@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">TopFace</string>
+  
+  <!-- Preferences Activity  -->
+  <string name="preferences_title">Настройки</string>
+  <string name="pref_social_title">Социальные сети</string>
+  <string name="pref_social_description">Привязка к соц сетям</string>
+  
+  <!-- Menu Activity -->
+  <string name="main_one">One</string>
+  <string name="main_preferences">Настройки</string>
+</resources>
