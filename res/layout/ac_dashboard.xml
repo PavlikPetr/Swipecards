@@ -10,18 +10,21 @@
 	    android:layout_centerInParent="true" >
     <TableRow
         android:layout_marginTop="20pt">
-      <Button
-          android:background="@drawable/im_btn_star"
+      <ImageButton
+          android:src="@drawable/im_btn_star"
+          android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
-      <Button
-          android:background="@drawable/im_btn_heart"
+      <ImageButton
+          android:src="@drawable/im_btn_heart"
+          android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
-      <Button
-          android:background="@drawable/im_btn_stars"
+      <ImageButton
+          android:src="@drawable/im_btn_stars"
+          android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
@@ -47,19 +50,22 @@
           android:layout_height="wrap_content" />
     </TableRow>
     <TableRow
-        android:layout_marginTop="6pt">
+        android:layout_marginTop="0pt">
       <Button
-          android:background="@drawable/im_btn_chat"
+          android:drawableBottom="@drawable/im_btn_chat"
+          android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <Button
-          android:background="@drawable/im_btn_top"
+          android:drawableBottom="@drawable/im_btn_top"
+          android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <Button
-          android:background="@drawable/im_btn_profile"
+          android:drawableBottom="@drawable/im_btn_profile"
+          android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
