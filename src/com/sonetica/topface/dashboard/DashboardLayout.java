@@ -1,4 +1,4 @@
-package com.sonetica.topface;
+package com.sonetica.topface.dashboard;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /*
- * Класс слоя для главного активити для позиционирования элементов на экране
+ * Класс слоя для Dashboard активити для позиционирования элементов на экране (Не используется, заменен на TableLayout)
  * спизжен с хабра http://habrahabr.ru/blogs/android_development/130194
  */
 public class DashboardLayout extends ViewGroup {
@@ -30,13 +30,18 @@ public class DashboardLayout extends ViewGroup {
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    // widthMeasureSpec,heightMeasureSpec размеры, получаемые от родителя, которые можем занять
+    
     mMaxChildWidth  = 0;
     mMaxChildHeight = 0;
-    // Measure once to find the maximum child size.
+    
+    final int count = getChildCount();
+    
+
     int childWidthMeasureSpec  = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec),  MeasureSpec.AT_MOST);
     int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.AT_MOST);
 
-    final int count = getChildCount();
+    // Поиск максимального размера среди детей
     for(int i=0;i<count;i++) {
       final View child = getChildAt(i);
       if(child.getVisibility() == GONE)
@@ -44,14 +49,14 @@ public class DashboardLayout extends ViewGroup {
       
       child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
       
-      mMaxChildWidth = Math.max(mMaxChildWidth, child.getMeasuredWidth());
+      mMaxChildWidth  = Math.max(mMaxChildWidth,  child.getMeasuredWidth());
       mMaxChildHeight = Math.max(mMaxChildHeight, child.getMeasuredHeight());
     }
-
-    // Measure again for each child to be exactly the same size.
+    
     childWidthMeasureSpec  = MeasureSpec.makeMeasureSpec(mMaxChildWidth,  MeasureSpec.EXACTLY);
     childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(mMaxChildHeight, MeasureSpec.EXACTLY);
-
+    
+    // Установка максимального размера для всех детей
     for(int i = 0; i < count; i++) {
       final View child = getChildAt(i);
       if(child.getVisibility() == GONE)
@@ -60,6 +65,7 @@ public class DashboardLayout extends ViewGroup {
       child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
     }
     
+    // Обязательно должн быть вызван данный метод, устанавливает размеры занимаемые компонентом
     setMeasuredDimension(resolveSize(mMaxChildWidth, widthMeasureSpec),resolveSize(mMaxChildHeight, heightMeasureSpec));
   }
   //---------------------------------------------------------------------------
@@ -70,7 +76,7 @@ public class DashboardLayout extends ViewGroup {
 
     final int count = getChildCount();
 
-    // Calculate the number of visible children.
+    // Подсчет числа видимых детей
     int visibleCount = 0;
     for(int i = 0; i < count; i++) {
       final View child = getChildAt(i);
@@ -82,12 +88,12 @@ public class DashboardLayout extends ViewGroup {
     if(visibleCount == 0)
       return;
 
-    // Calculate what number of rows and columns will optimize for even horizontal and
-    // vertical whitespace between items. Start with a 1 x N grid, then try 2 x N, and so on.
+    // Считает какое число строк и столбцов будет оптимизировано для каждого горизонт. и
+    // вертикального whitespace между итемами. Start with a 1 x N grid, then try 2 x N, and so on.
     int bestSpaceDifference = Integer.MAX_VALUE;
     int spaceDifference;
 
-    // Horizontal and vertical space between items
+    // Размеры горизонт и вертикал пространства между итемами 
     int hSpace = 0;
     int vSpace = 0;
 
@@ -97,7 +103,7 @@ public class DashboardLayout extends ViewGroup {
     while(true) {
       rows = (visibleCount - 1) / cols + 1;
 
-      hSpace = ((width - mMaxChildWidth * cols) / (cols + 1));
+      hSpace = ((width  - mMaxChildWidth  * cols) / (cols + 1));
       vSpace = ((height - mMaxChildHeight * rows) / (rows + 1));
 
       spaceDifference = Math.abs(vSpace - hSpace);

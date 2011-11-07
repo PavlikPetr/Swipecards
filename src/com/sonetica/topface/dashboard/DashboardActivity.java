@@ -1,5 +1,9 @@
-package com.sonetica.topface;
+package com.sonetica.topface.dashboard;
 
+import com.sonetica.topface.PreferencesActivity;
+import com.sonetica.topface.R;
+import com.sonetica.topface.R.layout;
+import com.sonetica.topface.R.string;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.social.Socium;
 import com.sonetica.topface.social.Socium.AuthException;
@@ -28,6 +32,7 @@ public class DashboardActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_dashboard);
     Utils.log(this,"+onCreate");
+    /*
     ((TextView)findViewById(R.id.txt)).setText("memory:"+Memory.getUsedHeap()/1024);
     final ImageView ava=(ImageView)findViewById(R.id.avatar);
     ava.setOnClickListener(new View.OnClickListener() {
@@ -42,17 +47,19 @@ public class DashboardActivity extends Activity {
             } catch(AuthException e) {
               startActivity(new Intent(DashboardActivity.this, SocialActivity.class));
             }
-            final Bitmap bmp = socium.getAvatar();
-            ava.post(new Runnable() {
-              @Override
-              public void run() {
-                ava.setImageBitmap(bmp);  
-              }
-            });           
+//            final Bitmap bmp = socium.getAvatar();
+//            if(bmp!=null)
+//              ava.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                  ava.setImageBitmap(bmp);  
+//                }
+//              });           
           }
         }).start();
       }
     });
+    */
   }
   //---------------------------------------------------------------------------
   @Override
@@ -67,8 +74,8 @@ public class DashboardActivity extends Activity {
   private static final int MENU_PREFERENCES = 1;
   @Override
   public boolean onCreatePanelMenu(int featureId, Menu menu) {
-    menu.add(0,MENU_ONE,0,getString(R.string.main_one));
-    menu.add(0,MENU_PREFERENCES,0,getString(R.string.main_preferences));
+    menu.add(0,MENU_ONE,0,getString(R.string.dashbrd_one));
+    menu.add(0,MENU_PREFERENCES,0,getString(R.string.dashbrd_preferences));
     return super.onCreatePanelMenu(featureId, menu);
   }
   //---------------------------------------------------------------------------
@@ -76,7 +83,7 @@ public class DashboardActivity extends Activity {
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
     switch (item.getItemId()) {
       case MENU_ONE:
-        Toast.makeText(this,getString(R.string.main_one),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,getString(R.string.dashbrd_one),Toast.LENGTH_SHORT).show();
         break;
       case MENU_PREFERENCES:
         startActivity(new Intent(this, PreferencesActivity.class));

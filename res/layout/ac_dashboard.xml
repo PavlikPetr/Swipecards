@@ -1,15 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/bg_dashbrd"
     android:orientation="vertical" >
+	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerInParent="true" >
+    <TableRow
+        android:layout_marginTop="20pt">
+      <Button
+          android:background="@drawable/im_btn_star"
+          android:layout_margin="2pt"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+      <Button
+          android:background="@drawable/im_btn_heart"
+          android:layout_margin="2pt"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+      <Button
+          android:background="@drawable/im_btn_stars"
+          android:layout_margin="2pt"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+    </TableRow>
+    <TableRow>
+        <TextView
+          android:textColor="#606060"
+          android:text="@string/dashbrd_btn_photorating"
+          android:layout_gravity="center"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+        <TextView
+          android:textColor="#606060"
+          android:text="@string/dashbrd_btn_likeme"
+          android:layout_gravity="center"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+        <TextView
+          android:textColor="#606060"
+          android:text="@string/dashbrd_btn_myrating"
+          android:layout_gravity="center"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+    </TableRow>
+    <TableRow
+        android:layout_marginTop="6pt">
+      <Button
+          android:background="@drawable/im_btn_chat"
+          android:layout_margin="2pt"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+      <Button
+          android:background="@drawable/im_btn_top"
+          android:layout_margin="2pt"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+      <Button
+          android:background="@drawable/im_btn_profile"
+          android:layout_margin="2pt"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+    </TableRow>
+    <TableRow>
+        <TextView
+          android:textColor="#606060"
+          android:text="@string/dashbrd_btn_chats"
+          android:layout_gravity="center"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+        <TextView
+          android:textColor="#606060"
+          android:text="@string/dashbrd_btn_tops"
+          android:layout_gravity="center"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+        <TextView
+          android:textColor="#606060"
+          android:text="@string/dashbrd_btn_profile"
+          android:layout_gravity="center"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+    </TableRow>
+  </TableLayout>
   <TextView
-      android:id="@+id/txt"
+      android:text="Banner" 
+      android:background="#595959"
+      android:textColor="#FFFFFF"
+      android:padding="3pt"
+      android:layout_alignParentBottom="true"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content" />
-  <ImageButton
-      android:id="@+id/avatar"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:src="@drawable/ic_launcher" />
-</LinearLayout>
+</RelativeLayout>

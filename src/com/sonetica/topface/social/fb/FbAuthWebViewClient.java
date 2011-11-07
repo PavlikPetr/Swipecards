@@ -136,7 +136,7 @@ public class FbAuthWebViewClient extends WebViewClient {
     }
     if(obj == null)
       return null;
-    String id = null;
+    String id = "";
     try {
       id = (String)obj.get("id");
     } catch(JSONException e) {
