@@ -1,9 +1,13 @@
 package com.sonetica.topface.dashboard;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import com.sonetica.topface.PreferencesActivity;
 import com.sonetica.topface.R;
 import com.sonetica.topface.R.layout;
 import com.sonetica.topface.R.string;
+import com.sonetica.topface.net.Http;
+import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.social.Socium;
 import com.sonetica.topface.social.Socium.AuthException;
@@ -32,6 +36,30 @@ public class DashboardActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_dashboard);
     Utils.log(this,"+onCreate");
+    
+    
+     //регистрация через сервер topface
+    String url = "http://api.topface.ru/?v=1";
+    String request = "q=";
+    
+    AuthToken.Token token = new AuthToken(this).getToken(); 
+    
+    JSONObject obj = new JSONObject();
+    try {
+      obj.put("service","auth");
+      obj.put("sid",token.getUserId());
+      obj.put("token",token.getTokenKey());
+      obj.put("platform",token.getSocialNet());
+    } catch(JSONException e) {
+      e.printStackTrace();
+    }
+    
+    //request = request+obj.toString();
+    
+    String response = Http.httpPostRequest(url,request);
+    response+="";
+    
+    
     /*
     ((TextView)findViewById(R.id.txt)).setText("memory:"+Memory.getUsedHeap()/1024);
     final ImageView ava=(ImageView)findViewById(R.id.avatar);
