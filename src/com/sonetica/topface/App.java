@@ -1,5 +1,6 @@
 package com.sonetica.topface;
 
+import com.sonetica.topface.utils.Utils;
 import android.app.Application;
 
 public class App extends Application {
@@ -9,10 +10,12 @@ public class App extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
+    Utils.log(this,"+onCreate");
   }
   //---------------------------------------------------------------------------
   @Override
   public void onTerminate() {
+    Utils.log(this,"-onTerminate");
     super.onTerminate();
   }
   //---------------------------------------------------------------------------

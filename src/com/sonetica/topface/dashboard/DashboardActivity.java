@@ -6,6 +6,7 @@ import com.sonetica.topface.PreferencesActivity;
 import com.sonetica.topface.R;
 import com.sonetica.topface.R.layout;
 import com.sonetica.topface.R.string;
+import com.sonetica.topface.TopsActivity;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.social.SocialActivity;
@@ -21,6 +22,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +30,7 @@ import android.widget.Toast;
 /*
  * Класс главного активити для навигации по приложению
  */
-public class DashboardActivity extends Activity {
+public class DashboardActivity extends Activity implements View.OnClickListener {
   // Data
   //---------------------------------------------------------------------------
   @Override
@@ -37,7 +39,7 @@ public class DashboardActivity extends Activity {
     setContentView(R.layout.ac_dashboard);
     Utils.log(this,"+onCreate");
     
-    
+    /*
      //регистрация через сервер topface
     String url = "http://api.topface.ru/?v=1";
     String request = "q=";
@@ -59,8 +61,6 @@ public class DashboardActivity extends Activity {
     String response = Http.httpPostRequest(url,request);
     response+="";
     
-    
-    /*
     ((TextView)findViewById(R.id.txt)).setText("memory:"+Memory.getUsedHeap()/1024);
     final ImageView ava=(ImageView)findViewById(R.id.avatar);
     ava.setOnClickListener(new View.OnClickListener() {
@@ -85,15 +85,42 @@ public class DashboardActivity extends Activity {
 //              });           
           }
         }).start();
-      }
+      }8888
     });
     */
+    
+    ((Button)findViewById(R.id.btnDashbrdChat)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDashbrdTops)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDashbrdProfile)).setOnClickListener(this);
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onClick(View view) {
+    
+    if(!Http.isOnline(this)){
+      Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
+      return;
+    }
+    
+    switch(view.getId()) {
+      case R.id.btnDashbrdChat: {
+        Toast.makeText(this,"chat",Toast.LENGTH_SHORT).show();
+      } break;
+      case R.id.btnDashbrdTops: {
+        Toast.makeText(this,"tops",Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this,TopsActivity.class));
+      } break;
+      case R.id.btnDashbrdProfile: {
+        Toast.makeText(this,"profile",Toast.LENGTH_SHORT).show();
+      } break;
+      default:
+    }
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    super.onDestroy();
     Utils.log(this,"-onDestroy");
+    super.onDestroy();
   }
   //---------------------------------------------------------------------------
   // Menu
@@ -102,8 +129,8 @@ public class DashboardActivity extends Activity {
   private static final int MENU_PREFERENCES = 1;
   @Override
   public boolean onCreatePanelMenu(int featureId, Menu menu) {
-    menu.add(0,MENU_ONE,0,getString(R.string.dashbrd_one));
-    menu.add(0,MENU_PREFERENCES,0,getString(R.string.dashbrd_preferences));
+    menu.add(0,MENU_ONE,0,getString(R.string.dashbrd_menu_one));
+    menu.add(0,MENU_PREFERENCES,0,getString(R.string.dashbrd_menu_preferences));
     return super.onCreatePanelMenu(featureId, menu);
   }
   //---------------------------------------------------------------------------
@@ -111,7 +138,7 @@ public class DashboardActivity extends Activity {
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
     switch (item.getItemId()) {
       case MENU_ONE:
-        Toast.makeText(this,getString(R.string.dashbrd_one),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,getString(R.string.dashbrd_menu_one),Toast.LENGTH_SHORT).show();
         break;
       case MENU_PREFERENCES:
         startActivity(new Intent(this, PreferencesActivity.class));

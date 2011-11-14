@@ -24,83 +24,8 @@ import com.sonetica.topface.utils.Utils;
  */
 public class Http {
   // Data
-  //---------------------------------------------------------------------------
-  public static String httpGetRequest(String request) {
-    HttpURLConnection urlConnection = null;
-    try {
-      // Делаем запрос
-      URL url = new URL(request);
-      urlConnection = (HttpURLConnection)url.openConnection();
-      urlConnection.setUseCaches(false);
-      
-      final int statusCode = urlConnection.getResponseCode();
-      if(statusCode != HttpURLConnection.HTTP_OK)
-         return null;
-
-      //Читаем ответ
-      InputStream    inStream   = new BufferedInputStream(urlConnection.getInputStream());
-      BufferedReader buffReader = new BufferedReader(new InputStreamReader(inStream));
-      StringBuilder  response   = new StringBuilder();
-      String line;
-      while((line = buffReader.readLine()) != null)
-        response.append(line);
-      
-      return response.toString();
-      
-    } catch (IOException e) {
-      Utils.log(null,"I/O error while retrieving response " + e.getMessage());
-    } catch (IllegalStateException e) {
-      Utils.log(null,"Incorrect URL or Connection error " + e.getMessage());
-    } catch (Exception e) {
-      Utils.log(null,"Error while retrieving response " + e.getMessage());
-    } finally {
-      if(urlConnection != null)
-        urlConnection.disconnect();
-    }
-    return null;
-  }
-  //---------------------------------------------------------------------------
-  public static String httpPostRequest(String request, String postParams) {
-    HttpURLConnection urlConnection = null;
-    try {
-      // Делаем запрос
-      URL url = new URL(request);
-      urlConnection = (HttpURLConnection)url.openConnection();
-      urlConnection.setUseCaches(false);
-      urlConnection.setDoOutput(true);
-      
-      // Отправляем post параметры
-      OutputStreamWriter osw = new OutputStreamWriter(urlConnection.getOutputStream());
-      osw.write(postParams);
-      osw.flush();
-      osw.close();
-      
-      final int statusCode = urlConnection.getResponseCode();
-      if(statusCode != HttpURLConnection.HTTP_OK)
-         return null;
-
-      //Читаем ответ
-      InputStream    inStream   = new BufferedInputStream(urlConnection.getInputStream());
-      BufferedReader buffReader = new BufferedReader(new InputStreamReader(inStream));
-      StringBuilder  response   = new StringBuilder();
-      String line;
-      while((line = buffReader.readLine()) != null)
-        response.append(line);
-      
-      return response.toString();
-      
-    } catch (IOException e) {
-      Utils.log(null,"I/O error while retrieving response " + e.getMessage());
-    } catch (IllegalStateException e) {
-      Utils.log(null,"Incorrect URL or Connection error " + e.getMessage());
-    } catch (Exception e) {
-      Utils.log(null,"Error while retrieving response " + e.getMessage());
-    } finally {
-      if(urlConnection != null)
-        urlConnection.disconnect();
-    }
-    return null;
-  }
+  private static final int HTTP_GET_REQUEST  = 0;
+  private static final int HTTP_POST_REQUEST = 1;
   //---------------------------------------------------------------------------
   public static boolean isOnline(Context context) {
     ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -110,6 +35,59 @@ public class Http {
     else
       return false;
   
+  }
+  //---------------------------------------------------------------------------
+  public static String httpGetRequest(String request) {
+    return httpRequest(HTTP_GET_REQUEST, request, null);
+  }
+  //---------------------------------------------------------------------------
+  public static String httpPostRequest(String request, String postParams) {
+    return httpRequest(HTTP_POST_REQUEST, request, postParams);
+  }
+  //---------------------------------------------------------------------------
+  private static String httpRequest(int typeRequest, String request, String postParams) {
+    HttpURLConnection urlConnection = null;
+    try {
+      // Делаем запрос
+      URL url = new URL(request);
+      urlConnection = (HttpURLConnection)url.openConnection();
+      urlConnection.setUseCaches(false);
+      
+      if(typeRequest == HTTP_POST_REQUEST){
+        // Отправляем post параметры
+        urlConnection.setDoOutput(true);
+        OutputStreamWriter osw = new OutputStreamWriter(urlConnection.getOutputStream());
+        osw.write(postParams);
+        osw.flush();
+        osw.close();
+      }
+      
+      // проверяет код ответа сервера
+      final int statusCode = urlConnection.getResponseCode();
+      if(statusCode != HttpURLConnection.HTTP_OK)
+         return null;
+
+      //Читаем ответ
+      InputStream    inStream   = new BufferedInputStream(urlConnection.getInputStream());
+      BufferedReader buffReader = new BufferedReader(new InputStreamReader(inStream));
+      StringBuilder  response   = new StringBuilder();
+      String line;
+      while((line = buffReader.readLine()) != null)
+        response.append(line);
+      
+      return response.toString();
+      
+    } catch (IOException e) {
+      Utils.log(null,"I/O error while retrieving response " + e.getMessage());
+    } catch (IllegalStateException e) {
+      Utils.log(null,"Incorrect URL or Connection error " + e.getMessage());
+    } catch (Exception e) {
+      Utils.log(null,"Error while retrieving response " + e.getMessage());
+    } finally {
+      if(urlConnection != null)
+        urlConnection.disconnect();
+    }
+    return null;
   }
   //---------------------------------------------------------------------------
   public static void imageLoader(final String url, final ImageView view) {

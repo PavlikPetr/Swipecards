@@ -15,8 +15,9 @@ public class PreferencesActivity extends PreferenceActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    addPreferencesFromResource(R.layout.ac_preferences);
     Utils.log(this,"+onCreate");
+
+    addPreferencesFromResource(R.layout.ac_preferences);
     
     // Social Button
     findPreference("pref_login").setOnPreferenceClickListener(
@@ -32,8 +33,8 @@ public class PreferencesActivity extends PreferenceActivity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    super.onDestroy();
     Utils.log(this,"-onDestroy");
+    super.onDestroy();  
   }
   //---------------------------------------------------------------------------
 }

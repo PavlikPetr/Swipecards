@@ -5,12 +5,12 @@
     android:gravity="center"
     android:orientation="vertical" >
   <Button
-      android:id="@+id/btn_vkontakte"
+      android:id="@+id/btnSocialVk"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:text="VKontakte" />
   <Button
-      android:id="@+id/btn_facebook"
+      android:id="@+id/btnSocialFb"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:text="Facebook" />

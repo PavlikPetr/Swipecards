@@ -21,7 +21,7 @@ public class SocialActivity extends Activity {
     setContentView(R.layout.ac_social);
     
     // VKontakte Button
-    ((Button)findViewById(R.id.btn_vkontakte)).setOnClickListener(
+    ((Button)findViewById(R.id.btnSocialVk)).setOnClickListener(
       new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -32,7 +32,7 @@ public class SocialActivity extends Activity {
       });
     
     // Facebook Button
-    ((Button)findViewById(R.id.btn_facebook)).setOnClickListener(
+    ((Button)findViewById(R.id.btnSocialFb)).setOnClickListener(
         new View.OnClickListener() {
           @Override
           public void onClick(View v) {

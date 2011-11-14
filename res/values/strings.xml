@@ -2,14 +2,18 @@
 <resources>
   <string name="app_name">TopFace</string>
   
+  <!-- General  -->
+  <string name="internet_off">Приложение требует подключение к Интернету</string>
+  <string name="header_tops_title">Самые красивые</string>
+  
   <!-- Preferences Activity  -->
   <string name="preferences_title">Настройки</string>
   <string name="pref_social_title">Социальные сети</string>
   <string name="pref_social_description">Привязка к соц сетям</string>
   
   <!-- Dashboard Activity -->
-  <string name="dashbrd_one">One</string>
-  <string name="dashbrd_preferences">Настройки</string>
+  <string name="dashbrd_menu_one">One</string>
+  <string name="dashbrd_menu_preferences">Настройки</string>
   
   <string name="dashbrd_btn_photorating">Оценка фото</string>
   <string name="dashbrd_btn_likeme">Я нравлюсь</string>

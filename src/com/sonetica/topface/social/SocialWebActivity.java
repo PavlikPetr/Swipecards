@@ -30,9 +30,9 @@ public class SocialWebActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_social_web);
     
-    mProgressBar = findViewById(R.id.socialweb_progressbar);
+    mProgressBar = findViewById(R.id.pgrsSocialWeb);
     
-    mWebView = (WebView)findViewById(R.id.socialweb_webview);
+    mWebView = (WebView)findViewById(R.id.wvSocWebRegistr);
     mWebView.getSettings().setJavaScriptEnabled(true);
     mWebView.setVerticalScrollbarOverlay(true);
     mWebView.setVerticalFadingEdgeEnabled(true);

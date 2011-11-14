@@ -2,28 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bg_dashbrd"
+    android:background="@drawable/bg_dashboard"
     android:orientation="vertical" >
 	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/tblBoard"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_centerInParent="true" >
     <TableRow
-        android:layout_marginTop="20pt">
+        android:layout_marginTop="14pt">
       <ImageButton
-          android:src="@drawable/im_btn_star"
+          android:id="@+id/btnDashbrdPhotorating"
+          android:src="@drawable/im_dashbrd_star"
           android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <ImageButton
-          android:src="@drawable/im_btn_heart"
+          android:id="@+id/btnDashbrdLikeme"
+          android:src="@drawable/im_dashbrd_heart"
           android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <ImageButton
-          android:src="@drawable/im_btn_stars"
+          android:id="@+id/btnDashbrdMyrating"
+          android:src="@drawable/im_dashbrd_stars"
           android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
@@ -52,19 +56,22 @@
     <TableRow
         android:layout_marginTop="0pt">
       <Button
-          android:drawableBottom="@drawable/im_btn_chat"
+          android:id="@+id/btnDashbrdChat"
+          android:drawableBottom="@drawable/im_dashbrd_chat"
           android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <Button
-          android:drawableBottom="@drawable/im_btn_top"
+          android:id="@+id/btnDashbrdTops"
+          android:drawableBottom="@drawable/im_dashbrd_top"
           android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <Button
-          android:drawableBottom="@drawable/im_btn_profile"
+          android:id="@+id/btnDashbrdProfile"
+          android:drawableBottom="@drawable/im_dashbrd_profile"
           android:background="@android:color/transparent"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
@@ -91,12 +98,12 @@
           android:layout_height="wrap_content" />
     </TableRow>
   </TableLayout>
-  <TextView
-      android:text="Banner" 
-      android:background="#595959"
-      android:textColor="#FFFFFF"
-      android:padding="3pt"
-      android:layout_alignParentBottom="true"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content" />
+
+	<!-- banner bar -->
+	<RelativeLayout 
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:layout_alignParentBottom="true">
+    <include layout="@layout/banner_bar" />
+  </RelativeLayout>
 </RelativeLayout>
