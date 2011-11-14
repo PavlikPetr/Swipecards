@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public class BitmapManager {
   // Data
-  private ArrayList  mUrls; //список ссылок на изображения полученные из JSON ответа topfase сервера
+  private ArrayList  mUrls;  //список ссылок на изображения полученные из JSON ответа topfase сервера
   private LinkedList mQueue; //очередь ожидающих вьюшек на подгрузку битмапа
   //---------------------------------------------------------------------------
   public BitmapManager() {
@@ -13,3 +13,6 @@ public class BitmapManager {
   }
   //---------------------------------------------------------------------------
 }
+
+// сохранять фотки в кэш
+// проверять, есть ли в кеше перед загрузкой

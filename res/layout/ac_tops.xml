@@ -9,6 +9,8 @@
       
   <!-- button bar -->
   <include layout="@layout/button_bar" />
+  
+  <!-- gallary -->
   <GridView
     android:id="@+id/grdTopsGallary"
     android:layout_width="fill_parent"

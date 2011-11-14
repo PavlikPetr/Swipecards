@@ -8,7 +8,8 @@ import android.view.View.MeasureSpec;
 import android.widget.Button;
 
 /*
- *  Класс для кнопок на Dashboard активити (не используется)
+ *  Класс для кнопок на Dashboard активити (НЕ ИСПОЛЬЗУЕТСЯ)
+ *  для отображения поверх кнопки иконки кол-во сообщений, оценок и т.д.
  */
 public class DashboardButton extends Button {
   //Data

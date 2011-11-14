@@ -1,5 +1,6 @@
 package com.sonetica.topface;
 
+import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.os.Bundle;
@@ -21,10 +22,13 @@ public class TopsActivity extends Activity {
     // Title
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.header_tops_title));
     
+    // получить массив ссылок на изображения с сервера
+    String s = Http.httpGetRequest("http://www.chrisboyd.net/wp-content/uploads/2011/10/albums.json");
+    
     // Gallary
     GridView gallary = (GridView)findViewById(R.id.grdTopsGallary);
     gallary.setAdapter(new TopsGridLayout(this));
-    //gallary.set
+    
   }
   //---------------------------------------------------------------------------
   @Override
