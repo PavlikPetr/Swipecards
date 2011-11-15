@@ -20,7 +20,7 @@
     </activity>
     
     <!-- activities -->
-    <activity android:name=".TopsActivity"/>
+    <activity android:name=".tops.TopsActivity"/>
     <activity android:name=".PreferencesActivity"/>
     <activity android:name=".dashboard.DashboardActivity"/>
     <activity android:name=".social.SocialActivity"/>

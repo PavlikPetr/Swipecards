@@ -117,7 +117,7 @@ public class Http {
     thread.start();
   }
   //---------------------------------------------------------------------------
-  private static Bitmap httpBitmapLoader(String url) {
+  public static Bitmap httpBitmapLoader(String url) {
     Bitmap bitmap = null;
     HttpURLConnection conn = null;
     BufferedInputStream buf_stream = null;

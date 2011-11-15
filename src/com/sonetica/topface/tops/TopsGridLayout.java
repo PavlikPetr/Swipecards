@@ -1,5 +1,9 @@
-package com.sonetica.topface;
+package com.sonetica.topface.tops;
 
+import java.util.ArrayList;
+import com.sonetica.topface.R;
+import com.sonetica.topface.R.drawable;
+import com.sonetica.topface.net.BitmapManager;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +15,17 @@ import android.widget.ImageView;
  */
 public class TopsGridLayout extends BaseAdapter {
   // Data
-  Context mContext;
+  private Context mContext;
+  private BitmapManager mBitmapManager;
   //---------------------------------------------------------------------------
-  public TopsGridLayout(Context context) {
+  public TopsGridLayout(Context context, ArrayList<String> urlList) {
     mContext = context;
+    mBitmapManager = new BitmapManager(context,urlList);
   }
   //---------------------------------------------------------------------------
   @Override
   public int getCount() {
-    return 40;
+    return mBitmapManager.getSize();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -34,9 +40,15 @@ public class TopsGridLayout extends BaseAdapter {
   //---------------------------------------------------------------------------
   @Override
   public View getView(int position,View convertView,ViewGroup parent) {
-    ImageView iv = new ImageView(mContext);
-    iv.setImageResource(R.drawable.ic_launcher);
-    return iv;
+    //ImageView iv = new ImageView(mContext);
+    //iv.setImageResource(R.drawable.ic_launcher);
+    convertView = new ImageView(mContext);
+    convertView.setMinimumWidth(115);
+    convertView.setMinimumHeight(115);
+    convertView.setBackgroundResource(R.drawable.ic_launcher);
+    mBitmapManager.getBitmap(position,convertView);
+    
+    return convertView;
   }
   //---------------------------------------------------------------------------
 }
