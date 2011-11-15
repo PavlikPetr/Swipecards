@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.R.drawable;
 import com.sonetica.topface.net.BitmapManager;
-import com.sonetica.vokrug.MessagesAdapter.ViewHolder;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
