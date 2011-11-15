@@ -1,14 +1,16 @@
-package com.sonetica.topface.tops;
+package com.sonetica.topface.ui.tops;
 
 import java.util.ArrayList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.R.drawable;
 import com.sonetica.topface.net.BitmapManager;
+import com.sonetica.vokrug.MessagesAdapter.ViewHolder;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 /*
  * Класс адаптера для отображения галлереи в Топ активити
@@ -17,6 +19,10 @@ public class TopsGridLayout extends BaseAdapter {
   // Data
   private Context mContext;
   private BitmapManager mBitmapManager;
+  // ViewHolder
+  static class ViewHolder {
+    TopButton mAvatar;
+  }
   //---------------------------------------------------------------------------
   public TopsGridLayout(Context context, ArrayList<String> urlList) {
     mContext = context;
@@ -40,12 +46,19 @@ public class TopsGridLayout extends BaseAdapter {
   //---------------------------------------------------------------------------
   @Override
   public View getView(int position,View convertView,ViewGroup parent) {
+    final ViewHolder holder;
+    if(convertView == null) {
+      holder = new ViewHolder();
+    } else
+      holder = (ViewHolder)convertView.getTag();
+    
     //ImageView iv = new ImageView(mContext);
     //iv.setImageResource(R.drawable.ic_launcher);
-    convertView = new ImageView(mContext);
+    convertView = new TopButton(mContext);
     convertView.setMinimumWidth(115);
     convertView.setMinimumHeight(115);
-    convertView.setBackgroundResource(R.drawable.ic_launcher);
+    // перелоадер
+    ((ImageView)convertView).setImageResource(R.drawable.ic_launcher);
     mBitmapManager.getBitmap(position,convertView);
     
     return convertView;

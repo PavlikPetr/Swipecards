@@ -1,4 +1,4 @@
-package com.sonetica.topface.dashboard;
+package com.sonetica.topface.ui.dashboard;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.concurrent.*;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
@@ -51,7 +52,8 @@ public class BitmapManager {
           File file = mContext.getFilesDir();
           BufferedOutputStream bos = null;
           
-          //отдельный кеширующий поток менеджер, который сохраняет и подгружает
+          // отдельный кеширующий поток менеджер, который сохраняет и подгружает
+          // BitmapFactory.decodeFile
           /*
           try {
             bos = new BufferedOutputStream(new FileOutputStream(file));

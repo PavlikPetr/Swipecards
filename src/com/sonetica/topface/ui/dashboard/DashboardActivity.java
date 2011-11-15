@@ -1,4 +1,4 @@
-package com.sonetica.topface.dashboard;
+package com.sonetica.topface.ui.dashboard;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +11,7 @@ import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.social.Socium;
 import com.sonetica.topface.social.Socium.AuthException;
-import com.sonetica.topface.tops.TopsActivity;
+import com.sonetica.topface.ui.tops.TopsActivity;
 import com.sonetica.topface.utils.Memory;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;

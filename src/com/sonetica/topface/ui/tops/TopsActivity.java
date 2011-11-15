@@ -1,4 +1,4 @@
-package com.sonetica.topface.tops;
+package com.sonetica.topface.ui.tops;
 
 import com.sonetica.topface.R;
 import com.sonetica.topface.R.id;
