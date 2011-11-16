@@ -4,7 +4,6 @@
   
   <!-- General  -->
   <string name="internet_off">Приложение требует подключение к Интернету</string>
-  <string name="header_tops_title">Самые красивые</string>
   
   <!-- Preferences Activity  -->
   <string name="preferences_title">Настройки</string>
@@ -14,11 +13,18 @@
   <!-- Dashboard Activity -->
   <string name="dashbrd_menu_one">One</string>
   <string name="dashbrd_menu_preferences">Настройки</string>
-  
   <string name="dashbrd_btn_photorating">Оценка фото</string>
   <string name="dashbrd_btn_likeme">Я нравлюсь</string>
   <string name="dashbrd_btn_myrating">Меня оценили</string>
   <string name="dashbrd_btn_chats">Диалоги</string>
   <string name="dashbrd_btn_tops">Топы</string>
   <string name="dashbrd_btn_profile">Профиль</string>
+  
+  <!-- Tops Activity -->
+  <string name="tops_header_title">Самые красивые</string>
+  <string name="tops_btn_boys">Парни</string>
+  <string name="tops_btn_girls">Девушки</string>
+  <string name="tops_prefs_city">city</string>
+  <string name="tops_prefs_sex">sex</string>
+  
 </resources>

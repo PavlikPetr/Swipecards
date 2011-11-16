@@ -48,7 +48,7 @@ public class BitmapManager {
         @Override
         public void run() {
           String uriLink = mUrlList.get(position);
-          final Bitmap bitmap = Http.httpBitmapLoader(uriLink);
+          final Bitmap bitmap = Http.bitmapLoader(uriLink);
           File file = mContext.getFilesDir();
           BufferedOutputStream bos = null;
           

@@ -90,10 +90,14 @@ public class Http {
     return null;
   }
   //---------------------------------------------------------------------------
+  /*
+   *  запускается в UI потоке, отдельный поток создавать не нужно
+   */
   public static void imageLoader(final String url, final ImageView view) {
     if(url == null || view == null )
       return;
     
+    // ui
     final Handler handler = new Handler() {
       @Override
       public void handleMessage(Message message) {
@@ -101,13 +105,14 @@ public class Http {
         view.setImageBitmap(image);
       }
     };
-
+    
+    // download
     final Thread thread = new Thread() {
       @Override
       public void run() {
-        final Bitmap image = httpBitmapLoader(url);
-        if(image != null) {
-          final Message message = handler.obtainMessage(1, image);
+        final Bitmap bitmap = bitmapLoader(url);
+        if(bitmap != null) {
+          final Message message = handler.obtainMessage(1, bitmap);
           handler.sendMessage(message);
         }
       }
@@ -117,36 +122,37 @@ public class Http {
     thread.start();
   }
   //---------------------------------------------------------------------------
-  public static Bitmap httpBitmapLoader(String url) {
+  /*
+   *  для использования необходим отдельный поток
+   *  при обрыве связи при скачивании фабрика возвращает null  
+   */
+  public static Bitmap bitmapLoader(String url) {
     Bitmap bitmap = null;
-    HttpURLConnection conn = null;
-    BufferedInputStream buf_stream = null;
+    HttpURLConnection httpConnection = null;
+    BufferedInputStream buffInputStream = null;
+    
     try {
-      conn = (HttpURLConnection)new URL(url).openConnection();
-      conn.setDoInput(true);
-      conn.setRequestProperty("Connection", "Keep-Alive");
-      conn.connect();
-      buf_stream = new BufferedInputStream(conn.getInputStream(), 8192);
-      bitmap = BitmapFactory.decodeStream(buf_stream);
-      buf_stream.close();
-      conn.disconnect();
-      buf_stream = null;
-      conn = null;
-    } catch (MalformedURLException ex) {
-      Utils.log(null, "Url parsing was failed: " + url);
-    } catch (IOException ex) {
-      Utils.log(null, url + " does not exists");
-    } catch (OutOfMemoryError e) {
-      Utils.log(null, "Out of memory!");
-      return null;
-    } finally {
-      if(buf_stream != null)
-        try { 
-          buf_stream.close(); 
-        } catch (IOException ex) {}
-      if(conn != null)
-        conn.disconnect();
-    }
+      httpConnection = (HttpURLConnection)new URL(url).openConnection();
+      httpConnection.setDoInput(true);
+      httpConnection.setRequestProperty("Connection", "Keep-Alive");
+      httpConnection.connect();
+      
+      buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
+      bitmap = BitmapFactory.decodeStream(buffInputStream);
+      
+    } catch (MalformedURLException ex) {Utils.log(null, "Url parsing was failed: " + url);} 
+      catch (IOException ex) {Utils.log(null, url + " does not exists");} 
+      catch (OutOfMemoryError ex) {Utils.log(null, "Out of memory!");} 
+      finally {
+        if(buffInputStream != null)
+          try {
+            buffInputStream.close();buffInputStream = null;
+          } catch(IOException ex){Utils.log(null,"error: "+ex.getMessage());}
+        if(httpConnection != null) {
+          httpConnection.disconnect();httpConnection = null;
+        }
+      }
+    
     return bitmap;
   }
   //---------------------------------------------------------------------------
