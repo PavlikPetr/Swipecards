@@ -8,9 +8,9 @@ import java.util.regex.Pattern;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.sonetica.topface.net.Http;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.social.SnApi;
+import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -128,17 +128,20 @@ public class FbAuthWebViewClient extends WebViewClient {
     StringBuilder request = new StringBuilder("https://graph.facebook.com/");
     request.append("me");
     request.append("&access_token=" + token);
-    JSONObject obj = null;
+    JSONObject jsonResult = null;
     try {
-      obj = new JSONObject(Http.httpGetRequest(request.toString()));
-    } catch(JSONException e1) {
-      e1.printStackTrace();
+      String response = Http.httpGetRequest(request.toString());
+      jsonResult = new JSONObject(response);
+    } catch(JSONException ex) {
+      ex.printStackTrace();
+    } catch(Exception e) {
+      e.printStackTrace();
     }
-    if(obj == null)
+    if(jsonResult == null)
       return null;
     String id = "";
     try {
-      id = (String)obj.get("id");
+      id = (String)jsonResult.get("id");
     } catch(JSONException e) {
       Utils.log(this, "'user_id' isn't received");
     } 

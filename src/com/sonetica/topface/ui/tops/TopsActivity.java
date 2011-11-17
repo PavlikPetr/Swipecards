@@ -2,7 +2,7 @@ package com.sonetica.topface.ui.tops;
 
 import com.sonetica.topface.App;
 import com.sonetica.topface.R;
-import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -24,13 +24,13 @@ import org.json.JSONObject;
  */
 public class TopsActivity extends Activity {
   // Data
-  private int mSexType;  // нажатая кнопка - девушки/парни
-  private int mCityType; // сохраненный город
+  private int mSexType;  // какая кнопка нажата - девушки/парни
+  private int mCityType; // выбранный город
   private GridView mGallary;
   private SharedPreferences mPreferences;
   private TopsGridAdapter mGridAdapter;
   private ProgressDialog mProgressDialog;
-  private ArrayList<String> mUrlList = new ArrayList<String>(); // Список линков на изображения
+  private ArrayList<String> mUrlList = new ArrayList<String>(); // список линков на изображения
   // Constants
   private static final int TOP_GIRLS = 0;
   private static final int TOP_BOYS  = 1;
@@ -42,25 +42,27 @@ public class TopsActivity extends Activity {
     Utils.log(this,"+onCreate");
        
     // Title Header
-    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.tops_header_title));
+   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.tops_header_title));
     
     // Boys Button
     Button btnBoys = (Button)findViewById(R.id.btnBarBoys);
-    btnBoys.setText(R.string.tops_btn_boys);
+    btnBoys.setText(getString(R.string.tops_btn_boys));
     btnBoys.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         Toast.makeText(TopsActivity.this,"boys",Toast.LENGTH_SHORT).show();
+        fillUrlList("param");
       }
     });
     
     // Girls Button
     Button btnGirls = (Button)findViewById(R.id.btnBarGirls);
-    btnGirls.setText(R.string.tops_btn_girls);
+    btnGirls.setText(getString(R.string.tops_btn_girls));
     btnGirls.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         Toast.makeText(TopsActivity.this,"girls",Toast.LENGTH_SHORT).show();
+        fillUrlList("param");
       }
     });
     
@@ -88,15 +90,15 @@ public class TopsActivity extends Activity {
     mGallary.setAdapter(mGridAdapter);
 
     //заполняем лист линками на изображения
-    fillUrlList(/* параметры запроса: мальчики - девочки - город */);
+    fillUrlList("null"/* параметры запроса: мальчики - девочки - город */);
   }
   //---------------------------------------------------------------------------
   /*
    * Запрос списка линков на изображения с сервера (параметры запроса  ???)
    * список линков закачивается каждый раз
    */
-  private void fillUrlList(/*params*/) {
-    new LinkLoaderTask().execute("params");
+  private void fillUrlList(String params) {
+    new LinkLoaderTask().execute(params);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -106,37 +108,41 @@ public class TopsActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   // class LinkLoaderTask
-  private class LinkLoaderTask extends AsyncTask<String, Void, Void> {
+  private class LinkLoaderTask extends AsyncTask<String, Void, Boolean> {
     @Override
     protected void onPreExecute(){
       mProgressDialog.show();
+      mUrlList.clear();
     }
     // @params параметры для получения списка линков
     @Override
-    protected Void doInBackground(String... params) {
+    protected Boolean doInBackground(String... params) {
       // получить массив ссылок на изображения с сервера
-      String s = Http.httpGetRequest("http://www.chrisboyd.net/wp-content/uploads/2011/10/albums.json");
+      String s = null;
+      try {
+        s = Http.httpGetRequest("http://www.chrisboyd.net/wp-content/uploads/2011/10/albums.json");
+      } catch(Exception ex) { ex.printStackTrace(); } 
+        finally { if(s == null) return false; }
+      
       JSONObject obj = null;
       JSONArray  arr = null;
       try {
         obj = new JSONObject(s);
         arr = new JSONArray(obj.getString("covers"));
-        
-        for(int i=0; i<arr.length(); i++) {
+        for(int i=0; i<arr.length(); ++i) {
           JSONObject o = (JSONObject)arr.get(i);
           mUrlList.add(o.getString("cover"));
-          Utils.log(null,"" + i);
         }
-        
       } catch(JSONException e) {
         e.printStackTrace();
       }
-      return null;
+      return true;
     }
     @Override
-    protected void onPostExecute(Void result) {
+    protected void onPostExecute(Boolean result) {
+      if(result!=false)
+        mGridAdapter.notifyDataSetChanged();
       mProgressDialog.cancel();
-      mGridAdapter.notifyDataSetChanged();
     }
   }// LinkLoaderTask
 }// TopsActivity

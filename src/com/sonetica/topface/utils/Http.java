@@ -1,4 +1,4 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -17,7 +17,6 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.ImageView;
-import com.sonetica.topface.utils.Utils;
 
 /*
  *  Класс для работы с http запросами 
@@ -37,15 +36,15 @@ public class Http {
   
   }
   //---------------------------------------------------------------------------
-  public static String httpGetRequest(String request) {
+  public static String httpGetRequest(String request) throws Exception {
     return httpRequest(HTTP_GET_REQUEST, request, null);
   }
   //---------------------------------------------------------------------------
-  public static String httpPostRequest(String request, String postParams) {
+  public static String httpPostRequest(String request, String postParams) throws Exception {
     return httpRequest(HTTP_POST_REQUEST, request, postParams);
   }
   //---------------------------------------------------------------------------
-  private static String httpRequest(int typeRequest, String request, String postParams) {
+  private static String httpRequest(int typeRequest, String request, String postParams) throws Exception {
     HttpURLConnection urlConnection = null;
     try {
       // Делаем запрос
@@ -77,17 +76,16 @@ public class Http {
       
       return response.toString();
       
-    } catch (IOException e) {
-      Utils.log(null,"I/O error while retrieving response " + e.getMessage());
-    } catch (IllegalStateException e) {
-      Utils.log(null,"Incorrect URL or Connection error " + e.getMessage());
-    } catch (Exception e) {
-      Utils.log(null,"Error while retrieving response " + e.getMessage());
-    } finally {
-      if(urlConnection != null)
-        urlConnection.disconnect();
-    }
-    return null;
+    } 
+      //catch (IOException e) {Utils.log(null,"I/O error while retrieving response " + e.getMessage());} 
+      //catch (IllegalStateException e) {Utils.log(null,"Incorrect URL or Connection error " + e.getMessage());} 
+      catch (Exception e) {
+        Utils.log(null,"Error while retrieving response " + e.getMessage());
+        throw new Exception(e.getMessage());
+      } finally {
+        if(urlConnection != null)
+          urlConnection.disconnect();
+      }
   }
   //---------------------------------------------------------------------------
   /*

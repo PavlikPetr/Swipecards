@@ -1,30 +1,22 @@
 package com.sonetica.topface.ui.dashboard;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.sonetica.topface.ChatActivity;
+import com.sonetica.topface.LikemeActivity;
+import com.sonetica.topface.MyratingActivity;
+import com.sonetica.topface.PhotoratingActivity;
 import com.sonetica.topface.PreferencesActivity;
+import com.sonetica.topface.ProfileActivity;
 import com.sonetica.topface.R;
-import com.sonetica.topface.R.layout;
-import com.sonetica.topface.R.string;
-import com.sonetica.topface.net.Http;
-import com.sonetica.topface.social.AuthToken;
-import com.sonetica.topface.social.SocialActivity;
-import com.sonetica.topface.social.Socium;
-import com.sonetica.topface.social.Socium.AuthException;
 import com.sonetica.topface.ui.tops.TopsActivity;
-import com.sonetica.topface.utils.Memory;
+import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /*
@@ -89,6 +81,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     });
     */
     
+    ((Button)findViewById(R.id.btnDashbrdPhotorating)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDashbrdLikeme)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDashbrdMyrating)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdChat)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdTops)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdProfile)).setOnClickListener(this);
@@ -103,16 +98,24 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     }
     
     switch(view.getId()) {
+      case R.id.btnDashbrdPhotorating: {
+        startActivity(new Intent(this,PhotoratingActivity.class));
+      } break;
+      case R.id.btnDashbrdLikeme: {
+        startActivity(new Intent(this,LikemeActivity.class));
+      } break;
+      case R.id.btnDashbrdMyrating: {
+        startActivity(new Intent(this,MyratingActivity.class));
+      } break;
       case R.id.btnDashbrdChat: {
-        Toast.makeText(this,"chat",Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this,ChatActivity.class));
       } break;
       case R.id.btnDashbrdTops: {
-        Toast.makeText(this,"tops",Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this,TopsActivity.class));
       } break;
       case R.id.btnDashbrdProfile: {
-        Toast.makeText(this,"profile",Toast.LENGTH_SHORT).show();
-      } break;
+        startActivity(new Intent(this,ProfileActivity.class));
+      } break;      
       default:
     }
   }
@@ -148,3 +151,4 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   }
   //---------------------------------------------------------------------------
 }
+//Toast.makeText(this,"tops",Toast.LENGTH_SHORT).show();

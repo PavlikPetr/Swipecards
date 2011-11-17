@@ -1,23 +1,21 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.utils;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.*;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 
-public class BitmapManager {
+/*
+ *  
+ */
+public class ImageLoader {
   // Data
   private ArrayList<String>  mUrlList;  //список ссылок на изображения полученные из JSON ответа topfase сервера
   private LinkedList<Pair<View,Integer>> mQueue; //очередь ожидающих вьюшек на подгрузку битмапа
@@ -27,7 +25,7 @@ public class BitmapManager {
   private Context mContext;
   
   //---------------------------------------------------------------------------
-  public BitmapManager(Context context,ArrayList<String> urlList) {
+  public ImageLoader(Context context,ArrayList<String> urlList) {
     mContext = context;
     mUrlList = urlList;
     mQueue = new LinkedList<Pair<View,Integer>>();

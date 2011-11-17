@@ -20,6 +20,11 @@
     </activity>
     
     <!-- activities -->
+    <activity android:name=".PhotoratingActivity"/>
+    <activity android:name=".LikemeActivity"/>
+    <activity android:name=".MyratingActivity"/>
+    <activity android:name=".ChatActivity"/>
+    <activity android:name=".ProfileActivity"/>
     <activity android:name=".PreferencesActivity"/>
     <activity android:name=".ui.dashboard.DashboardActivity"/>
     <activity android:name=".ui.tops.TopsActivity"/>

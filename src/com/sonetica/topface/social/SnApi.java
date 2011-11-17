@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Http;
 
 /*
  *  Интерфейс api для запросов к социальным сетям
@@ -26,14 +26,17 @@ public abstract class SnApi {
   abstract protected String getApiUrl();
   //---------------------------------------------------------------------------
   protected JSONObject sendRequest(SnRequest request) {
-    JSONObject result = null;
     request.setParam("access_token",mToken.getTokenKey());
+    JSONObject jsonResult = null;
     try {
-      result = new JSONObject(Http.httpGetRequest(getApiUrl()+request.toString()));
+      String response = Http.httpGetRequest(getApiUrl()+request.toString());
+      jsonResult = new JSONObject(response);
     } catch(JSONException e) {
       e.printStackTrace();
+    } catch(Exception e) {
+      e.printStackTrace();
     }
-    return result;
+    return jsonResult;
   }
   /*
   //---------------------------------------------------------------------------

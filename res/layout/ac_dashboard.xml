@@ -9,30 +9,31 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_centerInParent="true" >
+	    
+	  <!--  Buttons -->
     <TableRow
         android:layout_marginTop="14pt">
-      <ImageButton
+      <Button
           android:id="@+id/btnDashbrdPhotorating"
-          android:src="@drawable/im_dashbrd_star"
-          android:background="@android:color/transparent"
+          android:background="@drawable/btn_dashbrd_photorating_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
-      <ImageButton
+      <Button
           android:id="@+id/btnDashbrdLikeme"
-          android:src="@drawable/im_dashbrd_heart"
-          android:background="@android:color/transparent"
+          android:background="@drawable/btn_dashbrd_likeme_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
-      <ImageButton
+      <Button
           android:id="@+id/btnDashbrdMyrating"
-          android:src="@drawable/im_dashbrd_stars"
-          android:background="@android:color/transparent"
+          android:background="@drawable/btn_dashbrd_myrating_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
     </TableRow>
+    
+    <!--  Text -->
     <TableRow>
         <TextView
           android:textColor="#606060"
@@ -53,30 +54,31 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
     </TableRow>
+    
+    <!--  Buttons -->
     <TableRow
         android:layout_marginTop="0pt">
       <Button
           android:id="@+id/btnDashbrdChat"
-          android:drawableBottom="@drawable/im_dashbrd_chat"
-          android:background="@android:color/transparent"
+          android:background="@drawable/btn_dashbrd_chat_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <Button
           android:id="@+id/btnDashbrdTops"
-          android:drawableBottom="@drawable/im_dashbrd_top"
-          android:background="@android:color/transparent"
+          android:background="@drawable/btn_dashbrd_tops_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <Button
           android:id="@+id/btnDashbrdProfile"
-          android:drawableBottom="@drawable/im_dashbrd_profile"
-          android:background="@android:color/transparent"
+          android:background="@drawable/btn_dashbrd_profile_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
     </TableRow>
+
+    <!--  Text -->
     <TableRow>
         <TextView
           android:textColor="#606060"
@@ -98,6 +100,8 @@
           android:layout_height="wrap_content" />
     </TableRow>
   </TableLayout>
+  
+	<!--  android:background="@android:color/transparent" -->
 
 	<!-- banner bar -->
 	<RelativeLayout 
