@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlRaititRoot"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
   <!-- header bar -->
-  <include layout="@layout/header_bar" />
+  <include layout="@layout/banner_bar" />
   
-  <ListView
-      android:id="@+id/lvChatList"
-      android:layout_width="wrap_content" 
-      android:layout_height="wrap_content"
+  <!-- View Pager -->
+  <android.support.v4.view.ViewPager
+      android:id="@+id/viewpager"
       android:layout_weight="1"
-      android:background="#0000FF" />
-  
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
   <!-- banner bar -->
-  <RelativeLayout 
+  <RelativeLayout
       android:layout_width="fill_parent" 
       android:layout_height="wrap_content" 
       android:layout_alignParentBottom="true">

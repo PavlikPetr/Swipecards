@@ -4,6 +4,7 @@
   
   <!-- General  -->
   <string name="internet_off">Приложение требует подключение к Интернету</string>
+  <string name="dialog_loading">Загружаю</string>
   
   <!-- Preferences Activity  -->
   <string name="preferences_title">Настройки</string>
@@ -42,5 +43,8 @@
   
   <!-- Myrating Activity -->
   <string name="myrating_header_title">Меня оценили</string>
+  
+  <!-- Rateit Activity -->
+  <string name="rateit_header_title">Оцени Это !</string>
   
 </resources>

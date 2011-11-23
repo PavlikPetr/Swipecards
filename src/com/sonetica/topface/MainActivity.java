@@ -1,5 +1,6 @@
 package com.sonetica.topface;
 
+import com.sonetica.topface.services.StatisticService;
 import com.sonetica.topface.ui.dashboard.DashboardActivity;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;

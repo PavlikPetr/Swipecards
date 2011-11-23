@@ -5,8 +5,7 @@
   <!-- header bar -->
   <include layout="@layout/header_bar" />
   
-  
-  
+
   <!-- banner bar -->
   <RelativeLayout 
       android:layout_width="fill_parent" 

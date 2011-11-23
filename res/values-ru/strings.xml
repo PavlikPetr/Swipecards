@@ -1,37 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">TopFace</string>
-  
-  <!-- General  -->
-  <string name="internet_off">Приложение требует подключение к Интернету</string>
-  
-  <!-- Preferences Activity  -->
-  <string name="preferences_title">Настройки</string>
-  <string name="pref_social_title">Социальные сети</string>
-  <string name="pref_social_description">Привязка к соц сетям</string>
-  
-  <!-- Dashboard Activity -->
-  <string name="dashbrd_menu_one">One</string>
-  <string name="dashbrd_menu_preferences">Настройки</string>
-  <string name="dashbrd_btn_photorating">Оценка фото</string>
-  <string name="dashbrd_btn_likeme">Я нравлюсь</string>
-  <string name="dashbrd_btn_myrating">Меня оценили</string>
-  <string name="dashbrd_btn_chats">Диалоги</string>
-  <string name="dashbrd_btn_tops">Топы</string>
-  <string name="dashbrd_btn_profile">Профиль</string>
-  
-            
-  <!-- Chat Activity -->
-  <string name="chat_header_title">Диалоги</string> 
-  
-  <!-- Tops Activity -->
-  <string name="tops_header_title">Самые красивые</string>
-  <string name="tops_btn_boys">Парни</string>
-  <string name="tops_btn_girls">Девушки</string>
-  <string name="tops_prefs_city">city</string>
-  <string name="tops_prefs_sex">sex</string>
-  
-  <!-- Profile Activity -->
-  <string name="profile_header_title">Профиль</string>
-  
 </resources>

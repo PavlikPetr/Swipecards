@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+/*
+ *       "оценка фото"
+ */
 public class PhotoratingActivity extends Activity {
   // Data
   //---------------------------------------------------------------------------

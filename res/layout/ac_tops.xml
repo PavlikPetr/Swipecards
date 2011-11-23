@@ -15,12 +15,16 @@
     android:id="@+id/grdTopsGallary"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:listSelector="@android:color/transparent"
     android:layout_weight="1"
     android:numColumns="4"
+    android:fadingEdge="none"
     android:horizontalSpacing="0px"
     android:verticalSpacing="0px"
-    android:fadingEdge="none"
-    android:fadeScrollbars="true" >
+    android:layout_margin="0px"
+    android:padding="0px"
+    android:fadeScrollbars="true" 
+    android:background="#0000BB">
   </GridView>
   
   <!-- banner bar -->

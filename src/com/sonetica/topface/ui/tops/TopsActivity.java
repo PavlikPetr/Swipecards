@@ -2,16 +2,21 @@ package com.sonetica.topface.ui.tops;
 
 import com.sonetica.topface.App;
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.User;
+import com.sonetica.topface.utils.GalleryManager;
 import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -20,20 +25,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /*  
- *  Класс активити для просмотра топ списка пользователей
+ *  Класс активити для просмотра списка топ пользователей   "топы"
  */
 public class TopsActivity extends Activity {
   // Data
-  private int mSexType;  // какая кнопка нажата - девушки/парни
+  private int mSexType;  // пол людей
   private int mCityType; // выбранный город
   private GridView mGallary;
-  private SharedPreferences mPreferences;
   private TopsGridAdapter mGridAdapter;
+  private GalleryManager mGallaryManager;
   private ProgressDialog mProgressDialog;
-  private ArrayList<String> mUrlList = new ArrayList<String>(); // список линков на изображения
+  private SharedPreferences mPreferences;
+  private ArrayList<User> mUserList = new ArrayList<User>();
   // Constants
   private static final int TOP_GIRLS = 0;
   private static final int TOP_BOYS  = 1;
+  String url = "http://www.mssoft.org/data/200.json";
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +49,12 @@ public class TopsActivity extends Activity {
     Utils.log(this,"+onCreate");
        
     // Title Header
-   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.tops_header_title));
+    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.tops_header_title));
+    
+    // Восстанавливаем состояние с прошлого посещения
+    mPreferences = getSharedPreferences(App.TAG, 0);
+    mSexType  = mPreferences.getInt(getString(R.string.tops_prefs_sex),TOP_GIRLS);
+    mCityType = mPreferences.getInt(getString(R.string.tops_prefs_city),0);
     
     // Boys Button
     Button btnBoys = (Button)findViewById(R.id.btnBarBoys);
@@ -50,8 +62,7 @@ public class TopsActivity extends Activity {
     btnBoys.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Toast.makeText(TopsActivity.this,"boys",Toast.LENGTH_SHORT).show();
-        fillUrlList("param");
+        update("param");
       }
     });
     
@@ -61,8 +72,7 @@ public class TopsActivity extends Activity {
     btnGirls.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Toast.makeText(TopsActivity.this,"girls",Toast.LENGTH_SHORT).show();
-        fillUrlList("param");
+        update("param");
       }
     });
     
@@ -74,53 +84,65 @@ public class TopsActivity extends Activity {
       }
     });
     
-    // Достаем сохраненные состояния кнопок
-    // local final
-    mPreferences = getSharedPreferences(App.TAG, 0);
-    mSexType  = mPreferences.getInt(getString(R.string.tops_prefs_sex),TOP_GIRLS);
-    mCityType = mPreferences.getInt(getString(R.string.tops_prefs_city),0);
-    
     // Start progress dialog    
     mProgressDialog = new ProgressDialog(this);
-    mProgressDialog.setMessage("Loading...");
+    mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    
+    // Bitmat manager
+    mGallaryManager = new GalleryManager(this,"tops",mUserList);
     
     // Gallary
-    mGridAdapter = new TopsGridAdapter(this,mUrlList);
+    mGridAdapter = new TopsGridAdapter(this,mGallaryManager);
     mGallary = (GridView)findViewById(R.id.grdTopsGallary);
     mGallary.setAdapter(mGridAdapter);
-
-    //заполняем лист линками на изображения
-    fillUrlList("null"/* параметры запроса: мальчики - девочки - город */);
+    mGallary.setNumColumns(4);
+    mGallary.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(TopsActivity.this,RateitActivity.class);
+        //Intent intent = new Intent(TopsActivity.this,TestActivity.class);
+        intent.putExtra(RateitActivity.INTENT_USER_ID,mUserList.get(position).name);
+        startActivity(intent);
+      }
+    });
+    
+    // Качаем и отдаем лист линков менеджеру
+    update("null"/* параметры запроса: мальчики - девочки - город */);
   }
   //---------------------------------------------------------------------------
   /*
    * Запрос списка линков на изображения с сервера (параметры запроса  ???)
-   * список линков закачивается каждый раз
+   * список линков закачивается каждый раз при открытии активити (на короткий период кешировать !!!)
    */
-  private void fillUrlList(String params) {
-    new LinkLoaderTask().execute(params);
+  private void update(String params) {
+    new UsersLoaderTask().execute(params);
   }
-  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------  
   @Override
   protected void onDestroy() {
     Utils.log(this,"-onDestroy");
+    mGallaryManager.stop();
+    mGallaryManager.release();
     super.onDestroy();  
   }
   //---------------------------------------------------------------------------
-  // class LinkLoaderTask
-  private class LinkLoaderTask extends AsyncTask<String, Void, Boolean> {
+  // class UsersLoaderTask
+  private class UsersLoaderTask extends AsyncTask<String, Void, Boolean> {
+    //---------------------------------
     @Override
     protected void onPreExecute(){
+      mGallaryManager.stop();
       mProgressDialog.show();
-      mUrlList.clear();
+      mUserList = new ArrayList<User>();
     }
+    //---------------------------------
     // @params параметры для получения списка линков
     @Override
     protected Boolean doInBackground(String... params) {
       // получить массив ссылок на изображения с сервера
       String s = null;
       try {
-        s = Http.httpGetRequest("http://www.chrisboyd.net/wp-content/uploads/2011/10/albums.json");
+        s = Http.httpGetRequest(url);
       } catch(Exception ex) { ex.printStackTrace(); } 
         finally { if(s == null) return false; }
       
@@ -131,18 +153,27 @@ public class TopsActivity extends Activity {
         arr = new JSONArray(obj.getString("covers"));
         for(int i=0; i<arr.length(); ++i) {
           JSONObject o = (JSONObject)arr.get(i);
-          mUrlList.add(o.getString("cover"));
+          User user = new User();
+          user.link = o.getString("cover");
+          user.name = o.getString("artist");
+          mUserList.add(user);
         }
       } catch(JSONException e) {
         e.printStackTrace();
       }
       return true;
     }
+    //---------------------------------
     @Override
     protected void onPostExecute(Boolean result) {
-      if(result!=false)
-        mGridAdapter.notifyDataSetChanged();
+      if(result == false)
+        return;
+      mGallaryManager.restart(mUserList);
+      mGridAdapter.notifyDataSetChanged();
       mProgressDialog.cancel();
     }
-  }// LinkLoaderTask
+  }// UsersLoaderTask
+  //---------------------------------------------------------------------------
 }// TopsActivity
+
+// Toast.makeText(TopsActivity.this,"girls",Toast.LENGTH_SHORT).show();

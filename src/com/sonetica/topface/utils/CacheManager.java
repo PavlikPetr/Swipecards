@@ -1,18 +1,19 @@
 package com.sonetica.topface.utils;
 
+import java.util.Collection;
 import java.util.HashMap;
-import android.content.Context;
 import android.graphics.Bitmap;
 
-public class BitmapCache {
+public class CacheManager {
   // Data
-  private Context mContext;
-  private String  mFileCacheName;
-  private HashMap<Integer,Bitmap> mCache = new HashMap<Integer,Bitmap>();
+  private HashMap<Integer,Bitmap> mCache;
   //---------------------------------------------------------------------------
-  public BitmapCache(Context context,String fileCacheName) {
-    mContext = context;
-    mFileCacheName = fileCacheName;
+  private CacheManager() {
+    mCache = new HashMap<Integer,Bitmap>();
+  }
+  //---------------------------------------------------------------------------
+  public static CacheManager getInstance() {
+    return new CacheManager();
   }
   //---------------------------------------------------------------------------
   public void put(int key,Bitmap value) {
@@ -25,6 +26,13 @@ public class BitmapCache {
   //---------------------------------------------------------------------------
   public boolean containsKey(int key) {
     return mCache.containsKey(key);
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    Collection<Bitmap> values = mCache.values();
+    for(Bitmap bitmap : values)
+      bitmap.recycle();
+    mCache.clear();
   }
   //---------------------------------------------------------------------------
 }

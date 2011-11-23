@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+/*
+ *                   "Профиль"
+ */
 public class ProfileActivity extends Activity {
   // Data
   //---------------------------------------------------------------------------

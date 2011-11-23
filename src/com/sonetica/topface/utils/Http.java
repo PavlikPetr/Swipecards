@@ -129,6 +129,9 @@ public class Http {
     HttpURLConnection httpConnection = null;
     BufferedInputStream buffInputStream = null;
     
+    if(url == null)
+      return null;
+    
     try {
       httpConnection = (HttpURLConnection)new URL(url).openConnection();
       httpConnection.setDoInput(true);
@@ -136,7 +139,11 @@ public class Http {
       httpConnection.connect();
       
       buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
-      bitmap = BitmapFactory.decodeStream(buffInputStream);
+      // Bitmap Options
+      BitmapFactory.Options options=new BitmapFactory.Options();
+      //options.inSampleSize = 5;
+      bitmap = BitmapFactory.decodeStream(buffInputStream,null,options);
+      //bitmap = BitmapFactory.decodeStream(buffInputStream);
       
     } catch (MalformedURLException ex) {Utils.log(null, "Url parsing was failed: " + url);} 
       catch (IOException ex) {Utils.log(null, url + " does not exists");} 

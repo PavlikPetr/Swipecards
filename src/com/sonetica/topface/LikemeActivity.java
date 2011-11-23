@@ -1,10 +1,17 @@
 package com.sonetica.topface;
 
+import com.sonetica.topface.R;
+import com.sonetica.topface.R.id;
+import com.sonetica.topface.R.layout;
+import com.sonetica.topface.R.string;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+/*
+ *      "я нравлюсь"
+ */
 public class LikemeActivity extends Activity {
   // Data
   //---------------------------------------------------------------------------

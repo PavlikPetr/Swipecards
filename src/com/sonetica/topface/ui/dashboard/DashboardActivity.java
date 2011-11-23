@@ -1,12 +1,13 @@
 package com.sonetica.topface.ui.dashboard;
 
-import com.sonetica.topface.ChatActivity;
 import com.sonetica.topface.LikemeActivity;
-import com.sonetica.topface.MyratingActivity;
+import com.sonetica.topface.R;
 import com.sonetica.topface.PhotoratingActivity;
 import com.sonetica.topface.PreferencesActivity;
 import com.sonetica.topface.ProfileActivity;
-import com.sonetica.topface.R;
+import com.sonetica.topface.services.StatisticService;
+import com.sonetica.topface.ui.chat.ChatActivity;
+import com.sonetica.topface.ui.myrating.MyratingActivity;
 import com.sonetica.topface.ui.tops.TopsActivity;
 import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.Utils;
@@ -20,10 +21,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 /*
- * Класс главного активити для навигации по приложению
+ * Класс главного активити для навигации по приложению  "TopFace"
  */
 public class DashboardActivity extends Activity implements View.OnClickListener {
   // Data
+  private Intent mServiceIntent;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     ((Button)findViewById(R.id.btnDashbrdChat)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdTops)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdProfile)).setOnClickListener(this);
+    
+    startService(mServiceIntent = new Intent(this,StatisticService.class));
   }
   //---------------------------------------------------------------------------
   @Override
@@ -122,6 +126,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
+    stopService(mServiceIntent);
     Utils.log(this,"-onDestroy");
     super.onDestroy();
   }

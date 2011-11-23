@@ -4,21 +4,29 @@ import android.os.Debug;
 
 public class Memory {
   //---------------------------------------------------------------------------  
-  public static long getMaxHeap() {
-    return Runtime.getRuntime().maxMemory();
+  public static int getMaxHeap() {
+    return (int)(Runtime.getRuntime().maxMemory())/1024;
   }
   //---------------------------------------------------------------------------
-  public static long getUsedHeap() {
+  public static int getHeapUsed() {
     Runtime runtime = Runtime.getRuntime();   
-    return runtime.totalMemory()-runtime.freeMemory();
+    return (int)(runtime.totalMemory()-runtime.freeMemory())/1024;
   }
   //---------------------------------------------------------------------------
-  public static long getUsedNative() {
-    return Debug.getNativeHeapSize()-Debug.getNativeHeapFreeSize();
+  public static int getHeapFree() {  
+    return (int)(Runtime.getRuntime().freeMemory())/1024;
   }
   //---------------------------------------------------------------------------
-  public static long getUsedMemory() {
-    return getUsedHeap() + getUsedNative(); 
+  public static int getNativeUsed() {
+    return (int)(Debug.getNativeHeapSize()-Debug.getNativeHeapFreeSize())/1024;
+  }
+  //---------------------------------------------------------------------------
+  public static int getNativeFree() {
+    return (int)(Debug.getNativeHeapFreeSize())/1024;
+  }
+  //---------------------------------------------------------------------------
+  public static int getUsedMemory() {
+    return (int)(getHeapUsed() + getNativeUsed())/1024; 
   }
   //---------------------------------------------------------------------------
 }
