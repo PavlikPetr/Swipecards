@@ -4,6 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import android.graphics.Bitmap;
 
+/*
+ *  Менеджер управляет скачанными изорбражениями.
+ *  Хранение через слабые и мягкие ссылки
+ */
 public class CacheManager {
   // Data
   private HashMap<Integer,Bitmap> mCache;

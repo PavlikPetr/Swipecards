@@ -4,6 +4,9 @@ import java.util.HashMap;
 import com.sonetica.topface.App;
 import android.util.Log;
 
+/*
+ *  Набор вспомагательных функций
+ */
 public class Utils {
   //---------------------------------------------------------------------------
   public static void log(Object obj,String msg) {

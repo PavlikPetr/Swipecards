@@ -1,15 +1,22 @@
 package com.sonetica.topface.ui.dashboard;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import com.sonetica.topface.LikemeActivity;
 import com.sonetica.topface.R;
 import com.sonetica.topface.PhotoratingActivity;
 import com.sonetica.topface.PreferencesActivity;
 import com.sonetica.topface.ProfileActivity;
 import com.sonetica.topface.services.StatisticService;
+import com.sonetica.topface.social.AuthToken;
+import com.sonetica.topface.social.SocialActivity;
+import com.sonetica.topface.social.Socium;
+import com.sonetica.topface.social.Socium.AuthException;
 import com.sonetica.topface.ui.chat.ChatActivity;
 import com.sonetica.topface.ui.myrating.MyratingActivity;
 import com.sonetica.topface.ui.tops.TopsActivity;
 import com.sonetica.topface.utils.Http;
+import com.sonetica.topface.utils.Memory;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.content.Intent;
@@ -18,6 +25,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /*
@@ -26,6 +35,8 @@ import android.widget.Toast;
 public class DashboardActivity extends Activity implements View.OnClickListener {
   // Data
   private Intent mServiceIntent;
+  // Constants
+  public static final int INTENT_DASHBOARD = 100;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,55 +44,10 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     setContentView(R.layout.ac_dashboard);
     Utils.log(this,"+onCreate");
     
-    /*
-     //регистрация через сервер topface
-    String url = "http://api.topface.ru/?v=1";
-    String request = "q=";
-    
-    AuthToken.Token token = new AuthToken(this).getToken(); 
-    
-    JSONObject obj = new JSONObject();
-    try {
-      obj.put("service","auth");
-      obj.put("sid",token.getUserId());
-      obj.put("token",token.getTokenKey());
-      obj.put("platform",token.getSocialNet());
-    } catch(JSONException e) {
-      e.printStackTrace();
+    if(!Http.isOnline(this)){
+      Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
+      return;
     }
-    
-    //request = request+obj.toString();
-    
-    String response = Http.httpPostRequest(url,request);
-    response+="";
-    
-    ((TextView)findViewById(R.id.txt)).setText("memory:"+Memory.getUsedHeap()/1024);
-    final ImageView ava=(ImageView)findViewById(R.id.avatar);
-    ava.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        new Thread(new Runnable() {
-          @Override
-          public void run() {
-            Socium socium = null;
-            try {
-              socium = new Socium(DashboardActivity.this); 
-            } catch(AuthException e) {
-              startActivity(new Intent(DashboardActivity.this, SocialActivity.class));
-            }
-//            final Bitmap bmp = socium.getAvatar();
-//            if(bmp!=null)
-//              ava.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                  ava.setImageBitmap(bmp);  
-//                }
-//              });           
-          }
-        }).start();
-      }8888
-    });
-    */
     
     ((Button)findViewById(R.id.btnDashbrdPhotorating)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdLikeme)).setOnClickListener(this);
@@ -94,13 +60,11 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   }
   //---------------------------------------------------------------------------
   @Override
-  public void onClick(View view) {
-    
+  public void onClick(View view) {  
     if(!Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }
-    
     switch(view.getId()) {
       case R.id.btnDashbrdPhotorating: {
         startActivity(new Intent(this,PhotoratingActivity.class));
@@ -127,6 +91,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onDestroy() {
     stopService(mServiceIntent);
+    finishActivity(RESULT_OK);
+    
     Utils.log(this,"-onDestroy");
     super.onDestroy();
   }
@@ -153,6 +119,38 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         break;
     }
     return super.onMenuItemSelected(featureId,item);
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onResume() {
+    /*
+    //регистрация через сервер topface
+   String url = "http://api.topface.ru/?v=1";
+   String request = "";
+   
+   AuthToken.Token token = new AuthToken(this).getToken(); 
+   
+   JSONObject obj = new JSONObject();
+   try {
+     obj.put("service","auth");
+       JSONObject data = new JSONObject();
+       data.put("sid",token.getUserId());
+       data.put("token",token.getTokenKey());
+       data.put("platform",token.getSocialNet());
+     obj.put("data",data);
+   } catch(JSONException e) {
+     e.printStackTrace();
+   }
+
+   try {
+     request=request+obj.toString();
+     String response = Http.httpSendTpRequest(url,request);
+     response+="";
+   } catch(Exception e) { 
+     Utils.log(null,">>>> "+e.getMessage()); }
+     */
+    super.onResume();
+    
   }
   //---------------------------------------------------------------------------
 }

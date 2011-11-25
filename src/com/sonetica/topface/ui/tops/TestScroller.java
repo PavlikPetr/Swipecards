@@ -86,5 +86,14 @@ public class TestScroller extends ImageView implements View.OnTouchListener {
     return true;
   }
   //---------------------------------------------------------------------------
+  @Override
+  protected void finalize() throws Throwable {
+    if(mBitmap1==null || mBitmap2==null) {
+    mBitmap1.recycle();
+    mBitmap2.recycle();
+    }
+    super.finalize();
+  }
+  //---------------------------------------------------------------------------
 }
 

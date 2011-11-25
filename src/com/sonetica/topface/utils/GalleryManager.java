@@ -9,11 +9,12 @@ import android.widget.ImageView;
 
 /*
  *  Менеджер изображений закачивает, сторит и выдает
+ *  предназанчен для окон "Топы" и "Я нравлюсь" 
  */
 public class GalleryManager {
   // Data
   private Context mContext;
-  private String mName;
+  private String  mName;
   private ArrayList<User> mUserList;  //список ссылок на изображения полученные из JSON ответа topfase сервера
   private CacheManager mCacheManager;
   // пул на 4 одновременно работающих потока, остальные добавленные сидят курят, пока освободится место

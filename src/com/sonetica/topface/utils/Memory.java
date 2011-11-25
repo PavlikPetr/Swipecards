@@ -2,6 +2,9 @@ package com.sonetica.topface.utils;
 
 import android.os.Debug;
 
+/*
+ *  Набор функций для мониторинга расходывания памяти
+ */
 public class Memory {
   //---------------------------------------------------------------------------  
   public static int getMaxHeap() {

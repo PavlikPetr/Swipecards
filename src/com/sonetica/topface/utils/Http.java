@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.apache.http.HttpRequest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,24 +34,33 @@ public class Http {
       return true;
     else
       return false;
-  
   }
   //---------------------------------------------------------------------------
   public static String httpGetRequest(String request) throws Exception {
-    return httpRequest(HTTP_GET_REQUEST, request, null);
+    return httpRequest(HTTP_GET_REQUEST,request,null,false);
   }
   //---------------------------------------------------------------------------
   public static String httpPostRequest(String request, String postParams) throws Exception {
-    return httpRequest(HTTP_POST_REQUEST, request, postParams);
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,false);
   }
   //---------------------------------------------------------------------------
-  private static String httpRequest(int typeRequest, String request, String postParams) throws Exception {
+  // TopFace API
+  public static String httpSendTpRequest(String request, String postParams) throws Exception {
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,true);
+  }
+  //---------------------------------------------------------------------------
+  private static String httpRequest(int typeRequest, String request, String postParams,boolean isJson) throws Exception {
     HttpURLConnection urlConnection = null;
     try {
       // Делаем запрос
       URL url = new URL(request);
+      //HttpRequest
       urlConnection = (HttpURLConnection)url.openConnection();
       urlConnection.setUseCaches(false);
+      
+      // для запроса API на TopFace сервере
+      if(isJson)
+        urlConnection.setRequestProperty("Content-Type", "application/json");
       
       if(typeRequest == HTTP_POST_REQUEST){
         // Отправляем post параметры
