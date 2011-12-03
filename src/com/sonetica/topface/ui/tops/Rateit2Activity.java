@@ -7,20 +7,21 @@ import org.json.JSONObject;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.User;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.GalleryManager;
+import com.sonetica.topface.utils.Utils;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.widget.TextView;
 
-public class RateitActivity extends FragmentActivity {
+public class Rateit2Activity extends Activity {
   // Data
-  private PagerAdapter mPagerAdapter;
+  private Rateit2Gallery mGallery;
+  private Rateit2GalleryAdapter mGalleryAdapter;
   private ProgressDialog mProgressDialog;
-  private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
-  private ViewPager mPager;
+  private GalleryManager mGalleryManager; 
+  private ArrayList<String> mUrlList = new ArrayList<String>();
   // Constants
   public static final String INTENT_USER_ID = "user_id";
   String url = "http://www.mssoft.org/data/big.json";
@@ -28,22 +29,39 @@ public class RateitActivity extends FragmentActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.ac_rateit);
+    setContentView(R.layout.ac_rateit2);
     
-    // Start progress dialog    
+    // getIntent.getString id user profile (url link)
+    
+    // Title Header
+    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.rateit_header_title));
+    
+    // Progress Dialog
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
-    update(null);    
+    // Bitmat manager
+    mGalleryManager = new GalleryManager(this,mUrlList,1);
     
-    mPagerAdapter = new RateitPagerAdapter(getSupportFragmentManager(), mFragments);
-    mPager = (ViewPager)findViewById(R.id.viewpager);
-    mPager.setAdapter(mPagerAdapter);
-
+    // Gallery
+    mGallery = (Rateit2Gallery)findViewById(R.id.galleryRateit2);
+    mGalleryAdapter = new Rateit2GalleryAdapter(getApplicationContext(),mGalleryManager);
+    
+    update(null);
+    
+    mGallery.setAdapter(mGalleryAdapter);
   }
   //---------------------------------------------------------------------------
   private void update(String params) {
     new UsersLoaderTask().execute(params);
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onDestroy() {
+    Utils.log(this,"-onDestroy");
+    mGalleryManager.stop();
+    mGalleryManager.release();
+    super.onDestroy();  
   }
   //---------------------------------------------------------------------------
   // class UsersLoaderTask
@@ -52,13 +70,10 @@ public class RateitActivity extends FragmentActivity {
     @Override
     protected void onPreExecute(){
       mProgressDialog.show();
-      mFragments = new ArrayList<Fragment>();
     }
     //---------------------------------
-    // @params параметры для получения списка линков
     @Override
     protected Boolean doInBackground(String... params) {
-      // получить массив ссылок на изображения с сервера
       String s = null;
       try {
         s = Http.httpGetRequest(url);
@@ -75,9 +90,7 @@ public class RateitActivity extends FragmentActivity {
           User user = new User();
           user.link = o.getString("cover");
           user.name = o.getString("artist");
-          RateitFragment fragment = (RateitFragment)Fragment.instantiate(RateitActivity.this, RateitFragment.class.getName());
-          fragment.setUrl(user.link);
-          mFragments.add(fragment);
+          mUrlList.add(user.link);
         }
       } catch(JSONException e) {
         e.printStackTrace();
@@ -87,10 +100,7 @@ public class RateitActivity extends FragmentActivity {
     //---------------------------------
     @Override
     protected void onPostExecute(Boolean result) {
-      if(result == false)
-        return;
-      mPagerAdapter.notifyDataSetChanged();
-      mPager.invalidate();
+      mGalleryAdapter.notifyDataSetChanged();
       mProgressDialog.cancel();
     }
   }// UsersLoaderTask

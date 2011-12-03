@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import com.sonetica.topface.utils.Http;
+import com.sonetica.topface.net.Http;
 
 /*
  *  Интерфейс api для запросов к социальным сетям

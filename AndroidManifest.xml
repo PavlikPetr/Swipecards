@@ -12,29 +12,36 @@
                android:debuggable="true"
                android:screenOrientation="portrait">
     
-    <!-- main launcher -->
+    <!--  -->
     <activity android:name=".MainActivity">
     </activity>
     
-    <!-- activities -->
-    <activity android:name=".LikemeActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".PhotoratingActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ProfileActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".PreferencesActivity" android:screenOrientation="portrait"/>
-    
-    <activity android:name=".ui.myrating.MyratingActivity" android:screenOrientation="portrait"/>
+    <!-- main launcher -->
     <activity android:name=".ui.dashboard.DashboardActivity" android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+        
+    <!-- activities -->
+    <activity android:name=".ui.myrating.MyratingActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.myrating.MyratingActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.chat.ChatActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.tops.TopsActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".ui.tops.Tops2Activity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.tops.RateitActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".ui.tops.Rateit2Activity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.tops.TestActivity" android:screenOrientation="portrait"/>
     
+    <activity android:name=".LikemeActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".PhotoratingActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".ProfileActivity" android:screenOrientation="portrait"/>
+    
+    <!-- preferences activity -->
+    <activity android:name=".PreferencesActivity" android:screenOrientation="portrait"/>
+    
+    <!-- social activity -->
     <activity android:name=".social.SocialActivity" android:screenOrientation="portrait"/>
     <activity android:name=".social.SocialWebActivity" android:screenOrientation="portrait"/>
     
@@ -44,6 +51,7 @@
   
   <!-- permissions -->
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
   

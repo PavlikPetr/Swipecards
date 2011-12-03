@@ -3,8 +3,9 @@ package com.sonetica.topface.ui.tops;
 import com.sonetica.topface.App;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.User;
-import com.sonetica.topface.utils.GalleryManager;
-import com.sonetica.topface.utils.Http;
+import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.GalleryCachedManager;
+import com.sonetica.topface.utils.IFrame;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -13,10 +14,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -33,10 +34,9 @@ public class TopsActivity extends Activity {
   private int mCityType; // выбранный город
   private GridView mGallary;
   private TopsGridAdapter mGridAdapter;
-  private GalleryManager mGallaryManager;
   private ProgressDialog mProgressDialog;
   private SharedPreferences mPreferences;
-  private ArrayList<User> mUserList = new ArrayList<User>();
+  private UsersLoaderTask mAsyncTask;
   // Constants
   private static final int TOP_GIRLS = 0;
   private static final int TOP_BOYS  = 1;
@@ -47,6 +47,8 @@ public class TopsActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_tops);
     Utils.log(this,"+onCreate");
+    
+    mAsyncTask = new UsersLoaderTask();
        
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.tops_header_title));
@@ -62,7 +64,7 @@ public class TopsActivity extends Activity {
     btnBoys.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        update("param");
+        //update("param");
       }
     });
     
@@ -72,7 +74,7 @@ public class TopsActivity extends Activity {
     btnGirls.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        update("param");
+        //update("param");
       }
     });
     
@@ -88,25 +90,31 @@ public class TopsActivity extends Activity {
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
-    // Bitmat manager
-    mGallaryManager = new GalleryManager(this,"tops",mUserList);
-    
     // Gallary
-    mGridAdapter = new TopsGridAdapter(this,mGallaryManager);
     mGallary = (GridView)findViewById(R.id.grdTopsGallary);
-    mGallary.setAdapter(mGridAdapter);
     mGallary.setNumColumns(4);
     mGallary.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(TopsActivity.this,RateitActivity.class);
+        //Intent intent = new Intent(TopsActivity.this,RateitActivity.class);
+        Intent intent = new Intent(TopsActivity.this,Rateit2Activity.class);
         //Intent intent = new Intent(TopsActivity.this,TestActivity.class);
-        intent.putExtra(RateitActivity.INTENT_USER_ID,mUserList.get(position).name);
+        //intent.putExtra(RateitActivity.INTENT_USER_ID,mUrlList.get(position)); //!!!!!!!!!!
         startActivity(intent);
       }
     });
     
-    // Качаем и отдаем лист линков менеджеру
+//    mGallary.setOnScrollListener(new AbsListView.OnScrollListener() {
+//      @Override
+//      public void onScrollStateChanged(AbsListView arg0, int arg1) {}
+//        @Override
+//        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//          if(visibleItemCount > 0 && firstVisibleItem + visibleItemCount == totalItemCount && hasNextPage()) {
+//            loadNextPage();
+//          }
+//        }
+//      });
+    
     update("null"/* параметры запроса: мальчики - девочки - город */);
   }
   //---------------------------------------------------------------------------
@@ -115,61 +123,61 @@ public class TopsActivity extends Activity {
    * список линков закачивается каждый раз при открытии активити (на короткий период кешировать !!!)
    */
   private void update(String params) {
-    new UsersLoaderTask().execute(params);
+    //mTask.cancel(true);
+    mAsyncTask.execute(params);
+      
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onDestroy() {
     Utils.log(this,"-onDestroy");
-    mGallaryManager.stop();
-    mGallaryManager.release();
     super.onDestroy();  
   }
   //---------------------------------------------------------------------------
   // class UsersLoaderTask
-  private class UsersLoaderTask extends AsyncTask<String, Void, Boolean> {
+  private class UsersLoaderTask extends AsyncTask<String, Void, ArrayList<User>> {
     //---------------------------------
     @Override
     protected void onPreExecute(){
-      mGallaryManager.stop();
       mProgressDialog.show();
-      mUserList = new ArrayList<User>();
     }
     //---------------------------------
     // @params параметры для получения списка линков
     @Override
-    protected Boolean doInBackground(String... params) {
+    protected ArrayList<User> doInBackground(String... params) {
       // получить массив ссылок на изображения с сервера
-      String s = null;
+      String response = null;
       try {
-        s = Http.httpGetRequest(url);
+        response = Http.httpGetRequest(url);
       } catch(Exception ex) { ex.printStackTrace(); } 
-        finally { if(s == null) return false; }
+        finally { if(response==null) return null; }
+      
+      ArrayList<User> userList = new ArrayList<User>();
       
       JSONObject obj = null;
       JSONArray  arr = null;
       try {
-        obj = new JSONObject(s);
+        obj = new JSONObject(response);
         arr = new JSONArray(obj.getString("covers"));
         for(int i=0; i<arr.length(); ++i) {
           JSONObject o = (JSONObject)arr.get(i);
           User user = new User();
           user.link = o.getString("cover");
           user.name = o.getString("artist");
-          mUserList.add(user);
+          userList.add(user);
         }
       } catch(JSONException e) {
         e.printStackTrace();
       }
-      return true;
+      return userList;
     }
     //---------------------------------
     @Override
-    protected void onPostExecute(Boolean result) {
-      if(result == false)
-        return;
-      mGallaryManager.restart(mUserList);
-      mGridAdapter.notifyDataSetChanged();
+    protected void onPostExecute(ArrayList<User> userList) {
+      //if(isCancelled()==false || userList==null)
+      //  return;
+      mGridAdapter = new TopsGridAdapter(TopsActivity.this,userList);
+      mGallary.setAdapter(mGridAdapter);
       mProgressDialog.cancel();
     }
   }// UsersLoaderTask

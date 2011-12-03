@@ -13,7 +13,7 @@ public class TopButton extends ImageView {
   public Bitmap  mBitmap;
   public Boolean mLikeState;
   public String  mPercent;
-  
+  public ImageView iv;
   private static Paint s_Paint;
   private static Paint s_PaintLine;
   private static Paint s_PaintText;
@@ -31,6 +31,7 @@ public class TopButton extends ImageView {
   //---------------------------------------------------------------------------
   public TopButton(Context context) {
     super(context);
+    iv = new ImageView(context);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -38,7 +39,7 @@ public class TopButton extends ImageView {
     super.onDraw(canvas);
     
     // SCALING
-
+    iv.draw(canvas);
     if(mBitmap!=null) {
       canvas.drawBitmap(mBitmap,(getWidth()-mBitmap.getWidth())/2,(getHeight()-mBitmap.getHeight())/2,s_Paint);
       Rect lineRect = new Rect(0,getHeight()-29,getWidth(),getHeight());

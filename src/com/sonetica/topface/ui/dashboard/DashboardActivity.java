@@ -1,22 +1,17 @@
 package com.sonetica.topface.ui.dashboard;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import com.sonetica.topface.LikemeActivity;
 import com.sonetica.topface.R;
 import com.sonetica.topface.PhotoratingActivity;
 import com.sonetica.topface.PreferencesActivity;
 import com.sonetica.topface.ProfileActivity;
+import com.sonetica.topface.net.Http;
 import com.sonetica.topface.services.StatisticService;
-import com.sonetica.topface.social.AuthToken;
-import com.sonetica.topface.social.SocialActivity;
-import com.sonetica.topface.social.Socium;
-import com.sonetica.topface.social.Socium.AuthException;
 import com.sonetica.topface.ui.chat.ChatActivity;
 import com.sonetica.topface.ui.myrating.MyratingActivity;
+import com.sonetica.topface.ui.tops.Tops2Activity;
 import com.sonetica.topface.ui.tops.TopsActivity;
-import com.sonetica.topface.utils.Http;
-import com.sonetica.topface.utils.Memory;
+import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.content.Intent;
@@ -25,8 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /*
@@ -79,7 +72,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         startActivity(new Intent(this,ChatActivity.class));
       } break;
       case R.id.btnDashbrdTops: {
-        startActivity(new Intent(this,TopsActivity.class));
+        //startActivity(new Intent(this,TopsActivity.class));
+        startActivity(new Intent(this,Tops2Activity.class));
       } break;
       case R.id.btnDashbrdProfile: {
         startActivity(new Intent(this,ProfileActivity.class));
@@ -91,7 +85,10 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onDestroy() {
     stopService(mServiceIntent);
-    finishActivity(RESULT_OK);
+    // передавал в MainActivity
+    //finishActivity(RESULT_OK);
+    
+    CacheManager.close();
     
     Utils.log(this,"-onDestroy");
     super.onDestroy();

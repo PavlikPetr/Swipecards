@@ -1,10 +1,9 @@
 package com.sonetica.topface.ui.tops;
 
-import java.util.ArrayList;
-import com.sonetica.topface.data.User;
+import com.sonetica.topface.R;
 import com.sonetica.topface.utils.GalleryCachedManager;
-import com.sonetica.topface.utils.IFrame;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,14 +12,18 @@ import android.widget.ImageView;
 /*
  * Класс адаптера для отображения галереи в Топ активити
  */
-public class TopsGridAdapter extends BaseAdapter {
+public class Tops2GridAdapter extends BaseAdapter {
   // Data
-  private Context mContext;
+  private LayoutInflater mInflater;
   private GalleryCachedManager mGalleryCachedManager;
+  // class ViewHolder
+  static class ViewHolder {
+    ImageView miv;
+  };
   //---------------------------------------------------------------------------
-  public TopsGridAdapter(Context context,ArrayList<User> userList) {
-    mContext = context;
-    mGalleryCachedManager = null;//new GalleryCachedManager(this,IFrame.TOPS,userList/*,4*/);
+  public Tops2GridAdapter(Context context,GalleryCachedManager galleryCachedManager) {
+    mInflater = LayoutInflater.from(context);
+    mGalleryCachedManager = galleryCachedManager;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -30,15 +33,19 @@ public class TopsGridAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   @Override
   public View getView(int position,View convertView,ViewGroup parent) {
-    //if(convertView == null) {
-      convertView = new TopButton(mContext);
-      convertView.setMinimumWidth(120);
-      convertView.setMinimumHeight(160);
-    //}
-    ((TopButton)convertView).setImageBitmap(null);
-
-    //mGalleryCachedManager.getImage(position,((TopButton)convertView).iv);
-
+    ViewHolder holder = null;
+    if(convertView == null) {
+      holder = new ViewHolder();
+      convertView = (ViewGroup)mInflater.inflate(R.layout.tops_gallery_item, null, false);
+      holder.miv = (ImageView)convertView.findViewById(R.id.ivTG);
+      convertView.setTag(holder);
+    } else 
+      holder = (ViewHolder)convertView.getTag();
+    
+   // holder.miv.setImageResource(R.drawable.ic_launcher);
+    
+    mGalleryCachedManager.getImage(position,holder.miv);
+    
     return convertView;
   }
   //---------------------------------------------------------------------------

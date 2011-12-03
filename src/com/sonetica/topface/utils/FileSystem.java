@@ -3,6 +3,7 @@ package com.sonetica.topface.utils;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.regex.Pattern;
+import android.os.Environment;
 
 /*
  *   Класс для работы со стораджем,файлами,путями...
@@ -80,6 +81,20 @@ public class FileSystem {
         }
       });
     return list;
+  }
+  //---------------------------------------------------------------------------
+  public static File getRootDirectory() {
+    return Environment.getRootDirectory();
+  }
+  //---------------------------------------------------------------------------
+  public static File getExternalDirectory() {
+    return Environment.getExternalStorageDirectory();
+  }
+  //---------------------------------------------------------------------------
+  public static boolean isExternalCardAvailable() {
+    if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+      return true;
+    return false;
   }
   //---------------------------------------------------------------------------
 }// FileSystem

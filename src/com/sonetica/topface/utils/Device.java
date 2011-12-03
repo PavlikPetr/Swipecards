@@ -11,7 +11,7 @@ import android.view.WindowManager;
  *  собирает и отдает параметры и характеристики:
  *  клавы,экрана,процессора,сенсоров,
  */
-public class DeviceManager {
+public class Device {
   //---------------------------------------------------------------------------
   public Display getDisplay(Context context) {
     return ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -22,12 +22,6 @@ public class DeviceManager {
     DisplayMetrics displayMetrics = new DisplayMetrics();
     display.getMetrics(displayMetrics);
     return displayMetrics;
-  }
-  //---------------------------------------------------------------------------
-  public static boolean isExternalCardAvailable() {
-    if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-      return true;
-    return false;
   }
   //---------------------------------------------------------------------------
 }
