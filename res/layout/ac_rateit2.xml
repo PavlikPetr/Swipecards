@@ -8,7 +8,7 @@
   <include layout="@layout/header_bar" />
   
   <!-- gallery -->
-  <com.sonetica.topface.ui.tops.Rateit2Gallery
+  <com.sonetica.topface.ui.tops.RateitGallery
       android:id="@+id/galleryRateit2"
       android:spacing="0dip"  
       android:fadingEdge="none"

@@ -10,12 +10,12 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
 
-public class Rateit2GalleryAdapter extends BaseAdapter {
+public class RateitGalleryAdapter extends BaseAdapter {
   // Data
   private Context mContext;
   private GalleryManager mGalleryManager; // менеджер изображений
   //---------------------------------------------------------------------------
-  public Rateit2GalleryAdapter(Context context,GalleryManager bitmapManager) {
+  public RateitGalleryAdapter(Context context,GalleryManager bitmapManager) {
     mContext = context;
     mGalleryManager = bitmapManager;
   }

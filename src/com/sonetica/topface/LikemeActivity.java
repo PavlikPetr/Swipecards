@@ -25,4 +25,10 @@ public class LikemeActivity extends Activity {
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likeme_header_title));
   }
   //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    Utils.log(this,"-onDestroy");
+    super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
 }

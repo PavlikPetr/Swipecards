@@ -1,8 +1,12 @@
 package com.sonetica.topface;
 
+import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.social.SocialActivity;
+import com.sonetica.topface.social.SocialWebActivity;
 import com.sonetica.topface.utils.Utils;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -11,6 +15,8 @@ import android.preference.PreferenceActivity;
  * Класс активити для отображения настроек приложения
  */
 public class PreferencesActivity extends PreferenceActivity {
+  // Data
+  public static final int INTENT_PREFERENCES_ACTIVITY = 104;
   //---------------------------------------------------------------------------
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -23,11 +29,19 @@ public class PreferencesActivity extends PreferenceActivity {
     findPreference("pref_login").setOnPreferenceClickListener(
       new Preference.OnPreferenceClickListener() {
         public boolean onPreferenceClick(Preference preference) {
-          startActivity(new Intent(PreferencesActivity.this, SocialActivity.class));
+          SharedPreferences preferences = getSharedPreferences(AuthToken.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+          String sn = preferences.getString(AuthToken.KEY_SOCIAL_NETWORK,"");
+          if(sn.length()>0) {
+            Intent intent = new Intent(PreferencesActivity.this, SocialWebActivity.class);
+            if(sn.equals(AuthToken.SN_VKONTAKTE))
+              intent.putExtra(SocialWebActivity.TYPE,SocialWebActivity.TYPE_VKONTAKTE);
+            if(sn.equals(AuthToken.SN_FACEBOOK))
+              intent.putExtra(SocialWebActivity.TYPE,SocialWebActivity.TYPE_FACEBOOK);
+            startActivityForResult(intent,SocialWebActivity.INTENT_SOCIAL_WEB);
+          }
           return true;
         }
-      }
-    );
+      });
     
   }
   //---------------------------------------------------------------------------

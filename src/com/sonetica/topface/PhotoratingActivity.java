@@ -21,4 +21,10 @@ public class PhotoratingActivity extends Activity {
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.photorating_header_title));
   }
   //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    Utils.log(this,"-onDestroy");
+    super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
 }

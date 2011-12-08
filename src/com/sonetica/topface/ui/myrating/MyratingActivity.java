@@ -38,4 +38,10 @@ public class MyratingActivity extends Activity {
    mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    Utils.log(this,"-onDestroy");
+    super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
 }

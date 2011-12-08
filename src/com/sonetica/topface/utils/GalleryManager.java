@@ -41,7 +41,6 @@ public class GalleryManager {
             @Override
             public void run() {
               view.setImageBitmap(bitmap);
-              view.invalidate();
             }
           });
           mCache.put(position,bitmap);

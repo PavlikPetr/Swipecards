@@ -24,67 +24,46 @@ import android.graphics.drawable.BitmapDrawable;
  *  Хранение через слабые и мягкие ссылки
  */
 public class CacheManager {
-  //---------------------------------------------------------------------------
-  // class Cache
-  //---------------------------------------------------------------------------
-  public class Cache {
-    private IFrame mFrame;
-    private HashMap<Integer,Bitmap> mData;
-    Cache(IFrame frame) {
-      mFrame = frame;
-      mData  = CacheManager.this.mCache.get(frame);
-    }
-    public boolean containsKey(int key) {
-      return mData.containsKey(key);
-    }
-    public Bitmap get(int key) {
-      return mData.get(key);
-    }
-    public void put(int key,Bitmap value,String name) {
-      CacheManager.this.put(mFrame,key,value,name);
-    }
-    public void release() {
-      for(Bitmap bitmap : mData.values())
-        if(bitmap!=null)
-        bitmap.recycle();
-    }
-  }
-  //---------------------------------------------------------------------------
   // Data
   private Context mContext;
   private DbaseManager mDbase;
   private ExecutorService mThreadPool;
   private HashMap<IFrame,HashMap<Integer,Bitmap>> mCache;
-  // instance
+  // Instance
   private static CacheManager mInstance;
   //---------------------------------------------------------------------------
-  public static void init(Context context) {
+  public static void create(Context context) {
     mInstance = new CacheManager(context);
   }
   //---------------------------------------------------------------------------
-  private CacheManager(Context context) {
+  public static AbstractCache getCache(IFrame frame) {
+    switch(frame) {
+      case TOPS:
+        return new TopsCache(mInstance);
+      case RATEIT:
+        return new RateitCache(mInstance);
+    }
+    return null;
+  }
+  //---------------------------------------------------------------------------
+  public CacheManager(Context context) {
     mContext = context;
-    mThreadPool = Executors.newFixedThreadPool(2);
+    mThreadPool = Executors.newFixedThreadPool(3);
     mDbase = new DbaseManager(context);
     mCache = new HashMap<IFrame,HashMap<Integer,Bitmap>>();
     for(IFrame frame : IFrame.values())
-      mCache.put(frame,new HashMap<Integer,Bitmap>()); //load(frame)
+      mCache.put(frame,new HashMap<Integer,Bitmap>()); // create def map //load(frame)
     
     // загрузка кэша конкретного фрейма
     // load(IFrame.TOPS);
     // load(IFrame.RATEIT);
   }
   //---------------------------------------------------------------------------
-  public static Cache getCache(IFrame frame,ArrayList<User> userList) {
-    return mInstance.getCacheInt(frame,userList);
+  protected HashMap<Integer,Bitmap> getData(IFrame frame) {
+    return mCache.get(frame);
   }
   //---------------------------------------------------------------------------
-  private Cache getCacheInt(IFrame frame,ArrayList<User> userList) {
-   // loadSyncCache(frame,userList);
-    return new Cache(frame);
-  }
-  //---------------------------------------------------------------------------
-  private void put(final IFrame frame,final int key,final Bitmap value,final String fileName) {
+  protected void put(final IFrame frame,final int key,final Bitmap value,final String fileName) {
     switch(frame) {
       case TOPS:
         mThreadPool.execute(new Runnable() {
@@ -107,56 +86,37 @@ public class CacheManager {
     }
   }
   //---------------------------------------------------------------------------
-  private void loadSyncCache(IFrame frame,ArrayList<User> userList) {
-    switch(frame) {
-      case TOPS:
-        HashMap<Integer,Bitmap> temp = mCache.get(frame);
-        ArrayList<String> arr = mDbase.getTops();
-        for(int i=0;i<userList.size();i++) {
-          if(i>(arr.size()-1))
-            break;
-          if(FileSystem.getFileName(userList.get(i).link).equals(arr.get(i)))
-            temp.put(i,loadBitmap(frame,arr.get(i)));
-        }
-        //Utils.log(null,"sync: arr: "+arr.size()+" userList: "+userList.size()); 
-      break;
-    }
-  }
-  //---------------------------------------------------------------------------
-  private HashMap<Integer,Bitmap> loadCache(IFrame frame) {
-    // подгрузка всех изображений из кеша для фрейма
-    switch(frame) {
-      case TOPS:
-      break;
-    }
-    return null;
-  }
-  //---------------------------------------------------------------------------
-  public boolean saveBitmap(IFrame frame,String fileName, Bitmap bitmap) {
-    BufferedOutputStream bos = null;
-    File fdir = mContext.getFilesDir();
-    fdir = new File(fdir,frame.name());
-    if(!fdir.exists())
-      fdir.mkdir();
-    File file = new File(fdir,FileSystem.getFileName(fileName));
-    if(file.exists())
-      return false;
+  protected boolean save(final IFrame frame,final Bitmap bitmap,final String fileName) {
+    mThreadPool.execute(new Runnable() {
+      @Override
+      public void run() {
+        BufferedOutputStream bos = null;
+        File fdir = mContext.getFilesDir();
+        fdir = new File(fdir,frame.name());
+        if(!fdir.exists())
+          fdir.mkdir();
+        File file = new File(fdir,FileSystem.getFileName(fileName));
+        if(file.exists())
+          return;
 
-    try {
-      bos = new BufferedOutputStream(new FileOutputStream(file));
-      bitmap.compress(Bitmap.CompressFormat.JPEG, 85, bos);
-    } catch(FileNotFoundException e) { Utils.log(null,"error: "+e.getMessage()); } 
-      finally {
         try {
-          if(bos!=null)
-            bos.close();
-        } catch(IOException e) {}
+          bos = new BufferedOutputStream(new FileOutputStream(file));
+          bitmap.compress(Bitmap.CompressFormat.JPEG, 85, bos);
+        } catch(FileNotFoundException e) { Utils.log(null,"error: "+e.getMessage()); } 
+          finally {
+            try {
+              if(bos!=null)
+                bos.close();
+            } catch(IOException e) {}
+          }
+        
+        Utils.log(null,"saveBitmap: "+fileName);
       }
-    Utils.log(null,"saveBitmap: "+fileName);
+    });
     return true;
   }
   //---------------------------------------------------------------------------
-  public Bitmap loadBitmap(IFrame frame,String fileName) {
+  protected Bitmap load(IFrame frame,String fileName) {
     File file = mContext.getFilesDir();
     file = new File(new File(file,frame.name()),fileName);
     if(!file.exists())
@@ -177,12 +137,16 @@ public class CacheManager {
     Utils.log(null,"loadBitmap: "+fileName);
     return bitmap;
   }
+  //---------------------------------------------------------------------------  
+  protected boolean delete(IFrame frame,String fileName) {
+    return false;
+  }
   //---------------------------------------------------------------------------
   public static void close() {
     mInstance.closeInt();
   }
   //---------------------------------------------------------------------------
-  private void closeInt() {
+  protected void closeInt() {
     mContext = null;
     mThreadPool.shutdown();
     mThreadPool = null;
@@ -192,14 +156,32 @@ public class CacheManager {
           if(bitmap!=null)
             bitmap.recycle();
     mDbase.close();
+    mDbase = null;
     mInstance = null;
   }
   //---------------------------------------------------------------------------
-//  public void release() {
-//    Collection<Bitmap> values = mCache.values();
-//    for(Bitmap bitmap : values)
-//      bitmap.recycle();
-//    mCache.clear();
-//  }
+  protected void loadSyncCache(IFrame frame,ArrayList<User> userList) {
+    switch(frame) {
+      case TOPS:
+        HashMap<Integer,Bitmap> temp = mCache.get(frame);
+        ArrayList<String> arr = mDbase.getTops();
+        for(int i=0;i<userList.size();i++) {
+          if(i>(arr.size()-1))
+            break;
+          if(FileSystem.getFileName(userList.get(i).link).equals(arr.get(i)))
+            temp.put(i,load(frame,arr.get(i)));
+        }
+        //Utils.log(null,"sync: arr: "+arr.size()+" userList: "+userList.size()); 
+      break;
+    }
+  }
   //---------------------------------------------------------------------------
+  protected HashMap<Integer,Bitmap> loadCache(IFrame frame) {
+    // подгрузка всех изображений из кеша для фрейма
+    switch(frame) {
+      case TOPS:
+      break;
+    }
+    return null;
+  }
 }

@@ -12,7 +12,7 @@ import android.widget.Button;
  *  для отображения поверх кнопки иконки кол-во сообщений, оценок и т.д.
  */
 public class DashboardButton extends Button {
-  //Data
+  // Data
   //---------------------------------------------------------------------------
   public DashboardButton(Context context,AttributeSet attrs) {
     super(context,attrs);

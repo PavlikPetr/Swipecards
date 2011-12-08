@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <integer name="tops_width">120</integer>
+  <integer name="tops_height">140</integer>
+</resources>

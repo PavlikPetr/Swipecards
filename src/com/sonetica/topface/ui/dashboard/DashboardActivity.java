@@ -1,5 +1,6 @@
 package com.sonetica.topface.ui.dashboard;
 
+import com.sonetica.topface.App;
 import com.sonetica.topface.LikemeActivity;
 import com.sonetica.topface.R;
 import com.sonetica.topface.PhotoratingActivity;
@@ -7,14 +8,15 @@ import com.sonetica.topface.PreferencesActivity;
 import com.sonetica.topface.ProfileActivity;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.services.StatisticService;
+import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.chat.ChatActivity;
 import com.sonetica.topface.ui.myrating.MyratingActivity;
-import com.sonetica.topface.ui.tops.Tops2Activity;
 import com.sonetica.topface.ui.tops.TopsActivity;
-import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,14 +44,26 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       return;
     }
     
+    startService(mServiceIntent = new Intent(this,StatisticService.class));
+    
     ((Button)findViewById(R.id.btnDashbrdPhotorating)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdLikeme)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdMyrating)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdChat)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdTops)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdProfile)).setOnClickListener(this);
+
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
     
-    startService(mServiceIntent = new Intent(this,StatisticService.class));
+    if(isRegistered())
+      return;
+    
+    startActivity(new Intent(this,SocialActivity.class));
+    finish();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -72,8 +86,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         startActivity(new Intent(this,ChatActivity.class));
       } break;
       case R.id.btnDashbrdTops: {
-        //startActivity(new Intent(this,TopsActivity.class));
-        startActivity(new Intent(this,Tops2Activity.class));
+        startActivity(new Intent(this,TopsActivity.class));
       } break;
       case R.id.btnDashbrdProfile: {
         startActivity(new Intent(this,ProfileActivity.class));
@@ -82,15 +95,16 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     }
   }
   //---------------------------------------------------------------------------
+  private boolean isRegistered() {
+    SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    String ssid = preferences.getString(getString(R.string.ssid),"");
+    return ssid.length()>0;
+  }
+  //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    stopService(mServiceIntent);
-    // передавал в MainActivity
-    //finishActivity(RESULT_OK);
-    
-    CacheManager.close();
-    
     Utils.log(this,"-onDestroy");
+    stopService(mServiceIntent);
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
@@ -112,42 +126,10 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         Toast.makeText(this,getString(R.string.dashbrd_menu_one),Toast.LENGTH_SHORT).show();
         break;
       case MENU_PREFERENCES:
-        startActivity(new Intent(this, PreferencesActivity.class));
+        startActivity(new Intent(this,PreferencesActivity.class));
         break;
     }
     return super.onMenuItemSelected(featureId,item);
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onResume() {
-    /*
-    //регистрация через сервер topface
-   String url = "http://api.topface.ru/?v=1";
-   String request = "";
-   
-   AuthToken.Token token = new AuthToken(this).getToken(); 
-   
-   JSONObject obj = new JSONObject();
-   try {
-     obj.put("service","auth");
-       JSONObject data = new JSONObject();
-       data.put("sid",token.getUserId());
-       data.put("token",token.getTokenKey());
-       data.put("platform",token.getSocialNet());
-     obj.put("data",data);
-   } catch(JSONException e) {
-     e.printStackTrace();
-   }
-
-   try {
-     request=request+obj.toString();
-     String response = Http.httpSendTpRequest(url,request);
-     response+="";
-   } catch(Exception e) { 
-     Utils.log(null,">>>> "+e.getMessage()); }
-     */
-    super.onResume();
-    
   }
   //---------------------------------------------------------------------------
 }

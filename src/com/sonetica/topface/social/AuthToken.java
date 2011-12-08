@@ -41,10 +41,10 @@ final public class AuthToken {
   public static final int AUTH_COMPLETE = 0;
   public static final int AUTH_ERROR    = 1;
   // Keys
-  private static final String KEY_SOCIAL_NETWORK = "sn";
-  private static final String KEY_USER_ID  = "user_id";
-  private static final String KEY_TOKEN    = "token";
-  private static final String KEY_EXPIRES  = "expires_in";
+  public static final String KEY_SOCIAL_NETWORK = "sn";
+  public static final String KEY_USER_ID  = "user_id";
+  public static final String KEY_TOKEN    = "token";
+  public static final String KEY_EXPIRES  = "expires_in";
   //---------------------------------------------------------------------------
   public AuthToken(Context context) {
     mPreferences = context.getSharedPreferences(SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
@@ -67,7 +67,7 @@ final public class AuthToken {
   }
   //---------------------------------------------------------------------------
   public Token getToken() {
-    String tokenKey  = mPreferences.getString(KEY_TOKEN,   DEFAULT_VALUE);
+    String tokenKey  = mPreferences.getString(KEY_TOKEN, DEFAULT_VALUE);
     if(tokenKey.equals(DEFAULT_VALUE))
       return null;
 

@@ -1,12 +1,15 @@
 package com.sonetica.topface.social;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.sonetica.topface.App;
 import com.sonetica.topface.R;
+import com.sonetica.topface.net.Auth;
+import com.sonetica.topface.net.Requester;
 import com.sonetica.topface.social.fb.FbAuthWebViewClient;
 import com.sonetica.topface.social.vk.VkAuthWebViewClient;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +27,7 @@ public class SocialWebActivity extends Activity {
   // Constants
   public static final int TYPE_VKONTAKTE = 0;
   public static final int TYPE_FACEBOOK  = 1;
+  public static final int INTENT_SOCIAL_WEB = 101;
   public static final String TYPE = "social_network";
   //---------------------------------------------------------------------------
   public void onCreate(Bundle savedInstanceState) {
@@ -46,8 +50,8 @@ public class SocialWebActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    super.onDestroy();
     Utils.log(this,"-onDestroy");
+    super.onDestroy();
   }
   //---------------------------------------------------------------------------
   // class WebHandler
@@ -55,39 +59,47 @@ public class SocialWebActivity extends Activity {
   private class WebHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
-      if(msg.arg1 == AuthToken.AUTH_COMPLETE) {
-        AuthToken.Token token = (AuthToken.Token) msg.obj;
-        if(token == null)
-          finish();
-
-        //Отправляем полученый токен на сервер
-        JSONObject request     = new JSONObject();
-        JSONObject requestData = new JSONObject();
-        try {
-          //request.put("fb", requestData);
-          //request.put("vk", requestData);          
-          request.put("vk", token.getSocialNet());
-          requestData.put("token", token.getTokenKey());
-          requestData.put("id",    token.getUserId());
-          /*
-          Requester.getRequester().sendPacket("user.updateProfile", request.toString(), 
-            new Handler() {
-              @Override
-              public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                setResult(Activity.RESULT_OK);
-              }
-            });
-          */
-          finish();
-        } catch (JSONException e) {
-          Utils.log(this,"Error get token " + e.getMessage());
+      if(msg.arg1==AuthToken.AUTH_COMPLETE) {
+        AuthToken.Token token = (AuthToken.Token)msg.obj;
+        
+        if(token==null) {
           setResult(Activity.RESULT_CANCELED);
-        } finally {
           finish();
         }
+        
+        Auth auth = new Auth();
+        auth.platform = token.getSocialNet();
+        auth.sid  = token.getUserId();
+        auth.token    = token.getTokenKey();
+        
+        Requester.sendAuth(auth,new Handler() {
+          @Override
+          public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.arg1==Requester.OK && msg.obj!=null) {
+              // запись ssid
+              SharedPreferences preferences = SocialWebActivity.this.getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+              SharedPreferences.Editor editor = preferences.edit();
+              String ss1 = getString(R.string.ssid);
+              String ss2 = (String)msg.obj;
+              editor.putString(ss1,ss2);
+              editor.commit();
+
+              setResult(Activity.RESULT_OK);
+              finish();
+            } else {
+              setResult(Activity.RESULT_CANCELED);
+              finish();
+            }
+          }
+        });
       } else {
-        Utils.log(this,"SocialAuth error. Auth dismissed");
+        // стирание ssid
+        SharedPreferences preferences = SocialWebActivity.this.getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(getString(R.string.ssid),"");
+        editor.commit();
+        
         setResult(Activity.RESULT_CANCELED);
         finish();
       }
@@ -95,3 +107,4 @@ public class SocialWebActivity extends Activity {
   }// WebHandler
   //---------------------------------------------------------------------------
 }// SocialWebActivity
+

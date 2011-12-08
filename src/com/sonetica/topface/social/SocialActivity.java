@@ -1,19 +1,22 @@
 package com.sonetica.topface.social;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.ui.dashboard.DashboardActivity;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 /**
  * Класс активити выбора социальной сети для аутентификации
  */
-public class SocialActivity extends Activity {
+public class SocialActivity extends Activity implements View.OnClickListener {
   // Data
+  public static final int INTENT_SOCIAL_ACTIVITY = 102;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -21,26 +24,34 @@ public class SocialActivity extends Activity {
     setContentView(R.layout.ac_social);
     
     // VKontakte Button
-    ((Button)findViewById(R.id.btnSocialVk)).setOnClickListener(
-      new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          Intent intent = new Intent(SocialActivity.this, SocialWebActivity.class);
-          intent.putExtra(SocialWebActivity.TYPE,SocialWebActivity.TYPE_VKONTAKTE);
-          startActivity(intent);
-        }
-      });
+    ((Button)findViewById(R.id.btnSocialVk)).setOnClickListener(this);
     
     // Facebook Button
-    ((Button)findViewById(R.id.btnSocialFb)).setOnClickListener(
-        new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            Intent intent = new Intent(SocialActivity.this, SocialWebActivity.class);
-            intent.putExtra(SocialWebActivity.TYPE,SocialWebActivity.TYPE_FACEBOOK);
-            startActivity(intent);
-          }
-        });
+    ((Button)findViewById(R.id.btnSocialFb)).setOnClickListener(this);
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    if(requestCode!=SocialWebActivity.INTENT_SOCIAL_WEB)
+      return;
+    if(resultCode==Activity.RESULT_OK) {
+      startActivity(new Intent(this,DashboardActivity.class));
+      finish();
+    }
+  }  
+  //---------------------------------------------------------------------------
+  @Override
+  public void onClick(View button) {
+    Intent intent = new Intent(SocialActivity.this, SocialWebActivity.class);
+    switch(button.getId()) {
+      case R.id.btnSocialVk:
+        intent.putExtra(SocialWebActivity.TYPE,SocialWebActivity.TYPE_VKONTAKTE);
+        break;
+      case R.id.btnSocialFb:
+        intent.putExtra(SocialWebActivity.TYPE,SocialWebActivity.TYPE_FACEBOOK);
+        break;
+    }
+    startActivityForResult(intent,SocialWebActivity.INTENT_SOCIAL_WEB);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -48,5 +59,5 @@ public class SocialActivity extends Activity {
     super.onDestroy();
     Utils.log(this,"-onDestroy");
   }
-  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------  
 }

@@ -5,14 +5,14 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.Gallery;
 
-public class Rateit2Gallery extends Gallery {
+public class RateitGallery extends Gallery {
   // Data
   //---------------------------------------------------------------------------
-  public Rateit2Gallery(Context context, AttributeSet attrs) {
+  public RateitGallery(Context context, AttributeSet attrs) {
     super(context, attrs);
   }
   //---------------------------------------------------------------------------
-  public Rateit2Gallery(Context context, AttributeSet attrs, int defStyle) {
+  public RateitGallery(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
   }
   //---------------------------------------------------------------------------

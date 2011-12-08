@@ -95,6 +95,7 @@ public class VkAuthWebViewClient extends WebViewClient {
 
       Message message = new Message();
       message.arg1 = AuthToken.AUTH_ERROR;
+      message.obj  = null;
       mHandler.sendMessage(message);
     }
   }

@@ -12,12 +12,8 @@
                android:debuggable="true"
                android:screenOrientation="portrait">
     
-    <!--  -->
-    <activity android:name=".MainActivity">
-    </activity>
-    
     <!-- main launcher -->
-    <activity android:name=".ui.dashboard.DashboardActivity" android:screenOrientation="portrait">
+    <activity android:name=".MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
@@ -25,14 +21,11 @@
     </activity>
         
     <!-- activities -->
-    <activity android:name=".ui.myrating.MyratingActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".ui.dashboard.DashboardActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.myrating.MyratingActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.chat.ChatActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.tops.TopsActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ui.tops.Tops2Activity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.tops.RateitActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ui.tops.Rateit2Activity" android:screenOrientation="portrait"/>
-    <activity android:name=".ui.tops.TestActivity" android:screenOrientation="portrait"/>
     
     <activity android:name=".LikemeActivity" android:screenOrientation="portrait"/>
     <activity android:name=".PhotoratingActivity" android:screenOrientation="portrait"/>

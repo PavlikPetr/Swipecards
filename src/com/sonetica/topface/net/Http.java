@@ -172,4 +172,26 @@ public class Http {
     return bitmap;
   }
   //---------------------------------------------------------------------------
+  public static InputStream rawHttpStream(String url) {
+    if(url == null)
+      return null;
+    
+    HttpURLConnection httpConnection = null;
+    BufferedInputStream buffInputStream = null;
+    
+    try {
+      httpConnection = (HttpURLConnection)new URL(url).openConnection();
+      httpConnection.setDoInput(true);
+      httpConnection.setRequestProperty("Connection", "Keep-Alive");
+      httpConnection.connect();
+      
+      buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
+      
+    } catch (MalformedURLException ex) {Utils.log(null, "Url parsing was failed: " + url);} 
+      catch (IOException ex) {Utils.log(null, url + " does not exists");} 
+      catch (OutOfMemoryError ex) {Utils.log(null, "Out of memory!");} 
+    
+    return buffInputStream;
+  }
+  //---------------------------------------------------------------------------
 }

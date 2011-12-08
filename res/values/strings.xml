@@ -3,6 +3,7 @@
   <string name="app_name">TopFace</string>
   
   <!-- General  -->
+  <string name="ssid">ssid</string>
   <string name="internet_off">Приложение требует подключение к Интернету</string>
   <string name="dialog_loading">Загружаю</string>
   
