@@ -1,6 +1,6 @@
 package com.sonetica.topface.social;
 
-import com.sonetica.topface.utils.Utils;
+import com.sonetica.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +35,7 @@ public class SnResponse {
       try {
         return mData.get(name);
       } catch (JSONException e) {
-        Utils.log(this,"VkResponse get int error: " + e.getMessage());
+        Debug.log(this,"VkResponse get int error: " + e.getMessage());
         return defValue;
       }
     } else {
@@ -48,7 +48,7 @@ public class SnResponse {
       try {
         return mData.getInt(name);
       } catch (JSONException e) {
-        Utils.log(this,"VkResponse get int error: " + e.getMessage());
+        Debug.log(this,"VkResponse get int error: " + e.getMessage());
         return defValue;
       }
     } else
@@ -60,7 +60,7 @@ public class SnResponse {
       try {
         return mData.getString(name);
       } catch (JSONException e) {
-        Utils.log(this,"VkResponse get string error: " + e.getMessage());
+        Debug.log(this,"VkResponse get string error: " + e.getMessage());
         return defValue;
       }
     } else
@@ -74,6 +74,7 @@ public class SnResponse {
   //class VkResponseException
   //---------------------------------------------------------------------------
   static class VkResponseException extends Exception {
+    private static final long serialVersionUID = 1L;
     public VkResponseException(String detailMessage) {
       super(detailMessage);
     }

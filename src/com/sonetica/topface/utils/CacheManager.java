@@ -16,7 +16,6 @@ import com.sonetica.topface.dbase.DbaseManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 
 /*
  *  Менеджер управляет скачанными изорбражениями.
@@ -102,7 +101,7 @@ public class CacheManager {
         try {
           bos = new BufferedOutputStream(new FileOutputStream(file));
           bitmap.compress(Bitmap.CompressFormat.JPEG, 85, bos);
-        } catch(FileNotFoundException e) { Utils.log(null,"error: "+e.getMessage()); } 
+        } catch(FileNotFoundException e) { Debug.log(null,"error: "+e.getMessage()); } 
           finally {
             try {
               if(bos!=null)
@@ -110,7 +109,7 @@ public class CacheManager {
             } catch(IOException e) {}
           }
         
-        Utils.log(null,"saveBitmap: "+fileName);
+        Debug.log(null,"saveBitmap: "+fileName);
       }
     });
     return true;
@@ -127,14 +126,14 @@ public class CacheManager {
     try {
       bis = new BufferedInputStream(new FileInputStream(file));
       bitmap = BitmapFactory.decodeStream(bis);
-    } catch(FileNotFoundException e) { Utils.log(null,"error: "+e.getMessage()); }
+    } catch(FileNotFoundException e) { Debug.log(null,"error: "+e.getMessage()); }
       finally {
         try {
           if(bis!=null)
             bis.close();
         } catch(IOException e) {}
       }
-    Utils.log(null,"loadBitmap: "+fileName);
+    Debug.log(null,"loadBitmap: "+fileName);
     return bitmap;
   }
   //---------------------------------------------------------------------------  
@@ -168,7 +167,7 @@ public class CacheManager {
         for(int i=0;i<userList.size();i++) {
           if(i>(arr.size()-1))
             break;
-          if(FileSystem.getFileName(userList.get(i).link).equals(arr.get(i)))
+          if(FileSystem.getFileName(userList.get(i).photo).equals(arr.get(i)))
             temp.put(i,load(frame,arr.get(i)));
         }
         //Utils.log(null,"sync: arr: "+arr.size()+" userList: "+userList.size()); 

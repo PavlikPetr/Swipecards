@@ -30,8 +30,7 @@
   <string name="tops_header_title">Самые красивые</string>
   <string name="tops_btn_boys">Парни</string>
   <string name="tops_btn_girls">Девушки</string>
-  <string name="tops_prefs_city">city</string>
-  <string name="tops_prefs_sex">sex</string>
+  <string name="tops_btn_city">Город</string>
   
   <!-- Profile Activity -->
   <string name="profile_header_title">Профиль</string>

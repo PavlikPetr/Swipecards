@@ -26,6 +26,7 @@ public class TopButton extends ImageView {
     
     s_PaintText = new Paint();
     s_PaintText.setColor(Color.WHITE);
+    s_PaintText.setTextSize(20);
   }
   //---------------------------------------------------------------------------
   public TopButton(Context context,AttributeSet attrs) {
@@ -56,7 +57,8 @@ public class TopButton extends ImageView {
     canvas.drawBitmap(fullSizeBitmap, 0, 0, null);
     Rect lineRect = new Rect(0,scaledHeight-29,scaledWidth,scaledHeight);
     canvas.drawRect(lineRect,s_PaintLine);
-    canvas.drawText("пыщ",lineRect.left+15,lineRect.top+15,s_PaintText);
+    if(mPercent!=null)
+    canvas.drawText(mPercent+" %",lineRect.left,lineRect.top+s_PaintText.getTextSize(),s_PaintText);
   }
   //---------------------------------------------------------------------------
 }

@@ -7,8 +7,8 @@ import org.json.JSONObject;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.User;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.GalleryManager;
-import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -55,7 +55,7 @@ public class RateitActivity extends Activity {
   //---------------------------------------------------------------------------  
   @Override
   protected void onDestroy() {
-    Utils.log(this,"-onDestroy");
+    Debug.log(this,"-onDestroy");
     mGalleryManager.stop();
     mGalleryManager.release();
     super.onDestroy();  
@@ -84,10 +84,10 @@ public class RateitActivity extends Activity {
         arr = new JSONArray(obj.getString("covers"));
         for(int i=0; i<arr.length(); ++i) {
           JSONObject o = (JSONObject)arr.get(i);
-          User user = new User();
-          user.link = o.getString("cover");
+          User user = new User("","","0");
+          user.photo = o.getString("cover");
           user.name = o.getString("artist");
-          mUrlList.add(user.link);
+          mUrlList.add(user.photo);
         }
       } catch(JSONException e) {
         e.printStackTrace();

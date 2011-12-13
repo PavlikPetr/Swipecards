@@ -1,7 +1,7 @@
 package com.sonetica.topface.social;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /*
@@ -33,16 +33,16 @@ public class SnRequest {
   }
   //---------------------------------------------------------------------------
   public String toString() {
-    Set params = mRequest.entrySet();
+    Set<Entry<String,Object>> params = mRequest.entrySet();
     String requestString = mMethodName + "?";
     boolean hasEntry = false;
-    for(Object param : params) {
+    for(Entry<String,Object> param : params) {
       if(hasEntry)
         requestString += "&";
       else
         hasEntry = true;
-      Map.Entry entry = (Map.Entry) param;
-      requestString += entry.getKey() + "=" + entry.getValue();
+
+      requestString += param.getKey() + "=" + param.getValue();
     }
     return requestString;
   }

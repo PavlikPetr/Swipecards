@@ -2,9 +2,7 @@ package com.sonetica.topface.ui.dashboard;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.View.MeasureSpec;
 import android.widget.Button;
 
 /*

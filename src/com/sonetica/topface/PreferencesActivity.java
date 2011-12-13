@@ -1,9 +1,8 @@
 package com.sonetica.topface;
 
 import com.sonetica.topface.social.AuthToken;
-import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.social.SocialWebActivity;
-import com.sonetica.topface.utils.Utils;
+import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,8 +20,8 @@ public class PreferencesActivity extends PreferenceActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Utils.log(this,"+onCreate");
-
+    Debug.log(this,"+onCreate");
+    
     addPreferencesFromResource(R.layout.ac_preferences);
     
     // Social Button
@@ -42,12 +41,11 @@ public class PreferencesActivity extends PreferenceActivity {
           return true;
         }
       });
-    
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    Utils.log(this,"-onDestroy");
+    Debug.log(this,"-onDestroy");
     super.onDestroy();  
   }
   //---------------------------------------------------------------------------

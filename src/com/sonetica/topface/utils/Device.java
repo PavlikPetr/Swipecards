@@ -1,7 +1,6 @@
 package com.sonetica.topface.utils;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
@@ -13,11 +12,11 @@ import android.view.WindowManager;
  */
 public class Device {
   //---------------------------------------------------------------------------
-  public Display getDisplay(Context context) {
+  public static Display getDisplay(Context context) {
     return ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
   }
   //---------------------------------------------------------------------------
-  public DisplayMetrics getDisplayMetrics(Context context) {
+  public static DisplayMetrics getDisplayMetrics(Context context) {
     Display display = getDisplay(context);
     DisplayMetrics displayMetrics = new DisplayMetrics();
     display.getMetrics(displayMetrics);

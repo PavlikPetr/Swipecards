@@ -40,6 +40,7 @@
     
     <!-- services -->
     <service android:name=".services.StatisticService" />
+    <service android:name=".services.ConnectionService" />
   </application>
   
   <!-- permissions -->

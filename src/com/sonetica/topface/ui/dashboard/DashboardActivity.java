@@ -12,7 +12,7 @@ import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.chat.ChatActivity;
 import com.sonetica.topface.ui.myrating.MyratingActivity;
 import com.sonetica.topface.ui.tops.TopsActivity;
-import com.sonetica.topface.utils.Utils;
+import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -37,7 +37,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_dashboard);
-    Utils.log(this,"+onCreate");
+    Debug.log(this,"+onCreate");
     
     if(!Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
@@ -52,7 +52,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     ((Button)findViewById(R.id.btnDashbrdChat)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdTops)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdProfile)).setOnClickListener(this);
-
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -103,8 +102,10 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    Utils.log(this,"-onDestroy");
+    Debug.log(this,"-onDestroy");
+
     stopService(mServiceIntent);
+
     super.onDestroy();
   }
   //---------------------------------------------------------------------------

@@ -3,9 +3,6 @@ package com.sonetica.topface.social;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
 import com.sonetica.topface.net.Http;
 
 /*

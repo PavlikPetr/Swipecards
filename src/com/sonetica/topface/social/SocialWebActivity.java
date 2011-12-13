@@ -2,11 +2,12 @@ package com.sonetica.topface.social;
 
 import com.sonetica.topface.App;
 import com.sonetica.topface.R;
-import com.sonetica.topface.net.Auth;
-import com.sonetica.topface.net.Requester;
+import com.sonetica.topface.net.AuthRequest;
+import com.sonetica.topface.net.Response;
+import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.social.fb.FbAuthWebViewClient;
 import com.sonetica.topface.social.vk.VkAuthWebViewClient;
-import com.sonetica.topface.utils.Utils;
+import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -50,7 +51,7 @@ public class SocialWebActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    Utils.log(this,"-onDestroy");
+    Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
@@ -59,31 +60,25 @@ public class SocialWebActivity extends Activity {
   private class WebHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
-      if(msg.arg1==AuthToken.AUTH_COMPLETE) {
+      if(msg.what==AuthToken.AUTH_COMPLETE) {
         AuthToken.Token token = (AuthToken.Token)msg.obj;
-        
-        if(token==null) {
-          setResult(Activity.RESULT_CANCELED);
-          finish();
-        }
-        
-        Auth auth = new Auth();
-        auth.platform = token.getSocialNet();
-        auth.sid  = token.getUserId();
-        auth.token    = token.getTokenKey();
-        
-        Requester.sendAuth(auth,new Handler() {
+
+        AuthRequest authRequest = new AuthRequest();
+          authRequest.platform = token.getSocialNet();
+          authRequest.sid      = token.getUserId();
+          authRequest.token    = token.getTokenKey();
+        ConnectionService.sendRequest(authRequest,new Handler() {
           @Override
           public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if(msg.arg1==Requester.OK && msg.obj!=null) {
-              // запись ssid
+            Response resp = (Response)msg.obj;
+            if(resp.code==-1) {
               SharedPreferences preferences = SocialWebActivity.this.getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
               SharedPreferences.Editor editor = preferences.edit();
-              String ss1 = getString(R.string.ssid);
-              String ss2 = (String)msg.obj;
-              editor.putString(ss1,ss2);
+              editor.putString(getString(R.string.ssid),resp.getSsid());
               editor.commit();
+              
+              ConnectionService.SSID = resp.getSsid();
 
               setResult(Activity.RESULT_OK);
               finish();
@@ -93,6 +88,7 @@ public class SocialWebActivity extends Activity {
             }
           }
         });
+
       } else {
         // стирание ssid
         SharedPreferences preferences = SocialWebActivity.this.getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);

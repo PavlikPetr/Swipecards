@@ -6,6 +6,10 @@
   <include layout="@layout/header_bar" />    
   
   
+  <TextView
+      android:id="@+id/tvProfile"
+      android:layout_width="wrap_content" 
+      android:layout_height="wrap_content" />
   
   <!-- banner bar -->
   <RelativeLayout 

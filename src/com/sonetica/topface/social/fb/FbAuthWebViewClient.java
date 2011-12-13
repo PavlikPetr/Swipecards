@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.social.AuthToken;
-import com.sonetica.topface.social.SnApi;
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -71,7 +71,7 @@ public class FbAuthWebViewClient extends WebViewClient {
       try {
         URLEncodedUtils.parse(new URI(url), "utf-8");
       } catch(URISyntaxException e) {
-        Utils.log(this,"Error parse url");
+        Debug.log(this,"Error parse url");
       }
       
       // Разбор строки запроса и выбор токена
@@ -82,24 +82,15 @@ public class FbAuthWebViewClient extends WebViewClient {
       // Дополнительный запрос для получения user_id пользователя
       String userId = getUserId(tokenKey);
 
-      // Запись данных и возврат объекта токена
+      // Запись данных и получение объекта токена
       AuthToken authToken = new AuthToken(mContext);
-      AuthToken.Token token = authToken.setToken(AuthToken.SN_FACEBOOK,userId,tokenKey,expiresIn);
-      
-      Message message = new Message();
-      message.arg1 = AuthToken.AUTH_COMPLETE;
-      message.obj  = token;
-      mHandler.sendMessage(message);
-      
+      AuthToken.Token token = authToken.setToken(AuthToken.SN_VKONTAKTE,userId,tokenKey,expiresIn);
+      mHandler.sendMessage(Message.obtain(null,AuthToken.AUTH_COMPLETE,token));
     } else if (mMatcherError.find()) {
       view.stopLoading();
-      
       // Очистка токена при отмене аутентификации
       new AuthToken(mContext).remove();
-
-      Message message = new Message();
-      message.arg1 = AuthToken.AUTH_ERROR;
-      mHandler.sendMessage(message);
+      mHandler.sendMessage(Message.obtain(null,AuthToken.AUTH_ERROR));
     }
   }
   //---------------------------------------------------------------------------
@@ -143,7 +134,7 @@ public class FbAuthWebViewClient extends WebViewClient {
     try {
       id = (String)jsonResult.get("id");
     } catch(JSONException e) {
-      Utils.log(this, "'user_id' isn't received");
+      Debug.log(this, "'user_id' isn't received");
     } 
     return id;
   }

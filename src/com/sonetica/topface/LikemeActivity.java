@@ -1,10 +1,6 @@
 package com.sonetica.topface;
 
-import com.sonetica.topface.R;
-import com.sonetica.topface.R.id;
-import com.sonetica.topface.R.layout;
-import com.sonetica.topface.R.string;
-import com.sonetica.topface.utils.Utils;
+import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -19,7 +15,7 @@ public class LikemeActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_likeme);
-    Utils.log(this,"+onCreate");
+    Debug.log(this,"+onCreate");
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likeme_header_title));
@@ -27,7 +23,7 @@ public class LikemeActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    Utils.log(this,"-onDestroy");
+    Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------

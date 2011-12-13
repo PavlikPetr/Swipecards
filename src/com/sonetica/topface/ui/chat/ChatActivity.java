@@ -5,6 +5,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.R.id;
 import com.sonetica.topface.R.layout;
 import com.sonetica.topface.R.string;
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.os.Bundle;
@@ -24,7 +25,7 @@ public class ChatActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_chat);
-    Utils.log(this,"+onCreate");
+    Debug.log(this,"+onCreate");
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.chat_header_title));
@@ -43,7 +44,7 @@ public class ChatActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    Utils.log(this,"-onDestroy");
+    Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------

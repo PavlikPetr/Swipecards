@@ -2,7 +2,7 @@ package com.sonetica.topface;
 
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.dashboard.DashboardActivity;
-import com.sonetica.topface.utils.Utils;
+import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_main);
-    Utils.log(this,"+onCreate");
+    Debug.log(this,"+onCreate");
     
     SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     String ssid = preferences.getString(getString(R.string.ssid),"");
@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    Utils.log(this,"-onDestroy");
+    Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------

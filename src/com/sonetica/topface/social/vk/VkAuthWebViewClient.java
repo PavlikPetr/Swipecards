@@ -8,9 +8,9 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import com.sonetica.topface.social.AuthToken;
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Utils;
 import org.apache.http.client.utils.URLEncodedUtils;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -26,8 +26,10 @@ public class VkAuthWebViewClient extends WebViewClient {
   private Handler mHandler;
   private View    mProgressIndicator;
   // RegExp
-  private Pattern mRegExpToken = Pattern.compile("blank.html#(.*access_token=.+)$");
-  private Pattern mRegExpError = Pattern.compile("blank.html#(.*error=.+)$");
+  private Pattern mRegExpToken  = Pattern.compile("blank.html#(.*access_token=.+)$");
+  private Pattern mRegExpError  = Pattern.compile("blank.html#(.*error=.+)$");
+  private Pattern mRegExpLogout = Pattern.compile("(.*act=logout.+)$");
+  //https://login.vk.com/?act=logout
   // Constants
   private static final int CLIENT_ID     = 2664589; //vokrug 2454030  //tf 2257829 //tf-d 2664589
   private static final String SCOPE = "notify,friends,photos,wall,groups,offline,messages";
@@ -57,46 +59,39 @@ public class VkAuthWebViewClient extends WebViewClient {
    */
   @Override
   public void onPageStarted(WebView view, String url, Bitmap favicon) {
+    Debug.log(null,"url:"+url);
     super.onPageStarted(view, url, favicon);
     showProgressBar();
 
-    Matcher mMatcherToken = mRegExpToken.matcher(url);
-    Matcher mMatcherError = mRegExpError.matcher(url);
+    Matcher mMatcherToken  = mRegExpToken.matcher(url);
+    Matcher mMatcherError  = mRegExpError.matcher(url);
+    Matcher mMatcherLogout = mRegExpLogout.matcher(url);
 
     // Ждем подходящую строку запроса
     if(mMatcherToken.find()) {
+      Debug.log(null,"url:ok");
       view.stopLoading();
       try {
         URLEncodedUtils.parse(new URI(url), "utf-8");
       } catch(URISyntaxException e) {
-        Utils.log(this,"Error parse url");
+        Debug.log(this,"Error parse url");
       }
-
       // Разбор строки запроса и выбор токена и user_id
       HashMap<String, String> queryMap = Utils.parseQueryString(mMatcherToken.group(1));
       String tokenKey  = queryMap.get("access_token");
       String userId    = queryMap.get("user_id");
       String expiresIn = queryMap.get("expires_in");
 
-      // Запись данных и возврат объекта токена
+      // Запись данных и получение объекта токена
       AuthToken authToken = new AuthToken(mContext);
       AuthToken.Token token = authToken.setToken(AuthToken.SN_VKONTAKTE,userId,tokenKey,expiresIn);
-
-      Message message = new Message();
-      message.arg1 = AuthToken.AUTH_COMPLETE;
-      message.obj  = token;
-      mHandler.sendMessage(message);
-      
-    } else if (mMatcherError.find()) {
+      mHandler.sendMessage(Message.obtain(null,AuthToken.AUTH_COMPLETE,token));
+    } else if(mMatcherError.find() || mMatcherLogout.find()) {
+      Debug.log(null,"url:no ok");
       view.stopLoading();
-      
       // Очистка токена при отмене аутентификации
       new AuthToken(mContext).remove();
-
-      Message message = new Message();
-      message.arg1 = AuthToken.AUTH_ERROR;
-      message.obj  = null;
-      mHandler.sendMessage(message);
+      mHandler.sendMessage(Message.obtain(null,AuthToken.AUTH_ERROR));
     }
   }
   //---------------------------------------------------------------------------

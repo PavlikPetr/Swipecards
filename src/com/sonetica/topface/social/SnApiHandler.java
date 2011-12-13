@@ -1,7 +1,6 @@
 package com.sonetica.topface.social;
 
 import android.os.Handler;
-import android.os.Message;
 
 public abstract class SnApiHandler extends Handler {
 /*

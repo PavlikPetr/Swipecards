@@ -21,8 +21,8 @@ abstract class AbstractCache {
 //class TopsCache
 //---------------------------------------------------------------------------
 class TopsCache extends AbstractCache  {
-  int width  = 120;
-  int height = 140;
+  int width  = 80;  //120
+  int height = 100;  //140
   TopsCache(CacheManager cacheManager) {
     super(cacheManager);
     mFrame = IFrame.TOPS;
@@ -48,9 +48,10 @@ class TopsCache extends AbstractCache  {
     //mCacheManager.save(mFrame,value,name);
   }
   public void release() {
-//    for(Bitmap bitmap : mData.values())
-//      if(bitmap!=null)
-//        bitmap.recycle();
+    for(Bitmap bitmap : mData.values())
+      if(bitmap!=null)
+        bitmap.recycle();
+    mData.clear();
   }
 }
 //---------------------------------------------------------------------------

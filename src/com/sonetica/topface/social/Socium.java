@@ -30,6 +30,7 @@ public class Socium {
   // class AuthException
   //---------------------------------------------------------------------------
   public static class AuthException extends Exception {
+    private static final long serialVersionUID = 1L;
     public AuthException(String detailMessage) {
         super(detailMessage);
     }

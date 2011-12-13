@@ -28,14 +28,15 @@ public class GalleryCachedManager implements AbsListView.OnScrollListener {
     mThreadsPool  = Executors.newFixedThreadPool(4);
     mLinkCache    = new HashMap<ImageView,Integer>();
     mCache = CacheManager.getCache(frame);
+    mCache.release();
   }
   //---------------------------------------------------------------------------
   public void getImage(final int position,ImageView imageView) {
     mLinkCache.put(imageView,position);
     Bitmap bitmap = mCache.get(position);
-    if(bitmap!=null)
+    if(bitmap!=null) {
       imageView.setImageBitmap(bitmap);
-    else {
+    } else {
       setImageToQueue(new Pair<ImageView,Integer>(imageView,position));
       imageView.setImageResource(R.drawable.im_black_square);
     }
@@ -48,18 +49,21 @@ public class GalleryCachedManager implements AbsListView.OnScrollListener {
         if(imageViewReused(data))
           return;
         // закачка
-        final Bitmap bitmap = Http.bitmapLoader(mFullUserList.get(data.second).link);
+        Bitmap bitmap = Http.bitmapLoader(mFullUserList.get(data.second).photo);
+        if(bitmap==null)
+          return;
+        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,80,100,false); //120-140
         if(imageViewReused(data))
           return;
         // изменение размера и запись
-        mCache.put(data.second,bitmap,mFullUserList.get(data.second).link);
+        mCache.put(data.second,scaledBitmap,mFullUserList.get(data.second).photo);
         // отрисовка
         data.first.post(new Runnable() {
           @Override
           public void run() {
-            if(imageViewReused(data))
+            if(imageViewReused( data))
               return;
-            if(bitmap!=null)
+            if(scaledBitmap!=null)
               data.first.setImageBitmap(mCache.get(data.second));
             else
               data.first.setImageResource(R.drawable.im_black_square);

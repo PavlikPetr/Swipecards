@@ -9,8 +9,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.apache.http.HttpRequest;
-import com.sonetica.topface.utils.Utils;
+import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -47,6 +46,7 @@ public class Http {
   //---------------------------------------------------------------------------
   // TopFace API
   public static String httpSendTpRequest(String request, String postParams) throws Exception {
+    Debug.log(null,"request:"+postParams);
     return httpRequest(HTTP_POST_REQUEST,request,postParams,true);
   }
   //---------------------------------------------------------------------------
@@ -91,7 +91,7 @@ public class Http {
       //catch (IOException e) {Utils.log(null,"I/O error while retrieving response " + e.getMessage());} 
       //catch (IllegalStateException e) {Utils.log(null,"Incorrect URL or Connection error " + e.getMessage());} 
       catch (Exception e) {
-        Utils.log(null,"Error while retrieving response " + e.getMessage());
+        Debug.log(null,"Error while retrieving response " + e.getMessage());
         throw new Exception(e.getMessage());
       } finally {
         if(urlConnection != null)
@@ -156,14 +156,14 @@ public class Http {
       bitmap = BitmapFactory.decodeStream(buffInputStream,null,options);
       //bitmap = BitmapFactory.decodeStream(buffInputStream);
       
-    } catch (MalformedURLException ex) {Utils.log(null, "Url parsing was failed: " + url);} 
-      catch (IOException ex) {Utils.log(null, url + " does not exists");} 
-      catch (OutOfMemoryError ex) {Utils.log(null, "Out of memory!");} 
+    } catch (MalformedURLException ex) {Debug.log(null, "Url parsing was failed: " + url);} 
+      catch (IOException ex) {Debug.log(null, url + " does not exists");} 
+      catch (OutOfMemoryError ex) {Debug.log(null, "Out of memory!");} 
       finally {
         if(buffInputStream != null)
           try {
             buffInputStream.close();buffInputStream = null;
-          } catch(IOException ex){Utils.log(null,"error: "+ex.getMessage());}
+          } catch(IOException ex){Debug.log(null,"error: "+ex.getMessage());}
         if(httpConnection != null) {
           httpConnection.disconnect();httpConnection = null;
         }
@@ -187,9 +187,9 @@ public class Http {
       
       buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
       
-    } catch (MalformedURLException ex) {Utils.log(null, "Url parsing was failed: " + url);} 
-      catch (IOException ex) {Utils.log(null, url + " does not exists");} 
-      catch (OutOfMemoryError ex) {Utils.log(null, "Out of memory!");} 
+    } catch (MalformedURLException ex) {Debug.log(null, "Url parsing was failed: " + url);} 
+      catch (IOException ex) {Debug.log(null, url + " does not exists");} 
+      catch (OutOfMemoryError ex) {Debug.log(null, "Out of memory!");} 
     
     return buffInputStream;
   }

@@ -1,6 +1,6 @@
 package com.sonetica.topface;
 
-import com.sonetica.topface.utils.Utils;
+import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -15,7 +15,7 @@ public class PhotoratingActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_photorating);
-    Utils.log(this,"+onCreate");
+    Debug.log(this,"+onCreate");
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.photorating_header_title));
@@ -23,7 +23,7 @@ public class PhotoratingActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    Utils.log(this,"-onDestroy");
+    Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------

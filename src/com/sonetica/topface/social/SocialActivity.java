@@ -2,13 +2,12 @@ package com.sonetica.topface.social;
 
 import com.sonetica.topface.R;
 import com.sonetica.topface.ui.dashboard.DashboardActivity;
-import com.sonetica.topface.utils.Utils;
+import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 
 /**
@@ -57,7 +56,7 @@ public class SocialActivity extends Activity implements View.OnClickListener {
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    Utils.log(this,"-onDestroy");
+    Debug.log(this,"-onDestroy");
   }
   //---------------------------------------------------------------------------  
 }

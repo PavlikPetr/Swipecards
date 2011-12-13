@@ -2,6 +2,7 @@ package com.sonetica.topface.ui.myrating;
 
 import java.util.ArrayList;
 import com.sonetica.topface.R;
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.os.Bundle;
@@ -21,7 +22,7 @@ public class MyratingActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_myrating);
-    Utils.log(this,"+onCreate");
+    Debug.log(this,"+onCreate");
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.myrating_header_title));
@@ -40,7 +41,7 @@ public class MyratingActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    Utils.log(this,"-onDestroy");
+    Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
