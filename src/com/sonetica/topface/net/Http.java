@@ -85,8 +85,10 @@ public class Http {
       while((line = buffReader.readLine()) != null)
         response.append(line);
       
-      return response.toString();
+      buffReader.close();
+      urlConnection.disconnect();
       
+      return response.toString();
     } 
       //catch (IOException e) {Utils.log(null,"I/O error while retrieving response " + e.getMessage());} 
       //catch (IllegalStateException e) {Utils.log(null,"Incorrect URL or Connection error " + e.getMessage());} 
@@ -103,7 +105,7 @@ public class Http {
    *  запускается в UI потоке, отдельный поток создавать не нужно
    */
   public static void imageLoader(final String url, final ImageView view) {
-    if(url == null || view == null )
+    if(url==null || view==null )
       return;
     
     // ui
@@ -149,24 +151,28 @@ public class Http {
       httpConnection.setRequestProperty("Connection", "Keep-Alive");
       httpConnection.connect();
       
+      Debug.log(null,"downloading:"+url);
+      
       buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
       // Bitmap Options
       BitmapFactory.Options options=new BitmapFactory.Options();
       //options.inSampleSize = 5;
       bitmap = BitmapFactory.decodeStream(buffInputStream,null,options);
       //bitmap = BitmapFactory.decodeStream(buffInputStream);
-      
+      buffInputStream.close();
+      httpConnection.disconnect();
     } catch (MalformedURLException ex) {Debug.log(null, "Url parsing was failed: " + url);} 
       catch (IOException ex) {Debug.log(null, url + " does not exists");} 
       catch (OutOfMemoryError ex) {Debug.log(null, "Out of memory!");} 
       finally {
         if(buffInputStream != null)
           try {
-            buffInputStream.close();buffInputStream = null;
-          } catch(IOException ex){Debug.log(null,"error: "+ex.getMessage());}
-        if(httpConnection != null) {
-          httpConnection.disconnect();httpConnection = null;
-        }
+            buffInputStream.close();
+          } catch(IOException ex){
+            Debug.log(null,"error: "+ex.getMessage());
+          }
+        if(httpConnection!=null)
+          httpConnection.disconnect();
       }
     
     return bitmap;

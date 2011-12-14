@@ -31,31 +31,17 @@ public class TopButton extends ImageView {
   //---------------------------------------------------------------------------
   public TopButton(Context context,AttributeSet attrs) {
     super(context,attrs);
-    setBackgroundColor(Color.MAGENTA);
+    //setBackgroundColor(Color.MAGENTA);
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
     //super.onDraw(canvas);
-    int scaledWidth  = getMeasuredWidth();
-    int scaledHeight = getMeasuredHeight();
-    Bitmap fullSizeBitmap = ((BitmapDrawable)getDrawable()).getBitmap();
-    /*
-    Bitmap fullSizeBitmap = ((BitmapDrawable)getDrawable()).getBitmap();
-    int scaledWidth  = getMeasuredWidth();
-    int scaledHeight = getMeasuredHeight();
-    Bitmap mScaledBitmap;
-    if(scaledWidth == fullSizeBitmap.getWidth() & scaledHeight == fullSizeBitmap.getHeight())
-      mScaledBitmap = fullSizeBitmap;
-    else
-      mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap, scaledWidth, scaledHeight, true /* filter * /);
-    canvas.drawBitmap(mScaledBitmap, 0, 0, null);
-    Rect lineRect = new Rect(0,scaledHeight-29,scaledWidth,scaledHeight);
-    canvas.drawRect(lineRect,s_PaintLine);
-    canvas.drawText("пыщ",lineRect.left+15,lineRect.top+15,s_PaintText);
-    */
-    canvas.drawBitmap(fullSizeBitmap, 0, 0, null);
-    Rect lineRect = new Rect(0,scaledHeight-29,scaledWidth,scaledHeight);
+    int width  = getMeasuredWidth();
+    int height = getMeasuredHeight();
+    Bitmap bitmap = ((BitmapDrawable)getDrawable()).getBitmap();
+    canvas.drawBitmap(bitmap,0,0,null);
+    Rect lineRect = new Rect(0,height-29,width,height);
     canvas.drawRect(lineRect,s_PaintLine);
     if(mPercent!=null)
     canvas.drawText(mPercent+" %",lineRect.left,lineRect.top+s_PaintText.getTextSize(),s_PaintText);

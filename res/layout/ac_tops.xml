@@ -24,7 +24,7 @@
     android:layout_margin="0px"
     android:padding="0px"
     android:fadeScrollbars="true" 
-    android:background="#FF0000">
+    android:background="#000000">
   </GridView>
   
   <!-- banner bar -->

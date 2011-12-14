@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import com.sonetica.topface.data.User;
+import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.dbase.DbaseManager;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -159,7 +159,7 @@ public class CacheManager {
     mInstance = null;
   }
   //---------------------------------------------------------------------------
-  protected void loadSyncCache(IFrame frame,ArrayList<User> userList) {
+  protected void loadSyncCache(IFrame frame,ArrayList<TopUser> userList) {
     switch(frame) {
       case TOPS:
         HashMap<Integer,Bitmap> temp = mCache.get(frame);

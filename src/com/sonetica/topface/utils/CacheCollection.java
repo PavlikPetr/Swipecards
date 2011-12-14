@@ -37,14 +37,15 @@ class TopsCache extends AbstractCache  {
   public void put(int key,Bitmap value,String name) {
     if(value==null)
       return;
+    /*
     // scaling
     Bitmap mScaledBitmap;
     if(width == value.getWidth() & height == value.getHeight())
       mScaledBitmap = value;
     else
-      mScaledBitmap = Bitmap.createScaledBitmap(value, width, height, true /* filter */);
-    
-    mData.put(key,mScaledBitmap);
+      mScaledBitmap = Bitmap.createScaledBitmap(value,width,height,true);
+    */
+    mData.put(key,value);
     //mCacheManager.save(mFrame,value,name);
   }
   public void release() {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.sonetica.topface.data.User;
+import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.utils.Debug;
 
 public class Response {
@@ -37,17 +37,17 @@ public class Response {
     }
   }
   //---------------------------------------------------------------------------
-  public ArrayList<User> getUsers() {
+  public ArrayList<TopUser> getUsers() {
     if(code>=0)
       return null;
-    ArrayList<User> userList = null;
+    ArrayList<TopUser> userList = null;
     try {
       JSONArray arr = mJsonResult.getJSONArray("top");
       if(arr.length()>0) {
-        userList = new ArrayList<User>();
+        userList = new ArrayList<TopUser>();
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
-          userList.add(new User(item.getString("uid"),item.getString("photo"),item.getString("liked")));
+          userList.add(new TopUser(item.getString("uid"),item.getString("photo"),item.getString("liked")));
         }
       }
     } catch(JSONException e) {
@@ -66,4 +66,23 @@ public class Response {
     }
   }
   //---------------------------------------------------------------------------
+  public ArrayList<String> getAlbum() {
+    if(code>=0)
+      return null;
+    ArrayList<String> linkList = null;
+    try {
+      JSONArray arr = mJsonResult.getJSONArray("album");
+      if(arr.length()>0) {
+        linkList = new ArrayList<String>();
+        for(int i=0;i<arr.length();i++) {
+          JSONObject item = arr.getJSONObject(i);
+          linkList.add(item.getString("big"));
+        }
+      }
+      return linkList;
+    } catch(JSONException e) {
+      return null; 
+    }
+  }
+//---------------------------------------------------------------------------
 }

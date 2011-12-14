@@ -4,59 +4,66 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.*;
 import com.sonetica.topface.R;
-import com.sonetica.topface.data.User;
+import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.ui.tops.TopButton;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Pair;
-import android.widget.AbsListView;
-import android.widget.ImageView;
 
 /*
  *  Менеджер изображений закачивает, сторит и выдает через CacheManager
  *  предназанчен для окон "Топы" и "Я нравлюсь" 
  */
-public class GalleryCachedManager implements AbsListView.OnScrollListener {
+public class GalleryCachedManager {
   // Data
-  private ArrayList<User> mFullUserList;
-  private HashMap<ImageView,Integer> mLinkCache;
+  public int mBitmapWidth;
+  public int mBitmapHeight;
+  private ArrayList<TopUser> mUserList;
+  private HashMap<TopButton,Integer> mLinkCache;
   private ExecutorService mThreadsPool;
-  private AbstractCache mCache;
+  private AbstractCache mBitmapCache;
   //---------------------------------------------------------------------------
-  public GalleryCachedManager(Context context,IFrame frame,ArrayList<User> userList) {
-    mFullUserList = userList;
-    mThreadsPool  = Executors.newFixedThreadPool(4);
-    mLinkCache    = new HashMap<ImageView,Integer>();
-    mCache = CacheManager.getCache(frame);
-    mCache.release();
+  public GalleryCachedManager(Context context,IFrame frame,ArrayList<TopUser> userList) {
+    mUserList = userList;
+    mThreadsPool = Executors.newFixedThreadPool(4);
+    mLinkCache = new HashMap<TopButton,Integer>();
+    mBitmapCache = CacheManager.getCache(frame);
+    mBitmapCache.release();
+    mBitmapWidth  = Device.getDisplay(context).getWidth()/4;
+    mBitmapHeight = (int)(mBitmapWidth * 1.25);
   }
   //---------------------------------------------------------------------------
-  public void getImage(final int position,ImageView imageView) {
+  public void getImage(final int position,TopButton imageView) {
     mLinkCache.put(imageView,position);
-    Bitmap bitmap = mCache.get(position);
+    Bitmap bitmap = mBitmapCache.get(position);
     if(bitmap!=null) {
       imageView.setImageBitmap(bitmap);
     } else {
-      setImageToQueue(new Pair<ImageView,Integer>(imageView,position));
+      setImageToQueue(new Pair<TopButton,Integer>(imageView,position));
       imageView.setImageResource(R.drawable.im_black_square);
     }
   }
   //---------------------------------------------------------------------------
-  private void setImageToQueue(final Pair<ImageView,Integer> data) {
+  public TopUser get(int index) {
+    return mUserList.get(index);
+  }
+  //---------------------------------------------------------------------------
+  private void setImageToQueue(final Pair<TopButton,Integer> data) {
     mThreadsPool.execute(new Runnable() {
       @Override
       public void run() {
         if(imageViewReused(data))
           return;
         // закачка
-        Bitmap bitmap = Http.bitmapLoader(mFullUserList.get(data.second).photo);
-        if(bitmap==null)
+        Bitmap rawBitmap = Http.bitmapLoader(mUserList.get(data.second).photo);
+        if(rawBitmap==null)
           return;
-        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,80,100,false); //120-140
+        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
         if(imageViewReused(data))
           return;
         // изменение размера и запись
-        mCache.put(data.second,scaledBitmap,mFullUserList.get(data.second).photo);
+        mBitmapCache.put(data.second,scaledBitmap,mUserList.get(data.second).photo);
         // отрисовка
         data.first.post(new Runnable() {
           @Override
@@ -64,7 +71,7 @@ public class GalleryCachedManager implements AbsListView.OnScrollListener {
             if(imageViewReused( data))
               return;
             if(scaledBitmap!=null)
-              data.first.setImageBitmap(mCache.get(data.second));
+              data.first.setImageBitmap(mBitmapCache.get(data.second));
             else
               data.first.setImageResource(R.drawable.im_black_square);
           }
@@ -73,29 +80,19 @@ public class GalleryCachedManager implements AbsListView.OnScrollListener {
     });
   }
   //-------------------------------------------------------------------------
-  boolean imageViewReused(Pair<ImageView,Integer> data){
-      int index=mLinkCache.get(data.first);
-      if(index!=data.second)
-          return true;
-      return false;
+  boolean imageViewReused(Pair<TopButton,Integer> data){
+    int index=mLinkCache.get(data.first);
+    if(index!=data.second)
+      return true;
+    return false;
   }
   //---------------------------------------------------------------------------
-  public int getSize() {
-    return mFullUserList.size();
+  public int size() {
+    return mUserList.size();
   }
   //---------------------------------------------------------------------------
   public void release() {
-    mThreadsPool.shutdown();
-    mCache.release();
-    mLinkCache.clear();
+    mBitmapCache.release();
   }
-  //---------------------------------------------------------------------------
-  @Override
-  public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public void onScrollStateChanged(AbsListView view,int scrollState) {
-  }
-  //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 }

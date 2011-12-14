@@ -1,6 +1,7 @@
 package com.sonetica.topface.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,21 +20,27 @@ public class GalleryManager {
   private HashMap<Integer,Bitmap> mCache;
   private ExecutorService mThreadPool;
   private int mThreadCount;
+  private byte[] states;
   //---------------------------------------------------------------------------
   public GalleryManager(Context context,ArrayList<String> urlList,int threadCount) {
     mUrlList     = urlList;
     mThreadCount = threadCount;
     mThreadPool  = Executors.newFixedThreadPool(mThreadCount);
     mCache       = new HashMap<Integer,Bitmap>();
+    states = new byte[urlList.size()];
+    Arrays.fill(states,(byte)0);
   }
   //---------------------------------------------------------------------------
   public void getImage(final int position, final ImageView view) {
-    if(mCache.containsKey(position)) {
+    if(mCache.containsKey(position))
       view.setImageBitmap(mCache.get(position));
-    } else {
+    else {
+      if(states[position]==1)
+        return;
       mThreadPool.execute(new Runnable() {
         @Override
         public void run() {
+          states[position] = 1;
           final Bitmap bitmap = Http.bitmapLoader(mUrlList.get(position));
           if(bitmap==null)
             return;
@@ -49,37 +56,32 @@ public class GalleryManager {
     }
   }
   //---------------------------------------------------------------------------
-  public void restart(ArrayList<String> urlList) {
-    mUrlList    = urlList;
-    mThreadPool = Executors.newFixedThreadPool(mThreadCount);
-  }
-  //---------------------------------------------------------------------------
-  public int getSize() {
+  public int size() {
     return mUrlList.size();
   }
   //---------------------------------------------------------------------------
-  public void preload(final int index) {
-    if(index>=mUrlList.size())
+  public void preload(final int position) {
+    if(position>=mUrlList.size())
       return;
-
+    if(states[position]==1)
+      return;
     mThreadPool.execute(new Runnable() {
       @Override
       public void run() {
-        final Bitmap bitmap = Http.bitmapLoader(mUrlList.get(index));
+        states[position]=1;
+        final Bitmap bitmap = Http.bitmapLoader(mUrlList.get(position));
         if(bitmap==null)
           return;
-        mCache.put(index,bitmap);
+        mCache.put(position,bitmap);
       }
     });
   }
   //---------------------------------------------------------------------------
-  public void stop() {
-    mThreadPool.shutdown();
-  }
-  //---------------------------------------------------------------------------
   public void release() {
+    mThreadPool.shutdown();
     for(Bitmap bitmap : mCache.values())
       bitmap.recycle();
+    mCache.clear();
   }
   //---------------------------------------------------------------------------
 }

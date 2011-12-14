@@ -1,5 +1,6 @@
 package com.sonetica.topface.services;
 
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Memory;
 import android.app.Service;
 import android.content.Context;
@@ -62,11 +63,12 @@ public class StatisticService extends Service {
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
-  //class StatisticDrawer Handler
+  //class StatisticHandler Handler
   class StatisticHandler extends Handler{
     @Override
     public void handleMessage(Message msg) {
-      super.handleMessage(msg);      
+      super.handleMessage(msg);
+      /*
       mText.post(new Runnable() {
         @Override
         public void run() {
@@ -74,7 +76,10 @@ public class StatisticService extends Service {
                         "Na:" + Memory.getNativeUsed() + "  Nf:" + Memory.getNativeFree());
         }
       });
-      mStatDrawer.sendEmptyMessageDelayed(0,1000*1);
+      */
+      Debug.log(null,"Ha:" + Memory.getHeapUsed()   + " Hf:" + Memory.getHeapFree() + "\n" + 
+                     "::Na:" + Memory.getNativeUsed() + " Nf:" + Memory.getNativeFree());
+      mStatDrawer.sendEmptyMessageDelayed(0,1000*5);
     }
     public void close() {
       mWindowManager.removeView(mText);
