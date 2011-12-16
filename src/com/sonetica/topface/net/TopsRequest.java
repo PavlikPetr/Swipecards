@@ -3,7 +3,7 @@ package com.sonetica.topface.net;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class TopRequest extends Request {
+public class TopsRequest extends Request {
   // Data
   public String service = "top";
   public int sex;

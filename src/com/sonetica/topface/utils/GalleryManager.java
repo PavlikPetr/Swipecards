@@ -41,16 +41,18 @@ public class GalleryManager {
         @Override
         public void run() {
           states[position] = 1;
-          final Bitmap bitmap = Http.bitmapLoader(mUrlList.get(position));
-          if(bitmap==null)
+          Bitmap rawBitmap = Http.bitmapLoader(mUrlList.get(position));
+          if(rawBitmap==null)
             return;
+          //Scaled
+          final Bitmap scaledBitmap = rawBitmap;
           view.post(new Runnable() {
             @Override
             public void run() {
-              view.setImageBitmap(bitmap);
+              view.setImageBitmap(scaledBitmap);
             }
           });
-          mCache.put(position,bitmap);
+          mCache.put(position,scaledBitmap);
         }
       });
     }

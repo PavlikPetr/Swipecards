@@ -17,6 +17,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Pair;
 import android.widget.ImageView;
 
 /*
@@ -27,6 +28,9 @@ public class Http {
   private static final int HTTP_GET_REQUEST  = 0;
   private static final int HTTP_POST_REQUEST = 1;
   //---------------------------------------------------------------------------
+  /*
+   * Проверка на наличие интернета
+   */
   public static boolean isOnline(Context context) {
     ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -36,99 +40,91 @@ public class Http {
       return false;
   }
   //---------------------------------------------------------------------------
+  /*
+   *  Get запрос
+   */
   public static String httpGetRequest(String request) throws Exception {
     return httpRequest(HTTP_GET_REQUEST,request,null,false);
   }
   //---------------------------------------------------------------------------
+  /*
+   *  Post запрос
+   */
   public static String httpPostRequest(String request, String postParams) throws Exception {
     return httpRequest(HTTP_POST_REQUEST,request,postParams,false);
   }
   //---------------------------------------------------------------------------
-  // TopFace API
+  /*
+   *  запрос к TopFace API
+   */
   public static String httpSendTpRequest(String request, String postParams) throws Exception {
-    Debug.log(null,"request:"+postParams);
+    Debug.log(null,"req:"+postParams);
     return httpRequest(HTTP_POST_REQUEST,request,postParams,true);
   }
   //---------------------------------------------------------------------------
   private static String httpRequest(int typeRequest, String request, String postParams,boolean isJson) throws Exception {
-    HttpURLConnection urlConnection = null;
+    HttpURLConnection httpConnection = null;
+    BufferedReader buffReader = null;
     try {
-      // Делаем запрос
-      URL url = new URL(request);
-      //HttpRequest
-      urlConnection = (HttpURLConnection)url.openConnection();
-      urlConnection.setUseCaches(false);
+      // запрос
+      httpConnection = (HttpURLConnection)new URL(request).openConnection();
+      httpConnection.setUseCaches(false);
       
-      // для запроса API на TopFace сервере
+      // оция для запроса на TopFace API сервер
       if(isJson)
-        urlConnection.setRequestProperty("Content-Type", "application/json");
+        httpConnection.setRequestProperty("Content-Type", "application/json");
       
+      // Отправляем post параметры
       if(typeRequest == HTTP_POST_REQUEST){
-        // Отправляем post параметры
-        urlConnection.setDoOutput(true);
-        OutputStreamWriter osw = new OutputStreamWriter(urlConnection.getOutputStream());
+        httpConnection.setDoOutput(true);
+        OutputStreamWriter osw = new OutputStreamWriter(httpConnection.getOutputStream());
         osw.write(postParams);
         osw.flush();
         osw.close();
       }
       
       // проверяет код ответа сервера
-      final int statusCode = urlConnection.getResponseCode();
+      int statusCode = httpConnection.getResponseCode();
       if(statusCode != HttpURLConnection.HTTP_OK)
          return null;
 
-      //Читаем ответ
-      InputStream    inStream   = new BufferedInputStream(urlConnection.getInputStream());
-      BufferedReader buffReader = new BufferedReader(new InputStreamReader(inStream));
-      StringBuilder  response   = new StringBuilder();
+      // чтение ответа
+      buffReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(httpConnection.getInputStream())));
+      
+      StringBuilder  response = new StringBuilder();
       String line;
       while((line = buffReader.readLine()) != null)
         response.append(line);
       
-      buffReader.close();
-      urlConnection.disconnect();
-      
       return response.toString();
-    } 
-      //catch (IOException e) {Utils.log(null,"I/O error while retrieving response " + e.getMessage());} 
-      //catch (IllegalStateException e) {Utils.log(null,"Incorrect URL or Connection error " + e.getMessage());} 
-      catch (Exception e) {
-        Debug.log(null,"Error while retrieving response " + e.getMessage());
-        throw new Exception(e.getMessage());
-      } finally {
-        if(urlConnection != null)
-          urlConnection.disconnect();
-      }
+    } finally {
+      if(buffReader!=null)      buffReader.close();
+      if(httpConnection!=null)  httpConnection.disconnect();
+    }
   }
   //---------------------------------------------------------------------------
   /*
    *  запускается в UI потоке, отдельный поток создавать не нужно
    */
   public static void imageLoader(final String url, final ImageView view) {
-    if(url==null || view==null )
-      return;
-    
     // ui
     final Handler handler = new Handler() {
       @Override
       public void handleMessage(Message message) {
-        final Bitmap image = (Bitmap)message.obj;
-        view.setImageBitmap(image);
+        Bitmap bitmap = (Bitmap)message.obj;
+        if(bitmap!=null)
+          view.setImageBitmap(bitmap);
       }
     };
-    
     // download
-    final Thread thread = new Thread() {
+    Thread thread = new Thread() {
       @Override
       public void run() {
-        final Bitmap bitmap = bitmapLoader(url);
-        if(bitmap != null) {
-          final Message message = handler.obtainMessage(1, bitmap);
-          handler.sendMessage(message);
-        }
+        Bitmap bitmap = bitmapLoader(url);
+        if(bitmap != null)
+          handler.sendMessage(handler.obtainMessage(1, bitmap));
       }
     };
-
     thread.setPriority(3);
     thread.start();
   }
@@ -138,66 +134,52 @@ public class Http {
    *  при обрыве связи при скачивании фабрика возвращает null  
    */
   public static Bitmap bitmapLoader(String url) {
-    Bitmap bitmap = null;
-    HttpURLConnection httpConnection = null;
+    HttpURLConnection   httpConnection  = null;
     BufferedInputStream buffInputStream = null;
-    
-    if(url == null)
-      return null;
+    Bitmap bitmap = null;
     
     try {
       httpConnection = (HttpURLConnection)new URL(url).openConnection();
       httpConnection.setDoInput(true);
-      httpConnection.setRequestProperty("Connection", "Keep-Alive");
       httpConnection.connect();
       
-      Debug.log(null,"downloading:"+url);
-      
       buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
-      // Bitmap Options
-      BitmapFactory.Options options=new BitmapFactory.Options();
-      //options.inSampleSize = 5;
-      bitmap = BitmapFactory.decodeStream(buffInputStream,null,options);
-      //bitmap = BitmapFactory.decodeStream(buffInputStream);
+
+      bitmap = BitmapFactory.decodeStream(buffInputStream,null,new BitmapFactory.Options());
+      
       buffInputStream.close();
-      httpConnection.disconnect();
-    } catch (MalformedURLException ex) {Debug.log(null, "Url parsing was failed: " + url);} 
-      catch (IOException ex) {Debug.log(null, url + " does not exists");} 
-      catch (OutOfMemoryError ex) {Debug.log(null, "Out of memory!");} 
-      finally {
-        if(buffInputStream != null)
-          try {
-            buffInputStream.close();
-          } catch(IOException ex){
-            Debug.log(null,"error: "+ex.getMessage());
-          }
-        if(httpConnection!=null)
-          httpConnection.disconnect();
-      }
-    
+      httpConnection.disconnect();      
+    } catch(MalformedURLException e) {
+      Debug.log(null,"url is wrong");
+    } catch(IOException e) {
+      Debug.log(null,"file doesn't exist");
+    }
+    finally {
+      try {
+        if(buffInputStream!=null)
+          buffInputStream.close();
+      } catch(IOException e) {}
+      if(httpConnection!=null)
+        httpConnection.disconnect();
+    }
+
     return bitmap;
   }
   //---------------------------------------------------------------------------
-  public static InputStream rawHttpStream(String url) {
-    if(url == null)
-      return null;
-    
-    HttpURLConnection httpConnection = null;
+  /* 
+   *  возвращает поток от серевра для ручной обработки urkConnection для закрытия соединения
+   */
+  public static Pair<InputStream,HttpURLConnection> rawHttpStream(String url) throws MalformedURLException, IOException {
+    HttpURLConnection   httpConnection  = null;
     BufferedInputStream buffInputStream = null;
     
-    try {
-      httpConnection = (HttpURLConnection)new URL(url).openConnection();
-      httpConnection.setDoInput(true);
-      httpConnection.setRequestProperty("Connection", "Keep-Alive");
-      httpConnection.connect();
+    httpConnection = (HttpURLConnection)new URL(url).openConnection();
+    httpConnection.setDoInput(true);
+    httpConnection.connect();
       
-      buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
-      
-    } catch (MalformedURLException ex) {Debug.log(null, "Url parsing was failed: " + url);} 
-      catch (IOException ex) {Debug.log(null, url + " does not exists");} 
-      catch (OutOfMemoryError ex) {Debug.log(null, "Out of memory!");} 
+    buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
     
-    return buffInputStream;
+    return new Pair<InputStream,HttpURLConnection>(buffInputStream,httpConnection);
   }
   //---------------------------------------------------------------------------
 }

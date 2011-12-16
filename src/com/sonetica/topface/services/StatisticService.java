@@ -15,21 +15,16 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class StatisticService extends Service {
   // Data
-  private StatisticHandler mStatDrawer;
-  private WindowManager mWindowManager;
   private TextView mText;
+  private WindowManager mWindowManager;
+  private StatisticHandler mStatHandler;
   //---------------------------------------------------------------------------
   @Override
-  public IBinder onBind(Intent arg0) {
-    return null;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public void onStart(Intent paramIntent, int paramInt) {
+  public void onCreate() {
+    Debug.log(this,"+onCreate");
     
     mText = new TextView(this);
     mText.setTextSize(12);
@@ -50,21 +45,36 @@ public class StatisticService extends Service {
     
     mWindowManager.addView(mText,lp);
    
-    mStatDrawer = new StatisticHandler();
-    mStatDrawer.sendEmptyMessage(0);
-
-    Toast.makeText(this,"service start",Toast.LENGTH_LONG).show();
+    mStatHandler = new StatisticHandler();
+    mStatHandler.sendEmptyMessage(0);
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public int onStartCommand(Intent intent, int flags, int startId) {
+    return START_STICKY;
   }
   //---------------------------------------------------------------------------
   @Override
   public void onDestroy() {
-    Toast.makeText(this,"service destroy",Toast.LENGTH_LONG).show();
-    mStatDrawer.close();
+    mWindowManager.removeView(mText);
+    mWindowManager = null;
+    mStatHandler = null;
+    mText = null;
+    Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
-  //class StatisticHandler Handler
+  @Override
+  public IBinder onBind(Intent arg0) {
+    return null;
+  }
+  //---------------------------------------------------------------------------
+  //class StatisticHandler
+  //---------------------------------------------------------------------------
   class StatisticHandler extends Handler{
+    public StatisticHandler() {
+      Debug.log(this,"+started");
+    }
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
@@ -79,11 +89,8 @@ public class StatisticService extends Service {
       */
       Debug.log(null,"Ha:" + Memory.getHeapUsed()   + " Hf:" + Memory.getHeapFree() + "\n" + 
                      "::Na:" + Memory.getNativeUsed() + " Nf:" + Memory.getNativeFree());
-      mStatDrawer.sendEmptyMessageDelayed(0,1000*5);
+      mStatHandler.sendEmptyMessageDelayed(0,1000*4);
     }
-    public void close() {
-      mWindowManager.removeView(mText);
-    }
-  }
+  }//StatisticHandler
   //---------------------------------------------------------------------------
-}
+}//StatisticService

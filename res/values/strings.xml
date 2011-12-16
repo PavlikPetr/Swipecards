@@ -3,7 +3,6 @@
   <string name="app_name">TopFace</string>
   
   <!-- General  -->
-  <string name="ssid">ssid</string>
   <string name="internet_off">Приложение требует подключение к Интернету</string>
   <string name="dialog_loading">Загружаю</string>
   
@@ -24,7 +23,8 @@
   
             
   <!-- Chat Activity -->
-  <string name="chat_header_title">Диалоги</string> 
+  <string name="chat_header_title">Диалоги</string>
+  <string name="chat_gift">Вам прислали подарок.</string> 
   
   <!-- Tops Activity -->
   <string name="tops_header_title">Самые красивые</string>
@@ -38,13 +38,18 @@
   <!-- Photorating Activity -->
   <string name="photorating_header_title">Оценка фото</string>
   
-  <!-- Likeme Activity -->
-  <string name="likeme_header_title">Я нравлюсь</string>
+  <!-- Likes Activity -->
+  <string name="likes_header_title">Я нравлюсь</string>
   
   <!-- Myrating Activity -->
-  <string name="myrating_header_title">Меня оценили</string>
+  <string name="rates_header_title">Меня оценили</string>
   
   <!-- Rateit Activity -->
   <string name="rateit_header_title">Оцени Это !</string>
+  
+  <!-- Systems  -->
+  <string name="s_ssid">ssid</string>
+  <string name="s_tops_sex">tops_sex</string>
+  <string name="s_tops_city">tops_city</string>
   
 </resources>

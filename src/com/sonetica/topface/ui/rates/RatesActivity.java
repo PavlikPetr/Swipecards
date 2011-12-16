@@ -1,9 +1,9 @@
-package com.sonetica.topface.ui.chat;
+package com.sonetica.topface.ui.rates;
 
 import java.util.ArrayList;
 import com.sonetica.topface.R;
-import com.sonetica.topface.data.Inbox;
-import com.sonetica.topface.net.InboxRequest;
+import com.sonetica.topface.data.Rate;
+import com.sonetica.topface.net.RatesRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.utils.Debug;
@@ -17,49 +17,49 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /*
- *            "Диалоги"
+ *          "меня оценили"
  */
-public class ChatActivity extends Activity {
+public class RatesActivity extends Activity {
   // Data
   private ListView mListView;
-  private ArrayAdapter mAdapter;
-  private ProgressDialog mProgressDialog;
+  private ArrayAdapter<Rate> mAdapter;
+  private ProgressDialog  mProgressDialog;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.ac_chat);
+    setContentView(R.layout.ac_rates);
     Debug.log(this,"+onCreate");
     
     // Title Header
-   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.chat_header_title));
+   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.rates_header_title));
 
    // ListView
-   mListView = (ListView)findViewById(R.id.lvChatList);
+   mListView = (ListView)findViewById(R.id.lvRatesList);
    
    // Progress Bar
    mProgressDialog = new ProgressDialog(this);
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
    mProgressDialog.show();
+   
    update();
   }
   //---------------------------------------------------------------------------
   private void update() {
-    InboxRequest inboxRequest = new InboxRequest();
-    inboxRequest.offset = 0;
-    inboxRequest.limit  = 20;
-    ConnectionService.sendRequest(inboxRequest,new Handler() {
+    RatesRequest likesRequest = new RatesRequest();
+    likesRequest.offset = 0;
+    likesRequest.limit  = 20;
+    ConnectionService.sendRequest(likesRequest,new Handler() {
       @Override
       public void handleMessage(Message msg) {
         super.handleMessage(msg);
         Response resp = (Response)msg.obj;
         
-        ArrayList<Inbox> list = resp.getMessages();
-        
-        mAdapter = new ChatListAdapter(ChatActivity.this,list);
-        
-        mListView.setAdapter(mAdapter);
-
+        ArrayList<Rate> rates = resp.getRates();        
+        if(rates!=null) {
+          mAdapter = new RatesListAdapter(RatesActivity.this,rates);
+          mListView.setAdapter(mAdapter);
+        }
         mProgressDialog.cancel();
       }
     });
@@ -67,9 +67,6 @@ public class ChatActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    mListView = null;
-    mAdapter = null;
-    mProgressDialog = null;
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }

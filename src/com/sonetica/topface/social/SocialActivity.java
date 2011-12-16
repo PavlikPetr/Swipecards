@@ -55,8 +55,8 @@ public class SocialActivity extends Activity implements View.OnClickListener {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    super.onDestroy();
     Debug.log(this,"-onDestroy");
+    super.onDestroy();
   }
   //---------------------------------------------------------------------------  
 }

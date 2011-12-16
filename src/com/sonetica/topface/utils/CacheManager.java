@@ -25,7 +25,6 @@ import android.graphics.BitmapFactory;
 public class CacheManager {
   // Data
   private Context mContext;
-  private DbaseManager mDbase;
   private ExecutorService mThreadPool;
   private HashMap<IFrame,HashMap<Integer,Bitmap>> mCache;
   // Instance
@@ -48,7 +47,7 @@ public class CacheManager {
   public CacheManager(Context context) {
     mContext = context;
     mThreadPool = Executors.newFixedThreadPool(3);
-    mDbase = new DbaseManager(context);
+    //mDbase = new DbaseManager(context);
     mCache = new HashMap<IFrame,HashMap<Integer,Bitmap>>();
     for(IFrame frame : IFrame.values())
       mCache.put(frame,new HashMap<Integer,Bitmap>()); // create def map //load(frame)
@@ -101,7 +100,9 @@ public class CacheManager {
         try {
           bos = new BufferedOutputStream(new FileOutputStream(file));
           bitmap.compress(Bitmap.CompressFormat.JPEG, 85, bos);
-        } catch(FileNotFoundException e) { Debug.log(null,"error: "+e.getMessage()); } 
+        } catch(FileNotFoundException e) {
+          
+        } 
           finally {
             try {
               if(bos!=null)
@@ -109,7 +110,6 @@ public class CacheManager {
             } catch(IOException e) {}
           }
         
-        Debug.log(null,"saveBitmap: "+fileName);
       }
     });
     return true;
@@ -126,14 +126,15 @@ public class CacheManager {
     try {
       bis = new BufferedInputStream(new FileInputStream(file));
       bitmap = BitmapFactory.decodeStream(bis);
-    } catch(FileNotFoundException e) { Debug.log(null,"error: "+e.getMessage()); }
+    } catch(FileNotFoundException e) {
+      
+    }
       finally {
         try {
           if(bis!=null)
             bis.close();
         } catch(IOException e) {}
       }
-    Debug.log(null,"loadBitmap: "+fileName);
     return bitmap;
   }
   //---------------------------------------------------------------------------  
@@ -141,38 +142,38 @@ public class CacheManager {
     return false;
   }
   //---------------------------------------------------------------------------
-  public static void close() {
+  public static void close0() {
     mInstance.closeInt();
   }
   //---------------------------------------------------------------------------
   protected void closeInt() {
-    mContext = null;
-    mThreadPool.shutdown();
-    mThreadPool = null;
-    for(HashMap<Integer,Bitmap> cache : mCache.values())
-      if(cache!=null)
-        for(Bitmap bitmap : cache.values())
-          if(bitmap!=null)
-            bitmap.recycle();
-    mDbase.close();
-    mDbase = null;
-    mInstance = null;
+//    mContext = null;
+//    mThreadPool.shutdown();
+//    mThreadPool = null;
+//    for(HashMap<Integer,Bitmap> cache : mCache.values())
+//      if(cache!=null)
+//        for(Bitmap bitmap : cache.values())
+//          if(bitmap!=null)
+//            bitmap.recycle();
+//    mDbase.close();
+//    mDbase = null;
+//    mInstance = null;
   }
   //---------------------------------------------------------------------------
   protected void loadSyncCache(IFrame frame,ArrayList<TopUser> userList) {
-    switch(frame) {
-      case TOPS:
-        HashMap<Integer,Bitmap> temp = mCache.get(frame);
-        ArrayList<String> arr = mDbase.getTops();
-        for(int i=0;i<userList.size();i++) {
-          if(i>(arr.size()-1))
-            break;
-          if(FileSystem.getFileName(userList.get(i).photo).equals(arr.get(i)))
-            temp.put(i,load(frame,arr.get(i)));
-        }
-        //Utils.log(null,"sync: arr: "+arr.size()+" userList: "+userList.size()); 
-      break;
-    }
+//    switch(frame) {
+//      case TOPS:
+//        HashMap<Integer,Bitmap> temp = mCache.get(frame);
+//        ArrayList<String> arr = mDbase.getTops();
+//        for(int i=0;i<userList.size();i++) {
+//          if(i>(arr.size()-1))
+//            break;
+//          if(FileSystem.getFileName(userList.get(i).photo).equals(arr.get(i)))
+//            temp.put(i,load(frame,arr.get(i)));
+//        }
+//        //Utils.log(null,"sync: arr: "+arr.size()+" userList: "+userList.size()); 
+//      break;
+//    }
   }
   //---------------------------------------------------------------------------
   protected HashMap<Integer,Bitmap> loadCache(IFrame frame) {

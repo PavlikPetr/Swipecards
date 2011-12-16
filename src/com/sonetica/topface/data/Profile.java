@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 /*
  * Структура профиля владельца устройства
  */
-public class Owner {
+public class Profile {
   /*
   {String} first_name;
   {Number} age;

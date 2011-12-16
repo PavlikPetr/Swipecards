@@ -7,7 +7,7 @@
   <include layout="@layout/header_bar" />
   
   <ListView
-      android:id="@+id/lvMyratingList"
+      android:id="@+id/lvRatesList"
       android:layout_width="wrap_content" 
       android:layout_height="wrap_content"
       android:layout_weight="1"

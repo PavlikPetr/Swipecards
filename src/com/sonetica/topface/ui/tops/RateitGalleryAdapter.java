@@ -35,7 +35,7 @@ public class RateitGalleryAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   public View getView(final int position,View convertView, ViewGroup parent) {
     if(convertView == null) {
-      convertView = (ImageView)mInflater.inflate(R.layout.rateit2_gallery_item, null, false);
+      convertView = (ImageView)mInflater.inflate(R.layout.rateit_gallery_item, null, false);
       convertView.setLayoutParams(new Gallery.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
     }
     

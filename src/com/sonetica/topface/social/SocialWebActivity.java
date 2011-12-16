@@ -9,8 +9,6 @@ import com.sonetica.topface.social.fb.FbAuthWebViewClient;
 import com.sonetica.topface.social.vk.VkAuthWebViewClient;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -43,6 +41,7 @@ public class SocialWebActivity extends Activity {
     mWebView.setVerticalFadingEdgeEnabled(true);
     
     int type_network = getIntent().getIntExtra(TYPE,-1);
+    
     if(type_network == TYPE_VKONTAKTE)
       mWebView.setWebViewClient(new VkAuthWebViewClient(SocialWebActivity.this, mWebView, mProgressBar, new WebHandler()));
     else if(type_network == TYPE_FACEBOOK)
@@ -51,6 +50,9 @@ public class SocialWebActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
+    mWebView.destroy();
+    mWebView=null;
+    mProgressBar=null;
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
@@ -62,39 +64,32 @@ public class SocialWebActivity extends Activity {
     public void handleMessage(Message msg) {
       if(msg.what==AuthToken.AUTH_COMPLETE) {
         AuthToken.Token token = (AuthToken.Token)msg.obj;
-
+        // отправка токена на TP сервер
         AuthRequest authRequest = new AuthRequest();
-          authRequest.platform = token.getSocialNet();
-          authRequest.sid      = token.getUserId();
-          authRequest.token    = token.getTokenKey();
+        authRequest.platform = token.getSocialNet();
+        authRequest.sid      = token.getUserId();
+        authRequest.token    = token.getTokenKey();
         ConnectionService.sendRequest(authRequest,new Handler() {
           @Override
           public void handleMessage(Message msg) {
             super.handleMessage(msg);
             Response resp = (Response)msg.obj;
             if(resp.code==-1) {
-              SharedPreferences preferences = SocialWebActivity.this.getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-              SharedPreferences.Editor editor = preferences.edit();
-              editor.putString(getString(R.string.ssid),resp.getSsid());
-              editor.commit();
-              
-              ConnectionService.SSID = resp.getSsid();
+              // запись ssid
+              App.saveSSID(SocialWebActivity.this,resp.getSsid());
 
               setResult(Activity.RESULT_OK);
               finish();
             } else {
+              Debug.log(SocialWebActivity.this,"ssid is wrong");
               setResult(Activity.RESULT_CANCELED);
               finish();
             }
           }
         });
-
       } else {
         // стирание ssid
-        SharedPreferences preferences = SocialWebActivity.this.getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(getString(R.string.ssid),"");
-        editor.commit();
+        App.saveSSID(SocialWebActivity.this,"");
         
         setResult(Activity.RESULT_CANCELED);
         finish();

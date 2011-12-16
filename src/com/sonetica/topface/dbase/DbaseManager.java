@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 /*
  *   Менеджер для работы с базой данных
  */
+public class DbaseManager {}
+/*
 public class DbaseManager extends SQLiteOpenHelper {
   // Data
   private SQLiteDatabase mDBase;
@@ -33,7 +35,7 @@ public class DbaseManager extends SQLiteOpenHelper {
   public DbaseManager(Context context) {
     super(context,DB_NAME,null,DB_VERSION);
     //context.deleteDatabase(DB_NAME);
-    mDBase = getWritableDatabase();
+    //mDBase = getWritableDatabase();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -95,3 +97,4 @@ public class DbaseManager extends SQLiteOpenHelper {
 //  }
   //---------------------------------------------------------------------------
 }
+*/

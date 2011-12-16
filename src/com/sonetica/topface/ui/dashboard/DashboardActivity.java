@@ -1,22 +1,19 @@
 package com.sonetica.topface.ui.dashboard;
 
 import com.sonetica.topface.App;
-import com.sonetica.topface.LikemeActivity;
 import com.sonetica.topface.R;
 import com.sonetica.topface.PhotoratingActivity;
 import com.sonetica.topface.PreferencesActivity;
 import com.sonetica.topface.ProfileActivity;
 import com.sonetica.topface.net.Http;
-import com.sonetica.topface.services.StatisticService;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.chat.ChatActivity;
-import com.sonetica.topface.ui.myrating.MyratingActivity;
+import com.sonetica.topface.ui.likes.LikesActivity;
+import com.sonetica.topface.ui.rates.RatesActivity;
 import com.sonetica.topface.ui.tops.TopsActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +26,6 @@ import android.widget.Toast;
  */
 public class DashboardActivity extends Activity implements View.OnClickListener {
   // Data
-  private Intent mServiceIntent;
   // Constants
   public static final int INTENT_DASHBOARD = 100;
   //---------------------------------------------------------------------------
@@ -43,8 +39,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }
-    
-    startService(mServiceIntent = new Intent(this,StatisticService.class));
     
     ((Button)findViewById(R.id.btnDashbrdPhotorating)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdLikeme)).setOnClickListener(this);
@@ -76,10 +70,10 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         startActivity(new Intent(this,PhotoratingActivity.class));
       } break;
       case R.id.btnDashbrdLikeme: {
-        startActivity(new Intent(this,LikemeActivity.class));
+        startActivity(new Intent(this,LikesActivity.class));
       } break;
       case R.id.btnDashbrdMyrating: {
-        startActivity(new Intent(this,MyratingActivity.class));
+        startActivity(new Intent(this,RatesActivity.class));
       } break;
       case R.id.btnDashbrdChat: {
         startActivity(new Intent(this,ChatActivity.class));
@@ -95,17 +89,15 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   }
   //---------------------------------------------------------------------------
   private boolean isRegistered() {
-    SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-    String ssid = preferences.getString(getString(R.string.ssid),"");
-    return ssid.length()>0;
+    return App.SSID.length()>0;
+    //SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    //String ssid = preferences.getString(getString(R.string.ssid),"");
+    //return ssid.length()>0;
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
     Debug.log(this,"-onDestroy");
-
-    stopService(mServiceIntent);
-
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
@@ -134,4 +126,3 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   }
   //---------------------------------------------------------------------------
 }
-//Toast.makeText(this,"tops",Toast.LENGTH_SHORT).show();

@@ -35,7 +35,6 @@ public class SnResponse {
       try {
         return mData.get(name);
       } catch (JSONException e) {
-        Debug.log(this,"VkResponse get int error: " + e.getMessage());
         return defValue;
       }
     } else {
@@ -48,7 +47,6 @@ public class SnResponse {
       try {
         return mData.getInt(name);
       } catch (JSONException e) {
-        Debug.log(this,"VkResponse get int error: " + e.getMessage());
         return defValue;
       }
     } else
@@ -60,7 +58,6 @@ public class SnResponse {
       try {
         return mData.getString(name);
       } catch (JSONException e) {
-        Debug.log(this,"VkResponse get string error: " + e.getMessage());
         return defValue;
       }
     } else

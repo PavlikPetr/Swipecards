@@ -59,7 +59,6 @@ public class VkAuthWebViewClient extends WebViewClient {
    */
   @Override
   public void onPageStarted(WebView view, String url, Bitmap favicon) {
-    Debug.log(null,"url:"+url);
     super.onPageStarted(view, url, favicon);
     showProgressBar();
 
@@ -69,12 +68,10 @@ public class VkAuthWebViewClient extends WebViewClient {
 
     // Ждем подходящую строку запроса
     if(mMatcherToken.find()) {
-      Debug.log(null,"url:ok");
       view.stopLoading();
       try {
         URLEncodedUtils.parse(new URI(url), "utf-8");
       } catch(URISyntaxException e) {
-        Debug.log(this,"Error parse url");
       }
       // Разбор строки запроса и выбор токена и user_id
       HashMap<String, String> queryMap = Utils.parseQueryString(mMatcherToken.group(1));
@@ -87,7 +84,6 @@ public class VkAuthWebViewClient extends WebViewClient {
       AuthToken.Token token = authToken.setToken(AuthToken.SN_VKONTAKTE,userId,tokenKey,expiresIn);
       mHandler.sendMessage(Message.obtain(null,AuthToken.AUTH_COMPLETE,token));
     } else if(mMatcherError.find() || mMatcherLogout.find()) {
-      Debug.log(null,"url:no ok");
       view.stopLoading();
       // Очистка токена при отмене аутентификации
       new AuthToken(mContext).remove();

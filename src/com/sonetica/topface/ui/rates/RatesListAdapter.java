@@ -1,18 +1,19 @@
-package com.sonetica.topface.ui.myrating;
+package com.sonetica.topface.ui.rates;
 
-import java.util.List;
+import java.util.ArrayList;
+import com.sonetica.topface.data.Rate;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class MyratingListAdapter extends ArrayAdapter {
+public class RatesListAdapter extends ArrayAdapter<Rate> {
   // Data
   private Context mContext;
-  private List mList;
+  private ArrayList<Rate> mList;
   //---------------------------------------------------------------------------
-  public MyratingListAdapter(Context context,List list) {
+  public RatesListAdapter(Context context,ArrayList<Rate> list) {
     super(context,0,list);
     mContext=context;
     mList=list;
@@ -24,7 +25,7 @@ public class MyratingListAdapter extends ArrayAdapter {
   }
   //---------------------------------------------------------------------------
   @Override
-  public Object getItem(int position) {
+  public Rate getItem(int position) {
     return mList.get(position);
   }
   //---------------------------------------------------------------------------
@@ -46,8 +47,11 @@ public class MyratingListAdapter extends ArrayAdapter {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     if(convertView==null)
-      convertView=new TextView(mContext);
-    ((TextView)convertView).setText((String)getItem(position));
+      convertView = new TextView(mContext);
+    Rate rate = getItem(position);
+    String text = rate.first_name+"("+rate.age+"): "+rate.rate;
+    ((TextView)convertView).setText(text);
+    
     return convertView;
   }
   //---------------------------------------------------------------------------

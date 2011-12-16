@@ -1,7 +1,10 @@
 package com.sonetica.topface;
 
+import com.sonetica.topface.services.ConnectionService;
+import com.sonetica.topface.services.StatisticService;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.dashboard.DashboardActivity;
+import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Context;
@@ -20,10 +23,12 @@ public class MainActivity extends Activity {
     setContentView(R.layout.ac_main);
     Debug.log(this,"+onCreate");
     
-    SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-    String ssid = preferences.getString(getString(R.string.ssid),"");
+    CacheManager.create(this);
+    
+    startService(new Intent(this, ConnectionService.class));
+    startService(new Intent(this, StatisticService.class));
 
-    if(ssid.length()>0)
+    if(App.SSID.length()>0)
       startActivity(new Intent(this,DashboardActivity.class));
     else
       startActivity(new Intent(this,SocialActivity.class));

@@ -71,7 +71,6 @@ public class FbAuthWebViewClient extends WebViewClient {
       try {
         URLEncodedUtils.parse(new URI(url), "utf-8");
       } catch(URISyntaxException e) {
-        Debug.log(this,"Error parse url");
       }
       
       // Разбор строки запроса и выбор токена
@@ -134,7 +133,7 @@ public class FbAuthWebViewClient extends WebViewClient {
     try {
       id = (String)jsonResult.get("id");
     } catch(JSONException e) {
-      Debug.log(this, "'user_id' isn't received");
+
     } 
     return id;
   }
