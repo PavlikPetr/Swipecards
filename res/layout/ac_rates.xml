@@ -6,7 +6,7 @@
   <!-- header bar -->
   <include layout="@layout/header_bar" />
   
-  <ListView
+  <com.sonetica.topface.ui.PullToRefreshListView
       android:id="@+id/lvRatesList"
       android:layout_width="wrap_content" 
       android:layout_height="wrap_content"

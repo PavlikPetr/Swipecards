@@ -11,6 +11,13 @@ import android.view.WindowManager;
  *  клавы,экрана,процессора,сенсоров,
  */
 public class Device {
+  // Data
+  // Methods
+  //---------------------------------------------------------------------------
+  public static void init() {
+    // todo something
+    // init device hardware
+  }
   //---------------------------------------------------------------------------
   public static Display getDisplay(Context context) {
     return ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();

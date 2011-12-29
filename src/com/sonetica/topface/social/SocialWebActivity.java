@@ -1,6 +1,6 @@
 package com.sonetica.topface.social;
 
-import com.sonetica.topface.App;
+import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.net.AuthRequest;
 import com.sonetica.topface.net.Response;
@@ -63,8 +63,8 @@ public class SocialWebActivity extends Activity {
     @Override
     public void handleMessage(Message msg) {
       if(msg.what==AuthToken.AUTH_COMPLETE) {
-        AuthToken.Token token = (AuthToken.Token)msg.obj;
         // отправка токена на TP сервер
+        AuthToken.Token token   = (AuthToken.Token)msg.obj;
         AuthRequest authRequest = new AuthRequest();
         authRequest.platform = token.getSocialNet();
         authRequest.sid      = token.getUserId();
@@ -74,10 +74,9 @@ public class SocialWebActivity extends Activity {
           public void handleMessage(Message msg) {
             super.handleMessage(msg);
             Response resp = (Response)msg.obj;
-            if(resp.code==-1) {
+            if(resp.code==0) {
               // запись ssid
-              App.saveSSID(SocialWebActivity.this,resp.getSsid());
-
+              Global.saveSSID(SocialWebActivity.this,resp.getSSID());
               setResult(Activity.RESULT_OK);
               finish();
             } else {
@@ -89,8 +88,7 @@ public class SocialWebActivity extends Activity {
         });
       } else {
         // стирание ssid
-        App.saveSSID(SocialWebActivity.this,"");
-        
+        Global.saveSSID(SocialWebActivity.this,"");
         setResult(Activity.RESULT_CANCELED);
         finish();
       }

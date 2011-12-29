@@ -1,7 +1,9 @@
 package com.sonetica.topface.ui.tops;
 
 import com.sonetica.topface.R;
-import com.sonetica.topface.utils.GalleryCachedManager;
+import com.sonetica.topface.data.TopUser;
+import com.sonetica.topface.ui.ThumbView;
+import com.sonetica.topface.ui.GalleryManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +16,20 @@ import android.widget.BaseAdapter;
 public class TopsGridAdapter extends BaseAdapter {
   // Data
   private LayoutInflater mInflater;
-  private GalleryCachedManager mGalleryCachedManager;
+  private GalleryManager mGalleryManager;
   // class ViewHolder
   static class ViewHolder {
-    TopButton mTopButton;
+    ThumbView mThumbButton;
   };
   //---------------------------------------------------------------------------
-  public TopsGridAdapter(Context context,GalleryCachedManager galleryManager) {
+  public TopsGridAdapter(Context context,GalleryManager galleryManager) {
     mInflater = LayoutInflater.from(context);
-    mGalleryCachedManager = galleryManager;
+    mGalleryManager = galleryManager;
   }
   //---------------------------------------------------------------------------
   @Override
   public int getCount() {
-    return mGalleryCachedManager.size();
+    return mGalleryManager.size();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -35,18 +37,18 @@ public class TopsGridAdapter extends BaseAdapter {
     ViewHolder holder = null;
     if(convertView==null) {
       holder = new ViewHolder();
-      convertView = (ViewGroup)mInflater.inflate(R.layout.tops_gallery_item, null, false);
-      holder.mTopButton = (TopButton)convertView.findViewById(R.id.ivTG);
-      holder.mTopButton.setMinimumWidth(mGalleryCachedManager.mBitmapWidth);
-      holder.mTopButton.setMinimumHeight(mGalleryCachedManager.mBitmapHeight);
+      convertView = (ViewGroup)mInflater.inflate(R.layout.gallery_item, null, false);
+      holder.mThumbButton = (ThumbView)convertView.findViewById(R.id.ivTG);
+      holder.mThumbButton.setMinimumWidth(mGalleryManager.mBitmapWidth);
+      holder.mThumbButton.setMinimumHeight(mGalleryManager.mBitmapHeight);
       //holder.miv.setScaleType(ScaleType.CENTER);
       convertView.setTag(holder);
     } else 
       holder = (ViewHolder)convertView.getTag();
 
-    holder.mTopButton.mPercent = mGalleryCachedManager.get(position).liked; 
+    holder.mThumbButton.mPercent = ((TopUser)mGalleryManager.get(position)).liked; 
 
-    mGalleryCachedManager.getImage(position,holder.mTopButton);
+    mGalleryManager.getImage(position,holder.mThumbButton);
     
     return convertView;
   }

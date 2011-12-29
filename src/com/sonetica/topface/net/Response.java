@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.sonetica.topface.data.Album;
 import com.sonetica.topface.data.City;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.data.Like;
@@ -13,8 +14,10 @@ import com.sonetica.topface.utils.Debug;
 
 public class Response {
   // Data
-  public int code = -1;
+  public int code;
   JSONObject mJsonResult;
+  // Constants
+  public static final int FATAL_ERROR = 99;
   //---------------------------------------------------------------------------
   public Response(String response) {
     JSONObject obj = null;
@@ -23,15 +26,17 @@ public class Response {
       if(!obj.isNull("error")) {
         mJsonResult = obj.getJSONObject("error");
         code = mJsonResult.getInt("code");
-      }
-      mJsonResult = obj.getJSONObject("result");
+      } else if(!obj.isNull("result"))
+        mJsonResult = obj.getJSONObject("result");
+      else
+        code = FATAL_ERROR;
     } catch (JSONException e) {
-      // todo something
+      code = FATAL_ERROR;
     }
   }
   //---------------------------------------------------------------------------
-  public String getSsid() {
-    if(code>=0)
+  public String getSSID() {
+    if(code>0)
       return null;
     try {
       return mJsonResult.getString("ssid");
@@ -41,7 +46,7 @@ public class Response {
   }
   //---------------------------------------------------------------------------
   public ArrayList<TopUser> getUsers() {
-    if(code>=0)
+    if(code>0)
       return null;
     ArrayList<TopUser> userList = null;
     try {
@@ -50,7 +55,11 @@ public class Response {
         userList = new ArrayList<TopUser>();
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
-          userList.add(new TopUser(item.getString("uid"),item.getString("photo"),item.getString("liked")));
+          TopUser topUser = new TopUser();
+          topUser.liked = item.getString("liked");
+          topUser.photo = item.getString("photo");
+          topUser.uid   = item.getString("uid");
+          userList.add(topUser);
         }
       }
     } catch(JSONException e) {
@@ -60,7 +69,7 @@ public class Response {
   }
   //---------------------------------------------------------------------------
   public ArrayList<City> getCities() {
-    if(code>=0)
+    if(code>0)
       return null;
     ArrayList<City> cities = null;
     try {
@@ -82,36 +91,37 @@ public class Response {
   }
   //---------------------------------------------------------------------------
   public String getProfile() {
-    if(code>=0)
+    if(code>0)
       return null;
-    try {
-      return mJsonResult.getString("profile");
-    } catch(JSONException e) {
-      return null; 
-    }
+    return mJsonResult.toString();
   }
   //---------------------------------------------------------------------------
-  public ArrayList<String> getAlbum() {
-    if(code>=0)
+  public ArrayList<Album> getAlbum() {
+    if(code>0)
       return null;
-    ArrayList<String> linkList = null;
+    ArrayList<Album> linkList = null;
     try {
       JSONArray arr = mJsonResult.getJSONArray("album");
       if(arr.length()>0) {
-        linkList = new ArrayList<String>();
+        linkList = new ArrayList<Album>();
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
-          linkList.add(item.getString("big"));
+          Album album = new Album();
+          album.id    = item.getString("id");
+          album.small = item.getString("small");
+          album.big   = item.getString("big");
+          linkList.add(album);
         }
       }
       return linkList;
     } catch(JSONException e) {
+      Debug.log(null,"error:"+e);
       return null; 
     }
   }
   //---------------------------------------------------------------------------
   public ArrayList<Inbox> getMessages() {
-    if(code>=0)
+    if(code>0)
       return null;
     ArrayList<Inbox> userList = null;
     try {
@@ -139,7 +149,7 @@ public class Response {
   }
   //---------------------------------------------------------------------------
   public ArrayList<Rate> getRates() {
-    if(code>=0)
+    if(code>0)
       return null;
     ArrayList<Rate> rates = null;
     try {
@@ -167,7 +177,7 @@ public class Response {
   }
   //---------------------------------------------------------------------------
   public ArrayList<Like> getLikes() {
-    if(code>=0)
+    if(code>0)
       return null;
     ArrayList<Like> rates = null;
     try {

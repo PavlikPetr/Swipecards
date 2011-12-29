@@ -1,5 +1,5 @@
 package com.sonetica.topface.data;
 
-public class User {
+public class User extends Data {
 
 }

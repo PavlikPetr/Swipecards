@@ -3,16 +3,14 @@ package com.sonetica.topface.data;
 /*
  * Структура для хранения профиля в топе
  */
-public class TopUser {
+public class TopUser extends Data {
   // Data
-  public String uid   = "";
-  public String name  = "";
-  public String photo = "";
-  public String liked = "";
+  public String uid;
+  public String photo;
+  public String liked;
   // Methods
-  public TopUser(String uid, String photo, String liked) {
-    this.uid   = uid;
-    this.photo = photo;
-    this.liked = liked;
+  @Override
+  public String getLink() {
+    return photo;
   }
 }

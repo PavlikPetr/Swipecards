@@ -1,7 +1,7 @@
-package com.sonetica.topface.ui.tops;
+package com.sonetica.topface.ui.album;
 
 import com.sonetica.topface.R;
-import com.sonetica.topface.utils.GalleryManager;
+import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +11,16 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
 
-public class RateitGalleryAdapter extends BaseAdapter {
+public class AlbumGalleryAdapter extends BaseAdapter {
   // Data
   private LayoutInflater mInflater;
-  private GalleryManager mGalleryManager; // менеджер изображений
+  private AlbumGalleryManager mGalleryManager; // менеджер изображений
+  // class ViewHolder
+  static class ViewHolder {
+    ImageView mImageView;
+  };
   //---------------------------------------------------------------------------
-  public RateitGalleryAdapter(Context context,GalleryManager galleryManager) {
+  public AlbumGalleryAdapter(Context context,AlbumGalleryManager galleryManager) {
     mGalleryManager = galleryManager;
     mInflater = LayoutInflater.from(context);
   }
@@ -34,16 +38,22 @@ public class RateitGalleryAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   public View getView(final int position,View convertView, ViewGroup parent) {
-    if(convertView == null) {
-      convertView = (ImageView)mInflater.inflate(R.layout.rateit_gallery_item, null, false);
+    ViewHolder holder = null;
+    if(convertView==null) {
+      holder = new ViewHolder();
+      convertView = (ViewGroup)mInflater.inflate(R.layout.album_gallery_item, null, false);
       convertView.setLayoutParams(new Gallery.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-    }
+      holder.mImageView = (ImageView)convertView.findViewById(R.id.ivPreView);
+      Debug.log(null,"new view");
+      convertView.setTag(holder);
+    } else 
+      holder = (ViewHolder)convertView.getTag();
     
     if(mGalleryManager.size()==0)
       return convertView;
     
-    mGalleryManager.getImage(position,(ImageView)convertView);
-    mGalleryManager.preload(position+1);
+    mGalleryManager.getImage(position,holder.mImageView);
+    //mGalleryManager.preload(position+1);
     
     return convertView;
   }

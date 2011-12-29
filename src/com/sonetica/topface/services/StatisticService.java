@@ -11,21 +11,19 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.view.Display;
 import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
 
 public class StatisticService extends Service {
   // Data
-  private TextView mText;
-  private WindowManager mWindowManager;
+  //private TextView mText;
+  //private WindowManager mWindowManager;
   private StatisticHandler mStatHandler;
   //---------------------------------------------------------------------------
   @Override
   public void onCreate() {
     Debug.log(this,"+onCreate");
-    
+    /*
     mText = new TextView(this);
     mText.setTextSize(12);
     mText.setTextColor(Color.YELLOW);
@@ -44,7 +42,7 @@ public class StatisticService extends Service {
         PixelFormat.TRANSLUCENT);
     
     mWindowManager.addView(mText,lp);
-   
+    */
     mStatHandler = new StatisticHandler();
     mStatHandler.sendEmptyMessage(0);
   }
@@ -56,10 +54,10 @@ public class StatisticService extends Service {
   //---------------------------------------------------------------------------
   @Override
   public void onDestroy() {
-    mWindowManager.removeView(mText);
-    mWindowManager = null;
+    //mWindowManager.removeView(mText);
+    //mWindowManager = null;
     mStatHandler = null;
-    mText = null;
+    //mText = null;
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
@@ -87,8 +85,10 @@ public class StatisticService extends Service {
         }
       });
       */
+      /*
       Debug.log(null,"Ha:" + Memory.getHeapUsed()   + " Hf:" + Memory.getHeapFree() + "\n" + 
                      "::Na:" + Memory.getNativeUsed() + " Nf:" + Memory.getNativeFree());
+      */
       mStatHandler.sendEmptyMessageDelayed(0,1000*4);
     }
   }//StatisticHandler

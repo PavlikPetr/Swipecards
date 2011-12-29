@@ -5,6 +5,7 @@
   <!-- General  -->
   <string name="internet_off">Приложение требует подключение к Интернету</string>
   <string name="dialog_loading">Загружаю</string>
+  <string name="default_city">Москва</string>
   
   <!-- Preferences Activity  -->
   <string name="preferences_title">Настройки</string>
@@ -51,5 +52,7 @@
   <string name="s_ssid">ssid</string>
   <string name="s_tops_sex">tops_sex</string>
   <string name="s_tops_city">tops_city</string>
+  <string name="s_tops_city_position">tops_city_position</string>
+  <string name="s_tops_city_name">tops_city_name</string>
   
 </resources>

@@ -1,6 +1,6 @@
 package com.sonetica.topface.ui.dashboard;
 
-import com.sonetica.topface.App;
+import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.PhotoratingActivity;
 import com.sonetica.topface.PreferencesActivity;
@@ -35,24 +35,24 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     setContentView(R.layout.ac_dashboard);
     Debug.log(this,"+onCreate");
     
-    if(!Http.isOnline(this)){
-      Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
-      return;
-    }
-    
     ((Button)findViewById(R.id.btnDashbrdPhotorating)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdLikeme)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdMyrating)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdChat)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdTops)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDashbrdProfile)).setOnClickListener(this);
+    
+    if(!Http.isOnline(this)){
+      Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
+      return;
+    }
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStart() {
     super.onStart();
     
-    if(isRegistered())
+    if(Global.SSID.length()>0)
       return;
     
     startActivity(new Intent(this,SocialActivity.class));
@@ -86,13 +86,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       } break;      
       default:
     }
-  }
-  //---------------------------------------------------------------------------
-  private boolean isRegistered() {
-    return App.SSID.length()>0;
-    //SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-    //String ssid = preferences.getString(getString(R.string.ssid),"");
-    //return ssid.length()>0;
   }
   //---------------------------------------------------------------------------
   @Override

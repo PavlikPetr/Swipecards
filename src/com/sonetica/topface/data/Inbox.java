@@ -1,6 +1,6 @@
 package com.sonetica.topface.data;
 
-public class Inbox {
+public class Inbox extends Data {
   public String uid;
   public String first_name;
   public String age;

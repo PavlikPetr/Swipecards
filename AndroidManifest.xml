@@ -27,7 +27,7 @@
     <activity android:name=".ui.rates.RatesActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.chat.ChatActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.tops.TopsActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ui.tops.RateitActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".ui.album.AlbumActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.likes.LikesActivity" android:screenOrientation="portrait"/>
     <activity android:name=".PhotoratingActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ProfileActivity" android:screenOrientation="portrait"/>

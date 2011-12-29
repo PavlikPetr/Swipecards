@@ -1,6 +1,6 @@
 package com.sonetica.topface.data;
 
-public class Rate {
+public class Rate extends Data {
   public String uid;
   public String first_name;
   public String age;

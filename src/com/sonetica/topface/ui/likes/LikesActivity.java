@@ -3,17 +3,14 @@ package com.sonetica.topface.ui.likes;
 import java.util.ArrayList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Like;
-import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.net.LikesRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.services.ConnectionService;
-import com.sonetica.topface.ui.tops.RateitActivity;
-import com.sonetica.topface.ui.tops.TopsActivity;
-import com.sonetica.topface.ui.tops.TopsGridAdapter;
+import com.sonetica.topface.ui.GalleryManager;
+import com.sonetica.topface.ui.PullToRefreshGridView;
+import com.sonetica.topface.ui.PullToRefreshBase.OnRefreshListener;
+import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.utils.Debug;
-import com.sonetica.topface.utils.GalleryCachedManager;
-import com.sonetica.topface.utils.GalleryManager;
-import com.sonetica.topface.utils.IFrame;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -25,19 +22,18 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
  *      "я нравлюсь"
  */
 public class LikesActivity extends Activity {
   // Data
-  private GridView mGallery;
+  private PullToRefreshGridView mGallery;
   private ProgressDialog mProgressDialog;
   private GalleryManager mGalleryManager;
   private LikesGridAdapter mLikesGridAdapter;
-  private ArrayList<String> mLikesList;
   private ArrayList<Like> mLikes;
-  private int m_city = PITER;
   // Constats
   private static int PITER = 2;
   //---------------------------------------------------------------------------
@@ -52,61 +48,70 @@ public class LikesActivity extends Activity {
    
    // Girl Button
    Button btnGirls = (Button)findViewById(R.id.btnBarGirls);
+   btnGirls.setVisibility(View.INVISIBLE);
    btnGirls.setText(getString(R.string.tops_btn_girls));
    btnGirls.setOnClickListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       m_city = PITER;
-       update();
+       Toast.makeText(LikesActivity.this,"Girl",Toast.LENGTH_LONG).show();
+       //update();
      }
    });
    
    // Boy Button
    Button btnBoys  = (Button)findViewById(R.id.btnBarBoys);
+   btnBoys.setVisibility(View.INVISIBLE);
    btnBoys.setText(getString(R.string.tops_btn_boys));
    btnBoys.setOnClickListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       m_city = PITER;
-       update();
+       Toast.makeText(LikesActivity.this,"Boy",Toast.LENGTH_LONG).show();
+       //update();
      }
    });
    
    // City Button
    Button btnCity  = (Button)findViewById(R.id.btnBarCity);
+   btnCity.setVisibility(View.INVISIBLE);
    btnCity.setText(getString(R.string.tops_btn_city));
    btnCity.setOnClickListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       
-       // Смена города
-       m_city = 1;
-       update();
+       Toast.makeText(LikesActivity.this,"City",Toast.LENGTH_LONG).show();
+       //update();
      }
    });
    
    // Gallery
-   mGallery = (GridView)findViewById(R.id.grdLikesGallary);
+   mGallery = (PullToRefreshGridView)findViewById(R.id.grdLikesGallary);
    mGallery.setAnimationCacheEnabled(false);
-   mGallery.setScrollingCacheEnabled(false);
-   mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+   //mGallery.setScrollingCacheEnabled(false);
+   mGallery.getAdapterView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       Intent intent = new Intent(LikesActivity.this,RateitActivity.class);
-       intent.putExtra(RateitActivity.INTENT_USER_ID,mLikes.get(position).uid);
+       Intent intent = new Intent(LikesActivity.this,AlbumActivity.class);
+       intent.putExtra(AlbumActivity.INTENT_USER_ID,mLikes.get(position).uid);
        startActivity(intent);
      }
    });
+      
+   mGallery.setOnRefreshListener(new OnRefreshListener() {
+     @Override
+     public void onRefresh() {
+       update();
+     }});
+   
    
    // Progress Bar
    mProgressDialog = new ProgressDialog(this);
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
-   mProgressDialog.show();
    
    update();
   }
   //---------------------------------------------------------------------------
   private void update() {
+    mProgressDialog.show();
+    
     LikesRequest likesRequest = new LikesRequest();
     likesRequest.offset = 0;
     likesRequest.limit  = 20;
@@ -115,15 +120,13 @@ public class LikesActivity extends Activity {
       public void handleMessage(Message msg) {
         super.handleMessage(msg);
         Response resp = (Response)msg.obj;
-        mLikesList = new ArrayList<String>();
         mLikes = resp.getLikes();
-        for(Like like : mLikes)
-          mLikesList.add(like.avatars_small);
-        if(mLikesList != null) {
-          mGalleryManager   = new GalleryManager(LikesActivity.this,mLikesList,4);
+        if(mLikes != null) {
+          mGalleryManager   = new GalleryManager(LikesActivity.this,mLikes);
           mLikesGridAdapter = new LikesGridAdapter(LikesActivity.this,mGalleryManager);
-          mGallery.setAdapter(mLikesGridAdapter);
+          mGallery.getAdapterView().setAdapter(mLikesGridAdapter);
         }
+        mGallery.onRefreshComplete();
         mProgressDialog.cancel();
       }
     });

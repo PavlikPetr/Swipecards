@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.chat;
 
 import java.util.ArrayList;
-import java.util.List;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
 import android.content.Context;

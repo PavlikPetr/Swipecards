@@ -6,6 +6,8 @@ import com.sonetica.topface.data.Rate;
 import com.sonetica.topface.net.RatesRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.services.ConnectionService;
+import com.sonetica.topface.ui.PullToRefreshListView;
+import com.sonetica.topface.ui.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -21,7 +23,7 @@ import android.widget.TextView;
  */
 public class RatesActivity extends Activity {
   // Data
-  private ListView mListView;
+  private PullToRefreshListView mListView;
   private ArrayAdapter<Rate> mAdapter;
   private ProgressDialog  mProgressDialog;
   //---------------------------------------------------------------------------
@@ -35,17 +37,23 @@ public class RatesActivity extends Activity {
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.rates_header_title));
 
    // ListView
-   mListView = (ListView)findViewById(R.id.lvRatesList);
+   mListView = (PullToRefreshListView)findViewById(R.id.lvRatesList);
+   mListView.setOnRefreshListener(new OnRefreshListener() {
+     @Override
+     public void onRefresh() {
+         update();
+     }});
    
    // Progress Bar
    mProgressDialog = new ProgressDialog(this);
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
-   mProgressDialog.show();
    
    update();
   }
   //---------------------------------------------------------------------------
   private void update() {
+    //mProgressDialog.show();
+    
     RatesRequest likesRequest = new RatesRequest();
     likesRequest.offset = 0;
     likesRequest.limit  = 20;
@@ -60,7 +68,8 @@ public class RatesActivity extends Activity {
           mAdapter = new RatesListAdapter(RatesActivity.this,rates);
           mListView.setAdapter(mAdapter);
         }
-        mProgressDialog.cancel();
+        mListView.onRefreshComplete();
+        //mProgressDialog.cancel();
       }
     });
   }

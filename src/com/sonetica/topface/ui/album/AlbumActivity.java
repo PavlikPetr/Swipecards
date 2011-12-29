@@ -1,12 +1,12 @@
-package com.sonetica.topface.ui.tops;
+package com.sonetica.topface.ui.album;
 
 import java.util.ArrayList;
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.Album;
 import com.sonetica.topface.net.AlbumRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.utils.Debug;
-import com.sonetica.topface.utils.GalleryManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -14,20 +14,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
 
-public class RateitActivity extends Activity {
+public class AlbumActivity extends Activity {
   // Data
-  private RateitGallery  mGallery;
+  private AlbumGallery  mGallery;
   private ProgressDialog mProgressDialog;
-  private GalleryManager mGalleryManager;
-  private RateitGalleryAdapter mGalleryAdapter;
-  private ArrayList<String> mLinkList;
+  private AlbumGalleryManager mGalleryManager;
+  private AlbumGalleryAdapter mGalleryAdapter;
+  private ArrayList<Album> mAlbums;
   // Constants
   public static final String INTENT_USER_ID = "user_id";
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.ac_rateit2);
+    setContentView(R.layout.ac_album);
     Debug.log(this,"+onCreate");
 
     // Title Header
@@ -39,9 +39,9 @@ public class RateitActivity extends Activity {
     mProgressDialog.show();
     
     // Gallery
-    mGallery = (RateitGallery)findViewById(R.id.galleryRateit2);
+    mGallery = (AlbumGallery)findViewById(R.id.galleryAlbum);
     
-    mLinkList = new ArrayList<String>();
+    mAlbums = new ArrayList<Album>();
    
     try {
       int uid = Integer.parseInt(getIntent().getStringExtra(INTENT_USER_ID));
@@ -59,9 +59,9 @@ public class RateitActivity extends Activity {
       public void handleMessage(Message msg) {
         super.handleMessage(msg);
         Response resp = (Response)msg.obj;
-        mLinkList = resp.getAlbum();
-        mGalleryManager = new GalleryManager(RateitActivity.this,mLinkList,1);
-        mGalleryAdapter = new RateitGalleryAdapter(RateitActivity.this,mGalleryManager);
+        mAlbums = resp.getAlbum();
+        mGalleryManager = new AlbumGalleryManager(AlbumActivity.this,mAlbums);
+        mGalleryAdapter = new AlbumGalleryAdapter(AlbumActivity.this,mGalleryManager);
         mGallery.setAdapter(mGalleryAdapter);
         mProgressDialog.cancel();
       }

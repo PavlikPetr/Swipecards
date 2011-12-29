@@ -31,8 +31,8 @@ public class VkAuthWebViewClient extends WebViewClient {
   private Pattern mRegExpLogout = Pattern.compile("(.*act=logout.+)$");
   //https://login.vk.com/?act=logout
   // Constants
-  private static final int CLIENT_ID     = 2664589; //vokrug 2454030  //tf 2257829 //tf-d 2664589
-  private static final String SCOPE = "notify,friends,photos,wall,groups,offline,messages";
+  private static final int CLIENT_ID = 2664589; //vokrug 2454030  //tf 2257829 //tf-d 2664589
+  private static final String SCOPE  = "notify,friends,photos,wall,groups,offline,messages";
   //---------------------------------------------------------------------------
   /**
    * @param webView в котором будет происходить авторизация
@@ -70,9 +70,11 @@ public class VkAuthWebViewClient extends WebViewClient {
     if(mMatcherToken.find()) {
       view.stopLoading();
       try {
-        URLEncodedUtils.parse(new URI(url), "utf-8");
+        URLEncodedUtils.parse(new URI(url),"utf-8");
       } catch(URISyntaxException e) {
+        Debug.log(this,"url is wrong:" + e);
       }
+      
       // Разбор строки запроса и выбор токена и user_id
       HashMap<String, String> queryMap = Utils.parseQueryString(mMatcherToken.group(1));
       String tokenKey  = queryMap.get("access_token");
@@ -80,7 +82,7 @@ public class VkAuthWebViewClient extends WebViewClient {
       String expiresIn = queryMap.get("expires_in");
 
       // Запись данных и получение объекта токена
-      AuthToken authToken = new AuthToken(mContext);
+      AuthToken authToken   = new AuthToken(mContext);
       AuthToken.Token token = authToken.setToken(AuthToken.SN_VKONTAKTE,userId,tokenKey,expiresIn);
       mHandler.sendMessage(Message.obtain(null,AuthToken.AUTH_COMPLETE,token));
     } else if(mMatcherError.find() || mMatcherLogout.find()) {

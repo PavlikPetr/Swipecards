@@ -7,6 +7,7 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -27,14 +28,22 @@ public class ProfileActivity extends Activity {
     
     // TextView Profile   
     final TextView tvProfile = ((TextView)findViewById(R.id.tvProfile));
+    tvProfile.setTextColor(Color.WHITE);
     
     ProfileRequest profileRequest = new ProfileRequest();
     ConnectionService.sendRequest(profileRequest,new Handler() {
       @Override
       public void handleMessage(Message msg) {
         super.handleMessage(msg);
-        Response resp = (Response)msg.obj;
-        tvProfile.setText(resp.getProfile());
+        final Response resp = (Response)msg.obj;
+        ProfileActivity.this.runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            String s = resp.getProfile();
+            tvProfile.setText(s);
+            tvProfile.invalidate();
+          }
+        });
       }
     });
   }

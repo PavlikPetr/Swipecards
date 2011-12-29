@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.tops;
+package com.sonetica.topface.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,7 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-public class TopButton extends ImageView {
+public class ThumbView extends ImageView {
   // Data
   public String  mPercent;
   private static Paint s_Paint;
@@ -29,7 +29,7 @@ public class TopButton extends ImageView {
     s_PaintText.setTextSize(20);
   }
   //---------------------------------------------------------------------------
-  public TopButton(Context context,AttributeSet attrs) {
+  public ThumbView(Context context,AttributeSet attrs) {
     super(context,attrs);
     //setBackgroundColor(Color.MAGENTA);
   }

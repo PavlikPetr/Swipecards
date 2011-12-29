@@ -1,16 +1,16 @@
 package com.sonetica.topface.ui.likes;
 
 import com.sonetica.topface.R;
-import com.sonetica.topface.utils.GalleryManager;
+import com.sonetica.topface.ui.ThumbView;
+import com.sonetica.topface.ui.GalleryManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 
 /*
- * Класс адаптера для отображения галереи в Топ активити
+ *  Класс адаптера для отображения галереи в Like активити
  */
 public class LikesGridAdapter extends BaseAdapter {
   // Data
@@ -19,7 +19,7 @@ public class LikesGridAdapter extends BaseAdapter {
   private GalleryManager mGalleryManager;
   // class ViewHolder
   static class ViewHolder {
-    ImageView mTopButton;
+    ThumbView mThumbButton;
   };
   //---------------------------------------------------------------------------
   public LikesGridAdapter(Context context,GalleryManager galleryManager) {
@@ -38,10 +38,10 @@ public class LikesGridAdapter extends BaseAdapter {
     ViewHolder holder = null;
     if(convertView==null) {
       holder = new ViewHolder();
-      //convertView = (ViewGroup)mInflater.inflate(R.layout.tops_gallery_item, null, false);
-      convertView = new ImageView(mContext);
-      convertView.setMinimumWidth(80);
-      convertView.setMinimumHeight(100);
+      convertView = (ViewGroup)mInflater.inflate(R.layout.gallery_item, null, false);
+      holder.mThumbButton = (ThumbView)convertView.findViewById(R.id.ivTG);
+      holder.mThumbButton.setMinimumWidth(mGalleryManager.mBitmapWidth);
+      holder.mThumbButton.setMinimumHeight(mGalleryManager.mBitmapHeight);
       //holder.miv.setScaleType(ScaleType.CENTER);
       convertView.setTag(holder);
     } else 
@@ -49,7 +49,7 @@ public class LikesGridAdapter extends BaseAdapter {
 
     //holder.mTopButton.mPercent = mGalleryCachedManager.get(position).liked; 
 
-    mGalleryManager.getImage(position,(ImageView)convertView);
+    mGalleryManager.getImage(position,holder.mThumbButton);
     
     return convertView;
   }

@@ -4,7 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.*;
 import android.os.Process;
-import com.sonetica.topface.App;
+import com.sonetica.topface.Global;
 import com.sonetica.topface.net.AuthRequest;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.Packet;
@@ -15,7 +15,7 @@ import com.sonetica.topface.utils.Debug;
 
 public class ConnectionService extends Service {
   // Data
-  private static String URL  = "http://api.topface.ru/?v=1";
+  private static String URL = "http://api.topface.ru/?v=1";
   private static ServiceHandler serviceHandler;
   //---------------------------------------------------------------------------
   // class ServiceHandler
@@ -27,57 +27,67 @@ public class ConnectionService extends Service {
     }
     @Override
     public void handleMessage(Message msg) {
-      try {
-        Packet packet  = (Packet)msg.obj;
-        String sResponse = Http.httpSendTpRequest(URL,packet.toString());
-        Response resp = new Response(sResponse);
-        if(resp.code==3)
-          sendAuth(packet);
-        else
-          packet.sendMessage(Message.obtain(null,0,resp));
-        Debug.log(null,"resp:"+sResponse);
-      } catch (Exception e) {
-        Debug.log(this,"packet is wrong");
-      }
+      Packet packet = (Packet)msg.obj;
+      Response response = sendPacket(packet);
+      if(response.code==0)
+        packet.sendMessage(Message.obtain(null,0,response));
+      else if(response.code==3)
+        reAuth(packet);
+      else
+        packet.sendMessage(Message.obtain(null,0,null));
     }
   }//ServiceHandler
   //---------------------------------------------------------------------------
   @Override
   public void onCreate() {
     Debug.log(this,"+onCreate");
-    
     HandlerThread thread = new HandlerThread("ServiceStartArguments",Process.THREAD_PRIORITY_BACKGROUND);
     thread.start();
-    
     serviceHandler = new ServiceHandler(thread.getLooper());
   }
   //---------------------------------------------------------------------------
-  private void sendAuth(final Packet packet) {
-    AuthToken.Token token = new AuthToken(this).getToken();
+  // перерегистрация на сервере TP
+  private void reAuth(final Packet packet) {
+    Debug.log(this,"reAuth");
+
+    AuthToken.Token token   = new AuthToken(this).getToken();
     AuthRequest authRequest = new AuthRequest();
     authRequest.platform = token.getSocialNet();
     authRequest.sid      = token.getUserId();
     authRequest.token    = token.getTokenKey();
+    
     sendRequest(authRequest,new Handler() {
       @Override
       public void handleMessage(Message msg) {
         super.handleMessage(msg);
-        Response resp = (Response)msg.obj;
-        if(resp.code==-1) {
-          App.saveSSID(ConnectionService.this,resp.getSsid());
-          try {
-            String sResponse = Http.httpSendTpRequest(URL,packet.toString());
-            packet.sendMessage(Message.obtain(null,0,new Response(sResponse)));
-          } catch(Exception e) { }
-        } else {
-          //FAIL
-        }
+        Response ssidResponse = (Response)msg.obj;
+        if(ssidResponse.code==0) {
+          String ssid = ssidResponse.getSSID();
+          Global.saveSSID(ConnectionService.this,ssid);
+          packet.mRequest.ssid = ssid;
+          Response response = sendPacket(packet);
+          packet.sendMessage(Message.obtain(null,0,response));
+        } else
+          packet.sendMessage(Message.obtain(null,0,null));
       }
-    }); 
+    });
   }
   //---------------------------------------------------------------------------
+  // отправка пакета на сервер TP
+  private Response sendPacket(Packet packet) {
+    try {
+      String sResponse =  Http.httpSendTpRequest(URL,packet.toString());
+      Debug.log(null,"resp:"+sResponse);
+      return new Response(sResponse);
+    } catch(Exception e) {
+      Debug.log(this,"send packet error");
+    }
+    return null;
+  }
+  //---------------------------------------------------------------------------
+  // формирование запроса внутри приложения к коннект сервису
   public static void sendRequest(Request request, Handler handler) {
-    request.ssid = App.SSID;
+    request.ssid = Global.SSID;
     serviceHandler.sendMessage(Message.obtain(null,0,new Packet(request,handler)));
   }
   //---------------------------------------------------------------------------

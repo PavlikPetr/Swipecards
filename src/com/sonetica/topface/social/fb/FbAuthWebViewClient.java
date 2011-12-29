@@ -31,9 +31,10 @@ public class FbAuthWebViewClient extends WebViewClient {
   // RegExp
   private Pattern mRegExpToken = Pattern.compile("login_success.html#(.*access_token=.+)$");
   private Pattern mRegExpError = Pattern.compile("login_success.html#(.*error=.+)$");
+  private Pattern mRegExpLogout = Pattern.compile("(.*act=logout.+)$");
   // Constants
-  private static final long CLIENT_ID     = 161347997227885L;
-  private static final String SCOPE = "manage_pages,user_photos,user_videos,publish_stream,offline_access,user_checkins,friends_checkins";
+  private static final long CLIENT_ID = 161347997227885L;
+  private static final String SCOPE   = "manage_pages,user_photos,user_videos,publish_stream,offline_access,user_checkins,friends_checkins";
   //---------------------------------------------------------------------------
   /**
    * @param webView в котором будет происходить авторизация
@@ -63,14 +64,17 @@ public class FbAuthWebViewClient extends WebViewClient {
     super.onPageStarted(view, url, favicon);
     showProgressBar();
 
-    Matcher mMatcherToken = mRegExpToken.matcher(url);
-    Matcher mMatcherError = mRegExpError.matcher(url);
+    Matcher mMatcherToken  = mRegExpToken.matcher(url);
+    Matcher mMatcherError  = mRegExpError.matcher(url);
+    Matcher mMatcherLogout = mRegExpLogout.matcher(url);
 
+    // Ждем подходящую строку запроса
     if(mMatcherToken.find()) {
       view.stopLoading();
       try {
-        URLEncodedUtils.parse(new URI(url), "utf-8");
+        URLEncodedUtils.parse(new URI(url),"utf-8");
       } catch(URISyntaxException e) {
+        Debug.log(this,"url is wrong:" + e);
       }
       
       // Разбор строки запроса и выбор токена
@@ -82,10 +86,10 @@ public class FbAuthWebViewClient extends WebViewClient {
       String userId = getUserId(tokenKey);
 
       // Запись данных и получение объекта токена
-      AuthToken authToken = new AuthToken(mContext);
+      AuthToken authToken   = new AuthToken(mContext);
       AuthToken.Token token = authToken.setToken(AuthToken.SN_VKONTAKTE,userId,tokenKey,expiresIn);
       mHandler.sendMessage(Message.obtain(null,AuthToken.AUTH_COMPLETE,token));
-    } else if (mMatcherError.find()) {
+    } else if(mMatcherError.find() || mMatcherLogout.find()) {
       view.stopLoading();
       // Очистка токена при отмене аутентификации
       new AuthToken(mContext).remove();

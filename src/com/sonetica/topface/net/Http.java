@@ -40,41 +40,35 @@ public class Http {
       return false;
   }
   //---------------------------------------------------------------------------
-  /*
-   *  Get запрос
-   */
-  public static String httpGetRequest(String request) throws Exception {
+  //  Get запрос
+  public static String httpGetRequest(String request) {
     return httpRequest(HTTP_GET_REQUEST,request,null,false);
   }
   //---------------------------------------------------------------------------
-  /*
-   *  Post запрос
-   */
-  public static String httpPostRequest(String request, String postParams) throws Exception {
+  //  Post запрос
+  public static String httpPostRequest(String request, String postParams) {
     return httpRequest(HTTP_POST_REQUEST,request,postParams,false);
   }
   //---------------------------------------------------------------------------
-  /*
-   *  запрос к TopFace API
-   */
-  public static String httpSendTpRequest(String request, String postParams) throws Exception {
-    Debug.log(null,"req:"+postParams);
+  //  запрос к TopFace API
+  public static String httpSendTpRequest(String request, String postParams) {
+    Debug.log("Http.class","req:"+postParams);
     return httpRequest(HTTP_POST_REQUEST,request,postParams,true);
   }
   //---------------------------------------------------------------------------
-  private static String httpRequest(int typeRequest, String request, String postParams,boolean isJson) throws Exception {
+  private static String httpRequest(int typeRequest, String request, String postParams,boolean isJson) {
     HttpURLConnection httpConnection = null;
     BufferedReader buffReader = null;
     try {
       // запрос
       httpConnection = (HttpURLConnection)new URL(request).openConnection();
       httpConnection.setUseCaches(false);
-      
-      // оция для запроса на TopFace API сервер
+
+      // опция для запроса на TopFace API сервер
       if(isJson)
         httpConnection.setRequestProperty("Content-Type", "application/json");
       
-      // Отправляем post параметры
+      // отправляем post параметры
       if(typeRequest == HTTP_POST_REQUEST){
         httpConnection.setDoOutput(true);
         OutputStreamWriter osw = new OutputStreamWriter(httpConnection.getOutputStream());
@@ -91,21 +85,30 @@ public class Http {
       // чтение ответа
       buffReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(httpConnection.getInputStream())));
       
-      StringBuilder  response = new StringBuilder();
+      StringBuilder response = new StringBuilder();
       String line;
-      while((line = buffReader.readLine()) != null)
+      while((line=buffReader.readLine()) != null)
         response.append(line);
       
       return response.toString();
+    } catch(MalformedURLException e) {
+      Debug.log("Http.class","url is wrong:" + e);
+    } catch(IOException e) {
+      Debug.log("Http.class","io is fail #1:" + e);
     } finally {
-      if(buffReader!=null)      buffReader.close();
-      if(httpConnection!=null)  httpConnection.disconnect();
+      if(buffReader!=null)
+        try {
+          buffReader.close();
+        } catch(IOException e) {
+          Debug.log("Http.class","io is fail #2:" + e);
+        }
+      if(httpConnection!=null)
+        httpConnection.disconnect();
     }
+    return null;
   }
   //---------------------------------------------------------------------------
-  /*
-   *  запускается в UI потоке, отдельный поток создавать не нужно
-   */
+  //  запускается в UI потоке, отдельный поток создавать не нужно
   public static void imageLoader(final String url, final ImageView view) {
     // ui
     final Handler handler = new Handler() {
@@ -150,25 +153,26 @@ public class Http {
       buffInputStream.close();
       httpConnection.disconnect();      
     } catch(MalformedURLException e) {
-      Debug.log(null,"url is wrong");
+      Debug.log("Http.class","url is wrong:" + e);
     } catch(IOException e) {
-      Debug.log(null,"file doesn't exist");
-    }
-    finally {
+      Debug.log("Http.class","io is fail #1:" + e);
+    } finally {
       try {
         if(buffInputStream!=null)
           buffInputStream.close();
-      } catch(IOException e) {}
+      } catch(IOException e) {
+        Debug.log("Http.class","io is fail #2:" + e);
+      }
       if(httpConnection!=null)
         httpConnection.disconnect();
     }
+    
+    Debug.log("Http.class","image loading");
 
     return bitmap;
   }
   //---------------------------------------------------------------------------
-  /* 
-   *  возвращает поток от серевра для ручной обработки urkConnection для закрытия соединения
-   */
+  //  Возвращает поток от серевра для ручной обработки urlConnection для закрытия соединения
   public static Pair<InputStream,HttpURLConnection> rawHttpStream(String url) throws MalformedURLException, IOException {
     HttpURLConnection   httpConnection  = null;
     BufferedInputStream buffInputStream = null;
@@ -178,6 +182,8 @@ public class Http {
     httpConnection.connect();
       
     buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
+    
+    Debug.log("Http.class","raw streaming");
     
     return new Pair<InputStream,HttpURLConnection>(buffInputStream,httpConnection);
   }
