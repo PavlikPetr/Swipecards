@@ -3,7 +3,7 @@ package com.sonetica.topface.net;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RatesRequest extends Request {
+public class RatesRequest extends ApiRequest {
   // Data
   public String service = "feedRates";
   public int offset;

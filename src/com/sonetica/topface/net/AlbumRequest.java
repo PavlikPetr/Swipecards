@@ -3,7 +3,7 @@ package com.sonetica.topface.net;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AlbumRequest extends Request {
+public class AlbumRequest extends ApiRequest {
   // Data
   public String service = "album";
   public int uid; 

@@ -15,7 +15,7 @@ public class AlbumGallery extends Gallery implements View.OnTouchListener {
   //---------------------------------------------------------------------------
   public AlbumGallery(Context context, AttributeSet attrs) {
     super(context, attrs);
-    this.setOnTouchListener(this);
+    //this.setOnTouchListener(this);
   }
   //---------------------------------------------------------------------------
   public AlbumGallery(Context context, AttributeSet attrs, int defStyle) {

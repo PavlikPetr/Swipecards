@@ -114,7 +114,7 @@ public class LikesActivity extends Activity {
     
     LikesRequest likesRequest = new LikesRequest();
     likesRequest.offset = 0;
-    likesRequest.limit  = 20;
+    likesRequest.limit  = 40;
     ConnectionService.sendRequest(likesRequest,new Handler() {
       @Override
       public void handleMessage(Message msg) {

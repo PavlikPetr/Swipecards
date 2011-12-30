@@ -8,7 +8,7 @@ import com.sonetica.topface.Global;
 import com.sonetica.topface.net.AuthRequest;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.Packet;
-import com.sonetica.topface.net.Request;
+import com.sonetica.topface.net.ApiRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.utils.Debug;
@@ -86,7 +86,7 @@ public class ConnectionService extends Service {
   }
   //---------------------------------------------------------------------------
   // формирование запроса внутри приложения к коннект сервису
-  public static void sendRequest(Request request, Handler handler) {
+  public static void sendRequest(ApiRequest request, Handler handler) {
     request.ssid = Global.SSID;
     serviceHandler.sendMessage(Message.obtain(null,0,new Packet(request,handler)));
   }

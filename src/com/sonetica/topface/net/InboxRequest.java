@@ -3,7 +3,7 @@ package com.sonetica.topface.net;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class InboxRequest extends Request {
+public class InboxRequest extends ApiRequest {
   // Data
   public String service = "feedInbox";
   public int offset;

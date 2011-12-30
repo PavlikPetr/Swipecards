@@ -1,6 +1,6 @@
 package com.sonetica.topface.ui.chat;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
 import android.content.Context;
@@ -12,9 +12,9 @@ import android.widget.TextView;
 public class ChatListAdapter extends ArrayAdapter<Inbox> {
   // Data
   private Context mContext;
-  private ArrayList<Inbox>  mList;
+  private LinkedList<Inbox>  mList;
   //---------------------------------------------------------------------------
-  public ChatListAdapter(Context context,ArrayList<Inbox> list) {
+  public ChatListAdapter(Context context,LinkedList<Inbox> list) {
     super(context,0,list);
     mContext=context;
     mList=list;
@@ -49,7 +49,7 @@ public class ChatListAdapter extends ArrayAdapter<Inbox> {
   public View getView(int position, View convertView, ViewGroup parent) {
     if(convertView==null)
       convertView=new TextView(mContext);
-    Inbox msg = getItem(position);
+    Inbox   msg = getItem(position);
     String text = msg.first_name+"("+msg.age+"):"+(msg.text!=null?msg.text:(msg.gift!=null?mContext.getString(R.string.chat_gift):"code"));
     ((TextView)convertView).setText(text);
     return convertView;

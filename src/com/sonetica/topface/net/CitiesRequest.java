@@ -3,7 +3,7 @@ package com.sonetica.topface.net;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CitiesRequest extends Request {
+public class CitiesRequest extends ApiRequest {
   // Data
   public String service = "cities";
   public String type = "";

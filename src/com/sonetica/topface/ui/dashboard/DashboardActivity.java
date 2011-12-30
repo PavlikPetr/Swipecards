@@ -1,11 +1,15 @@
 package com.sonetica.topface.ui.dashboard;
 
+import java.util.concurrent.ExecutorService;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.PhotoratingActivity;
 import com.sonetica.topface.PreferencesActivity;
 import com.sonetica.topface.ProfileActivity;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.net.ProfileRequest;
+import com.sonetica.topface.net.Response;
+import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.chat.ChatActivity;
 import com.sonetica.topface.ui.likes.LikesActivity;
@@ -13,8 +17,11 @@ import com.sonetica.topface.ui.rates.RatesActivity;
 import com.sonetica.topface.ui.tops.TopsActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +33,9 @@ import android.widget.Toast;
  */
 public class DashboardActivity extends Activity implements View.OnClickListener {
   // Data
+  private volatile boolean mIsActive;
+  private ExecutorService  mThreadsPool;
+  private NotifyHandler    mNotifyHandler;
   // Constants
   public static final int INTENT_DASHBOARD = 100;
   //---------------------------------------------------------------------------
@@ -46,6 +56,10 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }
+    
+    mNotifyHandler = new NotifyHandler();
+    mNotifyHandler.sendEmptyMessage(0);
+    
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -54,9 +68,15 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     
     if(Global.SSID.length()>0)
       return;
-    
+
     startActivity(new Intent(this,SocialActivity.class));
     finish();
+ }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onResume() {
+    super.onResume();
+    mIsActive = true;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -87,9 +107,16 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       default:
     }
   }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onPause() {
+    super.onPause();
+    mIsActive = false;
+  }
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
+    mNotifyHandler = null;
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
@@ -116,6 +143,39 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         break;
     }
     return super.onMenuItemSelected(featureId,item);
+  }
+  //---------------------------------------------------------------------------
+  // NotifyHandler
+  //---------------------------------------------------------------------------
+  class NotifyHandler extends Handler {
+    @Override
+    public void handleMessage(Message msg) {
+      super.handleMessage(msg);
+      if(mNotifyHandler==null)
+        return;
+      if(!mIsActive)
+        this.sendEmptyMessageDelayed(0,1000*3);
+      else {
+        ProfileRequest profileRequest = new ProfileRequest(true);
+        ConnectionService.sendRequest(profileRequest,new Handler() {
+          @Override
+          public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            final Response resp = (Response)msg.obj;
+            final Activity context = DashboardActivity.this;
+            if(context!=null)
+              context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                  String s = resp.getProfile();
+                  Toast.makeText(context,s,Toast.LENGTH_SHORT).show();
+                  NotifyHandler.this.sendEmptyMessageDelayed(0,1000*3);
+                }
+              });
+          }
+        });
+      }
+    }
   }
   //---------------------------------------------------------------------------
 }

@@ -1,6 +1,7 @@
 package com.sonetica.topface.net;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -120,14 +121,14 @@ public class Response {
     }
   }
   //---------------------------------------------------------------------------
-  public ArrayList<Inbox> getMessages() {
+  public LinkedList<Inbox> getMessages() {
     if(code>0)
       return null;
-    ArrayList<Inbox> userList = null;
+    LinkedList<Inbox> userList = null;
     try {
       JSONArray arr = mJsonResult.getJSONArray("feed");
       if(arr.length()>0) {
-        userList = new ArrayList<Inbox>();
+        userList = new LinkedList<Inbox>();
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
           Inbox msg = new Inbox();

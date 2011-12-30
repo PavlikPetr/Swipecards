@@ -5,7 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ProfilesRequest extends Request {
+public class ProfilesRequest extends ApiRequest {
   // Data
   public String service = "profiles";
   public ArrayList<Integer> uids = new ArrayList<Integer>();

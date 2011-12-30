@@ -3,7 +3,7 @@ package com.sonetica.topface.net;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AuthRequest extends Request {
+public class AuthRequest extends ApiRequest {
   // Data
   public String service = "auth";
   public String sid;

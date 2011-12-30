@@ -84,6 +84,18 @@ public class AlbumGalleryManager {
     return false;
   }
   //---------------------------------------------------------------------------
+  public void preload(final Integer index) {
+    if(index>=size())
+      return;
+    mThreadsPool.execute(new Runnable() {
+      @Override
+      public void run() {
+        Bitmap bitmap = Http.bitmapLoader(mData.get(index).getLink());
+        mMemoryCache.put(index,bitmap);
+      }
+    });
+  }
+  //---------------------------------------------------------------------------
   public int size() {
     return mData.size();
   }

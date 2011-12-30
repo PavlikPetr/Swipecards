@@ -53,7 +53,7 @@ public class AlbumGalleryAdapter extends BaseAdapter {
       return convertView;
     
     mGalleryManager.getImage(position,holder.mImageView);
-    //mGalleryManager.preload(position+1);
+    mGalleryManager.preload(position+1);
     
     return convertView;
   }

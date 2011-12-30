@@ -5,10 +5,10 @@ import android.os.Message;
 
 public class Packet {
   // Data
-  public Request  mRequest;
+  public ApiRequest  mRequest;
   public Handler  mHandler;
   // Methods
-  public Packet(Request request, Handler handler) {
+  public Packet(ApiRequest request, Handler handler) {
     mRequest = request;
     mHandler = handler;
   }
