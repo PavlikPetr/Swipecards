@@ -12,7 +12,7 @@ import android.widget.TextView;
 public class ChatListAdapter extends ArrayAdapter<Inbox> {
   // Data
   private Context mContext;
-  private LinkedList<Inbox>  mList;
+  private LinkedList<Inbox> mList;
   //---------------------------------------------------------------------------
   public ChatListAdapter(Context context,LinkedList<Inbox> list) {
     super(context,0,list);

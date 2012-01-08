@@ -33,13 +33,13 @@ import android.widget.Toast;
  */
 public class ChatActivity extends Activity {
   // Data
-  private int mState;
-  private int mOffset;
-  private boolean mIsEndList;
   private PullToRefreshListView mListView;
   private ProgressDialog mProgressDialog;
   private ArrayAdapter mAdapter;
   private LinkedList<Inbox> mInboxList = new LinkedList<Inbox>();
+  private int mState;
+  private int mOffset;
+  private boolean mIsEndList;
   // Constants
   private static final int LIMIT = 20;
   //---------------------------------------------------------------------------

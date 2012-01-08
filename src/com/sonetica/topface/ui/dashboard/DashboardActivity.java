@@ -58,7 +58,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     }
     
     mNotifyHandler = new NotifyHandler();
-    mNotifyHandler.sendEmptyMessage(0);
+    //mNotifyHandler.sendEmptyMessage(0);
     
   }
   //---------------------------------------------------------------------------  
