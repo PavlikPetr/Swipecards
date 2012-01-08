@@ -1,6 +1,6 @@
 package com.sonetica.topface.data;
 
-public class Album extends Data {
+public class Album extends AbstractData {
   // Data
   public String id;
   public String small;

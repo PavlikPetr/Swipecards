@@ -1,7 +1,11 @@
-package com.sonetica.topface;
+package com.sonetica.topface.ui;
 
 import android.os.Handler;
 import android.os.Message;
+import com.sonetica.topface.R;
+import com.sonetica.topface.R.id;
+import com.sonetica.topface.R.layout;
+import com.sonetica.topface.R.string;
 import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.services.ConnectionService;
@@ -12,7 +16,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 /*
- *                   "Профиль"
+ *      "Профиль"
  */
 public class ProfileActivity extends Activity {
   // Data

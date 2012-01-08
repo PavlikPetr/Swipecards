@@ -1,11 +1,11 @@
 package com.sonetica.topface.ui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
-import com.sonetica.topface.data.Data;
+import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.Device;
 import com.sonetica.topface.utils.MemoryCache;
@@ -21,7 +21,7 @@ public class GalleryManager {
   // Data
   private MemoryCache mMemoryCache;
   private ExecutorService mThreadsPool;
-  private ArrayList<? extends Data> mData;
+  private LinkedList<? extends AbstractData> mData;
   private HashMap<ImageView,Integer> mLinkCache;
   private int mThreadCount;
   public  int mBitmapWidth;
@@ -29,11 +29,11 @@ public class GalleryManager {
   //Constants
   private static final int THREAD_DEFAULT = 4;
   //---------------------------------------------------------------------------
-  public GalleryManager(Context context,ArrayList<? extends Data> dataList) {
+  public GalleryManager(Context context,LinkedList<? extends AbstractData> dataList) {
     this(context,dataList,THREAD_DEFAULT);
   }
   //---------------------------------------------------------------------------
-  public GalleryManager(Context context,ArrayList<? extends Data> dataList,int threadCount) {
+  public GalleryManager(Context context,LinkedList<? extends AbstractData> dataList,int threadCount) {
     mData = dataList;
     mThreadCount  = threadCount;
     mMemoryCache  = new MemoryCache();
@@ -43,7 +43,7 @@ public class GalleryManager {
     mBitmapHeight = (int)(mBitmapWidth*1.25);
   }
   //---------------------------------------------------------------------------
-  public Data get(int position) {
+  public AbstractData get(int position) {
     return mData.get(position);
   }
   //---------------------------------------------------------------------------

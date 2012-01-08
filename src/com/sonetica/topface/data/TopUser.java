@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 /*
  * Структура для хранения профиля в топе
  */
-public class TopUser extends Data {
+public class TopUser extends AbstractData {
   // Data
   public String uid;
   public String photo;

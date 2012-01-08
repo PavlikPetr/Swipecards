@@ -1,12 +1,16 @@
-package com.sonetica.topface;
+package com.sonetica.topface.ui;
 
+import com.sonetica.topface.R;
+import com.sonetica.topface.R.id;
+import com.sonetica.topface.R.layout;
+import com.sonetica.topface.R.string;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
 /*
- *       "оценка фото"
+ *    "оценка фото"
  */
 public class PhotoratingActivity extends Activity {
   // Data

@@ -3,8 +3,15 @@
           package="com.sonetica.topface"
           android:versionCode="1"
           android:versionName="1.0" >
-          
-              <!-- android:installLocation="preferExternal"  -->
+     <!-- android:installLocation="preferExternal"  -->
+  
+  <uses-sdk android:minSdkVersion="7" />
+  
+  <!-- permissions -->
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
           
   <!-- application -->
   <application android:name=".App"
@@ -25,18 +32,18 @@
     <!-- activities -->
     <activity android:name=".ui.dashboard.DashboardActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.rates.RatesActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ui.chat.ChatActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ui.tops.TopsActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".ui.chat.ChatActivity"   android:screenOrientation="portrait"/>
+    <activity android:name=".ui.tops.TopsActivity"   android:screenOrientation="portrait"/>
     <activity android:name=".ui.album.AlbumActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.likes.LikesActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".PhotoratingActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ProfileActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".ui.PhotoratingActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".ui.ProfileActivity"     android:screenOrientation="portrait"/>
     
     <!-- preferences activity -->
-    <activity android:name=".PreferencesActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".ui.PreferencesActivity" android:screenOrientation="portrait"/>
     
     <!-- social activity -->
-    <activity android:name=".social.SocialActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".social.SocialActivity"    android:screenOrientation="portrait"/>
     <activity android:name=".social.SocialWebActivity" android:screenOrientation="portrait"/>
     
     <!-- services -->
@@ -44,12 +51,5 @@
     <service android:name=".services.ConnectionService" />
   </application>
   
-  <!-- permissions -->
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-  <uses-permission android:name="android.permission.INTERNET"/>
-  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-  
-  <uses-sdk android:minSdkVersion="7" />  
 </manifest>
 

@@ -1,23 +1,23 @@
 package com.sonetica.topface.ui.dashboard;
 
-import java.util.concurrent.ExecutorService;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
-import com.sonetica.topface.PhotoratingActivity;
-import com.sonetica.topface.PreferencesActivity;
-import com.sonetica.topface.ProfileActivity;
+import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.social.SocialActivity;
+import com.sonetica.topface.ui.PhotoratingActivity;
+import com.sonetica.topface.ui.PreferencesActivity;
+import com.sonetica.topface.ui.ProfileActivity;
 import com.sonetica.topface.ui.chat.ChatActivity;
 import com.sonetica.topface.ui.likes.LikesActivity;
 import com.sonetica.topface.ui.rates.RatesActivity;
 import com.sonetica.topface.ui.tops.TopsActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,12 +29,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 /*
- * Класс главного активити для навигации по приложению  "TopFace"
+ *  Класс главного активити для навигации по приложению  "TopFace"
  */
 public class DashboardActivity extends Activity implements View.OnClickListener {
   // Data
   private volatile boolean mIsActive;
-  private ExecutorService  mThreadsPool;
   private NotifyHandler    mNotifyHandler;
   // Constants
   public static final int INTENT_DASHBOARD = 100;
@@ -56,6 +55,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }
+    
+    Data.init();
     
     mNotifyHandler = new NotifyHandler();
     //mNotifyHandler.sendEmptyMessage(0);

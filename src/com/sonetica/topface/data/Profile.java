@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 /*
  * Структура профиля владельца устройства
  */
-public class Profile extends Data {
+public class Profile extends AbstractData {
   /*
   {String} first_name;
   {Number} age;

@@ -149,14 +149,14 @@ public class Response {
     return userList;
   }
   //---------------------------------------------------------------------------
-  public ArrayList<Rate> getRates() {
+  public LinkedList<Rate> getRates() {
     if(code>0)
       return null;
-    ArrayList<Rate> rates = null;
+    LinkedList<Rate> rates = null;
     try {
       JSONArray arr = mJsonResult.getJSONArray("feed");
       if(arr.length()>0) {
-        rates = new ArrayList<Rate>();
+        rates = new LinkedList<Rate>();
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
           Rate rate = new Rate();
@@ -177,14 +177,14 @@ public class Response {
     return rates;
   }
   //---------------------------------------------------------------------------
-  public ArrayList<Like> getLikes() {
+  public LinkedList<Like> getLikes() {
     if(code>0)
       return null;
-    ArrayList<Like> rates = null;
+    LinkedList<Like> rates = null;
     try {
       JSONArray arr = mJsonResult.getJSONArray("feed");
       if(arr.length()>0) {
-        rates = new ArrayList<Like>();
+        rates = new LinkedList<Like>();
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
           Like like = new Like();

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
-import com.sonetica.topface.data.Data;
+import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.MemoryCache;
 import com.sonetica.topface.utils.StorageCache;
@@ -22,13 +22,13 @@ public class AlbumGalleryManager {
   private MemoryCache  mMemoryCache;
   private StorageCache mStorageCache;
   private ExecutorService mThreadsPool;
-  private ArrayList<? extends Data> mData;
+  private ArrayList<? extends AbstractData> mData;
   //private HashMap<ImageView,Integer> mLinkCache;
   private int mThreadCount;
   //Constants
   private static final int THREAD_DEFAULT = 4;
   //---------------------------------------------------------------------------
-  public AlbumGalleryManager(Context context,ArrayList<? extends Data> dataList) {
+  public AlbumGalleryManager(Context context,ArrayList<? extends AbstractData> dataList) {
     mData = dataList;
     mThreadCount  = THREAD_DEFAULT;
     mMemoryCache  = new MemoryCache();
@@ -37,7 +37,7 @@ public class AlbumGalleryManager {
     mThreadsPool  = Executors.newFixedThreadPool(mThreadCount);
   }
   //---------------------------------------------------------------------------
-  public Data get(int position) {
+  public AbstractData get(int position) {
     return mData.get(position);
   }
   //---------------------------------------------------------------------------

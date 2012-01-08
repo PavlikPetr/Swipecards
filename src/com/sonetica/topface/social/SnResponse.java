@@ -1,6 +1,5 @@
 package com.sonetica.topface.social;
 
-import com.sonetica.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

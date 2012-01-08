@@ -1,8 +1,7 @@
 package com.sonetica.topface.ui.chat;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.net.InboxRequest;
@@ -18,15 +17,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /*
  *            "Диалоги"
@@ -34,9 +27,9 @@ import android.widget.Toast;
 public class ChatActivity extends Activity {
   // Data
   private PullToRefreshListView mListView;
-  private ProgressDialog mProgressDialog;
   private ArrayAdapter mAdapter;
-  private LinkedList<Inbox> mInboxList = new LinkedList<Inbox>();
+  private LinkedList<Inbox> mInboxList;
+  private ProgressDialog mProgressDialog;
   private int mState;
   private int mOffset;
   private boolean mIsEndList;
@@ -49,39 +42,19 @@ public class ChatActivity extends Activity {
     setContentView(R.layout.ac_chat);
     Debug.log(this,"+onCreate");
     
+    // Data
+    mInboxList = Data.s_InboxList;
+    
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.chat_header_title));
-
-    // ListAdapter
-    mAdapter = new ChatListAdapter(ChatActivity.this,mInboxList);
    
     // ListView
     mListView = (PullToRefreshListView)findViewById(R.id.lvChatList);
-    mListView.setAdapter(mAdapter);
     mListView.setOnRefreshListener(new OnRefreshListener() {
      @Override
      public void onRefresh() {
        update(mOffset=0,false);
      }});
-    /*
-    mListView.setOnScrollListener(new OnScrollListener() {
-      private int prevVisibleItem;
-      @Override
-      public void onScrollStateChanged(AbsListView view,int scrollState) {
-        mState = scrollState; 
-      }
-      @Override
-      public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
-        prevVisibleItem = firstVisibleItem;
-        if(mState==SCROLL_STATE_TOUCH_SCROLL) {
-          int current = firstVisibleItem+visibleItemCount+1;
-          if(current==totalItemCount && prevVisibleItem<current)
-            if(!mIsEndList)
-              update(mOffset+=LIMIT,true);
-        }
-      }
-    });
-    */
     mListView.setOnTouchListener(new OnTouchListener() {
       @Override
       public boolean onTouch(View v,MotionEvent event) {
@@ -92,8 +65,24 @@ public class ChatActivity extends Activity {
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
-
-    update(mOffset,true);
+    
+    if(mInboxList.size()==0)
+      update(mOffset,true);
+    else
+      create();
+  }
+  //---------------------------------------------------------------------------
+  private void create() {
+    // ListAdapter
+    mAdapter = new ChatListAdapter(ChatActivity.this,mInboxList);
+    mListView.setAdapter(mAdapter);
+  }
+  //---------------------------------------------------------------------------
+  private void release() {
+    if(mListView!=null) mListView=null;
+    if(mAdapter!=null) mAdapter=null;
+    if(mInboxList!=null) mInboxList=null;
+    if(mProgressDialog!=null) mProgressDialog=null;
   }
   //---------------------------------------------------------------------------
   private void update(int offset,final boolean append) {
@@ -116,14 +105,13 @@ public class ChatActivity extends Activity {
             //mInboxList.clear();
             mInboxList.addAll(list);
           }
-
         //else
           //mListView.removeFooterView(btnPrevMsg);
         //if(list.size()<LIMIT)
           //mIsEndList = true;
-
-        mAdapter.notifyDataSetChanged();
+        create();
         mListView.onRefreshComplete();
+        mAdapter.notifyDataSetChanged();
         if(mProgressDialog.isShowing())
           mProgressDialog.cancel();
       }
@@ -132,12 +120,29 @@ public class ChatActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    mListView = null;
-    mAdapter = null;
-    mProgressDialog = null;
-    mInboxList = null;
+    release();
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
 }
+
+/*
+mListView.setOnScrollListener(new OnScrollListener() {
+  private int prevVisibleItem;
+  @Override
+  public void onScrollStateChanged(AbsListView view,int scrollState) {
+    mState = scrollState; 
+  }
+  @Override
+  public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
+    prevVisibleItem = firstVisibleItem;
+    if(mState==SCROLL_STATE_TOUCH_SCROLL) {
+      int current = firstVisibleItem+visibleItemCount+1;
+      if(current==totalItemCount && prevVisibleItem<current)
+        if(!mIsEndList)
+          update(mOffset+=LIMIT,true);
+    }
+  }
+});
+*/

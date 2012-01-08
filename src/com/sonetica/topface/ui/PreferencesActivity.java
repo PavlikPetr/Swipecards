@@ -1,5 +1,7 @@
-package com.sonetica.topface;
+package com.sonetica.topface.ui;
 
+import com.sonetica.topface.R;
+import com.sonetica.topface.R.layout;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.social.SocialWebActivity;
 import com.sonetica.topface.utils.Debug;
@@ -11,7 +13,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 
 /*
- * Класс активити для отображения настроек приложения
+ *    Класс активити для отображения настроек приложения
  */
 public class PreferencesActivity extends PreferenceActivity {
   // Data

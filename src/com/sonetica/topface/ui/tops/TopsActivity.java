@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.tops;
 
 import com.sonetica.topface.App;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.City;
 import com.sonetica.topface.data.TopUser;
@@ -25,6 +26,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /*  
  *  Класс активити для просмотра списка топ пользователей   "топы"
@@ -33,9 +35,9 @@ public class TopsActivity extends Activity {
   // Data
   private GridView mGallery;
   private TopsGridAdapter mGridAdapter;
-  private ProgressDialog  mProgressDialog;
   private GalleryManager  mGalleryManager;
-  private ArrayList<TopUser> mUserList;
+  private LinkedList<TopUser> mTopsList;
+  private ProgressDialog  mProgressDialog;
   private Button mCityButton;
   private String m_city_name;
   private int m_city_position;
@@ -51,18 +53,21 @@ public class TopsActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_tops);
     Debug.log(this,"+onCreate");
+    
+    // Data
+    mTopsList = Data.s_TopsList;
 
     // Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.tops_header_title));
     
-    // восстановление предыдущих параметров
+    // Восстановление предыдущих параметров
     SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-    m_sex  = preferences.getInt(getString(R.string.s_tops_sex), GIRLS);
+    m_sex = preferences.getInt(getString(R.string.s_tops_sex), GIRLS);
     m_city_id = preferences.getInt(getString(R.string.s_tops_city),PITER);
-    m_city_position = preferences.getInt(getString(R.string.s_tops_city_position),0);
     m_city_name = preferences.getString(getString(R.string.s_tops_city_name),getString(R.string.default_city));
+    m_city_position = preferences.getInt(getString(R.string.s_tops_city_position),0);
     
-    // Girl Button
+    // Girls Button
     Button btnGirls = (Button)findViewById(R.id.btnBarGirls);
     btnGirls.setText(getString(R.string.tops_btn_girls));
     btnGirls.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +78,7 @@ public class TopsActivity extends Activity {
       }
     });
     
-    // Boy Button
+    // Boys Button
     Button btnBoys  = (Button)findViewById(R.id.btnBarBoys);
     btnBoys.setText(getString(R.string.tops_btn_boys));
     btnBoys.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +107,7 @@ public class TopsActivity extends Activity {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(TopsActivity.this,AlbumActivity.class);
-        intent.putExtra(AlbumActivity.INTENT_USER_ID,mUserList.get(position).uid);
+        intent.putExtra(AlbumActivity.INTENT_USER_ID,mTopsList.get(position).uid);
         startActivity(intent);
       }
     });
@@ -110,12 +115,34 @@ public class TopsActivity extends Activity {
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
-    mProgressDialog.show();
     
-    update(m_sex,m_city_id,false);
+    if(mTopsList.size()==0)
+      update(m_sex,m_city_id,false);
+    else
+      create();
+  }
+  //---------------------------------------------------------------------------
+  private void create() {
+    mGalleryManager = new GalleryManager(TopsActivity.this,mTopsList);
+    mGridAdapter    = new TopsGridAdapter(TopsActivity.this,mGalleryManager);
+    mGallery.setAdapter(mGridAdapter);
+  }
+  //---------------------------------------------------------------------------
+  private void release() {
+    if(mGalleryManager!=null) {
+      mGalleryManager.release();
+      mGalleryManager=null;
+    }
+    
+    if(mGallery!=null)        mGallery=null;
+    if(mGridAdapter!=null)    mGridAdapter=null;
+    if(mTopsList!=null)       mTopsList=null;
+    if(mProgressDialog!=null) mProgressDialog=null;
   }
   //---------------------------------------------------------------------------
   private void update(int sex, int city, boolean isRefreshed) { // refreshed - грузить локально или инет при первом запуске
+    mProgressDialog.show();
+    
     TopsRequest topRequest = new TopsRequest();
     topRequest.sex  = sex;
     topRequest.city = city;
@@ -124,40 +151,11 @@ public class TopsActivity extends Activity {
       public void handleMessage(Message msg) {
         super.handleMessage(msg);
         Response resp = (Response)msg.obj;
-        mUserList = resp.getUsers(); 
-        if(mUserList != null) {
-          mGalleryManager = new GalleryManager(TopsActivity.this,mUserList);
-          mGridAdapter    = new TopsGridAdapter(TopsActivity.this,mGalleryManager);
-          mGallery.setAdapter(mGridAdapter);
-        }
+        mTopsList.addAll(resp.getUsers());
+        create();
         mProgressDialog.cancel();
       }
     });
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onDestroy() {
-    // сохранение параметров
-    SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-    SharedPreferences.Editor editor = preferences.edit();
-    editor.putInt(getString(R.string.s_tops_sex), m_sex);
-    editor.putInt(getString(R.string.s_tops_city),m_city_id);
-    editor.putInt(getString(R.string.s_tops_city_position),m_city_position);
-    editor.putString(getString(R.string.s_tops_city_name),m_city_name);
-    editor.commit();
-    
-    if(mGalleryManager!=null) {
-      mGalleryManager.release();
-      mGalleryManager=null;
-    }
-    
-    if(mGridAdapter!=null)    mGridAdapter=null;
-    if(mGallery!=null)        mGallery=null;
-    if(mProgressDialog!=null) mProgressDialog=null;
-    if(mUserList!=null)       mUserList=null;
-    
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
   }
   //---------------------------------------------------------------------------
   private void getCities() {
@@ -193,6 +191,23 @@ public class TopsActivity extends Activity {
         alert.show();
       }
     });
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onDestroy() {
+    // Сохранение параметров
+    SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = preferences.edit();
+    editor.putInt(getString(R.string.s_tops_sex), m_sex);
+    editor.putInt(getString(R.string.s_tops_city),m_city_id);
+    editor.putInt(getString(R.string.s_tops_city_position),m_city_position);
+    editor.putString(getString(R.string.s_tops_city_name),m_city_name);
+    editor.commit();
+    
+    release();
+    
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
   }
   //---------------------------------------------------------------------------
 }

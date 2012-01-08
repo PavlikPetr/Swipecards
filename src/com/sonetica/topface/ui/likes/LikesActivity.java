@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.likes;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Like;
 import com.sonetica.topface.net.LikesRequest;
@@ -20,7 +21,6 @@ import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,18 +30,21 @@ import android.widget.Toast;
 public class LikesActivity extends Activity {
   // Data
   private PullToRefreshGridView mGallery;
-  private ProgressDialog mProgressDialog;
-  private GalleryManager mGalleryManager;
   private LikesGridAdapter mLikesGridAdapter;
-  private ArrayList<Like> mLikes;
+  private GalleryManager mGalleryManager;
+  private LinkedList<Like> mLikesList;
+  private ProgressDialog mProgressDialog;
   // Constats
-  private static int PITER = 2;
+  //private static int PITER = 2;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_likes);
     Debug.log(this,"+onCreate");
+    
+    // Data
+    mLikesList = Data.s_LikesList;
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likes_header_title));
@@ -90,7 +93,7 @@ public class LikesActivity extends Activity {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(LikesActivity.this,AlbumActivity.class);
-       intent.putExtra(AlbumActivity.INTENT_USER_ID,mLikes.get(position).uid);
+       intent.putExtra(AlbumActivity.INTENT_USER_ID,mLikesList.get(position).uid);
        startActivity(intent);
      }
    });
@@ -106,7 +109,23 @@ public class LikesActivity extends Activity {
    mProgressDialog = new ProgressDialog(this);
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
    
-   update();
+   if(mLikesList.size()==0)
+     update();
+   else
+     create();
+  }
+  //---------------------------------------------------------------------------
+  private void create() {
+    mGalleryManager   = new GalleryManager(LikesActivity.this,mLikesList);
+    mLikesGridAdapter = new LikesGridAdapter(LikesActivity.this,mGalleryManager);
+    mGallery.getAdapterView().setAdapter(mLikesGridAdapter);
+  }
+  //---------------------------------------------------------------------------
+  private void release() {
+    if(mGallery!=null) mGallery=null;
+    if(mLikesGridAdapter!=null) mLikesGridAdapter=null;
+    if(mLikesList!=null) mLikesList=null;
+    if(mProgressDialog!=null) mProgressDialog=null;
   }
   //---------------------------------------------------------------------------
   private void update() {
@@ -120,12 +139,8 @@ public class LikesActivity extends Activity {
       public void handleMessage(Message msg) {
         super.handleMessage(msg);
         Response resp = (Response)msg.obj;
-        mLikes = resp.getLikes();
-        if(mLikes != null) {
-          mGalleryManager   = new GalleryManager(LikesActivity.this,mLikes);
-          mLikesGridAdapter = new LikesGridAdapter(LikesActivity.this,mGalleryManager);
-          mGallery.getAdapterView().setAdapter(mLikesGridAdapter);
-        }
+        mLikesList.addAll(resp.getLikes());
+        create();
         mGallery.onRefreshComplete();
         mProgressDialog.cancel();
       }
@@ -134,6 +149,7 @@ public class LikesActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
+    release();
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }

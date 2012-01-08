@@ -1,6 +1,6 @@
 package com.sonetica.topface.data;
 
-public class Like extends Data {
+public class Like extends AbstractData {
   // Data
   public String uid;
   public String first_name;

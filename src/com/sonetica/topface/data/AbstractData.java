@@ -1,5 +1,5 @@
 package com.sonetica.topface.data;
 
-public class Data {
+public class AbstractData {
   public String getLink(){return null;};
 }

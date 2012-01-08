@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.rates;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import com.sonetica.topface.data.Rate;
 import android.content.Context;
 import android.view.View;
@@ -11,9 +12,9 @@ import android.widget.TextView;
 public class RatesListAdapter extends ArrayAdapter<Rate> {
   // Data
   private Context mContext;
-  private ArrayList<Rate> mList;
+  private LinkedList<Rate> mList;
   //---------------------------------------------------------------------------
-  public RatesListAdapter(Context context,ArrayList<Rate> list) {
+  public RatesListAdapter(Context context,LinkedList<Rate> list) {
     super(context,0,list);
     mContext=context;
     mList=list;
