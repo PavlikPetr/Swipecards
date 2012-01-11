@@ -2,6 +2,8 @@ package com.sonetica.topface.social;
 
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
+import com.sonetica.topface.net.ApiHandler;
+import com.sonetica.topface.net.ApiRequest;
 import com.sonetica.topface.net.AuthRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.services.ConnectionService;
@@ -65,27 +67,25 @@ public class SocialWebActivity extends Activity {
       if(msg.what==AuthToken.AUTH_COMPLETE) {
         // отправка токена на TP сервер
         AuthToken.Token token   = (AuthToken.Token)msg.obj;
-        AuthRequest authRequest = new AuthRequest();
+        AuthRequest authRequest = new AuthRequest(SocialWebActivity.this);
         authRequest.platform = token.getSocialNet();
         authRequest.sid      = token.getUserId();
         authRequest.token    = token.getTokenKey();
-        ConnectionService.sendRequest(authRequest,new Handler() {
+        authRequest.callback(new ApiHandler() {
           @Override
-          public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            Response resp = (Response)msg.obj;
-            if(resp.code==0) {
-              // запись ssid
-              Global.saveSSID(SocialWebActivity.this,resp.getSSID());
-              setResult(Activity.RESULT_OK);
-              finish();
-            } else {
-              Debug.log(SocialWebActivity.this,"ssid is wrong");
-              setResult(Activity.RESULT_CANCELED);
-              finish();
-            }
+          public void success(Response response) {
+            // запись ssid
+            Global.saveSSID(SocialWebActivity.this,response.getSSID());
+            setResult(Activity.RESULT_OK);
+            finish();
           }
-        });
+          @Override
+          public void fail(int codeError) {
+            Debug.log(SocialWebActivity.this,"ssid is wrong");
+            setResult(Activity.RESULT_CANCELED);
+            finish();
+          }
+        }).exec();
       } else {
         // стирание ssid
         Global.saveSSID(SocialWebActivity.this,"");

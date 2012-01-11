@@ -27,7 +27,7 @@ import android.widget.TextView;
 public class ChatActivity extends Activity {
   // Data
   private PullToRefreshListView mListView;
-  private ArrayAdapter mAdapter;
+  private ChatListAdapter mAdapter;
   private LinkedList<Inbox> mInboxList;
   private ProgressDialog mProgressDialog;
   private int mState;
@@ -61,7 +61,7 @@ public class ChatActivity extends Activity {
         return false;
       }
     });
-    
+
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
@@ -88,7 +88,7 @@ public class ChatActivity extends Activity {
   private void update(int offset,final boolean append) {
     if(append)
       mProgressDialog.show();
-    InboxRequest inboxRequest = new InboxRequest();
+    InboxRequest inboxRequest = new InboxRequest(this);
     inboxRequest.offset = offset;
     inboxRequest.limit  = LIMIT;
     ConnectionService.sendRequest(inboxRequest,new Handler() {

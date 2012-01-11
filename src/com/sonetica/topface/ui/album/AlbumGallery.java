@@ -2,7 +2,6 @@ package com.sonetica.topface.ui.album;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Gallery;

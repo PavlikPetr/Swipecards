@@ -34,7 +34,7 @@ public class ProfileActivity extends Activity {
     final TextView tvProfile = ((TextView)findViewById(R.id.tvProfile));
     tvProfile.setTextColor(Color.WHITE);
     
-    ProfileRequest profileRequest = new ProfileRequest();
+    ProfileRequest profileRequest = new ProfileRequest(this,false);
     ConnectionService.sendRequest(profileRequest,new Handler() {
       @Override
       public void handleMessage(Message msg) {

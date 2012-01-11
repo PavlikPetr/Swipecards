@@ -2,12 +2,16 @@ package com.sonetica.topface.net;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.Context;
 
 public class AlbumRequest extends ApiRequest {
   // Data
   public String service = "album";
   public int uid; 
   // Methods
+  public AlbumRequest(Context context) {
+    super(context);
+  }
   @Override
   public String toString() {
     JSONObject root = new JSONObject();

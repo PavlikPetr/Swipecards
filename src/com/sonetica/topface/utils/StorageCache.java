@@ -89,7 +89,7 @@ public class StorageCache {
   }
   //---------------------------------------------------------------------------
   private File getCacheDirectory() {
-    return mCacheType==EXTERNAL_CACHE ? mContext.getExternalCacheDir() : mContext.getCacheDir();
+    return mCacheType==EXTERNAL_CACHE ? mContext.getCacheDir() : mContext.getCacheDir(); //getExternalCacheDir
   }
   //---------------------------------------------------------------------------  
   public void clear(){
@@ -98,7 +98,7 @@ public class StorageCache {
     if(files!=null)
       for(File file : files)
         file.delete();
-    files = mContext.getExternalCacheDir().listFiles();
+    files = mContext.getCacheDir().listFiles();
     if(files!=null)
       for(File file : files)
         file.delete();

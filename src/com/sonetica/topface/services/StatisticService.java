@@ -1,18 +1,11 @@
 package com.sonetica.topface.services;
 
 import com.sonetica.topface.utils.Debug;
-import com.sonetica.topface.utils.Memory;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.view.WindowManager;
-import android.widget.TextView;
 
 public class StatisticService extends Service {
   // Data

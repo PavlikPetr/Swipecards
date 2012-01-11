@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Device;
 import com.sonetica.topface.utils.MemoryCache;
 import android.content.Context;
@@ -26,6 +27,7 @@ public class GalleryManager {
   private int mThreadCount;
   public  int mBitmapWidth;
   public  int mBitmapHeight;
+  public  boolean mRunning = true;
   //Constants
   private static final int THREAD_DEFAULT = 4;
   //---------------------------------------------------------------------------
@@ -49,6 +51,10 @@ public class GalleryManager {
   //---------------------------------------------------------------------------
   public void getImage(final int position,ImageView imageView) {
     mLinkCache.put(imageView,position);
+    if(!mRunning) {
+      imageView.setImageResource(R.drawable.im_black_square);
+      return;
+    }
     Bitmap bitmap = mMemoryCache.get(position);
     if(bitmap!=null)
       imageView.setImageBitmap(bitmap);

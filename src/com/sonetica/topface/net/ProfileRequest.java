@@ -3,16 +3,15 @@ package com.sonetica.topface.net;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.Context;
 
 public class ProfileRequest extends ApiRequest {
   // Data
   public String service = "profile";
   private boolean mIsNotification;
   // Methods
-  public ProfileRequest() {
-    this(false);
-  }
-  public ProfileRequest(boolean bNotification) {
+  public ProfileRequest(Context context,boolean bNotification) {
+    super(context);
     mIsNotification = bNotification;
   }
   @Override

@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.album;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.sonetica.topface.R;

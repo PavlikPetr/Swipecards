@@ -21,6 +21,11 @@ public class Response {
   public static final int FATAL_ERROR = 99;
   //---------------------------------------------------------------------------
   public Response(String response) {
+    if(response==null) {
+      Debug.log(this,"json resonse is null");
+      code = FATAL_ERROR;
+      return;
+    }
     JSONObject obj = null;
     try {
       obj = new JSONObject(response);
@@ -33,6 +38,7 @@ public class Response {
         code = FATAL_ERROR;
     } catch (JSONException e) {
       code = FATAL_ERROR;
+      Debug.log(this,"json resonse is wrong:" + response);
     }
   }
   //---------------------------------------------------------------------------
@@ -80,7 +86,7 @@ public class Response {
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
           City city = new City();
-          city.id   = item.getString("id");
+          city.id   = Integer.parseInt(item.getString("id"));
           city.name = item.getString("name");
           cities.add(city);
         }

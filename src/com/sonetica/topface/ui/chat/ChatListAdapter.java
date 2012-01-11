@@ -7,15 +7,15 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class ChatListAdapter extends ArrayAdapter<Inbox> {
+public class ChatListAdapter extends BaseAdapter {
   // Data
   private Context mContext;
   private LinkedList<Inbox> mList;
   //---------------------------------------------------------------------------
   public ChatListAdapter(Context context,LinkedList<Inbox> list) {
-    super(context,0,list);
     mContext=context;
     mList=list;
   }

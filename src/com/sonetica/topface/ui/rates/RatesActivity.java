@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Rate;
+import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.RatesRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.services.ConnectionService;
@@ -16,15 +17,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
  *     "меня оценили"
  */
 public class RatesActivity extends Activity {
   // Data
-  private PullToRefreshListView mListView;
-  private ArrayAdapter<Rate> mAdapter;
+  private ListView mListView;
+  //private RatesListAdapter mAdapter;
+  private ArrayAdapter mAdapter;
   private LinkedList<Rate> mRatesList;
   private ProgressDialog  mProgressDialog;
   //---------------------------------------------------------------------------
@@ -41,12 +45,14 @@ public class RatesActivity extends Activity {
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.rates_header_title));
 
    // ListView
-   mListView = (PullToRefreshListView)findViewById(R.id.lvRatesList);
+   mListView = (ListView)findViewById(R.id.lvRatesList);
+   /*
    mListView.setOnRefreshListener(new OnRefreshListener() {
      @Override
      public void onRefresh() {
-         update();
+         update(); 
      }});
+   */
    
    // Progress Bar
    mProgressDialog = new ProgressDialog(this);
@@ -60,7 +66,8 @@ public class RatesActivity extends Activity {
   //---------------------------------------------------------------------------
   private void create() {
     // ListAdapter
-    mAdapter = new RatesListAdapter(RatesActivity.this,mRatesList);
+    //mAdapter = new RatesListAdapter(RatesActivity.this,mRatesList);
+    mAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,new String[]{"one","two"});
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
@@ -74,44 +81,23 @@ public class RatesActivity extends Activity {
   private void update() {
     mProgressDialog.show();
     
-    RatesRequest likesRequest = new RatesRequest();
+    RatesRequest likesRequest = new RatesRequest(this);
     likesRequest.offset = 0;
     likesRequest.limit  = 20;
-    /*
     likesRequest.callback(new ApiHandler(){
+      @Override
+      public void success(Response response) {
+        mRatesList.addAll(response.getRates());
+        create();
+        //mListView.onRefreshComplete();
+        mAdapter.notifyDataSetChanged();
+        mProgressDialog.cancel();
+      }
       @Override
       public void fail(int codeError) {
         Toast.makeText(RatesActivity.this,"fail:"+codeError,Toast.LENGTH_SHORT).show();
       }
-      @Override
-      public void success(Response response) {
-        Toast.makeText(RatesActivity.this,"success",Toast.LENGTH_SHORT).show();
-        
-        ArrayList<Rate> rates = response.getRates();        
-        if(rates!=null) {
-          mAdapter = new RatesListAdapter(RatesActivity.this,rates);
-          mListView.setAdapter(mAdapter);
-        }
-        mListView.onRefreshComplete();
-        //mProgressDialog.cancel();
-        
-      }
-    }).exec(this);
-    */
-    ConnectionService.sendRequest(likesRequest,new Handler() {
-      @Override
-      public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        Response resp = (Response)msg.obj;
-        
-        mRatesList.addAll(resp.getRates());
-        create();
-        mListView.onRefreshComplete();
-        mAdapter.notifyDataSetChanged();
-        mProgressDialog.cancel();
-      }
-    });
-    
+    }).exec();
   }
   //---------------------------------------------------------------------------
   @Override

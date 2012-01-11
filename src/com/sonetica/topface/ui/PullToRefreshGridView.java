@@ -28,4 +28,8 @@ public class PullToRefreshGridView extends PullToRefreshBase<GridView> {
   public void setAdapter(ListAdapter adapter) {
     getAdapterView().setAdapter(adapter);
   }
+  
+  public void invalidateViews() {
+    getAdapterView().invalidateViews();
+  }
 }

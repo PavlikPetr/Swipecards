@@ -2,12 +2,17 @@ package com.sonetica.topface.net;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.Context;
 
 public class LikesRequest extends ApiRequest {
   // Data
   public String service = "feedLike";
   public int offset;
   public int limit;
+  //Methods
+  public LikesRequest(Context context) {
+    super(context);
+  }
   @Override
   public String toString() {
     JSONObject root = new JSONObject();

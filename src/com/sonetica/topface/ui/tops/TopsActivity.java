@@ -21,11 +21,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 /*  
@@ -38,15 +39,20 @@ public class TopsActivity extends Activity {
   private GalleryManager  mGalleryManager;
   private LinkedList<TopUser> mTopsList;
   private ProgressDialog  mProgressDialog;
+  private LinkedList<City> mCitiesList;
   private Button mCityButton;
-  private String m_city_name;
-  private int m_city_position;
-  private int m_city_id;
-  private int m_sex;
+  // Action Data
+  private class ActionData {
+    public int sex; 
+    public int city_id;
+    public String city_name;
+    public int city_popup_position;
+  }
+  private ActionData mActionData;
   // Constats
-  private static int GIRLS = 0;
-  private static int BOYS  = 1;
-  private static int PITER = 2;
+  private static int GIRLS  = 0;
+  private static int BOYS   = 1;
+  private static int MOSCOW = 1;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -55,17 +61,19 @@ public class TopsActivity extends Activity {
     Debug.log(this,"+onCreate");
     
     // Data
-    mTopsList = Data.s_TopsList;
+    mTopsList   = Data.s_TopsList;
+    mCitiesList = Data.s_CitiesList;
 
     // Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.tops_header_title));
     
-    // Восстановление предыдущих параметров
+    // Восстановление последних параметров
+    mActionData = new ActionData();
     SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-    m_sex = preferences.getInt(getString(R.string.s_tops_sex), GIRLS);
-    m_city_id = preferences.getInt(getString(R.string.s_tops_city),PITER);
-    m_city_name = preferences.getString(getString(R.string.s_tops_city_name),getString(R.string.default_city));
-    m_city_position = preferences.getInt(getString(R.string.s_tops_city_position),0);
+    mActionData.sex = preferences.getInt(getString(R.string.s_tops_sex),GIRLS);
+    mActionData.city_id = preferences.getInt(getString(R.string.s_tops_city_id),MOSCOW);
+    mActionData.city_name = preferences.getString(getString(R.string.s_tops_city_name),getString(R.string.default_city));
+    mActionData.city_popup_position = preferences.getInt(getString(R.string.s_tops_city_position),0);
     
     // Girls Button
     Button btnGirls = (Button)findViewById(R.id.btnBarGirls);
@@ -73,8 +81,8 @@ public class TopsActivity extends Activity {
     btnGirls.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        m_city_id = PITER;
-        update(m_sex=GIRLS,m_city_id,true);
+        mActionData.sex = GIRLS;
+        update();
       }
     });
     
@@ -84,18 +92,18 @@ public class TopsActivity extends Activity {
     btnBoys.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        m_city_id = PITER;
-        update(m_sex=BOYS,m_city_id,true);
+        mActionData.sex = BOYS;
+        update();
       }
     });
     
     // City Button
     mCityButton = (Button)findViewById(R.id.btnBarCity);
-    mCityButton.setText(m_city_name);
+    mCityButton.setText(mActionData.city_name);
     mCityButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        getCities();
+        choiceCity();
       }
     });
     
@@ -103,6 +111,19 @@ public class TopsActivity extends Activity {
     mGallery = (GridView)findViewById(R.id.grdTopsGallary);
     mGallery.setAnimationCacheEnabled(false);
     mGallery.setScrollingCacheEnabled(false);
+    mGallery.setOnScrollListener(new OnScrollListener() {
+      @Override
+      public void onScrollStateChanged(AbsListView view,int scrollState) {
+        if(scrollState==SCROLL_STATE_IDLE) {
+          mGalleryManager.mRunning=true;
+          mGallery.invalidateViews();
+        } else
+          mGalleryManager.mRunning=false;
+      }
+      @Override
+      public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
+      }
+    });
     mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -117,7 +138,7 @@ public class TopsActivity extends Activity {
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
     if(mTopsList.size()==0)
-      update(m_sex,m_city_id,false);
+      update();
     else
       create();
   }
@@ -140,17 +161,17 @@ public class TopsActivity extends Activity {
     if(mProgressDialog!=null) mProgressDialog=null;
   }
   //---------------------------------------------------------------------------
-  private void update(int sex, int city, boolean isRefreshed) { // refreshed - грузить локально или инет при первом запуске
+  private void update() { // refreshed - грузить локально или инет при первом запуске
     mProgressDialog.show();
-    
-    TopsRequest topRequest = new TopsRequest();
-    topRequest.sex  = sex;
-    topRequest.city = city;
+    TopsRequest topRequest = new TopsRequest(this);
+    topRequest.sex  = mActionData.sex;
+    topRequest.city = mActionData.city_id;
     ConnectionService.sendRequest(topRequest,new Handler() {
       @Override
       public void handleMessage(Message msg) {
         super.handleMessage(msg);
         Response resp = (Response)msg.obj;
+        mTopsList.clear();
         mTopsList.addAll(resp.getUsers());
         create();
         mProgressDialog.cancel();
@@ -158,39 +179,47 @@ public class TopsActivity extends Activity {
     });
   }
   //---------------------------------------------------------------------------
-  private void getCities() {
+  private void choiceCity() {
+    if(mCitiesList.size()!=0) {
+      showCitiesDialog();
+      return;
+    }
     mProgressDialog.show();
-    CitiesRequest citiesRequest = new CitiesRequest();
+    CitiesRequest citiesRequest = new CitiesRequest(this);
     citiesRequest.type = "top";
     ConnectionService.sendRequest(citiesRequest,new Handler() {
       @Override
       public void handleMessage(Message msg) {
         super.handleMessage(msg);
         Response resp = (Response)msg.obj;
-        final ArrayList<City> cities = resp.getCities();
-        String[] arr = new String[cities.size()];
-        for(int i=0;i<arr.length;i++)
-          arr[i] = cities.get(i).name;
+        mCitiesList.addAll(resp.getCities());
         mProgressDialog.cancel();
-        AlertDialog.Builder builder = new AlertDialog.Builder(TopsActivity.this);
-        builder.setTitle("Chooser");
-        builder.setSingleChoiceItems(arr,m_city_position,new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int index) {
-            int city = Integer.parseInt(cities.get(index).id);
-            if(m_city_id!=city) {
-              m_city_position = index;
-              m_city_id = city;
-              m_city_name = cities.get(index).name;
-              mCityButton.setText(m_city_name);
-              update(m_sex,m_city_id,true);
-            }
-            dialog.cancel();
-          }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+        showCitiesDialog();
       }
     });
+  }
+  //---------------------------------------------------------------------------
+  void showCitiesDialog() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(TopsActivity.this);
+    builder.setTitle("Chooser");
+    String[] cities = new String[mCitiesList.size()];
+    for(int i=0;i<mCitiesList.size();++i)
+      cities[i] = mCitiesList.get(i).name;
+    builder.setSingleChoiceItems(cities,mActionData.city_popup_position,new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int position) {
+        City city = mCitiesList.get(position);
+        if(mActionData.city_id!=city.id) {
+          mActionData.city_id = city.id;
+          mActionData.city_name = city.name;
+          mActionData.city_popup_position = position;
+          mCityButton.setText(mActionData.city_name);
+          update();
+        }
+        dialog.cancel();
+      }
+    });
+    AlertDialog alert = builder.create();
+    alert.show();
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -198,10 +227,10 @@ public class TopsActivity extends Activity {
     // Сохранение параметров
     SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = preferences.edit();
-    editor.putInt(getString(R.string.s_tops_sex), m_sex);
-    editor.putInt(getString(R.string.s_tops_city),m_city_id);
-    editor.putInt(getString(R.string.s_tops_city_position),m_city_position);
-    editor.putString(getString(R.string.s_tops_city_name),m_city_name);
+    editor.putInt(getString(R.string.s_tops_sex),mActionData.sex);
+    editor.putInt(getString(R.string.s_tops_city_id),mActionData.city_id);
+    editor.putString(getString(R.string.s_tops_city_name),mActionData.city_name);
+    editor.putInt(getString(R.string.s_tops_city_position),mActionData.city_popup_position);
     editor.commit();
     
     release();

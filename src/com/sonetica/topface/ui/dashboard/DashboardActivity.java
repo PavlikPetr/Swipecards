@@ -3,7 +3,6 @@ package com.sonetica.topface.ui.dashboard;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
-import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.Response;
@@ -25,7 +24,6 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 /*
@@ -35,6 +33,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   // Data
   private volatile boolean mIsActive;
   private NotifyHandler    mNotifyHandler;
+  private DashboardButton  mLikesButton;
+  private DashboardButton  mRatesButton;
+  private DashboardButton  mChatButton;
   // Constants
   public static final int INTENT_DASHBOARD = 100;
   //---------------------------------------------------------------------------
@@ -44,12 +45,15 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     setContentView(R.layout.ac_dashboard);
     Debug.log(this,"+onCreate");
     
-    ((Button)findViewById(R.id.btnDashbrdPhotorating)).setOnClickListener(this);
-    ((Button)findViewById(R.id.btnDashbrdLikeme)).setOnClickListener(this);
-    ((Button)findViewById(R.id.btnDashbrdMyrating)).setOnClickListener(this);
-    ((Button)findViewById(R.id.btnDashbrdChat)).setOnClickListener(this);
-    ((Button)findViewById(R.id.btnDashbrdTops)).setOnClickListener(this);
-    ((Button)findViewById(R.id.btnDashbrdProfile)).setOnClickListener(this);
+    mLikesButton = ((DashboardButton)findViewById(R.id.btnDashbrdLikeme));
+    mLikesButton.setOnClickListener(this);
+    mRatesButton = ((DashboardButton)findViewById(R.id.btnDashbrdRating));
+    mRatesButton.setOnClickListener(this);
+    mChatButton = ((DashboardButton)findViewById(R.id.btnDashbrdChat));
+    mChatButton.setOnClickListener(this);
+    ((DashboardButton)findViewById(R.id.btnDashbrdPhotorating)).setOnClickListener(this);
+    ((DashboardButton)findViewById(R.id.btnDashbrdTops)).setOnClickListener(this);
+    ((DashboardButton)findViewById(R.id.btnDashbrdProfile)).setOnClickListener(this);
     
     if(!Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
@@ -91,12 +95,15 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         startActivity(new Intent(this,PhotoratingActivity.class));
       } break;
       case R.id.btnDashbrdLikeme: {
+        mLikesButton.mNotify = 0;
         startActivity(new Intent(this,LikesActivity.class));
       } break;
-      case R.id.btnDashbrdMyrating: {
+      case R.id.btnDashbrdRating: {
+        mRatesButton.mNotify = 0;
         startActivity(new Intent(this,RatesActivity.class));
       } break;
       case R.id.btnDashbrdChat: {
+        mChatButton.mNotify = 0;
         startActivity(new Intent(this,ChatActivity.class));
       } break;
       case R.id.btnDashbrdTops: {
@@ -155,9 +162,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       if(mNotifyHandler==null)
         return;
       if(!mIsActive)
-        this.sendEmptyMessageDelayed(0,1000*3);
+        this.sendEmptyMessageDelayed(0,1000*8);
       else {
-        ProfileRequest profileRequest = new ProfileRequest(true);
+        ProfileRequest profileRequest = new ProfileRequest(DashboardActivity.this,true);
         ConnectionService.sendRequest(profileRequest,new Handler() {
           @Override
           public void handleMessage(Message msg) {
@@ -170,7 +177,15 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
                 public void run() {
                   String s = resp.getProfile();
                   Toast.makeText(context,s,Toast.LENGTH_SHORT).show();
-                  NotifyHandler.this.sendEmptyMessageDelayed(0,1000*3);
+                  
+                  mLikesButton.mNotify++;
+                  mLikesButton.invalidate();
+                  mRatesButton.mNotify++;
+                  mRatesButton.invalidate();
+                  mChatButton.mNotify++;
+                  mChatButton.invalidate();
+                  
+                  NotifyHandler.this.sendEmptyMessageDelayed(0,1000*5);
                 }
               });
           }

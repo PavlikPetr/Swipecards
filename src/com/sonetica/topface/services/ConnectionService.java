@@ -11,6 +11,7 @@ import com.sonetica.topface.net.Packet;
 import com.sonetica.topface.net.ApiRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.AuthToken;
+import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.utils.Debug;
 
 public class ConnectionService extends Service {
@@ -28,15 +29,19 @@ public class ConnectionService extends Service {
     @Override
     public void handleMessage(Message msg) {
       Packet packet = (Packet)msg.obj;
-      Response response = sendPacket(packet);
-      if(response.code==0)
-        packet.sendMessage(Message.obtain(null,0,response));
-      else if(response.code==3)
+      Response response = new Response(sendPacket(packet));
+      if(response.code==3)
         reAuth(packet);
       else
-        packet.sendMessage(Message.obtain(null,0,null));
+        packet.sendMessage(Message.obtain(null,0,response));
     }
   }//ServiceHandler
+  //---------------------------------------------------------------------------
+  // формирование запроса внутри приложения к коннект сервису
+  public static void sendRequest0(ApiRequest request, Handler handler) {
+    request.ssid = Global.SSID;
+    serviceHandler.sendMessage(Message.obtain(null,0,new Packet(request,handler)));
+  }
   //---------------------------------------------------------------------------
   @Override
   public void onCreate() {
@@ -48,10 +53,10 @@ public class ConnectionService extends Service {
   //---------------------------------------------------------------------------
   // перерегистрация на сервере TP
   private void reAuth(final Packet packet) {
-    Debug.log(this,"reAuth");
+    Debug.log(this,"service reAuth");
 
     AuthToken.Token token   = new AuthToken(this).getToken();
-    AuthRequest authRequest = new AuthRequest();
+    AuthRequest authRequest = new AuthRequest(this);
     authRequest.platform = token.getSocialNet();
     authRequest.sid      = token.getUserId();
     authRequest.token    = token.getTokenKey();
@@ -65,30 +70,22 @@ public class ConnectionService extends Service {
           String ssid = ssidResponse.getSSID();
           Global.saveSSID(ConnectionService.this,ssid);
           packet.mRequest.ssid = ssid;
-          Response response = sendPacket(packet);
+          Response response = new Response(sendPacket(packet));
           packet.sendMessage(Message.obtain(null,0,response));
+        } else if(ssidResponse.code>0) {
+            ; // ?????????
         } else
-          packet.sendMessage(Message.obtain(null,0,null));
+          ConnectionService.this.startActivity(new Intent(ConnectionService.this,SocialActivity.class));
       }
     });
   }
   //---------------------------------------------------------------------------
   // отправка пакета на сервер TP
-  private Response sendPacket(Packet packet) {
-    try {
-      String sResponse =  Http.httpSendTpRequest(URL,packet.toString());
-      Debug.log(null,"resp:"+sResponse);
-      return new Response(sResponse);
-    } catch(Exception e) {
-      Debug.log(this,"send packet error");
-    }
-    return null;
-  }
-  //---------------------------------------------------------------------------
-  // формирование запроса внутри приложения к коннект сервису
-  public static void sendRequest(ApiRequest request, Handler handler) {
-    request.ssid = Global.SSID;
-    serviceHandler.sendMessage(Message.obtain(null,0,new Packet(request,handler)));
+  private String sendPacket(Packet packet) {
+    String sResponse = null;
+    sResponse =  Http.httpSendTpRequest(URL,packet.toString());
+    Debug.log(this,"resp:" + sResponse);
+    return sResponse;
   }
   //---------------------------------------------------------------------------
   @Override

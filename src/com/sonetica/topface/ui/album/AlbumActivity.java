@@ -52,7 +52,7 @@ public class AlbumActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void update(int uid) {
-    AlbumRequest albumRequest = new AlbumRequest();
+    AlbumRequest albumRequest = new AlbumRequest(this);
     albumRequest.uid  = uid;
     ConnectionService.sendRequest(albumRequest,new Handler() {
       @Override
@@ -83,18 +83,3 @@ public class AlbumActivity extends Activity {
   }
   //---------------------------------------------------------------------------
 }
-
-/*
-ProfilesRequest profilesRequest = new ProfilesRequest();
-profilesRequest.uids.add(uid);
-ConnectionService.sendRequest(profilesRequest,new Handler() {
-  @Override
-  public void handleMessage(Message msg) {
-    super.handleMessage(msg);
-    Response resp = (Response)msg.obj;
-    // do it
-
-    mProgressDialog.cancel();
-  }
-});
-*/

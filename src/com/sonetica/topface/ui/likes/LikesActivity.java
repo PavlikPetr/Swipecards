@@ -19,10 +19,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AbsListView.OnScrollListener;
 
 /*
  *      "я нравлюсь"
@@ -89,6 +91,19 @@ public class LikesActivity extends Activity {
    mGallery = (PullToRefreshGridView)findViewById(R.id.grdLikesGallary);
    mGallery.setAnimationCacheEnabled(false);
    //mGallery.setScrollingCacheEnabled(false);
+   mGallery.setOnScrollListener(new OnScrollListener() {
+     @Override
+     public void onScrollStateChanged(AbsListView view,int scrollState) {
+       if(scrollState==SCROLL_STATE_IDLE) {
+         mGalleryManager.mRunning=true;
+         mGallery.invalidateViews();
+       } else
+         mGalleryManager.mRunning=false;
+     }
+     @Override
+     public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
+     }
+   });
    mGallery.getAdapterView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -97,12 +112,12 @@ public class LikesActivity extends Activity {
        startActivity(intent);
      }
    });
-      
    mGallery.setOnRefreshListener(new OnRefreshListener() {
      @Override
      public void onRefresh() {
        update();
-     }});
+     }
+   });
    
    
    // Progress Bar
@@ -130,8 +145,7 @@ public class LikesActivity extends Activity {
   //---------------------------------------------------------------------------
   private void update() {
     mProgressDialog.show();
-    
-    LikesRequest likesRequest = new LikesRequest();
+    LikesRequest likesRequest = new LikesRequest(this);
     likesRequest.offset = 0;
     likesRequest.limit  = 40;
     ConnectionService.sendRequest(likesRequest,new Handler() {

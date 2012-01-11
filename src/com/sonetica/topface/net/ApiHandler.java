@@ -13,6 +13,6 @@ abstract public class ApiHandler extends Handler {
     else
       success(response);
   }
-  abstract public void fail(int codeError);
   abstract public void success(Response response);
+  abstract public void fail(int codeError);
 }

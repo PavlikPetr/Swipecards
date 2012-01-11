@@ -25,12 +25,11 @@ import android.widget.ImageView;
  */
 public class Http {
   // Data
+  private static final String TAG = "Http"; 
   private static final int HTTP_GET_REQUEST  = 0;
   private static final int HTTP_POST_REQUEST = 1;
   //---------------------------------------------------------------------------
-  /*
-   * Проверка на наличие интернета
-   */
+  // Проверка на наличие интернета
   public static boolean isOnline(Context context) {
     ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -52,11 +51,12 @@ public class Http {
   //---------------------------------------------------------------------------
   //  запрос к TopFace API
   public static String httpSendTpRequest(String request, String postParams) {
-    Debug.log("Http.class","req:"+postParams);
     return httpRequest(HTTP_POST_REQUEST,request,postParams,true);
   }
   //---------------------------------------------------------------------------
   private static String httpRequest(int typeRequest, String request, String postParams,boolean isJson) {
+    Debug.log(TAG,"req:"+postParams);
+    
     HttpURLConnection httpConnection = null;
     BufferedReader buffReader = null;
     try {
@@ -78,12 +78,14 @@ public class Http {
       }
       
       // проверяет код ответа сервера
-      int statusCode = httpConnection.getResponseCode();
-      if(statusCode != HttpURLConnection.HTTP_OK)
-         return null;
+      int responseCode = httpConnection.getResponseCode();
+      if(responseCode != HttpURLConnection.HTTP_OK) {
+        Debug.log(TAG,"server response code:" + responseCode);
+        return null;
+      }
 
       // чтение ответа
-      buffReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(httpConnection.getInputStream())));
+      buffReader = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
       
       StringBuilder response = new StringBuilder();
       String line;
@@ -92,15 +94,15 @@ public class Http {
       
       return response.toString();
     } catch(MalformedURLException e) {
-      Debug.log("Http.class","url is wrong:" + e);
+      Debug.log(TAG,"url is wrong:" + e);
     } catch(IOException e) {
-      Debug.log("Http.class","io is fail #1:" + e);
+      Debug.log(TAG,"io is fail #1:" + e);
     } finally {
       if(buffReader!=null)
         try {
           buffReader.close();
         } catch(IOException e) {
-          Debug.log("Http.class","io is fail #2:" + e);
+          Debug.log(TAG,"io is fail #2:" + e);
         }
       if(httpConnection!=null)
         httpConnection.disconnect();
@@ -153,21 +155,21 @@ public class Http {
       buffInputStream.close();
       httpConnection.disconnect();      
     } catch(MalformedURLException e) {
-      Debug.log("Http.class","url is wrong:" + e);
+      Debug.log(TAG,"url is wrong:" + e);
     } catch(IOException e) {
-      Debug.log("Http.class","io is fail #1:" + e);
+      Debug.log(TAG,"io is fail #1:" + e);
     } finally {
       try {
         if(buffInputStream!=null)
           buffInputStream.close();
       } catch(IOException e) {
-        Debug.log("Http.class","io is fail #2:" + e);
+        Debug.log(TAG,"io is fail #2:" + e);
       }
       if(httpConnection!=null)
         httpConnection.disconnect();
     }
     
-    Debug.log("Http.class","image loading");
+    Debug.log(TAG,"bitmap loading");
 
     return bitmap;
   }
@@ -183,7 +185,7 @@ public class Http {
       
     buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
     
-    Debug.log("Http.class","raw streaming");
+    Debug.log(TAG,"raw streaming");
     
     return new Pair<InputStream,HttpURLConnection>(buffInputStream,httpConnection);
   }

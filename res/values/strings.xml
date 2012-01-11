@@ -51,7 +51,7 @@
   <!-- Systems  -->
   <string name="s_ssid">ssid</string>
   <string name="s_tops_sex">tops_sex</string>
-  <string name="s_tops_city">tops_city</string>
+  <string name="s_tops_city_id">tops_city_id</string>
   <string name="s_tops_city_position">tops_city_position</string>
   <string name="s_tops_city_name">tops_city_name</string>
   

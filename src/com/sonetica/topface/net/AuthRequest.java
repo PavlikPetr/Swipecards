@@ -2,6 +2,7 @@ package com.sonetica.topface.net;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.Context;
 
 public class AuthRequest extends ApiRequest {
   // Data
@@ -10,6 +11,9 @@ public class AuthRequest extends ApiRequest {
   public String token;
   public String platform;
   // Methods
+  public AuthRequest(Context context) {
+    super(context);
+  }
   @Override
   public String toString() {
     JSONObject root = new JSONObject();

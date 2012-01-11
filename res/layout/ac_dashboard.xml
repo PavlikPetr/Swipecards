@@ -13,20 +13,20 @@
 	  <!--  Buttons -->
     <TableRow
         android:layout_marginTop="14pt">
-      <Button
+      <com.sonetica.topface.ui.dashboard.DashboardButton
           android:id="@+id/btnDashbrdPhotorating"
           android:background="@drawable/btn_dashbrd_photorating_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
-      <Button
+      <com.sonetica.topface.ui.dashboard.DashboardButton
           android:id="@+id/btnDashbrdLikeme"
           android:background="@drawable/btn_dashbrd_likeme_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
-      <Button
-          android:id="@+id/btnDashbrdMyrating"
+      <com.sonetica.topface.ui.dashboard.DashboardButton
+          android:id="@+id/btnDashbrdRating"
           android:background="@drawable/btn_dashbrd_myrating_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
@@ -58,19 +58,19 @@
     <!--  Buttons -->
     <TableRow
         android:layout_marginTop="0pt">
-      <Button
+      <com.sonetica.topface.ui.dashboard.DashboardButton
           android:id="@+id/btnDashbrdChat"
           android:background="@drawable/btn_dashbrd_chat_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
-      <Button
+      <com.sonetica.topface.ui.dashboard.DashboardButton
           android:id="@+id/btnDashbrdTops"
           android:background="@drawable/btn_dashbrd_tops_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
-      <Button
+      <com.sonetica.topface.ui.dashboard.DashboardButton
           android:id="@+id/btnDashbrdProfile"
           android:background="@drawable/btn_dashbrd_profile_selector"
           android:layout_margin="2pt"

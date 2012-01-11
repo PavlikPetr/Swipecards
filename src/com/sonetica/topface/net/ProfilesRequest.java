@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.Context;
 
 public class ProfilesRequest extends ApiRequest {
   // Data
   public String service = "profiles";
   public ArrayList<Integer> uids = new ArrayList<Integer>();
   // Methods
+  public ProfilesRequest(Context context) {
+    super(context);
+  }
   @Override
   public String toString() {
     JSONObject root = new JSONObject();
