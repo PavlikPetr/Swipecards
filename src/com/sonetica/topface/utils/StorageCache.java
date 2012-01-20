@@ -20,42 +20,48 @@ public class StorageCache {
   // Data
   private Context mContext;
   private ExecutorService mThreadPool;
+  private File mCacheDir;
   private int mCacheType;
   // Constants
   public static final int INTERNAL_CACHE = 0;
   public static final int EXTERNAL_CACHE = 1;
   //---------------------------------------------------------------------------
-  public StorageCache(Context context,int cacheType){
-    mContext    = context;
-    mCacheType  = cacheType;
-    mThreadPool = Executors.newFixedThreadPool(3);
+  public StorageCache(Context context){
+    this(context,EXTERNAL_CACHE,3);
   }
   //---------------------------------------------------------------------------
-  public boolean isExist(String fileName) {
-    File file = new File(getCacheDirectory(),fileName);
-    if(file.exists())
-      return true;
-    return false;
+  public StorageCache(Context context,int cacheType){
+    this(context,cacheType,3);
+  }
+  //---------------------------------------------------------------------------
+  public StorageCache(Context context,int cacheType,int countThreads){
+    mContext    = context;
+    mCacheType  = cacheType;
+    mThreadPool = Executors.newFixedThreadPool(countThreads);
+    mCacheDir = getCacheDirectory();
+    if(!mCacheDir.exists())
+      mCacheDir.mkdirs();
   }
   //---------------------------------------------------------------------------
   public Bitmap load(String fileName) {
-    File cacheDir = getCacheDirectory();
-    File file = new File(cacheDir,fileName);
-    if(!file.exists())
-      return null;
-    BufferedInputStream bis = null;
     Bitmap bitmap = null;
+    BufferedInputStream bis = null;
     try {
+      File file = new File(mCacheDir,fileName);
+      if(!file.exists())
+        return null;
       bis = new BufferedInputStream(new FileInputStream(file));
       bitmap = BitmapFactory.decodeStream(bis);
     } catch(FileNotFoundException e) {
-      Debug.log(this,"bitmap loading, file not found #1");
+      Debug.log(this,"bitmap loading, file not found #1 "+ e);
+    } catch(Exception e) {
+      Debug.log(this,"bitmap loading, exception: " + e);
     } finally {
       try {
         if(bis!=null)
           bis.close();
       } catch(IOException e) {
-        Debug.log(this,"bitmap loading, input stream not closed #2");
+        Debug.log(this,"bitmap loading, input stream not closed #2 "+ e);
       }
     }
     return bitmap;
@@ -66,22 +72,21 @@ public class StorageCache {
       @Override
       public void run() {
         BufferedOutputStream bos = null;
-        File cacheDir = getCacheDirectory();
-        if(cacheDir==null) 
-          return;
-        File file = new File(cacheDir,fileName);
-        if(file.exists()) 
-          return;
         try {
+          File file = new File(mCacheDir,fileName);
+          if(file.exists()) 
+            return;
           bos = new BufferedOutputStream(new FileOutputStream(file));
           bitmap.compress(Bitmap.CompressFormat.PNG, 85, bos);
         } catch(FileNotFoundException e) {
-          Debug.log(this,"bitmap saving, file not found #1");
+          Debug.log(this,"bitmap saving, file not found #1 "+ e);
+        } catch(Exception e) {
+          Debug.log(this,"bitmap loading, exception: " + e);
         } finally {
           try {
             if(bos!=null) bos.close();
           } catch(IOException e) {
-            Debug.log(this,"bitmap saving, output stream not closed #2");    
+            Debug.log(this,"bitmap saving, output stream not closed #2 "+ e);    
           }
         }
       }
@@ -89,16 +94,17 @@ public class StorageCache {
   }
   //---------------------------------------------------------------------------
   private File getCacheDirectory() {
-    return mCacheType==EXTERNAL_CACHE ? mContext.getCacheDir() : mContext.getCacheDir(); //getExternalCacheDir
+    return mCacheType==EXTERNAL_CACHE ? FileSystem.getExternalCacheDirectory() : mContext.getCacheDir();
   }
   //---------------------------------------------------------------------------  
   public void clear(){
+    Debug.log(this,"clearing");
     File[] files; 
     files = mContext.getCacheDir().listFiles();
     if(files!=null)
       for(File file : files)
         file.delete();
-    files = mContext.getCacheDir().listFiles();
+    files = getCacheDirectory().listFiles();
     if(files!=null)
       for(File file : files)
         file.delete();

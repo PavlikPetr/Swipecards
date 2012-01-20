@@ -1,12 +1,11 @@
 package com.sonetica.topface.social;
 
+import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.net.ApiHandler;
-import com.sonetica.topface.net.ApiRequest;
 import com.sonetica.topface.net.AuthRequest;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.social.fb.FbAuthWebViewClient;
 import com.sonetica.topface.social.vk.VkAuthWebViewClient;
 import com.sonetica.topface.utils.Debug;
@@ -68,14 +67,16 @@ public class SocialWebActivity extends Activity {
         // отправка токена на TP сервер
         AuthToken.Token token   = (AuthToken.Token)msg.obj;
         AuthRequest authRequest = new AuthRequest(SocialWebActivity.this);
-        authRequest.platform = token.getSocialNet();
-        authRequest.sid      = token.getUserId();
-        authRequest.token    = token.getTokenKey();
+        authRequest.platform   = token.getSocialNet();
+        authRequest.sid        = token.getUserId();
+        authRequest.token      = token.getTokenKey();
+        authRequest.locale     = Global.LOCALE;
+        authRequest.clienttype = Global.CLIENT_TYPE;
         authRequest.callback(new ApiHandler() {
           @Override
           public void success(Response response) {
             // запись ssid
-            Global.saveSSID(SocialWebActivity.this,response.getSSID());
+            Data.saveSSID(SocialWebActivity.this,response.getSSID());
             setResult(Activity.RESULT_OK);
             finish();
           }
@@ -88,7 +89,7 @@ public class SocialWebActivity extends Activity {
         }).exec();
       } else {
         // стирание ssid
-        Global.saveSSID(SocialWebActivity.this,"");
+        Data.saveSSID(SocialWebActivity.this,"");
         setResult(Activity.RESULT_CANCELED);
         finish();
       }

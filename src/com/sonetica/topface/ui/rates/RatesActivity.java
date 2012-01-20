@@ -7,16 +7,10 @@ import com.sonetica.topface.data.Rate;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.RatesRequest;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.services.ConnectionService;
-import com.sonetica.topface.ui.PullToRefreshListView;
-import com.sonetica.topface.ui.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +22,7 @@ public class RatesActivity extends Activity {
   // Data
   private ListView mListView;
   //private RatesListAdapter mAdapter;
-  private ArrayAdapter mAdapter;
+  private RatesListAdapter mAdapter;
   private LinkedList<Rate> mRatesList;
   private ProgressDialog  mProgressDialog;
   //---------------------------------------------------------------------------
@@ -62,25 +56,28 @@ public class RatesActivity extends Activity {
      update();
    else
      create();
+   
+   // обнуление информера непросмотренных оценок
+   Data.mRates = 0;
   }
   //---------------------------------------------------------------------------
   private void create() {
     // ListAdapter
-    //mAdapter = new RatesListAdapter(RatesActivity.this,mRatesList);
-    mAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,new String[]{"one","two"});
+    mAdapter = new RatesListAdapter(RatesActivity.this,mRatesList);
+    //mAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,new String[]{"one","two"});
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
   private void release() {
-    if(mListView!=null) mListView=null;
-    if(mAdapter!=null) mAdapter=null;
-    if(mRatesList!=null) mRatesList=null;
+    if(mListView!=null)       mListView=null;
+    if(mAdapter!=null)        mAdapter=null;
+    if(mRatesList!=null)      mRatesList=null;
     if(mProgressDialog!=null) mProgressDialog=null;
   }
   //---------------------------------------------------------------------------
   private void update() {
     mProgressDialog.show();
-    
+
     RatesRequest likesRequest = new RatesRequest(this);
     likesRequest.offset = 0;
     likesRequest.limit  = 20;

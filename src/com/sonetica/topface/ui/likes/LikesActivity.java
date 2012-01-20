@@ -4,20 +4,18 @@ import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Like;
+import com.sonetica.topface.module.pull2refresh.PullToRefreshGridView;
+import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListener;
+import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.LikesRequest;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.ui.GalleryManager;
-import com.sonetica.topface.ui.PullToRefreshGridView;
-import com.sonetica.topface.ui.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -109,13 +107,14 @@ public class LikesActivity extends Activity {
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(LikesActivity.this,AlbumActivity.class);
        intent.putExtra(AlbumActivity.INTENT_USER_ID,mLikesList.get(position).uid);
-       startActivity(intent);
+       startActivityForResult(intent,0);
      }
    });
    mGallery.setOnRefreshListener(new OnRefreshListener() {
      @Override
      public void onRefresh() {
-       update();
+       //update();
+       mGallery.onRefreshComplete();
      }
    });
    
@@ -128,6 +127,9 @@ public class LikesActivity extends Activity {
      update();
    else
      create();
+   
+   // обнуление информера непросмотренных лайков
+   Data.mLikes = 0;
   }
   //---------------------------------------------------------------------------
   private void create() {
@@ -137,28 +139,35 @@ public class LikesActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void release() {
-    if(mGallery!=null) mGallery=null;
+    if(mGallery!=null)          mGallery=null;
     if(mLikesGridAdapter!=null) mLikesGridAdapter=null;
-    if(mLikesList!=null) mLikesList=null;
-    if(mProgressDialog!=null) mProgressDialog=null;
+    if(mLikesList!=null)        mLikesList=null;
+    if(mProgressDialog!=null)   mProgressDialog=null;
   }
   //---------------------------------------------------------------------------
   private void update() {
     mProgressDialog.show();
+    
     LikesRequest likesRequest = new LikesRequest(this);
     likesRequest.offset = 0;
     likesRequest.limit  = 40;
-    ConnectionService.sendRequest(likesRequest,new Handler() {
+    likesRequest.callback(new ApiHandler() {
       @Override
-      public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        Response resp = (Response)msg.obj;
-        mLikesList.addAll(resp.getLikes());
+      public void success(Response response) {
+        mLikesList.addAll(response.getLikes());
         create();
         mGallery.onRefreshComplete();
         mProgressDialog.cancel();
       }
-    });
+      @Override
+      public void fail(int codeError) {
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    mGalleryManager.restart();
   }
   //---------------------------------------------------------------------------
   @Override

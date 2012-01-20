@@ -1,6 +1,10 @@
 package com.sonetica.topface;
 
 import java.util.LinkedList;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.content.Context;
+import android.content.SharedPreferences;
 import com.sonetica.topface.data.City;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.data.Like;
@@ -12,18 +16,62 @@ import com.sonetica.topface.data.TopUser;
  */
 public class Data {
   // Data
+  public static String SSID;  // ключ для запросов к TP серверу
+  // Data Profile
+  public static int mRates;
+  public static int mMessages;
+  public static int mLikes;
+  public static int mPower;
+  public static int mMoney;
+  
   public static LinkedList<Inbox>   s_InboxList;
   public static LinkedList<Like>    s_LikesList;
   public static LinkedList<TopUser> s_TopsList;
   public static LinkedList<Rate>    s_RatesList;
   public static LinkedList<City>    s_CitiesList;
   //---------------------------------------------------------------------------
-  public static void init() {
+  public static void init(Context context) {
+    
+    SSID = Data.loadSSID(context);
+    
     s_InboxList  = new LinkedList<Inbox>();
     s_LikesList  = new LinkedList<Like>();
     s_TopsList   = new LinkedList<TopUser>();
     s_RatesList  = new LinkedList<Rate>();
     s_CitiesList = new LinkedList<City>();
+  }
+  //---------------------------------------------------------------------------
+  public static void updateNews(String data) {
+    JSONObject obj = null;
+    try {
+      obj = new JSONObject(data);
+      mRates    = obj.getInt("unread_rates");
+      mLikes    = obj.getInt("unread_likes");
+      mMessages = obj.getInt("unread_messages");
+      mPower = 0;
+      mMoney = 0;
+    } catch(JSONException e) {
+      mRates = mLikes = mMessages = mMoney = mPower = 0;
+    }
+  }
+  //---------------------------------------------------------------------------
+  public static void saveSSID(Context context,String ssid) {
+    if(ssid==null)
+      ssid = "";
+    
+    SharedPreferences preferences   = context.getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = preferences.edit();
+    editor.putString(context.getString(R.string.s_ssid),ssid);
+    editor.commit();
+    
+    SSID = ssid;
+  }
+  //---------------------------------------------------------------------------
+  public static String loadSSID(Context context) {
+    SharedPreferences preferences = context.getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    SSID = preferences.getString(context.getString(R.string.s_ssid),"");
+    
+    return SSID;
   }
   //---------------------------------------------------------------------------
   public static void clear() {

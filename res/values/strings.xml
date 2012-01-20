@@ -21,8 +21,7 @@
   <string name="dashbrd_btn_chats">Диалоги</string>
   <string name="dashbrd_btn_tops">Топы</string>
   <string name="dashbrd_btn_profile">Профиль</string>
-  
-            
+              
   <!-- Chat Activity -->
   <string name="chat_header_title">Диалоги</string>
   <string name="chat_gift">Вам прислали подарок.</string> 
@@ -36,8 +35,8 @@
   <!-- Profile Activity -->
   <string name="profile_header_title">Профиль</string>
   
-  <!-- Photorating Activity -->
-  <string name="photorating_header_title">Оценка фото</string>
+  <!-- Dating Activity -->
+  <string name="dating_header_title">Оценка фото</string>
   
   <!-- Likes Activity -->
   <string name="likes_header_title">Я нравлюсь</string>
@@ -47,12 +46,4 @@
   
   <!-- Rateit Activity -->
   <string name="rateit_header_title">Оцени Это !</string>
-  
-  <!-- Systems  -->
-  <string name="s_ssid">ssid</string>
-  <string name="s_tops_sex">tops_sex</string>
-  <string name="s_tops_city_id">tops_city_id</string>
-  <string name="s_tops_city_position">tops_city_position</string>
-  <string name="s_tops_city_name">tops_city_name</string>
-  
 </resources>

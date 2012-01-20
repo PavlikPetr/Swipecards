@@ -57,6 +57,7 @@ public class Http {
   private static String httpRequest(int typeRequest, String request, String postParams,boolean isJson) {
     Debug.log(TAG,"req:"+postParams);
     
+    String response = null;
     HttpURLConnection httpConnection = null;
     BufferedReader buffReader = null;
     try {
@@ -87,17 +88,17 @@ public class Http {
       // чтение ответа
       buffReader = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
       
-      StringBuilder response = new StringBuilder();
+      StringBuilder responseBuilder = new StringBuilder();
       String line;
       while((line=buffReader.readLine()) != null)
-        response.append(line);
-      
-      return response.toString();
+        responseBuilder.append(line);
+      response = responseBuilder.toString();
     } catch(MalformedURLException e) {
       Debug.log(TAG,"url is wrong:" + e);
     } catch(IOException e) {
       Debug.log(TAG,"io is fail #1:" + e);
     } finally {
+      Debug.log(TAG,"resp:" + response);
       if(buffReader!=null)
         try {
           buffReader.close();
@@ -107,7 +108,7 @@ public class Http {
       if(httpConnection!=null)
         httpConnection.disconnect();
     }
-    return null;
+    return response;
   }
   //---------------------------------------------------------------------------
   //  запускается в UI потоке, отдельный поток создавать не нужно

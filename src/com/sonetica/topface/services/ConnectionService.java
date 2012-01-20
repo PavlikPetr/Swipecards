@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.*;
 import android.os.Process;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.net.AuthRequest;
 import com.sonetica.topface.net.Http;
@@ -16,7 +17,6 @@ import com.sonetica.topface.utils.Debug;
 
 public class ConnectionService extends Service {
   // Data
-  private static String URL = "http://api.topface.ru/?v=1";
   private static ServiceHandler serviceHandler;
   //---------------------------------------------------------------------------
   // class ServiceHandler
@@ -38,8 +38,8 @@ public class ConnectionService extends Service {
   }//ServiceHandler
   //---------------------------------------------------------------------------
   // формирование запроса внутри приложения к коннект сервису
-  public static void sendRequest0(ApiRequest request, Handler handler) {
-    request.ssid = Global.SSID;
+  public static void sendRequest(ApiRequest request, Handler handler) {
+    request.ssid = Data.SSID;
     serviceHandler.sendMessage(Message.obtain(null,0,new Packet(request,handler)));
   }
   //---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ public class ConnectionService extends Service {
         Response ssidResponse = (Response)msg.obj;
         if(ssidResponse.code==0) {
           String ssid = ssidResponse.getSSID();
-          Global.saveSSID(ConnectionService.this,ssid);
+          Data.saveSSID(ConnectionService.this,ssid);
           packet.mRequest.ssid = ssid;
           Response response = new Response(sendPacket(packet));
           packet.sendMessage(Message.obtain(null,0,response));
@@ -83,7 +83,7 @@ public class ConnectionService extends Service {
   // отправка пакета на сервер TP
   private String sendPacket(Packet packet) {
     String sResponse = null;
-    sResponse =  Http.httpSendTpRequest(URL,packet.toString());
+    sResponse =  Http.httpSendTpRequest(Global.API_URL,packet.toString());
     Debug.log(this,"resp:" + sResponse);
     return sResponse;
   }

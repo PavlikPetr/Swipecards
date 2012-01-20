@@ -1,7 +1,5 @@
 package com.sonetica.topface;
 
-import com.sonetica.topface.services.ConnectionService;
-import com.sonetica.topface.services.StatisticService;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.dashboard.DashboardActivity;
 import com.sonetica.topface.utils.Debug;
@@ -20,15 +18,16 @@ public class MainActivity extends Activity {
     setContentView(R.layout.ac_main);
     Debug.log(this,"+onCreate");
     
-    startService(new Intent(this,ConnectionService.class));
-    startService(new Intent(this,StatisticService.class));
-
-    if(Global.loadSSID(this).length()>0)
+    //startService(new Intent(this,ConnectionService.class));
+    //startService(new Intent(this,StatisticService.class));
+    
+    if(Data.SSID.length()>0)
       startActivity(new Intent(this,DashboardActivity.class));
     else
       startActivity(new Intent(this,SocialActivity.class));
     
     finish();    
+    
   }
   //---------------------------------------------------------------------------
   @Override

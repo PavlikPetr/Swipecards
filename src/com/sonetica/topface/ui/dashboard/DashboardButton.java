@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
@@ -18,24 +19,25 @@ public class DashboardButton extends Button {
   // Data
   public int mNotify;
   private static Paint mPaint;
-  private Bitmap mRedInformer;
+  private Bitmap mRedNews;
   static {
     mPaint = new Paint();
     mPaint.setTextSize(18);
+    mPaint.setColor(Color.WHITE);
     mPaint.setTypeface(Typeface.DEFAULT_BOLD);
   }
   //---------------------------------------------------------------------------
   public DashboardButton(Context context,AttributeSet attrs) {
     super(context,attrs);
     mNotify = -1;
-    mRedInformer = BitmapFactory.decodeResource(getResources(),R.drawable.im_red_informer);
+    mRedNews = BitmapFactory.decodeResource(getResources(),R.drawable.im_red_informer);
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     if(mNotify>0) {
-      canvas.drawBitmap(mRedInformer,5,5,mPaint);
+      canvas.drawBitmap(mRedNews,5,5,mPaint);
       canvas.drawText(String.valueOf(mNotify),30,30,mPaint);
     }
   }

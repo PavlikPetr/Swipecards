@@ -2,16 +2,18 @@ package com.sonetica.topface.net;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
 public class CitiesRequest extends ApiRequest {
   // Data
-  public String service = "cities";
-  public String type = "";
-  // Methods
+  private String service = "cities";
+  public  String type;  // тип выборки перечня городов. Пока поддерживается только “top”
+  //---------------------------------------------------------------------------
   public CitiesRequest(Context context) {
     super(context);
   }
+  //---------------------------------------------------------------------------
   @Override
   public String toString() {
     JSONObject root = new JSONObject();
@@ -19,8 +21,11 @@ public class CitiesRequest extends ApiRequest {
       root.put("service",service);
       root.put("ssid",ssid);
       root.put("data",new JSONObject().put("type",type));
-    } catch(JSONException e) {}
+    } catch(JSONException e) {
+      Debug.log(this,"Wrong request compiling: " + e);
+    }
     return root.toString();
   }
+  //---------------------------------------------------------------------------
 }
 

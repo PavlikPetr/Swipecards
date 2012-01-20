@@ -1,12 +1,11 @@
 package com.sonetica.topface.ui.tops;
 
-import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
+import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.City;
 import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.net.*;
-import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.ui.GalleryManager;
 import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.utils.Debug;
@@ -18,8 +17,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -35,18 +32,19 @@ import java.util.LinkedList;
 public class TopsActivity extends Activity {
   // Data
   private GridView mGallery;
+  //private TopsGridAdapterEx mGridAdapter;
   private TopsGridAdapter mGridAdapter;
   private GalleryManager  mGalleryManager;
   private LinkedList<TopUser> mTopsList;
-  private ProgressDialog  mProgressDialog;
   private LinkedList<City> mCitiesList;
+  private ProgressDialog  mProgressDialog;
   private Button mCityButton;
   // Action Data
   private class ActionData {
     public int sex; 
     public int city_id;
-    public String city_name;
     public int city_popup_position;
+    public String city_name;
   }
   private ActionData mActionData;
   // Constats
@@ -69,7 +67,7 @@ public class TopsActivity extends Activity {
     
     // Восстановление последних параметров
     mActionData = new ActionData();
-    SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     mActionData.sex = preferences.getInt(getString(R.string.s_tops_sex),GIRLS);
     mActionData.city_id = preferences.getInt(getString(R.string.s_tops_city_id),MOSCOW);
     mActionData.city_name = preferences.getString(getString(R.string.s_tops_city_name),getString(R.string.default_city));
@@ -111,25 +109,28 @@ public class TopsActivity extends Activity {
     mGallery = (GridView)findViewById(R.id.grdTopsGallary);
     mGallery.setAnimationCacheEnabled(false);
     mGallery.setScrollingCacheEnabled(false);
+    /*
     mGallery.setOnScrollListener(new OnScrollListener() {
       @Override
       public void onScrollStateChanged(AbsListView view,int scrollState) {
         if(scrollState==SCROLL_STATE_IDLE) {
-          mGalleryManager.mRunning=true;
+          mGalleryManager.mRunning = true;
           mGallery.invalidateViews();
         } else
-          mGalleryManager.mRunning=false;
+          mGalleryManager.mRunning = false;
       }
       @Override
       public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
       }
     });
+    */
     mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mGalleryManager.stop();
         Intent intent = new Intent(TopsActivity.this,AlbumActivity.class);
         intent.putExtra(AlbumActivity.INTENT_USER_ID,mTopsList.get(position).uid);
-        startActivity(intent);
+        startActivityForResult(intent,0);
       }
     });
     
@@ -145,8 +146,11 @@ public class TopsActivity extends Activity {
   //---------------------------------------------------------------------------
   private void create() {
     mGalleryManager = new GalleryManager(TopsActivity.this,mTopsList);
+    //mGridAdapter    = new TopsGridAdapterEx(TopsActivity.this,mTopsList);
     mGridAdapter    = new TopsGridAdapter(TopsActivity.this,mGalleryManager);
     mGallery.setAdapter(mGridAdapter);
+    
+    //mGallery.setOnScrollListener(mGridAdapter);
   }
   //---------------------------------------------------------------------------
   private void release() {
@@ -166,17 +170,18 @@ public class TopsActivity extends Activity {
     TopsRequest topRequest = new TopsRequest(this);
     topRequest.sex  = mActionData.sex;
     topRequest.city = mActionData.city_id;
-    ConnectionService.sendRequest(topRequest,new Handler() {
+    topRequest.callback(new ApiHandler() {
       @Override
-      public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        Response resp = (Response)msg.obj;
+      public void success(Response response) {
         mTopsList.clear();
-        mTopsList.addAll(resp.getUsers());
+        mTopsList.addAll(response.getUsers());
         create();
         mProgressDialog.cancel();
       }
-    });
+      @Override
+      public void fail(int codeError) {
+      }
+    }).exec();
   }
   //---------------------------------------------------------------------------
   private void choiceCity() {
@@ -187,16 +192,17 @@ public class TopsActivity extends Activity {
     mProgressDialog.show();
     CitiesRequest citiesRequest = new CitiesRequest(this);
     citiesRequest.type = "top";
-    ConnectionService.sendRequest(citiesRequest,new Handler() {
+    citiesRequest.callback(new ApiHandler() {
       @Override
-      public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        Response resp = (Response)msg.obj;
-        mCitiesList.addAll(resp.getCities());
+      public void success(Response response) {
+        mCitiesList.addAll(response.getCities());
         mProgressDialog.cancel();
         showCitiesDialog();
       }
-    });
+      @Override
+      public void fail(int codeError) {
+      }
+    }).exec();
   }
   //---------------------------------------------------------------------------
   void showCitiesDialog() {
@@ -221,11 +227,16 @@ public class TopsActivity extends Activity {
     AlertDialog alert = builder.create();
     alert.show();
   }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    mGalleryManager.restart();
+  }
   //---------------------------------------------------------------------------  
   @Override
   protected void onDestroy() {
     // Сохранение параметров
-    SharedPreferences preferences = getSharedPreferences(App.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = preferences.edit();
     editor.putInt(getString(R.string.s_tops_sex),mActionData.sex);
     editor.putInt(getString(R.string.s_tops_city_id),mActionData.city_id);

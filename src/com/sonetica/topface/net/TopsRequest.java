@@ -2,17 +2,19 @@ package com.sonetica.topface.net;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
 public class TopsRequest extends ApiRequest {
   // Data
-  public String service = "top";
-  public int sex;
-  public int city;
-  // Methods
+  private String service = "top";
+  public  int sex;   // пол самых красивых 
+  public  int city;  // город самых красивых
+  //---------------------------------------------------------------------------
   public TopsRequest(Context context) {
     super(context);
   }
+  //---------------------------------------------------------------------------
   @Override
   public String toString() {
     JSONObject root = new JSONObject();
@@ -20,7 +22,10 @@ public class TopsRequest extends ApiRequest {
       root.put("service",service);
       root.put("ssid",ssid);
       root.put("data",new JSONObject().put("sex",sex).put("city",city));
-    } catch(JSONException e) {}
+    } catch(JSONException e) {
+      Debug.log(this,"Wrong request compiling: " + e);
+    }
     return root.toString();
   }
+  //---------------------------------------------------------------------------
 }

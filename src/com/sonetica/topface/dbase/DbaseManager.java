@@ -1,12 +1,5 @@
 package com.sonetica.topface.dbase;
 
-import java.util.ArrayList;
-import com.sonetica.topface.utils.Debug;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 /*
  *   Менеджер для работы с базой данных

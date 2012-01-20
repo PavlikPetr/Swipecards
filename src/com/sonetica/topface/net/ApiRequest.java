@@ -1,5 +1,6 @@
 package com.sonetica.topface.net;
 
+import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.utils.Debug;
@@ -8,14 +9,13 @@ import android.os.Message;
 
 public abstract class ApiRequest {
   // Data
-  public  String service = "";
-  public  String ssid = "";
-  private Context mContext;
+  public  String     ssid;
+  private Context    mContext;
   private ApiHandler mHandler;
-  private static String URL = "http://api.topface.ru/?v=1";
   //---------------------------------------------------------------------------
   public ApiRequest(Context context) {
     mContext = context;
+    ssid = "";
   }
   //---------------------------------------------------------------------------
   public ApiRequest callback(ApiHandler handler) {
@@ -24,10 +24,12 @@ public abstract class ApiRequest {
   }
   //---------------------------------------------------------------------------
   public void exec() {
-    if(mHandler==null)
+    if(mHandler==null) {
+      Debug.log(this,"Handler not found");
       return;
-    ssid = Global.SSID;
-    Response response = new Response(Http.httpSendTpRequest(URL,this.toString()));
+    }
+    ssid = Data.SSID;
+    Response response = new Response(Http.httpSendTpRequest(Global.API_URL,this.toString()));
     if(response.code==3)
       reAuth();
     else
@@ -40,18 +42,20 @@ public abstract class ApiRequest {
 
     final AuthToken.Token token   = new AuthToken(mContext).getToken();
     final AuthRequest authRequest = new AuthRequest(mContext);
-    authRequest.platform = token.getSocialNet();
-    authRequest.sid      = token.getUserId();
-    authRequest.token    = token.getTokenKey();
+    authRequest.platform   = token.getSocialNet();
+    authRequest.sid        = token.getUserId();
+    authRequest.token      = token.getTokenKey();
+    authRequest.locale     = Global.LOCALE;
+    authRequest.clienttype = Global.CLIENT_TYPE;
     authRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        Global.saveSSID(mContext,response.getSSID());
+        Data.saveSSID(mContext,response.getSSID());
         ApiRequest.this.exec();
       }
       @Override
       public void fail(int codeError) {
-        // ???
+        Debug.log(this,"Getting SSID is wrong");
       }
     }).exec();
   }
@@ -60,24 +64,3 @@ public abstract class ApiRequest {
   public abstract String toString();
   //---------------------------------------------------------------------------
 }
-
-/*
-public String toString() {
-  JSONObject root = new JSONObject();
-  JSONObject data = new JSONObject();
-  try {
-    Field[] fields = this.getClass().getFields();
-    for(Field field : fields) {
-      if(field.getName().equals("service") || field.getName().equals("ssid"))
-        root.put(field.getName(),field.get(this));
-      else
-        data.put(field.getName(),field.get(this));
-    }
-    root.put("data",data);
-  } catch(JSONException e) {} 
-    catch(IllegalArgumentException e) {} 
-    catch(IllegalAccessException e) {}
-
-  return root.toString();
-}
-*/

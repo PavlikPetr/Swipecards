@@ -1,3 +1,5 @@
+
+
 package com.sonetica.topface;
 
 import com.sonetica.topface.utils.Debug;
@@ -7,15 +9,25 @@ import android.app.Application;
  *  Контекст приложения
  */
 public class App extends Application {
+  // Data
+  public static int     state;    // стейт работы приложения
+  public static boolean cached;   // отображать данные из кеша
+  public static boolean isActive; // активность для потока получения непрочитанных данных
+  // Working states
+  public static int T_RUNNING  = 0;
+  public static int T_SLEEPING = 1;
   // Constants
   public static final String TAG = "TopFace";
-  public static final String SHARED_PREFERENCES_TAG = "preferences";
   //---------------------------------------------------------------------------
   @Override
   public void onCreate() {
     super.onCreate();
     Debug.log(this,"=======================================");
     Debug.log(this,"+onCreate");
+    
+    // App initialization
+    Global.init(this);
+    Data.init(this);
   }
   //---------------------------------------------------------------------------
   @Override

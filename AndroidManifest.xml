@@ -31,16 +31,16 @@
         
     <!-- activities -->
     <activity android:name=".ui.dashboard.DashboardActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ui.rates.RatesActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ui.chat.ChatActivity"   android:screenOrientation="portrait"/>
-    <activity android:name=".ui.tops.TopsActivity"   android:screenOrientation="portrait"/>
-    <activity android:name=".ui.album.AlbumActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ui.likes.LikesActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ui.PhotoratingActivity" android:screenOrientation="portrait"/>
-    <activity android:name=".ui.ProfileActivity"     android:screenOrientation="portrait"/>
+    <activity android:name=".ui.rates.RatesActivity"   android:screenOrientation="portrait"/>
+    <activity android:name=".ui.chat.ChatActivity"     android:screenOrientation="portrait"/>
+    <activity android:name=".ui.tops.TopsActivity"     android:screenOrientation="portrait"/>
+    <activity android:name=".ui.album.AlbumActivity"   android:screenOrientation="portrait"/>
+    <activity android:name=".ui.likes.LikesActivity"   android:screenOrientation="portrait"/>
+    <activity android:name=".ui.dating.DatingActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".ui.ProfileActivity"       android:screenOrientation="portrait"/>
     
     <!-- preferences activity -->
-    <activity android:name=".ui.PreferencesActivity" android:screenOrientation="portrait"/>
+    <activity android:name=".ui.PreferencesActivity"   android:screenOrientation="portrait"/>
     
     <!-- social activity -->
     <activity android:name=".social.SocialActivity"    android:screenOrientation="portrait"/>

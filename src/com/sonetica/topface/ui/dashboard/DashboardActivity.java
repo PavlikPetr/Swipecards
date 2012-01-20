@@ -1,17 +1,17 @@
 package com.sonetica.topface.ui.dashboard;
 
+import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
-import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
+import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.social.SocialActivity;
-import com.sonetica.topface.ui.PhotoratingActivity;
 import com.sonetica.topface.ui.PreferencesActivity;
 import com.sonetica.topface.ui.ProfileActivity;
 import com.sonetica.topface.ui.chat.ChatActivity;
+import com.sonetica.topface.ui.dating.DatingActivity;
 import com.sonetica.topface.ui.likes.LikesActivity;
 import com.sonetica.topface.ui.rates.RatesActivity;
 import com.sonetica.topface.ui.tops.TopsActivity;
@@ -31,7 +31,6 @@ import android.widget.Toast;
  */
 public class DashboardActivity extends Activity implements View.OnClickListener {
   // Data
-  private volatile boolean mIsActive;
   private NotifyHandler    mNotifyHandler;
   private DashboardButton  mLikesButton;
   private DashboardButton  mRatesButton;
@@ -55,23 +54,20 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     ((DashboardButton)findViewById(R.id.btnDashbrdTops)).setOnClickListener(this);
     ((DashboardButton)findViewById(R.id.btnDashbrdProfile)).setOnClickListener(this);
     
-    if(!Http.isOnline(this)){
+    if(!App.cached && !Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }
     
-    Data.init();
-    
     mNotifyHandler = new NotifyHandler();
-    //mNotifyHandler.sendEmptyMessage(0);
-    
+    mNotifyHandler.sendEmptyMessage(0);
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStart() {
     super.onStart();
     
-    if(Global.SSID.length()>0)
+    if(Data.SSID.length()>0)
       return;
 
     startActivity(new Intent(this,SocialActivity.class));
@@ -81,29 +77,27 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onResume() {
     super.onResume();
-    mIsActive = true;
+    redNewsInvalidate();
+    App.isActive = true;
   }
   //---------------------------------------------------------------------------
   @Override
   public void onClick(View view) {  
-    if(!Http.isOnline(this)){
+    if(!App.cached && !Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }
     switch(view.getId()) {
       case R.id.btnDashbrdPhotorating: {
-        startActivity(new Intent(this,PhotoratingActivity.class));
+        startActivity(new Intent(this,DatingActivity.class));
       } break;
       case R.id.btnDashbrdLikeme: {
-        mLikesButton.mNotify = 0;
         startActivity(new Intent(this,LikesActivity.class));
       } break;
       case R.id.btnDashbrdRating: {
-        mRatesButton.mNotify = 0;
         startActivity(new Intent(this,RatesActivity.class));
       } break;
       case R.id.btnDashbrdChat: {
-        mChatButton.mNotify = 0;
         startActivity(new Intent(this,ChatActivity.class));
       } break;
       case R.id.btnDashbrdTops: {
@@ -119,7 +113,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onPause() {
     super.onPause();
-    mIsActive = false;
+    App.isActive = false;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -145,6 +139,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     switch (item.getItemId()) {
       case MENU_ONE:
         Toast.makeText(this,getString(R.string.dashbrd_menu_one),Toast.LENGTH_SHORT).show();
+        App.cached = !App.cached;
         break;
       case MENU_PREFERENCES:
         startActivity(new Intent(this,PreferencesActivity.class));
@@ -156,42 +151,46 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   // NotifyHandler
   //---------------------------------------------------------------------------
   class NotifyHandler extends Handler {
+    private int sleep_time = 1000*15;
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
       if(mNotifyHandler==null)
         return;
-      if(!mIsActive)
-        this.sendEmptyMessageDelayed(0,1000*8);
+      if(!App.isActive)
+        this.sendEmptyMessageDelayed(0,sleep_time);
       else {
         ProfileRequest profileRequest = new ProfileRequest(DashboardActivity.this,true);
-        ConnectionService.sendRequest(profileRequest,new Handler() {
+        profileRequest.callback(new ApiHandler() {
           @Override
-          public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            final Response resp = (Response)msg.obj;
+          public void success(final Response response) {
             final Activity context = DashboardActivity.this;
             if(context!=null)
               context.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                  String s = resp.getProfile();
-                  Toast.makeText(context,s,Toast.LENGTH_SHORT).show();
-                  
-                  mLikesButton.mNotify++;
-                  mLikesButton.invalidate();
-                  mRatesButton.mNotify++;
-                  mRatesButton.invalidate();
-                  mChatButton.mNotify++;
-                  mChatButton.invalidate();
-                  
-                  NotifyHandler.this.sendEmptyMessageDelayed(0,1000*5);
+                  Data.updateNews(response.getProfile());
+                  redNewsInvalidate();
+                  Toast.makeText(context,"updated",Toast.LENGTH_SHORT).show();
+                  NotifyHandler.this.sendEmptyMessageDelayed(0,sleep_time);
                 }
               });
           }
-        });
+          @Override
+          public void fail(int codeError) {
+          }
+        }).exec();
       }
     }
+  }
+  //---------------------------------------------------------------------------
+  private void redNewsInvalidate() {
+    mLikesButton.mNotify = Data.mLikes;
+    mLikesButton.invalidate();
+    mRatesButton.mNotify = Data.mRates;
+    mRatesButton.invalidate();
+    mChatButton.mNotify = Data.mMessages;
+    mChatButton.invalidate();    
   }
   //---------------------------------------------------------------------------
 }

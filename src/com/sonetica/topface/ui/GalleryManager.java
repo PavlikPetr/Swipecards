@@ -7,12 +7,10 @@ import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
-import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.Device;
-import com.sonetica.topface.utils.MemoryCache;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Pair;
 import android.widget.ImageView;
 
 /*
@@ -20,7 +18,7 @@ import android.widget.ImageView;
  */
 public class GalleryManager {
   // Data
-  private MemoryCache mMemoryCache;
+  private CacheManager mCacheManager;
   private ExecutorService mThreadsPool;
   private LinkedList<? extends AbstractData> mData;
   private HashMap<ImageView,Integer> mLinkCache;
@@ -36,9 +34,9 @@ public class GalleryManager {
   }
   //---------------------------------------------------------------------------
   public GalleryManager(Context context,LinkedList<? extends AbstractData> dataList,int threadCount) {
-    mData = dataList;
+    mData         = dataList;
     mThreadCount  = threadCount;
-    mMemoryCache  = new MemoryCache();
+    mCacheManager = new CacheManager(context);
     mLinkCache    = new HashMap<ImageView,Integer>();
     mThreadsPool  = Executors.newFixedThreadPool(mThreadCount);
     mBitmapWidth  = Device.getDisplay(context).getWidth()/4;
@@ -49,54 +47,73 @@ public class GalleryManager {
     return mData.get(position);
   }
   //---------------------------------------------------------------------------
-  public void getImage(final int position,ImageView imageView) {
+  public void getImage(final int position,final ImageView imageView) {
     mLinkCache.put(imageView,position);
+    /*
     if(!mRunning) {
       imageView.setImageResource(R.drawable.im_black_square);
       return;
     }
-    Bitmap bitmap = mMemoryCache.get(position);
+    */
+    final Bitmap bitmap = mCacheManager.get(position,mData.get(position).getLink());
     if(bitmap!=null)
       imageView.setImageBitmap(bitmap);
     else {
-      setImageToQueue(new Pair<ImageView,Integer>(imageView,position));
+      setImageToQueue(position,imageView);
       imageView.setImageResource(R.drawable.im_black_square);
     }
   }
   //---------------------------------------------------------------------------
-  private void setImageToQueue(final Pair<ImageView,Integer> data) {
+  private void setImageToQueue(final int position,final ImageView imageView) {
+    if(mThreadsPool.isShutdown()) {
+      imageView.post(new Runnable() {
+        @Override
+        public void run() {
+          imageView.setImageResource(R.drawable.im_black_square);
+        }
+      });
+      return;
+    }
     mThreadsPool.execute(new Runnable() {
       @Override
       public void run() {
-        if(isViewReused(data))
+        if(isViewReused(position,imageView))
           return;
-        Bitmap rawBitmap = Http.bitmapLoader(mData.get(data.second).getLink());
+        Bitmap rawBitmap = Http.bitmapLoader(mData.get(position).getLink());
         if(rawBitmap==null)
           return;
-        if(isViewReused(data))
+        if(isViewReused(position,imageView))
           return;
         final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
-        mMemoryCache.put(data.second,scaledBitmap);
-        data.first.post(new Runnable() {
+        mCacheManager.put(position,mData.get(position).getLink(),scaledBitmap);
+        imageView.post(new Runnable() {
           @Override
           public void run() {
-            if(isViewReused( data))
+            if(isViewReused(position,imageView))
               return;
             if(scaledBitmap!=null)
-              data.first.setImageBitmap(mMemoryCache.get(data.second));
+              imageView.setImageBitmap(mCacheManager.get(position,mData.get(position).getLink()));
             else
-              data.first.setImageResource(R.drawable.im_black_square);
+              imageView.setImageResource(R.drawable.im_black_square);
           }
         });
       }
     });
   }
   //-------------------------------------------------------------------------
-  boolean isViewReused(Pair<ImageView,Integer> data){
-    int index=mLinkCache.get(data.first);
-    if(index!=data.second)
+  boolean isViewReused(int position,ImageView imageView){
+    int index = mLinkCache.get(imageView);
+    if(index!=position)
       return true;
     return false;
+  }
+  //---------------------------------------------------------------------------
+  public void restart() {
+    mThreadsPool = Executors.newFixedThreadPool(mThreadCount);
+  }
+  //---------------------------------------------------------------------------
+  public void stop() {
+    mThreadsPool.shutdown();
   }
   //---------------------------------------------------------------------------
   public int size() {
@@ -105,7 +122,7 @@ public class GalleryManager {
   //---------------------------------------------------------------------------
   public void release() {
     mThreadsPool.shutdown();
-    mMemoryCache.clear();
+    //mCacheManager.clear();
   }
   //---------------------------------------------------------------------------
 }

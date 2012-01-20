@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <integer name="default_city_id">1</integer>
+  
+  <string name="general_preferences_name">preferences</string>
+  <string name="token_preferences_name">auth-token</string>
+  <string name="api_url">http://api.topface.ru/?v=1</string>
+
+  <!-- External directory -->
+  <string name="sdcard_root_path">Android/data/com.sonetica.topface/</string>
+  <string name="sdcard_cache_path">cache/</string>
+  <string name="sdcard_data_path">data</string>
+  <string name="sdcard_images_path">images</string>
+  
+  <!-- Resources name -->  
+  <string name="s_ssid">ssid</string>
+  <string name="s_tops_sex">tops_sex</string>
+  <string name="s_tops_city_id">tops_city_id</string>
+  <string name="s_tops_city_position">tops_city_position</string>
+  <string name="s_tops_city_name">tops_city_name</string>
+  
 </resources>

@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
 import com.sonetica.topface.net.AlbumRequest;
+import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.widget.TextView;
 
 public class AlbumActivity extends Activity {
@@ -54,18 +52,19 @@ public class AlbumActivity extends Activity {
   private void update(int uid) {
     AlbumRequest albumRequest = new AlbumRequest(this);
     albumRequest.uid  = uid;
-    ConnectionService.sendRequest(albumRequest,new Handler() {
+    albumRequest.callback(new ApiHandler() {
       @Override
-      public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        Response resp = (Response)msg.obj;
-        mAlbums = resp.getAlbum();
+      public void success(Response response) {
+        mAlbums = response.getAlbum();
         mGalleryManager = new AlbumGalleryManager(AlbumActivity.this,mAlbums);
         mGalleryAdapter = new AlbumGalleryAdapter(AlbumActivity.this,mGalleryManager);
         mGallery.setAdapter(mGalleryAdapter);
         mProgressDialog.cancel();
       }
-    });
+      @Override
+      public void fail(int codeError) {
+      }
+    }).exec();
   }
   //---------------------------------------------------------------------------  
   @Override

@@ -1,5 +1,6 @@
 package com.sonetica.topface.ui;
 
+import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.social.SocialWebActivity;
@@ -29,7 +30,7 @@ public class PreferencesActivity extends PreferenceActivity {
     findPreference("pref_login").setOnPreferenceClickListener(
       new Preference.OnPreferenceClickListener() {
         public boolean onPreferenceClick(Preference preference) {
-          SharedPreferences preferences = getSharedPreferences(AuthToken.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+          SharedPreferences preferences = getSharedPreferences(Global.TOKEN_PREFERENCES_TAG, Context.MODE_PRIVATE);
           String sn = preferences.getString(AuthToken.KEY_SOCIAL_NETWORK,"");
           if(sn.length()>0) {
             Intent intent = new Intent(PreferencesActivity.this, SocialWebActivity.class);

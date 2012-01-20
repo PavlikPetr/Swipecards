@@ -1,5 +1,6 @@
 package com.sonetica.topface.social;
 
+import com.sonetica.topface.Global;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -36,18 +37,17 @@ final public class AuthToken {
   private SharedPreferences mPreferences;
   // Constants
   public static final String DEFAULT_VALUE = "";
-  public static final String SHARED_PREFERENCES_TAG = "auth-token";
   // Auth Types
   public static final int AUTH_COMPLETE = 0;
   public static final int AUTH_ERROR    = 1;
   // Keys
   public static final String KEY_SOCIAL_NETWORK = "sn";
-  public static final String KEY_USER_ID  = "user_id";
-  public static final String KEY_TOKEN    = "token";
-  public static final String KEY_EXPIRES  = "expires_in";
+  public static final String KEY_USER_ID        = "user_id";
+  public static final String KEY_TOKEN          = "token";
+  public static final String KEY_EXPIRES        = "expires_in";
   //---------------------------------------------------------------------------
   public AuthToken(Context context) {
-    mPreferences = context.getSharedPreferences(SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    mPreferences = context.getSharedPreferences(Global.TOKEN_PREFERENCES_TAG, Context.MODE_PRIVATE);
   }
   //---------------------------------------------------------------------------
   public Token setToken(String  snType, String  userId, String  tokenKey, String  expiresIn) {

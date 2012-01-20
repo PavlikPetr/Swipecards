@@ -1,14 +1,9 @@
 package com.sonetica.topface.ui;
 
-import android.os.Handler;
-import android.os.Message;
 import com.sonetica.topface.R;
-import com.sonetica.topface.R.id;
-import com.sonetica.topface.R.layout;
-import com.sonetica.topface.R.string;
+import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.graphics.Color;
@@ -35,21 +30,22 @@ public class ProfileActivity extends Activity {
     tvProfile.setTextColor(Color.WHITE);
     
     ProfileRequest profileRequest = new ProfileRequest(this,false);
-    ConnectionService.sendRequest(profileRequest,new Handler() {
+    profileRequest.callback(new ApiHandler() {
       @Override
-      public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        final Response resp = (Response)msg.obj;
+      public void success(final Response response) {
         ProfileActivity.this.runOnUiThread(new Runnable() {
           @Override
           public void run() {
-            String s = resp.getProfile();
+            String s = response.getProfile();
             tvProfile.setText(s);
             tvProfile.invalidate();
           }
         });
       }
-    });
+      @Override
+      public void fail(int codeError) {
+      }
+    }).exec();
   }
   //---------------------------------------------------------------------------
   @Override

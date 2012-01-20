@@ -3,6 +3,7 @@ package com.sonetica.topface.utils;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.regex.Pattern;
+import com.sonetica.topface.Global;
 import android.os.Environment;
 
 /*
@@ -89,6 +90,10 @@ public class FileSystem {
   //---------------------------------------------------------------------------
   public static File getExternalDirectory() {
     return Environment.getExternalStorageDirectory();
+  }
+  //---------------------------------------------------------------------------
+  public static File getExternalCacheDirectory() {
+    return new File(getExternalDirectory(),Global.EXTERANAL_CACHE_DIR);
   }
   //---------------------------------------------------------------------------
   public static boolean isExternalCardAvailable() {

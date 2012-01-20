@@ -4,22 +4,24 @@ import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
+import com.sonetica.topface.module.pull2refresh.PullToRefreshListView;
+import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListener;
+import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.InboxRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.services.ConnectionService;
-import com.sonetica.topface.ui.PullToRefreshBase.OnRefreshListener;
-import com.sonetica.topface.ui.PullToRefreshListView;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
  *            "Диалоги"
@@ -53,7 +55,8 @@ public class ChatActivity extends Activity {
     mListView.setOnRefreshListener(new OnRefreshListener() {
      @Override
      public void onRefresh() {
-       update(mOffset=0,false);
+       //update(0,true);
+       mListView.onRefreshComplete();
      }});
     mListView.setOnTouchListener(new OnTouchListener() {
       @Override
@@ -66,10 +69,14 @@ public class ChatActivity extends Activity {
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
-    if(mInboxList.size()==0)
-      update(mOffset,true);
-    else
+    if(mInboxList.size()==0) {
       create();
+      update(0,false);
+    } else
+      create();
+    
+    // обнуление информера непрочитанных сообщений
+    Data.mMessages = 0;
   }
   //---------------------------------------------------------------------------
   private void create() {
@@ -79,43 +86,57 @@ public class ChatActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void release() {
-    if(mListView!=null) mListView=null;
-    if(mAdapter!=null) mAdapter=null;
-    if(mInboxList!=null) mInboxList=null;
-    if(mProgressDialog!=null) mProgressDialog=null;
+    if(mListView!=null)       mListView = null;
+    if(mAdapter!=null)        mAdapter = null;
+    if(mInboxList!=null)      mInboxList = null;
+    if(mProgressDialog!=null) mProgressDialog = null;
   }
   //---------------------------------------------------------------------------
-  private void update(int offset,final boolean append) {
-    if(append)
-      mProgressDialog.show();
-    InboxRequest inboxRequest = new InboxRequest(this);
+  private void update(final int offset,final boolean isRefresh) {
+    //if(!isRefresh)
+      //mProgressDialog.show();
+    
+    InboxRequest inboxRequest = new InboxRequest(ChatActivity.this);
     inboxRequest.offset = offset;
-    inboxRequest.limit  = LIMIT;
+    inboxRequest.limit  = 20;
+    inboxRequest.callback(new ApiHandler() {
+      @Override
+      public void success(Response response) {
+        LinkedList<Inbox> list = response.getMessages();
+        if(list!=null) {
+          if(isRefresh)
+            for(int i=list.size()-1;i>=0;--i)
+              mInboxList.addFirst(list.get(i));
+          else
+            mInboxList.addAll(list);
+        }
+        
+        mAdapter.notifyDataSetChanged();
+        mListView.onRefreshComplete();
+        //if(mProgressDialog.isShowing())
+          //mProgressDialog.cancel();
+          
+      }
+      @Override
+      public void fail(int codeError) {
+        mListView.onRefreshComplete();
+      }
+    }).exec();
+    
+
+    /*
+    InboxRequest inboxRequest = new InboxRequest(ChatActivity.this);
+    inboxRequest.offset = offset;
+    inboxRequest.limit  = 6;
     ConnectionService.sendRequest(inboxRequest,new Handler() {
       @Override
       public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        Response resp = (Response)msg.obj;
-        
-        LinkedList<Inbox> list = resp.getMessages();
-        if(list!=null)
-          if(append)
-            mInboxList.addAll(list);
-          else {
-            //mInboxList.clear();
-            mInboxList.addAll(list);
-          }
-        //else
-          //mListView.removeFooterView(btnPrevMsg);
-        //if(list.size()<LIMIT)
-          //mIsEndList = true;
-        create();
+        Toast.makeText(ChatActivity.this,"result",Toast.LENGTH_SHORT).show();
+        try {Thread.sleep(1000*4);} catch(InterruptedException e) {}
         mListView.onRefreshComplete();
-        mAdapter.notifyDataSetChanged();
-        if(mProgressDialog.isShowing())
-          mProgressDialog.cancel();
       }
     });
+    */
   }
   //---------------------------------------------------------------------------
   @Override
