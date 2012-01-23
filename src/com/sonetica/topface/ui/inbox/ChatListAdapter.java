@@ -1,7 +1,8 @@
-package com.sonetica.topface.ui.chat;
+package com.sonetica.topface.ui.inbox;
 
 import java.util.LinkedList;
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.History;
 import com.sonetica.topface.data.Inbox;
 import android.content.Context;
 import android.view.View;
@@ -12,9 +13,9 @@ import android.widget.TextView;
 public class ChatListAdapter extends BaseAdapter {
   // Data
   private Context mContext;
-  private LinkedList<Inbox> mList;
+  private LinkedList<History> mList;
   //---------------------------------------------------------------------------
-  public ChatListAdapter(Context context,LinkedList<Inbox> list) {
+  public ChatListAdapter(Context context,LinkedList<History> list) {
     mContext=context;
     mList=list;
   }
@@ -25,7 +26,7 @@ public class ChatListAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   @Override
-  public Inbox getItem(int position) {
+  public History getItem(int position) {
     return mList.get(position);
   }
   //---------------------------------------------------------------------------
@@ -48,8 +49,8 @@ public class ChatListAdapter extends BaseAdapter {
   public View getView(int position, View convertView, ViewGroup parent) {
     if(convertView==null)
       convertView=new TextView(mContext);
-    Inbox   msg = getItem(position);
-    String text = msg.first_name+"("+msg.age+"):"+(msg.text!=null?msg.text:(msg.gift!=null?mContext.getString(R.string.chat_gift):"code"));
+    History msg = getItem(position);
+    String text = msg.text!=null?msg.text:msg.code+"="+msg.gift;
     ((TextView)convertView).setText(text);
     return convertView;
   }

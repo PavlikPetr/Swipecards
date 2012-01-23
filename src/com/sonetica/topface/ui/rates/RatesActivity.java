@@ -84,7 +84,7 @@ public class RatesActivity extends Activity {
     likesRequest.callback(new ApiHandler(){
       @Override
       public void success(Response response) {
-        mRatesList.addAll(response.getRates());
+        mRatesList.addAll(Rate.parse(response));
         create();
         //mListView.onRefreshComplete();
         mAdapter.notifyDataSetChanged();

@@ -3,6 +3,7 @@ package com.sonetica.topface.social;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.Auth;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.AuthRequest;
 import com.sonetica.topface.net.Response;
@@ -76,7 +77,8 @@ public class SocialWebActivity extends Activity {
           @Override
           public void success(Response response) {
             // запись ssid
-            Data.saveSSID(SocialWebActivity.this,response.getSSID());
+            Auth auth = Auth.parse(response);
+            Data.saveSSID(SocialWebActivity.this,auth.ssid);
             setResult(Activity.RESULT_OK);
             finish();
           }

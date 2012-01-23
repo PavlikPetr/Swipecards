@@ -2,6 +2,7 @@ package com.sonetica.topface.net;
 
 import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
+import com.sonetica.topface.data.Auth;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
@@ -42,15 +43,19 @@ public abstract class ApiRequest {
 
     final AuthToken.Token token   = new AuthToken(mContext).getToken();
     final AuthRequest authRequest = new AuthRequest(mContext);
-    authRequest.platform   = token.getSocialNet();
-    authRequest.sid        = token.getUserId();
-    authRequest.token      = token.getTokenKey();
-    authRequest.locale     = Global.LOCALE;
-    authRequest.clienttype = Global.CLIENT_TYPE;
+    authRequest.platform      = token.getSocialNet();
+    authRequest.sid           = token.getUserId();
+    authRequest.token         = token.getTokenKey();
+    authRequest.locale        = Global.LOCALE;
+    authRequest.clienttype    = Global.CLIENT_TYPE;
+    authRequest.clientversion = Global.CLIENT_VERSION;
+    authRequest.clientdevice  = Global.CLIENT_DEVICE;
+    authRequest.clientid      = Global.CLIENT_ID;
     authRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        Data.saveSSID(mContext,response.getSSID());
+        Auth auth = Auth.parse(response);
+        Data.saveSSID(mContext,auth.ssid);
         ApiRequest.this.exec();
       }
       @Override

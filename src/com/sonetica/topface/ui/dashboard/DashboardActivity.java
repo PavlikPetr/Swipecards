@@ -3,6 +3,7 @@ package com.sonetica.topface.ui.dashboard;
 import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.ProfileRequest;
@@ -10,8 +11,8 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.PreferencesActivity;
 import com.sonetica.topface.ui.ProfileActivity;
-import com.sonetica.topface.ui.chat.ChatActivity;
 import com.sonetica.topface.ui.dating.DatingActivity;
+import com.sonetica.topface.ui.inbox.InboxActivity;
 import com.sonetica.topface.ui.likes.LikesActivity;
 import com.sonetica.topface.ui.rates.RatesActivity;
 import com.sonetica.topface.ui.tops.TopsActivity;
@@ -98,7 +99,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         startActivity(new Intent(this,RatesActivity.class));
       } break;
       case R.id.btnDashbrdChat: {
-        startActivity(new Intent(this,ChatActivity.class));
+        startActivity(new Intent(this,InboxActivity.class));
       } break;
       case R.id.btnDashbrdTops: {
         startActivity(new Intent(this,TopsActivity.class));
@@ -169,7 +170,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
               context.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                  Data.updateNews(response.getProfile());
+                  Profile profile = Profile.parse(response,true);
+                  Data.updateNews(profile);
                   redNewsInvalidate();
                   Toast.makeText(context,"updated",Toast.LENGTH_SHORT).show();
                   NotifyHandler.this.sendEmptyMessageDelayed(0,sleep_time);
@@ -178,6 +180,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
           }
           @Override
           public void fail(int codeError) {
+            // ???
           }
         }).exec();
       }

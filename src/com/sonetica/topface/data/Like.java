@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
 
 public class Like extends AbstractData {
@@ -20,10 +21,10 @@ public class Like extends AbstractData {
     return avatars_big;
   }
   //---------------------------------------------------------------------------
-  public static LinkedList<Like> parse(JSONObject response) {
+  public static LinkedList<Like> parse(Response response) {
     LinkedList<Like> likesList = new LinkedList<Like>();
     try {
-      JSONArray arr = response.getJSONArray("feed");
+      JSONArray arr = response.mJSONResult.getJSONArray("feed");
       if(arr.length()>0)
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
@@ -38,7 +39,7 @@ public class Like extends AbstractData {
           likesList.add(like);
         }
     } catch(JSONException e) {
-      Debug.log(null,"Wrong response parsing: " + e);
+      Debug.log("Like.class","Wrong response parsing: " + e);
     }
     return likesList;
   }

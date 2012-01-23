@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.Response;
@@ -36,8 +37,8 @@ public class ProfileActivity extends Activity {
         ProfileActivity.this.runOnUiThread(new Runnable() {
           @Override
           public void run() {
-            String s = response.getProfile();
-            tvProfile.setText(s);
+            Profile profile = Profile.parse(response,false);
+            tvProfile.setText(profile.first_name);
             tvProfile.invalidate();
           }
         });

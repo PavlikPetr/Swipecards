@@ -1,6 +1,6 @@
 package com.sonetica.topface.ui.album;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
@@ -21,13 +21,13 @@ public class AlbumGalleryManager {
   private MemoryCache  mMemoryCache;
   private StorageCache mStorageCache;
   private ExecutorService mThreadsPool;
-  private ArrayList<? extends AbstractData> mData;
+  private LinkedList<? extends AbstractData> mData;
   //private HashMap<ImageView,Integer> mLinkCache;
   private int mThreadCount;
   //Constants
   private static final int THREAD_DEFAULT = 4;
   //---------------------------------------------------------------------------
-  public AlbumGalleryManager(Context context,ArrayList<? extends AbstractData> dataList) {
+  public AlbumGalleryManager(Context context,LinkedList<? extends AbstractData> dataList) {
     mData = dataList;
     mThreadCount  = THREAD_DEFAULT;
     mMemoryCache  = new MemoryCache();

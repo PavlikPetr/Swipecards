@@ -32,7 +32,8 @@
     <!-- activities -->
     <activity android:name=".ui.dashboard.DashboardActivity" android:screenOrientation="portrait"/>
     <activity android:name=".ui.rates.RatesActivity"   android:screenOrientation="portrait"/>
-    <activity android:name=".ui.chat.ChatActivity"     android:screenOrientation="portrait"/>
+    <activity android:name=".ui.inbox.InboxActivity"   android:screenOrientation="portrait"/>
+    <activity android:name=".ui.inbox.ChatActivity"    android:screenOrientation="portrait"/>
     <activity android:name=".ui.tops.TopsActivity"     android:screenOrientation="portrait"/>
     <activity android:name=".ui.album.AlbumActivity"   android:screenOrientation="portrait"/>
     <activity android:name=".ui.likes.LikesActivity"   android:screenOrientation="portrait"/>

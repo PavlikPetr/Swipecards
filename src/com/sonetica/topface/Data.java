@@ -1,13 +1,12 @@
 package com.sonetica.topface;
 
 import java.util.LinkedList;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import com.sonetica.topface.data.City;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.data.Like;
+import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.data.Rate;
 import com.sonetica.topface.data.TopUser;
 
@@ -41,18 +40,16 @@ public class Data {
     s_CitiesList = new LinkedList<City>();
   }
   //---------------------------------------------------------------------------
-  public static void updateNews(String data) {
-    JSONObject obj = null;
-    try {
-      obj = new JSONObject(data);
-      mRates    = obj.getInt("unread_rates");
-      mLikes    = obj.getInt("unread_likes");
-      mMessages = obj.getInt("unread_messages");
-      mPower = 0;
-      mMoney = 0;
-    } catch(JSONException e) {
+  public static void updateNews(Profile profile) {
+    if(profile==null) {
       mRates = mLikes = mMessages = mMoney = mPower = 0;
+      return;
     }
+    mRates    = profile.unread_rates;
+    mLikes    = profile.unread_likes;
+    mMessages = profile.unread_messages;
+    //mPower    = profile.power;
+    //mMoney    = profile.money;
   }
   //---------------------------------------------------------------------------
   public static void saveSSID(Context context,String ssid) {

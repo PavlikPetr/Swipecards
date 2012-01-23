@@ -102,7 +102,7 @@ public class LikesActivity extends Activity {
      public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
      }
    });
-   mGallery.getAdapterView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+   mGallery.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(LikesActivity.this,AlbumActivity.class);
@@ -154,7 +154,7 @@ public class LikesActivity extends Activity {
     likesRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        mLikesList.addAll(response.getLikes());
+        mLikesList.addAll(Like.parse(response));
         create();
         mGallery.onRefreshComplete();
         mProgressDialog.cancel();

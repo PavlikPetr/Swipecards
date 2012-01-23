@@ -1,6 +1,6 @@
 package com.sonetica.topface.ui.album;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
 import com.sonetica.topface.net.AlbumRequest;
@@ -18,7 +18,7 @@ public class AlbumActivity extends Activity {
   private ProgressDialog mProgressDialog;
   private AlbumGalleryManager mGalleryManager;
   private AlbumGalleryAdapter mGalleryAdapter;
-  private ArrayList<Album> mAlbums;
+  private LinkedList<Album> mAlbumsList;
   // Constants
   public static final String INTENT_USER_ID = "user_id";
   //---------------------------------------------------------------------------
@@ -39,14 +39,14 @@ public class AlbumActivity extends Activity {
     // Gallery
     mGallery = (AlbumGallery)findViewById(R.id.galleryAlbum);
     
-    mAlbums = new ArrayList<Album>();
+    mAlbumsList = new LinkedList<Album>();
    
-    try {
-      int uid = Integer.parseInt(getIntent().getStringExtra(INTENT_USER_ID));
-      update(uid);
-    } catch(Exception e) {
+    int uid = getIntent().getIntExtra(INTENT_USER_ID,-1);
+    if(uid==-1) {
+      Debug.log(this,"Intent param is wrong");
       finish();      
     }
+    update(uid);
   }
   //---------------------------------------------------------------------------
   private void update(int uid) {
@@ -55,8 +55,8 @@ public class AlbumActivity extends Activity {
     albumRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        mAlbums = response.getAlbum();
-        mGalleryManager = new AlbumGalleryManager(AlbumActivity.this,mAlbums);
+        mAlbumsList = Album.parse(response); 
+        mGalleryManager = new AlbumGalleryManager(AlbumActivity.this,mAlbumsList);
         mGalleryAdapter = new AlbumGalleryAdapter(AlbumActivity.this,mGalleryManager);
         mGallery.setAdapter(mGalleryAdapter);
         mProgressDialog.cancel();

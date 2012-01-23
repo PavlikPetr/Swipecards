@@ -5,12 +5,14 @@ import org.json.JSONObject;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
-public class SearchRequest extends ApiRequest {
+public class HistoryRequest extends ApiRequest {
   // Data
-  private String service = "search";
-  public  int limit;  // размер получаемой выборки 10 <= limit <= 50  
+  private String service = "history";
+  public int userid;  // идентификатор пользователя для получения истории сообщений с ним текущего пользвоателя
+  public int offset;  // смещение истории сообщений
+  public int limit;   // количество получаемых элементов истории сообщений
   //---------------------------------------------------------------------------
-  public SearchRequest(Context context) {
+  public HistoryRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -20,7 +22,9 @@ public class SearchRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("limit",limit));
+      root.put("data",new JSONObject().put("userid",userid)
+                                      .put("offset",offset)
+                                      .put("limit",limit));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }

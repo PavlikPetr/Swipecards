@@ -12,7 +12,7 @@ import android.widget.ImageView;
 
 public class ThumbView extends ImageView {
   // Data
-  public String  mPercent;
+  public int mPercent;
   private static Paint s_Paint;
   private static Paint s_PaintLine;
   private static Paint s_PaintText;
@@ -43,8 +43,8 @@ public class ThumbView extends ImageView {
     canvas.drawBitmap(bitmap,0,0,null);
     Rect lineRect = new Rect(0,height-29,width,height);
     canvas.drawRect(lineRect,s_PaintLine);
-    if(mPercent!=null)
-    canvas.drawText(mPercent+" %",lineRect.left,lineRect.top+s_PaintText.getTextSize(),s_PaintText);
+    if(mPercent!=0)
+      canvas.drawText(mPercent+" %",lineRect.left,lineRect.top+s_PaintText.getTextSize(),s_PaintText);
   }
   //---------------------------------------------------------------------------
 }

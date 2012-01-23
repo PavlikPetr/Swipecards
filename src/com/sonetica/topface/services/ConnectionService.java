@@ -6,6 +6,7 @@ import android.os.*;
 import android.os.Process;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
+import com.sonetica.topface.data.Auth;
 import com.sonetica.topface.net.AuthRequest;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.Packet;
@@ -67,9 +68,9 @@ public class ConnectionService extends Service {
         super.handleMessage(msg);
         Response ssidResponse = (Response)msg.obj;
         if(ssidResponse.code==0) {
-          String ssid = ssidResponse.getSSID();
-          Data.saveSSID(ConnectionService.this,ssid);
-          packet.mRequest.ssid = ssid;
+          Auth auth = Auth.parse(ssidResponse);
+          Data.saveSSID(ConnectionService.this,auth.ssid);
+          packet.mRequest.ssid = auth.ssid;
           Response response = new Response(sendPacket(packet));
           packet.sendMessage(Message.obtain(null,0,response));
         } else if(ssidResponse.code>0) {

@@ -1,27 +1,24 @@
-package com.sonetica.topface.ui.chat;
+package com.sonetica.topface.ui.inbox;
 
 import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.History;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.module.pull2refresh.PullToRefreshListView;
 import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.net.ApiHandler;
+import com.sonetica.topface.net.HistoryRequest;
 import com.sonetica.topface.net.InboxRequest;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.services.ConnectionService;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /*
  *            "Диалоги"
@@ -30,13 +27,15 @@ public class ChatActivity extends Activity {
   // Data
   private PullToRefreshListView mListView;
   private ChatListAdapter mAdapter;
-  private LinkedList<Inbox> mInboxList;
+  private LinkedList<History> mHistoryList;
   private ProgressDialog mProgressDialog;
+  private int mUserId;
   private int mState;
   private int mOffset;
   private boolean mIsEndList;
   // Constants
   private static final int LIMIT = 20;
+  public  static final String INTENT_USER_ID = "user_id";
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +44,7 @@ public class ChatActivity extends Activity {
     Debug.log(this,"+onCreate");
     
     // Data
-    mInboxList = Data.s_InboxList;
+    mHistoryList = new LinkedList<History>();
     
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.chat_header_title));
@@ -69,7 +68,9 @@ public class ChatActivity extends Activity {
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
-    if(mInboxList.size()==0) {
+    mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
+    
+    if(mHistoryList.size()==0) {
       create();
       update(0,false);
     } else
@@ -81,14 +82,14 @@ public class ChatActivity extends Activity {
   //---------------------------------------------------------------------------
   private void create() {
     // ListAdapter
-    mAdapter = new ChatListAdapter(ChatActivity.this,mInboxList);
+    mAdapter = new ChatListAdapter(ChatActivity.this,mHistoryList);
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
   private void release() {
     if(mListView!=null)       mListView = null;
     if(mAdapter!=null)        mAdapter = null;
-    if(mInboxList!=null)      mInboxList = null;
+    if(mHistoryList!=null)    mHistoryList = null;
     if(mProgressDialog!=null) mProgressDialog = null;
   }
   //---------------------------------------------------------------------------
@@ -96,19 +97,20 @@ public class ChatActivity extends Activity {
     //if(!isRefresh)
       //mProgressDialog.show();
     
-    InboxRequest inboxRequest = new InboxRequest(ChatActivity.this);
+    HistoryRequest inboxRequest = new HistoryRequest(ChatActivity.this);
+    inboxRequest.userid = mUserId; 
     inboxRequest.offset = offset;
     inboxRequest.limit  = 20;
     inboxRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        LinkedList<Inbox> list = response.getMessages();
+        LinkedList<History> list = History.parse(response);
         if(list!=null) {
           if(isRefresh)
             for(int i=list.size()-1;i>=0;--i)
-              mInboxList.addFirst(list.get(i));
+              mHistoryList.addFirst(list.get(i));
           else
-            mInboxList.addAll(list);
+            mHistoryList.addAll(list);
         }
         
         mAdapter.notifyDataSetChanged();

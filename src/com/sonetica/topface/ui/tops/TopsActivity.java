@@ -18,8 +18,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -174,7 +172,7 @@ public class TopsActivity extends Activity {
       @Override
       public void success(Response response) {
         mTopsList.clear();
-        mTopsList.addAll(response.getUsers());
+        mTopsList.addAll(TopUser.parse(response));
         create();
         mProgressDialog.cancel();
       }
@@ -195,7 +193,7 @@ public class TopsActivity extends Activity {
     citiesRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        mCitiesList.addAll(response.getCities());
+        mCitiesList.addAll(City.parse(response));
         mProgressDialog.cancel();
         showCitiesDialog();
       }

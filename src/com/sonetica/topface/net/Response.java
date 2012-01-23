@@ -8,12 +8,12 @@ import com.sonetica.topface.utils.Debug;
 public class Response {
   // Data
   public int code;
-  JSONObject mJsonResult;
+  public JSONObject mJSONResult;
   // Constants
   public static final int FATAL_ERROR = 99;
   //---------------------------------------------------------------------------
   public JSONObject getSearch() {
-    return mJsonResult;
+    return mJSONResult;
   }
   //---------------------------------------------------------------------------
   public Response(String response) {
@@ -22,20 +22,28 @@ public class Response {
       code = FATAL_ERROR;
       return;
     }
-    JSONObject obj = null;
     try {
-      obj = new JSONObject(response);
-      if(!obj.isNull("error")) {
-        mJsonResult = obj.getJSONObject("error");
-        code = mJsonResult.getInt("code");
-      } else if(!obj.isNull("result"))
-        mJsonResult = obj.getJSONObject("result");
-      else
+      mJSONResult = new JSONObject(response);
+      if(!mJSONResult.isNull("error")) {
+        mJSONResult = mJSONResult.getJSONObject("error");
+        code = mJSONResult.getInt("code");
+      } else if(!mJSONResult.isNull("result")) {
+        mJSONResult = mJSONResult.getJSONObject("result");
+      } else {
         code = FATAL_ERROR;
+      }
     } catch (JSONException e) {
       code = FATAL_ERROR;
       Debug.log(this,"json resonse is wrong:" + response);
     }
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String toString() {
+    if(mJSONResult!=null)
+      return mJSONResult.toString();
+    else
+      return "response is null";
   }
   //---------------------------------------------------------------------------
 }

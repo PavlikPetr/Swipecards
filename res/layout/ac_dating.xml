@@ -5,7 +5,11 @@
   <!-- header bar -->
   <include layout="@layout/header_bar" />
   
-  
+  <ImageView
+    android:id="@+id/ivDating"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:src="@drawable/im_red_informer" />
   
   <!-- banner bar -->
   <RelativeLayout 

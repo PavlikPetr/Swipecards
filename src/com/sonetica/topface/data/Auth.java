@@ -1,19 +1,19 @@
 package com.sonetica.topface.data;
 
 import org.json.JSONException;
-import org.json.JSONObject;
+import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
 
 public class Auth extends AbstractData {
   // Data
   public String ssid; //id (ssid) сессии нужен для подписи запросов к лицемеру
   //---------------------------------------------------------------------------
-  public static Auth parse(JSONObject response) {
+  public static Auth parse(Response response) {
     Auth auth = new Auth();
     try {
-      auth.ssid = response.getString("ssid");
+      auth.ssid = response.mJSONResult.getString("ssid");
     } catch(JSONException e) {
-      Debug.log(null,"Wrong response parsing: " + e);
+      Debug.log("Auth.class","Wrong response parsing: " + e);
     }
     return auth;
   }

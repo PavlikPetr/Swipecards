@@ -2,10 +2,11 @@ package com.sonetica.topface.data;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
 
 /*
- * Структура профиля владельца устройства
+ *  Класс профиля владельца устройства
  */
 public class Profile extends AbstractData {
   // Data
@@ -26,22 +27,29 @@ public class Profile extends AbstractData {
     return photo_url;
   }
   //---------------------------------------------------------------------------
-  public static Profile parse(JSONObject response) {
+  public static Profile parse(Response response,boolean isNotification) {
     Profile profile = new Profile();
     try {
-      profile.first_name      = response.getString("first_name");
-      profile.age             = response.getInt("age");
-      profile.sex             = response.getInt("sex");
-      profile.unread_rates    = response.getInt("unread_rates");
-      profile.unread_likes    = response.getInt("unread_likes");
-      profile.unread_messages = response.getInt("unread_messages");
-      profile.photo_url       = response.getString("photo_url");
-      profile.city            = response.getString("city");
-      profile.money           = response.getInt("money");
-      profile.power           = response.getInt("power");
-      profile.average_rate    = response.getInt("average_rate");
+      JSONObject resp = response.mJSONResult;
+      if(isNotification) {
+        profile.unread_rates    = resp.getInt("unread_rates");
+        profile.unread_likes    = resp.getInt("unread_likes");
+        profile.unread_messages = resp.getInt("unread_messages");
+        return profile;
+      }
+      profile.first_name      = resp.getString("first_name");
+      profile.age             = resp.getInt("age");
+      profile.sex             = resp.getInt("sex");
+      profile.unread_rates    = resp.getInt("unread_rates");
+      profile.unread_likes    = resp.getInt("unread_likes");
+      profile.unread_messages = resp.getInt("unread_messages");
+      profile.photo_url       = resp.getString("photo_url");
+      profile.city            = resp.getString("city");
+      profile.money           = resp.getInt("money");
+      profile.power           = resp.getInt("power");
+      profile.average_rate    = resp.getInt("average_rate");
     } catch(JSONException e) {
-      Debug.log(null,"Wrong response parsing: " + e);
+      Debug.log("Profile.class","Wrong response parsing: " + e);
     }
     return profile;
   }
