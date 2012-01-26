@@ -48,8 +48,25 @@ public class InboxListAdapter extends BaseAdapter {
   public View getView(int position, View convertView, ViewGroup parent) {
     if(convertView==null)
       convertView=new TextView(mContext);
-    Inbox   msg = getItem(position);
-    String text = msg.first_name+"("+msg.age+"):"+(msg.text!=null?msg.text:(msg.gift!=0?mContext.getString(R.string.chat_gift):"code"));
+    Inbox msg = getItem(position);
+    String text = null;
+    
+    switch(msg.type) {
+      case Inbox.PHOTO:
+        break;
+      case Inbox.GIFT:
+        break;
+      case Inbox.MESSAGE:
+        text = msg.text;
+        break;
+      case Inbox.MESSAGE_WISH:
+        text = " WISH ";
+        break;
+      case Inbox.MESSAGE_SEXUALITY:
+        text = " SEXUALITY ";
+        break;
+    }
+    
     ((TextView)convertView).setText(text);
     return convertView;
   }

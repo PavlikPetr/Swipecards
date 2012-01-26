@@ -18,6 +18,7 @@ public class Profile extends AbstractData {
   public int    unread_messages; // количество непрочитанных сообщений пользователя
   public String photo_url;       // URL аватарки пользователя
   public String city;            // название города пользвоателя
+  public String city_id;         // идентификтаор города пользователя
   public int    money;           // количество монет у пользователя
   public int    power;           // количество энергии пользователя
   public int    average_rate;    // средняя оценка текущего пользователя
@@ -45,6 +46,7 @@ public class Profile extends AbstractData {
       profile.unread_messages = resp.getInt("unread_messages");
       profile.photo_url       = resp.getString("photo_url");
       profile.city            = resp.getString("city");
+      profile.city_id         = resp.getString("city_id");
       profile.money           = resp.getInt("money");
       profile.power           = resp.getInt("power");
       profile.average_rate    = resp.getInt("average_rate");

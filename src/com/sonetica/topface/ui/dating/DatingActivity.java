@@ -6,13 +6,11 @@ import com.sonetica.topface.data.Filter;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.FilterRequest;
-import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /*
@@ -20,7 +18,7 @@ import android.widget.TextView;
  */
 public class DatingActivity extends Activity {
   // Data
-  ImageView mDatingView;
+  DatingGallery mDatingGallery;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +27,8 @@ public class DatingActivity extends Activity {
     Debug.log(this,"+onCreate");
     
     // Title Header
-   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
-   mDatingView = (ImageView)findViewById(R.id.ivDating);
+   //((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
+   mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
    
    update();
    //filter();
@@ -60,8 +58,8 @@ public class DatingActivity extends Activity {
       @Override
       public void success(Response response) {
         LinkedList<SearchUser> list = SearchUser.parse(response);
-        if(list.size()>0)
-          Http.imageLoader(list.get(0).getLink(),mDatingView);
+        //if(list.size()>0)
+          //Http.imageLoader(list.get(0).getLink(),mDatingView);
       }
       @Override
       public void fail(int codeError) {

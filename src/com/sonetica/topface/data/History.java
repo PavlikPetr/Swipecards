@@ -11,9 +11,17 @@ public class History extends AbstractData {
   // Data
   public int created;  // время создания сообщения
   public int owner_id; // идентификатор пользователя, отправившего сообщение
+  public int type;     // тип сообщения
   public int gift;     // идентификатор подарка. Если сообщение является подарком
   public int code;     // код входящего уведомления. Если сообщение является уведомлением
   public String text;  // текст сообщения. Если входящее сообщение является текстовым
+  // Constants
+  public static final int DEFAULT = 0;           // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
+  public static final int PHOTO   = 1;           // Рекламное уведомление
+  public static final int GIFT    = 2;           // Подарок
+  public static final int MESSAGE = 3;           // Текстовое сообщение
+  public static final int MESSAGE_WISH = 4;      // Тайное желание
+  public static final int MESSAGE_SEXUALITY = 5; // Оценка сексуальности
   //---------------------------------------------------------------------------
   public static LinkedList<History> parse(Response response) {
     LinkedList<History> historyList = new LinkedList<History>();
@@ -25,9 +33,25 @@ public class History extends AbstractData {
           History history  = new History();
           history.created  = item.getInt("created");
           history.owner_id = item.getInt("owner_id");
-          history.gift     = item.isNull("gift") ? 0 : item.getInt("gift");
-          history.code     = item.isNull("code") ? 0 : item.getInt("code");
-          history.text     = item.isNull("text") ? null : item.getString("text");
+          history.type     = item.getInt("type");
+          
+          switch(history.type) {
+            case PHOTO:
+              history.code = item.getInt("code");
+              break;
+            case GIFT:
+              history.gift = item.getInt("gift");
+              break;
+            case MESSAGE:
+              history.text = item.getString("text");
+              break;
+            case MESSAGE_WISH:
+              break;
+            case MESSAGE_SEXUALITY:
+              break;
+            default:
+              break;
+          }
           historyList.add(history);
         }
     } catch(JSONException e) {

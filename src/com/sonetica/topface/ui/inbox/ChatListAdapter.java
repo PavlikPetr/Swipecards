@@ -50,7 +50,24 @@ public class ChatListAdapter extends BaseAdapter {
     if(convertView==null)
       convertView=new TextView(mContext);
     History msg = getItem(position);
-    String text = msg.text!=null?msg.text:msg.code+"="+msg.gift;
+    String text = null;
+    
+    switch(msg.type) {
+      case Inbox.PHOTO:
+        break;
+      case Inbox.GIFT:
+        break;
+      case Inbox.MESSAGE:
+        text = msg.text;
+        break;
+      case Inbox.MESSAGE_WISH:
+        text = " WISH ";
+        break;
+      case Inbox.MESSAGE_SEXUALITY:
+        text = " SEXUALITY ";
+        break;
+    }
+    
     ((TextView)convertView).setText(text);
     return convertView;
   }

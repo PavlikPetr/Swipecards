@@ -13,6 +13,7 @@ public class Like extends AbstractData {
   public String first_name;     // имя пользователя
   public boolean online;        // флаг нахождения пользователя в онлайне
   public boolean unread;        // флаг прочитанного лайка
+  public String city_id;        // идентификатор города отправителя оценки
   public String  avatars_big;   // большая аватарка пользователя
   public String  avatars_small; // маленькая аватарка пользователя
   //---------------------------------------------------------------------------
@@ -33,7 +34,8 @@ public class Like extends AbstractData {
           like.uid         = item.getInt("uid");
           like.online      = item.getBoolean("online");
           like.unread      = item.getBoolean("unread");
-          JSONObject avatar = item.getJSONObject("avatars");
+          like.city_id     = item.getString("city_id");
+          JSONObject avatar  = item.getJSONObject("avatars");
           like.avatars_big   = avatar.getString("big");
           like.avatars_small = avatar.getString("small");
           likesList.add(like);

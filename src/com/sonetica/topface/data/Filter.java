@@ -6,12 +6,12 @@ import com.sonetica.topface.utils.Debug;
 
 public class Filter extends AbstractData {
   // Data
-  public boolean complete; // всегда TRUE
+  public boolean completed; // всегда TRUE
   //---------------------------------------------------------------------------
   public static Filter parse(Response response) {
     Filter filter = new Filter();
     try {
-      filter.complete = response.mJSONResult.getBoolean("complete");
+      filter.completed = response.mJSONResult.getBoolean("completed");
     } catch(JSONException e) {
       Debug.log("Filter.class","Wrong response parsing: " + e);
     }

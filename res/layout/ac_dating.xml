@@ -2,20 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-  <!-- header bar -->
-  <include layout="@layout/header_bar" />
-  
-  <ImageView
-    android:id="@+id/ivDating"
+
+  <com.sonetica.topface.ui.dating.DatingGallery
+    android:id="@+id/galleryDating"
     android:layout_width="fill_parent" 
-    android:layout_height="fill_parent" 
-    android:src="@drawable/im_red_informer" />
-  
-  <!-- banner bar -->
+    android:layout_height="fill_parent" />
+  <!-- 
   <RelativeLayout 
-      android:layout_width="fill_parent" 
+      android:id="@+id/loHeader"
+      android:layout_width="wrap_content" 
       android:layout_height="wrap_content" 
-      android:layout_alignParentBottom="true">
-    <include layout="@layout/banner_bar" />
+      android:layout_alignParentTop="true">
+    <include layout="@layout/header_bar" />
   </RelativeLayout>
+ -->
 </RelativeLayout>
