@@ -62,7 +62,6 @@ public class DashboardLayout extends ViewGroup {
       final View child = getChildAt(i);
       if(child.getVisibility() == GONE)
         continue;
-
       child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
     }
     

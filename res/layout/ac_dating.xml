@@ -7,7 +7,7 @@
     android:id="@+id/galleryDating"
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent" />
-  <!-- 
+  
   <RelativeLayout 
       android:id="@+id/loHeader"
       android:layout_width="wrap_content" 
@@ -15,5 +15,5 @@
       android:layout_alignParentTop="true">
     <include layout="@layout/header_bar" />
   </RelativeLayout>
- -->
+
 </RelativeLayout>

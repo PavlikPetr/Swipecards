@@ -12,15 +12,15 @@ import android.view.ViewGroup;
 import android.view.View.MeasureSpec;
 import android.widget.Toast;
 
-public class StarsView extends ViewGroup implements View.OnTouchListener {
+public class StarsView extends View implements View.OnTouchListener {
   // calss Star
   class Star {
     private Rect mRect;
     private int  mColor;
     private int  _x;
     private int  _y;
-    private int  _width  = I;
-    private int  _height = I;
+    private int  _width  = mWidth;
+    private int  _height = mWidth;
     public Star(int x,int y,int color) {
       _x = x;
       _y = y;
@@ -32,10 +32,10 @@ public class StarsView extends ViewGroup implements View.OnTouchListener {
     }
   }
   // Data
+  private int mWidth = 50;
   private Star[] mStars;
   private InformerView mInformer;
   // Constants
-  public static final int I = 50;
   private static final Paint starPaint = new Paint();
   //---------------------------------------------------------------------------
   public StarsView(Context context,InformerView informer) {
@@ -44,6 +44,10 @@ public class StarsView extends ViewGroup implements View.OnTouchListener {
     mInformer = informer;
     setOnTouchListener(this);
     setBackgroundColor(Color.WHITE);
+  }
+  //---------------------------------------------------------------------------
+  public int getWidthEx() {
+    return mWidth;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -75,13 +79,11 @@ public class StarsView extends ViewGroup implements View.OnTouchListener {
   @Override
   protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
     //super.onLayout(changed,left,top,right,bottom);
-    
-    Debug.log(this,">SW onLayout,l:"+left+" t:"+top+" r:"+right+" b:"+bottom);
-    
+   
     int x = 0;
     int y = 0;
-    mStars[0] = new Star(x,y,Color.BLACK);y+=50;
-    mStars[1] = new Star(x,y,Color.BLUE);y+=50;
+    mStars[0] = new Star(x,y,Color.BLUE);y+=50;
+    mStars[1] = new Star(x,y,Color.BLACK);y+=50;
     mStars[2] = new Star(x,y,Color.CYAN);y+=50;
     mStars[3] = new Star(x,y,Color.DKGRAY);y+=50;
     mStars[4] = new Star(x,y,Color.GRAY);y+=50;
@@ -95,9 +97,10 @@ public class StarsView extends ViewGroup implements View.OnTouchListener {
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-    int width0  = MeasureSpec.getSize(widthMeasureSpec);
-    int height0 = MeasureSpec.getSize(heightMeasureSpec);
-    Debug.log(this,">SW onMeasure, w:"+width0+" h:"+height0);
+//    super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+//    int width0  = MeasureSpec.getSize(widthMeasureSpec);
+//    int height0 = MeasureSpec.getSize(heightMeasureSpec);
+//    Debug.log(this,">SW onMeasure, w:"+width0+" h:"+height0);
   }
   //---------------------------------------------------------------------------
 }

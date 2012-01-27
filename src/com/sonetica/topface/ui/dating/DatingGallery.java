@@ -1,8 +1,6 @@
 package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
-import com.sonetica.topface.utils.Debug;
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -10,7 +8,6 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewConfiguration;
-import android.view.View.MeasureSpec;
 import android.widget.ImageView;
 import android.widget.Scroller;
 
@@ -135,7 +132,6 @@ public class DatingGallery extends ViewGroup {
   //-------------------------------------------------------------------------
   @Override
   protected void onLayout(boolean changed,int l,int t,int r,int b) {
-    Debug.log(this,"DG_0 onLayout,l:"+l+" t:"+t+" r:"+r+" b:"+b);
     int childLeft = 0;
     int count = getChildCount();
     for(int i = 0; i < count; i++) {
@@ -146,27 +142,18 @@ public class DatingGallery extends ViewGroup {
         childLeft += childWidth;
       }
     }
-    Debug.log(this,"DG_1 onLayout,l:"+l+" t:"+t+" r:"+r+" b:"+b);
   }
   //-------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    Debug.log(this,"DG_0 onMeasure, ");
     super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-    
-    Debug.log(this,"DG_1 onMeasure, ");
     
     int width = MeasureSpec.getSize(widthMeasureSpec);
     int count = getChildCount();
     for(int i=0;i<count;i++)
       getChildAt(i).measure(widthMeasureSpec,heightMeasureSpec);
     
-    int width0  = MeasureSpec.getSize(widthMeasureSpec);
-    int height0 = MeasureSpec.getSize(heightMeasureSpec);
-    
     scrollTo(mCurrentScreen * width,0);
-    
-    Debug.log(this,"DG_2 onMeasure, w:"+width0+" h:"+height0);
   }
   //-------------------------------------------------------------------------
   private void snapToDestination() {
@@ -200,4 +187,3 @@ public class DatingGallery extends ViewGroup {
   }
   //-------------------------------------------------------------------------
 }
-

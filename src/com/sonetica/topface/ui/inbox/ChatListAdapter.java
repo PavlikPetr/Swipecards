@@ -53,9 +53,14 @@ public class ChatListAdapter extends BaseAdapter {
     String text = null;
     
     switch(msg.type) {
+      case Inbox.DEFAULT:
+        text = msg.text;
+        break;
       case Inbox.PHOTO:
+        text = " PHOTO ";
         break;
       case Inbox.GIFT:
+        text = " GIFT ";
         break;
       case Inbox.MESSAGE:
         text = msg.text;

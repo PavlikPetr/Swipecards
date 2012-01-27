@@ -49,6 +49,9 @@ public class Inbox extends AbstractData {
           msg.type       = item.getInt("type");
           
           switch(msg.type) {
+            case DEFAULT:
+              msg.text = item.getString("text");
+              break;
             case PHOTO:
               msg.code = item.getInt("code");
               break;

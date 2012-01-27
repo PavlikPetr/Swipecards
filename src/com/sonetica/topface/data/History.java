@@ -36,6 +36,9 @@ public class History extends AbstractData {
           history.type     = item.getInt("type");
           
           switch(history.type) {
+            case DEFAULT:
+              history.text = item.getString("text");
+              break;
             case PHOTO:
               history.code = item.getInt("code");
               break;

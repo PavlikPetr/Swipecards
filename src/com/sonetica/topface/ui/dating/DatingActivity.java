@@ -26,8 +26,8 @@ public class DatingActivity extends Activity {
     setContentView(R.layout.ac_dating);
     Debug.log(this,"+onCreate");
     
-    // Title Header
-   //((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
+   // Title Header
+   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
    mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
    
    update();

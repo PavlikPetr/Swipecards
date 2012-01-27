@@ -26,11 +26,12 @@
     android:fadeScrollbars="true" 
     android:background="#000000" />
 
-  <!-- banner bar -->
+  <!-- banner bar 
   <RelativeLayout 
       android:layout_width="fill_parent" 
       android:layout_height="wrap_content" 
       android:layout_alignParentBottom="true">
     <include layout="@layout/banner_bar" />
   </RelativeLayout>
+  -->
 </LinearLayout>

@@ -27,6 +27,7 @@
     android:background="#000000">
   </GridView>
   
-  <!-- banner bar -->
+  <!-- banner bar 
   <include layout="@layout/banner_bar" />
+  -->
 </LinearLayout>

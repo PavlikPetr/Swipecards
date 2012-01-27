@@ -6,9 +6,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.MeasureSpec;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class InformerView extends ViewGroup {
   // Data
@@ -16,18 +20,31 @@ public class InformerView extends ViewGroup {
   int _x;
   int _y;
   String text = "text";
-  Button btn;
+  Button btn1;
+  Button btn2;
+  private int mWidth = 150;
   // Constants
-  public static final int I = 50;
   private static final Paint informerPaint = new Paint();
   //---------------------------------------------------------------------------
   public InformerView(Context context) {
     super(context);
     informerPaint.setColor(Color.GREEN);
-    setBackgroundColor(Color.MAGENTA);
-    btn = new Button(context);
-    btn.setText("profile");
-    addView(btn);
+    setBackgroundColor(Color.DKGRAY);
+    
+    btn1 = new Button(context);
+    btn1.setText("profile");
+    btn1.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Toast.makeText(getContext(),"size:"+btn1.getWidth()+" 2:"+btn1.getMeasuredWidth(),Toast.LENGTH_SHORT).show();
+      }
+    });
+    addView(btn1);
+    
+    btn2 = new Button(context);
+    btn2.setText("chat");
+    addView(btn2);
+
   }
   //---------------------------------------------------------------------------
   @Override
@@ -36,21 +53,31 @@ public class InformerView extends ViewGroup {
     canvas.drawText(text,_x,_y,informerPaint);
   }
   //---------------------------------------------------------------------------
+  public int getWidthEx() {
+    return mWidth;
+  }
+  //---------------------------------------------------------------------------
   @Override
   protected void onLayout(boolean changed,int l,int t,int r,int b) {
     //super.layout(l,t,r,b);
     //mRect = new Rect(l,t,r,b);
-    Debug.log(this,">IV onLayout,l:"+l+" t:"+t+" r:"+r+" b:"+b);
-    //btn.layout(l,t+40,l+80,t+40+40);
-    //btn.measure(40,40);
+    int w = btn1.getMeasuredWidth();
+    int h = btn1.getMeasuredHeight();
+    int y = r-w;
+    int z = b-h;
+    //btn1.layout(0,0,100,50);
+    //btn1.layout(0,50,50,100);
+
   }
   //-------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+    
     int width0  = MeasureSpec.getSize(widthMeasureSpec);
     int height0 = MeasureSpec.getSize(heightMeasureSpec);
-    Debug.log(this,">IV onMeasure, w:"+width0+" h:"+height0);
+    //btn1.measure(width0/2,height0/2);
+    
+    setMeasuredDimension(widthMeasureSpec,heightMeasureSpec);
   }
   //---------------------------------------------------------------------------
   public void setPosition(int x,int y) {
