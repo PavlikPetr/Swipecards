@@ -2,16 +2,21 @@ package com.sonetica.topface.ui.dating;
 
 import java.util.LinkedList;
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.DoRate;
 import com.sonetica.topface.data.Filter;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
+import com.sonetica.topface.net.DoRateRequest;
 import com.sonetica.topface.net.FilterRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
  *    "оценка фото"
@@ -28,27 +33,22 @@ public class DatingActivity extends Activity {
     
    // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
+
+   // Button Header
+   Button btnFilter = (Button)findViewById(R.id.tvHeaderButton);
+   btnFilter.setText(getString(R.string.dating_header_button));
+   btnFilter.setOnClickListener(new View.OnClickListener() {
+     @Override
+     public void onClick(View v) {
+       Toast.makeText(DatingActivity.this,"Filter",Toast.LENGTH_SHORT).show();
+     }
+   });
+   
+   // Dating Gallery
    mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
    
    update();
    //filter();
-  }
-  //---------------------------------------------------------------------------
-  public void filter() {
-    FilterRequest request = new FilterRequest(this);
-    request.city     = 2;
-    request.sex      = 0;
-    request.agebegin = 16;
-    request.ageend   = 40;
-    request.callback(new ApiHandler() {
-      @Override
-      public void success(Response response) {
-        Filter filter = Filter.parse(response);
-      }
-      @Override
-      public void fail(int codeError) {
-      }
-    }).exec();
   }
   //---------------------------------------------------------------------------
   public void update() {
@@ -64,6 +64,40 @@ public class DatingActivity extends Activity {
       @Override
       public void fail(int codeError) {
 
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  public void doRate(int rate) {
+    Toast.makeText(DatingActivity.this,"rate:"+rate,Toast.LENGTH_SHORT).show();
+    /*
+    DoRateRequest doRate = new DoRateRequest(this);
+    doRate.rate = rate;
+    doRate.callback(new ApiHandler() {
+      @Override
+      public void success(Response response) {
+        Toast.makeText(DatingActivity.this,"Rate",Toast.LENGTH_SHORT).show();
+      }
+      @Override
+      public void fail(int codeError) {
+      }
+    });
+    */
+  }
+  //---------------------------------------------------------------------------
+  public void filter() {
+    FilterRequest request = new FilterRequest(this);
+    request.city     = 2;
+    request.sex      = 0;
+    request.agebegin = 16;
+    request.ageend   = 40;
+    request.callback(new ApiHandler() {
+      @Override
+      public void success(Response response) {
+        Filter filter = Filter.parse(response);
+      }
+      @Override
+      public void fail(int codeError) {
       }
     }).exec();
   }

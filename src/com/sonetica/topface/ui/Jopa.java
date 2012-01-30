@@ -26,13 +26,6 @@ public class Jopa extends View implements View.OnTouchListener {
   }
   //---------------------------------------------------------------------------
   @Override
-  protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
-    //super.onLayout(changed,left,top,right,bottom);
-    
-    Debug.log(this,">> JOPA onLayout,l:"+left+" t:"+top+" r:"+right+" b:"+bottom);
-  }
-  //---------------------------------------------------------------------------
-  @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     //super.onMeasure(widthMeasureSpec,heightMeasureSpec);
     int width0  = MeasureSpec.getSize(widthMeasureSpec);
@@ -41,6 +34,13 @@ public class Jopa extends View implements View.OnTouchListener {
     setMeasuredDimension(width0*2,height0*2);
     
     Debug.log(this,">> JOPA onMeasure, w:"+width0+" h:"+height0);
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
+    //super.onLayout(changed,left,top,right,bottom);
+    
+    Debug.log(this,">> JOPA onLayout,l:"+left+" t:"+top+" r:"+right+" b:"+bottom);
   }
   //---------------------------------------------------------------------------
   @Override

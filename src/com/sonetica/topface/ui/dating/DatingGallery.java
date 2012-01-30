@@ -12,14 +12,14 @@ import android.widget.ImageView;
 import android.widget.Scroller;
 
 public class DatingGallery extends ViewGroup {
+  private int   mScrollX;        // x
+  private float mLastMotionX;    // last x
+  private int   mCurrentScreen;  // текущее изображение в галереи
+  private int   mTouchState;     // скролинг или нажатие на итем
+  private int   mTouchSlop;      // растояние, пройденное пальцем, для определения скролинга
   private Scroller mScroller;  
   private VelocityTracker mVelocityTracker;
   private DatingLayout mDatingLayout;
-  private int   mScrollX = 0;        // x
-  private float mLastMotionX;        // last x
-  private int   mCurrentScreen = 0;  // текущее изображение в галереи
-  private int   mTouchState;         // скролинг или нажатие на итем
-  private int   mTouchSlop;          // растояние, пройденное пальцем, для определения скролинга
   // Constants
   private static final int SNAP_VELOCITY         = 1000;
   private static final int TOUCH_STATE_IDLE      = 0;
@@ -27,11 +27,14 @@ public class DatingGallery extends ViewGroup {
   //-------------------------------------------------------------------------
   public DatingGallery(Context context,AttributeSet attrs) {
     super(context,attrs);
+    
     mScroller   = new Scroller(context);
     mTouchState = TOUCH_STATE_IDLE;
     mTouchSlop  = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+    
     setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.FILL_PARENT));
     
+    // фрейм оценок
     mDatingLayout = new DatingLayout(context);
     addView(mDatingLayout);
     

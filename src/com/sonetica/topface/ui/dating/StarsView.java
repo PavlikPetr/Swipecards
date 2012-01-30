@@ -1,71 +1,83 @@
 package com.sonetica.topface.ui.dating;
 
-import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.R;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.MeasureSpec;
-import android.widget.Toast;
 
 public class StarsView extends View implements View.OnTouchListener {
   // calss Star
   class Star {
-    private Rect mRect;
-    private int  mColor;
-    private int  _x;
-    private int  _y;
-    private int  _width  = mWidth;
-    private int  _height = mWidth;
-    public Star(int x,int y,int color) {
-      _x = x;
-      _y = y;
-      mColor = color;
+    private int _coord_x;
+    private int _coord_y;
+    public  int _index;
+    public Rect _rect;
+    public Star(int x,int y,int index) {
+      _coord_x = x;
+      _coord_y = y;
+      _index   = index;
+      _rect = new Rect(x,y,x+mStar0.getWidth(),y+mStar0.getHeight());
     }
     public void draw(Canvas canvas) {
-      starPaint.setColor(mColor);
-      canvas.drawRect(_x,_y,_x+_width,_y+_height,starPaint);
+      canvas.drawBitmap(mStar0,_coord_x,_coord_y,starPaint);
+      canvas.drawText(""+_index,_coord_x+12,_coord_y+18,starPaint);
     }
   }
   // Data
-  private int mWidth = 50;
-  private Star[] mStars;
-  private InformerView mInformer;
+  private static Bitmap mStar0;
+  private static Bitmap mStar1;
+  private static Bitmap mStar2;
+  private Star[] mStars;           // статичный массив объектов для отрисовки звезд;
+  private InformerView mInformer;  // обсервер текущего нажатия на экран
   // Constants
   private static final Paint starPaint = new Paint();
   //---------------------------------------------------------------------------
   public StarsView(Context context,InformerView informer) {
     super(context);
+    mStar0 = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_yellow);
+    mStar1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_blue);
+    mStar2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_grey);
     mStars = new Star[10];
     mInformer = informer;
     setOnTouchListener(this);
-    setBackgroundColor(Color.WHITE);
-  }
-  //---------------------------------------------------------------------------
-  public int getWidthEx() {
-    return mWidth;
+    setBackgroundColor(Color.TRANSPARENT);
   }
   //---------------------------------------------------------------------------
   @Override
   public boolean onTouch(View v,MotionEvent event) {
+    
+    int star = 0;
+    int x = (int)event.getX();
+    int y = (int)event.getY();
+    //----------------
+    for(int i=0;i<mStars.length;i++)
+      if(mStars[i]._rect.contains(x,y))
+        star = mStars[i]._index;
+    //----------------
+    
+    
     switch(event.getAction()) {
       case MotionEvent.ACTION_DOWN:
-        //Toast.makeText(getContext(),"down",Toast.LENGTH_SHORT).show();
+        mInformer.setData(0,y,star);
         break;
       case MotionEvent.ACTION_MOVE:
-        mInformer.setPosition(0,(int)event.getY());
-        mInformer.invalidate();
+        mInformer.setData(0,y,star);
         break;
       case MotionEvent.ACTION_UP:
+        mInformer.setData(-100,-100,star);
+        ((DatingActivity)getContext()).doRate(star); // Опасная операция, требует рефакторинг !!!!
         break;
       default:
+        mInformer.setData(-100,-100,star);
         break;
     }
-    invalidate();
+    mInformer.invalidate();
     return true;
   }
   //---------------------------------------------------------------------------
@@ -77,30 +89,28 @@ public class StarsView extends View implements View.OnTouchListener {
   }
   //---------------------------------------------------------------------------
   @Override
-  protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
-    //super.onLayout(changed,left,top,right,bottom);
-   
-    int x = 0;
-    int y = 0;
-    mStars[0] = new Star(x,y,Color.BLUE);y+=50;
-    mStars[1] = new Star(x,y,Color.BLACK);y+=50;
-    mStars[2] = new Star(x,y,Color.CYAN);y+=50;
-    mStars[3] = new Star(x,y,Color.DKGRAY);y+=50;
-    mStars[4] = new Star(x,y,Color.GRAY);y+=50;
-    mStars[5] = new Star(x,y,Color.GREEN);y+=50;
-    mStars[6] = new Star(x,y,Color.LTGRAY);y+=50;
-    mStars[7] = new Star(x,y,Color.MAGENTA);y+=50;
-    mStars[8] = new Star(x,y,Color.WHITE);y+=50;
-    mStars[9] = new Star(x,y,Color.YELLOW);y+=50;
+  protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
+    setMeasuredDimension(mStar0.getWidth(),MeasureSpec.getSize(heightMeasureSpec));
   }
   //---------------------------------------------------------------------------
   @Override
-  protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-//    super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-//    int width0  = MeasureSpec.getSize(widthMeasureSpec);
-//    int height0 = MeasureSpec.getSize(heightMeasureSpec);
-//    Debug.log(this,">SW onMeasure, w:"+width0+" h:"+height0);
+  protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
+   
+    int x = 0;
+    int y = 0;
+    int c = mStar0.getHeight();
+    int z = (getHeight()-c*10)/9+c; // расстояние между звездами
+    
+    mStars[0] = new Star(x,y,10); y+=z;
+    mStars[1] = new Star(x,y,9);  y+=z;
+    mStars[2] = new Star(x,y,8);  y+=z;
+    mStars[3] = new Star(x,y,7);  y+=z;
+    mStars[4] = new Star(x,y,6);  y+=z;
+    mStars[5] = new Star(x,y,5);  y+=z;
+    mStars[6] = new Star(x,y,4);  y+=z;
+    mStars[7] = new Star(x,y,3);  y+=z;
+    mStars[8] = new Star(x,y,2);  y+=z;
+    mStars[9] = new Star(x,y,1);  y+=z;
   }
   //---------------------------------------------------------------------------
 }
