@@ -11,10 +11,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class InformerView extends ViewGroup {
-  // class
+  //---------------------------------------------------------------------------
+  // class Informer
+  //---------------------------------------------------------------------------
   class Informer {
-    private float _x;         // х
-    private float _y;         // у
+    public  float _x;         // х
+    public  float _y;         // у
     private int   _widht;     // ширина
     private int   _height;    // высота
     private int   _index;     // цифра рейтинга
@@ -40,11 +42,8 @@ public class InformerView extends ViewGroup {
     public int getHeight() {
       return _height;
     }
-    public void setData(float y,int index) {
-      _y = y;
-      _index = index;
-    }
   }
+  //---------------------------------------------------------------------------
   // Data
   Button   mProfileBtn;
   Button   mChatBtn;
@@ -116,7 +115,8 @@ public class InformerView extends ViewGroup {
   }
   //---------------------------------------------------------------------------
   public void setData(float y,int index) {
-    mInformer.setData(y,index);
+    mInformer._y = y;
+    mInformer._index = index;
   }
   //---------------------------------------------------------------------------
 }

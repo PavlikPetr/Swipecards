@@ -13,7 +13,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class StarsView extends View implements View.OnTouchListener {
+  //---------------------------------------------------------------------------
   // calss Star
+  //---------------------------------------------------------------------------
   class Star {
     public  int _index;
     private int _color;
@@ -41,13 +43,14 @@ public class StarsView extends View implements View.OnTouchListener {
       canvas.drawText(""+_index,_coord_x+12,_coord_y+18,starPaint);
     }
   }
+  //---------------------------------------------------------------------------
   // Data
   private static Bitmap mStar0;
   //private static Bitmap mStar1;
   //private static Bitmap mStar2;
-  private float[] lastYs;
-  private Star[] mStars;           // статичный массив объектов для отрисовки звезд;
-  private InformerView mInformer;  // обсервер текущего нажатия на экран
+  private float[] lastYs;              // массив последних нажатий
+  private Star[]  mStars;              // статичный массив объектов для отрисовки звезд;
+  private InformerView mInformerView;  // обсервер текущего нажатия на экран
   // Constants
   private static final int EVENT_COUNT = 3;   // число последних запоминаемых координат пальца
   private static final int STARS_COUNT = 10;  // кол-во звезд на фрейме
@@ -57,7 +60,7 @@ public class StarsView extends View implements View.OnTouchListener {
     super(context);
     mStars = new Star[STARS_COUNT];
     lastYs = new float[EVENT_COUNT];
-    mInformer = informer;
+    mInformerView = informer;
     
     mStar0 = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_yellow);
     //mStar1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_blue);
@@ -92,7 +95,7 @@ public class StarsView extends View implements View.OnTouchListener {
       case MotionEvent.ACTION_UP:
         for(int i = 0; i < EVENT_COUNT; i++)
           lastYs[i] = -100;
-        ((DatingActivity)getContext()).doRate(0,star_index); // Опасная операция, требует рефакторинг !!!!
+        //((DatingActivity)getContext()).doRate(0,star_index); // Опасная операция, требует рефакторинг !!!!
         break;
       default:
         for(int i = 0; i < EVENT_COUNT; i++)
@@ -105,11 +108,9 @@ public class StarsView extends View implements View.OnTouchListener {
       averageY += lastYs[i];
     averageY /= EVENT_COUNT;
     
-    mInformer.setData(averageY,star_index);
-    mInformer.invalidate();
+    mInformerView.setData(averageY,star_index);
+    mInformerView.invalidate();
 
-    Debug.log("NULL"," >>>> " + averageY);
-    
     return true;
   }
   //---------------------------------------------------------------------------
@@ -122,10 +123,10 @@ public class StarsView extends View implements View.OnTouchListener {
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    int parent_h = MeasureSpec.getSize(heightMeasureSpec); // вычисляем предоставленную нам высоту для отрисовки
-    int width = (int)(mStar0.getWidth() * 1.3);            // вычисление своей ширины, вынести в константы !!!
+    int height = MeasureSpec.getSize(heightMeasureSpec); // вычисляем предоставленную нам высоту для отрисовки
+    int width  = (int)(mStar0.getWidth() * 1.3);         // вычисление своей ширины, вынести в константы !!!
 
-    setMeasuredDimension(width,parent_h);
+    setMeasuredDimension(width,height);
   }
   //---------------------------------------------------------------------------
   @Override

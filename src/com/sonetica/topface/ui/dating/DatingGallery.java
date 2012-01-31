@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.Scroller;
+import android.widget.Toast;
 
 public class DatingGallery extends ViewGroup {
   private int   mScrollX;        // x
@@ -200,6 +201,10 @@ public class DatingGallery extends ViewGroup {
   public void setUserList(LinkedList<SearchUser> userList) {
     mSearchUserList = userList;
     Http.imageLoader(mSearchUserList.get(0).getLink(),mDatingLayout.mImageView);
+  }
+  //-------------------------------------------------------------------------
+  public void message() {
+    Toast.makeText(getContext(),"Message",Toast.LENGTH_SHORT).show();    
   }
   //-------------------------------------------------------------------------
 }
