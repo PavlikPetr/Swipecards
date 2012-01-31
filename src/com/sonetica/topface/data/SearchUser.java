@@ -9,16 +9,15 @@ import com.sonetica.topface.utils.Debug;
 
 public class SearchUser extends AbstractData {
   // Data
-  public int uid;                 // идентификатор пользвоателя
-  public String first_name;       // имя пользователя
-  public int age;                 // возраст пользователя
-  public boolean online;          // флаг нахождения пользователя онлайн
-  public String status;           // статус пользователя
-  public String[]  avatars_big;   // большая аватарка пользователя
-  public String[]  avatars_small; // маленькая аватарка пользователя
-  
-  public String geo_city_name;         // наименование города пользователя
-  public int geo_city_id;              // идентификатор города пользователя
+  public int      uid;            // идентификатор пользователя
+  public String   first_name;     // имя пользователя
+  public int      age;            // возраст пользователя
+  public boolean  online;         // флаг нахождения пользователя онлайн
+  public String   status;         // статус пользователя
+  public String[] avatars_big;    // большая аватарка пользователя
+  public String[] avatars_small;  // маленькая аватарка пользователя
+  public String   geo_city_name;  // наименование города пользователя
+  public int      geo_city_id;    // идентификатор города пользователя
   
   //public String geo_distance;        // дистация до пользователя (всегда NULL)
   //public String geo_coordinates;     // координаты пользователя

@@ -29,7 +29,7 @@ public class AlbumActivity extends Activity {
     Debug.log(this,"+onCreate");
 
     // Title Header
-    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.rateit_header_title));
+    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.album_header_title));
     
     // Progress Dialog
     mProgressDialog = new ProgressDialog(this);

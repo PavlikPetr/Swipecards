@@ -45,6 +45,6 @@
   <!-- Myrating Activity -->
   <string name="rates_header_title">Меня оценили</string>
   
-  <!-- Rateit Activity -->
-  <string name="rateit_header_title">Оцени Это !</string>
+  <!-- Album Activity -->
+  <string name="album_header_title">Альбом</string>
 </resources>

@@ -2,7 +2,6 @@ package com.sonetica.topface.ui.dating;
 
 import java.util.LinkedList;
 import com.sonetica.topface.R;
-import com.sonetica.topface.data.DoRate;
 import com.sonetica.topface.data.Filter;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
@@ -24,13 +23,14 @@ import android.widget.Toast;
 public class DatingActivity extends Activity {
   // Data
   DatingGallery mDatingGallery;
+  LinkedList<SearchUser> mSearchUserList;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_dating);
     Debug.log(this,"+onCreate");
-    
+
    // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
 
@@ -43,7 +43,7 @@ public class DatingActivity extends Activity {
        Toast.makeText(DatingActivity.this,"Filter",Toast.LENGTH_SHORT).show();
      }
    });
-   
+
    // Dating Gallery
    mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
    
@@ -57,9 +57,9 @@ public class DatingActivity extends Activity {
     request.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        LinkedList<SearchUser> list = SearchUser.parse(response);
-        //if(list.size()>0)
-          //Http.imageLoader(list.get(0).getLink(),mDatingView);
+        mSearchUserList = SearchUser.parse(response);
+        if(mSearchUserList.size()>0)
+          mDatingGallery.setUserList(mSearchUserList);
       }
       @Override
       public void fail(int codeError) {
@@ -68,21 +68,19 @@ public class DatingActivity extends Activity {
     }).exec();
   }
   //---------------------------------------------------------------------------
-  public void doRate(int rate) {
-    Toast.makeText(DatingActivity.this,"rate:"+rate,Toast.LENGTH_SHORT).show();
-    /*
+  public void doRate(final int userid,final int rate) {
     DoRateRequest doRate = new DoRateRequest(this);
-    doRate.rate = rate;
+    doRate.userid = userid;
+    doRate.rate   = rate;
     doRate.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        Toast.makeText(DatingActivity.this,"Rate",Toast.LENGTH_SHORT).show();
+        Toast.makeText(DatingActivity.this,"rate:"+rate+",id:"+userid,Toast.LENGTH_SHORT).show();
       }
       @Override
       public void fail(int codeError) {
       }
     });
-    */
   }
   //---------------------------------------------------------------------------
   public void filter() {

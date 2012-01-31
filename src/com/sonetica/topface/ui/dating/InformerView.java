@@ -13,15 +13,16 @@ import android.widget.Toast;
 public class InformerView extends ViewGroup {
   // class
   class Informer {
-    private int _x;
-    private int _y;
-    private int _widht;
-    private int _height;
-    public  int _index;       // цифра рейтинга
-    private String _text;
+    private float _x;         // х
+    private float _y;         // у
+    private int   _widht;     // ширина
+    private int   _height;    // высота
+    private int   _index;     // цифра рейтинга
+    private String _text;     // текст подсказка
     int color = Color.WHITE;  // Битмап для бекграунда
+    // Ctor
     public Informer(int x,int y,int widht,int height) {
-      _x = x; 
+      _x = 0; 
       _y = y;
       _widht  = widht;
       _height = height;
@@ -39,8 +40,7 @@ public class InformerView extends ViewGroup {
     public int getHeight() {
       return _height;
     }
-    public void setData(int x,int y,int index) {
-      _x = x;
+    public void setData(float y,int index) {
       _y = y;
       _index = index;
     }
@@ -92,23 +92,31 @@ public class InformerView extends ViewGroup {
   //-------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    mChatBtn.measure(0,0);
-    mProfileBtn.measure(0,0);
+    int width  = mInformer.getWidth();                   // вычисление своей ширины
+    int height = MeasureSpec.getSize(heightMeasureSpec); // вычисляем предоставленную нам высоту для отрисовки
     
-    setMeasuredDimension(mInformer.getWidth(),mInformer.getHeight());
+    // передаем свои размеры предкам
+    mChatBtn.measure(width,height);
+    mProfileBtn.measure(width,height);
+    
+    setMeasuredDimension(width,height);
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
-    int x = getWidth()  - mProfileBtn.getMeasuredWidth();
-    int y = getHeight() - mProfileBtn.getMeasuredHeight();
-    mProfileBtn.layout(x,y,getWidth(),getHeight());
-    mChatBtn.layout(x,y-mChatBtn.getMeasuredHeight(),getWidth(),y);
+    int width  = getMeasuredWidth();
+    int height = getMeasuredHeight();
+    
+    int x = (int)(width  - mProfileBtn.getMeasuredWidth()*1.6);
+    int y = (int)(height - mProfileBtn.getMeasuredHeight()*3);
+    mChatBtn.layout(x,y,x+mChatBtn.getMeasuredWidth(),y+mChatBtn.getMeasuredHeight());
+    
+    y = (int)(y+mChatBtn.getMeasuredHeight()*1.5);
+    mProfileBtn.layout(x,y,x+mProfileBtn.getMeasuredWidth(),y+mProfileBtn.getMeasuredHeight());
   }
   //---------------------------------------------------------------------------
-  public void setData(int x,int y,int index) {
-    if(index != 0)
-      mInformer.setData(x,y,index);
+  public void setData(float y,int index) {
+    mInformer.setData(y,index);
   }
   //---------------------------------------------------------------------------
 }

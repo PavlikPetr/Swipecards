@@ -1,6 +1,9 @@
 package com.sonetica.topface.ui.dating;
 
+import java.util.LinkedList;
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.SearchUser;
+import com.sonetica.topface.net.Http;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -20,6 +23,7 @@ public class DatingGallery extends ViewGroup {
   private Scroller mScroller;  
   private VelocityTracker mVelocityTracker;
   private DatingLayout mDatingLayout;
+  private LinkedList<SearchUser> mSearchUserList;
   // Constants
   private static final int SNAP_VELOCITY         = 1000;
   private static final int TOUCH_STATE_IDLE      = 0;
@@ -32,20 +36,24 @@ public class DatingGallery extends ViewGroup {
     mTouchState = TOUCH_STATE_IDLE;
     mTouchSlop  = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     
-    setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.FILL_PARENT));
+    setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.FILL_PARENT));
     
     // фрейм оценок
     mDatingLayout = new DatingLayout(context);
     addView(mDatingLayout);
-    
+    // 1
     ImageView iv = new ImageView(context);
     iv.setImageResource(R.drawable.im_red_informer);
     addView(iv);
-    
+    // 2
     iv = new ImageView(context);
     iv.setImageResource(R.drawable.im_red_informer);
     addView(iv);
-    
+    // 3
+    iv = new ImageView(context);
+    iv.setImageResource(R.drawable.im_red_informer);
+    addView(iv);
+    // 5
     iv = new ImageView(context);
     iv.setImageResource(R.drawable.im_red_informer);
     addView(iv);
@@ -156,7 +164,7 @@ public class DatingGallery extends ViewGroup {
     for(int i=0;i<count;i++)
       getChildAt(i).measure(widthMeasureSpec,heightMeasureSpec);
     
-    scrollTo(mCurrentScreen * width,0);
+    scrollTo(mCurrentScreen*width,0);
   }
   //-------------------------------------------------------------------------
   private void snapToDestination() {
@@ -187,6 +195,11 @@ public class DatingGallery extends ViewGroup {
       scrollTo(mScrollX, 0);
       postInvalidate();
     }
+  }
+  //-------------------------------------------------------------------------
+  public void setUserList(LinkedList<SearchUser> userList) {
+    mSearchUserList = userList;
+    Http.imageLoader(mSearchUserList.get(0).getLink(),mDatingLayout.mImageView);
   }
   //-------------------------------------------------------------------------
 }

@@ -36,7 +36,7 @@ public class DashboardLayout extends ViewGroup {
     mMaxChildWidth  = 0;
     mMaxChildHeight = 0;
     
-    final int count = getChildCount();
+    int count = getChildCount();
     
 
     int childWidthMeasureSpec  = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec),  MeasureSpec.AT_MOST);
@@ -44,7 +44,7 @@ public class DashboardLayout extends ViewGroup {
 
     // Поиск максимального размера среди детей
     for(int i=0;i<count;i++) {
-      final View child = getChildAt(i);
+      View child = getChildAt(i);
       if(child.getVisibility() == GONE)
         continue;
       
@@ -58,9 +58,9 @@ public class DashboardLayout extends ViewGroup {
     childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(mMaxChildHeight, MeasureSpec.EXACTLY);
     
     // Установка максимального размера для всех детей
-    for(int i = 0; i < count; i++) {
-      final View child = getChildAt(i);
-      if(child.getVisibility() == GONE)
+    for(int i=0;i<count;i++) {
+      View child = getChildAt(i);
+      if(child.getVisibility()==GONE)
         continue;
       child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
     }
