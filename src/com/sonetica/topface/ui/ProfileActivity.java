@@ -16,6 +16,7 @@ import android.widget.TextView;
  */
 public class ProfileActivity extends Activity {
   // Data
+  public static final String INTENT_USER_ID = "user_id";
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,11 @@ public class ProfileActivity extends Activity {
     // TextView Profile   
     final TextView tvProfile = ((TextView)findViewById(R.id.tvProfile));
     tvProfile.setTextColor(Color.WHITE);
+    
+    // Чужой профиль
+    int userId = getIntent().getIntExtra(INTENT_USER_ID,-1);
+    if(userId==-1)
+      ; // свой профиль
     
     ProfileRequest profileRequest = new ProfileRequest(this,false);
     profileRequest.callback(new ApiHandler() {

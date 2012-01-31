@@ -24,6 +24,7 @@ public class DatingGallery extends ViewGroup {
   private VelocityTracker mVelocityTracker;
   private DatingLayout mDatingLayout;
   private LinkedList<SearchUser> mSearchUserList;
+  private DatingManager mDatingManager;
   // Constants
   private static final int SNAP_VELOCITY         = 1000;
   private static final int TOUCH_STATE_IDLE      = 0;
@@ -197,9 +198,8 @@ public class DatingGallery extends ViewGroup {
     }
   }
   //-------------------------------------------------------------------------
-  public void setUserList(LinkedList<SearchUser> userList) {
-    mSearchUserList = userList;
-    Http.imageLoader(mSearchUserList.get(0).getLink(),mDatingLayout.mImageView);
+  public void setGalleryManager(DatingManager manager) {
+    mDatingManager = manager;    
   }
   //-------------------------------------------------------------------------
 }

@@ -9,8 +9,13 @@ import com.sonetica.topface.net.DoRateRequest;
 import com.sonetica.topface.net.FilterRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
+import com.sonetica.topface.ui.ProfileActivity;
+import com.sonetica.topface.ui.album.AlbumActivity;
+import com.sonetica.topface.ui.inbox.ChatActivity;
+import com.sonetica.topface.ui.inbox.InboxActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,8 +27,9 @@ import android.widget.Toast;
  */
 public class DatingActivity extends Activity {
   // Data
-  DatingGallery mDatingGallery;
-  LinkedList<SearchUser> mSearchUserList;
+  private DatingGallery mDatingGallery;
+  private DatingManager mDatingManager;
+  private LinkedList<SearchUser> mSearchUserList;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +50,13 @@ public class DatingActivity extends Activity {
      }
    });
 
+   // Data
+   mSearchUserList = new LinkedList<SearchUser>();
+   
    // Dating Gallery
    mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
+   mDatingManager = new DatingManager(this,mSearchUserList);
+   mDatingGallery.setGalleryManager(mDatingManager);
    
    update();
    //filter();
@@ -57,30 +68,13 @@ public class DatingActivity extends Activity {
     request.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        mSearchUserList = SearchUser.parse(response);
-        if(mSearchUserList.size()>0)
-          mDatingGallery.setUserList(mSearchUserList);
+        mSearchUserList.addAll(SearchUser.parse(response));
       }
       @Override
       public void fail(int codeError) {
 
       }
     }).exec();
-  }
-  //---------------------------------------------------------------------------
-  public void doRate(final int userid,final int rate) {
-    DoRateRequest doRate = new DoRateRequest(this);
-    doRate.userid = userid;
-    doRate.rate   = rate;
-    doRate.callback(new ApiHandler() {
-      @Override
-      public void success(Response response) {
-        Toast.makeText(DatingActivity.this,"rate:"+rate+",id:"+userid,Toast.LENGTH_SHORT).show();
-      }
-      @Override
-      public void fail(int codeError) {
-      }
-    });
   }
   //---------------------------------------------------------------------------
   public void filter() {
@@ -98,6 +92,34 @@ public class DatingActivity extends Activity {
       public void fail(int codeError) {
       }
     }).exec();
+  }
+  //---------------------------------------------------------------------------
+  public void doRate(final int userid,final int rate) {
+    DoRateRequest doRate = new DoRateRequest(this);
+    doRate.userid = 6665705;
+    doRate.rate   = rate;
+    doRate.callback(new ApiHandler() {
+      @Override
+      public void success(Response response) {
+        Toast.makeText(DatingActivity.this,"rate ok:"+rate+",id:"+userid,Toast.LENGTH_SHORT).show();
+      }
+      @Override
+      public void fail(int codeError) {
+        Toast.makeText(DatingActivity.this,"rate not ok:"+rate+",id:"+userid,Toast.LENGTH_SHORT).show();
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  public void openChat(int userid) {
+    Intent intent = new Intent(this,ChatActivity.class);
+    intent.putExtra(ChatActivity.INTENT_USER_ID,userid);
+    startActivityForResult(intent,0);
+  }
+  //---------------------------------------------------------------------------
+  public void openProfile(int userId) {
+    Intent intent = new Intent(this,ProfileActivity.class);
+    intent.putExtra(ProfileActivity.INTENT_USER_ID,userId);
+    startActivityForResult(intent,0);
   }
   //---------------------------------------------------------------------------
   @Override
