@@ -16,8 +16,8 @@ public class SearchUser extends AbstractData {
   public String   status;         // статус пользователя
   public String[] avatars_big;    // большая аватарка пользователя
   public String[] avatars_small;  // маленькая аватарка пользователя
-  public String   geo_city_name;  // наименование города пользователя
-  public int      geo_city_id;    // идентификатор города пользователя
+  public String   city_name;      // наименование города пользователя
+  public int      city_id;        // идентификатор города пользователя
   
   //public String geo_distance;        // дистация до пользователя (всегда NULL)
   //public String geo_coordinates;     // координаты пользователя
@@ -42,8 +42,8 @@ public class SearchUser extends AbstractData {
             search.online     = item.getBoolean("online");
             search.status     = item.getString("status");
           JSONObject geo = item.getJSONObject("geo");
-            search.geo_city_name = geo.getString("city");
-            search.geo_city_id   = geo.getInt("city_id");
+            search.city_name = geo.getString("city");
+            search.city_id   = geo.getInt("city_id");
           JSONArray avatars = item.getJSONArray("avatars");
             int size = avatars.length();
             if(size>0) {

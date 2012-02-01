@@ -8,19 +8,19 @@ import android.graphics.Paint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class InformerView extends ViewGroup {
   //---------------------------------------------------------------------------
   // class Informer
   //---------------------------------------------------------------------------
   class Informer {
-    public  float _x;         // х
-    public  float _y;         // у
-    private int   _widht;     // ширина
-    private int   _height;    // высота
-    private int   _index;     // цифра рейтинга
-    private String _text;     // текст подсказка
+    public float  _x;         // х
+    public float  _y;         // у
+    public int    _widht;     // ширина
+    public int    _temp;      // temp
+    public int    _height;    // высота
+    public int    _index;     // цифра рейтинга
+    public String _text;      // текст подсказка
     int color = Color.WHITE;  // Битмап для бекграунда
     // Ctor
     public Informer(int x,int y,int widht,int height) {
@@ -29,18 +29,14 @@ public class InformerView extends ViewGroup {
       _widht  = widht;
       _height = height;
       _text   = "оценка ";
+      _temp   = height / 2;
       informerPaint.setColor(Color.WHITE);
       informerTitlePaint.setColor(Color.BLACK);
     }
     public void draw(Canvas canvas) {
+      _y-=_temp;
       canvas.drawRect(_x,_y,_x+_widht,_y+_height,informerPaint);
       canvas.drawText(_text+_index,_x+15,_y+15,informerTitlePaint);
-    }
-    public int getWidth() {
-      return _widht;
-    }
-    public int getHeight() {
-      return _height;
     }
   }
   //---------------------------------------------------------------------------
@@ -54,6 +50,7 @@ public class InformerView extends ViewGroup {
   //---------------------------------------------------------------------------
   public InformerView(Context context) {
     super(context);
+    
     setBackgroundColor(Color.TRANSPARENT);
     
     // Chat btn
@@ -62,7 +59,7 @@ public class InformerView extends ViewGroup {
     mChatBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Toast.makeText(getContext(),"Chat",Toast.LENGTH_SHORT).show();
+        ((DatingLayout)getParent()).onChatBtnClick();
       }
     });
     addView(mChatBtn);
@@ -73,13 +70,13 @@ public class InformerView extends ViewGroup {
     mProfileBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Toast.makeText(getContext(),"Profile",Toast.LENGTH_SHORT).show();
+        ((DatingLayout)getParent()).onProfileBtnClick();
       }
     });
     addView(mProfileBtn);
     
     // Informer popup
-    mInformer = new Informer(-100,-100,100,50);
+    mInformer = new Informer(-100,-100,200,80);
 
   }
   //---------------------------------------------------------------------------
@@ -91,7 +88,7 @@ public class InformerView extends ViewGroup {
   //-------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    int width  = mInformer.getWidth();                   // вычисление своей ширины
+    int width  = mInformer._widht;                       // вычисление своей ширины
     int height = MeasureSpec.getSize(heightMeasureSpec); // вычисляем предоставленную нам высоту для отрисовки
     
     // передаем свои размеры предкам

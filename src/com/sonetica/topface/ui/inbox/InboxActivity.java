@@ -69,7 +69,7 @@ public class InboxActivity extends Activity {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
         Intent intent = new Intent(InboxActivity.this,ChatActivity.class);
-        intent.putExtra(AlbumActivity.INTENT_USER_ID,mInboxList.get(position).uid);
+        intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxList.get(position).uid);
         startActivityForResult(intent,0);
       }
     });

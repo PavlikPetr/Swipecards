@@ -37,7 +37,7 @@
   
   <!-- Dating Activity -->
   <string name="dating_header_title">Оценка фото</string>
-  <string name="dating_header_button">Фильтр</string>
+  <string name="dating_menu_one">Фильтр</string>
   
   <!-- Likes Activity -->
   <string name="likes_header_title">Я нравлюсь</string>

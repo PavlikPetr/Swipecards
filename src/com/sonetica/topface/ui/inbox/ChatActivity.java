@@ -68,6 +68,7 @@ public class ChatActivity extends Activity {
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
+    // params
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
     
     if(mHistoryList.size()==0) {

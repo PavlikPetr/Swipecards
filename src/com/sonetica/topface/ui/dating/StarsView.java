@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
-import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -62,12 +61,12 @@ public class StarsView extends View implements View.OnTouchListener {
     lastYs = new float[EVENT_COUNT];
     mInformerView = informer;
     
+    setOnTouchListener(this);
+    setBackgroundColor(Color.TRANSPARENT);
+    
     mStar0 = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_yellow);
     //mStar1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_blue);
     //mStar2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_grey);
-    
-    setOnTouchListener(this);
-    setBackgroundColor(Color.TRANSPARENT);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -95,6 +94,7 @@ public class StarsView extends View implements View.OnTouchListener {
       case MotionEvent.ACTION_UP:
         for(int i = 0; i < EVENT_COUNT; i++)
           lastYs[i] = -100;
+        ((DatingLayout)getParent()).onRate(star_index);
         //((DatingActivity)getContext()).doRate(0,star_index); // Опасная операция, требует рефакторинг !!!!
         break;
       default:

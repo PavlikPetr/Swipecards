@@ -1,9 +1,9 @@
 package com.sonetica.topface.ui.dating;
 
-import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.Http;
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -13,9 +13,16 @@ import android.view.ViewGroup;
 import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.Scroller;
-import android.widget.Toast;
 
 public class DatingGallery extends ViewGroup {
+  // interface DatingEventListener
+  interface DatingEventListener {
+    public void openProfileActivity(int userId);
+    public void openChatActivity(int userId);
+    public void onRate(int userId,int index);
+  }
+  //---------------------------------------------------------------------------
+  // Data
   private int   mScrollX;        // x
   private float mLastMotionX;    // last x
   private int   mCurrentScreen;  // текущее изображение в галереи
@@ -23,8 +30,12 @@ public class DatingGallery extends ViewGroup {
   private int   mTouchSlop;      // растояние, пройденное пальцем, для определения скролинга
   private Scroller mScroller;  
   private VelocityTracker mVelocityTracker;
+  private ImageView iv1;
+  private ImageView iv2;
   private DatingLayout mDatingLayout;
-  private LinkedList<SearchUser> mSearchUserList;
+  private DatingGalleryAdapter mAdapter;
+  private DatingEventListener mEventListener;
+  private SearchUser mUser;
   // Constants
   private static final int SNAP_VELOCITY         = 1000;
   private static final int TOUCH_STATE_IDLE      = 0;
@@ -43,21 +54,11 @@ public class DatingGallery extends ViewGroup {
     mDatingLayout = new DatingLayout(context);
     addView(mDatingLayout);
     // 1
-    ImageView iv = new ImageView(context);
-    iv.setImageResource(R.drawable.im_red_informer);
-    addView(iv);
+    iv1 = new ImageView(context);
+    addView(iv1);
     // 2
-    iv = new ImageView(context);
-    iv.setImageResource(R.drawable.im_red_informer);
-    addView(iv);
-    // 3
-    iv = new ImageView(context);
-    iv.setImageResource(R.drawable.im_red_informer);
-    addView(iv);
-    // 5
-    iv = new ImageView(context);
-    iv.setImageResource(R.drawable.im_red_informer);
-    addView(iv);
+    iv2 = new ImageView(context);
+    addView(iv2);
   }
   //-------------------------------------------------------------------------
   @Override
@@ -95,7 +96,7 @@ public class DatingGallery extends ViewGroup {
     
     mVelocityTracker.addMovement(event);
     
-    int   action = event.getAction();
+    int   action  = event.getAction();
     float motionX = event.getX();
 
     switch(action) {
@@ -111,7 +112,7 @@ public class DatingGallery extends ViewGroup {
           if(mScrollX > 0)
             scrollBy(Math.max(-mScrollX,deltaX),0);
         } else if(deltaX > 0) {
-          int availableToScroll = getChildAt(getChildCount() - 1).getRight() - mScrollX - getWidth();
+          int availableToScroll = getChildAt(getChildCount()-1).getRight()-mScrollX-getWidth();
           if(availableToScroll > 0)
             scrollBy(Math.min(availableToScroll,deltaX),0);
         }
@@ -120,9 +121,14 @@ public class DatingGallery extends ViewGroup {
         VelocityTracker velocityTracker = mVelocityTracker;
         velocityTracker.computeCurrentVelocity(1000);
         int velocityX = (int)velocityTracker.getXVelocity();
-        if(velocityX > SNAP_VELOCITY && mCurrentScreen > 0)
+        if(velocityX > SNAP_VELOCITY && mCurrentScreen > 0) {
           snapToScreen(mCurrentScreen - 1);
-        else if(velocityX < -SNAP_VELOCITY && mCurrentScreen < getChildCount() - 1) 
+          
+          // показать звезды при возвращении на окно оценок
+          if(mCurrentScreen==0)
+            mDatingLayout.hideChildren(View.VISIBLE);
+          
+        } else if(velocityX < -SNAP_VELOCITY && mCurrentScreen < getChildCount() - 1)           
           snapToScreen(mCurrentScreen + 1);
         else
           snapToDestination();
@@ -176,7 +182,7 @@ public class DatingGallery extends ViewGroup {
   //-------------------------------------------------------------------------
   public void snapToScreen(int whichScreen) {
     mCurrentScreen = whichScreen;
-    int newX = whichScreen * getWidth();
+    int newX  = whichScreen * getWidth();
     int delta = newX - mScrollX;
     mScroller.startScroll(mScrollX,0,delta,0,Math.abs(delta)*2);             
     invalidate();
@@ -197,14 +203,39 @@ public class DatingGallery extends ViewGroup {
       postInvalidate();
     }
   }
-  //-------------------------------------------------------------------------
-  public void setUserList(LinkedList<SearchUser> userList) {
-    mSearchUserList = userList;
-    Http.imageLoader(mSearchUserList.get(0).getLink(),mDatingLayout.mImageView);
+  //---------------------------------------------------------------------------
+  public void setAdapter(DatingGalleryAdapter adapter) {
+    mAdapter = adapter;
   }
-  //-------------------------------------------------------------------------
-  public void message() {
-    Toast.makeText(getContext(),"Message",Toast.LENGTH_SHORT).show();    
+  //---------------------------------------------------------------------------
+  public void setEventListener(DatingEventListener eventListener) {
+    mEventListener = eventListener;
   }
-  //-------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  public void notifyDataChanged() {
+    mUser = mAdapter.getUser();
+    Http.imageLoader(mUser.avatars_big[0],mDatingLayout.mImageView);
+    if(mUser.avatars_big.length>1)
+      Http.imageLoader(mUser.avatars_big[1],iv1);
+    else
+      iv1.setImageResource(R.drawable.im_red_informer);
+    if(mUser.avatars_big.length>2)
+      Http.imageLoader(mUser.avatars_big[2],iv2);
+    else
+      iv2.setImageResource(R.drawable.im_red_informer);
+  }
+  //---------------------------------------------------------------------------
+  public void onProfileBtnClick() {
+    mEventListener.openProfileActivity(mUser.uid);
+  }
+  //---------------------------------------------------------------------------
+  public void onChatBtnClick() {
+    mEventListener.openChatActivity(mUser.uid);
+  }
+  //---------------------------------------------------------------------------
+  public void onRate(int index) {
+    mEventListener.onRate(mUser.uid,index);
+    notifyDataChanged();
+  }
+  //---------------------------------------------------------------------------
 }
