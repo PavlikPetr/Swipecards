@@ -2,12 +2,14 @@ package com.sonetica.topface.ui.dating;
 
 import java.util.LinkedList;
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.Filter;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.DoRateRequest;
 import com.sonetica.topface.net.FilterRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
+
 import com.sonetica.topface.ui.ProfileActivity;
 import com.sonetica.topface.ui.dating.DatingGallery.DatingEventListener;
 import com.sonetica.topface.ui.inbox.ChatActivity;
@@ -18,6 +20,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,13 +58,20 @@ public class DatingActivity extends Activity implements DatingEventListener {
    btnFilter.setOnClickListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
+       Toast.makeText(DatingActivity.this,"Filter",Toast.LENGTH_SHORT).show();
        filter();
      }
    });
    */
 
+
+
+
    // Dating Gallery
    mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
+   
+
+
    mDatingAdapter = new DatingGalleryAdapter(this,mSearchUserList);
    mDatingGallery.setAdapter(mDatingAdapter);
    mDatingGallery.setEventListener(this);
@@ -75,7 +85,6 @@ public class DatingActivity extends Activity implements DatingEventListener {
     request.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        
         mSearchUserList.addAll(SearchUser.parse(response));
         mDatingGallery.notifyDataChanged();
         
@@ -83,9 +92,25 @@ public class DatingActivity extends Activity implements DatingEventListener {
       }
       @Override
       public void fail(int codeError) {
+
         Toast.makeText(DatingActivity.this,"update fail",Toast.LENGTH_SHORT).show();
       }
     }).exec();
+  }
+  //---------------------------------------------------------------------------
+  public void doRate(final int userid,final int rate) {
+    DoRateRequest doRate = new DoRateRequest(this);
+    doRate.userid = userid;
+    doRate.rate   = rate;
+    doRate.callback(new ApiHandler() {
+      @Override
+      public void success(Response response) {
+        Toast.makeText(DatingActivity.this,"rate:"+rate+",id:"+userid,Toast.LENGTH_SHORT).show();
+      }
+      @Override
+      public void fail(int codeError) {
+      }
+    });
   }
   //---------------------------------------------------------------------------
   public void filter() {
@@ -115,6 +140,7 @@ public class DatingActivity extends Activity implements DatingEventListener {
     doRate.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
+        Filter filter = Filter.parse(response);
         Toast.makeText(DatingActivity.this,"rate success:"+rate+",id:"+userid,Toast.LENGTH_SHORT).show();
       }
       @Override

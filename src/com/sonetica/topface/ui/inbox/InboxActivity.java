@@ -9,8 +9,6 @@ import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListe
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.InboxRequest;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.ui.album.AlbumActivity;
-import com.sonetica.topface.ui.likes.LikesActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,7 +16,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
