@@ -88,7 +88,7 @@ public class DatingActivity extends Activity implements DatingEventListener {
         mSearchUserList.addAll(SearchUser.parse(response));
         mDatingGallery.notifyDataChanged();
         
-        Toast.makeText(DatingActivity.this,"update success",Toast.LENGTH_SHORT).show();
+        Toast.makeText(DatingActivity.this,"update success 0",Toast.LENGTH_SHORT).show();
       }
       @Override
       public void fail(int codeError) {

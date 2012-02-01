@@ -129,7 +129,7 @@ public class LikesActivity extends Activity {
      create();
    
    // обнуление информера непросмотренных лайков
-   Data.mLikes = 0;
+   Data._likes = 0;
   }
   //---------------------------------------------------------------------------
   private void create() {

@@ -1,10 +1,7 @@
 package com.sonetica.topface.ui.dating;
 
 import java.util.LinkedList;
-import android.app.Activity;
 import android.content.Context;
-import android.view.View;
-import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 
 public class DatingGalleryAdapter {

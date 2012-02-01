@@ -188,11 +188,11 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   }
   //---------------------------------------------------------------------------
   private void redNewsInvalidate() {
-    mLikesButton.mNotify = Data.mLikes;
+    mLikesButton.mNotify = Data._likes;
     mLikesButton.invalidate();
-    mRatesButton.mNotify = Data.mRates;
+    mRatesButton.mNotify = Data._rates;
     mRatesButton.invalidate();
-    mChatButton.mNotify = Data.mMessages;
+    mChatButton.mNotify = Data._messages;
     mChatButton.invalidate();    
   }
   //---------------------------------------------------------------------------

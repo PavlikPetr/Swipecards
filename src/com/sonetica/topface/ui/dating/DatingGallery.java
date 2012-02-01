@@ -1,9 +1,9 @@
 package com.sonetica.topface.ui.dating;
 
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.Http;
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -214,7 +214,16 @@ public class DatingGallery extends ViewGroup {
   //---------------------------------------------------------------------------
   public void notifyDataChanged() {
     mUser = mAdapter.getUser();
-    Http.imageLoader(mUser.avatars_big[0],mDatingLayout.mImageView);
+    
+    mDatingLayout.mTopfaceView.age    = mUser.age;
+    mDatingLayout.mTopfaceView.money  = Data._money;
+    mDatingLayout.mTopfaceView.power  = Data._power;
+    mDatingLayout.mTopfaceView.city   = mUser.city_name;
+    mDatingLayout.mTopfaceView.name   = mUser.first_name;
+    mDatingLayout.mTopfaceView.status = mUser.status;
+    mDatingLayout.mTopfaceView.online = mUser.online;
+    
+    Http.imageLoader(mUser.avatars_big[0],mDatingLayout.mTopfaceView);
     if(mUser.avatars_big.length>1)
       Http.imageLoader(mUser.avatars_big[1],iv1);
     else

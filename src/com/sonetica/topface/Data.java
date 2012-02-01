@@ -17,11 +17,11 @@ public class Data {
   // Data
   public static String SSID;  // ключ для запросов к TP серверу
   // Data Profile
-  public static int mRates;
-  public static int mMessages;
-  public static int mLikes;
-  public static int mPower;
-  public static int mMoney;
+  public static int _rates;
+  public static int _messages;
+  public static int _likes;
+  public static int _power;
+  public static int _money;
   
   public static LinkedList<Inbox>   s_InboxList;
   public static LinkedList<Like>    s_LikesList;
@@ -42,12 +42,12 @@ public class Data {
   //---------------------------------------------------------------------------
   public static void updateNews(Profile profile) {
     if(profile==null) {
-      mRates = mLikes = mMessages = mMoney = mPower = 0;
+      _rates = _likes = _messages = _money = _power = 0;
       return;
     }
-    mRates    = profile.unread_rates;
-    mLikes    = profile.unread_likes;
-    mMessages = profile.unread_messages;
+    _rates    = profile.unread_rates;
+    _likes    = profile.unread_likes;
+    _messages = profile.unread_messages;
     //mPower    = profile.power;
     //mMoney    = profile.money;
   }

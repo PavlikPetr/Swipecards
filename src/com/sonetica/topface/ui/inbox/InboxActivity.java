@@ -82,7 +82,7 @@ public class InboxActivity extends Activity {
       create();
     
     // обнуление информера непрочитанных сообщений
-    Data.mMessages = 0;
+    Data._messages = 0;
   }
   //---------------------------------------------------------------------------
   private void create() {

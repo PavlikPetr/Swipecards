@@ -1,16 +1,17 @@
 package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 public class DatingLayout extends ViewGroup implements View.OnClickListener {
   // Data
-  public  ImageView    mImageView;
+  public  TopfaceView  mTopfaceView;
   private StarsView    mStarsView;
   private InformerView mInformerView;
   private View mHeaderBar;
@@ -23,9 +24,9 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     setBackgroundColor(Color.BLACK);
     
     // Baby
-    mImageView = new ImageView(context);
-    mImageView.setImageResource(R.drawable.im_red_informer);
-    addView(mImageView);
+    mTopfaceView = new TopfaceView(context);
+    mTopfaceView.setImageResource(R.drawable.im_red_informer);
+    addView(mTopfaceView);
 
     // Informer, profile, chat
     mInformerView = new InformerView(context);
@@ -51,7 +52,7 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
   //---------------------------------------------------------------------------  
   @Override
   protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
-    mImageView.layout(left,top,right,bottom);
+    mTopfaceView.layout(left,top,right,bottom);
 
     int stars_x = getMeasuredWidth() - mStarsView.getMeasuredWidth();
     int stars_y = mHeaderOffset;
@@ -76,6 +77,7 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     mStarsView.setVisibility(visibility);
     mInformerView.setVisibility(visibility);
     mHeaderBar.setVisibility(visibility);
+    mTopfaceView.visible(visibility);
   }
   //---------------------------------------------------------------------------
   public void hideChildren() {
@@ -85,6 +87,8 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     mInformerView.setVisibility(visibility);
     visibility = mHeaderBar.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE ;
     mHeaderBar.setVisibility(visibility);
+    visibility = mTopfaceView.isVisible() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE ;
+    mTopfaceView.visible(visibility);
   }
   //---------------------------------------------------------------------------
   @Override
