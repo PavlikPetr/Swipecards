@@ -2,6 +2,7 @@ package com.sonetica.topface.ui.dating;
 
 import java.util.LinkedList;
 import com.sonetica.topface.R;
+import com.sonetica.topface.R.drawable;
 import com.sonetica.topface.data.Filter;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
@@ -20,7 +21,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +29,10 @@ import android.widget.Toast;
  */
 public class DatingActivity extends Activity implements DatingEventListener {
   // Data
-  public static View mHeaderBar;
   private DatingGallery mDatingGallery;
   private DatingGalleryAdapter mDatingAdapter; 
   private LinkedList<SearchUser> mSearchUserList;
-  public  static int HEADER_HEIGHT;
+  public  static View mHeaderBar;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +43,11 @@ public class DatingActivity extends Activity implements DatingEventListener {
     // Data
     mSearchUserList = new LinkedList<SearchUser>();
 
-   // Title Header
+    // Header Bar
+    mHeaderBar = findViewById(R.id.loHeader);
+    
+    // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
-   
-   mHeaderBar = findViewById(R.id.tvHeaderBar);
-   mHeaderBar.setBackgroundColor(R.drawable.im_dating_header_bar);
-   HEADER_HEIGHT = 50; 
 
    /*
    // Button Header
@@ -64,17 +62,12 @@ public class DatingActivity extends Activity implements DatingEventListener {
    });
    */
 
-
-
-
    // Dating Gallery
    mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
-   
-
-
    mDatingAdapter = new DatingGalleryAdapter(this,mSearchUserList);
    mDatingGallery.setAdapter(mDatingAdapter);
    mDatingGallery.setEventListener(this);
+   
    update();
    //filter();
   }
@@ -88,7 +81,7 @@ public class DatingActivity extends Activity implements DatingEventListener {
         mSearchUserList.addAll(SearchUser.parse(response));
         mDatingGallery.notifyDataChanged();
         
-        Toast.makeText(DatingActivity.this,"update success 0",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(DatingActivity.this,"update success 0",Toast.LENGTH_SHORT).show();
       }
       @Override
       public void fail(int codeError) {
@@ -141,7 +134,7 @@ public class DatingActivity extends Activity implements DatingEventListener {
       @Override
       public void success(Response response) {
         Filter filter = Filter.parse(response);
-        Toast.makeText(DatingActivity.this,"rate success:"+rate+",id:"+userid,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(DatingActivity.this,"rate success:"+rate+",id:"+userid,Toast.LENGTH_SHORT).show();
       }
       @Override
       public void fail(int codeError) {

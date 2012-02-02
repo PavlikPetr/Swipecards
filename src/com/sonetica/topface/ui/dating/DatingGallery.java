@@ -5,6 +5,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.Http;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -48,6 +49,7 @@ public class DatingGallery extends ViewGroup {
     mTouchState = TOUCH_STATE_IDLE;
     mTouchSlop  = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     
+    setBackgroundColor(Color.BLACK);
     setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.FILL_PARENT));
     
     // фрейм оценок
@@ -215,15 +217,16 @@ public class DatingGallery extends ViewGroup {
   public void notifyDataChanged() {
     mUser = mAdapter.getUser();
     
-    mDatingLayout.mTopfaceView.age    = mUser.age;
-    mDatingLayout.mTopfaceView.money  = Data._money;
-    mDatingLayout.mTopfaceView.power  = Data._power;
-    mDatingLayout.mTopfaceView.city   = mUser.city_name;
-    mDatingLayout.mTopfaceView.name   = mUser.first_name;
-    mDatingLayout.mTopfaceView.status = mUser.status;
-    mDatingLayout.mTopfaceView.online = mUser.online;
+    mDatingLayout.mInfoView.age    = mUser.age;
+    mDatingLayout.mInfoView.power  = 15000; // Data._power;
+    mDatingLayout.mInfoView.money  = 15000; // Data._money;
+    mDatingLayout.mInfoView.city   = mUser.city_name;
+    mDatingLayout.mInfoView.name   = mUser.first_name;
+    mDatingLayout.mInfoView.status = mUser.status;
+    mDatingLayout.mInfoView.online = mUser.online;
     
-    Http.imageLoader(mUser.avatars_big[0],mDatingLayout.mTopfaceView);
+    Http.imageLoader(mUser.avatars_big[0],mDatingLayout.mFaceView);
+    //mDatingLayout.mFaceView.setBackgroundColor(Color.WHITE);
     if(mUser.avatars_big.length>1)
       Http.imageLoader(mUser.avatars_big[1],iv1);
     else

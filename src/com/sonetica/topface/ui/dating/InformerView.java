@@ -103,8 +103,8 @@ public class InformerView extends ViewGroup {
     int width  = getMeasuredWidth();
     int height = getMeasuredHeight();
     
-    int x = (int)(width  - mProfileBtn.getMeasuredWidth()*1.6);
-    int y = (int)(height - mProfileBtn.getMeasuredHeight()*3);
+    int x = (int)(width  - mProfileBtn.getMeasuredWidth()*1.4);
+    int y = (int)(height - mProfileBtn.getMeasuredHeight()*2.6);
     mChatBtn.layout(x,y,x+mChatBtn.getMeasuredWidth(),y+mChatBtn.getMeasuredHeight());
     
     y = (int)(y+mChatBtn.getMeasuredHeight()*1.5);

@@ -2,18 +2,18 @@ package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 public class DatingLayout extends ViewGroup implements View.OnClickListener {
   // Data
-  public  TopfaceView  mTopfaceView;
-  private StarsView    mStarsView;
-  private InformerView mInformerView;
+  public  ImageView    mFaceView;     // оцениваемая фотография
+  public  InfoView     mInfoView;     // информация о пользователе 
+  private StarsView    mStarsView;    // контрол со звездами для оценки
+  private InformerView mInformerView; // контрол с всплывающей панелей и 2 кнопками(чат,профиль)
+  // 
   private View mHeaderBar;
   private int  mHeaderOffset;
   //---------------------------------------------------------------------------
@@ -24,9 +24,13 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     setBackgroundColor(Color.BLACK);
     
     // Baby
-    mTopfaceView = new TopfaceView(context);
-    mTopfaceView.setImageResource(R.drawable.im_red_informer);
-    addView(mTopfaceView);
+    mFaceView = new ImageView(context);
+    mFaceView.setImageResource(R.drawable.im_red_informer);
+    addView(mFaceView);
+    
+    // Info
+    mInfoView = new InfoView(context);
+    addView(mInfoView);
 
     // Informer, profile, chat
     mInformerView = new InformerView(context);
@@ -35,30 +39,31 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     // Stars
     mStarsView = new StarsView(context,mInformerView);
     addView(mStarsView);
-
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     super.onMeasure(widthMeasureSpec,heightMeasureSpec);
     
-    mHeaderBar = DatingActivity.mHeaderBar;
-    mHeaderOffset = DatingActivity.HEADER_HEIGHT;
+    // ПОПРАВИТЬ !!!!
+    mHeaderBar    = DatingActivity.mHeaderBar;
+    mHeaderOffset = DatingActivity.mHeaderBar.getHeight();
     
     int count = getChildCount();
     for(int i=0;i<count;i++)
-      getChildAt(i).measure(0,MeasureSpec.getSize(heightMeasureSpec)-mHeaderOffset); // HEADER OFFSET !!!!!
+      getChildAt(i).measure(MeasureSpec.getSize(widthMeasureSpec),MeasureSpec.getSize(heightMeasureSpec)-mHeaderOffset); // HEADER OFFSET !!!!!
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
-    mTopfaceView.layout(left,top,right,bottom);
+    mFaceView.layout(left,top,right,bottom);
 
     int stars_x = getMeasuredWidth() - mStarsView.getMeasuredWidth();
     int stars_y = mHeaderOffset;
     
     mStarsView.layout(stars_x,stars_y,stars_x+mStarsView.getMeasuredWidth(),stars_y+mStarsView.getMeasuredHeight());
     mInformerView.layout(stars_x-mInformerView.getMeasuredWidth(),stars_y,stars_x,stars_y+mInformerView.getMeasuredHeight());
+    mInfoView.layout(0,stars_y,mInfoView.getMeasuredWidth(),stars_y+mInfoView.getMeasuredHeight());
   }
   //-------------------------------------------------------------------------
   public void onProfileBtnClick() {
@@ -77,7 +82,7 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     mStarsView.setVisibility(visibility);
     mInformerView.setVisibility(visibility);
     mHeaderBar.setVisibility(visibility);
-    mTopfaceView.visible(visibility);
+    mInfoView.setVisibility(visibility);
   }
   //---------------------------------------------------------------------------
   public void hideChildren() {
@@ -87,8 +92,8 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     mInformerView.setVisibility(visibility);
     visibility = mHeaderBar.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE ;
     mHeaderBar.setVisibility(visibility);
-    visibility = mTopfaceView.isVisible() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE ;
-    mTopfaceView.visible(visibility);
+    visibility = mInfoView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE ;
+    mInfoView.setVisibility(visibility);
   }
   //---------------------------------------------------------------------------
   @Override
