@@ -38,6 +38,10 @@ public class PullToRefreshGridView extends PullToRefreshAdapterViewBase<GridView
 	  getRefreshableView().invalidate();
 	}
 	
+	public void setNumColumns(int columns) {
+    getRefreshableView().setNumColumns(columns);
+  }
+	
 	@Override
 	protected final GridView createRefreshableView(Context context, AttributeSet attrs) {
 		GridView gv = new InternalGridView(context, attrs);

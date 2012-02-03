@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.utils.Device;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,7 +56,7 @@ public class StarsView extends View implements View.OnTouchListener {
         else
           canvas.drawBitmap(mStarGreyActive,_coord_x,_bmp_y,paintStar);
       
-      canvas.drawText(""+_index,(float)(_coord_x+mStarYellow.getWidth()/2),(float)(_coord_y+mStarYellow.getHeight()/1.7),paintNumber);
+      canvas.drawText(""+_index,(float)(_coord_x+mStarYellow.getWidth()/2),(float)(_coord_y+mStarYellow.getHeight()/1.4),paintNumber);
     }
   }
   //---------------------------------------------------------------------------
@@ -85,7 +86,7 @@ public class StarsView extends View implements View.OnTouchListener {
     setBackgroundColor(Color.TRANSPARENT);
     
     paintNumber.setColor(Color.WHITE);
-    paintNumber.setTextSize(11);
+    paintNumber.setTextSize(Device.wideScreen?22:11);
     paintNumber.setTypeface(Typeface.DEFAULT_BOLD);
     paintNumber.setAntiAlias(true);
     paintNumber.setTextAlign(Paint.Align.CENTER);
@@ -117,28 +118,34 @@ public class StarsView extends View implements View.OnTouchListener {
     
     if(curr_star_index!=prev_star_index) {
       mStars[prev_star_index].pressed=false;
-      mStars[curr_star_index].pressed=true;
       prev_star_index = curr_star_index;
-      invalidate();
     }
     
     switch(event.getAction()) {
       case MotionEvent.ACTION_DOWN:
+        mStars[curr_star_index].pressed=true;
+        mInformerView.setVisible(true);
         for(int i = 0; i < EVENT_COUNT; i++)
           lastYs[i] = y;
         break;
       case MotionEvent.ACTION_MOVE:
+        mStars[curr_star_index].pressed=true;
+        mInformerView.setVisible(true);
         for (int i = 0; i < EVENT_COUNT-1; i++)
           lastYs[i] = lastYs[i+1];
         lastYs[EVENT_COUNT-1] = y;
         break;
       case MotionEvent.ACTION_UP:
+        mStars[curr_star_index].pressed=false;
+        mInformerView.setVisible(false);
         for(int i = 0; i < EVENT_COUNT; i++)
           lastYs[i] = -100;
         ((DatingLayout)getParent()).onRate(star_index);
         //((DatingActivity)getContext()).doRate(0,star_index); // Опасная операция, требует рефакторинг !!!!
         break;
       default:
+        mStars[curr_star_index].pressed=false;
+        mInformerView.setVisible(false);
         for(int i = 0; i < EVENT_COUNT; i++)
           lastYs[i] = -100;
         break;
@@ -151,7 +158,8 @@ public class StarsView extends View implements View.OnTouchListener {
     
     mInformerView.setData(averageY,star_index);
     mInformerView.invalidate();
-
+    invalidate();
+    
     return true;
   }
   //---------------------------------------------------------------------------

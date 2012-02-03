@@ -12,6 +12,7 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.GalleryManager;
 import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.Device;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -49,6 +50,7 @@ public class LikesActivity extends Activity {
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likes_header_title));
    
+   /*
    // Girl Button
    Button btnGirls = (Button)findViewById(R.id.btnBarGirls);
    btnGirls.setVisibility(View.INVISIBLE);
@@ -84,10 +86,12 @@ public class LikesActivity extends Activity {
        //update();
      }
    });
+   */
    
    // Gallery
    mGallery = (PullToRefreshGridView)findViewById(R.id.grdLikesGallary);
    mGallery.setAnimationCacheEnabled(false);
+   mGallery.setNumColumns(Device.wideScreen?3:2);
    //mGallery.setScrollingCacheEnabled(false);
    mGallery.setOnScrollListener(new OnScrollListener() {
      @Override

@@ -118,12 +118,11 @@ public class InformerView extends ViewGroup {
     mProfileBtn.layout(x,y,x+mProfileBtn.getMeasuredWidth(),y+mProfileBtn.getMeasuredHeight());
   }
   //---------------------------------------------------------------------------
+  public void setVisible(boolean visible) {
+    mInformer._visible = visible;
+  }
+  //---------------------------------------------------------------------------
   public void setData(float y,int index) {
-    if(y<0) {
-      mInformer._visible = false;
-      return;
-    }
-    mInformer._visible = true;
     mInformer._y = y;
     mInformer._index = index;
   }

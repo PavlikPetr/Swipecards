@@ -19,7 +19,7 @@ public class TopsGridAdapter extends BaseAdapter {
   private GalleryManager mGalleryManager;
   // class ViewHolder
   static class ViewHolder {
-    ThumbView mThumbButton;
+    ThumbView mThumbView;
   };
   //---------------------------------------------------------------------------
   public TopsGridAdapter(Context context,GalleryManager galleryManager) {
@@ -38,17 +38,17 @@ public class TopsGridAdapter extends BaseAdapter {
     if(convertView==null) {
       holder = new ViewHolder();
       convertView = (ViewGroup)mInflater.inflate(R.layout.gallery_item, null, false);
-      holder.mThumbButton = (ThumbView)convertView.findViewById(R.id.ivTG);
-      holder.mThumbButton.setMinimumWidth(mGalleryManager.mBitmapWidth);
-      holder.mThumbButton.setMinimumHeight(mGalleryManager.mBitmapHeight);
+      holder.mThumbView = (ThumbView)convertView.findViewById(R.id.ivTG);
+      holder.mThumbView.setMinimumWidth(mGalleryManager.mBitmapWidth);
+      holder.mThumbView.setMinimumHeight(mGalleryManager.mBitmapHeight);
       //holder.miv.setScaleType(ScaleType.CENTER);
       convertView.setTag(holder);
     } else 
       holder = (ViewHolder)convertView.getTag();
 
-    holder.mThumbButton.mPercent = ((TopUser)mGalleryManager.get(position)).liked; 
+    holder.mThumbView.mPercent = ((TopUser)mGalleryManager.get(position)).liked; 
 
-    mGalleryManager.getImage(position,holder.mThumbButton);
+    mGalleryManager.getImage(position,holder.mThumbView);
     
     return convertView;
   }

@@ -57,9 +57,25 @@ public class DatingGallery extends ViewGroup {
     addView(mDatingLayout);
     // 1
     iv1 = new ImageView(context);
+    iv1.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // ДУБЛЯЖ
+        int visibility = DatingActivity.mHeaderBar.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE ;
+        DatingActivity.mHeaderBar.setVisibility(visibility);
+      }
+    });
     addView(iv1);
     // 2
     iv2 = new ImageView(context);
+    iv2.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // ДУБЛЯЖ
+        int visibility = DatingActivity.mHeaderBar.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE ;
+        DatingActivity.mHeaderBar.setVisibility(visibility);
+      }
+    });
     addView(iv2);
   }
   //-------------------------------------------------------------------------
@@ -126,7 +142,7 @@ public class DatingGallery extends ViewGroup {
         if(velocityX > SNAP_VELOCITY && mCurrentScreen > 0) {
           snapToScreen(mCurrentScreen - 1);
           
-          // показать звезды при возвращении на окно оценок
+          // показать звезды при возвращении на окно оценок !!!!!!!!!
           if(mCurrentScreen==0)
             mDatingLayout.hideChildren(View.VISIBLE);
           

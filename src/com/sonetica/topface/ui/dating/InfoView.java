@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.utils.Device;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,25 +43,25 @@ class InfoView extends ImageView {
     
     // money, power
     paintResources.setColor(Color.WHITE);
-    paintResources.setTextSize(14);
+    paintResources.setTextSize(Device.wideScreen?28:14);
     paintResources.setAntiAlias(true);
     paintResources.setTypeface(Typeface.DEFAULT_BOLD);
     paintResources.setTextAlign(Paint.Align.RIGHT);
     
     // city
     paintCity.setColor(Color.WHITE);
-    paintCity.setTextSize(14);
+    paintCity.setTextSize(Device.wideScreen?28:14);
     paintCity.setAntiAlias(true);
     
     // status
     paintStatus.setColor(Color.WHITE);
-    paintStatus.setTextSize(14);
+    paintStatus.setTextSize(Device.wideScreen?28:14);
     paintStatus.setAntiAlias(true);
     paintStatus.setSubpixelText(true);
     
     // name age online
     paintName.setColor(Color.WHITE);
-    paintName.setTextSize(18);
+    paintName.setTextSize(Device.wideScreen?36:18);
     paintName.setTypeface(Typeface.DEFAULT_BOLD);
     paintName.setAntiAlias(true);
     
@@ -94,15 +95,15 @@ class InfoView extends ImageView {
     canvas.drawBitmap(mShadowBottomBmp,0,getHeight()-mShadowBottomBmp.getHeight(),paint);
     
     // money, power
-    float offset_x = 50;
-    float offset_y = 8;
+    float offset_x = Device.wideScreen?100:50;
+    float offset_y = Device.wideScreen?16:8;
     canvas.drawText(""+power,offset_x,offset_y+(int)(mPowerBmp.getHeight()/1.4),paintResources);
     canvas.drawBitmap(mPowerBmp,offset_x,offset_y,paint);
     offset_x *= 2.5;
     canvas.drawText(""+money,offset_x,offset_y+(int)(mMoneyBmp.getHeight()/1.4),paintResources);
     canvas.drawBitmap(mMoneyBmp,offset_x+4,offset_y,paint);
     
-    offset_x = 10;
+    offset_x = Device.wideScreen?20:10;
     offset_y = getHeight()-paintCity.getTextSize();
     
     //city
@@ -113,7 +114,7 @@ class InfoView extends ImageView {
     // status
     canvas.drawText(status,offset_x,(float)(offset_y-paintStatus.getTextSize()*1.5),paintStatus);
     
-    offset_y-=60;
+    offset_y-=Device.wideScreen?120:60;
     
     // name age online
     String name_age = name+", "+age; 
@@ -123,8 +124,6 @@ class InfoView extends ImageView {
       canvas.drawBitmap(mOnlineBmp,offset_x+offset_z,offset_y-mOnlineBmp.getHeight(),paint);
     else
       canvas.drawBitmap(mOfflineBmp,offset_x+offset_z,offset_y-mOnlineBmp.getHeight(),paint);
-    
-
   }
   //----------------------------------
 }

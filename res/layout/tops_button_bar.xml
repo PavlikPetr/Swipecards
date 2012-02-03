@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+  <RelativeLayout
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content" >
+      
+    <ImageView
+        android:id="@+id/ivHeaderBkgrd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/im_button_bar" />
+    
+	  <com.sonetica.topface.ui.DoubleButton
+	      android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true" 
+        android:layout_centerVertical="true" />
+	  
+	  <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/tops_btn_city"
+        android:background="@drawable/btn_city_selector"/>
+	  
+  </RelativeLayout>
+</merge>

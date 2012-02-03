@@ -34,7 +34,7 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
   private Bitmap[] mArray;
   // class ViewHolder
   static class ViewHolder {
-    ThumbView mThumbButton;
+    ThumbView mThumbView;
   };
   //threads
   private boolean isScrolled; // idle(0) scrolling(1)
@@ -64,17 +64,17 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
       holder = new ViewHolder();
 
       convertView = (ViewGroup)mInflater.inflate(R.layout.gallery_item, null, false);
-      holder.mThumbButton = (ThumbView)convertView.findViewById(R.id.ivTG);
-      holder.mThumbButton.setMinimumWidth(mBitmapWidth);
-      holder.mThumbButton.setMinimumHeight(mBitmapHeight);
+      holder.mThumbView = (ThumbView)convertView.findViewById(R.id.ivTG);
+      holder.mThumbView.setMinimumWidth(mBitmapWidth);
+      holder.mThumbView.setMinimumHeight(mBitmapHeight);
 
       convertView.setTag(holder);
     } else 
       holder = (ViewHolder)convertView.getTag();
 
-    holder.mThumbButton.mPercent = mData.get(position).liked; 
+    holder.mThumbView.mPercent = mData.get(position).liked; 
 
-    getImage(position,holder.mThumbButton);
+    getImage(position,holder.mThumbView);
     
     return convertView;
   }

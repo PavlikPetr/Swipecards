@@ -39,7 +39,7 @@ public class GalleryManager {
     mCacheManager = new CacheManager(context);
     mLinkCache    = new HashMap<ImageView,Integer>();
     mThreadsPool  = Executors.newFixedThreadPool(mThreadCount);
-    mBitmapWidth  = Device.getDisplay(context).getWidth()/4;
+    mBitmapWidth  = Device.getDisplay(context).getWidth()/(Device.wideScreen?3:2);
     mBitmapHeight = (int)(mBitmapWidth*1.25);
   }
   //---------------------------------------------------------------------------

@@ -1,6 +1,8 @@
 package com.sonetica.topface.ui.likes;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.Like;
+import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.ui.ThumbView;
 import com.sonetica.topface.ui.GalleryManager;
 import android.content.Context;
@@ -19,7 +21,7 @@ public class LikesGridAdapter extends BaseAdapter {
   private GalleryManager mGalleryManager;
   // class ViewHolder
   static class ViewHolder {
-    ThumbView mThumbButton;
+    ThumbView mThumbView;
   };
   //---------------------------------------------------------------------------
   public LikesGridAdapter(Context context,GalleryManager galleryManager) {
@@ -39,17 +41,23 @@ public class LikesGridAdapter extends BaseAdapter {
     if(convertView==null) {
       holder = new ViewHolder();
       convertView = (ViewGroup)mInflater.inflate(R.layout.gallery_item, null, false);
-      holder.mThumbButton = (ThumbView)convertView.findViewById(R.id.ivTG);
-      holder.mThumbButton.setMinimumWidth(mGalleryManager.mBitmapWidth);
-      holder.mThumbButton.setMinimumHeight(mGalleryManager.mBitmapHeight);
+      holder.mThumbView = (ThumbView)convertView.findViewById(R.id.ivTG);
+      holder.mThumbView.setMinimumWidth(mGalleryManager.mBitmapWidth);
+      holder.mThumbView.setMinimumHeight(mGalleryManager.mBitmapHeight);
       //holder.miv.setScaleType(ScaleType.CENTER);
       convertView.setTag(holder);
     } else 
       holder = (ViewHolder)convertView.getTag();
 
-    //holder.mTopButton.mPercent = mGalleryCachedManager.get(position).liked; 
-
-    mGalleryManager.getImage(position,holder.mThumbButton);
+    //holder.mTopButton.mPercent = mGalleryCachedManager.get(position).liked;
+    
+    Like like = ((Like)mGalleryManager.get(position));
+    
+    holder.mThumbView.mAge    = 99;
+    holder.mThumbView.mName   = like.first_name;
+    holder.mThumbView.mOnline = like.online;
+        
+    mGalleryManager.getImage(position,holder.mThumbView);
     
     return convertView;
   }

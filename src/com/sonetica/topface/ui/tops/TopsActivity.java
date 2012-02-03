@@ -9,6 +9,7 @@ import com.sonetica.topface.net.*;
 import com.sonetica.topface.ui.GalleryManager;
 import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.Device;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -71,6 +72,7 @@ public class TopsActivity extends Activity {
     mActionData.city_name = preferences.getString(getString(R.string.s_tops_city_name),getString(R.string.default_city));
     mActionData.city_popup_position = preferences.getInt(getString(R.string.s_tops_city_position),0);
     
+    /*
     // Girls Button
     Button btnGirls = (Button)findViewById(R.id.btnBarGirls);
     btnGirls.setText(getString(R.string.tops_btn_girls));
@@ -102,11 +104,12 @@ public class TopsActivity extends Activity {
         choiceCity();
       }
     });
-    
+    */
     // Gallery
     mGallery = (GridView)findViewById(R.id.grdTopsGallary);
     mGallery.setAnimationCacheEnabled(false);
     mGallery.setScrollingCacheEnabled(false);
+    mGallery.setNumColumns(Device.wideScreen?3:2);
     /*
     mGallery.setOnScrollListener(new OnScrollListener() {
       @Override

@@ -3,6 +3,7 @@
 package com.sonetica.topface;
 
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.Device;
 import android.app.Application;
 
 /*
@@ -27,6 +28,7 @@ public class App extends Application {
     
     // App initialization
     Global.init(this);
+    Device.init(this);
     Data.init(this);
   }
   //---------------------------------------------------------------------------
