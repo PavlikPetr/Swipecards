@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,12 +21,12 @@ public class InformerView extends ViewGroup {
     public int    _temp;      // temp
     public int    _height;    // высота
     public int    _index;     // цифра рейтинга
+    public int    _bottom;    // нижняя граница предка 
     public String _text;      // текст подсказка
-    int color = Color.WHITE;  // Битмап для бекграунда
+    public boolean _visible;      // рисовать или нет
+    private int color = Color.WHITE;  // Битмап для бекграунда
     // Ctor
-    public Informer(int x,int y,int widht,int height) {
-      _x = 0; 
-      _y = y;
+    public Informer(int widht,int height) {
       _widht  = widht;
       _height = height;
       _text   = "оценка ";
@@ -34,7 +35,11 @@ public class InformerView extends ViewGroup {
       informerTitlePaint.setColor(Color.BLACK);
     }
     public void draw(Canvas canvas) {
+      if(!_visible) return;
       _y-=_temp;
+      if(_y<0) _y=0;
+      else if(_y>_bottom-_height) _y=_bottom-_height; // иметь просчитанным !!!
+      Debug.log(">>>>>>>>","_y:"+_y+",Y:"+(_bottom-_height));
       canvas.drawRect(_x,_y,_x+_widht,_y+_height,informerPaint);
       canvas.drawText(_text+_index,_x+15,_y+15,informerTitlePaint);
     }
@@ -76,7 +81,7 @@ public class InformerView extends ViewGroup {
     addView(mProfileBtn);
     
     // Informer popup
-    mInformer = new Informer(-100,-100,200,80);
+    mInformer = new Informer(200,80);
 
   }
   //---------------------------------------------------------------------------
@@ -103,6 +108,8 @@ public class InformerView extends ViewGroup {
     int width  = getMeasuredWidth();
     int height = getMeasuredHeight();
     
+    mInformer._bottom = height;
+    
     int x = (int)(width  - mProfileBtn.getMeasuredWidth()*1.4);
     int y = (int)(height - mProfileBtn.getMeasuredHeight()*2.6);
     mChatBtn.layout(x,y,x+mChatBtn.getMeasuredWidth(),y+mChatBtn.getMeasuredHeight());
@@ -112,6 +119,11 @@ public class InformerView extends ViewGroup {
   }
   //---------------------------------------------------------------------------
   public void setData(float y,int index) {
+    if(y<0) {
+      mInformer._visible = false;
+      return;
+    }
+    mInformer._visible = true;
     mInformer._y = y;
     mInformer._index = index;
   }

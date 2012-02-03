@@ -47,7 +47,7 @@ public class DatingGallery extends ViewGroup {
     
     mScroller   = new Scroller(context);
     mTouchState = TOUCH_STATE_IDLE;
-    mTouchSlop  = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+    mTouchSlop  = ViewConfiguration.get(getContext()).getScaledTouchSlop()+40;
     
     setBackgroundColor(Color.BLACK);
     setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.FILL_PARENT));
@@ -218,8 +218,8 @@ public class DatingGallery extends ViewGroup {
     mUser = mAdapter.getUser();
     
     mDatingLayout.mInfoView.age    = mUser.age;
-    mDatingLayout.mInfoView.power  = 15000; // Data._power;
-    mDatingLayout.mInfoView.money  = 15000; // Data._money;
+    mDatingLayout.mInfoView.power  = Data._power;
+    mDatingLayout.mInfoView.money  = Data._money;
     mDatingLayout.mInfoView.city   = mUser.city_name;
     mDatingLayout.mInfoView.name   = mUser.first_name;
     mDatingLayout.mInfoView.status = mUser.status;

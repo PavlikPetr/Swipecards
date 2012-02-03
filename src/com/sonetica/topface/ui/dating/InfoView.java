@@ -32,7 +32,6 @@ class InfoView extends ImageView {
   private static final Paint paintName = new Paint();
   private static final Paint paintCity = new Paint();
   private static final Paint paintStatus = new Paint();
-  private static final Paint paintOnline = new Paint();
   //----------------------------------
   public InfoView(Context context) {
     super(context);

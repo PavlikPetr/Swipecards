@@ -1,8 +1,9 @@
 package com.sonetica.topface.ui.dating;
 
 import java.util.LinkedList;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
-import com.sonetica.topface.R.drawable;
+import com.sonetica.topface.data.DoRate;
 import com.sonetica.topface.data.Filter;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
@@ -91,21 +92,6 @@ public class DatingActivity extends Activity implements DatingEventListener {
     }).exec();
   }
   //---------------------------------------------------------------------------
-  public void doRate(final int userid,final int rate) {
-    DoRateRequest doRate = new DoRateRequest(this);
-    doRate.userid = userid;
-    doRate.rate   = rate;
-    doRate.callback(new ApiHandler() {
-      @Override
-      public void success(Response response) {
-        Toast.makeText(DatingActivity.this,"rate:"+rate+",id:"+userid,Toast.LENGTH_SHORT).show();
-      }
-      @Override
-      public void fail(int codeError) {
-      }
-    });
-  }
-  //---------------------------------------------------------------------------
   public void filter() {
     // вызывает окно фильтра и передает параметры 
     FilterRequest request = new FilterRequest(this);
@@ -133,12 +119,14 @@ public class DatingActivity extends Activity implements DatingEventListener {
     doRate.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        Filter filter = Filter.parse(response);
-        //Toast.makeText(DatingActivity.this,"rate success:"+rate+",id:"+userid,Toast.LENGTH_SHORT).show();
+        DoRate rate = DoRate.parse(response);
+        Data._power = rate.power;
+        Data._money = rate.money;
+        //Toast.makeText(DatingActivity.this,"p:"+Data._power+",m:"+Data._money,Toast.LENGTH_SHORT).show();
       }
       @Override
       public void fail(int codeError) {
-        Toast.makeText(DatingActivity.this,"rate fail:"+rate+",id:"+userid,Toast.LENGTH_SHORT).show();
+
       }
     }).exec();
   }

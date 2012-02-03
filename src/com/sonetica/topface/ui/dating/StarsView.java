@@ -25,6 +25,7 @@ public class StarsView extends View implements View.OnTouchListener {
     private int _height;
     public Rect _rect;
     public boolean pressed;
+    public int average=6;
     // Ctor
     public Star(int x,int y,int width,int height,int index) {
       _coord_x = x;
@@ -36,10 +37,24 @@ public class StarsView extends View implements View.OnTouchListener {
       _rect = new Rect(_coord_x,_coord_y,_coord_x+_widht,_coord_y+_height);
     }
     public void draw(Canvas canvas) {
-      if(!pressed)
-        canvas.drawBitmap(mStarYellow,_coord_x,_bmp_y,paintStar);
-      else
-        canvas.drawBitmap(mStarYellowActive,_coord_x,_bmp_y,paintStar);
+      if(_index==average)
+        if(!pressed)
+          canvas.drawBitmap(mStarBlue,_coord_x,_bmp_y,paintStar);
+        else
+          canvas.drawBitmap(mStarBlueActive,_coord_x,_bmp_y,paintStar);
+      
+      if(_index>average)
+        if(!pressed)
+          canvas.drawBitmap(mStarYellow,_coord_x,_bmp_y,paintStar);
+        else
+          canvas.drawBitmap(mStarYellowActive,_coord_x,_bmp_y,paintStar);
+      
+      if(_index<average)
+        if(!pressed)
+          canvas.drawBitmap(mStarGrey,_coord_x,_bmp_y,paintStar);
+        else
+          canvas.drawBitmap(mStarGreyActive,_coord_x,_bmp_y,paintStar);
+      
       canvas.drawText(""+_index,(float)(_coord_x+mStarYellow.getWidth()/2),(float)(_coord_y+mStarYellow.getHeight()/1.7),paintNumber);
     }
   }
@@ -82,6 +97,9 @@ public class StarsView extends View implements View.OnTouchListener {
     mStarGrey = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_grey);
     mStarGreyActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_grey_active);
   }
+  // index
+  int prev_star_index = 0;
+  int curr_star_index = 0;
   //---------------------------------------------------------------------------
   @Override
   public boolean onTouch(View v,MotionEvent event) {
@@ -90,10 +108,19 @@ public class StarsView extends View implements View.OnTouchListener {
     int y = (int)event.getY();
 
     // определяем на какой звезде находится палец
-    int star_index = 0;
+    int star_index = 1;
     for(int i=0;i<mStars.length;i++)
-      if(mStars[i]._rect.contains(x,y))
+      if(mStars[i]._rect.contains(x,y)) {
         star_index = mStars[i]._index;
+        curr_star_index = i;
+      }
+    
+    if(curr_star_index!=prev_star_index) {
+      mStars[prev_star_index].pressed=false;
+      mStars[curr_star_index].pressed=true;
+      prev_star_index = curr_star_index;
+      invalidate();
+    }
     
     switch(event.getAction()) {
       case MotionEvent.ACTION_DOWN:
@@ -104,7 +131,6 @@ public class StarsView extends View implements View.OnTouchListener {
         for (int i = 0; i < EVENT_COUNT-1; i++)
           lastYs[i] = lastYs[i+1];
         lastYs[EVENT_COUNT-1] = y;
-        mStars[star_index-1].pressed=true;
         break;
       case MotionEvent.ACTION_UP:
         for(int i = 0; i < EVENT_COUNT; i++)

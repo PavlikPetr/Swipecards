@@ -48,8 +48,8 @@ public class Data {
     _rates    = profile.unread_rates;
     _likes    = profile.unread_likes;
     _messages = profile.unread_messages;
-    //mPower    = profile.power;
-    //mMoney    = profile.money;
+    _power    = profile.power;
+    _money    = profile.money;
   }
   //---------------------------------------------------------------------------
   public static void saveSSID(Context context,String ssid) {
