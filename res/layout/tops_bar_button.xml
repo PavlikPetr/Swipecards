@@ -8,7 +8,7 @@
         android:id="@+id/ivHeaderBkgrd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/im_button_bar" />
+        android:src="@drawable/im_bar_button" />
     
 	  <com.sonetica.topface.ui.DoubleButton
 	      android:layout_width="wrap_content"
@@ -17,11 +17,13 @@
         android:layout_centerVertical="true" />
 	  
 	  <Button
+	      android:id="@+id/btnTopsBarCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:text="@string/tops_btn_city"
+        android:textColor="@drawable/clr_btn_city"
         android:background="@drawable/btn_city_selector"/>
 	  
   </RelativeLayout>

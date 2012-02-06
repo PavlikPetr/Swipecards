@@ -234,8 +234,8 @@ public class DatingGallery extends ViewGroup {
     mUser = mAdapter.getUser();
     
     mDatingLayout.mInfoView.age    = mUser.age;
-    mDatingLayout.mInfoView.power  = Data._power;
-    mDatingLayout.mInfoView.money  = Data._money;
+    mDatingLayout.mInfoView.power  = Data.s_Power;
+    mDatingLayout.mInfoView.money  = Data.s_Money;
     mDatingLayout.mInfoView.city   = mUser.city_name;
     mDatingLayout.mInfoView.name   = mUser.first_name;
     mDatingLayout.mInfoView.status = mUser.status;

@@ -42,47 +42,47 @@ public class InboxActivity extends Activity {
     setContentView(R.layout.ac_inbox);
     Debug.log(this,"+onCreate");
     
-    // Data
-    mInboxList = Data.s_InboxList;
-    
-    // Title Header
-    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.chat_header_title));
-   
-    // ListView
-    mListView = (PullToRefreshListView)findViewById(R.id.lvInboxList);
-    mListView.setOnRefreshListener(new OnRefreshListener() {
-     @Override
-     public void onRefresh() {
-       //update(0,true);
-       mListView.onRefreshComplete();
-     }});
-    mListView.setOnTouchListener(new OnTouchListener() {
-      @Override
-      public boolean onTouch(View v,MotionEvent event) {
-        return false;
-      }
-    });
-    mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
-        Intent intent = new Intent(InboxActivity.this,ChatActivity.class);
-        intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxList.get(position).uid);
-        startActivityForResult(intent,0);
-      }
-    });
-
-    // Progress Bar
-    mProgressDialog = new ProgressDialog(this);
-    mProgressDialog.setMessage(getString(R.string.dialog_loading));
-    
-    if(mInboxList.size()==0) {
-      create();
-      update(0,false);
-    } else
-      create();
-    
-    // обнуление информера непрочитанных сообщений
-    Data._messages = 0;
+//    // Data
+//    mInboxList = Data.s_InboxList;
+//    
+//    // Title Header
+//    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.chat_header_title));
+//   
+//    // ListView
+//    mListView = (PullToRefreshListView)findViewById(R.id.lvInboxList);
+//    mListView.setOnRefreshListener(new OnRefreshListener() {
+//     @Override
+//     public void onRefresh() {
+//       //update(0,true);
+//       mListView.onRefreshComplete();
+//     }});
+//    mListView.setOnTouchListener(new OnTouchListener() {
+//      @Override
+//      public boolean onTouch(View v,MotionEvent event) {
+//        return false;
+//      }
+//    });
+//    mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
+//      @Override
+//      public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
+//        Intent intent = new Intent(InboxActivity.this,ChatActivity.class);
+//        intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxList.get(position).uid);
+//        startActivityForResult(intent,0);
+//      }
+//    });
+//
+//    // Progress Bar
+//    mProgressDialog = new ProgressDialog(this);
+//    mProgressDialog.setMessage(getString(R.string.dialog_loading));
+//    
+//    if(mInboxList.size()==0) {
+//      create();
+//      update(0,false);
+//    } else
+//      create();
+//    
+//    // обнуление информера непрочитанных сообщений
+//    Data._messages = 0;
   }
   //---------------------------------------------------------------------------
   private void create() {

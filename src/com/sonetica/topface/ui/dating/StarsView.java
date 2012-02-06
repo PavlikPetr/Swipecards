@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
-import com.sonetica.topface.utils.Device;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,51 +11,53 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 public class StarsView extends View implements View.OnTouchListener {
   //---------------------------------------------------------------------------
   // calss Star
   //---------------------------------------------------------------------------
   class Star {
-    public  int _index;
-    private int _coord_x;
-    private int _coord_y;
+    public  int _index;    // оценка
+    private int _x;
+    private int _y;
     private int _bmp_y;
     private int _widht;
     private int _height;
-    public Rect _rect;
-    public boolean pressed;
-    public int average=6;
+    public Rect _rect;      // 
+    public boolean pressed; // состояние
+    public int average=6;   // средняя выставляемвя оценка 
     // Ctor
     public Star(int x,int y,int width,int height,int index) {
-      _coord_x = x;
-      _coord_y = y;
+      _x = x;
+      _y = y;
       _bmp_y = y + ((height - mStarYellow.getHeight()) / 2);   // центрирование по вертикале
       _widht   = width;
       _height  = height;
       _index   = index;
-      _rect = new Rect(_coord_x,_coord_y,_coord_x+_widht,_coord_y+_height);
+      _rect = new Rect(_x,_y,_x+_widht,_y+_height);
     }
     public void draw(Canvas canvas) {
       if(_index==average)
         if(!pressed)
-          canvas.drawBitmap(mStarBlue,_coord_x,_bmp_y,paintStar);
+          canvas.drawBitmap(mStarBlue,_x,_bmp_y,paintStar);
         else
-          canvas.drawBitmap(mStarBlueActive,_coord_x,_bmp_y,paintStar);
+          canvas.drawBitmap(mStarBlueActive,_x,_bmp_y,paintStar);
       
       if(_index>average)
         if(!pressed)
-          canvas.drawBitmap(mStarYellow,_coord_x,_bmp_y,paintStar);
+          canvas.drawBitmap(mStarYellow,_x,_bmp_y,paintStar);
         else
-          canvas.drawBitmap(mStarYellowActive,_coord_x,_bmp_y,paintStar);
+          canvas.drawBitmap(mStarYellowActive,_x,_bmp_y,paintStar);
       
       if(_index<average)
         if(!pressed)
-          canvas.drawBitmap(mStarGrey,_coord_x,_bmp_y,paintStar);
+          canvas.drawBitmap(mStarGrey,_x,_bmp_y,paintStar);
         else
-          canvas.drawBitmap(mStarGreyActive,_coord_x,_bmp_y,paintStar);
+          canvas.drawBitmap(mStarGreyActive,_x,_bmp_y,paintStar);
       
-      canvas.drawText(""+_index,(float)(_coord_x+mStarYellow.getWidth()/2),(float)(_coord_y+mStarYellow.getHeight()/1.4),paintNumber);
+      // Star Index         вынести расчеты !!!!!!!!
+      canvas.drawText(""+_index,(float)(_x+mStarYellow.getWidth()/2),(float)(_bmp_y+mStarYellow.getHeight()/1.6),paintNumber);
     }
   }
   //---------------------------------------------------------------------------
@@ -67,36 +68,40 @@ public class StarsView extends View implements View.OnTouchListener {
   private static Bitmap mStarBlueActive;
   private static Bitmap mStarGrey;
   private static Bitmap mStarGreyActive;
-  private float[] lastYs;              // массив последних нажатий
+  private float[] mLastYs;              // массив последних нажатий
   private Star[]  mStars;              // статичный массив объектов для отрисовки звезд;
   private InformerView mInformerView;  // обсервер текущего нажатия на экран
+  private TextView mPopupView;
+  private float   mFontSize;
   // Constants
   private static final int EVENT_COUNT = 3;   // число последних запоминаемых координат пальца
   private static final int STARS_COUNT = 10;  // кол-во звезд на фрейме
   private static final Paint paintStar   = new Paint();
   private static final Paint paintNumber = new Paint();
   //---------------------------------------------------------------------------
-  public StarsView(Context context,InformerView informer) {
+  public StarsView(Context context,InformerView informer,TextView popup) {
     super(context);
     mStars = new Star[STARS_COUNT];
-    lastYs = new float[EVENT_COUNT];
+    mLastYs = new float[EVENT_COUNT];
     mInformerView = informer;
-    
+    mPopupView = popup;
     setOnTouchListener(this);
     setBackgroundColor(Color.TRANSPARENT);
     
     paintNumber.setColor(Color.WHITE);
-    paintNumber.setTextSize(Device.wideScreen?22:11);
+    paintNumber.setTextSize(getResources().getDimension(R.dimen.dating_star_number));
     paintNumber.setTypeface(Typeface.DEFAULT_BOLD);
     paintNumber.setAntiAlias(true);
     paintNumber.setTextAlign(Paint.Align.CENTER);
     
-    mStarYellow = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_yellow);
-    mStarYellowActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_yellow_active);
-    mStarBlue = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_blue);
-    mStarBlueActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_blue_active);
-    mStarGrey = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_grey);
-    mStarGreyActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.im_dating_star_grey_active);
+    mFontSize = paintNumber.getTextSize();
+    
+    mStarYellow = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow);
+    mStarYellowActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow_pressed);
+    mStarBlue = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_blue);
+    mStarBlueActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_blue_pressed);
+    mStarGrey = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_grey);
+    mStarGreyActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_grey_pressed);
   }
   // index
   int prev_star_index = 0;
@@ -121,39 +126,44 @@ public class StarsView extends View implements View.OnTouchListener {
       prev_star_index = curr_star_index;
     }
     
+    mPopupView.setText(""+star_index);
+    
     switch(event.getAction()) {
       case MotionEvent.ACTION_DOWN:
+        mPopupView.setVisibility(View.VISIBLE);
         mStars[curr_star_index].pressed=true;
         mInformerView.setVisible(true);
         for(int i = 0; i < EVENT_COUNT; i++)
-          lastYs[i] = y;
+          mLastYs[i] = y;
         break;
       case MotionEvent.ACTION_MOVE:
         mStars[curr_star_index].pressed=true;
         mInformerView.setVisible(true);
         for (int i = 0; i < EVENT_COUNT-1; i++)
-          lastYs[i] = lastYs[i+1];
-        lastYs[EVENT_COUNT-1] = y;
+          mLastYs[i] = mLastYs[i+1];
+        mLastYs[EVENT_COUNT-1] = y;
         break;
       case MotionEvent.ACTION_UP:
+        mPopupView.setVisibility(View.INVISIBLE);
         mStars[curr_star_index].pressed=false;
         mInformerView.setVisible(false);
         for(int i = 0; i < EVENT_COUNT; i++)
-          lastYs[i] = -100;
+          mLastYs[i] = -100;
         ((DatingLayout)getParent()).onRate(star_index);
         //((DatingActivity)getContext()).doRate(0,star_index); // Опасная операция, требует рефакторинг !!!!
         break;
       default:
+        mPopupView.setVisibility(View.INVISIBLE);
         mStars[curr_star_index].pressed=false;
         mInformerView.setVisible(false);
         for(int i = 0; i < EVENT_COUNT; i++)
-          lastYs[i] = -100;
+          mLastYs[i] = -100;
         break;
     }
     
     float averageY = 0.0f;
     for(int i = 0; i < EVENT_COUNT; i++)
-      averageY += lastYs[i];
+      averageY += mLastYs[i];
     averageY /= EVENT_COUNT;
     
     mInformerView.setData(averageY,star_index);

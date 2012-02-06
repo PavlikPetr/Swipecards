@@ -35,13 +35,13 @@ public class InformerView extends ViewGroup {
       informerTitlePaint.setColor(Color.BLACK);
     }
     public void draw(Canvas canvas) {
-      if(!_visible) return;
-      _y-=_temp;
-      if(_y<0) _y=0;
-      else if(_y>_bottom-_height) _y=_bottom-_height; // иметь просчитанным !!!
-      Debug.log(">>>>>>>>","_y:"+_y+",Y:"+(_bottom-_height));
-      canvas.drawRect(_x,_y,_x+_widht,_y+_height,informerPaint);
-      canvas.drawText(_text+_index,_x+15,_y+15,informerTitlePaint);
+//      if(!_visible) return;
+//      _y-=_temp;
+//      if(_y<0) _y=0;
+//      else if(_y>_bottom-_height) _y=_bottom-_height; // иметь просчитанным !!!
+//      Debug.log(">>>>>>>>","_y:"+_y+",Y:"+(_bottom-_height));
+//      canvas.drawRect(_x,_y,_x+_widht,_y+_height,informerPaint);
+//      canvas.drawText(_text+_index,_x+15,_y+15,informerTitlePaint);
     }
   }
   //---------------------------------------------------------------------------
@@ -60,7 +60,7 @@ public class InformerView extends ViewGroup {
     
     // Chat btn
     mChatBtn = new Button(context);
-    mChatBtn.setBackgroundResource(R.drawable.btn_dating_chat_selector);
+    mChatBtn.setBackgroundResource(R.drawable.dating_chat_selector);
     mChatBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -71,7 +71,7 @@ public class InformerView extends ViewGroup {
     
     // Profile btn
     mProfileBtn = new Button(context);
-    mProfileBtn.setBackgroundResource(R.drawable.btn_dating_profile_selector);
+    mProfileBtn.setBackgroundResource(R.drawable.dating_profile_selector);
     mProfileBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -110,11 +110,11 @@ public class InformerView extends ViewGroup {
     
     mInformer._bottom = height;
     
-    int x = (int)(width  - mProfileBtn.getMeasuredWidth()*1.4);
-    int y = (int)(height - mProfileBtn.getMeasuredHeight()*2.6);
+    int x = (int)(width  - mProfileBtn.getMeasuredWidth()*1.2);
+    int y = (int)(height - mProfileBtn.getMeasuredHeight()*2.4);
     mChatBtn.layout(x,y,x+mChatBtn.getMeasuredWidth(),y+mChatBtn.getMeasuredHeight());
     
-    y = (int)(y+mChatBtn.getMeasuredHeight()*1.5);
+    y = (int)(y+mChatBtn.getMeasuredHeight()*1.2);
     mProfileBtn.layout(x,y,x+mProfileBtn.getMeasuredWidth(),y+mProfileBtn.getMeasuredHeight());
   }
   //---------------------------------------------------------------------------

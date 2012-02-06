@@ -37,7 +37,7 @@ public class TopsGridAdapter extends BaseAdapter {
     ViewHolder holder = null;
     if(convertView==null) {
       holder = new ViewHolder();
-      convertView = (ViewGroup)mInflater.inflate(R.layout.gallery_item, null, false);
+      convertView = (ViewGroup)mInflater.inflate(R.layout.item_grid_gallery, null, false);
       holder.mThumbView = (ThumbView)convertView.findViewById(R.id.ivTG);
       holder.mThumbView.setMinimumWidth(mGalleryManager.mBitmapWidth);
       holder.mThumbView.setMinimumHeight(mGalleryManager.mBitmapHeight);

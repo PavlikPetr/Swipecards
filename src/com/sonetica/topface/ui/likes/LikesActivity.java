@@ -12,7 +12,6 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.GalleryManager;
 import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.utils.Debug;
-import com.sonetica.topface.utils.Device;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,9 +19,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
 
 /*
@@ -91,7 +88,7 @@ public class LikesActivity extends Activity {
    // Gallery
    mGallery = (PullToRefreshGridView)findViewById(R.id.grdLikesGallary);
    mGallery.setAnimationCacheEnabled(false);
-   mGallery.setNumColumns(Device.wideScreen?3:2);
+   mGallery.setNumColumns(getResources().getInteger(R.integer.grid_column_number));
    //mGallery.setScrollingCacheEnabled(false);
    mGallery.setOnScrollListener(new OnScrollListener() {
      @Override
@@ -133,13 +130,13 @@ public class LikesActivity extends Activity {
      create();
    
    // обнуление информера непросмотренных лайков
-   Data._likes = 0;
+   Data.s_Likes = 0;
   }
   //---------------------------------------------------------------------------
   private void create() {
     mGalleryManager   = new GalleryManager(LikesActivity.this,mLikesList);
     mLikesGridAdapter = new LikesGridAdapter(LikesActivity.this,mGalleryManager);
-    mGallery.getAdapterView().setAdapter(mLikesGridAdapter);
+    mGallery.getRefreshableView().setAdapter(mLikesGridAdapter);
   }
   //---------------------------------------------------------------------------
   private void release() {

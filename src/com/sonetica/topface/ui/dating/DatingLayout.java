@@ -3,9 +3,11 @@ package com.sonetica.topface.ui.dating;
 import com.sonetica.topface.R;
 import android.content.Context;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class DatingLayout extends ViewGroup implements View.OnClickListener {
   // Data
@@ -16,6 +18,7 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
   // 
   private View mHeaderBar;
   private int  mHeaderOffset;
+  private TextView mPopupView;
   //---------------------------------------------------------------------------
   public DatingLayout(Context context) {
     super(context);
@@ -36,9 +39,17 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     mInformerView = new InformerView(context);
     addView(mInformerView);
     
+    // Popup
+    mPopupView = new TextView(context);
+    mPopupView.setBackgroundResource(R.drawable.dating_popup);
+    mPopupView.setVisibility(View.INVISIBLE);
+    mPopupView.setGravity(Gravity.CENTER);
+    addView(mPopupView);
+    
     // Stars
-    mStarsView = new StarsView(context,mInformerView);
+    mStarsView = new StarsView(context,mInformerView,mPopupView);
     addView(mStarsView);
+
   }
   //---------------------------------------------------------------------------
   @Override
@@ -64,6 +75,9 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     mStarsView.layout(stars_x,stars_y,stars_x+mStarsView.getMeasuredWidth(),stars_y+mStarsView.getMeasuredHeight());
     mInformerView.layout(stars_x-mInformerView.getMeasuredWidth(),stars_y,stars_x,stars_y+mInformerView.getMeasuredHeight());
     mInfoView.layout(0,stars_y,mInfoView.getMeasuredWidth(),stars_y+mInfoView.getMeasuredHeight());
+    stars_x = (getMeasuredWidth() - mPopupView.getMeasuredWidth())/2;
+    stars_y = (getMeasuredHeight() - mPopupView.getMeasuredHeight())/2;
+    mPopupView.layout(stars_x,stars_y,stars_x+mPopupView.getMeasuredWidth(),stars_y+mPopupView.getMeasuredHeight());
   }
   //-------------------------------------------------------------------------
   public void onProfileBtnClick() {

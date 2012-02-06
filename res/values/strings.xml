@@ -15,9 +15,9 @@
   <!-- Dashboard Activity -->
   <string name="dashbrd_menu_one">One</string>
   <string name="dashbrd_menu_preferences">Настройки</string>
-  <string name="dashbrd_btn_photorating">Оценка фото</string>
-  <string name="dashbrd_btn_likeme">Я нравлюсь</string>
-  <string name="dashbrd_btn_myrating">Меня оценили</string>
+  <string name="dashbrd_btn_dating">Оценка фото</string>
+  <string name="dashbrd_btn_likes">Я нравлюсь</string>
+  <string name="dashbrd_btn_rates">Меня оценили</string>
   <string name="dashbrd_btn_chats">Диалоги</string>
   <string name="dashbrd_btn_tops">Топы</string>
   <string name="dashbrd_btn_profile">Профиль</string>
@@ -47,4 +47,11 @@
   
   <!-- Album Activity -->
   <string name="album_header_title">Альбом</string>
+  
+  <!-- Pull2Refresh Module -->
+  <string name="pull_to_refresh_pull_label">Pull to refresh</string>
+  <string name="pull_to_refresh_release_label">Release to refresh</string>
+  <string name="pull_to_refresh_refreshing_label">Loading</string>
+  <string name="pull_to_refresh_tap_label">Tap to refresh</string>
+  
 </resources>

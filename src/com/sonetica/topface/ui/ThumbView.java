@@ -42,9 +42,9 @@ public class ThumbView extends ImageView {
   public ThumbView(Context context,AttributeSet attrs) {
     super(context,attrs);
     //setBackgroundColor(Color.MAGENTA);
-    mHeartBmp   = BitmapFactory.decodeResource(getResources(),R.drawable.ic_heart);
-    mOnlineBmp  = BitmapFactory.decodeResource(getResources(),R.drawable.im_dating_online);
-    mOfflineBmp = BitmapFactory.decodeResource(getResources(),R.drawable.im_dating_offline);
+    mHeartBmp   = BitmapFactory.decodeResource(getResources(),R.drawable.im_heart);
+    mOnlineBmp  = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
+    mOfflineBmp = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
   }
   //---------------------------------------------------------------------------
   @Override

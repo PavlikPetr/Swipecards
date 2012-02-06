@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
-import com.sonetica.topface.utils.Device;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,11 +27,11 @@ class InfoView extends ImageView {
   private static Bitmap mShadowTopBmp;
   private static Bitmap mShadowBottomBmp;
   // Constants
-  private static final Paint paint = new Paint();
+  private static final Paint paint      = new Paint();
+  private static final Paint paintName   = new Paint();
+  private static final Paint paintCity    = new Paint();
+  private static final Paint paintStatus   = new Paint();
   private static final Paint paintResources = new Paint();
-  private static final Paint paintName = new Paint();
-  private static final Paint paintCity = new Paint();
-  private static final Paint paintStatus = new Paint();
   //----------------------------------
   public InfoView(Context context) {
     super(context);
@@ -40,37 +39,39 @@ class InfoView extends ImageView {
     setBackgroundColor(Color.TRANSPARENT);
     
     paint.setColor(Color.RED);
+    paint.setDither(true);
+    
     
     // money, power
     paintResources.setColor(Color.WHITE);
-    paintResources.setTextSize(Device.wideScreen?28:14);
+    paintResources.setTextSize(getResources().getDimension(R.dimen.resources_font_size));
     paintResources.setAntiAlias(true);
     paintResources.setTypeface(Typeface.DEFAULT_BOLD);
     paintResources.setTextAlign(Paint.Align.RIGHT);
     
     // city
     paintCity.setColor(Color.WHITE);
-    paintCity.setTextSize(Device.wideScreen?28:14);
+    paintCity.setTextSize(getResources().getDimension(R.dimen.city_font_size));
     paintCity.setAntiAlias(true);
     
     // status
     paintStatus.setColor(Color.WHITE);
-    paintStatus.setTextSize(Device.wideScreen?28:14);
+    paintStatus.setTextSize(getResources().getDimension(R.dimen.status_font_size));
     paintStatus.setAntiAlias(true);
     paintStatus.setSubpixelText(true);
     
     // name age online
     paintName.setColor(Color.WHITE);
-    paintName.setTextSize(Device.wideScreen?36:18);
+    paintName.setTextSize(getResources().getDimension(R.dimen.name_font_size));
     paintName.setTypeface(Typeface.DEFAULT_BOLD);
     paintName.setAntiAlias(true);
-    
-    mPowerBmp        = BitmapFactory.decodeResource(getResources(),R.drawable.ic_dating_power);
-    mMoneyBmp        = BitmapFactory.decodeResource(getResources(),R.drawable.ic_dating_money);
-    mOnlineBmp       = BitmapFactory.decodeResource(getResources(),R.drawable.im_dating_online);
-    mOfflineBmp      = BitmapFactory.decodeResource(getResources(),R.drawable.im_dating_offline);
-    mShadowTopBmp    = BitmapFactory.decodeResource(getResources(),R.drawable.im_dating_shadow_top);
-    mShadowBottomBmp = BitmapFactory.decodeResource(getResources(),R.drawable.im_dating_shadow_bottom);
+
+    mOnlineBmp       = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
+    mOfflineBmp      = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
+    mPowerBmp        = BitmapFactory.decodeResource(getResources(),R.drawable.dating_power);
+    mMoneyBmp        = BitmapFactory.decodeResource(getResources(),R.drawable.dating_money);
+    mShadowTopBmp    = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_top);
+    mShadowBottomBmp = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_bottom);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -95,35 +96,31 @@ class InfoView extends ImageView {
     canvas.drawBitmap(mShadowBottomBmp,0,getHeight()-mShadowBottomBmp.getHeight(),paint);
     
     // money, power
-    float offset_x = Device.wideScreen?100:50;
-    float offset_y = Device.wideScreen?16:8;
+    float offset_x = getResources().getDimension(R.dimen.resources_offset_x_size);
+    float offset_y = getResources().getDimension(R.dimen.resources_offset_y_size);
     canvas.drawText(""+power,offset_x,offset_y+(int)(mPowerBmp.getHeight()/1.4),paintResources);
     canvas.drawBitmap(mPowerBmp,offset_x,offset_y,paint);
-    offset_x *= 2.5;
+    offset_x *= 2.3;
     canvas.drawText(""+money,offset_x,offset_y+(int)(mMoneyBmp.getHeight()/1.4),paintResources);
-    canvas.drawBitmap(mMoneyBmp,offset_x+4,offset_y,paint);
-    
-    offset_x = Device.wideScreen?20:10;
-    offset_y = getHeight()-paintCity.getTextSize();
+    canvas.drawBitmap(mMoneyBmp,offset_x+6,offset_y,paint);
     
     //city
+    offset_x = getResources().getDimension(R.dimen.city_offset_x_size);
+    offset_y = getHeight()-paintCity.getTextSize()/2;
     canvas.drawText(city,offset_x,offset_y,paintCity);
-    
-    //paintStatus.
-    
-    // status
-    canvas.drawText(status,offset_x,(float)(offset_y-paintStatus.getTextSize()*1.5),paintStatus);
-    
-    offset_y-=Device.wideScreen?120:60;
-    
+
     // name age online
+    offset_y-=getResources().getDimension(R.dimen.name_offset_y_size);
     String name_age = name+", "+age; 
     canvas.drawText(name_age,offset_x,offset_y,paintName);
-    float offset_z = paintName.measureText(name_age)+4;
+    float offset_z = paintName.measureText(name_age)+mOnlineBmp.getWidth()/2;
     if(online)
       canvas.drawBitmap(mOnlineBmp,offset_x+offset_z,offset_y-mOnlineBmp.getHeight(),paint);
     else
       canvas.drawBitmap(mOfflineBmp,offset_x+offset_z,offset_y-mOnlineBmp.getHeight(),paint);
+    
+    // status
+    canvas.drawText(status,offset_x,(float)(offset_y+paintName.getTextSize()),paintStatus);
   }
   //----------------------------------
 }

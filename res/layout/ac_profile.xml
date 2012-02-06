@@ -3,21 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
+    
   <!-- header bar -->
-  <include layout="@layout/header_bar" />  
+  <include layout="@layout/bar_header" />  
   
   <TextView
       android:id="@+id/tvProfile"
       android:layout_width="wrap_content" 
-      android:layout_height="wrap_content"
+      android:layout_height="0dip"
       android:layout_weight="1" />
   
-  <!-- banner bar 
-  <RelativeLayout 
-      android:layout_width="fill_parent" 
-      android:layout_height="wrap_content" 
-      android:layout_alignParentBottom="true">
-    <include layout="@layout/banner_bar" />
-  </RelativeLayout>
-  -->
 </LinearLayout>

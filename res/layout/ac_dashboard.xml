@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bg_dashboard"
-    android:orientation="vertical" >
-	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/dashbrd_bkgrd" >
+    
+	<TableLayout
 	    android:id="@+id/tblBoard"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
@@ -14,20 +14,20 @@
     <TableRow
         android:layout_marginTop="14pt">
       <com.sonetica.topface.ui.dashboard.DashboardButton
-          android:id="@+id/btnDashbrdPhotorating"
-          android:background="@drawable/btn_dashbrd_photorating_selector"
+          android:id="@+id/btnDashbrdDating"
+          android:background="@drawable/dashbrd_dating_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <com.sonetica.topface.ui.dashboard.DashboardButton
-          android:id="@+id/btnDashbrdLikeme"
-          android:background="@drawable/btn_dashbrd_likeme_selector"
+          android:id="@+id/btnDashbrdLikes"
+          android:background="@drawable/dashbrd_likes_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <com.sonetica.topface.ui.dashboard.DashboardButton
-          android:id="@+id/btnDashbrdRating"
-          android:background="@drawable/btn_dashbrd_myrating_selector"
+          android:id="@+id/btnDashbrdRates"
+          android:background="@drawable/dashbrd_rates_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
@@ -37,19 +37,19 @@
     <TableRow>
         <TextView
           android:textColor="#606060"
-          android:text="@string/dashbrd_btn_photorating"
+          android:text="@string/dashbrd_btn_dating"
           android:layout_gravity="center"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
         <TextView
           android:textColor="#606060"
-          android:text="@string/dashbrd_btn_likeme"
+          android:text="@string/dashbrd_btn_likes"
           android:layout_gravity="center"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
         <TextView
           android:textColor="#606060"
-          android:text="@string/dashbrd_btn_myrating"
+          android:text="@string/dashbrd_btn_rates"
           android:layout_gravity="center"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
@@ -60,19 +60,19 @@
         android:layout_marginTop="0pt">
       <com.sonetica.topface.ui.dashboard.DashboardButton
           android:id="@+id/btnDashbrdChat"
-          android:background="@drawable/btn_dashbrd_chat_selector"
+          android:background="@drawable/dashbrd_chat_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <com.sonetica.topface.ui.dashboard.DashboardButton
           android:id="@+id/btnDashbrdTops"
-          android:background="@drawable/btn_dashbrd_tops_selector"
+          android:background="@drawable/dashbrd_tops_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
       <com.sonetica.topface.ui.dashboard.DashboardButton
           android:id="@+id/btnDashbrdProfile"
-          android:background="@drawable/btn_dashbrd_profile_selector"
+          android:background="@drawable/dashbrd_profile_selector"
           android:layout_margin="2pt"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />

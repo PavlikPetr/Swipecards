@@ -9,7 +9,7 @@ import android.content.Context;
 public class ProfileRequest extends ApiRequest {
   // Data
   private String  service = "profile";
-  private String  fields;  //ассив интересующих полей профиля
+  private String  fields;  //массив интересующих полей профиля
   private boolean isNotification;
   //---------------------------------------------------------------------------
   public ProfileRequest(Context context,boolean bNotification) {
@@ -26,7 +26,8 @@ public class ProfileRequest extends ApiRequest {
       if(isNotification)
         root.put("data",new JSONObject().put("fields",new JSONArray().put("unread_rates")
                                                                      .put("unread_likes")
-                                                                     .put("unread_messages")));
+                                                                     .put("unread_messages")
+                                                                     .put("average_rate")));
 
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);

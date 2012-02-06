@@ -45,13 +45,14 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     setContentView(R.layout.ac_dashboard);
     Debug.log(this,"+onCreate");
     
-    mLikesButton = ((DashboardButton)findViewById(R.id.btnDashbrdLikeme));
+    mLikesButton = ((DashboardButton)findViewById(R.id.btnDashbrdLikes));
     mLikesButton.setOnClickListener(this);
-    mRatesButton = ((DashboardButton)findViewById(R.id.btnDashbrdRating));
+    mRatesButton = ((DashboardButton)findViewById(R.id.btnDashbrdRates));
     mRatesButton.setOnClickListener(this);
     mChatButton = ((DashboardButton)findViewById(R.id.btnDashbrdChat));
     mChatButton.setOnClickListener(this);
-    ((DashboardButton)findViewById(R.id.btnDashbrdPhotorating)).setOnClickListener(this);
+    
+    ((DashboardButton)findViewById(R.id.btnDashbrdDating)).setOnClickListener(this);
     ((DashboardButton)findViewById(R.id.btnDashbrdTops)).setOnClickListener(this);
     ((DashboardButton)findViewById(R.id.btnDashbrdProfile)).setOnClickListener(this);
     
@@ -61,7 +62,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     }
     
     mNotifyHandler = new NotifyHandler();
-    mNotifyHandler.sendEmptyMessage(0);
+    //mNotifyHandler.sendEmptyMessage(0);
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -89,13 +90,13 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       return;
     }
     switch(view.getId()) {
-      case R.id.btnDashbrdPhotorating: {
+      case R.id.btnDashbrdDating: {
         startActivity(new Intent(this,DatingActivity.class));
       } break;
-      case R.id.btnDashbrdLikeme: {
+      case R.id.btnDashbrdLikes: {
         startActivity(new Intent(this,LikesActivity.class));
       } break;
-      case R.id.btnDashbrdRating: {
+      case R.id.btnDashbrdRates: {
         startActivity(new Intent(this,RatesActivity.class));
       } break;
       case R.id.btnDashbrdChat: {
@@ -152,7 +153,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   // NotifyHandler
   //---------------------------------------------------------------------------
   class NotifyHandler extends Handler {
-    private int sleep_time = 1000*15;
+    private int sleep_time = 1000*30;
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
@@ -188,11 +189,13 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   }
   //---------------------------------------------------------------------------
   private void redNewsInvalidate() {
-    mLikesButton.mNotify = Data._likes;
+    mLikesButton.mNotify = Data.s_Likes;
     mLikesButton.invalidate();
-    mRatesButton.mNotify = Data._rates;
+    
+    mRatesButton.mNotify = Data.s_Rates;
     mRatesButton.invalidate();
-    mChatButton.mNotify = Data._messages;
+    
+    mChatButton.mNotify = Data.s_Messages;
     mChatButton.invalidate();    
   }
   //---------------------------------------------------------------------------

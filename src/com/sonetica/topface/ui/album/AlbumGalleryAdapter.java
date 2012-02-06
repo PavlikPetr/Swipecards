@@ -41,7 +41,7 @@ public class AlbumGalleryAdapter extends BaseAdapter {
     ViewHolder holder = null;
     if(convertView==null) {
       holder = new ViewHolder();
-      convertView = (ViewGroup)mInflater.inflate(R.layout.album_gallery_item, null, false);
+      convertView = (ViewGroup)mInflater.inflate(R.layout.album_item_gallery, null, false);
       convertView.setLayoutParams(new Gallery.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
       holder.mImageView = (ImageView)convertView.findViewById(R.id.ivPreView);
       Debug.log(null,"new view");

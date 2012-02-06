@@ -63,7 +63,7 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
     if(convertView==null) {
       holder = new ViewHolder();
 
-      convertView = (ViewGroup)mInflater.inflate(R.layout.gallery_item, null, false);
+      convertView = (ViewGroup)mInflater.inflate(R.layout.item_grid_gallery, null, false);
       holder.mThumbView = (ThumbView)convertView.findViewById(R.id.ivTG);
       holder.mThumbView.setMinimumWidth(mBitmapWidth);
       holder.mThumbView.setMinimumHeight(mBitmapHeight);

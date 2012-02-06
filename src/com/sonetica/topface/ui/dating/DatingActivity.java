@@ -4,14 +4,12 @@ import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.DoRate;
-import com.sonetica.topface.data.Filter;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.DoRateRequest;
 import com.sonetica.topface.net.FilterRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
-
 import com.sonetica.topface.ui.ProfileActivity;
 import com.sonetica.topface.ui.dating.DatingGallery.DatingEventListener;
 import com.sonetica.topface.ui.inbox.ChatActivity;
@@ -120,8 +118,8 @@ public class DatingActivity extends Activity implements DatingEventListener {
       @Override
       public void success(Response response) {
         DoRate rate = DoRate.parse(response);
-        Data._power = rate.power;
-        Data._money = rate.money;
+        Data.s_Power = rate.power;
+        Data.s_Money = rate.money;
         //Toast.makeText(DatingActivity.this,"p:"+Data._power+",m:"+Data._money,Toast.LENGTH_SHORT).show();
       }
       @Override

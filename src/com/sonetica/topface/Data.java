@@ -15,19 +15,20 @@ import com.sonetica.topface.data.TopUser;
  */
 public class Data {
   // Data
-  public static String SSID;  // ключ для запросов к TP серверу
-  // Data Profile
-  public static int _rates;
-  public static int _messages;
-  public static int _likes;
-  public static int _power;
-  public static int _money;
-  
   public static LinkedList<Inbox>   s_InboxList;
   public static LinkedList<Like>    s_LikesList;
   public static LinkedList<TopUser> s_TopsList;
   public static LinkedList<Rate>    s_RatesList;
   public static LinkedList<City>    s_CitiesList;
+  // Data Profile
+  public static int s_Rates;
+  public static int s_Messages;
+  public static int s_Likes;
+  public static int s_Power;
+  public static int s_Money;
+  public static int s_AverageRate;
+  // Topface key
+  public static String SSID;  // ключ для запросов к TP серверу
   //---------------------------------------------------------------------------
   public static void init(Context context) {
     
@@ -42,14 +43,15 @@ public class Data {
   //---------------------------------------------------------------------------
   public static void updateNews(Profile profile) {
     if(profile==null) {
-      _rates = _likes = _messages = _money = _power = 0;
+      s_Rates = s_Likes = s_Messages = s_Money = s_Power = s_AverageRate = 0;
       return;
     }
-    _rates    = profile.unread_rates;
-    _likes    = profile.unread_likes;
-    _messages = profile.unread_messages;
-    _power    = profile.power;
-    _money    = profile.money;
+    s_Rates    = profile.unread_rates;
+    s_Likes    = profile.unread_likes;
+    s_Messages = profile.unread_messages;
+    s_Power    = profile.power;
+    s_Money    = profile.money;
+    s_AverageRate = profile.average_rate;
   }
   //---------------------------------------------------------------------------
   public static void saveSSID(Context context,String ssid) {
@@ -74,12 +76,16 @@ public class Data {
   public static void clear() {
     s_InboxList.clear();
     s_InboxList = null;
+    
     s_LikesList.clear();
     s_LikesList = null;
+    
     s_TopsList.clear();
     s_TopsList = null;
+    
     s_RatesList.clear();
     s_RatesList = null;
+    
     s_CitiesList.clear();
     s_CitiesList = null;
   }

@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rlRaitit2Root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
+    
   <!-- header bar -->
-  <include layout="@layout/header_bar" />
+  <include layout="@layout/bar_header" />
   
   <!-- gallery -->
   <com.sonetica.topface.ui.album.AlbumGallery
       android:id="@+id/galleryAlbum"
-      android:spacing="0dip"  
+      android:spacing="0dp"  
       android:fadingEdge="none"
       android:layout_weight="1"
       android:layout_width="fill_parent"
-      android:layout_height="wrap_content" /> 
+      android:layout_height="0dp" /> 
   
-  <!-- banner bar 
-  <RelativeLayout
-      android:layout_width="fill_parent" 
-      android:layout_height="wrap_content" 
-      android:layout_alignParentBottom="true">
-    <include layout="@layout/banner_bar" />
-  </RelativeLayout>
-  -->
 </LinearLayout>

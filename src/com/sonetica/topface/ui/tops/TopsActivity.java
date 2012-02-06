@@ -9,7 +9,6 @@ import com.sonetica.topface.net.*;
 import com.sonetica.topface.ui.GalleryManager;
 import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.utils.Debug;
-import com.sonetica.topface.utils.Device;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -94,9 +93,10 @@ public class TopsActivity extends Activity {
         update();
       }
     });
+    */
     
     // City Button
-    mCityButton = (Button)findViewById(R.id.btnBarCity);
+    mCityButton = (Button)findViewById(R.id.btnTopsBarCity);
     mCityButton.setText(mActionData.city_name);
     mCityButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -104,12 +104,12 @@ public class TopsActivity extends Activity {
         choiceCity();
       }
     });
-    */
+    
     // Gallery
     mGallery = (GridView)findViewById(R.id.grdTopsGallary);
     mGallery.setAnimationCacheEnabled(false);
     mGallery.setScrollingCacheEnabled(false);
-    mGallery.setNumColumns(Device.wideScreen?3:2);
+    mGallery.setNumColumns(getResources().getInteger(R.integer.grid_column_number));
     /*
     mGallery.setOnScrollListener(new OnScrollListener() {
       @Override

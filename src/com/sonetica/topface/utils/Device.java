@@ -12,12 +12,12 @@ import android.view.WindowManager;
  */
 public class Device {
   // Data
-  public static boolean wideScreen;
+  //public static boolean wideScreen;
   // Methods
   //---------------------------------------------------------------------------
   public static void init(Context context) {
     // todo something
-    wideScreen = getDisplay(context).getWidth()==480;  // 320 vs 480
+    //wideScreen = getDisplay(context).getWidth()>320;  // 320 vs 480
     // init device hardware
   }
   //---------------------------------------------------------------------------

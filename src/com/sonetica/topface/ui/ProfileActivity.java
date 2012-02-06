@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui;
 
 import java.util.LinkedList;
-import java.util.List;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.data.ProfileUser;

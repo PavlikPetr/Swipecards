@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <integer name="default_city_id">1</integer>
+    
+     <!-- Tops, Likes  -->
+    <integer name="grid_column_number">3</integer>
+    
+</resources>

@@ -2,7 +2,6 @@ package com.sonetica.topface.ui.likes;
 
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Like;
-import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.ui.ThumbView;
 import com.sonetica.topface.ui.GalleryManager;
 import android.content.Context;
@@ -40,7 +39,7 @@ public class LikesGridAdapter extends BaseAdapter {
     ViewHolder holder = null;
     if(convertView==null) {
       holder = new ViewHolder();
-      convertView = (ViewGroup)mInflater.inflate(R.layout.gallery_item, null, false);
+      convertView = (ViewGroup)mInflater.inflate(R.layout.item_grid_gallery, null, false);
       holder.mThumbView = (ThumbView)convertView.findViewById(R.id.ivTG);
       holder.mThumbView.setMinimumWidth(mGalleryManager.mBitmapWidth);
       holder.mThumbView.setMinimumHeight(mGalleryManager.mBitmapHeight);

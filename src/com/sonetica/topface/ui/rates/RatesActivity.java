@@ -58,7 +58,7 @@ public class RatesActivity extends Activity {
      create();
    
    // обнуление информера непросмотренных оценок
-   Data._rates = 0;
+   Data.s_Rates = 0;
   }
   //---------------------------------------------------------------------------
   private void create() {

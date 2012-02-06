@@ -78,7 +78,7 @@ public class ChatActivity extends Activity {
       create();
     
     // обнуление информера непрочитанных сообщений
-    Data._messages = 0;
+    Data.s_Messages = 0;
   }
   //---------------------------------------------------------------------------
   private void create() {

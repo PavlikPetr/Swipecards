@@ -5,16 +5,16 @@
     android:orientation="vertical" >
     
   <!-- header bar -->
-  <include layout="@layout/header_bar" />
+  <include layout="@layout/bar_header" />
 
   <!-- button bar -->
-  <include layout="@layout/likes_button_bar" />
+  <include layout="@layout/likes_bar_button" />
   
   <!-- gallary -->
   <com.sonetica.topface.module.pull2refresh.PullToRefreshGridView
     android:id="@+id/grdLikesGallary"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="0dip"
     android:listSelector="@android:color/transparent"
     android:layout_weight="1"
     android:fadingEdge="none"
@@ -25,12 +25,4 @@
     android:fadeScrollbars="true" 
     android:background="#000000" />
 
-  <!-- banner bar 
-  <RelativeLayout 
-      android:layout_width="fill_parent" 
-      android:layout_height="wrap_content" 
-      android:layout_alignParentBottom="true">
-    <include layout="@layout/banner_bar" />
-  </RelativeLayout>
-  -->
 </LinearLayout>
