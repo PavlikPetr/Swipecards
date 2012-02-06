@@ -25,6 +25,7 @@ public class DoubleButton extends LinearLayout {
 
     mLeftButton  = (Button)findViewById(R.id.dblLeft);
     mRightButoon = (Button)findViewById(R.id.dblRight);
+    
   }
   //---------------------------------------------------------------------------
   public void setLeftText(String text) {

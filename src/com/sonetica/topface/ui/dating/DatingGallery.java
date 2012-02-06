@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.Scroller;
+import android.widget.ZoomControls;
 
 public class DatingGallery extends ViewGroup {
   // interface DatingEventListener
@@ -55,6 +56,7 @@ public class DatingGallery extends ViewGroup {
     // фрейм оценок
     mDatingLayout = new DatingLayout(context);
     addView(mDatingLayout);
+    
     // 1
     iv1 = new ImageView(context);
     iv1.setOnClickListener(new View.OnClickListener() {
