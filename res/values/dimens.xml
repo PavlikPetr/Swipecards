@@ -5,8 +5,8 @@
     <dimen name="resources_offset_x_size">60dp</dimen>
     <dimen name="resources_offset_y_size">6dp</dimen>
     <dimen name="city_font_size">16dp</dimen>
-    <dimen name="city_offset_x_size">12dp</dimen>
+    <dimen name="city_offset_x_size">8dp</dimen>
     <dimen name="name_font_size">26dp</dimen>
-    <dimen name="name_offset_y_size">100dp</dimen>
-     <dimen name="status_font_size">16dp</dimen>
+    <dimen name="name_offset_y_size">120dp</dimen>
+    <dimen name="status_font_size">16dp</dimen>
 </resources>

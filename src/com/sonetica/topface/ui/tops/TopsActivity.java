@@ -6,8 +6,10 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.City;
 import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.net.*;
+import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.ui.GalleryManager;
 import com.sonetica.topface.ui.album.AlbumActivity;
+import com.sonetica.topface.ui.likes.LikesActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.util.LinkedList;
 
 /*  
@@ -70,6 +73,23 @@ public class TopsActivity extends Activity {
     mActionData.city_id = preferences.getInt(getString(R.string.s_tops_city_id),MOSCOW);
     mActionData.city_name = preferences.getString(getString(R.string.s_tops_city_name),getString(R.string.default_city));
     mActionData.city_popup_position = preferences.getInt(getString(R.string.s_tops_city_position),0);
+    
+    // Double Button
+    DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDoubleTops);
+    btnDouble.setLeftText(getString(R.string.tops_btn_boys));
+    btnDouble.setRightText(getString(R.string.tops_btn_girls));
+    btnDouble.setLeftListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Toast.makeText(TopsActivity.this,"BOYS",Toast.LENGTH_SHORT).show();
+      }
+    });
+    btnDouble.setRightListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Toast.makeText(TopsActivity.this,"GIRLS",Toast.LENGTH_SHORT).show();
+      }
+    });
     
     /*
     // Girls Button

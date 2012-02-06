@@ -41,6 +41,8 @@
   
   <!-- Likes Activity -->
   <string name="likes_header_title">Я нравлюсь</string>
+  <string name="likes_btn_dbl_left">Все</string>
+  <string name="likes_btn_dbl_right">Мой город</string>
   
   <!-- Myrating Activity -->
   <string name="rates_header_title">Меня оценили</string>

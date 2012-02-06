@@ -41,7 +41,6 @@ class InfoView extends ImageView {
     paint.setColor(Color.RED);
     paint.setDither(true);
     
-    
     // money, power
     paintResources.setColor(Color.WHITE);
     paintResources.setTextSize(getResources().getDimension(R.dimen.resources_font_size));
@@ -86,7 +85,7 @@ class InfoView extends ImageView {
   protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
     super.onLayout(changed,left,top,right,bottom);
   }
-  //----------------------------------
+  //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
@@ -120,7 +119,43 @@ class InfoView extends ImageView {
       canvas.drawBitmap(mOfflineBmp,offset_x+offset_z,offset_y-mOnlineBmp.getHeight(),paint);
     
     // status
-    canvas.drawText(status,offset_x,(float)(offset_y+paintName.getTextSize()),paintStatus);
+    drawStatus(canvas,status,offset_x,offset_y);
+
   }
-  //----------------------------------
+  //---------------------------------------------------------------------------
+  public void drawStatus(Canvas canvas,String text,float offset_x,float offset_y) {
+    float k = 1.6f;
+    
+    if(status.length()<=1)
+      return;
+    
+    int count    = 0;
+    int size     = text.length();   // длина целой строки
+    int numChar  = paint.breakText(status,true,140,null); // кол-во влезающих символов; БЛЕАТЬ, что за 140 !!!!
+    int numStart = 0;               // начало обреза
+    int numEnd   = numChar;         // конец обреза
+    
+    offset_y += paintName.getTextSize()/1.4;
+    
+    do {
+      count++;  // чоп чоп
+      
+      canvas.drawText(status.substring(numStart,numEnd),offset_x,offset_y,paintStatus);
+      
+      offset_y += paintName.getTextSize() / k;
+      
+      if(size-numEnd<numChar || count==5) {
+        if(size-numEnd > numChar)
+          canvas.drawText(status.substring(numEnd,numEnd+numChar)+"...",offset_x,offset_y,paintStatus);
+        else
+          canvas.drawText(status.substring(numEnd,size),offset_x,offset_y,paintStatus);
+        break;
+      }
+      
+      numStart = numEnd;
+      numEnd  += numChar;
+      
+    } while(true);
+  }
+  //---------------------------------------------------------------------------
 }

@@ -146,9 +146,9 @@ public class DatingGallery extends ViewGroup {
           if(mCurrentScreen==0)
             mDatingLayout.hideChildren(View.VISIBLE);
           
-        } else if(velocityX < -SNAP_VELOCITY && mCurrentScreen < getChildCount() - 1)           
+        } else if(velocityX < -SNAP_VELOCITY && mCurrentScreen < getChildCount() - 1) {
           snapToScreen(mCurrentScreen + 1);
-        else
+        } else
           snapToDestination();
 
         if(mVelocityTracker != null) {
@@ -243,14 +243,21 @@ public class DatingGallery extends ViewGroup {
     
     Http.imageLoader(mUser.avatars_big[0],mDatingLayout.mFaceView);
     //mDatingLayout.mFaceView.setBackgroundColor(Color.WHITE);
-    if(mUser.avatars_big.length>1)
+    if(mUser.avatars_big.length>1) {
+      iv2.setVisibility(View.VISIBLE);
       Http.imageLoader(mUser.avatars_big[1],iv1);
-    else
-      iv1.setImageResource(R.drawable.im_red_informer);
-    if(mUser.avatars_big.length>2)
+    } else {
+      iv1.setImageResource(R.drawable.ic_launcher);
+      //iv1.setVisibility(View.GONE);
+    }
+    if(mUser.avatars_big.length>2) {
+      //iv2.setVisibility(View.VISIBLE);
       Http.imageLoader(mUser.avatars_big[2],iv2);
-    else
-      iv2.setImageResource(R.drawable.im_red_informer);
+    } else {
+      iv2.setImageResource(R.drawable.ic_launcher);
+      //iv2.setVisibility(View.GONE);
+    }
+    mDatingLayout.invalidate();
   }
   //---------------------------------------------------------------------------
   public void onProfileBtnClick() {

@@ -9,6 +9,7 @@ import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListe
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.LikesRequest;
 import com.sonetica.topface.net.Response;
+import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.ui.GalleryManager;
 import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.utils.Debug;
@@ -21,6 +22,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.Toast;
 
 /*
  *      "я нравлюсь"
@@ -47,43 +49,24 @@ public class LikesActivity extends Activity {
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likes_header_title));
    
-   /*
-   // Girl Button
-   Button btnGirls = (Button)findViewById(R.id.btnBarGirls);
-   btnGirls.setVisibility(View.INVISIBLE);
-   btnGirls.setText(getString(R.string.tops_btn_girls));
-   btnGirls.setOnClickListener(new View.OnClickListener() {
+
+   // Double Button
+   DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDoubleLikes);
+   btnDouble.setLeftText(getString(R.string.likes_btn_dbl_left));
+   btnDouble.setRightText(getString(R.string.likes_btn_dbl_right));
+   btnDouble.setLeftListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       Toast.makeText(LikesActivity.this,"Girl",Toast.LENGTH_LONG).show();
-       //update();
+       Toast.makeText(LikesActivity.this,"LEFT",Toast.LENGTH_SHORT).show();
      }
    });
-   
-   // Boy Button
-   Button btnBoys  = (Button)findViewById(R.id.btnBarBoys);
-   btnBoys.setVisibility(View.INVISIBLE);
-   btnBoys.setText(getString(R.string.tops_btn_boys));
-   btnBoys.setOnClickListener(new View.OnClickListener() {
+   btnDouble.setRightListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       Toast.makeText(LikesActivity.this,"Boy",Toast.LENGTH_LONG).show();
-       //update();
+       Toast.makeText(LikesActivity.this,"RIGHT",Toast.LENGTH_SHORT).show();
      }
    });
-   
-   // City Button
-   Button btnCity  = (Button)findViewById(R.id.btnBarCity);
-   btnCity.setVisibility(View.INVISIBLE);
-   btnCity.setText(getString(R.string.tops_btn_city));
-   btnCity.setOnClickListener(new View.OnClickListener() {
-     @Override
-     public void onClick(View v) {
-       Toast.makeText(LikesActivity.this,"City",Toast.LENGTH_LONG).show();
-       //update();
-     }
-   });
-   */
+
    
    // Gallery
    mGallery = (PullToRefreshGridView)findViewById(R.id.grdLikesGallary);

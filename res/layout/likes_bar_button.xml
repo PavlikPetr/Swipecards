@@ -11,6 +11,7 @@
         android:src="@drawable/im_bar_button" />
     
 	  <com.sonetica.topface.ui.DoubleButton
+	      android:id="@+id/btnDoubleLikes"
 	      android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
         android:layout_centerInParent="true"/>

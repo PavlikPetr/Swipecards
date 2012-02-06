@@ -54,11 +54,13 @@ public class ThumbView extends ImageView {
     int height = getMeasuredHeight();
     Bitmap bitmap = ((BitmapDrawable)getDrawable()).getBitmap();
     canvas.drawBitmap(bitmap,0,0,null);
-    Rect lineRect = new Rect(0,height-29,width,height);
+    Rect lineRect = new Rect(0,height-30,width,height);
     canvas.drawRect(lineRect,s_PaintLine);
+    
     if(mPercent!=0) {
-      canvas.drawBitmap(mHeartBmp,lineRect.left,lineRect.top+6,s_PaintState);
-      canvas.drawText(mPercent+" %",lineRect.left+mHeartBmp.getWidth(),lineRect.top+s_PaintText.getTextSize(),s_PaintText);
+      int x = lineRect.left+mHeartBmp.getWidth()/2;
+      canvas.drawBitmap(mHeartBmp,x,lineRect.top+6,s_PaintState);
+      canvas.drawText(mPercent+" %",x*=2,lineRect.top+s_PaintText.getTextSize(),s_PaintText);
     } else {
       canvas.drawText(mName+", "+mAge,lineRect.left+mHeartBmp.getWidth(),lineRect.top+s_PaintText.getTextSize(),s_PaintText);
       if(mOnline)

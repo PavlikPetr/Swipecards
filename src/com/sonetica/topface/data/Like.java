@@ -10,10 +10,11 @@ import com.sonetica.topface.utils.Debug;
 public class Like extends AbstractData {
   // Data
   public int uid;               // идентификатор фотографии в альбоме пользвоателя
+  public int age;               // возраст пользователя
   public String first_name;     // имя пользователя
   public boolean online;        // флаг нахождения пользователя в онлайне
   public boolean unread;        // флаг прочитанного лайка
-  public String city_id;        // идентификатор города отправителя оценки
+  public String  city_id;       // идентификатор города отправителя оценки
   public String  avatars_big;   // большая аватарка пользователя
   public String  avatars_small; // маленькая аватарка пользователя
   //---------------------------------------------------------------------------
@@ -32,6 +33,7 @@ public class Like extends AbstractData {
           Like like = new Like();
           like.first_name  = item.getString("first_name");
           like.uid         = item.getInt("uid");
+          //like.age         = item.getInt("age");
           like.online      = item.getBoolean("online");
           like.unread      = item.getBoolean("unread");
           like.city_id     = item.getString("city_id");

@@ -24,7 +24,7 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     super(context);
 
     setOnClickListener(this);
-    setBackgroundColor(Color.BLACK);
+    setBackgroundColor(Color.TRANSPARENT);
     
     // Baby
     mFaceView = new ImageView(context);
