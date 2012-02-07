@@ -18,7 +18,7 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
   // 
   private View mHeaderBar;
   private int  mHeaderOffset;
-  private TextView mPopupView;
+  //private TextView mPopupView;  // оценка по центру
   //---------------------------------------------------------------------------
   public DatingLayout(Context context) {
     super(context);
@@ -28,7 +28,7 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     
     // Baby
     mFaceView = new ImageView(context);
-    mFaceView.setImageResource(R.drawable.im_red_informer);
+    mFaceView.setImageResource(R.drawable.im_black_square);
     addView(mFaceView);
     
     // Info
@@ -38,16 +38,18 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     // Informer, profile, chat
     mInformerView = new InformerView(context);
     addView(mInformerView);
-    
+
+    /*
     // Popup
     mPopupView = new TextView(context);
     mPopupView.setBackgroundResource(R.drawable.dating_popup);
     mPopupView.setVisibility(View.INVISIBLE);
     mPopupView.setGravity(Gravity.CENTER);
     addView(mPopupView);
+    */
     
     // Stars
-    mStarsView = new StarsView(context,mInformerView,mPopupView);
+    mStarsView = new StarsView(context,mInformerView);
     addView(mStarsView);
 
   }
@@ -75,9 +77,11 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     mStarsView.layout(stars_x,stars_y,stars_x+mStarsView.getMeasuredWidth(),stars_y+mStarsView.getMeasuredHeight());
     mInformerView.layout(stars_x-mInformerView.getMeasuredWidth(),stars_y,stars_x,stars_y+mInformerView.getMeasuredHeight());
     mInfoView.layout(0,stars_y,mInfoView.getMeasuredWidth(),stars_y+mInfoView.getMeasuredHeight());
+    /*
     stars_x = (getMeasuredWidth() - mPopupView.getMeasuredWidth())/2;
     stars_y = (getMeasuredHeight() - mPopupView.getMeasuredHeight())/2;
     mPopupView.layout(stars_x,stars_y,stars_x+mPopupView.getMeasuredWidth(),stars_y+mPopupView.getMeasuredHeight());
+    */
   }
   //-------------------------------------------------------------------------
   public void onProfileBtnClick() {

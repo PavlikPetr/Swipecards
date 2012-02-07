@@ -1,5 +1,6 @@
 package com.sonetica.topface.ui.dating;
 
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -71,6 +72,9 @@ class InfoView extends ImageView {
     mMoneyBmp        = BitmapFactory.decodeResource(getResources(),R.drawable.dating_money);
     mShadowTopBmp    = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_top);
     mShadowBottomBmp = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_bottom);
+    
+    money = Data.s_Money;
+    power = Data.s_Power;
   }
   //---------------------------------------------------------------------------
   @Override

@@ -20,7 +20,7 @@ public class GalleryManager {
   // Data
   private CacheManager mCacheManager;
   private ExecutorService mThreadsPool;
-  private LinkedList<? extends AbstractData> mData;
+  private LinkedList<? extends AbstractData> mDataList;
   private HashMap<ImageView,Integer> mLinkCache;
   private int mThreadCount;
   public  int mBitmapWidth;
@@ -34,7 +34,7 @@ public class GalleryManager {
   }
   //---------------------------------------------------------------------------
   public GalleryManager(Context context,LinkedList<? extends AbstractData> dataList,int threadCount) {
-    mData         = dataList;
+    mDataList         = dataList;
     mThreadCount  = threadCount;
     mCacheManager = new CacheManager(context);
     mLinkCache    = new HashMap<ImageView,Integer>();
@@ -44,8 +44,12 @@ public class GalleryManager {
     mBitmapHeight = (int)(mBitmapWidth*1.25);
   }
   //---------------------------------------------------------------------------
+  public void setDataList(LinkedList<? extends AbstractData> dataList) {
+    mDataList = dataList;
+  }
+  //---------------------------------------------------------------------------
   public AbstractData get(int position) {
-    return mData.get(position);
+    return mDataList.get(position);
   }
   //---------------------------------------------------------------------------
   public void getImage(final int position,final ImageView imageView) {
@@ -56,7 +60,7 @@ public class GalleryManager {
       return;
     }
     */
-    final Bitmap bitmap = mCacheManager.get(position,mData.get(position).getLink());
+    final Bitmap bitmap = mCacheManager.get(position,mDataList.get(position).getLink());
     if(bitmap!=null)
       imageView.setImageBitmap(bitmap);
     else {
@@ -80,20 +84,20 @@ public class GalleryManager {
       public void run() {
         if(isViewReused(position,imageView))
           return;
-        Bitmap rawBitmap = Http.bitmapLoader(mData.get(position).getLink());
+        Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getLink());
         if(rawBitmap==null)
           return;
         if(isViewReused(position,imageView))
           return;
         final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
-        mCacheManager.put(position,mData.get(position).getLink(),scaledBitmap);
+        mCacheManager.put(position,mDataList.get(position).getLink(),scaledBitmap);
         imageView.post(new Runnable() {
           @Override
           public void run() {
             if(isViewReused(position,imageView))
               return;
             if(scaledBitmap!=null)
-              imageView.setImageBitmap(mCacheManager.get(position,mData.get(position).getLink()));
+              imageView.setImageBitmap(mCacheManager.get(position,mDataList.get(position).getLink()));
             else
               imageView.setImageResource(R.drawable.im_black_square);
           }
@@ -118,7 +122,7 @@ public class GalleryManager {
   }
   //---------------------------------------------------------------------------
   public int size() {
-    return mData.size();
+    return mDataList.size();
   }
   //---------------------------------------------------------------------------
   public void release() {

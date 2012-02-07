@@ -18,5 +18,6 @@
   <string name="s_tops_city_id">tops_city_id</string>
   <string name="s_tops_city_position">tops_city_position</string>
   <string name="s_tops_city_name">tops_city_name</string>
+  <string name="s_likes_city_id">likes_city_id</string>
   
 </resources>

@@ -52,7 +52,7 @@ public class LikesGridAdapter extends BaseAdapter {
     
     Like like = ((Like)mGalleryManager.get(position));
     
-    holder.mThumbView.mAge    = 99; //like.age;
+    holder.mThumbView.mAge    = like.age;
     holder.mThumbView.mName   = like.first_name;
     holder.mThumbView.mOnline = like.online;
         

@@ -1,11 +1,13 @@
 package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
-import com.sonetica.topface.utils.Debug;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,31 +26,46 @@ public class InformerView extends ViewGroup {
     public int    _bottom;    // нижняя граница предка 
     public String _text;      // текст подсказка
     public boolean _visible;      // рисовать или нет
-    private int color = Color.WHITE;  // Битмап для бекграунда
     // Ctor
     public Informer(int widht,int height) {
       _widht  = widht;
       _height = height;
       _text   = "оценка ";
       _temp   = height / 2;
-      informerPaint.setColor(Color.WHITE);
-      informerTitlePaint.setColor(Color.BLACK);
     }
     public void draw(Canvas canvas) {
-//      if(!_visible) return;
-//      _y-=_temp;
-//      if(_y<0) _y=0;
-//      else if(_y>_bottom-_height) _y=_bottom-_height; // иметь просчитанным !!!
-//      Debug.log(">>>>>>>>","_y:"+_y+",Y:"+(_bottom-_height));
-//      canvas.drawRect(_x,_y,_x+_widht,_y+_height,informerPaint);
-//      canvas.drawText(_text+_index,_x+15,_y+15,informerTitlePaint);
+      if(!_visible) 
+        return;
+      
+      _y-=_temp;                      // ПЕРЕПИСАТЬ ОТРИСОВКУ 
+      
+      if(_y<0) 
+        _y=0;
+      else if(_y>_bottom-_height) 
+        _y=_bottom-_height; // иметь просчитанным !!!
+      
+      int z = (mBkgrnd.getHeight()-mStar.getHeight())/2;
+      canvas.drawBitmap(mBkgrnd,_x,_y,informerPaint);
+      canvas.drawBitmap(mStar,_x+z*2,_y+z,informerPaint);
+      canvas.drawText(""+_index,(float)(_x+mStar.getWidth()/2)+z*2,(float)(_y+z+mStar.getHeight()/1.6),informerTitlePaint);
+      if(_index==10) {
+        canvas.drawText("1",(float)(_x+mStar.getWidth())+z*5,(float)(_y+z+mStar.getHeight()/1.6),informerTitlePaint);
+        // иметь просчитанным !!!
+        int n = mBkgrnd.getWidth()-mMoney.getWidth()-z*2;
+        z = (mBkgrnd.getHeight()-mMoney.getHeight())/2;
+        canvas.drawBitmap(mMoney,_x+n,_y+z,informerPaint);
+      }
+      
     }
   }
   //---------------------------------------------------------------------------
   // Data
-  Button   mProfileBtn;
-  Button   mChatBtn;
-  Informer mInformer;
+  private Button   mProfileBtn;
+  private Button   mChatBtn;
+  private Informer mInformer;
+  private Bitmap   mBkgrnd;     // Битмап для бекграунда
+  private Bitmap   mStar;       // звезда
+  private Bitmap   mMoney;      // монетка
   // Constants
   private static final Paint informerTitlePaint = new Paint();
   private static final Paint informerPaint = new Paint();
@@ -57,6 +74,16 @@ public class InformerView extends ViewGroup {
     super(context);
     
     setBackgroundColor(Color.TRANSPARENT);
+    
+    mBkgrnd = BitmapFactory.decodeResource(getResources(),R.drawable.dating_popup);
+    mStar   = BitmapFactory.decodeResource(getResources(),R.drawable.dating_star_yellow);
+    mMoney  = BitmapFactory.decodeResource(getResources(),R.drawable.dating_money);
+    
+    informerTitlePaint.setColor(Color.WHITE);
+    informerTitlePaint.setTextSize(getResources().getDimension(R.dimen.dating_star_number));
+    informerTitlePaint.setTypeface(Typeface.DEFAULT_BOLD);
+    informerTitlePaint.setAntiAlias(true);
+    informerTitlePaint.setTextAlign(Paint.Align.CENTER);
     
     // Chat btn
     mChatBtn = new Button(context);
@@ -82,7 +109,6 @@ public class InformerView extends ViewGroup {
     
     // Informer popup
     mInformer = new Informer(200,80);
-
   }
   //---------------------------------------------------------------------------
   @Override
@@ -93,7 +119,7 @@ public class InformerView extends ViewGroup {
   //-------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    int width  = mInformer._widht;                       // вычисление своей ширины
+    int width  = (int)(mBkgrnd.getWidth()*1.1);          // вычисление своей ширины
     int height = MeasureSpec.getSize(heightMeasureSpec); // вычисляем предоставленную нам высоту для отрисовки
     
     // передаем свои размеры предкам

@@ -11,13 +11,12 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 
 public class StarsView extends View implements View.OnTouchListener {
   //---------------------------------------------------------------------------
   // calss Star
   //---------------------------------------------------------------------------
-  class Star {
+  static class Star {
     public  int _index;    // оценка
     private int _x;
     private int _y;
@@ -26,7 +25,7 @@ public class StarsView extends View implements View.OnTouchListener {
     private int _height;
     public Rect _rect;      // 
     public boolean pressed; // состояние
-    public int average=6;   // средняя выставляемвя оценка 
+    public static int average=6;     // средняя выставляемвя оценка 
     // Ctor
     public Star(int x,int y,int width,int height,int index) {
       _x = x;
@@ -71,7 +70,7 @@ public class StarsView extends View implements View.OnTouchListener {
   private float[] mLastYs;              // массив последних нажатий
   private Star[]  mStars;              // статичный массив объектов для отрисовки звезд;
   private InformerView mInformerView;  // обсервер текущего нажатия на экран
-  private TextView mPopupView;
+  //private TextView mPopupView;
   private float   mFontSize;
   // Constants
   private static final int EVENT_COUNT = 3;   // число последних запоминаемых координат пальца
@@ -79,12 +78,12 @@ public class StarsView extends View implements View.OnTouchListener {
   private static final Paint paintStar   = new Paint();
   private static final Paint paintNumber = new Paint();
   //---------------------------------------------------------------------------
-  public StarsView(Context context,InformerView informer,TextView popup) {
+  public StarsView(Context context,InformerView informer) {
     super(context);
     mStars = new Star[STARS_COUNT];
     mLastYs = new float[EVENT_COUNT];
     mInformerView = informer;
-    mPopupView = popup;
+    //mPopupView = popup;
     setOnTouchListener(this);
     setBackgroundColor(Color.TRANSPARENT);
     
@@ -126,11 +125,11 @@ public class StarsView extends View implements View.OnTouchListener {
       prev_star_index = curr_star_index;
     }
     
-    mPopupView.setText(""+star_index);
+    //mPopupView.setText(""+star_index);
     
     switch(event.getAction()) {
       case MotionEvent.ACTION_DOWN:
-        mPopupView.setVisibility(View.VISIBLE);
+        //mPopupView.setVisibility(View.VISIBLE);
         mStars[curr_star_index].pressed=true;
         mInformerView.setVisible(true);
         for(int i = 0; i < EVENT_COUNT; i++)
@@ -144,7 +143,7 @@ public class StarsView extends View implements View.OnTouchListener {
         mLastYs[EVENT_COUNT-1] = y;
         break;
       case MotionEvent.ACTION_UP:
-        mPopupView.setVisibility(View.INVISIBLE);
+        //mPopupView.setVisibility(View.INVISIBLE);
         mStars[curr_star_index].pressed=false;
         mInformerView.setVisible(false);
         for(int i = 0; i < EVENT_COUNT; i++)
@@ -153,7 +152,7 @@ public class StarsView extends View implements View.OnTouchListener {
         //((DatingActivity)getContext()).doRate(0,star_index); // Опасная операция, требует рефакторинг !!!!
         break;
       default:
-        mPopupView.setVisibility(View.INVISIBLE);
+        //mPopupView.setVisibility(View.INVISIBLE);
         mStars[curr_star_index].pressed=false;
         mInformerView.setVisible(false);
         for(int i = 0; i < EVENT_COUNT; i++)

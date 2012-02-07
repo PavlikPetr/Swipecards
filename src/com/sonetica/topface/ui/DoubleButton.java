@@ -4,14 +4,18 @@ import com.sonetica.topface.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 
-public class DoubleButton extends LinearLayout {
+public class DoubleButton extends LinearLayout implements CompoundButton.OnCheckedChangeListener {
   // Data
-  private Button mLeftButton;
-  private Button mRightButoon;
+  private RadioButton  mLeftButton;
+  private RadioButton  mRightButoon;
+  // Constants
+  public static final int LEFT_BUTTON  = 0;
+  public static final int RIGHT_BUTTON = 1;
   //---------------------------------------------------------------------------
   public DoubleButton(Context context) {
     super(context,null);
@@ -23,9 +27,8 @@ public class DoubleButton extends LinearLayout {
     LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     inflater.inflate(R.layout.btn_double,this,true);
 
-    mLeftButton  = (Button)findViewById(R.id.dblLeft);
-    mRightButoon = (Button)findViewById(R.id.dblRight);
-    
+    mLeftButton  = (RadioButton)findViewById(R.id.dblLeft);
+    mRightButoon = (RadioButton)findViewById(R.id.dblRight);
   }
   //---------------------------------------------------------------------------
   public void setLeftText(String text) {
@@ -36,12 +39,39 @@ public class DoubleButton extends LinearLayout {
     mRightButoon.setText(text);
   }
   //---------------------------------------------------------------------------
+  public void setChecked(int n) {
+    switch(n) {
+      case LEFT_BUTTON:
+        mLeftButton.setChecked(true);
+        break;
+      case RIGHT_BUTTON:
+        mRightButoon.setChecked(true);
+        break;
+    }
+  }
+  //---------------------------------------------------------------------------
   public void setLeftListener(OnClickListener onClickListener) {
     mLeftButton.setOnClickListener(onClickListener);
+    mLeftButton.setOnCheckedChangeListener(this);
   }
   //---------------------------------------------------------------------------
   public void setRightListener(OnClickListener onClickListener) {
     mRightButoon.setOnClickListener(onClickListener);
+    mRightButoon.setOnCheckedChangeListener((OnCheckedChangeListener)this);
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onCheckedChanged(CompoundButton button,boolean value) {
+    switch(button.getId()) {
+      case R.id.dblLeft:
+        //mLeftButton.setChecked(true);
+        break;
+      case R.id.dblRight:
+        //mRightButoon.setChecked(true);
+        break;
+      default:
+        break;
+    }
   }
   //---------------------------------------------------------------------------
 }
