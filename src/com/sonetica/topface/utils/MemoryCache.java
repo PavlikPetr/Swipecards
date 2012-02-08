@@ -15,8 +15,8 @@ public class MemoryCache {
     mCache = new HashMap<Integer, SoftReference<Bitmap>>();
   }
   //---------------------------------------------------------------------------
-  public Bitmap get(Integer key){
-    SoftReference<Bitmap> ref = mCache.get(key);
+  public Bitmap get(Integer position){
+    SoftReference<Bitmap> ref = mCache.get(position);
     return ref != null ? ref.get() : null;
   }
   //---------------------------------------------------------------------------

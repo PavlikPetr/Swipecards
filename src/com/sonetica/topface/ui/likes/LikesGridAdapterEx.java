@@ -13,7 +13,7 @@ import android.widget.BaseAdapter;
 /*
  *  Класс адаптера для отображения галереи в Like активити
  */
-public class LikesGridAdapter extends BaseAdapter {
+public class LikesGridAdapterEx extends BaseAdapter {
   // Data
   Context mContext;
   private LayoutInflater mInflater;
@@ -22,10 +22,8 @@ public class LikesGridAdapter extends BaseAdapter {
   static class ViewHolder {
     ThumbView mThumbView;
   };
-  private int CITY = 2;  // ДАННЫЕ ИЗ ПРОФАЙЛА
-  private boolean collapse;
   //---------------------------------------------------------------------------
-  public LikesGridAdapter(Context context,GalleryManager galleryManager) {
+  public LikesGridAdapterEx(Context context,GalleryManager galleryManager) {
     mContext = context;
     mInflater = LayoutInflater.from(context);
     mGalleryManager = galleryManager;
@@ -34,10 +32,6 @@ public class LikesGridAdapter extends BaseAdapter {
   @Override
   public int getCount() {
     return mGalleryManager.size();
-  }
-  //---------------------------------------------------------------------------
-  public void collapse(boolean value) {
-    collapse = value;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -61,14 +55,8 @@ public class LikesGridAdapter extends BaseAdapter {
     holder.mThumbView.mAge    = like.age;
     holder.mThumbView.mName   = like.first_name;
     holder.mThumbView.mOnline = like.online;
-    holder.mThumbView.mCity   = like.city_id;
-    
+        
     mGalleryManager.getImage(position,holder.mThumbView);
-    
-    if(collapse && CITY!=like.city_id) {
-      convertView.setVisibility(View.INVISIBLE);
-    } else
-      convertView.setVisibility(View.VISIBLE);
     
     return convertView;
   }

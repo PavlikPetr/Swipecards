@@ -80,7 +80,6 @@ public class LikesActivity extends Activity {
      }
    });
 
-   
    // Gallery
    mGallery = (PullToRefreshGridView)findViewById(R.id.grdLikesGallary);
    mGallery.setAnimationCacheEnabled(false);
@@ -157,10 +156,14 @@ public class LikesActivity extends Activity {
           if(like.city_id==mCity)
             mLikesCityList.add(like);        // ЧТО ЭТО
         
-        if(mCurrentCity==ALL_CITIES)
+        if(mCurrentCity==ALL_CITIES) {
           mGalleryManager.setDataList(mLikesAllList);
-        else
+          mLikesGridAdapter.collapse(false);
+        } else {
+          //mGalleryManager.setDataList(mLikesAllList);
           mGalleryManager.setDataList(mLikesCityList);
+          mLikesGridAdapter.collapse(true);
+        }
 
         mLikesGridAdapter.notifyDataSetChanged();
         

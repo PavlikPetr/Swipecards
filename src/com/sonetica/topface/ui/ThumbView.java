@@ -14,17 +14,18 @@ import android.widget.ImageView;
 
 public class ThumbView extends ImageView {
   // Data
-  public int mPercent;
-  public int mAge;
-  public String mName;
+  public int     mPercent;
+  public int     mAge;
+  public String  mName;
   public boolean mOnline;
+  public int     mCity;
   // Constants
   private static Bitmap mOnlineBmp;
   private static Bitmap mOfflineBmp;
   private static Bitmap mHeartBmp;
-  private static Paint s_PaintState;
-  private static Paint s_PaintLine;
-  private static Paint s_PaintText;
+  private static Paint  s_PaintState;
+  private static Paint  s_PaintLine;
+  private static Paint  s_PaintText;
   static {
     s_PaintState = new Paint();
     s_PaintState.setColor(Color.WHITE);
@@ -56,6 +57,9 @@ public class ThumbView extends ImageView {
     canvas.drawBitmap(bitmap,0,0,null);
     Rect lineRect = new Rect(0,height-30,width,height);
     canvas.drawRect(lineRect,s_PaintLine);
+    
+    // city
+    canvas.drawText(mCity+"",10,20,s_PaintText);
     
     if(mPercent!=0) {
       int x = lineRect.left+mHeartBmp.getWidth()/2;

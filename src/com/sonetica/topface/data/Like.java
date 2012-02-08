@@ -9,7 +9,8 @@ import com.sonetica.topface.utils.Debug;
 
 public class Like extends AbstractData {
   // Data
-  public int uid;               // идентификатор фотографии в альбоме пользвоателя
+  public long id;
+  public int uid;               // идентификатор фотографии в альбоме пользователя
   public int age;               // возраст пользователя
   public String first_name;     // имя пользователя
   public boolean online;        // флаг нахождения пользователя в онлайне
@@ -40,6 +41,7 @@ public class Like extends AbstractData {
           JSONObject avatar  = item.getJSONObject("avatars");
           like.avatars_big   = avatar.getString("big");
           like.avatars_small = avatar.getString("small");
+          like.id = System.currentTimeMillis();
           likesList.add(like);
         }
     } catch(JSONException e) {
