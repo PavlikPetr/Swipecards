@@ -17,7 +17,7 @@ public class Global {
   public static String CLIENT_TYPE;            // тип клиента
   public static String CLIENT_VERSION;         // версия клиента
   public static String CLIENT_DEVICE;          // тип устройста
-  public static String CLIENT_ID;              // id пользователя
+  public static String CLIENT_ID;              // id устройства пользователя
   //---------------------------------------------------------------------------
   public static void init(Context context) {
     API_URL                = context.getString(R.string.api_url);

@@ -12,12 +12,12 @@ public class Like extends AbstractData {
   public long id;
   public int uid;               // идентификатор фотографии в альбоме пользователя
   public int age;               // возраст пользователя
-  public String first_name;     // имя пользователя
+  public int city_id;           // идентификатор города отправителя оценки
   public boolean online;        // флаг нахождения пользователя в онлайне
   public boolean unread;        // флаг прочитанного лайка
-  public int     city_id;       // идентификатор города отправителя оценки
-  public String  avatars_big;   // большая аватарка пользователя
-  public String  avatars_small; // маленькая аватарка пользователя
+  public String first_name;     // имя пользователя
+  public String avatars_big;    // большая аватарка пользователя
+  public String avatars_small;  // маленькая аватарка пользователя
   //---------------------------------------------------------------------------
   @Override
   public String getLink() {

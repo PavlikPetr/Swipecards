@@ -8,7 +8,7 @@ import android.content.Context;
 public class AlbumRequest extends ApiRequest {
   // Data
   private String service = "album";
-  public  int uid;       // внутренний идентификатор пользователя
+  public  int uid;  // внутренний идентификатор пользователя
   //---------------------------------------------------------------------------
   public AlbumRequest(Context context) {
     super(context);

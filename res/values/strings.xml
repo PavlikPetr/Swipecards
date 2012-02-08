@@ -22,8 +22,10 @@
   <string name="dashbrd_btn_tops">Топы</string>
   <string name="dashbrd_btn_profile">Профиль</string>
               
-  <!-- Chat Activity -->
-  <string name="chat_header_title">Диалоги</string>
+  <!-- Indow & Chat Activity -->
+  <string name="inbox_header_title">Диалоги</string>
+  <string name="inbox_btn_dbl_left">Все</string>
+  <string name="inbox_btn_dbl_right">Непрочитанные</string>
   <string name="chat_gift">Вам прислали подарок.</string> 
   
   <!-- Tops Activity -->
@@ -44,8 +46,10 @@
   <string name="likes_btn_dbl_left">Все</string>
   <string name="likes_btn_dbl_right">Мой город</string>
   
-  <!-- Myrating Activity -->
+  <!-- Rates Activity -->
   <string name="rates_header_title">Меня оценили</string>
+  <string name="rates_btn_dbl_left">Все</string>
+  <string name="rates_btn_dbl_right">Непрочитанные</string>
   
   <!-- Album Activity -->
   <string name="album_header_title">Альбом</string>

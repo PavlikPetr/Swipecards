@@ -9,6 +9,7 @@ import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListe
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.InboxRequest;
 import com.sonetica.topface.net.Response;
+import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -20,6 +21,7 @@ import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
  *            "Диалоги"
@@ -33,6 +35,7 @@ public class InboxActivity extends Activity {
   private int mState;
   private int mOffset;
   private boolean mIsEndList;
+  private boolean mIsNewMessages;
   // Constants
   private static final int LIMIT = 20;
   //---------------------------------------------------------------------------
@@ -42,47 +45,67 @@ public class InboxActivity extends Activity {
     setContentView(R.layout.ac_inbox);
     Debug.log(this,"+onCreate");
     
-//    // Data
-//    mInboxList = Data.s_InboxList;
-//    
-//    // Title Header
-//    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.chat_header_title));
-//   
-//    // ListView
-//    mListView = (PullToRefreshListView)findViewById(R.id.lvInboxList);
-//    mListView.setOnRefreshListener(new OnRefreshListener() {
-//     @Override
-//     public void onRefresh() {
-//       //update(0,true);
-//       mListView.onRefreshComplete();
-//     }});
-//    mListView.setOnTouchListener(new OnTouchListener() {
-//      @Override
-//      public boolean onTouch(View v,MotionEvent event) {
-//        return false;
-//      }
-//    });
-//    mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
-//      @Override
-//      public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
-//        Intent intent = new Intent(InboxActivity.this,ChatActivity.class);
-//        intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxList.get(position).uid);
-//        startActivityForResult(intent,0);
-//      }
-//    });
-//
-//    // Progress Bar
-//    mProgressDialog = new ProgressDialog(this);
-//    mProgressDialog.setMessage(getString(R.string.dialog_loading));
-//    
-//    if(mInboxList.size()==0) {
-//      create();
-//      update(0,false);
-//    } else
-//      create();
-//    
-//    // обнуление информера непрочитанных сообщений
-//    Data._messages = 0;
+    // Data
+    mInboxList = Data.s_InboxList;
+    
+    // Title Header
+    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.inbox_header_title));
+    
+    // Double Button
+    DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDoubleLikes);
+    btnDouble.setLeftText(getString(R.string.inbox_btn_dbl_left));
+    btnDouble.setRightText(getString(R.string.inbox_btn_dbl_right));
+    btnDouble.setChecked(mIsNewMessages==false?DoubleButton.LEFT_BUTTON:DoubleButton.RIGHT_BUTTON);
+    // Left btn
+    btnDouble.setLeftListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Toast.makeText(InboxActivity.this,"All",Toast.LENGTH_SHORT).show(); 
+      }
+    });
+    // Right btn
+    btnDouble.setRightListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Toast.makeText(InboxActivity.this,"New",Toast.LENGTH_SHORT).show();
+      }
+    });
+   
+    // ListView
+    mListView = (PullToRefreshListView)findViewById(R.id.lvInboxList);
+    mListView.setOnRefreshListener(new OnRefreshListener() {
+     @Override
+     public void onRefresh() {
+       //update(0,true);
+       mListView.onRefreshComplete();
+     }});
+    mListView.setOnTouchListener(new OnTouchListener() {
+      @Override
+      public boolean onTouch(View v,MotionEvent event) {
+        return false;
+      }
+    });
+    mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
+        Intent intent = new Intent(InboxActivity.this,ChatActivity.class);
+        intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxList.get(position).uid);
+        startActivityForResult(intent,0);
+      }
+    });
+
+    // Progress Bar
+    mProgressDialog = new ProgressDialog(this);
+    mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    
+    if(mInboxList.size()==0) {
+      create();
+      update(0,false);
+    } else
+      create();
+    
+    // обнуление информера непрочитанных сообщений
+    Data.s_Messages = 0;
   }
   //---------------------------------------------------------------------------
   private void create() {

@@ -40,26 +40,13 @@ public class DatingActivity extends Activity implements DatingEventListener {
     Debug.log(this,"+onCreate");
     
     // Data
-    mSearchUserList = new LinkedList<SearchUser>();
+    mSearchUserList = Data.s_SearchList;
 
     // Header Bar
     mHeaderBar = findViewById(R.id.loHeader);
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
-
-   /*
-   // Button Header
-   Button btnFilter = (Button)findViewById(R.id.tvHeaderButton);
-   btnFilter.setText(getString(R.string.dating_header_button));
-   btnFilter.setOnClickListener(new View.OnClickListener() {
-     @Override
-     public void onClick(View v) {
-       Toast.makeText(DatingActivity.this,"Filter",Toast.LENGTH_SHORT).show();
-       filter();
-     }
-   });
-   */
 
    // Dating Gallery
    mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
@@ -68,7 +55,6 @@ public class DatingActivity extends Activity implements DatingEventListener {
    mDatingGallery.setEventListener(this);
    
    update();
-   //filter();
   }
   //---------------------------------------------------------------------------
   public void update() {
@@ -79,13 +65,10 @@ public class DatingActivity extends Activity implements DatingEventListener {
       public void success(Response response) {
         mSearchUserList.addAll(SearchUser.parse(response));
         mDatingGallery.notifyDataChanged();
-        
-        //Toast.makeText(DatingActivity.this,"update success 0",Toast.LENGTH_SHORT).show();
       }
       @Override
       public void fail(int codeError) {
-
-        Toast.makeText(DatingActivity.this,"update fail",Toast.LENGTH_SHORT).show();
+        Toast.makeText(DatingActivity.this,"dating update fail",Toast.LENGTH_SHORT).show();
       }
     }).exec();
   }
@@ -120,11 +103,10 @@ public class DatingActivity extends Activity implements DatingEventListener {
         DoRate rate = DoRate.parse(response);
         Data.s_Power = rate.power;
         Data.s_Money = rate.money;
-        //Toast.makeText(DatingActivity.this,"p:"+Data._power+",m:"+Data._money,Toast.LENGTH_SHORT).show();
       }
       @Override
       public void fail(int codeError) {
-
+        Toast.makeText(DatingActivity.this,"dating rate fail",Toast.LENGTH_SHORT).show();
       }
     }).exec();
   }

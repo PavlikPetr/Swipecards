@@ -12,7 +12,7 @@ import android.util.AttributeSet;
 import android.widget.Button;
 
 /*
- *  Класс для кнопок на Dashboard активити (НЕ ИСПОЛЬЗУЕТСЯ)
+ *  Класс для кнопок на Dashboard активити 
  *  для отображения поверх кнопки иконки кол-во сообщений, оценок и т.д.
  */
 public class DashboardButton extends Button {

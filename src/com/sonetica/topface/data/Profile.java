@@ -10,18 +10,18 @@ import com.sonetica.topface.utils.Debug;
  */
 public class Profile extends AbstractData {
   // Data
-  public String first_name;      // имя пользователя
   public int    age;             // возраст пользователя
   public int    sex;             // секс пользователя
   public int    unread_rates;    // количество непрочитанных оценок пользователя
   public int    unread_likes;    // количество непрочитанных “понравилось” пользователя
   public int    unread_messages; // количество непрочитанных сообщений пользователя
-  public String photo_url;       // URL аватарки пользователя
-  public String city_name;       // название города пользвоателя
-  public String city_id;         // идентификтаор города пользователя
   public int    money;           // количество монет у пользователя
   public int    power;           // количество энергии пользователя
   public int    average_rate;    // средняя оценка текущего пользователя
+  public String first_name;      // имя пользователя
+  public String photo_url;       // URL аватарки пользователя
+  public String city_name;       // название города пользвоателя
+  public String city_id;         // идентификтаор города пользователя
   //---------------------------------------------------------------------------
   @Override
   public String getLink() {

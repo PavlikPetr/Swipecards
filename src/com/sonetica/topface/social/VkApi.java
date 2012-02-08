@@ -1,8 +1,6 @@
-package com.sonetica.topface.social.vk;
+package com.sonetica.topface.social;
 
 import android.graphics.Bitmap;
-import com.sonetica.topface.social.AuthToken;
-import com.sonetica.topface.social.SnApi;
 
 /*
  *  Класс для работы с Vkontakte

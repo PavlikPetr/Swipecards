@@ -47,7 +47,7 @@ public class ChatActivity extends Activity {
     mHistoryList = new LinkedList<History>();
     
     // Title Header
-    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.chat_header_title));
+    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.inbox_header_title));
    
     // ListView
     mListView = (PullToRefreshListView)findViewById(R.id.lvChatList);

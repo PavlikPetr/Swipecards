@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-// (НЕ ИСПОЛЬЗУЕТСЯ , заменен на TableLayout)
+                // (НЕ ИСПОЛЬЗУЕТСЯ , заменен на TableLayout)
 /*
  * Класс слоя для Dashboard активити для позиционирования элементов на экране
  * спизжен с хабра http://habrahabr.ru/blogs/android_development/130194

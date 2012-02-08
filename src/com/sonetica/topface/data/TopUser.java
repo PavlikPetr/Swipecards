@@ -12,9 +12,9 @@ import com.sonetica.topface.utils.Debug;
  */
 public class TopUser extends AbstractData {
   // Data
-  public int uid;      // идентификатор красивого пользователя
-  public String photo; // URL аватарки красивого пользователя 
+  public int uid;      // идентификатор красивого пользователя 
   public int liked;    // процент абсолютного значения красоты
+  public String photo; // URL аватарки красивого пользователя
   //---------------------------------------------------------------------------
   @Override
   public String getLink() {

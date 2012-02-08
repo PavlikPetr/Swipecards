@@ -7,6 +7,9 @@
   <!-- header bar -->
   <include layout="@layout/bar_header" />
   
+    <!-- button bar -->
+  <include layout="@layout/bar_double_button" />
+  
   <com.sonetica.topface.module.pull2refresh.PullToRefreshListView
       android:id="@+id/lvInboxList"
       android:layout_width="wrap_content" 

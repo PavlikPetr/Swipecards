@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+      android:layout_width="fill_parent" 
+      android:layout_height="wrap_content"
+      android:background="@drawable/item_gallery_selector"  >
+      
+    <!-- аватар -->
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/ic_launcher" />
+    
+    <!-- имя, возраст -->
+    <TextView
+        android:id="@+id/tvName"
+        android:textColor="#000000"
+        android:layout_toRightOf="@id/ivAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+    
+    <!-- текст -->
+    <TextView
+        android:id="@+id/tvText"
+        android:textColor="#000000"
+        android:layout_toRightOf="@id/ivAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvName"  />
+    
+    <!-- время -->
+    <TextView
+        android:id="@+id/tvTime"
+        android:textColor="#000000"
+        android:layout_toRightOf="@id/ivAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+    
+    <!-- стрелка -->
+    <ImageView
+        android:id="@+id/ivArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/im_item_gallery_arrow" />
+    
+  </RelativeLayout>

@@ -1,7 +1,5 @@
 package com.sonetica.topface.social;
 
-import com.sonetica.topface.social.fb.FbApi;
-import com.sonetica.topface.social.vk.VkApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 

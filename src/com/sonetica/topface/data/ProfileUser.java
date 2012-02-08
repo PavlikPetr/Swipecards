@@ -1,8 +1,6 @@
 package com.sonetica.topface.data;
 
 import java.util.LinkedList;
-import java.util.List;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.net.Response;
@@ -10,19 +8,19 @@ import com.sonetica.topface.utils.Debug;
 
 public class ProfileUser extends AbstractData {
   // Data
-  public int      uid;                 // идентификатор пользователя
-  public String   first_name;          // имя пользователя
-  public String   first_name_translit; // имя пользователя в транслитерации
-  public String   platform;            // платформа пользователя
-  public int      age;                 // возраст пользователя
-  public int      sex;                 // секс пользователя
-  public int      last_visit;          // таймстамп последнего посещения приложения
-  public String   status;              // статус пользователя
-  public boolean  online;              // флаг наличия пользвоателя в онлайне
-  public String   avatars_big;         // большая аватарка пользователя
-  public String   avatars_small;       // маленькая аватарка пользователя
-  public String   city_name;           // наименование города пользователя
-  public int      city_id;             // идентификатор города пользователя
+  public int uid;                    // идентификатор пользователя
+  public int age;                    // возраст пользователя
+  public int sex;                    // секс пользователя
+  public int last_visit;             // таймстамп последнего посещения приложения
+  public int city_id;                // идентификатор города пользователя
+  public boolean online;             // флаг наличия пользвоателя в онлайне
+  public String status;              // статус пользователя
+  public String first_name;          // имя пользователя
+  public String first_name_translit; // имя пользователя в транслитерации
+  public String platform;            // платформа пользователя
+  public String avatars_big;         // большая аватарка пользователя
+  public String avatars_small;       // маленькая аватарка пользователя
+  public String city_name;           // наименование города пользователя
     
   // {Null} geo.distance - дистация до пользователя (всегда NULL)
   // {Object} geo.coordinates - координаты пользователя

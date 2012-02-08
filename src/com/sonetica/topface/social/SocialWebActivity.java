@@ -7,8 +7,6 @@ import com.sonetica.topface.data.Auth;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.AuthRequest;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.social.fb.FbAuthWebViewClient;
-import com.sonetica.topface.social.vk.VkAuthWebViewClient;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.os.Bundle;

@@ -10,17 +10,17 @@ import com.sonetica.topface.utils.Debug;
 public class Inbox extends AbstractData {
   // Data
   public int uid;              // идентификатор фотографии в альбоме пользвоателя
-  public String first_name;    // имя пользователя
   public int age;              // возраст пользователя
-  public boolean online;       // флаг нахождения пользователя в онлайне
-  public boolean unread;       // флаг прочитанного сообщения
   public int created;          // время отправления оценки
   public int type;             // тип сообщения
   public int city_id;          // идентификатор города отправителя сообщения
-  public String avatars_big;   // большая аватарка пользователя
-  public String avatars_small; // маленькая аватарка пользователя
   public int gift;             // идентификатор подарка
   public int code;             // код входящего уведомления
+  public boolean online;       // флаг нахождения пользователя в онлайне
+  public boolean unread;       // флаг прочитанного сообщения
+  public String first_name;    // имя пользователя
+  public String avatars_big;   // большая аватарка пользователя
+  public String avatars_small; // маленькая аватарка пользователя
   public String text;          // текст сообщения
   // Constants
   public static final int DEFAULT = 0;           // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
@@ -70,8 +70,8 @@ public class Inbox extends AbstractData {
           }
 
           JSONObject avatars = item.getJSONObject("avatars");
-          msg.avatars_big   = avatars.getString("big");
-          msg.avatars_small = avatars.getString("small");
+          msg.avatars_big    = avatars.getString("big");
+          msg.avatars_small  = avatars.getString("small");
           userList.add(msg);
         }
     } catch(JSONException e) {

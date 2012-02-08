@@ -12,7 +12,7 @@ public class FilterRequest extends ApiRequest {
   public  int city ;    // идентификатор города для поиска пользователей
   public  int agebegin; // начальный возраст пользователей в выборке поиска
   public  int ageend;   // конечный возраст пользователей в выборке поиска
-  // Enum
+  // Sex
   public static final int FEMALE = 0;
   public static final int MALE   = 1;
   //---------------------------------------------------------------------------

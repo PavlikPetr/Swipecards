@@ -79,8 +79,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onResume() {
     super.onResume();
-    redNewsInvalidate();
-    App.isActive = true;
+    invalidateNotification();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -115,7 +114,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onPause() {
     super.onPause();
-    App.isActive = false;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -153,42 +151,40 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   // NotifyHandler
   //---------------------------------------------------------------------------
   class NotifyHandler extends Handler {
-    private int sleep_time = 1000*30;
+    private int sleep_time = 1000*30;   // ВРЕМЯ ОБНОВЛЕНИЯ НОТИФИКАЦИЙ
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
+      
       if(mNotifyHandler==null)
         return;
-      if(!App.isActive)
-        this.sendEmptyMessageDelayed(0,sleep_time);
-      else {
-        ProfileRequest profileRequest = new ProfileRequest(DashboardActivity.this,true);
-        profileRequest.callback(new ApiHandler() {
-          @Override
-          public void success(final Response response) {
-            final Activity context = DashboardActivity.this;
-            if(context!=null)
-              context.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                  Profile profile = Profile.parse(response,true);
-                  Data.updateNews(profile);
-                  redNewsInvalidate();
-                  Toast.makeText(context,"updated",Toast.LENGTH_SHORT).show();
-                  NotifyHandler.this.sendEmptyMessageDelayed(0,sleep_time);
-                }
-              });
-          }
-          @Override
-          public void fail(int codeError) {
-            // ???
-          }
-        }).exec();
-      }
+
+      ProfileRequest profileRequest = new ProfileRequest(DashboardActivity.this,true);
+      profileRequest.callback(new ApiHandler() {
+        @Override
+        public void success(final Response response) {
+          final Activity context = DashboardActivity.this;
+          if(context!=null)
+            context.runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                Profile profile = Profile.parse(response,true);
+                Data.updateNotification(profile);
+                invalidateNotification();
+                Toast.makeText(context,"updated",Toast.LENGTH_SHORT).show();
+                NotifyHandler.this.sendEmptyMessageDelayed(0,sleep_time);
+              }
+            });
+        }
+        @Override
+        public void fail(int codeError) {
+        }
+      }).exec();
     }
+
   }
   //---------------------------------------------------------------------------
-  private void redNewsInvalidate() {
+  private void invalidateNotification() {
     mLikesButton.mNotify = Data.s_Likes;
     mLikesButton.invalidate();
     

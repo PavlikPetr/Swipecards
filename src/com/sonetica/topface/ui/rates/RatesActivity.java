@@ -7,10 +7,12 @@ import com.sonetica.topface.data.Rate;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.RatesRequest;
 import com.sonetica.topface.net.Response;
+import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ public class RatesActivity extends Activity {
   private RatesListAdapter mAdapter;
   private LinkedList<Rate> mRatesList;
   private ProgressDialog  mProgressDialog;
+  private boolean mIsNewMessages;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,26 @@ public class RatesActivity extends Activity {
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.rates_header_title));
+   
+   // Double Button
+   DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDoubleLikes);
+   btnDouble.setLeftText(getString(R.string.rates_btn_dbl_left));
+   btnDouble.setRightText(getString(R.string.rates_btn_dbl_right));
+   btnDouble.setChecked(mIsNewMessages==false?DoubleButton.LEFT_BUTTON:DoubleButton.RIGHT_BUTTON);
+   // Left btn
+   btnDouble.setLeftListener(new View.OnClickListener() {
+     @Override
+     public void onClick(View v) {
+       Toast.makeText(RatesActivity.this,"All",Toast.LENGTH_SHORT).show(); 
+     }
+   });
+   // Right btn
+   btnDouble.setRightListener(new View.OnClickListener() {
+     @Override
+     public void onClick(View v) {
+       Toast.makeText(RatesActivity.this,"New",Toast.LENGTH_SHORT).show();
+     }
+   });
 
    // ListView
    mListView = (ListView)findViewById(R.id.lvRatesList);
