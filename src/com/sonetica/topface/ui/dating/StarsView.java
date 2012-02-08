@@ -113,11 +113,13 @@ public class StarsView extends View implements View.OnTouchListener {
     int y = (int)event.getY();
 
     // определяем на какой звезде находится палец
+    boolean isStar = false; // находится ли палец на звезде
     int star_index = 1;
     for(int i=0;i<mStars.length;i++)
       if(mStars[i]._rect.contains(x,y)) {
         star_index = mStars[i]._index;
         curr_star_index = i;
+        isStar = true;
       }
     
     if(curr_star_index!=prev_star_index) {
@@ -148,7 +150,9 @@ public class StarsView extends View implements View.OnTouchListener {
         mInformerView.setVisible(false);
         for(int i = 0; i < EVENT_COUNT; i++)
           mLastYs[i] = -100;
-        ((DatingLayout)getParent()).onRate(star_index);
+        
+        if(isStar)
+          ((DatingLayout)getParent()).onRate(star_index);
         //((DatingActivity)getContext()).doRate(0,star_index); // Опасная операция, требует рефакторинг !!!!
         break;
       default:
@@ -164,6 +168,11 @@ public class StarsView extends View implements View.OnTouchListener {
     for(int i = 0; i < EVENT_COUNT; i++)
       averageY += mLastYs[i];
     averageY /= EVENT_COUNT;
+    
+    if(!isStar) {
+      mInformerView.setVisible(false);
+      mStars[curr_star_index].pressed=false;
+    }
     
     mInformerView.setData(averageY,star_index);
     mInformerView.invalidate();

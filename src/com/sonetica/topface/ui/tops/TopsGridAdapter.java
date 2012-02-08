@@ -2,6 +2,7 @@ package com.sonetica.topface.ui.tops;
 
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.TopUser;
+import com.sonetica.topface.ui.GalleryManagerEx;
 import com.sonetica.topface.ui.ThumbView;
 import com.sonetica.topface.ui.GalleryManager;
 import android.content.Context;

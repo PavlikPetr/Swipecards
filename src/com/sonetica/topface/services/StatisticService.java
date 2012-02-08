@@ -1,6 +1,7 @@
 package com.sonetica.topface.services;
 
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.Memory;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
@@ -78,10 +79,10 @@ public class StatisticService extends Service {
         }
       });
       */
-      /*
+      
       Debug.log(null,"Ha:" + Memory.getHeapUsed()   + " Hf:" + Memory.getHeapFree() + "\n" + 
                      "::Na:" + Memory.getNativeUsed() + " Nf:" + Memory.getNativeFree());
-      */
+      
       mStatHandler.sendEmptyMessageDelayed(0,1000*4);
     }
   }//StatisticHandler

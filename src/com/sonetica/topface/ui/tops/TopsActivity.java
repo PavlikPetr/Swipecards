@@ -8,6 +8,7 @@ import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.net.*;
 import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.ui.GalleryManager;
+import com.sonetica.topface.ui.GalleryManagerEx;
 import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
@@ -230,7 +231,7 @@ public class TopsActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-    mGalleryManager.restart();
+    //mGalleryManager.restart();
   }
   //---------------------------------------------------------------------------  
   @Override

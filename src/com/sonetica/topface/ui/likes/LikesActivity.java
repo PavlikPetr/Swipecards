@@ -145,10 +145,12 @@ public class LikesActivity extends Activity {
     
     LikesRequest likesRequest = new LikesRequest(this);
     likesRequest.offset = 0;
-    likesRequest.limit  = 40;
+    likesRequest.limit  = 100;
     likesRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
+        mLikesAllList.clear();
+        mLikesCityList.clear();
         mLikesAllList.addAll(Like.parse(response));
         
         //int size = mLikesAllList.size();     // обычный фор!!!???
@@ -178,7 +180,7 @@ public class LikesActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-    mGalleryManager.restart();
+    //mGalleryManager.restart();
   }
   //---------------------------------------------------------------------------
   @Override
