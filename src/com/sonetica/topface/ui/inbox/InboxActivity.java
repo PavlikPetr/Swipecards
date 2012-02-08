@@ -131,7 +131,9 @@ public class InboxActivity extends Activity {
     inboxRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
+        
         LinkedList<Inbox> list = Inbox.parse(response);
+        
         if(list.size()!=0) {
           if(isRefresh)
             for(int i=list.size()-1;i>=0;--i)

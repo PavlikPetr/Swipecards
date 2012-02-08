@@ -13,10 +13,10 @@ public class Rate extends AbstractData {
   public int age;               // возраст пользователя
   public int rate;              // оценка пользователя
   public int created;           // время отправления оценки
+  public int city_id;           // идентификатор города отправителя оценки
   public boolean online;        // флаг нахождения пользователя в онлайне
   public boolean unread;        // флаг прочитанной оценки
   public String first_name;     // имя пользователя
-  public String city_id;        // идентификатор города отправителя оценки
   public String avatars_big;    // большая аватарка пользователя
   public String avatars_small;  // маленькая аватарка пользователя
   //---------------------------------------------------------------------------
@@ -35,7 +35,7 @@ public class Rate extends AbstractData {
           rate.uid        = item.getInt("uid");
           rate.age        = item.getInt("age");
           rate.rate       = item.getInt("rate");
-          rate.city_id    = item.getString("city_id");
+          rate.city_id    = item.getInt("city_id");
           JSONObject avatar  = item.getJSONObject("avatars");
           rate.avatars_small = avatar.getString("small");
           rate.avatars_big   = avatar.getString("big");

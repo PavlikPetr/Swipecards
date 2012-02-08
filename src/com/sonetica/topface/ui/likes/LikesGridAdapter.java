@@ -65,11 +65,12 @@ public class LikesGridAdapter extends BaseAdapter {
     
     mGalleryManager.getImage(position,holder.mThumbView);
     
+    /*
     if(collapse && CITY!=like.city_id) {
       convertView.setVisibility(View.INVISIBLE);
     } else
       convertView.setVisibility(View.VISIBLE);
-    
+    */
     return convertView;
   }
   //---------------------------------------------------------------------------
