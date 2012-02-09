@@ -7,6 +7,7 @@ import com.sonetica.topface.data.Rate;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.RatesRequest;
 import com.sonetica.topface.net.Response;
+import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
@@ -42,10 +43,10 @@ public class RatesActivity extends Activity {
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.rates_header_title));
    
    // Double Button
-   DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDoubleLikes);
+   DoubleBigButton btnDouble = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
    btnDouble.setLeftText(getString(R.string.rates_btn_dbl_left));
    btnDouble.setRightText(getString(R.string.rates_btn_dbl_right));
-   btnDouble.setChecked(mIsNewMessages==false?DoubleButton.LEFT_BUTTON:DoubleButton.RIGHT_BUTTON);
+   btnDouble.setChecked(mIsNewMessages==false?DoubleBigButton.LEFT_BUTTON:DoubleBigButton.RIGHT_BUTTON);
    // Left btn
    btnDouble.setLeftListener(new View.OnClickListener() {
      @Override
@@ -103,7 +104,7 @@ public class RatesActivity extends Activity {
 
     RatesRequest likesRequest = new RatesRequest(this);
     likesRequest.offset = 0;
-    likesRequest.limit  = 20;
+    likesRequest.limit  = 40;
     likesRequest.callback(new ApiHandler(){
       @Override
       public void success(Response response) {

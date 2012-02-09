@@ -6,6 +6,7 @@ import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.data.Rate;
 import com.sonetica.topface.ui.inbox.InboxListAdapter.ViewHolder;
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +26,12 @@ public class RatesListAdapter extends BaseAdapter {
   // Data
   private LayoutInflater mInflater;
   private LinkedList<Rate> mList;
+  private DateFormat mDataFormater = new DateFormat();
   // Constants
   private static final int T_ALL   = 0;
   private static final int T_CITY  = 2; // PITER
   private static final int T_COUNT = 2;
+  private static final String TIME_TEMPLATE = "dd MMM, hh:mm";
   //---------------------------------------------------------------------------
   public RatesListAdapter(Context context,LinkedList<Rate> list) {
     mList=list;
@@ -69,22 +72,21 @@ public class RatesListAdapter extends BaseAdapter {
 
     if(convertView==null) {
       holder = new ViewHolder();
-      switch (type) {              // один лайаут, только смена бекграунда у рута
+      
+      convertView = mInflater.inflate(R.layout.rates_item_gallery, null, false);
+      
+      holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
+      holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
+      holder.mText   = (TextView)convertView.findViewById(R.id.tvText);
+      holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);
+      holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
+      
+      switch (type) {
         case 0:
-          convertView = mInflater.inflate(R.layout.item_gallery_all, null, false);
-          holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
-          holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
-          holder.mText   = (TextView)convertView.findViewById(R.id.tvText);
-          holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);
-          holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
+          convertView.setBackgroundResource(R.drawable.item_gallery_all_selector);
           break;
         case 1:
-          convertView = mInflater.inflate(R.layout.item_gallery_city, null, false);
-          holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
-          holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
-          holder.mText   = (TextView)convertView.findViewById(R.id.tvText);
-          holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);
-          holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
+          convertView.setBackgroundResource(R.drawable.item_gallery_city_selector);
           break;
       }
 
@@ -97,7 +99,7 @@ public class RatesListAdapter extends BaseAdapter {
     holder.mAvatar.setImageResource(R.drawable.ic_launcher);
     holder.mName.setText(inbox.first_name+", "+inbox.age);
     holder.mText.setText(""+inbox.rate);
-    holder.mTime.setText(""+inbox.created);
+    holder.mTime.setText(mDataFormater.format(TIME_TEMPLATE,inbox.created));
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
       
     

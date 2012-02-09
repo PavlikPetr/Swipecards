@@ -1,10 +1,11 @@
 package com.sonetica.topface.ui.inbox;
 
-import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
-import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.ui.AvatarManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,34 +16,36 @@ import android.widget.TextView;
 public class InboxListAdapter extends BaseAdapter {
   // class ViewHolder
   public static class ViewHolder {
-    ImageView mAvatar;
-    TextView  mName;
-    TextView  mText;
-    TextView  mTime;
-    ImageView mArrow;
+    public ImageView mAvatar;
+    public TextView  mName;
+    public TextView  mText;
+    public TextView  mTime;
+    public ImageView mArrow;
   }
   // Data
   private LayoutInflater mInflater;
-  private LinkedList<Inbox> mList;
+  private AvatarManager<Inbox> mAvatarManager;
+  private DateFormat mDataFormater = new DateFormat();
   // Constants
   private static final int T_ALL   = 0;
   private static final int T_CITY  = 2; // PITER
   private static final int T_COUNT = 2;
+  private static final String TIME_TEMPLATE = "dd MMM, hh:mm";
   //---------------------------------------------------------------------------
-  public InboxListAdapter(Context context,LinkedList<Inbox> list) {
-    mList=list;
-    //mInflater = LayoutInflater.from(context);
+  public InboxListAdapter(Context context,AvatarManager<Inbox> avatarManager) {
+    mAvatarManager = avatarManager;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    //mInflater = LayoutInflater.from(context);
   }
   //---------------------------------------------------------------------------
   @Override
   public int getCount() {
-    return mList.size();
+    return mAvatarManager.size();
   }
   //---------------------------------------------------------------------------
   @Override
   public Inbox getItem(int position) {
-    return mList.get(position);
+    return mAvatarManager.get(position);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -57,7 +60,7 @@ public class InboxListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   @Override
   public int getItemViewType(int position) {
-    return mList.get(position).city_id==T_CITY ? 1 : 0; // T_CITY
+    return mAvatarManager.get(position).city_id==T_CITY ? 1 : 0; // T_CITY
   }
   //---------------------------------------------------------------------------
   @Override
@@ -68,22 +71,21 @@ public class InboxListAdapter extends BaseAdapter {
 
     if(convertView==null) {
       holder = new ViewHolder();
-      switch (type) {              // один лайаут, только смена бекграунда у рута
+      
+      convertView = mInflater.inflate(R.layout.inbox_item_gallery, null, false);
+      
+      holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
+      holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
+      holder.mText   = (TextView)convertView.findViewById(R.id.tvText);
+      holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);
+      holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
+      
+      switch (type) {
         case 0:
-          convertView = mInflater.inflate(R.layout.item_gallery_all, null, false);
-          holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
-          holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
-          holder.mText   = (TextView)convertView.findViewById(R.id.tvText);
-          holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);
-          holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
+          convertView.setBackgroundResource(R.drawable.item_gallery_all_selector);
           break;
         case 1:
-          convertView = mInflater.inflate(R.layout.item_gallery_city, null, false);
-          holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
-          holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
-          holder.mText   = (TextView)convertView.findViewById(R.id.tvText);
-          holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);
-          holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
+          convertView.setBackgroundResource(R.drawable.item_gallery_city_selector);
           break;
       }
 
@@ -92,39 +94,41 @@ public class InboxListAdapter extends BaseAdapter {
       holder = (ViewHolder)convertView.getTag();
     
     Inbox inbox = getItem(position);
-      
-    holder.mAvatar.setImageResource(R.drawable.ic_launcher);
+    
+    Bitmap bitmap = mAvatarManager.getImage(inbox.avatars_small);
+    if(bitmap!=null) {
+      holder.mAvatar.setImageBitmap(bitmap);
+      holder.mAvatar.setTag(this);
+    } else {
+      holder.mAvatar.setImageResource(R.drawable.ic_launcher);
+      holder.mAvatar.setTag(this);
+    }
+    
     holder.mName.setText(inbox.first_name+", "+inbox.age);
-    holder.mText.setText(inbox.text);
-    holder.mTime.setText(""+inbox.created);
-    holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
-      
     
-    /*
-    Inbox msg = getItem(position);
-    String text = null;
-    
-    switch(msg.type) {
+    switch(inbox.type) {
       case Inbox.DEFAULT:
-        text = msg.text;
+        holder.mText.setText(inbox.text);
         break;
       case Inbox.PHOTO:
-        text = " PHOTO ";
+        holder.mText.setText("PHOTO");
         break;
       case Inbox.GIFT:
-        text = " GIFT ";
+        holder.mText.setText("GIFT");
         break;
       case Inbox.MESSAGE:
-        text = msg.text;
+        holder.mText.setText(inbox.text);
         break;
       case Inbox.MESSAGE_WISH:
-        text = " WISH ";
+        holder.mText.setText("WISH");
         break;
       case Inbox.MESSAGE_SEXUALITY:
-        text = " SEXUALITY ";
+        holder.mText.setText("SEXUALITY");
         break;
     }
-    */
+    
+    holder.mTime.setText(mDataFormater.format(TIME_TEMPLATE,inbox.created));
+    holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
     
     return convertView;
   }

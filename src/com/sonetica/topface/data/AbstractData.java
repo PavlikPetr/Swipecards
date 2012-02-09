@@ -7,5 +7,6 @@ import com.sonetica.topface.net.Response;
  */
 public abstract class AbstractData {
   public static Object parse(Response response) { return null; }  // разбор ответа сервера
-  public String getLink(){ return null; };  // получение линка на изображение для скачивания
+  public abstract String getBigLink();    // получение линка на изображение для скачивания
+  public abstract String getSmallLink();  // получение линка на изображение для скачивания
 }

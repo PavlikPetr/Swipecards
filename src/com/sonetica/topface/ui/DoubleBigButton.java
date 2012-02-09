@@ -9,7 +9,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
-public class DoubleButton extends LinearLayout implements CompoundButton.OnCheckedChangeListener {
+public class DoubleBigButton extends LinearLayout implements CompoundButton.OnCheckedChangeListener {
   // Data
   private RadioButton  mLeftButton;
   private RadioButton  mRightButoon;
@@ -17,16 +17,16 @@ public class DoubleButton extends LinearLayout implements CompoundButton.OnCheck
   public static final int LEFT_BUTTON  = 0;
   public static final int RIGHT_BUTTON = 1;
   //---------------------------------------------------------------------------
-  public DoubleButton(Context context) {
+  public DoubleBigButton(Context context) {
     super(context,null);
   }
   //---------------------------------------------------------------------------
-  public DoubleButton(Context context,AttributeSet attrs) {
+  public DoubleBigButton(Context context,AttributeSet attrs) {
     super(context,attrs);
     
     LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     
-    inflater.inflate(R.layout.btn_double,this,true);
+    inflater.inflate(R.layout.btn_double_big,this,true);
 
     mLeftButton  = (RadioButton)findViewById(R.id.dblLeft);
     mRightButoon = (RadioButton)findViewById(R.id.dblRight);

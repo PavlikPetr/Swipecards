@@ -52,7 +52,7 @@ public class GalleryManager {
   //---------------------------------------------------------------------------
   public void getImage(final int position,final ImageView imageView) {
 
-    final Bitmap bitmap = mCache.get(mDataList.get(position).getLink());
+    final Bitmap bitmap = mCache.get(mDataList.get(position).getBigLink());
     
     if(bitmap!=null)
       imageView.setImageBitmap(bitmap);
@@ -67,16 +67,16 @@ public class GalleryManager {
     mThreadsPool.execute(new Runnable() {
       @Override
       public void run() {
-        Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getLink());
+        Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
         if(rawBitmap==null)
           return;
         final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
-        mCache.put(mDataList.get(position).getLink(),scaledBitmap);
+        mCache.put(mDataList.get(position).getBigLink(),scaledBitmap);
         imageView.post(new Runnable() {
           @Override
           public void run() {
             if(scaledBitmap!=null)
-              imageView.setImageBitmap(mCache.get(mDataList.get(position).getLink()));
+              imageView.setImageBitmap(mCache.get(mDataList.get(position).getBigLink()));
             else
               imageView.setImageResource(R.drawable.im_black_square);
           }

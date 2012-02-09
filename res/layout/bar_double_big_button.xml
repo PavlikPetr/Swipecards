@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/im_bar_button" />
     
-	  <com.sonetica.topface.ui.DoubleButton
-	      android:id="@+id/btnDouble"
+	  <com.sonetica.topface.ui.DoubleBigButton
+	      android:id="@+id/btnDoubleBig"
 	      android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
         android:layout_centerInParent="true"/>

@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@drawable/dashbrd_bkgrd">
     
   <!-- header bar -->
   <include layout="@layout/bar_header" />
   
     <!-- button bar -->
-  <include layout="@layout/bar_double_button" />
+  <include layout="@layout/bar_double_big_button" />
   
   <com.sonetica.topface.module.pull2refresh.PullToRefreshListView
       android:id="@+id/lvInboxList"
@@ -16,6 +17,6 @@
       android:layout_height="0dip"
       android:layout_weight="1"
       android:fadeScrollbars="true"
-      android:background="#0000FF" />
+      android:background="@android:color/transparent" />
   
 </LinearLayout>

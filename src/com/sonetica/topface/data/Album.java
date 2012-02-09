@@ -14,11 +14,6 @@ public class Album extends AbstractData {
   public String  big;    // строка URL большого изображения пользователя
   public boolean ero;    // флаг, является ли фотография эротической
   //---------------------------------------------------------------------------
-  @Override
-  public String getLink() {
-    return big;
-  }
-  //---------------------------------------------------------------------------
   public static LinkedList<Album> parse(Response response) {
     LinkedList<Album> albumsList = new LinkedList<Album>();
     try {
@@ -37,6 +32,16 @@ public class Album extends AbstractData {
       Debug.log("Album.class","Wrong response parsing: " + e);
     }
     return albumsList; 
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getBigLink() {
+    return big;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getSmallLink() {
+    return small;
   }
   //---------------------------------------------------------------------------
 }

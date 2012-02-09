@@ -9,7 +9,8 @@ import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListe
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.InboxRequest;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.ui.DoubleButton;
+import com.sonetica.topface.ui.AvatarManager;
+import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -31,13 +32,11 @@ public class InboxActivity extends Activity {
   private PullToRefreshListView mListView;
   private InboxListAdapter mAdapter;
   private LinkedList<Inbox> mInboxList;
+  private AvatarManager mAvatarManager;
   private ProgressDialog mProgressDialog;
-  private int mState;
-  private int mOffset;
-  private boolean mIsEndList;
   private boolean mIsNewMessages;
   // Constants
-  private static final int LIMIT = 20;
+  private static final int LIMIT = 40;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +51,10 @@ public class InboxActivity extends Activity {
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.inbox_header_title));
     
     // Double Button
-    DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDoubleLikes);
+    DoubleBigButton btnDouble = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
     btnDouble.setLeftText(getString(R.string.inbox_btn_dbl_left));
     btnDouble.setRightText(getString(R.string.inbox_btn_dbl_right));
-    btnDouble.setChecked(mIsNewMessages==false?DoubleButton.LEFT_BUTTON:DoubleButton.RIGHT_BUTTON);
+    btnDouble.setChecked(mIsNewMessages==false?DoubleBigButton.LEFT_BUTTON:DoubleBigButton.RIGHT_BUTTON);
     // Left btn
     btnDouble.setLeftListener(new View.OnClickListener() {
       @Override
@@ -109,8 +108,9 @@ public class InboxActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void create() {
-    // ListAdapter
-    mAdapter = new InboxListAdapter(InboxActivity.this,mInboxList);
+    mAvatarManager = new AvatarManager<Inbox>(this,mInboxList);
+    mListView.setOnScrollListener(mAvatarManager);    
+    mAdapter = new InboxListAdapter(this,mAvatarManager);
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
@@ -127,7 +127,7 @@ public class InboxActivity extends Activity {
     
     InboxRequest inboxRequest = new InboxRequest(InboxActivity.this);
     inboxRequest.offset = offset;
-    inboxRequest.limit  = 20;
+    inboxRequest.limit  = 40;
     inboxRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
@@ -142,6 +142,7 @@ public class InboxActivity extends Activity {
             mInboxList.addAll(list);
         }
         
+        mAvatarManager.setDataList(list);
         mAdapter.notifyDataSetChanged();
         mListView.onRefreshComplete();
         //if(mProgressDialog.isShowing())

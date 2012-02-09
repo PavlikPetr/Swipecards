@@ -80,4 +80,14 @@ public class Inbox extends AbstractData {
     return userList;
   }
   //---------------------------------------------------------------------------
+  @Override
+  public String getBigLink() {
+    return avatars_big;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getSmallLink() {
+    return avatars_small;
+  }
+  //---------------------------------------------------------------------------
 }

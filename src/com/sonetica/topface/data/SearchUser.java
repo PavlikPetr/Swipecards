@@ -24,10 +24,6 @@ public class SearchUser extends AbstractData {
   //public String geo_coordinates_lat; // широта нахождения пользоавтеля
   //public String geo_coordinates_lng; // долгота нахождения пользователя
   //---------------------------------------------------------------------------
-  public String getLink() {
-    return avatars_big[0];
-  };
-  //---------------------------------------------------------------------------
   public static LinkedList<SearchUser> parse(Response response) {
     LinkedList<SearchUser> userList = new LinkedList<SearchUser>();
     try {
@@ -61,6 +57,16 @@ public class SearchUser extends AbstractData {
       Debug.log("SearchUser.class","Wrong response parsing: " + e);
     }
     return userList;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getBigLink() {
+    return avatars_big[0];
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getSmallLink() {
+    return avatars_small[0];
   }
   //---------------------------------------------------------------------------
 }

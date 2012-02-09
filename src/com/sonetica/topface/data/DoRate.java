@@ -20,4 +20,14 @@ public class DoRate extends AbstractData {
     return doRate;
   }
   //---------------------------------------------------------------------------
+  @Override
+  public String getBigLink() {
+    return null;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getSmallLink() {
+    return null;
+  }
+  //---------------------------------------------------------------------------
 }

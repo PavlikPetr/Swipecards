@@ -23,11 +23,6 @@ public class Profile extends AbstractData {
   public String city_name;       // название города пользвоателя
   public String city_id;         // идентификтаор города пользователя
   //---------------------------------------------------------------------------
-  @Override
-  public String getLink() {
-    return photo_url;
-  }
-  //---------------------------------------------------------------------------
   public static Profile parse(Response response,boolean isNotification) {
     Profile profile = new Profile();
     try {
@@ -54,6 +49,16 @@ public class Profile extends AbstractData {
       Debug.log("Profile.class","Wrong response parsing: " + e);
     }
     return profile;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getBigLink() {
+    return photo_url;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getSmallLink() {
+    return photo_url;
   }
   //---------------------------------------------------------------------------
 }

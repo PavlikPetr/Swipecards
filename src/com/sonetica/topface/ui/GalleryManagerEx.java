@@ -60,7 +60,7 @@ public class GalleryManagerEx {
       return;
     }
     */
-    final Bitmap bitmap = mCacheManager.get(position,mDataList.get(position).getLink());
+    final Bitmap bitmap = mCacheManager.get(position,mDataList.get(position).getBigLink());
     if(bitmap!=null)
       imageView.setImageBitmap(bitmap);
     else {
@@ -84,20 +84,20 @@ public class GalleryManagerEx {
       public void run() {
         if(isViewReused(position,imageView))
           return;
-        Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getLink());
+        Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
         if(rawBitmap==null)
           return;
         if(isViewReused(position,imageView))
           return;
         final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
-        mCacheManager.put(position,mDataList.get(position).getLink(),scaledBitmap);
+        mCacheManager.put(position,mDataList.get(position).getBigLink(),scaledBitmap);
         imageView.post(new Runnable() {
           @Override
           public void run() {
             if(isViewReused(position,imageView))
               return;
             if(scaledBitmap!=null)
-              imageView.setImageBitmap(mCacheManager.get(position,mDataList.get(position).getLink()));
+              imageView.setImageBitmap(mCacheManager.get(position,mDataList.get(position).getBigLink()));
             else
               imageView.setImageResource(R.drawable.im_black_square);
           }

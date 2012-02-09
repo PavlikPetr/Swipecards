@@ -58,7 +58,7 @@ public class AlbumGalleryManager {
       public void run() {
         if(isViewReused(data))
           return;
-        final Bitmap rawBitmap = Http.bitmapLoader(mData.get(data.second).getLink());
+        final Bitmap rawBitmap = Http.bitmapLoader(mData.get(data.second).getBigLink());
         if(rawBitmap==null)
           return;
         if(isViewReused(data))
@@ -89,7 +89,7 @@ public class AlbumGalleryManager {
     mThreadsPool.execute(new Runnable() {
       @Override
       public void run() {
-        Bitmap bitmap = Http.bitmapLoader(mData.get(index).getLink());
+        Bitmap bitmap = Http.bitmapLoader(mData.get(index).getBigLink());
         mMemoryCache.put(index,bitmap);
       }
     });

@@ -61,7 +61,7 @@ public class LikesActivity extends Activity {
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likes_header_title));
    
    // Double Button
-   DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDoubleLikes);
+   DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDouble);
    btnDouble.setLeftText(getString(R.string.likes_btn_dbl_left));
    btnDouble.setRightText(getString(R.string.likes_btn_dbl_right));
    btnDouble.setChecked(mCity==0?DoubleButton.LEFT_BUTTON:DoubleButton.RIGHT_BUTTON);

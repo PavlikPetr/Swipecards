@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+  <RadioGroup
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal" >
+      
+	  <RadioButton  
+	      android:id="@+id/dblLeft"
+	      android:background="@drawable/btn_double_big_left_selector"
+        android:button="@android:color/transparent"
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:gravity="center"
+	      android:textSize="12dp"
+	      android:textColor="@drawable/clr_text_btn" />
+	  
+	  <RadioButton  
+	      android:id="@+id/dblRight"
+	      android:background="@drawable/btn_double_big_right_selector" 
+        android:button="@android:color/transparent"
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:gravity="center"
+	      android:textSize="12dp"
+	      android:textColor="@drawable/clr_text_btn"/>
+	  
+  </RadioGroup>
+</merge>

@@ -16,11 +16,6 @@ public class TopUser extends AbstractData {
   public int liked;    // процент абсолютного значения красоты
   public String photo; // URL аватарки красивого пользователя
   //---------------------------------------------------------------------------
-  @Override
-  public String getLink() {
-    return photo;
-  }
-  //---------------------------------------------------------------------------
   public static LinkedList<TopUser> parse(Response response) {
     LinkedList<TopUser> userList = new LinkedList<TopUser>();
     try {
@@ -38,6 +33,16 @@ public class TopUser extends AbstractData {
       Debug.log("TopUser.class","Wrong response parsing: " + e);
     }
     return userList;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getBigLink() {
+    return photo;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getSmallLink() {
+    return photo;
   }
   //---------------------------------------------------------------------------
 }

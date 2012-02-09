@@ -19,11 +19,6 @@ public class Like extends AbstractData {
   public String avatars_big;    // большая аватарка пользователя
   public String avatars_small;  // маленькая аватарка пользователя
   //---------------------------------------------------------------------------
-  @Override
-  public String getLink() {
-    return avatars_big;
-  }
-  //---------------------------------------------------------------------------
   public static LinkedList<Like> parse(Response response) {
     LinkedList<Like> likesList = new LinkedList<Like>();
     try {
@@ -48,6 +43,16 @@ public class Like extends AbstractData {
       Debug.log("Like.class","Wrong response parsing: " + e);
     }
     return likesList;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getBigLink() {
+    return avatars_big;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getSmallLink() {
+    return avatars_small;
   }
   //---------------------------------------------------------------------------
 }
