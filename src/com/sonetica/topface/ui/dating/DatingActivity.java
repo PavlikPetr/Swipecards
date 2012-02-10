@@ -68,7 +68,8 @@ public class DatingActivity extends Activity implements DatingEventListener {
       }
       @Override
       public void fail(int codeError) {
-        Toast.makeText(DatingActivity.this,"dating update fail",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(DatingActivity.this,"dating update fail",Toast.LENGTH_SHORT).show();
+        mDatingGallery.notifyDataChanged();
       }
     }).exec();
   }

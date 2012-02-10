@@ -26,6 +26,7 @@ public class GalleryManager {
   // Data
   private ExecutorService mThreadsPool;
   private LinkedList<? extends AbstractData> mDataList;
+  private HashMap<ImageView,Integer> mLinkCache;
   private MemoryCacheEx mCache;
   private StorageCache mStorage;
   //private HashMap<String,Bitmap> mCache;
@@ -38,6 +39,7 @@ public class GalleryManager {
   public GalleryManager(Context context,LinkedList<? extends AbstractData> dataList) {
     mDataList     = dataList;
     mThreadsPool  = Executors.newFixedThreadPool(THREAD_DEFAULT);
+    mLinkCache    = new HashMap<ImageView,Integer>();
     int columnNumber = context.getResources().getInteger(R.integer.grid_column_number);
     mBitmapWidth  = Device.getDisplay(context).getWidth()/(columnNumber);
     mBitmapHeight = (int)(mBitmapWidth*1.25);
@@ -56,7 +58,7 @@ public class GalleryManager {
   }
   //---------------------------------------------------------------------------
   public void getImage(final int position,final ImageView imageView) {
-
+    mLinkCache.put(imageView,position);
     final Bitmap bitmap = mCache.get(mDataList.get(position).getBigLink());
     
     if(bitmap!=null) {
@@ -78,13 +80,15 @@ public class GalleryManager {
     mThreadsPool.execute(new Runnable() {
       @Override
       public void run() {
-        
+        if(isViewReused(position,imageView))
+          return;
         boolean лежит = false;
                 
         Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
         if(rawBitmap==null)
           return;
-        
+        if(isViewReused(position,imageView))
+          return;
         if(rawBitmap.getWidth()>rawBitmap.getHeight())
           лежит = true;
         int width  = rawBitmap.getWidth();
@@ -114,6 +118,8 @@ public class GalleryManager {
         imageView.post(new Runnable() {
           @Override
           public void run() {
+            if(isViewReused(position,imageView))
+              return;
             if(scaledBitmap!=null)
               imageView.setImageBitmap(mCache.get(mDataList.get(position).getBigLink()));
             else
@@ -122,6 +128,13 @@ public class GalleryManager {
         });
       }
     });
+  }
+  //-------------------------------------------------------------------------
+  boolean isViewReused(int position,ImageView imageView){
+    int index = mLinkCache.get(imageView);
+    if(index!=position)
+      return true;
+    return false;
   }
   //---------------------------------------------------------------------------
   public void stop() {

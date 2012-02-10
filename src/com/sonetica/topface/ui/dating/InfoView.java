@@ -13,16 +13,16 @@ import android.widget.ImageView;
 
 class InfoView extends ImageView {
   // Data
-  public  int money;
-  public  int power;
+  //public  int money;
+  //public  int power;
   public  int age;
   public  String name;
   public  String city;
   public  String status;
   public  boolean online;
   // Bitmaps
-  private static Bitmap mPowerBmp;
-  private static Bitmap mMoneyBmp;
+//  private static Bitmap mPowerBmp;
+//  private static Bitmap mMoneyBmp;
   private static Bitmap mOnlineBmp;
   private static Bitmap mOfflineBmp;
   private static Bitmap mShadowTopBmp;
@@ -32,7 +32,7 @@ class InfoView extends ImageView {
   private static final Paint paintName   = new Paint();
   private static final Paint paintCity    = new Paint();
   private static final Paint paintStatus   = new Paint();
-  private static final Paint paintResources = new Paint();
+  //private static final Paint paintResources = new Paint();
   //----------------------------------
   public InfoView(Context context) {
     super(context);
@@ -43,11 +43,11 @@ class InfoView extends ImageView {
     paint.setDither(true);
     
     // money, power
-    paintResources.setColor(Color.WHITE);
-    paintResources.setTextSize(getResources().getDimension(R.dimen.resources_font_size));
-    paintResources.setAntiAlias(true);
-    paintResources.setTypeface(Typeface.DEFAULT_BOLD);
-    paintResources.setTextAlign(Paint.Align.RIGHT);
+//    paintResources.setColor(Color.WHITE);
+//    paintResources.setTextSize(getResources().getDimension(R.dimen.resources_font_size));
+//    paintResources.setAntiAlias(true);
+//    paintResources.setTypeface(Typeface.DEFAULT_BOLD);
+//    paintResources.setTextAlign(Paint.Align.RIGHT);
     
     // city
     paintCity.setColor(Color.WHITE);
@@ -68,13 +68,13 @@ class InfoView extends ImageView {
 
     mOnlineBmp       = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
     mOfflineBmp      = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
-    mPowerBmp        = BitmapFactory.decodeResource(getResources(),R.drawable.dating_power);
-    mMoneyBmp        = BitmapFactory.decodeResource(getResources(),R.drawable.dating_money);
+    //mPowerBmp        = BitmapFactory.decodeResource(getResources(),R.drawable.dating_power);
+    //mMoneyBmp        = BitmapFactory.decodeResource(getResources(),R.drawable.dating_money);
     mShadowTopBmp    = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_top);
     mShadowBottomBmp = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_bottom);
     
-    money = Data.s_Money;
-    power = Data.s_Power;
+    //money = Data.s_Money;
+    //power = Data.s_Power;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -98,18 +98,18 @@ class InfoView extends ImageView {
     canvas.drawBitmap(mShadowTopBmp,0,0,paint);
     canvas.drawBitmap(mShadowBottomBmp,0,getHeight()-mShadowBottomBmp.getHeight(),paint);
     
-    // money, power
-    float offset_x = getResources().getDimension(R.dimen.resources_offset_x_size);
-    float offset_y = getResources().getDimension(R.dimen.resources_offset_y_size);
-    canvas.drawText(""+power,offset_x,offset_y+(int)(mPowerBmp.getHeight()/1.4),paintResources);
-    canvas.drawBitmap(mPowerBmp,offset_x,offset_y,paint);
-    offset_x *= 2.3;
-    canvas.drawText(""+money,offset_x,offset_y+(int)(mMoneyBmp.getHeight()/1.4),paintResources);
-    canvas.drawBitmap(mMoneyBmp,offset_x+6,offset_y,paint);
+//    // money, power
+//    float offset_x = getResources().getDimension(R.dimen.resources_offset_x_size);
+//    float offset_y = getResources().getDimension(R.dimen.resources_offset_y_size);
+//    canvas.drawText(""+power,offset_x,offset_y+(int)(mPowerBmp.getHeight()/1.4),paintResources);
+//    canvas.drawBitmap(mPowerBmp,offset_x,offset_y,paint);
+//    offset_x *= 2.3;
+//    canvas.drawText(""+money,offset_x,offset_y+(int)(mMoneyBmp.getHeight()/1.4),paintResources);
+//    canvas.drawBitmap(mMoneyBmp,offset_x+6,offset_y,paint);
     
     //city
-    offset_x = getResources().getDimension(R.dimen.city_offset_x_size);
-    offset_y = getHeight()-paintCity.getTextSize()/2;
+    float offset_x = getResources().getDimension(R.dimen.city_offset_x_size);
+    float offset_y = getHeight()-paintCity.getTextSize()/2;
     canvas.drawText(city,offset_x,offset_y,paintCity);
 
     // name age online
