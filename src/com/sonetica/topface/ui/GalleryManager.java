@@ -16,6 +16,7 @@ import com.sonetica.topface.utils.StorageCache;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.widget.ImageView;
 
 /*
@@ -77,10 +78,37 @@ public class GalleryManager {
     mThreadsPool.execute(new Runnable() {
       @Override
       public void run() {
+        
+        boolean лежит = false;
+                
         Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
         if(rawBitmap==null)
           return;
-        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
+        
+        if(rawBitmap.getWidth()>rawBitmap.getHeight())
+          лежит = true;
+        int width  = rawBitmap.getWidth();
+        int height = rawBitmap.getHeight();
+        Matrix matrix = new Matrix();
+        if(лежит) {
+          float scaleWidth = ((float) mBitmapWidth) / width;
+          float ratio = ((float)width) / mBitmapWidth;
+          int newHeight = (int) (height / ratio);
+          
+          float scaleHeight = ((float) newHeight) / height;
+          matrix.postScale(scaleWidth, scaleHeight);
+
+        } else {
+          float scaleHeight = ((float) mBitmapHeight) / height;
+          float ratio = ((float)height) / mBitmapWidth;
+          int newWidth = (int) (width / ratio);
+          
+          float scaleWidth = ((float) newWidth) / width;
+          matrix.postScale(scaleWidth, scaleHeight);
+          
+        }
+        final Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, width, height, matrix, true);        
+        //final Bitmap scaledBitmap =rawBitmap;// Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
         mCache.put(mDataList.get(position).getBigLink(),scaledBitmap);
         mStorage.save(Utils.md5(mDataList.get(position).getBigLink()),scaledBitmap);
         imageView.post(new Runnable() {

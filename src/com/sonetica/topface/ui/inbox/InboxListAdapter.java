@@ -9,9 +9,11 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.AbsListView.OnScrollListener;
 
 public class InboxListAdapter extends BaseAdapter {
   // class ViewHolder
@@ -35,6 +37,7 @@ public class InboxListAdapter extends BaseAdapter {
   public InboxListAdapter(Context context,AvatarManager<Inbox> avatarManager) {
     mAvatarManager = avatarManager;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
     //mInflater = LayoutInflater.from(context);
   }
   //---------------------------------------------------------------------------

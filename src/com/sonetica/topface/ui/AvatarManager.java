@@ -6,7 +6,10 @@ import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.MemoryCacheEx;
+import com.sonetica.topface.utils.StorageCache;
+import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
@@ -21,19 +24,26 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
   // Data
   private LinkedList<T> mDataList;
   private MemoryCacheEx mCache;
+  private StorageCache  mStorage;
   private ExecutorService mThreadsPool;
   private boolean mBusy; 
   //Constants
   private static final int THREAD_DEFAULT = 3;
   //---------------------------------------------------------------------------
   public AvatarManager(Context context,LinkedList<T> dataList) {
-    mDataList = dataList;
     mThreadsPool = Executors.newFixedThreadPool(THREAD_DEFAULT);
-    mCache = new MemoryCacheEx();
+    mDataList = dataList;
+    mCache    = new MemoryCacheEx();
+    mStorage  = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
   }
   //---------------------------------------------------------------------------
   public Bitmap getImage(String url) {
-    return mCache.get(url);
+    Bitmap bitmap = mCache.get(url);
+    if(bitmap==null) {
+      bitmap = mStorage.load(Utils.md5(url));
+      mCache.put(url,bitmap);
+    }
+    return bitmap;
   }
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<T> dataList) {
@@ -82,13 +92,15 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
                 if(mBusy)
                   return;
                 final Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(first+index).getSmallLink());
-                if(rawBitmap!=null)
+                if(rawBitmap!=null) {
+                  mStorage.save(Utils.md5(mDataList.get(first+index).getBigLink()),rawBitmap);
                   iv.post(new Runnable() {
                     @Override
                     public void run() {
                       iv.setImageBitmap(rawBitmap);
                     }
                   });
+                }
                 iv.setTag(null);
               } 
             }
