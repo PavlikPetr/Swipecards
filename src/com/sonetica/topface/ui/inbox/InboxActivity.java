@@ -45,7 +45,8 @@ public class InboxActivity extends Activity {
     Debug.log(this,"+onCreate");
     
     // Data
-    mInboxList = Data.s_InboxList;
+    //mInboxList = Data.s_InboxList;
+    mInboxList = new LinkedList<Inbox>();
     
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.inbox_header_title));

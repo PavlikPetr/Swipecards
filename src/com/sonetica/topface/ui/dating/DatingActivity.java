@@ -10,6 +10,7 @@ import com.sonetica.topface.net.DoRateRequest;
 import com.sonetica.topface.net.FilterRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
+import com.sonetica.topface.ui.FilterActivity;
 import com.sonetica.topface.ui.ProfileActivity;
 import com.sonetica.topface.ui.dating.DatingGallery.DatingEventListener;
 import com.sonetica.topface.ui.inbox.ChatActivity;
@@ -40,7 +41,8 @@ public class DatingActivity extends Activity implements DatingEventListener {
     Debug.log(this,"+onCreate");
     
     // Data
-    mSearchUserList = Data.s_SearchList;
+    //mSearchUserList = Data.s_SearchList;
+    mSearchUserList = new LinkedList<SearchUser>();
 
     // Header Bar
     mHeaderBar = findViewById(R.id.loHeader);
@@ -80,7 +82,7 @@ public class DatingActivity extends Activity implements DatingEventListener {
     request.city     = 2;
     request.sex      = 0;
     request.agebegin = 16;
-    request.ageend   = 40;
+    request.ageend   = 20;
     request.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
@@ -104,12 +106,12 @@ public class DatingActivity extends Activity implements DatingEventListener {
         DoRate rate = DoRate.parse(response);
         Data.s_Power = rate.power;
         Data.s_Money = rate.money;
-        mDatingGallery.notifyDataChanged();
+        mDatingGallery.notifyDataChanged0();
       }
       @Override
       public void fail(int codeError) {
-        //Toast.makeText(DatingActivity.this,"dating rate fail",Toast.LENGTH_SHORT).show();
-        mDatingGallery.notifyDataChanged();
+        Toast.makeText(DatingActivity.this,"dating rate fail",Toast.LENGTH_SHORT).show();
+        mDatingGallery.notifyDataChanged0();
       }
     }).exec();
   }
@@ -150,7 +152,8 @@ public class DatingActivity extends Activity implements DatingEventListener {
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
     switch (item.getItemId()) {
       case MENU_FILTER:
-        filter();
+        //filter();
+        startActivity(new Intent(this,FilterActivity.class));
       break;
     }
     return super.onMenuItemSelected(featureId,item);

@@ -16,13 +16,13 @@ import com.sonetica.topface.data.TopUser;
  */
 public class Data {
   // Data
-  public static LinkedList<SearchUser>  s_SearchList;  // dating
-  public static LinkedList<Inbox>       s_InboxList;
-  public static LinkedList<Like>        s_LikesList;
-  public static LinkedList<TopUser>     s_TopsList;
-  public static LinkedList<Rate>        s_RatesList;
-  public static LinkedList<City>        s_CitiesList;
-  public static Profile                 s_Profile;
+  private static LinkedList<SearchUser> s_SearchList;  // dating
+  private static LinkedList<Inbox>      s_InboxList;
+  private static LinkedList<Like>       s_LikesList;
+  private static LinkedList<TopUser>    s_TopsList;
+  private static LinkedList<Rate>       s_RatesList;
+  private static LinkedList<City>       s_CitiesList;
+  private static Profile                s_Profile;
   // Data Profile
   public static int s_Rates;
   public static int s_Messages;

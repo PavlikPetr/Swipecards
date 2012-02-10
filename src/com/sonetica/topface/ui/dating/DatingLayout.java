@@ -16,9 +16,9 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
   public  ImageView     mFaceView;     // оцениваемая фотография
   public  InfoView      mInfoView;     // информация о пользователе
   public  ResourcesView mResView;     // ресурсы
-  private StarsView     mStarsView;    // контрол со звездами для оценки
-  private InformerView  mInformerView; // контрол с всплывающей панелей и 2 кнопками(чат,профиль)
-  public ProgressBar    mProgress;
+  public  StarsView     mStarsView;    // контрол со звездами для оценки
+  public  InformerView  mInformerView; // контрол с всплывающей панелей и 2 кнопками(чат,профиль)
+  public  ProgressBar   mProgress;
   // 
   private View mHeaderBar;
   private int  mHeaderOffset;
@@ -117,6 +117,7 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     mInformerView.setVisibility(visibility);
     mHeaderBar.setVisibility(visibility);
     mInfoView.setVisibility(visibility);
+    mResView.setVisibility(visibility);
   }
   //---------------------------------------------------------------------------
   public void hideChildren() {
@@ -128,6 +129,8 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     mHeaderBar.setVisibility(visibility);
     visibility = mInfoView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE ;
     mInfoView.setVisibility(visibility);
+    visibility = mResView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE ;
+    mResView.setVisibility(visibility);
   }
   //---------------------------------------------------------------------------
   @Override

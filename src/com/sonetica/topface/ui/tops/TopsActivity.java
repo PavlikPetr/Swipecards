@@ -34,7 +34,7 @@ public class TopsActivity extends Activity {
   private GridView mGallery;
   //private TopsGridAdapterEx mGridAdapter;
   private TopsGridAdapter mGridAdapter;
-  private GalleryManagerEx  mGalleryManager;
+  private GalleryManager  mGalleryManager;
   private LinkedList<TopUser> mTopsList;
   private LinkedList<City> mCitiesList;
   private ProgressDialog  mProgressDialog;
@@ -67,8 +67,10 @@ public class TopsActivity extends Activity {
     mActionData.city_popup_position = preferences.getInt(getString(R.string.s_tops_city_position),0);
     
     // Data
-    mTopsList   = Data.s_TopsList;
-    mCitiesList = Data.s_CitiesList;
+    //mTopsList   = Data.s_TopsList;
+    mTopsList = new LinkedList<TopUser>();
+    //mCitiesList = Data.s_CitiesList;
+    mCitiesList = new LinkedList<City>();
 
     // Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.tops_header_title));
@@ -146,7 +148,7 @@ public class TopsActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mGalleryManager = new GalleryManagerEx(TopsActivity.this,mTopsList);
+    mGalleryManager = new GalleryManager(TopsActivity.this,mTopsList);
     //mGridAdapter    = new TopsGridAdapterEx(TopsActivity.this,mTopsList);
     mGridAdapter    = new TopsGridAdapter(TopsActivity.this,mGalleryManager);
     mGallery.setAdapter(mGridAdapter);

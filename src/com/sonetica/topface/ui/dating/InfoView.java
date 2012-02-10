@@ -42,12 +42,12 @@ class InfoView extends ImageView {
     paint.setColor(Color.RED);
     paint.setDither(true);
     
-    // money, power
-//    paintResources.setColor(Color.WHITE);
-//    paintResources.setTextSize(getResources().getDimension(R.dimen.resources_font_size));
-//    paintResources.setAntiAlias(true);
-//    paintResources.setTypeface(Typeface.DEFAULT_BOLD);
-//    paintResources.setTextAlign(Paint.Align.RIGHT);
+      // money, power
+  //    paintResources.setColor(Color.WHITE);
+  //    paintResources.setTextSize(getResources().getDimension(R.dimen.resources_font_size));
+  //    paintResources.setAntiAlias(true);
+  //    paintResources.setTypeface(Typeface.DEFAULT_BOLD);
+  //    paintResources.setTextAlign(Paint.Align.RIGHT);
     
     // city
     paintCity.setColor(Color.WHITE);

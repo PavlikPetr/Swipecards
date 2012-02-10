@@ -17,13 +17,13 @@ import android.widget.BaseAdapter;
 public class TopsGridAdapter extends BaseAdapter {
   // Data
   private LayoutInflater mInflater;
-  private GalleryManagerEx mGalleryManager;
+  private GalleryManager mGalleryManager;
   // class ViewHolder
   static class ViewHolder {
     ThumbView mThumbView;
   };
   //---------------------------------------------------------------------------
-  public TopsGridAdapter(Context context,GalleryManagerEx galleryManager) {
+  public TopsGridAdapter(Context context,GalleryManager galleryManager) {
     mInflater = LayoutInflater.from(context);
     mGalleryManager = galleryManager;
   }

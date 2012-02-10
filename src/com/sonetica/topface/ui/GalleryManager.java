@@ -9,6 +9,7 @@ import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.data.Like;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.CacheManager;
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Device;
 import com.sonetica.topface.utils.MemoryCache;
 import com.sonetica.topface.utils.MemoryCacheEx;
@@ -44,7 +45,6 @@ public class GalleryManager {
     mBitmapWidth  = Device.getDisplay(context).getWidth()/(columnNumber);
     mBitmapHeight = (int)(mBitmapWidth*1.25);
     
-    //mCache = new HashMap<String,Bitmap>();
     mCache = new MemoryCacheEx();
     mStorage = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
   }
@@ -76,56 +76,83 @@ public class GalleryManager {
   }
   //---------------------------------------------------------------------------
   private void setImageToQueue(final int position,final ImageView imageView) {
-
+    if(isViewReused(position,imageView))
+      return;
     mThreadsPool.execute(new Runnable() {
       @Override
       public void run() {
         if(isViewReused(position,imageView))
           return;
-        boolean лежит = false;
-                
+        
+        // Исходное загруженное изображение
         Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
-        if(rawBitmap==null)
+        if(rawBitmap==null || isViewReused(position,imageView)) 
           return;
-        if(isViewReused(position,imageView))
-          return;
-        if(rawBitmap.getWidth()>rawBitmap.getHeight())
-          лежит = true;
+
+        // Исходный размер загруженного изображения
         int width  = rawBitmap.getWidth();
         int height = rawBitmap.getHeight();
-        Matrix matrix = new Matrix();
-        if(лежит) {
-          float scaleWidth = ((float) mBitmapWidth) / width;
-          float ratio = ((float)width) / mBitmapWidth;
-          int newHeight = (int) (height / ratio);
-          
-          float scaleHeight = ((float) newHeight) / height;
-          matrix.postScale(scaleWidth, scaleHeight);
+        
+        // буль, длиная фото или высокая
+        boolean LEG = false;
 
-        } else {
-          float scaleHeight = ((float) mBitmapHeight) / height;
-          float ratio = ((float)height) / mBitmapWidth;
-          int newWidth = (int) (width / ratio);
-          
-          float scaleWidth = ((float) newWidth) / width;
-          matrix.postScale(scaleWidth, scaleHeight);
-          
-        }
-        final Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, width, height, matrix, true);        
-        //final Bitmap scaledBitmap =rawBitmap;// Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
-        mCache.put(mDataList.get(position).getBigLink(),scaledBitmap);
-        mStorage.save(Utils.md5(mDataList.get(position).getBigLink()),scaledBitmap);
+        if(width >= height) 
+          LEG = true;
+
+      try {        
+        
+        // коффициент сжатия фотографии
+        float ratio;
+        /*
+        if(LEG)
+          ratio = (float)mBitmapHeight/height;
+        else
+          ratio = (float)mBitmapWidth/width;
+        */
+        
+        ratio = Math.max(((float)mBitmapWidth)/width,((float) mBitmapHeight)/height);
+        
+        // на получение оригинального размера по ширине или высоте
+        if(ratio==0) ratio=1;
+        
+        // матрица сжатия
+        Matrix matrix = new Matrix();
+        matrix.postScale(ratio,ratio);
+        
+        // сжатие изображения
+        Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap,0,0,width,height,matrix,true);
+        
+        // вырезаем необходимый размер
+        final Bitmap clippedBitmap;
+        if(LEG) {
+          // у горизонтальной, вырезаем по центру
+          int offset_x = (scaledBitmap.getWidth()-mBitmapWidth)/2;
+          clippedBitmap = Bitmap.createBitmap(scaledBitmap,offset_x,0,mBitmapWidth,mBitmapHeight,null,false);
+        } else
+          // у вертикальной режим с верху
+          clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,mBitmapWidth,mBitmapHeight,null,false);
+
+        // заливаем в кеш
+        mCache.put(mDataList.get(position).getBigLink(),clippedBitmap);
+        mStorage.save(Utils.md5(mDataList.get(position).getBigLink()),clippedBitmap);
+        
         imageView.post(new Runnable() {
           @Override
           public void run() {
             if(isViewReused(position,imageView))
               return;
-            if(scaledBitmap!=null)
+            if(clippedBitmap!=null)
               imageView.setImageBitmap(mCache.get(mDataList.get(position).getBigLink()));
             else
               imageView.setImageResource(R.drawable.im_black_square);
           }
         });
+        
+        
+      } catch (Exception e) {
+        Debug.log("!!!","Error w:"+rawBitmap.getWidth()+",h:"+rawBitmap.getHeight());
+      }
+        
       }
     });
   }

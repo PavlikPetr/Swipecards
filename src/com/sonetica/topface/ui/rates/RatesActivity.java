@@ -45,7 +45,8 @@ public class RatesActivity extends Activity {
     Debug.log(this,"+onCreate");
     
     // Data
-    mRatesList = Data.s_RatesList;
+    //mRatesList = Data.s_RatesList;
+    mRatesList = new LinkedList<Rate>();
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.rates_header_title));

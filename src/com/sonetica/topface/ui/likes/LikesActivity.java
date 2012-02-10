@@ -53,7 +53,8 @@ public class LikesActivity extends Activity {
     mCurrentCity = preferences.getInt(getString(R.string.s_likes_city_id),0);
     
     // Data
-    mLikesAllList  = Data.s_LikesList;
+    //mLikesAllList  = Data.s_LikesList;
+    mLikesAllList  = new LinkedList<Like>();
     mLikesCityList = new LinkedList<Like>();
     
     // Title Header
@@ -166,10 +167,12 @@ public class LikesActivity extends Activity {
           mLikesGridAdapter.collapse(true);
         }
 
+        mProgressDialog.cancel();
+        
         mLikesGridAdapter.notifyDataSetChanged();
         
         mGallery.onRefreshComplete();
-        mProgressDialog.cancel();
+
       }
       @Override
       public void fail(int codeError) {

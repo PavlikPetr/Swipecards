@@ -9,6 +9,7 @@ import com.sonetica.topface.net.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -245,10 +246,10 @@ public class DatingGallery extends ViewGroup {
   }
   //---------------------------------------------------------------------------
   public void notifyDataChanged() {
-//    mThreadsPool.execute(new Runnable() {
-//      @Override
-//      public void run() {
-//        Looper.prepare();
+    mThreadsPool.execute(new Runnable() {
+      @Override
+      public void run() {
+        Looper.prepare();
         mUser = mAdapter.getUser();
         
         mDatingLayout.mInfoView.age    = mUser.age;
@@ -275,11 +276,51 @@ public class DatingGallery extends ViewGroup {
           iv2.setImageResource(R.drawable.ic_launcher);
         */
         
+        int width  = getWidth();
+        int height = getHeight();
+        
+
         final Bitmap bmp = Http.bitmapLoader(mUser.avatars_big[0]);
+        
+        int w = bmp.getWidth();
+        int h = bmp.getHeight();
+        
+        boolean LEG = false;
+        if(w >= h) LEG = true;
+        float ratio;
+        /*
+        if(LEG)
+          ratio = (float)height/h;
+        else
+          ratio = (float)width/w;
+        */
+        ratio = Math.max(((float) width) / w, ((float) height) / h);
+        
+        if(ratio==0) ratio=1;
+        
+        Matrix matrix = new Matrix();
+        matrix.postScale(ratio,ratio);
+        
+        Bitmap scaledBitmap = Bitmap.createBitmap(bmp,0,0,w,h,matrix,true);
+        
+        w = scaledBitmap.getWidth();
+        h = scaledBitmap.getHeight();
+        
+        final Bitmap clippedBitmap;
+        if(LEG) {
+          // у горизонтальной, вырезаем по центру
+          int offset_x = (scaledBitmap.getWidth()-width)/2;
+          clippedBitmap = Bitmap.createBitmap(scaledBitmap,offset_x,0,width,height,null,false);
+        } else
+          // у вертикальной режим с верху
+          clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,width,height,null,false);
+        
+        
+        
         mDatingLayout.mFaceView.post(new Runnable() {
           @Override
           public void run() {
-            mDatingLayout.mFaceView.setImageBitmap(bmp);
+            mDatingLayout.mFaceView.setImageBitmap(clippedBitmap);
           }
         });
         
@@ -316,21 +357,23 @@ public class DatingGallery extends ViewGroup {
            }
          });
          
-//        mDatingLayout.mProgress.setVisibility(View.INVISIBLE);
-//        mDatingLayout.mInfoView.setVisibility(View.VISIBLE);
-//        mDatingLayout.mFaceView.setVisibility(View.VISIBLE);
-        //mDatingLayout.invalidate();
        
-
+       mDatingLayout.post(new Runnable() {
+        @Override
+        public void run() {
+          mDatingLayout.mStarsView.setEnabled(true);
           mDatingLayout.mProgress.setVisibility(View.INVISIBLE);
           mDatingLayout.mInfoView.setVisibility(View.VISIBLE);
           mDatingLayout.mFaceView.setVisibility(View.VISIBLE);
           mDatingLayout.invalidate();
+        }
+      });
+
 
        
-//      Looper.loop();
-//      }
-//    });
+      Looper.loop();
+      }
+    });
   }
   //---------------------------------------------------------------------------
   public void onProfileBtnClick() {
@@ -343,6 +386,7 @@ public class DatingGallery extends ViewGroup {
   //---------------------------------------------------------------------------
   public void onRate(int index) {
 
+        mDatingLayout.mStarsView.setEnabled(false);
         mDatingLayout.mInfoView.setVisibility(View.INVISIBLE);
         mDatingLayout.mFaceView.setVisibility(View.INVISIBLE);
         mDatingLayout.mProgress.setVisibility(View.VISIBLE);
@@ -350,6 +394,127 @@ public class DatingGallery extends ViewGroup {
 
         mEventListener.onRate(mUser.uid,index);
     //notifyDataChanged();
+  }
+  //---------------------------------------------------------------------------
+  public void notifyDataChanged0() {
+        mUser = mAdapter.getUser();
+        
+        mDatingLayout.mInfoView.age    = mUser.age;
+        mDatingLayout.mResView.power  = Data.s_Power;
+        mDatingLayout.mResView.money  = Data.s_Money;
+        mDatingLayout.mInfoView.city   = mUser.city_name;
+        if(mUser.first_name.length()<1)
+          mDatingLayout.mInfoView.name   = "Без имени"; // РЕСУРСЫ !!!!!!!
+        else
+          mDatingLayout.mInfoView.name   = mUser.first_name;
+        mDatingLayout.mInfoView.status = mUser.status;
+        mDatingLayout.mInfoView.online = mUser.online;
+        /*
+        Http.imageLoader(mUser.avatars_big[0],mDatingLayout.mFaceView);
+        
+        if(mUser.avatars_big.length>1)
+          Http.imageLoader(mUser.avatars_big[1],iv1);
+        else
+          iv1.setImageResource(R.drawable.ic_launcher);
+        
+        if(mUser.avatars_big.length>2)
+          Http.imageLoader(mUser.avatars_big[2],iv2);
+        else
+          iv2.setImageResource(R.drawable.ic_launcher);
+        */
+        
+        int width  = getWidth();
+        int height = getHeight();
+        
+
+        final Bitmap bmp = Http.bitmapLoader(mUser.avatars_big[0]);
+        
+        int w = bmp.getWidth();
+        int h = bmp.getHeight();
+        
+        boolean LEG = false;
+        if(w >= h) LEG = true;
+        float ratio;
+        /*
+        if(LEG)
+          ratio = (float)height/h;
+        else
+          ratio = (float)width/w;
+        */
+        ratio = Math.max(((float) width) / w, ((float) height) / h);
+        
+        if(ratio==0) ratio=1;
+        
+        Matrix matrix = new Matrix();
+        matrix.postScale(ratio,ratio);
+        
+        Bitmap scaledBitmap = Bitmap.createBitmap(bmp,0,0,w,h,matrix,true);
+        
+        w = scaledBitmap.getWidth();
+        h = scaledBitmap.getHeight();
+        
+        final Bitmap clippedBitmap;
+        if(LEG) {
+          // у горизонтальной, вырезаем по центру
+          int offset_x = (scaledBitmap.getWidth()-width)/2;
+          clippedBitmap = Bitmap.createBitmap(scaledBitmap,offset_x,0,width,height,null,false);
+        } else
+          // у вертикальной режим с верху
+          clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,width,height,null,false);
+        
+        
+        
+        mDatingLayout.mFaceView.post(new Runnable() {
+          @Override
+          public void run() {
+            mDatingLayout.mFaceView.setImageBitmap(clippedBitmap);
+          }
+        });
+        
+            
+       if(mUser.avatars_big.length > 1) {
+         final Bitmap bmp1 = Http.bitmapLoader(mUser.avatars_big[1]);
+         iv1.post(new Runnable() {
+           @Override
+           public void run() {
+             iv1.setImageBitmap(bmp1);
+           }
+         });
+       } else 
+         iv1.post(new Runnable() {
+           @Override
+           public void run() {
+             iv1.setImageResource(R.drawable.ic_launcher);
+           }
+         });
+       
+       if(mUser.avatars_big.length > 2) {
+         final Bitmap bmp2 = Http.bitmapLoader(mUser.avatars_big[2]);
+         iv2.post(new Runnable() {
+           @Override
+           public void run() {
+             iv2.setImageBitmap(bmp2);
+           }
+         });
+       } else 
+         iv2.post(new Runnable() {
+           @Override
+           public void run() {
+             iv2.setImageResource(R.drawable.ic_launcher);
+           }
+         });
+         
+       
+       mDatingLayout.post(new Runnable() {
+        @Override
+        public void run() {
+          mDatingLayout.mStarsView.setEnabled(true);
+          mDatingLayout.mProgress.setVisibility(View.INVISIBLE);
+          mDatingLayout.mInfoView.setVisibility(View.VISIBLE);
+          mDatingLayout.mFaceView.setVisibility(View.VISIBLE);
+          mDatingLayout.invalidate();
+        }
+      });
   }
   //---------------------------------------------------------------------------
 }

@@ -13,14 +13,15 @@ import android.os.Message;
 
 public abstract class ApiRequest {
   // Data
-  public  String     ssid;
-  private Context    mContext;
+  public  String  ssid;
+  private Context mContext;
   private ApiHandler mHandler;
-  private ExecutorService mThreadsPool = Executors.newFixedThreadPool(1);
+  private ExecutorService mThreadsPool;
   //---------------------------------------------------------------------------
   public ApiRequest(Context context) {
-    mContext = context;
     ssid = "";
+    mContext = context;
+    mThreadsPool = Executors.newFixedThreadPool(3);
   }
   //---------------------------------------------------------------------------
   public ApiRequest callback(ApiHandler handler) {
@@ -29,23 +30,25 @@ public abstract class ApiRequest {
   }
   //---------------------------------------------------------------------------
   public void exec() {
-    mThreadsPool.execute(new Runnable() {
-      @Override
-      public void run() {
-        Looper.prepare();
-        if(mHandler==null) {
-          Debug.log(this,"Handler not found");
-          return;
+    if(mHandler != null)
+      mThreadsPool.execute(new Runnable() {
+        @Override
+        public void run() {
+          Looper.prepare();
+          
+          ssid = Data.SSID;
+          
+          Response response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
+          if(response.code == 3)
+            reAuth();
+          else
+            mHandler.sendMessage(Message.obtain(null,0,response));
+          
+          Looper.loop();
         }
-        ssid = Data.SSID;
-        Response response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
-        if(response.code==3)
-          reAuth();
-        else
-          mHandler.sendMessage(Message.obtain(null,0,response));
-        Looper.loop();
-      }
-    });
+      });
+    else
+      Debug.log(this,"Handler not found");
   }
   //---------------------------------------------------------------------------
   // перерегистрация на сервере TP
@@ -80,6 +83,7 @@ public abstract class ApiRequest {
   public abstract String toString();
   //---------------------------------------------------------------------------
 }
+
 /*
 class LooperThread extends Thread {
   public Handler mHandler;
@@ -93,4 +97,4 @@ class LooperThread extends Thread {
     Looper.loop();
   }
 }
- */
+*/
