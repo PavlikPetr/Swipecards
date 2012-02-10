@@ -59,7 +59,7 @@ public class ThumbView extends ImageView {
     canvas.drawRect(lineRect,s_PaintLine);
     
     // city
-    canvas.drawText(mCity+"",10,20,s_PaintText);
+    //canvas.drawText(mCity+"",10,20,s_PaintText);
     
     if(mPercent!=0) {
       int x = lineRect.left+mHeartBmp.getWidth()/2;

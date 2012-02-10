@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class DatingLayout extends ViewGroup implements View.OnClickListener {
@@ -15,6 +16,7 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
   public  InfoView     mInfoView;     // информация о пользователе 
   private StarsView    mStarsView;    // контрол со звездами для оценки
   private InformerView mInformerView; // контрол с всплывающей панелей и 2 кнопками(чат,профиль)
+  public ProgressBar  mProgress;
   // 
   private View mHeaderBar;
   private int  mHeaderOffset;
@@ -51,6 +53,10 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     // Stars
     mStarsView = new StarsView(context,mInformerView);
     addView(mStarsView);
+    
+    mProgress = new ProgressBar(context);
+    mProgress.setVisibility(View.INVISIBLE);
+    addView(mProgress);
 
   }
   //---------------------------------------------------------------------------
@@ -82,6 +88,9 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
     stars_y = (getMeasuredHeight() - mPopupView.getMeasuredHeight())/2;
     mPopupView.layout(stars_x,stars_y,stars_x+mPopupView.getMeasuredWidth(),stars_y+mPopupView.getMeasuredHeight());
     */
+    stars_x = (getMeasuredWidth() - mProgress.getMeasuredWidth())/2;
+    stars_y = (getMeasuredHeight() - mProgress.getMeasuredHeight())/2;
+    mProgress.layout(stars_x,stars_y,stars_x+mProgress.getMeasuredWidth(),stars_y+mProgress.getMeasuredHeight());
   }
   //-------------------------------------------------------------------------
   public void onProfileBtnClick() {

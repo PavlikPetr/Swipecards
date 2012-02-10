@@ -103,10 +103,12 @@ public class DatingActivity extends Activity implements DatingEventListener {
         DoRate rate = DoRate.parse(response);
         Data.s_Power = rate.power;
         Data.s_Money = rate.money;
+        mDatingGallery.notifyDataChanged();
       }
       @Override
       public void fail(int codeError) {
-        Toast.makeText(DatingActivity.this,"dating rate fail",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(DatingActivity.this,"dating rate fail",Toast.LENGTH_SHORT).show();
+        mDatingGallery.notifyDataChanged();
       }
     }).exec();
   }
@@ -125,6 +127,7 @@ public class DatingActivity extends Activity implements DatingEventListener {
   //---------------------------------------------------------------------------
   public void onRate(int userid,int index) {
     rate(userid,index);
+    //mDatingGallery.notifyDataChanged();
   }
   //---------------------------------------------------------------------------
   @Override

@@ -137,7 +137,7 @@ public class InboxActivity extends Activity {
         if(list.size()!=0) {
           if(isRefresh)
             for(int i=list.size()-1;i>=0;--i)
-              mInboxList.addFirst(list.get(i));
+              mInboxList.addFirst(list.get(i));  //   ЧТО ЗА БРЕД С ЛИСТАМИ И НОТИФИКАЦИЕЙ
           else
             mInboxList.addAll(list);
         }

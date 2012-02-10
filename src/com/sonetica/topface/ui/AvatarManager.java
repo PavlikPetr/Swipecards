@@ -2,6 +2,7 @@ package com.sonetica.topface.ui;
 
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
@@ -9,7 +10,6 @@ import com.sonetica.topface.utils.MemoryCacheEx;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.AbsListView.OnScrollListener;
@@ -19,18 +19,16 @@ import android.widget.AbsListView.OnScrollListener;
  */
 public class AvatarManager<T extends AbstractData> implements AbsListView.OnScrollListener {
   // Data
-  private ExecutorService mThreadsPool;
   private LinkedList<T> mDataList;
   private MemoryCacheEx mCache;
-  private int mStartItem;
-  private int mCountItems;
+  private ExecutorService mThreadsPool;
   private boolean mBusy; 
   //Constants
-  private static final int THREAD_DEFAULT = 4;
+  private static final int THREAD_DEFAULT = 3;
   //---------------------------------------------------------------------------
   public AvatarManager(Context context,LinkedList<T> dataList) {
     mDataList = dataList;
-    //mThreadsPool = Executors.newFixedThreadPool(THREAD_DEFAULT);
+    mThreadsPool = Executors.newFixedThreadPool(THREAD_DEFAULT);
     mCache = new MemoryCacheEx();
   }
   //---------------------------------------------------------------------------
@@ -52,8 +50,8 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
   //---------------------------------------------------------------------------
   @Override
   public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
-    mStartItem  = firstVisibleItem;
-    mCountItems = visibleItemCount; 
+    //int mStartItem  = firstVisibleItem;
+    //int mCountItems = visibleItemCount; 
   }
   //---------------------------------------------------------------------------
   @Override
@@ -67,66 +65,38 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
         break;
       case OnScrollListener.SCROLL_STATE_IDLE: {
         mBusy = false;
-        int first = view.getFirstVisiblePosition();
-        int count = view.getChildCount();
-        int size = first + count;
-        for (int i=0;i<count;i++) {
-          View v = view.getChildAt(i);
-          if(v==null)
-            continue;
-          ImageView iv = (ImageView)(v.findViewById(R.id.ivAvatar));
-          if(iv==null)
-            continue;
-          if(iv.getTag()!=null) {
-            int z = first+i;
-            Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(z).getSmallLink());
-            if(rawBitmap!=null)
-              iv.setImageBitmap(rawBitmap);
-            iv.setTag(null);
-          } 
+        
+        final int first = view.getFirstVisiblePosition();
+        final int count = view.getChildCount();
+        
+        for(int i=0;i<count;i++) {
+          final int index = i;
+          mThreadsPool.execute(new Runnable() {
+            @Override
+            public void run() {
+              View item = view.getChildAt(index);
+              if(item==null) return;
+              final ImageView iv = (ImageView)(item.findViewById(R.id.ivAvatar));
+              if(iv==null) return;
+              if(iv.getTag()!=null) {
+                if(mBusy)
+                  return;
+                final Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(first+index).getSmallLink());
+                if(rawBitmap!=null)
+                  iv.post(new Runnable() {
+                    @Override
+                    public void run() {
+                      iv.setImageBitmap(rawBitmap);
+                    }
+                  });
+                iv.setTag(null);
+              } 
+            }
+          });//thread
         }
-      }break;
+      }
+      break;
     }
   }
   //---------------------------------------------------------------------------
 }
-
-
-/*
- * int first = view.getFirstVisiblePosition();
-      int count = view.getChildCount();
-for (int i=0; i<count; i++) {
-          View t = view.getChildAt(i);
-          if (t.getTag() != null) {
-            final Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(i).getSmallLink());
-            InboxListAdapter.ViewHolder holder = (InboxListAdapter.ViewHolder)t.getTag();
-            holder.mAvatar.setImageBitmap(rawBitmap);
-          }
-      }
- */
-
-/*
-private void setImageToQueue(final int position,final ImageView imageView) {
-  mThreadsPool.execute(new Runnable() {
-    @Override
-    public void run() {
-      final Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getLink());
-      if(rawBitmap==null)
-        return;
-      //final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
-      mCache.put(mDataList.get(position).getLink(),rawBitmap);
-      imageView.post(new Runnable() {
-        @Override
-        public void run() {
-          if(rawBitmap!=null)
-            imageView.setImageBitmap(mCache.get(mDataList.get(position).getLink()));
-          else
-            imageView.setImageResource(R.drawable.im_black_square);
-        }
-      });
-    }
-  });
-}
-*/
-
-

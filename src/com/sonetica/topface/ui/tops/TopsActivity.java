@@ -34,7 +34,7 @@ public class TopsActivity extends Activity {
   private GridView mGallery;
   //private TopsGridAdapterEx mGridAdapter;
   private TopsGridAdapter mGridAdapter;
-  private GalleryManager  mGalleryManager;
+  private GalleryManagerEx  mGalleryManager;
   private LinkedList<TopUser> mTopsList;
   private LinkedList<City> mCitiesList;
   private ProgressDialog  mProgressDialog;
@@ -146,7 +146,7 @@ public class TopsActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mGalleryManager = new GalleryManager(TopsActivity.this,mTopsList);
+    mGalleryManager = new GalleryManagerEx(TopsActivity.this,mTopsList);
     //mGridAdapter    = new TopsGridAdapterEx(TopsActivity.this,mTopsList);
     mGridAdapter    = new TopsGridAdapter(TopsActivity.this,mGalleryManager);
     mGallery.setAdapter(mGridAdapter);

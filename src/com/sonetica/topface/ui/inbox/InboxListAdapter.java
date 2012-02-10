@@ -98,7 +98,7 @@ public class InboxListAdapter extends BaseAdapter {
     Bitmap bitmap = mAvatarManager.getImage(inbox.avatars_small);
     if(bitmap!=null) {
       holder.mAvatar.setImageBitmap(bitmap);
-      holder.mAvatar.setTag(this);
+      holder.mAvatar.setTag(null);
     } else {
       holder.mAvatar.setImageResource(R.drawable.ic_launcher);
       holder.mAvatar.setTag(this);

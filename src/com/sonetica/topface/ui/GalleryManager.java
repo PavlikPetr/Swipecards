@@ -12,6 +12,8 @@ import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.Device;
 import com.sonetica.topface.utils.MemoryCache;
 import com.sonetica.topface.utils.MemoryCacheEx;
+import com.sonetica.topface.utils.StorageCache;
+import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
@@ -24,6 +26,7 @@ public class GalleryManager {
   private ExecutorService mThreadsPool;
   private LinkedList<? extends AbstractData> mDataList;
   private MemoryCacheEx mCache;
+  private StorageCache mStorage;
   //private HashMap<String,Bitmap> mCache;
   public  int mBitmapWidth;
   public  int mBitmapHeight;
@@ -40,6 +43,7 @@ public class GalleryManager {
     
     //mCache = new HashMap<String,Bitmap>();
     mCache = new MemoryCacheEx();
+    mStorage = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
   }
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<? extends AbstractData> dataList) {
@@ -54,9 +58,15 @@ public class GalleryManager {
 
     final Bitmap bitmap = mCache.get(mDataList.get(position).getBigLink());
     
-    if(bitmap!=null)
+    if(bitmap!=null) {
       imageView.setImageBitmap(bitmap);
-    else {
+      return;
+    }
+    Bitmap _bitmap = mStorage.load(Utils.md5(mDataList.get(position).getBigLink()));
+    if(_bitmap!=null){
+      imageView.setImageBitmap(_bitmap);
+      mCache.put(mDataList.get(position).getBigLink(),_bitmap);
+    } else {
       setImageToQueue(position,imageView);
       imageView.setImageResource(R.drawable.im_black_square);
     }
@@ -72,6 +82,7 @@ public class GalleryManager {
           return;
         final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
         mCache.put(mDataList.get(position).getBigLink(),scaledBitmap);
+        mStorage.save(Utils.md5(mDataList.get(position).getBigLink()),scaledBitmap);
         imageView.post(new Runnable() {
           @Override
           public void run() {

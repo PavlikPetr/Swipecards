@@ -37,7 +37,7 @@ public class LikesActivity extends Activity {
   private LinkedList<Like> mLikesAllList;
   private LinkedList<Like> mLikesCityList;
   private ProgressDialog mProgressDialog;
-  private int mCity;                                 // ГОРОД БРАТЬ ИЗ ПРОФАЙЛА
+  private int mCity = 2;                                 // ГОРОД БРАТЬ ИЗ ПРОФАЙЛА
   private int mCurrentCity; 
   // Constats
   private static final int ALL_CITIES = 0;
@@ -50,8 +50,7 @@ public class LikesActivity extends Activity {
     
     
     SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-    mCity = preferences.getInt(getString(R.string.s_likes_city_id),0);
-    mCurrentCity = mCity = 2;
+    mCurrentCity = preferences.getInt(getString(R.string.s_likes_city_id),0);
     
     // Data
     mLikesAllList  = Data.s_LikesList;
@@ -64,7 +63,7 @@ public class LikesActivity extends Activity {
    DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDouble);
    btnDouble.setLeftText(getString(R.string.likes_btn_dbl_left));
    btnDouble.setRightText(getString(R.string.likes_btn_dbl_right));
-   btnDouble.setChecked(mCity==0?DoubleButton.LEFT_BUTTON:DoubleButton.RIGHT_BUTTON);
+   btnDouble.setChecked(mCurrentCity==0?DoubleButton.LEFT_BUTTON:DoubleButton.RIGHT_BUTTON);
    btnDouble.setLeftListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
@@ -145,7 +144,7 @@ public class LikesActivity extends Activity {
     
     LikesRequest likesRequest = new LikesRequest(this);
     likesRequest.offset = 0;
-    likesRequest.limit  = 100;
+    likesRequest.limit  = 180;
     likesRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
@@ -188,7 +187,7 @@ public class LikesActivity extends Activity {
     // Сохранение параметров
     SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = preferences.edit();
-    editor.putInt(getString(R.string.s_likes_city_id),mCity);
+    editor.putInt(getString(R.string.s_likes_city_id),mCurrentCity);
     editor.commit();
     
     release();

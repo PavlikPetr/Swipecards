@@ -1,11 +1,15 @@
 package com.sonetica.topface.ui.dating;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.Http;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -37,6 +41,7 @@ public class DatingGallery extends ViewGroup {
   private DatingLayout mDatingLayout;
   private DatingGalleryAdapter mAdapter;
   private DatingEventListener mEventListener;
+  private ExecutorService mThreadsPool;
   private SearchUser mUser;
   // Constants
   private static final int SNAP_VELOCITY         = 1000;
@@ -50,7 +55,9 @@ public class DatingGallery extends ViewGroup {
     mTouchState = TOUCH_STATE_IDLE;
     mTouchSlop  = ViewConfiguration.get(getContext()).getScaledTouchSlop()+40;
     
-    setBackgroundColor(Color.BLACK);
+    mThreadsPool = Executors.newFixedThreadPool(1);
+    
+    setBackgroundColor(Color.TRANSPARENT);
     setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.FILL_PARENT));
     
     // фрейм оценок
@@ -79,6 +86,11 @@ public class DatingGallery extends ViewGroup {
       }
     });
     addView(iv2);
+    
+    
+    mDatingLayout.mInfoView.setVisibility(View.INVISIBLE);
+    mDatingLayout.mFaceView.setVisibility(View.INVISIBLE);
+    mDatingLayout.mProgress.setVisibility(View.VISIBLE);
   }
   //-------------------------------------------------------------------------
   @Override
@@ -233,33 +245,92 @@ public class DatingGallery extends ViewGroup {
   }
   //---------------------------------------------------------------------------
   public void notifyDataChanged() {
-    mUser = mAdapter.getUser();
-    
-    mDatingLayout.mInfoView.age    = mUser.age;
-    mDatingLayout.mInfoView.power  = Data.s_Power;
-    mDatingLayout.mInfoView.money  = Data.s_Money;
-    mDatingLayout.mInfoView.city   = mUser.city_name;
-    mDatingLayout.mInfoView.name   = mUser.first_name;
-    mDatingLayout.mInfoView.status = mUser.status;
-    mDatingLayout.mInfoView.online = mUser.online;
-    
-    Http.imageLoader(mUser.avatars_big[0],mDatingLayout.mFaceView);
-    //mDatingLayout.mFaceView.setBackgroundColor(Color.WHITE);
-    if(mUser.avatars_big.length>1) {
-      iv2.setVisibility(View.VISIBLE);
-      Http.imageLoader(mUser.avatars_big[1],iv1);
-    } else {
-      iv1.setImageResource(R.drawable.ic_launcher);
-      //iv1.setVisibility(View.GONE);
-    }
-    if(mUser.avatars_big.length>2) {
-      //iv2.setVisibility(View.VISIBLE);
-      Http.imageLoader(mUser.avatars_big[2],iv2);
-    } else {
-      iv2.setImageResource(R.drawable.ic_launcher);
-      //iv2.setVisibility(View.GONE);
-    }
-    mDatingLayout.invalidate();
+//    mThreadsPool.execute(new Runnable() {
+//      @Override
+//      public void run() {
+//        Looper.prepare();
+        mUser = mAdapter.getUser();
+        
+        mDatingLayout.mInfoView.age    = mUser.age;
+        mDatingLayout.mInfoView.power  = Data.s_Power;
+        mDatingLayout.mInfoView.money  = Data.s_Money;
+        mDatingLayout.mInfoView.city   = mUser.city_name;
+        if(mUser.first_name.length()<1)
+          mDatingLayout.mInfoView.name   = "Без имени"; // РЕСУРСЫ !!!!!!!
+        else
+          mDatingLayout.mInfoView.name   = mUser.first_name;
+        mDatingLayout.mInfoView.status = mUser.status;
+        mDatingLayout.mInfoView.online = mUser.online;
+        /*
+        Http.imageLoader(mUser.avatars_big[0],mDatingLayout.mFaceView);
+        
+        if(mUser.avatars_big.length>1)
+          Http.imageLoader(mUser.avatars_big[1],iv1);
+        else
+          iv1.setImageResource(R.drawable.ic_launcher);
+        
+        if(mUser.avatars_big.length>2)
+          Http.imageLoader(mUser.avatars_big[2],iv2);
+        else
+          iv2.setImageResource(R.drawable.ic_launcher);
+        */
+        
+        final Bitmap bmp = Http.bitmapLoader(mUser.avatars_big[0]);
+        mDatingLayout.mFaceView.post(new Runnable() {
+          @Override
+          public void run() {
+            mDatingLayout.mFaceView.setImageBitmap(bmp);
+          }
+        });
+        
+            
+       if(mUser.avatars_big.length > 1) {
+         final Bitmap bmp1 = Http.bitmapLoader(mUser.avatars_big[1]);
+         iv1.post(new Runnable() {
+           @Override
+           public void run() {
+             iv1.setImageBitmap(bmp1);
+           }
+         });
+       } else 
+         iv1.post(new Runnable() {
+           @Override
+           public void run() {
+             iv1.setImageResource(R.drawable.ic_launcher);
+           }
+         });
+       
+       if(mUser.avatars_big.length > 2) {
+         final Bitmap bmp2 = Http.bitmapLoader(mUser.avatars_big[2]);
+         iv2.post(new Runnable() {
+           @Override
+           public void run() {
+             iv2.setImageBitmap(bmp2);
+           }
+         });
+       } else 
+         iv2.post(new Runnable() {
+           @Override
+           public void run() {
+             iv2.setImageResource(R.drawable.ic_launcher);
+           }
+         });
+         
+//        mDatingLayout.mProgress.setVisibility(View.INVISIBLE);
+//        mDatingLayout.mInfoView.setVisibility(View.VISIBLE);
+//        mDatingLayout.mFaceView.setVisibility(View.VISIBLE);
+        //mDatingLayout.invalidate();
+       
+
+          mDatingLayout.mProgress.setVisibility(View.INVISIBLE);
+          mDatingLayout.mInfoView.setVisibility(View.VISIBLE);
+          mDatingLayout.mFaceView.setVisibility(View.VISIBLE);
+          mDatingLayout.invalidate();
+
+       
+//      Looper.loop();
+//      }
+//    });
   }
   //---------------------------------------------------------------------------
   public void onProfileBtnClick() {
@@ -271,8 +342,14 @@ public class DatingGallery extends ViewGroup {
   }
   //---------------------------------------------------------------------------
   public void onRate(int index) {
-    mEventListener.onRate(mUser.uid,index);
-    notifyDataChanged();
+
+        mDatingLayout.mInfoView.setVisibility(View.INVISIBLE);
+        mDatingLayout.mFaceView.setVisibility(View.INVISIBLE);
+        mDatingLayout.mProgress.setVisibility(View.VISIBLE);
+
+
+        mEventListener.onRate(mUser.uid,index);
+    //notifyDataChanged();
   }
   //---------------------------------------------------------------------------
 }

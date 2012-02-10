@@ -1,11 +1,10 @@
 package com.sonetica.topface.ui.rates;
 
-import java.util.LinkedList;
 import com.sonetica.topface.R;
-import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.data.Rate;
-import com.sonetica.topface.ui.inbox.InboxListAdapter.ViewHolder;
+import com.sonetica.topface.ui.AvatarManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +16,15 @@ import android.widget.TextView;
 public class RatesListAdapter extends BaseAdapter {
   // class ViewHolder
   public static class ViewHolder {
-    ImageView mAvatar;
-    TextView  mName;
-    TextView  mText;
-    TextView  mTime;
-    ImageView mArrow;
+    public ImageView mAvatar;
+    public TextView  mName;
+    public TextView  mText;
+    public TextView  mTime;
+    public ImageView mArrow;
   }
   // Data
   private LayoutInflater mInflater;
-  private LinkedList<Rate> mList;
+  private AvatarManager<Rate> mAvatarManager;
   private DateFormat mDataFormater = new DateFormat();
   // Constants
   private static final int T_ALL   = 0;
@@ -33,20 +32,20 @@ public class RatesListAdapter extends BaseAdapter {
   private static final int T_COUNT = 2;
   private static final String TIME_TEMPLATE = "dd MMM, hh:mm";
   //---------------------------------------------------------------------------
-  public RatesListAdapter(Context context,LinkedList<Rate> list) {
-    mList=list;
-    //mInflater = LayoutInflater.from(context);
+  public RatesListAdapter(Context context,AvatarManager<Rate> avatarManager) {
+    mAvatarManager = avatarManager;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    //mInflater = LayoutInflater.from(context);
   }
   //---------------------------------------------------------------------------
   @Override
   public int getCount() {
-    return mList.size();
+    return mAvatarManager.size();
   }
   //---------------------------------------------------------------------------
   @Override
   public Rate getItem(int position) {
-    return mList.get(position);
+    return mAvatarManager.get(position);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -61,7 +60,7 @@ public class RatesListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   @Override
   public int getItemViewType(int position) {
-    return mList.get(position).city_id==T_CITY ? 1 : 0; // T_CITY
+    return mAvatarManager.get(position).city_id==T_CITY ? 1 : 0; // T_CITY
   }
   //---------------------------------------------------------------------------
   @Override
@@ -95,36 +94,40 @@ public class RatesListAdapter extends BaseAdapter {
       holder = (ViewHolder)convertView.getTag();
     
     Rate inbox = getItem(position);
+    
+    Bitmap bitmap = mAvatarManager.getImage(inbox.avatars_small);
+    if(bitmap!=null) {
+      holder.mAvatar.setImageBitmap(bitmap);
+      holder.mAvatar.setTag(null);
+    } else {
+      holder.mAvatar.setImageResource(R.drawable.ic_launcher);
+      holder.mAvatar.setTag(this);
+    }
       
-    holder.mAvatar.setImageResource(R.drawable.ic_launcher);
     holder.mName.setText(inbox.first_name+", "+inbox.age);
     holder.mText.setText(""+inbox.rate);
     holder.mTime.setText(mDataFormater.format(TIME_TEMPLATE,inbox.created));
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
-      
     
     /*
-    Inbox msg = getItem(position);
-    String text = null;
-    
-    switch(msg.type) {
+    switch(inbox.type) {
       case Inbox.DEFAULT:
-        text = msg.text;
+        holder.mText.setText(inbox.text);
         break;
       case Inbox.PHOTO:
-        text = " PHOTO ";
+        holder.mText.setText("PHOTO");
         break;
       case Inbox.GIFT:
-        text = " GIFT ";
+        holder.mText.setText("GIFT");
         break;
       case Inbox.MESSAGE:
-        text = msg.text;
+        holder.mText.setText(inbox.text);
         break;
       case Inbox.MESSAGE_WISH:
-        text = " WISH ";
+        holder.mText.setText("WISH");
         break;
       case Inbox.MESSAGE_SEXUALITY:
-        text = " SEXUALITY ";
+        holder.mText.setText("SEXUALITY");
         break;
     }
     */

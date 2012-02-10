@@ -1,11 +1,14 @@
 package com.sonetica.topface.net;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.data.Auth;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
+import android.os.Looper;
 import android.os.Message;
 
 public abstract class ApiRequest {
@@ -13,6 +16,7 @@ public abstract class ApiRequest {
   public  String     ssid;
   private Context    mContext;
   private ApiHandler mHandler;
+  private ExecutorService mThreadsPool = Executors.newFixedThreadPool(1);
   //---------------------------------------------------------------------------
   public ApiRequest(Context context) {
     mContext = context;
@@ -25,16 +29,23 @@ public abstract class ApiRequest {
   }
   //---------------------------------------------------------------------------
   public void exec() {
-    if(mHandler==null) {
-      Debug.log(this,"Handler not found");
-      return;
-    }
-    ssid = Data.SSID;
-    Response response = new Response(Http.httpSendTpRequest(Global.API_URL,this.toString()));
-    if(response.code==3)
-      reAuth();
-    else
-      mHandler.sendMessage(Message.obtain(null,0,response));
+    mThreadsPool.execute(new Runnable() {
+      @Override
+      public void run() {
+        Looper.prepare();
+        if(mHandler==null) {
+          Debug.log(this,"Handler not found");
+          return;
+        }
+        ssid = Data.SSID;
+        Response response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
+        if(response.code==3)
+          reAuth();
+        else
+          mHandler.sendMessage(Message.obtain(null,0,response));
+        Looper.loop();
+      }
+    });
   }
   //---------------------------------------------------------------------------
   // перерегистрация на сервере TP
@@ -69,3 +80,17 @@ public abstract class ApiRequest {
   public abstract String toString();
   //---------------------------------------------------------------------------
 }
+/*
+class LooperThread extends Thread {
+  public Handler mHandler;
+  public void run() {
+    Looper.prepare();
+    mHandler = new Handler() {
+      public void handleMessage(Message msg) {
+        // process incoming messages here
+      }
+    };
+    Looper.loop();
+  }
+}
+ */

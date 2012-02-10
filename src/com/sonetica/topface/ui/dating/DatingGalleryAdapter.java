@@ -18,7 +18,7 @@ public class DatingGalleryAdapter {
   //---------------------------------------------------------------------------
   public SearchUser getUser() {
     SearchUser user = mSearchUserList.get(++curr_id);
-    if(curr_id==mSearchUserList.size()-1)
+    if(curr_id==mSearchUserList.size()-5)
       ((DatingActivity)mContext).update();
     return user;
   }
