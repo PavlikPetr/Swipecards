@@ -14,10 +14,10 @@ import android.widget.ProgressBar;
 
 public class DatingLayout extends ViewGroup implements View.OnClickListener {
   // Data
-  private FaceView mFaceView;
+  private FaceView      mFaceView;
+  private RateControl   mRateControl;
+  private ProgressBar   mProgress;
   private ResourcesView mResView;
-  private RateControl mRateControl;
-  private ProgressBar mProgress;
   //---------------------------------------------------------------------------
   public DatingLayout(Context context) {
     this(context,null);
@@ -90,6 +90,13 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
   }
   //---------------------------------------------------------------------------
   public void progress(int visibility) {
+    if(visibility == View.VISIBLE) { // если включен прогресс
+      mRateControl.setBlock(false);  // выключаем реакцию на контролах
+      this.setEnabled(false);
+    } else {                         // и наооборот
+      mRateControl.setBlock(true);
+      this.setEnabled(true);      
+    }
     //mProgress.setVisibility(mProgress.getVisibility()==View.VISIBLE?View.INVISIBLE:View.VISIBLE);
     mProgress.setVisibility(visibility);
   }

@@ -33,4 +33,9 @@ public class RateControl extends ViewGroup {
     mInformerView.layout(stars_x-mInformerView.getMeasuredWidth(),stars_y,stars_x,stars_y+mInformerView.getMeasuredHeight());
   }
   //---------------------------------------------------------------------------
+  public void setBlock(boolean block) {
+    mInformerView.setBlock(block);
+    mStarsView.setBlock(block);
+  }
+  //---------------------------------------------------------------------------
 }

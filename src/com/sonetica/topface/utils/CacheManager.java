@@ -29,15 +29,15 @@ public class CacheManager {
     bitmap = mMemoryCache.get(position);
     if(bitmap!=null)
       return bitmap;
-    bitmap = mStorageCache.load(Utils.md5(imageLink));
-    if(bitmap!=null)
-      mMemoryCache.put(position,bitmap);
+    //bitmap = mStorageCache.load(Utils.md5(imageLink));
+    //if(bitmap!=null)
+      //mMemoryCache.put(position,bitmap);
     return bitmap;
   }
   //---------------------------------------------------------------------------
   public void put(Integer position,String imageLink,Bitmap bitmap) {
     mMemoryCache.put(position,bitmap);
-    mStorageCache.save(Utils.md5(imageLink),bitmap);
+    //mStorageCache.save(Utils.md5(imageLink),bitmap);
   }
   //---------------------------------------------------------------------------
   public void clear() {

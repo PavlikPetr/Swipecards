@@ -10,18 +10,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class RatesListAdapter extends BaseAdapter {
+  //---------------------------------------------------------------------------
   // class ViewHolder
+  //---------------------------------------------------------------------------
   public static class ViewHolder {
     public ImageView mAvatar;
     public TextView  mName;
-    public TextView  mText;
+    public StarView  mStar;
     public TextView  mTime;
     public ImageView mArrow;
   }
+  //---------------------------------------------------------------------------
   // Data
   private LayoutInflater mInflater;
   private AvatarManager<Rate> mAvatarManager;
@@ -76,11 +80,11 @@ public class RatesListAdapter extends BaseAdapter {
       
       holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
       holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
-      holder.mText   = (TextView)convertView.findViewById(R.id.tvText);
+      holder.mStar   = (StarView)convertView.findViewById(R.id.ivStar);
       holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);
       holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
       
-      switch (type) {
+      switch(type) {
         case 0:
           convertView.setBackgroundResource(R.drawable.item_gallery_all_selector);
           break;
@@ -94,7 +98,7 @@ public class RatesListAdapter extends BaseAdapter {
       holder = (ViewHolder)convertView.getTag();
     
     Rate inbox = getItem(position);
-    
+    /*
     Bitmap bitmap = mAvatarManager.getImage(inbox.avatars_small);
     if(bitmap!=null) {
       holder.mAvatar.setImageBitmap(bitmap);
@@ -103,9 +107,11 @@ public class RatesListAdapter extends BaseAdapter {
       holder.mAvatar.setImageResource(R.drawable.ic_launcher);
       holder.mAvatar.setTag(this);
     }
-      
+    */
+    mAvatarManager.getImage(position,holder.mAvatar);
+    
     holder.mName.setText(inbox.first_name+", "+inbox.age);
-    holder.mText.setText(""+inbox.rate);
+    holder.mStar.mRate = inbox.rate;
     holder.mTime.setText(mDataFormater.format(TIME_TEMPLATE,inbox.created));
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
     

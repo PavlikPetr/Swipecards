@@ -232,4 +232,8 @@ public class StarsView extends View implements View.OnTouchListener {
     mRateListener = listener;
   }
   //---------------------------------------------------------------------------
+  public void setBlock(boolean block) {
+    this.setEnabled(block);
+  }
+  //---------------------------------------------------------------------------
 }

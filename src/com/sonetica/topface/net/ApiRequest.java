@@ -65,6 +65,18 @@ public abstract class ApiRequest {
     authRequest.clientversion = Global.CLIENT_VERSION;
     authRequest.clientdevice  = Global.CLIENT_DEVICE;
     authRequest.clientid      = Global.CLIENT_ID;
+    
+    Response response = new Response(Http.httpSendTpRequest(Global.API_URL,authRequest.toString()));
+    if(response.code == 0) {
+      Auth auth = Auth.parse(response);
+      Data.saveSSID(mContext,auth.ssid);
+      response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
+      mHandler.sendMessage(Message.obtain(null,0,response));
+      
+    } else
+       mHandler.sendMessage(Message.obtain(null,0,response));
+    
+    /*
     authRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
@@ -77,6 +89,7 @@ public abstract class ApiRequest {
         Debug.log(this,"Getting SSID is wrong");
       }
     }).exec();
+    */
   }
   //---------------------------------------------------------------------------
   @Override

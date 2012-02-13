@@ -123,8 +123,8 @@ public class InboxActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void update(final int offset,final boolean isRefresh) {
-    //if(!isRefresh)
-      //mProgressDialog.show();
+    if(!isRefresh)
+      mProgressDialog.show();
     
     InboxRequest inboxRequest = new InboxRequest(InboxActivity.this);
     inboxRequest.offset = offset;
@@ -146,8 +146,8 @@ public class InboxActivity extends Activity {
         mAvatarManager.setDataList(list);
         mAdapter.notifyDataSetChanged();
         mListView.onRefreshComplete();
-        //if(mProgressDialog.isShowing())
-          //mProgressDialog.cancel();
+        if(mProgressDialog.isShowing())
+          mProgressDialog.cancel();
           
       }
       @Override

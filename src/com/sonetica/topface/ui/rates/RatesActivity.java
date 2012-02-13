@@ -83,7 +83,7 @@ public class RatesActivity extends Activity {
    
    mListView.setOnItemClickListener(new OnItemClickListener(){
      @Override
-     public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
+     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(RatesActivity.this,ChatActivity.class);
        int x = mRatesList.get(position).uid;
        intent.putExtra(ChatActivity.INTENT_USER_ID,mRatesList.get(position).uid);

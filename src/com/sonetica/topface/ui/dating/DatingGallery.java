@@ -1,10 +1,12 @@
 package com.sonetica.topface.ui.dating;
 
 import java.util.LinkedList;
+import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.View;
@@ -12,16 +14,16 @@ import android.widget.ImageView;
 
 public class DatingGallery extends BaseGallery {
   // Data
-  private DatingLayout mDatingLayout;
-  private ImageView    mFirstView;
-  private ImageView    mSecondView;
-  private LinkedList<SearchUser> mSearchUserList;
-  private SearchUser mUser;
+  private DatingLayout mDatingLayout;  // фото с контролом для оценки
+  private ImageView    mFirstView;     // первая дополнительная фотография
+  private ImageView    mSecondView;    // вторая дополнительная фотография
+  private LinkedList<SearchUser> mSearchUserList;  // список плользователей для оценивания
+  private SearchUser mUser;   // текущий поьзователь
   private int curr_id = -1;
   //---------------------------------------------------------------------------
   public DatingGallery(Context context,AttributeSet attrs) {
     super(context,attrs);
-    
+
     mSearchUserList = new LinkedList<SearchUser>();
     mDatingLayout   = new DatingLayout(context);
     addView(mDatingLayout);
@@ -35,6 +37,7 @@ public class DatingGallery extends BaseGallery {
   }
   //---------------------------------------------------------------------------
   public void next() {
+    DatingActivity.mPaintView.setVisibility(View.INVISIBLE);
     mDatingLayout.progress(View.VISIBLE);
     mDatingLayout.setFaceVisibility(View.INVISIBLE);
 
@@ -49,10 +52,23 @@ public class DatingGallery extends BaseGallery {
     
     mUser = getUser();
     
+    DatingActivity.mPaintView.mCountPoints = mUser.avatars_big.length>=3?3:mUser.avatars_big.length;
+    
     new Thread(new Runnable() {
       @Override
       public void run() {
-        Bitmap bitmap0 = cutting(Http.bitmapLoader(mUser.avatars_big[0]));
+        Bitmap bitmap0 = Http.bitmapLoader(mUser.avatars_big[0]);
+        
+        if(bitmap0==null)
+          DatingGallery.this.post(new Runnable() {
+            @Override
+            public void run() {
+              mDatingLayout.setImageData(BitmapFactory.decodeResource(DatingGallery.this.getResources(),R.drawable.icon_people),mUser);
+              mDatingLayout.progress(View.INVISIBLE);
+            }
+          });
+        
+        bitmap0 = cutting(bitmap0);
         Bitmap bitmap1 = null;
         Bitmap bitmap2 = null;
         
@@ -83,6 +99,7 @@ public class DatingGallery extends BaseGallery {
               mSecondView.setImageBitmap(bmp2);
               DatingGallery.this.addView(mSecondView);
             }
+            DatingActivity.mPaintView.setVisibility(View.VISIBLE);
             mDatingLayout.setFaceVisibility(View.VISIBLE);
             mDatingLayout.progress(View.INVISIBLE);
           }
@@ -93,7 +110,7 @@ public class DatingGallery extends BaseGallery {
   //---------------------------------------------------------------------------
   public int getUserId() {
     return mUser.uid;
-  }  
+  }
   //---------------------------------------------------------------------------
   public SearchUser getUser() {
     SearchUser user = mSearchUserList.get(++curr_id);
@@ -105,29 +122,37 @@ public class DatingGallery extends BaseGallery {
   }
   //---------------------------------------------------------------------------
   private Bitmap cutting(Bitmap bitmap) {
-    int width  = getWidth();
-    int height = getHeight();
-
-    int w = bitmap.getWidth();
-    int h = bitmap.getHeight();
-
-    boolean LEG = false;
-    if(w >= h) LEG = true;
-    float ratio = Math.max(((float) width) / w, ((float) height) / h);
-
-    Matrix matrix = new Matrix();
-    matrix.postScale(ratio,ratio);
-
-    Bitmap scaledBitmap = Bitmap.createBitmap(bitmap,0,0,w,h,matrix,true);
-
     final Bitmap clippedBitmap;
-    if(LEG) {
-      int offset_x = (scaledBitmap.getWidth()-width)/2;
-      clippedBitmap = Bitmap.createBitmap(scaledBitmap,offset_x,0,width,height,null,false);
-    } else
-      clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,width,height,null,false);
-    
+    try {
+      int width  = getWidth();
+      int height = getHeight();
+  
+      int w = bitmap.getWidth();
+      int h = bitmap.getHeight();
+  
+      boolean LEG = false;
+      if(w >= h) LEG = true;
+      float ratio = Math.max(((float) width) / w, ((float) height) / h);
+  
+      Matrix matrix = new Matrix();
+      matrix.postScale(ratio,ratio);
+  
+      Bitmap scaledBitmap = Bitmap.createBitmap(bitmap,0,0,w,h,matrix,true);
+  
+      if(LEG) {
+        int offset_x = (scaledBitmap.getWidth()-width)/2;
+        clippedBitmap = Bitmap.createBitmap(scaledBitmap,offset_x,0,width,height,null,false);
+      } else
+        clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,width,height,null,false);
+    } catch (Exception e) {
+      return bitmap;
+    }
     return clippedBitmap;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void currentScreen(int whichScreen) {
+    DatingActivity.mPaintView.mCurrentPoint = whichScreen;
   }
   //---------------------------------------------------------------------------
 }

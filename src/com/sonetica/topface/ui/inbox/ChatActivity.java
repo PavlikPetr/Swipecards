@@ -91,8 +91,8 @@ public class ChatActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void update(final int offset,final boolean isRefresh) {
-    //if(!isRefresh)
-      //mProgressDialog.show();
+    if(!isRefresh)
+      mProgressDialog.show();
     
     HistoryRequest inboxRequest = new HistoryRequest(ChatActivity.this);
     inboxRequest.userid = mUserId; 
@@ -112,8 +112,8 @@ public class ChatActivity extends Activity {
         create();
         mAdapter.notifyDataSetChanged();
         mListView.onRefreshComplete();
-        //if(mProgressDialog.isShowing())
-          //mProgressDialog.cancel();
+        if(mProgressDialog.isShowing())
+          mProgressDialog.cancel();
           
       }
       @Override

@@ -143,4 +143,9 @@ public class InformerView extends ViewGroup {
     mInformer._index = index;
   }
   //---------------------------------------------------------------------------
+  public void setBlock(boolean block) {
+    mChatBtn.setEnabled(block);
+    mProfileBtn.setEnabled(block);
+  }
+  //---------------------------------------------------------------------------
 }

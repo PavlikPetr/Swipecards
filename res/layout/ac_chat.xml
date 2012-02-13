@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/chat_bkgrd"
     android:orientation="vertical" >
     
   <!-- header bar -->
@@ -12,7 +13,10 @@
       android:layout_width="wrap_content" 
       android:layout_height="0dip"
       android:layout_weight="1"
-      android:fadeScrollbars="true"
-      android:background="#0000FF" />
+      android:transcriptMode="alwaysScroll"
+      android:stackFromBottom="true"
+      android:cacheColorHint="#00000000"
+      android:fadeScrollbars="true" />
+  
 
 </LinearLayout>

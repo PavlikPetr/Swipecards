@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.view.ViewConfiguration;
 import android.widget.Scroller;
 
-public class BaseGallery extends ViewGroup {
+public abstract class BaseGallery extends ViewGroup {
   // Data
   protected int   mCurrentScreen;  // текущее изображение в галереи
   private   int   mScrollX;        // x
@@ -162,15 +162,18 @@ public class BaseGallery extends ViewGroup {
     mCurrentScreen = whichScreen;
     int newX  = whichScreen * getWidth();
     int delta = newX - mScrollX;
-    mScroller.startScroll(mScrollX,0,delta,0,Math.abs(delta)*2);             
+    mScroller.startScroll(mScrollX,0,delta,0,Math.abs(delta)*2);
+    currentScreen(whichScreen);
     invalidate();
   }
   //-------------------------------------------------------------------------
   private void setToScreen(int whichScreen) {
     mCurrentScreen = whichScreen;
     int newX = whichScreen * getWidth();
-    mScroller.startScroll(newX, 0, 0, 0, 10);             
+    mScroller.startScroll(newX, 0, 0, 0, 10);
     invalidate();
   }
+  //-------------------------------------------------------------------------
+  abstract public void currentScreen(int whichScreen);
   //-------------------------------------------------------------------------
 }

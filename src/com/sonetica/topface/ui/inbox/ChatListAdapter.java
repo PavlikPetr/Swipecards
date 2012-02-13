@@ -43,13 +43,7 @@ public class ChatListAdapter extends BaseAdapter {
     mContext=context;
     mList=list;
     mInflater = LayoutInflater.from(context);
-    
-    int count=0;
-    for(History msg : mList)
-      if(msg.owner_id==32574380)
-        mItemLayoutMap.put(count++,T_USER_PHOTO);
-      else
-        mItemLayoutMap.put(count++,T_FRIEND_PHOTO);
+    prepare(list);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -151,6 +145,20 @@ public class ChatListAdapter extends BaseAdapter {
     }
     */    
     return convertView;
+  }
+  //---------------------------------------------------------------------------
+  public void setDataList(LinkedList<History> dataList) {
+    prepare(dataList);
+    mList.addAll(dataList);
+  }
+  //---------------------------------------------------------------------------
+  public void prepare(LinkedList<History> dataList) {
+    int count=0;
+    for(History msg : dataList)
+      if(msg.owner_id==32574380)
+        mItemLayoutMap.put(count++,T_USER_PHOTO);
+      else
+        mItemLayoutMap.put(count++,T_FRIEND_PHOTO);
   }
   //---------------------------------------------------------------------------
 }

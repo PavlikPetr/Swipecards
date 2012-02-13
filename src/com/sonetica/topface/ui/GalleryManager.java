@@ -29,9 +29,10 @@ public class GalleryManager implements OnScrollListener {
   // Data
   private ExecutorService mThreadsPool;
   private LinkedList<? extends AbstractData> mDataList;
-  private HashMap<ImageView,Integer> mLinkCache;
-  private MemoryCacheEx mMemoryCache;
-  private StorageCache  mStorageCache;
+  //private HashMap<ImageView,Integer> mLinkCache;
+  private MemoryCacheEx mMemoryCache0;
+  private StorageCache  mStorageCache0;
+  private CacheManager mCacheManager;
   public  int mBitmapWidth;
   public  int mBitmapHeight;
   public  boolean mBusy;
@@ -40,15 +41,17 @@ public class GalleryManager implements OnScrollListener {
   //---------------------------------------------------------------------------
   public GalleryManager(Context context,LinkedList<? extends AbstractData> dataList) {
     mDataList     = dataList;
-    mLinkCache    = new HashMap<ImageView,Integer>();
+    //mLinkCache    = new HashMap<ImageView,Integer>();
     mThreadsPool  = Executors.newFixedThreadPool(THREAD_DEFAULT);
     
     int columnNumber = context.getResources().getInteger(R.integer.grid_column_number);
     mBitmapWidth  = Device.getDisplay(context).getWidth()/(columnNumber);
     mBitmapHeight = (int)(mBitmapWidth*1.25);
     
-    mMemoryCache  = new MemoryCacheEx();
-    mStorageCache = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
+    mCacheManager = new CacheManager(context);
+    
+    //mMemoryCache  = new MemoryCacheEx();
+    //mStorageCache = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
   }
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<? extends AbstractData> dataList) {
@@ -60,8 +63,18 @@ public class GalleryManager implements OnScrollListener {
   }
   //---------------------------------------------------------------------------
   public void getImage(final int position,final ImageView imageView) {
+    Bitmap bitmap = mCacheManager.get(position,mDataList.get(position).getSmallLink());
+    
+    if(bitmap!=null)
+      imageView.setImageBitmap(bitmap);
+    else {
+      setImageToQueue(position,imageView);
+      imageView.setImageResource(R.drawable.im_black_square);
+    }
+    /*
     mLinkCache.put(imageView,position);
-    final Bitmap bitmap = mMemoryCache.get(mDataList.get(position).getBigLink());
+    //final Bitmap bitmap = mMemoryCache.get(mDataList.get(position).getBigLink());
+    final Bitmap bitmap = mCacheManager.get(position,mDataList.get(position).getBigLink());
     
     if(bitmap!=null) {
       imageView.setImageBitmap(bitmap);
@@ -76,21 +89,25 @@ public class GalleryManager implements OnScrollListener {
       setImageToQueue(position,imageView);
       imageView.setImageResource(R.drawable.im_black_square);
     }
+    */
   }
   //---------------------------------------------------------------------------
   private void setImageToQueue(final int position,final ImageView imageView) {
-    if(isViewReused(position,imageView))
-      return;
+//    if(isViewReused(position,imageView))
+//      return;
   if(!mBusy)
     mThreadsPool.execute(new Runnable() {
       @Override
       public void run() {
-        if(isViewReused(position,imageView))
+//        if(isViewReused(position,imageView))
+//          return;
+        
+        if(mBusy)
           return;
         
         // Исходное загруженное изображение
         Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
-        if(rawBitmap==null || isViewReused(position,imageView)) 
+        if(rawBitmap==null/* || isViewReused(position,imageView)*/) 
           return;
 
         // Исходный размер загруженного изображения
@@ -129,16 +146,20 @@ public class GalleryManager implements OnScrollListener {
           clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,mBitmapWidth,mBitmapHeight,null,false);
 
         // заливаем в кеш
-        mMemoryCache.put(mDataList.get(position).getBigLink(),clippedBitmap);
+        //mMemoryCache.put(mDataList.get(position).getBigLink(),clippedBitmap);
         //mStorage.save(Utils.md5(mDataList.get(position).getBigLink()),clippedBitmap);
+        mCacheManager.put(position,mDataList.get(position).getBigLink(),clippedBitmap);
         
         imageView.post(new Runnable() {
           @Override
           public void run() {
-            if(isViewReused(position,imageView))
+            //if(isViewReused(position,imageView))
+              //return;
+            if(mBusy) 
               return;
             if(clippedBitmap!=null)
-              imageView.setImageBitmap(mMemoryCache.get(mDataList.get(position).getBigLink()));
+              //imageView.setImageBitmap(mMemoryCache.get(mDataList.get(position).getBigLink()));
+              imageView.setImageBitmap(clippedBitmap);
             else
               imageView.setImageResource(R.drawable.im_black_square);
           }
@@ -154,9 +175,9 @@ public class GalleryManager implements OnScrollListener {
   }
   //-------------------------------------------------------------------------
   boolean isViewReused(int position,ImageView imageView){
-    int index = mLinkCache.get(imageView);
-    if(index!=position)
-      return true;
+    //int index = mLinkCache.get(imageView);
+    //if(index!=position)
+      //return true;
     return false;
   }
   //---------------------------------------------------------------------------

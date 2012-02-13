@@ -28,8 +28,9 @@ import android.widget.Toast;
  */
 public class DatingActivity extends Activity {
   // Data
-  public static ViewGroup mHeaderBar;
   private DatingGallery   mDatingGallery;
+  public static ViewGroup mHeaderBar;
+  public static PointView mPaintView;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,9 @@ public class DatingActivity extends Activity {
 
     // Header Bar
     mHeaderBar = (ViewGroup)findViewById(R.id.loHeader);
+    
+    // Points
+    mPaintView = (PointView)findViewById(R.id.pointsView);
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));

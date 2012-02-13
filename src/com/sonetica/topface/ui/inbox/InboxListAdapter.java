@@ -76,7 +76,7 @@ public class InboxListAdapter extends BaseAdapter {
       holder = new ViewHolder();
       
       convertView = mInflater.inflate(R.layout.inbox_item_gallery, null, false);
-      
+
       holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
       holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
       holder.mText   = (TextView)convertView.findViewById(R.id.tvText);
@@ -97,7 +97,7 @@ public class InboxListAdapter extends BaseAdapter {
       holder = (ViewHolder)convertView.getTag();
     
     Inbox inbox = getItem(position);
-    
+    /*
     // avatar
     Bitmap bitmap = mAvatarManager.getImage(inbox.avatars_small);
     if(bitmap!=null) {
@@ -107,7 +107,9 @@ public class InboxListAdapter extends BaseAdapter {
       holder.mAvatar.setImageResource(R.drawable.ic_launcher);
       holder.mAvatar.setTag(this);
     }
+    */
     
+    mAvatarManager.getImage(position,holder.mAvatar);
     holder.mName.setText(inbox.first_name+", "+inbox.age);
     
     // text
