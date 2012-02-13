@@ -18,35 +18,37 @@ import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
 
 /*
  *  Менеджер изображений, загрузает и кеширует изображения
  */
-public class GalleryManager {
+public class GalleryManager implements OnScrollListener {
   // Data
   private ExecutorService mThreadsPool;
   private LinkedList<? extends AbstractData> mDataList;
   private HashMap<ImageView,Integer> mLinkCache;
-  private MemoryCacheEx mCache;
-  private StorageCache mStorage;
-  //private HashMap<String,Bitmap> mCache;
+  private MemoryCacheEx mMemoryCache;
+  private StorageCache  mStorageCache;
   public  int mBitmapWidth;
   public  int mBitmapHeight;
-  public  boolean mRunning = true;
+  public  boolean mBusy;
   //Constants
   private static final int THREAD_DEFAULT = 4;
   //---------------------------------------------------------------------------
   public GalleryManager(Context context,LinkedList<? extends AbstractData> dataList) {
     mDataList     = dataList;
-    mThreadsPool  = Executors.newFixedThreadPool(THREAD_DEFAULT);
     mLinkCache    = new HashMap<ImageView,Integer>();
+    mThreadsPool  = Executors.newFixedThreadPool(THREAD_DEFAULT);
+    
     int columnNumber = context.getResources().getInteger(R.integer.grid_column_number);
     mBitmapWidth  = Device.getDisplay(context).getWidth()/(columnNumber);
     mBitmapHeight = (int)(mBitmapWidth*1.25);
     
-    mCache = new MemoryCacheEx();
-    mStorage = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
+    mMemoryCache  = new MemoryCacheEx();
+    mStorageCache = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
   }
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<? extends AbstractData> dataList) {
@@ -59,16 +61,17 @@ public class GalleryManager {
   //---------------------------------------------------------------------------
   public void getImage(final int position,final ImageView imageView) {
     mLinkCache.put(imageView,position);
-    final Bitmap bitmap = mCache.get(mDataList.get(position).getBigLink());
+    final Bitmap bitmap = mMemoryCache.get(mDataList.get(position).getBigLink());
     
     if(bitmap!=null) {
       imageView.setImageBitmap(bitmap);
       return;
     }
-    Bitmap _bitmap = mStorage.load(Utils.md5(mDataList.get(position).getBigLink()));
+   // Bitmap _bitmap = mStorage.load(Utils.md5(mDataList.get(position).getBigLink()));
+    Bitmap _bitmap = bitmap;
     if(_bitmap!=null){
       imageView.setImageBitmap(_bitmap);
-      mCache.put(mDataList.get(position).getBigLink(),_bitmap);
+      mMemoryCache.put(mDataList.get(position).getBigLink(),_bitmap);
     } else {
       setImageToQueue(position,imageView);
       imageView.setImageResource(R.drawable.im_black_square);
@@ -78,6 +81,7 @@ public class GalleryManager {
   private void setImageToQueue(final int position,final ImageView imageView) {
     if(isViewReused(position,imageView))
       return;
+  if(!mBusy)
     mThreadsPool.execute(new Runnable() {
       @Override
       public void run() {
@@ -102,15 +106,7 @@ public class GalleryManager {
       try {        
         
         // коффициент сжатия фотографии
-        float ratio;
-        /*
-        if(LEG)
-          ratio = (float)mBitmapHeight/height;
-        else
-          ratio = (float)mBitmapWidth/width;
-        */
-        
-        ratio = Math.max(((float)mBitmapWidth)/width,((float) mBitmapHeight)/height);
+        float ratio = Math.max(((float)mBitmapWidth)/width,((float) mBitmapHeight)/height);
         
         // на получение оригинального размера по ширине или высоте
         if(ratio==0) ratio=1;
@@ -133,8 +129,8 @@ public class GalleryManager {
           clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,mBitmapWidth,mBitmapHeight,null,false);
 
         // заливаем в кеш
-        mCache.put(mDataList.get(position).getBigLink(),clippedBitmap);
-        mStorage.save(Utils.md5(mDataList.get(position).getBigLink()),clippedBitmap);
+        mMemoryCache.put(mDataList.get(position).getBigLink(),clippedBitmap);
+        //mStorage.save(Utils.md5(mDataList.get(position).getBigLink()),clippedBitmap);
         
         imageView.post(new Runnable() {
           @Override
@@ -142,7 +138,7 @@ public class GalleryManager {
             if(isViewReused(position,imageView))
               return;
             if(clippedBitmap!=null)
-              imageView.setImageBitmap(mCache.get(mDataList.get(position).getBigLink()));
+              imageView.setImageBitmap(mMemoryCache.get(mDataList.get(position).getBigLink()));
             else
               imageView.setImageResource(R.drawable.im_black_square);
           }
@@ -175,6 +171,26 @@ public class GalleryManager {
   public void release() {
     //mThreadsPool.shutdown();
     //mCacheManager.clear();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onScrollStateChanged(AbsListView view,int scrollState) {
+    switch(scrollState) {
+      case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+        mBusy = true;
+        break;
+      case OnScrollListener.SCROLL_STATE_FLING:
+        mBusy = true;
+        break;
+      case OnScrollListener.SCROLL_STATE_IDLE:
+        mBusy = false;
+        view.invalidateViews(); //  ПРАВИЛЬНО ???
+        break;
+    }
   }
   //---------------------------------------------------------------------------
 }

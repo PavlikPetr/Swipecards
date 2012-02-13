@@ -37,12 +37,11 @@ public class TopsGridAdapter extends BaseAdapter {
   public View getView(int position,View convertView,ViewGroup parent) {
     ViewHolder holder = null;
     if(convertView==null) {
-      holder = new ViewHolder();
       convertView = (ViewGroup)mInflater.inflate(R.layout.item_grid_gallery, null, false);
+      holder = new ViewHolder();
       holder.mThumbView = (ThumbView)convertView.findViewById(R.id.ivTG);
       holder.mThumbView.setMinimumWidth(mGalleryManager.mBitmapWidth);
       holder.mThumbView.setMinimumHeight(mGalleryManager.mBitmapHeight);
-      //holder.miv.setScaleType(ScaleType.CENTER);
       convertView.setTag(holder);
     } else 
       holder = (ViewHolder)convertView.getTag();

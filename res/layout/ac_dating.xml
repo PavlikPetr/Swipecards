@@ -2,18 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-<!--     
+<!--
    <ProgressBar
       android:id="@+id/pgrsDating"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
       style="@android:style/Widget.ProgressBar.Large.Inverse" />
- -->
+-->
   <com.sonetica.topface.ui.dating.DatingGallery
-    android:id="@+id/galleryDating"
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent" />
+      android:id="@+id/galleryDating"
+      android:layout_width="fill_parent" 
+      android:layout_height="fill_parent" />
 
   <RelativeLayout
       android:id="@+id/loHeader" 

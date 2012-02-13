@@ -1,6 +1,5 @@
 package com.sonetica.topface.ui.tops;
 
-import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.City;
@@ -8,7 +7,6 @@ import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.net.*;
 import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.ui.GalleryManager;
-import com.sonetica.topface.ui.GalleryManagerEx;
 import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
@@ -152,6 +150,7 @@ public class TopsActivity extends Activity {
     //mGridAdapter    = new TopsGridAdapterEx(TopsActivity.this,mTopsList);
     mGridAdapter    = new TopsGridAdapter(TopsActivity.this,mGalleryManager);
     mGallery.setAdapter(mGridAdapter);
+    mGallery.setOnScrollListener(mGalleryManager);
     
     //mGallery.setOnScrollListener(mGridAdapter);
   }

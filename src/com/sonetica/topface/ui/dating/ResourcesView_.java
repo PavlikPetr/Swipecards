@@ -10,21 +10,20 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.view.View;
+import android.view.View.MeasureSpec;
 
-public class ResourcesView extends View {
+public class ResourcesView_ extends View {
   // Data
-  public int money;
-  public int power;
+  public  int money;
+  public  int power;
   // Constants
   private static Bitmap mPowerBmp;
   private static Bitmap mMoneyBmp;
   private static final Paint paintResources = new Paint();
   private static final Paint paint = new Paint();
   //---------------------------------------------------------------------------
-  public ResourcesView(Context context) {
+  public ResourcesView_(Context context) {
     super(context);
-    
-    setBackgroundColor(Color.TRANSPARENT);
     
     // money, power
     paintResources.setColor(Color.WHITE);
@@ -33,8 +32,8 @@ public class ResourcesView extends View {
     paintResources.setTypeface(Typeface.DEFAULT_BOLD);
     paintResources.setTextAlign(Paint.Align.RIGHT);
     
-    mPowerBmp = BitmapFactory.decodeResource(getResources(),R.drawable.dating_power);
-    mMoneyBmp = BitmapFactory.decodeResource(getResources(),R.drawable.dating_money);
+    mPowerBmp        = BitmapFactory.decodeResource(getResources(),R.drawable.dating_power);
+    mMoneyBmp        = BitmapFactory.decodeResource(getResources(),R.drawable.dating_money);
     
     money = Data.s_Money;
     power = Data.s_Power;

@@ -12,13 +12,7 @@ import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class StarsView extends View implements View.OnTouchListener {
-  //---------------------------------------------------------------------------
-  // interface RateListener
-  //---------------------------------------------------------------------------
-  interface setOnRateListener {
-    public void onRate(int rate);
-  }
+public class StarsView_ extends View implements View.OnTouchListener {
   //---------------------------------------------------------------------------
   // calss Star
   //---------------------------------------------------------------------------
@@ -75,24 +69,21 @@ public class StarsView extends View implements View.OnTouchListener {
   private static Bitmap mStarGreyActive;
   private float[] mLastYs;              // массив последних нажатий
   private Star[]  mStars;              // статичный массив объектов для отрисовки звезд;
-  private InformerView mInformerView;  // обсервер текущего нажатия на экран
+  private InformerView_ mInformerView;  // обсервер текущего нажатия на экран
   //private TextView mPopupView;
   private float   mFontSize;
-  private setOnRateListener mRateListener;
   // Constants
   private static final int EVENT_COUNT = 3;   // число последних запоминаемых координат пальца
   private static final int STARS_COUNT = 10;  // кол-во звезд на фрейме
   private static final Paint paintStar   = new Paint();
   private static final Paint paintNumber = new Paint();
   //---------------------------------------------------------------------------
-  public StarsView(Context context,InformerView informer) {
+  public StarsView_(Context context,InformerView_ informer) {
     super(context);
     mStars = new Star[STARS_COUNT];
     mLastYs = new float[EVENT_COUNT];
     mInformerView = informer;
     //mPopupView = popup;
-    
-    setId(R.id.starsView);
     setOnTouchListener(this);
     setBackgroundColor(Color.TRANSPARENT);
     
@@ -161,8 +152,7 @@ public class StarsView extends View implements View.OnTouchListener {
           mLastYs[i] = -100;
         
         if(isStar)
-          mRateListener.onRate(star_index);
-          //((DatingLayout_)getParent()).onRate(star_index);
+          ((DatingLayout_)getParent()).onRate(star_index);
         //((DatingActivity)getContext()).doRate(0,star_index); // Опасная операция, требует рефакторинг !!!!
         break;
       default:
@@ -201,7 +191,7 @@ public class StarsView extends View implements View.OnTouchListener {
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     int height = MeasureSpec.getSize(heightMeasureSpec); // вычисляем предоставленную нам высоту для отрисовки
-    int width  = (int)(mStarYellow.getWidth() * 1.3);    // вычисление своей ширины, вынести в константы !!!
+    int width  = (int)(mStarYellow.getWidth() * 1.3);         // вычисление своей ширины, вынести в константы !!!
 
     setMeasuredDimension(width,height);
   }
@@ -226,10 +216,6 @@ public class StarsView extends View implements View.OnTouchListener {
     mStars[7] = new Star(x,y,star_w,star_h,3);  y+=star_h;
     mStars[8] = new Star(x,y,star_w,star_h,2);  y+=star_h;
     mStars[9] = new Star(x,y,star_w,star_h,1);
-  }
-  //---------------------------------------------------------------------------
-  public void setOnRateListener(setOnRateListener listener) {
-    mRateListener = listener;
   }
   //---------------------------------------------------------------------------
 }

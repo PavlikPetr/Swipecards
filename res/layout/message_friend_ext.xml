@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dip"
+                android:id="@+id/layout">
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/user_info"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_toLeftOf="@id/left_icon"
+                  android:layout_marginLeft="10dip"
+                  android:layout_marginRight="6px"
+                  android:background="@drawable/bg_message_friend_ext"
+                  android:orientation="vertical">
+
+        <!-- name -->
+        <TextView
+                android:id="@+id/name_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dip"
+                android:textColor="#0b75c9"
+                android:visibility="gone"
+                android:text=""/>
+
+        <!-- message -->
+        <TextView
+        android:id="@+id/chat_message"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        />
+
+
+        <!-- date -->
+        <TextView
+                android:id="@+id/chat_date"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/chat_message"
+                android:layout_alignParentBottom="true"
+                />
+    </LinearLayout>
+
+    <!-- avatar -->
+    <!-- <com.sonetica.vokrug.ui.RoundedImageView  -->
+    <ImageView
+            android:id="@+id/left_icon"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="3dip"
+            android:src="@drawable/ic_launcher"
+            android:visibility="invisible"
+            android:scaleType="fitCenter"/>
+
+</RelativeLayout>    

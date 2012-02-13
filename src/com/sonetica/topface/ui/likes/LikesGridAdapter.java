@@ -14,16 +14,18 @@ import android.widget.BaseAdapter;
  *  Класс адаптера для отображения галереи в Like активити
  */
 public class LikesGridAdapter extends BaseAdapter {
+  //---------------------------------------------------------------------------
+  // class ViewHolder
+  //---------------------------------------------------------------------------
+  static class ViewHolder {
+    ThumbView mThumbView;
+  };
+  //---------------------------------------------------------------------------
   // Data
   Context mContext;
   private LayoutInflater mInflater;
   private GalleryManager mGalleryManager;
-  // class ViewHolder
-  static class ViewHolder {
-    ThumbView mThumbView;
-  };
   private int CITY = 2;  // ДАННЫЕ ИЗ ПРОФАЙЛА
-  private boolean collapse;
   //---------------------------------------------------------------------------
   public LikesGridAdapter(Context context,GalleryManager galleryManager) {
     mContext = context;
@@ -36,26 +38,19 @@ public class LikesGridAdapter extends BaseAdapter {
     return mGalleryManager.size();
   }
   //---------------------------------------------------------------------------
-  public void collapse(boolean value) {
-    collapse = value;
-  }
-  //---------------------------------------------------------------------------
   @Override
   public View getView(int position,View convertView,ViewGroup parent) {
     ViewHolder holder = null;
     if(convertView==null) {
-      holder = new ViewHolder();
       convertView = (ViewGroup)mInflater.inflate(R.layout.item_grid_gallery, null, false);
+      holder = new ViewHolder();
       holder.mThumbView = (ThumbView)convertView.findViewById(R.id.ivTG);
       holder.mThumbView.setMinimumWidth(mGalleryManager.mBitmapWidth);
       holder.mThumbView.setMinimumHeight(mGalleryManager.mBitmapHeight);
-      //holder.miv.setScaleType(ScaleType.CENTER);
       convertView.setTag(holder);
     } else 
       holder = (ViewHolder)convertView.getTag();
 
-    //holder.mTopButton.mPercent = mGalleryCachedManager.get(position).liked;
-    
     Like like = ((Like)mGalleryManager.get(position));
     
     holder.mThumbView.mAge    = like.age;
@@ -65,12 +60,6 @@ public class LikesGridAdapter extends BaseAdapter {
     
     mGalleryManager.getImage(position,holder.mThumbView);
     
-    /*
-    if(collapse && CITY!=like.city_id) {
-      convertView.setVisibility(View.INVISIBLE);
-    } else
-      convertView.setVisibility(View.VISIBLE);
-    */
     return convertView;
   }
   //---------------------------------------------------------------------------

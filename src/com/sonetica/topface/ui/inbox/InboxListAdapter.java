@@ -9,14 +9,14 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
 
 public class InboxListAdapter extends BaseAdapter {
+  //---------------------------------------------------------------------------
   // class ViewHolder
+  //---------------------------------------------------------------------------
   public static class ViewHolder {
     public ImageView mAvatar;
     public TextView  mName;
@@ -24,6 +24,7 @@ public class InboxListAdapter extends BaseAdapter {
     public TextView  mTime;
     public ImageView mArrow;
   }
+  //---------------------------------------------------------------------------
   // Data
   private LayoutInflater mInflater;
   private AvatarManager<Inbox> mAvatarManager;
@@ -37,7 +38,6 @@ public class InboxListAdapter extends BaseAdapter {
   public InboxListAdapter(Context context,AvatarManager<Inbox> avatarManager) {
     mAvatarManager = avatarManager;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
     //mInflater = LayoutInflater.from(context);
   }
   //---------------------------------------------------------------------------
@@ -83,7 +83,7 @@ public class InboxListAdapter extends BaseAdapter {
       holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);
       holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
       
-      switch (type) {
+      switch(type) {
         case 0:
           convertView.setBackgroundResource(R.drawable.item_gallery_all_selector);
           break;
@@ -98,6 +98,7 @@ public class InboxListAdapter extends BaseAdapter {
     
     Inbox inbox = getItem(position);
     
+    // avatar
     Bitmap bitmap = mAvatarManager.getImage(inbox.avatars_small);
     if(bitmap!=null) {
       holder.mAvatar.setImageBitmap(bitmap);
@@ -109,6 +110,7 @@ public class InboxListAdapter extends BaseAdapter {
     
     holder.mName.setText(inbox.first_name+", "+inbox.age);
     
+    // text
     switch(inbox.type) {
       case Inbox.DEFAULT:
         holder.mText.setText(inbox.text);
@@ -130,6 +132,7 @@ public class InboxListAdapter extends BaseAdapter {
         break;
     }
     
+    // time
     holder.mTime.setText(mDataFormater.format(TIME_TEMPLATE,inbox.created));
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
     

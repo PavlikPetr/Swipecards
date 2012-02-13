@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class InformerView extends ViewGroup {
+public class InformerView_ extends ViewGroup {
   //---------------------------------------------------------------------------
   // class Informer
   //---------------------------------------------------------------------------
@@ -70,7 +70,7 @@ public class InformerView extends ViewGroup {
   private static final Paint informerTitlePaint = new Paint();
   private static final Paint informerPaint = new Paint();
   //---------------------------------------------------------------------------
-  public InformerView(Context context) {
+  public InformerView_(Context context) {
     super(context);
     
     setBackgroundColor(Color.TRANSPARENT);
@@ -87,18 +87,28 @@ public class InformerView extends ViewGroup {
     
     // Chat btn
     mChatBtn = new Button(context);
-    mChatBtn.setId(R.id.chatBtn);
     mChatBtn.setBackgroundResource(R.drawable.dating_chat_selector);
+    mChatBtn.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ((DatingLayout_)getParent()).onChatBtnClick();
+      }
+    });
     addView(mChatBtn);
     
     // Profile btn
     mProfileBtn = new Button(context);
-    mProfileBtn.setId(R.id.profileBtn);
     mProfileBtn.setBackgroundResource(R.drawable.dating_profile_selector);
+    mProfileBtn.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ((DatingLayout_)getParent()).onProfileBtnClick();
+      }
+    });
     addView(mProfileBtn);
     
     // Informer popup
-    mInformer = new Informer(mBkgrnd.getWidth(),mBkgrnd.getHeight());
+    mInformer = new Informer(200,80);
   }
   //---------------------------------------------------------------------------
   @Override

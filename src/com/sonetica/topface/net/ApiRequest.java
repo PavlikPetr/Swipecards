@@ -21,7 +21,7 @@ public abstract class ApiRequest {
   public ApiRequest(Context context) {
     ssid = "";
     mContext = context;
-    mThreadsPool = Executors.newFixedThreadPool(3);
+    mThreadsPool = Executors.newSingleThreadExecutor();
   }
   //---------------------------------------------------------------------------
   public ApiRequest callback(ApiHandler handler) {

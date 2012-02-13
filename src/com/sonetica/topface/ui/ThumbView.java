@@ -20,6 +20,7 @@ public class ThumbView extends ImageView {
   public boolean mOnline;
   public int     mCity;
   // Constants
+  private static Bitmap mPeople;
   private static Bitmap mOnlineBmp;
   private static Bitmap mOfflineBmp;
   private static Bitmap mHeartBmp;
@@ -43,6 +44,7 @@ public class ThumbView extends ImageView {
   public ThumbView(Context context,AttributeSet attrs) {
     super(context,attrs);
     //setBackgroundColor(Color.MAGENTA);
+    mPeople     = BitmapFactory.decodeResource(getResources(),R.drawable.icon_people);
     mHeartBmp   = BitmapFactory.decodeResource(getResources(),R.drawable.tops_heart);
     mOnlineBmp  = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
     mOfflineBmp = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
@@ -51,11 +53,16 @@ public class ThumbView extends ImageView {
   @Override
   protected void onDraw(Canvas canvas) {
     //super.onDraw(canvas);
+    
     int width  = getMeasuredWidth();
     int height = getMeasuredHeight();
+    
+    // People
+    canvas.drawBitmap(mPeople,(width-mPeople.getWidth())/2,(height-mPeople.getHeight())/2,s_PaintState);
+    
     Bitmap bitmap = ((BitmapDrawable)getDrawable()).getBitmap();
     canvas.drawBitmap(bitmap,0,0,null);
-    Rect lineRect = new Rect(0,height-30,width,height);
+    Rect lineRect = new Rect(0,height-32,width,height);
     canvas.drawRect(lineRect,s_PaintLine);
     
     // city
@@ -64,7 +71,7 @@ public class ThumbView extends ImageView {
     if(mPercent!=0) {
       int x = lineRect.left+mHeartBmp.getWidth()/2;
       canvas.drawBitmap(mHeartBmp,x,lineRect.top+6,s_PaintState);
-      canvas.drawText(mPercent+" %",x*=2,lineRect.top+s_PaintText.getTextSize(),s_PaintText);
+      canvas.drawText(mPercent+" %",x*=4,lineRect.top+s_PaintText.getTextSize(),s_PaintText);
     } else {
       canvas.drawText(mName+", "+mAge,lineRect.left+mHeartBmp.getWidth(),lineRect.top+s_PaintText.getTextSize(),s_PaintText);
       if(mOnline)

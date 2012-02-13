@@ -7,12 +7,9 @@ import com.sonetica.topface.data.DoRate;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.DoRateRequest;
-import com.sonetica.topface.net.FilterRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
-import com.sonetica.topface.ui.FilterActivity;
 import com.sonetica.topface.ui.ProfileActivity;
-import com.sonetica.topface.ui.dating.DatingGallery.DatingEventListener;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
@@ -21,40 +18,61 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 /*
  *    "оценка фото"
  */
-public class DatingActivity extends Activity implements DatingEventListener {
+public class DatingActivity extends Activity {
   // Data
-  private DatingGallery mDatingGallery;
-  private DatingGalleryAdapter mDatingAdapter; 
-  private LinkedList<SearchUser> mSearchUserList;
-  public  static View mHeaderBar;
+  public static ViewGroup mHeaderBar;
+  private DatingGallery   mDatingGallery;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_dating);
     Debug.log(this,"+onCreate");
-    
-    // Data
-    //mSearchUserList = Data.s_SearchList;
-    mSearchUserList = new LinkedList<SearchUser>();
 
     // Header Bar
-    mHeaderBar = findViewById(R.id.loHeader);
+    mHeaderBar = (ViewGroup)findViewById(R.id.loHeader);
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
 
    // Dating Gallery
    mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
-   mDatingAdapter = new DatingGalleryAdapter(this,mSearchUserList);
-   mDatingGallery.setAdapter(mDatingAdapter);
-   mDatingGallery.setEventListener(this);
+   
+   // Stars Button
+   StarsView btnStars = (StarsView)findViewById(R.id.starsView);
+   btnStars.setOnRateListener(new StarsView.setOnRateListener() {
+     @Override
+     public void onRate(int rate) {
+       mDatingGallery.next();
+       rate(mDatingGallery.getUserId(),rate);
+     }
+   });
+
+   // Chat Button
+   Button btnChat = (Button)findViewById(R.id.chatBtn);
+   btnChat.setOnClickListener(new View.OnClickListener() {
+     @Override
+     public void onClick(View v) {
+       openChatActivity(mDatingGallery.getUserId());
+     }
+   });
+
+   // Profile Button
+   Button btnProfile = (Button)findViewById(R.id.profileBtn);
+   btnProfile.setOnClickListener(new View.OnClickListener() {
+     @Override
+     public void onClick(View v) {
+       openProfileActivity(mDatingGallery.getUserId());
+     }
+   });
    
    update();
   }
@@ -65,38 +83,17 @@ public class DatingActivity extends Activity implements DatingEventListener {
     request.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        mSearchUserList.addAll(SearchUser.parse(response));
-        mDatingGallery.notifyDataChanged();
+        LinkedList<SearchUser> userList = SearchUser.parse(response);
+        mDatingGallery.setDataList(userList);
       }
       @Override
       public void fail(int codeError) {
-        //Toast.makeText(DatingActivity.this,"dating update fail",Toast.LENGTH_SHORT).show();
-        mDatingGallery.notifyDataChanged();
+        Toast.makeText(DatingActivity.this,"dating update fail",Toast.LENGTH_SHORT).show();
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
-  public void filter() {
-    // вызывает окно фильтра и передает параметры 
-    FilterRequest request = new FilterRequest(this);
-    request.city     = 2;
-    request.sex      = 0;
-    request.agebegin = 16;
-    request.ageend   = 20;
-    request.callback(new ApiHandler() {
-      @Override
-      public void success(Response response) {
-        //Filter filter = Filter.parse(response);
-        Toast.makeText(DatingActivity.this,"filter success",Toast.LENGTH_SHORT).show();
-      }
-      @Override
-      public void fail(int codeError) {
-        Toast.makeText(DatingActivity.this,"filter fail",Toast.LENGTH_SHORT).show();
-      }
-    }).exec();
-  }
-  //---------------------------------------------------------------------------
-  public void rate(final int userid,final int rate) {
+  private void rate(final int userid,final int rate) {
     DoRateRequest doRate = new DoRateRequest(this);
     doRate.userid = userid;
     doRate.rate   = rate;
@@ -106,31 +103,24 @@ public class DatingActivity extends Activity implements DatingEventListener {
         DoRate rate = DoRate.parse(response);
         Data.s_Power = rate.power;
         Data.s_Money = rate.money;
-        mDatingGallery.notifyDataChanged0();
       }
       @Override
       public void fail(int codeError) {
         Toast.makeText(DatingActivity.this,"dating rate fail",Toast.LENGTH_SHORT).show();
-        mDatingGallery.notifyDataChanged0();
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
-  public void openProfileActivity(int userId) {
+  private void openProfileActivity(int userId) {
     Intent intent = new Intent(this,ProfileActivity.class);
     intent.putExtra(ProfileActivity.INTENT_USER_ID,userId);
     startActivityForResult(intent,0);    
   }
   //---------------------------------------------------------------------------
-  public void openChatActivity(int userId) {
+  private void openChatActivity(int userId) {
     Intent intent = new Intent(this,ChatActivity.class);
     intent.putExtra(ChatActivity.INTENT_USER_ID,userId);
     startActivityForResult(intent,0);
-  }
-  //---------------------------------------------------------------------------
-  public void onRate(int userid,int index) {
-    rate(userid,index);
-    //mDatingGallery.notifyDataChanged();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -152,7 +142,6 @@ public class DatingActivity extends Activity implements DatingEventListener {
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
     switch (item.getItemId()) {
       case MENU_FILTER:
-        //filter();
         startActivity(new Intent(this,FilterActivity.class));
       break;
     }

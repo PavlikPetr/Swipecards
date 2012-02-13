@@ -4,12 +4,10 @@ import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.History;
-import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.module.pull2refresh.PullToRefreshListView;
 import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.HistoryRequest;
-import com.sonetica.topface.net.InboxRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
@@ -71,11 +69,9 @@ public class ChatActivity extends Activity {
     // params
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
     
-    if(mHistoryList.size()==0) {
-      create();
+    if(mHistoryList.size()==0)
       update(0,false);
-    } else
-      create();
+
     
     // обнуление информера непрочитанных сообщений
     Data.s_Messages = 0;
@@ -113,7 +109,7 @@ public class ChatActivity extends Activity {
           else
             mHistoryList.addAll(list);
         }
-        
+        create();
         mAdapter.notifyDataSetChanged();
         mListView.onRefreshComplete();
         //if(mProgressDialog.isShowing())

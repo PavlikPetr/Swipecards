@@ -84,20 +84,6 @@ public class LikesActivity extends Activity {
    mGallery = (PullToRefreshGridView)findViewById(R.id.grdLikesGallary);
    mGallery.setAnimationCacheEnabled(false);
    mGallery.setNumColumns(getResources().getInteger(R.integer.grid_column_number));
-   //mGallery.setScrollingCacheEnabled(false);
-   mGallery.setOnScrollListener(new OnScrollListener() {
-     @Override
-     public void onScrollStateChanged(AbsListView view,int scrollState) {
-       if(scrollState==SCROLL_STATE_IDLE) {
-         mGalleryManager.mRunning=true;
-         mGallery.invalidateViews();
-       } else
-         mGalleryManager.mRunning=false;
-     }
-     @Override
-     public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
-     }
-   });
    mGallery.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -131,6 +117,7 @@ public class LikesActivity extends Activity {
     mGalleryManager   = new GalleryManager(LikesActivity.this,mLikesAllList);
     mLikesGridAdapter = new LikesGridAdapter(LikesActivity.this,mGalleryManager);
     mGallery.getRefreshableView().setAdapter(mLikesGridAdapter);
+    mGallery.setOnScrollListener(mGalleryManager);
   }
   //---------------------------------------------------------------------------
   private void release() {
@@ -160,11 +147,9 @@ public class LikesActivity extends Activity {
         
         if(mCurrentCity==ALL_CITIES) {
           mGalleryManager.setDataList(mLikesAllList);
-          mLikesGridAdapter.collapse(false);
         } else {
           //mGalleryManager.setDataList(mLikesAllList);
           mGalleryManager.setDataList(mLikesCityList);
-          mLikesGridAdapter.collapse(true);
         }
 
         mProgressDialog.cancel();
