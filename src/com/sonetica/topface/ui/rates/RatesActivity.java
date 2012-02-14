@@ -34,8 +34,8 @@ public class RatesActivity extends Activity {
   private ListView mListView;
   private RatesListAdapter mAdapter;
   private LinkedList<Rate> mRatesList;
-  private AvatarManager mAvatarManager;
-  private ProgressDialog  mProgressDialog;
+  private AvatarManager    mAvatarManager;
+  private ProgressDialog   mProgressDialog;
   private boolean mIsNewMessages;
   //---------------------------------------------------------------------------
   @Override
@@ -116,6 +116,10 @@ public class RatesActivity extends Activity {
     if(mListView!=null)       mListView=null;
     if(mAdapter!=null)        mAdapter=null;
     if(mRatesList!=null)      mRatesList=null;
+    if(mAvatarManager!=null) {
+      mAvatarManager.release();
+      mAvatarManager=null;
+    }
     if(mProgressDialog!=null) mProgressDialog=null;
   }
   //---------------------------------------------------------------------------
@@ -124,7 +128,7 @@ public class RatesActivity extends Activity {
 
     RatesRequest likesRequest = new RatesRequest(this);
     likesRequest.offset = 0;
-    likesRequest.limit  = 40;
+    likesRequest.limit  = 100;
     likesRequest.callback(new ApiHandler(){
       @Override
       public void success(Response response) {

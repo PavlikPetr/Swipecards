@@ -47,7 +47,7 @@ public class StorageCache {
     Bitmap bitmap = null;
     BufferedInputStream bis = null;
     try {
-      File file = new File(mCacheDir,fileName);
+      File file = new File(mCacheDir,Utils.md5(fileName));
       if(!file.exists())
         return null;
       bis = new BufferedInputStream(new FileInputStream(file));
@@ -73,7 +73,7 @@ public class StorageCache {
       public void run() {
         BufferedOutputStream bos = null;
         try {
-          File file = new File(mCacheDir,fileName);
+          File file = new File(mCacheDir,Utils.md5(fileName));
           if(file.exists()) 
             return;
           bos = new BufferedOutputStream(new FileOutputStream(file));

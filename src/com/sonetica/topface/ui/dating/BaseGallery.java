@@ -167,12 +167,14 @@ public abstract class BaseGallery extends ViewGroup {
     invalidate();
   }
   //-------------------------------------------------------------------------
+  /*
   private void setToScreen(int whichScreen) {
     mCurrentScreen = whichScreen;
     int newX = whichScreen * getWidth();
     mScroller.startScroll(newX, 0, 0, 0, 10);
     invalidate();
   }
+  */
   //-------------------------------------------------------------------------
   abstract public void currentScreen(int whichScreen);
   //-------------------------------------------------------------------------

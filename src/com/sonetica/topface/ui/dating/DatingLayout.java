@@ -121,5 +121,16 @@ public class DatingLayout extends ViewGroup implements View.OnClickListener {
   public void setFaceVisibility(int visibility) {
     mFaceView.setVisibility(visibility);
   }
-  //---------------------------------------------------------------------------  
+  //---------------------------------------------------------------------------
+  public void release() {
+    mFaceView.release();
+    mFaceView = null;
+    mRateControl.release();
+    mRateControl = null;
+    mResView.release();
+    mResView = null;
+    
+    mProgress = null;
+  }
+  //---------------------------------------------------------------------------
 }

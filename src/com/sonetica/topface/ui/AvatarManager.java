@@ -7,13 +7,8 @@ import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
-import com.sonetica.topface.utils.CacheManager;
-import com.sonetica.topface.utils.MemoryCacheEx;
-import com.sonetica.topface.utils.StorageCache;
-import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.AbsListView.OnScrollListener;
@@ -24,7 +19,7 @@ import android.widget.AbsListView.OnScrollListener;
 public class AvatarManager<T extends AbstractData> implements AbsListView.OnScrollListener {
   // Data
   private LinkedList<T> mDataList;
-  private CacheManager mCacheManager;
+  private HashMap<Integer,Bitmap> mCache;
   private ExecutorService mThreadsPool;
   private boolean mBusy; 
   //Constants
@@ -32,19 +27,8 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
   //---------------------------------------------------------------------------
   public AvatarManager(Context context,LinkedList<T> dataList) {
     mDataList = dataList;
-    mCacheManager = new CacheManager(context);
+    mCache = new HashMap<Integer,Bitmap>();
     mThreadsPool = Executors.newFixedThreadPool(THREAD_DEFAULT);
-  }
-  //---------------------------------------------------------------------------
-  public void getImage(final int position,final ImageView imageView) {
-    Bitmap bitmap = mCacheManager.get(position,mDataList.get(position).getSmallLink());
-    
-    if(bitmap!=null)
-      imageView.setImageBitmap(bitmap);
-    else {
-      setImageToQueue(position,imageView);
-      imageView.setImageResource(R.drawable.icon_people);
-    }
   }
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<T> dataList) {
@@ -112,25 +96,42 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
     }
   }
   //---------------------------------------------------------------------------
-  public void setImageToQueue(final int position,final ImageView imageView) {
-    if(!mBusy)
-      mThreadsPool.execute(new Runnable() {
-        @Override
-        public void run() {
-          if(mBusy) return;
-            final Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink());
-            if(rawBitmap!=null) {
-              imageView.post(new Runnable() {
-                @Override
-                public void run() {
-                  imageView.setImageBitmap(rawBitmap);
-                  mCacheManager.put(position,mDataList.get(position).getSmallLink(),rawBitmap);
-                }
-              });
+  public void getImage(final int position,final ImageView imageView) {
+    Bitmap bitmap = mCache.get(position);
+    if(bitmap!=null)
+      imageView.setImageBitmap(bitmap);
+    else {
+      imageView.setImageResource(R.drawable.icon_people);
+      if(!mBusy)
+        loadingImages(position,imageView);
+    }
+  }
+  //---------------------------------------------------------------------------
+  public void loadingImages(final int position,final ImageView imageView) {
+    mThreadsPool.execute(new Runnable() {
+      @Override
+      public void run() {
+        if(mBusy) 
+          return;
+        final Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink());
+        if(rawBitmap!=null) {
+          imageView.post(new Runnable() {
+            @Override
+            public void run() {
+              imageView.setImageBitmap(rawBitmap);
             }
-            imageView.setTag(null);
-          } 
-      });
+          });
+        }
+        mCache.put(position,rawBitmap);
+      } 
+    });
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    mCache.clear();
+    mCache = null;
+    mThreadsPool.shutdown();
+    mThreadsPool = null;
   }
   //---------------------------------------------------------------------------
 }

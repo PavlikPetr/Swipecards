@@ -2,7 +2,6 @@ package com.sonetica.topface.ui.tops;
 
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.TopUser;
-import com.sonetica.topface.ui.GalleryManagerEx;
 import com.sonetica.topface.ui.ThumbView;
 import com.sonetica.topface.ui.GalleryManager;
 import android.content.Context;
@@ -15,13 +14,16 @@ import android.widget.BaseAdapter;
  * Класс адаптера для отображения галереи в Топ активити
  */
 public class TopsGridAdapter extends BaseAdapter {
-  // Data
-  private LayoutInflater mInflater;
-  private GalleryManager mGalleryManager;
+  //---------------------------------------------------------------------------
   // class ViewHolder
+  //---------------------------------------------------------------------------
   static class ViewHolder {
     ThumbView mThumbView;
   };
+  //---------------------------------------------------------------------------
+  // Data
+  private LayoutInflater mInflater;
+  private GalleryManager mGalleryManager;
   //---------------------------------------------------------------------------
   public TopsGridAdapter(Context context,GalleryManager galleryManager) {
     mInflater = LayoutInflater.from(context);
@@ -46,8 +48,8 @@ public class TopsGridAdapter extends BaseAdapter {
     } else 
       holder = (ViewHolder)convertView.getTag();
 
-    holder.mThumbView.mPercent = ((TopUser)mGalleryManager.get(position)).liked; 
-
+    holder.mThumbView.mPercent = ((TopUser)mGalleryManager.get(position)).liked;
+    
     mGalleryManager.getImage(position,holder.mThumbView);
     
     return convertView;

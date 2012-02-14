@@ -118,6 +118,10 @@ public class InboxActivity extends Activity {
   private void release() {
     if(mListView!=null)       mListView = null;
     if(mAdapter!=null)        mAdapter = null;
+    if(mAvatarManager!=null) {
+      mAvatarManager.release();
+      mAvatarManager = null;
+    }
     if(mInboxList!=null)      mInboxList = null;
     if(mProgressDialog!=null) mProgressDialog = null;
   }
@@ -128,7 +132,7 @@ public class InboxActivity extends Activity {
     
     InboxRequest inboxRequest = new InboxRequest(InboxActivity.this);
     inboxRequest.offset = offset;
-    inboxRequest.limit  = 40;
+    inboxRequest.limit  = 100;
     inboxRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {

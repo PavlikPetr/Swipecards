@@ -16,10 +16,10 @@ public class ResourcesView extends View {
   public int money;
   public int power;
   // Constants
-  private static Bitmap mPowerBmp;
-  private static Bitmap mMoneyBmp;
-  private static final Paint paintResources = new Paint();
-  private static final Paint paint = new Paint();
+  private Bitmap mPowerBmp;
+  private Bitmap mMoneyBmp;
+  private Paint paintResources = new Paint();
+  private Paint paint = new Paint();
   //---------------------------------------------------------------------------
   public ResourcesView(Context context) {
     super(context);
@@ -42,9 +42,6 @@ public class ResourcesView extends View {
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    int height = MeasureSpec.getSize(heightMeasureSpec);
-    int width  = MeasureSpec.getSize(widthMeasureSpec);
-    
     float offset_x = getResources().getDimension(R.dimen.resources_offset_x_size);
     offset_x *= 2.3;
     offset_x += mMoneyBmp.getWidth() * 2;
@@ -72,6 +69,13 @@ public class ResourcesView extends View {
     offset_x *= 2.3;
     canvas.drawText(""+money,offset_x,offset_y+(int)(mMoneyBmp.getHeight()/1.4),paintResources);
     canvas.drawBitmap(mMoneyBmp,offset_x+6,offset_y,paint);
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    mPowerBmp.recycle();
+    mMoneyBmp.recycle();
+    paintResources = null;
+    paint = null;    
   }
   //---------------------------------------------------------------------------
 }

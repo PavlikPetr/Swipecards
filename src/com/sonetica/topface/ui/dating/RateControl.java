@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 public class RateControl extends ViewGroup {
   // Data
   private InformerView mInformerView;
-  private StarsView    mStarsView;
+  private StarsView mStarsView;
   //---------------------------------------------------------------------------
   public RateControl(Context context) {
     super(context);
@@ -36,6 +36,11 @@ public class RateControl extends ViewGroup {
   public void setBlock(boolean block) {
     mInformerView.setBlock(block);
     mStarsView.setBlock(block);
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    mStarsView.release();
+    mInformerView.release();
   }
   //---------------------------------------------------------------------------
 }

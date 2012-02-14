@@ -6,6 +6,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.DoRate;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
+import com.sonetica.topface.net.ApiRequest;
 import com.sonetica.topface.net.DoRateRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
@@ -23,12 +24,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/*
- *    "оценка фото"
- */
+/* "оценка фото" */
 public class DatingActivity extends Activity {
   // Data
-  private DatingGallery   mDatingGallery;
+  private DatingGallery mDatingGallery;
   public static ViewGroup mHeaderBar;
   public static PointView mPaintView;
   //---------------------------------------------------------------------------
@@ -40,45 +39,45 @@ public class DatingActivity extends Activity {
 
     // Header Bar
     mHeaderBar = (ViewGroup)findViewById(R.id.loHeader);
-    
+
     // Points
     mPaintView = (PointView)findViewById(R.id.pointsView);
-    
+
     // Title Header
-   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
+    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
 
-   // Dating Gallery
-   mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
-   
-   // Stars Button
-   StarsView btnStars = (StarsView)findViewById(R.id.starsView);
-   btnStars.setOnRateListener(new StarsView.setOnRateListener() {
-     @Override
-     public void onRate(int rate) {
-       mDatingGallery.next();
-       rate(mDatingGallery.getUserId(),rate);
-     }
-   });
+    // Dating Gallery
+    mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
 
-   // Chat Button
-   Button btnChat = (Button)findViewById(R.id.chatBtn);
-   btnChat.setOnClickListener(new View.OnClickListener() {
-     @Override
-     public void onClick(View v) {
-       openChatActivity(mDatingGallery.getUserId());
-     }
-   });
+    // Stars Button
+    StarsView btnStars = (StarsView)findViewById(R.id.starsView);
+    btnStars.setOnRateListener(new StarsView.setOnRateListener() {
+      @Override
+      public void onRate(int rate) {
+        mDatingGallery.next();
+        rate(mDatingGallery.getUserId(),rate);
+      }
+    });
 
-   // Profile Button
-   Button btnProfile = (Button)findViewById(R.id.profileBtn);
-   btnProfile.setOnClickListener(new View.OnClickListener() {
-     @Override
-     public void onClick(View v) {
-       openProfileActivity(mDatingGallery.getUserId());
-     }
-   });
-   
-   update();
+    // Chat Button
+    Button btnChat = (Button)findViewById(R.id.chatBtn);
+    btnChat.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        openChatActivity(mDatingGallery.getUserId());
+      }
+    });
+
+    // Profile Button
+    Button btnProfile = (Button)findViewById(R.id.profileBtn);
+    btnProfile.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        openProfileActivity(mDatingGallery.getUserId());
+      }
+    });
+
+    update();
   }
   //---------------------------------------------------------------------------
   public void update() {
@@ -100,7 +99,7 @@ public class DatingActivity extends Activity {
   private void rate(final int userid,final int rate) {
     DoRateRequest doRate = new DoRateRequest(this);
     doRate.userid = userid;
-    doRate.rate   = rate;
+    doRate.rate = rate;
     doRate.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
@@ -118,7 +117,7 @@ public class DatingActivity extends Activity {
   private void openProfileActivity(int userId) {
     Intent intent = new Intent(this,ProfileActivity.class);
     intent.putExtra(ProfileActivity.INTENT_USER_ID,userId);
-    startActivityForResult(intent,0);    
+    startActivityForResult(intent,0);
   }
   //---------------------------------------------------------------------------
   private void openChatActivity(int userId) {
@@ -129,6 +128,13 @@ public class DatingActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
+    ApiRequest.shutdown();
+
+    mDatingGallery.release(); 
+    mDatingGallery = null;
+    mHeaderBar = null;
+    mPaintView = null;
+
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
@@ -137,14 +143,14 @@ public class DatingActivity extends Activity {
   //---------------------------------------------------------------------------
   private static final int MENU_FILTER = 0;
   @Override
-  public boolean onCreatePanelMenu(int featureId, Menu menu) {
+  public boolean onCreatePanelMenu(int featureId,Menu menu) {
     menu.add(0,MENU_FILTER,0,getString(R.string.dating_menu_one));
-    return super.onCreatePanelMenu(featureId, menu);
+    return super.onCreatePanelMenu(featureId,menu);
   }
   //---------------------------------------------------------------------------
   @Override
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
-    switch (item.getItemId()) {
+    switch(item.getItemId()) {
       case MENU_FILTER:
         startActivity(new Intent(this,FilterActivity.class));
       break;

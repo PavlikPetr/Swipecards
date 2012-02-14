@@ -22,7 +22,7 @@ public class StarsView extends View implements View.OnTouchListener {
   //---------------------------------------------------------------------------
   // calss Star
   //---------------------------------------------------------------------------
-  static class Star {
+  class Star {
     public  int _index;    // оценка
     private int _x;
     private int _y;
@@ -31,7 +31,6 @@ public class StarsView extends View implements View.OnTouchListener {
     private int _height;
     public Rect _rect;      // 
     public boolean pressed; // состояние
-    public static int average=6;     // средняя выставляемвя оценка 
     // Ctor
     public Star(int x,int y,int width,int height,int index) {
       _x = x;
@@ -67,30 +66,30 @@ public class StarsView extends View implements View.OnTouchListener {
   }
   //---------------------------------------------------------------------------
   // Data
-  private static Bitmap mStarYellow;
-  private static Bitmap mStarYellowActive;
-  private static Bitmap mStarBlue;
-  private static Bitmap mStarBlueActive;
-  private static Bitmap mStarGrey;
-  private static Bitmap mStarGreyActive;
-  private float[] mLastYs;              // массив последних нажатий
+  public int average=7;            // средняя выставляемвя оценка
+  private float[] mLastYs;           // массив последних нажатий
   private Star[]  mStars;              // статичный массив объектов для отрисовки звезд;
-  private InformerView mInformerView;  // обсервер текущего нажатия на экран
-  //private TextView mPopupView;
-  private float   mFontSize;
-  private setOnRateListener mRateListener;
+  private InformerView mInformerView;    // обсервер текущего нажатия на экран
+  private setOnRateListener mRateListener; // listener на клик по звезде
+  // Bitmaps
+  private Bitmap mStarYellow;
+  private Bitmap mStarYellowActive;
+  private Bitmap mStarBlue;
+  private Bitmap mStarBlueActive;
+  private Bitmap mStarGrey;
+  private Bitmap mStarGreyActive;
+  // Paints
+  private Paint paintStar   = new Paint();
+  private Paint paintNumber = new Paint();
   // Constants
   private static final int EVENT_COUNT = 3;   // число последних запоминаемых координат пальца
   private static final int STARS_COUNT = 10;  // кол-во звезд на фрейме
-  private static final Paint paintStar   = new Paint();
-  private static final Paint paintNumber = new Paint();
   //---------------------------------------------------------------------------
   public StarsView(Context context,InformerView informer) {
     super(context);
     mStars = new Star[STARS_COUNT];
     mLastYs = new float[EVENT_COUNT];
     mInformerView = informer;
-    //mPopupView = popup;
     
     setId(R.id.starsView);
     setOnTouchListener(this);
@@ -102,8 +101,6 @@ public class StarsView extends View implements View.OnTouchListener {
     paintNumber.setAntiAlias(true);
     paintNumber.setTextAlign(Paint.Align.CENTER);
     
-    mFontSize = paintNumber.getTextSize();
-    
     mStarYellow = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow);
     mStarYellowActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow_pressed);
     mStarBlue = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_blue);
@@ -111,36 +108,35 @@ public class StarsView extends View implements View.OnTouchListener {
     mStarGrey = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_grey);
     mStarGreyActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_grey_pressed);
   }
-  // index
+  //---------------------------------------------------------------------------
+  // index 
   int prev_star_index = 0;
   int curr_star_index = 0;
-  //---------------------------------------------------------------------------
   @Override
   public boolean onTouch(View v,MotionEvent event) {
     // текущие координаты пальца
     int x = (int)event.getX();
     int y = (int)event.getY();
 
+    // находится ли палец в пределах контрола звезд
+    boolean isStar = false;
     // определяем на какой звезде находится палец
-    boolean isStar = false; // находится ли палец на звезде
     int star_index = 1;
     for(int i=0;i<mStars.length;i++)
       if(mStars[i]._rect.contains(x,y)) {
         star_index = mStars[i]._index;
         curr_star_index = i;
-        isStar = true;
+        isStar = true; 
       }
     
+    // определение нажатой звезды
     if(curr_star_index!=prev_star_index) {
-      mStars[prev_star_index].pressed=false;
+      mStars[prev_star_index].pressed = false;
       prev_star_index = curr_star_index;
     }
     
-    //mPopupView.setText(""+star_index);
-    
     switch(event.getAction()) {
       case MotionEvent.ACTION_DOWN:
-        //mPopupView.setVisibility(View.VISIBLE);
         mStars[curr_star_index].pressed=true;
         mInformerView.setVisible(true);
         for(int i = 0; i < EVENT_COUNT; i++)
@@ -154,19 +150,17 @@ public class StarsView extends View implements View.OnTouchListener {
         mLastYs[EVENT_COUNT-1] = y;
         break;
       case MotionEvent.ACTION_UP:
-        //mPopupView.setVisibility(View.INVISIBLE);
         mStars[curr_star_index].pressed=false;
         mInformerView.setVisible(false);
         for(int i = 0; i < EVENT_COUNT; i++)
           mLastYs[i] = -100;
         
+        // клик по звезде
         if(isStar)
           mRateListener.onRate(star_index);
-          //((DatingLayout_)getParent()).onRate(star_index);
-        //((DatingActivity)getContext()).doRate(0,star_index); // Опасная операция, требует рефакторинг !!!!
+
         break;
       default:
-        //mPopupView.setVisibility(View.INVISIBLE);
         mStars[curr_star_index].pressed=false;
         mInformerView.setVisible(false);
         for(int i = 0; i < EVENT_COUNT; i++)
@@ -181,7 +175,7 @@ public class StarsView extends View implements View.OnTouchListener {
     
     if(!isStar) {
       mInformerView.setVisible(false);
-      mStars[curr_star_index].pressed=false;
+      mStars[curr_star_index].pressed = false;
     }
     
     mInformerView.setData(averageY,star_index);
@@ -234,6 +228,21 @@ public class StarsView extends View implements View.OnTouchListener {
   //---------------------------------------------------------------------------
   public void setBlock(boolean block) {
     this.setEnabled(block);
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    mStars = null;
+    mRateListener = null;
+    
+    mStarYellow.recycle();
+    mStarYellowActive.recycle();
+    mStarBlue.recycle();
+    mStarBlueActive.recycle();
+    mStarGrey.recycle();
+    mStarGreyActive.recycle();
+    
+    paintStar = null;
+    paintNumber = null;
   }
   //---------------------------------------------------------------------------
 }

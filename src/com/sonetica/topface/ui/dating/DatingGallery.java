@@ -58,7 +58,6 @@ public class DatingGallery extends BaseGallery {
       @Override
       public void run() {
         Bitmap bitmap0 = Http.bitmapLoader(mUser.avatars_big[0]);
-        
         if(bitmap0==null)
           DatingGallery.this.post(new Runnable() {
             @Override
@@ -105,7 +104,7 @@ public class DatingGallery extends BaseGallery {
           }
         });
       }
-    }).start();
+    },"rate - update").start();
   }
   //---------------------------------------------------------------------------
   public int getUserId() {
@@ -113,7 +112,10 @@ public class DatingGallery extends BaseGallery {
   }
   //---------------------------------------------------------------------------
   public SearchUser getUser() {
-    SearchUser user = mSearchUserList.get(++curr_id);
+    if(++curr_id>=mSearchUserList.size())
+      ((DatingActivity)getContext()).update();
+    
+    SearchUser user = mSearchUserList.get(curr_id);
     
     if(curr_id == mSearchUserList.size()-5)
       ((DatingActivity)getContext()).update();
@@ -122,7 +124,8 @@ public class DatingGallery extends BaseGallery {
   }
   //---------------------------------------------------------------------------
   private Bitmap cutting(Bitmap bitmap) {
-    final Bitmap clippedBitmap;
+    Bitmap clippedBitmap = null;
+    Bitmap scaledBitmap  = null;
     try {
       int width  = getWidth();
       int height = getHeight();
@@ -137,7 +140,7 @@ public class DatingGallery extends BaseGallery {
       Matrix matrix = new Matrix();
       matrix.postScale(ratio,ratio);
   
-      Bitmap scaledBitmap = Bitmap.createBitmap(bitmap,0,0,w,h,matrix,true);
+      scaledBitmap = Bitmap.createBitmap(bitmap,0,0,w,h,matrix,true);
   
       if(LEG) {
         int offset_x = (scaledBitmap.getWidth()-width)/2;
@@ -145,14 +148,27 @@ public class DatingGallery extends BaseGallery {
       } else
         clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,width,height,null,false);
     } catch (Exception e) {
+      if(scaledBitmap != null)  scaledBitmap.recycle();
+      if(clippedBitmap != null) clippedBitmap.recycle();
+      
       return bitmap;
     }
+    if(bitmap != null) bitmap.recycle();
+    if(scaledBitmap != null)  scaledBitmap.recycle();
+    
     return clippedBitmap;
   }
   //---------------------------------------------------------------------------
   @Override
   public void currentScreen(int whichScreen) {
     DatingActivity.mPaintView.mCurrentPoint = whichScreen;
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    mDatingLayout.release();
+    mDatingLayout = null;
+    mFirstView  = null;
+    mSecondView = null;
   }
   //---------------------------------------------------------------------------
 }

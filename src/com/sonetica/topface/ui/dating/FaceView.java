@@ -21,22 +21,22 @@ public class FaceView extends ImageView {
   private int mOffset_y;
   private boolean mHide;
   // Bitmaps
-  private static Bitmap mOnlineBmp;
-  private static Bitmap mOfflineBmp;
-  private static Bitmap mShadowTopBmp;
-  private static Bitmap mShadowBottomBmp;
+  private Bitmap mOnlineBmp;
+  private Bitmap mOfflineBmp;
+  private Bitmap mShadowTopBmp;
+  private Bitmap mShadowBottomBmp;
   // Constants
-  private static final Paint paint      = new Paint();
-  private static final Paint paintName   = new Paint();
-  private static final Paint paintCity    = new Paint();
-  private static final Paint paintStatus   = new Paint();
+  private Paint paint     = new Paint();
+  private Paint paintName  = new Paint();
+  private Paint paintCity   = new Paint();
+  private Paint paintStatus  = new Paint();
   //---------------------------------------------------------------------------
   public FaceView(Context context) {
     super(context);
     
-    mOnlineBmp       = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
-    mOfflineBmp      = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
-    mShadowTopBmp    = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_top);
+    mOnlineBmp  = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
+    mOfflineBmp   = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
+    mShadowTopBmp  = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_top);
     mShadowBottomBmp = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_bottom);
     
     // paint
@@ -134,6 +134,17 @@ public class FaceView extends ImageView {
   //---------------------------------------------------------------------------
   public void hideInfo() {
     mHide = !mHide;    
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    mOnlineBmp.recycle();
+    mOfflineBmp.recycle();
+    mShadowTopBmp.recycle();
+    mShadowBottomBmp.recycle();
+    paint     = null;
+    paintName  = null;
+    paintCity   = null;
+    paintStatus  = null;
   }
   //---------------------------------------------------------------------------
 }

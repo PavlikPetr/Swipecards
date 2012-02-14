@@ -30,7 +30,6 @@ import java.util.LinkedList;
 public class TopsActivity extends Activity {
   // Data
   private GridView mGallery;
-  //private TopsGridAdapterEx mGridAdapter;
   private TopsGridAdapter mGridAdapter;
   private GalleryManager  mGalleryManager;
   private LinkedList<TopUser> mTopsList;
@@ -128,7 +127,7 @@ public class TopsActivity extends Activity {
     mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mGalleryManager.stop();
+        //mGalleryManager.stop();
         Intent intent = new Intent(TopsActivity.this,AlbumActivity.class);
         intent.putExtra(AlbumActivity.INTENT_USER_ID,mTopsList.get(position).uid);
         startActivityForResult(intent,0);

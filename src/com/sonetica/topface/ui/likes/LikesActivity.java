@@ -121,6 +121,10 @@ public class LikesActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void release() {
+    if(mGalleryManager!=null) { 
+      mGalleryManager.release();
+      mGalleryManager=null;
+    }
     if(mGallery!=null)          mGallery=null;
     if(mLikesGridAdapter!=null) mLikesGridAdapter=null;
     if(mLikesAllList!=null)     mLikesAllList=null;

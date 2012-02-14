@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -16,7 +15,7 @@ public class InformerView extends ViewGroup {
   //---------------------------------------------------------------------------
   // class Informer
   //---------------------------------------------------------------------------
-  class Informer {
+  class Informer {            // информер нажатой звезды
     public float  _x;         // х
     public float  _y;         // у
     public int    _widht;     // ширина
@@ -25,7 +24,7 @@ public class InformerView extends ViewGroup {
     public int    _index;     // цифра рейтинга
     public int    _bottom;    // нижняя граница предка 
     public String _text;      // текст подсказка
-    public boolean _visible;      // рисовать или нет
+    public boolean _visible;  // рисовать или нет
     // Ctor
     public Informer(int widht,int height) {
       _widht  = widht;
@@ -60,15 +59,16 @@ public class InformerView extends ViewGroup {
   }
   //---------------------------------------------------------------------------
   // Data
-  private Button   mProfileBtn;
-  private Button   mChatBtn;
-  private Informer mInformer;
+  private Button   mProfileBtn; // кнопка на профиль
+  private Button   mChatBtn;    // кнопка в чат
+  private Informer mInformer;   // информер текущей звезды
+  // Bitmaps
   private Bitmap   mBkgrnd;     // Битмап для бекграунда
   private Bitmap   mStar;       // звезда
   private Bitmap   mMoney;      // монетка
   // Constants
-  private static final Paint informerTitlePaint = new Paint();
-  private static final Paint informerPaint = new Paint();
+  private Paint informerTitlePaint = new Paint();
+  private Paint informerPaint = new Paint();
   //---------------------------------------------------------------------------
   public InformerView(Context context) {
     super(context);
@@ -146,6 +146,19 @@ public class InformerView extends ViewGroup {
   public void setBlock(boolean block) {
     mChatBtn.setEnabled(block);
     mProfileBtn.setEnabled(block);
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    mProfileBtn = null;
+    mChatBtn = null;
+    mInformer = null;
+    
+    mBkgrnd.recycle();
+    mStar.recycle();
+    mMoney.recycle();
+    
+    informerTitlePaint = null;
+    informerPaint = null;
   }
   //---------------------------------------------------------------------------
 }

@@ -4,17 +4,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import com.sonetica.topface.App;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
-import com.sonetica.topface.data.Like;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Device;
 import com.sonetica.topface.utils.MemoryCache;
-import com.sonetica.topface.utils.MemoryCacheEx;
 import com.sonetica.topface.utils.StorageCache;
-import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -25,36 +23,40 @@ import android.widget.ImageView;
 /*
  *  Менеджер изображений, загрузает и кеширует изображения
  */
-public class GalleryManager implements OnScrollListener {
+public class GalleryManager<T extends AbstractData> implements OnScrollListener {
+  //---------------------------------------------------------------------------
+  class Queue {
+    private HashMap<Integer,Bitmap> mQueue = new HashMap<Integer,Bitmap>(20);
+    public Bitmap get(int key) {return mQueue.get(key);}
+    public void put(int key,Bitmap value) {mQueue.put(key,value);}
+  }
+  //---------------------------------------------------------------------------
   // Data
   private ExecutorService mThreadsPool;
-  private LinkedList<? extends AbstractData> mDataList;
-  //private HashMap<ImageView,Integer> mLinkCache;
-  private MemoryCacheEx mMemoryCache0;
-  private StorageCache  mStorageCache0;
-  private CacheManager mCacheManager;
+  private LinkedList<T> mDataList;
+  // кеш
+  private MemoryCache  mMemoryCache;
+  private StorageCache mStorageCache;
+  // размеры фотографии в гриде
   public  int mBitmapWidth;
   public  int mBitmapHeight;
+  // скролинг
   public  boolean mBusy;
-  //Constants
+  // Constants
   private static final int THREAD_DEFAULT = 4;
   //---------------------------------------------------------------------------
-  public GalleryManager(Context context,LinkedList<? extends AbstractData> dataList) {
+  public GalleryManager(Context context,LinkedList<T> dataList) {
     mDataList     = dataList;
-    //mLinkCache    = new HashMap<ImageView,Integer>();
     mThreadsPool  = Executors.newFixedThreadPool(THREAD_DEFAULT);
+    mMemoryCache  = new MemoryCache();
+    mStorageCache = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
     
     int columnNumber = context.getResources().getInteger(R.integer.grid_column_number);
     mBitmapWidth  = Device.getDisplay(context).getWidth()/(columnNumber);
     mBitmapHeight = (int)(mBitmapWidth*1.25);
-    
-    mCacheManager = new CacheManager(context);
-    
-    //mMemoryCache  = new MemoryCacheEx();
-    //mStorageCache = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
   }
   //---------------------------------------------------------------------------
-  public void setDataList(LinkedList<? extends AbstractData> dataList) {
+  public void setDataList(LinkedList<T> dataList) {
     mDataList = dataList;
   }
   //---------------------------------------------------------------------------
@@ -63,51 +65,32 @@ public class GalleryManager implements OnScrollListener {
   }
   //---------------------------------------------------------------------------
   public void getImage(final int position,final ImageView imageView) {
-    Bitmap bitmap = mCacheManager.get(position,mDataList.get(position).getSmallLink());
+    Bitmap bitmap = mMemoryCache.get(position); 
     
     if(bitmap!=null)
       imageView.setImageBitmap(bitmap);
     else {
-      setImageToQueue(position,imageView);
       imageView.setImageResource(R.drawable.im_black_square);
+      if(!mBusy) {
+        bitmap = mStorageCache.load(mDataList.get(position).getSmallLink());
+        if(bitmap!=null) {
+          imageView.setImageBitmap(bitmap);
+          mMemoryCache.put(position,bitmap);
+        } else
+          loadingImages(position,imageView);
+      }
     }
-    /*
-    mLinkCache.put(imageView,position);
-    //final Bitmap bitmap = mMemoryCache.get(mDataList.get(position).getBigLink());
-    final Bitmap bitmap = mCacheManager.get(position,mDataList.get(position).getBigLink());
-    
-    if(bitmap!=null) {
-      imageView.setImageBitmap(bitmap);
-      return;
-    }
-   // Bitmap _bitmap = mStorage.load(Utils.md5(mDataList.get(position).getBigLink()));
-    Bitmap _bitmap = bitmap;
-    if(_bitmap!=null){
-      imageView.setImageBitmap(_bitmap);
-      mMemoryCache.put(mDataList.get(position).getBigLink(),_bitmap);
-    } else {
-      setImageToQueue(position,imageView);
-      imageView.setImageResource(R.drawable.im_black_square);
-    }
-    */
   }
   //---------------------------------------------------------------------------
-  private void setImageToQueue(final int position,final ImageView imageView) {
-//    if(isViewReused(position,imageView))
-//      return;
-  if(!mBusy)
+  private void loadingImages(final int position,final ImageView imageView) {
     mThreadsPool.execute(new Runnable() {
       @Override
       public void run() {
-//        if(isViewReused(position,imageView))
-//          return;
-        
-        if(mBusy)
-          return;
-        
+        if(mBusy) return;
+
         // Исходное загруженное изображение
         Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
-        if(rawBitmap==null/* || isViewReused(position,imageView)*/) 
+        if(rawBitmap==null) 
           return;
 
         // Исходный размер загруженного изображения
@@ -119,70 +102,49 @@ public class GalleryManager implements OnScrollListener {
 
         if(width >= height) 
           LEG = true;
-
-      try {        
         
-        // коффициент сжатия фотографии
-        float ratio = Math.max(((float)mBitmapWidth)/width,((float) mBitmapHeight)/height);
-        
-        // на получение оригинального размера по ширине или высоте
-        if(ratio==0) ratio=1;
-        
-        // матрица сжатия
-        Matrix matrix = new Matrix();
-        matrix.postScale(ratio,ratio);
-        
-        // сжатие изображения
-        Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap,0,0,width,height,matrix,true);
-        
-        // вырезаем необходимый размер
-        final Bitmap clippedBitmap;
-        if(LEG) {
-          // у горизонтальной, вырезаем по центру
-          int offset_x = (scaledBitmap.getWidth()-mBitmapWidth)/2;
-          clippedBitmap = Bitmap.createBitmap(scaledBitmap,offset_x,0,mBitmapWidth,mBitmapHeight,null,false);
-        } else
-          // у вертикальной режим с верху
-          clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,mBitmapWidth,mBitmapHeight,null,false);
-
-        // заливаем в кеш
-        //mMemoryCache.put(mDataList.get(position).getBigLink(),clippedBitmap);
-        //mStorage.save(Utils.md5(mDataList.get(position).getBigLink()),clippedBitmap);
-        mCacheManager.put(position,mDataList.get(position).getBigLink(),clippedBitmap);
-        
-        imageView.post(new Runnable() {
-          @Override
-          public void run() {
-            //if(isViewReused(position,imageView))
-              //return;
-            if(mBusy) 
-              return;
-            if(clippedBitmap!=null)
-              //imageView.setImageBitmap(mMemoryCache.get(mDataList.get(position).getBigLink()));
+        if(mBusy) return;
+        try {        
+          
+          // коффициент сжатия фотографии
+          float ratio = Math.max(((float)mBitmapWidth)/width,((float) mBitmapHeight)/height);
+          
+          // на получение оригинального размера по ширине или высоте
+          if(ratio==0) ratio=1;
+          
+          // матрица сжатия
+          Matrix matrix = new Matrix();
+          matrix.postScale(ratio,ratio);
+          
+          // сжатие изображения
+          Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap,0,0,width,height,matrix,true);
+          
+          // вырезаем необходимый размер
+          final Bitmap clippedBitmap;
+          if(LEG) {
+            // у горизонтальной, вырезаем по центру
+            int offset_x = (scaledBitmap.getWidth()-mBitmapWidth)/2;
+            clippedBitmap = Bitmap.createBitmap(scaledBitmap,offset_x,0,mBitmapWidth,mBitmapHeight,null,false);
+          } else
+            // у вертикальной режим с верху
+            clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,mBitmapWidth,mBitmapHeight,null,false);
+  
+          // заливаем в кеш
+          mMemoryCache.put(position,clippedBitmap);
+          mStorageCache.save(mDataList.get(position).getSmallLink(),clippedBitmap);
+          
+          // ui draw
+          imageView.post(new Runnable() {
+            @Override
+            public void run() {
               imageView.setImageBitmap(clippedBitmap);
-            else
-              imageView.setImageResource(R.drawable.im_black_square);
-          }
-        });
-        
-        
-      } catch (Exception e) {
-        Debug.log("!!!","Error w:"+rawBitmap.getWidth()+",h:"+rawBitmap.getHeight());
-      }
-        
-      }
-    });
-  }
-  //-------------------------------------------------------------------------
-  boolean isViewReused(int position,ImageView imageView){
-    //int index = mLinkCache.get(imageView);
-    //if(index!=position)
-      //return true;
-    return false;
-  }
-  //---------------------------------------------------------------------------
-  public void stop() {
-    //mThreadsPool.shutdown();
+            }
+          });
+        } catch (Exception e) {
+          Debug.log(App.TAG,"Error clipping:"+e);
+        }
+      } // run
+    }); // thread
   }
   //---------------------------------------------------------------------------
   public int size() {
@@ -190,8 +152,9 @@ public class GalleryManager implements OnScrollListener {
   }
   //---------------------------------------------------------------------------
   public void release() {
-    //mThreadsPool.shutdown();
-    //mCacheManager.clear();
+    mThreadsPool.shutdown();
+    mMemoryCache  = null;
+    mStorageCache = null;
   }
   //---------------------------------------------------------------------------
   @Override

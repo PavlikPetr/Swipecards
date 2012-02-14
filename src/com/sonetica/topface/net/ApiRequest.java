@@ -16,7 +16,7 @@ public abstract class ApiRequest {
   public  String  ssid;
   private Context mContext;
   private ApiHandler mHandler;
-  private ExecutorService mThreadsPool;
+  private static ExecutorService mThreadsPool;
   //---------------------------------------------------------------------------
   public ApiRequest(Context context) {
     ssid = "";
@@ -30,6 +30,21 @@ public abstract class ApiRequest {
   }
   //---------------------------------------------------------------------------
   public void exec() {
+  
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        ssid = Data.SSID;
+        
+        Response response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
+        if(response.code == 3)
+          reAuth();
+        else
+          mHandler.sendMessage(Message.obtain(null,0,response));
+      }
+    },"api-request").start();
+    
+/*
     if(mHandler != null)
       mThreadsPool.execute(new Runnable() {
         @Override
@@ -49,6 +64,7 @@ public abstract class ApiRequest {
       });
     else
       Debug.log(this,"Handler not found");
+      */
   }
   //---------------------------------------------------------------------------
   // перерегистрация на сервере TP
@@ -65,18 +81,18 @@ public abstract class ApiRequest {
     authRequest.clientversion = Global.CLIENT_VERSION;
     authRequest.clientdevice  = Global.CLIENT_DEVICE;
     authRequest.clientid      = Global.CLIENT_ID;
-    
+
     Response response = new Response(Http.httpSendTpRequest(Global.API_URL,authRequest.toString()));
     if(response.code == 0) {
       Auth auth = Auth.parse(response);
       Data.saveSSID(mContext,auth.ssid);
+      ssid = Data.SSID;
       response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
       mHandler.sendMessage(Message.obtain(null,0,response));
-      
     } else
        mHandler.sendMessage(Message.obtain(null,0,response));
-    
-    /*
+
+/*
     authRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
@@ -89,11 +105,15 @@ public abstract class ApiRequest {
         Debug.log(this,"Getting SSID is wrong");
       }
     }).exec();
-    */
+*/
   }
   //---------------------------------------------------------------------------
   @Override
   public abstract String toString();
+  //---------------------------------------------------------------------------
+  public static void shutdown() {
+    mThreadsPool.shutdown();
+  }
   //---------------------------------------------------------------------------
 }
 
