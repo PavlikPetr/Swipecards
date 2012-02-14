@@ -8,6 +8,7 @@ import com.sonetica.topface.module.pull2refresh.PullToRefreshListView;
 import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.HistoryRequest;
+import com.sonetica.topface.net.MessageRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
@@ -16,7 +17,10 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
  *            "Диалоги"
@@ -27,10 +31,9 @@ public class ChatActivity extends Activity {
   private ChatListAdapter mAdapter;
   private LinkedList<History> mHistoryList;
   private ProgressDialog mProgressDialog;
+  private EditText mEdBox;
   private int mUserId;
-  private int mState;
   private int mOffset;
-  private boolean mIsEndList;
   // Constants
   private static final int LIMIT = 20;
   public  static final String INTENT_USER_ID = "user_id";
@@ -52,7 +55,7 @@ public class ChatActivity extends Activity {
     mListView.setOnRefreshListener(new OnRefreshListener() {
      @Override
      public void onRefresh() {
-       //update(0,true);
+       update(mOffset,false);
        mListView.onRefreshComplete();
      }});
     mListView.setOnTouchListener(new OnTouchListener() {
@@ -69,6 +72,39 @@ public class ChatActivity extends Activity {
     // params
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
     
+    mEdBox = (EditText)findViewById(R.id.edChatBox);
+    
+    Button btnSend = (Button)findViewById(R.id.btnChatSend);
+    btnSend.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        MessageRequest message = new MessageRequest(ChatActivity.this);
+        message.message = mEdBox.getText().toString(); 
+        message.userid  = mUserId;
+        message.callback(new ApiHandler() {
+          @Override
+          public void success(Response response) {
+            Toast.makeText(ChatActivity.this,"msg sent",Toast.LENGTH_SHORT).show();
+            History history = new History();
+            history.code=0;
+            history.created=0;
+            history.gift=0;
+            history.owner_id=32574380;
+            history.text=mEdBox.getText().toString();
+            history.type=History.MESSAGE;
+            mAdapter.addSentMessage(history);
+            mAdapter.notifyDataSetChanged();
+            mEdBox.getText().clear();
+          }
+          @Override
+          public void fail(int codeError) {
+            Toast.makeText(ChatActivity.this,"msg faild",Toast.LENGTH_SHORT).show();
+          }
+        }).exec();
+      }
+    });
+    
+    create();
     if(mHistoryList.size()==0)
       update(0,false);
 
@@ -84,9 +120,9 @@ public class ChatActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void release() {
-    if(mListView!=null)       mListView = null;
-    if(mAdapter!=null)        mAdapter = null;
-    if(mHistoryList!=null)    mHistoryList = null;
+    if(mListView!=null)    mListView = null;
+    if(mAdapter!=null)      mAdapter = null;
+    if(mHistoryList!=null)   mHistoryList = null;
     if(mProgressDialog!=null) mProgressDialog = null;
   }
   //---------------------------------------------------------------------------
@@ -94,26 +130,24 @@ public class ChatActivity extends Activity {
     if(!isRefresh)
       mProgressDialog.show();
     
-    HistoryRequest inboxRequest = new HistoryRequest(ChatActivity.this);
-    inboxRequest.userid = mUserId; 
-    inboxRequest.offset = offset;
-    inboxRequest.limit  = 20;
-    inboxRequest.callback(new ApiHandler() {
+    final HistoryRequest historyRequest = new HistoryRequest(ChatActivity.this);
+    historyRequest.userid = mUserId; 
+    historyRequest.offset = offset;
+    historyRequest.limit  = LIMIT;
+    historyRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        LinkedList<History> list = History.parse(response);
-        if(list!=null) {
-          if(isRefresh)
-            for(int i=list.size()-1;i>=0;--i)
-              mHistoryList.addFirst(list.get(i));
-          else
-            mHistoryList.addAll(list);
-        }
-        create();
+        LinkedList<History> dataList = History.parse(response);
+        
+        if(dataList!=null)
+          mAdapter.setDataList(dataList);
+
         mAdapter.notifyDataSetChanged();
         mListView.onRefreshComplete();
         if(mProgressDialog.isShowing())
           mProgressDialog.cancel();
+        
+        mOffset += LIMIT;
           
       }
       @Override

@@ -3,16 +3,18 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dip"
-                      android:background="@drawable/bg_transporent_selector"
+                android:background="@drawable/bg_transporent_selector"
                 android:id="@+id/layout" >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@+id/user_info"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
+                  android:layout_toLeftOf="@id/left_icon"
                   android:layout_marginLeft="10dip"
+                  android:layout_marginRight="6px"
                   android:background="@drawable/bg_message_friend"
-                  android:orientation="vertical" >
+                  android:orientation="vertical">
 
         <!-- name -->
         <TextView
@@ -22,14 +24,16 @@
                 android:textSize="16dip"
                 android:textColor="#0b75c9"
                 android:visibility="gone"
-                android:text="" />
+                android:text=""/>
 
         <!-- message -->
         <TextView
-                android:id="@+id/chat_message"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true" />
+        android:id="@+id/chat_message"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        />
+
 
         <!-- date -->
         <TextView
@@ -37,18 +41,19 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/chat_message"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true"
+                />
     </LinearLayout>
 
     <!-- avatar -->
-    <ImageView
+    <com.sonetica.topface.ui.RoundedImageViewEx
             android:id="@+id/left_icon"
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="3dip"
-            android:src="@drawable/ic_launcher"
-            android:scaleType="fitCenter" />
+            android:src="@drawable/icon_people"
+            android:scaleType="fitCenter"/>
 
 </RelativeLayout>    

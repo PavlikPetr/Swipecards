@@ -55,7 +55,8 @@ public class History extends AbstractData {
             default:
               break;
           }
-          historyList.add(history);
+          //historyList.add(history);
+          historyList.addFirst(history);
         }
     } catch(JSONException e) {
       Debug.log("History.class","Wrong response parsing: " + e);

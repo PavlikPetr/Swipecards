@@ -3,6 +3,7 @@ package com.sonetica.topface.ui.rates;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Rate;
 import com.sonetica.topface.ui.AvatarManager;
+import com.sonetica.topface.ui.RoundedImageView;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.format.DateFormat;
@@ -19,7 +20,7 @@ public class RatesListAdapter extends BaseAdapter {
   // class ViewHolder
   //---------------------------------------------------------------------------
   public static class ViewHolder {
-    public ImageView mAvatar;
+    public RoundedImageView mAvatar;
     public TextView  mName;
     public StarView  mStar;
     public TextView  mTime;
@@ -78,7 +79,7 @@ public class RatesListAdapter extends BaseAdapter {
       
       convertView = mInflater.inflate(R.layout.rates_item_gallery, null, false);
       
-      holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
+      holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.ivAvatar);
       holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
       holder.mStar   = (StarView)convertView.findViewById(R.id.ivStar);
       holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);

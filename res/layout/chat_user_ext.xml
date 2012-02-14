@@ -4,8 +4,7 @@
                 android:layout_height="wrap_content"
                 android:padding="4dip"
                 android:background="@drawable/bg_transporent_selector"
-                android:id="@+id/layout">
-
+                android:id="@+id/layout" >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@+id/user_info"
@@ -47,7 +46,6 @@
     </LinearLayout>
 
     <!-- avatar -->
-    <!-- <com.sonetica.vokrug.ui.RoundedImageView  -->
     <ImageView
             android:id="@+id/left_icon"
             android:layout_width="40dip"

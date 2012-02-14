@@ -3,6 +3,7 @@ package com.sonetica.topface.ui.inbox;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.ui.AvatarManager;
+import com.sonetica.topface.ui.RoundedImageView;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.format.DateFormat;
@@ -18,7 +19,7 @@ public class InboxListAdapter extends BaseAdapter {
   // class ViewHolder
   //---------------------------------------------------------------------------
   public static class ViewHolder {
-    public ImageView mAvatar;
+    public RoundedImageView mAvatar;
     public TextView  mName;
     public TextView  mText;
     public TextView  mTime;
@@ -77,7 +78,7 @@ public class InboxListAdapter extends BaseAdapter {
       
       convertView = mInflater.inflate(R.layout.inbox_item_gallery, null, false);
 
-      holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
+      holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.ivAvatar);
       holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
       holder.mText   = (TextView)convertView.findViewById(R.id.tvText);
       holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);

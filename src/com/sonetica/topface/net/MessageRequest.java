@@ -8,7 +8,7 @@ import android.content.Context;
 public class MessageRequest extends ApiRequest {
   // Data
   private String service = "message";
-  public int userid;      // идентификатор пользователя для оценки
+  public int userid;      // идентификатор пользователя, кому послали сообщение
   public String message;  // текст сообщения в UTF-8. min размер текста - 1 символ, max - 1024 
   //---------------------------------------------------------------------------
   public MessageRequest(Context context) {
