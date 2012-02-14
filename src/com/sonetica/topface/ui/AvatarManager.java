@@ -121,8 +121,8 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
               imageView.setImageBitmap(rawBitmap);
             }
           });
+          mCache.put(position,rawBitmap);
         }
-        mCache.put(position,rawBitmap);
       } 
     });
   }
