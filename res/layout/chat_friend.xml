@@ -3,7 +3,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dip"
-                      android:background="@drawable/bg_transporent_selector"
+                android:background="@android:color/transparent"
                 android:id="@+id/layout" >
 
     <!-- avatar -->
@@ -26,30 +26,19 @@
                   android:background="@drawable/bg_message_user"
                   android:orientation="vertical" >
 
-        <!-- name -->
-        <TextView
-                android:id="@+id/name_entry"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16dip"
-                android:textColor="#0b75c9"
-                android:visibility="gone"
-                android:text="" />
-
         <!-- message -->
         <TextView
                 android:id="@+id/chat_message"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true" />
+                android:textColor="#4D4D4D" />
 
         <!-- date -->
         <TextView
                 android:id="@+id/chat_date"
+                android:textColor="#999999"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/chat_message"
-                android:layout_alignParentBottom="true" />
+                android:layout_height="wrap_content" />
     </LinearLayout>
 
 

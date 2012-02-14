@@ -5,13 +5,11 @@ import com.sonetica.topface.data.Rate;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.RoundedImageView;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +28,6 @@ public class RatesListAdapter extends BaseAdapter {
   // Data
   private LayoutInflater mInflater;
   private AvatarManager<Rate> mAvatarManager;
-  private DateFormat mDataFormater = new DateFormat();
   // Constants
   private static final int T_ALL   = 0;
   private static final int T_CITY  = 2; // PITER
@@ -113,7 +110,7 @@ public class RatesListAdapter extends BaseAdapter {
     
     holder.mName.setText(inbox.first_name+", "+inbox.age);
     holder.mStar.mRate = inbox.rate;
-    holder.mTime.setText(mDataFormater.format(TIME_TEMPLATE,inbox.created));
+    holder.mTime.setText(DateFormat.format(TIME_TEMPLATE,inbox.created));
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
     
     /*

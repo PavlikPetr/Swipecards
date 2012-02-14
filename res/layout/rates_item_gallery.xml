@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/ivArrow"
         android:layout_marginTop="12dp"
-        android:paddingTop="2dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/dating_star_yellow" />
     
   </RelativeLayout>

@@ -61,6 +61,21 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       return;
     }
     
+    // Get Profile
+    ProfileRequest profileRequest = new ProfileRequest(DashboardActivity.this,false);
+    profileRequest.callback(new ApiHandler() {
+      @Override
+      public void success(final Response response) {
+        Data.s_Profile = Profile.parse(response,false);
+        Data.updateNotification(Data.s_Profile);
+        Toast.makeText(DashboardActivity.this,"profile",Toast.LENGTH_SHORT).show();
+      }
+      @Override
+      public void fail(int codeError) {
+      }
+    }).exec();
+    
+    
     mNotifyHandler = new NotifyHandler();
     //mNotifyHandler.sendEmptyMessage(0);
   }

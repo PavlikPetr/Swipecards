@@ -11,11 +11,11 @@ public class Inbox extends AbstractData {
   // Data
   public int uid;              // идентификатор фотографии в альбоме пользвоателя
   public int age;              // возраст пользователя
-  public int created;          // время отправления оценки
   public int type;             // тип сообщения
   public int city_id;          // идентификатор города отправителя сообщения
   public int gift;             // идентификатор подарка
   public int code;             // код входящего уведомления
+  public long created;         // время отправления оценки
   public boolean online;       // флаг нахождения пользователя в онлайне
   public boolean unread;       // флаг прочитанного сообщения
   public String first_name;    // имя пользователя
@@ -42,7 +42,7 @@ public class Inbox extends AbstractData {
           msg.first_name = item.getString("first_name");
           msg.online     = item.getBoolean("online");
           msg.unread     = item.getBoolean("unread");
-          msg.created    = item.getInt("created");
+          msg.created    = item.getLong("created");
           msg.city_id    = item.getInt("city_id");
           msg.uid        = item.getInt("uid");
           msg.age        = item.getInt("age");

@@ -12,8 +12,8 @@ public class Rate extends AbstractData {
   public int uid;               // идентификатор фотографии в альбоме пользвоателя
   public int age;               // возраст пользователя
   public int rate;              // оценка пользователя
-  public int created;           // время отправления оценки
   public int city_id;           // идентификатор города отправителя оценки
+  public long created;          // время отправления оценки
   public boolean online;        // флаг нахождения пользователя в онлайне
   public boolean unread;        // флаг прочитанной оценки
   public String first_name;     // имя пользователя
@@ -31,7 +31,7 @@ public class Rate extends AbstractData {
           rate.first_name = item.getString("first_name");
           rate.online     = item.getBoolean("online");
           rate.unread     = item.getBoolean("unread");
-          rate.created    = item.getInt("created");
+          rate.created    = item.getLong("created");
           rate.uid        = item.getInt("uid");
           rate.age        = item.getInt("age");
           rate.rate       = item.getInt("rate");

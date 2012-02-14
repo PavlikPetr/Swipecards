@@ -12,12 +12,15 @@
     
     <EditText 
         android:id="@+id/edChatBox"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="4dp"
         android:layout_weight="1"
         android:textSize="16sp"
+        android:singleLine="true"
+        android:inputType="text"
+        android:textColor="#3D3D3D"
         android:background="@drawable/bg_editbox" />
     
     <Button  
@@ -25,8 +28,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/send_btn_selector"
-        android:text="send"
+        android:background="@drawable/chat_send_selector"
+        android:textColor="#3D3D3D"
+        android:text="Послать"
         />
        
   </LinearLayout>

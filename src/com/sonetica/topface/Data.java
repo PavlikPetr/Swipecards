@@ -22,7 +22,8 @@ public class Data {
   private static LinkedList<TopUser>    s_TopsList;
   private static LinkedList<Rate>       s_RatesList;
   private static LinkedList<City>       s_CitiesList;
-  private static Profile                s_Profile;
+  
+  public static Profile s_Profile;
   // Data Profile
   public static int s_Rates;
   public static int s_Messages;

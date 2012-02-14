@@ -9,11 +9,11 @@ import com.sonetica.topface.utils.Debug;
 
 public class History extends AbstractData {
   // Data
-  public int created;  // время создания сообщения
   public int owner_id; // идентификатор пользователя, отправившего сообщение
   public int type;     // тип сообщения
   public int gift;     // идентификатор подарка. Если сообщение является подарком
   public int code;     // код входящего уведомления. Если сообщение является уведомлением
+  public long created; // время создания сообщения
   public String text;  // текст сообщения. Если входящее сообщение является текстовым
   // Constants
   public static final int DEFAULT = 0;           // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
@@ -31,7 +31,7 @@ public class History extends AbstractData {
         for(int i=0;i<array.length();i++) {
           JSONObject item = array.getJSONObject(i);
           History history  = new History();
-          history.created  = item.getInt("created");
+          history.created  = item.getLong("created");
           history.owner_id = item.getInt("owner_id");
           history.type     = item.getInt("type");
           

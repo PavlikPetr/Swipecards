@@ -87,8 +87,8 @@ public class ChatActivity extends Activity {
             Toast.makeText(ChatActivity.this,"msg sent",Toast.LENGTH_SHORT).show();
             History history = new History();
             history.code=0;
-            history.created=0;
             history.gift=0;
+            history.created=System.currentTimeMillis();
             history.owner_id=32574380;
             history.text=mEdBox.getText().toString();
             history.type=History.MESSAGE;

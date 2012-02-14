@@ -1,10 +1,12 @@
 package com.sonetica.topface.ui.inbox;
 
-import java.util.HashMap;
 import java.util.LinkedList;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.History;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,20 +19,19 @@ public class ChatListAdapter extends BaseAdapter {
   // ViewHolder
   //---------------------------------------------------------------------------
   public static class ViewHolder {
-      TextView  mName;
       ImageView mAvatar;
-      ImageView mStatus;
       TextView  mMessage;
-      ImageView mImage;
       TextView  mDate;
   }
   //---------------------------------------------------------------------------
   // Data
-  //private Context mContext;
+  private Bitmap baby;
+  private Bitmap me;
   private LinkedList<History> mList;
   /* содержит тип итема для отрисовки необходимого слоя */
-  private LinkedList<Integer> mItemLayoutList = new LinkedList<Integer>();
   private LayoutInflater mInflater;
+  private LinkedList<Integer> mItemLayoutList = new LinkedList<Integer>();
+  private static final String TIME_TEMPLATE = "dd MMM, hh:mm";
   // Type Item
   private static final int T_USER_PHOTO   = 0;
   private static final int T_USER_EXT     = 1;
@@ -39,7 +40,6 @@ public class ChatListAdapter extends BaseAdapter {
   private static final int T_COUNT = 4;
   //---------------------------------------------------------------------------
   public ChatListAdapter(Context context,LinkedList<History> list) {
-    //mContext=context;
     mList=list;
     mInflater = LayoutInflater.from(context);
     prepare(list);
@@ -79,32 +79,28 @@ public class ChatListAdapter extends BaseAdapter {
       holder = new ViewHolder();
       switch(type) {
         case T_FRIEND_PHOTO:
-            convertView = mInflater.inflate(R.layout.chat_friend, null, false);
-            holder.mName = (TextView) convertView.findViewById(R.id.name_entry);
-            holder.mAvatar = (ImageView) convertView.findViewById(R.id.left_icon);
+            convertView     = mInflater.inflate(R.layout.chat_friend, null, false);
+            holder.mAvatar  = (ImageView) convertView.findViewById(R.id.left_icon);
             holder.mMessage = (TextView) convertView.findViewById(R.id.chat_message);
-            holder.mDate = (TextView) convertView.findViewById(R.id.chat_date);
+            holder.mDate    = (TextView) convertView.findViewById(R.id.chat_date);
             break;
         case T_FRIEND_EXT:
-            convertView = mInflater.inflate(R.layout.chat_friend_ext, null, false);
-            holder.mName = (TextView) convertView.findViewById(R.id.name_entry);
-            holder.mAvatar = (ImageView) convertView.findViewById(R.id.left_icon);
+            convertView     = mInflater.inflate(R.layout.chat_friend_ext, null, false);
+            holder.mAvatar  = (ImageView) convertView.findViewById(R.id.left_icon);
             holder.mMessage = (TextView) convertView.findViewById(R.id.chat_message);
-            holder.mDate = (TextView) convertView.findViewById(R.id.chat_date);
+            holder.mDate    = (TextView) convertView.findViewById(R.id.chat_date);
             break;
         case T_USER_PHOTO:
-            convertView = mInflater.inflate(R.layout.chat_user, null, false);
-            holder.mName = (TextView) convertView.findViewById(R.id.name_entry);
-            holder.mAvatar = (ImageView) convertView.findViewById(R.id.left_icon);
+            convertView     = mInflater.inflate(R.layout.chat_user, null, false);
+            holder.mAvatar  = (ImageView) convertView.findViewById(R.id.left_icon);
             holder.mMessage = (TextView) convertView.findViewById(R.id.chat_message);
-            holder.mDate = (TextView) convertView.findViewById(R.id.chat_date);
+            holder.mDate    = (TextView) convertView.findViewById(R.id.chat_date);
             break;
         case T_USER_EXT:
-            convertView = mInflater.inflate(R.layout.chat_user_ext, null, false);
-            holder.mName = (TextView) convertView.findViewById(R.id.name_entry);
-            holder.mAvatar = (ImageView) convertView.findViewById(R.id.left_icon);
-            holder.mMessage = (TextView) convertView.findViewById(R.id.chat_message);
-            holder.mDate = (TextView) convertView.findViewById(R.id.chat_date);
+            convertView     = mInflater.inflate(R.layout.chat_user_ext, null, false);
+            holder.mAvatar  = (ImageView)convertView.findViewById(R.id.left_icon);
+            holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
+            holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
             break;
       }
       
@@ -115,33 +111,31 @@ public class ChatListAdapter extends BaseAdapter {
     
     History msg = getItem(position);
     
-    //holder.mName.setText(msg.);
-    //holder.mAvatar = (ImageView) convertView.findViewById(R.id.left_icon);
-    holder.mMessage.setText(msg.text);
-    holder.mDate.setText(""+msg.created);
-    
-    /*
+    //holder.mAvatar.setImageBitmap(Data.s_Profile.photo_url);
+
     switch(msg.type) {
-      case Inbox.DEFAULT:
-        text = msg.text;
+      case History.DEFAULT:
+        holder.mMessage.setText(msg.text);
         break;
-      case Inbox.PHOTO:
-        text = " PHOTO ";
+      case History.PHOTO:
+        holder.mMessage.setText("PHOTO");
         break;
-      case Inbox.GIFT:
-        text = " GIFT ";
+      case History.GIFT:
+        holder.mMessage.setText("GIFT");
         break;
-      case Inbox.MESSAGE:
-        text = msg.text;
+      case History.MESSAGE:
+        holder.mMessage.setText(msg.text);
         break;
-      case Inbox.MESSAGE_WISH:
-        text = " WISH ";
+      case History.MESSAGE_WISH:
+        holder.mMessage.setText("WISH");
         break;
-      case Inbox.MESSAGE_SEXUALITY:
-        text = " SEXUALITY ";
+      case History.MESSAGE_SEXUALITY:
+        holder.mMessage.setText("SEXUALITY");
         break;
     }
-    */    
+    
+    holder.mDate.setText(DateFormat.format(TIME_TEMPLATE,msg.created));
+
     return convertView;
   }
   //---------------------------------------------------------------------------

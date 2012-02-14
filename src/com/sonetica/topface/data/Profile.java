@@ -10,14 +10,14 @@ import com.sonetica.topface.utils.Debug;
  */
 public class Profile extends AbstractData {
   // Data
-  public int    age;             // возраст пользователя
-  public int    sex;             // секс пользователя
-  public int    unread_rates;    // количество непрочитанных оценок пользователя
-  public int    unread_likes;    // количество непрочитанных “понравилось” пользователя
-  public int    unread_messages; // количество непрочитанных сообщений пользователя
-  public int    money;           // количество монет у пользователя
-  public int    power;           // количество энергии пользователя
-  public int    average_rate;    // средняя оценка текущего пользователя
+  public int age;             // возраст пользователя
+  public int sex;             // секс пользователя
+  public int unread_rates;    // количество непрочитанных оценок пользователя
+  public int unread_likes;    // количество непрочитанных “понравилось” пользователя
+  public int unread_messages; // количество непрочитанных сообщений пользователя
+  public int money;           // количество монет у пользователя
+  public int power;           // количество энергии пользователя
+  public int average_rate;    // средняя оценка текущего пользователя
   public String first_name;      // имя пользователя
   public String photo_url;       // URL аватарки пользователя
   public String city_name;       // название города пользвоателя
@@ -27,18 +27,14 @@ public class Profile extends AbstractData {
     Profile profile = new Profile();
     try {
       JSONObject resp = response.mJSONResult;
-      if(isNotification) {
-        profile.unread_rates    = resp.getInt("unread_rates");
-        profile.unread_likes    = resp.getInt("unread_likes");
-        profile.unread_messages = resp.getInt("unread_messages");
-        return profile;
-      }
-      profile.first_name      = resp.getString("first_name");
-      profile.age             = resp.getInt("age");
-      profile.sex             = resp.getInt("sex");
       profile.unread_rates    = resp.getInt("unread_rates");
       profile.unread_likes    = resp.getInt("unread_likes");
       profile.unread_messages = resp.getInt("unread_messages");
+      if(isNotification)  
+        return profile;
+      profile.first_name      = resp.getString("first_name");
+      profile.age             = resp.getInt("age");
+      profile.sex             = resp.getInt("sex");
       profile.photo_url       = resp.getString("photo_url");
       profile.city_name       = resp.getString("city");
       profile.city_id         = resp.getString("city_id");
