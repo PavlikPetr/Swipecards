@@ -32,8 +32,8 @@ public class DatingGallery extends BaseGallery {
   public void setDataList(LinkedList<SearchUser> userList) {
     //mSearchUserList = userList;
     mSearchUserList.addAll(userList);
-    if(curr_id == -1)
-      next();
+    //if(curr_id == -1)
+      //next();
   }
   //---------------------------------------------------------------------------
   public void next() {
@@ -112,8 +112,10 @@ public class DatingGallery extends BaseGallery {
   }
   //---------------------------------------------------------------------------
   public SearchUser getUser() {
-    if(++curr_id>=mSearchUserList.size())
+    if(++curr_id>=mSearchUserList.size()) {
       ((DatingActivity)getContext()).update();
+      return null;
+    }
     
     SearchUser user = mSearchUserList.get(curr_id);
     

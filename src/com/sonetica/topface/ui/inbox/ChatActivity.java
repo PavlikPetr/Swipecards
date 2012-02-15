@@ -13,10 +13,13 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -72,24 +75,30 @@ public class ChatActivity extends Activity {
     // params
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
     
+    // Edit Box
     mEdBox = (EditText)findViewById(R.id.edChatBox);
     
+    // Send Button
     Button btnSend = (Button)findViewById(R.id.btnChatSend);
     btnSend.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        // закрытие клавиатуры
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        InputMethodManager imm = (InputMethodManager)ChatActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEdBox.getWindowToken(),0);
+        // формирование сообщения
         MessageRequest message = new MessageRequest(ChatActivity.this);
         message.message = mEdBox.getText().toString(); 
         message.userid  = mUserId;
         message.callback(new ApiHandler() {
           @Override
           public void success(Response response) {
-            Toast.makeText(ChatActivity.this,"msg sent",Toast.LENGTH_SHORT).show();
             History history = new History();
             history.code=0;
             history.gift=0;
+            history.owner_id=0;
             history.created=System.currentTimeMillis();
-            history.owner_id=32574380;
             history.text=mEdBox.getText().toString();
             history.type=History.MESSAGE;
             mAdapter.addSentMessage(history);
@@ -98,7 +107,7 @@ public class ChatActivity extends Activity {
           }
           @Override
           public void fail(int codeError) {
-            Toast.makeText(ChatActivity.this,"msg faild",Toast.LENGTH_SHORT).show();
+            Toast.makeText(ChatActivity.this,"msg sending failed",Toast.LENGTH_SHORT).show();
           }
         }).exec();
       }
@@ -115,7 +124,7 @@ public class ChatActivity extends Activity {
   //---------------------------------------------------------------------------
   private void create() {
     // ListAdapter
-    mAdapter = new ChatListAdapter(ChatActivity.this,mHistoryList);
+    mAdapter = new ChatListAdapter(ChatActivity.this,mUserId,mHistoryList);
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------

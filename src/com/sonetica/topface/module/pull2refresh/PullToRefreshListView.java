@@ -12,6 +12,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
 		public InternalListView(Context context, AttributeSet attrs) {
 			super(context, attrs);
+			setDividerHeight(0);
 		}
 
 		@Override

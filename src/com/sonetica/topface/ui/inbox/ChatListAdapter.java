@@ -10,6 +10,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,9 +26,10 @@ public class ChatListAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   // Data
+  private int mUserId;
+  private LinkedList<History> mList;
   private Bitmap baby;
   private Bitmap me;
-  private LinkedList<History> mList;
   /* содержит тип итема для отрисовки необходимого слоя */
   private LayoutInflater mInflater;
   private LinkedList<Integer> mItemLayoutList = new LinkedList<Integer>();
@@ -39,10 +41,11 @@ public class ChatListAdapter extends BaseAdapter {
   private static final int T_FRIEND_EXT   = 3;
   private static final int T_COUNT = 4;
   //---------------------------------------------------------------------------
-  public ChatListAdapter(Context context,LinkedList<History> list) {
-    mList=list;
-    mInflater = LayoutInflater.from(context);
-    prepare(list);
+  public ChatListAdapter(Context context,int userId,LinkedList<History> dataList) {
+    mList = dataList;
+    mUserId = userId;
+    mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    prepare(dataList);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -141,10 +144,11 @@ public class ChatListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   public void addSentMessage(History msg) {
     History history = mList.get(mList.size()-1);
-    if(history.owner_id == 32574380)
-      mItemLayoutList.add(T_USER_EXT);
-    else
+    if(history.owner_id == mUserId)
       mItemLayoutList.add(T_USER_PHOTO);
+    else
+      mItemLayoutList.add(T_USER_EXT);
+
     mList.add(msg);
   }
   //---------------------------------------------------------------------------
@@ -158,16 +162,16 @@ public class ChatListAdapter extends BaseAdapter {
     int prev_id = 0;
     for(int i=0;i<count;i++) {
       History history = dataList.get(i); 
-      if(history.owner_id==32574380)
-        if(history.owner_id==prev_id)
-          mItemLayoutList.add(T_USER_EXT);
-        else
-          mItemLayoutList.add(T_USER_PHOTO);
-      else
+      if(history.owner_id==mUserId)
         if(history.owner_id==prev_id)
           mItemLayoutList.add(T_FRIEND_EXT);
         else
           mItemLayoutList.add(T_FRIEND_PHOTO);
+      else
+        if(history.owner_id==prev_id)
+          mItemLayoutList.add(T_USER_EXT);
+        else
+          mItemLayoutList.add(T_USER_PHOTO);
       prev_id = history.owner_id;
     }
   }

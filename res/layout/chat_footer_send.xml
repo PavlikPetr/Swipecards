@@ -21,7 +21,9 @@
         android:singleLine="true"
         android:inputType="text"
         android:textColor="#3D3D3D"
-        android:background="@drawable/bg_editbox" />
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:background="@drawable/chat_editbox" />
     
     <Button  
         android:id="@+id/btnChatSend"

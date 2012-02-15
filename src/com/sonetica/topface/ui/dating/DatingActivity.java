@@ -10,8 +10,8 @@ import com.sonetica.topface.net.ApiRequest;
 import com.sonetica.topface.net.DoRateRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
-import com.sonetica.topface.ui.ProfileActivity;
 import com.sonetica.topface.ui.inbox.ChatActivity;
+import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Intent;
@@ -88,6 +88,7 @@ public class DatingActivity extends Activity {
       public void success(Response response) {
         LinkedList<SearchUser> userList = SearchUser.parse(response);
         mDatingGallery.setDataList(userList);
+        mDatingGallery.next();
       }
       @Override
       public void fail(int codeError) {

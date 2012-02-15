@@ -11,13 +11,12 @@
   <!-- button bar -->
   <include layout="@layout/bar_double_big_button" />
   
-  <!-- com.sonetica.topface.module.pull2refresh.PullToRefreshListView -->
-  
-  <ListView
+  <com.sonetica.topface.module.pull2refresh.PullToRefreshListView
       android:id="@+id/lvRatesList"
       android:layout_width="wrap_content" 
       android:layout_height="0dip"
       android:layout_weight="1"
+      android:fadeScrollbars="true"
       android:background="@android:color/transparent" />
   
 </LinearLayout>

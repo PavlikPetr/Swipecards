@@ -3,17 +3,14 @@ package com.sonetica.topface.ui.rates;
 import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
-import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.data.Rate;
+import com.sonetica.topface.module.pull2refresh.PullToRefreshListView;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.RatesRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.DoubleBigButton;
-import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.ui.inbox.ChatActivity;
-import com.sonetica.topface.ui.inbox.InboxActivity;
-import com.sonetica.topface.ui.inbox.InboxListAdapter;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -21,7 +18,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -31,7 +27,7 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class RatesActivity extends Activity {
   // Data
-  private ListView mListView;
+  private PullToRefreshListView mListView;
   private RatesListAdapter mAdapter;
   private LinkedList<Rate> mRatesList;
   private AvatarManager    mAvatarManager;
@@ -72,7 +68,7 @@ public class RatesActivity extends Activity {
    });
 
    // ListView
-   mListView = (ListView)findViewById(R.id.lvRatesList);
+   mListView = (PullToRefreshListView)findViewById(R.id.lvRatesList);
    /*
    mListView.setOnRefreshListener(new OnRefreshListener() {
      @Override
@@ -81,7 +77,7 @@ public class RatesActivity extends Activity {
      }});
    */
    
-   mListView.setOnItemClickListener(new OnItemClickListener(){
+   mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(RatesActivity.this,ChatActivity.class);

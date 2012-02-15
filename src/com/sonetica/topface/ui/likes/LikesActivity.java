@@ -21,10 +21,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
 
 /*
  *      "я нравлюсь"
@@ -33,7 +31,7 @@ public class LikesActivity extends Activity {
   // Data
   private PullToRefreshGridView mGallery;
   private LikesGridAdapter mLikesGridAdapter;
-  private GalleryManager mGalleryManager;
+  private GalleryManager<Like>   mGalleryManager;
   private LinkedList<Like> mLikesAllList;
   private LinkedList<Like> mLikesCityList;
   private ProgressDialog mProgressDialog;
@@ -114,7 +112,7 @@ public class LikesActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mGalleryManager   = new GalleryManager(LikesActivity.this,mLikesAllList);
+    mGalleryManager   = new GalleryManager<Like>(LikesActivity.this,mLikesAllList);
     mLikesGridAdapter = new LikesGridAdapter(LikesActivity.this,mGalleryManager);
     mGallery.getRefreshableView().setAdapter(mLikesGridAdapter);
     mGallery.setOnScrollListener(mGalleryManager);

@@ -6,12 +6,26 @@
     android:orientation="vertical" >
     
   <!-- header bar -->
-  <include layout="@layout/bar_header" />  
+  <include layout="@layout/bar_header" />
+  <!--
+  <ScrollView
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content" >
+	  <LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+	      <include layout="@layout/profile_form_top" />  
+	      <include layout="@layout/profile_form_bottom" />
+	  </LinearLayout>
+  </ScrollView>
+  -->
   
-  <TextView
-      android:id="@+id/tvProfile"
-      android:layout_width="wrap_content" 
-      android:layout_height="0dip"
-      android:layout_weight="1" />
+  <android.support.v4.view.ViewPager
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"
+    android:id="@+id/awesomepager"/>
+  
+  
   
 </LinearLayout>

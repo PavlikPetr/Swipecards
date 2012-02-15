@@ -8,7 +8,7 @@
   <!-- header bar -->
   <include layout="@layout/bar_header" />
   
-    <!-- button bar -->
+  <!-- button bar -->
   <include layout="@layout/bar_double_big_button" />
   
   <com.sonetica.topface.module.pull2refresh.PullToRefreshListView
