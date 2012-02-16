@@ -13,14 +13,9 @@ public class JLogActivity extends Activity {
     ScrollView scrollView = new ScrollView(this);
     TextView textView = new TextView(this);
     scrollView.addView(textView);
-
     
-    for(int i=Data.s_LogList.size()-1;i>0;i--) {
-      if(Data.s_LogList.get(i).length()>200)
-        textView.append(Data.s_LogList.get(i).substring(0,200)+"\n");
-      else
-        textView.append(Data.s_LogList.get(i)+"\n");
-    }
+    for(int i=Data.s_LogList.size()-1;i>0;i--)
+      textView.append(Data.s_LogList.get(i)+"\n");
     
     setContentView(scrollView);
   }

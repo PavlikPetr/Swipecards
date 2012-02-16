@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="@drawable/chat_send_selector"
-        android:textColor="#3D3D3D"
+        android:textColor="@drawable/clr_text_btn"
         android:text="Послать"
         />
        

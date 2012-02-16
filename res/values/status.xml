@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Status Job -->
+    <string name="profile_btn_chata">Поболтать</string>
+    <string>Студент</string>
+    <string>Школьник</string>
+    <string>Офисный работник</string>
+    <string>Госслужащий</string>
+    <string>Работяга</string>
+    <string>Бизнесмен</string>
+    <string>Военный</string>
+    <string>Ученый</string>
+    <string>Бездельник</string>
+
+    <string>Студентка</string>
+    <string>Школьница</string>
+    <string>Офисная работница</string>
+    <string>Менеджер</string>
+    <string>Госслужащая</string>
+    <string>Бизнесвумен</string>
+    <string>Ученая</string>
+    <string>Домохозяйка</string>
+    <string>Бездельница</string>
+</resources>

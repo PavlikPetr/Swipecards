@@ -126,11 +126,11 @@ public class InformerView extends ViewGroup {
     
     mInformer._bottom = height;
     
-    int x = (int)(width  - mProfileBtn.getMeasuredWidth()*1.2);
-    int y = (int)(height - mProfileBtn.getMeasuredHeight()*2.4);
+    int x = (int)(width  - mProfileBtn.getMeasuredWidth()*1.4);
+    int y = (int)(height - mProfileBtn.getMeasuredHeight()*2.6);
     mChatBtn.layout(x,y,x+mChatBtn.getMeasuredWidth(),y+mChatBtn.getMeasuredHeight());
     
-    y = (int)(y+mChatBtn.getMeasuredHeight()*1.2);
+    y = (int)(y+mChatBtn.getMeasuredHeight()*1.4);
     mProfileBtn.layout(x,y,x+mProfileBtn.getMeasuredWidth(),y+mProfileBtn.getMeasuredHeight());
   }
   //---------------------------------------------------------------------------

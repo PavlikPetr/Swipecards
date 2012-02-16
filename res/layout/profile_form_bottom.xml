@@ -175,5 +175,93 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
+    <!-- row -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_job"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="РостРостРост"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>
+    <!-- row -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_marriage"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="РостРостРост"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>
+    <!-- row -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_finances"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="РостРостРост"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>
+     <!-- row -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_smoking"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="РостРостРост"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>   
   </TableLayout>
 </LinearLayout>

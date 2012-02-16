@@ -48,6 +48,11 @@
   <string name="profile_character">Характер</string>
   <string name="profile_alcohol">Алкоголь</string>
   <string name="profile_body">Комплекция</string>
+  <string name="profile_job">StatusJob</string>
+  <string name="profile_marriage">Marriage</string>
+  <string name="profile_finances">Finances</string>
+  <string name="profile_smoking">Smoking</string>
+
   
   <!-- Dating Activity -->
   <string name="dating_header_title">Оценка фото</string>

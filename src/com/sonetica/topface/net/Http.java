@@ -98,7 +98,10 @@ public class Http {
         responseBuilder.append(line);
       response = responseBuilder.toString();
       
-      Data.s_LogList.add("   [RESP]: "+response);  // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      if(response.length()>200)               // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Data.s_LogList.add("   [RESP]: "+response.substring(0,200));
+      else
+        Data.s_LogList.add("   [RESP]: "+response);
       
       
     } catch(MalformedURLException e) {
