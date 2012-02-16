@@ -9,6 +9,7 @@ import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.SocialActivity;
+import com.sonetica.topface.ui.JLogActivity;
 import com.sonetica.topface.ui.PreferencesActivity;
 import com.sonetica.topface.ui.dating.DatingActivity;
 import com.sonetica.topface.ui.inbox.InboxActivity;
@@ -60,21 +61,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }
-    
-    // Get Profile
-    ProfileRequest profileRequest = new ProfileRequest(DashboardActivity.this,false);
-    profileRequest.callback(new ApiHandler() {
-      @Override
-      public void success(final Response response) {
-        Data.s_Profile = Profile.parse(response,false);
-        Data.updateNotification(Data.s_Profile);
-        Toast.makeText(DashboardActivity.this,"profile",Toast.LENGTH_SHORT).show();
-      }
-      @Override
-      public void fail(int codeError) {
-      }
-    }).exec();
-    
     
     mNotifyHandler = new NotifyHandler();
     //mNotifyHandler.sendEmptyMessage(0);
@@ -142,10 +128,14 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   //---------------------------------------------------------------------------
   private static final int MENU_ONE = 0;
   private static final int MENU_PREFERENCES = 1;
+  private static final int MENU_LOG = 2;
   @Override
   public boolean onCreatePanelMenu(int featureId, Menu menu) {
     menu.add(0,MENU_ONE,0,getString(R.string.dashbrd_menu_one));
     menu.add(0,MENU_PREFERENCES,0,getString(R.string.dashbrd_menu_preferences));
+    
+    menu.add(0,MENU_LOG,0,"Log");   // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
     return super.onCreatePanelMenu(featureId, menu);
   }
   //---------------------------------------------------------------------------
@@ -158,6 +148,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         break;
       case MENU_PREFERENCES:
         startActivity(new Intent(this,PreferencesActivity.class));
+        break;
+      case MENU_LOG:
+        startActivity(new Intent(this,JLogActivity.class));   // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         break;
     }
     return super.onMenuItemSelected(featureId,item);

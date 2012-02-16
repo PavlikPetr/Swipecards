@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:sonetica="http://schemas.android.com/apk/res/com.sonetica.topface"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dip"
@@ -34,10 +35,11 @@
     </LinearLayout>
 
     <!-- avatar -->
-    <ImageView
+    <com.sonetica.topface.ui.RoundedImageView
+            sonetica:frame="chat"
             android:id="@+id/left_icon"
-            android:layout_width="40dip"
-            android:layout_height="40dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="3dip"

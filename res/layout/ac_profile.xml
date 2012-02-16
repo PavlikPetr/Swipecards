@@ -7,25 +7,19 @@
     
   <!-- header bar -->
   <include layout="@layout/bar_header" />
-  <!--
-  <ScrollView
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content" >
-	  <LinearLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical" >
-	      <include layout="@layout/profile_form_top" />  
-	      <include layout="@layout/profile_form_bottom" />
-	  </LinearLayout>
-  </ScrollView>
-  -->
   
+  <TextView
+      android:layout_width="fill_parent" 
+      android:layout_height="wrap_content"
+      android:background="#FFFFFF"
+      android:gravity="center"
+      android:textColor="#404040"
+      android:text="туда - сюда" />
+        
+  <!-- view pager -->
   <android.support.v4.view.ViewPager
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent"
-    android:id="@+id/awesomepager"/>
-  
-  
-  
+    android:id="@+id/viewPagerProfile"/>
+
 </LinearLayout>

@@ -54,8 +54,8 @@ public class DatingActivity extends Activity {
     btnStars.setOnRateListener(new StarsView.setOnRateListener() {
       @Override
       public void onRate(int rate) {
-        mDatingGallery.next();
         rate(mDatingGallery.getUserId(),rate);
+        mDatingGallery.next();
       }
     });
 

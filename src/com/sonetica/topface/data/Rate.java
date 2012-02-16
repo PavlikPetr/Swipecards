@@ -31,7 +31,7 @@ public class Rate extends AbstractData {
           rate.first_name = item.getString("first_name");
           rate.online     = item.getBoolean("online");
           rate.unread     = item.getBoolean("unread");
-          rate.created    = item.getLong("created");
+          rate.created    = item.getLong("created")*1000; // время приходит в секундах
           rate.uid        = item.getInt("uid");
           rate.age        = item.getInt("age");
           rate.rate       = item.getInt("rate");

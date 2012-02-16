@@ -32,7 +32,7 @@ public class InboxListAdapter extends BaseAdapter {
   private static final int T_ALL   = 0;
   private static final int T_CITY  = 2; // PITER
   private static final int T_COUNT = 2;
-  private static final String TIME_TEMPLATE = "dd MMM, hh:mm";
+  private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   //---------------------------------------------------------------------------
   public InboxListAdapter(Context context,AvatarManager<Inbox> avatarManager) {
     mAvatarManager = avatarManager;

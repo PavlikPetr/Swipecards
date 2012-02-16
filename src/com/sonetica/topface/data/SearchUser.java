@@ -13,9 +13,9 @@ public class SearchUser extends AbstractData {
   public int age;                 // возраст пользователя
   public int city_id;             // идентификатор города пользователя
   public boolean online;          // флаг нахождения пользователя онлайн
-  public String   first_name;     // имя пользователя
-  public String   status;         // статус пользователя
-  public String   city_name;      // наименование города пользователя
+  public String  first_name;      // имя пользователя
+  public String  status;          // статус пользователя
+  public String  city_name;       // наименование города пользователя
   public String[] avatars_big;    // большая аватарка пользователя
   public String[] avatars_small;  // маленькая аватарка пользователя
   

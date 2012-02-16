@@ -23,6 +23,8 @@ public class Data {
   private static LinkedList<Rate>       s_RatesList;
   private static LinkedList<City>       s_CitiesList;
   
+  public static LinkedList<String> s_LogList;
+  
   public static Profile s_Profile;
   // Data Profile
   public static int s_Rates;
@@ -44,6 +46,8 @@ public class Data {
     s_TopsList   = new LinkedList<TopUser>();
     s_RatesList  = new LinkedList<Rate>();
     s_CitiesList = new LinkedList<City>();
+    
+    s_LogList = new LinkedList<String>();
   }
   //---------------------------------------------------------------------------
   public static void updateNotification(Profile profile) {

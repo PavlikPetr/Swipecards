@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -51,6 +52,9 @@ public class Http {
   //---------------------------------------------------------------------------
   //  запрос к TopFace API
   public static String httpSendTpRequest(String request, String postParams) {
+    
+    Data.s_LogList.add("   [REQ]: "+postParams);  // JSON LOG   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
     return httpRequest(HTTP_POST_REQUEST,request,postParams,true);
   }
   //---------------------------------------------------------------------------
@@ -93,6 +97,10 @@ public class Http {
       while((line=buffReader.readLine()) != null)
         responseBuilder.append(line);
       response = responseBuilder.toString();
+      
+      Data.s_LogList.add("   [RESP]: "+response);  // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      
+      
     } catch(MalformedURLException e) {
       Debug.log(TAG,"url is wrong:" + e);
     } catch(IOException e) {

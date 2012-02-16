@@ -2,6 +2,7 @@ package com.sonetica.topface.ui;
 
 import com.sonetica.topface.R;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,22 +13,50 @@ import android.widget.ImageView;
 
 public class RoundedImageView extends ImageView {
   // Data
+  private int mFrameType;
   //private static final int mRadius = 10;
-  private static Bitmap mFrameBitmap;
+  private static Bitmap mDialogBitmap;
+  private static Bitmap mChatBitmap;
+  // Frames Type
+  private static final int DIALOG = 0;
+  private static final int CHAT   = 1;
   //---------------------------------------------------------------------------
   public RoundedImageView(Context context) {
-    super(context);
+    this(context,null);
   }
   //---------------------------------------------------------------------------
   public RoundedImageView(Context context,AttributeSet attrs) {
-    super(context,attrs);
-    if(mFrameBitmap==null)
-      mFrameBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_frame_photo);
+    this(context,attrs,0);
+  }
+  //---------------------------------------------------------------------------
+  public RoundedImageView(Context context, AttributeSet attrs, int defStyle) {
+    super(context,attrs,defStyle);
+    
+    setAttrs(attrs);
+    
+    if(mDialogBitmap==null && mFrameType==DIALOG)
+      mDialogBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_frame_photo);
+    else if(mChatBitmap==null && mFrameType==CHAT)
+      mChatBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.chat_frame_photo);
+
+  }
+  //---------------------------------------------------------------------------
+  private void setAttrs(AttributeSet attrs) {
+    if(attrs==null)
+      return;
+    
+    TypedArray a = getContext().obtainStyledAttributes(attrs,R.styleable.RoundedImageView, 0,0);
+    mFrameType = a.getInteger(R.styleable.RoundedImageView_frame,0);
+    a.recycle();
+
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    setMeasuredDimension(mFrameBitmap.getWidth(),mFrameBitmap.getHeight());
+    if(mFrameType==DIALOG)
+      setMeasuredDimension(mDialogBitmap.getWidth(),mDialogBitmap.getHeight());
+    else if(mFrameType==CHAT)
+      setMeasuredDimension(mChatBitmap.getWidth(),mChatBitmap.getHeight());
   }  
   //---------------------------------------------------------------------------
   @Override
@@ -35,8 +64,7 @@ public class RoundedImageView extends ImageView {
     Drawable canvasDrawable = getDrawable();
     if(canvasDrawable != null) {
       try {
-        BitmapDrawable drawable = (BitmapDrawable)canvasDrawable;
-        Bitmap fullSizeBitmap = drawable.getBitmap();
+        Bitmap fullSizeBitmap = ((BitmapDrawable)canvasDrawable).getBitmap();
         int scaledWidth  = getMeasuredWidth();
         int scaledHeight = getMeasuredHeight();
         Bitmap mScaledBitmap;
@@ -45,11 +73,17 @@ public class RoundedImageView extends ImageView {
         else
           mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap,scaledWidth,scaledHeight,true /* filter */);
 
-        Bitmap roundBitmap = mScaledBitmap; //Utils.getRoundedCornerBitmap(mScaledBitmap,mScaledBitmap.getWidth(),mScaledBitmap.getHeight(),mRadius);
-        canvas.drawBitmap(roundBitmap,0,0,null);
+        // перенес скругление в менеджер
+        //Bitmap roundBitmap = Utils.getRoundedCornerBitmap(mScaledBitmap,mScaledBitmap.getWidth(),mScaledBitmap.getHeight(),mRadius);
         
-        // тенюшка
-        canvas.drawBitmap(mFrameBitmap,0,0,null); 
+        canvas.drawBitmap(mScaledBitmap,0,0,null);
+        
+        // фрейм с тенюшкой
+        if(mFrameType==DIALOG)
+          canvas.drawBitmap(mDialogBitmap,0,0,null);
+        if(mFrameType==CHAT)
+          canvas.drawBitmap(mChatBitmap,0,0,null); 
+        
       } catch(Exception e) {
         e.printStackTrace();
       }

@@ -10,19 +10,23 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-public class RoundedImageViewEx extends ImageView {
+public class FrameImageView extends ImageView {
   // Data
-  //private static final int mRadius = 10;
-  private static Bitmap mFrameBitmap;
+  public boolean mOnlineState; 
+  private Bitmap mFrameBitmap;
+  private Bitmap mOnlineBitmap;
+  private Bitmap mOfflineBitmap;
   //---------------------------------------------------------------------------
-  public RoundedImageViewEx(Context context) {
-    super(context);
+  public FrameImageView(Context context) {
+    this(context,null);
   }
   //---------------------------------------------------------------------------
-  public RoundedImageViewEx(Context context,AttributeSet attrs) {
+  public FrameImageView(Context context,AttributeSet attrs) {
     super(context,attrs);
-    if(mFrameBitmap==null)
-      mFrameBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.chat_frame_photo);
+    
+    mFrameBitmap   = BitmapFactory.decodeResource(getResources(),R.drawable.profile_frame_photo);
+    mOnlineBitmap  = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
+    mOfflineBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -32,28 +36,34 @@ public class RoundedImageViewEx extends ImageView {
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
-    Drawable canvasDrawable = getDrawable();
-    if(canvasDrawable != null) {
-      try {
+    super.onDraw(canvas);
+    //Drawable canvasDrawable = getDrawable();
+    //if(canvasDrawable != null) {
+      //try {
+        /*
         BitmapDrawable drawable = (BitmapDrawable)canvasDrawable;
         Bitmap fullSizeBitmap = drawable.getBitmap();
         int scaledWidth  = getMeasuredWidth();
         int scaledHeight = getMeasuredHeight();
+
         Bitmap mScaledBitmap;
         if(scaledWidth == fullSizeBitmap.getWidth() && scaledHeight == fullSizeBitmap.getHeight())
           mScaledBitmap = fullSizeBitmap;
         else
-          mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap,scaledWidth,scaledHeight,true /* filter */);
+          mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap,scaledWidth,scaledHeight,true /* filter * /);
 
-        Bitmap roundBitmap = mScaledBitmap; //Utils.getRoundedCornerBitmap(mScaledBitmap,mScaledBitmap.getWidth(),mScaledBitmap.getHeight(),mRadius);
-        canvas.drawBitmap(roundBitmap,0,0,null);
+        canvas.drawBitmap(mScaledBitmap,0,0,null);
+        */
+        // фрейм с тенюшкой
+        canvas.drawBitmap(mFrameBitmap,0,0,null);
         
-        // тенюшка
-        canvas.drawBitmap(mFrameBitmap,0,0,null); 
-      } catch(Exception e) {
-        e.printStackTrace();
-      }
-    }
+        // online state                      // ЗАРАНИЕ ПРОСЧИТАТЬ КООРДИНАТЫ
+        canvas.drawBitmap(mOnlineState ? mOnlineBitmap : mOfflineBitmap,(int)(getWidth()-mOnlineBitmap.getWidth()*1.5),mOnlineBitmap.getHeight()/2,null);
+        
+      //} catch(Exception e) {
+        //e.printStackTrace();
+      //}
+    //}
   }
   //---------------------------------------------------------------------------
 }

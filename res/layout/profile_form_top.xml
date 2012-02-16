@@ -1,8 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-	  <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:text="top"
-	    android:background="#FF0000"   />
-	
-	
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+  <!-- Profile -->  <LinearLayout 
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:padding="10dp"
+      android:orientation="horizontal" >
+      
+    <!-- Frame -->
+    <com.sonetica.topface.ui.FrameImageView
+        android:id="@+id/imProfileFramePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profile_frame_photo" />
+    
+    <!-- Info -->
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical" >
+        
+      <!-- Name -->
+      <TextView
+        android:id="@+id/tvProfileName" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+      
+      <!-- City -->
+      <TextView 
+        android:id="@+id/tvProfileCity"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp" />
+      
+      <!-- Chat Button -->
+      <Button 
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/profile_chat_selector"
+          android:text="@string/profile_btn_chat"
+          android:textColor="@drawable/clr_text_btn"
+          android:textSize="12sp"
+          android:gravity="right|center_vertical"
+          android:drawableRight="@android:color/transparent"
+          android:drawablePadding="14dp"
+          android:textStyle="bold"
+          android:visibility="gone"
+          android:layout_marginTop="10dp"
+          android:id="@+id/btnProfileChat"/>
+      
+      <!-- Edit Button -->
+      <Button 
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@drawable/clr_text_btn"
+          android:textSize="12sp"
+          android:background="@drawable/profile_edit_selector"
+          android:text="@string/profile_btn_edit"
+          android:textStyle="bold"
+          android:visibility="gone"
+          android:layout_marginTop="10dp"
+          android:id="@+id/btnProfileEdit"/>
+    </LinearLayout>
+  </LinearLayout>
+  
+  <!-- Foto -->
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="10dp"
+      android:text="@string/profile_foto" 
+      android:textColor="#FFFFFF"
+      android:textSize="20sp" />
+  
+  <!-- Ero Foto -->  
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="10dp"
+      android:text="@string/profile_foto_ero"
+      android:textColor="#FFFFFF" 
+      android:textSize="20sp" />
+    
+</LinearLayout>

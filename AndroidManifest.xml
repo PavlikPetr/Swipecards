@@ -18,7 +18,7 @@
                android:icon="@drawable/ic_launcher"
                android:label="@string/app_name"
                android:theme="@android:style/Theme.NoTitleBar"
-               android:debuggable="true"
+               android:debuggable="false"
                android:screenOrientation="portrait">
     
     <!-- main launcher -->
@@ -43,6 +43,8 @@
     
     <!-- preferences activity -->
     <activity android:name=".ui.PreferencesActivity"   android:screenOrientation="portrait" />
+    
+    <activity android:name=".ui.JLogActivity"   android:screenOrientation="portrait" />
     
     <!-- social activity -->
     <activity android:name=".social.SocialActivity"    android:screenOrientation="portrait" />

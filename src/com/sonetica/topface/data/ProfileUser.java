@@ -1,6 +1,5 @@
 package com.sonetica.topface.data;
 
-import java.util.LinkedList;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.net.Response;
@@ -27,36 +26,29 @@ public class ProfileUser extends AbstractData {
   // {Object} geo.coordinates.lat - широта нахождения пользоавтеля
   // {Object} geo.coordinates.lng - долгота нахождения пользователя
   //---------------------------------------------------------------------------
-  public static LinkedList<ProfileUser> parse(int userId,Response response) {
-    LinkedList<ProfileUser> userList = new LinkedList<ProfileUser>();
+  public static ProfileUser parse(int userId,Response response) {    //нужно знать userId
+    ProfileUser profile = new ProfileUser();
     try {
-      //JSONArray array = response.mJSONResult.getJSONArray("profiles");
-      //if(array.length()>0)                          // ЗАПРОС НЕ ОБРАБАТЫВАЕТСЯ КАК МАССИВ
-        //for(int i=0;i<array.length();i++) {         // ЕБАННАЯ ХУЙНЯ В ОТВЕТЕ ,  
-          //JSONObject item = array.getJSONObject(i);
-          JSONObject item = response.mJSONResult.getJSONObject("profiles"); // не массив
-          item = item.getJSONObject(""+userId);          //нужно знать userId
-          ProfileUser profile = new ProfileUser();
-            profile.uid        = item.getInt("uid");
-            profile.age        = item.getInt("age");
-            profile.first_name = item.getString("first_name");
-            profile.first_name_translit = item.getString("first_name_translit");
-            profile.platform   = item.getString("platform");
-            profile.last_visit = item.getInt("last_visit");
-            profile.online     = item.getBoolean("online");
-            profile.status     = item.getString("status");
-          JSONObject geo = item.getJSONObject("geo");
-            profile.city_name = geo.getString("city");
-            profile.city_id   = geo.getInt("city_id");
-          JSONObject avatars = item.getJSONObject("avatars");
-            profile.avatars_big   = avatars.getString("big");
-            profile.avatars_small = avatars.getString("small");
-          userList.add(profile);
-        //}
+      JSONObject item = response.mJSONResult.getJSONObject("profiles");
+      item = item.getJSONObject(""+userId);
+        profile.uid        = item.getInt("uid");
+        profile.age        = item.getInt("age");
+        profile.first_name = item.getString("first_name");
+        profile.first_name_translit = item.getString("first_name_translit");
+        profile.platform   = item.getString("platform");
+        profile.last_visit = item.getInt("last_visit");
+        profile.online     = item.getBoolean("online");
+        profile.status     = item.getString("status");
+      JSONObject geo = item.getJSONObject("geo");
+        profile.city_name  = geo.getString("city");
+        profile.city_id    = geo.getInt("city_id");
+      JSONObject avatars = item.getJSONObject("avatars");
+        profile.avatars_big   = avatars.getString("big");
+        profile.avatars_small = avatars.getString("small");
     } catch(JSONException e) {
       Debug.log("SearchUser.class","Wrong response parsing: " + e);
     }
-    return userList;
+    return profile;
   }
   //---------------------------------------------------------------------------
   @Override

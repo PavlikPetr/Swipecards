@@ -42,7 +42,7 @@ public class Inbox extends AbstractData {
           msg.first_name = item.getString("first_name");
           msg.online     = item.getBoolean("online");
           msg.unread     = item.getBoolean("unread");
-          msg.created    = item.getLong("created");
+          msg.created    = item.getLong("created")*1000; // время приходит в секундах
           msg.city_id    = item.getInt("city_id");
           msg.uid        = item.getInt("uid");
           msg.age        = item.getInt("age");

@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.History;
+import com.sonetica.topface.ui.RoundedImageView;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.format.DateFormat;
@@ -18,9 +19,8 @@ import android.widget.TextView;
 public class ChatListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // ViewHolder
-  //---------------------------------------------------------------------------
   public static class ViewHolder {
-      ImageView mAvatar;
+      RoundedImageView mAvatar;
       TextView  mMessage;
       TextView  mDate;
   }
@@ -33,7 +33,7 @@ public class ChatListAdapter extends BaseAdapter {
   /* содержит тип итема для отрисовки необходимого слоя */
   private LayoutInflater mInflater;
   private LinkedList<Integer> mItemLayoutList = new LinkedList<Integer>();
-  private static final String TIME_TEMPLATE = "dd MMM, hh:mm";
+  private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   // Type Item
   private static final int T_USER_PHOTO   = 0;
   private static final int T_USER_EXT     = 1;
@@ -83,25 +83,25 @@ public class ChatListAdapter extends BaseAdapter {
       switch(type) {
         case T_FRIEND_PHOTO:
             convertView     = mInflater.inflate(R.layout.chat_friend, null, false);
-            holder.mAvatar  = (ImageView) convertView.findViewById(R.id.left_icon);
-            holder.mMessage = (TextView) convertView.findViewById(R.id.chat_message);
-            holder.mDate    = (TextView) convertView.findViewById(R.id.chat_date);
+            holder.mAvatar  = (RoundedImageView)convertView.findViewById(R.id.left_icon);
+            holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
+            holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
             break;
         case T_FRIEND_EXT:
             convertView     = mInflater.inflate(R.layout.chat_friend_ext, null, false);
-            holder.mAvatar  = (ImageView) convertView.findViewById(R.id.left_icon);
-            holder.mMessage = (TextView) convertView.findViewById(R.id.chat_message);
-            holder.mDate    = (TextView) convertView.findViewById(R.id.chat_date);
+            holder.mAvatar  = (RoundedImageView)convertView.findViewById(R.id.left_icon);
+            holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
+            holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
             break;
         case T_USER_PHOTO:
             convertView     = mInflater.inflate(R.layout.chat_user, null, false);
-            holder.mAvatar  = (ImageView) convertView.findViewById(R.id.left_icon);
-            holder.mMessage = (TextView) convertView.findViewById(R.id.chat_message);
-            holder.mDate    = (TextView) convertView.findViewById(R.id.chat_date);
+            holder.mAvatar  = (RoundedImageView)convertView.findViewById(R.id.left_icon);
+            holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
+            holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
             break;
         case T_USER_EXT:
             convertView     = mInflater.inflate(R.layout.chat_user_ext, null, false);
-            holder.mAvatar  = (ImageView)convertView.findViewById(R.id.left_icon);
+            holder.mAvatar  = (RoundedImageView)convertView.findViewById(R.id.left_icon);
             holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
             holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
             break;
@@ -143,12 +143,17 @@ public class ChatListAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   public void addSentMessage(History msg) {
-    History history = mList.get(mList.size()-1);
-    if(history.owner_id == mUserId)
+    int position = mList.size()-1;
+    if(position<0)
       mItemLayoutList.add(T_USER_PHOTO);
-    else
-      mItemLayoutList.add(T_USER_EXT);
-
+    else {
+      History history = mList.get(mList.size()-1);
+      if(history.owner_id == mUserId)
+        mItemLayoutList.add(T_USER_PHOTO);
+      else
+        mItemLayoutList.add(T_USER_EXT);
+    }
+    
     mList.add(msg);
   }
   //---------------------------------------------------------------------------

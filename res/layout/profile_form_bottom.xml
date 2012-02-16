@@ -1,7 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="@android:color/transparent"
+    android:padding="12dp"
+    android:orientation="vertical">
+    
+  <!-- Anketa -->
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/profile_form" 
+      android:textColor="#FFFFFF"
+      android:textSize="20sp" />
+    
+  <TableLayout
+      android:id="@+id/tblBoard"
       android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:text="bottom"
-      android:background="#0000FF"   />
-  
+      android:layout_height="wrap_content"
+      android:stretchColumns="0,1"
+      android:background="@android:color/transparent" >
+      
+    <!-- row -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_height"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="РостРостРост"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>
+    <!-- row -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_weight"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="РостРостРост"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>
+    <!-- row -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_education"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="РостРостРост"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>
+    <!-- row -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_commutability"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="РостРостРост"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>
+    <!-- row -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_character"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="РостРостРост"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>
+    <!-- row -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_alcohol"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="РостРостРост"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>
+    <!-- row -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_body"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="РостРостРост"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>
+  </TableLayout>
+</LinearLayout>

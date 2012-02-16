@@ -31,7 +31,7 @@ public class LikesActivity extends Activity {
   // Data
   private PullToRefreshGridView mGallery;
   private LikesGridAdapter mLikesGridAdapter;
-  private GalleryManager<Like>   mGalleryManager;
+  private GalleryManager<Like> mGalleryManager;
   private LinkedList<Like> mLikesAllList;
   private LinkedList<Like> mLikesCityList;
   private ProgressDialog mProgressDialog;
@@ -134,7 +134,7 @@ public class LikesActivity extends Activity {
     
     LikesRequest likesRequest = new LikesRequest(this);
     likesRequest.offset = 0;
-    likesRequest.limit  = 180;
+    likesRequest.limit = 40;
     likesRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {

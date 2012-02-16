@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.util.HashMap;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -63,6 +64,46 @@ public class Utils {
     canvas.drawBitmap(bitmap, rect, rect, paint);
 
     return output;
+  }
+  //---------------------------------------------------------------------------
+  public static Bitmap clipping(Bitmap rawBitmap,int bitmapWidth,int bitmapHeight) {
+    if(rawBitmap==null || bitmapWidth<=0 || bitmapHeight<=0)
+      return null;
+    
+    // Исходный размер загруженного изображения
+    int width  = rawBitmap.getWidth();
+    int height = rawBitmap.getHeight();
+    
+    // буль, длиная фото или высокая
+    boolean LEG = false;
+
+    if(width >= height) 
+      LEG = true;
+    
+    // коффициент сжатия фотографии
+    float ratio = Math.max(((float)bitmapWidth)/width,((float) bitmapHeight)/height);
+    
+    // на получение оригинального размера по ширине или высоте
+    if(ratio==0) ratio=1;
+    
+    // матрица сжатия
+    Matrix matrix = new Matrix();
+    matrix.postScale(ratio,ratio);
+    
+    // сжатие изображения
+    Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap,0,0,width,height,matrix,true);
+    
+    // вырезаем необходимый размер
+    final Bitmap clippedBitmap;
+    if(LEG) {
+      // у горизонтальной, вырезаем по центру
+      int offset_x = (scaledBitmap.getWidth()-bitmapWidth)/2;
+      clippedBitmap = Bitmap.createBitmap(scaledBitmap,offset_x,0,bitmapWidth,bitmapHeight,null,false);
+    } else
+      // у вертикальной режим с верху
+      clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,bitmapWidth,bitmapHeight,null,false);
+      
+    return clippedBitmap;
   }
   //---------------------------------------------------------------------------
 }

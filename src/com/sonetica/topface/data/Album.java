@@ -25,7 +25,10 @@ public class Album extends AbstractData {
           album.id    = item.getInt("id");
           album.small = item.getString("small");
           album.big   = item.getString("big");
-          album.ero   = item.getBoolean("ero");
+          
+          if(!item.isNull("ero"))
+            album.ero   = item.getBoolean("ero");
+          
           albumsList.add(album);
         }
     } catch(JSONException e) {
