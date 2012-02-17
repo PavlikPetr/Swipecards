@@ -13,6 +13,8 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.ui.GalleryManager;
 import com.sonetica.topface.ui.album.AlbumActivity;
+import com.sonetica.topface.ui.inbox.ChatActivity;
+import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -85,8 +87,8 @@ public class LikesActivity extends Activity {
    mGallery.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       Intent intent = new Intent(LikesActivity.this,AlbumActivity.class);
-       intent.putExtra(AlbumActivity.INTENT_USER_ID,mLikesAllList.get(position).uid);
+       Intent intent = new Intent(LikesActivity.this,ProfileActivity.class);
+       intent.putExtra(ProfileActivity.INTENT_USER_ID,mLikesAllList.get(position).uid);
        startActivityForResult(intent,0);
      }
    });

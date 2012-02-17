@@ -11,6 +11,8 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.ui.inbox.ChatActivity;
+import com.sonetica.topface.ui.likes.LikesActivity;
+import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -80,9 +82,8 @@ public class RatesActivity extends Activity {
    mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       Intent intent = new Intent(RatesActivity.this,ChatActivity.class);
-       int x = mRatesList.get(position).uid;
-       intent.putExtra(ChatActivity.INTENT_USER_ID,mRatesList.get(position).uid);
+       Intent intent = new Intent(RatesActivity.this,ProfileActivity.class);
+       intent.putExtra(ProfileActivity.INTENT_USER_ID,mRatesList.get(position).uid);
        startActivityForResult(intent,0);
      }
    });

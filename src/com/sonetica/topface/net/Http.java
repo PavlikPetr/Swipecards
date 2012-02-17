@@ -98,8 +98,8 @@ public class Http {
         responseBuilder.append(line);
       response = responseBuilder.toString();
       
-      if(response.length()>200)               // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        Data.s_LogList.add("   [RESP]: "+response.substring(0,200));
+      if(response.length()>500)               // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Data.s_LogList.add("   [RESP]: "+response.substring(0,500));
       else
         Data.s_LogList.add("   [RESP]: "+response);
       

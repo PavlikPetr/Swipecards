@@ -15,7 +15,7 @@ public class JLogActivity extends Activity {
     scrollView.addView(textView);
     
     for(int i=Data.s_LogList.size()-1;i>0;i--)
-      textView.append(Data.s_LogList.get(i)+"\n");
+      textView.append(Data.s_LogList.get(i)+"\n\n");
     
     setContentView(scrollView);
   }

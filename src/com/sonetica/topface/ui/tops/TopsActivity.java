@@ -8,6 +8,9 @@ import com.sonetica.topface.net.*;
 import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.ui.GalleryManager;
 import com.sonetica.topface.ui.album.AlbumActivity;
+import com.sonetica.topface.ui.inbox.ChatActivity;
+import com.sonetica.topface.ui.profile.ProfileActivity;
+import com.sonetica.topface.ui.rates.RatesActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -128,8 +131,8 @@ public class TopsActivity extends Activity {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //mGalleryManager.stop();
-        Intent intent = new Intent(TopsActivity.this,AlbumActivity.class);
-        intent.putExtra(AlbumActivity.INTENT_USER_ID,mTopsList.get(position).uid);
+        Intent intent = new Intent(TopsActivity.this,ProfileActivity.class);
+        intent.putExtra(ProfileActivity.INTENT_USER_ID,mTopsList.get(position).uid);
         startActivityForResult(intent,0);
       }
     });

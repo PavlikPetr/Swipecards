@@ -61,6 +61,8 @@ public class RoundedImageView extends ImageView {
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
+    super.onDraw(canvas);
+    
     Drawable canvasDrawable = getDrawable();
     if(canvasDrawable != null) {
       try {
@@ -71,7 +73,7 @@ public class RoundedImageView extends ImageView {
         if(scaledWidth == fullSizeBitmap.getWidth() && scaledHeight == fullSizeBitmap.getHeight())
           mScaledBitmap = fullSizeBitmap;
         else
-          mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap,scaledWidth,scaledHeight,true /* filter */);
+          mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap,scaledWidth,scaledHeight,true);
 
         // перенес скругление в менеджер
         //Bitmap roundBitmap = Utils.getRoundedCornerBitmap(mScaledBitmap,mScaledBitmap.getWidth(),mScaledBitmap.getHeight(),mRadius);
@@ -88,6 +90,7 @@ public class RoundedImageView extends ImageView {
         e.printStackTrace();
       }
     }
+    
   }
   //---------------------------------------------------------------------------
 }

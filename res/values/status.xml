@@ -1,24 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Status Job -->
-    <string name="profile_btn_chata">Поболтать</string>
-    <string>Студент</string>
-    <string>Школьник</string>
-    <string>Офисный работник</string>
-    <string>Госслужащий</string>
-    <string>Работяга</string>
-    <string>Бизнесмен</string>
-    <string>Военный</string>
-    <string>Ученый</string>
-    <string>Бездельник</string>
 
-    <string>Студентка</string>
-    <string>Школьница</string>
-    <string>Офисная работница</string>
-    <string>Менеджер</string>
-    <string>Госслужащая</string>
-    <string>Бизнесвумен</string>
-    <string>Ученая</string>
-    <string>Домохозяйка</string>
-    <string>Бездельница</string>
+    <string name="profile_form_empty">–</string>
+    
+    <!-- Education -->
+    <string name="profile_form_education_male_1">Среднее</string>
+    <string name="profile_form_education_male_2">Еще учусь</string>
+    <string name="profile_form_education_male_3">Высшее</string>
+    <string name="profile_form_education_male_4">Несколько высших</string>
+    <string name="profile_form_education_male_5">Выше среднего</string>
+    <string name="profile_form_education_male_6">Ниже среднего</string>
+    <string name="profile_form_education_male_7">Я просто очень умный</string>
+
+    <string name="profile_form_education_female_1">Среднее</string>
+    <string name="profile_form_education_female_2">Еще учусь</string>
+    <string name="profile_form_education_female_3">Высшее</string>
+    <string name="profile_form_education_female_4">Несколько высших</string>
+    <string name="profile_form_education_female_5">Выше среднего</string>
+    <string name="profile_form_education_female_6">Ниже среднего</string>
+    <string name="profile_form_education_female_7">Я просто очень умная</string>
+    
+    <!-- Communication -->
+    <string name="profile_form_communication_male_1">Очень общительный</string>
+    <string name="profile_form_communication_male_2">Открыт интересным людям</string>
+    <string name="profile_form_communication_male_3">Пишите - посмотрим</string>
+    <string name="profile_form_communication_male_4">Общаюсь только с избранными</string>
+
+    <string name="profile_form_communication_female_1">Очень общительная</string>
+    <string name="profile_form_communication_female_2">Открыта интересным людям</string>
+    <string name="profile_form_communication_female_3">Пишите - посмотрим</string>
+    <string name="profile_form_communication_female_4">Общаюсь только с избранными</string>
+    
+    <!-- Character -->
+    <string name="profile_form_character_male_1">Легкий</string>
+    <string name="profile_form_character_male_2">Тяжелый</string>
+    <string name="profile_form_character_male_3">Строгий</string>
+    <string name="profile_form_character_male_4">Мягкий</string>
+    <string name="profile_form_character_male_5">Спокойный</string>
+    <string name="profile_form_character_male_6">Беспокойный</string>
+    <string name="profile_form_character_male_7">Никто не жаловался</string>
+
+    <string name="profile_form_character_female_1">Легкий</string>
+    <string name="profile_form_character_female_2">Тяжелый</string>
+    <string name="profile_form_character_female_3">Строгий</string>
+    <string name="profile_form_character_female_4">Мягкий</string>
+    <string name="profile_form_character_female_5">Спокойный</string>
+    <string name="profile_form_character_female_6">Беспокойный</string>
+    <string name="profile_form_character_female_7">Никто не жаловался</string>
+    
+    <!-- Alcohol -->
+    <string name="profile_form_alcohol_male_1">Мне и так весело</string>
+    <string name="profile_form_alcohol_male_2">Завязал</string>
+    <string name="profile_form_alcohol_male_3">Иногда можно</string>
+    <string name="profile_form_alcohol_male_4">Скоро брошу</string>
+    <string name="profile_form_alcohol_male_5">Пил, пью и буду пить</string>
+
+    <string name="profile_form_alcohol_female_1">Мне и так весело</string>
+    <string name="profile_form_alcohol_female_2">Завязала</string>
+    <string name="profile_form_alcohol_female_3">Иногда можно</string>
+    <string name="profile_form_alcohol_female_4">Скоро брошу</string>
+    <string name="profile_form_alcohol_female_5">Пил, пью и буду пить</string>
+     
+    <!-- Fitness -->
+    <string name="profile_form_fitness_male_1">Мускулистый</string>
+    <string name="profile_form_fitness_male_2">Спортивный</string>
+    <string name="profile_form_fitness_male_3">Худощавый</string>
+    <string name="profile_form_fitness_male_4">Обычный</string>
+    <string name="profile_form_fitness_male_5">В меру упитанный</string>
+    <string name="profile_form_fitness_male_6">У меня масса других достоинств</string>
+
+    <string name="profile_form_fitness_female_1">Спортивная</string>
+    <string name="profile_form_fitness_female_2">Стройная</string>
+    <string name="profile_form_fitness_female_3">Худощавая</string>
+    <string name="profile_form_fitness_female_4">Модель</string>
+    <string name="profile_form_fitness_female_5">Есть за что подержаться</string>
+    <string name="profile_form_fitness_female_6">С богатыми формами</string>
+    
+    <!-- Job -->
+    <string name="profile_form_job_male_2">Студент</string>
+    <string name="profile_form_job_male_3">Школьник</string>
+    <string name="profile_form_job_male_4">Офисный работник</string>
+    <string name="profile_form_job_male_5">Госслужащий</string>
+    <string name="profile_form_job_male_6">Работяга</string>
+    <string name="profile_form_job_male_7">Бизнесмен</string>
+    <string name="profile_form_job_male_8">Военный</string>
+    <string name="profile_form_job_male_9">Ученый</string>
+    <string name="profile_form_job_male_10">Бездельник</string>
+    
+    <string name="profile_form_job_female_2">Студентка</string>
+    <string name="profile_form_job_female_3">Школьница</string>
+    <string name="profile_form_job_female_4">Офисная работница</string>
+    <string name="profile_form_job_female_5">Менеджер</string>
+    <string name="profile_form_job_female_6">Госслужащая</string>
+    <string name="profile_form_job_female_7">Бизнесвумен</string>
+    <string name="profile_form_job_female_8">Ученая</string>
+    <string name="profile_form_job_female_9">Домохозяйка</string>
+    <string name="profile_form_job_female_10">Бездельница</string>
+    
+    <!-- Marriage -->
+    <string name="profile_form_marriage_male_1">Еще нет</string>
+    <string name="profile_form_marriage_male_2">Уже нет</string>
+    <string name="profile_form_marriage_male_3">Пока да</string>
+    <string name="profile_form_marriage_male_4">Да</string>
+    <string name="profile_form_marriage_male_5">Да и навсегда</string>
+    <string name="profile_form_marriage_male_6">А кому это мешает?</string>
+    <string name="profile_form_marriage_male_7">Никогда</string>
+
+    <string name="profile_form_marriage_female_1">Еще нет</string>
+    <string name="profile_form_marriage_female_2">Уже нет</string>
+    <string name="profile_form_marriage_female_3">Пока да</string>
+    <string name="profile_form_marriage_female_4">Да</string>
+    <string name="profile_form_marriage_female_5">Да и навсегда</string>
+    <string name="profile_form_marriage_female_6">А кому это мешает?</string>
+    <string name="profile_form_marriage_female_7">Никогда</string>
+    
+    <!-- Finances -->
+    <string name="profile_form_finances_male_1">Очень высокий доход</string>
+    <string name="profile_form_finances_male_2">Могу поделиться</string>
+    <string name="profile_form_finances_male_3">Зарабатываю выше среднего</string>
+    <string name="profile_form_finances_male_4">Стабильные средние заработки</string>
+    <string name="profile_form_finances_male_5">Деньги не главное</string>
+    <string name="profile_form_finances_male_6">Скромно, но достаточно</string>
+    <string name="profile_form_finances_male_7">Помогите материально</string>
+
+    <string name="profile_form_finances_female_1">Очень высокий доход</string>
+    <string name="profile_form_finances_female_2">Могу поделиться</string>
+    <string name="profile_form_finances_female_3">Зарабатываю выше среднего</string>
+    <string name="profile_form_finances_female_4">Стабильные средние заработки</string>
+    <string name="profile_form_finances_female_5">Деньги не главное</string>
+    <string name="profile_form_finances_female_6">Скромно, но достаточно</string>
+    <string name="profile_form_finances_female_7">Помогите материально</string>
+    
+    <!-- Smoking -->
+    <string name="profile_form_smoking_male_1">Не курил</string>
+    <string name="profile_form_smoking_male_2">Бросил</string>
+    <string name="profile_form_smoking_male_3">Бросаю</string>
+    <string name="profile_form_smoking_male_4">Только когда выпью</string>
+    <string name="profile_form_smoking_male_5">Дымлю как паровоз</string>
+    <string name="profile_form_smoking_male_6">Курю, но не табак</string>
+    
+    <string name="profile_form_smoking_female_1">Не курила</string>
+    <string name="profile_form_smoking_female_2">Бросила</string>
+    <string name="profile_form_smoking_female_3">Бросаю</string>
+    <string name="profile_form_smoking_female_4">Только когда выпью</string>
+    <string name="profile_form_smoking_female_5">Дымлю как паровоз</string>
+    <string name="profile_form_smoking_female_6">Курю, но не табак</string>
+    
 </resources>

@@ -13,9 +13,9 @@ import android.widget.ImageView;
 public class FaceView extends ImageView {
   // Data
   public  int age;
-  public  String name="";
-  public  String city="";
-  public  String status="";
+  public  String  name="";
+  public  String  city="";
+  public  String  status="";
   public  boolean online;
   
   private int mOffset_y;
