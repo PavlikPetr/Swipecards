@@ -84,22 +84,33 @@
       android:textColor="#FFFFFF"
       android:textSize="20sp" />
   
-<com.sonetica.topface.ui.HorizontalListView
-    android:id="@+id/QQ"
-    android:layout_width="fill_parent"
-    android:layout_height="40dp"  />
+	<com.sonetica.topface.ui.profile.HorizontalListView
+	    android:id="@+id/lvAlbumPreview"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"  
+	    android:layout_marginLeft="20dp" 
+	    android:layout_marginRight="20dp"
+	    android:background="@drawable/profile_bg_gallery" />
   
   <!-- Ero Foto -->  
   <TextView
+      android:id="@+id/tvEroTitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="10dp"
       android:text="@string/profile_foto_ero"
-      android:textColor="#FFFFFF" 
-      android:textSize="20sp" />
-  <Gallery
-    android:id="@+id/QQ2"
-    android:layout_width="fill_parent"
-    android:layout_height="40dp"  />
+      android:textColor="#FFFFFF"
+      android:textSize="20sp" 
+      android:visibility="invisible" />
+  
+
+  <com.sonetica.topface.ui.profile.HorizontalListView
+      android:id="@+id/lvEroAlbumPreview"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"  
+      android:layout_marginLeft="20dp" 
+      android:layout_marginRight="20dp" 
+      android:visibility="invisible" />
+
 </LinearLayout>
 </merge>

@@ -10,6 +10,7 @@ import com.sonetica.topface.utils.Debug;
  */
 public class Profile extends AbstractData {
   // Data
+  public int id;
   public int age;             // возраст пользователя
   public int sex;             // секс пользователя
   public int unread_rates;    // количество непрочитанных оценок пользователя

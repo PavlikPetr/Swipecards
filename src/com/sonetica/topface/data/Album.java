@@ -9,10 +9,13 @@ import com.sonetica.topface.utils.Debug;
 
 public class Album extends AbstractData {
   // Data
-  public int     id;     // идентификатор фотографии в альбоме пользвоателя
+  public int id;     // идентификатор фотографии в альбоме пользвоателя
   public String  small;  // строка URL маленького изображения пользователя
   public String  big;    // строка URL большого изображения пользователя
   public boolean ero;    // флаг, является ли фотография эротической
+  public int cost;       // стоимость просмотра фотографии
+  public int likes;      // количество одобрительных отзывов
+  public int dislikes;   // количество отрицательных отзывов
   //---------------------------------------------------------------------------
   public static LinkedList<Album> parse(Response response) {
     LinkedList<Album> albumsList = new LinkedList<Album>();
@@ -26,9 +29,14 @@ public class Album extends AbstractData {
           album.small = item.getString("small");
           album.big   = item.getString("big");
           
-          if(!item.isNull("ero"))
-            album.ero   = item.getBoolean("ero");
-          
+          if(!item.isNull("ero")) {
+            album.ero   = true;
+            album.cost  = item.getInt("cost");
+            album.likes = item.getInt("likes");
+            album.dislikes = item.getInt("dislikes");
+          } else {
+            album.ero = false;            
+          }
           albumsList.add(album);
         }
     } catch(JSONException e) {

@@ -23,9 +23,9 @@ public class TopsGridAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // Data
   private LayoutInflater mInflater;
-  private GalleryManager mGalleryManager;
+  private GalleryManager<TopUser> mGalleryManager;
   //---------------------------------------------------------------------------
-  public TopsGridAdapter(Context context,GalleryManager galleryManager) {
+  public TopsGridAdapter(Context context,GalleryManager<TopUser> galleryManager) {
     mInflater = LayoutInflater.from(context);
     mGalleryManager = galleryManager;
   }

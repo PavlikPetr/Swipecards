@@ -1,51 +1,46 @@
 package com.sonetica.topface.ui.profile;
 
+import java.util.LinkedList;
 import com.sonetica.topface.R;
+import com.sonetica.topface.data.Album;
 import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.data.ProfileUser;
+import com.sonetica.topface.net.AlbumRequest;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.ProfilesRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.FrameImageView;
-import com.sonetica.topface.ui.HorizontalListView;
+import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.Gallery;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
  *      "Профиль"
  */
 public class ProfileActivity extends Activity {
   // Data
-  private LayoutInflater mInflater;
-  //private ViewPager mViewPager;
-  //private ProfilePagerAdapter mPageAdapter;
-  private ProgressDialog mProgressDialog;
   private TextView mName;
   private TextView mCity;
+  private TextView mEroTitle;
   private FrameImageView mFramePhoto;
-  //private GridView mGallary;
-  private View mProfileTop;
-  private View mProfileBottom;
+  private HorizontalListView mListView;
+  private HorizontalListView mListEroView;
+  private PhotoGalleryAdapter mListAdapter;
+  private PhotoGalleryAdapter mListEroAdapter;
+  private ProgressDialog mProgressDialog;
   // Info
   private TextView mHeight;
   private TextView mWeight;
@@ -59,11 +54,7 @@ public class ProfileActivity extends Activity {
   private TextView mFinances;
   private TextView mSmoking;
   //private TextView mStatus;  // дана отмашка на отключение статуса
-  
   //Constants
-  private static final int PROFILE_TOP = 0;
-  private static final int PROFILE_BOTTOM = 1;
-  private static final int NUM_VIEWS = 2;
   public  static final String INTENT_USER_ID = "user_id";
   //---------------------------------------------------------------------------
   @Override
@@ -78,30 +69,33 @@ public class ProfileActivity extends Activity {
     // свой - чужой профиль
     final int userId = getIntent().getIntExtra(INTENT_USER_ID,-1);
     
-    /*
-    mInflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    mProfileTop = mInflater.inflate(R.layout.profile_form_top, null, false);
-    mProfileBottom = mInflater.inflate(R.layout.profile_form_bottom, null, false);
-
-    mPageAdapter = new ProfilePagerAdapter();
-    mViewPager = (ViewPager)findViewById(R.id.viewPagerProfile);
-    mViewPager.setAdapter(mPageAdapter);
-    */
-    
     // Name
     mName = (TextView)this.findViewById(R.id.tvProfileName);
     // City
     mCity = (TextView)this.findViewById(R.id.tvProfileCity);
     // Photo
     mFramePhoto = (FrameImageView)this.findViewById(R.id.ivProfileFramePhoto);
-    // Gallary
-    HorizontalListView gridview = (HorizontalListView)findViewById(R.id.QQ);
-    gridview.setAdapter(new ImageAdapter(this));
-    
-    //Gallery gridview2 = (Gallery)findViewById(R.id.QQ2);
-    //gridview2.
-    //gridview2.setAdapter(new ImageAdapter(this));
-
+    // Gallary and Adapter
+    mListAdapter = new PhotoGalleryAdapter(ProfileActivity.this);
+    mListView = (HorizontalListView)findViewById(R.id.lvAlbumPreview);
+    mListView.setBackgroundResource(R.drawable.profile_bg_gallery);
+    mListView.setAdapter(mListAdapter);
+    mListView.setOnItemClickListener(new OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> arg0,View arg1,int arg2,long arg3) {
+        Toast.makeText(ProfileActivity.this,"p:"+arg2,Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(ProfileActivity.this,AlbumActivity.class);
+        intent.putExtra(AlbumActivity.INTENT_USER_ID,userId);
+        startActivityForResult(intent,0);
+      }
+    });
+    // Ero Gallary and Adapter
+    mListEroAdapter = new PhotoGalleryAdapter(ProfileActivity.this);
+    mListEroView = (HorizontalListView)findViewById(R.id.lvEroAlbumPreview);
+    mListEroView.setBackgroundColor(Color.WHITE);
+    mListEroView.setAdapter(mListEroAdapter);
+    mEroTitle = (TextView)this.findViewById(R.id.tvEroTitle);
+    // Info
     mHeight = (TextView)this.findViewById(R.id.tvProfileHeight);
     mWeight = (TextView)this.findViewById(R.id.tvProfileWeight);
     mEducation = (TextView)this.findViewById(R.id.tvProfileEducation);
@@ -115,7 +109,8 @@ public class ProfileActivity extends Activity {
     mSmoking = (TextView)this.findViewById(R.id.tvProfileSmoking);
     //mStatus = (TextView)mProfileBottom.findViewById(R.id.tvProfileStatus);
     
-    if(userId==-1) {
+    // Buttons
+    if(userId==-1) {  // редактировать
       Button btnEdit = (Button)this.findViewById(R.id.btnProfileEdit);
       btnEdit.setVisibility(View.VISIBLE);
       btnEdit.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +119,7 @@ public class ProfileActivity extends Activity {
 
         }
       });
-    } else {
+    } else {  // поболтать
       Button btnChat = (Button)this.findViewById(R.id.btnProfileChat);
       btnChat.setVisibility(View.VISIBLE);
       btnChat.setOnClickListener(new View.OnClickListener() {
@@ -153,23 +148,24 @@ public class ProfileActivity extends Activity {
       getProfile(userId);
   }
   //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
-  }
-  //---------------------------------------------------------------------------
+  // свой профиль
   private void getProfile() {
     ProfileRequest profileRequest = new ProfileRequest(this,false);
     profileRequest.callback(new ApiHandler() {
       @Override
       public void success(final Response response) {
         Profile profile = Profile.parse(response,false);
+        
+        // грузим галерею
+        getAlbum(profile.id);
+        
+        // основная информация
         mName.setText(profile.first_name);
         mCity.setText(profile.age+", "+profile.city_name);
         mHeight.setText(""+profile.questionary_height);
         mWeight.setText(""+profile.questionary_weight);
         
+        // анкета
         FormInfo formInfo = new FormInfo(ProfileActivity.this,profile.sex);
         mEducation.setText(formInfo.getEducation(profile.questionary_education_id));
         mCommunication.setText(formInfo.getCommunication(profile.questionary_communication_id));
@@ -182,8 +178,10 @@ public class ProfileActivity extends Activity {
         mSmoking.setText(formInfo.getSmoking(profile.questionary_smoking_id));
         //mStatus.setText(""+profile.questionary_status);
         
+        // avatar
         mFramePhoto.mOnlineState = true;
         Http.imageLoader(profile.photo_url,mFramePhoto);
+        
         mProgressDialog.cancel();
       }
       @Override
@@ -192,6 +190,7 @@ public class ProfileActivity extends Activity {
     }).exec();
   }
   //---------------------------------------------------------------------------
+  // чужой профиль
   private void getProfile(final int userId) {
     ProfilesRequest profileRequest = new ProfilesRequest(this);
     profileRequest.uids.add(userId);
@@ -199,11 +198,17 @@ public class ProfileActivity extends Activity {
       @Override
       public void success(final Response response) {
         ProfileUser profile = ProfileUser.parse(userId,response);
+        
+        // грузим галерею
+        getAlbum(userId);
+
+        // основная информация
         mName.setText(profile.first_name);
         mCity.setText(profile.age+", "+profile.city_name);
         mHeight.setText(""+profile.questionary_height);
         mWeight.setText(""+profile.questionary_weight);
         
+        // анкета
         FormInfo formInfo = new FormInfo(ProfileActivity.this,profile.sex);
         mEducation.setText(formInfo.getEducation(profile.questionary_education_id));
         mCommunication.setText(formInfo.getCommunication(profile.questionary_communication_id));
@@ -216,8 +221,10 @@ public class ProfileActivity extends Activity {
         mSmoking.setText(formInfo.getSmoking(profile.questionary_smoking_id));
         //mStatus.setText(""+profile.questionary_status);
         
+        // avatar
         mFramePhoto.mOnlineState = profile.online;
         Http.imageLoader(profile.getBigLink(),mFramePhoto);
+        
         mProgressDialog.cancel();
       }
       @Override
@@ -226,67 +233,56 @@ public class ProfileActivity extends Activity {
     }).exec();
   }
   //---------------------------------------------------------------------------
-  // class ProfilePagerAdapter
-  //---------------------------------------------------------------------------
-  private class ProfilePagerAdapter extends PagerAdapter{
-    @Override
-    public int getCount() {
-      return NUM_VIEWS;
-    }
-    @Override
-    public Object instantiateItem(View collection, int position) {
-      View view=null;
-      
-      if(position==PROFILE_TOP)
-        ((ViewPager)collection).addView(view=mProfileTop,0);
-      else if(position==PROFILE_BOTTOM)
-        ((ViewPager)collection).addView(view=mProfileBottom,0);
-      
-      return view;
-    }
-    @Override
-    public void destroyItem(View collection, int position, Object view) {
-      ((ViewPager)collection).removeView((View)view);
-    }
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-      return view==((View)object);
-    }
-    @Override public void finishUpdate(View arg0) {}
-    @Override public void restoreState(Parcelable arg0, ClassLoader arg1) {}
-    @Override public Parcelable saveState() {return null;}
-    @Override public void startUpdate(View arg0) {}
+  private void getAlbum(int uid) {
+    AlbumRequest albumRequest = new AlbumRequest(this);
+    albumRequest.uid  = uid;
+    albumRequest.callback(new ApiHandler() {
+      @Override
+      public void success(Response response) {
+        LinkedList<Album> photoList = new LinkedList<Album>(); 
+        LinkedList<Album> eroList   = new LinkedList<Album>();
+        
+        // сортируем эро и не эро
+        LinkedList<Album> albumList = Album.parse(response);        
+        for(Album album : albumList)
+          if(album.ero)
+            eroList.add(album);
+          else
+            photoList.add(album);
+        
+        // обнавляем галереи
+        if(photoList.size()>0) {
+          mListAdapter.setDataList(photoList);
+          mListAdapter.notifyDataSetChanged();
+        }
+
+        if(eroList.size()>0) {
+          mEroTitle.setVisibility(View.VISIBLE);
+          mListEroView.setVisibility(View.VISIBLE);
+          mListEroAdapter.setDataList(eroList);
+          mListEroAdapter.notifyDataSetChanged();
+        }
+      }
+      @Override
+      public void fail(int codeError) {
+      }
+    }).exec();
   }
   //---------------------------------------------------------------------------
-  // class ImageAdapter
-  //---------------------------------------------------------------------------
-  public class ImageAdapter extends BaseAdapter {    
-  private Context mContext;    
-  public ImageAdapter(Context c) {        mContext = c;    }    
-  public int getCount() {        return mThumbIds.length;    }    
-  public Object getItem(int position) {        return null;    }    
-  public long getItemId(int position) {        return 0;    }    // create a new ImageView for each item referenced by the Adapter    
-  public View getView(int position, View convertView, ViewGroup parent) {        
-    ImageView imageView;        if (convertView == null) {  // if it's not recycled, initialize some attributes            
-    imageView = new ImageView(mContext);            
-    imageView.setLayoutParams(new Gallery.LayoutParams(85, 85));            
-    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);            
-    imageView.setPadding(8, 8, 8, 8);        } else {            
-      imageView = (ImageView) convertView;        }        
-    imageView.setImageResource(mThumbIds[position]);        
-    return imageView;    }
-  
-    private Integer[] mThumbIds  = {
-            R.drawable.ic_launcher,
-            R.drawable.im_red_informer,
-            R.drawable.ic_launcher,
-            R.drawable.im_red_informer,
-            R.drawable.ic_launcher,
-            R.drawable.im_red_informer,
-            R.drawable.ic_launcher,
-            R.drawable.im_red_informer
-  };
+  public void release() {
+    mName = null;
+    mCity = null;
+    mFramePhoto = null;
+    mListView = null;
+    mListAdapter = null;
+    mProgressDialog = null;
   }
   //---------------------------------------------------------------------------
-  
+  @Override
+  protected void onDestroy() {
+    release();
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
+  }
+  //---------------------------------------------------------------------------  
 }

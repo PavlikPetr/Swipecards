@@ -146,6 +146,25 @@ public class Http {
     thread.start();
   }
   //---------------------------------------------------------------------------
+  //  запускается в UI потоке, отдельный поток создавать не нужно
+  public static void imageLoaderExp(final String url, final ImageView view) {
+    Thread thread = new Thread() {
+      @Override
+      public void run() {
+        final Bitmap bitmap = bitmapLoader(url);
+        if(bitmap != null)
+          view.post(new Runnable() {
+            @Override
+            public void run() {
+              view.setImageBitmap(bitmap);
+            }
+          });
+      }
+    };
+    thread.setPriority(3);
+    thread.start();
+  }
+  //---------------------------------------------------------------------------
   /*
    *  для использования необходим отдельный поток
    *  при обрыве связи при скачивании фабрика возвращает null  
