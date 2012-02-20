@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.album;
 
 import com.sonetica.topface.R;
-import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,12 +38,11 @@ public class AlbumGalleryAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   public View getView(final int position,View convertView, ViewGroup parent) {
     ViewHolder holder = null;
-    if(convertView==null) {
+    if(convertView == null) {
       holder = new ViewHolder();
       convertView = (ViewGroup)mInflater.inflate(R.layout.album_item_gallery, null, false);
       convertView.setLayoutParams(new Gallery.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
       holder.mImageView = (ImageView)convertView.findViewById(R.id.ivPreView);
-      Debug.log(null,"new view");
       convertView.setTag(holder);
     } else 
       holder = (ViewHolder)convertView.getTag();

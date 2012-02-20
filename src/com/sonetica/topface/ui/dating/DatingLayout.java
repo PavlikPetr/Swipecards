@@ -14,9 +14,9 @@ import android.widget.ProgressBar;
 
 public class DatingLayout extends ViewGroup implements View.OnClickListener {
   // Data
-  private FaceView      mFaceView;
-  private RateControl   mRateControl;
-  private ProgressBar   mProgress;
+  private FaceView mFaceView;
+  private RateControl mRateControl;
+  private ProgressBar mProgress;
   private ResourcesView mResView;
   //---------------------------------------------------------------------------
   public DatingLayout(Context context) {

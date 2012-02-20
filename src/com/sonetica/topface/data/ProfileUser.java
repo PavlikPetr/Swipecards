@@ -54,9 +54,14 @@ public class ProfileUser extends AbstractData {
         profile.last_visit = item.getInt("last_visit");
         profile.online     = item.getBoolean("online");
         profile.status     = item.getString("status");
+      /*
       JSONObject geo = item.getJSONObject("geo");
         profile.city_name  = geo.getString("city");
         profile.city_id    = geo.getInt("city_id");
+      */
+      profile.city_name  = item.getString("city");
+      profile.city_id    = item.getInt("city_id");
+        
       JSONObject avatars = item.getJSONObject("avatars");
         profile.avatars_big   = avatars.getString("big");
         profile.avatars_small = avatars.getString("small");

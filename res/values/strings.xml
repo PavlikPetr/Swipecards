@@ -69,8 +69,11 @@
   <string name="rates_btn_dbl_left">Все</string>
   <string name="rates_btn_dbl_right">Непрочитанные</string>
   
-  <!-- Album Activity -->
+  <!-- Album Ero Activity -->
   <string name="album_header_title">Альбом</string>
+  <string name="ero_album_btn_like">Рекомендую</string>
+  <string name="ero_album_btn_dislike">Не рекомендую</string>
+  <string name="ero_album_btn_buy">Смотреть следующую</string>
   
   <!-- Pull2Refresh Module -->
   <string name="pull_to_refresh_pull_label">Pull to refresh</string>

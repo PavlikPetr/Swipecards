@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 public class ProfileThumbView extends ImageView {
   // Data
-  public boolean mEro;
   private static Bitmap mFrameBitmap;
   //---------------------------------------------------------------------------
   public ProfileThumbView(Context context) {

@@ -34,7 +34,7 @@ public class GalleryManager<T extends AbstractData> implements OnScrollListener 
   // Data
   private ExecutorService mThreadsPool;
   private LinkedList<T> mDataList;
-  // кеш
+  // кэш
   private MemoryCache  mMemoryCache;
   private StorageCache mStorageCache;
   // размеры фотографии в гриде
@@ -70,7 +70,8 @@ public class GalleryManager<T extends AbstractData> implements OnScrollListener 
     if(bitmap!=null)
       imageView.setImageBitmap(bitmap);
     else {
-      imageView.setImageResource(R.drawable.im_black_square);
+      //imageView.setImageResource(R.drawable.im_black_square);
+      imageView.setImageResource(R.drawable.icon_people);
       if(!mBusy) {
         bitmap = mStorageCache.load(mDataList.get(position).getSmallLink());
         if(bitmap!=null) {

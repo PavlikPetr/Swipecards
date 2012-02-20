@@ -15,12 +15,13 @@ import android.widget.TextView;
 public class AlbumActivity extends Activity {
   // Data
   private AlbumGallery  mGallery;
+  private LinkedList<Album> mAlbumsList;
   private ProgressDialog mProgressDialog;
   private AlbumGalleryManager mGalleryManager;
   private AlbumGalleryAdapter mGalleryAdapter;
-  private LinkedList<Album> mAlbumsList;
   // Constants
   public static final String INTENT_USER_ID = "user_id";
+  public static final String INTENT_ALBUM_POS = "album_position";
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +43,15 @@ public class AlbumActivity extends Activity {
     mAlbumsList = new LinkedList<Album>();
    
     int uid = getIntent().getIntExtra(INTENT_USER_ID,-1);
+    int pos = getIntent().getIntExtra(INTENT_ALBUM_POS,0);
     if(uid==-1) {
       Debug.log(this,"Intent param is wrong");
       finish();      
     }
-    update(uid);
+    update(uid,pos);
   }
   //---------------------------------------------------------------------------
-  private void update(int uid) {
+  private void update(int uid,final int position) {
     AlbumRequest albumRequest = new AlbumRequest(this);
     albumRequest.uid  = uid;
     albumRequest.callback(new ApiHandler() {
@@ -59,6 +61,7 @@ public class AlbumActivity extends Activity {
         mGalleryManager = new AlbumGalleryManager(AlbumActivity.this,mAlbumsList);
         mGalleryAdapter = new AlbumGalleryAdapter(AlbumActivity.this,mGalleryManager);
         mGallery.setAdapter(mGalleryAdapter);
+        mGallery.setSelection(position,true);
         mProgressDialog.cancel();
       }
       @Override
@@ -75,6 +78,7 @@ public class AlbumActivity extends Activity {
       mGalleryManager.release();
       mGalleryManager = null;
     }
+    
     if(mGalleryAdapter!=null) mGalleryAdapter=null;
     if(mGallery!=null)        mGallery=null;
     

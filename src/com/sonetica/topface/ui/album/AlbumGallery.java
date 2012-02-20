@@ -1,6 +1,5 @@
 package com.sonetica.topface.ui.album;
 
-import com.sonetica.topface.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -32,6 +31,7 @@ public class AlbumGallery extends Gallery implements View.OnTouchListener {
   public int side=0;
   @Override
   public boolean onTouch(View v,MotionEvent event) {
+    /*
     if(this.getSelectedItemId()==0 || this.getSelectedItemId()==this.getCount()-1)
       switch (event.getAction()) {
         case MotionEvent.ACTION_MOVE : {
@@ -89,6 +89,7 @@ public class AlbumGallery extends Gallery implements View.OnTouchListener {
             mLastXs[i] = 0;
         } break;
       }
+      */
     return false;
   }
   //---------------------------------------------------------------------------

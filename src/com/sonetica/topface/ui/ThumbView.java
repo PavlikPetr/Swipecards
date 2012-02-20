@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -20,7 +19,7 @@ public class ThumbView extends ImageView {
   public boolean mOnline;
   public int     mCity;
   // Constants
-  private static Bitmap mPeople;
+  //private static Bitmap mPeople;
   private static Bitmap mOnlineBmp;
   private static Bitmap mOfflineBmp;
   private static Bitmap mHeartBmp;
@@ -43,8 +42,11 @@ public class ThumbView extends ImageView {
   //---------------------------------------------------------------------------
   public ThumbView(Context context,AttributeSet attrs) {
     super(context,attrs);
-    //setBackgroundColor(Color.MAGENTA);
-    mPeople     = BitmapFactory.decodeResource(getResources(),R.drawable.icon_people);
+    
+    setBackgroundColor(Color.TRANSPARENT);
+    setScaleType(ScaleType.CENTER);
+    
+    //mPeople     = BitmapFactory.decodeResource(getResources(),R.drawable.icon_people);
     mHeartBmp   = BitmapFactory.decodeResource(getResources(),R.drawable.tops_heart);
     mOnlineBmp  = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
     mOfflineBmp = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
@@ -52,16 +54,16 @@ public class ThumbView extends ImageView {
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
-    //super.onDraw(canvas);
+    super.onDraw(canvas);
     
     int width  = getMeasuredWidth();
     int height = getMeasuredHeight();
     
     // People
-    canvas.drawBitmap(mPeople,(width-mPeople.getWidth())/2,(height-mPeople.getHeight())/2,s_PaintState);
+    //canvas.drawBitmap(mPeople,(width-mPeople.getWidth())/2,(height-mPeople.getHeight())/2,s_PaintState);
     
-    Bitmap bitmap = ((BitmapDrawable)getDrawable()).getBitmap();
-    canvas.drawBitmap(bitmap,0,0,null);
+    //Bitmap bitmap = ((BitmapDrawable)getDrawable()).getBitmap();
+    //canvas.drawBitmap(bitmap,0,0,null);
     Rect lineRect = new Rect(0,height-32,width,height);
     canvas.drawRect(lineRect,s_PaintLine);
     

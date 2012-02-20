@@ -18,14 +18,13 @@ import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /*
  *      "Профиль"
@@ -38,9 +37,12 @@ public class ProfileActivity extends Activity {
   private FrameImageView mFramePhoto;
   private HorizontalListView mListView;
   private HorizontalListView mListEroView;
+  private ViewGroup mEroViewGroup;
   private PhotoGalleryAdapter mListAdapter;
-  private PhotoGalleryAdapter mListEroAdapter;
+  private PhotoEroGalleryAdapter mListEroAdapter;
   private ProgressDialog mProgressDialog;
+  public static LinkedList<Album> mPhotoList; 
+  public static LinkedList<Album> mEroList;
   // Info
   private TextView mHeight;
   private TextView mWeight;
@@ -75,6 +77,7 @@ public class ProfileActivity extends Activity {
     mCity = (TextView)this.findViewById(R.id.tvProfileCity);
     // Photo
     mFramePhoto = (FrameImageView)this.findViewById(R.id.ivProfileFramePhoto);
+    
     // Gallary and Adapter
     mListAdapter = new PhotoGalleryAdapter(ProfileActivity.this);
     mListView = (HorizontalListView)findViewById(R.id.lvAlbumPreview);
@@ -82,19 +85,31 @@ public class ProfileActivity extends Activity {
     mListView.setAdapter(mListAdapter);
     mListView.setOnItemClickListener(new OnItemClickListener() {
       @Override
-      public void onItemClick(AdapterView<?> arg0,View arg1,int arg2,long arg3) {
-        Toast.makeText(ProfileActivity.this,"p:"+arg2,Toast.LENGTH_SHORT).show();
+      public void onItemClick(AdapterView<?> arg0,View arg1,int position,long arg3) {
         Intent intent = new Intent(ProfileActivity.this,AlbumActivity.class);
         intent.putExtra(AlbumActivity.INTENT_USER_ID,userId);
+        intent.putExtra(AlbumActivity.INTENT_ALBUM_POS,position);
         startActivityForResult(intent,0);
       }
     });
+    
     // Ero Gallary and Adapter
-    mListEroAdapter = new PhotoGalleryAdapter(ProfileActivity.this);
-    mListEroView = (HorizontalListView)findViewById(R.id.lvEroAlbumPreview);
-    mListEroView.setBackgroundColor(Color.WHITE);
-    mListEroView.setAdapter(mListEroAdapter);
     mEroTitle = (TextView)this.findViewById(R.id.tvEroTitle);
+    mEroViewGroup = (ViewGroup)findViewById(R.id.loEroAlbum);
+    mListEroAdapter = new PhotoEroGalleryAdapter(ProfileActivity.this);
+    mListEroView = (HorizontalListView)findViewById(R.id.lvEroAlbumPreview);
+    mListEroView.setBackgroundResource(R.drawable.profile_bg_gallery);
+    mListEroView.setAdapter(mListEroAdapter);
+    mListEroView.setOnItemClickListener(new OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> arg0,View arg1,int position,long arg3) {
+        Intent intent = new Intent(ProfileActivity.this,EroAlbumActivity.class);
+        intent.putExtra(EroAlbumActivity.INTENT_USER_ID,userId);
+        intent.putExtra(EroAlbumActivity.INTENT_ALBUM_POS,position);
+        startActivityForResult(intent,0);
+      }
+    });
+    
     // Info
     mHeight = (TextView)this.findViewById(R.id.tvProfileHeight);
     mWeight = (TextView)this.findViewById(R.id.tvProfileWeight);
@@ -135,6 +150,10 @@ public class ProfileActivity extends Activity {
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    
+    // Albums
+    mPhotoList = new LinkedList<Album>(); 
+    mEroList   = new LinkedList<Album>();
 
     update(userId);
   }
@@ -157,7 +176,7 @@ public class ProfileActivity extends Activity {
         Profile profile = Profile.parse(response,false);
         
         // грузим галерею
-        getAlbum(profile.id);
+        getAlbum(profile.uid);
         
         // основная информация
         mName.setText(profile.first_name);
@@ -181,8 +200,6 @@ public class ProfileActivity extends Activity {
         // avatar
         mFramePhoto.mOnlineState = true;
         Http.imageLoader(profile.photo_url,mFramePhoto);
-        
-        mProgressDialog.cancel();
       }
       @Override
       public void fail(int codeError) {
@@ -224,8 +241,6 @@ public class ProfileActivity extends Activity {
         // avatar
         mFramePhoto.mOnlineState = profile.online;
         Http.imageLoader(profile.getBigLink(),mFramePhoto);
-        
-        mProgressDialog.cancel();
       }
       @Override
       public void fail(int codeError) {
@@ -239,29 +254,28 @@ public class ProfileActivity extends Activity {
     albumRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        LinkedList<Album> photoList = new LinkedList<Album>(); 
-        LinkedList<Album> eroList   = new LinkedList<Album>();
-        
         // сортируем эро и не эро
         LinkedList<Album> albumList = Album.parse(response);        
         for(Album album : albumList)
           if(album.ero)
-            eroList.add(album);
+            mEroList.add(album);
           else
-            photoList.add(album);
+            mPhotoList.add(album);
         
         // обнавляем галереи
-        if(photoList.size()>0) {
-          mListAdapter.setDataList(photoList);
+        if(mPhotoList.size()>0) {
+          mListAdapter.setDataList(mPhotoList);
           mListAdapter.notifyDataSetChanged();
         }
 
-        if(eroList.size()>0) {
-          mEroTitle.setVisibility(View.VISIBLE);
-          mListEroView.setVisibility(View.VISIBLE);
-          mListEroAdapter.setDataList(eroList);
+        if(mEroList.size()>0) {
+          mListEroAdapter.setDataList(mEroList);
           mListEroAdapter.notifyDataSetChanged();
+          mEroTitle.setVisibility(View.VISIBLE);
+          mEroViewGroup.setVisibility(View.VISIBLE);
         }
+        
+        mProgressDialog.cancel();
       }
       @Override
       public void fail(int codeError) {

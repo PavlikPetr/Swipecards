@@ -15,6 +15,7 @@ public class Inbox extends AbstractData {
   public int city_id;          // идентификатор города отправителя сообщения
   public int gift;             // идентификатор подарка
   public int code;             // код входящего уведомления
+  public int unread_count;     // количество оставшихся непрочитанных
   public long created;         // время отправления оценки
   public boolean online;       // флаг нахождения пользователя в онлайне
   public boolean unread;       // флаг прочитанного сообщения
@@ -43,6 +44,7 @@ public class Inbox extends AbstractData {
           msg.online     = item.getBoolean("online");
           msg.unread     = item.getBoolean("unread");
           msg.created    = item.getLong("created")*1000; // время приходит в секундах
+          msg.unread_count = response.mJSONResult.getInt("unread");
           msg.city_id    = item.getInt("city_id");
           msg.uid        = item.getInt("uid");
           msg.age        = item.getInt("age");

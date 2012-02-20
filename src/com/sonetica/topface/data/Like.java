@@ -13,6 +13,7 @@ public class Like extends AbstractData {
   public int uid;               // идентификатор фотографии в альбоме пользователя
   public int age;               // возраст пользователя
   public int city_id;           // идентификатор города отправителя оценки
+  public int unread_count;      // количество оставшихся непрочитанных
   public boolean online;        // флаг нахождения пользователя в онлайне
   public boolean unread;        // флаг прочитанного лайка
   public String first_name;     // имя пользователя
@@ -30,6 +31,7 @@ public class Like extends AbstractData {
           like.first_name  = item.getString("first_name");
           like.uid         = item.getInt("uid");
           like.age         = item.getInt("age");
+          like.unread_count = response.mJSONResult.getInt("unread");
           like.online      = item.getBoolean("online");
           like.unread      = item.getBoolean("unread");
           like.city_id     = item.getInt("city_id");

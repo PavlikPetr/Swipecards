@@ -16,7 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView.ScaleType;
 
-public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListener  {
+public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollListener  {
   // Data
   private Context mContext;
   private LinkedList<Album> mAlbumList;
@@ -24,7 +24,7 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
   private ExecutorService mThreadsPool;
   private boolean mBusy; 
   //---------------------------------------------------------------------------
-  public PhotoGalleryAdapter(Context context) {
+  public PhotoEroGalleryAdapter(Context context) {
     mContext = context;
     mCache = new HashMap<Integer,Bitmap>();
     mAlbumList = new LinkedList<Album>();
@@ -53,24 +53,27 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
   @Override
   public View getView(int position,View convertView,ViewGroup parent) {
     if(convertView == null) {
-      convertView = new ProfileThumbView(mContext);
-      ((ProfileThumbView)convertView).setScaleType(ScaleType.CENTER_CROP);
+      convertView = new ProfileEroThumbView(mContext);
+      ((ProfileEroThumbView)convertView).setScaleType(ScaleType.CENTER_CROP);
       convertView.setBackgroundResource(R.drawable.profile_bg_gallery);
     }
 
     Bitmap bitmap = mCache.get(position);
     if(bitmap!=null)
-      ((ProfileThumbView)convertView).setImageBitmap(bitmap);
+      ((ProfileEroThumbView)convertView).setImageBitmap(bitmap);
     else {
-      ((ProfileThumbView)convertView).setImageResource(R.drawable.profile_bg_gallery);
-      loadingImage(position,((ProfileThumbView)convertView));
+      ((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_bg_gallery);
+      loadingImage(position,((ProfileEroThumbView)convertView));
     }
     
     return convertView;
   }
   //---------------------------------------------------------------------------
-  private void loadingImage(final int position,final ProfileThumbView view) {
+  private void loadingImage(final int position,final ProfileEroThumbView view) {
     final Album album = (Album)getItem(position);
+    view.cost = album.cost;
+    view.likes = album.likes;
+    view.dislikes = album.dislikes;
     mThreadsPool.execute(new Runnable() {
       @Override
       public void run() {

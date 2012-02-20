@@ -40,6 +40,7 @@
     <activity android:name=".ui.dating.DatingActivity"       android:screenOrientation="portrait" />
     <activity android:name=".ui.dating.FilterActivity"       android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.ProfileActivity"     android:screenOrientation="portrait" />
+    <activity android:name=".ui.profile.EroAlbumActivity"    android:screenOrientation="portrait" />
     
     <!-- preferences activity -->
     <activity android:name=".ui.PreferencesActivity"   android:screenOrientation="portrait" />

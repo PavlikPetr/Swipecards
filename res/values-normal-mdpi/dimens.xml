@@ -9,4 +9,5 @@
     <dimen name="name_font_size">26sp</dimen>
     <dimen name="name_offset_y_size">120dp</dimen>
     <dimen name="status_font_size">16sp</dimen>
+    <dimen name="profile_arrow_width">20dp</dimen>
 </resources>

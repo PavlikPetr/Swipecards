@@ -32,11 +32,11 @@ public class InboxActivity extends Activity {
   private PullToRefreshListView mListView;
   private InboxListAdapter mAdapter;
   private LinkedList<Inbox> mInboxList;
-  private AvatarManager mAvatarManager;
+  private AvatarManager<Inbox> mAvatarManager;
   private ProgressDialog mProgressDialog;
   private boolean mIsNewMessages;
   // Constants
-  private static final int LIMIT = 40;
+  private static final int LIMIT = 20;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +132,7 @@ public class InboxActivity extends Activity {
     
     InboxRequest inboxRequest = new InboxRequest(InboxActivity.this);
     inboxRequest.offset = offset;
-    inboxRequest.limit  = 100;
+    inboxRequest.limit  = LIMIT;
     inboxRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {

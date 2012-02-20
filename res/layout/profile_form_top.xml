@@ -82,15 +82,38 @@
       android:layout_marginLeft="10dp"
       android:text="@string/profile_foto" 
       android:textColor="#FFFFFF"
+      android:layout_marginTop="5dp"
       android:textSize="20sp" />
   
-	<com.sonetica.topface.ui.profile.HorizontalListView
-	    android:id="@+id/lvAlbumPreview"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"  
-	    android:layout_marginLeft="20dp" 
-	    android:layout_marginRight="20dp"
-	    android:background="@drawable/profile_bg_gallery" />
+  <LinearLayout 
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="5dp"
+      android:orientation="horizontal" >
+
+    <ImageView
+        android:layout_width="@dimen/profile_arrow_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:src="@drawable/profile_arrow_left" />
+    
+		<com.sonetica.topface.ui.profile.HorizontalListView
+		    android:id="@+id/lvAlbumPreview"
+        android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="2"  
+        android:padding="1dp"
+		    android:background="@drawable/profile_bg_gallery" />
+		
+    <ImageView
+        android:layout_width="@dimen/profile_arrow_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:src="@drawable/profile_arrow_right" />
+		 
+	</LinearLayout>
   
   <!-- Ero Foto -->  
   <TextView
@@ -101,16 +124,40 @@
       android:text="@string/profile_foto_ero"
       android:textColor="#FFFFFF"
       android:textSize="20sp" 
+      android:layout_marginTop="15dp"
       android:visibility="invisible" />
   
-
-  <com.sonetica.topface.ui.profile.HorizontalListView
-      android:id="@+id/lvEroAlbumPreview"
+  <LinearLayout
+      android:id="@+id/loEroAlbum" 
       android:layout_width="fill_parent"
-      android:layout_height="wrap_content"  
-      android:layout_marginLeft="20dp" 
-      android:layout_marginRight="20dp" 
-      android:visibility="invisible" />
-
+      android:layout_height="wrap_content"
+      android:layout_marginTop="5dp"
+      android:visibility="invisible"
+      android:orientation="horizontal" >
+    
+    <ImageView
+        android:layout_width="@dimen/profile_arrow_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:src="@drawable/profile_arrow_left" />
+    
+	  <com.sonetica.topface.ui.profile.HorizontalListView
+	      android:id="@+id/lvEroAlbumPreview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"  
+        android:padding="1dp"
+        android:background="@drawable/profile_bg_gallery" />
+	  
+	  <ImageView
+        android:layout_width="@dimen/profile_arrow_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:src="@drawable/profile_arrow_right" />
+	      
+  </LinearLayout>
+  
 </LinearLayout>
 </merge>

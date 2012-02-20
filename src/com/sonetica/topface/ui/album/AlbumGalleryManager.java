@@ -10,18 +10,15 @@ import com.sonetica.topface.utils.MemoryCache;
 import com.sonetica.topface.utils.StorageCache;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Pair;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 
 /*
  *  Менеджер изображений, загрузает и кеширует изображения
  */
 public class AlbumGalleryManager {
   // Data
-  private Context mContext;
-  private MemoryCache  mMemoryCache;
+    private MemoryCache  mMemoryCache;
   private StorageCache mStorageCache;
   private ExecutorService mThreadsPool;
   private LinkedList<? extends AbstractData> mData;
@@ -31,7 +28,6 @@ public class AlbumGalleryManager {
   private static final int THREAD_DEFAULT = 4;
   //---------------------------------------------------------------------------
   public AlbumGalleryManager(Context context,LinkedList<? extends AbstractData> dataList) {
-    mContext = context;
     mData = dataList;
     mThreadCount  = THREAD_DEFAULT;
     mMemoryCache  = new MemoryCache();

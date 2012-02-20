@@ -13,6 +13,7 @@ public class Rate extends AbstractData {
   public int age;               // возраст пользователя
   public int rate;              // оценка пользователя
   public int city_id;           // идентификатор города отправителя оценки
+  public int unread_count;      // количество оставшихся непрочитанных
   public long created;          // время отправления оценки
   public boolean online;        // флаг нахождения пользователя в онлайне
   public boolean unread;        // флаг прочитанной оценки
@@ -32,6 +33,7 @@ public class Rate extends AbstractData {
           rate.online     = item.getBoolean("online");
           rate.unread     = item.getBoolean("unread");
           rate.created    = item.getLong("created")*1000; // время приходит в секундах
+          rate.unread_count = response.mJSONResult.getInt("unread");
           rate.uid        = item.getInt("uid");
           rate.age        = item.getInt("age");
           rate.rate       = item.getInt("rate");
