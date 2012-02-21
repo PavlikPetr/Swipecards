@@ -19,6 +19,7 @@ import com.sonetica.topface.ui.rates.RatesActivity;
 import com.sonetica.topface.ui.tops.TopsActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,6 +38,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   private DashboardButton  mLikesButton;
   private DashboardButton  mRatesButton;
   private DashboardButton  mChatButton;
+  private ProgressDialog   mProgressDialog;
   // Constants
   public static final int INTENT_DASHBOARD = 100;
   //---------------------------------------------------------------------------
@@ -62,8 +64,15 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       return;
     }
     
+    // Progress Bar
+    mProgressDialog = new ProgressDialog(this);
+    mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    mProgressDialog.show();
+    
     mNotifyHandler = new NotifyHandler();
     //mNotifyHandler.sendEmptyMessage(0);
+    
+    update();
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -122,6 +131,35 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     mNotifyHandler = null;
     Debug.log(this,"-onDestroy");
     super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
+  public void update() {
+    ProfileRequest profileRequest = new ProfileRequest(this,false);
+    profileRequest.callback(new ApiHandler() {
+      @Override
+      public void success(final Response response) {
+        Profile profile = Profile.parse(response,false);
+        if(profile==null){
+          Toast.makeText(DashboardActivity.this.getApplicationContext(),"Profile is null",Toast.LENGTH_SHORT).show();
+        }
+        Data.setProfile(profile);
+        mProgressDialog.cancel();
+      }
+      @Override
+      public void fail(int codeError) {
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  private void invalidateNotification() {
+    mLikesButton.mNotify = Data.s_Likes;
+    mLikesButton.invalidate();
+    
+    mRatesButton.mNotify = Data.s_Rates;
+    mRatesButton.invalidate();
+    
+    mChatButton.mNotify = Data.s_Messages;
+    mChatButton.invalidate();    
   }
   //---------------------------------------------------------------------------
   // Menu
@@ -190,17 +228,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       }).exec();
     }
 
-  }
-  //---------------------------------------------------------------------------
-  private void invalidateNotification() {
-    mLikesButton.mNotify = Data.s_Likes;
-    mLikesButton.invalidate();
-    
-    mRatesButton.mNotify = Data.s_Rates;
-    mRatesButton.invalidate();
-    
-    mChatButton.mNotify = Data.s_Messages;
-    mChatButton.invalidate();    
   }
   //---------------------------------------------------------------------------
 }

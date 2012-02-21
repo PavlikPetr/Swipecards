@@ -9,7 +9,7 @@ import com.sonetica.topface.utils.Debug;
 
 public class City extends AbstractData {
   // Data
-  public int    id;   // уникальных код города
+  public int id;      // уникальных код города
   public String name; // строка наименования города в русскоязычной локали
   //---------------------------------------------------------------------------
   public static LinkedList<City> parse(Response response) {

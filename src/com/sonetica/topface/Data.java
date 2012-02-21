@@ -17,21 +17,20 @@ import com.sonetica.topface.data.TopUser;
 public class Data {
   // Data
   private static LinkedList<SearchUser> s_SearchList;  // dating
-  private static LinkedList<Inbox>      s_InboxList;
-  private static LinkedList<Like>       s_LikesList;
-  private static LinkedList<TopUser>    s_TopsList;
-  private static LinkedList<Rate>       s_RatesList;
-  private static LinkedList<City>       s_CitiesList;
-  
+  private static LinkedList<TopUser> s_TopsList;
+  private static LinkedList<Inbox> s_InboxList;
+  private static LinkedList<Like>  s_LikesList;
+  private static LinkedList<Rate>  s_RatesList;
+  private static LinkedList<City>  s_CitiesList;
   public static LinkedList<String> s_LogList;
-  
+  // profile
   public static Profile s_Profile;
   // Data Profile
-  public static int s_Rates;
-  public static int s_Messages;
-  public static int s_Likes;
   public static int s_Power;
   public static int s_Money;
+  public static int s_Rates;
+  public static int s_Likes;
+  public static int s_Messages;
   public static int s_AverageRate;
   // Topface ssid key
   public static String SSID;  // ключ для запросов к TP серверу
@@ -50,29 +49,30 @@ public class Data {
     s_LogList = new LinkedList<String>();
   }
   //---------------------------------------------------------------------------
+  public static void setProfile(Profile profile) {
+    s_Profile = profile;
+    updateNotification(profile);
+  }
+  //---------------------------------------------------------------------------
   public static void updateNotification(Profile profile) {
-    if(profile==null) {
-      s_Rates = s_Likes = s_Messages = s_Money = s_Power = s_AverageRate = 0;
-      return;
-    }
-    s_Rates       = profile.unread_rates;
-    s_Likes       = profile.unread_likes;
-    s_Messages    = profile.unread_messages;
-    s_Power       = profile.power;
-    s_Money       = profile.money;
+    s_Power = profile.power;
+    s_Money = profile.money;
+    s_Rates = profile.unread_rates;
+    s_Likes = profile.unread_likes;
+    s_Messages = profile.unread_messages;
     s_AverageRate = profile.average_rate;
   }
   //---------------------------------------------------------------------------
   public static void saveSSID(Context context,String ssid) {
-    if(ssid==null)
-      ssid = "";
+    if(ssid==null || ssid.length()==0)
+      SSID = "";
+    else
+      SSID = ssid;
     
     SharedPreferences preferences   = context.getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = preferences.edit();
-    editor.putString(context.getString(R.string.s_ssid),ssid);
+    editor.putString(context.getString(R.string.s_ssid),SSID);
     editor.commit();
-    
-    SSID = ssid;
   }
   //---------------------------------------------------------------------------
   public static String loadSSID(Context context) {

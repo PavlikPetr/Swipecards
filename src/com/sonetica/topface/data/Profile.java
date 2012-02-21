@@ -1,5 +1,7 @@
 package com.sonetica.topface.data;
 
+import java.util.LinkedList;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.net.Response;
@@ -20,9 +22,11 @@ public class Profile extends AbstractData {
   public int power;           // количество энергии пользователя
   public int average_rate;    // средняя оценка текущего пользователя
   public String first_name;      // имя пользователя
-  public String photo_url;       // URL аватарки пользователя
   public String city_name;       // название города пользвоателя
   public String city_id;         // идентификтаор города пользователя
+  public String avatar_big;      // аватарка пользователя большого размера
+  public String avatar_small;    // аватарки пользователя маленького размера
+  public LinkedList<Album> albums;
   // Questionary
   public int questionary_job_id;           // идентификатор рабочей партии пользователя
   public String questionary_job;           // описание оригинальной работы пользователя
@@ -49,14 +53,37 @@ public class Profile extends AbstractData {
         if(isNotification)  
           return profile;
         profile.first_name      = resp.getString("first_name");
+        profile.uid             = resp.getInt("uid");
         profile.age             = resp.getInt("age");
         profile.sex             = resp.getInt("sex");
-        profile.photo_url       = resp.getString("photo_url");
-        profile.city_name       = resp.getString("city");
-        profile.city_id         = resp.getString("city_id");
         profile.money           = resp.getInt("money");
         profile.power           = resp.getInt("power");
         profile.average_rate    = resp.getInt("average_rate");
+        profile.city_name       = resp.getString("city");
+        profile.city_id         = resp.getString("city_id");
+      //avatars
+      JSONObject avatars = resp.getJSONObject("avatars");
+        profile.avatar_big   = avatars.getString("big");
+        profile.avatar_small = avatars.getString("small");
+      //albums
+      JSONArray albums = resp.getJSONArray("album");
+      profile.albums = new LinkedList<Album>();
+        if(albums.length()>0)
+          for(int i=0;i<albums.length();i++) {
+            JSONObject album = albums.getJSONObject(i);
+            Album item = new Album();
+            item.id    = album.getInt("id");
+            item.small = album.getString("small");
+            item.big   = album.getString("big");
+            if(!album.isNull("ero")) {
+              item.ero   = true;
+              item.cost  = album.getInt("cost");
+              item.likes = album.getInt("likes");
+              item.dislikes = album.getInt("dislikes");
+            } else
+              item.ero = false;            
+            profile.albums.add(item);
+          }
       //questionary
       JSONObject questionary = resp.getJSONObject("questionary");
         profile.questionary_job_id = questionary.getInt("job_id");
@@ -81,12 +108,12 @@ public class Profile extends AbstractData {
   //---------------------------------------------------------------------------
   @Override
   public String getBigLink() {
-    return photo_url;
+    return avatar_big;
   }
   //---------------------------------------------------------------------------
   @Override
   public String getSmallLink() {
-    return photo_url;
+    return avatar_small;
   }
   //---------------------------------------------------------------------------
 }

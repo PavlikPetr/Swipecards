@@ -34,9 +34,8 @@ public class Album extends AbstractData {
             album.cost  = item.getInt("cost");
             album.likes = item.getInt("likes");
             album.dislikes = item.getInt("dislikes");
-          } else {
+          } else
             album.ero = false;            
-          }
           albumsList.add(album);
         }
     } catch(JSONException e) {

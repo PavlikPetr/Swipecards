@@ -26,7 +26,8 @@
   <string name="inbox_header_title">Диалоги</string>
   <string name="inbox_btn_dbl_left">Все</string>
   <string name="inbox_btn_dbl_right">Непрочитанные</string>
-  <string name="chat_gift">Вам прислали подарок</string> 
+  <string name="chat_gift">Вам прислали подарок</string>
+  <string name="chat_btn_send">Послать</string> 
   
   <!-- Tops Activity -->
   <string name="tops_header_title">Самые красивые</string>
@@ -53,8 +54,8 @@
   <string name="profile_finances">Finances</string>
   <string name="profile_smoking">Smoking</string>
   <string name="profile_status">О себе</string>
+  <string name="profile_btn_form">Анкета</string>
 
-  
   <!-- Dating Activity -->
   <string name="dating_header_title">Оценка фото</string>
   <string name="dating_menu_one">Фильтр</string>

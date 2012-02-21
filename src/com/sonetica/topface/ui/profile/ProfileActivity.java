@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.profile;
 
 import java.util.LinkedList;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
 import com.sonetica.topface.data.Profile;
@@ -21,6 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -29,8 +31,10 @@ import android.widget.TextView;
 /*
  *      "Профиль"
  */
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends Activity implements SwapView.OnSwapListener {
   // Data
+  private int mUserId;
+  private boolean mOwner;
   private TextView mName;
   private TextView mCity;
   private TextView mEroTitle;
@@ -41,8 +45,8 @@ public class ProfileActivity extends Activity {
   private PhotoGalleryAdapter mListAdapter;
   private PhotoEroGalleryAdapter mListEroAdapter;
   private ProgressDialog mProgressDialog;
-  public static LinkedList<Album> mPhotoList; 
-  public static LinkedList<Album> mEroList;
+  private LinkedList<Album> mPhotoList; 
+  private LinkedList<Album> mEroList;
   // Info
   private TextView mHeight;
   private TextView mWeight;
@@ -56,6 +60,7 @@ public class ProfileActivity extends Activity {
   private TextView mFinances;
   private TextView mSmoking;
   //private TextView mStatus;  // дана отмашка на отключение статуса
+  boolean swap = true;
   //Constants
   public  static final String INTENT_USER_ID = "user_id";
   //---------------------------------------------------------------------------
@@ -68,8 +73,43 @@ public class ProfileActivity extends Activity {
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.profile_header_title));
     
+    final SwapView swapView = ((SwapView)findViewById(R.id.swapFormView));
+    swapView.setOnSwapListener(this);
+    
+    // Button Close
+    ((Button)findViewById(R.id.btnHeader)).setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        swapView.snapToScreen(swap?1:0);
+      }
+    });
+    
     // свой - чужой профиль
-    final int userId = getIntent().getIntExtra(INTENT_USER_ID,-1);
+    mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
+    // Buttons
+    if(mUserId==-1) {  // редактировать
+      mOwner = true;
+      mUserId = Data.s_Profile.uid;
+      Button btnEdit = (Button)this.findViewById(R.id.btnProfileEdit);
+      btnEdit.setVisibility(View.VISIBLE);
+      btnEdit.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+      });
+    } else {  // поболтать
+      Button btnChat = (Button)this.findViewById(R.id.btnProfileChat);
+      btnChat.setVisibility(View.VISIBLE);
+      btnChat.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          Intent intent = new Intent(ProfileActivity.this,ChatActivity.class);
+          intent.putExtra(ChatActivity.INTENT_USER_ID,mUserId);
+          startActivityForResult(intent,0);
+        }
+      });
+    }
     
     // Name
     mName = (TextView)this.findViewById(R.id.tvProfileName);
@@ -87,7 +127,7 @@ public class ProfileActivity extends Activity {
       @Override
       public void onItemClick(AdapterView<?> arg0,View arg1,int position,long arg3) {
         Intent intent = new Intent(ProfileActivity.this,AlbumActivity.class);
-        intent.putExtra(AlbumActivity.INTENT_USER_ID,userId);
+        intent.putExtra(AlbumActivity.INTENT_USER_ID,mUserId);
         intent.putExtra(AlbumActivity.INTENT_ALBUM_POS,position);
         startActivityForResult(intent,0);
       }
@@ -104,7 +144,7 @@ public class ProfileActivity extends Activity {
       @Override
       public void onItemClick(AdapterView<?> arg0,View arg1,int position,long arg3) {
         Intent intent = new Intent(ProfileActivity.this,EroAlbumActivity.class);
-        intent.putExtra(EroAlbumActivity.INTENT_USER_ID,userId);
+        intent.putExtra(EroAlbumActivity.INTENT_USER_ID,mUserId);
         intent.putExtra(EroAlbumActivity.INTENT_ALBUM_POS,position);
         startActivityForResult(intent,0);
       }
@@ -124,29 +164,6 @@ public class ProfileActivity extends Activity {
     mSmoking = (TextView)this.findViewById(R.id.tvProfileSmoking);
     //mStatus = (TextView)mProfileBottom.findViewById(R.id.tvProfileStatus);
     
-    // Buttons
-    if(userId==-1) {  // редактировать
-      Button btnEdit = (Button)this.findViewById(R.id.btnProfileEdit);
-      btnEdit.setVisibility(View.VISIBLE);
-      btnEdit.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-        }
-      });
-    } else {  // поболтать
-      Button btnChat = (Button)this.findViewById(R.id.btnProfileChat);
-      btnChat.setVisibility(View.VISIBLE);
-      btnChat.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          Intent intent = new Intent(ProfileActivity.this,ChatActivity.class);
-          intent.putExtra(ChatActivity.INTENT_USER_ID,userId);
-          startActivityForResult(intent,0);
-        }
-      });
-    }
-    
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
@@ -155,16 +172,18 @@ public class ProfileActivity extends Activity {
     mPhotoList = new LinkedList<Album>(); 
     mEroList   = new LinkedList<Album>();
 
-    update(userId);
+    update();
   }
   //---------------------------------------------------------------------------
-  public void update(int userId) {
+  public void update() {
     mProgressDialog.show();
     
-    if(userId==-1)
+    if(mOwner)
       getProfile();
     else
-      getProfile(userId);
+      getUserProfile(mUserId);
+    
+    mProgressDialog.cancel();
   }
   //---------------------------------------------------------------------------
   // свой профиль
@@ -173,10 +192,10 @@ public class ProfileActivity extends Activity {
     profileRequest.callback(new ApiHandler() {
       @Override
       public void success(final Response response) {
-        Profile profile = Profile.parse(response,false);
+        Profile profile = Data.s_Profile;
         
         // грузим галерею
-        getAlbum(profile.uid);
+        getAlbum();
         
         // основная информация
         mName.setText(profile.first_name);
@@ -199,7 +218,7 @@ public class ProfileActivity extends Activity {
         
         // avatar
         mFramePhoto.mOnlineState = true;
-        Http.imageLoader(profile.photo_url,mFramePhoto);
+        Http.imageLoader(profile.getBigLink(),mFramePhoto);
       }
       @Override
       public void fail(int codeError) {
@@ -208,7 +227,7 @@ public class ProfileActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   // чужой профиль
-  private void getProfile(final int userId) {
+  private void getUserProfile(final int userId) {
     ProfilesRequest profileRequest = new ProfilesRequest(this);
     profileRequest.uids.add(userId);
     profileRequest.callback(new ApiHandler() {
@@ -217,7 +236,7 @@ public class ProfileActivity extends Activity {
         ProfileUser profile = ProfileUser.parse(userId,response);
         
         // грузим галерею
-        getAlbum(userId);
+        getUserAlbum(userId);
 
         // основная информация
         mName.setText(profile.first_name);
@@ -248,7 +267,30 @@ public class ProfileActivity extends Activity {
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void getAlbum(int uid) {
+  private void getAlbum() {
+    // сортируем эро и не эро
+    LinkedList<Album> albumList = Data.s_Profile.albums;        
+    for(Album album : albumList)
+      if(album.ero)
+        mEroList.add(album);
+      else
+        mPhotoList.add(album);
+    
+    // обнавляем галереи
+    if(mPhotoList.size()>0) {
+      mListAdapter.setDataList(mPhotoList);
+      mListAdapter.notifyDataSetChanged();
+    }
+
+    if(mEroList.size()>0) {
+      mListEroAdapter.setDataList(mEroList);
+      mListEroAdapter.notifyDataSetChanged();
+      mEroTitle.setVisibility(View.VISIBLE);
+      mEroViewGroup.setVisibility(View.VISIBLE);
+    }
+  }
+  //---------------------------------------------------------------------------
+  private void getUserAlbum(int uid) {
     AlbumRequest albumRequest = new AlbumRequest(this);
     albumRequest.uid  = uid;
     albumRequest.callback(new ApiHandler() {
@@ -274,8 +316,6 @@ public class ProfileActivity extends Activity {
           mEroTitle.setVisibility(View.VISIBLE);
           mEroViewGroup.setVisibility(View.VISIBLE);
         }
-        
-        mProgressDialog.cancel();
       }
       @Override
       public void fail(int codeError) {
@@ -299,4 +339,9 @@ public class ProfileActivity extends Activity {
     super.onDestroy();
   }
   //---------------------------------------------------------------------------  
+  @Override
+  public void onSwap() {
+    swap=!swap;
+  }
+  //---------------------------------------------------------------------------
 }

@@ -58,6 +58,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
   private OnItemClickListener mOnItemClicked;
   private OnItemLongClickListener mOnItemLongClicked;
   private Queue<View> mRemovedViewQueue = new LinkedList<View>();
+  // Observer
   private DataSetObserver mDataObserver = new DataSetObserver() {
     @Override
     public void onChanged() {
@@ -134,6 +135,16 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
   //---------------------------------------------------------------------------
   @Override
   public void setSelection(int position) {
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
+    super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+    if(getChildCount()>0) {
+      View child = getChildAt(0);
+      child.measure(widthMeasureSpec,heightMeasureSpec);
+      setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec),child.getMeasuredHeight());
+    }
   }
   //---------------------------------------------------------------------------
   private void addAndMeasureChild(final View child, int viewPos) {

@@ -8,7 +8,6 @@ import com.sonetica.topface.data.Auth;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
-import android.os.Looper;
 import android.os.Message;
 
 public abstract class ApiRequest {

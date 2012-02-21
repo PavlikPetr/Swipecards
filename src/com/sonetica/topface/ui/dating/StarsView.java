@@ -1,5 +1,6 @@
 package com.sonetica.topface.ui.dating;
 
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -42,19 +43,19 @@ public class StarsView extends View implements View.OnTouchListener {
       _rect = new Rect(_x,_y,_x+_widht,_y+_height);
     }
     public void draw(Canvas canvas) {
-      if(_index==average)
+      if(_index==mAverageRate)
         if(!pressed)
           canvas.drawBitmap(mStarBlue,_x,_bmp_y,paintStar);
         else
           canvas.drawBitmap(mStarBlueActive,_x,_bmp_y,paintStar);
       
-      if(_index>average)
+      if(_index>mAverageRate)
         if(!pressed)
           canvas.drawBitmap(mStarYellow,_x,_bmp_y,paintStar);
         else
           canvas.drawBitmap(mStarYellowActive,_x,_bmp_y,paintStar);
       
-      if(_index<average)
+      if(_index<mAverageRate)
         if(!pressed)
           canvas.drawBitmap(mStarGrey,_x,_bmp_y,paintStar);
         else
@@ -66,7 +67,7 @@ public class StarsView extends View implements View.OnTouchListener {
   }
   //---------------------------------------------------------------------------
   // Data
-  public int average=7;            // средняя выставляемвя оценка
+  public int mAverageRate;         // средняя выставляемвя оценка
   private float[] mLastYs;           // массив последних нажатий
   private Star[]  mStars;              // статичный массив объектов для отрисовки звезд;
   private InformerView mInformerView;    // обсервер текущего нажатия на экран
@@ -90,6 +91,8 @@ public class StarsView extends View implements View.OnTouchListener {
     mStars = new Star[STARS_COUNT];
     mLastYs = new float[EVENT_COUNT];
     mInformerView = informer;
+    
+    mAverageRate = Data.s_AverageRate;
     
     setId(R.id.starsView);
     setOnTouchListener(this);
