@@ -2,33 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-<!--
-   <ProgressBar
-      android:id="@+id/pgrsDating"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      style="@android:style/Widget.ProgressBar.Large.Inverse" />
--->
-  <com.sonetica.topface.ui.dating.DatingGallery
-      android:id="@+id/galleryDating"
-      android:layout_width="fill_parent" 
-      android:layout_height="fill_parent" />
-  
-  <com.sonetica.topface.ui.dating.PointView
-      android:id="@+id/pointsView"
-      android:layout_width="fill_parent" 
-      android:layout_height="wrap_content"
-      android:visibility="invisible"
-      android:layout_alignParentBottom="true" 
-      android:layout_centerHorizontal="true" />
 
-  <RelativeLayout
-      android:id="@+id/loHeader" 
-      android:layout_width="fill_parent" 
-      android:layout_height="wrap_content" 
-      android:layout_alignParentTop="true">
-    <include layout="@layout/bar_header" />
-  </RelativeLayout>
+    <com.sonetica.topface.ui.dating.DatingControl
+        android:id="@+id/galleryDating"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" /> 
+
+    <RelativeLayout
+        android:id="@+id/loHeader"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" >
+
+        <include layout="@layout/bar_header" />
+    </RelativeLayout>
 
 </RelativeLayout>

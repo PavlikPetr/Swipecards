@@ -7,7 +7,7 @@ import com.sonetica.topface.net.AlbumRequest;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.ui.dating.ResourcesView;
+import com.sonetica.topface.ui.dating_ex.ResourcesView;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;

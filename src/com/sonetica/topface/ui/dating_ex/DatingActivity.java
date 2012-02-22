@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.dating;
+package com.sonetica.topface.ui.dating_ex;
 
 import java.util.LinkedList;
 import com.sonetica.topface.Data;
@@ -27,9 +27,9 @@ import android.widget.Toast;
 /* "оценка фото" */
 public class DatingActivity extends Activity {
   // Data
-  private DatingControl mDatingControl;
-  // Constants
+  private DatingGallery mDatingGallery;
   public static ViewGroup mHeaderBar;
+  public static PointView mPaintView;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -39,29 +39,32 @@ public class DatingActivity extends Activity {
 
     // Header Bar
     mHeaderBar = (ViewGroup)findViewById(R.id.loHeader);
-    
+
+    // Points
+    mPaintView = (PointView)findViewById(R.id.pointsView);
+
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
 
     // Dating Gallery
-    mDatingControl = (DatingControl)findViewById(R.id.galleryDating);
-    
+    mDatingGallery = (DatingGallery)findViewById(R.id.galleryDating);
+
     // Stars Button
     StarsView btnStars = (StarsView)findViewById(R.id.starsView);
     btnStars.setOnRateListener(new StarsView.setOnRateListener() {
       @Override
       public void onRate(int rate) {
-        rate(mDatingControl.getUserId(),rate);
-        mDatingControl.next();
+        rate(mDatingGallery.getUserId(),rate);
+        mDatingGallery.next();
       }
     });
-    
+
     // Chat Button
     Button btnChat = (Button)findViewById(R.id.chatBtn);
     btnChat.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        openChatActivity(mDatingControl.getUserId());
+        openChatActivity(mDatingGallery.getUserId());
       }
     });
 
@@ -70,7 +73,7 @@ public class DatingActivity extends Activity {
     btnProfile.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        openProfileActivity(mDatingControl.getUserId());
+        openProfileActivity(mDatingGallery.getUserId());
       }
     });
 
@@ -84,37 +87,14 @@ public class DatingActivity extends Activity {
       @Override
       public void success(Response response) {
         LinkedList<SearchUser> userList = SearchUser.parse(response);
-        mDatingControl.setDataList(userList);
+        mDatingGallery.setDataList(userList);
+        mDatingGallery.next();
       }
       @Override
       public void fail(int codeError) {
         Toast.makeText(DatingActivity.this,"dating update fail",Toast.LENGTH_SHORT).show();
       }
     }).exec();
-  }
-  //---------------------------------------------------------------------------
-  private void openProfileActivity(int userId) {
-    Intent intent = new Intent(this,ProfileActivity.class);
-    intent.putExtra(ProfileActivity.INTENT_USER_ID,userId);
-    startActivityForResult(intent,0);
-  }
-  //---------------------------------------------------------------------------
-  private void openChatActivity(int userId) {
-    Intent intent = new Intent(this,ChatActivity.class);
-    intent.putExtra(ChatActivity.INTENT_USER_ID,userId);
-    startActivityForResult(intent,0);
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    ApiRequest.shutdown();
-
-    //mDatingControl.release();
-    mDatingControl = null;
-    mHeaderBar = null;
-
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
   }
   //---------------------------------------------------------------------------
   private void rate(final int userid,final int rate) {
@@ -135,6 +115,31 @@ public class DatingActivity extends Activity {
     }).exec();
   }
   //---------------------------------------------------------------------------
+  private void openProfileActivity(int userId) {
+    Intent intent = new Intent(this,ProfileActivity.class);
+    intent.putExtra(ProfileActivity.INTENT_USER_ID,userId);
+    startActivityForResult(intent,0);
+  }
+  //---------------------------------------------------------------------------
+  private void openChatActivity(int userId) {
+    Intent intent = new Intent(this,ChatActivity.class);
+    intent.putExtra(ChatActivity.INTENT_USER_ID,userId);
+    startActivityForResult(intent,0);
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    ApiRequest.shutdown();
+
+    mDatingGallery.release(); 
+    mDatingGallery = null;
+    mHeaderBar = null;
+    mPaintView = null;
+
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
   // Menu
   //---------------------------------------------------------------------------
   private static final int MENU_FILTER = 0;
@@ -148,7 +153,7 @@ public class DatingActivity extends Activity {
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
     switch(item.getItemId()) {
       case MENU_FILTER:
-        //startActivity(new Intent(this,FilterActivity.class));
+        startActivity(new Intent(this,FilterActivity.class));
       break;
     }
     return super.onMenuItemSelected(featureId,item);

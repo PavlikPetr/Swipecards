@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.dating;
+package com.sonetica.topface.ui.dating_ex;
 
 import com.sonetica.topface.R;
 import com.sonetica.topface.net.ApiHandler;

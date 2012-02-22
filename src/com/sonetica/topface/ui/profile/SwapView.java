@@ -168,6 +168,8 @@ public class SwapView extends ViewGroup {
   }
   //-------------------------------------------------------------------------
   public void snapToScreen(int heightScreen) {
+    if(mCurrentScreen == heightScreen)
+      return;
     mCurrentScreen = heightScreen;
     int newY  = heightScreen * getHeight();
     int delta = newY - mScrollY;
@@ -185,8 +187,9 @@ public class SwapView extends ViewGroup {
   }
   */
   //-------------------------------------------------------------------------
-  public void currentScreen(int whichScreen) {
-    mSwapListener.onSwap();    
+  public void currentScreen(int heightScreen) {
+    //if(mCurrentScreen!=heightScreen)
+      mSwapListener.onSwap();    
   }
   //-------------------------------------------------------------------------
   public void setOnSwapListener(OnSwapListener listener) {

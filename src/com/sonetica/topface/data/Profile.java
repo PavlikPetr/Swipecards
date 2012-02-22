@@ -27,6 +27,12 @@ public class Profile extends AbstractData {
   public String avatar_big;      // аватарка пользователя большого размера
   public String avatar_small;    // аватарки пользователя маленького размера
   public LinkedList<Album> albums;
+  // Dating
+  public int dating_sex;       // пол пользователей для поиска
+  public int dating_age_start; // начальный возраст для пользователей
+  public int dating_age_end;   // конечный возраст для пользователей
+  public int dating_city_id;   // идентификатор города для поиска пользователей
+  public String dating_city;   // наименование пользователя в русской локали
   // Questionary
   public int questionary_job_id;           // идентификатор рабочей партии пользователя
   public String questionary_job;           // описание оригинальной работы пользователя
@@ -70,21 +76,29 @@ public class Profile extends AbstractData {
       profile.albums = new LinkedList<Album>();
         if(albums.length()>0)
           for(int i=0;i<albums.length();i++) {
-            JSONObject album = albums.getJSONObject(i);
-            Album item = new Album();
-            item.id    = album.getInt("id");
-            item.small = album.getString("small");
-            item.big   = album.getString("big");
-            if(!album.isNull("ero")) {
-              item.ero   = true;
-              item.cost  = album.getInt("cost");
-              item.likes = album.getInt("likes");
-              item.dislikes = album.getInt("dislikes");
+            JSONObject item = albums.getJSONObject(i);
+            Album album = new Album();
+            album.id    = item.getInt("id");
+            album.small = item.getString("small");
+            album.big   = item.getString("big");
+            if(!item.isNull("ero")) {
+              album.ero   = true;
+              album.buy   = item.getBoolean("buy");
+              album.cost  = item.getInt("cost");
+              album.likes = item.getInt("likes");
+              album.dislikes = item.getInt("dislikes");
             } else
-              item.ero = false;            
-            profile.albums.add(item);
+              album.ero = false;            
+            profile.albums.add(album);
           }
-      //questionary
+      // dating
+      JSONObject dating = resp.getJSONObject("dating");
+        profile.dating_sex       = dating.getInt("sex");
+        profile.dating_age_start = dating.getInt("age_start");
+        profile.dating_age_end   = dating.getInt("age_end");
+        profile.dating_city_id   = dating.getInt("city_id");
+        profile.dating_city      = dating.getString("city");
+      // questionary
       JSONObject questionary = resp.getJSONObject("questionary");
         profile.questionary_job_id = questionary.getInt("job_id");
         profile.questionary_job = questionary.getString("job");

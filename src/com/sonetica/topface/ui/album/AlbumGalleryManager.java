@@ -18,7 +18,7 @@ import android.widget.ImageView;
  */
 public class AlbumGalleryManager {
   // Data
-    private MemoryCache  mMemoryCache;
+  private MemoryCache  mMemoryCache;
   private StorageCache mStorageCache;
   private ExecutorService mThreadsPool;
   private LinkedList<? extends AbstractData> mData;

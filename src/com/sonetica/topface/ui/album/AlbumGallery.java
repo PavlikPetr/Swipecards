@@ -17,10 +17,6 @@ public class AlbumGallery extends Gallery implements View.OnTouchListener {
     //this.setOnTouchListener(this);
   }
   //---------------------------------------------------------------------------
-  public AlbumGallery(Context context, AttributeSet attrs, int defStyle) {
-    super(context, attrs, defStyle);
-  }
-  //---------------------------------------------------------------------------
   @Override
   public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
     return true;

@@ -60,8 +60,10 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   private TextView mFinances;
   private TextView mSmoking;
   //private TextView mStatus;  // дана отмашка на отключение статуса
-  boolean swap = true;
+  boolean swap = true;  // проверить на оптимизацию 
   //Constants
+  public static final int FORM_TOP = 0;
+  public static final int FORM_BOTTOM = 1;
   public  static final String INTENT_USER_ID = "user_id";
   //---------------------------------------------------------------------------
   @Override
@@ -76,11 +78,18 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     final SwapView swapView = ((SwapView)findViewById(R.id.swapFormView));
     swapView.setOnSwapListener(this);
     
-    // Button Close
-    ((Button)findViewById(R.id.btnHeader)).setOnClickListener(new OnClickListener() {
+    // Button Profile
+    final Button btnProfile = ((Button)findViewById(R.id.btnHeader));
+    btnProfile.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        swapView.snapToScreen(swap?1:0);
+        // mCurrForm = mCurrForm == FORM_TOP ? FORM_BOTTOM : FORM_TOP;
+        swapView.snapToScreen(swap?FORM_BOTTOM:FORM_TOP);
+        if(!swap) {
+          btnProfile.setText(R.string.profile_header_title);
+        } else {
+          btnProfile.setText(R.string.profile_btn_form);
+        }
       }
     });
     
@@ -88,7 +97,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
     // Buttons
     if(mUserId==-1) {  // редактировать
-      mOwner = true;
+      mOwner  = true;
       mUserId = Data.s_Profile.uid;
       Button btnEdit = (Button)this.findViewById(R.id.btnProfileEdit);
       btnEdit.setVisibility(View.VISIBLE);
@@ -182,8 +191,6 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       getProfile();
     else
       getUserProfile(mUserId);
-    
-    mProgressDialog.cancel();
   }
   //---------------------------------------------------------------------------
   // свой профиль
@@ -288,6 +295,8 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       mEroTitle.setVisibility(View.VISIBLE);
       mEroViewGroup.setVisibility(View.VISIBLE);
     }
+    
+    mProgressDialog.cancel();
   }
   //---------------------------------------------------------------------------
   private void getUserAlbum(int uid) {
@@ -316,6 +325,8 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
           mEroTitle.setVisibility(View.VISIBLE);
           mEroViewGroup.setVisibility(View.VISIBLE);
         }
+        
+        mProgressDialog.cancel();
       }
       @Override
       public void fail(int codeError) {
@@ -341,7 +352,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   //---------------------------------------------------------------------------  
   @Override
   public void onSwap() {
-    swap=!swap;
+    swap=!swap; // костыль на скорую руку
   }
   //---------------------------------------------------------------------------
 }

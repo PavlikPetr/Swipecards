@@ -13,6 +13,7 @@ public class Album extends AbstractData {
   public String  small;  // строка URL маленького изображения пользователя
   public String  big;    // строка URL большого изображения пользователя
   public boolean ero;    // флаг, является ли фотография эротической
+  public boolean buy;    // является ли фотографию купленной текущим пользователем
   public int cost;       // стоимость просмотра фотографии
   public int likes;      // количество одобрительных отзывов
   public int dislikes;   // количество отрицательных отзывов
@@ -31,6 +32,7 @@ public class Album extends AbstractData {
           
           if(!item.isNull("ero")) {
             album.ero   = true;
+            album.buy   = item.getBoolean("buy");
             album.cost  = item.getInt("cost");
             album.likes = item.getInt("likes");
             album.dislikes = item.getInt("dislikes");

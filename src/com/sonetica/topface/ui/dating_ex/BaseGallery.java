@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.dating;
+package com.sonetica.topface.ui.dating_ex;
 
 import android.content.Context;
 import android.graphics.Color;
