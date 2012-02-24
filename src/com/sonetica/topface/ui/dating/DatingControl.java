@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,6 +18,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ProgressBar;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 /*    ЛАПША КОД - СКОРОСТЬ превыше КАЧЕСТВА
  *    разобраться с листенерами
@@ -32,12 +34,14 @@ public class DatingControl extends ViewGroup {
   private boolean mStart;
   private int mDataPosition;
   private int mGalleryPrevPos;
+  private int mGallerySize;
   private DatingGallery mDatingGallery;
   private DatingGalleryAdapter mGalleryAdapter;
   private OnNeedUpdateListener mOnNeedUpdateListener;
   // Views
   private Button mBackButton;
   private FaceView mFaceView;
+  private TextView mCounter;
   private ProgressBar mProgress;
   private RateControl mRateControl;
   private ResourcesView mResourcesView;
@@ -65,6 +69,7 @@ public class DatingControl extends ViewGroup {
       @Override
       public void onChanged() {
         mFaceView.setVisibility(View.INVISIBLE);
+        DatingControl.this.setCounter(mGalleryPrevPos+1,mGallerySize); //  УПРАВЛЕНИЕ СЧЕТЧИКОМ
       }
       @Override
       public void onInvalidated() {
@@ -86,6 +91,7 @@ public class DatingControl extends ViewGroup {
           DatingControl.this.controlVisibility(DatingControl.V_SHOW_ALL);
         }
         mGalleryPrevPos = position;
+        DatingControl.this.setCounter(mGalleryPrevPos+1,mGallerySize); //  УПРАВЛЕНИЕ СЧЕТЧИКОМ
       }
       @Override
       public void onNothingSelected(AdapterView<?> arg0) {
@@ -101,7 +107,7 @@ public class DatingControl extends ViewGroup {
       }
     });
     addView(mDatingGallery);
-
+    
     // Back Button
     mBackButton = new Button(context);
     mBackButton.setText("Back");
@@ -126,6 +132,11 @@ public class DatingControl extends ViewGroup {
     // Rate Control
     mRateControl = new RateControl(context);
     addView(mRateControl);
+    
+    mCounter = new TextView(context);
+    mCounter.setGravity(Gravity.CENTER_HORIZONTAL);
+    mCounter.setTextColor(Color.WHITE);
+    addView(mCounter);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -156,6 +167,8 @@ public class DatingControl extends ViewGroup {
     
     mResourcesView.layout(0,offset_y,mResourcesView.getMeasuredWidth(),offset_y+mResourcesView.getMeasuredHeight());
     mRateControl.layout(0,offset_y,mRateControl.getMeasuredWidth(),offset_y+mRateControl.getMeasuredHeight());
+    
+    mCounter.layout(0,getHeight()-30,getWidth(),getHeight());    // COUNTER
   }
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<SearchUser> dataList) {
@@ -172,6 +185,11 @@ public class DatingControl extends ViewGroup {
   //---------------------------------------------------------------------------
   public void setOnNeedUpdateListener(OnNeedUpdateListener onNeedUpdateListener) {
     mOnNeedUpdateListener = onNeedUpdateListener;
+  }
+  //---------------------------------------------------------------------------
+  public void setCounter(int index,int size) {
+    mCounter.setText(index+"/"+size);
+    mCounter.invalidate();
   }
   //---------------------------------------------------------------------------
   public void controlVisibility(int state) {
@@ -219,6 +237,7 @@ public class DatingControl extends ViewGroup {
         visibility=mResourcesView.getVisibility();
         if(visibility==View.VISIBLE) {
           mFaceView.setVisibility(View.VISIBLE);
+          mCounter.setVisibility(View.VISIBLE);
           mProgress.setVisibility(View.INVISIBLE);
         }
         break;
@@ -228,6 +247,7 @@ public class DatingControl extends ViewGroup {
   public void next() {
     mProgress.setVisibility(View.VISIBLE);
     mFaceView.setVisibility(View.INVISIBLE);
+    mCounter.setVisibility(View.INVISIBLE);
     
     int count = mDataList.size()-1;
     if(mDataPosition>=count) {
@@ -247,6 +267,8 @@ public class DatingControl extends ViewGroup {
     mFaceView.name   = user.first_name;
     mFaceView.online = user.online;
     mFaceView.status = user.status;
+    
+    mGallerySize = user.avatars_big.length;
 
     mDatingGallery.setSelection(0);
     mGalleryAdapter.setUserData(user);
