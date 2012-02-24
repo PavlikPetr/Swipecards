@@ -13,12 +13,12 @@ public class DatingGallery extends Gallery implements View.OnTouchListener {
   }
   //---------------------------------------------------------------------------
   @Override
-  public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+  public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
     return true;
   }
   //---------------------------------------------------------------------------
   @Override
-  public boolean onTouch(View arg0,MotionEvent event) {
+  public boolean onTouch(View v,MotionEvent event) {
     return false;
   }
   //---------------------------------------------------------------------------

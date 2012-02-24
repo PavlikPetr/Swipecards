@@ -122,6 +122,46 @@ public class Http {
     return response;
   }
   //---------------------------------------------------------------------------
+  /*
+   *  для использования необходим отдельный поток
+   *  при обрыве связи при скачивании фабрика возвращает null  
+   */
+  public static Bitmap bitmapLoader(String url) {
+    HttpURLConnection   httpConnection  = null;
+    BufferedInputStream buffInputStream = null;
+    Bitmap bitmap = null;
+    
+    try {
+      httpConnection = (HttpURLConnection)new URL(url).openConnection();
+      httpConnection.setDoInput(true);
+      httpConnection.connect();
+      
+      buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
+
+      bitmap = BitmapFactory.decodeStream(buffInputStream,null,new BitmapFactory.Options());
+      
+      buffInputStream.close();
+      httpConnection.disconnect();      
+    } catch(MalformedURLException e) {
+      Debug.log(TAG,"url is wrong:" + e);
+    } catch(IOException e) {
+      Debug.log(TAG,"io is fail #1:" + e);
+    } finally {
+      try {
+        if(buffInputStream!=null)
+          buffInputStream.close();
+      } catch(IOException e) {
+        Debug.log(TAG,"io is fail #2:" + e);
+      }
+      if(httpConnection!=null)
+        httpConnection.disconnect();
+    }
+    
+    Debug.log(TAG,"bitmap loading");
+
+    return bitmap;
+  }
+  //---------------------------------------------------------------------------
   //  запускается в UI потоке, отдельный поток создавать не нужно
   public static void imageLoader(final String url, final ImageView view) {
     // ui
@@ -163,46 +203,6 @@ public class Http {
     };
     thread.setPriority(3);
     thread.start();
-  }
-  //---------------------------------------------------------------------------
-  /*
-   *  для использования необходим отдельный поток
-   *  при обрыве связи при скачивании фабрика возвращает null  
-   */
-  public static Bitmap bitmapLoader(String url) {
-    HttpURLConnection   httpConnection  = null;
-    BufferedInputStream buffInputStream = null;
-    Bitmap bitmap = null;
-    
-    try {
-      httpConnection = (HttpURLConnection)new URL(url).openConnection();
-      httpConnection.setDoInput(true);
-      httpConnection.connect();
-      
-      buffInputStream = new BufferedInputStream(httpConnection.getInputStream(), 8192);
-
-      bitmap = BitmapFactory.decodeStream(buffInputStream,null,new BitmapFactory.Options());
-      
-      buffInputStream.close();
-      httpConnection.disconnect();      
-    } catch(MalformedURLException e) {
-      Debug.log(TAG,"url is wrong:" + e);
-    } catch(IOException e) {
-      Debug.log(TAG,"io is fail #1:" + e);
-    } finally {
-      try {
-        if(buffInputStream!=null)
-          buffInputStream.close();
-      } catch(IOException e) {
-        Debug.log(TAG,"io is fail #2:" + e);
-      }
-      if(httpConnection!=null)
-        httpConnection.disconnect();
-    }
-    
-    Debug.log(TAG,"bitmap loading");
-
-    return bitmap;
   }
   //---------------------------------------------------------------------------
   //  Возвращает поток от серевра для ручной обработки urlConnection для закрытия соединения

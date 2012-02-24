@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.view.View;
 import android.widget.ImageView;
 
 public class FaceView extends ImageView {
@@ -72,7 +73,8 @@ public class FaceView extends ImageView {
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     
-    if(!mHide) {
+    //if(!mHide) {
+    if(getVisibility()==View.VISIBLE) {
       // shadows
       canvas.drawBitmap(mShadowTopBmp,0,mOffset_y,paint);
       canvas.drawBitmap(mShadowBottomBmp,0,getHeight()-mShadowBottomBmp.getHeight(),paint);

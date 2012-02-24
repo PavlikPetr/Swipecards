@@ -8,28 +8,46 @@ import com.sonetica.topface.ui.dating.ResourcesView;
 import com.sonetica.topface.ui.dating.FaceView;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ProgressBar;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 
 /*    ЛАПША КОД - СКОРОСТЬ превыше КАЧЕСТВА
- *    
+ *    разобраться с листенерами
  */
 public class DatingControl extends ViewGroup {
+  //---------------------------------------------------------------------------
+  // interface OnNeedUpdateListener
+  //---------------------------------------------------------------------------
+  interface OnNeedUpdateListener {
+    public void needUpdate();
+  }
   // Data
-  private int mPosition;
   private boolean mStart;
+  private int mDataPosition;
+  private int mGalleryPrevPos;
   private DatingGallery mDatingGallery;
   private DatingGalleryAdapter mGalleryAdapter;
-  // 
-  private FaceView mFaceView;
-  private ResourcesView mResView;
-  private RateControl mRateControl;
+  private OnNeedUpdateListener mOnNeedUpdateListener;
+  // Views
   private Button mBackButton;
+  private FaceView mFaceView;
+  private ProgressBar mProgress;
+  private RateControl mRateControl;
+  private ResourcesView mResourcesView;
   private LinkedList<SearchUser> mDataList;
+  // Visible States
+  public static final int V_SWAP_ALL  = 0;
+  public static final int V_SHOW_ALL  = 1;
+  public static final int V_HIDE_ALL  = 2;
+  public static final int V_SWAP_BACK = 3;
+  public static final int V_SHOW_INFO = 4;
   //---------------------------------------------------------------------------
   public DatingControl(Context context,AttributeSet attrs) {
     super(context,attrs);
@@ -37,12 +55,16 @@ public class DatingControl extends ViewGroup {
     mStart = false;
     mDataList = new LinkedList<SearchUser>();
     
+    // Progress
+    mProgress = new ProgressBar(context);
+    addView(mProgress);
+    
     // Adapter
-    mGalleryAdapter = new DatingGalleryAdapter(context);
+    mGalleryAdapter = new DatingGalleryAdapter(context,this);
     mGalleryAdapter.registerDataSetObserver(new DataSetObserver() {
       @Override
       public void onChanged() {
-        mFaceView.setVisibility(View.VISIBLE);
+        mFaceView.setVisibility(View.INVISIBLE);
       }
       @Override
       public void onInvalidated() {
@@ -53,20 +75,34 @@ public class DatingControl extends ViewGroup {
     mDatingGallery = new DatingGallery(context);
     mDatingGallery.setAdapter(mGalleryAdapter);
     mDatingGallery.setSpacing(0);
+    mDatingGallery.setBackgroundColor(Color.TRANSPARENT);
     mDatingGallery.setFadingEdgeLength(0);
-    
-    // Hide controls
+    mDatingGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> arg0,View arg1,int position,long arg3) {
+        if(position==1 && mGalleryPrevPos==0) {
+          DatingControl.this.controlVisibility(DatingControl.V_HIDE_ALL);
+        } else if(position==0 && mGalleryPrevPos>0) {
+          DatingControl.this.controlVisibility(DatingControl.V_SHOW_ALL);
+        }
+        mGalleryPrevPos = position;
+      }
+      @Override
+      public void onNothingSelected(AdapterView<?> arg0) {
+      }
+    });
     mDatingGallery.setOnItemClickListener(new OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> arg0,View arg1,int position,long arg3) {
         if(position==0)
-          hideAllControls();
+          controlVisibility(DatingControl.V_SWAP_ALL);
         else
-          hideBack();
+          controlVisibility(DatingControl.V_SWAP_BACK);
       }
     });
     addView(mDatingGallery);
-    
+
+    // Back Button
     mBackButton = new Button(context);
     mBackButton.setText("Back");
     mBackButton.setVisibility(View.INVISIBLE);
@@ -74,7 +110,6 @@ public class DatingControl extends ViewGroup {
       @Override
       public void onClick(View v) {
         mDatingGallery.setSelection(0,true);
-        hideAllControls();
       }
     });
     addView(mBackButton);
@@ -85,13 +120,12 @@ public class DatingControl extends ViewGroup {
     addView(mFaceView);
     
     // Power and Money
-    mResView = new ResourcesView(context);
-    addView(mResView);
+    mResourcesView = new ResourcesView(context);
+    addView(mResourcesView);
     
     // Rate Control
     mRateControl = new RateControl(context);
     addView(mRateControl);
-
   }
   //---------------------------------------------------------------------------
   @Override
@@ -102,6 +136,7 @@ public class DatingControl extends ViewGroup {
     for(int i=0;i<count;i++)
       getChildAt(i).measure(widthMeasureSpec,heightMeasureSpec);
     
+    mProgress.measure(0,0);
     mBackButton.measure(0,0);
   }
   //---------------------------------------------------------------------------
@@ -111,11 +146,15 @@ public class DatingControl extends ViewGroup {
     
     int offset_y = DatingActivity.mHeaderBar.getHeight();
     
+    int px = (getWidth()-mProgress.getMeasuredWidth())/2;
+    int py = (getHeight()-mProgress.getMeasuredHeight())/2;
+    mProgress.layout(px,py,px+mProgress.getMeasuredWidth(),py+mProgress.getMeasuredHeight());
+    
     mBackButton.layout(0,100,mBackButton.getMeasuredWidth(),100+mBackButton.getMeasuredHeight());
     
     mDatingGallery.layout(0,0,mDatingGallery.getMeasuredWidth(),mDatingGallery.getMeasuredHeight());
     
-    mResView.layout(0,offset_y,mResView.getMeasuredWidth(),offset_y+mResView.getMeasuredHeight());
+    mResourcesView.layout(0,offset_y,mResourcesView.getMeasuredWidth(),offset_y+mResourcesView.getMeasuredHeight());
     mRateControl.layout(0,offset_y,mRateControl.getMeasuredWidth(),offset_y+mRateControl.getMeasuredHeight());
   }
   //---------------------------------------------------------------------------
@@ -127,12 +166,81 @@ public class DatingControl extends ViewGroup {
     }
   }
   //---------------------------------------------------------------------------
-  public void rate() {
-    next();
+  public int getUserId() {
+    return mDataList.get(mDataPosition).uid;
+  }
+  //---------------------------------------------------------------------------
+  public void setOnNeedUpdateListener(OnNeedUpdateListener onNeedUpdateListener) {
+    mOnNeedUpdateListener = onNeedUpdateListener;
+  }
+  //---------------------------------------------------------------------------
+  public void controlVisibility(int state) {
+    int visibility;
+    switch(state) {
+      case V_SWAP_ALL:
+        visibility=mResourcesView.getVisibility();
+        if(visibility==View.VISIBLE) {
+          DatingActivity.mHeaderBar.setVisibility(View.INVISIBLE);
+          mFaceView.setVisibility(View.INVISIBLE);
+          mResourcesView.setVisibility(View.INVISIBLE);
+          mRateControl.setVisibility(View.INVISIBLE);
+        } else {
+          DatingActivity.mHeaderBar.setVisibility(View.VISIBLE);
+          mFaceView.setVisibility(View.VISIBLE);
+          mResourcesView.setVisibility(View.VISIBLE);
+          mRateControl.setVisibility(View.VISIBLE);
+          mBackButton.setVisibility(View.INVISIBLE);
+        }
+        break;
+      case V_SHOW_ALL:
+        DatingActivity.mHeaderBar.setVisibility(View.VISIBLE);
+        mFaceView.setVisibility(View.VISIBLE);
+        mResourcesView.setVisibility(View.VISIBLE);
+        mRateControl.setVisibility(View.VISIBLE);
+        mBackButton.setVisibility(View.INVISIBLE);
+        break;
+      case V_HIDE_ALL:
+        DatingActivity.mHeaderBar.setVisibility(View.INVISIBLE);
+        mFaceView.setVisibility(View.INVISIBLE);
+        mResourcesView.setVisibility(View.INVISIBLE);
+        mRateControl.setVisibility(View.INVISIBLE);        
+        break;
+      case V_SWAP_BACK:
+        visibility=mBackButton.getVisibility();
+        if(visibility==View.VISIBLE) {
+          DatingActivity.mHeaderBar.setVisibility(View.INVISIBLE);
+          mBackButton.setVisibility(View.INVISIBLE);
+        } else {
+          DatingActivity.mHeaderBar.setVisibility(View.VISIBLE);
+          mBackButton.setVisibility(View.VISIBLE);          
+        }
+        break;
+      case V_SHOW_INFO:
+        visibility=mResourcesView.getVisibility();
+        if(visibility==View.VISIBLE) {
+          mFaceView.setVisibility(View.VISIBLE);
+          mProgress.setVisibility(View.INVISIBLE);
+        }
+        break;
+    }
   }
   //---------------------------------------------------------------------------
   public void next() {
-    SearchUser user = mDataList.get(++mPosition);
+    mProgress.setVisibility(View.VISIBLE);
+    mFaceView.setVisibility(View.INVISIBLE);
+    
+    int count = mDataList.size()-1;
+    if(mDataPosition>=count) {
+      mDataPosition = 0;
+      mDataList.clear();
+      mOnNeedUpdateListener.needUpdate();
+      return;
+    }
+    
+    if(mDataPosition==count-5)
+      mOnNeedUpdateListener.needUpdate();
+    
+    SearchUser user = mDataList.get(++mDataPosition);
     
     mFaceView.age    = user.age;
     mFaceView.city   = user.city_name;
@@ -145,33 +253,15 @@ public class DatingControl extends ViewGroup {
     mGalleryAdapter.notifyDataSetChanged();
   }
   //---------------------------------------------------------------------------
-  public int getUserId() {
-    return mDataList.get(mPosition).uid;
-  }
-  //---------------------------------------------------------------------------
-  public void hideBack() {
-    int visibility=DatingActivity.mHeaderBar.getVisibility()==View.VISIBLE?View.INVISIBLE:View.VISIBLE;
-    DatingActivity.mHeaderBar.setVisibility(visibility);
-    
-    visibility=mBackButton.getVisibility()==View.VISIBLE?View.INVISIBLE:View.VISIBLE;
-    mBackButton.setVisibility(visibility);
-  }
-  //---------------------------------------------------------------------------
-  public void hideAllControls() {
-    int visibility=mFaceView.getVisibility()==View.VISIBLE?View.INVISIBLE:View.VISIBLE;
-    mFaceView.setVisibility(visibility);
-    
-    visibility=mResView.getVisibility()==View.VISIBLE?View.INVISIBLE:View.VISIBLE;
-    mResView.setVisibility(visibility);
-    
-    visibility=mRateControl.getVisibility()==View.VISIBLE?View.INVISIBLE:View.VISIBLE;
-    mRateControl.setVisibility(visibility);
-    
-    visibility=DatingActivity.mHeaderBar.getVisibility()==View.VISIBLE?View.INVISIBLE:View.VISIBLE;
-    DatingActivity.mHeaderBar.setVisibility(visibility);
-    
-    if(mBackButton.getVisibility()==View.VISIBLE);
-      mBackButton.setVisibility(View.INVISIBLE);
+  public void release() {
+    mOnNeedUpdateListener = null;
+    mDatingGallery = null;
+    mGalleryAdapter = null;
+    mBackButton = null;
+    mFaceView = null;
+    mResourcesView = null;
+    mRateControl = null;
+    mDataList = null;
   }
   //---------------------------------------------------------------------------
 }

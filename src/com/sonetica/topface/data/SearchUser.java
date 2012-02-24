@@ -16,13 +16,14 @@ public class SearchUser extends AbstractData {
   public String  first_name;      // имя пользователя
   public String  status;          // статус пользователя
   public String  city_name;       // наименование города пользователя
+  public String  city_full;       // полное наименование города пользователя
   public String[] avatars_big;    // большая аватарка пользователя
   public String[] avatars_small;  // маленькая аватарка пользователя
   
-  //public String geo_distance;        // дистация до пользователя (всегда NULL)
-  //public String geo_coordinates;     // координаты пользователя
-  //public String geo_coordinates_lat; // широта нахождения пользоавтеля
-  //public String geo_coordinates_lng; // долгота нахождения пользователя
+  //public String geo_distance;  // дистация до пользователя (всегда NULL)
+  //public String geo_coord;     // координаты пользователя
+  //public String geo_coord_lat; // широта нахождения пользоавтеля
+  //public String geo_coord_lng; // долгота нахождения пользователя
   //---------------------------------------------------------------------------
   public static LinkedList<SearchUser> parse(Response response) {
     LinkedList<SearchUser> userList = new LinkedList<SearchUser>();
@@ -30,16 +31,18 @@ public class SearchUser extends AbstractData {
       JSONArray array = response.mJSONResult.getJSONArray("users");
       if(array.length()>0)
         for(int i=0;i<array.length();i++) {
-          JSONObject item = array.getJSONObject(i);
           SearchUser search = new SearchUser();
+          JSONObject item = array.getJSONObject(i);
             search.uid        = item.getInt("uid");
             search.age        = item.getInt("age");
             search.first_name = item.getString("first_name");
             search.online     = item.getBoolean("online");
             search.status     = item.getString("status");
-          JSONObject geo = item.getJSONObject("geo");
-            search.city_name = geo.getString("city");
-            search.city_id   = geo.getInt("city_id");
+            search.city_name  = item.getString("city");
+          JSONObject city = item.getJSONObject("city");
+            search.city_id    = city.getInt("id");            
+            search.city_name  = city.getString("name");
+            search.city_full  = city.getString("full");
           JSONArray avatars = item.getJSONArray("avatars");
             int size = avatars.length();
             if(size>0) {

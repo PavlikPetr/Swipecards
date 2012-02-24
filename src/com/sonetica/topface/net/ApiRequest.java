@@ -1,7 +1,5 @@
 package com.sonetica.topface.net;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.data.Auth;
@@ -15,12 +13,12 @@ public abstract class ApiRequest {
   public  String  ssid;
   private Context mContext;
   private ApiHandler mHandler;
-  private static ExecutorService mThreadsPool;
+  //private static ExecutorService mThreadsPool;
   //---------------------------------------------------------------------------
   public ApiRequest(Context context) {
     ssid = "";
     mContext = context;
-    mThreadsPool = Executors.newSingleThreadExecutor();
+    //mThreadsPool = Executors.newSingleThreadExecutor();
   }
   //---------------------------------------------------------------------------
   public ApiRequest callback(ApiHandler handler) {
@@ -29,19 +27,16 @@ public abstract class ApiRequest {
   }
   //---------------------------------------------------------------------------
   public void exec() {
-  
-    new Thread(new Runnable() {
+    new Thread() {
       @Override
       public void run() {
         ssid = Data.SSID;
-        
         Response response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
         if(response.code == 3)
           reAuth();
         else
           mHandler.sendMessage(Message.obtain(null,0,response));
-      }
-    },"api-request").start();
+    }}.start();
     
 /*
     if(mHandler != null)
@@ -111,7 +106,7 @@ public abstract class ApiRequest {
   public abstract String toString();
   //---------------------------------------------------------------------------
   public static void shutdown() {
-    mThreadsPool.shutdown();
+    //mThreadsPool.shutdown();
   }
   //---------------------------------------------------------------------------
 }
