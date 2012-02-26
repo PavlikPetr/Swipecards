@@ -3,8 +3,6 @@ package com.sonetica.topface.ui.dating;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.Http;
-import com.sonetica.topface.utils.Debug;
-import com.sonetica.topface.utils.MemoryCache;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,7 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
 
-public class DatingGalleryAdapter extends BaseAdapter {
+public class DatingGalleryAdapterEx extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
@@ -26,24 +24,27 @@ public class DatingGalleryAdapter extends BaseAdapter {
   };
   //---------------------------------------------------------------------------
   // Data
-  private int mPrevPosition;
-  private MemoryCache mCache;
-  private SearchUser  mUserData;               
+  private int mPrevPosition = -1; // предыдущая позиция в галерее
+  private int mPrePosition  = -1; // пред загрузка позиция
+  private Bitmap mRateBitmap;     // оцениваемое фото
+  private Bitmap mPreBitmap;      // пред загрузка фото
+  private SearchUser mUserData;               
   private LayoutInflater  mInflater;          
   private DatingControl   mDatingControl;
   private AlphaAnimation  mAlphaAnimation;
   //---------------------------------------------------------------------------
-  public DatingGalleryAdapter(Context context,DatingControl datingControl) {
+  public DatingGalleryAdapterEx(Context context,DatingControl datingControl) {
     mInflater = LayoutInflater.from(context);
     mDatingControl  = datingControl;
     mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
     mAlphaAnimation.setDuration(200L);
-    mCache = new MemoryCache();
   }
   //---------------------------------------------------------------------------
   public void setUserData(SearchUser user) {
+    mPrevPosition = -1;
+    mPrePosition  = -1;
+    mRateBitmap = null;
     mUserData = user;
-    mCache.clear();
   }
   //---------------------------------------------------------------------------
   public int getCount() {
@@ -75,22 +76,24 @@ public class DatingGalleryAdapter extends BaseAdapter {
     } else 
       holder = (ViewHolder)convertView.getTag();
     
-    if(mUserData==null)
-      return convertView;
+    if(mUserData!=null) {
+      if(position==0 && mRateBitmap!=null) {
+        holder.mImageView.setImageBitmap(mRateBitmap);
+      } else {
+        // текущее фото
+        if(position==mPrePosition && mPreBitmap!=null)
+          holder.mImageView.setImageBitmap(mPreBitmap);
+        else
+          loadingImage(position, holder.mImageView);
+        // следующее фото
+        mPrePosition = position>mPrevPosition ? position+1 : position-1;   // в какую сторону идем
+        if(mPrePosition>=0 && mPrePosition<=(mUserData.avatars_big.length-1)) {  // если не на границе
+          preLoading(mPrePosition, holder.mImageView.getWidth(), holder.mImageView.getHeight());
+        }
+      }
+      mPrevPosition = position;
+    }
     
-    Bitmap bitmap = mCache.get(position);
-    if(bitmap!=null)
-      holder.mImageView.setImageBitmap(bitmap);
-    else
-      loadingImage(position, holder.mImageView);
-    
-    int prePosition = position>mPrevPosition ? position+1 : position-1;
-    if(!mCache.containsKey(prePosition))
-      if(prePosition>0 && position<(getCount()-1))
-        preLoading(prePosition,holder.mImageView.getWidth(),holder.mImageView.getHeight());
-    
-    mPrevPosition = position;
-
     return convertView;
   }
   //---------------------------------------------------------------------------
@@ -98,11 +101,22 @@ public class DatingGalleryAdapter extends BaseAdapter {
     new Thread() {
       @Override
       public void run() {
+        Bitmap rawBitmap  = null;
         Bitmap clipBitmap = null;
-        Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);
         
-        if(rawBitmap!=null)
-          clipBitmap = Utils.clipping(rawBitmap,view.getWidth(),view.getHeight());
+        if(position==0 && mRateBitmap==null) {
+          rawBitmap = Http.bitmapLoader(mUserData.avatars_big[position]);
+          if(rawBitmap!=null) {
+            clipBitmap  = Utils.clipping(rawBitmap,view.getWidth(),view.getHeight());
+            mRateBitmap = clipBitmap;
+          }
+        } else if(position==0 && mRateBitmap!=null) {
+          clipBitmap = mRateBitmap;
+        } else {
+          rawBitmap = Http.bitmapLoader(mUserData.avatars_big[position]);
+          if(rawBitmap!=null)
+            clipBitmap = Utils.clipping(rawBitmap,view.getWidth(),view.getHeight());
+        }
         
         final Bitmap bitmap = clipBitmap;
         
@@ -121,8 +135,6 @@ public class DatingGalleryAdapter extends BaseAdapter {
               mDatingControl.controlVisibility(DatingControl.V_SHOW_INFO);
             } else
               view.setImageBitmap(bitmap);
-            
-            mCache.put(position,bitmap);
           }
         });
       }
@@ -130,23 +142,26 @@ public class DatingGalleryAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   public void preLoading(final int position,final int w,final int h) {
-    Debug.log("!!!","pos:"+position);
     new Thread() {
       @Override
       public void run() {
-        Bitmap clipBitmap = null;
-        Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);
+        Bitmap rawBitmap = Http.bitmapLoader(mUserData.avatars_big[position]);
         if(rawBitmap!=null) {
-          clipBitmap = Utils.clipping(rawBitmap,w,h);
-          mCache.put(position,clipBitmap);
+          mPreBitmap = Utils.clipping(rawBitmap,w,h);
         }
       }
     }.start();
   }
   //---------------------------------------------------------------------------
   public void release() {
-    mCache.clear();
-    mCache = null;
+    if(mRateBitmap!=null) {
+      mRateBitmap.recycle();
+      mRateBitmap = null;
+    }
+    if(mPreBitmap!=null) {
+      mPreBitmap.recycle();
+      mPreBitmap = null;
+    }
   }
   //---------------------------------------------------------------------------
 }

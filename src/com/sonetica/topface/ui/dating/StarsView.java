@@ -17,7 +17,7 @@ public class StarsView extends View implements View.OnTouchListener {
   //---------------------------------------------------------------------------
   // interface RateListener
   //---------------------------------------------------------------------------
-  interface setOnRateListener {
+  interface OnRateListener {
     public void onRate(int rate);
   }
   //---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ public class StarsView extends View implements View.OnTouchListener {
   private float[] mLastYs;           // массив последних нажатий
   private Star[]  mStars;              // статичный массив объектов для отрисовки звезд;
   private InformerView mInformerView;    // обсервер текущего нажатия на экран
-  private setOnRateListener mRateListener; // listener на клик по звезде
+  private OnRateListener mRateListener; // listener на клик по звезде
   // Bitmaps
   private Bitmap mStarYellow;
   private Bitmap mStarYellowActive;
@@ -225,7 +225,7 @@ public class StarsView extends View implements View.OnTouchListener {
     mStars[9] = new Star(x,y,star_w,star_h,1);
   }
   //---------------------------------------------------------------------------
-  public void setOnRateListener(setOnRateListener listener) {
+  public void setOnRateListener(OnRateListener listener) {
     mRateListener = listener;
   }
   //---------------------------------------------------------------------------

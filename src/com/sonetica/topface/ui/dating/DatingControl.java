@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.dating;
 
 import java.util.LinkedList;
+import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.ui.dating.DatingActivity;
 import com.sonetica.topface.ui.dating.RateControl;
@@ -32,6 +33,7 @@ public class DatingControl extends ViewGroup {
   }
   // Data
   private boolean mStart;
+  private boolean mNotHide;
   private int mDataPosition;
   private int mGalleryPrevPos;
   private int mGallerySize;
@@ -68,7 +70,7 @@ public class DatingControl extends ViewGroup {
     mGalleryAdapter.registerDataSetObserver(new DataSetObserver() {
       @Override
       public void onChanged() {
-        mFaceView.setVisibility(View.INVISIBLE);
+        //mFaceView.setVisibility(View.INVISIBLE);
         DatingControl.this.setCounter(mGalleryPrevPos+1,mGallerySize); //  УПРАВЛЕНИЕ СЧЕТЧИКОМ
       }
       @Override
@@ -100,6 +102,8 @@ public class DatingControl extends ViewGroup {
     mDatingGallery.setOnItemClickListener(new OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> arg0,View arg1,int position,long arg3) {
+        if(!mNotHide)
+          return;
         if(position==0)
           controlVisibility(DatingControl.V_SWAP_ALL);
         else
@@ -110,7 +114,9 @@ public class DatingControl extends ViewGroup {
     
     // Back Button
     mBackButton = new Button(context);
-    mBackButton.setText("Back");
+    mBackButton.setBackgroundResource(R.drawable.dating_back);
+    mBackButton.setTextColor(Color.WHITE);
+    mBackButton.setText(R.string.dating_back);
     mBackButton.setVisibility(View.INVISIBLE);
     mBackButton.setOnClickListener(new OnClickListener() {
       @Override
@@ -124,15 +130,17 @@ public class DatingControl extends ViewGroup {
     mFaceView = new FaceView(context);
     mFaceView.setVisibility(View.INVISIBLE);
     addView(mFaceView);
-    
+
     // Power and Money
     mResourcesView = new ResourcesView(context);
     addView(mResourcesView);
     
     // Rate Control
     mRateControl = new RateControl(context);
+    mRateControl.setBlock(true);
     addView(mRateControl);
     
+    // Counter
     mCounter = new TextView(context);
     mCounter.setGravity(Gravity.CENTER_HORIZONTAL);
     mCounter.setTextColor(Color.WHITE);
@@ -161,7 +169,8 @@ public class DatingControl extends ViewGroup {
     int py = (getHeight()-mProgress.getMeasuredHeight())/2;
     mProgress.layout(px,py,px+mProgress.getMeasuredWidth(),py+mProgress.getMeasuredHeight());
     
-    mBackButton.layout(0,100,mBackButton.getMeasuredWidth(),100+mBackButton.getMeasuredHeight());
+    int y = (mRateControl.getMeasuredHeight()-mBackButton.getMeasuredHeight())/2;
+    mBackButton.layout(0,y,mBackButton.getMeasuredWidth(),y+mBackButton.getMeasuredHeight());
     
     mDatingGallery.layout(0,0,mDatingGallery.getMeasuredWidth(),mDatingGallery.getMeasuredHeight());
     
@@ -187,15 +196,17 @@ public class DatingControl extends ViewGroup {
     mOnNeedUpdateListener = onNeedUpdateListener;
   }
   //---------------------------------------------------------------------------
+  // счетчик галереи
   public void setCounter(int index,int size) {
     mCounter.setText(index+"/"+size);
     mCounter.invalidate();
   }
   //---------------------------------------------------------------------------
-  public void controlVisibility(int state) {
+  // управление скрытием контролов от позиции
+  synchronized public void controlVisibility(int state) {
     int visibility;
     switch(state) {
-      case V_SWAP_ALL:
+      case V_SWAP_ALL: {
         visibility=mResourcesView.getVisibility();
         if(visibility==View.VISIBLE) {
           DatingActivity.mHeaderBar.setVisibility(View.INVISIBLE);
@@ -209,21 +220,21 @@ public class DatingControl extends ViewGroup {
           mRateControl.setVisibility(View.VISIBLE);
           mBackButton.setVisibility(View.INVISIBLE);
         }
-        break;
-      case V_SHOW_ALL:
+      } break;
+      case V_SHOW_ALL: {
         DatingActivity.mHeaderBar.setVisibility(View.VISIBLE);
         mFaceView.setVisibility(View.VISIBLE);
         mResourcesView.setVisibility(View.VISIBLE);
         mRateControl.setVisibility(View.VISIBLE);
         mBackButton.setVisibility(View.INVISIBLE);
-        break;
-      case V_HIDE_ALL:
+      } break;
+      case V_HIDE_ALL: {
         DatingActivity.mHeaderBar.setVisibility(View.INVISIBLE);
         mFaceView.setVisibility(View.INVISIBLE);
         mResourcesView.setVisibility(View.INVISIBLE);
         mRateControl.setVisibility(View.INVISIBLE);        
-        break;
-      case V_SWAP_BACK:
+      } break;
+      case V_SWAP_BACK: {
         visibility=mBackButton.getVisibility();
         if(visibility==View.VISIBLE) {
           DatingActivity.mHeaderBar.setVisibility(View.INVISIBLE);
@@ -232,24 +243,31 @@ public class DatingControl extends ViewGroup {
           DatingActivity.mHeaderBar.setVisibility(View.VISIBLE);
           mBackButton.setVisibility(View.VISIBLE);          
         }
-        break;
-      case V_SHOW_INFO:
+      }  break;
+      case V_SHOW_INFO: {
+        // активировать
+        mNotHide = true;
+        mRateControl.setBlock(true);
         visibility=mResourcesView.getVisibility();
         if(visibility==View.VISIBLE) {
           mFaceView.setVisibility(View.VISIBLE);
-          mCounter.setVisibility(View.VISIBLE);
+          mCounter.setVisibility(View.VISIBLE);  // для инвалидейта
           mProgress.setVisibility(View.INVISIBLE);
         }
-        break;
+      } break;
     }
   }
   //---------------------------------------------------------------------------
+  // Установка следующего пользователя для оценки
   public void next() {
+    // блокировать
     mProgress.setVisibility(View.VISIBLE);
-    mFaceView.setVisibility(View.INVISIBLE);
-    mCounter.setVisibility(View.INVISIBLE);
+    mNotHide = false;
+    //mFaceView.setVisibility(View.INVISIBLE);
+    //mCounter.setVisibility(View.INVISIBLE);
     
     int count = mDataList.size()-1;
+    
     if(mDataPosition>=count) {
       mDataPosition = 0;
       mDataList.clear();
@@ -273,16 +291,27 @@ public class DatingControl extends ViewGroup {
     mDatingGallery.setSelection(0);
     mGalleryAdapter.setUserData(user);
     mGalleryAdapter.notifyDataSetChanged();
+    mRateControl.setBlock(false);
   }
   //---------------------------------------------------------------------------
   public void release() {
     mOnNeedUpdateListener = null;
     mDatingGallery = null;
-    mGalleryAdapter = null;
     mBackButton = null;
+    
+    mGalleryAdapter.release();
+    mGalleryAdapter = null;
+
+    mFaceView.release();
     mFaceView = null;
+    
+    mResourcesView.release();
     mResourcesView = null;
+    
+    mRateControl.release();
     mRateControl = null;
+    
+    mDataList.clear();
     mDataList = null;
   }
   //---------------------------------------------------------------------------

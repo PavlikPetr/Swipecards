@@ -15,6 +15,10 @@ public class MemoryCache {
     mCache = new HashMap<Integer, SoftReference<Bitmap>>();
   }
   //---------------------------------------------------------------------------
+  public boolean containsKey(Integer key) {
+    return mCache.containsKey(key);
+  }
+  //---------------------------------------------------------------------------
   public Bitmap get(Integer position){
     SoftReference<Bitmap> ref = mCache.get(position);
     return ref != null ? ref.get() : null;
@@ -25,7 +29,7 @@ public class MemoryCache {
   }
   //---------------------------------------------------------------------------
   public void clear() {
-    Debug.log(this,"clearing");
+    Debug.log(this,"memory cache clearing");
     mCache.clear();
   }
   //---------------------------------------------------------------------------  

@@ -10,6 +10,7 @@ import com.sonetica.topface.net.DoRateRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
 import com.sonetica.topface.ui.dating.DatingControl.OnNeedUpdateListener;
+import com.sonetica.topface.ui.dating.StarsView.OnRateListener;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
@@ -26,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /* "оценка фото" */
-public class DatingActivity extends Activity implements OnNeedUpdateListener,OnClickListener{
+public class DatingActivity extends Activity implements OnNeedUpdateListener,OnRateListener,OnClickListener{
   // Data
   private DatingControl mDatingControl;
   // Constants
@@ -40,46 +41,18 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnC
 
     // Header Bar
     mHeaderBar = (ViewGroup)findViewById(R.id.loHeader);
-    
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
-    
     // Chat Button
     ((Button)findViewById(R.id.chatBtn)).setOnClickListener(this);
     // Profile Button
     ((Button)findViewById(R.id.profileBtn)).setOnClickListener(this);
-
     // Dating Gallery
     mDatingControl = (DatingControl)findViewById(R.id.galleryDating);
     mDatingControl.setOnNeedUpdateListener(this);
-    
     // Stars Button
-    StarsView btnStars = (StarsView)findViewById(R.id.starsView);
-    btnStars.setOnRateListener(new StarsView.setOnRateListener() {
-      @Override
-      public void onRate(int rate) {
-        rate(mDatingControl.getUserId(),rate);
-        mDatingControl.next();
-      }
-    });
+    ((StarsView)findViewById(R.id.starsView)).setOnRateListener(this);
 
-    update();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public void onClick(View v) {
-    switch(v.getId()) {
-      case R.id.chatBtn:
-        openChatActivity(mDatingControl.getUserId());
-        break;
-      case R.id.profileBtn:
-        openProfileActivity(mDatingControl.getUserId());
-        break;
-    }
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public void needUpdate() {
     update();
   }
   //---------------------------------------------------------------------------
@@ -117,16 +90,31 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnC
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void openProfileActivity(int userId) {
-    Intent intent = new Intent(this,ProfileActivity.class);
-    intent.putExtra(ProfileActivity.INTENT_USER_ID,userId);
-    startActivityForResult(intent,0);
+  @Override
+  public void needUpdate() {
+    update();
   }
   //---------------------------------------------------------------------------
-  private void openChatActivity(int userId) {
-    Intent intent = new Intent(this,ChatActivity.class);
-    intent.putExtra(ChatActivity.INTENT_USER_ID,userId);
-    startActivityForResult(intent,0);
+  @Override
+  public void onRate(int rate) {
+    rate(mDatingControl.getUserId(),rate);
+    mDatingControl.next();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onClick(View view) {
+    switch(view.getId()) {
+      case R.id.chatBtn: {
+        Intent intent = new Intent(this,ChatActivity.class);
+        intent.putExtra(ChatActivity.INTENT_USER_ID,mDatingControl.getUserId());
+        startActivityForResult(intent,0);
+      } break;
+      case R.id.profileBtn: {
+        Intent intent = new Intent(this,ProfileActivity.class);
+        intent.putExtra(ProfileActivity.INTENT_USER_ID,mDatingControl.getUserId());
+        startActivityForResult(intent,0);
+      } break;
+    }
   }
   //---------------------------------------------------------------------------
   @Override
@@ -159,5 +147,5 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnC
     }
     return super.onMenuItemSelected(featureId,item);
   }
-  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------  
 }
