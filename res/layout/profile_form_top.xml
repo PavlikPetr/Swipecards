@@ -75,14 +75,27 @@
     </LinearLayout>
   </LinearLayout>
   
-  <!-- album preview -->
+  <LinearLayout 
+      android:layout_width="fill_parent"
+      android:layout_height="50dp"
+      android:layout_gravity="center_vertical"       
+      android:orientation="horizontal"
+      android:background="#5FFFFFFF" >
+    <Button
+        android:id="@+id/btnProfileBuying"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"  
+        android:text="@string/profile_btn_buy"/>
+  </LinearLayout>
+  
+  <!-- photo album preview -->
   <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginTop="5dp"
       android:layout_marginLeft="10dp"
       android:text="@string/profile_foto" 
       android:textColor="#FFFFFF"
-      android:layout_marginTop="5dp"
       android:textSize="20sp" />
   
   <LinearLayout 
@@ -115,16 +128,16 @@
 		 
 	</LinearLayout>
   
-  <!-- ero album preview -->  
+  <!-- ero photo album preview -->  
   <TextView
       android:id="@+id/tvEroTitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
       android:layout_marginLeft="10dp"
       android:text="@string/profile_foto_ero"
       android:textColor="#FFFFFF"
       android:textSize="20sp" 
-      android:layout_marginTop="15dp"
       android:visibility="invisible" />
   
   <LinearLayout

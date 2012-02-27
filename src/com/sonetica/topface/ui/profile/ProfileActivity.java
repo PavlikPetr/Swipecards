@@ -13,6 +13,7 @@ import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.ProfilesRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.album.AlbumActivity;
+import com.sonetica.topface.ui.buying.BuyingActivity;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
@@ -36,6 +37,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   private boolean mOwner;
   private SwapView mSwapView;
   private Button mProfileButton;
+  private Button mBuyingButton;
   private ViewGroup mEroViewGroup;
   private FrameImageView mFramePhoto;
   private HorizontalListView mListView;
@@ -79,7 +81,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     // Swap
     mSwapView = ((SwapView)findViewById(R.id.swapFormView));
     mSwapView.setOnSwapListener(this);
-    // Button Profile
+    // Profile Button 
     mProfileButton = ((Button)findViewById(R.id.btnHeader));
     mProfileButton.setOnClickListener(this);
     // свой - чужой профиль
@@ -98,6 +100,9 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       btnChat.setVisibility(View.VISIBLE);
       btnChat.setOnClickListener(this);
     }
+    // Buying Button
+    mBuyingButton = ((Button)findViewById(R.id.btnProfileBuying));
+    mBuyingButton.setOnClickListener(this);
     
     // Gallary and Adapter
     mListAdapter = new PhotoGalleryAdapter(ProfileActivity.this,mOwner);
@@ -312,6 +317,9 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       } break;
       case R.id.btnProfileEdit: {
         startActivity(new Intent(ProfileActivity.this,EditProfileActivity.class));
+      } break;
+      case R.id.btnProfileBuying: {
+        startActivity(new Intent(ProfileActivity.this,BuyingActivity.class));
       } break;
       case R.id.btnHeader: {
         // mCurrForm = mCurrForm == FORM_TOP ? FORM_BOTTOM : FORM_TOP;

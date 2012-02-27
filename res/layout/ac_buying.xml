@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/list_bkgrd"
+    android:orientation="vertical" >
+
+    <!-- header bar -->
+    <include layout="@layout/bar_header" />
+
+    <!-- Money -->
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/buying_money"
+        android:textColor="#FFFFFF" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/buying_selector"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btnBuyingMoney40"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="40" />
+
+        <Button
+            android:id="@+id/btnBuyingMoney100"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100" />
+        
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:background="@drawable/buying_economy_selector"
+            android:text="economy 30%"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="economy 30%"
+            android:textColor="#000000" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btnBuyingPower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10000" />
+
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:background="@drawable/buying_economy_selector"
+            android:text="economy 30%"
+            android:textColor="#000000" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="economy 30%"
+            android:textColor="#000000" />            
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Power -->
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/buying_power"
+        android:textColor="#FFFFFF" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/buying_selector"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="text" />
+    </LinearLayout>
+
+</LinearLayout>

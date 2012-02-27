@@ -39,6 +39,7 @@
     <activity android:name=".ui.likes.LikesActivity"         android:screenOrientation="portrait" />
     <activity android:name=".ui.dating.DatingActivity"       android:screenOrientation="portrait" />
     <activity android:name=".ui.filter.FilterActivity"       android:screenOrientation="portrait" />
+    <activity android:name=".ui.buying.BuyingActivity"       android:screenOrientation="portrait" />
     
     <activity android:name=".ui.profile.ProfileActivity"     android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.EroAlbumActivity"    android:screenOrientation="portrait" />
