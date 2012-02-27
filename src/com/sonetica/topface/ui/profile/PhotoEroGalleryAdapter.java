@@ -18,14 +18,16 @@ import android.widget.ImageView.ScaleType;
 
 public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollListener  {
   // Data
+  private boolean mOwner;
   private Context mContext;
   private LinkedList<Album> mAlbumList;
   private HashMap<Integer,Bitmap> mCache;
   private ExecutorService mThreadsPool;
   private boolean mBusy; 
   //---------------------------------------------------------------------------
-  public PhotoEroGalleryAdapter(Context context) {
+  public PhotoEroGalleryAdapter(Context context,boolean bOwner) {
     mContext = context;
+    mOwner = bOwner;
     mCache = new HashMap<Integer,Bitmap>();
     mAlbumList = new LinkedList<Album>();
     mThreadsPool = Executors.newFixedThreadPool(2);
@@ -55,9 +57,20 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     if(convertView == null) {
       convertView = new ProfileEroThumbView(mContext);
       ((ProfileEroThumbView)convertView).setScaleType(ScaleType.CENTER_CROP);
+      ((ProfileEroThumbView)convertView).mOwner = mOwner;
       convertView.setBackgroundResource(R.drawable.profile_bg_gallery);
     }
 
+    
+    if(position==0 && mOwner==true) {
+      ((ProfileEroThumbView)convertView).mIsAddButton = true;
+      ((ProfileEroThumbView)convertView).setPadding(0,0,0,20);
+      ((ProfileEroThumbView)convertView).setScaleType(ScaleType.CENTER_INSIDE);
+      ((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_add_photo);
+      return convertView;
+    } else
+      ((ProfileEroThumbView)convertView).mIsAddButton = false;
+    
     Bitmap bitmap = mCache.get(position);
     if(bitmap!=null)
       ((ProfileEroThumbView)convertView).setImageBitmap(bitmap);

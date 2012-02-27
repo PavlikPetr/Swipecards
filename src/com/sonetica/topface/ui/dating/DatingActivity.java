@@ -11,6 +11,7 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
 import com.sonetica.topface.ui.dating.DatingControl.OnNeedUpdateListener;
 import com.sonetica.topface.ui.dating.StarsView.OnRateListener;
+import com.sonetica.topface.ui.filter.FilterActivity;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
@@ -57,7 +58,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   }
   //---------------------------------------------------------------------------
   public void update() {
-    SearchRequest request = new SearchRequest(this);
+    SearchRequest request = new SearchRequest(this.getApplicationContext());
     request.limit = 20;
     request.callback(new ApiHandler() {
       @Override
@@ -73,7 +74,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   }
   //---------------------------------------------------------------------------
   private void rate(final int userid,final int rate) {
-    DoRateRequest doRate = new DoRateRequest(this);
+    DoRateRequest doRate = new DoRateRequest(this.getApplicationContext());
     doRate.userid = userid;
     doRate.rate = rate;
     doRate.callback(new ApiHandler() {
@@ -82,6 +83,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
         DoRate rate = DoRate.parse(response);
         Data.s_Power = rate.power;
         Data.s_Money = rate.money;
+        Data.s_AverageRate = rate.average;
       }
       @Override
       public void fail(int codeError) {
@@ -119,8 +121,6 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    //ApiRequest.shutdown();
-
     mDatingControl.release();
     mDatingControl = null;
     mHeaderBar = null;

@@ -16,6 +16,8 @@ public class ProfileEroThumbView extends ImageView {
   public int cost;       // стоимость просмотра фотографии
   public int likes;      // количество одобрительных отзывов
   public int dislikes;   // количество отрицательных отзывов
+  public boolean mOwner;
+  public boolean mIsAddButton;
   private static Bitmap mFrameBitmap;
   private static Bitmap mEroInfo;
   private static Paint s_PaintBg;
@@ -43,12 +45,24 @@ public class ProfileEroThumbView extends ImageView {
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     setMeasuredDimension(mFrameBitmap.getWidth(),mFrameBitmap.getHeight());
-  }  
+  }
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     canvas.drawBitmap(mFrameBitmap,0,0,null);
+    
+    if(mOwner) {
+      if(mIsAddButton) {
+        Paint paint = new Paint();
+        paint.setTextAlign(Align.CENTER);
+        paint.setColor(Color.DKGRAY);
+        paint.setAntiAlias(true);
+        paint.setTextSize(19);
+        canvas.drawText(getContext().getString(R.string.profile_btn_add),getWidth()/2,95,paint);
+      }
+      return;
+    }
     canvas.drawRect(0,0,getWidth(),getHeight(),s_PaintBg);
     canvas.drawBitmap(mEroInfo,0,0,null);
     // cost

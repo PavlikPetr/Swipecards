@@ -38,7 +38,6 @@ public class SearchUser extends AbstractData {
             search.first_name = item.getString("first_name");
             search.online     = item.getBoolean("online");
             search.status     = item.getString("status");
-            search.city_name  = item.getString("city");
           JSONObject city = item.getJSONObject("city");
             search.city_id    = city.getInt("id");            
             search.city_name  = city.getString("name");

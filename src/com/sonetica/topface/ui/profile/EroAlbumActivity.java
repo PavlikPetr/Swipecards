@@ -7,18 +7,15 @@ import com.sonetica.topface.net.AlbumRequest;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.ui.dating_ex.ResourcesView;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class EroAlbumActivity extends Activity {
@@ -81,7 +78,6 @@ public class EroAlbumActivity extends Activity {
         mBuyButton.setVisibility(View.INVISIBLE);
       }
     });
-    
     
     int uid = getIntent().getIntExtra(INTENT_USER_ID,-1);
     mCurrentPos = getIntent().getIntExtra(INTENT_ALBUM_POS,-1);

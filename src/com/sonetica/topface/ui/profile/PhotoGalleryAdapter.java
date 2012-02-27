@@ -18,14 +18,16 @@ import android.widget.ImageView.ScaleType;
 
 public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListener  {
   // Data
+  private boolean mOwner;
   private Context mContext;
   private LinkedList<Album> mAlbumList;
   private HashMap<Integer,Bitmap> mCache;
   private ExecutorService mThreadsPool;
   private boolean mBusy; 
   //---------------------------------------------------------------------------
-  public PhotoGalleryAdapter(Context context) {
+  public PhotoGalleryAdapter(Context context,boolean bOwner) {
     mContext = context;
+    mOwner = bOwner;
     mCache = new HashMap<Integer,Bitmap>();
     mAlbumList = new LinkedList<Album>();
     mThreadsPool = Executors.newFixedThreadPool(2);
@@ -58,6 +60,15 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
       convertView.setBackgroundResource(R.drawable.profile_bg_gallery);
     }
 
+    if(position==0 && mOwner==true) {
+      ((ProfileThumbView)convertView).mIsAddButton = true;
+      ((ProfileThumbView)convertView).setPadding(0,0,0,20);
+      ((ProfileThumbView)convertView).setScaleType(ScaleType.CENTER_INSIDE);
+      ((ProfileThumbView)convertView).setImageResource(R.drawable.profile_add_photo);
+      return convertView;
+    } else
+      ((ProfileThumbView)convertView).mIsAddButton = false;
+    
     Bitmap bitmap = mCache.get(position);
     if(bitmap!=null)
       ((ProfileThumbView)convertView).setImageBitmap(bitmap);

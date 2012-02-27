@@ -21,9 +21,10 @@ public class Profile extends AbstractData {
   public int money;           // количество монет у пользователя
   public int power;           // количество энергии пользователя
   public int average_rate;    // средняя оценка текущего пользователя
+  public int city_id;         // идентификтаор города пользователя
+  public String city_name;       // название города пользователя
+  public String city_full;       // полное название города пользвоателя
   public String first_name;      // имя пользователя
-  public String city_name;       // название города пользвоателя
-  public String city_id;         // идентификтаор города пользователя
   public String avatar_big;      // аватарка пользователя большого размера
   public String avatar_small;    // аватарки пользователя маленького размера
   public LinkedList<Album> albums;
@@ -56,22 +57,27 @@ public class Profile extends AbstractData {
         profile.unread_rates    = resp.getInt("unread_rates");
         profile.unread_likes    = resp.getInt("unread_likes");
         profile.unread_messages = resp.getInt("unread_messages");
-        if(isNotification)  
-          return profile;
-        profile.first_name      = resp.getString("first_name");
-        profile.uid             = resp.getInt("uid");
-        profile.age             = resp.getInt("age");
-        profile.sex             = resp.getInt("sex");
+        profile.average_rate    = resp.getInt("average_rate");
         profile.money           = resp.getInt("money");
         profile.power           = resp.getInt("power");
-        profile.average_rate    = resp.getInt("average_rate");
-        profile.city_name       = resp.getString("city");
-        profile.city_id         = resp.getString("city_id");
-      //avatars
+        
+        if(isNotification)  
+          return profile;
+        
+        profile.uid  = resp.getInt("uid");
+        profile.age  = resp.getInt("age");
+        profile.sex  = resp.getInt("sex");
+        profile.first_name  = resp.getString("first_name");
+      // city  
+      JSONObject city = resp.getJSONObject("city");
+        profile.city_id    = city.getInt("id");            
+        profile.city_name  = city.getString("name");
+        profile.city_full  = city.getString("full");
+      // avatars
       JSONObject avatars = resp.getJSONObject("avatars");
         profile.avatar_big   = avatars.getString("big");
         profile.avatar_small = avatars.getString("small");
-      //albums
+      // albums
       JSONArray albums = resp.getJSONArray("album");
       profile.albums = new LinkedList<Album>();
         if(albums.length()>0)

@@ -230,6 +230,7 @@ public class StarsView extends View implements View.OnTouchListener {
   }
   //---------------------------------------------------------------------------
   public void setBlock(boolean block) {
+    mAverageRate = Data.s_AverageRate;    // Костыль по обновлению средней оценки
     this.setEnabled(block);
   }
   //---------------------------------------------------------------------------

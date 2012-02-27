@@ -39,8 +39,10 @@
   <string name="profile_header_title">Профиль</string>
   <string name="profile_btn_chat">Поболтать</string>
   <string name="profile_btn_edit">Редактировать</string>
-  <string name="profile_foto">Фотографии</string>
+  <string name="profile_btn_form">Анкета</string>
+  <string name="profile_btn_add">Добавить</string>
   <string name="profile_form">Анкета</string>
+  <string name="profile_foto">Фотографии</string>
   <string name="profile_foto_ero">Эрофотографии</string>
   <string name="profile_height">Рост</string>
   <string name="profile_weight">Вес</string>
@@ -54,12 +56,27 @@
   <string name="profile_finances">Finances</string>
   <string name="profile_smoking">Smoking</string>
   <string name="profile_status">О себе</string>
-  <string name="profile_btn_form">Анкета</string>
+  <string name="profile_edit_title">Редактировать</string>
+  <string name="profile_add_title">Добавить фотографию</string>
+  <string name="profile_add_album">Добавить из альбома</string>
+  <string name="profile_add_camera">Сделать снимок</string>
 
   <!-- Dating Activity -->
   <string name="dating_header_title">Оценка фото</string>
   <string name="dating_menu_one">Фильтр</string>
   <string name="dating_back">Назад</string>
+  
+  <!-- Filter Activity -->
+  <string name="filter_header_title">Я ищу</string>
+  <string name="filter_menu_save">Сохранить</string>
+  <string name="filter_filter">Фильтр</string>
+  <string name="filter_place">Местоположение</string>
+  <string name="filter_sex">Пол</string>
+  <string name="filter_age">Возраст</string>
+  <string name="filter_online">Онлайн</string>
+  <string name="filter_boy">Парня</string>
+  <string name="filter_girl">Девушку</string>
+  <string name="filter_all">Все</string>
   
   <!-- Likes Activity -->
   <string name="likes_header_title">Я нравлюсь</string>
@@ -73,6 +90,8 @@
   
   <!-- Album Ero Activity -->
   <string name="album_header_title">Альбом</string>
+  <string name="album_menu_main">Сделать главной</string>
+  <string name="album_menu_delete">Удалить</string>
   <string name="ero_album_btn_like">Рекомендую</string>
   <string name="ero_album_btn_dislike">Не рекомендую</string>
   <string name="ero_album_btn_buy">Смотреть следующую</string>

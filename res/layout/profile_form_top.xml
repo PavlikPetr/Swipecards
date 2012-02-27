@@ -13,7 +13,7 @@
       android:orientation="horizontal" >
       
     <!-- Frame -->
-    <com.sonetica.topface.ui.FrameImageView
+    <com.sonetica.topface.ui.profile.FrameImageView
         android:id="@+id/ivProfileFramePhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

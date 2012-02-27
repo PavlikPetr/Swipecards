@@ -13,13 +13,14 @@ public class ProfileUser extends AbstractData {
   public int last_visit;             // таймстамп последнего посещения приложения
   public int city_id;                // идентификатор города пользователя
   public boolean online;             // флаг наличия пользвоателя в онлайне
+  public String city_name;           // наименование города пользователя
+  public String city_full;           // полное наименование города пользователя
   public String status;              // статус пользователя
   public String first_name;          // имя пользователя
   public String first_name_translit; // имя пользователя в транслитерации
   public String platform;            // платформа пользователя
   public String avatars_big;         // большая аватарка пользователя
   public String avatars_small;       // маленькая аватарка пользователя
-  public String city_name;           // наименование города пользователя
   // Questionary
   public int questionary_job_id;           // идентификатор рабочей партии пользователя
   public String questionary_job;           // описание оригинальной работы пользователя
@@ -59,8 +60,11 @@ public class ProfileUser extends AbstractData {
         profile.city_name  = geo.getString("city");
         profile.city_id    = geo.getInt("city_id");
       */
-      profile.city_name  = item.getString("city");
-      profile.city_id    = item.getInt("city_id");
+        // city  
+      JSONObject city = item.getJSONObject("city");
+        profile.city_id    = city.getInt("id");            
+        profile.city_name  = city.getString("name");
+        profile.city_full  = city.getString("full");
         
       JSONObject avatars = item.getJSONObject("avatars");
         profile.avatars_big   = avatars.getString("big");
