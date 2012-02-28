@@ -100,9 +100,13 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       btnChat.setVisibility(View.VISIBLE);
       btnChat.setOnClickListener(this);
     }
+    
     // Buying Button
-    mBuyingButton = ((Button)findViewById(R.id.btnProfileBuying));
-    mBuyingButton.setOnClickListener(this);
+    if(mOwner) {
+      ((ViewGroup)findViewById(R.id.lvProfileBuying)).setVisibility(View.VISIBLE);
+      mBuyingButton = ((Button)findViewById(R.id.btnProfileBuying));
+      mBuyingButton.setOnClickListener(this);
+    }
     
     // Gallary and Adapter
     mListAdapter = new PhotoGalleryAdapter(ProfileActivity.this,mOwner);

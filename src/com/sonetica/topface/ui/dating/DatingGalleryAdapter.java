@@ -115,8 +115,8 @@ public class DatingGalleryAdapter extends BaseAdapter {
       @Override
       public void run() {
         
-        if(view.getWidth()==0)
-          return;
+        //if(view.getWidth()==0)
+          //return;
         
         Bitmap clipBitmap = null;
         Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);

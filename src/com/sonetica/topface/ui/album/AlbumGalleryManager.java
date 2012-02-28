@@ -7,7 +7,6 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.MemoryCache;
-import com.sonetica.topface.utils.StorageCache;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Pair;
@@ -19,7 +18,7 @@ import android.widget.ImageView;
 public class AlbumGalleryManager {
   // Data
   private MemoryCache  mMemoryCache;
-  private StorageCache mStorageCache;
+  //private StorageCache mStorageCache;
   private ExecutorService mThreadsPool;
   private LinkedList<? extends AbstractData> mData;
   //private HashMap<ImageView,Integer> mLinkCache;
@@ -31,7 +30,7 @@ public class AlbumGalleryManager {
     mData = dataList;
     mThreadCount  = THREAD_DEFAULT;
     mMemoryCache  = new MemoryCache();
-    mStorageCache = new StorageCache(context,StorageCache.EXTERNAL_CACHE);
+    //mStorageCache = new StorageCache(context,StorageCache.EXTERNAL_CACHE);
     //mLinkCache    = new HashMap<ImageView,Integer>();
     mThreadsPool  = Executors.newFixedThreadPool(mThreadCount);
   }

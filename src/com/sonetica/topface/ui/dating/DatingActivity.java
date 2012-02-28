@@ -59,7 +59,9 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   //---------------------------------------------------------------------------
   public void update() {
     SearchRequest request = new SearchRequest(this.getApplicationContext());
-    request.limit = 20;
+    request.limit  = 20;
+    request.geo    = Data.s_Profile.filter_geo;
+    request.online = Data.s_Profile.filter_online;
     request.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
@@ -87,7 +89,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
       }
       @Override
       public void fail(int codeError) {
-        Toast.makeText(DatingActivity.this,"dating rate fail",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(DatingActivity.this,"dating rate failed",Toast.LENGTH_SHORT).show();
       }
     }).exec();
   }

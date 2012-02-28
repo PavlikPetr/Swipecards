@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.inbox;
 
 import java.util.LinkedList;
-import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.History;
 import com.sonetica.topface.ui.RoundedImageView;
@@ -11,9 +10,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ChatListAdapter extends BaseAdapter {

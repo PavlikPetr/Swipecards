@@ -20,4 +20,9 @@
   <string name="s_tops_city_name">tops_city_name</string>
   <string name="s_likes_city_id">likes_city_id</string>
   
+  <!-- Filter pref name -->
+  <string name="s_filter_sex">filterSex</string>
+  <string name="s_filter_age">filterAge</string>
+  <string name="s_filter_online">filterOnline</string>
+  
 </resources>

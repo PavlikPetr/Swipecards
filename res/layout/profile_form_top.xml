@@ -75,11 +75,14 @@
     </LinearLayout>
   </LinearLayout>
   
+  <!-- monew, power, buy btn -->
   <LinearLayout 
+      android:id="@+id/lvProfileBuying"
       android:layout_width="fill_parent"
       android:layout_height="50dp"
       android:layout_gravity="center_vertical"       
       android:orientation="horizontal"
+      android:visibility="gone"
       android:background="#5FFFFFFF" >
     <Button
         android:id="@+id/btnProfileBuying"

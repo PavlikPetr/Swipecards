@@ -38,7 +38,7 @@ public class ProfileThumbView extends ImageView {
       paint.setColor(Color.DKGRAY);
       paint.setAntiAlias(true);
       paint.setTextSize(19);
-      canvas.drawText(getContext().getString(R.string.profile_btn_add),getWidth()/2,95,paint);
+      canvas.drawText(getContext().getString(R.string.profile_btn_add),getWidth()/2,getHeight()-paint.getTextSize(),paint);
     }
   }
   //---------------------------------------------------------------------------  

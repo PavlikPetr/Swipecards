@@ -8,4 +8,5 @@
     <!-- header bar -->
     <include layout="@layout/bar_header" />
     
+    
 </LinearLayout>

@@ -1,11 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="#000000" >
-    
-    <!-- header bar -->
-    <include layout="@layout/bar_header" />
-    
-</LinearLayout>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- filter -->
+    <PreferenceCategory android:title="@string/filter_filter"
+        android:background="@drawable/im_bar_header" >
+      <!-- sex -->
+      <Preference
+          android:title="@string/filter_sex"
+          android:key="@string/s_filter_sex" 
+          android:summary="" />
+      
+      <!-- age -->
+      <Preference
+          android:title="@string/filter_age"
+          android:key="@string/s_filter_age"
+          android:summary="" />
+      
+      <!-- online -->
+      <Preference
+          android:title="@string/filter_online"
+          android:key="@string/s_filter_online"
+          android:summary="" />
+    </PreferenceCategory>
+  
+    <!-- place -->
+    <PreferenceCategory android:title="@string/filter_place">
+        
+      <Preference
+          android:title="Custom Preference"
+          android:summary="This works almost like a button"
+          android:key="customPref" />
+      <Preference
+          android:title="Custom Preference"
+          android:summary="This works almost like a button"
+          android:key="customPref" />
+      <Preference
+          android:title="Custom Preference"
+          android:summary="This works almost like a button"
+          android:key="customPref" />
+      <Preference
+          android:title="Custom Preference"
+          android:summary="This works almost like a button"
+          android:key="customPref" />
+      
+   </PreferenceCategory>
+   
+  
+</PreferenceScreen>
