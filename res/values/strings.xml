@@ -42,7 +42,10 @@
   <string name="profile_btn_form">Анкета</string>
   <string name="profile_btn_add">Добавить</string>
   <string name="profile_btn_buy">Купить</string>
+  <string name="profile_sex_boy">Парень</string>
+  <string name="profile_sex_girl">Девушка</string>
   <string name="profile_form">Анкета</string>
+  <string name="profile_form_name">Имя</string>
   <string name="profile_foto">Фотографии</string>
   <string name="profile_foto_ero">Эрофотографии</string>
   <string name="profile_height">Рост</string>
@@ -54,7 +57,7 @@
   <string name="profile_fitness">Комплекция</string>
   <string name="profile_job">StatusJob</string>
   <string name="profile_marriage">Marriage</string>
-  <string name="profile_finances">Finances</string>
+  <string name="profile_finances">Доход</string>
   <string name="profile_smoking">Smoking</string>
   <string name="profile_status">О себе</string>
   <string name="profile_edit_title">Редактировать</string>
@@ -72,6 +75,7 @@
   <string name="filter_menu_save">Сохранить</string>
   <string name="filter_filter">Фильтр</string>
   <string name="filter_place">Местоположение</string>
+  <string name="filter_city">Город</string>
   <string name="filter_sex">Пол</string>
   <string name="filter_age">Возраст</string>
   <string name="filter_online">Онлайн</string>

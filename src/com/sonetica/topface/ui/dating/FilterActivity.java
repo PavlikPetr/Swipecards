@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.filter;
+package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
@@ -8,7 +8,6 @@ import com.sonetica.topface.net.FilterRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -34,9 +33,6 @@ public class FilterActivity extends PreferenceActivity {
   }
   //---------------------------------------------------------------------------
   // Data
-  private Preference mSex;
-  private Preference mAge;
-  private Preference mOnline;
   private TempFilter mTemp;
   //---------------------------------------------------------------------------
   @Override
@@ -54,25 +50,25 @@ public class FilterActivity extends PreferenceActivity {
     mTemp.geo       = Data.s_Profile.filter_geo;
     
     // sex button
-    mSex = findPreference(getString(R.string.s_filter_sex));
+    Preference sex = findPreference(getString(R.string.s_filter_sex));
     if(mTemp.sex==Global.GIRL)
-      mSex.setSummary(getString(R.string.filter_girl));
+      sex.setSummary(getString(R.string.filter_girl));
     else
-      mSex.setSummary(getString(R.string.filter_boy));
-    mSex.setOnPreferenceClickListener(mOnSexListener);
+      sex.setSummary(getString(R.string.filter_boy));
+    sex.setOnPreferenceClickListener(mOnSexListener);
     
     // age button
-    mAge = findPreference(getString(R.string.s_filter_age));
-    mAge.setSummary(getString(R.string.filter_from)+" "+mTemp.age_start+" "+getString(R.string.filter_to)+" "+mTemp.age_end);
-    mAge.setOnPreferenceClickListener(mOnAgeListener);
+    Preference age = findPreference(getString(R.string.s_filter_age));
+    age.setSummary(getString(R.string.filter_from)+" "+mTemp.age_start+" "+getString(R.string.filter_to)+" "+mTemp.age_end);
+    age.setOnPreferenceClickListener(mOnAgeListener);
     
     // online button
-    mOnline = findPreference(getString(R.string.s_filter_online));
+    Preference online = findPreference(getString(R.string.s_filter_online));
     if(mTemp.online==false)
-      mOnline.setSummary(getString(R.string.filter_all));
+      online.setSummary(getString(R.string.filter_all));
     else
-      mOnline.setSummary(getString(R.string.filter_online));
-    mOnline.setOnPreferenceClickListener(mOnOnelineListener);
+      online.setSummary(getString(R.string.filter_online));
+    online.setOnPreferenceClickListener(mOnOnelineListener);
     
   }
   //---------------------------------------------------------------------------
@@ -129,12 +125,13 @@ public class FilterActivity extends PreferenceActivity {
   //---------------------------------------------------------------------------
   // sex
   Preference.OnPreferenceClickListener mOnSexListener = new Preference.OnPreferenceClickListener() {
-    public boolean onPreferenceClick(Preference preference) {
+    public boolean onPreferenceClick(final Preference preference) {
       final CharSequence[] items = {getString(R.string.filter_girl),getString(R.string.filter_boy)};
       AlertDialog.Builder builder = new AlertDialog.Builder(FilterActivity.this);
+      //builder.setTitle(getString(R.string.filter_sex));
       builder.setItems(items, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int item) {
-          mSex.setSummary(items[item]);
+          preference.setSummary(items[item]);
           mTemp.sex = item;
         }
       });
@@ -146,7 +143,7 @@ public class FilterActivity extends PreferenceActivity {
   //---------------------------------------------------------------------------
   // age
   Preference.OnPreferenceClickListener mOnAgeListener = new Preference.OnPreferenceClickListener() {
-    public boolean onPreferenceClick(Preference preference) {
+    public boolean onPreferenceClick(final Preference preference) {
 
       View view = LayoutInflater.from(FilterActivity.this.getApplicationContext()).inflate(R.layout.age_picker,null);
       final TextView tvFrom = (TextView)view.findViewById(R.id.tvFilterFrom);
@@ -201,7 +198,7 @@ public class FilterActivity extends PreferenceActivity {
           if(mTemp.age_start > mTemp.age_end)
             mTemp.age_start = mTemp.age_end;
 
-          mAge.setSummary(getString(R.string.filter_from)+" "+mTemp.age_start+" "+getString(R.string.filter_to)+" "+mTemp.age_end);
+          preference.setSummary(getString(R.string.filter_from)+" "+mTemp.age_start+" "+getString(R.string.filter_to)+" "+mTemp.age_end);
         }
       });
       
@@ -216,12 +213,13 @@ public class FilterActivity extends PreferenceActivity {
   //---------------------------------------------------------------------------
   // online
   Preference.OnPreferenceClickListener mOnOnelineListener = new Preference.OnPreferenceClickListener() {
-    public boolean onPreferenceClick(Preference preference) {
+    public boolean onPreferenceClick(final Preference preference) {
       final CharSequence[] items = {getString(R.string.filter_all),getString(R.string.filter_online)};
       AlertDialog.Builder builder = new AlertDialog.Builder(FilterActivity.this);
+      //builder.setTitle(getString(R.string.filter_online));
       builder.setItems(items, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int item) {
-          mOnline.setSummary(items[item]);
+          preference.setSummary(items[item]);
           mTemp.online = (item==0 ? false : true);
         }
       });

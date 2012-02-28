@@ -21,8 +21,27 @@
   <string name="s_likes_city_id">likes_city_id</string>
   
   <!-- Filter pref name -->
-  <string name="s_filter_sex">filterSex</string>
-  <string name="s_filter_age">filterAge</string>
-  <string name="s_filter_online">filterOnline</string>
+  <string name="s_filter_sex">filter_sex</string>
+  <string name="s_filter_age">filter_age</string>
+  <string name="s_filter_online">filter_online</string>
+  
+  <!-- Profile pref name -->
+  <string name="s_profile_name">profile_name</string>
+  <string name="s_profile_sex">profile_sex</string>
+  <string name="s_profile_age">profile_age</string>
+  <string name="s_profile_city">profile_city</string>
+  
+  <string name="s_profile_about">profile_about</string>
+  <string name="s_profile_height">profile_height</string>
+  <string name="s_profile_weight">profile_weight</string>
+  <string name="s_profile_fitness">profile_fitness</string>
+  <string name="s_profile_marriage">profile_marriage</string>
+  <string name="s_profile_education">profile_education</string>
+  <string name="s_profile_finances">profile_finances</string>
+  <string name="s_profile_smoking">profile_smoking</string>
+  <string name="s_profile_alcohol">profile_alcohol</string>
+  <string name="s_profile_commutability">profile_commutability</string>
+  <string name="s_profile_character">profile_character</string>
+  
   
 </resources>

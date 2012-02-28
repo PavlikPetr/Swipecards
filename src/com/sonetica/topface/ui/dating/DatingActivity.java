@@ -11,7 +11,6 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
 import com.sonetica.topface.ui.dating.DatingControl.OnNeedUpdateListener;
 import com.sonetica.topface.ui.dating.StarsView.OnRateListener;
-import com.sonetica.topface.ui.filter.FilterActivity;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;

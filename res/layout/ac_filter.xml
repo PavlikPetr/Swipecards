@@ -2,24 +2,23 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- filter -->
-    <PreferenceCategory android:title="@string/filter_filter"
-        android:background="@drawable/im_bar_header" >
+    <PreferenceCategory android:title="@string/filter_filter" >
       <!-- sex -->
       <Preference
-          android:title="@string/filter_sex"
-          android:key="@string/s_filter_sex" 
+          android:key="@string/s_filter_sex"
+          android:title="@string/filter_sex" 
           android:summary="" />
       
       <!-- age -->
       <Preference
-          android:title="@string/filter_age"
           android:key="@string/s_filter_age"
+          android:title="@string/filter_age"
           android:summary="" />
       
       <!-- online -->
       <Preference
-          android:title="@string/filter_online"
           android:key="@string/s_filter_online"
+          android:title="@string/filter_online"
           android:summary="" />
     </PreferenceCategory>
   
