@@ -10,6 +10,7 @@ public class DoRateRequest extends ApiRequest {
   private String service = "rate";
   public  int userid;   // идентификатор пользователя для оценки
   public  int rate;     // оценка пользователя. ОДЗ: 1 <= RATE <= 10
+  public  String comment;     // оценка пользователя. ОДЗ: 1 <= RATE <= 10
   //---------------------------------------------------------------------------
   public DoRateRequest(Context context) {
     super(context);

@@ -15,6 +15,7 @@ import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,8 @@ import android.widget.Toast;
 public class DatingActivity extends Activity implements OnNeedUpdateListener,OnRateListener,OnClickListener{
   // Data
   private DatingControl mDatingControl;
+  private Dialog   mCommentDialog;
+  private EditText mCommentText;
   // Constants
   public static ViewGroup mHeaderBar;
   //---------------------------------------------------------------------------
@@ -52,6 +56,12 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     mDatingControl.setOnNeedUpdateListener(this);
     // Stars Button
     ((StarsView)findViewById(R.id.starsView)).setOnRateListener(this);
+    
+    // Comment window
+    mCommentDialog = new Dialog(this);
+    mCommentDialog.setTitle("Comments");    
+    mCommentDialog.setContentView(R.layout.popup_comment);
+    mCommentText = (EditText)mCommentDialog.findViewById(R.id.etPopupComment);
 
     update();
   }
@@ -74,10 +84,11 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void rate(final int userid,final int rate) {
+  private void rate(final int userid,final int rate,String comment) {
     DoRateRequest doRate = new DoRateRequest(this.getApplicationContext());
-    doRate.userid = userid;
-    doRate.rate = rate;
+    doRate.userid  = userid;
+    doRate.rate    = rate;
+    doRate.comment = comment;
     doRate.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
@@ -99,9 +110,25 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   }
   //---------------------------------------------------------------------------
   @Override
-  public void onRate(int rate) {
-    rate(mDatingControl.getUserId(),rate);
-    mDatingControl.next();
+  public void onRate(final int rate) {
+    if(rate==10 || rate==9) {
+      ((Button)mCommentDialog.findViewById(R.id.btnPopupCommentSend)).setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          String comment = mCommentText.getText().toString();
+          if(comment.equals(""))
+            return;
+          rate(mDatingControl.getUserId(),rate,comment);
+          mCommentText.setText("");
+          mCommentDialog.cancel();
+          mDatingControl.next();
+        }
+      });
+      mCommentDialog.show();
+    } else {
+      rate(mDatingControl.getUserId(),rate,null);
+      mDatingControl.next();
+    }
   }
   //---------------------------------------------------------------------------
   @Override

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal" 
+    android:orientation="vertical" >
+        <EditText
+        android:id="@+id/etPopupComment"
+        android:layout_width="240dp"
+        android:layout_height="110dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="top|left"
+        android:inputType="textMultiLine"
+        android:singleLine="false" />
+    
+    <Button  
+        android:id="@+id/btnPopupCommentSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/chat_send_selector"
+        android:textColor="@drawable/clr_text_btn"
+        android:text="@string/chat_btn_send" />
+    
+</LinearLayout>
