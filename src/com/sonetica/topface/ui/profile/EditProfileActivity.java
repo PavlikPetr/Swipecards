@@ -1,21 +1,59 @@
 package com.sonetica.topface.ui.profile;
 
 import com.sonetica.topface.Data;
-import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
+import com.sonetica.topface.net.ApiHandler;
+import com.sonetica.topface.net.QuestionaryRequest;
+import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.SettingsRequest;
 import com.sonetica.topface.utils.Debug;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.text.InputType;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class EditProfileActivity extends PreferenceActivity {
   // Data
+  FormInfo mFormInfo;
+  // Constants
+  // profile
+  public static final int PROFILE_NAME = 0;
+  public static final int PROFILE_AGE  = 1;
+  public static final int PROFILE_SEX  = 2;
+  public static final int PROFILE_LAT  = 3;
+  public static final int PROFILE_LNG  = 4;
+  public static final int PROFILE_CITYID  = 5;
+  // form
+  public static final int FORM_WEIGHT    = 6;
+  public static final int FORM_HEIGHT    = 7;
+  public static final int FORM_JOBID     = 8;
+  public static final int FORM_JOB       = 9;
+  public static final int FORM_STATUSID  = 11;
+  public static final int FORM_STATUS    = 12;
+  public static final int FORM_EDUCATION = 13;
+  public static final int FORM_MARRIAGE  = 14;
+  public static final int FORM_FINANCES  = 15;
+  public static final int FORM_CHARACTER = 16;
+  public static final int FORM_SMOKING   = 17;
+  public static final int FORM_ALCOHOL   = 18;
+  public static final int FORM_FITNESS   = 19;
+  public static final int FORM_COMMUNICATE = 20;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     addPreferencesFromResource(R.layout.ac_edit_profile);
     Debug.log(this,"+onCreate");
+    
+    mFormInfo = new FormInfo(EditProfileActivity.this,Data.s_Profile.sex);
      
     /*
      *  PROFILE
@@ -24,20 +62,20 @@ public class EditProfileActivity extends PreferenceActivity {
     // name
     Preference name = findPreference(getString(R.string.s_profile_name));
     name.setSummary(Data.s_Profile.first_name);
-    //name.setOnPreferenceClickListener(mOnSexListener);
+    name.setOnPreferenceClickListener(mOnNameListener);
     
     // sex
     Preference sex = findPreference(getString(R.string.s_profile_sex));
-    if(Data.s_Profile.sex==Global.GIRL)
+    if(Data.s_Profile.sex==0)
       sex.setSummary(getString(R.string.profile_sex_girl));
     else
       sex.setSummary(getString(R.string.profile_sex_boy));
-    //sex.setOnPreferenceClickListener(mOnSexListener);
+    sex.setOnPreferenceClickListener(mOnSexListener);
 
     // age
     Preference age = findPreference(getString(R.string.s_profile_age));
     age.setSummary(""+Data.s_Profile.age);
-    //age.setOnPreferenceClickListener(mOnSexListener);
+    age.setOnPreferenceClickListener(mOnAgeListener);
     
     // city
     Preference city = findPreference(getString(R.string.s_profile_city));
@@ -51,57 +89,73 @@ public class EditProfileActivity extends PreferenceActivity {
     // about
     Preference about = findPreference(getString(R.string.s_profile_about));
     about.setSummary(Data.s_Profile.questionary_status);
-    //about.setOnPreferenceClickListener(mOnSexListener);
+    about.setOnPreferenceClickListener(mOnAboutListener);
     
     // height
     Preference height = findPreference(getString(R.string.s_profile_height));
     height.setSummary(""+Data.s_Profile.questionary_height);
-    //height.setOnPreferenceClickListener(mOnSexListener);
+    height.setOnPreferenceClickListener(mOnHeightListener);
     
     // weight
     Preference weight = findPreference(getString(R.string.s_profile_weight));
     weight.setSummary(""+Data.s_Profile.questionary_weight);
-    //weight.setOnPreferenceClickListener(mOnSexListener);
+    weight.setOnPreferenceClickListener(mOnWeightListener);
     
     // fitness
-    Preference fitness = findPreference(getString(R.string.s_profile_fitness));
-    fitness.setSummary(""+Data.s_Profile.questionary_fitness_id);
-    //fitness.setOnPreferenceClickListener(mOnSexListener);
+    ListPreference fitness = (ListPreference)findPreference(getString(R.string.s_profile_fitness));
+    fitness.setSummary(mFormInfo.getFitness(Data.s_Profile.questionary_fitness_id));
+    fitness.setEntries(mFormInfo.getFitnessEntries());
+    fitness.setEntryValues(mFormInfo.getFitnessValues());
+    fitness.setOnPreferenceChangeListener(mOnFitnessListener);
     
     // marriage
-    Preference marriage = findPreference(getString(R.string.s_profile_marriage));
-    marriage.setSummary(""+Data.s_Profile.questionary_marriage_id);
-    //marriage.setOnPreferenceClickListener(mOnSexListener);
+    ListPreference marriage = (ListPreference)findPreference(getString(R.string.s_profile_marriage));
+    marriage.setSummary(mFormInfo.getMarriage(Data.s_Profile.questionary_marriage_id));
+    marriage.setEntries(mFormInfo.getMarriageEntries());
+    marriage.setEntryValues(mFormInfo.getMarriageValues());
+    marriage.setOnPreferenceChangeListener(mOnMarriageListener);
     
     // education
-    Preference education = findPreference(getString(R.string.s_profile_education));
-    education.setSummary(""+Data.s_Profile.questionary_education_id);
-    //education.setOnPreferenceClickListener(mOnSexListener);
+    ListPreference education = (ListPreference)findPreference(getString(R.string.s_profile_education));
+    education.setSummary(mFormInfo.getEducation(Data.s_Profile.questionary_education_id));
+    education.setEntries(mFormInfo.getEducationEntries());
+    education.setEntryValues(mFormInfo.getEducationValues());
+    education.setOnPreferenceChangeListener(mOnEducationListener);
     
     // finances
-    Preference finances = findPreference(getString(R.string.s_profile_finances));
-    finances.setSummary(""+Data.s_Profile.questionary_finances_id);
-    //finances.setOnPreferenceClickListener(mOnSexListener);
+    ListPreference finances = (ListPreference)findPreference(getString(R.string.s_profile_finances));
+    finances.setSummary(mFormInfo.getFinances(Data.s_Profile.questionary_finances_id));
+    finances.setEntries(mFormInfo.getFinancesEntries());
+    finances.setEntryValues(mFormInfo.getFinancesValues());
+    finances.setOnPreferenceChangeListener(mOnFinancesListener);
     
     // smoking
-    Preference smoking = findPreference(getString(R.string.s_profile_smoking));
-    smoking.setSummary(""+Data.s_Profile.questionary_smoking_id);
-    //smoking.setOnPreferenceClickListener(mOnSexListener);
+    ListPreference smoking = (ListPreference)findPreference(getString(R.string.s_profile_smoking));
+    smoking.setSummary(mFormInfo.getSmoking(Data.s_Profile.questionary_smoking_id));
+    smoking.setEntries(mFormInfo.getSmokingEntries());
+    smoking.setEntryValues(mFormInfo.getSmokingValues());
+    smoking.setOnPreferenceChangeListener(mOnSmokingListener);
     
     // alcohol
-    Preference alcohol = findPreference(getString(R.string.s_profile_alcohol));
-    alcohol.setSummary(""+Data.s_Profile.questionary_alcohol_id);
-    //alcohol.setOnPreferenceClickListener(mOnSexListener);
+    ListPreference alcohol = (ListPreference)findPreference(getString(R.string.s_profile_alcohol));
+    alcohol.setSummary(mFormInfo.getAlcohol(Data.s_Profile.questionary_alcohol_id));
+    alcohol.setEntries(mFormInfo.getAlcoholEntries());
+    alcohol.setEntryValues(mFormInfo.getAlcoholValues());
+    alcohol.setOnPreferenceChangeListener(mOnAlcoholListener);
     
     // commutability
-    Preference commutability = findPreference(getString(R.string.s_profile_commutability));
-    commutability.setSummary(""+Data.s_Profile.questionary_communication_id);
-    //commutability.setOnPreferenceClickListener(mOnSexListener);
+    ListPreference commutability = (ListPreference)findPreference(getString(R.string.s_profile_commutability));
+    commutability.setSummary(mFormInfo.getCommunication(Data.s_Profile.questionary_communication_id));
+    commutability.setEntries(mFormInfo.getCommunicationEntries());
+    commutability.setEntryValues(mFormInfo.getCommunicationValues());
+    commutability.setOnPreferenceChangeListener(mOnCommutabilityListener);
     
     // character
-    Preference character = findPreference(getString(R.string.s_profile_character));
-    character.setSummary(""+Data.s_Profile.questionary_character_id);
-    //character.setOnPreferenceClickListener(mOnSexListener);
+    ListPreference character = (ListPreference)findPreference(getString(R.string.s_profile_character));
+    character.setSummary(mFormInfo.getCharacter(Data.s_Profile.questionary_character_id));
+    character.setEntries(mFormInfo.getCharacterEntries());
+    character.setEntryValues(mFormInfo.getCharacterValues());
+    character.setOnPreferenceChangeListener(mOnCharacterListener);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -109,27 +163,376 @@ public class EditProfileActivity extends PreferenceActivity {
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
-  /*
   //---------------------------------------------------------------------------
-  // Menu
+  // data sending
   //---------------------------------------------------------------------------
-  private static final int MENU_SAVE = 0;
-  @Override
-  public boolean onCreatePanelMenu(int featureId,Menu menu) {
-    menu.add(0,MENU_SAVE,0,getString(R.string.filter_menu_save));
-    return super.onCreatePanelMenu(featureId,menu);
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public boolean onMenuItemSelected(int featureId,MenuItem item) {
-    switch(item.getItemId()) {
-      case MENU_SAVE:
-        data();
-        finish();
-      break;
+  private void sendProfileData(int field,Object data) {
+    SettingsRequest settings = new SettingsRequest(this.getApplicationContext());
+    switch(field) {
+      case PROFILE_NAME:
+        settings.name = (String)data;
+        break;
+      case PROFILE_AGE:
+        settings.age = (Integer)data;
+        break;
+      case PROFILE_SEX:
+        settings.sex = (Integer)data;
+        break;
+      case PROFILE_LAT:
+        settings.lat = (Integer)data;
+        break;
+      case PROFILE_LNG:
+        settings.lng = (Integer)data;
+        break;
+      case PROFILE_CITYID:
+        settings.cityid = (Integer)data;
+        break;
     }
-    return super.onMenuItemSelected(featureId,item);
+    settings.callback(new ApiHandler() {
+      @Override
+      public void success(Response response) {
+      }
+      @Override
+      public void fail(int codeError) {
+      }
+    }).exec();
   }
   //---------------------------------------------------------------------------
-  */
+  private void sendFormData(int field,Object data) {
+    QuestionaryRequest questionary = new QuestionaryRequest(this.getApplicationContext());
+    switch(field) {
+      case FORM_WEIGHT:
+        questionary.weight = (Integer)data;
+        break;
+      case FORM_HEIGHT:
+        questionary.height = (Integer)data;
+        break;
+      case FORM_JOBID:
+        questionary.jobid = (Integer)data;
+        break;
+      case FORM_JOB:
+        questionary.job = (String)data;
+        break;
+      case FORM_STATUSID:
+        questionary.statusid = (Integer)data;
+        break;
+      case FORM_STATUS:
+        questionary.status = (String)data;
+        break;
+      case FORM_EDUCATION:
+        questionary.educationid = (Integer)data;
+        break;
+      case FORM_MARRIAGE:
+        questionary.marriageid = (Integer)data;
+        break;
+      case FORM_FINANCES:
+        questionary.financesid = (Integer)data;
+        break;
+      case FORM_CHARACTER:
+        questionary.characterid = (Integer)data;
+        break;
+      case FORM_SMOKING:
+        questionary.smokingid = (Integer)data;
+        break;
+      case FORM_ALCOHOL:
+        questionary.alcoholid = (Integer)data;
+        break;
+      case FORM_FITNESS:
+        questionary.fitnessid = (Integer)data;
+        break;
+      case FORM_COMMUNICATE:
+        questionary.communicationid = (Integer)data;
+        break;
+    }
+    questionary.callback(new ApiHandler() {
+      @Override
+      public void success(Response response) {
+      }
+      @Override
+      public void fail(int codeError) {
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  // Listeners
+  //---------------------------------------------------------------------------
+  // name
+  Preference.OnPreferenceClickListener mOnNameListener = new Preference.OnPreferenceClickListener() {
+    public boolean onPreferenceClick(final Preference preference) {
+      View view = LayoutInflater.from(EditProfileActivity.this.getApplicationContext()).inflate(R.layout.pref_edit,null);
+      final EditText editBox = (EditText)view.findViewById(R.id.etProfileInput);
+      editBox.setText(preference.getSummary());
+      AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+      builder.setTitle(getString(R.string.profile_form_name));
+      builder.setView(view);
+      builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface arg0, int arg1) {
+          String value = editBox.getText().toString();
+          if(value.equals(""))
+            return;
+          preference.setSummary(editBox.getText().toString());
+          Data.s_Profile.first_name = value;
+          sendProfileData(PROFILE_NAME,value);
+        }
+      });
+      AlertDialog alert = builder.create();
+      alert.show();      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // age
+  Preference.OnPreferenceClickListener mOnAgeListener = new Preference.OnPreferenceClickListener() {
+    public boolean onPreferenceClick(final Preference preference) {
+
+      View view = LayoutInflater.from(EditProfileActivity.this.getApplicationContext()).inflate(R.layout.pref_age_one_picker,null);
+
+      final TextView age = (TextView)view.findViewById(R.id.tvProfileAgePicker);
+      age.setText(preference.getSummary());
+      
+      Button btnAgeUp = (Button)view.findViewById(R.id.btnProfileAgeUp);
+      btnAgeUp.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          int n = Integer.parseInt(age.getText().toString());
+          if(n<99)
+            age.setText(""+(++n));
+        }
+      });
+      Button btnAgeDown = (Button)view.findViewById(R.id.btnProfileAgeDown);
+      btnAgeDown.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          int n = Integer.parseInt(age.getText().toString());
+          if(n>12)
+            age.setText(""+(--n));
+        }
+      });
+      
+      AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+      builder.setTitle(getString(R.string.filter_age));
+      builder.setView(view);
+      builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface arg0, int arg1) {
+          preference.setSummary(age.getText());
+          int value = Integer.parseInt(age.getText().toString());
+          Data.s_Profile.age = value;
+          sendProfileData(PROFILE_AGE,value);
+        }
+      });
+      
+      AlertDialog alert = builder.create();
+      alert.show();
+      
+      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // sex
+  Preference.OnPreferenceClickListener mOnSexListener = new Preference.OnPreferenceClickListener() {
+    public boolean onPreferenceClick(final Preference preference) {
+      final CharSequence[] items = {getString(R.string.profile_sex_girl),getString(R.string.profile_sex_boy)};
+      AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+      builder.setItems(items, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int value) {
+          preference.setSummary(items[value]);
+          Data.s_Profile.sex = value;
+          mFormInfo.setSex(value);
+          sendProfileData(PROFILE_SEX,value);
+        }
+      });
+      AlertDialog alert = builder.create();
+      alert.show();      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // about
+  Preference.OnPreferenceClickListener mOnAboutListener = new Preference.OnPreferenceClickListener() {
+    public boolean onPreferenceClick(final Preference preference) {
+      View view = LayoutInflater.from(EditProfileActivity.this.getApplicationContext()).inflate(R.layout.pref_edit,null);
+      final EditText editBox = (EditText)view.findViewById(R.id.etProfileInput);
+      editBox.setText(preference.getSummary());
+      AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+      builder.setTitle(getString(R.string.profile_form_name));
+      builder.setView(view);
+      builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface arg0, int arg1) {
+          String value = editBox.getText().toString();
+          preference.setSummary(value);
+          Data.s_Profile.questionary_status = value;
+          sendFormData(FORM_STATUS,value);
+        }
+      });
+      AlertDialog alert = builder.create();
+      alert.show();      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // height
+  Preference.OnPreferenceClickListener mOnHeightListener = new Preference.OnPreferenceClickListener() {
+    public boolean onPreferenceClick(final Preference preference) {
+      View view = LayoutInflater.from(EditProfileActivity.this.getApplicationContext()).inflate(R.layout.pref_edit,null);
+      final EditText editBox = (EditText)view.findViewById(R.id.etProfileInput);
+      editBox.setInputType(InputType.TYPE_CLASS_NUMBER);
+      editBox.setText(preference.getSummary());
+      AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+      builder.setTitle(getString(R.string.profile_height));
+      builder.setView(view);
+      builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface arg0, int arg1) {
+          if(editBox.getText().toString().equals(""))
+            return;
+          Integer value = Integer.parseInt(editBox.getText().toString());
+          preference.setSummary(""+value);
+          Data.s_Profile.questionary_height = value;
+          sendFormData(FORM_HEIGHT,value);
+        }
+      });
+      AlertDialog alert = builder.create();
+      alert.show();      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // weight
+  Preference.OnPreferenceClickListener mOnWeightListener = new Preference.OnPreferenceClickListener() {
+    public boolean onPreferenceClick(final Preference preference) {
+      View view = LayoutInflater.from(EditProfileActivity.this.getApplicationContext()).inflate(R.layout.pref_edit,null);
+      final EditText editBox = (EditText)view.findViewById(R.id.etProfileInput);
+      editBox.setInputType(InputType.TYPE_CLASS_NUMBER);
+      editBox.setText(preference.getSummary());
+      AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+      builder.setTitle(getString(R.string.profile_weight));
+      builder.setView(view);
+      builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface arg0, int arg1) {
+          if(editBox.getText().toString().equals(""))
+            return;
+          Integer value = Integer.parseInt(editBox.getText().toString());
+          preference.setSummary(""+value);
+          Data.s_Profile.questionary_weight = value;
+          sendFormData(FORM_WEIGHT,value);
+        }
+      });
+      AlertDialog alert = builder.create();
+      alert.show();      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // fitness
+  Preference.OnPreferenceChangeListener mOnFitnessListener = new Preference.OnPreferenceChangeListener() {
+    @Override
+    public boolean onPreferenceChange(Preference preference,Object newValue) {      
+      Integer i = Integer.parseInt(newValue.toString());
+      String value = mFormInfo.getFitness(i);
+      preference.setSummary(value);
+      Data.s_Profile.questionary_finances_id = i;
+      sendFormData(FORM_FITNESS,i);
+      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // marriage
+  Preference.OnPreferenceChangeListener mOnMarriageListener = new Preference.OnPreferenceChangeListener() {
+    @Override
+    public boolean onPreferenceChange(Preference preference,Object newValue) {      
+      Integer i = Integer.parseInt(newValue.toString());
+      String value = mFormInfo.getMarriage(i);
+      preference.setSummary(value);
+      Data.s_Profile.questionary_marriage_id = i;
+      sendFormData(FORM_MARRIAGE,i);
+      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // education
+  Preference.OnPreferenceChangeListener mOnEducationListener = new Preference.OnPreferenceChangeListener() {
+    @Override
+    public boolean onPreferenceChange(Preference preference,Object newValue) {      
+      Integer i = Integer.parseInt(newValue.toString());
+      String value = mFormInfo.getEducation(i);
+      preference.setSummary(value);
+      Data.s_Profile.questionary_education_id = i;
+      sendFormData(FORM_EDUCATION,i);
+      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // finances
+  Preference.OnPreferenceChangeListener mOnFinancesListener = new Preference.OnPreferenceChangeListener() {
+    @Override
+    public boolean onPreferenceChange(Preference preference,Object newValue) {      
+      Integer i = Integer.parseInt(newValue.toString());
+      String value = mFormInfo.getFinances(i);
+      preference.setSummary(value);
+      Data.s_Profile.questionary_finances_id = i;
+      sendFormData(FORM_FINANCES,i);
+      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // smoking
+  Preference.OnPreferenceChangeListener mOnSmokingListener = new Preference.OnPreferenceChangeListener() {
+    @Override
+    public boolean onPreferenceChange(Preference preference,Object newValue) {      
+      Integer i = Integer.parseInt(newValue.toString());
+      String value = mFormInfo.getSmoking(i);
+      preference.setSummary(value);
+      Data.s_Profile.questionary_smoking_id = i;
+      sendFormData(FORM_SMOKING,i);
+      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // alcohol
+  Preference.OnPreferenceChangeListener mOnAlcoholListener = new Preference.OnPreferenceChangeListener() {
+    @Override
+    public boolean onPreferenceChange(Preference preference,Object newValue) {      
+      Integer i = Integer.parseInt(newValue.toString());
+      String value = mFormInfo.getAlcohol(i);
+      preference.setSummary(value);
+      Data.s_Profile.questionary_alcohol_id = i;
+      sendFormData(FORM_ALCOHOL,i);
+      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // commutability
+  Preference.OnPreferenceChangeListener mOnCommutabilityListener = new Preference.OnPreferenceChangeListener() {
+    @Override
+    public boolean onPreferenceChange(Preference preference,Object newValue) {      
+      Integer i = Integer.parseInt(newValue.toString());
+      String value = mFormInfo.getCommunication(i);
+      preference.setSummary(value);
+      Data.s_Profile.questionary_communication_id = i;
+      sendFormData(FORM_COMMUNICATE,i);
+      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // character
+  Preference.OnPreferenceChangeListener mOnCharacterListener = new Preference.OnPreferenceChangeListener() {
+    @Override
+    public boolean onPreferenceChange(Preference preference,Object newValue) {      
+      Integer i = Integer.parseInt(newValue.toString());
+      String value = mFormInfo.getCharacter(i);
+      preference.setSummary(value);
+      Data.s_Profile.questionary_character_id = i;
+      sendFormData(FORM_CHARACTER,i);
+      
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
 }

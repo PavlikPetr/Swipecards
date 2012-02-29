@@ -253,7 +253,6 @@
             android:textSize="15sp" />
     </TableRow>
     <!-- row -->
-    <!-- 
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -274,6 +273,5 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
-     -->
   </TableLayout>
 </LinearLayout>

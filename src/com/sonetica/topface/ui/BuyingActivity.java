@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.buying;
+package com.sonetica.topface.ui;
 
 import com.sonetica.topface.R;
 import com.sonetica.topface.utils.Debug;

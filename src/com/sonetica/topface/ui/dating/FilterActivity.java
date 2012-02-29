@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class FilterActivity extends PreferenceActivity {
   //---------------------------------------------------------------------------
@@ -88,11 +87,11 @@ public class FilterActivity extends PreferenceActivity {
       @Override
       public void success(Response response) {
         //Filter filter = Filter.parse(response);
-        Toast.makeText(FilterActivity.this,"filter success",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(FilterActivity.this,"filter success",Toast.LENGTH_SHORT).show();
       }
       @Override
       public void fail(int codeError) {
-        Toast.makeText(FilterActivity.this,"filter fail",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(FilterActivity.this,"filter fail",Toast.LENGTH_SHORT).show();
       }
     }).exec();
   }
@@ -123,6 +122,8 @@ public class FilterActivity extends PreferenceActivity {
     return super.onMenuItemSelected(featureId,item);
   }
   //---------------------------------------------------------------------------
+  // Listeners
+  //---------------------------------------------------------------------------
   // sex
   Preference.OnPreferenceClickListener mOnSexListener = new Preference.OnPreferenceClickListener() {
     public boolean onPreferenceClick(final Preference preference) {
@@ -145,7 +146,7 @@ public class FilterActivity extends PreferenceActivity {
   Preference.OnPreferenceClickListener mOnAgeListener = new Preference.OnPreferenceClickListener() {
     public boolean onPreferenceClick(final Preference preference) {
 
-      View view = LayoutInflater.from(FilterActivity.this.getApplicationContext()).inflate(R.layout.age_picker,null);
+      View view = LayoutInflater.from(FilterActivity.this.getApplicationContext()).inflate(R.layout.pref_age_picker,null);
       final TextView tvFrom = (TextView)view.findViewById(R.id.tvFilterFrom);
       tvFrom.setText(""+mTemp.age_start);
       final TextView tvTo = (TextView)view.findViewById(R.id.tvFilterTo);
@@ -214,7 +215,7 @@ public class FilterActivity extends PreferenceActivity {
   // online
   Preference.OnPreferenceClickListener mOnOnelineListener = new Preference.OnPreferenceClickListener() {
     public boolean onPreferenceClick(final Preference preference) {
-      final CharSequence[] items = {getString(R.string.filter_all),getString(R.string.filter_online)};
+      final CharSequence[] items = {getString(R.string.filter_all),getString(R.string.filter_only_online)};
       AlertDialog.Builder builder = new AlertDialog.Builder(FilterActivity.this);
       //builder.setTitle(getString(R.string.filter_online));
       builder.setItems(items, new DialogInterface.OnClickListener() {

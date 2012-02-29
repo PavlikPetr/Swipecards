@@ -53,49 +53,49 @@
             android:summary="This allows you to enter a string" />
         
         <!-- fitness -->
-        <Preference
+        <ListPreference
             android:key="@string/s_profile_fitness"
             android:title="@string/profile_fitness" 
             android:summary="This allows you to enter a string" />
         
         <!-- marriage -->
-        <Preference
+        <ListPreference
             android:key="@string/s_profile_marriage"
             android:title="@string/profile_marriage" 
             android:summary="This allows you to enter a string" />
         
         <!-- education -->
-        <Preference
+        <ListPreference
             android:key="@string/s_profile_education"
             android:title="@string/profile_education" 
             android:summary="This allows you to enter a string" />
         
         <!-- finances -->
-        <Preference
+        <ListPreference
             android:key="@string/s_profile_finances"
             android:title="@string/profile_finances" 
             android:summary="This allows you to enter a string" />
         
         <!-- smoking -->
-        <Preference
+        <ListPreference
             android:key="@string/s_profile_smoking"
             android:title="@string/profile_smoking" 
             android:summary="This allows you to enter a string" />
         
         <!-- alcohol -->
-        <Preference
+        <ListPreference
             android:key="@string/s_profile_alcohol"
             android:title="@string/profile_alcohol" 
             android:summary="This allows you to enter a string" />
         
         <!-- commutability -->
-        <Preference
+        <ListPreference
             android:key="@string/s_profile_commutability"
             android:title="@string/profile_commutability" 
             android:summary="This allows you to enter a string" />
         
         <!-- character -->
-        <Preference
+        <ListPreference
             android:key="@string/s_profile_character"
             android:title="@string/profile_character" 
             android:summary="This allows you to enter a string" />

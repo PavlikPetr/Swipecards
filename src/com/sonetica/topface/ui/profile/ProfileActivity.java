@@ -12,8 +12,8 @@ import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.ProfilesRequest;
 import com.sonetica.topface.net.Response;
+import com.sonetica.topface.ui.BuyingActivity;
 import com.sonetica.topface.ui.album.AlbumActivity;
-import com.sonetica.topface.ui.buying.BuyingActivity;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
@@ -62,7 +62,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   private TextView mMarriage;
   private TextView mFinances;
   private TextView mSmoking;
-  //private TextView mStatus;  // дана отмашка на отключение статуса
+  private TextView mStatus;
   boolean swap = true;  // проверить на оптимизацию 
   //Constants
   public static final String INTENT_USER_ID = "user_id";
@@ -139,7 +139,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mMarriage = (TextView)this.findViewById(R.id.tvProfileMarriage);
     mFinances = (TextView)this.findViewById(R.id.tvProfileFinances);
     mSmoking = (TextView)this.findViewById(R.id.tvProfileSmoking);
-    //mStatus = (TextView)mProfileBottom.findViewById(R.id.tvProfileStatus);
+    mStatus = (TextView)this.findViewById(R.id.tvProfileStatus);
     
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
@@ -189,7 +189,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
         mMarriage.setText(formInfo.getMarriage(profile.questionary_marriage_id));
         mFinances.setText(formInfo.getFinances(profile.questionary_finances_id));
         mSmoking.setText(formInfo.getSmoking(profile.questionary_smoking_id));
-        //mStatus.setText(""+profile.questionary_status);
+        mStatus.setText(profile.questionary_status);
         
         // avatar
         mFramePhoto.mOnlineState = true;
@@ -230,7 +230,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
         mMarriage.setText(formInfo.getMarriage(profile.questionary_marriage_id));
         mFinances.setText(formInfo.getFinances(profile.questionary_finances_id));
         mSmoking.setText(formInfo.getSmoking(profile.questionary_smoking_id));
-        //mStatus.setText(""+profile.questionary_status);
+        mStatus.setText(profile.questionary_status);
         
         // avatar
         mFramePhoto.mOnlineState = profile.online;

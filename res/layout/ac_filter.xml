@@ -6,7 +6,7 @@
       <!-- sex -->
       <Preference
           android:key="@string/s_filter_sex"
-          android:title="@string/filter_sex" 
+          android:title="@string/filter_header_title" 
           android:summary="" />
       
       <!-- age -->

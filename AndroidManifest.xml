@@ -38,16 +38,16 @@
     <activity android:name=".ui.album.AlbumActivity"         android:screenOrientation="portrait" />
     <activity android:name=".ui.likes.LikesActivity"         android:screenOrientation="portrait" />
     <activity android:name=".ui.dating.DatingActivity"       android:screenOrientation="portrait" />
-    <activity android:name=".ui.dating.FilterActivity"       android:screenOrientation="portrait" />
-    <activity android:name=".ui.buying.BuyingActivity"       android:screenOrientation="portrait" />
+    <activity android:name=".ui.dating.FilterActivity"       android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
+    <activity android:name=".ui.BuyingActivity"              android:screenOrientation="portrait" />
     
     <activity android:name=".ui.profile.ProfileActivity"     android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.EroAlbumActivity"    android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.AddPhotoActivity"    android:screenOrientation="portrait" />
-    <activity android:name=".ui.profile.EditProfileActivity" android:screenOrientation="portrait" />
+    <activity android:name=".ui.profile.EditProfileActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
     
     <!-- preferences activity -->
-    <activity android:name=".ui.PreferencesActivity"   android:screenOrientation="portrait" />
+    <activity android:name=".ui.PreferencesActivity"   android:screenOrientation="portrait"  android:theme="@android:style/Theme.Light" />
 
     <!-- social activity -->
     <activity android:name=".social.SocialActivity"    android:screenOrientation="portrait" />

@@ -82,6 +82,7 @@
   <string name="filter_boy">Парня</string>
   <string name="filter_girl">Девушку</string>
   <string name="filter_all">Все</string>
+  <string name="filter_only_online">Только онлайн</string>
   <string name="filter_from">С</string>
   <string name="filter_to">до</string>
   
