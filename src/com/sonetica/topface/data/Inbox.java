@@ -12,13 +12,15 @@ public class Inbox extends AbstractData {
   public int uid;              // идентификатор фотографии в альбоме пользвоателя
   public int age;              // возраст пользователя
   public int type;             // тип сообщения
-  public int city_id;          // идентификатор города отправителя сообщения
   public int gift;             // идентификатор подарка
   public int code;             // код входящего уведомления
+  public int city_id;          // идентификатор города отправителя сообщения
   public int unread_count;     // количество оставшихся непрочитанных
   public long created;         // время отправления оценки
   public boolean online;       // флаг нахождения пользователя в онлайне
   public boolean unread;       // флаг прочитанного сообщения
+  public String city_name;       // название города пользователя
+  public String city_full;       // полное название города пользвоателя
   public String first_name;    // имя пользователя
   public String avatars_big;   // большая аватарка пользователя
   public String avatars_small; // маленькая аватарка пользователя
@@ -40,15 +42,14 @@ public class Inbox extends AbstractData {
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
           Inbox msg = new Inbox();
-          msg.first_name = item.getString("first_name");
-          msg.online     = item.getBoolean("online");
-          msg.unread     = item.getBoolean("unread");
-          msg.created    = item.getLong("created")*1000; // время приходит в секундах
-          msg.unread_count = response.mJSONResult.getInt("unread");
-          msg.city_id    = item.getInt("city_id");
-          msg.uid        = item.getInt("uid");
-          msg.age        = item.getInt("age");
-          msg.type       = item.getInt("type");
+            msg.first_name = item.getString("first_name");
+            msg.online     = item.getBoolean("online");
+            msg.unread     = item.getBoolean("unread");
+            msg.created    = item.getLong("created")*1000; // время приходит в секундах
+            msg.unread_count = response.mJSONResult.getInt("unread");
+            msg.uid        = item.getInt("uid");
+            msg.age        = item.getInt("age");
+            msg.type       = item.getInt("type");
           
           switch(msg.type) {
             case DEFAULT:
@@ -71,9 +72,15 @@ public class Inbox extends AbstractData {
               break;
           }
 
+          // city  
+          JSONObject city = item.getJSONObject("city");
+            msg.city_id    = city.getInt("id");            
+            msg.city_name  = city.getString("name");
+            msg.city_full  = city.getString("full");
+          // avatars
           JSONObject avatars = item.getJSONObject("avatars");
-          msg.avatars_big    = avatars.getString("big");
-          msg.avatars_small  = avatars.getString("small");
+            msg.avatars_big    = avatars.getString("big");
+            msg.avatars_small  = avatars.getString("small");
           userList.add(msg);
         }
     } catch(JSONException e) {

@@ -27,7 +27,8 @@
   <string name="inbox_btn_dbl_left">Все</string>
   <string name="inbox_btn_dbl_right">Непрочитанные</string>
   <string name="chat_gift">Вам прислали подарок</string>
-  <string name="chat_btn_send">Послать</string> 
+  <string name="chat_btn_send">Послать</string>
+  <string name="chat_comment">Написать сообщение</string> 
   
   <!-- Tops Activity -->
   <string name="tops_header_title">Самые красивые</string>
@@ -46,6 +47,7 @@
   <string name="profile_sex_girl">Девушка</string>
   <string name="profile_form">Анкета</string>
   <string name="profile_form_name">Имя</string>
+  <string name="profile_form_city">Выбор города</string>
   <string name="profile_foto">Фотографии</string>
   <string name="profile_foto_ero">Эрофотографии</string>
   <string name="profile_height">Рост</string>
@@ -68,7 +70,7 @@
   <!-- Dating Activity -->
   <string name="dating_header_title">Оценка фото</string>
   <string name="dating_menu_one">Фильтр</string>
-  <string name="dating_back">Назад</string>
+  <string name="dating_back">К оценкам</string>
   
   <!-- Filter Activity -->
   <string name="filter_header_title">Я ищу</string>
@@ -85,6 +87,9 @@
   <string name="filter_only_online">Только онлайн</string>
   <string name="filter_from">С</string>
   <string name="filter_to">до</string>
+  <string name="filter_nearby">Рядом со мной</string>
+  <string name="filter_cities_all">Все города</string>
+  <string name="filter_select_city">Выбор города</string>
   
   <!-- Likes Activity -->
   <string name="likes_header_title">Я нравлюсь</string>

@@ -6,9 +6,12 @@ import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.QuestionaryRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SettingsRequest;
+import com.sonetica.topface.ui.CitySearchActivity;
 import com.sonetica.topface.utils.Debug;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -22,7 +25,8 @@ import android.widget.TextView;
 
 public class EditProfileActivity extends PreferenceActivity {
   // Data
-  FormInfo mFormInfo;
+  private FormInfo mFormInfo;
+  private Preference mCity;
   // Constants
   // profile
   public static final int PROFILE_NAME = 0;
@@ -78,9 +82,9 @@ public class EditProfileActivity extends PreferenceActivity {
     age.setOnPreferenceClickListener(mOnAgeListener);
     
     // city
-    Preference city = findPreference(getString(R.string.s_profile_city));
-    city.setSummary(Data.s_Profile.city_name);
-    //city.setOnPreferenceClickListener(mOnSexListener);
+    mCity = findPreference(getString(R.string.s_profile_city));
+    mCity.setSummary(Data.s_Profile.city_name);
+    mCity.setOnPreferenceClickListener(mOnCityListener);
     
     /*
      *  FORM
@@ -156,6 +160,21 @@ public class EditProfileActivity extends PreferenceActivity {
     character.setEntries(mFormInfo.getCharacterEntries());
     character.setEntryValues(mFormInfo.getCharacterValues());
     character.setOnPreferenceChangeListener(mOnCharacterListener);
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    super.onActivityResult(requestCode,resultCode,data);
+    if (resultCode == Activity.RESULT_OK && requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
+      Bundle extras = data.getExtras();
+
+      Data.s_Profile.city_id   = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
+      Data.s_Profile.city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
+      
+      mCity.setSummary(Data.s_Profile.city_name);
+      
+      sendProfileData(PROFILE_CITYID,Data.s_Profile.city_id);
+    }
   }
   //---------------------------------------------------------------------------
   @Override
@@ -344,6 +363,17 @@ public class EditProfileActivity extends PreferenceActivity {
       });
       AlertDialog alert = builder.create();
       alert.show();      
+
+      return true;
+    }
+  };
+  //---------------------------------------------------------------------------
+  // city
+  Preference.OnPreferenceClickListener mOnCityListener = new Preference.OnPreferenceClickListener() {
+    public boolean onPreferenceClick(final Preference preference) {
+      Intent intent = new Intent(EditProfileActivity.this.getApplicationContext(),CitySearchActivity.class);
+      startActivityForResult(intent,CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+      
       return true;
     }
   };
@@ -367,6 +397,7 @@ public class EditProfileActivity extends PreferenceActivity {
       });
       AlertDialog alert = builder.create();
       alert.show();      
+      
       return true;
     }
   };
@@ -393,6 +424,7 @@ public class EditProfileActivity extends PreferenceActivity {
       });
       AlertDialog alert = builder.create();
       alert.show();      
+      
       return true;
     }
   };
@@ -419,6 +451,7 @@ public class EditProfileActivity extends PreferenceActivity {
       });
       AlertDialog alert = builder.create();
       alert.show();      
+      
       return true;
     }
   };
@@ -430,7 +463,7 @@ public class EditProfileActivity extends PreferenceActivity {
       Integer i = Integer.parseInt(newValue.toString());
       String value = mFormInfo.getFitness(i);
       preference.setSummary(value);
-      Data.s_Profile.questionary_finances_id = i;
+      Data.s_Profile.questionary_fitness_id = i;
       sendFormData(FORM_FITNESS,i);
       
       return true;

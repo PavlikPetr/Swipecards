@@ -40,6 +40,7 @@
     <activity android:name=".ui.dating.DatingActivity"       android:screenOrientation="portrait" />
     <activity android:name=".ui.dating.FilterActivity"       android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
     <activity android:name=".ui.BuyingActivity"              android:screenOrientation="portrait" />
+    <activity android:name=".ui.CitySearchActivity"                android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
     
     <activity android:name=".ui.profile.ProfileActivity"     android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.EroAlbumActivity"    android:screenOrientation="portrait" />

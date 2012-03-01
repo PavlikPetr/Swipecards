@@ -123,6 +123,7 @@ public class DatingControl extends ViewGroup {
     mBackButton.setTextColor(Color.WHITE);
     mBackButton.setText(R.string.dating_back);
     mBackButton.setVisibility(View.INVISIBLE);
+    //mBackButton.s
     mBackButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -174,8 +175,10 @@ public class DatingControl extends ViewGroup {
     int py = (getHeight()-mProgress.getMeasuredHeight())/2;
     mProgress.layout(px,py,px+mProgress.getMeasuredWidth(),py+mProgress.getMeasuredHeight());
     
+    int x = mBackButton.getMeasuredWidth()/10;
     int y = (mRateControl.getMeasuredHeight()-mBackButton.getMeasuredHeight())/2;
-    mBackButton.layout(0,y,mBackButton.getMeasuredWidth(),y+mBackButton.getMeasuredHeight());
+    mBackButton.layout(x,y,x+mBackButton.getMeasuredWidth(),y+mBackButton.getMeasuredHeight());
+    mBackButton.setPadding((int)(mBackButton.getMeasuredWidth()/4),0,0,0);
     
     mDatingGallery.layout(0,0,mDatingGallery.getMeasuredWidth(),mDatingGallery.getMeasuredHeight());
     

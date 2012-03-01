@@ -89,9 +89,9 @@ public class DatingGalleryAdapter extends BaseAdapter {
     
     Bitmap bitmap = mCache.get(position);
     if(bitmap!=null && position==0) {
-      holder.mImageView.setAlpha(255);
+      //holder.mImageView.setAlpha(255);
       holder.mImageView.setImageBitmap(bitmap);
-      holder.mImageView.startAnimation(mAlphaAnimation);
+      //holder.mImageView.startAnimation(mAlphaAnimation);
     } else if(bitmap!=null && position!=0)
       holder.mImageView.setImageBitmap(bitmap);
     else
@@ -122,7 +122,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
         Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);
         
         if(rawBitmap!=null)
-          clipBitmap = Utils.clipping(rawBitmap,view.getWidth(),view.getHeight());
+          clipBitmap = Utils.clipping(rawBitmap,mW,mH);
         
         final Bitmap bitmap = clipBitmap;
         

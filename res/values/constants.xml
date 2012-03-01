@@ -24,6 +24,10 @@
   <string name="s_filter_sex">filter_sex</string>
   <string name="s_filter_age">filter_age</string>
   <string name="s_filter_online">filter_online</string>
+  <string name="s_filter_nearby">filter_nearby</string>
+  <string name="s_filter_cities_all">filter_cities_all</string>
+  <string name="s_filter_select_city">filter_select_city</string>
+  <string name="s_filter_city">filter_city</string>
   
   <!-- Profile pref name -->
   <string name="s_profile_name">profile_name</string>
@@ -42,6 +46,5 @@
   <string name="s_profile_alcohol">profile_alcohol</string>
   <string name="s_profile_commutability">profile_commutability</string>
   <string name="s_profile_character">profile_character</string>
-  
-  
+    
 </resources>

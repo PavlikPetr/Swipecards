@@ -7,6 +7,7 @@ import com.sonetica.topface.data.DoRate;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.DoRateRequest;
+import com.sonetica.topface.net.MessageRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SearchRequest;
 import com.sonetica.topface.ui.dating.DatingControl.OnNeedUpdateListener;
@@ -16,12 +17,15 @@ import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +38,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   private DatingControl mDatingControl;
   private Dialog   mCommentDialog;
   private EditText mCommentText;
+  private InputMethodManager mInputManager;
   // Constants
   public static ViewGroup mHeaderBar;
   //---------------------------------------------------------------------------
@@ -45,24 +50,34 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
 
     // Header Bar
     mHeaderBar = (ViewGroup)findViewById(R.id.loHeader);
+    
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
+    
     // Chat Button
     ((Button)findViewById(R.id.chatBtn)).setOnClickListener(this);
+    
     // Profile Button
     ((Button)findViewById(R.id.profileBtn)).setOnClickListener(this);
+    
     // Dating Gallery
     mDatingControl = (DatingControl)findViewById(R.id.galleryDating);
     mDatingControl.setOnNeedUpdateListener(this);
+    
     // Stars Button
     ((StarsView)findViewById(R.id.starsView)).setOnRateListener(this);
+
+    // Клавиатура
+    mInputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
     
     // Comment window
     mCommentDialog = new Dialog(this);
-    mCommentDialog.setTitle("Comments");    
+    mCommentDialog.setTitle(R.string.chat_comment);    
     mCommentDialog.setContentView(R.layout.popup_comment);
+    //mCommentDialog.getWindow().setBackgroundDrawableResource(R.drawable.popup_comment);
+    mCommentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     mCommentText = (EditText)mCommentDialog.findViewById(R.id.etPopupComment);
-
+   
     update();
   }
   //---------------------------------------------------------------------------
@@ -118,13 +133,38 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
           String comment = mCommentText.getText().toString();
           if(comment.equals(""))
             return;
-          rate(mDatingControl.getUserId(),rate,comment);
+          int uid = mDatingControl.getUserId();
+          
+          // отправка комментария к оценке
+          MessageRequest message = new MessageRequest(DatingActivity.this.getApplicationContext());
+          message.message = comment; 
+          message.userid  = uid;
+          message.callback(new ApiHandler() {
+            @Override
+            public void success(Response response) {
+            }
+            @Override
+            public void fail(int codeError) {
+            }
+          }).exec();
+          
+          // отправка оценки
+          rate(uid,rate,comment);
+          
           mCommentText.setText("");
           mCommentDialog.cancel();
+          
+          // скрыть клавиатуру
+          mInputManager.hideSoftInputFromWindow(mCommentText.getWindowToken(),InputMethodManager.HIDE_IMPLICIT_ONLY);
+          
+          // подгрузка следующего
           mDatingControl.next();
         }
       });
+      
+      // показать окно отправки сообщения
       mCommentDialog.show();
+      
     } else {
       rate(mDatingControl.getUserId(),rate,null);
       mDatingControl.next();

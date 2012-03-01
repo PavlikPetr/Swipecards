@@ -21,7 +21,7 @@
       android:stretchColumns="0,1"
       android:background="@android:color/transparent" >
       
-    <!-- row -->
+    <!-- row HEIGHT -->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -42,7 +42,7 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
-    <!-- row -->
+    <!-- row WEIGHT -->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -63,7 +63,7 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
-    <!-- row -->
+    <!-- row EDUCATION -->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -84,7 +84,7 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
-    <!-- row -->
+    <!-- row COMMUTABILITY -->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -105,7 +105,7 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
-    <!-- row -->
+    <!-- row CHARACTER-->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -126,7 +126,7 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
-    <!-- row -->
+    <!-- row ALCOHOL -->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -147,7 +147,7 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
-    <!-- row -->
+    <!-- row FITNESS -->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -168,7 +168,7 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
-    <!-- row -->
+    <!-- row JOB -->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -178,6 +178,7 @@
             android:layout_weight="1"
             android:text="@string/profile_job"
             android:textColor="#535353"
+            android:visibility="gone"
             android:textSize="15sp" />
         <TextView
             android:id="@+id/tvProfileJob"
@@ -187,9 +188,10 @@
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:textColor="#2D2D2D"
+            android:visibility="gone"
             android:textSize="15sp" />
     </TableRow>
-    <!-- row -->
+    <!-- row MARRIAGE -->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -210,7 +212,7 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
-    <!-- row -->
+    <!-- row FINANCES -->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -231,7 +233,7 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
-    <!-- row -->
+    <!-- row SMOKING -->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -252,7 +254,7 @@
             android:textColor="#2D2D2D"
             android:textSize="15sp" />
     </TableRow>
-    <!-- row -->
+    <!-- row STATUS -->
     <TableRow>
         <TextView
             android:layout_width="0dp"
@@ -262,6 +264,7 @@
             android:layout_weight="1"
             android:text="@string/profile_status"
             android:textColor="#535353"
+            android:visibility="gone"
             android:textSize="15sp" />
         <TextView
             android:id="@+id/tvProfileStatus"
@@ -271,6 +274,7 @@
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:textColor="#2D2D2D"
+            android:visibility="gone"
             android:textSize="15sp" />
     </TableRow>
   </TableLayout>

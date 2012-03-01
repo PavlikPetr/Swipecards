@@ -69,6 +69,16 @@ public class FilterActivity extends PreferenceActivity {
       online.setSummary(getString(R.string.filter_online));
     online.setOnPreferenceClickListener(mOnOnelineListener);
     
+    //
+    Preference nearby = findPreference(getString(R.string.s_filter_nearby));
+    nearby.setSummary(nearby.getSummary()+"0");
+    Preference cities = findPreference(getString(R.string.s_filter_cities_all));
+    cities.setSummary(cities.getSummary()+"0");
+    Preference city   = findPreference(getString(R.string.s_filter_city));
+    city.setSummary(city.getSummary()+"0");
+    Preference select = findPreference(getString(R.string.s_filter_select_city));
+    select.setSummary(select.getSummary()+"0");
+    
   }
   //---------------------------------------------------------------------------
   public void filter() {

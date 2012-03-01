@@ -9,7 +9,6 @@ import com.sonetica.topface.data.ProfileUser;
 import com.sonetica.topface.net.AlbumRequest;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.Http;
-import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.ProfilesRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.BuyingActivity;
@@ -81,7 +80,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     // Swap
     mSwapView = ((SwapView)findViewById(R.id.swapFormView));
     mSwapView.setOnSwapListener(this);
-    // Profile Button 
+    // Profile Header Button 
     mProfileButton = ((Button)findViewById(R.id.btnHeader));
     mProfileButton.setOnClickListener(this);
     // свой - чужой профиль
@@ -135,7 +134,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mCharacter = (TextView)this.findViewById(R.id.tvProfileCharacter);
     mAlcohol = (TextView)this.findViewById(R.id.tvProfileAlcohol);
     mFitness = (TextView)this.findViewById(R.id.tvProfileFitness);
-    mJob = (TextView)this.findViewById(R.id.tvProfileJob);
+    mJob = (TextView)this.findViewById(R.id.tvProfileJob);              // ЧЁЗА ???
     mMarriage = (TextView)this.findViewById(R.id.tvProfileMarriage);
     mFinances = (TextView)this.findViewById(R.id.tvProfileFinances);
     mSmoking = (TextView)this.findViewById(R.id.tvProfileSmoking);
@@ -149,69 +148,64 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mPhotoList = new LinkedList<Album>(); 
     mEroList   = new LinkedList<Album>();
 
-    update();
+    if(!mOwner)
+      getUserProfile(mUserId);
+    else 
+      getAlbum();  // грузим галерею
   }
   //---------------------------------------------------------------------------
-  public void update() {
-    mProgressDialog.show();
+  @Override
+  protected void onStart() {
+    super.onStart();
     
     if(mOwner)
       getProfile();
-    else
-      getUserProfile(mUserId);
-  }
+  }  
   //---------------------------------------------------------------------------
   // свой профиль
   private void getProfile() {
-    ProfileRequest profileRequest = new ProfileRequest(this,false);
-    profileRequest.callback(new ApiHandler() {
-      @Override
-      public void success(final Response response) {
-        Profile profile = Data.s_Profile;
-        
-        // грузим галерею
-        getAlbum();
-        
-        // основная информация
-        mName.setText(profile.first_name);
-        mCity.setText(profile.age+", "+profile.city_name);
-        mHeight.setText(""+profile.questionary_height);
-        mWeight.setText(""+profile.questionary_weight);
-        
-        // анкета
-        FormInfo formInfo = new FormInfo(ProfileActivity.this,profile.sex);
-        mEducation.setText(formInfo.getEducation(profile.questionary_education_id));
-        mCommunication.setText(formInfo.getCommunication(profile.questionary_communication_id));
-        mCharacter.setText(formInfo.getCharacter(profile.questionary_character_id));
-        mAlcohol.setText(formInfo.getAlcohol(profile.questionary_alcohol_id));
-        mFitness.setText(formInfo.getFitness(profile.questionary_fitness_id));
-        mJob.setText(formInfo.getJob(profile.questionary_job_id));
-        mMarriage.setText(formInfo.getMarriage(profile.questionary_marriage_id));
-        mFinances.setText(formInfo.getFinances(profile.questionary_finances_id));
-        mSmoking.setText(formInfo.getSmoking(profile.questionary_smoking_id));
-        mStatus.setText(profile.questionary_status);
-        
-        // avatar
-        mFramePhoto.mOnlineState = true;
-        Http.imageLoader(profile.getBigLink(),mFramePhoto);
-      }
-      @Override
-      public void fail(int codeError) {
-      }
-    }).exec();
+    Profile profile = Data.s_Profile;
+    
+    // основная информация
+    mName.setText(profile.first_name);
+    mCity.setText(profile.age+", "+profile.city_name);
+    mHeight.setText(""+profile.questionary_height);
+    mWeight.setText(""+profile.questionary_weight);
+    
+    // анкета
+    FormInfo formInfo = new FormInfo(ProfileActivity.this,profile.sex);
+    mEducation.setText(formInfo.getEducation(profile.questionary_education_id));
+    mCommunication.setText(formInfo.getCommunication(profile.questionary_communication_id));
+    mCharacter.setText(formInfo.getCharacter(profile.questionary_character_id));
+    mAlcohol.setText(formInfo.getAlcohol(profile.questionary_alcohol_id));
+    mFitness.setText(formInfo.getFitness(profile.questionary_fitness_id));
+    mJob.setText(formInfo.getJob(profile.questionary_job_id));
+    mMarriage.setText(formInfo.getMarriage(profile.questionary_marriage_id));
+    mFinances.setText(formInfo.getFinances(profile.questionary_finances_id));
+    mSmoking.setText(formInfo.getSmoking(profile.questionary_smoking_id));
+    mStatus.setText(profile.questionary_status);
+    
+    // avatar
+    mFramePhoto.mOnlineState = true;
+    Http.imageLoader(profile.getBigLink(),mFramePhoto);
   }
   //---------------------------------------------------------------------------
   // чужой профиль
   private void getUserProfile(final int userId) {
+    // включаем прогресс
+    mProgressDialog.show();
     ProfilesRequest profileRequest = new ProfilesRequest(this);
     profileRequest.uids.add(userId);
     profileRequest.callback(new ApiHandler() {
       @Override
-      public void success(final Response response) {
+      public void success(final Response response) {        
         ProfileUser profile = ProfileUser.parse(userId,response);
         
         // грузим галерею
         getUserAlbum(userId);
+        
+        // отключаем прогресс
+        mProgressDialog.cancel();
 
         // основная информация
         mName.setText(profile.first_name);
@@ -267,8 +261,6 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       mEroTitle.setVisibility(View.VISIBLE);
       mEroViewGroup.setVisibility(View.VISIBLE);
     }
-    
-    mProgressDialog.cancel();
   }
   //---------------------------------------------------------------------------
   private void getUserAlbum(int uid) {
@@ -297,8 +289,6 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
           mEroTitle.setVisibility(View.VISIBLE);
           mEroViewGroup.setVisibility(View.VISIBLE);
         }
-        
-        mProgressDialog.cancel();
       }
       @Override
       public void fail(int codeError) {
@@ -382,6 +372,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
   }
   //---------------------------------------------------------------------------
+  // получение фото из галереи и отправка на сервер
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
     super.onActivityResult(requestCode,resultCode,data);

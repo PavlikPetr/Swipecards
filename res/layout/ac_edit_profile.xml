@@ -8,25 +8,25 @@
         <Preference
             android:key="@string/s_profile_name"
             android:title="@string/profile_form_name"
-            android:summary="name" />
+            android:summary="" />
         
         <!-- sex -->
         <Preference
             android:key="@string/s_profile_sex"
             android:title="@string/filter_sex" 
-            android:summary="sex" />
+            android:summary="" />
         
         <!-- age -->
         <Preference
             android:key="@string/s_profile_age"
             android:title="@string/filter_age" 
-            android:summary="age" />
+            android:summary="" />
         
         <!-- city -->
         <Preference
             android:key="@string/s_profile_city"
             android:title="@string/filter_city" 
-            android:summary="city" />
+            android:summary="" />
         
       
     </PreferenceCategory>
@@ -38,67 +38,67 @@
         <Preference
             android:key="@string/s_profile_about"
             android:title="@string/profile_status" 
-            android:summary="This allows you to enter a string" />
+            android:summary="" />
         
         <!-- height -->
         <Preference
             android:key="@string/s_profile_height"
             android:title="@string/profile_height" 
-            android:summary="This allows you to enter a string" />
+            android:summary="" />
         
         <!-- weight -->
         <Preference
             android:key="@string/s_profile_weight"
             android:title="@string/profile_weight" 
-            android:summary="This allows you to enter a string" />
+            android:summary="" />
         
         <!-- fitness -->
         <ListPreference
             android:key="@string/s_profile_fitness"
             android:title="@string/profile_fitness" 
-            android:summary="This allows you to enter a string" />
+            android:summary="" />
         
         <!-- marriage -->
         <ListPreference
             android:key="@string/s_profile_marriage"
             android:title="@string/profile_marriage" 
-            android:summary="This allows you to enter a string" />
+            android:summary="" />
         
         <!-- education -->
         <ListPreference
             android:key="@string/s_profile_education"
             android:title="@string/profile_education" 
-            android:summary="This allows you to enter a string" />
+            android:summary="" />
         
         <!-- finances -->
         <ListPreference
             android:key="@string/s_profile_finances"
             android:title="@string/profile_finances" 
-            android:summary="This allows you to enter a string" />
+            android:summary="" />
         
         <!-- smoking -->
         <ListPreference
             android:key="@string/s_profile_smoking"
             android:title="@string/profile_smoking" 
-            android:summary="This allows you to enter a string" />
+            android:summary="" />
         
         <!-- alcohol -->
         <ListPreference
             android:key="@string/s_profile_alcohol"
             android:title="@string/profile_alcohol" 
-            android:summary="This allows you to enter a string" />
+            android:summary="" />
         
         <!-- commutability -->
         <ListPreference
             android:key="@string/s_profile_commutability"
             android:title="@string/profile_commutability" 
-            android:summary="This allows you to enter a string" />
+            android:summary="" />
         
         <!-- character -->
         <ListPreference
             android:key="@string/s_profile_character"
             android:title="@string/profile_character" 
-            android:summary="This allows you to enter a string" />
+            android:summary="" />
       
     </PreferenceCategory>
     

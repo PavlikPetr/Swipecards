@@ -26,21 +26,24 @@
     <PreferenceCategory android:title="@string/filter_place">
         
       <Preference
-          android:title="Custom Preference"
-          android:summary="This works almost like a button"
-          android:key="customPref" />
+          android:key="@string/s_filter_nearby"
+          android:title="@string/filter_nearby"
+          android:summary="1" />
+      
       <Preference
-          android:title="Custom Preference"
-          android:summary="This works almost like a button"
-          android:key="customPref" />
+          android:key="@string/s_filter_cities_all"
+          android:title="@string/filter_cities_all"
+          android:summary="1" />
+      
       <Preference
-          android:title="Custom Preference"
-          android:summary="This works almost like a button"
-          android:key="customPref" />
+          android:key="@string/s_filter_city" 
+          android:title="@string/filter_city"
+          android:summary="1" />
+      
       <Preference
-          android:title="Custom Preference"
-          android:summary="This works almost like a button"
-          android:key="customPref" />
+          android:key="@string/s_filter_select_city"
+          android:title="@string/filter_select_city"
+          android:summary="1" />
       
    </PreferenceCategory>
    

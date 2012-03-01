@@ -9,17 +9,19 @@ import com.sonetica.topface.utils.Debug;
 
 public class Rate extends AbstractData {
   // Data
-  public int uid;               // идентификатор фотографии в альбоме пользвоателя
-  public int age;               // возраст пользователя
-  public int rate;              // оценка пользователя
-  public int city_id;           // идентификатор города отправителя оценки
-  public int unread_count;      // количество оставшихся непрочитанных
-  public long created;          // время отправления оценки
-  public boolean online;        // флаг нахождения пользователя в онлайне
-  public boolean unread;        // флаг прочитанной оценки
-  public String first_name;     // имя пользователя
-  public String avatars_big;    // большая аватарка пользователя
-  public String avatars_small;  // маленькая аватарка пользователя
+  public int uid;                // идентификатор фотографии в альбоме пользвоателя
+  public int age;                // возраст пользователя
+  public int rate;               // оценка пользователя
+  public int city_id;            // идентификатор города отправителя оценки
+  public int unread_count;       // количество оставшихся непрочитанных
+  public long created;           // время отправления оценки
+  public boolean online;         // флаг нахождения пользователя в онлайне
+  public boolean unread;         // флаг прочитанной оценки
+  public String city_name;       // название города пользователя
+  public String city_full;       // полное название города пользвоателя
+  public String first_name;      // имя пользователя
+  public String avatars_big;     // большая аватарка пользователя
+  public String avatars_small;   // маленькая аватарка пользователя
   //---------------------------------------------------------------------------
   public static LinkedList<Rate> parse(Response response) {
     LinkedList<Rate> ratesList = new LinkedList<Rate>();
@@ -37,10 +39,15 @@ public class Rate extends AbstractData {
           rate.uid        = item.getInt("uid");
           rate.age        = item.getInt("age");
           rate.rate       = item.getInt("rate");
-          rate.city_id    = item.getInt("city_id");
+          // city  
+          JSONObject city = item.getJSONObject("city");
+            rate.city_id    = city.getInt("id");            
+            rate.city_name  = city.getString("name");
+            rate.city_full  = city.getString("full");
+          //  avatars
           JSONObject avatar  = item.getJSONObject("avatars");
-          rate.avatars_small = avatar.getString("small");
-          rate.avatars_big   = avatar.getString("big");
+            rate.avatars_small = avatar.getString("small");
+            rate.avatars_big   = avatar.getString("big");
           ratesList.add(rate);
         }
     } catch(JSONException e) {

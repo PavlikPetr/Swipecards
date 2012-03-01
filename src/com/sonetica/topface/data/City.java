@@ -11,6 +11,7 @@ public class City extends AbstractData {
   // Data
   public int id;      // уникальных код города
   public String name; // строка наименования города в русскоязычной локали
+  public String full; // строка наименования города в русскоязычной локали
   //---------------------------------------------------------------------------
   public static LinkedList<City> parse(Response response) {
     LinkedList<City> cities = new LinkedList<City>();
@@ -20,8 +21,9 @@ public class City extends AbstractData {
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
           City city = new City();
-          city.id   = Integer.parseInt(item.getString("id"));
-          city.name = item.getString("name");
+            city.id   = item.getInt("id");
+            city.name = item.getString("name");
+            city.full = item.getString("full");
           cities.add(city);
         }
     } catch(JSONException e) {
