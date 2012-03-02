@@ -8,4 +8,15 @@
     <!-- header bar -->
     <include layout="@layout/bar_header" />
     
+    <Button
+        android:id="@+id/QQQQ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Отправить" 
+    />
+    
+    <ImageView
+        android:id="@+id/ivAddPhotoView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

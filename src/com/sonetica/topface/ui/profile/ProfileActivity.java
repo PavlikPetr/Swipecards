@@ -18,14 +18,12 @@ import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /*
  *      "Профиль"
@@ -332,7 +330,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     switch(parent.getId()) {
       case R.id.lvAlbumPreview: {                // ALBUM
         if(position==0 && mOwner==true) { 
-          showAddDialog(false);
+          addPhoto(false);
         } else {
           Intent intent = new Intent(ProfileActivity.this,AlbumActivity.class);
           if(mOwner==true) {
@@ -347,7 +345,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       } break;
       case R.id.lvEroAlbumPreview: {            // ERO ALBUM
         if(position==0 && mOwner==true) {
-          showAddDialog(true);
+          addPhoto(true);
         } else {
           Intent intent = null;
           if(mOwner==true) {
@@ -365,16 +363,21 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     }
   }
   //---------------------------------------------------------------------------
-  private void showAddDialog(boolean isEro) {
+  private void addPhoto(boolean isEro) {
+    
+    /*
     Intent intent = new Intent();
     intent.setType("image/*");
     intent.setAction(Intent.ACTION_GET_CONTENT);
     startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
+    */
+    startActivity(new Intent(this,AddPhotoActivity.class));
   }
   //---------------------------------------------------------------------------
   // получение фото из галереи и отправка на сервер
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    /*
     super.onActivityResult(requestCode,resultCode,data);
     Uri imageUri = data != null ? data.getData() : null;
     if (requestCode == GALLARY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && imageUri != null) {
@@ -382,6 +385,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     } else {
       Toast.makeText(ProfileActivity.this.getApplicationContext(),"no", Toast.LENGTH_SHORT).show();
     }
+    */
   }
   //---------------------------------------------------------------------------
   public void release() {

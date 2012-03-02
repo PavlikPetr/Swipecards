@@ -24,26 +24,29 @@
   
     <!-- place -->
     <PreferenceCategory android:title="@string/filter_place">
-        
-      <Preference
+      
+      <!-- nearby -->
+      <CheckBoxPreference
           android:key="@string/s_filter_nearby"
           android:title="@string/filter_nearby"
-          android:summary="1" />
+          android:defaultValue="false" />
       
-      <Preference
+      <!-- all cities -->
+      <CheckBoxPreference
           android:key="@string/s_filter_cities_all"
           android:title="@string/filter_cities_all"
-          android:summary="1" />
+          android:defaultValue="false" />
       
-      <Preference
+      <!-- current city -->
+      <CheckBoxPreference
           android:key="@string/s_filter_city" 
           android:title="@string/filter_city"
-          android:summary="1" />
+          android:defaultValue="false" />
       
+      <!-- select city -->
       <Preference
           android:key="@string/s_filter_select_city"
-          android:title="@string/filter_select_city"
-          android:summary="1" />
+          android:title="@string/filter_select_city" />
       
    </PreferenceCategory>
    

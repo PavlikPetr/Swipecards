@@ -26,9 +26,9 @@ public class Album extends AbstractData {
         for(int i=0;i<array.length();i++) {
           JSONObject item = array.getJSONObject(i);
           Album album = new Album();
-          album.id    = item.getInt("id");
-          album.small = item.getString("small");
-          album.big   = item.getString("big");
+            album.id    = item.getInt("id");
+            album.small = item.getString("small");
+            album.big   = item.getString("big");
           
           if(!item.isNull("ero")) {
             album.ero   = true;

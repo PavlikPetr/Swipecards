@@ -34,7 +34,6 @@ public class DatingControl extends ViewGroup {
     public void needUpdate();
   }
   // Data
-  private boolean mStart;      // первый старт оценок
   private boolean mNotHide;    // блокировка скрытия инфо пользователя
   private int mDataPosition;   // позиция в массиве пользователей на оценку
   private int mGallerySize;    // кол-во фото у оцениваемого пользователя
@@ -61,8 +60,8 @@ public class DatingControl extends ViewGroup {
   //---------------------------------------------------------------------------
   public DatingControl(Context context,AttributeSet attrs) {
     super(context,attrs);
-    
-    mStart = false;
+
+    // Data
     mDataList = new LinkedList<SearchUser>();
     
     // Progress
@@ -188,12 +187,14 @@ public class DatingControl extends ViewGroup {
     mCounter.layout(0,getHeight()-30,getWidth(),getHeight());
   }
   //---------------------------------------------------------------------------
+  public void addDataList(LinkedList<SearchUser> dataList) {
+    mDataList.clear();
+    mDataList.addAll(dataList);
+    next();
+  }
+  //---------------------------------------------------------------------------
   public void setDataList(LinkedList<SearchUser> dataList) {
     mDataList.addAll(dataList);
-    if(!mStart) {
-      mStart = true;
-      next();
-    }
   }
   //---------------------------------------------------------------------------
   public int getUserId() {

@@ -78,10 +78,10 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     mCommentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     mCommentText = (EditText)mCommentDialog.findViewById(R.id.etPopupComment);
    
-    update();
+    update(true);
   }
   //---------------------------------------------------------------------------
-  public void update() {
+  public void update(final boolean firstQuery) {
     SearchRequest request = new SearchRequest(this.getApplicationContext());
     request.limit  = 20;
     request.geo    = Data.s_Profile.filter_geo;
@@ -90,7 +90,10 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
       @Override
       public void success(Response response) {
         LinkedList<SearchUser> userList = SearchUser.parse(response);
-        mDatingControl.setDataList(userList);
+        if(firstQuery)
+          mDatingControl.addDataList(userList);
+        else
+          mDatingControl.setDataList(userList);
       }
       @Override
       public void fail(int codeError) {
@@ -121,7 +124,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   //---------------------------------------------------------------------------
   @Override
   public void needUpdate() {
-    update();
+    update(false);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -188,6 +191,14 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   }
   //---------------------------------------------------------------------------
   @Override
+  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    super.onActivityResult(requestCode,resultCode,data);
+    if(resultCode == Activity.RESULT_OK && requestCode == FilterActivity.INTENT_FILTER_ACTIVITY) {
+      update(true);
+    }
+  }
+  //---------------------------------------------------------------------------
+  @Override
   protected void onDestroy() {
     mDatingControl.release();
     mDatingControl = null;
@@ -210,7 +221,8 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
     switch(item.getItemId()) {
       case MENU_FILTER:
-        startActivity(new Intent(this,FilterActivity.class));
+        Intent intent = new Intent(this,FilterActivity.class);
+        startActivityForResult(intent,FilterActivity.INTENT_FILTER_ACTIVITY);
       break;
     }
     return super.onMenuItemSelected(featureId,item);

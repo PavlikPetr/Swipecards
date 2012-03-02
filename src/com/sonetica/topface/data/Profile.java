@@ -29,13 +29,15 @@ public class Profile extends AbstractData {
   public String avatar_small;    // аватарки пользователя маленького размера
   public LinkedList<Album> albums;
   // Dating
-  public int filter_sex;        // пол пользователей для поиска
-  public int filter_age_start;  // начальный возраст для пользователей
-  public int filter_age_end;    // конечный возраст для пользователей
-  public int filter_city_id;    // идентификатор города для поиска пользователей
-  public String filter_city;    // наименование пользователя в русской локали
-  public boolean filter_geo;    // идентификатор города для поиска пользователей
-  public boolean filter_online; // идентификатор города для поиска пользователей
+  public int filter_sex;           // пол пользователей для поиска
+  public int filter_age_start;     // начальный возраст для пользователей
+  public int filter_age_end;       // конечный возраст для пользователей
+  public int filter_city_id;       // идентификатор города для поиска пользователей
+  public String filter_city_name;  // наименование пользователя в русской локали
+  public String filter_city_full;  // полное наименование города
+  public boolean filter_geo;       // идентификатор города для поиска пользователей
+  public boolean filter_online;    // идентификатор города для поиска пользователей
+  
   // Questionary
   public int questionary_job_id;           // идентификатор рабочей партии пользователя
   public String questionary_job;           // описание оригинальной работы пользователя
@@ -104,8 +106,10 @@ public class Profile extends AbstractData {
         profile.filter_sex       = dating.getInt("sex");
         profile.filter_age_start = dating.getInt("age_start");
         profile.filter_age_end   = dating.getInt("age_end");
-        profile.filter_city_id   = dating.getInt("city_id");
-        profile.filter_city      = dating.getString("city");
+        JSONObject datingCity = dating.getJSONObject("city");
+          profile.filter_city_id   = datingCity.getInt("id");            
+          profile.filter_city_name = datingCity.getString("name");
+          profile.filter_city_full = datingCity.getString("full");
       // questionary
       JSONObject questionary = resp.getJSONObject("questionary");
         profile.questionary_job_id = questionary.getInt("job_id");
