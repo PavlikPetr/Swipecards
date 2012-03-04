@@ -82,6 +82,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   }
   //---------------------------------------------------------------------------
   public void update(final boolean firstQuery) {
+    Debug.log(this,"update");
     SearchRequest request = new SearchRequest(this.getApplicationContext());
     request.limit  = 20;
     request.geo    = Data.s_Profile.filter_geo;
@@ -90,10 +91,13 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
       @Override
       public void success(Response response) {
         LinkedList<SearchUser> userList = SearchUser.parse(response);
-        if(firstQuery)
+        if(firstQuery) {
+          Debug.log(this,"update add");
           mDatingControl.addDataList(userList);
-        else
+        } else {
+          Debug.log(this,"update set");
           mDatingControl.setDataList(userList);
+        }
       }
       @Override
       public void fail(int codeError) {
@@ -194,6 +198,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
     super.onActivityResult(requestCode,resultCode,data);
     if(resultCode == Activity.RESULT_OK && requestCode == FilterActivity.INTENT_FILTER_ACTIVITY) {
+      Debug.log(this,"filterActivity->datingResult");
       update(true);
     }
   }

@@ -18,7 +18,7 @@
       <!-- online -->
       <Preference
           android:key="@string/s_filter_online"
-          android:title="@string/filter_online"
+          android:title="@string/filter_all"
           android:summary="" />
     </PreferenceCategory>
   

@@ -22,7 +22,7 @@
   <string name="dashbrd_btn_tops">Топы</string>
   <string name="dashbrd_btn_profile">Профиль</string>
               
-  <!-- Indow & Chat Activity -->
+  <!-- Indox & Chat Activity -->
   <string name="inbox_header_title">Диалоги</string>
   <string name="inbox_btn_dbl_left">Все</string>
   <string name="inbox_btn_dbl_right">Непрочитанные</string>
@@ -80,7 +80,7 @@
   <string name="filter_city">Город</string>
   <string name="filter_sex">Пол</string>
   <string name="filter_age">Возраст</string>
-  <string name="filter_online">Онлайн</string>
+  <string name="filter_online0">Онлайн</string>
   <string name="filter_boy">Парня</string>
   <string name="filter_girl">Девушку</string>
   <string name="filter_all">Все</string>

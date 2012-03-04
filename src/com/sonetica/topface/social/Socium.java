@@ -1,7 +1,6 @@
 package com.sonetica.topface.social;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 /*
  * Класс обертка над апи соц сетей
@@ -16,13 +15,13 @@ public class Socium {
       throw new AuthException("VkAuthToken is not valid or empty");
     
     if(token.getSocialNet().equals(AuthToken.SN_VKONTAKTE))
-      mApi = new VkApi(token);
+      mApi = new VkApi(context,token);
     else if(token.getSocialNet().equals(AuthToken.SN_FACEBOOK))
-      mApi = new FbApi(token);
+      mApi = new FbApi(context,token);
   }
   //---------------------------------------------------------------------------
-  public Bitmap getAvatar(){
-    return mApi.getAvatar();
+  public void uploadPhoto(){
+    mApi.uploadPhoto();
   }
   //---------------------------------------------------------------------------
   // class AuthException

@@ -89,7 +89,7 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     if(mTemp.online==false)
       online.setSummary(getString(R.string.filter_all));
     else
-      online.setSummary(getString(R.string.filter_online));
+      online.setSummary(getString(R.string.filter_only_online));
     online.setOnPreferenceClickListener(mOnOnelineListener);
     
     // cities group    
@@ -183,7 +183,7 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     Data.s_Profile.filter_age_end   = mTemp.age_end;
     
     FilterRequest request = new FilterRequest(this.getApplicationContext());
-    request.city     = mTemp.city_id;
+    request.city     = mTemp.city_id;  // ЧТО СТАВИМ ПРИ ЗАПРОСЕ С КООРДИНАТАМИ
     request.sex      = mTemp.sex;
     request.agebegin = mTemp.age_start;
     request.ageend   = mTemp.age_end; 
@@ -232,6 +232,7 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
     switch(item.getItemId()) {
       case MENU_SAVE:
+        // if(mTemp.online)
         sendFilter();
         setResult(RESULT_OK,null);
         finish();

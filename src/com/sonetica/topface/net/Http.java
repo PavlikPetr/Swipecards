@@ -74,7 +74,7 @@ public class Http {
         httpConnection.setRequestProperty("Content-Type", "application/json");
       
       // отправляем post параметры
-      if(typeRequest == HTTP_POST_REQUEST){
+      if(typeRequest == HTTP_POST_REQUEST && postParams != null){
         httpConnection.setDoOutput(true);
         OutputStreamWriter osw = new OutputStreamWriter(httpConnection.getOutputStream());
         osw.write(postParams);

@@ -276,6 +276,7 @@ public class DatingControl extends ViewGroup {
   //---------------------------------------------------------------------------
   // Установка следующего пользователя для оценки
   public void next() {
+    Debug.log(this,"next");
     // блокировать
     mProgress.setVisibility(View.VISIBLE);
     mRateControl.setBlock(false);

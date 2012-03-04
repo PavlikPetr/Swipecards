@@ -2,7 +2,7 @@ package com.sonetica.topface.social;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.graphics.Bitmap;
+import android.content.Context;
 import com.sonetica.topface.net.Http;
 
 /*
@@ -10,15 +10,17 @@ import com.sonetica.topface.net.Http;
  */
 public abstract class SnApi {
   // Data
+  protected Context mContext;
   protected AuthToken.Token mToken;
   //---------------------------------------------------------------------------
-  public SnApi(AuthToken.Token token) {
+  public SnApi(Context context,AuthToken.Token token) {
+    mContext = context;
     mToken = token;
   }
   //---------------------------------------------------------------------------
   abstract public void getProfile();
   //---------------------------------------------------------------------------
-  abstract public Bitmap getAvatar();
+  abstract public void uploadPhoto();
   //---------------------------------------------------------------------------
   abstract protected String getApiUrl();
   //---------------------------------------------------------------------------
