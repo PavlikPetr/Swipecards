@@ -2,21 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="#000000" >
-    
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/list_bkgrd"
+    android:orientation="vertical" >
+
     <!-- header bar -->
+
     <include layout="@layout/bar_header" />
-    
+
     <Button
-        android:id="@+id/QQQQ"
+        android:id="@+id/btnAddPhotoAlbum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Отправить" 
-    />
-    
-    <ImageView
-        android:id="@+id/ivAddPhotoView"
+        android:layout_margin="10dp"
+        android:background="@drawable/im_big_button"
+        android:text="Альбом" />
+
+    <Button
+        android:id="@+id/btnAddPhotoCamera"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/im_big_button"
+        android:text="Камера" />
+
 </LinearLayout>

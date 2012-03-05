@@ -1,10 +1,15 @@
 package com.sonetica.topface.social;
 
+import java.io.ByteArrayOutputStream;
 import java.net.URLEncoder;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import com.sonetica.topface.R;
 import com.sonetica.topface.net.Http;
 
@@ -25,7 +30,7 @@ public class VkApi extends SnApi {
   }
   //---------------------------------------------------------------------------
   @Override
-  public void uploadPhoto() {
+  public void uploadPhoto(Uri uri) {
     try {
       StringBuilder request = new StringBuilder("https://api.vk.com/method/photos.getAlbums?");
       request.append("uid=" + mToken.getUserId());
@@ -68,7 +73,44 @@ public class VkApi extends SnApi {
       jsonResult = new JSONObject(response);
       JSONObject obj = jsonResult.getJSONObject("response");
       String url =  obj.getString("upload_url");
+      
       // отправка по урлу данные
+      Bitmap bitmap = BitmapFactory.decodeStream(mContext.getContentResolver().openInputStream(uri));
+      ByteArrayOutputStream bos = new ByteArrayOutputStream();
+      bitmap.compress(CompressFormat.JPEG,100,bos);
+      byte[] data = bos.toByteArray();
+
+      
+      // загрузка фото
+      response = Http.httpPostDataRequest(url,null,data);
+      
+      
+      /*
+      HttpClient httpClient = new DefaultHttpClient();
+      HttpPost postMethod = new HttpPost(url);
+      postMethod.setEntity(new ByteArrayEntity(data));
+      HttpResponse resp = httpClient.execute(postMethod);
+      HttpEntity entity = resp.getEntity();
+      BasicResponseHandler handler = new BasicResponseHandler();
+      String response0 = handler.handleResponse(resp);
+      */
+
+      jsonResult = new JSONObject(response);
+      
+      String photosList = jsonResult.getString("photos_list");
+      String hash       = jsonResult.getString("hash");
+      String server     = jsonResult.getString("server");
+      
+      request = new StringBuilder("https://api.vk.com/method/photos.save?");
+      request.append("aid=" + albumId);
+      request.append("&server=" + server);
+      request.append("&photos_list=" + photosList);
+      request.append("&hash=" + hash);
+      request.append("&access_token=" + mToken.getTokenKey());
+      
+      response = Http.httpPostRequest(request.toString(),null);
+      obj = jsonResult.getJSONObject("response");
+      
       
       request.toString();
     } catch(Exception e) {
@@ -82,3 +124,4 @@ public class VkApi extends SnApi {
   }
   //---------------------------------------------------------------------------
 }//VkApi
+

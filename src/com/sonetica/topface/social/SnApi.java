@@ -3,6 +3,7 @@ package com.sonetica.topface.social;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
+import android.net.Uri;
 import com.sonetica.topface.net.Http;
 
 /*
@@ -20,7 +21,7 @@ public abstract class SnApi {
   //---------------------------------------------------------------------------
   abstract public void getProfile();
   //---------------------------------------------------------------------------
-  abstract public void uploadPhoto();
+  abstract public void uploadPhoto(Uri uri);
   //---------------------------------------------------------------------------
   abstract protected String getApiUrl();
   //---------------------------------------------------------------------------

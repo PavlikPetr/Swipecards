@@ -1,6 +1,7 @@
 package com.sonetica.topface.social;
 
 import android.content.Context;
+import android.net.Uri;
 
 /*
  * Класс обертка над апи соц сетей
@@ -20,8 +21,8 @@ public class Socium {
       mApi = new FbApi(context,token);
   }
   //---------------------------------------------------------------------------
-  public void uploadPhoto(){
-    mApi.uploadPhoto();
+  public void uploadPhoto(Uri uri){
+    mApi.uploadPhoto(uri);
   }
   //---------------------------------------------------------------------------
   // class AuthException

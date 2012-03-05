@@ -2,6 +2,7 @@ package com.sonetica.topface.net;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -42,23 +43,28 @@ public class Http {
   //---------------------------------------------------------------------------
   //  Get запрос
   public static String httpGetRequest(String request) {
-    return httpRequest(HTTP_GET_REQUEST,request,null,false);
+    return httpRequest(HTTP_GET_REQUEST,request,null,null,false);
   }
   //---------------------------------------------------------------------------
   //  Post запрос
-  public static String httpPostRequest(String request, String postParams) {
-    return httpRequest(HTTP_POST_REQUEST,request,postParams,false);
+  public static String httpPostRequest(String request,String postParams) {
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,false);
   }
   //---------------------------------------------------------------------------
   //  запрос к TopFace API
-  public static String httpSendTpRequest(String request, String postParams) {
+  public static String httpSendTpRequest(String request,String postParams) {
     
     Data.s_LogList.add("   [REQ]: "+postParams);  // JSON LOG   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
-    return httpRequest(HTTP_POST_REQUEST,request,postParams,true);
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,true);
   }
   //---------------------------------------------------------------------------
-  private static String httpRequest(int typeRequest, String request, String postParams,boolean isJson) {
+  // загрузка фото в соц сеть
+  public static String httpPostDataRequest(String request, String postParams, byte[] dataParams) {
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,dataParams,false);
+  }
+  //---------------------------------------------------------------------------
+  private static String httpRequest(int typeRequest, String request,String postParams,byte[] dataParams,boolean isJson) {
     Debug.log(TAG,"req:"+postParams);
     
     String response = null;
@@ -74,12 +80,33 @@ public class Http {
         httpConnection.setRequestProperty("Content-Type", "application/json");
       
       // отправляем post параметры
-      if(typeRequest == HTTP_POST_REQUEST && postParams != null){
+      if(typeRequest == HTTP_POST_REQUEST && postParams != null) {
+        httpConnection.setRequestMethod("POST");
         httpConnection.setDoOutput(true);
         OutputStreamWriter osw = new OutputStreamWriter(httpConnection.getOutputStream());
         osw.write(postParams);
         osw.flush();
         osw.close();
+      }
+      
+     // отправляем data параметры
+      if(typeRequest == HTTP_POST_REQUEST && dataParams != null) {
+        String lineEnd    = "\r\n";
+        String twoHyphens = "--";
+        String boundary   = "0xKhTmLbOuNdArY";
+        httpConnection.setRequestMethod("POST");
+        httpConnection.setDoOutput(true);
+        //httpConnection.setRequestProperty("Connection", "Keep-Alive");
+        //httpConnection.setRequestProperty("Content-Length","" + dataParams.length);
+        httpConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+        DataOutputStream dos = new DataOutputStream(httpConnection.getOutputStream());
+        dos.writeBytes(twoHyphens + boundary + lineEnd);
+        dos.writeBytes("Content-Disposition: form-data; name=\"photo\";filename=\"photo.jpg\"" + lineEnd);
+        dos.writeBytes("Content-Type: image/jpg" + lineEnd + lineEnd);
+        dos.write(dataParams);
+        dos.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
+        dos.flush();
+        dos.close();
       }
       
       // проверяет код ответа сервера
