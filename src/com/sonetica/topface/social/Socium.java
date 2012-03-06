@@ -21,8 +21,8 @@ public class Socium {
       mApi = new FbApi(context,token);
   }
   //---------------------------------------------------------------------------
-  public void uploadPhoto(Uri uri){
-    mApi.uploadPhoto(uri);
+  public String[] uploadPhoto(Uri uri){
+    return mApi.uploadPhoto(uri);
   }
   //---------------------------------------------------------------------------
   // class AuthException

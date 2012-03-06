@@ -13,7 +13,7 @@ public class PhotoAdd extends AbstractData {
     try {
       add.completed = response.mJSONResult.getBoolean("completed");
     } catch(JSONException e) {
-      Debug.log("Questionary.class","Wrong response parsing: " + e);
+      Debug.log("PhotoAdd.class","Wrong response parsing: " + e);
     }
     return add;
   }

@@ -43,12 +43,12 @@ public class Http {
   //---------------------------------------------------------------------------
   //  Get запрос
   public static String httpGetRequest(String request) {
-    return httpRequest(HTTP_GET_REQUEST,request,null,null,false);
+    return httpRequest(HTTP_GET_REQUEST,request,null,null,null,false);
   }
   //---------------------------------------------------------------------------
   //  Post запрос
   public static String httpPostRequest(String request,String postParams) {
-    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,false);
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,null,false);
   }
   //---------------------------------------------------------------------------
   //  запрос к TopFace API
@@ -56,15 +56,20 @@ public class Http {
     
     Data.s_LogList.add("   [REQ]: "+postParams);  // JSON LOG   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
-    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,true);
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,null,true);
   }
   //---------------------------------------------------------------------------
-  // загрузка фото в соц сеть
+  // загрузка фото в соц сеть, массив данных
   public static String httpPostDataRequest(String request, String postParams, byte[] dataParams) {
-    return httpRequest(HTTP_POST_REQUEST,request,postParams,dataParams,false);
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,dataParams,null,false);
   }
   //---------------------------------------------------------------------------
-  private static String httpRequest(int typeRequest, String request,String postParams,byte[] dataParams,boolean isJson) {
+  // загрузка фото в соц сеть, потоком
+  public static String httpPostDataRequest(String request, String postParams, InputStream is) {
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,is,false);
+  }
+  //---------------------------------------------------------------------------
+  private static String httpRequest(int typeRequest, String request,String postParams,byte[] dataParams,InputStream is,boolean isJson) {
     Debug.log(TAG,"req:"+postParams);
     
     String response = null;
@@ -96,14 +101,34 @@ public class Http {
         String boundary   = "0xKhTmLbOuNdArY";
         httpConnection.setRequestMethod("POST");
         httpConnection.setDoOutput(true);
-        //httpConnection.setRequestProperty("Connection", "Keep-Alive");
-        //httpConnection.setRequestProperty("Content-Length","" + dataParams.length);
         httpConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
         DataOutputStream dos = new DataOutputStream(httpConnection.getOutputStream());
         dos.writeBytes(twoHyphens + boundary + lineEnd);
         dos.writeBytes("Content-Disposition: form-data; name=\"photo\";filename=\"photo.jpg\"" + lineEnd);
         dos.writeBytes("Content-Type: image/jpg" + lineEnd + lineEnd);
         dos.write(dataParams);
+        dos.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
+        dos.flush();
+        dos.close();
+      }
+      
+      // отправляем inputStream
+      if(typeRequest == HTTP_POST_REQUEST && is != null) {
+        String lineEnd    = "\r\n";
+        String twoHyphens = "--";
+        String boundary   = "0xKhTmLbOuNdArY";
+        httpConnection.setRequestMethod("POST");
+        httpConnection.setDoOutput(true);
+        httpConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+        DataOutputStream dos = new DataOutputStream(httpConnection.getOutputStream());
+        dos.writeBytes(twoHyphens + boundary + lineEnd);
+        dos.writeBytes("Content-Disposition: form-data; name=\"photo\";filename=\"photo.jpg\"" + lineEnd);
+        dos.writeBytes("Content-Type: image/jpg" + lineEnd + lineEnd);
+        BufferedInputStream bis = new BufferedInputStream(is);
+        byte[] buff = new byte[1024];
+        while(bis.read(buff) > 0) {
+          dos.write(buff); 
+        }
         dos.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
         dos.flush();
         dos.close();

@@ -7,9 +7,12 @@ import android.content.Context;
 
 public class PhotoAddRequest extends ApiRequest {
   // Data
-  private String service = "photoOpen";
-  public int uid;    // идентификатор пользователя хозяина фотографии
-  public int photo;  // идентификатор эротической фотографии
+  private String service = "photoAdd";
+  public String big;    // URL фотографии пользователя из социальной сети в большом разрешении
+  public String medium; // URL фотографии пользователя из социальной сети в среднем разрешении
+  public String small;  // URL фотографии пользователя из социальной сети в малом разрешении
+  public boolean ero;   // флаг, является ли фотография эротической
+  public int cost;      // стоимость просмотра эротической фотографии
   //---------------------------------------------------------------------------
   public PhotoAddRequest(Context context) {
     super(context);
@@ -21,8 +24,11 @@ public class PhotoAddRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("uid",uid)
-                                      .put("photo",photo));
+      root.put("data",new JSONObject().put("big",big)
+                                      .put("medium",medium)
+                                      .put("small",small)
+                                      .put("ero",ero)
+                                      .put("cost",cost));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }

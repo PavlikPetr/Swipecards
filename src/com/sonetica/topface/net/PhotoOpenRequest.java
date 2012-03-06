@@ -7,8 +7,9 @@ import android.content.Context;
 
 public class PhotoOpenRequest extends ApiRequest {
   // Data
-  private String service = "photoDelete";
-  public int photoid ;    // идентификатор фотографии для установки в качестве главной
+  private String service = "photoOpen";
+  public int uid;    // идентификатор пользователя хозяина фотографии
+  public int photo;  // идентификатор эротической фотографии
   //---------------------------------------------------------------------------
   public PhotoOpenRequest(Context context) {
     super(context);
@@ -20,7 +21,8 @@ public class PhotoOpenRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("photoid",photoid));
+      root.put("data",new JSONObject().put("uid",uid)
+                                      .put("photo",photo));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }

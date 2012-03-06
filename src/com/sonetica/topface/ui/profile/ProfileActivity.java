@@ -4,11 +4,13 @@ import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
+import com.sonetica.topface.data.PhotoAdd;
 import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.data.ProfileUser;
 import com.sonetica.topface.net.AlbumRequest;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.net.PhotoAddRequest;
 import com.sonetica.topface.net.ProfilesRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.Socium;
@@ -16,7 +18,6 @@ import com.sonetica.topface.social.Socium.AuthException;
 import com.sonetica.topface.ui.BuyingActivity;
 import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.ui.inbox.ChatActivity;
-import com.sonetica.topface.ui.profile.AddPhotoActivity.AsyncTaskUploader;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -426,14 +427,14 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   //---------------------------------------------------------------------------
   // class AsyncTaskUploader
   //---------------------------------------------------------------------------
-  class AsyncTaskUploader extends AsyncTask<Uri, Void, Void> {
+  class AsyncTaskUploader extends AsyncTask<Uri, Void, String[]> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         mProgressDialog.show();
     }
     @Override
-    protected Void doInBackground(Uri... uri) {
+    protected String[] doInBackground(Uri... uri) {
       Socium soc;
       try {
         soc = new Socium(ProfileActivity.this.getApplicationContext());
@@ -444,8 +445,23 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       return null;
     }
     @Override
-    protected void onPostExecute(Void result) {
+    protected void onPostExecute(String[] result) {
       super.onPostExecute(result);
+      PhotoAddRequest addPhotoRequest = new PhotoAddRequest(ProfileActivity.this);
+      addPhotoRequest.big    = result[0];
+      addPhotoRequest.medium = result[1];
+      addPhotoRequest.small  = result[2];
+      addPhotoRequest.ero = false;
+      addPhotoRequest.callback(new ApiHandler() {
+        @Override
+        public void success(Response response) {
+          PhotoAdd add = PhotoAdd.parse(response);
+          response.toString();
+        }
+        @Override
+        public void fail(int codeError) {
+        }
+      }).exec();
       mProgressDialog.cancel();  
     }
   }

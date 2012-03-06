@@ -21,7 +21,7 @@ public abstract class SnApi {
   //---------------------------------------------------------------------------
   abstract public void getProfile();
   //---------------------------------------------------------------------------
-  abstract public void uploadPhoto(Uri uri);
+  abstract public String[] uploadPhoto(Uri uri);
   //---------------------------------------------------------------------------
   abstract protected String getApiUrl();
   //---------------------------------------------------------------------------
