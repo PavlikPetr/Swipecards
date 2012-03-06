@@ -11,19 +11,27 @@ import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.ProfilesRequest;
 import com.sonetica.topface.net.Response;
+import com.sonetica.topface.social.Socium;
+import com.sonetica.topface.social.Socium.AuthException;
 import com.sonetica.topface.ui.BuyingActivity;
 import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.ui.inbox.ChatActivity;
+import com.sonetica.topface.ui.profile.AddPhotoActivity.AsyncTaskUploader;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
  *      "Профиль"
@@ -322,6 +330,16 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
           mProfileButton.setText(R.string.profile_btn_form);
         }
       } break;
+      case R.id.btnAddPhotoAlbum: {
+        Intent intent = new Intent();
+        intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
+      } break;
+      case R.id.btnAddPhotoCamera: {
+        Intent intent = new Intent();
+        intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
+      } break;
     }
   }
   //---------------------------------------------------------------------------
@@ -364,28 +382,30 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   }
   //---------------------------------------------------------------------------
   private void addPhoto(boolean isEro) {
-    
-    /*
-    Intent intent = new Intent();
-    intent.setType("image/*");
-    intent.setAction(Intent.ACTION_GET_CONTENT);
-    startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
-    */
-    startActivity(new Intent(this,AddPhotoActivity.class));
+    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+    builder.setTitle(getString(R.string.album_add_photo_title));
+    View view = LayoutInflater.from(ProfileActivity.this.getApplicationContext()).inflate(R.layout.profile_add_photo,null);
+    view.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(this);
+    view.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(this);
+    builder.setView(view);
+    AlertDialog alert = builder.create();
+    alert.show();
+    //startActivity(new Intent(this,AddPhotoActivity.class));    
   }
   //---------------------------------------------------------------------------
   // получение фото из галереи и отправка на сервер
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-    /*
-    super.onActivityResult(requestCode,resultCode,data);
-    Uri imageUri = data != null ? data.getData() : null;
-    if (requestCode == GALLARY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && imageUri != null) {
-      Toast.makeText(ProfileActivity.this.getApplicationContext(),"yes", Toast.LENGTH_SHORT).show();
+    if(requestCode == GALLARY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+      Uri imageUri = data != null ? data.getData() : null;
+      if(imageUri==null)
+        return;
+      
+      new AsyncTaskUploader().execute(imageUri);
+      
     } else {
-      Toast.makeText(ProfileActivity.this.getApplicationContext(),"no", Toast.LENGTH_SHORT).show();
+      Toast.makeText(getApplicationContext(),"oops", Toast.LENGTH_SHORT).show();
     }
-    */
   }
   //---------------------------------------------------------------------------
   public void release() {
@@ -402,6 +422,32 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     release();
     Debug.log(this,"-onDestroy");
     super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
+  // class AsyncTaskUploader
+  //---------------------------------------------------------------------------
+  class AsyncTaskUploader extends AsyncTask<Uri, Void, Void> {
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        mProgressDialog.show();
+    }
+    @Override
+    protected Void doInBackground(Uri... uri) {
+      Socium soc;
+      try {
+        soc = new Socium(ProfileActivity.this.getApplicationContext());
+        soc.uploadPhoto(uri[0]);
+      } catch(AuthException e) {
+        e.printStackTrace();
+      }
+      return null;
+    }
+    @Override
+    protected void onPostExecute(Void result) {
+      super.onPostExecute(result);
+      mProgressDialog.cancel();  
+    }
   }
   //---------------------------------------------------------------------------
 }
