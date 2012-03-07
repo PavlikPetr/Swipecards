@@ -16,7 +16,6 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.Socium;
 import com.sonetica.topface.social.Socium.AuthException;
 import com.sonetica.topface.ui.BuyingActivity;
-import com.sonetica.topface.ui.album.AlbumActivity;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
@@ -245,8 +244,8 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   //---------------------------------------------------------------------------
   private void getAlbum() {
     // кнопки добавления
-    mPhotoList.add(new Album()); 
-    mEroList.add(new Album());
+    mPhotoList.add(new Album()); // добавление элемента кнопки загрузки новых сообщений
+    mEroList.add(new Album());   // кнопка
 
     // сортируем эро и не эро
     LinkedList<Album> albumList = Data.s_Profile.albums;
@@ -303,11 +302,24 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     }).exec();
   }
   //---------------------------------------------------------------------------
+  private void addPhoto(boolean isEro) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+    builder.setTitle(getString(R.string.album_add_photo_title));
+    View view = LayoutInflater.from(ProfileActivity.this.getApplicationContext()).inflate(R.layout.profile_add_photo,null);
+    view.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(this);
+    view.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(this);
+    builder.setView(view);
+    AlertDialog alert = builder.create();
+    alert.show();
+    //startActivity(new Intent(this,AddPhotoActivity.class));    
+  }
+  //---------------------------------------------------------------------------
   @Override
   public void onSwap() {
     swap=!swap; // костыль на скорую руку
   }
   //---------------------------------------------------------------------------
+  // обработчик нажатия на кнопки
   @Override
   public void onClick(View view) {
     switch(view.getId()) {
@@ -344,35 +356,45 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     }
   }
   //---------------------------------------------------------------------------
+  // обработчик нажатия на итем галереи
   @Override
   public void onItemClick(AdapterView<?> parent,View arg1,int position,long arg3) {
     switch(parent.getId()) {
-      case R.id.lvAlbumPreview: {                // ALBUM
-        if(position==0 && mOwner==true) { 
+      case R.id.lvAlbumPreview: {          // ALBUM
+        if(position==0 && mOwner==true) {  // нажатие на добавление фотки в своем альбоме
           addPhoto(false);
         } else {
-          Intent intent = new Intent(ProfileActivity.this,AlbumActivity.class);
+          Intent intent = new Intent(ProfileActivity.this,PhotoAlbumActivity.class);
           if(mOwner==true) {
             --position;
-            intent.putExtra(AlbumActivity.INTENT_OWNER,true);            
+            Data.s_PhotoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
+            Data.s_PhotoAlbum.addAll(mPhotoList);
+            Data.s_PhotoAlbum.removeFirst();
+          } else {
+            Data.s_PhotoAlbum = mPhotoList;
           }
-          intent.putExtra(AlbumActivity.INTENT_USER_ID,mUserId);
-          intent.putExtra(AlbumActivity.INTENT_ALBUM_POS,position);
+          intent.putExtra(PhotoAlbumActivity.INTENT_USER_ID,mUserId);
+          intent.putExtra(PhotoAlbumActivity.INTENT_ALBUM_POS,position);
 
           startActivity(intent);
         }
       } break;
-      case R.id.lvEroAlbumPreview: {            // ERO ALBUM
-        if(position==0 && mOwner==true) {
+      case R.id.lvEroAlbumPreview: {       // ERO ALBUM
+        if(position==0 && mOwner==true) {  // нажатие на добавление эро фотки в своем альбоме
           addPhoto(true);
         } else {
           Intent intent = null;
           if(mOwner==true) {
             --position;
-            intent = new Intent(ProfileActivity.this,AlbumActivity.class);
-            intent.putExtra(AlbumActivity.INTENT_OWNER,true);
-          } else
+            Data.s_PhotoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
+            Data.s_PhotoAlbum.addAll(mEroList);
+            Data.s_PhotoAlbum.removeFirst();
+            intent = new Intent(ProfileActivity.this,PhotoAlbumActivity.class);
+            intent.putExtra(PhotoAlbumActivity.INTENT_OWNER,true);
+          } else {
+            Data.s_PhotoAlbum = mEroList;
             intent = new Intent(ProfileActivity.this,EroAlbumActivity.class);
+          }
           intent.putExtra(EroAlbumActivity.INTENT_USER_ID,mUserId);
           intent.putExtra(EroAlbumActivity.INTENT_ALBUM_POS,position);
 
@@ -380,18 +402,6 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
         }        
       } break;
     }
-  }
-  //---------------------------------------------------------------------------
-  private void addPhoto(boolean isEro) {
-    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
-    builder.setTitle(getString(R.string.album_add_photo_title));
-    View view = LayoutInflater.from(ProfileActivity.this.getApplicationContext()).inflate(R.layout.profile_add_photo,null);
-    view.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(this);
-    view.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(this);
-    builder.setView(view);
-    AlertDialog alert = builder.create();
-    alert.show();
-    //startActivity(new Intent(this,AddPhotoActivity.class));    
   }
   //---------------------------------------------------------------------------
   // получение фото из галереи и отправка на сервер
@@ -435,33 +445,36 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     }
     @Override
     protected String[] doInBackground(Uri... uri) {
-      Socium soc;
       try {
-        soc = new Socium(ProfileActivity.this.getApplicationContext());
-        soc.uploadPhoto(uri[0]);
+        Socium soc = new Socium(ProfileActivity.this.getApplicationContext());
+        return soc.uploadPhoto(uri[0]);
       } catch(AuthException e) {
         e.printStackTrace();
       }
       return null;
     }
     @Override
-    protected void onPostExecute(String[] result) {
+    protected void onPostExecute(final String[] result) {
       super.onPostExecute(result);
-      PhotoAddRequest addPhotoRequest = new PhotoAddRequest(ProfileActivity.this);
-      addPhotoRequest.big    = result[0];
-      addPhotoRequest.medium = result[1];
-      addPhotoRequest.small  = result[2];
-      addPhotoRequest.ero = false;
-      addPhotoRequest.callback(new ApiHandler() {
+      ProfileActivity.this.runOnUiThread(new Runnable() {
         @Override
-        public void success(Response response) {
-          PhotoAdd add = PhotoAdd.parse(response);
-          response.toString();
+        public void run() {
+          PhotoAddRequest addPhotoRequest = new PhotoAddRequest(ProfileActivity.this.getApplicationContext());
+          addPhotoRequest.big    = result[0];
+          addPhotoRequest.medium = result[1];
+          addPhotoRequest.small  = result[2];
+          addPhotoRequest.ero = false;
+          addPhotoRequest.callback(new ApiHandler() {
+            @Override
+            public void success(Response response) {
+              PhotoAdd add = PhotoAdd.parse(response);
+            }
+            @Override
+            public void fail(int codeError) {
+            }
+          }).exec();
         }
-        @Override
-        public void fail(int codeError) {
-        }
-      }).exec();
+      });
       mProgressDialog.cancel();  
     }
   }

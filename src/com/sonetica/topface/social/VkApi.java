@@ -96,11 +96,13 @@ public class VkApi extends SnApi {
       request.append("&access_token=" + mToken.getTokenKey());
       
       response = Http.httpPostRequest(request.toString(),null);
-      obj = jsonResult.getJSONObject("response");
+      jsonResult = new JSONObject(response);
+      JSONArray links = jsonResult.getJSONArray("response");
+      JSONObject link = links.getJSONObject(0);   // повесить проверки 
 
-      result[0] = obj.getString("src_big"); 
-      result[1] = obj.getString("src");
-      result[2] = obj.getString("src_small");
+      result[0] = link.getString("src_big"); 
+      result[1] = link.getString("src");
+      result[2] = link.getString("src_small");
       
     } catch(Exception e) {
       e.printStackTrace();

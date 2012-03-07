@@ -26,9 +26,9 @@ public class AlbumActivity extends Activity {
   private AlbumGalleryManager mGalleryManager;
   private AlbumGalleryAdapter mGalleryAdapter;
   // Constants
+  public static final String INTENT_OWNER = "owner";
   public static final String INTENT_USER_ID = "user_id";
   public static final String INTENT_ALBUM_POS = "album_position";
-  public static final String INTENT_OWNER = "owner";
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {

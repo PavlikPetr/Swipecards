@@ -9,7 +9,7 @@ import com.sonetica.topface.utils.Debug;
 
 public class Album extends AbstractData {
   // Data
-  public int id;     // идентификатор фотографии в альбоме пользвоателя
+  public int id;         // идентификатор фотографии в альбоме пользвоателя
   public String  small;  // строка URL маленького изображения пользователя
   public String  big;    // строка URL большого изображения пользователя
   public boolean ero;    // флаг, является ли фотография эротической

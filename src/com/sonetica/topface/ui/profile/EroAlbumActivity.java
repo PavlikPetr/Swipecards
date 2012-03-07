@@ -1,15 +1,20 @@
 package com.sonetica.topface.ui.profile;
 
 import java.util.LinkedList;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
+import com.sonetica.topface.data.PhotoOpen;
 import com.sonetica.topface.net.AlbumRequest;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.net.PhotoOpenRequest;
 import com.sonetica.topface.net.Response;
+import com.sonetica.topface.ui.BuyingActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -21,13 +26,17 @@ import android.widget.TextView;
 public class EroAlbumActivity extends Activity {
   // Data
   private int mCurrentPos;
+  private int mUserId;
   private Button mLikeButton;
   private Button mDislikeButton;
   private Button mBuyButton;
   private ImageView mEroView;
   private LinkedList<Album> mAlbumsList;
   private ProgressDialog mProgressDialog;
+  // States
+  public static final int S_BUY = 0;
   // Constants
+  public static final String INTENT_OWNER = "owner";
   public static final String INTENT_USER_ID = "user_id";
   public static final String INTENT_ALBUM_POS = "album_position";
   //---------------------------------------------------------------------------
@@ -39,6 +48,8 @@ public class EroAlbumActivity extends Activity {
     
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText("Oo");
+    
+    mAlbumsList = Data.s_PhotoAlbum;
     
     // Image Ero
     mEroView = ((ImageView)findViewById(R.id.ivEroPhoto));
@@ -72,28 +83,30 @@ public class EroAlbumActivity extends Activity {
       public void onClick(View v) {
         if(++mCurrentPos == mAlbumsList.size())
           mCurrentPos = 0;
-        showImage(mCurrentPos);
+        showImage();
         mLikeButton.setVisibility(View.VISIBLE);
         mDislikeButton.setVisibility(View.VISIBLE);
         mBuyButton.setVisibility(View.INVISIBLE);
       }
     });
     
-    int uid = getIntent().getIntExtra(INTENT_USER_ID,-1);
+    mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
     mCurrentPos = getIntent().getIntExtra(INTENT_ALBUM_POS,-1);
 
-    if(uid==-1 || mCurrentPos==-1) {
+    if(mUserId==-1 || mCurrentPos==-1) {
       finish();      
     }
     
     // Progress Dialog
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
-    mProgressDialog.show();
+    //mProgressDialog.show();
     
-    update(uid,mCurrentPos);
+    //update(uid,mCurrentPos);
+    showImage();
   }
   //---------------------------------------------------------------------------
+  /*
   private void update(int uid,final int position) {
     AlbumRequest albumRequest = new AlbumRequest(this);
     albumRequest.uid  = uid;
@@ -109,32 +122,70 @@ public class EroAlbumActivity extends Activity {
       }
     }).exec();
   }
+  */
   //---------------------------------------------------------------------------
-  public void showImage(final int position) {
+  public void showImage() {
     mEroView.setVisibility(View.INVISIBLE);
+    // спрашиваем сервер, можем ли загрузить и показать эро фотографию
+    Album album = mAlbumsList.get(mCurrentPos);
     
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        final Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink());
-        if(bitmap!=null)
-          mEroView.post(new Runnable() {
-            @Override
-            public void run() {
-              mEroView.setVisibility(View.VISIBLE);
-              mEroView.setImageBitmap(bitmap);
-
-            }
-          });
-      }
-    }).start();
+    
+    if(album.buy) {  // данная фотография уже куплена
+      new Thread(new LoaderEroPhoto()).start();
+      return;
+    } else {  // запрос на покупку
+      PhotoOpenRequest photoOpenRequest = new PhotoOpenRequest(this);
+      photoOpenRequest.uid = mUserId;
+      photoOpenRequest.photo = album.id;
+      photoOpenRequest.callback(new ApiHandler() {
+        @Override
+        public void success(Response response) {
+          PhotoOpen photoOpen = PhotoOpen.parse(response);
+          if(photoOpen.completed)
+            new Thread(new LoaderEroPhoto()).start();     // загрузка эро фотографии
+          else
+            startActivity(new Intent(EroAlbumActivity.this,BuyingActivity.class));  // окно на покупку монет
+        }
+        @Override
+        public void fail(int codeError) {
+          EroAlbumActivity.this.finish();  // какие-то неполадки
+        }
+      }).exec();
+    }
+  }
+  //---------------------------------------------------------------------------
+  synchronized public void controlVisibility(int state) {
     
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onDestroy() {
+    mAlbumsList = null;
+    mLikeButton = null;
+    mDislikeButton = null;
+    mBuyButton = null;
+    mProgressDialog = null;
+    mEroView = null;
+    
     Debug.log(this,"-onDestroy");
     super.onDestroy();  
+  }
+  //---------------------------------------------------------------------------
+  // class LoaderEroPhoto
+  //---------------------------------------------------------------------------
+  class LoaderEroPhoto implements Runnable {
+    @Override
+    public void run() {
+      final Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(mCurrentPos).getBigLink());
+      if(bitmap!=null)
+        mEroView.post(new Runnable() {
+          @Override
+          public void run() {
+            mEroView.setVisibility(View.VISIBLE);
+            mEroView.setImageBitmap(bitmap);
+          }
+        });
+    }
   }
   //---------------------------------------------------------------------------
 }

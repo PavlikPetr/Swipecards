@@ -1,6 +1,7 @@
 package com.sonetica.topface.social;
 
 import java.io.FileNotFoundException;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.net.Http;
@@ -42,9 +43,7 @@ public class FbApi extends SnApi {
       // загрузка фото
       String response = Http.httpPostDataRequest(request.toString(),null,mContext.getContentResolver().openInputStream(uri));
     
-      JSONObject jsonResult=null;
-    
-      jsonResult = new JSONObject(response);
+      JSONObject jsonResult = new JSONObject(response);
       long id = jsonResult.getLong("id");
       
       request = new StringBuilder("https://graph.facebook.com/");
@@ -52,12 +51,15 @@ public class FbApi extends SnApi {
       request.append("access_token=" + mToken.getTokenKey());
       
       response = Http.httpPostRequest(request.toString(),null);
+      jsonResult = new JSONObject(response);
+      JSONArray images = jsonResult.getJSONArray("images");
       
-      /*
-      result[0]
-      result[1]
-      result[2]
-      */
+      if(images.length()<2)
+        return null;
+      
+      result[0] = images.getJSONObject(1).getString("source");
+      result[1] = images.getJSONObject(2).getString("source");
+      result[2] = images.getJSONObject(3).getString("source");
       
     } catch(JSONException e) {
       e.printStackTrace();

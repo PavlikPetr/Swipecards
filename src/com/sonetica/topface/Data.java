@@ -3,6 +3,7 @@ package com.sonetica.topface;
 import java.util.LinkedList;
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.sonetica.topface.data.Album;
 import com.sonetica.topface.data.City;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.data.Like;
@@ -16,12 +17,15 @@ import com.sonetica.topface.data.TopUser;
  */
 public class Data {
   // Data
+  /*
   private static LinkedList<SearchUser> s_SearchList;  // dating
   private static LinkedList<TopUser> s_TopsList;
   private static LinkedList<Inbox> s_InboxList;
   private static LinkedList<Like>  s_LikesList;
   private static LinkedList<Rate>  s_RatesList;
   private static LinkedList<City>  s_CitiesList;
+  */
+  public static LinkedList<Album>  s_PhotoAlbum;
   public static LinkedList<String> s_LogList;
   // profile
   public static Profile s_Profile;
@@ -38,14 +42,14 @@ public class Data {
   public static void init(Context context) {
     
     SSID = Data.loadSSID(context);
-    
+    /*
     s_SearchList = new LinkedList<SearchUser>();
     s_InboxList  = new LinkedList<Inbox>();
     s_LikesList  = new LinkedList<Like>();
     s_TopsList   = new LinkedList<TopUser>();
     s_RatesList  = new LinkedList<Rate>();
     s_CitiesList = new LinkedList<City>();
-    
+    */
     s_LogList = new LinkedList<String>();
   }
   //---------------------------------------------------------------------------
@@ -83,6 +87,7 @@ public class Data {
   }
   //---------------------------------------------------------------------------
   public static void clear() {
+    /*
     s_SearchList.clear();
     s_SearchList = null;
     
@@ -100,7 +105,16 @@ public class Data {
     
     s_CitiesList.clear();
     s_CitiesList = null;
-
+    */
+    
+    if(s_PhotoAlbum!=null) {
+      s_PhotoAlbum.clear();
+      s_PhotoAlbum = null;
+    }
+    
+    s_LogList.clear();
+    s_LogList = null;
+    
     s_Profile = null;
   }
   //---------------------------------------------------------------------------
