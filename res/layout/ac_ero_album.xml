@@ -32,6 +32,7 @@
         android:textColor="#FFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         android:text="@string/ero_album_btn_like"
         android:layout_alignParentLeft="true"  />
     <Button
@@ -43,10 +44,19 @@
         android:text="@string/ero_album_btn_buy"
         android:layout_centerInParent="true"  />
     <Button
+        android:id="@+id/btnEroAlbumNext"
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="@string/ero_album_btn_next"
+        android:layout_centerInParent="true"  />
+    <Button
         android:id="@+id/btnEroAlbumDislike"
         android:textColor="#FFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         android:text="@string/ero_album_btn_dislike"
         android:layout_alignParentRight="true"  />
         

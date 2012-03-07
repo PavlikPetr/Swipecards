@@ -108,7 +108,8 @@
   <string name="album_menu_delete">Удалить</string>
   <string name="ero_album_btn_like">Рекомендую</string>
   <string name="ero_album_btn_dislike">Не рекомендую</string>
-  <string name="ero_album_btn_buy">Смотреть следующую</string>
+  <string name="ero_album_btn_buy">Оплатить следующую</string>
+  <string name="ero_album_btn_next">Смотреть следующую</string>
   
   <!-- Buying Activity -->
   <string name="buying_header_title">Покупка</string>
