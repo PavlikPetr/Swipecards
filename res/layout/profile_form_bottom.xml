@@ -277,5 +277,26 @@
             android:visibility="gone"
             android:textSize="15sp" />
     </TableRow>
+    <!-- row ABOUT SHORT -->
+    <TableRow>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="@string/profile_status"
+            android:textColor="#535353"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/tvProfileAbout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:textColor="#2D2D2D"
+            android:textSize="15sp" />
+    </TableRow>
   </TableLayout>
 </LinearLayout>

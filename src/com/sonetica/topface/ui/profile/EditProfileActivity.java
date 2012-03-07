@@ -34,12 +34,13 @@ public class EditProfileActivity extends PreferenceActivity {
   public static final int PROFILE_SEX  = 2;
   public static final int PROFILE_LAT  = 3;
   public static final int PROFILE_LNG  = 4;
-  public static final int PROFILE_CITYID  = 5;
+  public static final int PROFILE_CITYID = 5;
+  public static final int PROFILE_ABOUT  = 6;
   // form
-  public static final int FORM_WEIGHT    = 6;
-  public static final int FORM_HEIGHT    = 7;
-  public static final int FORM_JOBID     = 8;
-  public static final int FORM_JOB       = 9;
+  public static final int FORM_WEIGHT    = 7;
+  public static final int FORM_HEIGHT    = 8;
+  public static final int FORM_JOBID     = 9;
+  public static final int FORM_JOB       = 10;
   public static final int FORM_STATUSID  = 11;
   public static final int FORM_STATUS    = 12;
   public static final int FORM_EDUCATION = 13;
@@ -92,7 +93,7 @@ public class EditProfileActivity extends PreferenceActivity {
     
     // about
     Preference about = findPreference(getString(R.string.s_profile_about));
-    about.setSummary(Data.s_Profile.questionary_status);
+    about.setSummary(Data.s_Profile.status);
     about.setOnPreferenceClickListener(mOnAboutListener);
     
     // height
@@ -190,6 +191,9 @@ public class EditProfileActivity extends PreferenceActivity {
     switch(field) {
       case PROFILE_NAME:
         settings.name = (String)data;
+        break;
+      case PROFILE_ABOUT:
+        settings.status = (String)data;
         break;
       case PROFILE_AGE:
         settings.age = (Integer)data;
@@ -391,8 +395,8 @@ public class EditProfileActivity extends PreferenceActivity {
         public void onClick(DialogInterface arg0, int arg1) {
           String value = editBox.getText().toString();
           preference.setSummary(value);
-          Data.s_Profile.questionary_status = value;
-          sendFormData(FORM_STATUS,value);
+          Data.s_Profile.status = value;
+          sendProfileData(PROFILE_ABOUT,value);
         }
       });
       AlertDialog alert = builder.create();

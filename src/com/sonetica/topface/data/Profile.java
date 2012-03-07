@@ -22,6 +22,7 @@ public class Profile extends AbstractData {
   public int power;           // количество энергии пользователя
   public int average_rate;    // средняя оценка текущего пользователя
   public int city_id;         // идентификтаор города пользователя
+  public String status;          // статус пользователя
   public String city_name;       // название города пользователя
   public String city_full;       // полное название города пользвоателя
   public String first_name;      // имя пользователя
@@ -71,6 +72,7 @@ public class Profile extends AbstractData {
         profile.uid  = resp.getInt("uid");
         profile.age  = resp.getInt("age");
         profile.sex  = resp.getInt("sex");
+        profile.status = resp.getString("status");
         profile.first_name  = resp.getString("first_name");
       // city  
       JSONObject city = resp.getJSONObject("city");

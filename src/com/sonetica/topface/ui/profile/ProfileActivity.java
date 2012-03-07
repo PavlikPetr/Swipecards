@@ -63,11 +63,12 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   private TextView mCharacter;
   private TextView mAlcohol;
   private TextView mFitness;
-  private TextView mJob;
   private TextView mMarriage;
   private TextView mFinances;
   private TextView mSmoking;
   private TextView mStatus;
+  private TextView mJob;
+  private TextView mAbout;
   boolean swap = true;  // проверить на оптимизацию 
   //Constants
   public static final String INTENT_USER_ID = "user_id";
@@ -145,6 +146,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mFinances = (TextView)this.findViewById(R.id.tvProfileFinances);
     mSmoking = (TextView)this.findViewById(R.id.tvProfileSmoking);
     mStatus = (TextView)this.findViewById(R.id.tvProfileStatus);
+    mAbout = (TextView)this.findViewById(R.id.tvProfileAbout);
     
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
@@ -185,11 +187,12 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mCharacter.setText(formInfo.getCharacter(profile.questionary_character_id));
     mAlcohol.setText(formInfo.getAlcohol(profile.questionary_alcohol_id));
     mFitness.setText(formInfo.getFitness(profile.questionary_fitness_id));
-    mJob.setText(formInfo.getJob(profile.questionary_job_id));
     mMarriage.setText(formInfo.getMarriage(profile.questionary_marriage_id));
     mFinances.setText(formInfo.getFinances(profile.questionary_finances_id));
     mSmoking.setText(formInfo.getSmoking(profile.questionary_smoking_id));
-    mStatus.setText(profile.questionary_status);
+    //mStatus.setText(profile.status);
+    //mJob.setText(formInfo.getJob(profile.questionary_job_id));
+    mAbout.setText(profile.status);
     
     // avatar
     mFramePhoto.mOnlineState = true;
@@ -226,11 +229,12 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
         mCharacter.setText(formInfo.getCharacter(profile.questionary_character_id));
         mAlcohol.setText(formInfo.getAlcohol(profile.questionary_alcohol_id));
         mFitness.setText(formInfo.getFitness(profile.questionary_fitness_id));
-        mJob.setText(formInfo.getJob(profile.questionary_job_id));
         mMarriage.setText(formInfo.getMarriage(profile.questionary_marriage_id));
         mFinances.setText(formInfo.getFinances(profile.questionary_finances_id));
         mSmoking.setText(formInfo.getSmoking(profile.questionary_smoking_id));
-        mStatus.setText(profile.questionary_status);
+        //mStatus.setText(profile.status);
+        //mJob.setText(formInfo.getJob(profile.questionary_job_id));
+        mAbout.setText(profile.status);
         
         // avatar
         mFramePhoto.mOnlineState = profile.online;
