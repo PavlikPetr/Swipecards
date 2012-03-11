@@ -58,7 +58,7 @@ public class EditProfileActivity extends PreferenceActivity {
     addPreferencesFromResource(R.layout.ac_edit_profile);
     Debug.log(this,"+onCreate");
     
-    mFormInfo = new FormInfo(EditProfileActivity.this,Data.s_Profile.sex);
+    mFormInfo = new FormInfo(getApplicationContext(),Data.s_Profile.sex);
      
     /*
      *  PROFILE
@@ -187,7 +187,7 @@ public class EditProfileActivity extends PreferenceActivity {
   // data sending
   //---------------------------------------------------------------------------
   private void sendProfileData(int field,Object data) {
-    SettingsRequest settings = new SettingsRequest(this.getApplicationContext());
+    SettingsRequest settings = new SettingsRequest(getApplicationContext());
     switch(field) {
       case PROFILE_NAME:
         settings.name = (String)data;
@@ -222,7 +222,7 @@ public class EditProfileActivity extends PreferenceActivity {
   }
   //---------------------------------------------------------------------------
   private void sendFormData(int field,Object data) {
-    QuestionaryRequest questionary = new QuestionaryRequest(this.getApplicationContext());
+    QuestionaryRequest questionary = new QuestionaryRequest(getApplicationContext());
     switch(field) {
       case FORM_WEIGHT:
         questionary.weight = (Integer)data;

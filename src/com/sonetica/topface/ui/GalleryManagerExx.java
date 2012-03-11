@@ -18,7 +18,7 @@ public class GalleryManagerExx {
   private MemoryCache mCacheManager;
   private ExecutorService mThreadsPool;
   private LinkedList<? extends AbstractData> mData;
-  private int mStartPos;
+  //private int mStartPos;
   private int mThreadCount;
   public  int mBitmapWidth;
   public  int mBitmapHeight;
@@ -44,11 +44,11 @@ public class GalleryManagerExx {
   }
   //---------------------------------------------------------------------------
   public void setStartPos(int startPosition) {
-    mStartPos = startPosition;
+    //mStartPos = startPosition;
   }
   //---------------------------------------------------------------------------
   public void clearStartPos() {
-    mStartPos = -1;
+    //mStartPos = -1;
   }
   //---------------------------------------------------------------------------
   public void getImage(final int position,final ImageView imageView) {

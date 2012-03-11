@@ -64,4 +64,13 @@ public class FrameImageView extends ImageView {
     //}
   }
   //---------------------------------------------------------------------------
+  public void release() {
+    mFrameBitmap.recycle();
+    mFrameBitmap=null;
+    mOnlineBitmap.recycle();
+    mOnlineBitmap=null;
+    mOfflineBitmap.recycle();
+    mOfflineBitmap=null;
+  }
+  //---------------------------------------------------------------------------
 }

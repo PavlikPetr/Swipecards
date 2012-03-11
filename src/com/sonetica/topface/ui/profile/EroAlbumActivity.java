@@ -5,7 +5,6 @@ import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
 import com.sonetica.topface.data.PhotoOpen;
-import com.sonetica.topface.data.PhotoVote;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.PhotoOpenRequest;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class EroAlbumActivity extends Activity implements View.OnClickListener {
@@ -34,7 +32,7 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
   private Button mBuyButton;
   private Button mNextButton;
   private ImageView mEroView;
-  private ProgressBar mProgress;
+  //private ProgressBar mProgress;
   private LinkedList<Album> mAlbumsList;
   private ProgressDialog mProgressDialog;
   // States
@@ -66,7 +64,7 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
     mEroView = ((ImageView)findViewById(R.id.ivEroPhoto));
     
     // Progress
-    mProgress = (ProgressBar)findViewById(R.id.pgrsEroAlbum);
+    //mProgress = (ProgressBar)findViewById(R.id.pgrsEroAlbum);
     
     // button рекомендую
     mLikeButton = ((Button)findViewById(R.id.btnEroAlbumLike));
@@ -101,8 +99,9 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
     mCurrentPos = getIntent().getIntExtra(INTENT_ALBUM_POS,-1);
 
-    if(mUserId==-1 || mCurrentPos==-1)
+    if(mUserId==-1 || mCurrentPos==-1) {
       finish();
+    }
     
     // Progress Dialog
     mProgressDialog = new ProgressDialog(this);
@@ -113,14 +112,14 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
   }
   //---------------------------------------------------------------------------
   public void voteImage(int vote) {
-    PhotoVoteRequest photoVoteRequest = new PhotoVoteRequest(this);
+    PhotoVoteRequest photoVoteRequest = new PhotoVoteRequest(getApplicationContext());
     photoVoteRequest.uid   = mUserId;
     photoVoteRequest.photo = mAlbumsList.get(mCurrentPos).id;
     photoVoteRequest.vote  = vote; 
     photoVoteRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        PhotoVote photoVote = PhotoVote.parse(response);
+        //PhotoVote photoVote = PhotoVote.parse(response);
       }
       @Override
       public void fail(int codeError,Response response) {
@@ -152,7 +151,7 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
 
     } else {  // запрос на покупку
 
-      PhotoOpenRequest photoOpenRequest = new PhotoOpenRequest(this);
+      PhotoOpenRequest photoOpenRequest = new PhotoOpenRequest(getApplicationContext());
       photoOpenRequest.uid = mUserId;
       photoOpenRequest.photo = album.id;
       photoOpenRequest.callback(new ApiHandler() {
@@ -166,11 +165,13 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
             new Thread(new LoaderEroPhoto()).start();     // загрузка эро фотографии
             
           } else
-            startActivity(new Intent(EroAlbumActivity.this,BuyingActivity.class));  // окно на покупку монет
+            startActivity(new Intent(EroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));  // окно на покупку монет
         }
         @Override
         public void fail(int codeError,Response response) {
-          EroAlbumActivity.this.finish();  // какие-то неполадки
+          if(codeError==Response.PAYMENT)
+            startActivity(new Intent(EroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));
+          EroAlbumActivity.this.finish();
         }
       }).exec();
       

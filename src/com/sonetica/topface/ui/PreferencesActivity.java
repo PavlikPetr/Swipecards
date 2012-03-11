@@ -33,7 +33,7 @@ public class PreferencesActivity extends PreferenceActivity {
           SharedPreferences preferences = getSharedPreferences(Global.TOKEN_PREFERENCES_TAG, Context.MODE_PRIVATE);
           String sn = preferences.getString(AuthToken.KEY_SOCIAL_NETWORK,"");
           if(sn.length()>0) {
-            Intent intent = new Intent(PreferencesActivity.this, SocialWebActivity.class);
+            Intent intent = new Intent(PreferencesActivity.this.getApplicationContext(), SocialWebActivity.class);
             if(sn.equals(AuthToken.SN_VKONTAKTE))
               intent.putExtra(SocialWebActivity.TYPE,SocialWebActivity.TYPE_VKONTAKTE);
             if(sn.equals(AuthToken.SN_FACEBOOK))

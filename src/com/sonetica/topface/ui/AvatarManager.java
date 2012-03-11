@@ -2,11 +2,11 @@ package com.sonetica.topface.ui;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.sonetica.topface.App;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,15 +21,15 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
   // Data
   private LinkedList<T> mDataList;
   private HashMap<Integer,Bitmap> mCache;
-  private ExecutorService mThreadsPool;
+  //private ExecutorService mThreadsPool;
   private boolean mBusy; 
   //Constants
-  private static final int THREAD_DEFAULT = 2;
+  //private static final int THREAD_DEFAULT = 2;
   //---------------------------------------------------------------------------
   public AvatarManager(Context context,LinkedList<T> dataList) {
     mDataList = dataList;
     mCache = new HashMap<Integer,Bitmap>();
-    mThreadsPool = Executors.newFixedThreadPool(THREAD_DEFAULT);
+    //mThreadsPool = Executors.newFixedThreadPool(THREAD_DEFAULT);
   }
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<T> dataList) {
@@ -77,35 +77,46 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
   }
   //---------------------------------------------------------------------------
   public void loadingImages(final int position,final ImageView imageView) {
-    mThreadsPool.execute(new Runnable() {
+    //mThreadsPool.execute(new Runnable() {
+    new Thread(new Runnable() {
       @Override
       public void run() {
-        if(mBusy) return;
+        try {
+          if(mBusy) return;
         
-        final Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink());
-        Bitmap clippedBitmap = Utils.clipping(rawBitmap,imageView.getWidth(),imageView.getHeight());
-        if(clippedBitmap==null)
-          return;
-        final Bitmap roundBitmap = Utils.getRoundedCornerBitmap(clippedBitmap,clippedBitmap.getWidth(),clippedBitmap.getHeight(),12); // mRadius
-        
-        if(roundBitmap!=null) {
-          imageView.post(new Runnable() {
-            @Override
-            public void run() {
-              imageView.setImageBitmap(roundBitmap);
-            }
-          });
-          mCache.put(position,roundBitmap);
+          final Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink());
+          Bitmap clippedBitmap = Utils.clipping(rawBitmap,imageView.getWidth(),imageView.getHeight());
+          if(clippedBitmap==null)
+            return;
+          final Bitmap roundBitmap = Utils.getRoundedCornerBitmap(clippedBitmap,clippedBitmap.getWidth(),clippedBitmap.getHeight(),12); // mRadius
+          
+          if(roundBitmap!=null) {
+            imageView.post(new Runnable() {
+              @Override
+              public void run() {
+                imageView.setImageBitmap(roundBitmap);
+              }
+            });
+            if(mCache!=null)
+              mCache.put(position,roundBitmap);
+          }
+        } catch (Exception e) {
+          Debug.log(App.TAG,"thread error:"+e);
         }
       } 
-    });
+    }).start();
   }
   //---------------------------------------------------------------------------
   public void release() {
-    mCache.clear();
+    if(mCache!=null)
+      mCache.clear();
     mCache = null;
-    mThreadsPool.shutdown();
-    mThreadsPool = null;
+    
+    mDataList=null;
+    
+//    if(mThreadsPool!=null)
+//      mThreadsPool.shutdown();
+//    mThreadsPool = null;
   }
   //---------------------------------------------------------------------------
 }

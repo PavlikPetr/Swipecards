@@ -1,5 +1,6 @@
 package com.sonetica.topface.ui.inbox;
 
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.ui.AvatarManager;
@@ -28,9 +29,10 @@ public class InboxListAdapter extends BaseAdapter {
   // Data
   private LayoutInflater mInflater;
   private AvatarManager<Inbox> mAvatarManager;
+  private int mOwnerCityID;
   // Constants
   private static final int T_ALL   = 0;
-  private static final int T_CITY  = 2; // PITER
+  private static final int T_CITY  = 1; // PITER
   private static final int T_COUNT = 2;
   private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   //---------------------------------------------------------------------------
@@ -38,6 +40,7 @@ public class InboxListAdapter extends BaseAdapter {
     mAvatarManager = avatarManager;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     //mInflater = LayoutInflater.from(context);
+    mOwnerCityID = Data.s_Profile.city_id;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -62,7 +65,7 @@ public class InboxListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   @Override
   public int getItemViewType(int position) {
-    return mAvatarManager.get(position).city_id==T_CITY ? 1 : 0; // T_CITY
+    return mAvatarManager.get(position).city_id==mOwnerCityID ? T_CITY : T_ALL;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -83,10 +86,10 @@ public class InboxListAdapter extends BaseAdapter {
       holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
       
       switch(type) {
-        case 0:
+        case T_ALL:
           convertView.setBackgroundResource(R.drawable.item_gallery_all_selector);
           break;
-        case 1:
+        case T_CITY:
           convertView.setBackgroundResource(R.drawable.item_gallery_city_selector);
           break;
       }
@@ -137,6 +140,11 @@ public class InboxListAdapter extends BaseAdapter {
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
     
     return convertView;
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    mInflater=null;
+    mAvatarManager=null;
   }
   //---------------------------------------------------------------------------
 }

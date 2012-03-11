@@ -5,7 +5,6 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.History;
 import com.sonetica.topface.ui.RoundedImageView;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +24,8 @@ public class ChatListAdapter extends BaseAdapter {
   // Data
   private int mUserId;
   private LinkedList<History> mList;
-  private Bitmap baby;
-  private Bitmap me;
+  //private Bitmap baby;
+  //private Bitmap me;
   /* содержит тип итема для отрисовки необходимого слоя */
   private LayoutInflater mInflater;
   private LinkedList<Integer> mItemLayoutList = new LinkedList<Integer>();

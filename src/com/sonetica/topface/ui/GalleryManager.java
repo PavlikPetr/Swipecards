@@ -2,8 +2,6 @@ package com.sonetica.topface.ui;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import com.sonetica.topface.App;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
@@ -32,7 +30,9 @@ public class GalleryManager<T extends AbstractData> implements OnScrollListener 
   }
   //---------------------------------------------------------------------------
   // Data
-  private ExecutorService mThreadsPool;
+  //private int mStartPosition;
+  //private int mEndPosition;
+  //private ExecutorService mThreadsPool;  // что за хуйня с пулами потоков ???
   private LinkedList<T> mDataList;
   // кэш
   private MemoryCache  mMemoryCache;
@@ -43,11 +43,11 @@ public class GalleryManager<T extends AbstractData> implements OnScrollListener 
   // скролинг
   public  boolean mBusy;
   // Constants
-  private static final int THREAD_DEFAULT = 4;
+  //private static final int THREAD_DEFAULT = 4;
   //---------------------------------------------------------------------------
   public GalleryManager(Context context,LinkedList<T> dataList) {
     mDataList     = dataList;
-    mThreadsPool  = Executors.newFixedThreadPool(THREAD_DEFAULT);
+    //mThreadsPool  = Executors.newFixedThreadPool(THREAD_DEFAULT);
     mMemoryCache  = new MemoryCache();
     mStorageCache = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
     
@@ -64,13 +64,16 @@ public class GalleryManager<T extends AbstractData> implements OnScrollListener 
     return mDataList.get(position);
   }
   //---------------------------------------------------------------------------
+  public int size() {
+    return mDataList.size();
+  }
+  //---------------------------------------------------------------------------
   public void getImage(final int position,final ImageView imageView) {
     Bitmap bitmap = mMemoryCache.get(position); 
     
     if(bitmap!=null)
       imageView.setImageBitmap(bitmap);
     else {
-      //imageView.setImageResource(R.drawable.im_black_square);
       imageView.setImageResource(R.drawable.icon_people);
       if(!mBusy) {
         bitmap = mStorageCache.load(mDataList.get(position).getSmallLink());
@@ -84,29 +87,29 @@ public class GalleryManager<T extends AbstractData> implements OnScrollListener 
   }
   //---------------------------------------------------------------------------
   private void loadingImages(final int position,final ImageView imageView) {
-    mThreadsPool.execute(new Runnable() {
+
+    //mThreadsPool.execute(new Runnable() {
+    new Thread(new Runnable() {
       @Override
       public void run() {
-        if(mBusy) return;
-
-        // Исходное загруженное изображение
-        Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
-        if(rawBitmap==null) 
-          return;
-
-        // Исходный размер загруженного изображения
-        int width  = rawBitmap.getWidth();
-        int height = rawBitmap.getHeight();
-        
-        // буль, длиная фото или высокая
-        boolean LEG = false;
-
-        if(width >= height) 
-          LEG = true;
-        
-        if(mBusy) return;
-        try {        
+        try {
+          // Исходное загруженное изображение
+          Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
+          if(rawBitmap==null) 
+            return;
+  
+          // Исходный размер загруженного изображения
+          int width  = rawBitmap.getWidth();
+          int height = rawBitmap.getHeight();
           
+          // буль, длинная фото или высокая
+          boolean LEG = false;
+  
+          if(width >= height) 
+            LEG = true;
+          
+          if(mBusy) return;
+       
           // коффициент сжатия фотографии
           float ratio = Math.max(((float)mBitmapWidth)/width,((float) mBitmapHeight)/height);
           
@@ -142,24 +145,28 @@ public class GalleryManager<T extends AbstractData> implements OnScrollListener 
             }
           });
         } catch (Exception e) {
-          Debug.log(App.TAG,"Error clipping:"+e);
+          Debug.log(App.TAG,"thread error:"+e);
         }
       } // run
-    }); // thread
-  }
-  //---------------------------------------------------------------------------
-  public int size() {
-    return mDataList.size();
+    }).start(); // thread
+
   }
   //---------------------------------------------------------------------------
   public void release() {
-    mThreadsPool.shutdown();
+    //mThreadsPool.shutdown();
     mMemoryCache  = null;
     mStorageCache = null;
+    if(mDataList!=null)
+      mDataList.clear();
+    mDataList = null;
   }
   //---------------------------------------------------------------------------
   @Override
   public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
+//    if(!mBusy) {
+//      mStartPosition = firstVisibleItem;
+//      mEndPosition   = mStartPosition + 10; 
+//    }
   }
   //---------------------------------------------------------------------------
   @Override

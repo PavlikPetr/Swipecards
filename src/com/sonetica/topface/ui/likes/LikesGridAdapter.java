@@ -24,10 +24,9 @@ public class LikesGridAdapter extends BaseAdapter {
   // Data
   Context mContext;
   private LayoutInflater mInflater;
-  private GalleryManager mGalleryManager;
-  private int CITY = 2;  // ДАННЫЕ ИЗ ПРОФАЙЛА
+  private GalleryManager<Like> mGalleryManager;
   //---------------------------------------------------------------------------
-  public LikesGridAdapter(Context context,GalleryManager galleryManager) {
+  public LikesGridAdapter(Context context,GalleryManager<Like> galleryManager) {
     mContext = context;
     mInflater = LayoutInflater.from(context);
     mGalleryManager = galleryManager;
@@ -71,6 +70,12 @@ public class LikesGridAdapter extends BaseAdapter {
   @Override
   public long getItemId(int position) {
     return position;
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    mContext=null;
+    mInflater=null;
+    mGalleryManager=null;
   }
   //---------------------------------------------------------------------------
 }

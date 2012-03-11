@@ -93,10 +93,12 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
         LinkedList<SearchUser> userList = SearchUser.parse(response);
         if(firstQuery) {
           Debug.log(this,"update add");
-          mDatingControl.addDataList(userList);
+          if(mDatingControl!=null)                  // придумать блокировку запроса !!!
+            mDatingControl.addDataList(userList);
         } else {
           Debug.log(this,"update set");
-          mDatingControl.setDataList(userList);
+          if(mDatingControl!=null)
+            mDatingControl.setDataList(userList);
         }
       }
       @Override
@@ -230,7 +232,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
     switch(item.getItemId()) {
       case MENU_FILTER:
-        Intent intent = new Intent(this,FilterActivity.class);
+        Intent intent = new Intent(this.getApplicationContext(),FilterActivity.class);
         startActivityForResult(intent,FilterActivity.INTENT_FILTER_ACTIVITY);
       break;
     }

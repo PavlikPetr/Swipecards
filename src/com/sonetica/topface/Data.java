@@ -81,6 +81,14 @@ public class Data {
     return SSID;
   }
   //---------------------------------------------------------------------------
+  public static void removeSSID(Context context) {
+    SSID = "";
+    SharedPreferences preferences   = context.getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = preferences.edit();
+    editor.putString(context.getString(R.string.s_ssid),SSID);
+    editor.commit();
+  }
+  //---------------------------------------------------------------------------
   public static void clear() {
     /*
     s_SearchList.clear();

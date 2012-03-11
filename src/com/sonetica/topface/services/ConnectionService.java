@@ -56,8 +56,8 @@ public class ConnectionService extends Service {
   private void reAuth(final Packet packet) {
     Debug.log(this,"service reAuth");
 
-    AuthToken.Token token   = new AuthToken(this).getToken();
-    AuthRequest authRequest = new AuthRequest(this);
+    AuthToken.Token token   = new AuthToken(getApplicationContext()).getToken();
+    AuthRequest authRequest = new AuthRequest(getApplicationContext());
     authRequest.platform = token.getSocialNet();
     authRequest.sid      = token.getUserId();
     authRequest.token    = token.getTokenKey();
@@ -69,14 +69,14 @@ public class ConnectionService extends Service {
         Response ssidResponse = (Response)msg.obj;
         if(ssidResponse.code==0) {
           Auth auth = Auth.parse(ssidResponse);
-          Data.saveSSID(ConnectionService.this,auth.ssid);
+          Data.saveSSID(ConnectionService.this.getApplicationContext(),auth.ssid);
           packet.mRequest.ssid = auth.ssid;
           Response response = new Response(sendPacket(packet));
           packet.sendMessage(Message.obtain(null,0,response));
         } else if(ssidResponse.code>0) {
             ; // ?????????
         } else
-          ConnectionService.this.startActivity(new Intent(ConnectionService.this,SocialActivity.class));
+          ConnectionService.this.startActivity(new Intent(ConnectionService.this.getApplicationContext(),SocialActivity.class));
       }
     });
   }

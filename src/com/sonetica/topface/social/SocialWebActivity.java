@@ -62,6 +62,10 @@ public class SocialWebActivity extends Activity {
   private class WebHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
+      mWebView.clearCache(true);
+      mWebView.clearFormData();
+      mWebView.clearView();
+      mWebView.clearHistory();
       if(msg.what==AuthToken.AUTH_COMPLETE) {
         // отправка токена на TP сервер
         AuthToken.Token token   = (AuthToken.Token)msg.obj;

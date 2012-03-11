@@ -87,7 +87,7 @@ public class ChatActivity extends Activity {
         InputMethodManager imm = (InputMethodManager)ChatActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mEdBox.getWindowToken(),0);
         // формирование сообщения
-        MessageRequest message = new MessageRequest(ChatActivity.this);
+        MessageRequest message = new MessageRequest(ChatActivity.this.getApplicationContext());
         message.message = mEdBox.getText().toString(); 
         message.userid  = mUserId;
         message.callback(new ApiHandler() {
@@ -123,7 +123,7 @@ public class ChatActivity extends Activity {
   //---------------------------------------------------------------------------
   private void create() {
     // ListAdapter
-    mAdapter = new ChatListAdapter(ChatActivity.this,mUserId,mHistoryList);
+    mAdapter = new ChatListAdapter(ChatActivity.this.getApplicationContext(),mUserId,mHistoryList);
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
@@ -138,7 +138,7 @@ public class ChatActivity extends Activity {
     if(!isRefresh)
       mProgressDialog.show();
     
-    final HistoryRequest historyRequest = new HistoryRequest(ChatActivity.this);
+    final HistoryRequest historyRequest = new HistoryRequest(ChatActivity.this.getApplicationContext());
     historyRequest.userid = mUserId; 
     historyRequest.offset = offset;
     historyRequest.limit  = LIMIT;
@@ -146,10 +146,7 @@ public class ChatActivity extends Activity {
       @Override
       public void success(Response response) {
         LinkedList<History> dataList = History.parse(response);
-        
-        if(dataList!=null)
-          mAdapter.setDataList(dataList);
-
+        mAdapter.setDataList(dataList);
         mAdapter.notifyDataSetChanged();
         mListView.onRefreshComplete();
         if(mProgressDialog.isShowing())

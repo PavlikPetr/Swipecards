@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 /*
@@ -35,7 +34,7 @@ public class RatesActivity extends Activity {
   private ProgressDialog mProgressDialog;
   private DoubleBigButton mDoubleButton;
   // Constants
-  private static final int LIMIT = 40;
+  private static final int LIMIT = 60;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +74,7 @@ public class RatesActivity extends Activity {
    mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       Intent intent = new Intent(RatesActivity.this,ProfileActivity.class);
+       Intent intent = new Intent(RatesActivity.this.getApplicationContext(),ProfileActivity.class);
        intent.putExtra(ProfileActivity.INTENT_USER_ID,mRatesDataList.get(position).uid);
        startActivityForResult(intent,0);
      }
@@ -104,12 +103,14 @@ public class RatesActivity extends Activity {
     if(isProgress)
       mProgressDialog.show();
 
-    RatesRequest likesRequest = new RatesRequest(this);
+    RatesRequest likesRequest = new RatesRequest(getApplicationContext());
     likesRequest.limit = LIMIT;
     likesRequest.only_new = isNew;
     likesRequest.callback(new ApiHandler(){
       @Override
       public void success(Response response) {
+        if(RatesActivity.this==null)
+          return;
         LinkedList<Rate> ratesList = Rate.parse(response);
         if(ratesList.size()>0) {
          mRatesDataList = ratesList;
@@ -131,14 +132,19 @@ public class RatesActivity extends Activity {
     // ListAdapter
     mAvatarManager = new AvatarManager<Rate>(this,mRatesDataList);
     mListView.setOnScrollListener(mAvatarManager);    
-    mAdapter = new RatesListAdapter(this,mAvatarManager);
+    mAdapter = new RatesListAdapter(getApplicationContext(),mAvatarManager);
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
   private void release() {
     mListView=null;
-    mAdapter=null;
+    
+    if(mAdapter!=null)
+      mAdapter.release();
+    mAdapter = null;
+    
     mRatesDataList=null;
+    
     if(mAvatarManager!=null) {
       mAvatarManager.release();
       mAvatarManager=null;
@@ -146,7 +152,8 @@ public class RatesActivity extends Activity {
     if(StarView.mStarYellow!=null)
       StarView.mStarYellow.recycle();
     StarView.mStarYellow=null;
-    if(mProgressDialog!=null) mProgressDialog=null;
+    
+    mProgressDialog=null;
   }
   //---------------------------------------------------------------------------
   @Override

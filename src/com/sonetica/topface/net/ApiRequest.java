@@ -31,10 +31,13 @@ public abstract class ApiRequest {
     new Thread() {
       @Override
       public void run() {
-        Response response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
-        if(response.code == 3) // ошибка авторизации
+        String rawResponse = Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString());
+        if(rawResponse==null)
+          rawResponse = Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString());
+        Response response = new Response(rawResponse);
+        if(response.code == Response.SESSION_NOT_FOUND) // ошибка авторизации
           reAuth();  // реавторизация на сервере топфейса
-        else
+        else 
           mHandler.sendMessage(Message.obtain(null,0,response));
     }}.start();
   }
@@ -55,7 +58,7 @@ public abstract class ApiRequest {
     authRequest.clientid      = Global.CLIENT_ID;
 
     Response response = new Response(Http.httpSendTpRequest(Global.API_URL,authRequest.toString()));
-    if(response.code == 0) {
+    if(response.code == Response.RESULT_OK) {
       Auth auth = Auth.parse(response);
       Data.saveSSID(mContext,auth.ssid);
       ssid = Data.SSID;
@@ -64,7 +67,7 @@ public abstract class ApiRequest {
       
       mHandler.sendMessage(Message.obtain(null,0,response));
     } else
-       mHandler.sendMessage(Message.obtain(null,0,response));
+      mHandler.sendMessage(Message.obtain(null,0,response));
   }
   //---------------------------------------------------------------------------
   public static void shutdown() {

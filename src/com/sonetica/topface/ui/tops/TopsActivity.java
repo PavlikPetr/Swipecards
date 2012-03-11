@@ -64,9 +64,7 @@ public class TopsActivity extends Activity {
     mActionData.city_popup_position = preferences.getInt(getString(R.string.s_tops_city_position),0);
     
     // Data
-    //mTopsList   = Data.s_TopsList;
-    mTopsList = new LinkedList<TopUser>();
-    //mCitiesList = Data.s_CitiesList;
+    mTopsList   = new LinkedList<TopUser>();
     mCitiesList = new LinkedList<City>();
 
     // Header
@@ -128,7 +126,7 @@ public class TopsActivity extends Activity {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //mGalleryManager.stop();
-        Intent intent = new Intent(TopsActivity.this,ProfileActivity.class);
+        Intent intent = new Intent(TopsActivity.this.getApplicationContext(),ProfileActivity.class);
         intent.putExtra(ProfileActivity.INTENT_USER_ID,mTopsList.get(position).uid);
         startActivityForResult(intent,0);
       }
@@ -145,8 +143,8 @@ public class TopsActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mGalleryManager = new GalleryManager<TopUser>(TopsActivity.this,mTopsList);
-    mGridAdapter    = new TopsGridAdapter(TopsActivity.this,mGalleryManager);
+    mGalleryManager = new GalleryManager<TopUser>(getApplicationContext(),mTopsList);
+    mGridAdapter    = new TopsGridAdapter(getApplicationContext(),mGalleryManager);
     mGallery.setAdapter(mGridAdapter);
     mGallery.setOnScrollListener(mGalleryManager);
     
@@ -167,12 +165,14 @@ public class TopsActivity extends Activity {
   //---------------------------------------------------------------------------
   private void update() { // refreshed - грузить локально или инет при первом запуске
     mProgressDialog.show();
-    TopsRequest topRequest = new TopsRequest(this);
+    TopsRequest topRequest = new TopsRequest(getApplicationContext());
     topRequest.sex  = mActionData.sex;
     topRequest.city = mActionData.city_id;
     topRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
+        if(TopsActivity.this==null)
+          return;
         mTopsList.clear();
         mTopsList.addAll(TopUser.parse(response));
         create();
@@ -190,11 +190,13 @@ public class TopsActivity extends Activity {
       return;
     }
     mProgressDialog.show();
-    CitiesRequest citiesRequest = new CitiesRequest(this);
+    CitiesRequest citiesRequest = new CitiesRequest(getApplicationContext());
     citiesRequest.type = "top";
     citiesRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
+        if(TopsActivity.this==null)
+          return;
         mCitiesList.addAll(City.parse(response));
         mProgressDialog.cancel();
         showCitiesDialog();
@@ -206,7 +208,7 @@ public class TopsActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   void showCitiesDialog() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(TopsActivity.this);
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle("Chooser");
     String[] cities = new String[mCitiesList.size()];
     for(int i=0;i<mCitiesList.size();++i)

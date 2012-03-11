@@ -150,6 +150,7 @@ public class DatingControl extends ViewGroup {
     mCounter = new TextView(context);
     mCounter.setGravity(Gravity.CENTER_HORIZONTAL);
     mCounter.setTextColor(Color.LTGRAY);
+    mCounter.setVisibility(View.INVISIBLE);
     addView(mCounter);
   }
   //---------------------------------------------------------------------------
@@ -289,6 +290,8 @@ public class DatingControl extends ViewGroup {
   public void next() {
     Debug.log(this,"next");
     // блокировать
+    mFaceView.setVisibility(View.INVISIBLE);
+    mCounter.setVisibility(View.INVISIBLE);
     mProgress.setVisibility(View.VISIBLE);
     mRateControl.setBlock(false);
     mNotHide = false;

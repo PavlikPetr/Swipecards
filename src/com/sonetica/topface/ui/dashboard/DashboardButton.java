@@ -18,8 +18,8 @@ import android.widget.Button;
 public class DashboardButton extends Button {
   // Data
   public int mNotify;
-  private static Paint mPaint;
-  private Bitmap mRedNews;
+  public static Bitmap mRedNews;
+  public static Paint mPaint;
   static {
     mPaint = new Paint();
     mPaint.setTextSize(18);

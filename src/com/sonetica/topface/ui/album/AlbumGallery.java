@@ -8,9 +8,9 @@ import android.widget.Gallery;
 
 public class AlbumGallery extends Gallery implements View.OnTouchListener {
   // Data
-  private float   mStartX = -1;
-  private float[] mLastXs = new float[EVENT_COUNT];
-  private static final int EVENT_COUNT = 3;
+  //private float   mStartX = -1;
+  //private float[] mLastXs = new float[EVENT_COUNT];
+  //private static final int EVENT_COUNT = 3;
   //---------------------------------------------------------------------------
   public AlbumGallery(Context context, AttributeSet attrs) {
     super(context, attrs);

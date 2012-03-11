@@ -5,6 +5,7 @@ import com.sonetica.topface.R;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -13,20 +14,23 @@ import android.widget.TextView;
 
 public class ResourcesView extends LinearLayout {
   // Data
-  private TextView mPowerTxt;
-  private TextView mMoneyTxt;
+  private TextView  mPowerTxt;
+  private TextView  mMoneyTxt;
   private ImageView mPowerImg;
   private ImageView mMoneyImg;
   //---------------------------------------------------------------------------
   public ResourcesView(Context context) {
-    super(context);
+    this(context,null);
+  }
+  //---------------------------------------------------------------------------
+  public ResourcesView(Context context,AttributeSet attrs) {
+    super(context,attrs);
     
     int padding = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
     
     setBackgroundColor(Color.TRANSPARENT);
     setOrientation(HORIZONTAL);
     setPadding(padding,padding,0,0);
-    
 
     // power
     mPowerTxt = new TextView(context);

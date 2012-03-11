@@ -22,7 +22,6 @@ import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /*
  *            "Диалоги"
@@ -88,7 +87,7 @@ public class InboxActivity extends Activity {
     mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
-        Intent intent = new Intent(InboxActivity.this,ChatActivity.class);
+        Intent intent = new Intent(InboxActivity.this.getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxDataList.get(position).uid);
         startActivityForResult(intent,0);
       }
@@ -110,7 +109,7 @@ public class InboxActivity extends Activity {
     if(isProgress)
       mProgressDialog.show();
     
-    InboxRequest inboxRequest = new InboxRequest(InboxActivity.this);
+    InboxRequest inboxRequest = new InboxRequest(getApplicationContext());
     inboxRequest.limit = LIMIT;
     inboxRequest.only_new = isNew;
     inboxRequest.callback(new ApiHandler() {
@@ -148,21 +147,25 @@ public class InboxActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mAvatarManager = new AvatarManager<Inbox>(this,mInboxDataList);
+    mAvatarManager = new AvatarManager<Inbox>(getApplicationContext(),mInboxDataList);
     mListView.setOnScrollListener(mAvatarManager);    
-    mAdapter = new InboxListAdapter(this,mAvatarManager);
+    mAdapter = new InboxListAdapter(getApplicationContext(),mAvatarManager);
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
   private void release() {
-    if(mListView!=null)       mListView = null;
-    if(mAdapter!=null)        mAdapter = null;
+    mListView = null;
+    if(mAdapter!=null)
+      mAdapter.release();
+    mAdapter = null;
     if(mAvatarManager!=null) {
       mAvatarManager.release();
       mAvatarManager = null;
     }
-    if(mInboxDataList!=null)      mInboxDataList = null;
-    if(mProgressDialog!=null) mProgressDialog = null;
+    if(mInboxDataList!=null)
+      mInboxDataList.clear();
+    mInboxDataList = null;
+    mProgressDialog = null;
   }
   //---------------------------------------------------------------------------
   @Override

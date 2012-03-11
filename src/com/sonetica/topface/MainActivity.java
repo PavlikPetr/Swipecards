@@ -20,12 +20,12 @@ public class MainActivity extends Activity {
     Debug.log(this,"+onCreate");
     
     //startService(new Intent(this,ConnectionService.class));
-    startService(new Intent(this,StatisticService.class));
+    startService(new Intent(getApplicationContext(),StatisticService.class));
     
     if(Data.SSID.length()>0)
-      startActivity(new Intent(this,DashboardActivity.class));
+      startActivity(new Intent(getApplicationContext(),DashboardActivity.class));
     else
-      startActivity(new Intent(this,SocialActivity.class));
+      startActivity(new Intent(getApplicationContext(),SocialActivity.class));
     
     finish();    
     

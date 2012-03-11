@@ -12,14 +12,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddPhotoActivity extends Activity {
   // Data
   private Uri mImageUri;
-  private ImageView mImage;
+  //private ImageView mImage;
   private ProgressDialog mProgress;
   // Constants
   public static final int GALLARY_IMAGE_ACTIVITY_REQUEST_CODE = 100;

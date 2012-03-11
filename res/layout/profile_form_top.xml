@@ -58,6 +58,7 @@
           android:textStyle="bold"
           android:visibility="gone"
           android:layout_marginTop="10dp"
+          android:layout_gravity="right"
           android:id="@+id/btnProfileChat"/>
       
       <!-- Edit Button -->
@@ -71,25 +72,58 @@
           android:textStyle="bold"
           android:visibility="gone"
           android:layout_marginTop="10dp"
+          android:layout_gravity="right"
           android:id="@+id/btnProfileEdit"/>
+      
+      <!-- Exit Button -->
+      <Button 
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@drawable/clr_text_btn"
+          android:textSize="12sp"
+          android:background="@drawable/profile_edit_selector"
+          android:text="@string/profile_btn_exit"
+          android:textStyle="bold"
+          android:visibility="gone"
+          android:layout_marginTop="10dp"
+          android:layout_gravity="right"
+          android:id="@+id/btnProfileExit"/>
+    
     </LinearLayout>
+    
   </LinearLayout>
   
   <!-- monew, power, buy btn -->
-  <LinearLayout 
+  <RelativeLayout 
       android:id="@+id/lvProfileBuying"
       android:layout_width="fill_parent"
-      android:layout_height="50dp"
-      android:layout_gravity="center_vertical"       
-      android:orientation="horizontal"
+      android:layout_height="52dp"
+      android:gravity="center_vertical"       
       android:visibility="gone"
       android:background="#5FFFFFFF" >
+    
+    <!-- Resources -->
+    <com.sonetica.topface.ui.dating.ResourcesView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
+    
+    <!-- Buying -->
     <Button
         android:id="@+id/btnProfileBuying"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"  
-        android:text="@string/profile_btn_buy"/>
-  </LinearLayout>
+        android:layout_height="wrap_content"
+        android:textColor="@drawable/clr_text_btn"
+        android:background="@drawable/profile_edit_selector"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:layout_marginRight="10dp"
+        android:text="@string/profile_btn_buy" />
+  </RelativeLayout>
   
   <!-- photo album preview -->
   <TextView

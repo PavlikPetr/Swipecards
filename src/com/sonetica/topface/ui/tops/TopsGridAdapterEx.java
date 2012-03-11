@@ -1,12 +1,8 @@
 package com.sonetica.topface.ui.tops;
 
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.TopUser;
-import com.sonetica.topface.net.Http;
 import com.sonetica.topface.ui.ThumbView;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Device;
@@ -28,7 +24,7 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
   private LayoutInflater mInflater;
   private LinkedList<TopUser> mData;
   //private ExecutorService mThread;
-  private HashMap<Integer,Bitmap> mCache;
+  //private HashMap<Integer,Bitmap> mCache;
   private int mBitmapWidth;
   private int mBitmapHeight;
   private Bitmap[] mArray;
@@ -38,8 +34,8 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
   };
   //threads
   private boolean isScrolled; // idle(0) scrolling(1)
-  private int startPosition;
-  private int endPosition = startPosition + 10;
+  //private int startPosition;
+  //private int endPosition = startPosition + 10;
   //---------------------------------------------------------------------------
   public TopsGridAdapterEx(Context context,LinkedList<TopUser> topUserList) {
     mInflater = LayoutInflater.from(context);
@@ -47,7 +43,7 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
     mBitmapWidth  = Device.getDisplay(context).getWidth()/4;
     mBitmapHeight = (int)(mBitmapWidth*1.25);
     //mThread = Executors.newSingleThreadExecutor();
-    mCache  = new HashMap<Integer,Bitmap>();
+    //mCache  = new HashMap<Integer,Bitmap>();
     mArray  = new Bitmap[topUserList.size()];
     new Thread(RUN).start();
   }
@@ -133,10 +129,10 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
   //---------------------------------------------------------------------------
   @Override
   public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
-    if(!isScrolled) {
-      startPosition = firstVisibleItem;
-      endPosition   = startPosition + 10; 
-    }
+//    if(!isScrolled) {
+//      startPosition = firstVisibleItem;
+//      endPosition   = startPosition + 10; 
+//    }
   }
   //---------------------------------------------------------------------------
   @Override

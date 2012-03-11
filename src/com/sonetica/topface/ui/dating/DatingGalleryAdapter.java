@@ -3,6 +3,7 @@ package com.sonetica.topface.ui.dating;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.MemoryCache;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
@@ -162,13 +163,16 @@ public class DatingGalleryAdapter extends BaseAdapter {
     if(mCache.containsKey(position))
       return;
     
+    Debug.log(this,"preloader:"+mPrevPosition+":"+position);
+    
     new Thread() {
       @Override
       public void run() {
         Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);
         if(rawBitmap!=null && position==0)
           rawBitmap = Utils.clipping(rawBitmap,width,height);
-        mCache.put(position,rawBitmap);
+        if(mCache!=null)
+          mCache.put(position,rawBitmap);
       }
     }.start();
     

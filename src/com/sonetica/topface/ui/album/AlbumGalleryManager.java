@@ -1,8 +1,6 @@
 package com.sonetica.topface.ui.album;
 
 import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
@@ -19,20 +17,20 @@ public class AlbumGalleryManager {
   // Data
   private MemoryCache  mMemoryCache;
   //private StorageCache mStorageCache;
-  private ExecutorService mThreadsPool;
+  //private ExecutorService mThreadsPool;
   private LinkedList<? extends AbstractData> mData;
   //private HashMap<ImageView,Integer> mLinkCache;
-  private int mThreadCount;
+  //private int mThreadCount;
   //Constants
-  private static final int THREAD_DEFAULT = 4;
+  //private static final int THREAD_DEFAULT = 4;
   //---------------------------------------------------------------------------
   public AlbumGalleryManager(Context context,LinkedList<? extends AbstractData> dataList) {
     mData = dataList;
-    mThreadCount  = THREAD_DEFAULT;
+    //mThreadCount  = THREAD_DEFAULT;
     mMemoryCache  = new MemoryCache();
     //mStorageCache = new StorageCache(context,StorageCache.EXTERNAL_CACHE);
     //mLinkCache    = new HashMap<ImageView,Integer>();
-    mThreadsPool  = Executors.newFixedThreadPool(mThreadCount);
+    //mThreadsPool  = Executors.newFixedThreadPool(mThreadCount);
   }
   //---------------------------------------------------------------------------
   public AbstractData get(int position) {
@@ -52,7 +50,8 @@ public class AlbumGalleryManager {
   }
   //---------------------------------------------------------------------------
   private void setImageToQueue(final Pair<ImageView,Integer> data) {
-    mThreadsPool.execute(new Runnable() {
+    //mThreadsPool.execute(new Runnable() {
+    new Thread(new Runnable() {
       @Override
       public void run() {
         if(isViewReused(data))
@@ -72,7 +71,7 @@ public class AlbumGalleryManager {
           }
         });
       }
-    });
+    }).start();
   }
   //-------------------------------------------------------------------------
   boolean isViewReused(Pair<ImageView,Integer> data){
@@ -85,13 +84,14 @@ public class AlbumGalleryManager {
   public void preload(final Integer index) {
     if(index>=size())
       return;
-    mThreadsPool.execute(new Runnable() {
+    //mThreadsPool.execute(new Runnable() {
+    new Thread(new Runnable() {
       @Override
       public void run() {
         Bitmap bitmap = Http.bitmapLoader(mData.get(index).getBigLink());
         mMemoryCache.put(index,bitmap);
       }
-    });
+    }).start();
   }
   //---------------------------------------------------------------------------
   public int size() {
@@ -99,7 +99,7 @@ public class AlbumGalleryManager {
   }
   //---------------------------------------------------------------------------
   public void release() {
-    mThreadsPool.shutdown();
+    //mThreadsPool.shutdown();
     mMemoryCache.clear();
   }
   //---------------------------------------------------------------------------

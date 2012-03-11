@@ -2,8 +2,6 @@ package com.sonetica.topface.ui.profile;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
 import com.sonetica.topface.net.Http;
@@ -22,7 +20,7 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
   private Context mContext;
   private LinkedList<Album> mAlbumList;
   private HashMap<Integer,Bitmap> mCache;
-  private ExecutorService mThreadsPool;
+  //private ExecutorService mThreadsPool;
   private boolean mBusy; 
   //---------------------------------------------------------------------------
   public PhotoEroGalleryAdapter(Context context,boolean bOwner) {
@@ -30,7 +28,7 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     mOwner = bOwner;
     mCache = new HashMap<Integer,Bitmap>();
     mAlbumList = new LinkedList<Album>();
-    mThreadsPool = Executors.newFixedThreadPool(2);
+    //mThreadsPool = Executors.newFixedThreadPool(2);
   }
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<Album> dataList) {
@@ -87,7 +85,8 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     view.cost = album.cost;
     view.likes = album.likes;
     view.dislikes = album.dislikes;
-    mThreadsPool.execute(new Runnable() {
+    //mThreadsPool.execute(new Runnable() {
+    new Thread(new Runnable() {
       @Override
       public void run() {
         if(!mBusy) {
@@ -102,7 +101,17 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
             });
         }
       }
-    });
+    }).start();
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    mContext=null;
+    if(mAlbumList!=null)
+      mAlbumList.clear();
+    mAlbumList=null;
+    if(mCache!=null)
+      mCache.clear();
+    mCache=null;
   }
   //---------------------------------------------------------------------------
   @Override

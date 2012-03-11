@@ -27,7 +27,7 @@ import android.widget.TextView;
 public class LikesActivity extends Activity {
   // Data
   private PullToRefreshGridView mGallery;
-  private LikesGridAdapter mLikesGridAdapter;
+  private LikesGridAdapter mAdapter;
   private GalleryManager<Like> mGalleryManager;
   private LinkedList<Like> mLikesDataList;
   private ProgressDialog mProgressDialog;
@@ -73,7 +73,7 @@ public class LikesActivity extends Activity {
    mGallery.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       Intent intent = new Intent(LikesActivity.this,ProfileActivity.class);
+       Intent intent = new Intent(LikesActivity.this.getApplicationContext(),ProfileActivity.class);
        intent.putExtra(ProfileActivity.INTENT_USER_ID,mLikesDataList.get(position).uid);
        startActivityForResult(intent,0);
      }
@@ -87,7 +87,7 @@ public class LikesActivity extends Activity {
    });
    
    // Progress Bar
-   mProgressDialog = new ProgressDialog(this);
+   mProgressDialog = new ProgressDialog(this); // getApplicationContext() падает
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
    
    create();
@@ -101,7 +101,7 @@ public class LikesActivity extends Activity {
   private void update(boolean isProgress, final boolean isNew) {
     if(isProgress)
       mProgressDialog.show();
-    LikesRequest likesRequest = new LikesRequest(this);
+    LikesRequest likesRequest = new LikesRequest(getApplicationContext());
     likesRequest.limit = LIMIT;
     likesRequest.only_new = isNew;
     likesRequest.callback(new ApiHandler() {
@@ -113,7 +113,7 @@ public class LikesActivity extends Activity {
           mLikesDataList=likesList;
           mDoubleButton.setChecked(isNew==false?DoubleBigButton.LEFT_BUTTON:DoubleBigButton.RIGHT_BUTTON);        
           mGalleryManager.setDataList(mLikesDataList);
-          mLikesGridAdapter.notifyDataSetChanged();
+          mAdapter.notifyDataSetChanged();
         } else
           mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
         mProgressDialog.cancel();
@@ -121,14 +121,16 @@ public class LikesActivity extends Activity {
       }
       @Override
       public void fail(int codeError,Response response) {
+        mProgressDialog.cancel();
+        update(true,true);
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mGalleryManager   = new GalleryManager<Like>(LikesActivity.this,mLikesDataList);
-    mLikesGridAdapter = new LikesGridAdapter(LikesActivity.this,mGalleryManager);
-    mGallery.getRefreshableView().setAdapter(mLikesGridAdapter);
+    mGalleryManager   = new GalleryManager<Like>(getApplicationContext(),mLikesDataList);
+    mAdapter = new LikesGridAdapter(getApplicationContext(),mGalleryManager);
+    mGallery.getRefreshableView().setAdapter(mAdapter);
     mGallery.setOnScrollListener(mGalleryManager);
   }
   //---------------------------------------------------------------------------
@@ -137,8 +139,13 @@ public class LikesActivity extends Activity {
       mGalleryManager.release();
       mGalleryManager=null;
     }
+    
     mGallery=null;
-    mLikesGridAdapter=null;
+    
+    if(mAdapter!=null)
+      mAdapter.release();
+    mAdapter = null;
+
     mLikesDataList=null;
     mProgressDialog=null;
   }

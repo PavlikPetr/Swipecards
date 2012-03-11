@@ -2,8 +2,6 @@ package com.sonetica.topface.ui.profile;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
 import com.sonetica.topface.net.Http;
@@ -22,7 +20,7 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
   private Context mContext;
   private LinkedList<Album> mAlbumList;
   private HashMap<Integer,Bitmap> mCache;
-  private ExecutorService mThreadsPool;
+  //private ExecutorService mThreadsPool;
   private boolean mBusy; 
   //---------------------------------------------------------------------------
   public PhotoGalleryAdapter(Context context,boolean bOwner) {
@@ -30,7 +28,7 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
     mOwner = bOwner;
     mCache = new HashMap<Integer,Bitmap>();
     mAlbumList = new LinkedList<Album>();
-    mThreadsPool = Executors.newFixedThreadPool(2);
+    //mThreadsPool = Executors.newFixedThreadPool(2);
   }
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<Album> dataList) {
@@ -82,12 +80,13 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
   //---------------------------------------------------------------------------
   private void loadingImage(final int position,final ProfileThumbView view) {
     final Album album = (Album)getItem(position);
-    mThreadsPool.execute(new Runnable() {
+    //mThreadsPool.execute(new Runnable() {
+    new Thread(new Runnable() {
       @Override
       public void run() {
         if(!mBusy) {
           final Bitmap bitmap = Http.bitmapLoader(album.getSmallLink());
-          if(bitmap!=null)
+          if(bitmap!=null && mCache!=null)
             mCache.put(position,bitmap);
             view.post(new Runnable() {
               @Override
@@ -97,7 +96,17 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
             });
         }
       }
-    });
+    }).start();
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    mContext=null;
+    if(mAlbumList!=null)
+      mAlbumList.clear();
+    mAlbumList=null;
+    if(mCache!=null)
+      mCache.clear();
+    mCache=null;    
   }
   //---------------------------------------------------------------------------
   @Override

@@ -17,13 +17,13 @@ public class LikesGridAdapterEx extends BaseAdapter {
   // Data
   Context mContext;
   private LayoutInflater mInflater;
-  private GalleryManager mGalleryManager;
+  private GalleryManager<Like> mGalleryManager;
   // class ViewHolder
   static class ViewHolder {
     ThumbView mThumbView;
   };
   //---------------------------------------------------------------------------
-  public LikesGridAdapterEx(Context context,GalleryManager galleryManager) {
+  public LikesGridAdapterEx(Context context,GalleryManager<Like> galleryManager) {
     mContext = context;
     mInflater = LayoutInflater.from(context);
     mGalleryManager = galleryManager;
