@@ -67,6 +67,10 @@
   <string name="profile_add_title">Добавить фотографию</string>
   <string name="profile_add_album">Добавить из альбома</string>
   <string name="profile_add_camera">Сделать снимок</string>
+  <string name="profile_coin_1">1 монета</string>
+  <string name="profile_coin_2">2 монеты</string>
+  <string name="profile_coin_3">3 монеты</string>
+  <string name="profile_ero_price">Цена</string>
 
   <!-- Dating Activity -->
   <string name="dating_header_title">Оценка фото</string>
@@ -106,7 +110,9 @@
   <string name="album_header_title">Альбом</string>
   <string name="album_add_photo_title">Добавить фотографию</string>
   <string name="album_menu_main">Сделать главной</string>
+  <string name="album_menu_did_main">Главная</string>
   <string name="album_menu_delete">Удалить</string>
+  <string name="album_menu_did_delete">Удалено</string>
   <string name="ero_album_btn_like">Рекомендую</string>
   <string name="ero_album_btn_dislike">Не рекомендую</string>
   <string name="ero_album_btn_buy">Оплатить следующую</string>

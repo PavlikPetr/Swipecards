@@ -21,6 +21,7 @@ import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -39,7 +40,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   // Data
   private int mUserId;
   private boolean mOwner;
-  private boolean mAddEroPhoto;
+  private boolean mAddEroState;
   private SwapView mSwapView;
   private Button mProfileButton;
   private Button mBuyingButton;
@@ -52,6 +53,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   private ProgressDialog mProgressDialog;
   private LinkedList<Album> mPhotoList; 
   private LinkedList<Album> mEroList;
+  private AlertDialog mAddPhotoDialog;
   // Info
   private TextView mName;
   private TextView mCity;
@@ -314,17 +316,16 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void addPhoto(boolean isEro) {
-    mAddEroPhoto = isEro;
+  private void addPhoto(boolean bEro) {
+    mAddEroState = bEro;
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(getString(R.string.album_add_photo_title));
     View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.profile_add_photo,null);
     view.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(this);
     view.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(this);
     builder.setView(view);
-    AlertDialog alert = builder.create();
-    alert.show();
-    //startActivity(new Intent(this,AddPhotoActivity.class));    
+    mAddPhotoDialog = builder.create();
+    mAddPhotoDialog.show();   
   }
   //---------------------------------------------------------------------------
   @Override
@@ -368,11 +369,13 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
         Intent intent = new Intent();
         intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
+        mAddPhotoDialog.cancel();
       } break;
       case R.id.btnAddPhotoCamera: {
         Intent intent = new Intent();
         intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
+        mAddPhotoDialog.cancel();
       } break;
     }
   }
@@ -484,6 +487,8 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     if(Data.s_PhotoAlbum!=null)
       Data.s_PhotoAlbum.clear();
     Data.s_PhotoAlbum=null;
+    
+    mAddPhotoDialog=null;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -506,6 +511,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     protected String[] doInBackground(Uri... uri) {
       try {
         Socium soc = new Socium(ProfileActivity.this.getApplicationContext());
+        // сжатие и поворот
         return soc.uploadPhoto(uri[0]);
       } catch(AuthException e) {
         e.printStackTrace();
@@ -515,6 +521,24 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     @Override
     protected void onPostExecute(final String[] result) {
       super.onPostExecute(result);
+      mProgressDialog.cancel();  
+
+      if(mAddEroState) {
+        // попап с выбором цены эро фотографии
+        final CharSequence[] items = {getString(R.string.profile_coin_1), 
+                                      getString(R.string.profile_coin_2),
+                                      getString(R.string.profile_coin_3)};
+        new AlertDialog.Builder(ProfileActivity.this)
+        .setTitle(getString(R.string.profile_ero_price))
+        .setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+              sendAddRequest(result,item+1);
+            }
+        }).create().show();
+      } else
+        sendAddRequest(result,0);
+    }
+    private void sendAddRequest(final String[] result,final int price) {
       ProfileActivity.this.runOnUiThread(new Runnable() {
         @Override
         public void run() {
@@ -522,7 +546,9 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
           addPhotoRequest.big    = result[0];
           addPhotoRequest.medium = result[1];
           addPhotoRequest.small  = result[2];
-          addPhotoRequest.ero = mAddEroPhoto;
+          addPhotoRequest.ero = mAddEroState;
+          if(mAddEroState)
+            addPhotoRequest.cost=price;
           addPhotoRequest.callback(new ApiHandler() {
             @Override
             public void success(Response response) {
@@ -533,8 +559,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
             }
           }).exec();
         }
-      });
-      mProgressDialog.cancel();  
+      });//runOnUiThread
     }
   }
   //---------------------------------------------------------------------------

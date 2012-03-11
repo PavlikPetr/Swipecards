@@ -100,11 +100,10 @@ public class PhotoAlbumActivity extends Activity {
         request.callback(new ApiHandler() {
           @Override
           public void success(Response response) {
-            Toast.makeText(PhotoAlbumActivity.this,"main",Toast.LENGTH_SHORT).show();
+            Toast.makeText(PhotoAlbumActivity.this,getString(R.string.album_menu_did_main),Toast.LENGTH_SHORT).show();
           }
           @Override
           public void fail(int codeError,Response response) {
-            Toast.makeText(PhotoAlbumActivity.this,"no main",Toast.LENGTH_SHORT).show();
           }
         }).exec();
       } break;
@@ -114,11 +113,10 @@ public class PhotoAlbumActivity extends Activity {
         request.callback(new ApiHandler() {
           @Override
           public void success(Response response) {
-            Toast.makeText(PhotoAlbumActivity.this,"delete",Toast.LENGTH_SHORT).show();
+            Toast.makeText(PhotoAlbumActivity.this,getString(R.string.album_menu_did_delete),Toast.LENGTH_SHORT).show();
           }
           @Override
           public void fail(int codeError,Response response) {
-            Toast.makeText(PhotoAlbumActivity.this,"no delete",Toast.LENGTH_SHORT).show();
           }
         }).exec();
       } break;

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@drawable/im_big_button"
-        android:text="Альбом" />
+        android:text="@string/profile_add_album" />
 
     <Button
         android:id="@+id/btnAddPhotoCamera"
@@ -18,6 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@drawable/im_big_button"
-        android:text="Камера" />
+        android:text="@string/profile_add_camera" />
     
 </LinearLayout>
