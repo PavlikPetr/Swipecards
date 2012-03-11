@@ -1,10 +1,12 @@
 package com.sonetica.topface.data;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
 
+/*
+ *   Класс чужого профиля
+ */
 public class ProfileUser extends AbstractData {
   // Data
   public int uid;                    // идентификатор пользователя
@@ -44,50 +46,55 @@ public class ProfileUser extends AbstractData {
   //---------------------------------------------------------------------------
   public static ProfileUser parse(int userId,Response response) {    //нужно знать userId
     ProfileUser profile = new ProfileUser();
+    
     try {
       JSONObject item = response.mJSONResult.getJSONObject("profiles");
       item = item.getJSONObject(""+userId);
-        profile.uid        = item.getInt("uid");
-        profile.age        = item.getInt("age");
-        profile.first_name = item.getString("first_name");
-        profile.first_name_translit = item.getString("first_name_translit");
-        profile.platform   = item.getString("platform");
-        profile.last_visit = item.getInt("last_visit");
-        profile.online     = item.getBoolean("online");
-        profile.status     = item.getString("status");
+        profile.uid        = item.optInt("uid");
+        profile.age        = item.optInt("age");
+        profile.first_name = item.optString("first_name");
+        profile.first_name_translit = item.optString("first_name_translit");
+        profile.platform   = item.optString("platform");
+        profile.last_visit = item.optInt("last_visit");
+        profile.online     = item.optBoolean("online");
+        profile.status     = item.optString("status");
+        
       /*
       JSONObject geo = item.getJSONObject("geo");
         profile.city_name  = geo.getString("city");
         profile.city_id    = geo.getInt("city_id");
       */
+        
         // city  
       JSONObject city = item.getJSONObject("city");
-        profile.city_id    = city.getInt("id");            
-        profile.city_name  = city.getString("name");
-        profile.city_full  = city.getString("full");
+        profile.city_id    = city.optInt("id");            
+        profile.city_name  = city.optString("name");
+        profile.city_full  = city.optString("full");
         
       JSONObject avatars = item.getJSONObject("avatars");
-        profile.avatars_big   = avatars.getString("big");
-        profile.avatars_small = avatars.getString("small");
+        profile.avatars_big   = avatars.optString("big");
+        profile.avatars_small = avatars.optString("small");
+        
         //questionary
-      JSONObject questionary = item.getJSONObject("questionary");
-        profile.questionary_job_id = questionary.getInt("job_id");
-        profile.questionary_job = questionary.getString("job");
-        profile.questionary_status_id = questionary.getInt("status_id");
-        profile.questionary_status = questionary.getString("status");
-        profile.questionary_education_id = questionary.getInt("education_id");
-        profile.questionary_marriage_id = questionary.getInt("marriage_id");
-        profile.questionary_finances_id = questionary.getInt("finances_id");
-        profile.questionary_character_id = questionary.getInt("character_id");
-        profile.questionary_smoking_id = questionary.getInt("smoking_id");
-        profile.questionary_alcohol_id = questionary.getInt("alcohol_id");
-        profile.questionary_fitness_id = questionary.getInt("fitness_id");
-        profile.questionary_communication_id = questionary.getInt("communication_id");
-        profile.questionary_weight = questionary.getInt("weight");
-        profile.questionary_height = questionary.getInt("height");
-    } catch(JSONException e) {
-      Debug.log("SearchUser.class","Wrong response parsing: " + e);
+      JSONObject questionary = item.optJSONObject("questionary");
+        profile.questionary_job_id = questionary.optInt("job_id");
+        profile.questionary_job = questionary.optString("job");
+        profile.questionary_status_id = questionary.optInt("status_id");
+        profile.questionary_status = questionary.optString("status");
+        profile.questionary_education_id = questionary.optInt("education_id");
+        profile.questionary_marriage_id = questionary.optInt("marriage_id");
+        profile.questionary_finances_id = questionary.optInt("finances_id");
+        profile.questionary_character_id = questionary.optInt("character_id");
+        profile.questionary_smoking_id = questionary.optInt("smoking_id");
+        profile.questionary_alcohol_id = questionary.optInt("alcohol_id");
+        profile.questionary_fitness_id = questionary.optInt("fitness_id");
+        profile.questionary_communication_id = questionary.optInt("communication_id");
+        profile.questionary_weight = questionary.optInt("weight");
+        profile.questionary_height = questionary.optInt("height");
+    } catch(Exception e) {
+      Debug.log("ProfileUser.class","Wrong response parsing: " + e);
     }
+    
     return profile;
   }
   //---------------------------------------------------------------------------

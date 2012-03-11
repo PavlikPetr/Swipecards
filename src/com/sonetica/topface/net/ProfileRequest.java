@@ -10,11 +10,11 @@ public class ProfileRequest extends ApiRequest {
   // Data
   private String  service = "profile";
   //private String  fields;  //массив интересующих полей профиля
-  private boolean isNotification;
+  private boolean update_data;
   //---------------------------------------------------------------------------
-  public ProfileRequest(Context context,boolean bNotification) {
+  public ProfileRequest(Context context,boolean update) {
     super(context);
-    isNotification = bNotification;
+    update_data = update;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -23,7 +23,7 @@ public class ProfileRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      if(isNotification)
+      if(update_data)
         root.put("data",new JSONObject().put("fields",new JSONArray().put("unread_rates")
                                                                      .put("unread_likes")
                                                                      .put("unread_messages")
@@ -34,6 +34,7 @@ public class ProfileRequest extends ApiRequest {
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }
+    
     return root.toString();
   }
   //---------------------------------------------------------------------------

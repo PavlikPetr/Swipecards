@@ -146,7 +146,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         mProgressDialog.cancel();
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
       }
     }).exec();
   }
@@ -223,7 +223,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
             });
         }
         @Override
-        public void fail(int codeError) {
+        public void fail(int codeError,Response response) {
         }
       }).exec();
     }

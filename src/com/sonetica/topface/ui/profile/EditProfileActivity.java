@@ -216,7 +216,7 @@ public class EditProfileActivity extends PreferenceActivity {
       public void success(Response response) {
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
       }
     }).exec();
   }
@@ -272,7 +272,7 @@ public class EditProfileActivity extends PreferenceActivity {
       public void success(Response response) {
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
       }
     }).exec();
   }

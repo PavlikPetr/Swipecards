@@ -3,7 +3,6 @@ package com.sonetica.topface.ui.dating;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.Http;
-import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.MemoryCache;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
@@ -26,8 +25,8 @@ public class DatingGalleryAdapter extends BaseAdapter {
   };
   //---------------------------------------------------------------------------
   // Data
-  private int mW = 480;              // длина
-  private int mH = 816;              // высота
+  private int mW = 0;              // длина
+  private int mH = 0;              // высота
   private int mPrevPosition;         // предыдущая позиция фото в альбоме
   private int mPreRunning;           // текущая пред загружаемое фото
   private Bitmap mRateBitmap;        // жесткая ссылка на оцениваемую фотографию
@@ -50,6 +49,8 @@ public class DatingGalleryAdapter extends BaseAdapter {
     // очистка
     mPreRunning = 0;
     mPrevPosition = 0;
+    if(mRateBitmap!=null)
+      mRateBitmap.recycle();
     mRateBitmap = null;
     mCache.clear();
   }
@@ -75,6 +76,8 @@ public class DatingGalleryAdapter extends BaseAdapter {
   public View getView(final int position,View convertView, ViewGroup parent) {
     ViewHolder holder = null;
     if(convertView==null) {
+      mW = mDatingControl.getWidth();
+      mH = mDatingControl.getHeight();
       holder = new ViewHolder();
       convertView = (ViewGroup)mInflater.inflate(R.layout.album_item_gallery, null, false);
       convertView.setLayoutParams(new Gallery.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
@@ -98,10 +101,10 @@ public class DatingGalleryAdapter extends BaseAdapter {
       loadingImage(position, holder.mImageView);
     
     int prePosition = position>=mPrevPosition ? position+1 : position-1;
-    if(!mCache.containsKey(prePosition))
-      if(prePosition>0 && position<(getCount()-1))
-        preLoading(prePosition,mW,mH);
+    if(prePosition>0 && position<(getCount()-1))
+      preLoading(prePosition,mW,mH);
     
+    // кнопка back
     if(position>2 && position==getCount()-1)
       mDatingControl.controlVisibility(DatingControl.V_SHOW_BACK);
     
@@ -118,13 +121,12 @@ public class DatingGalleryAdapter extends BaseAdapter {
         //if(view.getWidth()==0)
           //return;
         
-        Bitmap clipBitmap = null;
         Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);
         
-        if(rawBitmap!=null)
-          clipBitmap = Utils.clipping(rawBitmap,mW,mH);
+        if(rawBitmap!=null && position==0)
+          rawBitmap = Utils.clipping(rawBitmap,mW,mH);
         
-        final Bitmap bitmap = clipBitmap;
+        final Bitmap bitmap = rawBitmap;
         
         view.post(new Runnable() {
           @Override
@@ -157,17 +159,16 @@ public class DatingGalleryAdapter extends BaseAdapter {
     if(position==mPreRunning || width==0)
       return;
     
-    Debug.log(this,"preloading:"+position);
+    if(mCache.containsKey(position))
+      return;
     
     new Thread() {
       @Override
       public void run() {
-        Bitmap clipBitmap = null;
         Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);
-        if(rawBitmap!=null) {
-          clipBitmap = Utils.clipping(rawBitmap,width,height);
-          mCache.put(position,clipBitmap);
-        }
+        if(rawBitmap!=null && position==0)
+          rawBitmap = Utils.clipping(rawBitmap,width,height);
+        mCache.put(position,rawBitmap);
       }
     }.start();
     
@@ -175,10 +176,9 @@ public class DatingGalleryAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   public void release() {
-    if(mRateBitmap!=null) {
+    if(mRateBitmap!=null)
       mRateBitmap.recycle();
-      mRateBitmap = null;
-    }
+    mRateBitmap = null;
     mCache.clear();
     mCache = null;
   }
@@ -188,7 +188,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
 //  Http.imageLoaderExp(url,view);
 
 /*
-// утечка памяти в данной реализации
+// утечка памяти при работе с пулами
   mThreadsPool.execute(new Thread() {
     @Override
     public void run() {

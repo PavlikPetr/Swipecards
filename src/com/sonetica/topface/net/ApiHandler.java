@@ -9,10 +9,10 @@ abstract public class ApiHandler extends Handler {
     super.handleMessage(msg);
     Response response = (Response)msg.obj;
     if(response.code>0)
-      fail(response.code);
+      fail(response.code,response);
     else
       success(response);
   }
   abstract public void success(Response response);
-  abstract public void fail(int codeError);
+  abstract public void fail(int codeError,Response response);
 }

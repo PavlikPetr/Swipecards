@@ -8,11 +8,11 @@ import android.content.Context;
 public class PhotoAddRequest extends ApiRequest {
   // Data
   private String service = "photoAdd";
-  public String big;    // URL фотографии пользователя из социальной сети в большом разрешении
-  public String medium; // URL фотографии пользователя из социальной сети в среднем разрешении
-  public String small;  // URL фотографии пользователя из социальной сети в малом разрешении
-  public boolean ero;   // флаг, является ли фотография эротической
-  public int cost;      // стоимость просмотра эротической фотографии
+  public String big;     // URL фотографии пользователя из социальной сети в большом разрешении
+  public String medium;  // URL фотографии пользователя из социальной сети в среднем разрешении
+  public String small;   // URL фотографии пользователя из социальной сети в малом разрешении
+  public boolean ero;    // флаг, является ли фотография эротической
+  public int cost;       // стоимость просмотра эротической фотографии
   //---------------------------------------------------------------------------
   public PhotoAddRequest(Context context) {
     super(context);
@@ -32,6 +32,7 @@ public class PhotoAddRequest extends ApiRequest {
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }
+    
     return root.toString();
   }
   //---------------------------------------------------------------------------

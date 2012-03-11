@@ -2,7 +2,6 @@ package com.sonetica.topface.data;
 
 import java.util.LinkedList;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
@@ -27,21 +26,26 @@ public class SearchUser extends AbstractData {
   //---------------------------------------------------------------------------
   public static LinkedList<SearchUser> parse(Response response) {
     LinkedList<SearchUser> userList = new LinkedList<SearchUser>();
+    
     try {
       JSONArray array = response.mJSONResult.getJSONArray("users");
       if(array.length()>0)
         for(int i=0;i<array.length();i++) {
           SearchUser search = new SearchUser();
           JSONObject item = array.getJSONObject(i);
-            search.uid        = item.getInt("uid");
-            search.age        = item.getInt("age");
-            search.first_name = item.getString("first_name");
-            search.online     = item.getBoolean("online");
-            search.status     = item.getString("status");
+            search.uid        = item.optInt("uid");
+            search.age        = item.optInt("age");
+            search.first_name = item.optString("first_name");
+            search.online     = item.optBoolean("online");
+            search.status     = item.optString("status");
+            
+          // city
           JSONObject city = item.getJSONObject("city");
-            search.city_id    = city.getInt("id");            
-            search.city_name  = city.getString("name");
-            search.city_full  = city.getString("full");
+            search.city_id    = city.optInt("id");            
+            search.city_name  = city.optString("name");
+            search.city_full  = city.optString("full");
+            
+          // avatars
           JSONArray avatars = item.getJSONArray("avatars");
             int size = avatars.length();
             if(size>0) {
@@ -49,15 +53,16 @@ public class SearchUser extends AbstractData {
               search.avatars_small = new String[size];
               for(int n=0;n<avatars.length();n++) {
                 JSONObject avatar = avatars.getJSONObject(n);
-                search.avatars_big[n]   = avatar.getString("big");
-                search.avatars_small[n] = avatar.getString("small");
+                search.avatars_big[n]   = avatar.optString("big");
+                search.avatars_small[n] = avatar.optString("small");
               }
             }
           userList.add(search);
         }
-    } catch(JSONException e) {
+    } catch(Exception e) {
       Debug.log("SearchUser.class","Wrong response parsing: " + e);
     }
+    
     return userList;
   }
   //---------------------------------------------------------------------------

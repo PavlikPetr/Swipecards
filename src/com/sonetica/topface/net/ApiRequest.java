@@ -10,10 +10,10 @@ import android.os.Message;
 
 public abstract class ApiRequest {
   // Data
-  public  String  ssid;
+  public String ssid;  // volatile
   private Context mContext;
   private ApiHandler mHandler;
-  //private static ExecutorService mThreadsPool;
+  //private static ExecutorService mThreadsPool; // что за хуйня с пулом потоков ?
   //---------------------------------------------------------------------------
   public ApiRequest(Context context) {
     ssid = "";
@@ -27,38 +27,16 @@ public abstract class ApiRequest {
   }
   //---------------------------------------------------------------------------
   public void exec() {
+    ssid = Data.SSID;
     new Thread() {
       @Override
       public void run() {
-        ssid = Data.SSID;
         Response response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
-        if(response.code == 3)
-          reAuth();
+        if(response.code == 3) // ошибка авторизации
+          reAuth();  // реавторизация на сервере топфейса
         else
           mHandler.sendMessage(Message.obtain(null,0,response));
     }}.start();
-    
-/*
-    if(mHandler != null)
-      mThreadsPool.execute(new Runnable() {
-        @Override
-        public void run() {
-          Looper.prepare();
-          
-          ssid = Data.SSID;
-          
-          Response response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
-          if(response.code == 3)
-            reAuth();
-          else
-            mHandler.sendMessage(Message.obtain(null,0,response));
-          
-          Looper.loop();
-        }
-      });
-    else
-      Debug.log(this,"Handler not found");
-      */
   }
   //---------------------------------------------------------------------------
   // перерегистрация на сервере TP
@@ -81,35 +59,56 @@ public abstract class ApiRequest {
       Auth auth = Auth.parse(response);
       Data.saveSSID(mContext,auth.ssid);
       ssid = Data.SSID;
+      
       response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
+      
       mHandler.sendMessage(Message.obtain(null,0,response));
     } else
        mHandler.sendMessage(Message.obtain(null,0,response));
-
-/*
-    authRequest.callback(new ApiHandler() {
-      @Override
-      public void success(Response response) {
-        Auth auth = Auth.parse(response);
-        Data.saveSSID(mContext,auth.ssid);
-        ApiRequest.this.exec();
-      }
-      @Override
-      public void fail(int codeError) {
-        Debug.log(this,"Getting SSID is wrong");
-      }
-    }).exec();
-*/
   }
-  //---------------------------------------------------------------------------
-  @Override
-  public abstract String toString();
   //---------------------------------------------------------------------------
   public static void shutdown() {
     //mThreadsPool.shutdown();
   }
   //---------------------------------------------------------------------------
 }
+
+/*  работа с пулом потоков
+if(mHandler != null)
+  mThreadsPool.execute(new Runnable() {
+    @Override
+    public void run() {
+      Looper.prepare();
+      
+      ssid = Data.SSID;
+      
+      Response response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
+      if(response.code == 3)
+        reAuth();
+      else
+        mHandler.sendMessage(Message.obtain(null,0,response));
+      
+      Looper.loop();
+    }
+  });
+else
+  Debug.log(this,"Handler not found");
+  */
+
+/*  работа с пулом потоков
+authRequest.callback(new ApiHandler() {
+  @Override
+  public void success(Response response) {
+    Auth auth = Auth.parse(response);
+    Data.saveSSID(mContext,auth.ssid);
+    ApiRequest.this.exec();
+  }
+  @Override
+  public void fail(int codeError) {
+    Debug.log(this,"Getting SSID is wrong");
+  }
+}).exec();
+*/
 
 /*
 class LooperThread extends Thread {

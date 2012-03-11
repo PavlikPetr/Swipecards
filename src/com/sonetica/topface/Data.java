@@ -4,13 +4,7 @@ import java.util.LinkedList;
 import android.content.Context;
 import android.content.SharedPreferences;
 import com.sonetica.topface.data.Album;
-import com.sonetica.topface.data.City;
-import com.sonetica.topface.data.Inbox;
-import com.sonetica.topface.data.Like;
 import com.sonetica.topface.data.Profile;
-import com.sonetica.topface.data.Rate;
-import com.sonetica.topface.data.SearchUser;
-import com.sonetica.topface.data.TopUser;
 
 /*
  *   Сохранение данных в течении жизни процесса
@@ -27,8 +21,8 @@ public class Data {
   */
   public static LinkedList<Album>  s_PhotoAlbum;
   public static LinkedList<String> s_LogList;
-  // profile
   public static Profile s_Profile;
+
   // Data Profile
   public static int s_Power;
   public static int s_Money;
@@ -42,6 +36,8 @@ public class Data {
   public static void init(Context context) {
     
     SSID = Data.loadSSID(context);
+    s_LogList = new LinkedList<String>();
+    
     /*
     s_SearchList = new LinkedList<SearchUser>();
     s_InboxList  = new LinkedList<Inbox>();
@@ -50,7 +46,6 @@ public class Data {
     s_RatesList  = new LinkedList<Rate>();
     s_CitiesList = new LinkedList<City>();
     */
-    s_LogList = new LinkedList<String>();
   }
   //---------------------------------------------------------------------------
   public static void setProfile(Profile profile) {

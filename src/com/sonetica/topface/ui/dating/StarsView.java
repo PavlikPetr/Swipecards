@@ -30,7 +30,7 @@ public class StarsView extends View implements View.OnTouchListener {
     private int _bmp_y;
     private int _widht;
     private int _height;
-    public Rect _rect;      // 
+    public Rect _rect;       
     public boolean pressed; // состояние
     // Ctor
     public Star(int x,int y,int width,int height,int index) {
@@ -43,13 +43,13 @@ public class StarsView extends View implements View.OnTouchListener {
       _rect = new Rect(_x,_y,_x+_widht,_y+_height);
     }
     public void draw(Canvas canvas) {
-      if(_index==mAverageRate)
+      if(_index==mAverageRate)  // средняя оценка
         if(!pressed)
-          canvas.drawBitmap(mStarBlue,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(mStarGrey,_x,_bmp_y,paintStar);
         else
-          canvas.drawBitmap(mStarBlueActive,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(mStarGreyActive,_x,_bmp_y,paintStar);
       
-      if(_index>mAverageRate)
+      if(_index>mAverageRate) // yellow stars
         if(!pressed)
           canvas.drawBitmap(mStarYellow,_x,_bmp_y,paintStar);
         else
@@ -57,9 +57,9 @@ public class StarsView extends View implements View.OnTouchListener {
       
       if(_index<mAverageRate)
         if(!pressed)
-          canvas.drawBitmap(mStarGrey,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(mStarBlue,_x,_bmp_y,paintStar);
         else
-          canvas.drawBitmap(mStarGreyActive,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(mStarBlueActive,_x,_bmp_y,paintStar);
       
       // Star Index         вынести расчеты !!!!!!!!
       canvas.drawText(""+_index,(float)(_x+mStarYellow.getWidth()/2),(float)(_bmp_y+mStarYellow.getHeight()/1.6),paintNumber);
@@ -67,11 +67,11 @@ public class StarsView extends View implements View.OnTouchListener {
   }
   //---------------------------------------------------------------------------
   // Data
-  public int mAverageRate;         // средняя выставляемвя оценка
-  private float[] mLastYs;           // массив последних нажатий
-  private Star[]  mStars;              // статичный массив объектов для отрисовки звезд;
+  public int mAverageRate;   // средняя выставляемвя оценка
+  private float[] mLastYs;   // массив последних нажатий
+  private Star[]  mStars;    // статичный массив объектов для отрисовки звезд;
   private InformerView mInformerView;    // обсервер текущего нажатия на экран
-  private OnRateListener mRateListener; // listener на клик по звезде
+  private OnRateListener mRateListener;  // listener на клик по звезде
   // Bitmaps
   private Bitmap mStarYellow;
   private Bitmap mStarYellowActive;
@@ -88,7 +88,7 @@ public class StarsView extends View implements View.OnTouchListener {
   //---------------------------------------------------------------------------
   public StarsView(Context context,InformerView informer) {
     super(context);
-    mStars = new Star[STARS_COUNT];
+    mStars  = new Star[STARS_COUNT];
     mLastYs = new float[EVENT_COUNT];
     mInformerView = informer;
     
@@ -198,7 +198,7 @@ public class StarsView extends View implements View.OnTouchListener {
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     int height = MeasureSpec.getSize(heightMeasureSpec); // вычисляем предоставленную нам высоту для отрисовки
-    int width  = (int)(mStarYellow.getWidth() * 1.3);    // вычисление своей ширины, вынести в константы !!!
+    int width  = (int)(mStarYellow.getWidth() * 1.1);    // говорим, что нам нужно больше
 
     setMeasuredDimension(width,height);
   }
@@ -238,12 +238,29 @@ public class StarsView extends View implements View.OnTouchListener {
     mStars = null;
     mRateListener = null;
     
-    mStarYellow.recycle();
-    mStarYellowActive.recycle();
-    mStarBlue.recycle();
-    mStarBlueActive.recycle();
-    mStarGrey.recycle();
-    mStarGreyActive.recycle();
+    if(mStarYellow!=null)
+      mStarYellow.recycle();
+    mStarYellow=null;
+    
+    if(mStarYellowActive!=null)
+      mStarYellowActive.recycle();
+    mStarYellowActive=null;
+    
+    if(mStarBlue!=null)
+      mStarBlue.recycle();
+    mStarBlue=null;
+    
+    if(mStarBlueActive!=null)
+      mStarBlueActive.recycle();
+    mStarBlueActive=null;
+    
+    if(mStarGrey!=null)
+      mStarGrey.recycle();
+    mStarGrey=null;
+    
+    if(mStarGreyActive!=null)
+      mStarGreyActive.recycle();
+    mStarGreyActive=null;
     
     paintStar = null;
     paintNumber = null;

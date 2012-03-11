@@ -45,6 +45,7 @@ public class SettingsRequest extends ApiRequest {
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }
+    
     return root.toString();
   }
   //---------------------------------------------------------------------------

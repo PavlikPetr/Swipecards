@@ -105,7 +105,7 @@ public class ChatActivity extends Activity {
             mEdBox.getText().clear();
           }
           @Override
-          public void fail(int codeError) {
+          public void fail(int codeError,Response response) {
             Toast.makeText(ChatActivity.this,"msg sending failed",Toast.LENGTH_SHORT).show();
           }
         }).exec();
@@ -159,7 +159,7 @@ public class ChatActivity extends Activity {
           
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
         mListView.onRefreshComplete();
       }
     }).exec();

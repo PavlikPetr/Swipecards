@@ -31,12 +31,12 @@ public class InboxActivity extends Activity {
   // Data
   private PullToRefreshListView mListView;
   private InboxListAdapter mAdapter;
-  private LinkedList<Inbox> mInboxList;
+  private LinkedList<Inbox> mInboxDataList;
   private AvatarManager<Inbox> mAvatarManager;
   private ProgressDialog mProgressDialog;
-  private boolean mIsNewMessages;
+  private DoubleBigButton mDoubleButton;
   // Constants
-  private static final int LIMIT = 20;
+  private static final int LIMIT = 40;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -46,28 +46,28 @@ public class InboxActivity extends Activity {
     
     // Data
     //mInboxList = Data.s_InboxList;
-    mInboxList = new LinkedList<Inbox>();
+    mInboxDataList = new LinkedList<Inbox>();
     
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.inbox_header_title));
     
     // Double Button
-    DoubleBigButton btnDouble = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
-    btnDouble.setLeftText(getString(R.string.inbox_btn_dbl_left));
-    btnDouble.setRightText(getString(R.string.inbox_btn_dbl_right));
-    btnDouble.setChecked(mIsNewMessages==false?DoubleBigButton.LEFT_BUTTON:DoubleBigButton.RIGHT_BUTTON);
+    mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
+    mDoubleButton.setLeftText(getString(R.string.inbox_btn_dbl_left));
+    mDoubleButton.setRightText(getString(R.string.inbox_btn_dbl_right));
+    mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
     // Left btn
-    btnDouble.setLeftListener(new View.OnClickListener() {
+    mDoubleButton.setLeftListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Toast.makeText(InboxActivity.this,"All",Toast.LENGTH_SHORT).show(); 
+        update(true,false);
       }
     });
     // Right btn
-    btnDouble.setRightListener(new View.OnClickListener() {
+    mDoubleButton.setRightListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Toast.makeText(InboxActivity.this,"New",Toast.LENGTH_SHORT).show();
+        update(true,true);
       }
     });
    
@@ -76,7 +76,7 @@ public class InboxActivity extends Activity {
     mListView.setOnRefreshListener(new OnRefreshListener() {
      @Override
      public void onRefresh() {
-       //update(0,true);
+       update(false,true);
        mListView.onRefreshComplete();
      }});
     mListView.setOnTouchListener(new OnTouchListener() {
@@ -89,7 +89,7 @@ public class InboxActivity extends Activity {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
         Intent intent = new Intent(InboxActivity.this,ChatActivity.class);
-        intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxList.get(position).uid);
+        intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxDataList.get(position).uid);
         startActivityForResult(intent,0);
       }
     });
@@ -98,68 +98,39 @@ public class InboxActivity extends Activity {
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
-    if(mInboxList.size()==0) {
-      create();
-      update(0,false);
-    } else
-      create();
+    create();
+    
+    update(true,false);
     
     // обнуление информера непрочитанных сообщений
     Data.s_Messages = 0;
   }
   //---------------------------------------------------------------------------
-  private void create() {
-    mAvatarManager = new AvatarManager<Inbox>(this,mInboxList);
-    mListView.setOnScrollListener(mAvatarManager);    
-    mAdapter = new InboxListAdapter(this,mAvatarManager);
-    mListView.setAdapter(mAdapter);
-  }
-  //---------------------------------------------------------------------------
-  private void release() {
-    if(mListView!=null)       mListView = null;
-    if(mAdapter!=null)        mAdapter = null;
-    if(mAvatarManager!=null) {
-      mAvatarManager.release();
-      mAvatarManager = null;
-    }
-    if(mInboxList!=null)      mInboxList = null;
-    if(mProgressDialog!=null) mProgressDialog = null;
-  }
-  //---------------------------------------------------------------------------
-  private void update(final int offset,final boolean isRefresh) {
-    if(!isRefresh)
+  private void update(boolean isProgress, final boolean isNew) {
+    if(isProgress)
       mProgressDialog.show();
     
     InboxRequest inboxRequest = new InboxRequest(InboxActivity.this);
-    inboxRequest.offset = offset;
-    inboxRequest.limit  = LIMIT;
+    inboxRequest.limit = LIMIT;
+    inboxRequest.only_new = isNew;
     inboxRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        
-        LinkedList<Inbox> list = Inbox.parse(response);
-        
-        if(list.size()!=0) {
-          if(isRefresh)
-            for(int i=list.size()-1;i>=0;--i)
-              mInboxList.addFirst(list.get(i));  //   ЧТО ЗА БРЕД С ЛИСТАМИ И НОТИФИКАЦИЕЙ
-          else
-            mInboxList.addAll(list);
-        }
-        
-        mAvatarManager.setDataList(list);
-        mAdapter.notifyDataSetChanged();
+        LinkedList<Inbox> inboxList = Inbox.parse(response);
+        if(inboxList.size()>0) {
+          mInboxDataList = inboxList;
+          mAvatarManager.setDataList(inboxList);
+          mAdapter.notifyDataSetChanged();
+        } else
+          mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
+        mProgressDialog.cancel();
         mListView.onRefreshComplete();
-        if(mProgressDialog.isShowing())
-          mProgressDialog.cancel();
           
       }
       @Override
-      public void fail(int codeError) {
-        mListView.onRefreshComplete();
+      public void fail(int codeError,Response response) {
       }
     }).exec();
-    
 
     /*
     InboxRequest inboxRequest = new InboxRequest(ChatActivity.this);
@@ -174,6 +145,24 @@ public class InboxActivity extends Activity {
       }
     });
     */
+  }
+  //---------------------------------------------------------------------------
+  private void create() {
+    mAvatarManager = new AvatarManager<Inbox>(this,mInboxDataList);
+    mListView.setOnScrollListener(mAvatarManager);    
+    mAdapter = new InboxListAdapter(this,mAvatarManager);
+    mListView.setAdapter(mAdapter);
+  }
+  //---------------------------------------------------------------------------
+  private void release() {
+    if(mListView!=null)       mListView = null;
+    if(mAdapter!=null)        mAdapter = null;
+    if(mAvatarManager!=null) {
+      mAvatarManager.release();
+      mAvatarManager = null;
+    }
+    if(mInboxDataList!=null)      mInboxDataList = null;
+    if(mProgressDialog!=null) mProgressDialog = null;
   }
   //---------------------------------------------------------------------------
   @Override

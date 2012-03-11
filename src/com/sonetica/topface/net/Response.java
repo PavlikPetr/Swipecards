@@ -1,6 +1,5 @@
 package com.sonetica.topface.net;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.sonetica.topface.utils.Debug;
@@ -17,22 +16,22 @@ public class Response {
   }
   //---------------------------------------------------------------------------
   public Response(String response) {
-    if(response==null) {
-      Debug.log(this,"json response is null");
-      code = FATAL_ERROR;
-      return;
-    }
     try {
+      if(response == null) {
+        Debug.log(this,"json response is null");
+        code = FATAL_ERROR;
+        return;
+      }
+      
       mJSONResult = new JSONObject(response);
       if(!mJSONResult.isNull("error")) {
         mJSONResult = mJSONResult.getJSONObject("error");
         code = mJSONResult.getInt("code");
-      } else if(!mJSONResult.isNull("result")) {
+      } else if(!mJSONResult.isNull("result"))
         mJSONResult = mJSONResult.getJSONObject("result");
-      } else {
+      else
         code = FATAL_ERROR;
-      }
-    } catch (JSONException e) {
+    } catch (Exception e) {
       code = FATAL_ERROR;
       Debug.log(this,"json resonse is wrong:" + response);
     }

@@ -18,11 +18,15 @@ public class RateControl extends ViewGroup {
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+    int measuredWidth = 0;
 
     int count = getChildCount();
-    for(int i=0;i<count;i++)
+    for(int i=0;i<count;i++) {
       getChildAt(i).measure(MeasureSpec.getSize(widthMeasureSpec),MeasureSpec.getSize(heightMeasureSpec)-DatingActivity.mHeaderBar.getHeight());
+      measuredWidth += getChildAt(i).getMeasuredWidth();
+    }
+    
+    setMeasuredDimension(measuredWidth,MeasureSpec.getSize(heightMeasureSpec));
   }
   //---------------------------------------------------------------------------
   @Override

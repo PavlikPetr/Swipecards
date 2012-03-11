@@ -8,8 +8,9 @@
   <!-- header bar -->
   <include layout="@layout/bar_header" />
 
-  <!-- button bar -->
-  <include layout="@layout/bar_double_button" />
+    <!-- button bar -->
+  <include layout="@layout/bar_double_big_button" />
+  <!-- <include layout="@layout/bar_double_button" /> -->
   
   <!-- gallary -->
   <com.sonetica.topface.module.pull2refresh.PullToRefreshGridView

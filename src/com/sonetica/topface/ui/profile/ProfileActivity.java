@@ -241,7 +241,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
         Http.imageLoader(profile.getBigLink(),mFramePhoto);
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
       }
     }).exec();
   }
@@ -301,7 +301,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
         }
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
       }
     }).exec();
   }
@@ -474,7 +474,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
               PhotoAdd add = PhotoAdd.parse(response);
             }
             @Override
-            public void fail(int codeError) {
+            public void fail(int codeError,Response response) {
             }
           }).exec();
         }

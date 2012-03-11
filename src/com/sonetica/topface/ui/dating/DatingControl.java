@@ -12,6 +12,7 @@ import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -42,12 +43,12 @@ public class DatingControl extends ViewGroup {
   private DatingGallery mDatingGallery;
   private DatingGalleryAdapter mGalleryAdapter;
   // Views
-  private Button mBackButton;      // кнопка возврата к оцениваемой фотографии
-  private TextView mCounter;        // счетчик позиции в галерее пользователя
+  private Button mBackButton;    // кнопка возврата к оцениваемой фотографии
+  private TextView mCounter;       // счетчик позиции в галерее пользователя
   private FaceView mFaceView;        // информация о пользователе
-  private ProgressBar mProgress;      // прогресс
-  private RateControl mRateControl;    // звезды
-  private ResourcesView mResourcesView; // монеты и энергия
+  private ProgressBar mProgress;       // прогресс
+  private RateControl mRateControl;      // звезды
+  private ResourcesView mResourcesView;    // монеты и энергия
   private LinkedList<SearchUser> mDataList;  // массив пользователей под оценку
   private OnNeedUpdateListener mOnNeedUpdateListener;  // нужно подтянуть еще пользователей под оценку
   // Visible States
@@ -73,8 +74,8 @@ public class DatingControl extends ViewGroup {
     mGalleryAdapter.registerDataSetObserver(new DataSetObserver() {
       @Override
       public void onChanged() {
-        //mFaceView.setVisibility(View.INVISIBLE);
-        DatingControl.this.setCounter(mGalleryPrevPos+1,mGallerySize); //  Обновление после оценки
+        // Обновление после оценки
+        DatingControl.this.setCounter(mGalleryPrevPos+1,mGallerySize); 
       }
       @Override
       public void onInvalidated() {}
@@ -120,9 +121,9 @@ public class DatingControl extends ViewGroup {
     mBackButton = new Button(context);
     mBackButton.setBackgroundResource(R.drawable.dating_back);
     mBackButton.setTextColor(Color.WHITE);
+    mBackButton.setTypeface(Typeface.DEFAULT_BOLD);
     mBackButton.setText(R.string.dating_back);
     mBackButton.setVisibility(View.INVISIBLE);
-    //mBackButton.s
     mBackButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -148,7 +149,7 @@ public class DatingControl extends ViewGroup {
     // Counter
     mCounter = new TextView(context);
     mCounter.setGravity(Gravity.CENTER_HORIZONTAL);
-    mCounter.setTextColor(Color.WHITE);
+    mCounter.setTextColor(Color.LTGRAY);
     addView(mCounter);
   }
   //---------------------------------------------------------------------------
@@ -160,6 +161,7 @@ public class DatingControl extends ViewGroup {
     for(int i=0;i<count;i++)
       getChildAt(i).measure(widthMeasureSpec,heightMeasureSpec);
     
+    mCounter.measure(widthMeasureSpec,0);
     mProgress.measure(0,0);
     mBackButton.measure(0,0);
   }
@@ -170,21 +172,30 @@ public class DatingControl extends ViewGroup {
     
     int offset_y = DatingActivity.mHeaderBar.getHeight();
     
-    int px = (getWidth()-mProgress.getMeasuredWidth())/2;
-    int py = (getHeight()-mProgress.getMeasuredHeight())/2;
+    int px = (getMeasuredWidth()-mProgress.getMeasuredWidth())/2;
+    int py = (getMeasuredHeight()-mProgress.getMeasuredHeight())/2;
+    
     mProgress.layout(px,py,px+mProgress.getMeasuredWidth(),py+mProgress.getMeasuredHeight());
     
     int x = mBackButton.getMeasuredWidth()/10;
     int y = (mRateControl.getMeasuredHeight()-mBackButton.getMeasuredHeight())/2;
+    
     mBackButton.layout(x,y,x+mBackButton.getMeasuredWidth(),y+mBackButton.getMeasuredHeight());
+    
     mBackButton.setPadding((int)(mBackButton.getMeasuredWidth()/4),0,0,0);
     
     mDatingGallery.layout(0,0,mDatingGallery.getMeasuredWidth(),mDatingGallery.getMeasuredHeight());
     
     mResourcesView.layout(0,offset_y,mResourcesView.getMeasuredWidth(),offset_y+mResourcesView.getMeasuredHeight());
-    mRateControl.layout(0,offset_y,mRateControl.getMeasuredWidth(),offset_y+mRateControl.getMeasuredHeight());
     
-    mCounter.layout(0,getHeight()-30,getWidth(),getHeight());
+    mRateControl.layout(getMeasuredWidth()-mRateControl.getMeasuredWidth(),offset_y,getMeasuredWidth(),offset_y+mRateControl.getMeasuredHeight());
+    
+    mCounter.layout(0,(int)(getMeasuredHeight()-mCounter.getMeasuredHeight()*1.5),getMeasuredWidth(),getMeasuredHeight());
+    
+    // длина символов в статусе
+    //int x1=getMeasuredWidth();
+    //int x2=mRateControl.getMeasuredWidth();
+    //mFaceView.setTextBreak(getMeasuredWidth()/2);
   }
   //---------------------------------------------------------------------------
   public void addDataList(LinkedList<SearchUser> dataList) {
@@ -281,8 +292,6 @@ public class DatingControl extends ViewGroup {
     mProgress.setVisibility(View.VISIBLE);
     mRateControl.setBlock(false);
     mNotHide = false;
-    //mFaceView.setVisibility(View.INVISIBLE);
-    //mCounter.setVisibility(View.INVISIBLE);
     
     int count = mDataList.size()-1;
     
@@ -304,22 +313,22 @@ public class DatingControl extends ViewGroup {
     mFaceView.online = user.online;
     mFaceView.status = user.status;
     
-    mResourcesView.money = Data.s_Money;
-    mResourcesView.power = Data.s_Power;
-    
+    mResourcesView.setResources(Data.s_Power,Data.s_Money);
     
     mGallerySize = user.avatars_big.length;
 
     mDatingGallery.setSelection(0);
     mGalleryAdapter.setUserData(user);
     mGalleryAdapter.notifyDataSetChanged();
-    
   }
   //---------------------------------------------------------------------------
   public void release() {
     mOnNeedUpdateListener = null;
-    mDatingGallery = null;
     mBackButton = null;
+    mProgress = null;
+    mCounter = null;
+    
+    mDatingGallery = null;
     
     mGalleryAdapter.release();
     mGalleryAdapter = null;
@@ -335,6 +344,7 @@ public class DatingControl extends ViewGroup {
     
     mDataList.clear();
     mDataList = null;
+    
     Debug.log(this,"release");
   }
   //---------------------------------------------------------------------------

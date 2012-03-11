@@ -2,7 +2,6 @@ package com.sonetica.topface.ui.likes;
 
 import java.util.LinkedList;
 import com.sonetica.topface.Data;
-import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Like;
 import com.sonetica.topface.module.pull2refresh.PullToRefreshGridView;
@@ -10,17 +9,13 @@ import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListe
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.LikesRequest;
 import com.sonetica.topface.net.Response;
-import com.sonetica.topface.ui.DoubleButton;
+import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.ui.GalleryManager;
-import com.sonetica.topface.ui.album.AlbumActivity;
-import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,13 +29,11 @@ public class LikesActivity extends Activity {
   private PullToRefreshGridView mGallery;
   private LikesGridAdapter mLikesGridAdapter;
   private GalleryManager<Like> mGalleryManager;
-  private LinkedList<Like> mLikesAllList;
-  private LinkedList<Like> mLikesCityList;
+  private LinkedList<Like> mLikesDataList;
   private ProgressDialog mProgressDialog;
-  private int mCity = 2;                                 // ГОРОД БРАТЬ ИЗ ПРОФАЙЛА
-  private int mCurrentCity; 
-  // Constats
-  private static final int ALL_CITIES = 0;
+  private DoubleBigButton mDoubleButton;
+  // Constants
+  private static final int LIMIT = 42;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -48,35 +41,28 @@ public class LikesActivity extends Activity {
     setContentView(R.layout.ac_likes);
     Debug.log(this,"+onCreate");
     
-    
-    SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-    mCurrentCity = preferences.getInt(getString(R.string.s_likes_city_id),0);
-    
     // Data
-    //mLikesAllList  = Data.s_LikesList;
-    mLikesAllList  = new LinkedList<Like>();
-    mLikesCityList = new LinkedList<Like>();
+    mLikesDataList  = new LinkedList<Like>();
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likes_header_title));
    
    // Double Button
-   DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDouble);
-   btnDouble.setLeftText(getString(R.string.likes_btn_dbl_left));
-   btnDouble.setRightText(getString(R.string.likes_btn_dbl_right));
-   btnDouble.setChecked(mCurrentCity==0?DoubleButton.LEFT_BUTTON:DoubleButton.RIGHT_BUTTON);
-   btnDouble.setLeftListener(new View.OnClickListener() {
+   //DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDouble);
+   mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
+   mDoubleButton.setLeftText(getString(R.string.inbox_btn_dbl_left));
+   mDoubleButton.setRightText(getString(R.string.inbox_btn_dbl_right));
+   mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
+   mDoubleButton.setLeftListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       mCurrentCity = ALL_CITIES;
-       update();
+       update(true,false);
      }
    });
-   btnDouble.setRightListener(new View.OnClickListener() {
+   mDoubleButton.setRightListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       mCurrentCity = mCity;
-       update();
+       update(true,true);
      }
    });
 
@@ -88,14 +74,14 @@ public class LikesActivity extends Activity {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(LikesActivity.this,ProfileActivity.class);
-       intent.putExtra(ProfileActivity.INTENT_USER_ID,mLikesAllList.get(position).uid);
+       intent.putExtra(ProfileActivity.INTENT_USER_ID,mLikesDataList.get(position).uid);
        startActivityForResult(intent,0);
      }
    });
    mGallery.setOnRefreshListener(new OnRefreshListener() {
      @Override
      public void onRefresh() {
-       //update();
+       update(false,true);
        mGallery.onRefreshComplete();
      }
    });
@@ -106,15 +92,41 @@ public class LikesActivity extends Activity {
    
    create();
    
-   if(mLikesAllList.size()==0)
-     update();
+   update(true,Data.s_Likes>0?true:false);
    
    // обнуление информера непросмотренных лайков
    Data.s_Likes = 0;
   }
   //---------------------------------------------------------------------------
+  private void update(boolean isProgress, final boolean isNew) {
+    if(isProgress)
+      mProgressDialog.show();
+    LikesRequest likesRequest = new LikesRequest(this);
+    likesRequest.limit = LIMIT;
+    likesRequest.only_new = isNew;
+    likesRequest.callback(new ApiHandler() {
+      @Override
+      public void success(Response response) {
+        LinkedList<Like> likesList = Like.parse(response);
+        if(likesList.size()>0) {
+          mLikesDataList.clear();
+          mLikesDataList=likesList;
+          mDoubleButton.setChecked(isNew==false?DoubleBigButton.LEFT_BUTTON:DoubleBigButton.RIGHT_BUTTON);        
+          mGalleryManager.setDataList(mLikesDataList);
+          mLikesGridAdapter.notifyDataSetChanged();
+        } else
+          mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
+        mProgressDialog.cancel();
+        mGallery.onRefreshComplete();
+      }
+      @Override
+      public void fail(int codeError,Response response) {
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
   private void create() {
-    mGalleryManager   = new GalleryManager<Like>(LikesActivity.this,mLikesAllList);
+    mGalleryManager   = new GalleryManager<Like>(LikesActivity.this,mLikesDataList);
     mLikesGridAdapter = new LikesGridAdapter(LikesActivity.this,mGalleryManager);
     mGallery.getRefreshableView().setAdapter(mLikesGridAdapter);
     mGallery.setOnScrollListener(mGalleryManager);
@@ -125,48 +137,10 @@ public class LikesActivity extends Activity {
       mGalleryManager.release();
       mGalleryManager=null;
     }
-    if(mGallery!=null)          mGallery=null;
-    if(mLikesGridAdapter!=null) mLikesGridAdapter=null;
-    if(mLikesAllList!=null)     mLikesAllList=null;
-    if(mProgressDialog!=null)   mProgressDialog=null;
-  }
-  //---------------------------------------------------------------------------
-  private void update() {
-    mProgressDialog.show();
-    
-    LikesRequest likesRequest = new LikesRequest(this);
-    likesRequest.offset = 0;
-    likesRequest.limit = 40;
-    likesRequest.callback(new ApiHandler() {
-      @Override
-      public void success(Response response) {
-        mLikesAllList.clear();
-        mLikesCityList.clear();
-        mLikesAllList.addAll(Like.parse(response));
-        
-        //int size = mLikesAllList.size();     // обычный фор!!!???
-        for(Like like : mLikesAllList)
-          if(like.city_id==mCity)
-            mLikesCityList.add(like);        // ЧТО ЭТО
-        
-        if(mCurrentCity==ALL_CITIES) {
-          mGalleryManager.setDataList(mLikesAllList);
-        } else {
-          //mGalleryManager.setDataList(mLikesAllList);
-          mGalleryManager.setDataList(mLikesCityList);
-        }
-
-        mProgressDialog.cancel();
-        
-        mLikesGridAdapter.notifyDataSetChanged();
-        
-        mGallery.onRefreshComplete();
-
-      }
-      @Override
-      public void fail(int codeError) {
-      }
-    }).exec();
+    mGallery=null;
+    mLikesGridAdapter=null;
+    mLikesDataList=null;
+    mProgressDialog=null;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -177,10 +151,10 @@ public class LikesActivity extends Activity {
   @Override
   protected void onDestroy() {
     // Сохранение параметров
-    SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-    SharedPreferences.Editor editor = preferences.edit();
-    editor.putInt(getString(R.string.s_likes_city_id),mCurrentCity);
-    editor.commit();
+    //SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    //SharedPreferences.Editor editor = preferences.edit();
+    //editor.putInt(getString(R.string.s_likes_city_id),mCurrentCity);
+    //editor.commit();
     
     release();
     

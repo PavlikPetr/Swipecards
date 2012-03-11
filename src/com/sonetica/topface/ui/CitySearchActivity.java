@@ -131,7 +131,7 @@ public class CitySearchActivity extends Activity {
         mProgressDialog.cancel();
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
       }
     }).exec();
   }
@@ -146,7 +146,7 @@ public class CitySearchActivity extends Activity {
         fillData(citiesList);
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
       }
     }).exec();
   }

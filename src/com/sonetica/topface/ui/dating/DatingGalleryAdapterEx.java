@@ -169,7 +169,7 @@ public class DatingGalleryAdapterEx extends BaseAdapter {
 //  Http.imageLoaderExp(url,view);
 
 /*
-// утечка памяти в данной реализации
+// утечка памяти при работе с пулами
   mThreadsPool.execute(new Thread() {
     @Override
     public void run() {

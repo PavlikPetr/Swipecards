@@ -2,7 +2,6 @@ package com.sonetica.topface.data;
 
 import java.util.LinkedList;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
@@ -25,34 +24,38 @@ public class Rate extends AbstractData {
   //---------------------------------------------------------------------------
   public static LinkedList<Rate> parse(Response response) {
     LinkedList<Rate> ratesList = new LinkedList<Rate>();
+    
     try {
       JSONArray arr = response.mJSONResult.getJSONArray("feed");
       if(arr.length()>0)
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
           Rate rate = new Rate();
-          rate.first_name = item.getString("first_name");
-          rate.online     = item.getBoolean("online");
-          rate.unread     = item.getBoolean("unread");
-          rate.created    = item.getLong("created")*1000; // время приходит в секундах
-          rate.unread_count = response.mJSONResult.getInt("unread");
-          rate.uid        = item.getInt("uid");
-          rate.age        = item.getInt("age");
-          rate.rate       = item.getInt("rate");
+          rate.first_name = item.optString("first_name");
+          rate.online     = item.optBoolean("online");
+          rate.unread     = item.optBoolean("unread");
+          rate.created    = item.optLong("created") * 1000; // время приходит в секундах
+          rate.unread_count = response.mJSONResult.optInt("unread");
+          rate.uid        = item.optInt("uid");
+          rate.age        = item.optInt("age");
+          rate.rate       = item.optInt("rate");
+          
           // city  
           JSONObject city = item.getJSONObject("city");
-            rate.city_id    = city.getInt("id");            
-            rate.city_name  = city.getString("name");
-            rate.city_full  = city.getString("full");
+            rate.city_id    = city.optInt("id");            
+            rate.city_name  = city.optString("name");
+            rate.city_full  = city.optString("full");
+            
           //  avatars
           JSONObject avatar  = item.getJSONObject("avatars");
-            rate.avatars_small = avatar.getString("small");
-            rate.avatars_big   = avatar.getString("big");
+            rate.avatars_small = avatar.optString("small");
+            rate.avatars_big   = avatar.optString("big");
           ratesList.add(rate);
         }
-    } catch(JSONException e) {
+    } catch(Exception e) {
       Debug.log("Rate.class","Wrong response parsing: " + e);
     }
+    
     return ratesList;
   }
   //---------------------------------------------------------------------------

@@ -75,7 +75,7 @@ public class AlbumActivity extends Activity {
         mProgressDialog.cancel();
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
       }
     }).exec();
   }
@@ -120,7 +120,7 @@ public class AlbumActivity extends Activity {
             Toast.makeText(AlbumActivity.this,"main",Toast.LENGTH_SHORT).show();
           }
           @Override
-          public void fail(int codeError) {
+          public void fail(int codeError,Response response) {
             Toast.makeText(AlbumActivity.this,"no main",Toast.LENGTH_SHORT).show();
           }
         }).exec();
@@ -134,7 +134,7 @@ public class AlbumActivity extends Activity {
             Toast.makeText(AlbumActivity.this,"delete",Toast.LENGTH_SHORT).show();
           }
           @Override
-          public void fail(int codeError) {
+          public void fail(int codeError,Response response) {
             Toast.makeText(AlbumActivity.this,"no delete",Toast.LENGTH_SHORT).show();
           }
         }).exec();

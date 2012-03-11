@@ -81,7 +81,7 @@ public class SocialWebActivity extends Activity {
             finish();
           }
           @Override
-          public void fail(int codeError) {
+          public void fail(int codeError,Response response) {
             Debug.log(SocialWebActivity.this,"ssid is wrong");
             setResult(Activity.RESULT_CANCELED);
             finish();

@@ -5,13 +5,12 @@ import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Rate;
 import com.sonetica.topface.module.pull2refresh.PullToRefreshListView;
+import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.RatesRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.DoubleBigButton;
-import com.sonetica.topface.ui.inbox.ChatActivity;
-import com.sonetica.topface.ui.likes.LikesActivity;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
@@ -31,10 +30,12 @@ public class RatesActivity extends Activity {
   // Data
   private PullToRefreshListView mListView;
   private RatesListAdapter mAdapter;
-  private LinkedList<Rate> mRatesList;
-  private AvatarManager    mAvatarManager;
-  private ProgressDialog   mProgressDialog;
-  private boolean mIsNewMessages;
+  private LinkedList<Rate> mRatesDataList;
+  private AvatarManager<Rate> mAvatarManager;
+  private ProgressDialog mProgressDialog;
+  private DoubleBigButton mDoubleButton;
+  // Constants
+  private static final int LIMIT = 40;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,47 +45,46 @@ public class RatesActivity extends Activity {
     
     // Data
     //mRatesList = Data.s_RatesList;
-    mRatesList = new LinkedList<Rate>();
+    mRatesDataList = new LinkedList<Rate>();
     
     // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.rates_header_title));
    
    // Double Button
-   DoubleBigButton btnDouble = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
-   btnDouble.setLeftText(getString(R.string.rates_btn_dbl_left));
-   btnDouble.setRightText(getString(R.string.rates_btn_dbl_right));
-   btnDouble.setChecked(mIsNewMessages==false?DoubleBigButton.LEFT_BUTTON:DoubleBigButton.RIGHT_BUTTON);
+   mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
+   mDoubleButton.setLeftText(getString(R.string.rates_btn_dbl_left));
+   mDoubleButton.setRightText(getString(R.string.rates_btn_dbl_right));
+   mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
    // Left btn
-   btnDouble.setLeftListener(new View.OnClickListener() {
+   mDoubleButton.setLeftListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       Toast.makeText(RatesActivity.this,"All",Toast.LENGTH_SHORT).show(); 
+       update(true,false);
      }
    });
    // Right btn
-   btnDouble.setRightListener(new View.OnClickListener() {
+   mDoubleButton.setRightListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       Toast.makeText(RatesActivity.this,"New",Toast.LENGTH_SHORT).show();
+       update(true,true);
      }
    });
 
    // ListView
    mListView = (PullToRefreshListView)findViewById(R.id.lvRatesList);
-   /*
-   mListView.setOnRefreshListener(new OnRefreshListener() {
-     @Override
-     public void onRefresh() {
-         update(); 
-     }});
-   */
-   
    mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(RatesActivity.this,ProfileActivity.class);
-       intent.putExtra(ProfileActivity.INTENT_USER_ID,mRatesList.get(position).uid);
+       intent.putExtra(ProfileActivity.INTENT_USER_ID,mRatesDataList.get(position).uid);
        startActivityForResult(intent,0);
+     }
+   });
+   mListView.setOnRefreshListener(new OnRefreshListener() {
+     @Override
+     public void onRefresh() {
+       update(false,true);
+       mListView.onRefreshComplete();
      }
    });
    
@@ -93,59 +93,66 @@ public class RatesActivity extends Activity {
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
    
    create();
-   if(mRatesList.size()==0)
-     update();
+   
+   update(true,Data.s_Likes>0?true:false);
    
    // обнуление информера непросмотренных оценок
    Data.s_Rates = 0;
   }
   //---------------------------------------------------------------------------
+  private void update(boolean isProgress, final boolean isNew) {
+    if(isProgress)
+      mProgressDialog.show();
+
+    RatesRequest likesRequest = new RatesRequest(this);
+    likesRequest.limit = LIMIT;
+    likesRequest.only_new = isNew;
+    likesRequest.callback(new ApiHandler(){
+      @Override
+      public void success(Response response) {
+        LinkedList<Rate> ratesList = Rate.parse(response);
+        if(ratesList.size()>0) {
+         mRatesDataList = ratesList;
+         mDoubleButton.setChecked(isNew==false?DoubleBigButton.LEFT_BUTTON:DoubleBigButton.RIGHT_BUTTON);
+          mAvatarManager.setDataList(ratesList);
+          mAdapter.notifyDataSetChanged();
+        } else
+          mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
+        mProgressDialog.cancel();
+        mListView.onRefreshComplete();
+      }
+      @Override
+      public void fail(int codeError,Response response) {
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
   private void create() {
     // ListAdapter
-    //mAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,new String[]{"one","two"});
-    mAvatarManager = new AvatarManager<Rate>(this,mRatesList);
+    mAvatarManager = new AvatarManager<Rate>(this,mRatesDataList);
     mListView.setOnScrollListener(mAvatarManager);    
     mAdapter = new RatesListAdapter(this,mAvatarManager);
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
   private void release() {
-    if(mListView!=null)       mListView=null;
-    if(mAdapter!=null)        mAdapter=null;
-    if(mRatesList!=null)      mRatesList=null;
+    mListView=null;
+    mAdapter=null;
+    mRatesDataList=null;
     if(mAvatarManager!=null) {
       mAvatarManager.release();
       mAvatarManager=null;
     }
+    if(StarView.mStarYellow!=null)
+      StarView.mStarYellow.recycle();
+    StarView.mStarYellow=null;
     if(mProgressDialog!=null) mProgressDialog=null;
-  }
-  //---------------------------------------------------------------------------
-  private void update() {
-    mProgressDialog.show();
-
-    RatesRequest likesRequest = new RatesRequest(this);
-    likesRequest.offset = 0;
-    likesRequest.limit  = 100;
-    likesRequest.callback(new ApiHandler(){
-      @Override
-      public void success(Response response) {
-        LinkedList<Rate> ratesList = Rate.parse(response);
-        mRatesList = ratesList;
-        mAvatarManager.setDataList(ratesList);
-        mAdapter.notifyDataSetChanged();
-        mProgressDialog.cancel();
-        //mListView.onRefreshComplete();
-      }
-      @Override
-      public void fail(int codeError) {
-        Toast.makeText(RatesActivity.this,"fail:"+codeError,Toast.LENGTH_SHORT).show();
-      }
-    }).exec();
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
     release();
+    
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }

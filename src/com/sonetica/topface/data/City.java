@@ -2,7 +2,6 @@ package com.sonetica.topface.data;
 
 import java.util.LinkedList;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
@@ -15,20 +14,22 @@ public class City extends AbstractData {
   //---------------------------------------------------------------------------
   public static LinkedList<City> parse(Response response) {
     LinkedList<City> cities = new LinkedList<City>();
+    
     try {
       JSONArray arr = response.mJSONResult.getJSONArray("cities");
       if(arr.length()>0)
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
           City city = new City();
-            city.id   = item.getInt("id");
-            city.name = item.getString("name");
-            city.full = item.getString("full");
+            city.id   = item.optInt("id");
+            city.name = item.optString("name");
+            city.full = item.optString("full");
           cities.add(city);
         }
-    } catch(JSONException e) {
+    } catch(Exception e) {
       Debug.log("City.class","Wrong response parsing: " + e);
     }
+    
     return cities;
   }
   //---------------------------------------------------------------------------

@@ -9,11 +9,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-public class Jopa extends View implements View.OnTouchListener {
+public class MyView extends View implements View.OnTouchListener {
   //Data
   Paint paint = new Paint();
   //---------------------------------------------------------------------------
-  public Jopa(Context context) {
+  public MyView(Context context) {
     super(context);
     setBackgroundColor(Color.WHITE);
     setOnTouchListener(this);
@@ -28,19 +28,19 @@ public class Jopa extends View implements View.OnTouchListener {
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     //super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-    int width0  = MeasureSpec.getSize(widthMeasureSpec);
-    int height0 = MeasureSpec.getSize(heightMeasureSpec);
+    int width  = MeasureSpec.getSize(widthMeasureSpec);
+    int height = MeasureSpec.getSize(heightMeasureSpec);
     
-    setMeasuredDimension(width0*2,height0*2);
+    setMeasuredDimension(width*2,height*2);
     
-    Debug.log(this,">> JOPA onMeasure, w:"+width0+" h:"+height0);
+    Debug.log(this,">> MyView onMeasure, w:"+width+" h:"+height);
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
     //super.onLayout(changed,left,top,right,bottom);
     
-    Debug.log(this,">> JOPA onLayout,l:"+left+" t:"+top+" r:"+right+" b:"+bottom);
+    Debug.log(this,">> MyView onLayout,l:"+left+" t:"+top+" r:"+right+" b:"+bottom);
   }
   //---------------------------------------------------------------------------
   @Override

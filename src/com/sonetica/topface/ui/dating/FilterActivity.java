@@ -193,7 +193,7 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
         //Toast.makeText(FilterActivity.this,"filter success",Toast.LENGTH_SHORT).show();
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
       }
     }).exec();
   }
@@ -372,7 +372,7 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
         mLocationManager.removeUpdates(FilterActivity.this);
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
         mLocationManager.removeUpdates(FilterActivity.this);
       }
     }).exec();

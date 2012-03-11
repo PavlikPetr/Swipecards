@@ -10,7 +10,6 @@ public class DoRateRequest extends ApiRequest {
   private String service = "rate";
   public  int userid;   // идентификатор пользователя для оценки
   public  int rate;     // оценка пользователя. ОДЗ: 1 <= RATE <= 10
-  public  String comment;     // оценка пользователя. ОДЗ: 1 <= RATE <= 10
   //---------------------------------------------------------------------------
   public DoRateRequest(Context context) {
     super(context);
@@ -27,6 +26,7 @@ public class DoRateRequest extends ApiRequest {
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }
+    
     return root.toString();
   }
   //---------------------------------------------------------------------------

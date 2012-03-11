@@ -179,7 +179,7 @@ public class TopsActivity extends Activity {
         mProgressDialog.cancel();
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
       }
     }).exec();
   }
@@ -200,7 +200,7 @@ public class TopsActivity extends Activity {
         showCitiesDialog();
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
       }
     }).exec();
   }

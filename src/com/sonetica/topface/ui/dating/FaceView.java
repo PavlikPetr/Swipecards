@@ -7,10 +7,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.view.View;
 import android.widget.ImageView;
 
+/*
+ *   информация оцениваемого пользователя, ПЕРЕДЕЛАТЬ на layout и объекты view
+ */
 public class FaceView extends ImageView {
   // Data
   public  int age;
@@ -58,7 +60,7 @@ public class FaceView extends ImageView {
     // name age online
     paintName.setColor(Color.WHITE);
     paintName.setTextSize(getResources().getDimension(R.dimen.name_font_size));
-    paintName.setTypeface(Typeface.DEFAULT_BOLD);
+    //paintName.setTypeface(Typeface.DEFAULT_BOLD);
     paintName.setAntiAlias(true);
   }
   //---------------------------------------------------------------------------
@@ -81,7 +83,7 @@ public class FaceView extends ImageView {
       
       //city
       float offset_x = getResources().getDimension(R.dimen.city_offset_x_size);
-      float offset_y = getHeight()-paintCity.getTextSize()/2;
+      float offset_y = (float)(getHeight()-paintCity.getTextSize()*1.5);
       canvas.drawText(city,offset_x,offset_y,paintCity);
   
       // name age online
@@ -107,7 +109,7 @@ public class FaceView extends ImageView {
     
     int count    = 0;
     int size     = text.length();   // длина целой строки
-    int numChar  = paint.breakText(status,true,140,null); // кол-во влезающих символов; БЛЕАТЬ, что за 140 !!!!
+    int numChar  = paint.breakText(status,false,170,null); // 170 магическое число
     int numStart = 0;               // начало обреза
     int numEnd   = numChar;         // конец обреза
     
@@ -139,10 +141,22 @@ public class FaceView extends ImageView {
   }
   //---------------------------------------------------------------------------
   public void release() {
-    mOnlineBmp.recycle();
-    mOfflineBmp.recycle();
-    mShadowTopBmp.recycle();
-    mShadowBottomBmp.recycle();
+    if(mOnlineBmp!=null)
+      mOnlineBmp.recycle();
+    mOnlineBmp=null;
+    
+    if(mOfflineBmp!=null)
+      mOfflineBmp.recycle();
+    mOfflineBmp=null;
+    
+    if(mShadowTopBmp!=null)
+      mShadowTopBmp.recycle();
+    mShadowTopBmp=null;
+    
+    if(mShadowBottomBmp!=null)
+      mShadowBottomBmp.recycle();
+    mShadowBottomBmp=null;
+    
     paint     = null;
     paintName  = null;
     paintCity   = null;

@@ -121,17 +121,20 @@ public class InformerView extends ViewGroup {
   //---------------------------------------------------------------------------
   @Override
   protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
+    
+    float offset_from_stars = 1.3f;
+    
     int width  = getMeasuredWidth();
     int height = getMeasuredHeight();
     
     mInformer._bottom = height;
     
-    int x = (int)(width  - mProfileBtn.getMeasuredWidth()*1.4);
-    int y = (int)(height - mProfileBtn.getMeasuredHeight()*2.6);
+    int x = (int)(width - mProfileBtn.getMeasuredWidth()*offset_from_stars);
+    int y = (int)(height - mProfileBtn.getMeasuredHeight()*2.5);
     mChatBtn.layout(x,y,x+mChatBtn.getMeasuredWidth(),y+mChatBtn.getMeasuredHeight());
     
-    y = (int)(y+mChatBtn.getMeasuredHeight()*1.4);
-    mProfileBtn.layout(x,y,x+mProfileBtn.getMeasuredWidth(),y+mProfileBtn.getMeasuredHeight());
+    y = (int)(y + mChatBtn.getMeasuredHeight()*offset_from_stars);
+    mProfileBtn.layout(x,y,x + mProfileBtn.getMeasuredWidth(),y + mProfileBtn.getMeasuredHeight());
   }
   //---------------------------------------------------------------------------
   public void setVisible(boolean visible) {
@@ -153,9 +156,17 @@ public class InformerView extends ViewGroup {
     mChatBtn = null;
     mInformer = null;
     
-    mBkgrnd.recycle();
-    mStar.recycle();
-    mMoney.recycle();
+    if(mBkgrnd!=null)
+      mBkgrnd.recycle();
+    mBkgrnd=null;
+    
+    if(mStar!=null)
+      mStar.recycle();
+    mStar=null;
+    
+    if(mMoney!=null)
+      mMoney.recycle();
+    mMoney=null;
     
     informerTitlePaint = null;
     informerPaint = null;

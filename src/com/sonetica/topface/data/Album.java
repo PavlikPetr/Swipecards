@@ -2,7 +2,6 @@ package com.sonetica.topface.data;
 
 import java.util.LinkedList;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
@@ -20,29 +19,31 @@ public class Album extends AbstractData {
   //---------------------------------------------------------------------------
   public static LinkedList<Album> parse(Response response) {
     LinkedList<Album> albumsList = new LinkedList<Album>();
+    
     try {
       JSONArray array = response.mJSONResult.getJSONArray("album");
       if(array.length()>0)
         for(int i=0;i<array.length();i++) {
           JSONObject item = array.getJSONObject(i);
           Album album = new Album();
-            album.id    = item.getInt("id");
-            album.small = item.getString("small");
-            album.big   = item.getString("big");
+            album.id    = item.optInt("id");
+            album.small = item.optString("small");
+            album.big   = item.optString("big");
           
           if(!item.isNull("ero")) {
             album.ero   = true;
-            album.buy   = item.getBoolean("buy");
-            album.cost  = item.getInt("cost");
-            album.likes = item.getInt("likes");
-            album.dislikes = item.getInt("dislikes");
+            album.buy   = item.optBoolean("buy");
+            album.cost  = item.optInt("cost");
+            album.likes = item.optInt("likes");
+            album.dislikes = item.optInt("dislikes");
           } else
             album.ero = false;            
           albumsList.add(album);
         }
-    } catch(JSONException e) {
+    } catch(Exception e) {
       Debug.log("Album.class","Wrong response parsing: " + e);
     }
+    
     return albumsList; 
   }
   //---------------------------------------------------------------------------

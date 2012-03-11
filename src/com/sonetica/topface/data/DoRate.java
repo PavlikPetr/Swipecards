@@ -1,6 +1,5 @@
 package com.sonetica.topface.data;
 
-import org.json.JSONException;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
 
@@ -12,13 +11,15 @@ public class DoRate extends AbstractData {
   //---------------------------------------------------------------------------
   public static DoRate parse(Response response) {
     DoRate doRate = new DoRate();
+    
     try {
-      doRate.money = response.mJSONResult.getInt("money");
-      doRate.power = response.mJSONResult.getInt("power");
-      doRate.average = response.mJSONResult.getInt("average");
-    } catch(JSONException e) {
+      doRate.money = response.mJSONResult.optInt("money");
+      doRate.power = response.mJSONResult.optInt("power");
+      doRate.average = response.mJSONResult.optInt("average");
+    } catch(Exception e) {
       Debug.log("DoRate.class","Wrong response parsing: " + e);
     }
+    
     return doRate;
   }
   //---------------------------------------------------------------------------

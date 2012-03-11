@@ -123,7 +123,7 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
         PhotoVote photoVote = PhotoVote.parse(response);
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
         
       }
     }).exec();
@@ -169,7 +169,7 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
             startActivity(new Intent(EroAlbumActivity.this,BuyingActivity.class));  // окно на покупку монет
         }
         @Override
-        public void fail(int codeError) {
+        public void fail(int codeError,Response response) {
           EroAlbumActivity.this.finish();  // какие-то неполадки
         }
       }).exec();

@@ -2,7 +2,6 @@ package com.sonetica.topface.data;
 
 import java.util.LinkedList;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.utils.Debug;
@@ -25,28 +24,29 @@ public class History extends AbstractData {
   //---------------------------------------------------------------------------
   public static LinkedList<History> parse(Response response) {
     LinkedList<History> historyList = new LinkedList<History>();
+    
     try {
       JSONArray array = response.mJSONResult.getJSONArray("history");
       if(array.length()>0)
         for(int i=0;i<array.length();i++) {
           JSONObject item = array.getJSONObject(i);
           History history  = new History();
-          history.created  = item.getLong("created")*1000; // время приходит в секундах
-          history.owner_id = item.getInt("owner_id");
-          history.type     = item.getInt("type");
+          history.created  = item.optLong("created")*1000; // время приходит в секундах
+          history.owner_id = item.optInt("owner_id");
+          history.type     = item.optInt("type");
           
           switch(history.type) {
             case DEFAULT:
-              history.text = item.getString("text");
+              history.text = item.optString("text");
               break;
             case PHOTO:
-              history.code = item.getInt("code");
+              history.code = item.optInt("code");
               break;
             case GIFT:
-              history.gift = item.getInt("gift");
+              history.gift = item.optInt("gift");
               break;
             case MESSAGE:
-              history.text = item.getString("text");
+              history.text = item.optString("text");
               break;
             case MESSAGE_WISH:
               break;
@@ -55,12 +55,12 @@ public class History extends AbstractData {
             default:
               break;
           }
-          //historyList.add(history);
           historyList.addFirst(history);
         }
-    } catch(JSONException e) {
+    } catch(Exception e) {
       Debug.log("History.class","Wrong response parsing: " + e);
     }
+    
     return historyList; 
   }
   //---------------------------------------------------------------------------

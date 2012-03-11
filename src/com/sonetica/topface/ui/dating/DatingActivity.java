@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /* "оценка фото" */
 public class DatingActivity extends Activity implements OnNeedUpdateListener,OnRateListener,OnClickListener{
@@ -74,8 +73,9 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     mCommentDialog = new Dialog(this);
     mCommentDialog.setTitle(R.string.chat_comment);    
     mCommentDialog.setContentView(R.layout.popup_comment);
-    //mCommentDialog.getWindow().setBackgroundDrawableResource(R.drawable.popup_comment);
     mCommentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    //mCommentDialog.getWindow().setBackgroundDrawableResource(R.drawable.popup_comment);
+    
     mCommentText = (EditText)mCommentDialog.findViewById(R.id.etPopupComment);
    
     update(true);
@@ -100,17 +100,17 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
         }
       }
       @Override
-      public void fail(int codeError) {
-        Toast.makeText(DatingActivity.this,"dating update fail",Toast.LENGTH_SHORT).show();
+      public void fail(int codeError,Response response) {
+        update(true);
+        //Toast.makeText(DatingActivity.this,"dating update fail",Toast.LENGTH_SHORT).show();
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void rate(final int userid,final int rate,String comment) {
+  private void rate(final int userid,final int rate) {
     DoRateRequest doRate = new DoRateRequest(this.getApplicationContext());
-    doRate.userid  = userid;
-    doRate.rate    = rate;
-    doRate.comment = comment;
+    doRate.userid = userid;
+    doRate.rate   = rate;
     doRate.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
@@ -120,7 +120,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
         Data.s_AverageRate = rate.average;
       }
       @Override
-      public void fail(int codeError) {
+      public void fail(int codeError,Response response) {
         //Toast.makeText(DatingActivity.this,"dating rate failed",Toast.LENGTH_SHORT).show();
       }
     }).exec();
@@ -140,6 +140,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
           String comment = mCommentText.getText().toString();
           if(comment.equals(""))
             return;
+          
           int uid = mDatingControl.getUserId();
           
           // отправка комментария к оценке
@@ -151,15 +152,15 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
             public void success(Response response) {
             }
             @Override
-            public void fail(int codeError) {
+            public void fail(int codeError,Response response) {
             }
           }).exec();
           
           // отправка оценки
-          rate(uid,rate,comment);
+          rate(uid,rate);
           
-          mCommentText.setText("");
           mCommentDialog.cancel();
+          mCommentText.setText("");
           
           // скрыть клавиатуру
           mInputManager.hideSoftInputFromWindow(mCommentText.getWindowToken(),InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -173,7 +174,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
       mCommentDialog.show();
       
     } else {
-      rate(mDatingControl.getUserId(),rate,null);
+      rate(mDatingControl.getUserId(),rate);
       mDatingControl.next();
     }
   }
@@ -182,12 +183,12 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   public void onClick(View view) {
     switch(view.getId()) {
       case R.id.chatBtn: {
-        Intent intent = new Intent(this,ChatActivity.class);
+        Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mDatingControl.getUserId());
         startActivityForResult(intent,0);
       } break;
       case R.id.profileBtn: {
-        Intent intent = new Intent(this,ProfileActivity.class);
+        Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
         intent.putExtra(ProfileActivity.INTENT_USER_ID,mDatingControl.getUserId());
         startActivityForResult(intent,0);
       } break;
@@ -207,6 +208,9 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   protected void onDestroy() {
     mDatingControl.release();
     mDatingControl = null;
+    mCommentDialog = null;
+    mCommentText = null;
+
     mHeaderBar = null;
 
     Debug.log(this,"-onDestroy");

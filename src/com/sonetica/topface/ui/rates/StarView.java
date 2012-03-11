@@ -16,7 +16,7 @@ public class StarView extends View {
   public int mRate;
   private float x;
   private float y;
-  private static Bitmap mStarYellow;
+  public static Bitmap mStarYellow;
   private static final Paint paintNumber = new Paint();
   //---------------------------------------------------------------------------
   public StarView(Context context,AttributeSet attrs) {
@@ -33,8 +33,6 @@ public class StarView extends View {
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    int w = mStarYellow.getWidth();
-    int h = mStarYellow.getHeight();
     // центрирование цифры 
     x = (mStarYellow.getWidth()/2);
     y = (mStarYellow.getHeight()/2+paintNumber.getTextSize()/2);
