@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -90,16 +91,20 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
-        if(!mBusy) {
-          final Bitmap bitmap = Http.bitmapLoader(album.getSmallLink());
-          if(bitmap!=null)
-            mCache.put(position,bitmap);
-            view.post(new Runnable() {
-              @Override
-              public void run() {
-                view.setImageBitmap(bitmap);
-              }
-            });
+        try {
+          if(!mBusy) {
+            final Bitmap bitmap = Http.bitmapLoader(album.getSmallLink());
+            if(bitmap!=null)
+              mCache.put(position,bitmap);
+              view.post(new Runnable() {
+                @Override
+                public void run() {
+                  view.setImageBitmap(bitmap);
+                }
+              });
+          }
+        } catch(Exception e){
+          Debug.log(this,"tread error: " + e);
         }
       }
     });

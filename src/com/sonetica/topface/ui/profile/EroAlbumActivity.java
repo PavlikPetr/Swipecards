@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,8 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
   // Data
   private int mCurrentPos;
   private int mUserId;
+  private TextView mMoney;
+  private TextView mCounter;
   private Button mLikeButton;
   private Button mDislikeButton;
   private Button mBuyButton;
@@ -58,14 +61,14 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
     LeaksManager.getInstance().monitorObject(this);
     
     // Title Header
-    ((TextView)findViewById(R.id.tvHeaderTitle)).setText("Oo");
+    mCounter = (TextView)findViewById(R.id.tvHeaderTitle);
     
     // Data List
     mAlbumsList = Data.s_PhotoAlbum;
     
     // Image Ero
     mEroView = ((ImageView)findViewById(R.id.ivEroPhoto));
-    
+
     // Progress
     //mProgress = (ProgressBar)findViewById(R.id.pgrsEroAlbum);
     
@@ -110,6 +113,14 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     //mProgressDialog.show();
+    
+    // Money
+    Drawable drwbl = getResources().getDrawable(R.drawable.dating_money);
+    mMoney = (TextView)findViewById(R.id.tvEroAlbumMoney);
+    mMoney.setCompoundDrawablePadding(5);
+    mMoney.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl,null);
+    
+    updateCounter();
     
     showImage();
   }
@@ -164,6 +175,7 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
         public void success(Response response) {
           PhotoOpen photoOpen = PhotoOpen.parse(response);
           if(photoOpen.completed) {
+            Data.s_Money = photoOpen.money;
             album.buy = true;
             controlVisibility(S_SHOW_LIKE_DISLIKE);
             
@@ -183,6 +195,16 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
       }).exec();
       
     }
+  }
+  //---------------------------------------------------------------------------
+  // счетчик галереи
+  public void updateCounter() {
+    // money
+    mMoney.setText(""+Data.s_Money);
+    mMoney.invalidate();
+    // counter
+    mCounter.setText((mCurrentPos+1)+"/"+mAlbumsList.size());
+    mCounter.invalidate();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -212,6 +234,9 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
   }
   //---------------------------------------------------------------------------
   synchronized public void controlVisibility(int state) {
+    
+    updateCounter();
+    
     switch(state) {
       case S_HIDE_ALL: {
         mLikeButton.setVisibility(View.INVISIBLE);

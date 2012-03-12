@@ -25,7 +25,7 @@ import android.widget.TextView;
 /*
  *            "Диалоги"
  */
-public class ChatActivity extends Activity {
+public class ChatActivity extends Activity implements View.OnClickListener {
   // Data
   private ListView mListView;
   private ChatListAdapter mAdapter;
@@ -83,14 +83,7 @@ public class ChatActivity extends Activity {
     // Profile Button
     ImageButton btnProfile = (ImageButton)findViewById(R.id.btnChatProfile);
     btnProfile.setVisibility(View.VISIBLE);
-    btnProfile.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
-        intent.putExtra(ProfileActivity.INTENT_USER_ID,mUserId);
-        startActivity(intent);
-      }
-    });
+    btnProfile.setOnClickListener(this);
     
     // Edit Box
     mEdBox = (EditText)findViewById(R.id.edChatBox);
@@ -145,6 +138,13 @@ public class ChatActivity extends Activity {
     Data.s_Messages = 0;
   }
   //---------------------------------------------------------------------------
+  @Override
+  public void onClick(View v) {
+    Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
+    intent.putExtra(ProfileActivity.INTENT_USER_ID,mUserId);
+    startActivity(intent);
+  }
+  //---------------------------------------------------------------------------
   private void update(final int offset,final boolean isRefresh) {
     if(!isRefresh)
       mProgressDialog.show();
@@ -187,6 +187,7 @@ public class ChatActivity extends Activity {
   private void create() {
     // ListAdapter
     mAdapter = new ChatListAdapter(getApplicationContext(),mUserId,mHistoryList);
+    mAdapter.setOnAvatarListener(this);
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------

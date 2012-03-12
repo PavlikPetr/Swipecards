@@ -2,64 +2,81 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-  
- 
-  <ProgressBar
-      android:id="@+id/pgrsEroAlbum"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      style="@android:style/Widget.ProgressBar.Large" />
-    
-  <!-- gallery -->
-  <ImageView
-      android:id="@+id/ivEroPhoto"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent" />
-    
-  <!-- header bar -->
-  <include layout="@layout/bar_header" />
-  
-  <!--  buttons  -->
-  <RelativeLayout
-      android:layout_width="fill_parent" 
-      android:layout_height="wrap_content"
-      android:layout_alignParentBottom="true"
-      android:background="@drawable/im_bar_header" >
-    
-    <Button
-        android:id="@+id/btnEroAlbumLike"
-        android:textColor="#FFFFFF"
+
+    <ProgressBar
+        android:id="@+id/pgrsEroAlbum"
+        style="@android:style/Widget.ProgressBar.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:text="@string/ero_album_btn_like"
-        android:layout_alignParentLeft="true"  />
-    <Button
-        android:id="@+id/btnEroAlbumBuy"
-        android:textColor="#FFFFFF"
-        android:layout_width="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <!-- gallery -->
+
+    <ImageView
+        android:id="@+id/ivEroPhoto"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <!-- header bar -->
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:text="@string/ero_album_btn_buy"
-        android:layout_centerInParent="true"  />
-    <Button
-        android:id="@+id/btnEroAlbumNext"
-        android:textColor="#FFFFFF"
-        android:layout_width="wrap_content"
+        android:orientation="vertical" >
+      <include layout="@layout/bar_header" />
+      <TextView
+          android:id="@+id/tvEroAlbumMoney"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="#ffffff"
+          android:textStyle="bold"
+          android:layout_marginLeft="5dp"
+          android:layout_marginTop="5dp"
+          />
+    </LinearLayout>
+
+    <!-- buttons -->
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:text="@string/ero_album_btn_next"
-        android:layout_centerInParent="true"  />
-    <Button
-        android:id="@+id/btnEroAlbumDislike"
-        android:textColor="#FFFFFF"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:text="@string/ero_album_btn_dislike"
-        android:layout_alignParentRight="true"  />
-        
-  </RelativeLayout>
-  
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/im_bar_header" >
+
+        <Button
+            android:id="@+id/btnEroAlbumLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/ero_album_btn_like"
+            android:textColor="#FFFFFF"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btnEroAlbumBuy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/ero_album_btn_buy"
+            android:textColor="#FFFFFF"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btnEroAlbumNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/ero_album_btn_next"
+            android:textColor="#FFFFFF"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btnEroAlbumDislike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/ero_album_btn_dislike"
+            android:textColor="#FFFFFF"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
 </RelativeLayout>

@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class ChatListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
-  public static class ViewHolder {
+  public class ViewHolder {
       RoundedImageView mAvatar;
       TextView  mMessage;
       TextView  mDate;
@@ -26,9 +26,11 @@ public class ChatListAdapter extends BaseAdapter {
   private LinkedList<History> mList;
   //private Bitmap baby;
   //private Bitmap me;
+  private View.OnClickListener mOnAvatarListener;
   /* содержит тип итема для отрисовки необходимого слоя */
   private LayoutInflater mInflater;
   private LinkedList<Integer> mItemLayoutList = new LinkedList<Integer>();
+  // Constants
   private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   // Type Item
   private static final int T_USER_PHOTO   = 0;
@@ -42,6 +44,10 @@ public class ChatListAdapter extends BaseAdapter {
     mUserId = userId;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     prepare(dataList);
+  }
+  //---------------------------------------------------------------------------
+  public void setOnAvatarListener(View.OnClickListener onAvatarListener){
+    mOnAvatarListener = onAvatarListener;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -77,30 +83,31 @@ public class ChatListAdapter extends BaseAdapter {
     if(convertView == null) { 
       holder = new ViewHolder();
       switch(type) {
-        case T_FRIEND_PHOTO:
+        case T_FRIEND_PHOTO: {
             convertView     = mInflater.inflate(R.layout.chat_friend, null, false);
             holder.mAvatar  = (RoundedImageView)convertView.findViewById(R.id.left_icon);
             holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
             holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
-            break;
-        case T_FRIEND_EXT:
+            holder.mAvatar.setOnClickListener(mOnAvatarListener);
+        } break;
+        case T_FRIEND_EXT: {
             convertView     = mInflater.inflate(R.layout.chat_friend_ext, null, false);
             holder.mAvatar  = (RoundedImageView)convertView.findViewById(R.id.left_icon);
             holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
             holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
-            break;
-        case T_USER_PHOTO:
+        } break;
+        case T_USER_PHOTO: {
             convertView     = mInflater.inflate(R.layout.chat_user, null, false);
             holder.mAvatar  = (RoundedImageView)convertView.findViewById(R.id.left_icon);
             holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
             holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
-            break;
-        case T_USER_EXT:
+        } break;
+        case T_USER_EXT: {
             convertView     = mInflater.inflate(R.layout.chat_user_ext, null, false);
             holder.mAvatar  = (RoundedImageView)convertView.findViewById(R.id.left_icon);
             holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
             holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
-            break;
+        } break;
       }
       
       convertView.setTag(holder);
