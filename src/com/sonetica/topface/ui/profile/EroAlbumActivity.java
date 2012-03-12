@@ -12,6 +12,7 @@ import com.sonetica.topface.net.PhotoVoteRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.BuyingActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -53,6 +54,8 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_ero_album);
     Debug.log(this,"+onCreate");
+    
+    LeaksManager.getInstance().monitorObject(this);
     
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText("Oo");
@@ -147,7 +150,9 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
           controlVisibility(S_SHOW_NEXT_BUY);
       }
       
-      new Thread(new LoaderEroPhoto()).start();     // загрузка эро фотографии
+      Thread t = new Thread(new LoaderEroPhoto());     // загрузка эро фотографии
+      LeaksManager.getInstance().monitorObject(t);
+      t.start();
 
     } else {  // запрос на покупку
 
@@ -162,7 +167,9 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
             album.buy = true;
             controlVisibility(S_SHOW_LIKE_DISLIKE);
             
-            new Thread(new LoaderEroPhoto()).start();     // загрузка эро фотографии
+            Thread t = new Thread(new LoaderEroPhoto());     // загрузка эро фотографии
+            LeaksManager.getInstance().monitorObject(t);
+            t.start();
             
           } else
             startActivity(new Intent(EroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));  // окно на покупку монет

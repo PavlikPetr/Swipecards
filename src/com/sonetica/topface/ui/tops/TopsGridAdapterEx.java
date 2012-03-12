@@ -45,7 +45,7 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
     //mThread = Executors.newSingleThreadExecutor();
     //mCache  = new HashMap<Integer,Bitmap>();
     mArray  = new Bitmap[topUserList.size()];
-    new Thread(RUN).start();
+    //new Thread(RUN).start();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -141,10 +141,11 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
     Debug.log(this,"state : " + isScrolled);
   }
   //---------------------------------------------------------------------------
+  /*
   private Runnable RUN = new Runnable() {
     @Override
     public void run() {
-      /*
+      
       while(!isScrolled) {
         final Bitmap rawBitmap = Http.bitmapLoader(mData.get(position).getLink());
         if(rawBitmap==null)
@@ -160,9 +161,10 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
           mArray[position] = scaledBitmap;
         }
       }
-      */
+      
     }
   };
+  */
   //---------------------------------------------------------------------------
 }
 

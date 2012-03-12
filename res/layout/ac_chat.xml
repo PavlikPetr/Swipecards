@@ -10,7 +10,8 @@
   <!-- header bar -->
   <include layout="@layout/bar_header" />
   
-  <com.sonetica.topface.module.pull2refresh.PullToRefreshListView
+ <!--  <com.sonetica.topface.module.pull2refresh.PullToRefreshListView  -->
+ <ListView
       android:id="@+id/lvChatList"
       android:layout_width="wrap_content" 
       android:layout_height="0dip"

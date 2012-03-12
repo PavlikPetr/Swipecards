@@ -12,17 +12,22 @@ import com.sonetica.topface.ui.album.AlbumGallery;
 import com.sonetica.topface.ui.album.AlbumGalleryAdapter;
 import com.sonetica.topface.ui.album.AlbumGalleryManager;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 public class PhotoAlbumActivity extends Activity {
   // Data
   private boolean mOwner;
+  private TextView mCounter;
   private AlbumGallery  mGallery;
   private LinkedList<Album> mAlbumsList;
   private ProgressDialog mProgressDialog;
@@ -38,9 +43,13 @@ public class PhotoAlbumActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_album);
     Debug.log(this,"+onCreate");
+    
+    System.gc();
+    
+    LeaksManager.getInstance().monitorObject(this);
 
     // Title Header
-    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.album_header_title));
+    mCounter = ((TextView)findViewById(R.id.tvHeaderTitle));
     
     // Progress Dialog
     mProgressDialog = new ProgressDialog(this);
@@ -50,20 +59,38 @@ public class PhotoAlbumActivity extends Activity {
     
     mOwner = getIntent().getBooleanExtra(INTENT_OWNER,false);
     
-    int uid = getIntent().getIntExtra(INTENT_USER_ID,-1);
-    int position = getIntent().getIntExtra(INTENT_ALBUM_POS,0);
+    int uid = getIntent().getIntExtra(INTENT_USER_ID,-1);  // нахуя он нужен, разобраться почему это здесь написано!!!
+    final int position = getIntent().getIntExtra(INTENT_ALBUM_POS,0);
 
     if(uid==-1) {
       Debug.log(this,"Intent param is wrong");
       finish();      
     }
     
-    // Gallery
-    mGallery = (AlbumGallery)findViewById(R.id.galleryAlbum);
+    // Gallery Adapter
     mGalleryManager = new AlbumGalleryManager(getApplicationContext(),mAlbumsList);
     mGalleryAdapter = new AlbumGalleryAdapter(getApplicationContext(),mGalleryManager);
+
+    // Gallery
+    mGallery = (AlbumGallery)findViewById(R.id.galleryAlbum);
     mGallery.setAdapter(mGalleryAdapter);
     mGallery.setSelection(position,true);
+    mGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> arg0,View arg1,int position,long arg3) {
+        PhotoAlbumActivity.this.setCounter(position+1,mAlbumsList.size()); //  УПРАВЛЕНИЕ СЧЕТЧИКОМ
+      }
+      @Override
+      public void onNothingSelected(AdapterView<?> arg0) {}
+    });
+    
+    setCounter(position+1,mAlbumsList.size());
+  }
+  //---------------------------------------------------------------------------
+  // счетчик галереи
+  public void setCounter(int index,int size) {
+    mCounter.setText(index+"/"+size);
+    mCounter.invalidate();
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -73,6 +100,8 @@ public class PhotoAlbumActivity extends Activity {
     mGalleryManager.release();
     mGalleryManager = null;
     mGalleryAdapter = null;
+    
+    System.gc();
     
     Debug.log(this,"-onDestroy");
     super.onDestroy();  

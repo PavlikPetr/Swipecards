@@ -13,6 +13,7 @@ import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.ui.GalleryManager;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -40,6 +41,8 @@ public class LikesActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_likes);
     Debug.log(this,"+onCreate");
+    
+    LeaksManager.getInstance().monitorObject(this);
     
     // Data
     mLikesDataList  = new LinkedList<Like>();

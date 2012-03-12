@@ -7,6 +7,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -78,7 +79,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
   //---------------------------------------------------------------------------
   public void loadingImages(final int position,final ImageView imageView) {
     //mThreadsPool.execute(new Runnable() {
-    new Thread(new Runnable() {
+    Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
         try {
@@ -104,7 +105,9 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
           Debug.log(App.TAG,"thread error:"+e);
         }
       } 
-    }).start();
+    });
+    LeaksManager.getInstance().monitorObject(t);
+    t.start();
   }
   //---------------------------------------------------------------------------
   public void release() {

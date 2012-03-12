@@ -4,6 +4,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.social.Socium;
 import com.sonetica.topface.social.Socium.AuthException;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -28,6 +29,8 @@ public class AddPhotoActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_add_photo);
     Debug.log(this,"+onCreate");
+    
+    LeaksManager.getInstance().monitorObject(this);
     
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.album_add_photo_title));

@@ -3,6 +3,7 @@ package com.sonetica.topface.ui.dating;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -98,7 +99,7 @@ public class DatingGalleryAdapterEx extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   public void loadingImage(final int position,final ImageView view) {
-    new Thread() {
+    Thread t = new Thread() {
       @Override
       public void run() {
         Bitmap rawBitmap  = null;
@@ -138,7 +139,9 @@ public class DatingGalleryAdapterEx extends BaseAdapter {
           }
         });
       }
-    }.start();
+    };
+    LeaksManager.getInstance().monitorObject(t);
+    t.start();
   }
   //---------------------------------------------------------------------------
   public void preLoading(final int position,final int w,final int h) {

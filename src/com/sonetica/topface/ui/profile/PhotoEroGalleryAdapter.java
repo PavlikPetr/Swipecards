@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.LeaksManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
@@ -86,7 +87,7 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     view.likes = album.likes;
     view.dislikes = album.dislikes;
     //mThreadsPool.execute(new Runnable() {
-    new Thread(new Runnable() {
+    Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
         if(!mBusy) {
@@ -101,7 +102,9 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
             });
         }
       }
-    }).start();
+    });
+    LeaksManager.getInstance().monitorObject(t);
+    t.start();
   }
   //---------------------------------------------------------------------------
   public void release() {

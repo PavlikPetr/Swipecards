@@ -9,6 +9,7 @@ import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.ui.GalleryManager;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -54,6 +55,8 @@ public class TopsActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_tops);
     Debug.log(this,"+onCreate");
+    
+    LeaksManager.getInstance().monitorObject(this);
     
     // Восстановление последних параметров
     mActionData = new ActionData();

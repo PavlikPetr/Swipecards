@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.LeaksManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
@@ -81,7 +82,7 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
   private void loadingImage(final int position,final ProfileThumbView view) {
     final Album album = (Album)getItem(position);
     //mThreadsPool.execute(new Runnable() {
-    new Thread(new Runnable() {
+    Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
         if(!mBusy) {
@@ -96,7 +97,9 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
             });
         }
       }
-    }).start();
+    });
+    LeaksManager.getInstance().monitorObject(t);
+    t.start();
   }
   //---------------------------------------------------------------------------
   public void release() {

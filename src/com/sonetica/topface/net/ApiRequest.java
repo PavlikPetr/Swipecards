@@ -5,6 +5,7 @@ import com.sonetica.topface.Global;
 import com.sonetica.topface.data.Auth;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.content.Context;
 import android.os.Message;
 
@@ -28,7 +29,7 @@ public abstract class ApiRequest {
   //---------------------------------------------------------------------------
   public void exec() {
     ssid = Data.SSID;
-    new Thread() {
+    Thread t = new Thread() {
       @Override
       public void run() {
         String rawResponse = Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString());
@@ -39,7 +40,9 @@ public abstract class ApiRequest {
           reAuth();  // реавторизация на сервере топфейса
         else 
           mHandler.sendMessage(Message.obtain(null,0,response));
-    }}.start();
+    }};
+    LeaksManager.getInstance().monitorObject(t);
+    t.start();
   }
   //---------------------------------------------------------------------------
   // перерегистрация на сервере TP

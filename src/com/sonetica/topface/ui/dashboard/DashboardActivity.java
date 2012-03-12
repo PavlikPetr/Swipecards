@@ -10,6 +10,7 @@ import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.JLogActivity;
+import com.sonetica.topface.ui.LeaksActivity;
 import com.sonetica.topface.ui.PreferencesActivity;
 import com.sonetica.topface.ui.dating.DatingActivity;
 import com.sonetica.topface.ui.inbox.InboxActivity;
@@ -18,6 +19,7 @@ import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.ui.rates.RatesActivity;
 import com.sonetica.topface.ui.tops.TopsActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -48,6 +50,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_dashboard);
     Debug.log(this,"+onCreate");
+    
+    LeaksManager.getInstance().monitorObject(this);
     
     mLikesButton = ((DashboardButton)findViewById(R.id.btnDashbrdLikes));
     mLikesButton.setOnClickListener(this);
@@ -100,10 +104,12 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   protected void onStart() {
     super.onStart();
     
+    System.gc();
+    
     if(Data.SSID.length()>0)
       return;
 
-    startActivity(new Intent(this.getApplicationContext(),SocialActivity.class));
+    startActivity(new Intent(getApplicationContext(),SocialActivity.class));
     finish();
  }
   //---------------------------------------------------------------------------  
@@ -156,6 +162,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   protected void onDestroy() {
     mNotifyHandler = null;
     
+    System.gc();
+    
     /*
     if(DashboardButton.mRedNews!=null)
       DashboardButton.mRedNews.recycle();
@@ -183,12 +191,13 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   private static final int MENU_ONE = 0;
   private static final int MENU_PREFERENCES = 1;
   private static final int MENU_LOG = 2;
+  private static final int MENU_LEAKS = 3;
   @Override
   public boolean onCreatePanelMenu(int featureId, Menu menu) {
     menu.add(0,MENU_ONE,0,getString(R.string.dashbrd_menu_one));
     menu.add(0,MENU_PREFERENCES,0,getString(R.string.dashbrd_menu_preferences));
-    
-    menu.add(0,MENU_LOG,0,"Log");   // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    menu.add(0,MENU_LOG,0,"Log");
+    menu.add(0,MENU_LEAKS,0,"Leaks");
     
     return super.onCreatePanelMenu(featureId, menu);
   }
@@ -201,10 +210,13 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         App.cached = !App.cached;
         break;
       case MENU_PREFERENCES:
-        startActivity(new Intent(this.getApplicationContext(),PreferencesActivity.class));
+        startActivity(new Intent(getApplicationContext(),PreferencesActivity.class));
         break;
       case MENU_LOG:
-        startActivity(new Intent(this.getApplicationContext(),JLogActivity.class));   // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        startActivity(new Intent(getApplicationContext(),JLogActivity.class));
+        break;
+      case MENU_LEAKS:
+        startActivity(new Intent(getApplicationContext(),LeaksActivity.class));
         break;
     }
     return super.onMenuItemSelected(featureId,item);

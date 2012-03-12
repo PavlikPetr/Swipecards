@@ -12,6 +12,7 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -42,6 +43,8 @@ public class InboxActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_inbox);
     Debug.log(this,"+onCreate");
+    
+    LeaksManager.getInstance().monitorObject(this);
     
     // Data
     //mInboxList = Data.s_InboxList;

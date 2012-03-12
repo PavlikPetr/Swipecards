@@ -18,6 +18,7 @@ import com.sonetica.topface.social.Socium.AuthException;
 import com.sonetica.topface.ui.BuyingActivity;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -83,6 +84,10 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_profile);
     Debug.log(this,"+onCreate");
+    
+    System.gc();
+    
+    LeaksManager.getInstance().monitorObject(this);
     
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.profile_header_title));
@@ -347,7 +352,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       } break;
       case R.id.btnProfileExit: {
         Data.removeSSID(getApplicationContext());
-        Intent intent = new Intent(this, SocialActivity.class);
+        Intent intent = new Intent(getApplicationContext(), SocialActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
@@ -494,6 +499,8 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   @Override
   protected void onDestroy() {
     release();
+    
+    System.gc();
 
     Debug.log(this,"-onDestroy");
     super.onDestroy();

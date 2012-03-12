@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class ChatListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
-  // ViewHolder
+  // class ViewHolder
   public static class ViewHolder {
       RoundedImageView mAvatar;
       TextView  mMessage;
@@ -175,6 +175,16 @@ public class ChatListAdapter extends BaseAdapter {
           mItemLayoutList.add(T_USER_PHOTO);
       prev_id = history.owner_id;
     }
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    if(mList!=null)
+      mList.clear();
+    mList=null;
+    mInflater=null;
+    if(mItemLayoutList!=null)
+      mItemLayoutList.clear();
+    mItemLayoutList=null;
   }
   //---------------------------------------------------------------------------
 }

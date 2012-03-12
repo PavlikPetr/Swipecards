@@ -1,6 +1,7 @@
 package com.sonetica.topface.services;
 
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.Memory;
 import android.app.Service;
 import android.content.Intent;
@@ -82,8 +83,10 @@ public class StatisticService extends Service {
       
       Debug.log(null,"Ha:" + Memory.getHeapUsed()   + " Hf:" + Memory.getHeapFree() + "\n" + 
                      "::Na:" + Memory.getNativeUsed() + " Nf:" + Memory.getNativeFree());
+      Debug.log(null,"leaks manager: "+LeaksManager.getInstance().checkLeaks().size());
       
-      mStatHandler.sendEmptyMessageDelayed(0,1000*4);
+      if(mStatHandler!=null)
+        mStatHandler.sendEmptyMessageDelayed(0,1000*4);
     }
   }//StatisticHandler
   //---------------------------------------------------------------------------

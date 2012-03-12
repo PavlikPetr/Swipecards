@@ -4,6 +4,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.MemoryCache;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
@@ -115,7 +116,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   public void loadingImage(final int position,final ImageView view) {
-    new Thread() {
+    Thread t = new Thread() {
       @Override
       public void run() {
         
@@ -153,7 +154,9 @@ public class DatingGalleryAdapter extends BaseAdapter {
         }); // view.post
         
       }
-    }.start();
+    };
+    LeaksManager.getInstance().monitorObject(t);
+    t.start();
   }
   //---------------------------------------------------------------------------
   public void preLoading(final int position,final int width,final int height) {

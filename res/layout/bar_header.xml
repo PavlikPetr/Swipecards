@@ -20,5 +20,16 @@
 	      android:layout_width="wrap_content"
 	      android:layout_height="wrap_content"
 	      android:layout_centerInParent="true"  />
+	  
+	  <ImageButton
+        android:id="@+id/btnChatProfile"
+        android:src="@drawable/icon_people"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"  />
+	  
   </RelativeLayout>
 </merge>

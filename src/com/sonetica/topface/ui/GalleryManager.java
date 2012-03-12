@@ -9,6 +9,7 @@ import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Device;
+import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.MemoryCache;
 import com.sonetica.topface.utils.StorageCache;
 import android.content.Context;
@@ -89,7 +90,7 @@ public class GalleryManager<T extends AbstractData> implements OnScrollListener 
   private void loadingImages(final int position,final ImageView imageView) {
 
     //mThreadsPool.execute(new Runnable() {
-    new Thread(new Runnable() {
+    Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
         try {
@@ -148,7 +149,9 @@ public class GalleryManager<T extends AbstractData> implements OnScrollListener 
           Debug.log(App.TAG,"thread error:"+e);
         }
       } // run
-    }).start(); // thread
+    }); // thread
+    LeaksManager.getInstance().monitorObject(t);
+    t.start();
 
   }
   //---------------------------------------------------------------------------

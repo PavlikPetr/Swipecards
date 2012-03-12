@@ -13,6 +13,7 @@ import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -41,6 +42,8 @@ public class RatesActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_rates);
     Debug.log(this,"+onCreate");
+    
+    LeaksManager.getInstance().monitorObject(this);
     
     // Data
     //mRatesList = Data.s_RatesList;
@@ -93,7 +96,7 @@ public class RatesActivity extends Activity {
    
    create();
    
-   update(true,Data.s_Likes>0?true:false);
+   update(true,Data.s_Rates>0?true:false);
    
    // обнуление информера непросмотренных оценок
    Data.s_Rates = 0;

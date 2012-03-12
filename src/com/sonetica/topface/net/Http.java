@@ -12,6 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -235,6 +236,7 @@ public class Http {
       }
     };
     thread.setPriority(3);
+    LeaksManager.getInstance().monitorObject(thread);
     thread.start();
   }
   //---------------------------------------------------------------------------
@@ -254,6 +256,7 @@ public class Http {
       }
     };
     thread.setPriority(3);
+    LeaksManager.getInstance().monitorObject(thread);
     thread.start();
   }
   //---------------------------------------------------------------------------

@@ -7,8 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,7 +17,7 @@ import android.graphics.BitmapFactory;
 public class StorageCache {
   // Data
   private Context mContext;
-  private ExecutorService mThreadPool;
+  //private ExecutorService mThreadPool;
   private File mCacheDir;
   private int mCacheType;
   // Constants
@@ -37,7 +35,7 @@ public class StorageCache {
   public StorageCache(Context context,int cacheType,int countThreads){
     mContext    = context;
     mCacheType  = cacheType;
-    mThreadPool = Executors.newFixedThreadPool(countThreads);
+    //mThreadPool = Executors.newFixedThreadPool(countThreads);
     mCacheDir = getCacheDirectory();
     if(!mCacheDir.exists())
       mCacheDir.mkdirs();
@@ -68,7 +66,8 @@ public class StorageCache {
   }
   //---------------------------------------------------------------------------
   public void save(final String fileName, final Bitmap bitmap) {
-    mThreadPool.execute(new Runnable() {
+    //mThreadPool.execute(new Runnable() {
+    new Thread(new Runnable() {
       @Override
       public void run() {
         BufferedOutputStream bos = null;
@@ -90,7 +89,7 @@ public class StorageCache {
           }
         }
       }
-    });
+    }).start();
   }
   //---------------------------------------------------------------------------
   private File getCacheDirectory() {

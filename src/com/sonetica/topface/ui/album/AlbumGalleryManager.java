@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.MemoryCache;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -51,7 +52,7 @@ public class AlbumGalleryManager {
   //---------------------------------------------------------------------------
   private void setImageToQueue(final Pair<ImageView,Integer> data) {
     //mThreadsPool.execute(new Runnable() {
-    new Thread(new Runnable() {
+    Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
         if(isViewReused(data))
@@ -71,7 +72,9 @@ public class AlbumGalleryManager {
           }
         });
       }
-    }).start();
+    });
+    LeaksManager.getInstance().monitorObject(t);
+    t.start();
   }
   //-------------------------------------------------------------------------
   boolean isViewReused(Pair<ImageView,Integer> data){

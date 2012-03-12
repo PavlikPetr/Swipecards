@@ -15,6 +15,7 @@ import com.sonetica.topface.ui.dating.StarsView.OnRateListener;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -46,6 +47,8 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_dating);
     Debug.log(this,"+onCreate");
+    
+    LeaksManager.getInstance().monitorObject(this);
 
     // Header Bar
     mHeaderBar = (ViewGroup)findViewById(R.id.loHeader);
@@ -183,18 +186,18 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   //---------------------------------------------------------------------------
   @Override
   public void onClick(View view) {
+    Intent intent = null;
     switch(view.getId()) {
       case R.id.chatBtn: {
-        Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+        intent = new Intent(getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mDatingControl.getUserId());
-        startActivityForResult(intent,0);
       } break;
       case R.id.profileBtn: {
-        Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
+        intent = new Intent(getApplicationContext(),ProfileActivity.class);
         intent.putExtra(ProfileActivity.INTENT_USER_ID,mDatingControl.getUserId());
-        startActivityForResult(intent,0);
       } break;
     }
+    startActivity(intent);
   }
   //---------------------------------------------------------------------------
   @Override

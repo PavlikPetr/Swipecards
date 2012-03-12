@@ -8,6 +8,7 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.net.SettingsRequest;
 import com.sonetica.topface.ui.CitySearchActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -57,6 +58,8 @@ public class EditProfileActivity extends PreferenceActivity {
     super.onCreate(savedInstanceState);
     addPreferencesFromResource(R.layout.ac_edit_profile);
     Debug.log(this,"+onCreate");
+    
+    LeaksManager.getInstance().monitorObject(this);
     
     mFormInfo = new FormInfo(getApplicationContext(),Data.s_Profile.sex);
      
