@@ -3,7 +3,9 @@ package com.sonetica.topface.social;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore;
 import com.sonetica.topface.net.Http;
 
 /*
@@ -11,13 +13,21 @@ import com.sonetica.topface.net.Http;
  */
 public abstract class SnApi {
   // Data
-  protected Context mContext;
-  protected AuthToken.Token mToken;
+  private Context mContext;
+  private AuthToken.Token mToken;
   //---------------------------------------------------------------------------
   public SnApi(Context context,AuthToken.Token token) {
     mContext = context;
     mToken = token;
   }
+  //---------------------------------------------------------------------------
+  protected Context getContext() {
+    return mContext;
+  }
+  //---------------------------------------------------------------------------
+  protected AuthToken.Token getAuthToken() {
+    return mToken;
+  } 
   //---------------------------------------------------------------------------
   abstract public void getProfile();
   //---------------------------------------------------------------------------
@@ -37,6 +47,16 @@ public abstract class SnApi {
       e.printStackTrace();
     }
     return jsonResult;
+  }
+  //---------------------------------------------------------------------------
+  public static int getOrientation(Context context, Uri photoUri) {
+    Cursor cursor = context.getContentResolver().query(photoUri,
+            new String[] { MediaStore.Images.ImageColumns.ORIENTATION }, null, null, null);
+    if(cursor.getCount() != 1)
+      return -1;
+    cursor.moveToFirst();
+    
+    return cursor.getInt(0);
   }
   /*
   //---------------------------------------------------------------------------

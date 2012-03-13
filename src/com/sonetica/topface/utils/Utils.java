@@ -115,7 +115,7 @@ public class Utils {
   public static void formatTime(TextView tv,long time) {
     Context context = tv.getContext();
     long now = System.currentTimeMillis();
-
+    /*
     String text = null;
     long t = now - time;
     if((time > now) || t < 60)
@@ -135,7 +135,8 @@ public class Utils {
       else
         text = DateFormat.format("dd.MM.yyyy kk:mm",time).toString();
     }
-    tv.setText(text);
+    */
+    tv.setText("time");
   }
   //---------------------------------------------------------------------------
   private static String formatHour(Context context,long hours) {
@@ -146,11 +147,14 @@ public class Utils {
       if((hours%10 == 2) || (hours%10 == 3) || (hours%10 == 4))
         caseValue = 2;
     }
+    /*
     switch(caseValue) {
      case 1:  return String.format(context.getString(R.string.time_hour_0),hours);
      case 2:  return String.format(context.getString(R.string.time_hour_1),hours);
      default: return String.format(context.getString(R.string.time_hours),hours);
     }
+    */
+    return null;
   }
   //---------------------------------------------------------------------------
   private static String formatMinute(Context context,long minutes) {
@@ -161,11 +165,14 @@ public class Utils {
       if((minutes%10 == 2) || (minutes%10 == 3) || (minutes%10 == 4))
         caseValue = 2;
     }
+    /*
     switch(caseValue) {
      case 1:  return String.format(context.getString(R.string.time_minute_0),minutes);
      case 2:  return String.format(context.getString(R.string.time_minute_1),minutes);
      default: return String.format(context.getString(R.string.time_minutes),minutes);
     }
+    */
+    return null;
   }
   //---------------------------------------------------------------------------
 }

@@ -21,6 +21,9 @@ public class Global {
   // Constants
   public static final int GIRL = 0;
   public static final int BOY  = 1;
+  // add photo params
+  public static final int W = 640;
+  public static final int H = 960;
   //---------------------------------------------------------------------------
   public static void init(Context context) {
     API_URL                = context.getString(R.string.api_url);
