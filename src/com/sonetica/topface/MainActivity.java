@@ -22,7 +22,12 @@ public class MainActivity extends Activity {
 
     LeaksManager.getInstance().monitorObject(this);
     
+    // App initialization
+    Global.init(getApplicationContext());
+    Data.init(getApplicationContext());
+    
     //startService(new Intent(this,ConnectionService.class));
+    
     startService(new Intent(getApplicationContext(),StatisticService.class));
     
     if(Data.SSID.length()>0) {

@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.utils.Debug;
@@ -120,6 +121,8 @@ public class Http {
         String boundary   = "0xKhTmLbOuNdArY";
         httpConnection.setRequestMethod("POST");
         httpConnection.setDoOutput(true);
+        httpConnection.setConnectTimeout(10*1000);
+        httpConnection.setReadTimeout(10*1000);
         httpConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
         DataOutputStream dos = new DataOutputStream(httpConnection.getOutputStream());
         dos.writeBytes(twoHyphens + boundary + lineEnd);
@@ -156,7 +159,9 @@ public class Http {
       else
         Data.s_LogList.add("   [RESP]: "+response);
       
-      
+    
+    } catch(SocketTimeoutException e) {
+      Debug.log(TAG,"socket timeout:" + e);
     } catch(MalformedURLException e) {
       Debug.log(TAG,"url is wrong:" + e);
     } catch(IOException e) {

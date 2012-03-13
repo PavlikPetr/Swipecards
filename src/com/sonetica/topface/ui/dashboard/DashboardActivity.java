@@ -162,6 +162,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   protected void onDestroy() {
     mNotifyHandler = null;
     
+    Data.clear();
+    
     System.gc();
     
     /*

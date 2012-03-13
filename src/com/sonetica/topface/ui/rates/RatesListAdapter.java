@@ -5,8 +5,8 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.Rate;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.RoundedImageView;
+import com.sonetica.topface.utils.Utils;
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +34,7 @@ public class RatesListAdapter extends BaseAdapter {
   private static final int T_ALL   = 0;
   private static final int T_CITY  = 1;
   private static final int T_COUNT = 2;
-  private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
+  //private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   //---------------------------------------------------------------------------
   public RatesListAdapter(Context context,AvatarManager<Rate> avatarManager) {
     mAvatarManager = avatarManager;
@@ -98,7 +98,7 @@ public class RatesListAdapter extends BaseAdapter {
     } else
       holder = (ViewHolder)convertView.getTag();
     
-    Rate inbox = getItem(position);
+    Rate rate = getItem(position);
     /*
     Bitmap bitmap = mAvatarManager.getImage(inbox.avatars_small);
     if(bitmap!=null) {
@@ -111,9 +111,10 @@ public class RatesListAdapter extends BaseAdapter {
     */
     mAvatarManager.getImage(position,holder.mAvatar);
     
-    holder.mName.setText(inbox.first_name+", "+inbox.age);
-    holder.mStar.mRate = inbox.rate;
-    holder.mTime.setText(DateFormat.format(TIME_TEMPLATE,inbox.created));
+    holder.mName.setText(rate.first_name+", "+rate.age);
+    holder.mStar.mRate = rate.rate;
+    //holder.mTime.setText(DateFormat.format(TIME_TEMPLATE,inbox.created));
+    Utils.formatTime(holder.mTime,rate.created);
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
     
     /*

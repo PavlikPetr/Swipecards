@@ -20,6 +20,8 @@
       android:transcriptMode="alwaysScroll"
       android:stackFromBottom="true"
       android:cacheColorHint="#00000000"
+      android:divider="@android:color/transparent"
+      android:dividerHeight="0dp"
       android:fadeScrollbars="true" />
 
   <include layout="@layout/chat_footer_send" />

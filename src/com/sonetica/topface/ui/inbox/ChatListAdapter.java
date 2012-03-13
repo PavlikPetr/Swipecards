@@ -1,11 +1,12 @@
 package com.sonetica.topface.ui.inbox;
 
 import java.util.LinkedList;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.History;
 import com.sonetica.topface.ui.RoundedImageView;
+import com.sonetica.topface.utils.Utils;
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class ChatListAdapter extends BaseAdapter {
   private LayoutInflater mInflater;
   private LinkedList<Integer> mItemLayoutList = new LinkedList<Integer>();
   // Constants
-  private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
+  //private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   // Type Item
   private static final int T_USER_PHOTO   = 0;
   private static final int T_USER_EXT     = 1;
@@ -89,6 +90,7 @@ public class ChatListAdapter extends BaseAdapter {
             holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
             holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
             holder.mAvatar.setOnClickListener(mOnAvatarListener);
+            holder.mAvatar.setImageDrawable(Data.s_UserDrw);
         } break;
         case T_FRIEND_EXT: {
             convertView     = mInflater.inflate(R.layout.chat_friend_ext, null, false);
@@ -101,6 +103,7 @@ public class ChatListAdapter extends BaseAdapter {
             holder.mAvatar  = (RoundedImageView)convertView.findViewById(R.id.left_icon);
             holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
             holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
+            holder.mAvatar.setImageDrawable(Data.s_OwnerDrw);
         } break;
         case T_USER_EXT: {
             convertView     = mInflater.inflate(R.layout.chat_user_ext, null, false);
@@ -140,7 +143,8 @@ public class ChatListAdapter extends BaseAdapter {
         break;
     }
     
-    holder.mDate.setText(DateFormat.format(TIME_TEMPLATE,msg.created));
+    //holder.mDate.setText(DateFormat.format(TIME_TEMPLATE,msg.created));
+    Utils.formatTime(holder.mDate,msg.created);
 
     return convertView;
   }

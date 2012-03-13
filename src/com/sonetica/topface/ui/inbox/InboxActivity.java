@@ -7,21 +7,26 @@ import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.module.pull2refresh.PullToRefreshListView;
 import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.net.ApiHandler;
+import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.InboxRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
+import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /*
@@ -90,15 +95,18 @@ public class InboxActivity extends Activity {
     mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
+        Data.s_UserDrw = ((ImageView)view.findViewById(R.id.ivAvatar)).getDrawable();
         Intent intent = new Intent(InboxActivity.this.getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxDataList.get(position).uid);
-        startActivityForResult(intent,0);
+        startActivity(intent);
       }
     });
 
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    
+    avatarOwnerPreloading();
     
     create();
     
@@ -149,10 +157,18 @@ public class InboxActivity extends Activity {
     */
   }
   //---------------------------------------------------------------------------
+  private void avatarOwnerPreloading() {
+    if(Data.s_OwnerDrw!=null)
+      return;
+    Bitmap ava = Http.bitmapLoader(Data.s_Profile.avatar_small);
+    ava = Utils.getRoundedCornerBitmap(ava,ava.getWidth(),ava.getHeight(),12);
+    Data.s_OwnerDrw = new BitmapDrawable(getApplicationContext().getResources(),ava);
+  }
+  //---------------------------------------------------------------------------
   private void create() {
     mAvatarManager = new AvatarManager<Inbox>(getApplicationContext(),mInboxDataList);
-    mListView.setOnScrollListener(mAvatarManager);    
     mAdapter = new InboxListAdapter(getApplicationContext(),mAvatarManager);
+    mListView.setOnScrollListener(mAvatarManager);    
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------

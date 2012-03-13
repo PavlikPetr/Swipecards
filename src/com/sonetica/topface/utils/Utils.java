@@ -1,7 +1,10 @@
 package com.sonetica.topface.utils;
 
 import java.security.MessageDigest;
+import java.util.Calendar;
 import java.util.HashMap;
+import com.sonetica.topface.R;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -11,6 +14,9 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
+import android.widget.TextView;
 
 /*
  *  Набор вспомагательных функций
@@ -94,7 +100,7 @@ public class Utils {
     Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap,0,0,width,height,matrix,true);
     
     // вырезаем необходимый размер
-    final Bitmap clippedBitmap;
+    Bitmap clippedBitmap;
     if(LEG) {
       // у горизонтальной, вырезаем по центру
       int offset_x = (scaledBitmap.getWidth()-bitmapWidth)/2;
@@ -104,6 +110,62 @@ public class Utils {
       clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,bitmapWidth,bitmapHeight,null,false);
       
     return clippedBitmap;
+  }
+  //---------------------------------------------------------------------------
+  public static void formatTime(TextView tv,long time) {
+    Context context = tv.getContext();
+    long now = System.currentTimeMillis();
+
+    String text = null;
+    long t = now - time;
+    if((time > now) || t < 60)
+      text = context.getString(R.string.time_now);
+    else if(t < 36000)
+      text = formatMinute(context,t/600);
+    else if(t < 6*36000)
+      text = formatHour(context,t/3600);
+    else if(DateUtils.isToday(time))
+      text = DateFormat.format("kk:mm",time).toString();
+    else { 
+      Calendar cal = Calendar.getInstance();
+      cal.set(Calendar.HOUR_OF_DAY,0);
+      cal.set(Calendar.MINUTE,0);
+      if(time > (now-(now-cal.getTimeInMillis())-(24*60*60*1000)))
+        text = DateFormat.format(context.getString(R.string.time_yesterday)+" kk:mm",time).toString();
+      else
+        text = DateFormat.format("dd.MM.yyyy kk:mm",time).toString();
+    }
+    tv.setText(text);
+  }
+  //---------------------------------------------------------------------------
+  private static String formatHour(Context context,long hours) {
+    byte caseValue = 0;
+    if((hours < 11) || (hours > 19)) {
+      if(hours%10 == 1)
+        caseValue = 1;
+      if((hours%10 == 2) || (hours%10 == 3) || (hours%10 == 4))
+        caseValue = 2;
+    }
+    switch(caseValue) {
+     case 1:  return String.format(context.getString(R.string.time_hour_0),hours);
+     case 2:  return String.format(context.getString(R.string.time_hour_1),hours);
+     default: return String.format(context.getString(R.string.time_hours),hours);
+    }
+  }
+  //---------------------------------------------------------------------------
+  private static String formatMinute(Context context,long minutes) {
+    byte caseValue = 0;
+    if((minutes < 11) || (minutes > 19)) {
+      if(minutes%10 == 1)
+        caseValue = 1;
+      if((minutes%10 == 2) || (minutes%10 == 3) || (minutes%10 == 4))
+        caseValue = 2;
+    }
+    switch(caseValue) {
+     case 1:  return String.format(context.getString(R.string.time_minute_0),minutes);
+     case 2:  return String.format(context.getString(R.string.time_minute_1),minutes);
+     default: return String.format(context.getString(R.string.time_minutes),minutes);
+    }
   }
   //---------------------------------------------------------------------------
 }

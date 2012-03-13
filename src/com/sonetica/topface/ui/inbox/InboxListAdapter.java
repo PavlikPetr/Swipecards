@@ -5,8 +5,8 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.RoundedImageView;
+import com.sonetica.topface.utils.Utils;
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +18,7 @@ public class InboxListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
-  public static class ViewHolder {
+  public class ViewHolder {
     public RoundedImageView mAvatar;
     public TextView  mName;
     public TextView  mText;
@@ -34,7 +34,7 @@ public class InboxListAdapter extends BaseAdapter {
   private static final int T_ALL   = 0;
   private static final int T_CITY  = 1; // PITER
   private static final int T_COUNT = 2;
-  private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
+  //private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   //---------------------------------------------------------------------------
   public InboxListAdapter(Context context,AvatarManager<Inbox> avatarManager) {
     mAvatarManager = avatarManager;
@@ -135,8 +135,8 @@ public class InboxListAdapter extends BaseAdapter {
         holder.mText.setText("SEXUALITY");
         break;
     }
-    
-    holder.mTime.setText(DateFormat.format(TIME_TEMPLATE,inbox.created));
+    //holder.mTime.setText(DateFormat.format(TIME_TEMPLATE,inbox.created));
+    Utils.formatTime(holder.mTime,inbox.created);
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
     
     return convertView;

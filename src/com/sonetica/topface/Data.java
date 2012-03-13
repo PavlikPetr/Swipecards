@@ -3,6 +3,7 @@ package com.sonetica.topface;
 import java.util.LinkedList;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import com.sonetica.topface.data.Album;
 import com.sonetica.topface.data.Profile;
 
@@ -22,6 +23,8 @@ public class Data {
   public static LinkedList<Album>  s_PhotoAlbum;
   public static LinkedList<String> s_LogList;
   public static Profile s_Profile;
+  public static Drawable s_OwnerDrw;
+  public static Drawable s_UserDrw;
 
   // Data Profile
   public static int s_Power;
@@ -117,6 +120,9 @@ public class Data {
     
     s_LogList.clear();
     s_LogList = null;
+    
+    s_OwnerDrw=null;
+    s_UserDrw=null;
     
     s_Profile = null;
   }

@@ -22,10 +22,7 @@ public class App extends Application {
     
     Debug.log(this,"=======================================");
     Debug.log(this,"+onCreate");
-    
-    // App initialization
-    Global.init(this);
-    Data.init(this);
+
   }
   //---------------------------------------------------------------------------
   @Override

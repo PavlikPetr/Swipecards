@@ -45,7 +45,7 @@ public class Inbox extends AbstractData {
             msg.first_name = item.optString("first_name");
             msg.online     = item.optBoolean("online");
             msg.unread     = item.optBoolean("unread");
-            msg.created    = item.optLong("created") * 1000; // время приходит в секундах
+            msg.created    = item.optLong("created")*1000; // время приходит в секундах *1000
             msg.unread_count = response.mJSONResult.getInt("unread");
             msg.uid        = item.optInt("uid");
             msg.age        = item.optInt("age");
@@ -73,10 +73,16 @@ public class Inbox extends AbstractData {
           }
 
           // city  
-          JSONObject city = item.getJSONObject("city");
-            msg.city_id    = city.optInt("id");            
-            msg.city_name  = city.optString("name");
-            msg.city_full  = city.optString("full");
+          JSONObject city = item.optJSONObject("city");
+            if(city!=null) {
+              msg.city_id    = city.optInt("id");            
+              msg.city_name  = city.optString("name");
+              msg.city_full  = city.optString("full");
+            } else {
+              msg.city_id    = 0;       
+              msg.city_name  = "";
+              msg.city_full  = "";
+            }
             
           // avatars
           JSONObject avatars = item.getJSONObject("avatars");
