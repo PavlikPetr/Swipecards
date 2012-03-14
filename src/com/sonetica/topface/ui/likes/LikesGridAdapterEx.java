@@ -3,7 +3,7 @@ package com.sonetica.topface.ui.likes;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Like;
 import com.sonetica.topface.ui.ThumbView;
-import com.sonetica.topface.ui.GalleryManager;
+import com.sonetica.topface.ui.GalleryGridManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +17,13 @@ public class LikesGridAdapterEx extends BaseAdapter {
   // Data
   Context mContext;
   private LayoutInflater mInflater;
-  private GalleryManager<Like> mGalleryManager;
+  private GalleryGridManager<Like> mGalleryManager;
   // class ViewHolder
   static class ViewHolder {
     ThumbView mThumbView;
   };
   //---------------------------------------------------------------------------
-  public LikesGridAdapterEx(Context context,GalleryManager<Like> galleryManager) {
+  public LikesGridAdapterEx(Context context,GalleryGridManager<Like> galleryManager) {
     mContext = context;
     mInflater = LayoutInflater.from(context);
     mGalleryManager = galleryManager;

@@ -56,7 +56,8 @@ public class Http {
   //  запрос к TopFace API
   public static String httpSendTpRequest(String request,String postParams) {
     
-    Data.s_LogList.add("   [REQ]: "+postParams);  // JSON LOG   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if(Data.s_LogList!=null)
+      Data.s_LogList.add("   [REQ]: "+postParams);  // JSON LOG   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
     return httpRequest(HTTP_POST_REQUEST,request,postParams,null,null,true);
   }

@@ -1,12 +1,13 @@
 package com.sonetica.topface.ui.tops;
 
+import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.City;
 import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.net.*;
 import com.sonetica.topface.ui.DoubleButton;
-import com.sonetica.topface.ui.GalleryManager;
+import com.sonetica.topface.ui.GalleryGridManager;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
@@ -32,12 +33,11 @@ public class TopsActivity extends Activity {
   // Data
   private GridView mGallery;
   private TopsGridAdapter mGridAdapter;
-  private GalleryManager<TopUser>  mGalleryManager;
+  private GalleryGridManager<TopUser>  mGalleryGridManager;
   private LinkedList<TopUser> mTopsList;
-  private LinkedList<City> mCitiesList;
   private ProgressDialog  mProgressDialog;
   private Button mCityButton;
-  // Action Data
+  // class Action Data
   private class ActionData {
     public int sex; 
     public int city_id;
@@ -68,7 +68,6 @@ public class TopsActivity extends Activity {
     
     // Data
     mTopsList   = new LinkedList<TopUser>();
-    mCitiesList = new LinkedList<City>();
 
     // Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.tops_header_title));
@@ -139,56 +138,54 @@ public class TopsActivity extends Activity {
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
-    if(mTopsList.size()==0)
-      update();
-    else
-      create();
+    create();
+    update();
   }
   //---------------------------------------------------------------------------
-  private void create() {
-    mGalleryManager = new GalleryManager<TopUser>(getApplicationContext(),mTopsList);
-    mGridAdapter    = new TopsGridAdapter(getApplicationContext(),mGalleryManager);
-    mGallery.setAdapter(mGridAdapter);
-    mGallery.setOnScrollListener(mGalleryManager);
-    
-    //mGallery.setOnScrollListener(mGridAdapter);
-  }
-  //---------------------------------------------------------------------------
-  private void release() {
-    if(mGalleryManager!=null) {
-      mGalleryManager.release();
-      mGalleryManager=null;
-    }
-    
-    if(mGallery!=null)        mGallery=null;
-    if(mGridAdapter!=null)    mGridAdapter=null;
-    if(mTopsList!=null)       mTopsList=null;
-    if(mProgressDialog!=null) mProgressDialog=null;
-  }
-  //---------------------------------------------------------------------------
-  private void update() { // refreshed - грузить локально или инет при первом запуске
+  private void update() {
     mProgressDialog.show();
+    
     TopsRequest topRequest = new TopsRequest(getApplicationContext());
     topRequest.sex  = mActionData.sex;
     topRequest.city = mActionData.city_id;
     topRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        if(TopsActivity.this==null)
-          return;
         mTopsList.clear();
-        mTopsList.addAll(TopUser.parse(response));
-        create();
+        mTopsList = TopUser.parse(response);
+        mGalleryGridManager.setDataList(mTopsList);
+        mGridAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();
       }
       @Override
       public void fail(int codeError,Response response) {
+        mProgressDialog.cancel();
+        //update();
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
+  private void create() {
+    mGalleryGridManager = new GalleryGridManager<TopUser>(getApplicationContext(),mTopsList);
+    mGridAdapter = new TopsGridAdapter(getApplicationContext(),mGalleryGridManager);
+    mGallery.setAdapter(mGridAdapter);
+    mGallery.setOnScrollListener(mGalleryGridManager);
+  }
+  //---------------------------------------------------------------------------
+  private void release() {
+    if(mGalleryGridManager != null) {
+      mGalleryGridManager.release();
+      mGalleryGridManager = null;
+    }
+    
+    mGallery = null;
+    mGridAdapter = null;
+    mTopsList = null;
+    mProgressDialog = null;
+  }
+  //---------------------------------------------------------------------------
   private void choiceCity() {
-    if(mCitiesList.size()!=0) {
+    if(Data.s_CitiesList != null && Data.s_CitiesList.size() > 0) {
       showCitiesDialog();
       return;
     }
@@ -198,14 +195,13 @@ public class TopsActivity extends Activity {
     citiesRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        if(TopsActivity.this==null)
-          return;
-        mCitiesList.addAll(City.parse(response));
+        Data.s_CitiesList = City.parse(response);
         mProgressDialog.cancel();
         showCitiesDialog();
       }
       @Override
       public void fail(int codeError,Response response) {
+        mProgressDialog.cancel();
       }
     }).exec();
   }
@@ -213,12 +209,13 @@ public class TopsActivity extends Activity {
   void showCitiesDialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle("Chooser");
-    String[] cities = new String[mCitiesList.size()];
-    for(int i=0;i<mCitiesList.size();++i)
-      cities[i] = mCitiesList.get(i).name;
+    int arraySize = Data.s_CitiesList.size();
+    String[] cities = new String[arraySize];
+    for(int i=0; i<arraySize; ++i)
+      cities[i] = Data.s_CitiesList.get(i).name;
     builder.setSingleChoiceItems(cities,mActionData.city_popup_position,new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int position) {
-        City city = mCitiesList.get(position);
+        City city = Data.s_CitiesList.get(position);
         if(mActionData.city_id!=city.id) {
           mActionData.city_id = city.id;
           mActionData.city_name = city.name;
@@ -231,11 +228,6 @@ public class TopsActivity extends Activity {
     });
     AlertDialog alert = builder.create();
     alert.show();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-    //mGalleryManager.restart();
   }
   //---------------------------------------------------------------------------  
   @Override

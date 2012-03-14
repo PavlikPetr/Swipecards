@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import com.sonetica.topface.data.Album;
+import com.sonetica.topface.data.City;
 import com.sonetica.topface.data.Profile;
 
 /*
@@ -20,6 +21,7 @@ public class Data {
   private static LinkedList<Rate>  s_RatesList;
   private static LinkedList<City>  s_CitiesList;
   */
+  public static LinkedList<City>   s_CitiesList;
   public static LinkedList<Album>  s_PhotoAlbum;
   public static LinkedList<String> s_LogList;
   public static Profile s_Profile;
@@ -118,8 +120,13 @@ public class Data {
       s_PhotoAlbum = null;
     }
     
+    if(s_LogList!=null)
     s_LogList.clear();
     s_LogList = null;
+    
+    if(s_CitiesList!=null)
+      s_CitiesList.clear();
+    s_CitiesList = null;
     
     s_OwnerDrw=null;
     s_UserDrw=null;

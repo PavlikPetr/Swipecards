@@ -20,12 +20,8 @@ import com.sonetica.topface.billing.Consts.ResponseCode;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 public class BillingReceiver extends BroadcastReceiver {
-  
-  private static final String TAG = "BillingReceiver";
-
   @Override
   public void onReceive(Context context, Intent intent) {
     String action = intent.getAction();
@@ -35,15 +31,12 @@ public class BillingReceiver extends BroadcastReceiver {
       purchaseStateChanged(context, signedData, signature);
     } else if(Consts.ACTION_NOTIFY.equals(action)) {
       String notifyId = intent.getStringExtra(Consts.NOTIFICATION_ID);
-      if(Consts.DEBUG)
-        Log.i(TAG, "notifyId: " + notifyId);
       notify(context, notifyId);
     } else if(Consts.ACTION_RESPONSE_CODE.equals(action)) {
       long requestId = intent.getLongExtra(Consts.INAPP_REQUEST_ID, -1);
       int responseCodeIndex = intent.getIntExtra(Consts.INAPP_RESPONSE_CODE, ResponseCode.RESULT_ERROR.ordinal());
       checkResponseCode(context, requestId, responseCodeIndex);
-    } else
-      Log.w(TAG, "unexpected action: " + action);
+    } 
   }
 
   private void purchaseStateChanged(Context context, String signedData, String signature) {

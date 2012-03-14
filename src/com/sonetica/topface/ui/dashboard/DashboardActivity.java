@@ -76,7 +76,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     mProgressDialog.show();
     
     mNotifyHandler = new NotifyHandler();
-    //mNotifyHandler.sendEmptyMessage(0);
+    mNotifyHandler.sendEmptyMessage(0);
     
     update();
   }
@@ -229,7 +229,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   // NotifyHandler
   //---------------------------------------------------------------------------
   class NotifyHandler extends Handler {
-    private int sleep_time = 1000*30;   // ВРЕМЯ ОБНОВЛЕНИЯ НОТИФИКАЦИЙ
+    private int sleep_time = 1000*60;   // ВРЕМЯ ОБНОВЛЕНИЯ НОТИФИКАЦИЙ
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
@@ -241,15 +241,15 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       profileRequest.callback(new ApiHandler() {
         @Override
         public void success(final Response response) {
-          DashboardActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+          //DashboardActivity.this.runOnUiThread(new Runnable() {
+            //@Override
+            //public void run() {
               Profile profile = Profile.parse(response,true);
               Data.updateNotification(profile);
               invalidateNotification();
               NotifyHandler.this.sendEmptyMessageDelayed(0,sleep_time);
-            }
-          });
+            //}
+          //});
         }
         @Override
         public void fail(int codeError,Response response) {

@@ -17,9 +17,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -30,6 +28,7 @@ import android.widget.TextView;
  */
 public class InboxActivity extends Activity {
   // Data
+  private boolean mOnlyNewData;
   private PullToRefreshListView mListView;
   private InboxListAdapter mAdapter;
   private LinkedList<Inbox> mInboxDataList;
@@ -48,7 +47,6 @@ public class InboxActivity extends Activity {
     LeaksManager.getInstance().monitorObject(this);
     
     // Data
-    //mInboxList = Data.s_InboxList;
     mInboxDataList = new LinkedList<Inbox>();
     
     // Title Header
@@ -59,97 +57,78 @@ public class InboxActivity extends Activity {
     mDoubleButton.setLeftText(getString(R.string.inbox_btn_dbl_left));
     mDoubleButton.setRightText(getString(R.string.inbox_btn_dbl_right));
     mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
-    // Left btn
     mDoubleButton.setLeftListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        update(true,false);
+        mOnlyNewData = false;
+        update(true);
       }
     });
-    // Right btn
     mDoubleButton.setRightListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        update(true,true);
+        mOnlyNewData = true;
+        update(true);
       }
     });
    
     // ListView
     mListView = (PullToRefreshListView)findViewById(R.id.lvInboxList);
     mListView.setOnRefreshListener(new OnRefreshListener() {
-     @Override
-     public void onRefresh() {
-       update(false,true);
-       //mListView.onRefreshComplete();
-     }});
-    mListView.setOnTouchListener(new OnTouchListener() {
       @Override
-      public boolean onTouch(View v,MotionEvent event) {
-        return false;
+      public void onRefresh() {
+        update(false);
       }
     });
     mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
         Data.s_UserDrw = ((ImageView)view.findViewById(R.id.ivAvatar)).getDrawable();
+        
         Intent intent = new Intent(InboxActivity.this.getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxDataList.get(position).uid);
         intent.putExtra(ChatActivity.INTENT_USER_NAME,mInboxDataList.get(position).first_name);
         startActivity(intent);
       }
     });
-
+    
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
+
+    mOnlyNewData = Data.s_Messages > 0 ? true : false;
     
     create();
-    
-    update(true,false);
+    update(true);
     
     // обнуление информера непрочитанных сообщений
     Data.s_Messages = 0;
   }
   //---------------------------------------------------------------------------
-  private void update(boolean isProgress, final boolean isNew) {
+  private void update(boolean isProgress) {
     if(isProgress)
       mProgressDialog.show();
     
     InboxRequest inboxRequest = new InboxRequest(getApplicationContext());
     inboxRequest.limit = LIMIT;
-    inboxRequest.only_new = isNew;
+    inboxRequest.only_new = mOnlyNewData;
     inboxRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        LinkedList<Inbox> inboxList = Inbox.parse(response);
-        if(inboxList.size()>0) {
-          mInboxDataList = inboxList;
-          mAvatarManager.setDataList(inboxList);
-          mAdapter.notifyDataSetChanged();
-        } else
-          mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
+        mDoubleButton.setChecked(mOnlyNewData ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
+        mInboxDataList.clear();
+        mInboxDataList = Inbox.parse(response);
+        mAvatarManager.setDataList(mInboxDataList);
+        mAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();
         mListView.onRefreshComplete();
-          
       }
       @Override
       public void fail(int codeError,Response response) {
+        mProgressDialog.cancel();
+        //update(true);
       }
     }).exec();
-
-    /*
-    InboxRequest inboxRequest = new InboxRequest(ChatActivity.this);
-    inboxRequest.offset = offset;
-    inboxRequest.limit  = 6;
-    ConnectionService.sendRequest(inboxRequest,new Handler() {
-      @Override
-      public void handleMessage(Message msg) {
-        Toast.makeText(ChatActivity.this,"result",Toast.LENGTH_SHORT).show();
-        try {Thread.sleep(1000*4);} catch(InterruptedException e) {}
-        mListView.onRefreshComplete();
-      }
-    });
-    */
   }
   //---------------------------------------------------------------------------
   private void create() {

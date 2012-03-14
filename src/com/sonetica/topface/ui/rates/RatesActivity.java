@@ -28,6 +28,7 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class RatesActivity extends Activity {
   // Data
+  private boolean mOnlyNewData;
   private PullToRefreshListView mListView;
   private RatesListAdapter mAdapter;
   private LinkedList<Rate> mRatesDataList;
@@ -46,7 +47,6 @@ public class RatesActivity extends Activity {
     LeaksManager.getInstance().monitorObject(this);
     
     // Data
-    //mRatesList = Data.s_RatesList;
     mRatesDataList = new LinkedList<Rate>();
     
     // Title Header
@@ -57,18 +57,18 @@ public class RatesActivity extends Activity {
    mDoubleButton.setLeftText(getString(R.string.rates_btn_dbl_left));
    mDoubleButton.setRightText(getString(R.string.rates_btn_dbl_right));
    mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
-   // Left btn
    mDoubleButton.setLeftListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       update(true,false);
+       mOnlyNewData = false;
+       update(true);
      }
    });
-   // Right btn
    mDoubleButton.setRightListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       update(true,true);
+       mOnlyNewData = true;
+       update(true);
      }
    });
 
@@ -85,57 +85,53 @@ public class RatesActivity extends Activity {
    mListView.setOnRefreshListener(new OnRefreshListener() {
      @Override
      public void onRefresh() {
-       update(false,true);
-       mListView.onRefreshComplete();
+       update(false);
      }
    });
    
    // Progress Bar
    mProgressDialog = new ProgressDialog(this);
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
+
+   mOnlyNewData = Data.s_Rates > 0 ? true : false;
    
    create();
-   
-   update(true,Data.s_Rates>0?true:false);
+   update(true);
    
    // обнуление информера непросмотренных оценок
    Data.s_Rates = 0;
   }
   //---------------------------------------------------------------------------
-  private void update(boolean isProgress, final boolean isNew) {
+  private void update(boolean isProgress) {
     if(isProgress)
       mProgressDialog.show();
 
     RatesRequest likesRequest = new RatesRequest(getApplicationContext());
     likesRequest.limit = LIMIT;
-    likesRequest.only_new = isNew;
+    likesRequest.only_new = mOnlyNewData;
     likesRequest.callback(new ApiHandler(){
       @Override
       public void success(Response response) {
-        if(RatesActivity.this==null)
-          return;
-        LinkedList<Rate> ratesList = Rate.parse(response);
-        if(ratesList.size()>0) {
-         mRatesDataList = ratesList;
-         mDoubleButton.setChecked(isNew==false?DoubleBigButton.LEFT_BUTTON:DoubleBigButton.RIGHT_BUTTON);
-          mAvatarManager.setDataList(ratesList);
-          mAdapter.notifyDataSetChanged();
-        } else
-          mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
+        mDoubleButton.setChecked(mOnlyNewData?DoubleBigButton.RIGHT_BUTTON:DoubleBigButton.LEFT_BUTTON);
+        mRatesDataList.clear();
+        mRatesDataList = Rate.parse(response);
+        mAvatarManager.setDataList(mRatesDataList);
+        mAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();
         mListView.onRefreshComplete();
       }
       @Override
       public void fail(int codeError,Response response) {
+        mProgressDialog.cancel();
+        //update(true);
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
   private void create() {
-    // ListAdapter
     mAvatarManager = new AvatarManager<Rate>(this,mRatesDataList);
-    mListView.setOnScrollListener(mAvatarManager);    
     mAdapter = new RatesListAdapter(getApplicationContext(),mAvatarManager);
+    mListView.setOnScrollListener(mAvatarManager);
     mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------

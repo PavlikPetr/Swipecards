@@ -34,7 +34,6 @@ public class RatesListAdapter extends BaseAdapter {
   private static final int T_ALL   = 0;
   private static final int T_CITY  = 1;
   private static final int T_COUNT = 2;
-  //private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   //---------------------------------------------------------------------------
   public RatesListAdapter(Context context,AvatarManager<Rate> avatarManager) {
     mAvatarManager = avatarManager;
@@ -113,7 +112,6 @@ public class RatesListAdapter extends BaseAdapter {
     
     holder.mName.setText(rate.first_name+", "+rate.age);
     holder.mStar.mRate = rate.rate;
-    //holder.mTime.setText(DateFormat.format(TIME_TEMPLATE,inbox.created));
     Utils.formatTime(holder.mTime,rate.created);
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
     

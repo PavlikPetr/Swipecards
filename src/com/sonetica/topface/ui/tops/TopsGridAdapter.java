@@ -3,7 +3,7 @@ package com.sonetica.topface.ui.tops;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.ui.ThumbView;
-import com.sonetica.topface.ui.GalleryManager;
+import com.sonetica.topface.ui.GalleryGridManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +23,9 @@ public class TopsGridAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // Data
   private LayoutInflater mInflater;
-  private GalleryManager<TopUser> mGalleryManager;
+  private GalleryGridManager<TopUser> mGalleryManager;
   //---------------------------------------------------------------------------
-  public TopsGridAdapter(Context context,GalleryManager<TopUser> galleryManager) {
+  public TopsGridAdapter(Context context,GalleryGridManager<TopUser> galleryManager) {
     mInflater = LayoutInflater.from(context);
     mGalleryManager = galleryManager;
   }

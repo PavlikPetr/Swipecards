@@ -10,7 +10,7 @@ import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.LikesRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.DoubleBigButton;
-import com.sonetica.topface.ui.GalleryManager;
+import com.sonetica.topface.ui.GalleryGridManager;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
@@ -27,14 +27,15 @@ import android.widget.TextView;
  */
 public class LikesActivity extends Activity {
   // Data
+  private boolean mOnlyNewData;
   private PullToRefreshGridView mGallery;
   private LikesGridAdapter mAdapter;
-  private GalleryManager<Like> mGalleryManager;
+  private GalleryGridManager<Like> mGalleryGridManager;
   private LinkedList<Like> mLikesDataList;
   private ProgressDialog mProgressDialog;
   private DoubleBigButton mDoubleButton;
   // Constants
-  private static final int LIMIT = 42;
+  private static final int LIMIT = 60;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,6 @@ public class LikesActivity extends Activity {
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likes_header_title));
    
    // Double Button
-   //DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDouble);
    mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
    mDoubleButton.setLeftText(getString(R.string.inbox_btn_dbl_left));
    mDoubleButton.setRightText(getString(R.string.inbox_btn_dbl_right));
@@ -59,13 +59,15 @@ public class LikesActivity extends Activity {
    mDoubleButton.setLeftListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       update(true,false);
+       mOnlyNewData = false;
+       update(true);
      }
    });
    mDoubleButton.setRightListener(new View.OnClickListener() {
      @Override
      public void onClick(View v) {
-       update(true,true);
+       mOnlyNewData = true;
+       update(true);
      }
    });
 
@@ -84,8 +86,7 @@ public class LikesActivity extends Activity {
    mGallery.setOnRefreshListener(new OnRefreshListener() {
      @Override
      public void onRefresh() {
-       update(false,true);
-       mGallery.onRefreshComplete();
+       update(false);
      }
    });
    
@@ -93,54 +94,51 @@ public class LikesActivity extends Activity {
    mProgressDialog = new ProgressDialog(this); // getApplicationContext() падает
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
    
+   mOnlyNewData = Data.s_Likes > 0 ? true : false;
+   
    create();
-   
-   update(true,Data.s_Likes>0?true:false);
-   
+   update(true);
+
    // обнуление информера непросмотренных лайков
    Data.s_Likes = 0;
   }
   //---------------------------------------------------------------------------
-  private void update(boolean isProgress, final boolean isNew) {
+  private void update(boolean isProgress) {
     if(isProgress)
       mProgressDialog.show();
     LikesRequest likesRequest = new LikesRequest(getApplicationContext());
     likesRequest.limit = LIMIT;
-    likesRequest.only_new = isNew;
+    likesRequest.only_new = mOnlyNewData;
     likesRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        LinkedList<Like> likesList = Like.parse(response);
-        if(likesList.size()>0) {
-          mLikesDataList.clear();
-          mLikesDataList=likesList;
-          mDoubleButton.setChecked(isNew==false?DoubleBigButton.LEFT_BUTTON:DoubleBigButton.RIGHT_BUTTON);        
-          mGalleryManager.setDataList(mLikesDataList);
-          mAdapter.notifyDataSetChanged();
-        } else
-          mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
+        mDoubleButton.setChecked(mOnlyNewData ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
+        mLikesDataList.clear();
+        mLikesDataList = Like.parse(response);
+        mGalleryGridManager.setDataList(mLikesDataList);
+        mAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();
         mGallery.onRefreshComplete();
       }
       @Override
       public void fail(int codeError,Response response) {
         mProgressDialog.cancel();
-        update(true,true);
+        //update(true);
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mGalleryManager   = new GalleryManager<Like>(getApplicationContext(),mLikesDataList);
-    mAdapter = new LikesGridAdapter(getApplicationContext(),mGalleryManager);
+    mGalleryGridManager = new GalleryGridManager<Like>(getApplicationContext(),mLikesDataList);
+    mAdapter = new LikesGridAdapter(getApplicationContext(),mGalleryGridManager);
     mGallery.getRefreshableView().setAdapter(mAdapter);
-    mGallery.setOnScrollListener(mGalleryManager);
+    mGallery.setOnScrollListener(mGalleryGridManager);
   }
   //---------------------------------------------------------------------------
   private void release() {
-    if(mGalleryManager!=null) { 
-      mGalleryManager.release();
-      mGalleryManager=null;
+    if(mGalleryGridManager!=null) { 
+      mGalleryGridManager.release();
+      mGalleryGridManager=null;
     }
     
     mGallery=null;
@@ -151,11 +149,6 @@ public class LikesActivity extends Activity {
 
     mLikesDataList=null;
     mProgressDialog=null;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-    //mGalleryManager.restart();
   }
   //---------------------------------------------------------------------------
   @Override

@@ -22,7 +22,7 @@ import android.widget.ImageView;
 /*
  *  Менеджер изображений, загрузает и кеширует изображения
  */
-public class GalleryManager<T extends AbstractData> implements OnScrollListener {
+public class GalleryGridManager<T extends AbstractData> implements OnScrollListener {
   //---------------------------------------------------------------------------
   class Queue {
     private HashMap<Integer,Bitmap> mQueue = new HashMap<Integer,Bitmap>(20);
@@ -46,7 +46,7 @@ public class GalleryManager<T extends AbstractData> implements OnScrollListener 
   // Constants
   //private static final int THREAD_DEFAULT = 4;
   //---------------------------------------------------------------------------
-  public GalleryManager(Context context,LinkedList<T> dataList) {
+  public GalleryGridManager(Context context,LinkedList<T> dataList) {
     mDataList     = dataList;
     //mThreadsPool  = Executors.newFixedThreadPool(THREAD_DEFAULT);
     mMemoryCache  = new MemoryCache();
@@ -59,6 +59,7 @@ public class GalleryManager<T extends AbstractData> implements OnScrollListener 
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<T> dataList) {
     mDataList = dataList;
+    mMemoryCache.clear();
   }
   //---------------------------------------------------------------------------
   public AbstractData get(int position) {
