@@ -3,7 +3,7 @@
           package="com.sonetica.topface"
           android:versionCode="1"
           android:versionName="1.0" >
-     <!-- android:installLocation="preferExternal"  -->
+     <!-- android:installLocation="preferExternal" INSTALL_FAILED_INSUFFICIENT_STORAGE  -->
   
   <uses-sdk android:minSdkVersion="7" />
   
@@ -13,13 +13,14 @@
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="com.android.vending.BILLING" />
           
   <!-- application -->
   <application android:name=".App"
                android:icon="@drawable/ic_launcher"
                android:label="@string/app_name"
                android:theme="@android:style/Theme.NoTitleBar"
-               android:debuggable="true"
+               android:debuggable="false"
                android:screenOrientation="portrait">
     
     <!-- main launcher -->
@@ -40,15 +41,15 @@
     <activity android:name=".ui.likes.LikesActivity"         android:screenOrientation="portrait" />
     <activity android:name=".ui.dating.DatingActivity"       android:screenOrientation="portrait" />
     <activity android:name=".ui.dating.FilterActivity"       android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
-    <activity android:name=".ui.BuyingActivity"              android:screenOrientation="portrait" />
     <activity android:name=".ui.CitySearchActivity"          android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
     <activity android:name=".ui.LeaksActivity"               android:screenOrientation="portrait" />
-    
     <activity android:name=".ui.profile.ProfileActivity"     android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.EroAlbumActivity"    android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.PhotoAlbumActivity"  android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.AddPhotoActivity"    android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.EditProfileActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
+    
+    <activity android:name=".billing.BuyingActivity"         android:screenOrientation="portrait" />
     
     <!-- preferences activity -->
     <activity android:name=".ui.PreferencesActivity"   android:screenOrientation="portrait"  android:theme="@android:style/Theme.Light" />
@@ -60,9 +61,20 @@
     <!--Log -->
     <activity android:name=".ui.JLogActivity"   android:screenOrientation="portrait" />
     
+    <!-- receivers -->
+    <receiver android:name=".billing.BillingReceiver">
+        <intent-filter>
+            <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
+            <action android:name="com.android.vending.billing.RESPONSE_CODE" />
+            <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
+        </intent-filter>
+    </receiver>
+    
     <!-- services -->
     <service android:name=".services.StatisticService" />
     <service android:name=".services.ConnectionService" />
+    <service android:name=".billing.BillingService" />
+    
   </application>
   
 </manifest>

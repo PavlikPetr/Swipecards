@@ -90,7 +90,8 @@ public class ChatListAdapter extends BaseAdapter {
             holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
             holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
             holder.mAvatar.setOnClickListener(mOnAvatarListener);
-            holder.mAvatar.setImageDrawable(Data.s_UserDrw);
+            if(Data.s_UserDrw!=null)
+              holder.mAvatar.setImageDrawable(Data.s_UserDrw);
         } break;
         case T_FRIEND_EXT: {
             convertView     = mInflater.inflate(R.layout.chat_friend_ext, null, false);

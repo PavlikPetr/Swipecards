@@ -7,19 +7,15 @@ import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.module.pull2refresh.PullToRefreshListView;
 import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.net.ApiHandler;
-import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.InboxRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
-import com.sonetica.topface.utils.Utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -84,7 +80,7 @@ public class InboxActivity extends Activity {
      @Override
      public void onRefresh() {
        update(false,true);
-       mListView.onRefreshComplete();
+       //mListView.onRefreshComplete();
      }});
     mListView.setOnTouchListener(new OnTouchListener() {
       @Override
@@ -98,6 +94,7 @@ public class InboxActivity extends Activity {
         Data.s_UserDrw = ((ImageView)view.findViewById(R.id.ivAvatar)).getDrawable();
         Intent intent = new Intent(InboxActivity.this.getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxDataList.get(position).uid);
+        intent.putExtra(ChatActivity.INTENT_USER_NAME,mInboxDataList.get(position).first_name);
         startActivity(intent);
       }
     });
@@ -105,8 +102,6 @@ public class InboxActivity extends Activity {
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
-    
-    avatarOwnerPreloading();
     
     create();
     
@@ -157,14 +152,6 @@ public class InboxActivity extends Activity {
     */
   }
   //---------------------------------------------------------------------------
-  private void avatarOwnerPreloading() {
-    if(Data.s_OwnerDrw!=null)
-      return;
-    Bitmap ava = Http.bitmapLoader(Data.s_Profile.avatar_small);
-    ava = Utils.getRoundedCornerBitmap(ava,ava.getWidth(),ava.getHeight(),12);
-    Data.s_OwnerDrw = new BitmapDrawable(getApplicationContext().getResources(),ava);
-  }
-  //---------------------------------------------------------------------------
   private void create() {
     mAvatarManager = new AvatarManager<Inbox>(getApplicationContext(),mInboxDataList);
     mAdapter = new InboxListAdapter(getApplicationContext(),mAvatarManager);
@@ -185,11 +172,14 @@ public class InboxActivity extends Activity {
       mInboxDataList.clear();
     mInboxDataList = null;
     mProgressDialog = null;
+    
+    Data.s_UserDrw = null;
   }
   //---------------------------------------------------------------------------
   @Override
-  protected void onDestroy() {
+  protected void onDestroy() {   
     release();
+    
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }

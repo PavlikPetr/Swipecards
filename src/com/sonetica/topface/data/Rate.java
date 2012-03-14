@@ -34,7 +34,7 @@ public class Rate extends AbstractData {
           rate.first_name = item.optString("first_name");
           rate.online     = item.optBoolean("online");
           rate.unread     = item.optBoolean("unread");
-          rate.created    = item.optLong("created")*1000; // время приходит в секундах  *1000
+          rate.created    = item.optLong("created"); // время приходит в секундах  *1000
           rate.unread_count = response.mJSONResult.optInt("unread");
           rate.uid        = item.optInt("uid");
           rate.age        = item.optInt("age");

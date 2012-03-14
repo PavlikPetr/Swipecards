@@ -35,6 +35,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<T> dataList) {
     mDataList = dataList;
+    mCache.clear();
   }
   //---------------------------------------------------------------------------
   public T get(int position) {

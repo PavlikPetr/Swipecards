@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
+import com.sonetica.topface.ui.album.AlbumGallery;
 import com.sonetica.topface.ui.dating.DatingActivity;
 import com.sonetica.topface.ui.dating.RateControl;
 import com.sonetica.topface.ui.dating.ResourcesView;
@@ -40,7 +41,7 @@ public class DatingControl extends ViewGroup {
   private int mGallerySize;    // кол-во фото у оцениваемого пользователя
   private int mGalleryPrevPos; // предыдущая позиция в альбоме
   // Gallery
-  private DatingGallery mDatingGallery;
+  private AlbumGallery mDatingGallery;
   private DatingGalleryAdapter mGalleryAdapter;
   // Views
   private Button mBackButton;    // кнопка возврата к оцениваемой фотографии
@@ -82,7 +83,7 @@ public class DatingControl extends ViewGroup {
     });
     
     // Gallery
-    mDatingGallery = new DatingGallery(context);
+    mDatingGallery = new AlbumGallery(context, attrs);
     mDatingGallery.setAdapter(mGalleryAdapter);
     mDatingGallery.setSpacing(0);
     mDatingGallery.setBackgroundColor(Color.TRANSPARENT);

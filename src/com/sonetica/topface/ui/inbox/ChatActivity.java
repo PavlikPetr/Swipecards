@@ -34,10 +34,12 @@ public class ChatActivity extends Activity implements View.OnClickListener {
   //private InputMethodManager mInputManager;
   private EditText mEdBox;
   private int mUserId;
+  private TextView mHeaderTitle;
   //private int mOffset;
   // Constants
   private static final int LIMIT = 20;
-  public  static final String INTENT_USER_ID = "user_id";
+  public  static final String INTENT_USER_ID   = "user_id";
+  public  static final String INTENT_USER_NAME = "user_name";
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     //mInputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
     
     // Title Header
-    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.inbox_header_title));
+    mHeaderTitle = ((TextView)findViewById(R.id.tvHeaderTitle));
     
     // ListView
     mListView = (ListView)findViewById(R.id.lvChatList);
@@ -79,6 +81,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     
     // params
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
+    mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME));
     
     // Profile Button
     ImageButton btnProfile = (ImageButton)findViewById(R.id.btnChatProfile);
@@ -93,6 +96,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     btnSend.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        mProgressDialog.show();
         // закрытие клавиатуры
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         /*
@@ -121,6 +125,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
             mAdapter.addSentMessage(history);
             mAdapter.notifyDataSetChanged();
             mEdBox.getText().clear();
+            mProgressDialog.cancel();
           }
           @Override
           public void fail(int codeError,Response response) {

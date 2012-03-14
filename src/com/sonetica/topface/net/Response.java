@@ -30,6 +30,7 @@ public class Response {
   public static final int INVALID_PRODUCT = 17;
   public static final int INVERIFIED_RECEIPT = 18;
   public static final int ITUNES_CONNECTION = 19;
+  public static final int INVERIFIED_TOKEN = 20;
   public static final int FATAL_ERROR = 99;
   //---------------------------------------------------------------------------
   public JSONObject getSearch() {

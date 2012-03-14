@@ -56,6 +56,11 @@ public class Utils {
   //---------------------------------------------------------------------------
   public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int width, int height, int roundPx) {
     Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+    if(width<height)
+      height=width;
+    else
+      width=height;
+    output = clipping(output,width,height); // !!!!
     Canvas canvas = new Canvas(output);
 
     final Rect rect = new Rect(0, 0, width, height);
@@ -114,29 +119,28 @@ public class Utils {
   //---------------------------------------------------------------------------
   public static void formatTime(TextView tv,long time) {
     Context context = tv.getContext();
-    long now = System.currentTimeMillis();
-    /*
-    String text = null;
+    String text;
+    long now = System.currentTimeMillis()/1000;
+    long full_time = time * 1000;
     long t = now - time;
     if((time > now) || t < 60)
       text = context.getString(R.string.time_now);
-    else if(t < 36000)
-      text = formatMinute(context,t/600);
-    else if(t < 6*36000)
+    else if(t < 3600)
+      text = formatMinute(context,t/60);
+    else if(t < 6*3600)
       text = formatHour(context,t/3600);
-    else if(DateUtils.isToday(time))
-      text = DateFormat.format("kk:mm",time).toString();
+    else if(DateUtils.isToday(full_time))
+      text = DateFormat.format("kk:mm",full_time).toString();
     else { 
       Calendar cal = Calendar.getInstance();
       cal.set(Calendar.HOUR_OF_DAY,0);
       cal.set(Calendar.MINUTE,0);
-      if(time > (now-(now-cal.getTimeInMillis())-(24*60*60*1000)))
-        text = DateFormat.format(context.getString(R.string.time_yesterday)+" kk:mm",time).toString();
+      if(full_time > (now-(now-cal.getTimeInMillis())-(24*60*60*1000)))
+        text = DateFormat.format(context.getString(R.string.time_yesterday)+" kk:mm",full_time).toString();
       else
-        text = DateFormat.format("dd.MM.yyyy kk:mm",time).toString();
+        text = DateFormat.format("dd.MM.yyyy kk:mm",full_time).toString();
     }
-    */
-    tv.setText("time");
+    tv.setText(text);
   }
   //---------------------------------------------------------------------------
   private static String formatHour(Context context,long hours) {
@@ -147,14 +151,11 @@ public class Utils {
       if((hours%10 == 2) || (hours%10 == 3) || (hours%10 == 4))
         caseValue = 2;
     }
-    /*
     switch(caseValue) {
      case 1:  return String.format(context.getString(R.string.time_hour_0),hours);
      case 2:  return String.format(context.getString(R.string.time_hour_1),hours);
      default: return String.format(context.getString(R.string.time_hours),hours);
     }
-    */
-    return null;
   }
   //---------------------------------------------------------------------------
   private static String formatMinute(Context context,long minutes) {
@@ -165,14 +166,11 @@ public class Utils {
       if((minutes%10 == 2) || (minutes%10 == 3) || (minutes%10 == 4))
         caseValue = 2;
     }
-    /*
     switch(caseValue) {
      case 1:  return String.format(context.getString(R.string.time_minute_0),minutes);
      case 2:  return String.format(context.getString(R.string.time_minute_1),minutes);
      default: return String.format(context.getString(R.string.time_minutes),minutes);
     }
-    */
-    return null;
   }
   //---------------------------------------------------------------------------
 }

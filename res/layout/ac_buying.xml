@@ -16,81 +16,53 @@
         android:textColor="#FFFFFF" />
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/buying_selector"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
 
+        <!-- 6 money btn -->
+        <Button
+            android:id="@+id/btnBuyingMoney6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6" />
+         
+        <!-- 6 money btn -->
         <Button
             android:id="@+id/btnBuyingMoney40"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="40" />
-
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:background="@drawable/buying_economy_selector"
+            android:text="economy 30%"
+            android:textColor="#000000" />
+        
+        <!-- 100 money btn -->
         <Button
             android:id="@+id/btnBuyingMoney100"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="100" />
-        
-        <LinearLayout 
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:background="@drawable/buying_economy_selector"
-            android:text="economy 30%"
+            android:text="economy 40%"
             android:textColor="#000000" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="economy 30%"
-            android:textColor="#000000" />
-
-        </LinearLayout>
-
-
-        <Button
-            android:id="@+id/btnBuyingPower"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="10000" />
-
-        <LinearLayout 
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:background="@drawable/buying_economy_selector"
-            android:text="economy 30%"
-            android:textColor="#000000" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text="economy 30%"
-            android:textColor="#000000" />            
-
-        </LinearLayout>
-
     </LinearLayout>
 
     <!-- Power -->
-
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -104,11 +76,13 @@
         android:background="@drawable/buying_selector"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
-
+       
+       <!-- 10 000 power btn -->
         <Button
+            android:id="@+id/btnBuyingPower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="text" />
+            android:text="10 000" />
     </LinearLayout>
 
 </LinearLayout>

@@ -1,7 +1,11 @@
 package com.sonetica.topface;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Utils;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 
 /*
@@ -36,5 +40,19 @@ public class Global {
     CLIENT_DEVICE          = Build.BRAND + " " + Build.MANUFACTURER;
     CLIENT_ID              = Build.ID;
   }
-  //---------------------------------------------------------------------------  
+  //---------------------------------------------------------------------------
+  public static void avatarOwnerPreloading(Context context) {
+    if(Data.s_OwnerDrw!=null)
+      return;
+    Bitmap ava = Http.bitmapLoader(Data.s_Profile.avatar_small);
+    ava = Utils.getRoundedCornerBitmap(ava,ava.getWidth(),ava.getHeight(),12);
+    Data.s_OwnerDrw = new BitmapDrawable(context.getResources(),ava);
+  }
+  //---------------------------------------------------------------------------
+  public static void avatarUserPreloading(Context context,String url) {
+    Bitmap ava = Http.bitmapLoader(url);
+    ava = Utils.getRoundedCornerBitmap(ava,ava.getWidth(),ava.getHeight(),12);
+    Data.s_UserDrw = new BitmapDrawable(context.getResources(),ava);
+  }
+  //---------------------------------------------------------------------------
 }

@@ -2,6 +2,7 @@ package com.sonetica.topface.ui.dashboard;
 
 import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
+import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.net.ApiHandler;
@@ -91,6 +92,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
           Toast.makeText(DashboardActivity.this.getApplicationContext(),"Profile is null",Toast.LENGTH_SHORT).show();
         }
         Data.setProfile(profile);
+        Global.avatarOwnerPreloading(DashboardActivity.this.getApplicationContext());
         mProgressDialog.cancel();
       }
       @Override
@@ -208,8 +210,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
     switch (item.getItemId()) {
       case MENU_ONE:
-        Toast.makeText(this,getString(R.string.dashbrd_menu_one),Toast.LENGTH_SHORT).show();
-        App.cached = !App.cached;
+        //Toast.makeText(this,getString(R.string.dashbrd_menu_one),Toast.LENGTH_SHORT).show();
+        //App.cached = !App.cached;
         break;
       case MENU_PREFERENCES:
         startActivity(new Intent(getApplicationContext(),PreferencesActivity.class));

@@ -2,7 +2,9 @@ package com.sonetica.topface.ui.profile;
 
 import java.util.LinkedList;
 import com.sonetica.topface.Data;
+import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
+import com.sonetica.topface.billing.BuyingActivity;
 import com.sonetica.topface.data.Album;
 import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.data.ProfileUser;
@@ -15,7 +17,6 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.social.Socium;
 import com.sonetica.topface.social.Socium.AuthException;
-import com.sonetica.topface.ui.BuyingActivity;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
@@ -72,7 +73,8 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   //private TextView mStatus;
   //private TextView mJob;
   private TextView mAbout;
-  boolean swap = true;  // проверить на оптимизацию 
+  private boolean swap = true;  // проверить на оптимизацию
+  private String mUserAvatarUrl;
   //Constants
   public static final String INTENT_USER_ID = "user_id";
   public static final int FORM_TOP = 0;
@@ -223,6 +225,8 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
           return;
         ProfileUser profile = ProfileUser.parse(userId,response);
         
+        mUserAvatarUrl=profile.avatars_small;
+        
         // грузим галерею
         getUserAlbum(userId);
         
@@ -343,8 +347,10 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   public void onClick(View view) {
     switch(view.getId()) {
       case R.id.btnProfileChat: {
+        Global.avatarUserPreloading(getApplicationContext(),mUserAvatarUrl);
         Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mUserId);
+        intent.putExtra(ChatActivity.INTENT_USER_NAME,mName.getText());
         startActivity(intent);
       } break;
       case R.id.btnProfileEdit: {
