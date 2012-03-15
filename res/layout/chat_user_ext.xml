@@ -3,7 +3,7 @@
                 xmlns:sonetica="http://schemas.android.com/apk/res/com.sonetica.topface"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:padding="4dip"
+                android:padding="4dp"
                 android:background="@android:color/transparent"
                 android:id="@+id/layout" >
 
@@ -12,8 +12,8 @@
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_toLeftOf="@id/left_icon"
-                  android:layout_marginLeft="10dip"
-                  android:layout_marginRight="6px"
+                  android:layout_marginLeft="10dp"
+                  android:layout_marginRight="3dp"
                   android:background="@drawable/bg_message_friend_ext"
                   android:orientation="vertical">
 
@@ -22,6 +22,7 @@
         android:id="@+id/chat_message"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textSize="15sp"
         android:textColor="#4D4D4D"
         />
 
@@ -29,6 +30,7 @@
         <TextView
                 android:id="@+id/chat_date"
                 android:textColor="#999999"
+                android:textSize="12sp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 />
@@ -42,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="3dip"
+            android:layout_marginRight="3dp"
             android:src="@drawable/ic_launcher"
             android:visibility="invisible"
             android:scaleType="fitCenter"/>

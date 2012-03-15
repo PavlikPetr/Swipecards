@@ -140,11 +140,20 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-    if(getChildCount()>0) {
-      View child = getChildAt(0);
-      child.measure(widthMeasureSpec,heightMeasureSpec);
-      setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec),child.getMeasuredHeight());
+    int w = 0;
+    int h = 0;
+    int count = getChildCount();
+    if(count>0) {
+      for(int i=1;i<count;++i) {
+        View child = getChildAt(i);
+        child.measure(widthMeasureSpec,heightMeasureSpec);
+        w += child.getMeasuredWidth();
+        h = child.getMeasuredHeight();
+      }
     }
+    if(w>MeasureSpec.getSize(widthMeasureSpec))
+      w = MeasureSpec.getSize(widthMeasureSpec);
+    setMeasuredDimension(w,h);
   }
   //---------------------------------------------------------------------------
   private void addAndMeasureChild(final View child, int viewPos) {

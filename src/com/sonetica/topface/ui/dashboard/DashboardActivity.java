@@ -92,8 +92,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
           Toast.makeText(DashboardActivity.this.getApplicationContext(),"Profile is null",Toast.LENGTH_SHORT).show();
         }
         Data.setProfile(profile);
-        Imager.avatarOwnerPreloading(DashboardActivity.this.getApplicationContext());
         mProgressDialog.cancel();
+        Imager.avatarOwnerPreloading(DashboardActivity.this.getApplicationContext());
         mNotifyHandler.sendEmptyMessage(0);
       }
       @Override

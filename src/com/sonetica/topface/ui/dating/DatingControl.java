@@ -163,6 +163,7 @@ public class DatingControl extends ViewGroup {
     for(int i=0;i<count;i++)
       getChildAt(i).measure(widthMeasureSpec,heightMeasureSpec);
     
+    mResourcesView.measure(0,0);
     mCounter.measure(widthMeasureSpec,0);
     mProgress.measure(0,0);
     mBackButton.measure(0,0);

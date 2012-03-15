@@ -64,7 +64,7 @@ public class TopsActivity extends Activity {
     mActionData.sex       = preferences.getInt(getString(R.string.s_tops_sex),GIRLS);
     mActionData.city_id   = preferences.getInt(getString(R.string.s_tops_city_id),MOSCOW);
     mActionData.city_name = preferences.getString(getString(R.string.s_tops_city_name),getString(R.string.default_city));
-    mActionData.city_popup_position = preferences.getInt(getString(R.string.s_tops_city_position),0);
+    mActionData.city_popup_position = preferences.getInt(getString(R.string.s_tops_city_position),-1);
     
     // Data
     mTopsList   = new LinkedList<TopUser>();

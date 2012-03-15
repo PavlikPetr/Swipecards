@@ -136,7 +136,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     // Gallary and Adapter
     mListAdapter = new PhotoGalleryAdapter(getApplicationContext(),mOwner);
     mListView = (HorizontalListView)findViewById(R.id.lvAlbumPreview);
-    mListView.setBackgroundResource(R.drawable.profile_bg_gallery);
+    //mListView.setBackgroundResource(R.drawable.profile_bg_gallery);
     mListView.setAdapter(mListAdapter);
     mListView.setOnItemClickListener(this);
     
