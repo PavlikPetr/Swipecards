@@ -8,13 +8,13 @@ import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.data.Auth;
 import com.sonetica.topface.net.AuthRequest;
-import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.Packet;
 import com.sonetica.topface.net.ApiRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.Http;
 
 public class ConnectionService extends Service {
   // Data

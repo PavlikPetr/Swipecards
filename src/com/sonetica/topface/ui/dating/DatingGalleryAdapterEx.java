@@ -2,7 +2,7 @@ package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
-import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;

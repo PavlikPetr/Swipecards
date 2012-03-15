@@ -1,5 +1,6 @@
 package com.sonetica.topface.utils;
 
+import com.sonetica.topface.Data;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -12,13 +13,27 @@ import android.view.WindowManager;
  */
 public class Device {
   // Data
-  //public static boolean wideScreen;
+  public static int width;
   // Methods
   //---------------------------------------------------------------------------
   public static void init(Context context) {
-    // todo something
-    //wideScreen = getDisplay(context).getWidth()>320;  // 320 vs 480
-    // init device hardware
+    width = getDisplay(context).getWidth();
+    switch(width) {
+      case 240:
+      case 320:
+        Data.s_gridColumn = 2;
+        break;
+      case 480:
+        Data.s_gridColumn = 3;
+        break;
+      case 720:
+        Data.s_gridColumn = 4;
+        break;
+      default:
+        Data.s_gridColumn = 6;
+        break;
+    }
+
   }
   //---------------------------------------------------------------------------
   public static Display getDisplay(Context context) {

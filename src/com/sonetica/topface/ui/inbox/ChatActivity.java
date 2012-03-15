@@ -10,12 +10,15 @@ import com.sonetica.topface.net.MessageRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.Imager;
 import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,6 +34,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
   private ChatListAdapter mAdapter;
   private LinkedList<History> mHistoryList;
   private ProgressDialog mProgressDialog;
+  private boolean mProfileInvoke;
   //private InputMethodManager mInputManager;
   private EditText mEdBox;
   private int mUserId;
@@ -38,8 +42,9 @@ public class ChatActivity extends Activity implements View.OnClickListener {
   //private int mOffset;
   // Constants
   private static final int LIMIT = 20;
-  public  static final String INTENT_USER_ID   = "user_id";
+  public  static final String INTENT_USER_ID = "user_id";
   public  static final String INTENT_USER_NAME = "user_name";
+  public  static final String INTENT_PROFILE_INVOKE = "profile_invoke";
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     
     // params
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
+    mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE,false);
     mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME));
     
     // Profile Button
@@ -99,11 +105,10 @@ public class ChatActivity extends Activity implements View.OnClickListener {
         mProgressDialog.show();
         // закрытие клавиатуры
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        /*
+
         InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mEdBox.getWindowToken(),0);
-        imm = null;
-        */
+        
         /*
         // скрыть клавиатуру
         //mInputManager.hideSoftInputFromWindow(mEdBox.getWindowToken(),InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -145,14 +150,21 @@ public class ChatActivity extends Activity implements View.OnClickListener {
   //---------------------------------------------------------------------------
   @Override
   public void onClick(View v) {
+    if(mProfileInvoke) {
+      finish();
+      return;
+    }
     Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
     intent.putExtra(ProfileActivity.INTENT_USER_ID,mUserId);
+    intent.putExtra(ProfileActivity.INTENT_CHAT_INVOKE,true);
     startActivity(intent);
   }
   //---------------------------------------------------------------------------
   private void update(final int offset,final boolean isRefresh) {
-    if(!isRefresh)
+    if(!isRefresh) {
       mProgressDialog.show();
+      Imager.avatarOwnerPreloading(getApplicationContext());
+    }
     
     final HistoryRequest historyRequest = new HistoryRequest(getApplicationContext());
     historyRequest.userid = mUserId; 

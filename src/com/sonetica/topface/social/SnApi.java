@@ -6,7 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Http;
 
 /*
  *  Интерфейс api для запросов к социальным сетям

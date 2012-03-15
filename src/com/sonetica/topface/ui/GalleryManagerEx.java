@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
-import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.Device;
+import com.sonetica.topface.utils.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
@@ -39,7 +40,7 @@ public class GalleryManagerEx {
     mCacheManager = new CacheManager(context);
     mLinkCache    = new HashMap<ImageView,Integer>();
     mThreadsPool  = Executors.newFixedThreadPool(mThreadCount);
-    int columnNumber = context.getResources().getInteger(R.integer.grid_column_number);
+    int columnNumber = Data.s_gridColumn;
     mBitmapWidth  = Device.getDisplay(context).getWidth()/(columnNumber);
     mBitmapHeight = (int)(mBitmapWidth*1.25);
   }

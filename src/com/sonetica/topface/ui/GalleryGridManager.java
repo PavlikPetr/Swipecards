@@ -3,12 +3,13 @@ package com.sonetica.topface.ui;
 import java.util.HashMap;
 import java.util.LinkedList;
 import com.sonetica.topface.App;
+import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
-import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Device;
+import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.MemoryCache;
 import com.sonetica.topface.utils.StorageCache;
@@ -52,7 +53,7 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
     mMemoryCache  = new MemoryCache();
     mStorageCache = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
     
-    int columnNumber = context.getResources().getInteger(R.integer.grid_column_number);
+    int columnNumber = Data.s_gridColumn;
     mBitmapWidth  = Device.getDisplay(context).getWidth()/(columnNumber);
     mBitmapHeight = (int)(mBitmapWidth*1.25);
   }

@@ -74,7 +74,7 @@ public class LikesActivity extends Activity {
    // Gallery
    mGallery = (PullToRefreshGridView)findViewById(R.id.grdLikesGallary);
    mGallery.setAnimationCacheEnabled(false);
-   mGallery.setNumColumns(getResources().getInteger(R.integer.grid_column_number));
+   mGallery.setNumColumns(Data.s_gridColumn);
    mGallery.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

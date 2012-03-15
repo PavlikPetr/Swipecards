@@ -5,10 +5,11 @@ import com.sonetica.topface.R;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.view.Gravity;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,8 +17,9 @@ public class ResourcesView extends LinearLayout {
   // Data
   private TextView  mPowerTxt;
   private TextView  mMoneyTxt;
-  private ImageView mPowerImg;
-  private ImageView mMoneyImg;
+//  private ImageView mPowerImg;
+//  private ImageView mMoneyImg;
+  private Button    mBuying;
   //---------------------------------------------------------------------------
   public ResourcesView(Context context) {
     this(context,null);
@@ -30,7 +32,13 @@ public class ResourcesView extends LinearLayout {
     
     setBackgroundColor(Color.TRANSPARENT);
     setOrientation(HORIZONTAL);
-    setPadding(padding,padding,0,0);
+    setPadding(5,0,0,0);
+
+    //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+    //layoutParams.gravity = Gravity.CENTER_VERTICAL;
+    
+    Drawable drwbl_power = getResources().getDrawable(R.drawable.dating_power);
+    Drawable drwbl_money = getResources().getDrawable(R.drawable.dating_money);
 
     // power
     mPowerTxt = new TextView(context);
@@ -38,10 +46,15 @@ public class ResourcesView extends LinearLayout {
     mPowerTxt.setTextColor(Color.WHITE);
     mPowerTxt.setTypeface(Typeface.DEFAULT_BOLD);
     mPowerTxt.setPadding(padding,0,padding,0);
-    mPowerTxt.setGravity(Gravity.CENTER);
+    mPowerTxt.setCompoundDrawablePadding(5);
+    mPowerTxt.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl_power,null);
+    addView(mPowerTxt);
     
-    mPowerImg = new ImageView(context);
-    mPowerImg.setImageResource(R.drawable.dating_power);
+//    mPowerImg = new ImageView(context);
+//    mPowerImg.setImageResource(R.drawable.dating_power);
+//    addView(mPowerImg);
+    
+    
     
     // money
     mMoneyTxt = new TextView(context);
@@ -49,16 +62,21 @@ public class ResourcesView extends LinearLayout {
     mMoneyTxt.setTextColor(Color.WHITE);
     mMoneyTxt.setTypeface(Typeface.DEFAULT_BOLD);
     mMoneyTxt.setPadding(padding,0,padding,0);
-    mMoneyTxt.setGravity(Gravity.CENTER);
-    
-    mMoneyImg = new ImageView(context);
-    mMoneyImg.setImageResource(R.drawable.dating_money);
-    
-    addView(mPowerTxt);
-    addView(mPowerImg);
-    
+    mMoneyTxt.setCompoundDrawablePadding(5);
+    mMoneyTxt.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl_money,null);
     addView(mMoneyTxt);
-    addView(mMoneyImg);
+    
+//    mMoneyImg = new ImageView(context);
+//    mMoneyImg.setImageResource(R.drawable.dating_money);
+//    addView(mMoneyImg);
+    
+    // Buying
+    mBuying = new Button(context);
+    mBuying.setId(R.id.datingPlusBtn);
+    mBuying.setVisibility(View.INVISIBLE);
+    mBuying.setEnabled(false);
+    mBuying.setText("+");
+    addView(mBuying);    
   }
   //---------------------------------------------------------------------------
   public void setResources(int power,int money) {
@@ -69,8 +87,9 @@ public class ResourcesView extends LinearLayout {
   public void release() {
     mPowerTxt = null;
     mMoneyTxt = null;
-    mPowerImg = null;
-    mMoneyImg = null;
+//    mPowerImg = null;
+//    mMoneyImg = null;
+    mBuying   = null;
   }
   //---------------------------------------------------------------------------
 }

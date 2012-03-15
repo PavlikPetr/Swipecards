@@ -3,6 +3,7 @@ package com.sonetica.topface.ui.dating;
 import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
+import com.sonetica.topface.billing.BuyingActivity;
 import com.sonetica.topface.data.DoRate;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
@@ -36,7 +37,7 @@ import android.widget.TextView;
 public class DatingActivity extends Activity implements OnNeedUpdateListener,OnRateListener,OnClickListener{
   // Data
   private DatingControl mDatingControl;
-  private Dialog   mCommentDialog;
+  private Dialog mCommentDialog;
   private EditText mCommentText;
   private InputMethodManager mInputManager;
   // Constants
@@ -55,6 +56,12 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
+    
+    // Resources Buying Button
+    Button btnBuying = ((Button)findViewById(R.id.datingPlusBtn));
+    btnBuying.setOnClickListener(this);
+    btnBuying.setVisibility(View.VISIBLE);
+    btnBuying.setEnabled(true);
     
     // Chat Button
     ((Button)findViewById(R.id.chatBtn)).setOnClickListener(this);
@@ -75,7 +82,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     // Comment window
     mCommentDialog = new Dialog(this);
     mCommentDialog.setTitle(R.string.chat_comment);    
-    mCommentDialog.setContentView(R.layout.popup_comment);
+    mCommentDialog.setContentView(R.layout.popup_comment); //,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
     mCommentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     //mCommentDialog.getWindow().setBackgroundDrawableResource(R.drawable.popup_comment);
     
@@ -138,56 +145,64 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   //---------------------------------------------------------------------------
   @Override
   public void onRate(final int rate) {
-    if(rate==10 || rate==9) {
-      ((Button)mCommentDialog.findViewById(R.id.btnPopupCommentSend)).setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          String comment = mCommentText.getText().toString();
-          if(comment.equals(""))
-            return;
-          
-          int uid = mDatingControl.getUserId();
-          
-          // отправка комментария к оценке
-          MessageRequest message = new MessageRequest(DatingActivity.this.getApplicationContext());
-          message.message = comment; 
-          message.userid  = uid;
-          message.callback(new ApiHandler() {
-            @Override
-            public void success(Response response) {
-            }
-            @Override
-            public void fail(int codeError,Response response) {
-            }
-          }).exec();
-          
-          // отправка оценки
-          rate(uid,rate);
-          
-          mCommentDialog.cancel();
-          mCommentText.setText("");
-          
-          // скрыть клавиатуру
-          mInputManager.hideSoftInputFromWindow(mCommentText.getWindowToken(),InputMethodManager.HIDE_IMPLICIT_ONLY);
-          
-          // подгрузка следующего
-          mDatingControl.next();
-        }
-      });
-      
-      // показать окно отправки сообщения
-      mCommentDialog.show();
-      
-    } else {
+    if(rate < 9) {
       rate(mDatingControl.getUserId(),rate);
       mDatingControl.next();
+      return;
     }
+     
+    if(Data.s_Money <= 0) {
+      startActivity(new Intent(getApplicationContext(),BuyingActivity.class));
+      return;
+    }
+    
+    // кнопка на окне комментария оценки 10 и 9
+    ((Button)mCommentDialog.findViewById(R.id.btnPopupCommentSend)).setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        String comment = mCommentText.getText().toString();
+        if(comment.equals(""))
+          return;
+        
+        int uid = mDatingControl.getUserId();
+        
+        // отправка комментария к оценке
+        MessageRequest message = new MessageRequest(DatingActivity.this.getApplicationContext());
+        message.message = comment; 
+        message.userid  = uid;
+        message.callback(new ApiHandler() {
+          @Override
+          public void success(Response response) {
+          }
+          @Override
+          public void fail(int codeError,Response response) {
+          }
+        }).exec();
+        
+        // отправка оценки
+        rate(uid,rate);
+        
+        mCommentDialog.cancel();
+        mCommentText.setText("");
+        
+        // скрыть клавиатуру
+        mInputManager.hideSoftInputFromWindow(mCommentText.getWindowToken(),InputMethodManager.HIDE_IMPLICIT_ONLY);
+        
+        // подгрузка следующего
+        mDatingControl.next();
+      }
+    });
+    
+    mCommentDialog.show(); // окно сообщения
   }
   //---------------------------------------------------------------------------
   @Override
   public void onClick(View view) {
     Intent intent = null;
     switch(view.getId()) {
+      case R.id.datingPlusBtn: {
+        intent = new Intent(getApplicationContext(),BuyingActivity.class);
+      } break;
       case R.id.chatBtn: {
         intent = new Intent(getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mDatingControl.getUserId());

@@ -4,6 +4,7 @@ import com.sonetica.topface.services.StatisticService;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.dashboard.DashboardActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.Device;
 import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.content.Intent;
@@ -25,6 +26,7 @@ public class MainActivity extends Activity {
     // App initialization
     Global.init(getApplicationContext());
     Data.init(getApplicationContext());
+    Device.init(getApplicationContext());
     
     //startService(new Intent(this,ConnectionService.class));
     

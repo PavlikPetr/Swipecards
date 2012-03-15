@@ -2,7 +2,6 @@ package com.sonetica.topface.ui.profile;
 
 import java.util.LinkedList;
 import com.sonetica.topface.Data;
-import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.billing.BuyingActivity;
 import com.sonetica.topface.data.Album;
@@ -10,7 +9,6 @@ import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.data.ProfileUser;
 import com.sonetica.topface.net.AlbumRequest;
 import com.sonetica.topface.net.ApiHandler;
-import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.PhotoAddRequest;
 import com.sonetica.topface.net.ProfilesRequest;
 import com.sonetica.topface.net.Response;
@@ -19,6 +17,8 @@ import com.sonetica.topface.social.Socium;
 import com.sonetica.topface.social.Socium.AuthException;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.Http;
+import com.sonetica.topface.utils.Imager;
 import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -43,6 +43,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   private int mUserId;
   private boolean mOwner;
   private boolean mAddEroState;
+  private boolean mChatInvoke;
   private SwapView mSwapView;
   private Button mProfileButton;
   private Button mBuyingButton;
@@ -77,6 +78,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   private String mUserAvatarUrl;
   //Constants
   public static final String INTENT_USER_ID = "user_id";
+  public static final String INTENT_CHAT_INVOKE = "chat_invoke";
   public static final int FORM_TOP = 0;
   public static final int FORM_BOTTOM = 1;
   public static final int GALLARY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -99,8 +101,12 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     // Profile Header Button 
     mProfileButton = ((Button)findViewById(R.id.btnHeader));
     mProfileButton.setOnClickListener(this);
+    
     // свой - чужой профиль
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
+    // пришли из чата
+    mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE,false);
+    
     // Buttons
     if(mUserId==-1) {  
       mOwner = true;           // СВОЙ ПРОФИЛЬ
@@ -347,10 +353,15 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   public void onClick(View view) {
     switch(view.getId()) {
       case R.id.btnProfileChat: {
-        Global.avatarUserPreloading(getApplicationContext(),mUserAvatarUrl);
+        if(mChatInvoke) {
+          finish();
+          return;
+        }
+        Imager.avatarUserPreloading(getApplicationContext(),mUserAvatarUrl);
         Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mUserId);
         intent.putExtra(ChatActivity.INTENT_USER_NAME,mName.getText());
+        intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE,true);
         startActivity(intent);
       } break;
       case R.id.btnProfileEdit: {
@@ -566,6 +577,19 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
             @Override
             public void success(Response response) {
               //PhotoAdd add = PhotoAdd.parse(response);
+              
+              Album album = new Album();
+              album.big   = result[0];
+              album.small = result[2];
+              
+              if(mAddEroState) {
+                mEroList.add(album);
+                mListEroAdapter.notifyDataSetChanged();
+              } else {
+                mPhotoList.add(album);
+                mListAdapter.notifyDataSetChanged();
+              }
+              
             }
             @Override
             public void fail(int codeError,Response response) {

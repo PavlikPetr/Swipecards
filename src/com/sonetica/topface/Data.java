@@ -13,6 +13,7 @@ import com.sonetica.topface.data.Profile;
  */
 public class Data {
   // Data
+  public static int s_gridColumn;
   /*
   private static LinkedList<SearchUser> s_SearchList;  // dating
   private static LinkedList<TopUser> s_TopsList;
@@ -35,6 +36,7 @@ public class Data {
   public static int s_Likes;
   public static int s_Messages;
   public static int s_AverageRate;
+  
   // Topface ssid key
   public static String SSID;  // ключ для запросов к TP серверу
   //---------------------------------------------------------------------------

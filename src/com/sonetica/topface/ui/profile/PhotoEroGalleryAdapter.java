@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
-import com.sonetica.topface.net.Http;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.LeaksManager;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -35,6 +35,7 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<Album> dataList) {
     mAlbumList = dataList;
+    mCache.clear();
   };
   //---------------------------------------------------------------------------
   @Override

@@ -108,7 +108,7 @@ public class TopsActivity extends Activity {
     mGallery = (GridView)findViewById(R.id.grdTopsGallary);
     mGallery.setAnimationCacheEnabled(false);
     mGallery.setScrollingCacheEnabled(false);
-    mGallery.setNumColumns(getResources().getInteger(R.integer.grid_column_number));
+    mGallery.setNumColumns(Data.s_gridColumn);
     /*
     mGallery.setOnScrollListener(new OnScrollListener() {
       @Override

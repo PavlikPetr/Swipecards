@@ -5,7 +5,7 @@ import java.io.InputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.sonetica.topface.Global;
-import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

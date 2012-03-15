@@ -2,11 +2,9 @@ package com.sonetica.topface.ui.dashboard;
 
 import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
-import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.net.ApiHandler;
-import com.sonetica.topface.net.Http;
 import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.SocialActivity;
@@ -20,6 +18,8 @@ import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.ui.rates.RatesActivity;
 import com.sonetica.topface.ui.tops.TopsActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.Http;
+import com.sonetica.topface.utils.Imager;
 import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -38,6 +38,7 @@ import android.widget.Toast;
 public class DashboardActivity extends Activity implements View.OnClickListener {
   // Data
   private boolean mBlock;
+  private boolean mIsUpdateNotify;
   private NotifyHandler    mNotifyHandler;
   private DashboardButton  mLikesButton;
   private DashboardButton  mRatesButton;
@@ -53,7 +54,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     Debug.log(this,"+onCreate");
     
     LeaksManager.getInstance().monitorObject(this);
-    
+
     mLikesButton = ((DashboardButton)findViewById(R.id.btnDashbrdLikes));
     mLikesButton.setOnClickListener(this);
     mRatesButton = ((DashboardButton)findViewById(R.id.btnDashbrdRates));
@@ -76,7 +77,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     mProgressDialog.show();
     
     mNotifyHandler = new NotifyHandler();
-    mNotifyHandler.sendEmptyMessage(0);
     
     update();
   }
@@ -92,8 +92,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
           Toast.makeText(DashboardActivity.this.getApplicationContext(),"Profile is null",Toast.LENGTH_SHORT).show();
         }
         Data.setProfile(profile);
-        Global.avatarOwnerPreloading(DashboardActivity.this.getApplicationContext());
+        Imager.avatarOwnerPreloading(DashboardActivity.this.getApplicationContext());
         mProgressDialog.cancel();
+        mNotifyHandler.sendEmptyMessage(0);
       }
       @Override
       public void fail(int codeError,Response response) {
@@ -118,6 +119,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onResume() {
     super.onResume();
+    
+    mIsUpdateNotify = true;
     invalidateNotification();
   }
   //---------------------------------------------------------------------------
@@ -158,11 +161,14 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onPause() {
     super.onPause();
+    
+    mIsUpdateNotify = false;
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    mNotifyHandler = null;
+    mIsUpdateNotify = false;
+    mNotifyHandler  = null;
     
     Data.clear();
     
@@ -198,8 +204,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   private static final int MENU_LEAKS = 3;
   @Override
   public boolean onCreatePanelMenu(int featureId, Menu menu) {
-    menu.add(0,MENU_ONE,0,getString(R.string.dashbrd_menu_one));
-    menu.add(0,MENU_PREFERENCES,0,getString(R.string.dashbrd_menu_preferences));
+    //menu.add(0,MENU_ONE,0,getString(R.string.dashbrd_menu_one));
+    //menu.add(0,MENU_PREFERENCES,0,getString(R.string.dashbrd_menu_preferences));
     menu.add(0,MENU_LOG,0,"Log");
     menu.add(0,MENU_LEAKS,0,"Leaks");
     
@@ -234,22 +240,20 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
       
-      if(mNotifyHandler==null)
+      if(!mIsUpdateNotify) {
+        NotifyHandler.this.sendEmptyMessageDelayed(0,sleep_time);
         return;
+      }
 
       ProfileRequest profileRequest = new ProfileRequest(DashboardActivity.this.getApplicationContext(),true);
       profileRequest.callback(new ApiHandler() {
         @Override
         public void success(final Response response) {
-          //DashboardActivity.this.runOnUiThread(new Runnable() {
-            //@Override
-            //public void run() {
-              Profile profile = Profile.parse(response,true);
-              Data.updateNotification(profile);
-              invalidateNotification();
-              NotifyHandler.this.sendEmptyMessageDelayed(0,sleep_time);
-            //}
-          //});
+          Profile profile = Profile.parse(response,true);
+          Data.updateNotification(profile);
+          invalidateNotification();
+          NotifyHandler.this.sendEmptyMessageDelayed(0,sleep_time);
+          Debug.log(DashboardActivity.this,"up");
         }
         @Override
         public void fail(int codeError,Response response) {

@@ -13,7 +13,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
-import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Http;
 
 /*
  *  Класс для работы с Vkontakte

@@ -5,6 +5,7 @@ import com.sonetica.topface.Global;
 import com.sonetica.topface.data.Auth;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.LeaksManager;
 import android.content.Context;
 import android.os.Message;

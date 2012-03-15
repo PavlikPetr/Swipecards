@@ -3,7 +3,7 @@ package com.sonetica.topface.ui.album;
 import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
-import com.sonetica.topface.net.Http;
+import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.MemoryCache;
 import android.content.Context;

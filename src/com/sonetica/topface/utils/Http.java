@@ -1,4 +1,4 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -12,8 +12,6 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import com.sonetica.topface.Data;
-import com.sonetica.topface.utils.Debug;
-import com.sonetica.topface.utils.LeaksManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -7,6 +7,11 @@
   <string name="dialog_loading">Загружаю</string>
   <string name="default_city">Москва</string>
   
+  <!-- Social Activity  -->
+  <string name="social_btn_vk">Войти через ВКонтакте</string>
+  <string name="social_btn_fb">Войти через facebook</string>
+  <string name="social_title">Оценивай фотографии и знакомься!</string>
+  
   <!-- Preferences Activity  -->
   <string name="preferences_title">Настройки</string>
   <string name="pref_social_title">Социальные сети</string>

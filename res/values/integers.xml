@@ -3,7 +3,4 @@
     
     <integer name="default_city_id">1</integer>
     
-    <!-- Tops, Likes  -->
-    <integer name="grid_column_number">6</integer>
-    
 </resources>
