@@ -30,7 +30,7 @@ public class DashboardButton extends Button {
   public DashboardButton(Context context,AttributeSet attrs) {
     super(context,attrs);
     mNotify = -1;
-    mRedNews = BitmapFactory.decodeResource(getResources(),R.drawable.im_red_informer);
+    mRedNews = BitmapFactory.decodeResource(getResources(),R.drawable.im_informer);
   }
   //---------------------------------------------------------------------------
   @Override

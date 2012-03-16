@@ -30,7 +30,7 @@ public class SettingsRequest extends ApiRequest {
         if(name!=null)
           data.put("name",name);
         if(status!=null)
-          data.put("stats",status);
+          data.put("status",status);
         if(age!=-1)
           data.put("age",age);
         if(sex!=-1)

@@ -31,6 +31,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /* "оценка фото" */
@@ -40,6 +42,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   private Dialog mCommentDialog;
   private EditText mCommentText;
   private InputMethodManager mInputManager;
+  private ProgressBar mProgress;
   // Constants
   public static ViewGroup mHeaderBar;
   //---------------------------------------------------------------------------
@@ -58,10 +61,13 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
     
     // Resources Buying Button
-    Button btnBuying = ((Button)findViewById(R.id.datingPlusBtn));
-    btnBuying.setOnClickListener(this);
-    btnBuying.setVisibility(View.VISIBLE);
-    btnBuying.setEnabled(true);
+    ((ResourcesView)findViewById(R.id.datingRes)).setOnClickListener(this);
+    
+    mProgress = (ProgressBar)findViewById(R.id.pgrsDating);
+        
+    ImageView ivDatingPlus = ((ImageView)findViewById(R.id.datingPlus));
+    ivDatingPlus.setVisibility(View.VISIBLE);
+    ivDatingPlus.setEnabled(true);
     
     // Chat Button
     ((Button)findViewById(R.id.chatBtn)).setOnClickListener(this);
@@ -110,6 +116,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
           if(mDatingControl!=null)
             mDatingControl.setDataList(userList);
         }
+        mProgress.setVisibility(View.GONE);
       }
       @Override
       public void fail(int codeError,Response response) {
@@ -200,7 +207,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   public void onClick(View view) {
     Intent intent = null;
     switch(view.getId()) {
-      case R.id.datingPlusBtn: {
+      case R.id.datingRes: {
         intent = new Intent(getApplicationContext(),BuyingActivity.class);
       } break;
       case R.id.chatBtn: {

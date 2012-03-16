@@ -7,22 +7,28 @@ import com.sonetica.topface.billing.Consts.PurchaseState;
 import com.sonetica.topface.billing.Consts.ResponseCode;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class BuyingActivity extends Activity implements View.OnClickListener {
   // Data
-  private Button mMoney6;
-  private Button mMoney40;
-  private Button mMoney100;
-  private Button mPower;
+  private ViewGroup mMoney6;
+  private ViewGroup mMoney40;
+  private ViewGroup mMoney100;
+  private ViewGroup mPower;
   private TopfacePurchaseObserver mTopfacePurchaseObserver;
   private Handler mHandler;
   private BillingService mBillingService;
+  // Constants
+  private static final int PRICE_COINS_6   = 6;
+  private static final int PRICE_COINS_40  = 40;
+  private static final int PRICE_COINS_100 = 100;
+  private static final int PRICE_ENERGY    = 10000;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +39,40 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.buying_header_title));
     
-    mMoney6 = (Button)findViewById(R.id.btnBuyingMoney6);
-    mMoney6.setOnClickListener(this);
-    mMoney40 = (Button)findViewById(R.id.btnBuyingMoney40);
-    mMoney40.setOnClickListener(this);
-    mMoney100 = (Button)findViewById(R.id.btnBuyingMoney100);
-    mMoney100.setOnClickListener(this);
-    mPower = (Button)findViewById(R.id.btnBuyingPower);
-    mPower.setOnClickListener(this);
+    Drawable drwbl_energy = getResources().getDrawable(R.drawable.dating_power);
+    Drawable drwbl_coins = getResources().getDrawable(R.drawable.dating_money);
+    {
+      mMoney6 = (ViewGroup)findViewById(R.id.btnBuyingMoney6);
+      mMoney6.setOnClickListener(this);
+      TextView tvTitle = (TextView)findViewById(R.id.tvBuyingTitle6);
+      tvTitle.setText(getString(R.string.buying_buy)+" "+PRICE_COINS_6);
+      tvTitle.setCompoundDrawablePadding(5);
+      tvTitle.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl_coins,null);
+    }
+    {
+      mMoney40 = (ViewGroup)findViewById(R.id.btnBuyingMoney40);
+      mMoney40.setOnClickListener(this);
+      TextView tvTitle = (TextView)findViewById(R.id.tvBuyingTitle40);
+      tvTitle.setText(getString(R.string.buying_buy)+" "+PRICE_COINS_40);
+      tvTitle.setCompoundDrawablePadding(5);
+      tvTitle.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl_coins,null);
+    }
+    {
+      mMoney100 = (ViewGroup)findViewById(R.id.btnBuyingMoney100);
+      mMoney100.setOnClickListener(this);
+      TextView tvTitle = (TextView)findViewById(R.id.tvBuyingTitle100);
+      tvTitle.setText(getString(R.string.buying_buy)+" "+PRICE_COINS_100);
+      tvTitle.setCompoundDrawablePadding(5);
+      tvTitle.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl_coins,null);
+    }
+    {
+      mPower = (ViewGroup)findViewById(R.id.btnBuyingPower);
+      mPower.setOnClickListener(this);
+      TextView tvTitle = (TextView)findViewById(R.id.tvBuyingTitlePower);
+      tvTitle.setText(getString(R.string.buying_buy)+" "+PRICE_ENERGY);
+      tvTitle.setCompoundDrawablePadding(5);
+      tvTitle.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl_energy,null);
+    }
     
     mHandler = new Handler();
     mTopfacePurchaseObserver = new TopfacePurchaseObserver(mHandler);

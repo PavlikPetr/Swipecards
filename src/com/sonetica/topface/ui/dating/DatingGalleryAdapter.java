@@ -155,6 +155,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
         
       }
     };
+    t.setPriority(Thread.MAX_PRIORITY);
     LeaksManager.getInstance().monitorObject(t);
     t.start();
   }
@@ -168,7 +169,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
     
     Debug.log(this,"preloader:"+mPrevPosition+":"+position);
     
-    new Thread() {
+    Thread t = new Thread() {
       @Override
       public void run() {
         Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);
@@ -177,7 +178,10 @@ public class DatingGalleryAdapter extends BaseAdapter {
         if(mCache!=null)
           mCache.put(position,rawBitmap);
       }
-    }.start();
+    };
+    t.setPriority(Thread.MIN_PRIORITY);
+    LeaksManager.getInstance().monitorObject(t);
+    t.start();
     
     mPreRunning = position;
   }

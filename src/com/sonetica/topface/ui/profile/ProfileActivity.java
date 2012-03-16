@@ -46,7 +46,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   private boolean mChatInvoke;
   private SwapView mSwapView;
   private Button mProfileButton;
-  private Button mBuyingButton;
+  private View mBuyingButton;
   private ViewGroup mEroViewGroup;
   private FrameImageView mFramePhoto;
   private HorizontalListView mListView;
@@ -113,22 +113,22 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       mUserId = Data.s_Profile.uid;
       
       // Edit button
-      Button btnEdit = (Button)findViewById(R.id.btnProfileEdit);
+      View btnEdit = findViewById(R.id.btnProfileEdit);
       btnEdit.setVisibility(View.VISIBLE);
       btnEdit.setOnClickListener(this);
       
       // Exit button
-      Button btnChat = (Button)findViewById(R.id.btnProfileExit);
-      btnChat.setVisibility(View.VISIBLE);
-      btnChat.setOnClickListener(this);
+      View btnExit = findViewById(R.id.btnProfileExit);
+      btnExit.setVisibility(View.VISIBLE);
+      btnExit.setOnClickListener(this);
       
       // Buying Button
-      ((ViewGroup)findViewById(R.id.lvProfileBuying)).setVisibility(View.VISIBLE);
-      mBuyingButton = ((Button)findViewById(R.id.btnProfileBuying));
+      findViewById(R.id.lvProfileBuying).setVisibility(View.VISIBLE);
+      mBuyingButton = findViewById(R.id.btnProfileBuying);
       mBuyingButton.setOnClickListener(this);
     } else {
       // Chat button
-      Button btnChat = (Button)findViewById(R.id.btnProfileChat);
+      View btnChat = findViewById(R.id.btnProfileChat);
       btnChat.setVisibility(View.VISIBLE);
       btnChat.setOnClickListener(this);
     }

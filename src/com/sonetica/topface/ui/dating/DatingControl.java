@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ProgressBar;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.TextView;
@@ -44,10 +43,9 @@ public class DatingControl extends ViewGroup {
   private AlbumGallery mDatingGallery;
   private DatingGalleryAdapter mGalleryAdapter;
   // Views
-  private Button mBackButton;    // кнопка возврата к оцениваемой фотографии
-  private TextView mCounter;       // счетчик позиции в галерее пользователя
-  private FaceView mFaceView;        // информация о пользователе
-  private ProgressBar mProgress;       // прогресс
+  private Button mBackButton;      // кнопка возврата к оцениваемой фотографии
+  private TextView mCounter;         // счетчик позиции в галерее пользователя
+  private FaceView mFaceView;          // информация о пользователе
   private RateControl mRateControl;      // звезды
   private ResourcesView mResourcesView;    // монеты и энергия
   private LinkedList<SearchUser> mDataList;  // массив пользователей под оценку
@@ -65,10 +63,6 @@ public class DatingControl extends ViewGroup {
 
     // Data
     mDataList = new LinkedList<SearchUser>();
-    
-    // Progress
-    mProgress = new ProgressBar(context);
-    addView(mProgress);
     
     // Adapter
     mGalleryAdapter = new DatingGalleryAdapter(context,this);
@@ -165,7 +159,6 @@ public class DatingControl extends ViewGroup {
     
     mResourcesView.measure(0,0);
     mCounter.measure(widthMeasureSpec,0);
-    mProgress.measure(0,0);
     mBackButton.measure(0,0);
   }
   //---------------------------------------------------------------------------
@@ -174,11 +167,6 @@ public class DatingControl extends ViewGroup {
     mFaceView.layout(left,top,right,bottom);
     
     int offset_y = DatingActivity.mHeaderBar.getHeight();
-    
-    int px = (getMeasuredWidth()-mProgress.getMeasuredWidth())/2;
-    int py = (getMeasuredHeight()-mProgress.getMeasuredHeight())/2;
-    
-    mProgress.layout(px,py,px+mProgress.getMeasuredWidth(),py+mProgress.getMeasuredHeight());
     
     int x = mBackButton.getMeasuredWidth()/10;
     int y = (mRateControl.getMeasuredHeight()-mBackButton.getMeasuredHeight())/2;
@@ -275,7 +263,6 @@ public class DatingControl extends ViewGroup {
         if(visibility==View.VISIBLE) {
           mFaceView.setVisibility(View.VISIBLE);
           mCounter.setVisibility(View.VISIBLE);
-          mProgress.setVisibility(View.INVISIBLE);
         }
       } break;
       case V_SHOW_BACK: {
@@ -294,7 +281,6 @@ public class DatingControl extends ViewGroup {
     // блокировать
     mFaceView.setVisibility(View.INVISIBLE);
     mCounter.setVisibility(View.INVISIBLE);
-    mProgress.setVisibility(View.VISIBLE);
     mRateControl.setBlock(false);
     mNotHide = false;
     
@@ -325,12 +311,12 @@ public class DatingControl extends ViewGroup {
     mDatingGallery.setSelection(0);
     mGalleryAdapter.setUserData(user);
     mGalleryAdapter.notifyDataSetChanged();
+
   }
   //---------------------------------------------------------------------------
   public void release() {
     mOnNeedUpdateListener = null;
     mBackButton = null;
-    mProgress = null;
     mCounter = null;
     
     mDatingGallery = null;

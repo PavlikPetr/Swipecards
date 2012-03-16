@@ -30,6 +30,8 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /*
@@ -39,11 +41,13 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   // Data
   private boolean mBlock;
   private boolean mIsUpdateNotify;
-  private NotifyHandler    mNotifyHandler;
-  private DashboardButton  mLikesButton;
-  private DashboardButton  mRatesButton;
-  private DashboardButton  mChatButton;
-  private ProgressDialog   mProgressDialog;
+  
+  private TextView mLikesNotify;
+  private TextView mInboxNotify;
+  private TextView mRatesNotify;
+
+  private NotifyHandler  mNotifyHandler;
+  private ProgressDialog mProgressDialog;
   // Constants
   public static final int INTENT_DASHBOARD = 100;
   //---------------------------------------------------------------------------
@@ -54,18 +58,18 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     Debug.log(this,"+onCreate");
     
     LeaksManager.getInstance().monitorObject(this);
+    
+    mLikesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyLikes);
+    mInboxNotify = (TextView)findViewById(R.id.tvDshbrdNotifyChat);
+    mRatesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyRates);
 
-    mLikesButton = ((DashboardButton)findViewById(R.id.btnDashbrdLikes));
-    mLikesButton.setOnClickListener(this);
-    mRatesButton = ((DashboardButton)findViewById(R.id.btnDashbrdRates));
-    mRatesButton.setOnClickListener(this);
-    mChatButton = ((DashboardButton)findViewById(R.id.btnDashbrdChat));
-    mChatButton.setOnClickListener(this);
-    
-    ((DashboardButton)findViewById(R.id.btnDashbrdDating)).setOnClickListener(this);
-    ((DashboardButton)findViewById(R.id.btnDashbrdTops)).setOnClickListener(this);
-    ((DashboardButton)findViewById(R.id.btnDashbrdProfile)).setOnClickListener(this);
-    
+    ((Button)findViewById(R.id.btnDshbrdDating)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDshbrdLikes)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDshbrdRates)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDshbrdChat)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDshbrdTops)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDshbrdProfile)).setOnClickListener(this);
+
     if(!App.cached && !Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
@@ -135,27 +139,29 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       Toast.makeText(this,"profile is null",Toast.LENGTH_SHORT).show();
       return;
     }
+
     switch(view.getId()) {
-      case R.id.btnDashbrdDating: {
+      case R.id.btnDshbrdDating: {
         startActivity(new Intent(this.getApplicationContext(),DatingActivity.class));
       } break;
-      case R.id.btnDashbrdLikes: {
+      case R.id.btnDshbrdLikes: {
         startActivity(new Intent(this.getApplicationContext(),LikesActivity.class));
       } break;
-      case R.id.btnDashbrdRates: {
+      case R.id.btnDshbrdRates: {
         startActivity(new Intent(this.getApplicationContext(),RatesActivity.class));
       } break;
-      case R.id.btnDashbrdChat: {
+      case R.id.btnDshbrdChat: {
         startActivity(new Intent(this.getApplicationContext(),InboxActivity.class));
       } break;
-      case R.id.btnDashbrdTops: {
+      case R.id.btnDshbrdTops: {
         startActivity(new Intent(this.getApplicationContext(),TopsActivity.class));
       } break;
-      case R.id.btnDashbrdProfile: {
+      case R.id.btnDshbrdProfile: {
         startActivity(new Intent(this.getApplicationContext(),ProfileActivity.class));
       } break;      
       default:
     }
+
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -186,14 +192,24 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   }
   //---------------------------------------------------------------------------
   private void invalidateNotification() {
-    mLikesButton.mNotify = Data.s_Likes;
-    mLikesButton.invalidate();
+    if(Data.s_Likes > 0) {
+      mLikesNotify.setText(" "+Data.s_Likes+" ");
+      mLikesNotify.setVisibility(View.VISIBLE);
+    } else
+      mLikesNotify.setVisibility(View.INVISIBLE);
+
+    if(Data.s_Messages > 0) {
+      mInboxNotify.setText(" "+Data.s_Messages+" ");
+      mInboxNotify.setVisibility(View.VISIBLE);
+    } else
+      mInboxNotify.setVisibility(View.INVISIBLE);
     
-    mRatesButton.mNotify = Data.s_Rates;
-    mRatesButton.invalidate();
+    if(Data.s_Rates > 0) {
+      mRatesNotify.setText(" "+Data.s_Rates+" ");
+      mRatesNotify.setVisibility(View.VISIBLE);
+    } else
+      mRatesNotify.setVisibility(View.INVISIBLE);
     
-    mChatButton.mNotify = Data.s_Messages;
-    mChatButton.invalidate();    
   }
   //---------------------------------------------------------------------------
   // Menu
@@ -260,7 +276,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         }
       }).exec();
     }
-
   }
   //---------------------------------------------------------------------------
 }

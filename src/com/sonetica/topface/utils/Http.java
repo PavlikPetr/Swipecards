@@ -153,7 +153,7 @@ public class Http {
         responseBuilder.append(line);
       response = responseBuilder.toString();
       
-      if(response.length()>500)               // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      if(response.length()>500 && Data.s_LogList!=null)               // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Data.s_LogList.add("   [RESP]: "+response.substring(0,500));
       else
         Data.s_LogList.add("   [RESP]: "+response);

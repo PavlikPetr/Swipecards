@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,7 +19,7 @@ public class ResourcesView extends LinearLayout {
   private TextView  mMoneyTxt;
 //  private ImageView mPowerImg;
 //  private ImageView mMoneyImg;
-  private Button    mBuying;
+  private ImageView mBuying;
   //---------------------------------------------------------------------------
   public ResourcesView(Context context) {
     this(context,null);
@@ -30,9 +30,10 @@ public class ResourcesView extends LinearLayout {
     
     int padding = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
     
+    setId(R.id.datingRes);
     setBackgroundColor(Color.TRANSPARENT);
     setOrientation(HORIZONTAL);
-    setPadding(5,0,0,0);
+    setPadding(6,6,0,0);
 
     //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
     //layoutParams.gravity = Gravity.CENTER_VERTICAL;
@@ -71,11 +72,11 @@ public class ResourcesView extends LinearLayout {
 //    addView(mMoneyImg);
     
     // Buying
-    mBuying = new Button(context);
-    mBuying.setId(R.id.datingPlusBtn);
-    mBuying.setVisibility(View.INVISIBLE);
+    mBuying = new ImageView(context);
+    mBuying.setId(R.id.datingPlus);
+    mBuying.setImageResource(R.drawable.dating_plus);
+    mBuying.setVisibility(View.GONE);
     mBuying.setEnabled(false);
-    mBuying.setText("+");
     addView(mBuying);    
   }
   //---------------------------------------------------------------------------

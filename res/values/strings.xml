@@ -127,6 +127,14 @@
   <string name="buying_header_title">Покупка</string>
   <string name="buying_money">Покупка монет</string>
   <string name="buying_power">Покупка энергии</string>
+  <string name="buying_buy">Купить</string>
+  <string name="buying_6coins">за $1</string>
+  <string name="buying_40coins">за $5</string>
+  <string name="buying_100coins">за $10</string>
+  <string name="buying_energy">за $3</string>
+  <string name="buying_info">Вы можете купить монеты и энергию</string>
+  <string name="buying_economy_25">Экономия 25%</string>
+  <string name="buying_economy_40">Экономия 40%</string>
   
   <!-- Pull2Refresh Module -->
   <string name="pull_to_refresh_pull_label">Pull to refresh</string>
