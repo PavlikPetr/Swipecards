@@ -30,7 +30,7 @@ public class Device {
         Data.s_gridColumn = 4;
         break;
       default:
-        Data.s_gridColumn = 6;
+        Data.s_gridColumn = 4;
         break;
     }
 

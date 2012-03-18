@@ -51,7 +51,7 @@
             android:layout_marginLeft="18dp"
             android:text="@string/ero_album_btn_like"
             android:textColor="@drawable/clr_text_btn"
-            android:background="@drawable/btn_ero_like_selector"
+            android:background="@drawable/album_ero_like_selector"
             android:visibility="invisible" />
 
         <Button
@@ -62,7 +62,7 @@
             android:layout_centerVertical="true"
             android:text="@string/ero_album_btn_buy"
             android:textColor="@drawable/clr_text_btn"
-            android:background="@drawable/btn_ero_next_selector"
+            android:background="@drawable/album_ero_next_selector"
             android:visibility="invisible" />
 
         <Button
@@ -73,7 +73,7 @@
             android:layout_centerVertical="true"
             android:text="@string/ero_album_btn_next"
             android:textColor="@drawable/clr_text_btn"
-            android:background="@drawable/btn_ero_next_selector"
+            android:background="@drawable/album_ero_next_selector"
             android:visibility="invisible" />
 
         <Button
@@ -85,7 +85,7 @@
             android:layout_marginRight="18dp"
             android:text="@string/ero_album_btn_dislike"
             android:textColor="@drawable/clr_text_btn"
-            android:background="@drawable/btn_ero_like_selector"
+            android:background="@drawable/album_ero_like_selector"
             android:visibility="invisible" />
     </RelativeLayout>
 

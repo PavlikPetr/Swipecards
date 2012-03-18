@@ -4,9 +4,9 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Http;
+import com.sonetica.topface.utils.Imager;
 import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.MemoryCache;
-import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -81,7 +81,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
       mW = mDatingControl.getWidth();
       mH = mDatingControl.getHeight();
       holder = new ViewHolder();
-      convertView = (ViewGroup)mInflater.inflate(R.layout.album_item_gallery, null, false);
+      convertView = (ViewGroup)mInflater.inflate(R.layout.item_album_gallery, null, false);
       convertView.setLayoutParams(new Gallery.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
       holder.mImageView = (ImageView)convertView.findViewById(R.id.ivPreView);
       // ДОБАВИТЬ РАЗМЕРЫ
@@ -126,7 +126,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
         Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);
         
         if(rawBitmap!=null && position==0)
-          rawBitmap = Utils.clipping(rawBitmap,mW,mH);
+          rawBitmap = Imager.clipping(rawBitmap,mW,mH);
         
         final Bitmap bitmap = rawBitmap;
         
@@ -174,7 +174,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
       public void run() {
         Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);
         if(rawBitmap!=null && position==0)
-          rawBitmap = Utils.clipping(rawBitmap,width,height);
+          rawBitmap = Imager.clipping(rawBitmap,width,height);
         if(mCache!=null)
           mCache.put(position,rawBitmap);
       }

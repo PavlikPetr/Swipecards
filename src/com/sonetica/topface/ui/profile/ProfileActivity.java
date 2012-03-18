@@ -46,7 +46,6 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   private boolean mChatInvoke;
   private SwapView mSwapView;
   private Button mProfileButton;
-  private View mBuyingButton;
   private ViewGroup mEroViewGroup;
   private FrameImageView mFramePhoto;
   private HorizontalListView mListView;
@@ -88,16 +87,17 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_profile);
     Debug.log(this,"+onCreate");
-    
+
     System.gc();
     
     LeaksManager.getInstance().monitorObject(this);
-    
+
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.profile_header_title));
     // Swap
     mSwapView = ((SwapView)findViewById(R.id.swapFormView));
-    mSwapView.setOnSwapListener(this);
+    if(Data.s_gridColumn > 2)
+      mSwapView.setOnSwapListener(this);
     // Profile Header Button 
     mProfileButton = ((Button)findViewById(R.id.btnHeader));
     mProfileButton.setOnClickListener(this);
@@ -123,9 +123,9 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       btnExit.setOnClickListener(this);
       
       // Buying Button
-      findViewById(R.id.lvProfileBuying).setVisibility(View.VISIBLE);
-      mBuyingButton = findViewById(R.id.btnProfileBuying);
-      mBuyingButton.setOnClickListener(this);
+      findViewById(R.id.loProfileBuying).setVisibility(View.VISIBLE);
+      View btnBuying = findViewById(R.id.btnProfileBuying);
+      btnBuying.setOnClickListener(this);
     } else {
       // Chat button
       View btnChat = findViewById(R.id.btnProfileChat);
@@ -145,7 +145,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mEroViewGroup = (ViewGroup)findViewById(R.id.loEroAlbum);
     mListEroAdapter = new PhotoEroGalleryAdapter(getApplicationContext(),mOwner);
     mListEroView = (HorizontalListView)findViewById(R.id.lvEroAlbumPreview);
-    mListEroView.setBackgroundResource(R.drawable.profile_bg_gallery);
+    //mListEroView.setBackgroundResource(R.drawable.profile_bg_gallery);
     mListEroView.setAdapter(mListEroAdapter);
     mListEroView.setOnItemClickListener(this);
     
@@ -379,12 +379,15 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       } break;
       case R.id.btnHeader: {
         // mCurrForm = mCurrForm == FORM_TOP ? FORM_BOTTOM : FORM_TOP;
-        mSwapView.snapToScreen(swap?FORM_BOTTOM:FORM_TOP);
+        if(Data.s_gridColumn > 2)
+          mSwapView.snapToScreen(swap?FORM_BOTTOM:FORM_TOP);
+        /*
         if(!swap) {
           mProfileButton.setText(R.string.profile_header_title);
         } else {
           mProfileButton.setText(R.string.profile_btn_form);
         }
+        */
       } break;
       // popup
       case R.id.btnAddPhotoAlbum: {
@@ -478,7 +481,6 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mSmoking=null;
     mSwapView=null;
     mProfileButton=null;
-    mBuyingButton=null;
     mEroViewGroup=null;
     
     if(mFramePhoto!=null)

@@ -8,9 +8,8 @@ import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.ProfileRequest;
 import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.SocialActivity;
-import com.sonetica.topface.ui.JLogActivity;
+import com.sonetica.topface.ui.LogActivity;
 import com.sonetica.topface.ui.LeaksActivity;
-import com.sonetica.topface.ui.PreferencesActivity;
 import com.sonetica.topface.ui.dating.DatingActivity;
 import com.sonetica.topface.ui.inbox.InboxActivity;
 import com.sonetica.topface.ui.likes.LikesActivity;
@@ -24,6 +23,8 @@ import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -81,6 +82,10 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     mProgressDialog.show();
     
     mNotifyHandler = new NotifyHandler();
+    
+    Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_bar_header);
+    Data.s_HeaderHeight = bitmap.getHeight();
+    bitmap.recycle();
     
     update();
   }
@@ -220,8 +225,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   private static final int MENU_LEAKS = 3;
   @Override
   public boolean onCreatePanelMenu(int featureId, Menu menu) {
-    //menu.add(0,MENU_ONE,0,getString(R.string.dashbrd_menu_one));
-    //menu.add(0,MENU_PREFERENCES,0,getString(R.string.dashbrd_menu_preferences));
     menu.add(0,MENU_LOG,0,"Log");
     menu.add(0,MENU_LEAKS,0,"Leaks");
     
@@ -232,14 +235,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
     switch (item.getItemId()) {
       case MENU_ONE:
-        //Toast.makeText(this,getString(R.string.dashbrd_menu_one),Toast.LENGTH_SHORT).show();
-        //App.cached = !App.cached;
-        break;
       case MENU_PREFERENCES:
-        startActivity(new Intent(getApplicationContext(),PreferencesActivity.class));
-        break;
       case MENU_LOG:
-        startActivity(new Intent(getApplicationContext(),JLogActivity.class));
+        startActivity(new Intent(getApplicationContext(),LogActivity.class));
         break;
       case MENU_LEAKS:
         startActivity(new Intent(getApplicationContext(),LeaksActivity.class));

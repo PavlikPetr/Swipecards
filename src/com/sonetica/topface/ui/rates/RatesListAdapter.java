@@ -76,7 +76,7 @@ public class RatesListAdapter extends BaseAdapter {
     if(convertView==null) {
       holder = new ViewHolder();
       
-      convertView = mInflater.inflate(R.layout.rates_item_gallery, null, false);
+      convertView = mInflater.inflate(R.layout.item_rates_gallery, null, false);
       
       holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.ivAvatar);
       holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
@@ -86,10 +86,10 @@ public class RatesListAdapter extends BaseAdapter {
       
       switch(type) {
         case T_ALL:
-          convertView.setBackgroundResource(R.drawable.item_gallery_all_selector);
+          convertView.setBackgroundResource(R.drawable.gallery_item_all_selector);
           break;
         case T_CITY:
-          convertView.setBackgroundResource(R.drawable.item_gallery_city_selector);
+          convertView.setBackgroundResource(R.drawable.gallery_item_city_selector);
           break;
       }
 

@@ -50,16 +50,13 @@
     <activity android:name=".ui.profile.EditProfileActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
     
     <activity android:name=".billing.BuyingActivity"         android:screenOrientation="portrait" />
-    
-    <!-- preferences activity -->
-    <activity android:name=".ui.PreferencesActivity"   android:screenOrientation="portrait"  android:theme="@android:style/Theme.Light" />
 
     <!-- social activity -->
     <activity android:name=".social.SocialActivity"    android:screenOrientation="portrait" />
     <activity android:name=".social.SocialWebActivity" android:screenOrientation="portrait" />
     
     <!--Log -->
-    <activity android:name=".ui.JLogActivity"   android:screenOrientation="portrait" />
+    <activity android:name=".ui.LogActivity"   android:screenOrientation="portrait" />
     
     <!-- receivers -->
     <receiver android:name=".billing.BillingReceiver">

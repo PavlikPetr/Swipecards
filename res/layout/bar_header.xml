@@ -22,9 +22,9 @@
 	      android:layout_height="wrap_content"
 	      android:layout_centerInParent="true"  />
 	  
-	  <ImageButton
+	  <Button
         android:id="@+id/btnChatProfile"
-        android:src="@drawable/icon_people"
+        android:background="@drawable/profile_bar_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"

@@ -4,31 +4,24 @@
   
   <!-- General  -->
   <string name="internet_off">Приложение требует подключение к Интернету</string>
-  <string name="dialog_loading">Загружаю</string>
-  <string name="default_city">Москва</string>
+  <string name="dialog_loading">Loading</string>
+  <string name="default_city">Moscow</string>
   
   <!-- Social Activity  -->
-  <string name="social_btn_vk">Войти через ВКонтакте</string>
-  <string name="social_btn_fb">Войти через facebook</string>
-  <string name="social_title">Оценивай фотографии и знакомься!</string>
-  
-  <!-- Preferences Activity  -->
-  <string name="preferences_title">Настройки</string>
-  <string name="pref_social_title">Социальные сети</string>
-  <string name="pref_social_description">Привязка к соц сетям</string>
+  <string name="social_btn_vk">Login via VKontakte</string>
+  <string name="social_btn_fb">Login via Facebook</string>
+  <string name="social_title">Rating and dating</string>
   
   <!-- Dashboard Activity -->
-  <string name="dashbrd_menu_one">One</string>
-  <string name="dashbrd_menu_preferences">Настройки</string>
-  <string name="dashbrd_btn_dating">Оценка фото</string>
-  <string name="dashbrd_btn_likes">Я нравлюсь</string>
-  <string name="dashbrd_btn_rates">Меня оценили</string>
-  <string name="dashbrd_btn_chats">Диалоги</string>
-  <string name="dashbrd_btn_tops">Топы</string>
-  <string name="dashbrd_btn_profile">Профиль</string>
+  <string name="dashbrd_btn_dating">Rating photos</string>
+  <string name="dashbrd_btn_likes">Likes you</string>
+  <string name="dashbrd_btn_rates">Feed</string>
+  <string name="dashbrd_btn_chats">My messages</string>
+  <string name="dashbrd_btn_tops">Most popular</string>
+  <string name="dashbrd_btn_profile">Profile</string>
               
   <!-- Indox & Chat Activity -->
-  <string name="inbox_header_title">Диалоги</string>
+  <string name="inbox_header_title">My messages</string>
   <string name="inbox_btn_dbl_left">Все</string>
   <string name="inbox_btn_dbl_right">Непрочитанные</string>
   <string name="chat_gift">Вам прислали подарок</string>
@@ -36,13 +29,13 @@
   <string name="chat_comment">Написать сообщение</string> 
   
   <!-- Tops Activity -->
-  <string name="tops_header_title">Самые красивые</string>
+  <string name="tops_header_title">Most popular</string>
   <string name="tops_btn_boys">Парни</string>
   <string name="tops_btn_girls">Девушки</string>
   <string name="tops_btn_city">Город</string>
   
   <!-- Profile Activity -->
-  <string name="profile_header_title">Профиль</string>
+  <string name="profile_header_title">My Profile</string>
   <string name="profile_btn_chat">Поболтать</string>
   <string name="profile_btn_edit">Редактировать</string>
   <string name="profile_btn_form">Анкета</string>
@@ -78,9 +71,10 @@
   <string name="profile_ero_price">Цена</string>
 
   <!-- Dating Activity -->
-  <string name="dating_header_title">Оценка фото</string>
-  <string name="dating_menu_one">Фильтр</string>
-  <string name="dating_back">К оценкам</string>
+  <string name="dating_header_title_him">Rate him!</string>
+  <string name="dating_header_title_her">Rate her!</string>
+  <string name="dating_menu_one">Filter</string>
+  <string name="dating_back">To scores</string>
   
   <!-- Filter Activity -->
   <string name="filter_header_title">Я ищу</string>
@@ -90,7 +84,6 @@
   <string name="filter_city">Город</string>
   <string name="filter_sex">Пол</string>
   <string name="filter_age">Возраст</string>
-  <string name="filter_online0">Онлайн</string>
   <string name="filter_boy">Парня</string>
   <string name="filter_girl">Девушку</string>
   <string name="filter_all">Все</string>

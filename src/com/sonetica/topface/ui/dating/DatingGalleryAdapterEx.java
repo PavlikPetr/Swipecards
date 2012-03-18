@@ -3,8 +3,8 @@ package com.sonetica.topface.ui.dating;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.utils.Http;
+import com.sonetica.topface.utils.Imager;
 import com.sonetica.topface.utils.LeaksManager;
-import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -70,7 +70,7 @@ public class DatingGalleryAdapterEx extends BaseAdapter {
     ViewHolder holder = null;
     if(convertView==null) {
       holder = new ViewHolder();
-      convertView = (ViewGroup)mInflater.inflate(R.layout.album_item_gallery, null, false);
+      convertView = (ViewGroup)mInflater.inflate(R.layout.item_album_gallery, null, false);
       convertView.setLayoutParams(new Gallery.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
       holder.mImageView = (ImageView)convertView.findViewById(R.id.ivPreView);
       convertView.setTag(holder);
@@ -108,7 +108,7 @@ public class DatingGalleryAdapterEx extends BaseAdapter {
         if(position==0 && mRateBitmap==null) {
           rawBitmap = Http.bitmapLoader(mUserData.avatars_big[position]);
           if(rawBitmap!=null) {
-            clipBitmap  = Utils.clipping(rawBitmap,view.getWidth(),view.getHeight());
+            clipBitmap  = Imager.clipping(rawBitmap,view.getWidth(),view.getHeight());
             mRateBitmap = clipBitmap;
           }
         } else if(position==0 && mRateBitmap!=null) {
@@ -116,7 +116,7 @@ public class DatingGalleryAdapterEx extends BaseAdapter {
         } else {
           rawBitmap = Http.bitmapLoader(mUserData.avatars_big[position]);
           if(rawBitmap!=null)
-            clipBitmap = Utils.clipping(rawBitmap,view.getWidth(),view.getHeight());
+            clipBitmap = Imager.clipping(rawBitmap,view.getWidth(),view.getHeight());
         }
         
         final Bitmap bitmap = clipBitmap;
@@ -150,7 +150,7 @@ public class DatingGalleryAdapterEx extends BaseAdapter {
       public void run() {
         Bitmap rawBitmap = Http.bitmapLoader(mUserData.avatars_big[position]);
         if(rawBitmap!=null) {
-          mPreBitmap = Utils.clipping(rawBitmap,w,h);
+          mPreBitmap = Imager.clipping(rawBitmap,w,h);
         }
       }
     }.start();

@@ -90,7 +90,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME));
     
     // Profile Button
-    ImageButton btnProfile = (ImageButton)findViewById(R.id.btnChatProfile);
+    View btnProfile = findViewById(R.id.btnChatProfile);
     btnProfile.setVisibility(View.VISIBLE);
     btnProfile.setOnClickListener(this);
     

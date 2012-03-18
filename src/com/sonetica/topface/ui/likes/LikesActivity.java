@@ -4,13 +4,14 @@ import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Like;
-import com.sonetica.topface.module.pull2refresh.PullToRefreshGridView;
-import com.sonetica.topface.module.pull2refresh.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.LikesRequest;
 import com.sonetica.topface.net.Response;
+import com.sonetica.topface.p2r.PullToRefreshGridView;
+import com.sonetica.topface.p2r.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.ui.GalleryGridManager;
+import com.sonetica.topface.ui.ThumbView;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
@@ -141,6 +142,22 @@ public class LikesActivity extends Activity {
       mGalleryGridManager=null;
     }
     
+    if(ThumbView.mOnlineBmp!=null)
+      ThumbView.mOnlineBmp.recycle();
+    ThumbView.mOnlineBmp=null;
+    
+    if(ThumbView.mOfflineBmp!=null)
+      ThumbView.mOfflineBmp.recycle();
+    ThumbView.mOfflineBmp=null;
+    
+    if(ThumbView.mHeartBmp!=null)
+      ThumbView.mHeartBmp.recycle();
+    ThumbView.mHeartBmp=null;
+    
+    ThumbView.s_PaintState=null;
+    ThumbView.s_PaintLine=null;
+    ThumbView.s_PaintText=null;
+
     mGallery=null;
     
     if(mAdapter!=null)

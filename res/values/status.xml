@@ -4,40 +4,40 @@
     <string name="profile_form_empty">–</string>
     
     <!-- Education ******************************************************************************** -->
-    <string name="profile_form_education_male_1">Среднее</string>
-    <string name="profile_form_education_male_2">Еще учусь</string>
-    <string name="profile_form_education_male_3">Высшее</string>
-    <string name="profile_form_education_male_4">Несколько высших</string>
-    <string name="profile_form_education_male_5">Выше среднего</string>
-    <string name="profile_form_education_male_6">Ниже среднего</string>
-    <string name="profile_form_education_male_7">Я просто очень умный</string>
+    <string name="profile_form_education_male_1">High school</string>
+    <string name="profile_form_education_male_2">Still studying</string>
+    <string name="profile_form_education_male_3">Higher education</string>
+    <string name="profile_form_education_male_4">Several university degrees</string>
+    <string name="profile_form_education_male_5">Higher than average</string>
+    <string name="profile_form_education_male_6">Below average</string>
+    <string name="profile_form_education_male_7">I\'m just very smart</string>
 
-    <string name="profile_form_education_female_1">Среднее</string>
-    <string name="profile_form_education_female_2">Еще учусь</string>
-    <string name="profile_form_education_female_3">Высшее</string>
-    <string name="profile_form_education_female_4">Несколько высших</string>
-    <string name="profile_form_education_female_5">Выше среднего</string>
-    <string name="profile_form_education_female_6">Ниже среднего</string>
-    <string name="profile_form_education_female_7">Я просто очень умная</string>
+    <string name="profile_form_education_female_1">Average</string>
+    <string name="profile_form_education_female_2">Still studying</string>
+    <string name="profile_form_education_female_3">Bachelor\'s degree</string>
+    <string name="profile_form_education_female_4">Several university degrees</string>
+    <string name="profile_form_education_female_5">Higher than average</string>
+    <string name="profile_form_education_female_6">Below average</string>
+    <string name="profile_form_education_female_7">I\'m just very smart</string>
     
     <string-array name="profile_form_education_male">
-        <item>Среднее</item>
-        <item>Еще учусь</item>
-        <item>Высшее</item>
-        <item>Несколько высших</item>
-        <item>Выше среднего</item>
-        <item>Ниже среднего</item>
-        <item>Я просто очень умный</item>
+        <item>High school</item>
+        <item>Still studying</item>
+        <item>Higher education</item>
+        <item>Several university degrees</item>
+        <item>Higher than average</item>
+        <item>Below average</item>
+        <item>I\'m just very smart</item>
     </string-array>
     
     <string-array name="profile_form_education_female">
-        <item>Среднее</item>
-        <item>Еще учусьт</item>
-        <item>Высшее</item>
-        <item>Несколько высших</item>
-        <item>Выше среднего</item>
-        <item>Ниже среднего</item>
-        <item>Я просто очень умная</item>
+        <item>Average</item>
+        <item>Still studying</item>
+        <item>Bachelor\'s degree</item>
+        <item>Several university degrees</item>
+        <item>Higher than average</item>
+        <item>Below average</item>
+        <item>I\'m just very smart</item>
     </string-array>
     
     <string-array name="profile_form_education_values">
@@ -51,28 +51,28 @@
     </string-array>
     
     <!-- Communication ******************************************************************************** -->
-    <string name="profile_form_communication_male_1">Очень общительный</string>
-    <string name="profile_form_communication_male_2">Открыт интересным людям</string>
-    <string name="profile_form_communication_male_3">Пишите - посмотрим</string>
-    <string name="profile_form_communication_male_4">Общаюсь только с избранными</string>
+    <string name="profile_form_communication_male_1">Very sociable</string>
+    <string name="profile_form_communication_male_2">Open for interesting people</string>
+    <string name="profile_form_communication_male_3">Write me and we will see</string>
+    <string name="profile_form_communication_male_4">Chat only with the best</string>
 
-    <string name="profile_form_communication_female_1">Очень общительная</string>
-    <string name="profile_form_communication_female_2">Открыта интересным людям</string>
-    <string name="profile_form_communication_female_3">Пишите - посмотрим</string>
-    <string name="profile_form_communication_female_4">Общаюсь только с избранными</string>
+    <string name="profile_form_communication_female_1">Very sociable</string>
+    <string name="profile_form_communication_female_2">Open for interesting people</string>
+    <string name="profile_form_communication_female_3">Write me and we will see</string>
+    <string name="profile_form_communication_female_4">Chat only with the best</string>
     
     <string-array name="profile_form_communication_male">
-        <item>Очень общительный</item>
-        <item>Открыт интересным людям</item>
-        <item>Пишите - посмотрим</item>
+        <item>Very sociable</item>
+        <item>Open for interesting people</item>
+        <item>Write me and we will see</item>
         <item>Общаюсь только с избранными</item>
     </string-array>
     
     <string-array name="profile_form_communication_female">
-        <item>Очень общительная</item>
-        <item>Открыта интересным людям</item>
-        <item>Пишите - посмотрим</item>
-        <item>Общаюсь только с избранными</item>
+        <item>Very sociable</item>
+        <item>Open for interesting people</item>
+        <item>Write me and we will see</item>
+        <item>Chat only with the best</item>
     </string-array>
     
     <string-array name="profile_form_communication_values">
@@ -83,40 +83,40 @@
     </string-array>
     
     <!-- Character ******************************************************************************** -->
-    <string name="profile_form_character_male_1">Легкий</string>
-    <string name="profile_form_character_male_2">Тяжелый</string>
-    <string name="profile_form_character_male_3">Строгий</string>
-    <string name="profile_form_character_male_4">Мягкий</string>
-    <string name="profile_form_character_male_5">Спокойный</string>
-    <string name="profile_form_character_male_6">Беспокойный</string>
-    <string name="profile_form_character_male_7">Никто не жаловался</string>
+    <string name="profile_form_character_male_1">Easy going</string>
+    <string name="profile_form_character_male_2">Bad tempered</string>
+    <string name="profile_form_character_male_3">Strict</string>
+    <string name="profile_form_character_male_4">Soft</string>
+    <string name="profile_form_character_male_5">Calm</string>
+    <string name="profile_form_character_male_6">Uneasy</string>
+    <string name="profile_form_character_male_7">Noone complained</string>
 
-    <string name="profile_form_character_female_1">Легкий</string>
-    <string name="profile_form_character_female_2">Тяжелый</string>
-    <string name="profile_form_character_female_3">Строгий</string>
-    <string name="profile_form_character_female_4">Мягкий</string>
-    <string name="profile_form_character_female_5">Спокойный</string>
-    <string name="profile_form_character_female_6">Беспокойный</string>
-    <string name="profile_form_character_female_7">Никто не жаловался</string>
+    <string name="profile_form_character_female_1">Easy going</string>
+    <string name="profile_form_character_female_2">Bad tempered</string>
+    <string name="profile_form_character_female_3">Strict</string>
+    <string name="profile_form_character_female_4">Soft</string>
+    <string name="profile_form_character_female_5">Calm</string>
+    <string name="profile_form_character_female_6">Uneasy</string>
+    <string name="profile_form_character_female_7">Noone complained</string>
     
     <string-array name="profile_form_character_male">
-        <item>Легкий</item>
-        <item>Тяжелый</item>
-        <item>Строгий</item>
-        <item>Мягкий</item>
-        <item>Спокойный</item>
-        <item>Беспокойный</item>
-        <item>Никто не жаловался</item>
+        <item>Easy going</item>
+        <item>Bad tempered</item>
+        <item>Strict</item>
+        <item>Soft</item>
+        <item>Calm</item>
+        <item>Uneasy</item>
+        <item>Noone complained</item>
     </string-array>
     
     <string-array name="profile_form_character_female">
-        <item>Легкий</item>
-        <item>Тяжелый</item>
-        <item>Строгий</item>
-        <item>Мягкий</item>
-        <item>Спокойный</item>
-        <item>Беспокойный</item>
-        <item>Никто не жаловался</item>
+        <item>Easy going</item>
+        <item>Bad tempered</item>
+        <item>Strict</item>
+        <item>Soft</item>
+        <item>Calm</item>
+        <item>Uneasy</item>
+        <item>Noone complained</item>
     </string-array>
     
     <string-array name="profile_form_character_values">
@@ -130,32 +130,32 @@
     </string-array>
     
     <!-- Alcohol ******************************************************************************** -->
-    <string name="profile_form_alcohol_male_1">Мне и так весело</string>
-    <string name="profile_form_alcohol_male_2">Завязал</string>
-    <string name="profile_form_alcohol_male_3">Иногда можно</string>
-    <string name="profile_form_alcohol_male_4">Скоро брошу</string>
-    <string name="profile_form_alcohol_male_5">Пил, пью и буду пить</string>
+    <string name="profile_form_alcohol_male_1">I have fun without alcohol</string>
+    <string name="profile_form_alcohol_male_2">Gave up drinking</string>
+    <string name="profile_form_alcohol_male_3">Drink sometimes</string>
+    <string name="profile_form_alcohol_male_4">Will give up soon</string>
+    <string name="profile_form_alcohol_male_5">Drank, drink, and will drink</string>
 
-    <string name="profile_form_alcohol_female_1">Мне и так весело</string>
-    <string name="profile_form_alcohol_female_2">Завязала</string>
-    <string name="profile_form_alcohol_female_3">Иногда можно</string>
-    <string name="profile_form_alcohol_female_4">Скоро брошу</string>
-    <string name="profile_form_alcohol_female_5">Пила, пью и буду пить</string>
+    <string name="profile_form_alcohol_female_1">I have fun without alcohol</string>
+    <string name="profile_form_alcohol_female_2">Gave up drinking</string>
+    <string name="profile_form_alcohol_female_3">Drink sometimes</string>
+    <string name="profile_form_alcohol_female_4">Will give up soon</string>
+    <string name="profile_form_alcohol_female_5">Drank, drink, and will drink</string>
     
     <string-array name="profile_form_alcohol_male">
-        <item>Мне и так весело</item>
-        <item>Завязал</item>
-        <item>Иногда можно</item>
-        <item>Скоро брошу</item>
-        <item>Пил, пью и буду пить</item>
+        <item>I have fun without alcohol</item>
+        <item>Gave up drinking</item>
+        <item>Drink sometimes</item>
+        <item>Will give up soon</item>
+        <item>Drank, drink, and will drink</item>
     </string-array>
     
     <string-array name="profile_form_alcohol_female">
-        <item>Мне и так весело</item>
-        <item>Завязала</item>
-        <item>Иногда можно</item>
-        <item>Скоро брошу</item>
-        <item>Пила, пью и буду пить</item>
+        <item>I have fun without alcohol</item>
+        <item>Gave up drinking</item>
+        <item>Drink sometimes</item>
+        <item>Will give up soon</item>
+        <item>Drank, drink, and will drink</item>
     </string-array>
     
     <string-array name="profile_form_alcohol_values">
@@ -167,36 +167,36 @@
     </string-array>
      
     <!-- Fitness ******************************************************************************** -->
-    <string name="profile_form_fitness_male_1">Мускулистый</string>
-    <string name="profile_form_fitness_male_2">Спортивный</string>
-    <string name="profile_form_fitness_male_3">Худощавый</string>
-    <string name="profile_form_fitness_male_4">Обычный</string>
-    <string name="profile_form_fitness_male_5">В меру упитанный</string>
-    <string name="profile_form_fitness_male_6">У меня масса других достоинств</string>
+    <string name="profile_form_fitness_male_1">Muscular</string>
+    <string name="profile_form_fitness_male_2">Fit</string>
+    <string name="profile_form_fitness_male_3">Thin</string>
+    <string name="profile_form_fitness_male_4">Normal</string>
+    <string name="profile_form_fitness_male_5">Well padded</string>
+    <string name="profile_form_fitness_male_6">Got lots of other advantages</string>
 
-    <string name="profile_form_fitness_female_1">Спортивная</string>
-    <string name="profile_form_fitness_female_2">Стройная</string>
-    <string name="profile_form_fitness_female_3">Худощавая</string>
-    <string name="profile_form_fitness_female_4">Модель</string>
-    <string name="profile_form_fitness_female_5">Есть за что подержаться</string>
-    <string name="profile_form_fitness_female_6">С богатыми формами</string>
+    <string name="profile_form_fitness_female_1">Sporty</string>
+    <string name="profile_form_fitness_female_2">Slim</string>
+    <string name="profile_form_fitness_female_3">Thin</string>
+    <string name="profile_form_fitness_female_4">Model</string>
+    <string name="profile_form_fitness_female_5">Interesting shapes</string>
+    <string name="profile_form_fitness_female_6">With the sexy body</string>
     
     <string-array name="profile_form_fitness_male">
-        <item>Мускулистый</item>
-        <item>Спортивный</item>
-        <item>Худощавый</item>
-        <item>Обычный</item>
-        <item>В меру упитанный</item>
-        <item>У меня масса других достоинств</item>
+        <item>Muscular</item>
+        <item>Fit</item>
+        <item>Thin</item>
+        <item>Normal</item>
+        <item>Well padded</item>
+        <item>Got lots of other advantages</item>
     </string-array>
     
     <string-array name="profile_form_fitness_female">
-        <item>Спортивная</item>
-        <item>Стройная</item>
-        <item>Худощавая</item>
-        <item>Модель</item>
-        <item>Есть за что подержаться</item>
-        <item>С богатыми формами</item>
+        <item>Sporty</item>
+        <item>Slim</item>
+        <item>Thin</item>
+        <item>Model</item>
+        <item>Interesting shapes</item>
+        <item>With the sexy body</item>
     </string-array>
     
     <string-array name="profile_form_fitness_values">
@@ -230,40 +230,40 @@
     <string name="profile_form_job_female_10">Бездельница</string>
     
     <!-- Marriage ******************************************************************************** -->
-    <string name="profile_form_marriage_male_1">Еще нет</string>
-    <string name="profile_form_marriage_male_2">Уже нет</string>
-    <string name="profile_form_marriage_male_3">Пока да</string>
-    <string name="profile_form_marriage_male_4">Да</string>
-    <string name="profile_form_marriage_male_5">Да и навсегда</string>
-    <string name="profile_form_marriage_male_6">А кому это мешает?</string>
-    <string name="profile_form_marriage_male_7">Никогда</string>
+    <string name="profile_form_marriage_male_1">Not yet</string>
+    <string name="profile_form_marriage_male_2">No longer</string>
+    <string name="profile_form_marriage_male_3">Still</string>
+    <string name="profile_form_marriage_male_4">Yes</string>
+    <string name="profile_form_marriage_male_5">Yes and forever</string>
+    <string name="profile_form_marriage_male_6">Is it a problem?</string>
+    <string name="profile_form_marriage_male_7">Never</string>
 
-    <string name="profile_form_marriage_female_1">Еще нет</string>
-    <string name="profile_form_marriage_female_2">Уже нет</string>
-    <string name="profile_form_marriage_female_3">Пока да</string>
-    <string name="profile_form_marriage_female_4">Да</string>
-    <string name="profile_form_marriage_female_5">Да и навсегда</string>
-    <string name="profile_form_marriage_female_6">А кому это мешает?</string>
-    <string name="profile_form_marriage_female_7">Никогда</string>
+    <string name="profile_form_marriage_female_1">Not yet</string>
+    <string name="profile_form_marriage_female_2">No longer</string>
+    <string name="profile_form_marriage_female_3">Still</string>
+    <string name="profile_form_marriage_female_4">Yes</string>
+    <string name="profile_form_marriage_female_5">Yes and forever</string>
+    <string name="profile_form_marriage_female_6">Is it a problem?</string>
+    <string name="profile_form_marriage_female_7">Never</string>
     
     <string-array name="profile_form_marriage_male">
-        <item>Еще нет</item>
-        <item>Уже нет</item>
-        <item>Пока да</item>
-        <item>Да</item>
-        <item>Да и навсегда</item>
-        <item>А кому это мешает?</item>
-        <item>Никогда</item>
+        <item>Not yet</item>
+        <item>No longer</item>
+        <item>Still</item>
+        <item>Yes</item>
+        <item>Yes and forever</item>
+        <item>Is it a problem?</item>
+        <item>Never</item>
     </string-array>
     
     <string-array name="profile_form_marriage_female">
-        <item>Еще нет</item>
-        <item>Уже нет</item>
-        <item>Пока да</item>
-        <item>Да</item>
-        <item>Да и навсегда</item>
-        <item>А кому это мешает?</item>
-        <item>Никогда</item>
+        <item>Not yet</item>
+        <item>No longer</item>
+        <item>Still</item>
+        <item>Yes</item>
+        <item>Yes and forever</item>
+        <item>Is it a problem?</item>
+        <item>Never</item>
     </string-array>
     
     <string-array name="profile_form_marriage_values">
@@ -277,40 +277,40 @@
     </string-array>
     
     <!-- Finances ******************************************************************************** -->
-    <string name="profile_form_finances_male_1">Очень высокий доход</string>
-    <string name="profile_form_finances_male_2">Могу поделиться</string>
-    <string name="profile_form_finances_male_3">Зарабатываю выше среднего</string>
-    <string name="profile_form_finances_male_4">Стабильные средние заработки</string>
-    <string name="profile_form_finances_male_5">Деньги не главное</string>
-    <string name="profile_form_finances_male_6">Скромно, но достаточно</string>
-    <string name="profile_form_finances_male_7">Помогите материально</string>
+    <string name="profile_form_finances_male_1">Very high income</string>
+    <string name="profile_form_finances_male_2">I can share</string>
+    <string name="profile_form_finances_male_3">Earn more than average</string>
+    <string name="profile_form_finances_male_4">Stable income</string>
+    <string name="profile_form_finances_male_5">Money is not important</string>
+    <string name="profile_form_finances_male_6">Modest, but enough</string>
+    <string name="profile_form_finances_male_7">Help me financially</string>
 
-    <string name="profile_form_finances_female_1">Очень высокий доход</string>
-    <string name="profile_form_finances_female_2">Могу поделиться</string>
-    <string name="profile_form_finances_female_3">Зарабатываю выше среднего</string>
-    <string name="profile_form_finances_female_4">Стабильные средние заработки</string>
-    <string name="profile_form_finances_female_5">Деньги не главное</string>
-    <string name="profile_form_finances_female_6">Скромно, но достаточно</string>
-    <string name="profile_form_finances_female_7">Помогите материально</string>
+    <string name="profile_form_finances_female_1">Very high income</string>
+    <string name="profile_form_finances_female_2">I can share</string>
+    <string name="profile_form_finances_female_3">Earn more than average</string>
+    <string name="profile_form_finances_female_4">Stable income</string>
+    <string name="profile_form_finances_female_5">Money is not important</string>
+    <string name="profile_form_finances_female_6">Modest, but enough</string>
+    <string name="profile_form_finances_female_7">Help me financially</string>
     
     <string-array name="profile_form_finances_male">
-        <item>Очень высокий доход</item>
-        <item>Могу поделиться</item>
-        <item>Зарабатываю выше среднего</item>
-        <item>Стабильные средние заработки</item>
-        <item>Деньги не главное</item>
-        <item>Скромно, но достаточно</item>
-        <item>Помогите материально</item>
+        <item>Very high income</item>
+        <item>I can share</item>
+        <item>Earn more than average</item>
+        <item>Stable income</item>
+        <item>Money is not important</item>
+        <item>Modest, but enough</item>
+        <item>Help me financially</item>
     </string-array>
     
     <string-array name="profile_form_finances_female">
-        <item>Очень высокий доход</item>
-        <item>Могу поделиться</item>
-        <item>Зарабатываю выше среднего</item>
-        <item>Стабильные средние заработки</item>
-        <item>Деньги не главное</item>
-        <item>Скромно, но достаточно</item>
-        <item>Помогите материально</item>
+        <item>Very high income</item>
+        <item>I can share</item>
+        <item>Earn more than average</item>
+        <item>Stable income</item>
+        <item>Money is not important</item>
+        <item>Modest, but enough</item>
+        <item>Help me financially</item>
     </string-array>
     
     <string-array name="profile_form_finances_values">
@@ -324,36 +324,36 @@
     </string-array>
     
     <!-- Smoking ******************************************************************************** -->
-    <string name="profile_form_smoking_male_1">Не курил</string>
-    <string name="profile_form_smoking_male_2">Бросил</string>
-    <string name="profile_form_smoking_male_3">Бросаю</string>
-    <string name="profile_form_smoking_male_4">Только когда выпью</string>
-    <string name="profile_form_smoking_male_5">Дымлю как паровоз</string>
-    <string name="profile_form_smoking_male_6">Курю, но не табак</string>
+    <string name="profile_form_smoking_male_1">Do not smoke</string>
+    <string name="profile_form_smoking_male_2">Gave up smoking</string>
+    <string name="profile_form_smoking_male_3">Giving up smoking</string>
+    <string name="profile_form_smoking_male_4">Only when I drink</string>
+    <string name="profile_form_smoking_male_5">Smoke like a locomotive</string>
+    <string name="profile_form_smoking_male_6">Smoke but not cigarettes</string>
     
-    <string name="profile_form_smoking_female_1">Не курила</string>
-    <string name="profile_form_smoking_female_2">Бросила</string>
-    <string name="profile_form_smoking_female_3">Бросаю</string>
-    <string name="profile_form_smoking_female_4">Только когда выпью</string>
-    <string name="profile_form_smoking_female_5">Дымлю как паровоз</string>
-    <string name="profile_form_smoking_female_6">Курю, но не табак</string>
+    <string name="profile_form_smoking_female_1">Do not smoking</string>
+    <string name="profile_form_smoking_female_2">Gave up smoking</string>
+    <string name="profile_form_smoking_female_3">Giving up smoking</string>
+    <string name="profile_form_smoking_female_4">Only when I drink</string>
+    <string name="profile_form_smoking_female_5">Smoke like a locomotive</string>
+    <string name="profile_form_smoking_female_6">Smoke but not cigarettes</string>
     
     <string-array name="profile_form_smoking_male">
-        <item>Не курил</item>
-        <item>Бросил</item>
-        <item>Бросаю</item>
-        <item>Только когда выпью</item>
-        <item>Дымлю как паровоз</item>
-        <item>Курю, но не табак</item>
+        <item>Do not smoke</item>
+        <item>Gave up smoking</item>
+        <item>Giving up smoking</item>
+        <item>Only when I drink</item>
+        <item>Smoke like a locomotive</item>
+        <item>Smoke but not cigarettes</item>
     </string-array>
     
     <string-array name="profile_form_smoking_female">
-        <item>Не курила</item>
-        <item>Бросила</item>
-        <item>Бросаю</item>
-        <item>Только когда выпью</item>
-        <item>Дымлю как паровоз</item>
-        <item>Курю, но не табак</item>
+        <item>Do not smoking</item>
+        <item>Gave up smoking</item>
+        <item>Giving up smoking</item>
+        <item>Only when I drink</item>
+        <item>Smoke like a locomotive</item>
+        <item>Smoke but not cigarettes</item>
     </string-array>
     
     <string-array name="profile_form_smoking_values">

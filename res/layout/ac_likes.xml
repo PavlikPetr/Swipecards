@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/dashbrd_bkgrd"
+    android:background="@drawable/list_bkgrd"
     android:orientation="vertical" >
     
   <!-- header bar -->
@@ -13,7 +13,7 @@
   <!-- <include layout="@layout/bar_double_button" /> -->
   
   <!-- gallary -->
-  <com.sonetica.topface.module.pull2refresh.PullToRefreshGridView
+  <com.sonetica.topface.p2r.PullToRefreshGridView
     android:id="@+id/grdLikesGallary"
     android:layout_width="fill_parent"
     android:layout_height="0dip"

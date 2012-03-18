@@ -31,13 +31,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /* "оценка фото" */
 public class DatingActivity extends Activity implements OnNeedUpdateListener,OnRateListener,OnClickListener{
   // Data
+  private TextView mHeaderTitle;
   private DatingControl mDatingControl;
   private Dialog mCommentDialog;
   private EditText mCommentText;
@@ -58,14 +58,14 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     mHeaderBar = (ViewGroup)findViewById(R.id.loHeader);
     
     // Title Header
-    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.dating_header_title));
+    mHeaderTitle = ((TextView)findViewById(R.id.tvHeaderTitle));
     
     // Resources Buying Button
     ((ResourcesView)findViewById(R.id.datingRes)).setOnClickListener(this);
     
     mProgress = (ProgressBar)findViewById(R.id.pgrsDating);
         
-    ImageView ivDatingPlus = ((ImageView)findViewById(R.id.datingPlus));
+    View ivDatingPlus = findViewById(R.id.datingPlus);
     ivDatingPlus.setVisibility(View.VISIBLE);
     ivDatingPlus.setEnabled(true);
     
@@ -148,6 +148,16 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   @Override
   public void needUpdate() {
     update(false);
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onResume() {
+    super.onResume();
+    
+    if(Data.s_Profile.filter_sex == 0)
+      mHeaderTitle.setText(getString(R.string.dating_header_title_her));
+    else
+      mHeaderTitle.setText(getString(R.string.dating_header_title_him));
   }
   //---------------------------------------------------------------------------
   @Override

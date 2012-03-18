@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/dashbrd_bkgrd"
+    android:background="@drawable/list_bkgrd"
     android:orientation="vertical" >
     
   <!-- header bar -->
   <include layout="@layout/bar_header" />
       
   <!-- button bar -->
-  <include layout="@layout/tops_bar_button" />
+  <include layout="@layout/bar_tops_button" />
   
   <!-- gallary -->
   <GridView

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">TopFace</string>
+  
+  <!-- General  -->
+  <string name="internet_off">Приложение требует подключение к Интернету</string>
+  <string name="dialog_loading">Загружаю</string>
+  <string name="default_city">Москва</string>
+  
+  <!-- Social Activity  -->
+  <string name="social_btn_vk">Войти через ВКонтакте</string>
+  <string name="social_btn_fb">Войти через facebook</string>
+  <string name="social_title">Оценивай фотографии и знакомься</string>
+  
+  <!-- Dashboard Activity -->
+  <string name="dashbrd_btn_dating">Оценка фото</string>
+  <string name="dashbrd_btn_likes">Я нравлюсь</string>
+  <string name="dashbrd_btn_rates">Меня оценили</string>
+  <string name="dashbrd_btn_chats">Диалоги</string>
+  <string name="dashbrd_btn_tops">Топы</string>
+  <string name="dashbrd_btn_profile">Профиль</string>
+              
+  <!-- Indox & Chat Activity -->
+  <string name="inbox_header_title">Диалоги</string>
+  <string name="inbox_btn_dbl_left">Все</string>
+  <string name="inbox_btn_dbl_right">Непрочитанные</string>
+  <string name="chat_gift">Вам прислали подарок</string>
+  <string name="chat_btn_send">Послать</string>
+  <string name="chat_comment">Написать сообщение</string> 
+  
+  <!-- Tops Activity -->
+  <string name="tops_header_title">Самые красивые</string>
+  <string name="tops_btn_boys">Парни</string>
+  <string name="tops_btn_girls">Девушки</string>
+  <string name="tops_btn_city">Город</string>
+  
+  <!-- Profile Activity -->
+  <string name="profile_header_title">Профиль</string>
+  <string name="profile_btn_chat">Поболтать</string>
+  <string name="profile_btn_edit">Редактировать</string>
+  <string name="profile_btn_form">Анкета</string>
+  <string name="profile_btn_add">Добавить</string>
+  <string name="profile_btn_buy">Купить</string>
+  <string name="profile_btn_exit">Выйти</string>
+  <string name="profile_sex_boy">Парень</string>
+  <string name="profile_sex_girl">Девушка</string>
+  <string name="profile_form">Анкета</string>
+  <string name="profile_form_name">Имя</string>
+  <string name="profile_form_city">Выбор города</string>
+  <string name="profile_foto">Фотографии</string>
+  <string name="profile_foto_ero">Эрофотографии</string>
+  <string name="profile_height">Рост</string>
+  <string name="profile_weight">Вес</string>
+  <string name="profile_education">Образование</string>
+  <string name="profile_commutability">Общительность</string>
+  <string name="profile_character">Характер</string>
+  <string name="profile_alcohol">Алкоголь</string>
+  <string name="profile_fitness">Комплекция</string>
+  <string name="profile_job">StatusJob</string>
+  <string name="profile_marriage">Marriage</string>
+  <string name="profile_finances">Доход</string>
+  <string name="profile_smoking">Smoking</string>
+  <string name="profile_status">О себе</string>
+  <string name="profile_edit_title">Редактировать</string>
+  <string name="profile_add_title">Добавить фотографию</string>
+  <string name="profile_add_album">Добавить из альбома</string>
+  <string name="profile_add_camera">Сделать снимок</string>
+  <string name="profile_coin_1">1 монета</string>
+  <string name="profile_coin_2">2 монеты</string>
+  <string name="profile_coin_3">3 монеты</string>
+  <string name="profile_ero_price">Цена</string>
+
+  <!-- Dating Activity -->
+  <string name="dating_header_title_him">Оцени его!</string>
+  <string name="dating_header_title_her">Оцени её!</string>
+  <string name="dating_menu_one">Фильтр</string>
+  <string name="dating_back">К оценкам</string>
+  
+  <!-- Filter Activity -->
+  <string name="filter_header_title">Я ищу</string>
+  <string name="filter_menu_save">Сохранить</string>
+  <string name="filter_filter">Фильтр</string>
+  <string name="filter_place">Местоположение</string>
+  <string name="filter_city">Город</string>
+  <string name="filter_sex">Пол</string>
+  <string name="filter_age">Возраст</string>
+  <string name="filter_boy">Парня</string>
+  <string name="filter_girl">Девушку</string>
+  <string name="filter_all">Все</string>
+  <string name="filter_only_online">Только онлайн</string>
+  <string name="filter_from">С</string>
+  <string name="filter_to">до</string>
+  <string name="filter_nearby">Рядом со мной</string>
+  <string name="filter_cities_all">Все города</string>
+  <string name="filter_select_city">Выбор города</string>
+  
+  <!-- Likes Activity -->
+  <string name="likes_header_title">Я нравлюсь</string>
+  <string name="likes_btn_dbl_left">Все</string>
+  <string name="likes_btn_dbl_right">Мой город</string>
+  
+  <!-- Rates Activity -->
+  <string name="rates_header_title">Меня оценили</string>
+  <string name="rates_btn_dbl_left">Все</string>
+  <string name="rates_btn_dbl_right">Непрочитанные</string>
+  
+  <!-- Album Ero Activity -->
+  <string name="album_header_title">Альбом</string>
+  <string name="album_add_photo_title">Добавить фотографию</string>
+  <string name="album_menu_main">Сделать главной</string>
+  <string name="album_menu_did_main">Главная</string>
+  <string name="album_menu_delete">Удалить</string>
+  <string name="album_menu_did_delete">Удалено</string>
+  <string name="ero_album_btn_like">Рекомендую</string>
+  <string name="ero_album_btn_dislike">Не рекомендую</string>
+  <string name="ero_album_btn_buy">Оплатить следующую</string>
+  <string name="ero_album_btn_next">Смотреть следующую</string>
+  
+  <!-- Buying Activity -->
+  <string name="buying_header_title">Покупка</string>
+  <string name="buying_money">Покупка монет</string>
+  <string name="buying_power">Покупка энергии</string>
+  <string name="buying_buy">Купить</string>
+  <string name="buying_6coins">за $1</string>
+  <string name="buying_40coins">за $5</string>
+  <string name="buying_100coins">за $10</string>
+  <string name="buying_energy">за $3</string>
+  <string name="buying_info">Вы можете купить монеты и энергию</string>
+  <string name="buying_economy_25">Экономия 25%</string>
+  <string name="buying_economy_40">Экономия 40%</string>
+  
+  <!-- Pull2Refresh Module -->
+  <string name="pull_to_refresh_pull_label">Pull to refresh</string>
+  <string name="pull_to_refresh_release_label">Release to refresh</string>
+  <string name="pull_to_refresh_refreshing_label">Loading</string>
+  <string name="pull_to_refresh_tap_label">Tap to refresh</string>
+  
+</resources>

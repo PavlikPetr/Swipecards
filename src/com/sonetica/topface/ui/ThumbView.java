@@ -20,25 +20,13 @@ public class ThumbView extends ImageView {
   public int     mCity;
   // Constants
   //private static Bitmap mPeople;
-  private static Bitmap mOnlineBmp;
-  private static Bitmap mOfflineBmp;
-  private static Bitmap mHeartBmp;
-  private static Paint  s_PaintState;
-  private static Paint  s_PaintLine;
-  private static Paint  s_PaintText;
-  static {
-    s_PaintState = new Paint();
-    s_PaintState.setColor(Color.WHITE);
+  public static Bitmap mOnlineBmp;
+  public static Bitmap mOfflineBmp;
+  public static Bitmap mHeartBmp;
+  public static Paint s_PaintState;
+  public static Paint s_PaintLine;
+  public static Paint s_PaintText;
 
-    s_PaintLine = new Paint();
-    s_PaintLine.setColor(Color.BLACK);
-    s_PaintLine.setAlpha(154);
-    
-    s_PaintText = new Paint();
-    s_PaintText.setColor(Color.WHITE);
-    s_PaintText.setAntiAlias(true);
-    s_PaintText.setTextSize(20);
-  }
   //---------------------------------------------------------------------------
   public ThumbView(Context context,AttributeSet attrs) {
     super(context,attrs);
@@ -47,9 +35,28 @@ public class ThumbView extends ImageView {
     setScaleType(ScaleType.CENTER);
     
     //mPeople     = BitmapFactory.decodeResource(getResources(),R.drawable.icon_people);
-    mHeartBmp   = BitmapFactory.decodeResource(getResources(),R.drawable.tops_heart);
-    mOnlineBmp  = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
-    mOfflineBmp = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
+    if(mHeartBmp == null)
+      mHeartBmp = BitmapFactory.decodeResource(getResources(),R.drawable.tops_heart);
+    if(mOnlineBmp == null)
+      mOnlineBmp = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
+    if(mOfflineBmp == null)
+      mOfflineBmp = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
+    if(s_PaintState == null) {
+      s_PaintState = new Paint();
+      s_PaintState.setColor(Color.WHITE);
+    }
+    if(s_PaintLine == null) {
+      s_PaintLine = new Paint();
+      s_PaintLine.setColor(Color.BLACK);
+      s_PaintLine.setAlpha(154);
+      
+    }
+    if(s_PaintText == null) {
+      s_PaintText = new Paint();
+      s_PaintText.setColor(Color.WHITE);
+      s_PaintText.setAntiAlias(true);
+      s_PaintText.setTextSize(16);
+    }
   }
   //---------------------------------------------------------------------------
   @Override
@@ -71,15 +78,22 @@ public class ThumbView extends ImageView {
     //canvas.drawText(mCity+"",10,20,s_PaintText);
     
     if(mPercent!=0) {
-      int x = lineRect.left+mHeartBmp.getWidth()/2;
-      canvas.drawBitmap(mHeartBmp,x,lineRect.top+6,s_PaintState);
-      canvas.drawText(mPercent+" %",x*=4,lineRect.top+s_PaintText.getTextSize(),s_PaintText);
+        float x = lineRect.left+mHeartBmp.getWidth()/2;
+        float y = (lineRect.height()-mHeartBmp.getHeight())/2;
+      // heart
+      canvas.drawBitmap(mHeartBmp,x,lineRect.top+y,s_PaintState);
+        x = x*2 + mHeartBmp.getWidth();
+      canvas.drawText(mPercent+" %",x,(float)(lineRect.bottom-s_PaintText.getTextSize()/1.5),s_PaintText);
     } else {
-      canvas.drawText(mName+", "+mAge,lineRect.left+mHeartBmp.getWidth(),lineRect.top+s_PaintText.getTextSize(),s_PaintText);
+      float x = (float)(lineRect.right-mOnlineBmp.getWidth()*1.25);
+      float y = (lineRect.height()-mOnlineBmp.getHeight())/2; 
+      // name
+      canvas.drawText(mName+", "+mAge,lineRect.left+mHeartBmp.getWidth()/2,(float)(lineRect.bottom-s_PaintText.getTextSize()/1.5),s_PaintText);
+      // online
       if(mOnline)
-        canvas.drawBitmap(mOnlineBmp,lineRect.right-mOnlineBmp.getWidth(),lineRect.top+6,s_PaintState);
+        canvas.drawBitmap(mOnlineBmp,x,lineRect.top+y,s_PaintState);
       else
-        canvas.drawBitmap(mOfflineBmp,lineRect.right-mOnlineBmp.getWidth(),lineRect.top+6,s_PaintState);
+        canvas.drawBitmap(mOfflineBmp,x,lineRect.top+y,s_PaintState);
     }
   }
   //---------------------------------------------------------------------------

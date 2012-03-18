@@ -37,6 +37,8 @@ public class Data {
   public static int s_Messages;
   public static int s_AverageRate;
   
+  public static int s_HeaderHeight;
+  
   // Topface ssid key
   public static String SSID;  // ключ для запросов к TP серверу
   //---------------------------------------------------------------------------

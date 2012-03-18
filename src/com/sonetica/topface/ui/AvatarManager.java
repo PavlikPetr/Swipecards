@@ -7,8 +7,8 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Http;
+import com.sonetica.topface.utils.Imager;
 import com.sonetica.topface.utils.LeaksManager;
-import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.AbsListView;
@@ -87,10 +87,10 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
           if(mBusy) return;
         
           final Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink());
-          Bitmap clippedBitmap = Utils.clipping(rawBitmap,imageView.getWidth(),imageView.getHeight());
+          Bitmap clippedBitmap = Imager.clipping(rawBitmap,imageView.getWidth(),imageView.getHeight());
           if(clippedBitmap==null)
             return;
-          final Bitmap roundBitmap = Utils.getRoundedCornerBitmap(clippedBitmap,clippedBitmap.getWidth(),clippedBitmap.getHeight(),12); // mRadius
+          final Bitmap roundBitmap = Imager.getRoundedCornerBitmap(clippedBitmap,clippedBitmap.getWidth(),clippedBitmap.getHeight(),12); // mRadius
           
           if(roundBitmap!=null) {
             imageView.post(new Runnable() {

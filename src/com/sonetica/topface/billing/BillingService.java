@@ -17,9 +17,9 @@
 package com.sonetica.topface.billing;
 
 import com.android.vending.billing.IMarketBillingService;
-
 import com.sonetica.topface.billing.Consts.ResponseCode;
 import com.sonetica.topface.billing.Security.VerifiedPurchase;
+
 
 import android.app.PendingIntent;
 import android.app.Service;

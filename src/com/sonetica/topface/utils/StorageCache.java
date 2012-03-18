@@ -19,7 +19,7 @@ public class StorageCache {
   private Context mContext;
   //private ExecutorService mThreadPool;
   private File mCacheDir;
-  private int mCacheType;
+  private int  mCacheType;
   // Constants
   public static final int INTERNAL_CACHE = 0;
   public static final int EXTERNAL_CACHE = 1;

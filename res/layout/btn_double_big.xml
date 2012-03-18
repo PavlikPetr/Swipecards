@@ -7,7 +7,7 @@
       
 	  <RadioButton  
 	      android:id="@+id/dblLeft"
-	      android:background="@drawable/btn_double_big_left_selector"
+	      android:background="@drawable/double_big_left_selector"
         android:button="@android:color/transparent"
 	      android:layout_width="wrap_content"
 	      android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
 	  
 	  <RadioButton  
 	      android:id="@+id/dblRight"
-	      android:background="@drawable/btn_double_big_right_selector" 
+	      android:background="@drawable/double_big_right_selector" 
         android:button="@android:color/transparent"
 	      android:layout_width="wrap_content"
 	      android:layout_height="wrap_content"

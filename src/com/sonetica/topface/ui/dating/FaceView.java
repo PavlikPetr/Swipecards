@@ -21,7 +21,6 @@ public class FaceView extends ImageView {
   public  String status = "";
   public  boolean online;
   
-  private int mOffset_y;
   private boolean mHide;
   // Bitmaps
   private Bitmap mOnlineBmp;
@@ -67,8 +66,6 @@ public class FaceView extends ImageView {
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-
-    mOffset_y = DatingActivity.mHeaderBar.getHeight();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -78,8 +75,8 @@ public class FaceView extends ImageView {
     //if(!mHide) {
     if(getVisibility()==View.VISIBLE) {
       // shadows
-      canvas.drawBitmap(mShadowTopBmp,0,mOffset_y,paint);
-      canvas.drawBitmap(mShadowBottomBmp,0,getHeight()-mShadowBottomBmp.getHeight(),paint);
+      //canvas.drawBitmap(mShadowTopBmp,0,0,paint);
+      //canvas.drawBitmap(mShadowBottomBmp,0,getHeight()-mShadowBottomBmp.getHeight(),paint);
       
       //city
       float offset_x = getResources().getDimension(R.dimen.city_offset_x_size);

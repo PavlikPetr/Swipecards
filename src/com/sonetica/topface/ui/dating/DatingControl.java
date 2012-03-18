@@ -153,10 +153,16 @@ public class DatingControl extends ViewGroup {
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     super.onMeasure(widthMeasureSpec,heightMeasureSpec);
     
-    int count = getChildCount();
-    for(int i=0;i<count;i++)
-      getChildAt(i).measure(widthMeasureSpec,heightMeasureSpec);
+    mDatingGallery.measure(widthMeasureSpec,heightMeasureSpec);
     
+    int offset_y = Data.s_HeaderHeight;
+    
+    int mode = MeasureSpec.getMode(heightMeasureSpec);
+    int h = MeasureSpec.getSize(heightMeasureSpec);
+    int new_h = MeasureSpec.makeMeasureSpec(h-offset_y,mode);
+    
+    mFaceView.measure(widthMeasureSpec,new_h);
+    mRateControl.measure(0,new_h);
     mResourcesView.measure(0,0);
     mCounter.measure(widthMeasureSpec,0);
     mBackButton.measure(0,0);
@@ -164,9 +170,10 @@ public class DatingControl extends ViewGroup {
   //---------------------------------------------------------------------------
   @Override
   protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
-    mFaceView.layout(left,top,right,bottom);
     
-    int offset_y = DatingActivity.mHeaderBar.getHeight();
+    int offset_y = Data.s_HeaderHeight;
+    
+    mFaceView.layout(0,offset_y,right,bottom);
     
     int x = mBackButton.getMeasuredWidth()/10;
     int y = (mRateControl.getMeasuredHeight()-mBackButton.getMeasuredHeight())/2;
@@ -175,11 +182,13 @@ public class DatingControl extends ViewGroup {
     
     mBackButton.setPadding((int)(mBackButton.getMeasuredWidth()/4),0,0,0);
     
-    mDatingGallery.layout(0,0,mDatingGallery.getMeasuredWidth(),mDatingGallery.getMeasuredHeight());
+    mDatingGallery.layout(0,0,right,bottom);
     
-    mResourcesView.layout(0,offset_y,mResourcesView.getMeasuredWidth(),offset_y+mResourcesView.getMeasuredHeight());
+    int n = mResourcesView.getMeasuredHeight();
+    int o = 6;
+    mResourcesView.layout(o,offset_y,mResourcesView.getMeasuredWidth()+n,o+offset_y+mResourcesView.getMeasuredHeight()+n);
     
-    mRateControl.layout(getMeasuredWidth()-mRateControl.getMeasuredWidth(),offset_y,getMeasuredWidth(),offset_y+mRateControl.getMeasuredHeight());
+    mRateControl.layout(getMeasuredWidth()-mRateControl.getMeasuredWidth(),offset_y,getMeasuredWidth(),bottom);
     
     mCounter.layout(0,(int)(getMeasuredHeight()-mCounter.getMeasuredHeight()*1.5),getMeasuredWidth(),getMeasuredHeight());
     

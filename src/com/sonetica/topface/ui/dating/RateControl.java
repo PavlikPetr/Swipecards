@@ -18,11 +18,13 @@ public class RateControl extends ViewGroup {
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
+    super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+
     int measuredWidth = 0;
 
     int count = getChildCount();
     for(int i=0;i<count;i++) {
-      getChildAt(i).measure(MeasureSpec.getSize(widthMeasureSpec),MeasureSpec.getSize(heightMeasureSpec)-DatingActivity.mHeaderBar.getHeight());
+      getChildAt(i).measure(MeasureSpec.getSize(widthMeasureSpec),MeasureSpec.getSize(heightMeasureSpec));
       measuredWidth += getChildAt(i).getMeasuredWidth();
     }
     
@@ -31,10 +33,9 @@ public class RateControl extends ViewGroup {
   //---------------------------------------------------------------------------
   @Override
   protected void onLayout(boolean changed,int l,int t,int r,int b) {
-    int stars_x = getMeasuredWidth() - mStarsView.getMeasuredWidth();
-    int stars_y = 0;
-    mStarsView.layout(stars_x,stars_y,stars_x+mStarsView.getMeasuredWidth(),stars_y+mStarsView.getMeasuredHeight());
-    mInformerView.layout(stars_x-mInformerView.getMeasuredWidth(),stars_y,stars_x,stars_y+mInformerView.getMeasuredHeight());
+    int stars_x = getMeasuredWidth()-mStarsView.getMeasuredWidth();
+    mStarsView.layout(stars_x,0,stars_x+mStarsView.getMeasuredWidth(),b);
+    mInformerView.layout(stars_x-mInformerView.getMeasuredWidth(),0,stars_x,b);
   }
   //---------------------------------------------------------------------------
   public void setBlock(boolean block) {

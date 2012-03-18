@@ -30,9 +30,9 @@ public class Global {
     EXTERANAL_CACHE_DIR    = context.getString(R.string.sdcard_root_path)+context.getString(R.string.sdcard_cache_path);
     SHARED_PREFERENCES_TAG = context.getString(R.string.general_preferences_name);
     TOKEN_PREFERENCES_TAG  = context.getString(R.string.token_preferences_name);
-    LOCALE                 = "ru"; //context.getApplicationContext().getResources().getConfiguration().locale.getLanguage();
+    LOCALE                 = context.getApplicationContext().getResources().getConfiguration().locale.getLanguage();
     CLIENT_TYPE            = "android";
-    CLIENT_VERSION         = "0.1";
+    CLIENT_VERSION         = "1.0";
     CLIENT_DEVICE          = Build.BRAND + " " + Build.MANUFACTURER;
     CLIENT_ID              = Build.ID;
   }

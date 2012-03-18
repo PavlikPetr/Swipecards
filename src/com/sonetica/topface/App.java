@@ -8,7 +8,7 @@ import android.app.Application;
  */
 public class App extends Application {
   // Data
-  public static int  state;      // стейт работы приложения
+  public static int state;      // стейт работы приложения
   public static boolean cached;  // отображать данные из кеша
   // Constants
   public static final String TAG = "TopFace";
@@ -22,7 +22,6 @@ public class App extends Application {
     
     Debug.log(this,"=======================================");
     Debug.log(this,"+onCreate");
-
   }
   //---------------------------------------------------------------------------
   @Override
