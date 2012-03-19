@@ -29,7 +29,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerHorizontal="true"
-          android:layout_marginTop="14dp"
+          android:layout_marginTop="10dp"
           android:orientation="horizontal" >
           
       <!-- Dating -->
@@ -88,35 +88,6 @@
           android:layout_height="wrap_content"
           android:layout_centerHorizontal="true"
           android:orientation="horizontal" >
-          
-      <!-- Chat -->
-      <RelativeLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" >
-
-          <Button
-              android:id="@+id/btnDshbrdChat"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:paddingBottom="10dp"
-              android:textColor="#FFFFFF"
-              android:gravity="bottom|center_horizontal"
-              android:text="@string/dashbrd_btn_chats"
-              android:textSize="12sp"
-              android:background="@drawable/dashbrd_chat_selector" />
-
-          <TextView
-              android:id="@+id/tvDshbrdNotifyChat"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentTop="true"
-              android:layout_alignRight="@id/btnDshbrdChat"
-              android:background="@drawable/im_informer"
-              android:gravity="center"
-              android:visibility="invisible"
-              android:textSize="12dp"
-              android:textColor="#FFFFFF" />
-      </RelativeLayout>
       
       <!-- Rates -->
       <RelativeLayout
@@ -146,6 +117,36 @@
               android:textSize="12dp"
               android:textColor="#FFFFFF" />
       </RelativeLayout>
+      
+      <!-- Chat -->
+      <RelativeLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" >
+
+          <Button
+              android:id="@+id/btnDshbrdChat"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingBottom="10dp"
+              android:textColor="#FFFFFF"
+              android:gravity="bottom|center_horizontal"
+              android:text="@string/dashbrd_btn_chats"
+              android:textSize="12sp"
+              android:background="@drawable/dashbrd_chat_selector" />
+
+          <TextView
+              android:id="@+id/tvDshbrdNotifyChat"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentTop="true"
+              android:layout_alignRight="@id/btnDshbrdChat"
+              android:background="@drawable/im_informer"
+              android:gravity="center"
+              android:visibility="invisible"
+              android:textSize="12dp"
+              android:textColor="#FFFFFF" />
+      </RelativeLayout>
+      
     </LinearLayout>   
     
     <!-- 3 -->
@@ -155,24 +156,6 @@
           android:layout_height="wrap_content"
           android:layout_centerHorizontal="true"
           android:orientation="horizontal" >
-          
-      <!-- Profile -->
-      <RelativeLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" >
-
-          <Button
-              android:id="@+id/btnDshbrdProfile"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:paddingBottom="10dp"
-              android:textColor="#FFFFFF"
-              android:gravity="bottom|center_horizontal"
-              android:text="@string/dashbrd_btn_profile"
-              android:textSize="12sp"
-              android:background="@drawable/dashbrd_profile_selector" />
-
-      </RelativeLayout>
       
       <!-- Tops -->
       <RelativeLayout
@@ -191,6 +174,25 @@
               android:background="@drawable/dashbrd_tops_selector" />
 
       </RelativeLayout>
+      
+      <!-- Profile -->
+      <RelativeLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" >
+
+          <Button
+              android:id="@+id/btnDshbrdProfile"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingBottom="10dp"
+              android:textColor="#FFFFFF"
+              android:gravity="bottom|center_horizontal"
+              android:text="@string/dashbrd_btn_profile"
+              android:textSize="12sp"
+              android:background="@drawable/dashbrd_profile_selector" />
+
+      </RelativeLayout>
+      
     </LinearLayout>
 </RelativeLayout>
 

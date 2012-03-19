@@ -2,6 +2,7 @@ package com.sonetica.topface;
 
 import com.sonetica.topface.R;
 import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 
 /*
@@ -31,8 +32,12 @@ public class Global {
     SHARED_PREFERENCES_TAG = context.getString(R.string.general_preferences_name);
     TOKEN_PREFERENCES_TAG  = context.getString(R.string.token_preferences_name);
     LOCALE                 = context.getApplicationContext().getResources().getConfiguration().locale.getLanguage();
+    try {
+      CLIENT_VERSION       = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+    } catch(NameNotFoundException e) {
+      CLIENT_VERSION = "0.0";
+    }
     CLIENT_TYPE            = "android";
-    CLIENT_VERSION         = "1.0";
     CLIENT_DEVICE          = Build.BRAND + " " + Build.MANUFACTURER;
     CLIENT_ID              = Build.ID;
   }

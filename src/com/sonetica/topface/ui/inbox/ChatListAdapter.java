@@ -23,6 +23,7 @@ public class ChatListAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   // Data
+  private Context mContext;
   private int mUserId;
   private LinkedList<History> mList;
   //private Bitmap baby;
@@ -41,6 +42,7 @@ public class ChatListAdapter extends BaseAdapter {
   private static final int T_COUNT = 4;
   //---------------------------------------------------------------------------
   public ChatListAdapter(Context context,int userId,LinkedList<History> dataList) {
+    mContext  = context;
     mList = dataList;
     mUserId = userId;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -127,20 +129,56 @@ public class ChatListAdapter extends BaseAdapter {
       case History.DEFAULT:
         holder.mMessage.setText(msg.text);
         break;
-      case History.PHOTO:
-        holder.mMessage.setText("PHOTO");
-        break;
+      case History.PHOTO: {
+        switch(type) {
+          case T_FRIEND_PHOTO:
+          case T_FRIEND_EXT:{ 
+            holder.mMessage.setText(mContext.getString(R.string.chat_rate_in) + " " + msg.code + ".");
+          } break;
+          case T_USER_PHOTO:
+          case T_USER_EXT: {
+            holder.mMessage.setText(mContext.getString(R.string.chat_rate_out) + " " + msg.code + ".");
+          } break;
+        }
+      } break;
       case History.GIFT:
-        holder.mMessage.setText("GIFT");
+        switch(type) {
+          case T_FRIEND_PHOTO:
+          case T_FRIEND_EXT:{ 
+            holder.mMessage.setText(mContext.getString(R.string.chat_gift_in));
+          } break;
+          case T_USER_PHOTO:
+          case T_USER_EXT: {
+            holder.mMessage.setText(mContext.getString(R.string.chat_gift_out));
+          } break;
+        }
         break;
       case History.MESSAGE:
         holder.mMessage.setText(msg.text);
         break;
       case History.MESSAGE_WISH:
-        holder.mMessage.setText("WISH");
+        switch(type) {
+          case T_FRIEND_PHOTO:
+          case T_FRIEND_EXT:{ 
+            holder.mMessage.setText(mContext.getString(R.string.chat_wish_in));
+          } break;
+          case T_USER_PHOTO:
+          case T_USER_EXT: {
+            holder.mMessage.setText(mContext.getString(R.string.chat_wish_out));
+          } break;
+        }
         break;
       case History.MESSAGE_SEXUALITY:
-        holder.mMessage.setText("SEXUALITY");
+        switch(type) {
+          case T_FRIEND_PHOTO:
+          case T_FRIEND_EXT:{ 
+            holder.mMessage.setText(mContext.getString(R.string.chat_sexuality_in));
+          } break;
+          case T_USER_PHOTO:
+          case T_USER_EXT: {
+            holder.mMessage.setText(mContext.getString(R.string.chat_sexuality_out));
+          } break;
+        }
         break;
     }
     

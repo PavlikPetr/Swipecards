@@ -8,4 +8,5 @@
     <string name="time_minute_1">%d минуты назад</string>
     <string name="time_minutes">%d минут назад</string>
     <string name="time_yesterday">Вчера</string>
+    <string name="time_today">Сегодня</string>
 </resources>

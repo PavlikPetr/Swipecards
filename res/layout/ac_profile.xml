@@ -9,7 +9,7 @@
   <!-- header bar -->
   <include layout="@layout/bar_btn_header" />
 
-  <!--    
+    
   <ScrollView 
       android:layout_width="fill_parent" 
       android:layout_height="fill_parent"
@@ -22,9 +22,9 @@
        <include layout="@layout/profile_form_bottom" />
     </LinearLayout>
   </ScrollView>
-   -->
+
    
-   
+  <!--  
   <com.sonetica.topface.ui.profile.SwapView
       android:id="@+id/swapFormView"
       android:layout_width="fill_parent" 
@@ -34,7 +34,7 @@
     <include layout="@layout/profile_form_bottom" />
     
   </com.sonetica.topface.ui.profile.SwapView>
-   
+    -->
   
   <!-- view pager -->
 <!-- 

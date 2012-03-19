@@ -189,6 +189,7 @@ public class SwapView extends ViewGroup {
   //-------------------------------------------------------------------------
   public void currentScreen(int heightScreen) {
     //if(mCurrentScreen!=heightScreen)
+    if(mSwapListener!=null)
       mSwapListener.onSwap();    
   }
   //-------------------------------------------------------------------------

@@ -14,7 +14,9 @@ import com.sonetica.topface.ui.album.AlbumGalleryManager;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -137,20 +139,40 @@ public class PhotoAlbumActivity extends Activity {
         }).exec();
       } break;
       case MENU_DELETE: {
-        PhotoDeleteRequest request = new PhotoDeleteRequest(getApplicationContext());
-        request.photoid = mAlbumsList.get(mGallery.getSelectedItemPosition()).id;
-        request.callback(new ApiHandler() {
-          @Override
-          public void success(Response response) {
-            Toast.makeText(PhotoAlbumActivity.this,getString(R.string.album_menu_did_delete),Toast.LENGTH_SHORT).show();
-          }
-          @Override
-          public void fail(int codeError,Response response) {
-          }
-        }).exec();
+        
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(PhotoAlbumActivity.this.getString(R.string.album_menu_popup_delete))
+               .setCancelable(false)
+               .setPositiveButton(PhotoAlbumActivity.this.getString(R.string.album_menu_popup_yes), new DialogInterface.OnClickListener() {
+                 public void onClick(DialogInterface dialog, int id) {
+                   PhotoAlbumActivity.this.deletePhoto();
+                 }
+               })
+               .setNegativeButton(PhotoAlbumActivity.this.getString(R.string.album_menu_popup_no), new DialogInterface.OnClickListener() {
+                 public void onClick(DialogInterface dialog, int id) {
+                   dialog.cancel();
+                 }
+               });
+        AlertDialog alert = builder.create();
+        alert.show();
+
       } break;
     }
     return super.onMenuItemSelected(featureId,item);
+  }
+  //---------------------------------------------------------------------------
+  private void deletePhoto() {
+    PhotoDeleteRequest request = new PhotoDeleteRequest(getApplicationContext());
+    request.photoid = mAlbumsList.get(mGallery.getSelectedItemPosition()).id;
+    request.callback(new ApiHandler() {
+      @Override
+      public void success(Response response) {
+        Toast.makeText(PhotoAlbumActivity.this,getString(R.string.album_menu_did_delete),Toast.LENGTH_SHORT).show();
+      }
+      @Override
+      public void fail(int codeError,Response response) {
+      }
+    }).exec();    
   }
   //---------------------------------------------------------------------------
 }

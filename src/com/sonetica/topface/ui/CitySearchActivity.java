@@ -45,7 +45,7 @@ public class CitySearchActivity extends Activity {
     Debug.log(this,"+onCreate");
     
     // Title Header
-    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.profile_form_city));
+    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.filter_city));
     
     // Data
     mDataList = new LinkedList<City>();

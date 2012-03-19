@@ -6,7 +6,7 @@
       <!-- sex -->
       <Preference
           android:key="@string/s_filter_sex"
-          android:title="@string/filter_header_title" 
+          android:title="@string/filter_sex" 
           android:summary="" />
       
       <!-- age -->
@@ -18,7 +18,7 @@
       <!-- online -->
       <Preference
           android:key="@string/s_filter_online"
-          android:title="@string/filter_all"
+          android:title="@string/filter_online"
           android:summary="" />
     </PreferenceCategory>
   

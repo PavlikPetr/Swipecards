@@ -3,8 +3,8 @@
   <string name="app_name">TopFace</string>
   
   <!-- General  -->
-  <string name="internet_off">Приложение требует подключение к Интернету</string>
-  <string name="dialog_loading">Загружаю</string>
+  <string name="internet_off">Нет подключения к Интернет</string>
+  <string name="dialog_loading">Загрузка</string>
   <string name="default_city">Москва</string>
   
   <!-- Social Activity  -->
@@ -24,9 +24,16 @@
   <string name="inbox_header_title">Диалоги</string>
   <string name="inbox_btn_dbl_left">Все</string>
   <string name="inbox_btn_dbl_right">Непрочитанные</string>
-  <string name="chat_gift">Вам прислали подарок</string>
-  <string name="chat_btn_send">Послать</string>
-  <string name="chat_comment">Написать сообщение</string> 
+  <string name="chat_btn_send">Отправить</string>
+  <string name="chat_comment">Написать сообщение</string>
+  <string name="chat_gift_in">Вы получили подарок.</string>
+  <string name="chat_gift_out">Вы отправили подарок.</string>
+  <string name="chat_rate_in">Вас оценили на</string>
+  <string name="chat_rate_out">Вы оценили</string>
+  <string name="chat_wish_in">Вам отправили Тайное Желание.</string>
+  <string name="chat_wish_out">Вы отправили Тайное Желание.</string>
+  <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>
+  <string name="chat_sexuality_out">Вы оценили сексуальность.</string> 
   
   <!-- Tops Activity -->
   <string name="tops_header_title">Самые красивые</string>
@@ -51,24 +58,25 @@
   <string name="profile_foto_ero">Эрофотографии</string>
   <string name="profile_height">Рост</string>
   <string name="profile_weight">Вес</string>
-  <string name="profile_education">Образование</string>
+  <string name="profile_education">Учеба</string>
   <string name="profile_commutability">Общительность</string>
   <string name="profile_character">Характер</string>
   <string name="profile_alcohol">Алкоголь</string>
   <string name="profile_fitness">Комплекция</string>
-  <string name="profile_job">StatusJob</string>
-  <string name="profile_marriage">Marriage</string>
+  <string name="profile_job">Статус</string>
+  <string name="profile_marriage_male">Женат</string>
+  <string name="profile_marriage_female">Замужем</string>
   <string name="profile_finances">Доход</string>
-  <string name="profile_smoking">Smoking</string>
+  <string name="profile_smoking">Курение</string>
   <string name="profile_status">О себе</string>
   <string name="profile_edit_title">Редактировать</string>
   <string name="profile_add_title">Добавить фотографию</string>
-  <string name="profile_add_album">Добавить из альбома</string>
+  <string name="profile_add_album">Из фотогалереи</string>
   <string name="profile_add_camera">Сделать снимок</string>
   <string name="profile_coin_1">1 монета</string>
   <string name="profile_coin_2">2 монеты</string>
   <string name="profile_coin_3">3 монеты</string>
-  <string name="profile_ero_price">Цена</string>
+  <string name="profile_ero_price">Выберите цену</string>
 
   <!-- Dating Activity -->
   <string name="dating_header_title_him">Оцени его!</string>
@@ -86,34 +94,38 @@
   <string name="filter_age">Возраст</string>
   <string name="filter_boy">Парня</string>
   <string name="filter_girl">Девушку</string>
+  <string name="filter_online">Онлайн</string>
   <string name="filter_all">Все</string>
   <string name="filter_only_online">Только онлайн</string>
   <string name="filter_from">С</string>
   <string name="filter_to">до</string>
   <string name="filter_nearby">Рядом со мной</string>
-  <string name="filter_cities_all">Все города</string>
+  <string name="filter_cities_all">Всем городам</string>
   <string name="filter_select_city">Выбор города</string>
   
   <!-- Likes Activity -->
   <string name="likes_header_title">Я нравлюсь</string>
   <string name="likes_btn_dbl_left">Все</string>
-  <string name="likes_btn_dbl_right">Мой город</string>
+  <string name="likes_btn_dbl_right">Непрочитанные</string>
   
   <!-- Rates Activity -->
-  <string name="rates_header_title">Меня оценили</string>
+  <string name="rates_header_title">Мои оценки</string>
   <string name="rates_btn_dbl_left">Все</string>
   <string name="rates_btn_dbl_right">Непрочитанные</string>
   
-  <!-- Album Ero Activity -->
+  <!-- Album, Ero Album Activity -->
   <string name="album_header_title">Альбом</string>
-  <string name="album_add_photo_title">Добавить фотографию</string>
+  <string name="album_add_photo_title">Добавить фото</string>
   <string name="album_menu_main">Сделать главной</string>
   <string name="album_menu_did_main">Главная</string>
+  <string name="album_menu_popup_delete">Вы действительно хотите удалить эту фотографию ?</string>
+  <string name="album_menu_popup_yes">Да</string>
+  <string name="album_menu_popup_no">Нет</string>
   <string name="album_menu_delete">Удалить</string>
   <string name="album_menu_did_delete">Удалено</string>
   <string name="ero_album_btn_like">Рекомендую</string>
   <string name="ero_album_btn_dislike">Не рекомендую</string>
-  <string name="ero_album_btn_buy">Оплатить следующую</string>
+  <string name="ero_album_btn_buy">Смотреть следующую</string>
   <string name="ero_album_btn_next">Смотреть следующую</string>
   
   <!-- Buying Activity -->
@@ -130,9 +142,9 @@
   <string name="buying_economy_40">Экономия 40%</string>
   
   <!-- Pull2Refresh Module -->
-  <string name="pull_to_refresh_pull_label">Pull to refresh</string>
-  <string name="pull_to_refresh_release_label">Release to refresh</string>
-  <string name="pull_to_refresh_refreshing_label">Loading</string>
-  <string name="pull_to_refresh_tap_label">Tap to refresh</string>
+  <string name="pull_to_refresh_pull_label">Тяните</string>
+  <string name="pull_to_refresh_release_label">Отпустите</string>
+  <string name="pull_to_refresh_refreshing_label">Обновление</string>
+  <string name="pull_to_refresh_tap_label">Нажмите</string>
   
 </resources>

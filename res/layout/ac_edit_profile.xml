@@ -61,7 +61,7 @@
         <!-- marriage -->
         <ListPreference
             android:key="@string/s_profile_marriage"
-            android:title="@string/profile_marriage" 
+            android:title="@string/profile_marriage_male" 
             android:summary="" />
         
         <!-- education -->

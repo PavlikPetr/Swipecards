@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /*
@@ -44,7 +45,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   private boolean mOwner;
   private boolean mAddEroState;
   private boolean mChatInvoke;
-  private SwapView mSwapView;
+  //private SwapView mSwapView;
   private Button mProfileButton;
   private ViewGroup mEroViewGroup;
   private FrameImageView mFramePhoto;
@@ -75,6 +76,11 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   private TextView mAbout;
   private boolean swap = true;  // проверить на оптимизацию
   private String mUserAvatarUrl;
+  // Arrows
+  private ImageView mGR;
+  private ImageView mGL;
+  private ImageView mEGL;
+  private ImageView mEGR;
   //Constants
   public static final String INTENT_USER_ID = "user_id";
   public static final String INTENT_CHAT_INVOKE = "chat_invoke";
@@ -95,9 +101,9 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.profile_header_title));
     // Swap
-    mSwapView = ((SwapView)findViewById(R.id.swapFormView));
-    if(Data.s_gridColumn > 2)
-      mSwapView.setOnSwapListener(this);
+    //mSwapView = ((SwapView)findViewById(R.id.swapFormView));
+    //if(Data.s_gridColumn > 2)
+      //mSwapView.setOnSwapListener(this);
     // Profile Header Button 
     mProfileButton = ((Button)findViewById(R.id.btnHeader));
     mProfileButton.setOnClickListener(this);
@@ -161,6 +167,8 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mAlcohol = (TextView)findViewById(R.id.tvProfileAlcohol);
     mFitness = (TextView)findViewById(R.id.tvProfileFitness);
     mMarriage = (TextView)findViewById(R.id.tvProfileMarriage);
+    if(Data.s_Profile.sex==0)
+      mMarriage.setText(getString(R.string.profile_marriage_female));
     mFinances = (TextView)findViewById(R.id.tvProfileFinances);
     mSmoking = (TextView)findViewById(R.id.tvProfileSmoking);
     //mJob = (TextView)findViewById(R.id.tvProfileJob);
@@ -174,6 +182,12 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     // Albums
     mPhotoList = new LinkedList<Album>(); 
     mEroList   = new LinkedList<Album>();
+    
+    // Arrows
+    mGR  = (ImageView)findViewById(R.id.ivProfileArrowGL);
+    mGL  = (ImageView)findViewById(R.id.ivProfileArrowGR);
+    mEGL = (ImageView)findViewById(R.id.ivProfileArrowEGL);
+    mEGR = (ImageView)findViewById(R.id.ivProfileArrowEGR);
 
     if(!mOwner)
       getUserProfile(mUserId);
@@ -235,9 +249,6 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
         
         // грузим галерею
         getUserAlbum(userId);
-        
-        // отключаем прогресс
-        mProgressDialog.cancel();
 
         // основная информация
         mName.setText(profile.first_name);
@@ -302,8 +313,9 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     albumRequest.callback(new ApiHandler() {
       @Override
       public void success(Response response) {
-        if(ProfileActivity.this==null)
-          return;
+        // отключаем прогресс
+        mProgressDialog.cancel();
+        
         // сортируем эро и не эро
         LinkedList<Album> albumList = Album.parse(response);        
         for(Album album : albumList)
@@ -379,8 +391,8 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       } break;
       case R.id.btnHeader: {
         // mCurrForm = mCurrForm == FORM_TOP ? FORM_BOTTOM : FORM_TOP;
-        if(Data.s_gridColumn > 2)
-          mSwapView.snapToScreen(swap?FORM_BOTTOM:FORM_TOP);
+        //if(Data.s_gridColumn > 2)
+          //mSwapView.snapToScreen(swap?FORM_BOTTOM:FORM_TOP);
         /*
         if(!swap) {
           mProfileButton.setText(R.string.profile_header_title);
@@ -479,7 +491,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mMarriage=null;
     mFinances=null;
     mSmoking=null;
-    mSwapView=null;
+    //mSwapView=null;
     mProfileButton=null;
     mEroViewGroup=null;
     

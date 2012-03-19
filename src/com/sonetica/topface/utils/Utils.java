@@ -59,13 +59,13 @@ public class Utils {
     else if(t < 6*3600)
       text = formatHour(context,t/3600);
     else if(DateUtils.isToday(full_time))
-      text = DateFormat.format("kk:mm",full_time).toString();
+      text = context.getString(R.string.time_today)+DateFormat.format(" kk:mm",full_time).toString();
     else { 
       Calendar cal = Calendar.getInstance();
       cal.set(Calendar.HOUR_OF_DAY,0);
       cal.set(Calendar.MINUTE,0);
       if(full_time > (now-(now-cal.getTimeInMillis())-(24*60*60*1000)))
-        text = DateFormat.format(context.getString(R.string.time_yesterday)+" kk:mm",full_time).toString();
+        text = context.getString(R.string.time_yesterday)+DateFormat.format(" kk:mm",full_time).toString();
       else
         text = DateFormat.format("dd.MM.yyyy kk:mm",full_time).toString();
     }

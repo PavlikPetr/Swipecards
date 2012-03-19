@@ -208,7 +208,7 @@ public class TopsActivity extends Activity {
   //---------------------------------------------------------------------------
   void showCitiesDialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle("Chooser");
+    builder.setTitle(getString(R.string.filter_select_city));
     int arraySize = Data.s_CitiesList.size();
     String[] cities = new String[arraySize];
     for(int i=0; i<arraySize; ++i)

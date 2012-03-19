@@ -121,6 +121,8 @@ public class EditProfileActivity extends PreferenceActivity {
     marriage.setSummary(mFormInfo.getMarriage(Data.s_Profile.questionary_marriage_id));
     marriage.setEntries(mFormInfo.getMarriageEntries());
     marriage.setEntryValues(mFormInfo.getMarriageValues());
+    if(Data.s_Profile.sex==0)
+      marriage.setTitle(getString(R.string.profile_marriage_female));
     marriage.setOnPreferenceChangeListener(mOnMarriageListener);
     
     // education

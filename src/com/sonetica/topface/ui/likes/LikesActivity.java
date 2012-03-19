@@ -54,8 +54,8 @@ public class LikesActivity extends Activity {
    
    // Double Button
    mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
-   mDoubleButton.setLeftText(getString(R.string.inbox_btn_dbl_left));
-   mDoubleButton.setRightText(getString(R.string.inbox_btn_dbl_right));
+   mDoubleButton.setLeftText(getString(R.string.likes_btn_dbl_left));
+   mDoubleButton.setRightText(getString(R.string.likes_btn_dbl_right));
    mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
    mDoubleButton.setLeftListener(new View.OnClickListener() {
      @Override

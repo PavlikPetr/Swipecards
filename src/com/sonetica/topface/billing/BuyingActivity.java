@@ -83,7 +83,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
     ResponseHandler.register(mTopfacePurchaseObserver);
     
     if(!mBillingService.checkBillingSupported()) {
-      Toast.makeText(getApplicationContext(),"no",Toast.LENGTH_SHORT).show();
+      ;//Toast.makeText(getApplicationContext(),"no",Toast.LENGTH_SHORT).show();
     }
   }
   //---------------------------------------------------------------------------

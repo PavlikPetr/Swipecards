@@ -27,6 +27,7 @@ public class InboxListAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   // Data
+  private Context mContext;
   private LayoutInflater mInflater;
   private AvatarManager<Inbox> mAvatarManager;
   private int mOwnerCityID;
@@ -37,6 +38,7 @@ public class InboxListAdapter extends BaseAdapter {
   //private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   //---------------------------------------------------------------------------
   public InboxListAdapter(Context context,AvatarManager<Inbox> avatarManager) {
+    mContext = context;
     mAvatarManager = avatarManager;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     //mInflater = LayoutInflater.from(context);
@@ -120,19 +122,19 @@ public class InboxListAdapter extends BaseAdapter {
         holder.mText.setText(inbox.text);
         break;
       case Inbox.PHOTO:
-        holder.mText.setText("PHOTO");
+        holder.mText.setText(mContext.getString(R.string.chat_rate_in) + " " + inbox.code + ".");
         break;
       case Inbox.GIFT:
-        holder.mText.setText("GIFT");
+        holder.mText.setText(mContext.getString(R.string.chat_gift_in));
         break;
       case Inbox.MESSAGE:
         holder.mText.setText(inbox.text);
         break;
       case Inbox.MESSAGE_WISH:
-        holder.mText.setText("WISH");
+        holder.mText.setText(mContext.getString(R.string.chat_wish_in));
         break;
       case Inbox.MESSAGE_SEXUALITY:
-        holder.mText.setText("SEXUALITY");
+        holder.mText.setText(mContext.getString(R.string.chat_sexuality_in));
         break;
     }
     //holder.mTime.setText(DateFormat.format(TIME_TEMPLATE,inbox.created));
