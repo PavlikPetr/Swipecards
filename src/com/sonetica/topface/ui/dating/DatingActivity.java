@@ -116,7 +116,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
           if(mDatingControl!=null)
             mDatingControl.setDataList(userList);
         }
-        mProgress.setVisibility(View.GONE);
+        mProgress.setVisibility(View.INVISIBLE);
       }
       @Override
       public void fail(int codeError,Response response) {

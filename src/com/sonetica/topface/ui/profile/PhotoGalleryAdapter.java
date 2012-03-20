@@ -73,7 +73,7 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
     if(bitmap!=null)
       ((ProfileThumbView)convertView).setImageBitmap(bitmap);
     else {
-      ((ProfileThumbView)convertView).setImageResource(R.drawable.profile_bg_gallery);
+      //((ProfileThumbView)convertView).setImageResource(R.drawable.profile_bg_gallery);
       loadingImage(position,((ProfileThumbView)convertView));
     }
     

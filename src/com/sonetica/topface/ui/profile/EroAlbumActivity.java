@@ -33,7 +33,7 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
   private TextView mCounter;
   private Button mLikeButton;
   private Button mDislikeButton;
-  private Button mBuyButton;
+  private View mBuyButton;
   private Button mNextButton;
   private ImageView mEroView;
   //private ProgressBar mProgress;
@@ -81,7 +81,7 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
     mDislikeButton.setOnClickListener(this);
     
     // button купить    
-    mBuyButton = ((Button)findViewById(R.id.btnEroAlbumBuy));
+    mBuyButton = findViewById(R.id.btnEroAlbumBuy);
     mBuyButton.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {

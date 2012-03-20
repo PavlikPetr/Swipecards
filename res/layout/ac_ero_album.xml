@@ -54,16 +54,31 @@
             android:background="@drawable/album_ero_like_selector"
             android:visibility="invisible" />
 
-        <Button
-            android:id="@+id/btnEroAlbumBuy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            android:text="@string/ero_album_btn_buy"
-            android:textColor="@drawable/clr_text_btn"
-            android:background="@drawable/album_ero_next_selector"
-            android:visibility="invisible" />
+        
+        <!-- Buy Button -->
+          <LinearLayout 
+               android:id="@+id/btnEroAlbumBuy"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_centerInParent="true"
+		            android:layout_centerVertical="true"
+		            android:text="@string/ero_album_btn_buy"
+		            android:textColor="@drawable/clr_text_btn"
+		            android:background="@drawable/album_ero_next_selector"
+		            android:visibility="invisible"
+		            android:orientation="horizontal" >
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:textColor="#303030"
+                android:textSize="12sp"
+                android:text="@string/profile_btn_exit"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/profile_logout"
+                android:drawablePadding="4dp" />
+          </LinearLayout>
 
         <Button
             android:id="@+id/btnEroAlbumNext"

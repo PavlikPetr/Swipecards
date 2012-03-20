@@ -29,8 +29,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_marginLeft="10dp"
 			        android:layout_column="0"
-			        android:scaleType="centerCrop"
-			        android:src="@drawable/profile_frame_photo" />
+			        android:scaleType="centerCrop" />
 			    <!-- Info -->
 			    <LinearLayout 
 			        android:layout_width="wrap_content"
@@ -183,11 +182,11 @@
 		
 		    <ImageView
 		        android:id="@+id/ivProfileArrowGL"
-		        android:layout_width="18dp"
+		        android:layout_width="26dp"
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="center_vertical"
 		        android:layout_weight="1"
-		        android:visibility="visible"
+		        android:visibility="invisible"
 		        android:src="@drawable/profile_arrow_left" />
 		    
 		    <com.sonetica.topface.ui.profile.HorizontalListView
@@ -201,11 +200,11 @@
 		
 		    <ImageView
 		        android:id="@+id/ivProfileArrowGR"
-		        android:layout_width="18dp"
+		        android:layout_width="26dp"
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="center_vertical"
 		        android:layout_weight="1"
-		        android:visibility="visible" 
+		        android:visibility="invisible" 
 		        android:src="@drawable/profile_arrow_right" />
 		     
 		  </LinearLayout>
@@ -232,7 +231,7 @@
 		    
 		    <ImageView
 		        android:id="@+id/ivProfileArrowEGL"
-		        android:layout_width="@dimen/profile_arrow_width"
+		        android:layout_width="26dp"
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="center_vertical"
 		        android:layout_weight="1"
@@ -248,7 +247,7 @@
 		    <!-- android:background="@drawable/profile_bg_gallery" -->
 		    <ImageView
 		        android:id="@+id/ivProfileArrowEGR"
-		        android:layout_width="@dimen/profile_arrow_width"
+		        android:layout_width="26dp"
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="center_vertical"
 		        android:layout_weight="1"

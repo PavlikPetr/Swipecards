@@ -1,22 +1,9 @@
 package com.sonetica.topface.ui.profile;
 
-import com.sonetica.topface.R;
-import com.sonetica.topface.social.Socium;
-import com.sonetica.topface.social.Socium.AuthException;
-import com.sonetica.topface.utils.Debug;
-import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class AddPhotoActivity extends Activity {
+  /*
   // Data
   private Uri mImageUri;
   //private ImageView mImage;
@@ -111,6 +98,8 @@ public class AddPhotoActivity extends Activity {
       mProgress.cancel();  
     }
   }
-  //---------------------------------------------------------------------------  
+  //---------------------------------------------------------------------------
+  
+   */
 }
 

@@ -76,7 +76,7 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     if(bitmap!=null)
       ((ProfileEroThumbView)convertView).setImageBitmap(bitmap);
     else {
-      ((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_bg_gallery);
+      //((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_bg_gallery);
       loadingImage(position,((ProfileEroThumbView)convertView));
     }
     

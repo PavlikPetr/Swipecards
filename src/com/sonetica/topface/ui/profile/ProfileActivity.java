@@ -155,10 +155,11 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mListEroView.setAdapter(mListEroAdapter);
     mListEroView.setOnItemClickListener(this);
     
+    mFramePhoto = (FrameImageView)findViewById(R.id.ivProfileFramePhoto);
+    
     // Info
     mName = (TextView)findViewById(R.id.tvProfileName);
     mCity = (TextView)findViewById(R.id.tvProfileCity);
-    mFramePhoto = (FrameImageView)findViewById(R.id.ivProfileFramePhoto);
     mHeight = (TextView)findViewById(R.id.tvProfileHeight);
     mWeight = (TextView)findViewById(R.id.tvProfileWeight);
     mEducation = (TextView)findViewById(R.id.tvProfileEducation);
@@ -180,14 +181,14 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
     // Albums
-    mPhotoList = new LinkedList<Album>(); 
+    mPhotoList = new LinkedList<Album>();
     mEroList   = new LinkedList<Album>();
     
     // Arrows
     mGR  = (ImageView)findViewById(R.id.ivProfileArrowGL);
     mGL  = (ImageView)findViewById(R.id.ivProfileArrowGR);
-    mEGL = (ImageView)findViewById(R.id.ivProfileArrowEGL);
     mEGR = (ImageView)findViewById(R.id.ivProfileArrowEGR);
+    mEGL = (ImageView)findViewById(R.id.ivProfileArrowEGL);
 
     if(!mOwner)
       getUserProfile(mUserId);
@@ -305,6 +306,16 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
       mEroTitle.setVisibility(View.VISIBLE);
       mEroViewGroup.setVisibility(View.VISIBLE);
     }
+    
+    if(mPhotoList.size() > Data.s_gridColumn+1) {
+      mGR.setVisibility(View.VISIBLE);
+      mGL.setVisibility(View.VISIBLE);
+    }
+
+    if(mEroList.size() > Data.s_gridColumn+1) {
+      mEGR.setVisibility(View.VISIBLE);
+      mEGL.setVisibility(View.VISIBLE);
+    }
   }
   //---------------------------------------------------------------------------
   private void getUserAlbum(int uid) {
@@ -335,6 +346,16 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
           mListEroAdapter.notifyDataSetChanged();
           mEroTitle.setVisibility(View.VISIBLE);
           mEroViewGroup.setVisibility(View.VISIBLE);
+        }
+        
+        if(mPhotoList.size() > Data.s_gridColumn+1) {
+          mGR.setVisibility(View.VISIBLE);
+          mGL.setVisibility(View.VISIBLE);
+        }
+
+        if(mEroList.size() > Data.s_gridColumn+1) {
+          mEGR.setVisibility(View.VISIBLE);
+          mEGL.setVisibility(View.VISIBLE);
         }
       }
       @Override

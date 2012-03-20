@@ -17,12 +17,14 @@ import android.view.animation.AlphaAnimation;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 public class DatingGalleryAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
   static class ViewHolder {
+    ProgressBar mProgressBar;
     ImageView mImageView;
   };
   //---------------------------------------------------------------------------
@@ -83,7 +85,8 @@ public class DatingGalleryAdapter extends BaseAdapter {
       holder = new ViewHolder();
       convertView = (ViewGroup)mInflater.inflate(R.layout.item_album_gallery, null, false);
       convertView.setLayoutParams(new Gallery.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-      holder.mImageView = (ImageView)convertView.findViewById(R.id.ivPreView);
+      holder.mImageView   = (ImageView)convertView.findViewById(R.id.ivPreView);
+      holder.mProgressBar = (ProgressBar)convertView.findViewById(R.id.pgrsAlbum);
       // ДОБАВИТЬ РАЗМЕРЫ
       convertView.setTag(holder);
     } else 
@@ -96,11 +99,13 @@ public class DatingGalleryAdapter extends BaseAdapter {
     if(bitmap!=null && position==0) {
       //holder.mImageView.setAlpha(255);
       holder.mImageView.setImageBitmap(bitmap);
+      holder.mProgressBar.setVisibility(View.INVISIBLE);
       //holder.mImageView.startAnimation(mAlphaAnimation);
     } else if(bitmap!=null && position!=0)
       holder.mImageView.setImageBitmap(bitmap);
-    else
-      loadingImage(position, holder.mImageView);
+    else {
+      loadingImage(position, holder.mImageView,holder.mProgressBar);
+    }
     
     int prePosition = position>=mPrevPosition ? position+1 : position-1;
     if(prePosition>0 && position<(getCount()-1))
@@ -115,7 +120,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
     return convertView;
   }
   //---------------------------------------------------------------------------
-  public void loadingImage(final int position,final ImageView view) {
+  public void loadingImage(final int position,final ImageView view,final ProgressBar progressBar) {
     Thread t = new Thread() {
       @Override
       public void run() {
@@ -141,6 +146,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
             }
             
             if(position==0) {
+              progressBar.setVisibility(View.INVISIBLE);
               view.setAlpha(255);
               view.setImageBitmap(bitmap);
               mDatingControl.controlVisibility(DatingControl.V_SHOW_INFO);

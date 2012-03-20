@@ -64,7 +64,7 @@
 		            android:id="@+id/btnBuyingMoney6" 
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
-		            android:background="@drawable/buying_purchase"
+		            android:background="@drawable/buying_purchase_selector"
 		            android:gravity="center" 
 		            android:orientation="horizontal">
 		            <TextView
@@ -96,7 +96,7 @@
 			            android:id="@+id/btnBuyingMoney40" 
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
-			            android:background="@drawable/buying_purchase"
+			            android:background="@drawable/buying_purchase_selector"
 			            android:gravity="center" 
 			            android:orientation="horizontal">
 			            <TextView
@@ -144,7 +144,7 @@
 			            android:id="@+id/btnBuyingMoney100" 
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
-			            android:background="@drawable/buying_purchase"
+			            android:background="@drawable/buying_purchase_selector"
 			            android:gravity="center" 
 			            android:orientation="horizontal">
 			            <TextView
@@ -210,7 +210,7 @@
 		            android:id="@+id/btnBuyingPower" 
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
-		            android:background="@drawable/buying_purchase"
+		            android:background="@drawable/buying_purchase_selector"
 		            android:gravity="center" 
 		            android:orientation="horizontal">
 		            <TextView

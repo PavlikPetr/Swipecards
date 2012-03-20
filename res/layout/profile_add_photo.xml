@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/im_big_button"
+        android:background="@drawable/buying_purchase_selector"
         android:text="@string/profile_add_album" />
 
     <Button
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/im_big_button"
+        android:background="@drawable/buying_purchase_selector"
         android:text="@string/profile_add_camera" />
     
 </LinearLayout>

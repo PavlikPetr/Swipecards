@@ -15,8 +15,8 @@ public class RoundedImageView extends ImageView {
   // Data
   private int mFrameType;
   //private static final int mRadius = 10;
-  private static Bitmap mDialogBitmap;
-  private static Bitmap mChatBitmap;
+  private static Bitmap mFrameBitmap;
+  private static Bitmap mPeopleBitmap;
   // Frames Type
   private static final int DIALOG = 0;
   private static final int CHAT   = 1;
@@ -34,10 +34,13 @@ public class RoundedImageView extends ImageView {
     
     setAttrs(attrs);
     
-    if(mDialogBitmap==null && mFrameType==DIALOG)
-      mDialogBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_frame_photo);
-    else if(mChatBitmap==null && mFrameType==CHAT)
-      mChatBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.chat_frame_photo);
+    if(mFrameBitmap==null && mFrameType==DIALOG)
+      mFrameBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_frame_photo);
+    else if(mFrameBitmap==null && mFrameType==CHAT)
+      mFrameBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.chat_frame_photo);
+    
+    if(mPeopleBitmap==null)
+      mPeopleBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.tops_heart);
 
   }
   //---------------------------------------------------------------------------
@@ -54,9 +57,9 @@ public class RoundedImageView extends ImageView {
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     if(mFrameType==DIALOG)
-      setMeasuredDimension(mDialogBitmap.getWidth(),mDialogBitmap.getHeight());
+      setMeasuredDimension(mFrameBitmap.getWidth(),mFrameBitmap.getHeight());
     else if(mFrameType==CHAT)
-      setMeasuredDimension(mChatBitmap.getWidth(),mChatBitmap.getHeight());
+      setMeasuredDimension(mFrameBitmap.getWidth(),mFrameBitmap.getHeight());
   }  
   //---------------------------------------------------------------------------
   @Override
@@ -81,14 +84,15 @@ public class RoundedImageView extends ImageView {
         canvas.drawBitmap(mScaledBitmap,0,0,null);
         
         // фрейм с тенюшкой
-        if(mFrameType==DIALOG)
-          canvas.drawBitmap(mDialogBitmap,0,0,null);
-        if(mFrameType==CHAT)
-          canvas.drawBitmap(mChatBitmap,0,0,null); 
+        canvas.drawBitmap(mFrameBitmap,0,0,null); 
         
       } catch(Exception e) {
         e.printStackTrace();
       }
+    } else {
+      int x = (mFrameBitmap.getWidth()-mPeopleBitmap.getWidth())/2;
+      int y = (mFrameBitmap.getHeight()-mPeopleBitmap.getHeight())/2;
+      canvas.drawBitmap(mPeopleBitmap,x,y,null);
     }
     
   }

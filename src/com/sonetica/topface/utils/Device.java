@@ -14,7 +14,14 @@ import android.view.WindowManager;
 public class Device {
   // Data
   public static int width;
-  // Methods
+  // Constants
+  public static final int W_240 = 240;
+  public static final int W_320 = 320;
+  public static final int W_480 = 480;
+  public static final int W_540 = 540;
+  public static final int W_600 = 600;
+  public static final int W_720 = 720;
+  public static final int W_800 = 800;
   //---------------------------------------------------------------------------
   public static void init(Context context) {
     width = getDisplay(context).getWidth();

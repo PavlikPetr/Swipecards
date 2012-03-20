@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" 
           package="com.sonetica.topface"
           android:versionCode="1"
+          android:installLocation="preferExternal"
           android:versionName="1.0" >
      <!-- android:installLocation="preferExternal" INSTALL_FAILED_INSUFFICIENT_STORAGE  -->
   

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -14,6 +15,7 @@ public class FrameImageView extends ImageView {
   private Bitmap mFrameBitmap;
   private Bitmap mOnlineBitmap;
   private Bitmap mOfflineBitmap;
+  private Bitmap mPeopleBitmap;
   //---------------------------------------------------------------------------
   public FrameImageView(Context context) {
     this(context,null);
@@ -25,6 +27,7 @@ public class FrameImageView extends ImageView {
     mFrameBitmap   = BitmapFactory.decodeResource(getResources(),R.drawable.profile_frame_photo);
     mOnlineBitmap  = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
     mOfflineBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
+    mPeopleBitmap  = BitmapFactory.decodeResource(getResources(),R.drawable.icon_people);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -35,8 +38,12 @@ public class FrameImageView extends ImageView {
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
-    //Drawable canvasDrawable = getDrawable();
-    //if(canvasDrawable != null) {
+    Drawable canvasDrawable = getDrawable();
+    if(canvasDrawable == null) {
+      int x = (mFrameBitmap.getWidth()-mPeopleBitmap.getWidth())/2;
+      int y = (mFrameBitmap.getHeight()-mPeopleBitmap.getHeight())/2;
+      canvas.drawBitmap(mPeopleBitmap,x,y,null);
+    }
       //try {
         /*
         BitmapDrawable drawable = (BitmapDrawable)canvasDrawable;
