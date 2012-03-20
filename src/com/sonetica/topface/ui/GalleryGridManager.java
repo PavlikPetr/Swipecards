@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
-import com.sonetica.topface.R;
 import com.sonetica.topface.data.AbstractData;
 import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.Debug;
@@ -77,7 +76,8 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
     if(bitmap!=null)
       imageView.setImageBitmap(bitmap);
     else {
-      imageView.setImageResource(R.drawable.icon_people);
+      //imageView.setImageResource(R.drawable.icon_people);
+      imageView.setImageBitmap(null);
       if(!mBusy) {
         bitmap = mStorageCache.load(mDataList.get(position).getSmallLink());
         if(bitmap!=null) {

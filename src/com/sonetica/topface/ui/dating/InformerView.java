@@ -1,9 +1,8 @@
 package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.ui.Recycle;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,13 +22,11 @@ public class InformerView extends ViewGroup {
     public int    _height;    // высота
     public int    _index;     // цифра рейтинга
     public int    _bottom;    // нижняя граница предка 
-    public String _text;      // текст подсказка
     public boolean _visible;  // рисовать или нет
     // Ctor
     public Informer(int widht,int height) {
       _widht  = widht;
       _height = height;
-      _text   = "оценка ";
       _temp   = height / 2;
     }
     public void draw(Canvas canvas) {
@@ -43,16 +40,20 @@ public class InformerView extends ViewGroup {
       else if(_y>_bottom-_height) 
         _y=_bottom-_height; // иметь просчитанным !!!
       
-      int z = (mBkgrnd.getHeight()-mStar.getHeight())/2;
-      canvas.drawBitmap(mBkgrnd,_x,_y,informerPaint);
-      canvas.drawBitmap(mStar,_x+z*2,_y+z,informerPaint);
-      canvas.drawText(""+_index,(float)(_x+mStar.getWidth()/2)+z*2,(float)(_y+z+mStar.getHeight()/1.6),informerTitlePaint);
+      int z = (Recycle.s_StarPopupBG.getHeight()-Recycle.s_StarYellow.getHeight())/2;
+      // background
+      canvas.drawBitmap(Recycle.s_StarPopupBG,_x,_y,informerPaint);
+      // star
+      canvas.drawBitmap(Recycle.s_StarYellow,_x+z*2,_y+z,informerPaint);
+      // rating
+      canvas.drawText(""+_index,(float)(_x+Recycle.s_StarYellow.getWidth()/2)+z*2,(float)(_y+z+Recycle.s_StarYellow.getHeight()/1.6),informerTitlePaint);
       if(_index==10) {
-        canvas.drawText("1",(float)(_x+mStar.getWidth())+z*5,(float)(_y+z+mStar.getHeight()/1.6),informerTitlePaint);
+        canvas.drawText("1",(float)(_x+Recycle.s_StarYellow.getWidth())+z*5,(float)(_y+z+Recycle.s_StarYellow.getHeight()/1.6),informerTitlePaint);
         // иметь просчитанным !!!
-        int n = mBkgrnd.getWidth()-mMoney.getWidth()-z*2;
-        z = (mBkgrnd.getHeight()-mMoney.getHeight())/2;
-        canvas.drawBitmap(mMoney,_x+n,_y+z,informerPaint);
+        int n = Recycle.s_StarPopupBG.getWidth()-Recycle.s_Money.getWidth()-z*2;
+        z = (Recycle.s_StarPopupBG.getHeight()-Recycle.s_Money.getHeight())/2;
+        // money
+        canvas.drawBitmap(Recycle.s_Money,_x+n,_y+z,informerPaint);
       }
       
     }
@@ -62,10 +63,6 @@ public class InformerView extends ViewGroup {
   private Button   mProfileBtn; // кнопка на профиль
   private Button   mChatBtn;    // кнопка в чат
   private Informer mInformer;   // информер текущей звезды
-  // Bitmaps
-  private Bitmap   mBkgrnd;     // Битмап для бекграунда
-  private Bitmap   mStar;       // звезда
-  private Bitmap   mMoney;      // монетка
   // Constants
   private Paint informerTitlePaint = new Paint();
   private Paint informerPaint = new Paint();
@@ -74,10 +71,6 @@ public class InformerView extends ViewGroup {
     super(context);
     
     setBackgroundColor(Color.TRANSPARENT);
-    
-    mBkgrnd = BitmapFactory.decodeResource(getResources(),R.drawable.dating_popup);
-    mStar   = BitmapFactory.decodeResource(getResources(),R.drawable.dating_star_yellow);
-    mMoney  = BitmapFactory.decodeResource(getResources(),R.drawable.dating_money);
     
     informerTitlePaint.setColor(Color.WHITE);
     informerTitlePaint.setTextSize(getResources().getDimension(R.dimen.dating_star_number));
@@ -98,7 +91,7 @@ public class InformerView extends ViewGroup {
     addView(mProfileBtn);
     
     // Informer popup
-    mInformer = new Informer(mBkgrnd.getWidth(),mBkgrnd.getHeight());
+    mInformer = new Informer(Recycle.s_StarPopupBG.getWidth(),Recycle.s_StarPopupBG.getHeight());
   }
   //---------------------------------------------------------------------------
   @Override
@@ -109,7 +102,7 @@ public class InformerView extends ViewGroup {
   //-------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    int width  = (int)(mBkgrnd.getWidth()*1.1);          // вычисление своей ширины
+    int width  = (int)(Recycle.s_StarPopupBG.getWidth()*1.1); // вычисление своей ширины
     int height = MeasureSpec.getSize(heightMeasureSpec); // вычисляем предоставленную нам высоту для отрисовки
     
     // передаем свои размеры предкам
@@ -155,19 +148,6 @@ public class InformerView extends ViewGroup {
     mProfileBtn = null;
     mChatBtn = null;
     mInformer = null;
-    
-    if(mBkgrnd!=null)
-      mBkgrnd.recycle();
-    mBkgrnd=null;
-    
-    if(mStar!=null)
-      mStar.recycle();
-    mStar=null;
-    
-    if(mMoney!=null)
-      mMoney.recycle();
-    mMoney=null;
-    
     informerTitlePaint = null;
     informerPaint = null;
   }

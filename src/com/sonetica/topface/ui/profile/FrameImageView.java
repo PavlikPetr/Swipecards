@@ -1,9 +1,7 @@
 package com.sonetica.topface.ui.profile;
 
-import com.sonetica.topface.R;
+import com.sonetica.topface.ui.Recycle;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -12,10 +10,6 @@ import android.widget.ImageView;
 public class FrameImageView extends ImageView {
   // Data
   public boolean mOnlineState; 
-  private Bitmap mFrameBitmap;
-  private Bitmap mOnlineBitmap;
-  private Bitmap mOfflineBitmap;
-  private Bitmap mPeopleBitmap;
   //---------------------------------------------------------------------------
   public FrameImageView(Context context) {
     this(context,null);
@@ -23,16 +17,11 @@ public class FrameImageView extends ImageView {
   //---------------------------------------------------------------------------
   public FrameImageView(Context context,AttributeSet attrs) {
     super(context,attrs);
-    
-    mFrameBitmap   = BitmapFactory.decodeResource(getResources(),R.drawable.profile_frame_photo);
-    mOnlineBitmap  = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
-    mOfflineBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
-    mPeopleBitmap  = BitmapFactory.decodeResource(getResources(),R.drawable.icon_people);
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    setMeasuredDimension(mFrameBitmap.getWidth(),mFrameBitmap.getHeight());
+    setMeasuredDimension(Recycle.s_ProfilePhotoFrame.getWidth(),Recycle.s_ProfilePhotoFrame.getHeight());
   }  
   //---------------------------------------------------------------------------
   @Override
@@ -40,9 +29,9 @@ public class FrameImageView extends ImageView {
     super.onDraw(canvas);
     Drawable canvasDrawable = getDrawable();
     if(canvasDrawable == null) {
-      int x = (mFrameBitmap.getWidth()-mPeopleBitmap.getWidth())/2;
-      int y = (mFrameBitmap.getHeight()-mPeopleBitmap.getHeight())/2;
-      canvas.drawBitmap(mPeopleBitmap,x,y,null);
+      int x = (Recycle.s_ProfilePhotoFrame.getWidth()-Recycle.s_People.getWidth())/2;
+      int y = (Recycle.s_ProfilePhotoFrame.getHeight()-Recycle.s_People.getHeight())/2;
+      canvas.drawBitmap(Recycle.s_People,x,y,null);
     }
       //try {
         /*
@@ -60,24 +49,15 @@ public class FrameImageView extends ImageView {
         canvas.drawBitmap(mScaledBitmap,0,0,null);
         */
         // фрейм с тенюшкой
-        canvas.drawBitmap(mFrameBitmap,0,0,null);
+        canvas.drawBitmap(Recycle.s_ProfilePhotoFrame,0,0,null);
         
         // online state                      // ЗАРАНИЕ ПРОСЧИТАТЬ КООРДИНАТЫ
-        canvas.drawBitmap(mOnlineState ? mOnlineBitmap : mOfflineBitmap,(int)(getWidth()-mOnlineBitmap.getWidth()*1.5),mOnlineBitmap.getHeight()/2,null);
+        canvas.drawBitmap(mOnlineState ? Recycle.s_Online : Recycle.s_Offline,(int)(getWidth()-Recycle.s_Online.getWidth()*1.5),Recycle.s_Online.getHeight()/2,null);
         
       //} catch(Exception e) {
         //e.printStackTrace();
       //}
     //}
-  }
-  //---------------------------------------------------------------------------
-  public void release() {
-    mFrameBitmap.recycle();
-    mFrameBitmap=null;
-    mOnlineBitmap.recycle();
-    mOnlineBitmap=null;
-    mOfflineBitmap.recycle();
-    mOfflineBitmap=null;
   }
   //---------------------------------------------------------------------------
 }

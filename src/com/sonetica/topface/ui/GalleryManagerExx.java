@@ -1,19 +1,9 @@
 package com.sonetica.topface.ui;
 
-import java.util.LinkedList; 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import com.sonetica.topface.data.AbstractData;
-import com.sonetica.topface.utils.Device;
-import com.sonetica.topface.utils.MemoryCache;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.widget.ImageView;
-
 /*
  *  Менеджер изображений, загрузает и кеширует изображения
  */
-public class GalleryManagerExx {
+public class GalleryManagerExx  { /*
   // Data
   private MemoryCache mCacheManager;
   private ExecutorService mThreadsPool;
@@ -79,8 +69,5 @@ public class GalleryManagerExx {
     //mCacheManager.clear();
   }
   //---------------------------------------------------------------------------
+  */
 }
-
-
-
-

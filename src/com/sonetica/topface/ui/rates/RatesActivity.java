@@ -148,9 +148,6 @@ public class RatesActivity extends Activity {
       mAvatarManager.release();
       mAvatarManager=null;
     }
-    if(StarView.mStarYellow!=null)
-      StarView.mStarYellow.recycle();
-    StarView.mStarYellow=null;
     
     mProgressDialog=null;
   }

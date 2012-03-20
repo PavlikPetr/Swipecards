@@ -1,21 +1,10 @@
 package com.sonetica.topface.ui.dashboard;
 
-import com.sonetica.topface.R;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.util.AttributeSet;
-import android.widget.Button;
-
-/*
+/*  НЕ ИСПОЛЬЗУЕТСЯ
  *  Класс для кнопок на Dashboard активити 
  *  для отображения поверх кнопки иконки кол-во сообщений, оценок и т.д.
  */
-public class DashboardButton extends Button {
+public class DashboardButton{} /* extends Button {
   // Data
   public int mNotify;
   public static Bitmap mRedNews;
@@ -46,5 +35,6 @@ public class DashboardButton extends Button {
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     super.onMeasure(widthMeasureSpec,heightMeasureSpec);
   }
-  //--------------------------------------------------------------------------- 
+  //---------------------------------------------------------------------------
 }
+  */

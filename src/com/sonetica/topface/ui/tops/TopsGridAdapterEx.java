@@ -1,25 +1,9 @@
 package com.sonetica.topface.ui.tops;
 
-import java.util.LinkedList;
-import com.sonetica.topface.R;
-import com.sonetica.topface.data.TopUser;
-import com.sonetica.topface.ui.ThumbView;
-import com.sonetica.topface.utils.Debug;
-import com.sonetica.topface.utils.Device;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-
 /*
  * Класс адаптера для отображения галереи в Топ активити
  */
-public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
+public class TopsGridAdapterEx{} /* extends BaseAdapter implements OnScrollListener {
   // Data
   private LayoutInflater mInflater;
   private LinkedList<TopUser> mData;
@@ -95,26 +79,25 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
     
     imageView.setImageResource(R.drawable.im_black_square);
     
-    /*
-    mThread.execute(new Runnable() {
-      @Override
-      public void run() {
-        final Bitmap rawBitmap = Http.bitmapLoader(mData.get(position).getLink());
-        if(rawBitmap==null)
-          return;
-        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
-        if(scaledBitmap!=null) {
-          imageView.post(new Runnable() {
-            @Override
-            public void run() {
-              imageView.setImageBitmap(scaledBitmap);
-            }
-          });
-          mArray[position] = scaledBitmap;
-        }
-      }
-    });
-    */
+//    mThread.execute(new Runnable() {
+//      @Override
+//      public void run() {
+//        final Bitmap rawBitmap = Http.bitmapLoader(mData.get(position).getLink());
+//        if(rawBitmap==null)
+//          return;
+//        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
+//        if(scaledBitmap!=null) {
+//          imageView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//              imageView.setImageBitmap(scaledBitmap);
+//            }
+//          });
+//          mArray[position] = scaledBitmap;
+//        }
+//      }
+//    });
+
   }
   //---------------------------------------------------------------------------
   @Override
@@ -141,33 +124,32 @@ public class TopsGridAdapterEx extends BaseAdapter implements OnScrollListener {
     Debug.log(this,"state : " + isScrolled);
   }
   //---------------------------------------------------------------------------
-  /*
-  private Runnable RUN = new Runnable() {
-    @Override
-    public void run() {
-      
-      while(!isScrolled) {
-        final Bitmap rawBitmap = Http.bitmapLoader(mData.get(position).getLink());
-        if(rawBitmap==null)
-          return;
-        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
-        if(scaledBitmap!=null) {
-          imageView.post(new Runnable() {
-            @Override
-            public void run() {
-              imageView.setImageBitmap(scaledBitmap);
-            }
-          });
-          mArray[position] = scaledBitmap;
-        }
-      }
-      
-    }
-  };
-  */
+//  private Runnable RUN = new Runnable() {
+//    @Override
+//    public void run() {
+//      
+//      while(!isScrolled) {
+//        final Bitmap rawBitmap = Http.bitmapLoader(mData.get(position).getLink());
+//        if(rawBitmap==null)
+//          return;
+//        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(rawBitmap,mBitmapWidth,mBitmapHeight,false);
+//        if(scaledBitmap!=null) {
+//          imageView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//              imageView.setImageBitmap(scaledBitmap);
+//            }
+//          });
+//          mArray[position] = scaledBitmap;
+//        }
+//      }
+//      
+//    }
+//  };
+//  
   //---------------------------------------------------------------------------
 }
-
+*/
 
 
 

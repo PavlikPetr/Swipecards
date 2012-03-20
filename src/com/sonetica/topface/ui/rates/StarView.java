@@ -1,9 +1,8 @@
 package com.sonetica.topface.ui.rates;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.ui.Recycle;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,7 +15,6 @@ public class StarView extends View {
   public int mRate;
   private float x;
   private float y;
-  public static Bitmap mStarYellow;
   private static final Paint paintNumber = new Paint();
   //---------------------------------------------------------------------------
   public StarView(Context context,AttributeSet attrs) {
@@ -27,24 +25,22 @@ public class StarView extends View {
     paintNumber.setTypeface(Typeface.DEFAULT_BOLD);
     paintNumber.setAntiAlias(true);
     paintNumber.setTextAlign(Paint.Align.CENTER);
-    
-    mStarYellow = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow);
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     // центрирование цифры 
-    x = (mStarYellow.getWidth()/2);
-    y = (mStarYellow.getHeight()/2+paintNumber.getTextSize()/2);
+    x = (Recycle.s_StarYellow.getWidth()/2);
+    y = (Recycle.s_StarYellow.getHeight()/2+paintNumber.getTextSize()/2);
     
-    setMeasuredDimension(mStarYellow.getWidth(),mStarYellow.getHeight());
+    setMeasuredDimension(Recycle.s_StarYellow.getWidth(),Recycle.s_StarYellow.getHeight());
   }  
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     
-    canvas.drawBitmap(mStarYellow,0,0,paintNumber);
+    canvas.drawBitmap(Recycle.s_StarYellow,0,0,paintNumber);
     canvas.drawText(""+mRate,x,y,paintNumber);
   }
   //---------------------------------------------------------------------------  

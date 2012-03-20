@@ -2,9 +2,8 @@ package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
+import com.sonetica.topface.ui.Recycle;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -36,7 +35,7 @@ public class StarsView extends View implements View.OnTouchListener {
     public Star(int x,int y,int width,int height,int index) {
       _x = x;
       _y = y;
-      _bmp_y = y + ((height - mStarYellow.getHeight()) / 2);   // центрирование по вертикале
+      _bmp_y = y + ((height - Recycle.s_StarYellow.getHeight()) / 2);   // центрирование по вертикале
       _widht   = width;
       _height  = height;
       _index   = index;
@@ -45,24 +44,24 @@ public class StarsView extends View implements View.OnTouchListener {
     public void draw(Canvas canvas) {
       if(_index==mAverageRate)  // средняя оценка
         if(!pressed)
-          canvas.drawBitmap(mStarGrey,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(Recycle.s_StarGrey,_x,_bmp_y,paintStar);
         else
-          canvas.drawBitmap(mStarGreyActive,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(Recycle.s_StarGreyActive,_x,_bmp_y,paintStar);
       
       if(_index>mAverageRate) // yellow stars
         if(!pressed)
-          canvas.drawBitmap(mStarYellow,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(Recycle.s_StarYellow,_x,_bmp_y,paintStar);
         else
-          canvas.drawBitmap(mStarYellowActive,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(Recycle.s_StarYellowActive,_x,_bmp_y,paintStar);
       
       if(_index<mAverageRate)
         if(!pressed)
-          canvas.drawBitmap(mStarBlue,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(Recycle.s_StarBlue,_x,_bmp_y,paintStar);
         else
-          canvas.drawBitmap(mStarBlueActive,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(Recycle.s_StarBlueActive,_x,_bmp_y,paintStar);
       
       // Star Index         вынести расчеты !!!!!!!!
-      canvas.drawText(""+_index,(float)(_x+mStarYellow.getWidth()/2),(float)(_bmp_y+mStarYellow.getHeight()/1.6),paintNumber);
+      canvas.drawText(""+_index,(float)(_x+Recycle.s_StarYellow.getWidth()/2),(float)(_bmp_y+Recycle.s_StarYellow.getHeight()/1.6),paintNumber);
     }
   }
   //---------------------------------------------------------------------------
@@ -72,13 +71,6 @@ public class StarsView extends View implements View.OnTouchListener {
   private Star[]  mStars;    // статичный массив объектов для отрисовки звезд;
   private InformerView mInformerView;    // обсервер текущего нажатия на экран
   private OnRateListener mRateListener;  // listener на клик по звезде
-  // Bitmaps
-  private Bitmap mStarYellow;
-  private Bitmap mStarYellowActive;
-  private Bitmap mStarBlue;
-  private Bitmap mStarBlueActive;
-  private Bitmap mStarGrey;
-  private Bitmap mStarGreyActive;
   // Paints
   private Paint paintStar   = new Paint();
   private Paint paintNumber = new Paint();
@@ -103,13 +95,6 @@ public class StarsView extends View implements View.OnTouchListener {
     paintNumber.setTypeface(Typeface.DEFAULT_BOLD);
     paintNumber.setAntiAlias(true);
     paintNumber.setTextAlign(Paint.Align.CENTER);
-    
-    mStarYellow = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow);
-    mStarYellowActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow_pressed);
-    mStarBlue = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_blue);
-    mStarBlueActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_blue_pressed);
-    mStarGrey = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_grey);
-    mStarGreyActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_grey_pressed);
   }
   //---------------------------------------------------------------------------
   // index 
@@ -198,7 +183,7 @@ public class StarsView extends View implements View.OnTouchListener {
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     int height = MeasureSpec.getSize(heightMeasureSpec); // вычисляем предоставленную нам высоту для отрисовки
-    int width  = (int)(mStarYellow.getWidth() * 1.1);    // говорим, что нам нужно больше
+    int width  = (int)(Recycle.s_StarYellow.getWidth() * 1.1); // говорим, что нам нужно больше
 
     setMeasuredDimension(width,height);
   }
@@ -237,31 +222,6 @@ public class StarsView extends View implements View.OnTouchListener {
   public void release() {
     mStars = null;
     mRateListener = null;
-    
-    if(mStarYellow!=null)
-      mStarYellow.recycle();
-    mStarYellow=null;
-    
-    if(mStarYellowActive!=null)
-      mStarYellowActive.recycle();
-    mStarYellowActive=null;
-    
-    if(mStarBlue!=null)
-      mStarBlue.recycle();
-    mStarBlue=null;
-    
-    if(mStarBlueActive!=null)
-      mStarBlueActive.recycle();
-    mStarBlueActive=null;
-    
-    if(mStarGrey!=null)
-      mStarGrey.recycle();
-    mStarGrey=null;
-    
-    if(mStarGreyActive!=null)
-      mStarGreyActive.recycle();
-    mStarGreyActive=null;
-    
     paintStar = null;
     paintNumber = null;
   }

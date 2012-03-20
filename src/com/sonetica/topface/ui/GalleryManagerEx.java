@@ -1,23 +1,10 @@
 package com.sonetica.topface.ui;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import com.sonetica.topface.Data;
-import com.sonetica.topface.R;
-import com.sonetica.topface.data.AbstractData;
-import com.sonetica.topface.utils.CacheManager;
-import com.sonetica.topface.utils.Device;
-import com.sonetica.topface.utils.Http;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.widget.ImageView;
-
 /*
  *  Менеджер изображений, загрузает и кеширует изображения
  */
 public class GalleryManagerEx {
+  /*
   // Data
   private CacheManager mCacheManager;
   private ExecutorService mThreadsPool;
@@ -55,12 +42,12 @@ public class GalleryManagerEx {
   //---------------------------------------------------------------------------
   public void getImage(final int position,final ImageView imageView) {
     mLinkCache.put(imageView,position);
-    /*
-    if(!mRunning) {
-      imageView.setImageResource(R.drawable.im_black_square);
-      return;
-    }
-    */
+
+//    if(!mRunning) {
+//      imageView.setImageResource(R.drawable.im_black_square);
+//      return;
+//    }
+
     final Bitmap bitmap = mCacheManager.get(position,mDataList.get(position).getBigLink());
     if(bitmap!=null)
       imageView.setImageBitmap(bitmap);
@@ -131,6 +118,7 @@ public class GalleryManagerEx {
     //mCacheManager.clear();
   }
   //---------------------------------------------------------------------------
+  */
 }
 
 

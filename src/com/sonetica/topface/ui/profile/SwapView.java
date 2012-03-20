@@ -1,16 +1,6 @@
 package com.sonetica.topface.ui.profile;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.VelocityTracker;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewConfiguration;
-import android.widget.Scroller;
-
-public class SwapView extends ViewGroup {
+public class SwapView{}/* extends ViewGroup {
   //-------------------------------------------------------------------------
   // interface OnSwapListener
   //-------------------------------------------------------------------------
@@ -178,14 +168,12 @@ public class SwapView extends ViewGroup {
     invalidate();
   }
   //-------------------------------------------------------------------------
-  /*
-  private void setToScreen(int whichScreen) {
-    mCurrentScreen = whichScreen;
-    int newX = whichScreen * getWidth();
-    mScroller.startScroll(newX, 0, 0, 0, 10);
-    invalidate();
-  }
-  */
+//  private void setToScreen(int whichScreen) {
+//    mCurrentScreen = whichScreen;
+//    int newX = whichScreen * getWidth();
+//    mScroller.startScroll(newX, 0, 0, 0, 10);
+//    invalidate();
+//  }
   //-------------------------------------------------------------------------
   public void currentScreen(int heightScreen) {
     //if(mCurrentScreen!=heightScreen)
@@ -198,3 +186,4 @@ public class SwapView extends ViewGroup {
   } 
   //-------------------------------------------------------------------------
 }
+*/

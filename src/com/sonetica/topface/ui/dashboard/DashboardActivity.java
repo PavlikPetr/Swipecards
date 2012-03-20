@@ -10,6 +10,7 @@ import com.sonetica.topface.net.Response;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.LogActivity;
 import com.sonetica.topface.ui.LeaksActivity;
+import com.sonetica.topface.ui.Recycle;
 import com.sonetica.topface.ui.dating.DatingActivity;
 import com.sonetica.topface.ui.inbox.InboxActivity;
 import com.sonetica.topface.ui.likes.LikesActivity;
@@ -42,13 +43,12 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   // Data
   private boolean mBlock;
   private boolean mIsUpdateNotify;
-  
   private TextView mLikesNotify;
   private TextView mInboxNotify;
   private TextView mRatesNotify;
-
   private NotifyHandler  mNotifyHandler;
   private ProgressDialog mProgressDialog;
+  private int sleep_time = 1000*60;   // ВРЕМЯ ОБНОВЛЕНИЯ НОТИФИКАЦИЙ
   // Constants
   public static final int INTENT_DASHBOARD = 100;
   //---------------------------------------------------------------------------
@@ -59,6 +59,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     Debug.log(this,"+onCreate");
     
     LeaksManager.getInstance().monitorObject(this);
+    
+    Recycle.init(this);
     
     mLikesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyLikes);
     mInboxNotify = (TextView)findViewById(R.id.tvDshbrdNotifyChat);
@@ -88,6 +90,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     bitmap.recycle();
     
     update();
+    
+    //mNotifyHandler.sendEmptyMessageDelayed(0,sleep_time);
   }
   //---------------------------------------------------------------------------
   public void update() {
@@ -103,7 +107,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         Data.setProfile(profile);
         mProgressDialog.cancel();
         Imager.avatarOwnerPreloading(DashboardActivity.this.getApplicationContext());
-        mNotifyHandler.sendEmptyMessage(0);
       }
       @Override
       public void fail(int codeError,Response response) {
@@ -183,6 +186,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     
     Data.clear();
     
+    Recycle.release();
+    
     System.gc();
     
     /*
@@ -249,7 +254,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   // NotifyHandler
   //---------------------------------------------------------------------------
   class NotifyHandler extends Handler {
-    private int sleep_time = 1000*60;   // ВРЕМЯ ОБНОВЛЕНИЯ НОТИФИКАЦИЙ
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
@@ -266,7 +270,10 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
           Profile profile = Profile.parse(response,true);
           Data.updateNotification(profile);
           invalidateNotification();
-          NotifyHandler.this.sendEmptyMessageDelayed(0,sleep_time);
+          
+          //sendEmptyMessageDelayed(0,sleep_time);
+          mNotifyHandler.sendEmptyMessageDelayed(0,sleep_time);
+          
           Debug.log(DashboardActivity.this,"up");
         }
         @Override

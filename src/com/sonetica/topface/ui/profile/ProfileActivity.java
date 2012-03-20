@@ -39,7 +39,7 @@ import android.widget.TextView;
 /*
  *      "Профиль"
  */
-public class ProfileActivity extends Activity implements SwapView.OnSwapListener, View.OnClickListener, AdapterView.OnItemClickListener {
+public class ProfileActivity extends Activity implements /*SwapView.OnSwapListener,*/ View.OnClickListener, AdapterView.OnItemClickListener {
   // Data
   private int mUserId;
   private boolean mOwner;
@@ -74,7 +74,7 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
   //private TextView mStatus;
   //private TextView mJob;
   private TextView mAbout;
-  private boolean swap = true;  // проверить на оптимизацию
+  //private boolean swap = true;  // проверить на оптимизацию
   private String mUserAvatarUrl;
   // Arrows
   private ImageView mGR;
@@ -376,10 +376,9 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     mAddPhotoDialog.show();   
   }
   //---------------------------------------------------------------------------
-  @Override
-  public void onSwap() {
-    swap=!swap; // костыль на скорую руку
-  }
+//  public void onSwap() {
+//    swap=!swap; // костыль на скорую руку
+//  }
   //---------------------------------------------------------------------------
   // обработчик нажатия на кнопки
   @Override
@@ -515,10 +514,6 @@ public class ProfileActivity extends Activity implements SwapView.OnSwapListener
     //mSwapView=null;
     mProfileButton=null;
     mEroViewGroup=null;
-    
-    if(mFramePhoto!=null)
-      mFramePhoto.release();
-    mFramePhoto=null;
     
     mListView=null;
     mListEroView=null;

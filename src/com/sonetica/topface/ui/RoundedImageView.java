@@ -4,7 +4,6 @@ import com.sonetica.topface.R;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,12 +13,9 @@ import android.widget.ImageView;
 public class RoundedImageView extends ImageView {
   // Data
   private int mFrameType;
-  //private static final int mRadius = 10;
-  private static Bitmap mFrameBitmap;
-  private static Bitmap mPeopleBitmap;
   // Frames Type
-  private static final int DIALOG = 0;
-  private static final int CHAT   = 1;
+  private static final int INBOX = 0;
+  private static final int CHAT  = 1;
   //---------------------------------------------------------------------------
   public RoundedImageView(Context context) {
     this(context,null);
@@ -31,17 +27,7 @@ public class RoundedImageView extends ImageView {
   //---------------------------------------------------------------------------
   public RoundedImageView(Context context, AttributeSet attrs, int defStyle) {
     super(context,attrs,defStyle);
-    
     setAttrs(attrs);
-    
-    if(mFrameBitmap==null && mFrameType==DIALOG)
-      mFrameBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_frame_photo);
-    else if(mFrameBitmap==null && mFrameType==CHAT)
-      mFrameBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.chat_frame_photo);
-    
-    if(mPeopleBitmap==null)
-      mPeopleBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.tops_heart);
-
   }
   //---------------------------------------------------------------------------
   private void setAttrs(AttributeSet attrs) {
@@ -56,10 +42,10 @@ public class RoundedImageView extends ImageView {
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    if(mFrameType==DIALOG)
-      setMeasuredDimension(mFrameBitmap.getWidth(),mFrameBitmap.getHeight());
+    if(mFrameType==INBOX)
+      setMeasuredDimension(Recycle.s_InboxFrame.getWidth(),Recycle.s_InboxFrame.getHeight());
     else if(mFrameType==CHAT)
-      setMeasuredDimension(mFrameBitmap.getWidth(),mFrameBitmap.getHeight());
+      setMeasuredDimension(Recycle.s_ChatFrame.getWidth(),Recycle.s_ChatFrame.getHeight());
   }  
   //---------------------------------------------------------------------------
   @Override
@@ -84,16 +70,20 @@ public class RoundedImageView extends ImageView {
         canvas.drawBitmap(mScaledBitmap,0,0,null);
         
         // фрейм с тенюшкой
-        canvas.drawBitmap(mFrameBitmap,0,0,null); 
+        if(mFrameType==INBOX)
+          canvas.drawBitmap(Recycle.s_InboxFrame,0,0,null);
+        else if(mFrameType==CHAT)
+          canvas.drawBitmap(Recycle.s_ChatFrame,0,0,null);
         
       } catch(Exception e) {
         e.printStackTrace();
       }
-    } else {
-      int x = (mFrameBitmap.getWidth()-mPeopleBitmap.getWidth())/2;
-      int y = (mFrameBitmap.getHeight()-mPeopleBitmap.getHeight())/2;
-      canvas.drawBitmap(mPeopleBitmap,x,y,null);
-    }
+    } 
+//    else {
+//      int x = (mFrameBitmap.getWidth()-mPeopleBitmap.getWidth())/2;
+//      int y = (mFrameBitmap.getHeight()-mPeopleBitmap.getHeight())/2;
+//      canvas.drawBitmap(mPeopleBitmap,x,y,null);
+//    }
     
   }
   //---------------------------------------------------------------------------

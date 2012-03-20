@@ -1,9 +1,6 @@
 package com.sonetica.topface.ui;
 
-import com.sonetica.topface.R;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,34 +10,21 @@ import android.widget.ImageView;
 
 public class ThumbView extends ImageView {
   // Data
-  public int     mPercent;
-  public int     mAge;
-  public String  mName;
+  public int mPercent;
+  public int mAge;
+  public int mCity;
+  public String mName;
   public boolean mOnline;
-  public int     mCity;
   // Constants
-  //private static Bitmap mPeople;
-  public static Bitmap mOnlineBmp;
-  public static Bitmap mOfflineBmp;
-  public static Bitmap mHeartBmp;
   public static Paint s_PaintState;
   public static Paint s_PaintLine;
   public static Paint s_PaintText;
-
   //---------------------------------------------------------------------------
   public ThumbView(Context context,AttributeSet attrs) {
     super(context,attrs);
     
     setBackgroundColor(Color.TRANSPARENT);
-    setScaleType(ScaleType.CENTER);
-    
-    //mPeople     = BitmapFactory.decodeResource(getResources(),R.drawable.icon_people);
-    if(mHeartBmp == null)
-      mHeartBmp = BitmapFactory.decodeResource(getResources(),R.drawable.tops_heart);
-    if(mOnlineBmp == null)
-      mOnlineBmp = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
-    if(mOfflineBmp == null)
-      mOfflineBmp = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
+
     if(s_PaintState == null) {
       s_PaintState = new Paint();
       s_PaintState.setColor(Color.WHITE);
@@ -61,39 +45,35 @@ public class ThumbView extends ImageView {
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
-    super.onDraw(canvas);
-    
     int width  = getMeasuredWidth();
     int height = getMeasuredHeight();
+
+    int _x = (width-Recycle.s_People.getWidth())/2;
+    int _y = (height-Recycle.s_People.getHeight())/2;
+    canvas.drawBitmap(Recycle.s_People,_x,_y,null);
     
-    // People
-    //canvas.drawBitmap(mPeople,(width-mPeople.getWidth())/2,(height-mPeople.getHeight())/2,s_PaintState);
-    
-    //Bitmap bitmap = ((BitmapDrawable)getDrawable()).getBitmap();
-    //canvas.drawBitmap(bitmap,0,0,null);
+    super.onDraw(canvas);
+
     Rect lineRect = new Rect(0,height-32,width,height);
     canvas.drawRect(lineRect,s_PaintLine);
-    
-    // city
-    //canvas.drawText(mCity+"",10,20,s_PaintText);
-    
-    if(mPercent!=0) {
-        float x = lineRect.left+mHeartBmp.getWidth()/2;
-        float y = (lineRect.height()-mHeartBmp.getHeight())/2;
+
+    if(mPercent!=0) {  // tops
+        float x = lineRect.left+Recycle.s_Heart.getWidth()/2;
+        float y = (lineRect.height()-Recycle.s_Heart.getHeight())/2;
       // heart
-      canvas.drawBitmap(mHeartBmp,x,lineRect.top+y,s_PaintState);
-        x = x*2 + mHeartBmp.getWidth();
+      canvas.drawBitmap(Recycle.s_Heart,x,lineRect.top+y,s_PaintState);
+        x = x*2 + Recycle.s_Heart.getWidth();
       canvas.drawText(mPercent+" %",x,(float)(lineRect.bottom-s_PaintText.getTextSize()/1.5),s_PaintText);
-    } else {
-      float x = (float)(lineRect.right-mOnlineBmp.getWidth()*1.25);
-      float y = (lineRect.height()-mOnlineBmp.getHeight())/2; 
+    } else {  // likes
+      float x = (float)(lineRect.right-Recycle.s_Online.getWidth()*1.25);
+      float y = (lineRect.height()-Recycle.s_Online.getHeight())/2; 
       // name
-      canvas.drawText(mName+", "+mAge,lineRect.left+mHeartBmp.getWidth()/2,(float)(lineRect.bottom-s_PaintText.getTextSize()/1.5),s_PaintText);
-      // online
+      canvas.drawText(mName+", "+mAge,lineRect.left+Recycle.s_Heart.getWidth()/2,(float)(lineRect.bottom-s_PaintText.getTextSize()/1.5),s_PaintText);
+      // is online
       if(mOnline)
-        canvas.drawBitmap(mOnlineBmp,x,lineRect.top+y,s_PaintState);
+        canvas.drawBitmap(Recycle.s_Online,x,lineRect.top+y,s_PaintState);
       else
-        canvas.drawBitmap(mOfflineBmp,x,lineRect.top+y,s_PaintState);
+        canvas.drawBitmap(Recycle.s_Offline,x,lineRect.top+y,s_PaintState);
     }
   }
   //---------------------------------------------------------------------------

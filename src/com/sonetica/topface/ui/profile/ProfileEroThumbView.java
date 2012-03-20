@@ -1,9 +1,8 @@
 package com.sonetica.topface.ui.profile;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.ui.Recycle;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -19,9 +18,6 @@ public class ProfileEroThumbView extends ImageView {
   public int dislikes;   // количество отрицательных отзывов
   public boolean mOwner;
   public boolean mIsAddButton;
-  private static Bitmap mFrameBitmap;
-  private static Bitmap mEroInfo;
-  private static Bitmap mPeopleBitmap;
   private static Paint s_PaintBg;
   private static Paint s_PaintInfo;
   //---------------------------------------------------------------------------
@@ -37,18 +33,11 @@ public class ProfileEroThumbView extends ImageView {
     s_PaintBg = new Paint();
     s_PaintBg.setColor(Color.WHITE);
     s_PaintBg.setAlpha(175);
-    
-    if(mFrameBitmap==null)
-      mFrameBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.profile_frame_gallery);
-    if(mEroInfo==null)
-      mEroInfo = BitmapFactory.decodeResource(getResources(),R.drawable.profile_ero_info);
-    if(mPeopleBitmap==null)
-      mPeopleBitmap  = BitmapFactory.decodeResource(getResources(),R.drawable.icon_people);
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    setMeasuredDimension(mFrameBitmap.getWidth(),mFrameBitmap.getHeight());
+    setMeasuredDimension(Recycle.s_ProfileGalleryFrame.getWidth(),Recycle.s_ProfileGalleryFrame.getHeight());
   }
   //---------------------------------------------------------------------------
   @Override
@@ -57,9 +46,9 @@ public class ProfileEroThumbView extends ImageView {
     
     Drawable canvasDrawable = getDrawable();
     if(canvasDrawable==null && mIsAddButton!=true) {
-      int x = (mFrameBitmap.getWidth()-mPeopleBitmap.getWidth())/2;
-      int y = (mFrameBitmap.getHeight()-mPeopleBitmap.getHeight())/2;
-      canvas.drawBitmap(mPeopleBitmap,x,y,null);
+      int x = (Recycle.s_ProfileGalleryFrame.getWidth()-Recycle.s_People.getWidth())/2;
+      int y = (Recycle.s_ProfileGalleryFrame.getHeight()-Recycle.s_People.getHeight())/2;
+      canvas.drawBitmap(Recycle.s_People,x,y,null);
     }
     
     if(mOwner) {
@@ -79,15 +68,15 @@ public class ProfileEroThumbView extends ImageView {
     
     // рамка для стоимости и лайков эро фотки
     int o = 2;
-    canvas.drawBitmap(mEroInfo,0,o,null);
+    canvas.drawBitmap(Recycle.s_ProfileEroInfo,0,o,null);
     // cost
-    canvas.drawText(""+cost,(float)(mEroInfo.getWidth()/2.2),o+(float)(mEroInfo.getHeight()/2.5),s_PaintInfo);
+    canvas.drawText(""+cost,(float)(Recycle.s_ProfileEroInfo.getWidth()/2.2),o+(float)(Recycle.s_ProfileEroInfo.getHeight()/2.5),s_PaintInfo);
     // likes
-    canvas.drawText(""+likes,(float)(mEroInfo.getWidth()/3.8),o+(float)(mEroInfo.getHeight()/1.18),s_PaintInfo);
+    canvas.drawText(""+likes,(float)(Recycle.s_ProfileEroInfo.getWidth()/3.8),o+(float)(Recycle.s_ProfileEroInfo.getHeight()/1.18),s_PaintInfo);
     // dislikes
-    canvas.drawText(""+dislikes,(float)(mEroInfo.getWidth()/1.21),o+(float)(mEroInfo.getHeight()/1.18),s_PaintInfo);
+    canvas.drawText(""+dislikes,(float)(Recycle.s_ProfileEroInfo.getWidth()/1.21),o+(float)(Recycle.s_ProfileEroInfo.getHeight()/1.18),s_PaintInfo);
     
-    canvas.drawBitmap(mFrameBitmap,0,0,null);
+    canvas.drawBitmap(Recycle.s_ProfileGalleryFrame,0,0,null);
   }
   //---------------------------------------------------------------------------  
 }

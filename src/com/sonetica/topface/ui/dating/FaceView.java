@@ -1,9 +1,8 @@
 package com.sonetica.topface.ui.dating;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.ui.Recycle;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -22,11 +21,6 @@ public class FaceView extends ImageView {
   public  boolean online;
   
   private boolean mHide;
-  // Bitmaps
-  private Bitmap mOnlineBmp;
-  private Bitmap mOfflineBmp;
-  private Bitmap mShadowTopBmp;
-  private Bitmap mShadowBottomBmp;
   // Constants
   private Paint paint     = new Paint();
   private Paint paintName  = new Paint();
@@ -35,11 +29,9 @@ public class FaceView extends ImageView {
   //---------------------------------------------------------------------------
   public FaceView(Context context) {
     super(context);
-    
-    mOnlineBmp  = BitmapFactory.decodeResource(getResources(),R.drawable.im_online);
-    mOfflineBmp   = BitmapFactory.decodeResource(getResources(),R.drawable.im_offline);
-    mShadowTopBmp  = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_top);
-    mShadowBottomBmp = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_bottom);
+
+    //mShadowTopBmp  = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_top);
+    //mShadowBottomBmp = BitmapFactory.decodeResource(getResources(),R.drawable.dating_shadow_bottom);
     
     // paint
     paint.setColor(Color.RED);
@@ -59,7 +51,6 @@ public class FaceView extends ImageView {
     // name age online
     paintName.setColor(Color.WHITE);
     paintName.setTextSize(getResources().getDimension(R.dimen.name_font_size));
-    //paintName.setTypeface(Typeface.DEFAULT_BOLD);
     paintName.setAntiAlias(true);
   }
   //---------------------------------------------------------------------------
@@ -87,11 +78,11 @@ public class FaceView extends ImageView {
       offset_y-=getResources().getDimension(R.dimen.name_offset_y_size);
       String name_age = name+", "+age; 
       canvas.drawText(name_age,offset_x,offset_y,paintName);
-      float offset_z = paintName.measureText(name_age)+mOnlineBmp.getWidth()/2;
+      float offset_z = paintName.measureText(name_age)+Recycle.s_Online.getWidth()/2;
       if(online)
-        canvas.drawBitmap(mOnlineBmp,offset_x+offset_z,offset_y-mOnlineBmp.getHeight(),paint);
+        canvas.drawBitmap(Recycle.s_Online,offset_x+offset_z,offset_y-Recycle.s_Online.getHeight(),paint);
       else
-        canvas.drawBitmap(mOfflineBmp,offset_x+offset_z,offset_y-mOnlineBmp.getHeight(),paint);
+        canvas.drawBitmap(Recycle.s_Offline,offset_x+offset_z,offset_y-Recycle.s_Offline.getHeight(),paint);
       
       // status
       drawStatus(canvas,status,offset_x,offset_y);
@@ -138,22 +129,6 @@ public class FaceView extends ImageView {
   }
   //---------------------------------------------------------------------------
   public void release() {
-    if(mOnlineBmp!=null)
-      mOnlineBmp.recycle();
-    mOnlineBmp=null;
-    
-    if(mOfflineBmp!=null)
-      mOfflineBmp.recycle();
-    mOfflineBmp=null;
-    
-    if(mShadowTopBmp!=null)
-      mShadowTopBmp.recycle();
-    mShadowTopBmp=null;
-    
-    if(mShadowBottomBmp!=null)
-      mShadowBottomBmp.recycle();
-    mShadowBottomBmp=null;
-    
     paint     = null;
     paintName  = null;
     paintCity   = null;
