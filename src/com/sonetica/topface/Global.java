@@ -23,7 +23,7 @@ public class Global {
   public static final int GIRL = 0;
   public static final int BOY  = 1;
   // add photo params
-  public static final int W = 640;
+  public static final int W = 640;  // максимально разрешение для отправки фото на ТФ сервер
   public static final int H = 960;
   //---------------------------------------------------------------------------
   public static void init(Context context) {

@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 public class ProfileThumbView extends ImageView {
@@ -25,14 +24,14 @@ public class ProfileThumbView extends ImageView {
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
-    super.onDraw(canvas);
     
-    Drawable canvasDrawable = getDrawable();
-    if(canvasDrawable==null && mIsAddButton!=true) {
+    if(mIsAddButton!=true) {
       int x = (Recycle.s_ProfileGalleryFrame.getWidth()-Recycle.s_People.getWidth())/2;
       int y = (Recycle.s_ProfileGalleryFrame.getHeight()-Recycle.s_People.getHeight())/2;
       canvas.drawBitmap(Recycle.s_People,x,y,null);
     }
+    
+    super.onDraw(canvas);
     
     canvas.drawBitmap(Recycle.s_ProfileGalleryFrame,0,0,null);
     

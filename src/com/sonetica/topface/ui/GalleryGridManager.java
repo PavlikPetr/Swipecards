@@ -95,9 +95,11 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
     Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
+        Bitmap rawBitmap = null;
+        Bitmap scaledBitmap = null;
         try {
           // Исходное загруженное изображение
-          Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
+          rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
           if(rawBitmap==null) 
             return;
   
@@ -124,7 +126,7 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
           matrix.postScale(ratio,ratio);
           
           // сжатие изображения
-          Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap,0,0,width,height,matrix,true);
+          scaledBitmap = Bitmap.createBitmap(rawBitmap,0,0,width,height,matrix,true);
           
           // вырезаем необходимый размер
           final Bitmap clippedBitmap;
@@ -132,9 +134,10 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
             // у горизонтальной, вырезаем по центру
             int offset_x = (scaledBitmap.getWidth()-mBitmapWidth)/2;
             clippedBitmap = Bitmap.createBitmap(scaledBitmap,offset_x,0,mBitmapWidth,mBitmapHeight,null,false);
-          } else
+          } else {
             // у вертикальной режим с верху
             clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,mBitmapWidth,mBitmapHeight,null,false);
+          }
   
           // заливаем в кеш
           mMemoryCache.put(position,clippedBitmap);
@@ -149,6 +152,11 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
           });
         } catch (Exception e) {
           Debug.log(App.TAG,"thread error:"+e);
+        } finally {
+          if(rawBitmap!=null)
+            rawBitmap.recycle();
+          if(scaledBitmap!=null)
+            scaledBitmap.recycle();
         }
       } // run
     }); // thread

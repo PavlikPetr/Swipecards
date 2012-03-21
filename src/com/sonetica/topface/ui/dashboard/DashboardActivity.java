@@ -1,6 +1,5 @@
 package com.sonetica.topface.ui.dashboard;
 
-import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Profile;
@@ -73,7 +72,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     ((Button)findViewById(R.id.btnDshbrdTops)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDshbrdProfile)).setOnClickListener(this);
 
-    if(!App.cached && !Http.isOnline(this)){
+    if(/*!App.cached &&*/ !Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }
@@ -138,7 +137,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   //---------------------------------------------------------------------------
   @Override
   public void onClick(View view) {  
-    if(!App.cached && !Http.isOnline(this)){
+    if(/*!App.cached &&*/ !Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }

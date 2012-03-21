@@ -67,7 +67,7 @@ public class TopsActivity extends Activity {
     mActionData.city_popup_position = preferences.getInt(getString(R.string.s_tops_city_position),-1);
     
     // Data
-    mTopsList   = new LinkedList<TopUser>();
+    mTopsList = new LinkedList<TopUser>();
 
     // Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.tops_header_title));
@@ -144,6 +144,8 @@ public class TopsActivity extends Activity {
   //---------------------------------------------------------------------------
   private void update() {
     mProgressDialog.show();
+    
+    mGallery.setSelection(0);
     
     TopsRequest topRequest = new TopsRequest(getApplicationContext());
     topRequest.sex  = mActionData.sex;

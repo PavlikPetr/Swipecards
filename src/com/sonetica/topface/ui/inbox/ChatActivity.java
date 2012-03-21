@@ -156,6 +156,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
     intent.putExtra(ProfileActivity.INTENT_USER_ID,mUserId);
     intent.putExtra(ProfileActivity.INTENT_CHAT_INVOKE,true);
+    intent.putExtra(ProfileActivity.INTENT_USER_NAME,mHeaderTitle.getText());
     startActivity(intent);
   }
   //---------------------------------------------------------------------------

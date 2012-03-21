@@ -37,7 +37,6 @@ public class RoundedImageView extends ImageView {
     TypedArray a = getContext().obtainStyledAttributes(attrs,R.styleable.RoundedImageView, 0,0);
     mFrameType = a.getInteger(R.styleable.RoundedImageView_frame,0);
     a.recycle();
-
   }
   //---------------------------------------------------------------------------
   @Override
@@ -46,6 +45,8 @@ public class RoundedImageView extends ImageView {
       setMeasuredDimension(Recycle.s_InboxFrame.getWidth(),Recycle.s_InboxFrame.getHeight());
     else if(mFrameType==CHAT)
       setMeasuredDimension(Recycle.s_ChatFrame.getWidth(),Recycle.s_ChatFrame.getHeight());
+    else
+      setMeasuredDimension(0,0);
   }  
   //---------------------------------------------------------------------------
   @Override
@@ -53,38 +54,44 @@ public class RoundedImageView extends ImageView {
     super.onDraw(canvas);
     
     Drawable canvasDrawable = getDrawable();
-    if(canvasDrawable != null) {
-      try {
-        Bitmap fullSizeBitmap = ((BitmapDrawable)canvasDrawable).getBitmap();
-        int scaledWidth  = getMeasuredWidth();
-        int scaledHeight = getMeasuredHeight();
-        Bitmap mScaledBitmap;
-        if(scaledWidth == fullSizeBitmap.getWidth() && scaledHeight == fullSizeBitmap.getHeight())
-          mScaledBitmap = fullSizeBitmap;
-        else
-          mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap,scaledWidth,scaledHeight,true);
-
-        // перенес скругление в менеджер
-        //Bitmap roundBitmap = Utils.getRoundedCornerBitmap(mScaledBitmap,mScaledBitmap.getWidth(),mScaledBitmap.getHeight(),mRadius);
-        
-        canvas.drawBitmap(mScaledBitmap,0,0,null);
-        
-        // фрейм с тенюшкой
-        if(mFrameType==INBOX)
-          canvas.drawBitmap(Recycle.s_InboxFrame,0,0,null);
-        else if(mFrameType==CHAT)
-          canvas.drawBitmap(Recycle.s_ChatFrame,0,0,null);
-        
-      } catch(Exception e) {
-        e.printStackTrace();
-      }
-    } 
-//    else {
-//      int x = (mFrameBitmap.getWidth()-mPeopleBitmap.getWidth())/2;
-//      int y = (mFrameBitmap.getHeight()-mPeopleBitmap.getHeight())/2;
-//      canvas.drawBitmap(mPeopleBitmap,x,y,null);
-//    }
+    if(canvasDrawable == null)
+      return;
     
+    // Frame
+    Bitmap frameBitmap = mFrameType==INBOX ? Recycle.s_InboxFrame : Recycle.s_ChatFrame;
+    
+    // people
+    int x = (frameBitmap.getWidth()-Recycle.s_People.getWidth())/2;
+    int y = (frameBitmap.getHeight()-Recycle.s_People.getHeight())/2;
+    canvas.drawBitmap(Recycle.s_People,x,y,null);
+
+    try {
+      Bitmap fullSizeBitmap = ((BitmapDrawable)canvasDrawable).getBitmap();
+      
+      if(fullSizeBitmap==null) {
+        // фрейм с тенюшкой
+        canvas.drawBitmap(frameBitmap,0,0,null);
+      }
+      
+      int scaledWidth  = getMeasuredWidth();
+      int scaledHeight = getMeasuredHeight();
+      Bitmap mScaledBitmap;
+      if(scaledWidth == fullSizeBitmap.getWidth() && scaledHeight == fullSizeBitmap.getHeight())
+        mScaledBitmap = fullSizeBitmap;
+      else
+        mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap,scaledWidth,scaledHeight,true);
+
+      // перенес скругление в менеджер
+      //Bitmap roundBitmap = Utils.getRoundedCornerBitmap(mScaledBitmap,mScaledBitmap.getWidth(),mScaledBitmap.getHeight(),mRadius);
+      
+      canvas.drawBitmap(mScaledBitmap,0,0,null);
+      
+      // фрейм с тенюшкой
+      canvas.drawBitmap(frameBitmap,0,0,null);
+      
+    } catch(Exception e) {
+      //
+    }
   }
   //---------------------------------------------------------------------------
 }

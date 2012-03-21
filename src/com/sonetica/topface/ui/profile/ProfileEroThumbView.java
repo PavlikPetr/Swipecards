@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.graphics.drawable.Drawable;
 import android.graphics.Typeface;
 import android.widget.ImageView;
 
@@ -42,14 +41,14 @@ public class ProfileEroThumbView extends ImageView {
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
-    super.onDraw(canvas);
     
-    Drawable canvasDrawable = getDrawable();
-    if(canvasDrawable==null && mIsAddButton!=true) {
+    if(mIsAddButton!=true) {
       int x = (Recycle.s_ProfileGalleryFrame.getWidth()-Recycle.s_People.getWidth())/2;
       int y = (Recycle.s_ProfileGalleryFrame.getHeight()-Recycle.s_People.getHeight())/2;
       canvas.drawBitmap(Recycle.s_People,x,y,null);
     }
+    
+    super.onDraw(canvas);
     
     if(mOwner) {
       if(mIsAddButton) {
@@ -60,6 +59,9 @@ public class ProfileEroThumbView extends ImageView {
         paint.setTextSize(19);
         canvas.drawText(getContext().getString(R.string.profile_btn_add),getWidth()/2,getHeight()-paint.getTextSize(),paint);
       }
+      
+      canvas.drawBitmap(Recycle.s_ProfileGalleryFrame,0,0,null);
+      
       return;
     }
     

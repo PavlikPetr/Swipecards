@@ -59,7 +59,7 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
       convertView = new ProfileEroThumbView(mContext);
       ((ProfileEroThumbView)convertView).setScaleType(ScaleType.CENTER_CROP);
       ((ProfileEroThumbView)convertView).mOwner = mOwner;
-      convertView.setBackgroundResource(R.drawable.profile_bg_gallery);
+      //((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_frame_gallery);
     }
 
     
@@ -76,7 +76,7 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     if(bitmap!=null)
       ((ProfileEroThumbView)convertView).setImageBitmap(bitmap);
     else {
-      //((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_bg_gallery);
+      //((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_frame_gallery);
       loadingImage(position,((ProfileEroThumbView)convertView));
     }
     

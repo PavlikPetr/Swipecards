@@ -78,6 +78,9 @@ public class DatingGalleryAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   public View getView(final int position,View convertView, ViewGroup parent) {
+    
+    Debug.log(">>>>>>>>>>>>>>>>>>>>>>","convertView:"+convertView);
+    
     ViewHolder holder = null;
     if(convertView==null) {
       mW = mDatingControl.getWidth();

@@ -46,6 +46,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
   private boolean mAddEroState;
   private boolean mChatInvoke;
   //private SwapView mSwapView;
+  private TextView mHeaderTitle;
   private Button mProfileButton;
   private ViewGroup mEroViewGroup;
   private FrameImageView mFramePhoto;
@@ -83,6 +84,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
   private ImageView mEGR;
   //Constants
   public static final String INTENT_USER_ID = "user_id";
+  public static final String INTENT_USER_NAME = "user_name";
   public static final String INTENT_CHAT_INVOKE = "chat_invoke";
   public static final int FORM_TOP = 0;
   public static final int FORM_BOTTOM = 1;
@@ -97,9 +99,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     System.gc();
     
     LeaksManager.getInstance().monitorObject(this);
-
-    // Title Header
-    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.profile_header_title));
+    
     // Swap
     //mSwapView = ((SwapView)findViewById(R.id.swapFormView));
     //if(Data.s_gridColumn > 2)
@@ -112,6 +112,16 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
     // пришли из чата
     mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE,false);
+    
+    // name
+    String name = getIntent().getStringExtra(INTENT_USER_NAME);
+
+    // Title Header
+    mHeaderTitle = (TextView)findViewById(R.id.tvHeaderTitle);
+    if(name!=null)
+      mHeaderTitle.setText(name);
+    else
+      mHeaderTitle.setText(getString(R.string.profile_header_title));
     
     // Buttons
     if(mUserId==-1) {  

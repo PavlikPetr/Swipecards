@@ -4,6 +4,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.ui.ThumbView;
 import com.sonetica.topface.ui.GalleryGridManager;
+import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,9 @@ public class TopsGridAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   @Override
   public View getView(int position,View convertView,ViewGroup parent) {
+    
+    Debug.log(">>>>>>>>>>>>>>>>>>>>>>","GRID convertView:"+convertView);
+    
     ViewHolder holder = null;
     if(convertView==null) {
       convertView = (ViewGroup)mInflater.inflate(R.layout.item_grid_gallery, null, false);

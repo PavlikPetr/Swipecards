@@ -31,7 +31,7 @@ public class CitySearchActivity extends Activity {
   private LinkedList<City> mTopCitiesList;
   private LinkedList<City> mDataList;
   private LinkedList<String> mNameList;
-  private ProgressDialog  mProgressDialog;
+  private ProgressDialog mProgressDialog;
   // Constants
   public static final int INTENT_CITY_SEARCH_ACTIVITY = 100;
   public static final String INTENT_CITY_ID   = "city_id";
@@ -52,13 +52,13 @@ public class CitySearchActivity extends Activity {
     mNameList = new LinkedList<String>();
     
     // ListAdapter
-    mListAdapter   = new ArrayAdapter<String>(this,
-                     android.R.layout.simple_list_item_1, 
-                     android.R.id.text1, 
-                     mNameList);
+    mListAdapter = new ArrayAdapter<String>(this,
+                   android.R.layout.simple_list_item_1, 
+                   android.R.id.text1, 
+                   mNameList);
     
     // ListView
-    mCityListView  = (ListView)findViewById(R.id.lvCityList);
+    mCityListView = (ListView)findViewById(R.id.lvCityList);
     mCityListView.setAdapter(mListAdapter);
     
     // возврат значения и выход

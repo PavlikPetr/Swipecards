@@ -212,6 +212,10 @@ public class DatingControl extends ViewGroup {
     return mDataList.get(mDataPosition).uid;
   }
   //---------------------------------------------------------------------------
+  public String getUserName() {
+    return mDataList.get(mDataPosition).first_name;
+  }
+  //---------------------------------------------------------------------------
   public void setOnNeedUpdateListener(OnNeedUpdateListener onNeedUpdateListener) {
     mOnNeedUpdateListener = onNeedUpdateListener;
   }

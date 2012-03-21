@@ -62,22 +62,29 @@
 		            android:layout_height="wrap_content"
 		            android:layout_centerInParent="true"
 		            android:layout_centerVertical="true"
+		            android:gravity="center"
 		            android:text="@string/ero_album_btn_buy"
 		            android:textColor="@drawable/clr_text_btn"
 		            android:background="@drawable/album_ero_next_selector"
 		            android:visibility="invisible"
 		            android:orientation="horizontal" >
-            <TextView 
+            <TextView
+                android:id="@+id/tvEroPhotoCost" 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_vertical"
+                android:layout_marginRight="4dp"
+                android:gravity="center"
                 android:textColor="#303030"
                 android:textSize="12sp"
-                android:text="@string/profile_btn_exit"
                 android:textStyle="bold"
-                android:drawableLeft="@drawable/profile_logout"
+                android:drawableRight="@drawable/dating_money"
                 android:drawablePadding="4dp" />
+            <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:gravity="center"
+		            android:text="@string/ero_album_btn_next"
+	            android:textColor="@drawable/clr_text_btn" />
           </LinearLayout>
 
         <Button

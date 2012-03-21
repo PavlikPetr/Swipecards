@@ -11,8 +11,8 @@ import org.acra.annotation.ReportsCrashes;
 @ReportsCrashes(formKey="dEFCekVNeDJEaDZHcjQyU1k2ZWtTbGc6MQ")
 public class App extends Application {
   // Data
-  public static int state;       // стейт работы приложения
-  public static boolean cached;  // отображать данные из кеша
+  //public static int state;       // стейт работы приложения
+  //public static boolean cached;  // отображать данные из кеша
   // Constants
   public static final String TAG = "TopFace";
   // Working states

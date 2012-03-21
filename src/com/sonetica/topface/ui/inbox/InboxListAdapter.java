@@ -5,6 +5,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.RoundedImageView;
+import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -72,6 +73,9 @@ public class InboxListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
+    
+    Debug.log(">>>>>>>>>>>>>>>>>>>>>>","GRID convertView:"+convertView); 
+    
     ViewHolder holder;
     
     int type = getItemViewType(position);

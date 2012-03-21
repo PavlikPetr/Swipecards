@@ -31,6 +31,7 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
   private int mUserId;
   private TextView mMoney;
   private TextView mCounter;
+  private TextView mPhotoCost;
   private Button mLikeButton;
   private Button mDislikeButton;
   private View mBuyButton;
@@ -102,6 +103,9 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
       }
     });
     
+    //
+    mPhotoCost = (TextView)findViewById(R.id.tvEroPhotoCost);
+    
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
     mCurrentPos = getIntent().getIntExtra(INTENT_ALBUM_POS,-1);
 
@@ -147,6 +151,8 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
     
     final Album album = mAlbumsList.get(mCurrentPos);
     
+    mPhotoCost.setText(""+album.cost);  // стоимость фото
+    
     if(album.buy) {  // данная фотография уже куплена
       
       if(mAlbumsList.size()==1) {
@@ -166,7 +172,6 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
       t.start();
 
     } else {  // запрос на покупку
-
       PhotoOpenRequest photoOpenRequest = new PhotoOpenRequest(getApplicationContext());
       photoOpenRequest.uid = mUserId;
       photoOpenRequest.photo = album.id;
@@ -225,10 +230,14 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
       int nextPos = mCurrentPos + 1;
       if(nextPos >= mAlbumsList.size())
         nextPos = 0;
+      
+      mPhotoCost.setText(""+mAlbumsList.get(nextPos).cost);  // стоимость фото
+      
       if(mAlbumsList.get(nextPos).buy)
         controlVisibility(S_SHOW_NEXT);
-      else
+      else {
         controlVisibility(S_SHOW_NEXT_BUY);
+      }
     }
     
   }

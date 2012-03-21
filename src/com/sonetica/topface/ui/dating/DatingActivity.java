@@ -223,10 +223,12 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
       case R.id.chatBtn: {
         intent = new Intent(getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mDatingControl.getUserId());
+        intent.putExtra(ChatActivity.INTENT_USER_NAME,mDatingControl.getUserName());
       } break;
       case R.id.profileBtn: {
         intent = new Intent(getApplicationContext(),ProfileActivity.class);
         intent.putExtra(ProfileActivity.INTENT_USER_ID,mDatingControl.getUserId());
+        intent.putExtra(ProfileActivity.INTENT_USER_NAME,mDatingControl.getUserName());
       } break;
     }
     startActivity(intent);
