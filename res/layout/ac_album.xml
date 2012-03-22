@@ -8,13 +8,6 @@
   <include layout="@layout/bar_header" />
   
   <!-- gallery -->
-
-  <Button
-      android:id="@+id/button1"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="sdfgsdfsdf" />
-
   <com.sonetica.topface.ui.profile.AlbumGallery
       android:id="@+id/galleryAlbum"
       android:layout_width="fill_parent"
