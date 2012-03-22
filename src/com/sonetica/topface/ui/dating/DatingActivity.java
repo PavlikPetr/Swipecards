@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /* "оценка фото" */
 public class DatingActivity extends Activity implements OnNeedUpdateListener,OnRateListener,OnClickListener{
@@ -63,8 +64,10 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     // Resources Buying Button
     ((ResourcesView)findViewById(R.id.datingRes)).setOnClickListener(this);
     
+    // Progress Bar
     mProgress = (ProgressBar)findViewById(R.id.pgrsDating);
-        
+    
+    // Resourse Plus
     View ivDatingPlus = findViewById(R.id.datingPlus);
     ivDatingPlus.setVisibility(View.VISIBLE);
     ivDatingPlus.setEnabled(true);
@@ -97,7 +100,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     update(true);
   }
   //---------------------------------------------------------------------------
-  public void update(final boolean firstQuery) {
+  private void update(final boolean firstQuery) {
     Debug.log(this,"update");
     SearchRequest request = new SearchRequest(this.getApplicationContext());
     request.limit  = 20;
@@ -168,7 +171,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
       return;
     }
      
-    if(Data.s_Money <= 0) {
+    if(rate==10 && Data.s_Money <= 0) {
       startActivity(new Intent(getApplicationContext(),BuyingActivity.class));
       return;
     }
@@ -190,6 +193,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
         message.callback(new ApiHandler() {
           @Override
           public void success(Response response) {
+            Toast.makeText(getApplicationContext(),getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
           }
           @Override
           public void fail(int codeError,Response response) {

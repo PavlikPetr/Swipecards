@@ -8,6 +8,7 @@ import com.sonetica.topface.data.TopUser;
 import com.sonetica.topface.net.*;
 import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.ui.GalleryGridManager;
+import com.sonetica.topface.ui.ThumbView;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
@@ -109,25 +110,9 @@ public class TopsActivity extends Activity {
     mGallery.setAnimationCacheEnabled(false);
     mGallery.setScrollingCacheEnabled(false);
     mGallery.setNumColumns(Data.s_gridColumn);
-    /*
-    mGallery.setOnScrollListener(new OnScrollListener() {
-      @Override
-      public void onScrollStateChanged(AbsListView view,int scrollState) {
-        if(scrollState==SCROLL_STATE_IDLE) {
-          mGalleryManager.mRunning = true;
-          mGallery.invalidateViews();
-        } else
-          mGalleryManager.mRunning = false;
-      }
-      @Override
-      public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
-      }
-    });
-    */
     mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //mGalleryManager.stop();
         Intent intent = new Intent(TopsActivity.this.getApplicationContext(),ProfileActivity.class);
         intent.putExtra(ProfileActivity.INTENT_USER_ID,mTopsList.get(position).uid);
         startActivityForResult(intent,0);
@@ -208,7 +193,7 @@ public class TopsActivity extends Activity {
     }).exec();
   }
   //---------------------------------------------------------------------------
-  void showCitiesDialog() {
+  private void showCitiesDialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(getString(R.string.filter_select_city));
     int arraySize = Data.s_CitiesList.size();
@@ -244,6 +229,8 @@ public class TopsActivity extends Activity {
     editor.commit();
     
     release();
+    
+    ThumbView.release();
     
     Debug.log(this,"-onDestroy");
     super.onDestroy();

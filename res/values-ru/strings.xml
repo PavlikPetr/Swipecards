@@ -6,6 +6,7 @@
   <string name="internet_off">Нет подключения к Интернет</string>
   <string name="dialog_loading">Загрузка</string>
   <string name="default_city">Москва</string>
+  <string name="btn_ok">Ok</string>
   
   <!-- Social Activity  -->
   <string name="social_btn_vk">Войти через ВКонтакте</string>
@@ -42,7 +43,7 @@
   <string name="tops_btn_city">Город</string>
   
   <!-- Profile Activity -->
-  <string name="profile_header_title">Профиль</string>
+  <string name="profile_header_title">Мой профиль</string>
   <string name="profile_btn_chat">Поболтать</string>
   <string name="profile_btn_edit">Редактировать</string>
   <string name="profile_btn_form">Анкета</string>
@@ -77,6 +78,9 @@
   <string name="profile_coin_2">2 монеты</string>
   <string name="profile_coin_3">3 монеты</string>
   <string name="profile_ero_price">Выберите цену</string>
+  <string name="profile_btn_ask">Попросить заполнить анкету</string>
+  <string name="profile_msg_ask">Хочу узнать о тебе больше. Заполни, пожалуйста, анкету!</string>
+  <string name="profile_msg_sent">Отправлено</string>
 
   <!-- Dating Activity -->
   <string name="dating_header_title_him">Оцени его!</string>

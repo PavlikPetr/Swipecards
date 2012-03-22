@@ -11,6 +11,7 @@ import com.sonetica.topface.p2r.PullToRefreshGridView;
 import com.sonetica.topface.p2r.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.ui.GalleryGridManager;
+import com.sonetica.topface.ui.ThumbView;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
@@ -80,6 +81,7 @@ public class LikesActivity extends Activity {
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(LikesActivity.this.getApplicationContext(),ProfileActivity.class);
        intent.putExtra(ProfileActivity.INTENT_USER_ID,mLikesDataList.get(position).uid);
+       intent.putExtra(ProfileActivity.INTENT_USER_NAME,mLikesDataList.get(position).first_name);
        startActivityForResult(intent,0);
      }
    });
@@ -140,10 +142,6 @@ public class LikesActivity extends Activity {
       mGalleryGridManager.release();
       mGalleryGridManager=null;
     }
-    
-//    ThumbView.s_PaintState=null;
-//    ThumbView.s_PaintLine=null;
-//    ThumbView.s_PaintText=null;
 
     mGallery=null;
     
@@ -157,13 +155,10 @@ public class LikesActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    // Сохранение параметров
-    //SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-    //SharedPreferences.Editor editor = preferences.edit();
-    //editor.putInt(getString(R.string.s_likes_city_id),mCurrentCity);
-    //editor.commit();
     
     release();
+    
+    ThumbView.release();
     
     Debug.log(this,"-onDestroy");
     super.onDestroy();

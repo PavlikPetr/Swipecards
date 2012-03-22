@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.inbox;
 
 import java.util.LinkedList;
-import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.History;
 import com.sonetica.topface.net.ApiHandler;
@@ -34,11 +33,9 @@ public class ChatActivity extends Activity implements View.OnClickListener {
   private LinkedList<History> mHistoryList;
   private ProgressDialog mProgressDialog;
   private boolean mProfileInvoke;
-  //private InputMethodManager mInputManager;
   private EditText mEdBox;
   private int mUserId;
   private TextView mHeaderTitle;
-  //private int mOffset;
   // Constants
   private static final int LIMIT = 20;
   public  static final String INTENT_USER_ID = "user_id";
@@ -55,9 +52,6 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     
     // Data
     mHistoryList = new LinkedList<History>();
-    
-    // Клавиатура
-    //mInputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
     
     // Title Header
     mHeaderTitle = ((TextView)findViewById(R.id.tvHeaderTitle));
@@ -102,16 +96,10 @@ public class ChatActivity extends Activity implements View.OnClickListener {
       @Override
       public void onClick(View v) {
         mProgressDialog.show();
-        // закрытие клавиатуры
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mEdBox.getWindowToken(),0);
         
-        /*
-        // скрыть клавиатуру
-        //mInputManager.hideSoftInputFromWindow(mEdBox.getWindowToken(),InputMethodManager.HIDE_IMPLICIT_ONLY);
-        */
         // формирование сообщения
         MessageRequest message = new MessageRequest(ChatActivity.this.getApplicationContext());
         message.message = mEdBox.getText().toString(); 
@@ -140,11 +128,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     });
     
     create();
-    
     update(0,false);
-    
-    // обнуление информера непрочитанных сообщений
-    Data.s_Messages = 0;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -209,9 +193,6 @@ public class ChatActivity extends Activity implements View.OnClickListener {
   }
   //---------------------------------------------------------------------------
   private void release() {
-    //mInputManager = null;
-    if(mEdBox!=null)
-      mEdBox.destroyDrawingCache();
     mEdBox = null;
     mListView = null;
     if(mAdapter!=null)

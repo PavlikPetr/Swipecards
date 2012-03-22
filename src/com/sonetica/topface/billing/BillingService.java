@@ -17,7 +17,6 @@ package com.sonetica.topface.billing;
 import com.android.vending.billing.IMarketBillingService;
 import com.sonetica.topface.billing.Consts.ResponseCode;
 import com.sonetica.topface.billing.Security.VerifiedPurchase;
-import com.sonetica.topface.utils.Debug;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -33,6 +32,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class BillingService extends Service implements ServiceConnection {
+  // Data
   private static final String TAG = "BillingService";
   private static IMarketBillingService mService;
   private static LinkedList<BillingRequest> mPendingRequests = new LinkedList<BillingRequest>();
@@ -230,6 +230,7 @@ public class BillingService extends Service implements ServiceConnection {
     }
   }
   //---------------------------------------------------------------------------
+  // Methods
   public BillingService() {
     super();
   }
@@ -253,20 +254,17 @@ public class BillingService extends Service implements ServiceConnection {
     if(Consts.ACTION_CONFIRM_NOTIFICATION.equals(action)) {
       String[] notifyIds = intent.getStringArrayExtra(Consts.NOTIFICATION_ID);
       confirmNotifications(startId,notifyIds);
-      Debug.log("MARKET","service 1: id:"+startId+",notify:"+notifyIds);
     } else if(Consts.ACTION_GET_PURCHASE_INFORMATION.equals(action)) {
       String notifyId = intent.getStringExtra(Consts.NOTIFICATION_ID);
       getPurchaseInformation(startId,new String[]{notifyId});
     } else if(Consts.ACTION_PURCHASE_STATE_CHANGED.equals(action)) {
       String signedData = intent.getStringExtra(Consts.INAPP_SIGNED_DATA);
       String signature = intent.getStringExtra(Consts.INAPP_SIGNATURE);
-      Debug.log("MARKET","service 2: data:"+signedData+",sign:"+signature);
       purchaseStateChanged(startId,signedData,signature);
     } else if(Consts.ACTION_RESPONSE_CODE.equals(action)) {
       long requestId = intent.getLongExtra(Consts.INAPP_REQUEST_ID,-1);
       int responseCodeIndex = intent.getIntExtra(Consts.INAPP_RESPONSE_CODE,ResponseCode.RESULT_ERROR.ordinal());
       ResponseCode responseCode = ResponseCode.valueOf(responseCodeIndex);
-      Debug.log("MARKET","service 3: req:"+requestId+",resp:"+responseCodeIndex);
       checkResponseCode(requestId,responseCode);
     }
   }

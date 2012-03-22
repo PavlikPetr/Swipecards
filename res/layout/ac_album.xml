@@ -8,12 +8,19 @@
   <include layout="@layout/bar_header" />
   
   <!-- gallery -->
-  <com.sonetica.topface.ui.album.AlbumGallery
+
+  <Button
+      android:id="@+id/button1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="sdfgsdfsdf" />
+
+  <com.sonetica.topface.ui.profile.AlbumGallery
       android:id="@+id/galleryAlbum"
-      android:spacing="0dp"  
-      android:fadingEdge="none"
-      android:layout_weight="1"
       android:layout_width="fill_parent"
-      android:layout_height="0dp" /> 
+      android:layout_height="0dp"
+      android:layout_weight="0.63"
+      android:fadingEdge="none"
+      android:spacing="0dp" />
   
 </LinearLayout>

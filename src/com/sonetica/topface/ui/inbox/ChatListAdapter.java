@@ -16,7 +16,7 @@ import android.widget.TextView;
 public class ChatListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
-  public class ViewHolder {
+  static class ViewHolder {
       RoundedImageView mAvatar;
       TextView  mMessage;
       TextView  mDate;
@@ -26,14 +26,9 @@ public class ChatListAdapter extends BaseAdapter {
   private Context mContext;
   private int mUserId;
   private LinkedList<History> mList;
-  //private Bitmap baby;
-  //private Bitmap me;
   private View.OnClickListener mOnAvatarListener;
-  /* содержит тип итема для отрисовки необходимого слоя */
   private LayoutInflater mInflater;
   private LinkedList<Integer> mItemLayoutList = new LinkedList<Integer>();
-  // Constants
-  //private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   // Type Item
   private static final int T_USER_PHOTO   = 0;
   private static final int T_USER_EXT     = 1;
@@ -42,7 +37,7 @@ public class ChatListAdapter extends BaseAdapter {
   private static final int T_COUNT = 4;
   //---------------------------------------------------------------------------
   public ChatListAdapter(Context context,int userId,LinkedList<History> dataList) {
-    mContext  = context;
+    mContext = context;
     mList = dataList;
     mUserId = userId;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -122,8 +117,6 @@ public class ChatListAdapter extends BaseAdapter {
       holder = (ViewHolder) convertView.getTag();
     
     History msg = getItem(position);
-    
-    //holder.mAvatar.setImageBitmap(Data.s_Profile.photo_url);
 
     switch(msg.type) {
       case History.DEFAULT:
@@ -182,7 +175,6 @@ public class ChatListAdapter extends BaseAdapter {
         break;
     }
     
-    //holder.mDate.setText(DateFormat.format(TIME_TEMPLATE,msg.created));
     Utils.formatTime(holder.mDate,msg.created);
 
     return convertView;

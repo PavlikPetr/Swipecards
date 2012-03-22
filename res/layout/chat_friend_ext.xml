@@ -16,9 +16,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="3dp"
-            android:src="@drawable/ic_launcher"
-            android:visibility="invisible"
-            android:scaleType="fitCenter" />
+            android:visibility="invisible" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@+id/user_info"

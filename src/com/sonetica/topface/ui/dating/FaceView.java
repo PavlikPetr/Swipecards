@@ -63,7 +63,6 @@ public class FaceView extends ImageView {
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     
-    //if(!mHide) {
     if(getVisibility()==View.VISIBLE) {
       // shadows
       //canvas.drawBitmap(mShadowTopBmp,0,0,paint);

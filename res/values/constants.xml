@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+  <integer name="api_version">1</integer>
   
-    <!-- General -->
+  <!-- General -->
   <string name="general_preferences_name">preferences</string>
   <string name="token_preferences_name">auth-token</string>
   <string name="api_url">http://api.topface.ru/?v=1</string>

@@ -21,22 +21,25 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
   // Data
   private LinkedList<T> mDataList;
   private HashMap<Integer,Bitmap> mCache;
-  //private ExecutorService mThreadsPool;
   private boolean mBusy;
   private int mRadius = 12;  // хард кор !!!!!!!
-  //Constants
-  //private static final int THREAD_DEFAULT = 2;
   //---------------------------------------------------------------------------
   public AvatarManager(Context context,LinkedList<T> dataList) {
     mDataList = dataList;
     mCache = new HashMap<Integer,Bitmap>();
-    //mThreadsPool = Executors.newFixedThreadPool(THREAD_DEFAULT);
   }
   //---------------------------------------------------------------------------
   public void setDataList(LinkedList<T> dataList) {
-    mDataList = dataList;
-    
     clear();
+    mDataList = dataList;
+  }
+  //---------------------------------------------------------------------------
+  public T get(int position) {
+    return mDataList.get(position);
+  }
+  //---------------------------------------------------------------------------
+  public int size() {
+    return mDataList.size();
   }
   //---------------------------------------------------------------------------
   private void clear() {
@@ -49,12 +52,65 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
     mCache.clear();
   }
   //---------------------------------------------------------------------------
-  public T get(int position) {
-    return mDataList.get(position);
+  public void getImage(final int position,final ImageView imageView) {
+    Bitmap bitmap = mCache.get(position);
+    
+    if(bitmap!=null)
+      imageView.setImageBitmap(bitmap);
+    else {
+      imageView.setImageBitmap(null);
+      if(!mBusy)
+        loadingImages(position,imageView);
+    }
   }
   //---------------------------------------------------------------------------
-  public int size() {
-    return mDataList.size();
+  private void loadingImages(final int position,final ImageView imageView) {
+    Thread t = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        Bitmap rawBitmap = null;
+        try {
+          if(mBusy) return;
+        
+          //качаем
+          rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink());
+          
+          // округляем
+          final Bitmap roundBitmap = Imager.getRoundedCornerBitmap(rawBitmap,imageView.getWidth(),imageView.getHeight(),mRadius);
+          
+          imagePost(imageView,roundBitmap);
+          
+          //clippedBitmap.recycle();
+          //clippedBitmap = null;
+          
+          mCache.put(position,roundBitmap);
+
+        } catch (Exception e) {
+          Debug.log(App.TAG,"thread error:"+e);
+        } finally {
+          if(rawBitmap!=null)
+            rawBitmap.recycle();
+          rawBitmap=null;
+        }
+      } 
+    });
+    LeaksManager.getInstance().monitorObject(t);
+    t.start();
+  }
+  //---------------------------------------------------------------------------
+  private void imagePost(final ImageView imageView,final Bitmap bitmap) {
+    imageView.post(new Runnable() {
+      @Override
+      public void run() {
+        imageView.setImageBitmap(bitmap);
+      }
+    });
+  }
+  //---------------------------------------------------------------------------
+  public void release() {
+    clear();
+    mCache = null;
+    mDataList = null;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -76,70 +132,6 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
       }
       break;
     }
-  }
-  //---------------------------------------------------------------------------
-  public void getImage(final int position,final ImageView imageView) {
-    Bitmap bitmap = mCache.get(position);
-    if(bitmap!=null)
-      imageView.setImageBitmap(bitmap);
-    else {
-      //imageView.setImageResource(R.drawable.icon_people);
-      imageView.setImageBitmap(null);
-      if(!mBusy)
-        loadingImages(position,imageView);
-    }
-  }
-  //---------------------------------------------------------------------------
-  public void loadingImages(final int position,final ImageView imageView) {
-    //mThreadsPool.execute(new Runnable() {
-    Thread t = new Thread(new Runnable() {
-      @Override
-      public void run() {
-        Bitmap rawBitmap = null;
-        Bitmap clippedBitmap = null;
-        try {
-          if(mBusy) return;
-        
-          rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink());
-          
-          clippedBitmap = Imager.clipping(rawBitmap,imageView.getWidth(),imageView.getHeight());
-          if(clippedBitmap==null)
-            return;
-          
-          final Bitmap roundBitmap = Imager.getRoundedCornerBitmap(clippedBitmap,clippedBitmap.getWidth(),clippedBitmap.getHeight(),mRadius);
-          
-          if(roundBitmap!=null) {
-            imageView.post(new Runnable() {
-              @Override
-              public void run() {
-                imageView.setImageBitmap(roundBitmap);
-              }
-            });
-            if(mCache!=null)
-              mCache.put(position,roundBitmap);
-          }
-        } catch (Exception e) {
-          Debug.log(App.TAG,"thread error:"+e);
-        } finally {
-          if(rawBitmap!=null)
-            rawBitmap.recycle();
-          if(clippedBitmap!=null)
-            clippedBitmap.recycle();
-        }
-      } 
-    });
-    LeaksManager.getInstance().monitorObject(t);
-    t.start();
-  }
-  //---------------------------------------------------------------------------
-  public void release() {
-    clear();
-    mCache = null;
-    mDataList = null;
-    
-//    if(mThreadsPool!=null)
-//      mThreadsPool.shutdown();
-//    mThreadsPool = null;
   }
   //---------------------------------------------------------------------------
 }

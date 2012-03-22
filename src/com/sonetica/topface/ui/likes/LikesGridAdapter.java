@@ -40,6 +40,7 @@ public class LikesGridAdapter extends BaseAdapter {
   @Override
   public View getView(int position,View convertView,ViewGroup parent) {
     ViewHolder holder = null;
+    
     if(convertView==null) {
       convertView = (ViewGroup)mInflater.inflate(R.layout.item_grid_gallery, null, false);
       holder = new ViewHolder();

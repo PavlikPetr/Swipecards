@@ -10,6 +10,7 @@ import android.os.Build;
  */
 public class Global {
   // Read_only Data
+  public static int API_VERSION;               // поддерживаемая версия серверного апи
   public static String API_URL;                // урл сервера топфейса для запросов
   public static String EXTERANAL_CACHE_DIR;    // путь для кеша на внешней карте памяти
   public static String SHARED_PREFERENCES_TAG; // имя файла общих настроек
@@ -27,6 +28,7 @@ public class Global {
   public static final int H = 960;
   //---------------------------------------------------------------------------
   public static void init(Context context) {
+    API_VERSION            = context.getResources().getInteger(R.integer.api_version);
     API_URL                = context.getString(R.string.api_url);
     EXTERANAL_CACHE_DIR    = context.getString(R.string.sdcard_root_path)+context.getString(R.string.sdcard_cache_path);
     SHARED_PREFERENCES_TAG = context.getString(R.string.general_preferences_name);

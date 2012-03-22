@@ -18,7 +18,7 @@ public class RatesListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
-  public static class ViewHolder {
+  static class ViewHolder {
     public RoundedImageView mAvatar;
     public TextView  mName;
     public StarView  mStar;

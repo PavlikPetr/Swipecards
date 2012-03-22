@@ -62,7 +62,6 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
       //((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_frame_gallery);
     }
 
-    
     if(position==0 && mOwner==true) {
       ((ProfileEroThumbView)convertView).mIsAddButton = true;
       ((ProfileEroThumbView)convertView).setPadding(0,0,0,20);
@@ -76,7 +75,7 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     if(bitmap!=null)
       ((ProfileEroThumbView)convertView).setImageBitmap(bitmap);
     else {
-      //((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_frame_gallery);
+      ((ProfileEroThumbView)convertView).setImageBitmap(null);
       loadingImage(position,((ProfileEroThumbView)convertView));
     }
     
@@ -88,7 +87,6 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     view.cost = album.cost;
     view.likes = album.likes;
     view.dislikes = album.dislikes;
-    //mThreadsPool.execute(new Runnable() {
     Thread t = new Thread(new Runnable() {
       @Override
       public void run() {

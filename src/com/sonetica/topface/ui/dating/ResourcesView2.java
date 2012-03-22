@@ -1,17 +1,6 @@
 package com.sonetica.topface.ui.dating;
 
-import com.sonetica.topface.Data;
-import com.sonetica.topface.R;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.view.View;
-
-public class ResourcesView2 extends View {
+public class ResourcesView2 {} /* extends View {
   // Data
   public int money;
   public int power;
@@ -79,3 +68,4 @@ public class ResourcesView2 extends View {
   }
   //---------------------------------------------------------------------------
 }
+*/

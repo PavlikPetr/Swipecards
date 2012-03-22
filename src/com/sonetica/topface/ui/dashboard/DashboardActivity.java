@@ -93,7 +93,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     //mNotifyHandler.sendEmptyMessageDelayed(0,sleep_time);
   }
   //---------------------------------------------------------------------------
-  public void update() {
+  private void update() {
     ProfileRequest profileRequest = new ProfileRequest(this,false);
     profileRequest.callback(new ApiHandler() {
       @Override
@@ -189,13 +189,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     
     System.gc();
     
-    /*
-    if(DashboardButton.mRedNews!=null)
-      DashboardButton.mRedNews.recycle();
-    DashboardButton.mRedNews=null;
-    DashboardButton.mPaint=null;
-    */
-    
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
@@ -223,8 +216,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   //---------------------------------------------------------------------------
   // Menu
   //---------------------------------------------------------------------------
-  private static final int MENU_ONE = 0;
-  private static final int MENU_PREFERENCES = 1;
   private static final int MENU_LOG = 2;
   private static final int MENU_LEAKS = 3;
   @Override
@@ -238,8 +229,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
     switch (item.getItemId()) {
-      case MENU_ONE:
-      case MENU_PREFERENCES:
       case MENU_LOG:
         startActivity(new Intent(getApplicationContext(),LogActivity.class));
         break;

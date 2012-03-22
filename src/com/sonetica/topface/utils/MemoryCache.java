@@ -30,6 +30,11 @@ public class MemoryCache {
   //---------------------------------------------------------------------------
   public void clear() {
     Debug.log(this,"memory cache clearing");
+    for(int i=0;i<mCache.size();i++) {
+      Bitmap bitmap = get(i);
+      if(bitmap!=null)
+        bitmap.recycle();
+    }
     mCache.clear();
   }
   //---------------------------------------------------------------------------  

@@ -9,6 +9,7 @@ import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.data.ProfileUser;
 import com.sonetica.topface.net.AlbumRequest;
 import com.sonetica.topface.net.ApiHandler;
+import com.sonetica.topface.net.MessageRequest;
 import com.sonetica.topface.net.PhotoAddRequest;
 import com.sonetica.topface.net.ProfilesRequest;
 import com.sonetica.topface.net.Response;
@@ -35,6 +36,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
  *      "Профиль"
@@ -110,6 +112,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     
     // свой - чужой профиль
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
+
     // пришли из чата
     mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE,false);
     
@@ -119,9 +122,11 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     // Title Header
     mHeaderTitle = (TextView)findViewById(R.id.tvHeaderTitle);
     if(name!=null)
-      mHeaderTitle.setText(name);
+      mHeaderTitle.setText(name);  // пришли из likes, rates, chat
+    else if(name==null && mUserId>0)
+      mHeaderTitle.setText("");    // пришли из tops
     else
-      mHeaderTitle.setText(getString(R.string.profile_header_title));
+      mHeaderTitle.setText(getString(R.string.profile_header_title)); // свой профиль
     
     // Buttons
     if(mUserId==-1) {  
@@ -218,29 +223,42 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
   private void getProfile() {
     Profile profile = Data.s_Profile;
     
+    // avatar
+    mFramePhoto.mOnlineState = true;
+    Http.imageLoader(profile.getBigLink(),mFramePhoto);
+    
     // основная информация
     mName.setText(profile.first_name);
     mCity.setText(profile.age+", "+profile.city_name);
+    
     mHeight.setText(""+profile.questionary_height);
+    findViewById(R.id.rowProfileHeight).setVisibility(View.VISIBLE);
     mWeight.setText(""+profile.questionary_weight);
+    findViewById(R.id.rowProfileWeight).setVisibility(View.VISIBLE);
     
     // анкета
     FormInfo formInfo = new FormInfo(getApplicationContext(),profile.sex);
     mEducation.setText(formInfo.getEducation(profile.questionary_education_id));
+    findViewById(R.id.rowProfileEducation).setVisibility(View.VISIBLE);
     mCommunication.setText(formInfo.getCommunication(profile.questionary_communication_id));
+    findViewById(R.id.rowProfileCommutability).setVisibility(View.VISIBLE);
     mCharacter.setText(formInfo.getCharacter(profile.questionary_character_id));
+    findViewById(R.id.rowProfileCharacter).setVisibility(View.VISIBLE);
     mAlcohol.setText(formInfo.getAlcohol(profile.questionary_alcohol_id));
+    findViewById(R.id.rowProfileAlcohol).setVisibility(View.VISIBLE);
     mFitness.setText(formInfo.getFitness(profile.questionary_fitness_id));
+    findViewById(R.id.rowProfileFitness).setVisibility(View.VISIBLE);
     mMarriage.setText(formInfo.getMarriage(profile.questionary_marriage_id));
+    findViewById(R.id.rowProfileMarriage).setVisibility(View.VISIBLE);
     mFinances.setText(formInfo.getFinances(profile.questionary_finances_id));
+    findViewById(R.id.rowProfileFinances).setVisibility(View.VISIBLE);
     mSmoking.setText(formInfo.getSmoking(profile.questionary_smoking_id));
+    findViewById(R.id.rowProfileSmoking).setVisibility(View.VISIBLE);
     //mStatus.setText(profile.status);
     //mJob.setText(formInfo.getJob(profile.questionary_job_id));
     mAbout.setText(profile.status);
+    findViewById(R.id.rowProfileAbout).setVisibility(View.VISIBLE);
     
-    // avatar
-    mFramePhoto.mOnlineState = true;
-    Http.imageLoader(profile.getBigLink(),mFramePhoto);
   }
   //---------------------------------------------------------------------------
   // чужой профиль
@@ -256,34 +274,107 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
           return;
         ProfileUser profile = ProfileUser.parse(userId,response);
         
+        mHeaderTitle.setText(profile.first_name);
+        
         mUserAvatarUrl=profile.avatars_small;
         
         // грузим галерею
         getUserAlbum(userId);
-
-        // основная информация
-        mName.setText(profile.first_name);
-        mCity.setText(profile.age+", "+profile.city_name);
-        mHeight.setText(""+profile.questionary_height);
-        mWeight.setText(""+profile.questionary_weight);
-        
-        // анкета
-        FormInfo formInfo = new FormInfo(ProfileActivity.this.getApplicationContext(),profile.sex);
-        mEducation.setText(formInfo.getEducation(profile.questionary_education_id));
-        mCommunication.setText(formInfo.getCommunication(profile.questionary_communication_id));
-        mCharacter.setText(formInfo.getCharacter(profile.questionary_character_id));
-        mAlcohol.setText(formInfo.getAlcohol(profile.questionary_alcohol_id));
-        mFitness.setText(formInfo.getFitness(profile.questionary_fitness_id));
-        mMarriage.setText(formInfo.getMarriage(profile.questionary_marriage_id));
-        mFinances.setText(formInfo.getFinances(profile.questionary_finances_id));
-        mSmoking.setText(formInfo.getSmoking(profile.questionary_smoking_id));
-        //mStatus.setText(profile.status);
-        //mJob.setText(formInfo.getJob(profile.questionary_job_id));
-        mAbout.setText(profile.status);
         
         // avatar
         mFramePhoto.mOnlineState = profile.online;
         Http.imageLoader(profile.getBigLink(),mFramePhoto);
+
+        int fieldCounter=0;
+        
+        // основная информация
+        mName.setText(profile.first_name);
+        mCity.setText(profile.age+", "+profile.city_name);
+        if(profile.questionary_height > 0) {
+          mHeight.setText(""+profile.questionary_height);
+          findViewById(R.id.rowProfileHeight).setVisibility(View.VISIBLE);
+          fieldCounter++;
+        }
+        if(profile.questionary_weight > 0) {
+          mWeight.setText(""+profile.questionary_weight);
+          findViewById(R.id.rowProfileWeight).setVisibility(View.VISIBLE);
+          fieldCounter++;
+        }
+        
+        // анкета
+        FormInfo formInfo = new FormInfo(ProfileActivity.this.getApplicationContext(),profile.sex);
+        String value = formInfo.getEducation(profile.questionary_education_id);
+        if(value!=null) {
+          mEducation.setText(value);
+          findViewById(R.id.rowProfileEducation).setVisibility(View.VISIBLE);
+          fieldCounter++;
+        }
+        
+        value = formInfo.getCommunication(profile.questionary_communication_id);
+        if(value!=null) {
+          mCommunication.setText(value);
+          findViewById(R.id.rowProfileCommutability).setVisibility(View.VISIBLE);
+          fieldCounter++;
+        }
+        
+        value = formInfo.getCharacter(profile.questionary_character_id);
+        if(value!=null) {
+          mCharacter.setText(value);
+          findViewById(R.id.rowProfileCharacter).setVisibility(View.VISIBLE);
+          fieldCounter++;
+        }
+        
+        value = formInfo.getAlcohol(profile.questionary_alcohol_id);
+        if(value!=null) {
+          mAlcohol.setText(value);
+          findViewById(R.id.rowProfileAlcohol).setVisibility(View.VISIBLE);
+          fieldCounter++;
+        }
+        
+        value = formInfo.getFitness(profile.questionary_fitness_id);
+        if(value!=null) {
+          mFitness.setText(value);
+          findViewById(R.id.rowProfileFitness).setVisibility(View.VISIBLE);
+          fieldCounter++;
+        }
+        
+        value = formInfo.getMarriage(profile.questionary_marriage_id);
+        if(value!=null) {
+          mMarriage.setText(value);
+          findViewById(R.id.rowProfileMarriage).setVisibility(View.VISIBLE);
+          fieldCounter++;
+        }
+        
+        value = formInfo.getFinances(profile.questionary_finances_id);
+        if(value!=null) {
+          mFinances.setText(value);
+          findViewById(R.id.rowProfileFinances).setVisibility(View.VISIBLE);
+          fieldCounter++;
+        }
+        
+        value = formInfo.getSmoking(profile.questionary_smoking_id);
+        if(value!=null) {
+          mSmoking.setText(value);
+          findViewById(R.id.rowProfileSmoking).setVisibility(View.VISIBLE);
+          fieldCounter++;
+        }
+        
+        //mStatus.setText(profile.status);
+        //mJob.setText(formInfo.getJob(profile.questionary_job_id));
+        
+        value = profile.status;
+        if(value!=null && value.length()>1) {
+          mAbout.setText(value);
+          findViewById(R.id.rowProfileAbout).setVisibility(View.VISIBLE);
+          fieldCounter++;
+        }
+        
+        if(fieldCounter < 2) {
+          View btnAsk = findViewById(R.id.btnProfileAsk);
+          btnAsk.setVisibility(View.VISIBLE);
+          btnAsk.setOnClickListener(ProfileActivity.this);
+        }
+       
       }
       @Override
       public void fail(int codeError,Response response) {
@@ -443,6 +534,21 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
         intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
         mAddPhotoDialog.cancel();
+      } break;
+      case R.id.btnProfileAsk: {
+        findViewById(R.id.btnProfileAsk).setVisibility(View.INVISIBLE);
+        MessageRequest message = new MessageRequest(ProfileActivity.this.getApplicationContext());
+        message.message = getString(R.string.profile_msg_ask); 
+        message.userid  = mUserId;
+        message.callback(new ApiHandler() {
+          @Override
+          public void success(Response response) {
+            Toast.makeText(getApplicationContext(),getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
+          }
+          @Override
+          public void fail(int codeError,Response response) {
+          }
+        }).exec();
       } break;
     }
   }

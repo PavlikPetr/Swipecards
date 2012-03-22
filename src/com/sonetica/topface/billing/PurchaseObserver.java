@@ -16,14 +16,17 @@ import android.util.Log;
 import java.lang.reflect.Method;
 
 public abstract class PurchaseObserver {
+  // Data
   private static final String TAG = "PurchaseObserver";
   private final Activity mActivity;
   private final Handler mHandler;
   private Method mStartIntentSender;
   private Object[] mStartIntentSenderArgs = new Object[5];
+  
   @SuppressWarnings("rawtypes")
   private static final Class[] START_INTENT_SENDER_SIG = new Class[]{IntentSender.class,Intent.class,int.class,int.class,int.class};
 
+  // Methods
   public PurchaseObserver(Activity activity,Handler handler) {
     mActivity = activity;
     mHandler = handler;

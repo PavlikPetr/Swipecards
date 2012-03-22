@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -51,12 +49,6 @@ public class RoundedImageView extends ImageView {
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {
-    super.onDraw(canvas);
-    
-    Drawable canvasDrawable = getDrawable();
-    if(canvasDrawable == null)
-      return;
-    
     // Frame
     Bitmap frameBitmap = mFrameType==INBOX ? Recycle.s_InboxFrame : Recycle.s_ChatFrame;
     
@@ -64,34 +56,13 @@ public class RoundedImageView extends ImageView {
     int x = (frameBitmap.getWidth()-Recycle.s_People.getWidth())/2;
     int y = (frameBitmap.getHeight()-Recycle.s_People.getHeight())/2;
     canvas.drawBitmap(Recycle.s_People,x,y,null);
-
-    try {
-      Bitmap fullSizeBitmap = ((BitmapDrawable)canvasDrawable).getBitmap();
+    
+    // avatar
+    super.onDraw(canvas);
       
-      if(fullSizeBitmap==null) {
-        // фрейм с тенюшкой
-        canvas.drawBitmap(frameBitmap,0,0,null);
-      }
+    // фрейм с тенюшкой
+    canvas.drawBitmap(frameBitmap,0,0,null);
       
-      int scaledWidth  = getMeasuredWidth();
-      int scaledHeight = getMeasuredHeight();
-      Bitmap mScaledBitmap;
-      if(scaledWidth == fullSizeBitmap.getWidth() && scaledHeight == fullSizeBitmap.getHeight())
-        mScaledBitmap = fullSizeBitmap;
-      else
-        mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap,scaledWidth,scaledHeight,true);
-
-      // перенес скругление в менеджер
-      //Bitmap roundBitmap = Utils.getRoundedCornerBitmap(mScaledBitmap,mScaledBitmap.getWidth(),mScaledBitmap.getHeight(),mRadius);
-      
-      canvas.drawBitmap(mScaledBitmap,0,0,null);
-      
-      // фрейм с тенюшкой
-      canvas.drawBitmap(frameBitmap,0,0,null);
-      
-    } catch(Exception e) {
-      //
-    }
   }
   //---------------------------------------------------------------------------
 }

@@ -29,12 +29,14 @@ public class ThumbView extends ImageView {
       s_PaintState = new Paint();
       s_PaintState.setColor(Color.WHITE);
     }
+    
     if(s_PaintLine == null) {
       s_PaintLine = new Paint();
       s_PaintLine.setColor(Color.BLACK);
       s_PaintLine.setAlpha(154);
       
     }
+    
     if(s_PaintText == null) {
       s_PaintText = new Paint();
       s_PaintText.setColor(Color.WHITE);
@@ -56,25 +58,37 @@ public class ThumbView extends ImageView {
 
     Rect lineRect = new Rect(0,height-32,width,height);
     canvas.drawRect(lineRect,s_PaintLine);
-
-    if(mPercent!=0) {  // tops
-        float x = lineRect.left+Recycle.s_Heart.getWidth()/2;
-        float y = (lineRect.height()-Recycle.s_Heart.getHeight())/2;
+    
+    // tops
+    if(mPercent!=0) {
+      float x = lineRect.left+Recycle.s_Heart.getWidth()/2;
+      float y = (lineRect.height()-Recycle.s_Heart.getHeight())/2;
+      
       // heart
       canvas.drawBitmap(Recycle.s_Heart,x,lineRect.top+y,s_PaintState);
         x = x*2 + Recycle.s_Heart.getWidth();
       canvas.drawText(mPercent+" %",x,(float)(lineRect.bottom-s_PaintText.getTextSize()/1.5),s_PaintText);
-    } else {  // likes
+      
+    // likes
+    } else {  
       float x = (float)(lineRect.right-Recycle.s_Online.getWidth()*1.25);
       float y = (lineRect.height()-Recycle.s_Online.getHeight())/2; 
+      
       // name
       canvas.drawText(mName+", "+mAge,lineRect.left+Recycle.s_Heart.getWidth()/2,(float)(lineRect.bottom-s_PaintText.getTextSize()/1.5),s_PaintText);
+      
       // is online
       if(mOnline)
         canvas.drawBitmap(Recycle.s_Online,x,lineRect.top+y,s_PaintState);
       else
         canvas.drawBitmap(Recycle.s_Offline,x,lineRect.top+y,s_PaintState);
     }
+  }
+  //---------------------------------------------------------------------------
+  public static void release() {
+    s_PaintState = null;
+    s_PaintLine  = null;
+    s_PaintText  = null;
   }
   //---------------------------------------------------------------------------
 }

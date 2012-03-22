@@ -5,7 +5,6 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.RoundedImageView;
-import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Utils;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -19,7 +18,7 @@ public class InboxListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
-  public class ViewHolder {
+  static class ViewHolder {
     public RoundedImageView mAvatar;
     public TextView  mName;
     public TextView  mText;
@@ -73,9 +72,6 @@ public class InboxListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
-    
-    Debug.log(">>>>>>>>>>>>>>>>>>>>>>","GRID convertView:"+convertView); 
-    
     ViewHolder holder;
     
     int type = getItemViewType(position);
@@ -105,17 +101,6 @@ public class InboxListAdapter extends BaseAdapter {
       holder = (ViewHolder)convertView.getTag();
     
     Inbox inbox = getItem(position);
-    /*
-    // avatar
-    Bitmap bitmap = mAvatarManager.getImage(inbox.avatars_small);
-    if(bitmap!=null) {
-      holder.mAvatar.setImageBitmap(bitmap);
-      holder.mAvatar.setTag(null);
-    } else {
-      holder.mAvatar.setImageResource(R.drawable.ic_launcher);
-      holder.mAvatar.setTag(this);
-    }
-    */
     
     mAvatarManager.getImage(position,holder.mAvatar);
     holder.mName.setText(inbox.first_name+", "+inbox.age);
@@ -141,7 +126,7 @@ public class InboxListAdapter extends BaseAdapter {
         holder.mText.setText(mContext.getString(R.string.chat_sexuality_in));
         break;
     }
-    //holder.mTime.setText(DateFormat.format(TIME_TEMPLATE,inbox.created));
+
     Utils.formatTime(holder.mTime,inbox.created);
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
     

@@ -7,11 +7,11 @@ import android.graphics.Bitmap;
 /*
  *  Класс для хранения Битмапов с помощью слабых ссылок 
  */
-public class MemoryCacheEx {
+public class MemoryCacheS {
   // Data
   private HashMap<String,SoftReference<Bitmap>> mCache;
   //---------------------------------------------------------------------------
-  public MemoryCacheEx() {
+  public MemoryCacheS() {
     mCache = new HashMap<String, SoftReference<Bitmap>>();
   }
   //---------------------------------------------------------------------------

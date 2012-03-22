@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.album;
+package com.sonetica.topface.ui.profile;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -29,29 +29,6 @@ public class Imager {
     Data.s_UserDrw = new BitmapDrawable(context.getResources(),ava);
   }
   //---------------------------------------------------------------------------
-  public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int width, int height, int roundPx) {
-    Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
-    if(width<height)
-      height=width;
-    else
-      width=height;
-    output = clipping(output,width,height); // !!!!
-    Canvas canvas = new Canvas(output);
-
-    final Rect rect = new Rect(0, 0, width, height);
-    final RectF rectF = new RectF(rect);
-    final Paint paint = new Paint();
-    paint.setAntiAlias(true);
-    canvas.drawARGB(0, 0, 0, 0);
-    paint.setColor(0xff424242);
-    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-    canvas.drawBitmap(bitmap, rect, rect, paint);
-
-    return output;
-  }
-  //---------------------------------------------------------------------------
   public static Bitmap clipping(Bitmap rawBitmap,int bitmapWidth,int bitmapHeight) {
     if(rawBitmap==null || bitmapWidth<=0 || bitmapHeight<=0)
       return null;
@@ -89,7 +66,40 @@ public class Imager {
       // у вертикальной режим с верху
       clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,bitmapWidth,bitmapHeight,null,false);
       
+    scaledBitmap.recycle();
+    scaledBitmap = null;
+    
     return clippedBitmap;
+  }
+  //---------------------------------------------------------------------------
+  public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int width, int height, int roundPx) {
+    if(width < height)
+      height = width;
+    else
+      width = height;
+    
+    Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+    
+    Bitmap clippedBitmap = clipping(bitmap,width,height);
+    
+    bitmap.recycle();
+    bitmap=null;
+
+    Canvas canvas = new Canvas(output);
+
+    final Rect  rect  = new Rect(0, 0, width, height);
+    final RectF rectF = new RectF(rect);
+    final Paint paint = new Paint();
+    
+    paint.setAntiAlias(true);
+    paint.setColor(0xff424242);
+    canvas.drawARGB(0, 0, 0, 0);
+    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+    canvas.drawBitmap(clippedBitmap, rect, rect, paint);
+
+    return output;
   }
   //---------------------------------------------------------------------------
 }

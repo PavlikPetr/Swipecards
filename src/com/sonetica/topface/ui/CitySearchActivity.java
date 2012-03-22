@@ -119,7 +119,7 @@ public class CitySearchActivity extends Activity {
     update();
   }
   //---------------------------------------------------------------------------
-  public void update() {
+  private void update() {
     mProgressDialog.show();
     CitiesRequest citiesRequest = new CitiesRequest(this);
     citiesRequest.type = "top";
@@ -136,7 +136,7 @@ public class CitySearchActivity extends Activity {
     }).exec();
   }
   //---------------------------------------------------------------------------
-  public void city(String prefix) {
+  private void city(String prefix) {
     SearchCitiesRequest searchCitiesRequest = new SearchCitiesRequest(this);
     searchCitiesRequest.prefix = prefix;
     searchCitiesRequest.callback(new ApiHandler() {
@@ -151,7 +151,7 @@ public class CitySearchActivity extends Activity {
     }).exec();
   }
   //---------------------------------------------------------------------------
-  public void fillData(LinkedList<City> citiesList) {
+  private void fillData(LinkedList<City> citiesList) {
     mDataList.clear();
     mDataList.addAll(citiesList);
     mNameList.clear();

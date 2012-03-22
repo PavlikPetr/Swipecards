@@ -6,6 +6,7 @@
   <string name="internet_off">No Internet connection</string>
   <string name="dialog_loading">Loading</string>
   <string name="default_city">Moscow</string>
+  <string name="btn_ok">Ok</string>
   
   <!-- Social Activity  -->
   <string name="social_btn_vk">Login via VKontakte</string>
@@ -77,6 +78,9 @@
   <string name="profile_coin_2">2 coins</string>
   <string name="profile_coin_3">3 coins</string>
   <string name="profile_ero_price">Choose photo cost</string>
+  <string name="profile_btn_ask">Ask to fill questionnaire</string>
+  <string name="profile_msg_ask">I want to learn more about you. Please fill in the questionnaire!</string>
+  <string name="profile_msg_sent">Sent</string>
 
   <!-- Dating Activity -->
   <string name="dating_header_title_him">Rate him!</string>

@@ -33,7 +33,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
   private int mH = 0;              // высота
   private int mPrevPosition;         // предыдущая позиция фото в альбоме
   private int mPreRunning;           // текущая пред загружаемое фото
-  private Bitmap mRateBitmap;        // жесткая ссылка на оцениваемую фотографию
+  private Bitmap mMainBitmap;        // жесткая ссылка на оцениваемую фотографию
   private MemoryCache mCache;        // кеш фоток
   private SearchUser  mUserData;     // данные пользователя               
   private LayoutInflater mInflater;          
@@ -53,9 +53,9 @@ public class DatingGalleryAdapter extends BaseAdapter {
     // очистка
     mPreRunning = 0;
     mPrevPosition = 0;
-    if(mRateBitmap!=null)
-      mRateBitmap.recycle();
-    mRateBitmap = null;
+    if(mMainBitmap!=null)
+      mMainBitmap.recycle();
+    mMainBitmap = null;
     mCache.clear();
   }
   //---------------------------------------------------------------------------
@@ -78,10 +78,8 @@ public class DatingGalleryAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   public View getView(final int position,View convertView, ViewGroup parent) {
-    
-    Debug.log(">>>>>>>>>>>>>>>>>>>>>>","convertView:"+convertView);
-    
     ViewHolder holder = null;
+    
     if(convertView==null) {
       mW = mDatingControl.getWidth();
       mH = mDatingControl.getHeight();
@@ -100,10 +98,8 @@ public class DatingGalleryAdapter extends BaseAdapter {
     
     Bitmap bitmap = mCache.get(position);
     if(bitmap!=null && position==0) {
-      //holder.mImageView.setAlpha(255);
       holder.mImageView.setImageBitmap(bitmap);
       holder.mProgressBar.setVisibility(View.INVISIBLE);
-      //holder.mImageView.startAnimation(mAlphaAnimation);
     } else if(bitmap!=null && position!=0)
       holder.mImageView.setImageBitmap(bitmap);
     else {
@@ -154,7 +150,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
               view.setImageBitmap(bitmap);
               mDatingControl.controlVisibility(DatingControl.V_SHOW_INFO);
               view.startAnimation(mAlphaAnimation);
-              mRateBitmap = bitmap;
+              mMainBitmap = bitmap;
             } else
               view.setImageBitmap(bitmap);
             
@@ -196,9 +192,9 @@ public class DatingGalleryAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   public void release() {
-    if(mRateBitmap!=null)
-      mRateBitmap.recycle();
-    mRateBitmap = null;
+    if(mMainBitmap!=null)
+      mMainBitmap.recycle();
+    mMainBitmap = null;
     mCache.clear();
     mCache = null;
   }

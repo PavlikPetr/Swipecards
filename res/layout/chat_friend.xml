@@ -15,9 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="3dp"
-            android:src="@drawable/icon_people"
-            android:scaleType="fitCenter" />
+            android:layout_marginLeft="3dp" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@+id/user_info"

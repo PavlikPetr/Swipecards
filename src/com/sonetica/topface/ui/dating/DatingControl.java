@@ -4,11 +4,11 @@ import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.SearchUser;
-import com.sonetica.topface.ui.album.AlbumGallery;
 import com.sonetica.topface.ui.dating.DatingActivity;
 import com.sonetica.topface.ui.dating.RateControl;
 import com.sonetica.topface.ui.dating.ResourcesView;
 import com.sonetica.topface.ui.dating.FaceView;
+import com.sonetica.topface.ui.profile.AlbumGallery;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -82,7 +82,6 @@ public class DatingControl extends ViewGroup {
     mDatingGallery.setSpacing(0);
     mDatingGallery.setBackgroundColor(Color.TRANSPARENT);
     mDatingGallery.setFadingEdgeLength(0);
-    
     mDatingGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> arg0,View arg1,int position,long arg3) {
@@ -97,7 +96,6 @@ public class DatingControl extends ViewGroup {
       @Override
       public void onNothingSelected(AdapterView<?> arg0) {}
     });
-    
     mDatingGallery.setOnItemClickListener(new OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> arg0,View arg1,int position,long arg3) {
@@ -109,7 +107,6 @@ public class DatingControl extends ViewGroup {
           controlVisibility(DatingControl.V_SWAP_BACK);
       }
     });
-    
     addView(mDatingGallery);
     
     // Back Button
@@ -191,11 +188,6 @@ public class DatingControl extends ViewGroup {
     mRateControl.layout(getMeasuredWidth()-mRateControl.getMeasuredWidth(),offset_y,getMeasuredWidth(),bottom);
     
     mCounter.layout(0,(int)(getMeasuredHeight()-mCounter.getMeasuredHeight()*1.5),getMeasuredWidth(),getMeasuredHeight());
-    
-    // длина символов в статусе
-    //int x1=getMeasuredWidth();
-    //int x2=mRateControl.getMeasuredWidth();
-    //mFaceView.setTextBreak(getMeasuredWidth()/2);
   }
   //---------------------------------------------------------------------------
   public void addDataList(LinkedList<SearchUser> dataList) {
@@ -348,8 +340,6 @@ public class DatingControl extends ViewGroup {
     
     mDataList.clear();
     mDataList = null;
-    
-    Debug.log(this,"release");
   }
   //---------------------------------------------------------------------------
 }

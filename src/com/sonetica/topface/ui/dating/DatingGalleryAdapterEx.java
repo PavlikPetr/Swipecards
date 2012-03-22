@@ -1,22 +1,6 @@
 package com.sonetica.topface.ui.dating;
 
-import com.sonetica.topface.R;
-import com.sonetica.topface.data.SearchUser;
-import com.sonetica.topface.utils.Http;
-import com.sonetica.topface.utils.Imager;
-import com.sonetica.topface.utils.LeaksManager;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.animation.AlphaAnimation;
-import android.widget.BaseAdapter;
-import android.widget.Gallery;
-import android.widget.ImageView;
-
-public class DatingGalleryAdapterEx extends BaseAdapter {
+public class DatingGalleryAdapterEx{} /* extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
@@ -168,7 +152,7 @@ public class DatingGalleryAdapterEx extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
 }
-
+*/
 //  Http.imageLoaderExp(url,view);
 
 /*

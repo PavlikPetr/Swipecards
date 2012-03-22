@@ -9,12 +9,12 @@ import com.sonetica.topface.utils.CacheManager;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Device;
 import com.sonetica.topface.utils.Http;
+import com.sonetica.topface.utils.Imager;
 import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.MemoryCache;
 import com.sonetica.topface.utils.StorageCache;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
@@ -31,24 +31,18 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
   }
   //---------------------------------------------------------------------------
   // Data
-  //private int mStartPosition;
-  //private int mEndPosition;
-  //private ExecutorService mThreadsPool;  // что за хуйня с пулами потоков ???
   private LinkedList<T> mDataList;
   // кэш
   private MemoryCache  mMemoryCache;
   private StorageCache mStorageCache;
   // размеры фотографии в гриде
-  public  int mBitmapWidth;
-  public  int mBitmapHeight;
+  public int mBitmapWidth;
+  public int mBitmapHeight;
   // скролинг
-  public  boolean mBusy;
-  // Constants
-  //private static final int THREAD_DEFAULT = 4;
+  public boolean mBusy;
   //---------------------------------------------------------------------------
   public GalleryGridManager(Context context,LinkedList<T> dataList) {
     mDataList     = dataList;
-    //mThreadsPool  = Executors.newFixedThreadPool(THREAD_DEFAULT);
     mMemoryCache  = new MemoryCache();
     mStorageCache = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
     
@@ -76,7 +70,6 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
     if(bitmap!=null)
       imageView.setImageBitmap(bitmap);
     else {
-      //imageView.setImageResource(R.drawable.icon_people);
       imageView.setImageBitmap(null);
       if(!mBusy) {
         bitmap = mStorageCache.load(mDataList.get(position).getSmallLink());
@@ -87,87 +80,60 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
           loadingImages(position,imageView);
       }
     }
+    bitmap = null;
   }
   //---------------------------------------------------------------------------
   private void loadingImages(final int position,final ImageView imageView) {
-
-    //mThreadsPool.execute(new Runnable() {
     Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
         Bitmap rawBitmap = null;
-        Bitmap scaledBitmap = null;
         try {
-          // Исходное загруженное изображение
-          rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
-          if(rawBitmap==null) 
-            return;
-  
-          // Исходный размер загруженного изображения
-          int width  = rawBitmap.getWidth();
-          int height = rawBitmap.getHeight();
-          
-          // буль, длинная фото или высокая
-          boolean LEG = false;
-  
-          if(width >= height) 
-            LEG = true;
-          
           if(mBusy) return;
-       
-          // коффициент сжатия фотографии
-          float ratio = Math.max(((float)mBitmapWidth)/width,((float) mBitmapHeight)/height);
+            
+          // качаем            
+          rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink());
+
+          if(rawBitmap==null) return;
+
+          // вырезаем
+          Bitmap clippedBitmap = Imager.clipping(rawBitmap,mBitmapWidth,mBitmapHeight);
           
-          // на получение оригинального размера по ширине или высоте
-          if(ratio==0) ratio=1;
+          // отображаем
+          imagePost(imageView,clippedBitmap);
           
-          // матрица сжатия
-          Matrix matrix = new Matrix();
-          matrix.postScale(ratio,ratio);
-          
-          // сжатие изображения
-          scaledBitmap = Bitmap.createBitmap(rawBitmap,0,0,width,height,matrix,true);
-          
-          // вырезаем необходимый размер
-          final Bitmap clippedBitmap;
-          if(LEG) {
-            // у горизонтальной, вырезаем по центру
-            int offset_x = (scaledBitmap.getWidth()-mBitmapWidth)/2;
-            clippedBitmap = Bitmap.createBitmap(scaledBitmap,offset_x,0,mBitmapWidth,mBitmapHeight,null,false);
-          } else {
-            // у вертикальной режим с верху
-            clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,mBitmapWidth,mBitmapHeight,null,false);
-          }
-  
           // заливаем в кеш
           mMemoryCache.put(position,clippedBitmap);
           mStorageCache.save(mDataList.get(position).getSmallLink(),clippedBitmap);
           
-          // ui draw
-          imageView.post(new Runnable() {
-            @Override
-            public void run() {
-              imageView.setImageBitmap(clippedBitmap);
-            }
-          });
+          //clippedBitmap.recycle();  // нельзя !
+          clippedBitmap = null;
+          
         } catch (Exception e) {
           Debug.log(App.TAG,"thread error:"+e);
         } finally {
           if(rawBitmap!=null)
             rawBitmap.recycle();
-          if(scaledBitmap!=null)
-            scaledBitmap.recycle();
+          rawBitmap = null;
         }
       } // run
     }); // thread
     LeaksManager.getInstance().monitorObject(t);
     t.start();
-
+  }
+  //---------------------------------------------------------------------------
+  private void imagePost(final ImageView imageView,final Bitmap bitmap) {
+    imageView.post(new Runnable() {
+      @Override
+      public void run() {
+        imageView.setImageBitmap(bitmap);
+      }
+    });
   }
   //---------------------------------------------------------------------------
   public void release() {
-    //mThreadsPool.shutdown();
-    mMemoryCache  = null;
+    mMemoryCache.clear();
+    mMemoryCache = null;
     mStorageCache = null;
     if(mDataList!=null)
       mDataList.clear();
@@ -176,10 +142,6 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
   //---------------------------------------------------------------------------
   @Override
   public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
-//    if(!mBusy) {
-//      mStartPosition = firstVisibleItem;
-//      mEndPosition   = mStartPosition + 10; 
-//    }
   }
   //---------------------------------------------------------------------------
   @Override

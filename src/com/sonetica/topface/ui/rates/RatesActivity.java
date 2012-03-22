@@ -79,6 +79,7 @@ public class RatesActivity extends Activity {
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(RatesActivity.this.getApplicationContext(),ProfileActivity.class);
        intent.putExtra(ProfileActivity.INTENT_USER_ID,mRatesDataList.get(position).uid);
+       intent.putExtra(ProfileActivity.INTENT_USER_NAME,mRatesDataList.get(position).first_name);
        startActivityForResult(intent,0);
      }
    });

@@ -45,8 +45,6 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="3dp"
-            android:src="@drawable/ic_launcher"
-            android:visibility="invisible"
-            android:scaleType="fitCenter"/>
+            android:visibility="invisible" />
 
 </RelativeLayout>    

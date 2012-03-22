@@ -15,7 +15,6 @@
 package com.sonetica.topface.billing;
 
 import com.sonetica.topface.billing.Consts.ResponseCode;
-import com.sonetica.topface.utils.Debug;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -39,7 +38,6 @@ public class BillingReceiver extends BroadcastReceiver {
   }
 
   private void purchaseStateChanged(Context context,String signedData,String signature) {
-    Debug.log("MARKET","receiver 3:"+signedData);
     Intent intent = new Intent(Consts.ACTION_PURCHASE_STATE_CHANGED);
     intent.setClass(context,BillingService.class);
     intent.putExtra(Consts.INAPP_SIGNED_DATA,signedData);
@@ -48,7 +46,6 @@ public class BillingReceiver extends BroadcastReceiver {
   }
 
   private void notify(Context context,String notifyId) {
-    Debug.log("MARKET","receiver 2:"+notifyId);
     Intent intent = new Intent(Consts.ACTION_GET_PURCHASE_INFORMATION);
     intent.setClass(context,BillingService.class);
     intent.putExtra(Consts.NOTIFICATION_ID,notifyId);
@@ -56,7 +53,6 @@ public class BillingReceiver extends BroadcastReceiver {
   }
 
   private void checkResponseCode(Context context,long requestId,int responseCodeIndex) {
-    Debug.log("MARKET","receiver 1: req:"+requestId+",resp:"+responseCodeIndex);
     Intent intent = new Intent(Consts.ACTION_RESPONSE_CODE);
     intent.setClass(context,BillingService.class);
     intent.putExtra(Consts.INAPP_REQUEST_ID,requestId);

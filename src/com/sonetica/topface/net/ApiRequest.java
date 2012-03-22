@@ -15,12 +15,10 @@ public abstract class ApiRequest {
   public String ssid;  // volatile
   private Context mContext;
   private ApiHandler mHandler;
-  //private static ExecutorService mThreadsPool; // что за хуйня с пулом потоков ?
   //---------------------------------------------------------------------------
   public ApiRequest(Context context) {
     ssid = "";
     mContext = context;
-    //mThreadsPool = Executors.newSingleThreadExecutor();
   }
   //---------------------------------------------------------------------------
   public ApiRequest callback(ApiHandler handler) {
@@ -72,10 +70,6 @@ public abstract class ApiRequest {
       mHandler.sendMessage(Message.obtain(null,0,response));
     } else
       mHandler.sendMessage(Message.obtain(null,0,response));
-  }
-  //---------------------------------------------------------------------------
-  public static void shutdown() {
-    //mThreadsPool.shutdown();
   }
   //---------------------------------------------------------------------------
 }

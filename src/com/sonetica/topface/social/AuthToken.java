@@ -92,8 +92,3 @@ final public class AuthToken {
   }
   //---------------------------------------------------------------------------
 }//VkAuthToken
-
-//    long expeiresInLong = (long)expiresIn;
-//    if(expeiresInLong > 0)
-//      expeiresInLong = Utils.unixtime() + expeiresInLong  * 1000L;
-//    editor.putLong(getExpiresInIdKey(), expeiresInLong);

@@ -13,21 +13,15 @@ import com.sonetica.topface.data.Profile;
  */
 public class Data {
   // Data
-  /*
-  private static LinkedList<SearchUser> s_SearchList;  // dating
-  private static LinkedList<TopUser> s_TopsList;
-  private static LinkedList<Inbox> s_InboxList;
-  private static LinkedList<Like>  s_LikesList;
-  private static LinkedList<Rate>  s_RatesList;
-  private static LinkedList<City>  s_CitiesList;
-  */
   public static int s_gridColumn;
   public static int s_HeaderHeight;
   
   public static LinkedList<City>   s_CitiesList;
   public static LinkedList<Album>  s_PhotoAlbum;
   public static LinkedList<String> s_LogList;
+  
   public static Profile s_Profile;
+  
   public static Drawable s_OwnerDrw;
   public static Drawable s_UserDrw;
 
@@ -43,18 +37,8 @@ public class Data {
   public static String SSID;  // ключ для запросов к TP серверу
   //---------------------------------------------------------------------------
   public static void init(Context context) {
-    
     SSID = Data.loadSSID(context);
     s_LogList = new LinkedList<String>();
-    
-    /*
-    s_SearchList = new LinkedList<SearchUser>();
-    s_InboxList  = new LinkedList<Inbox>();
-    s_LikesList  = new LinkedList<Like>();
-    s_TopsList   = new LinkedList<TopUser>();
-    s_RatesList  = new LinkedList<Rate>();
-    s_CitiesList = new LinkedList<City>();
-    */
   }
   //---------------------------------------------------------------------------
   public static void setProfile(Profile profile) {
@@ -99,26 +83,6 @@ public class Data {
   }
   //---------------------------------------------------------------------------
   public static void clear() {
-    /*
-    s_SearchList.clear();
-    s_SearchList = null;
-    
-    s_InboxList.clear();
-    s_InboxList = null;
-    
-    s_LikesList.clear();
-    s_LikesList = null;
-    
-    s_TopsList.clear();
-    s_TopsList = null;
-    
-    s_RatesList.clear();
-    s_RatesList = null;
-    
-    s_CitiesList.clear();
-    s_CitiesList = null;
-    */
-    
     if(s_PhotoAlbum!=null) {
       s_PhotoAlbum.clear();
       s_PhotoAlbum = null;

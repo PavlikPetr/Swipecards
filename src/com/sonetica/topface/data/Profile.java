@@ -11,16 +11,17 @@ import com.sonetica.topface.utils.Debug;
  */
 public class Profile extends AbstractData {
   // Data
-  public int uid;             // id пользователя в топфейсе
-  public int age;             // возраст пользователя
-  public int sex;             // секс пользователя
-  public int unread_rates;    // количество непрочитанных оценок пользователя
-  public int unread_likes;    // количество непрочитанных “понравилось” пользователя
-  public int unread_messages; // количество непрочитанных сообщений пользователя
-  public int money;           // количество монет у пользователя
-  public int power;           // количество энергии пользователя
-  public int average_rate;    // средняя оценка текущего пользователя
-  public int city_id;         // идентификтаор города пользователя
+  public int uid;                // id пользователя в топфейсе
+  public int age;                // возраст пользователя
+  public int sex;                // секс пользователя
+  public int unread_rates;       // количество непрочитанных оценок пользователя
+  public int unread_likes;       // количество непрочитанных “понравилось” пользователя
+  public int unread_messages;    // количество непрочитанных сообщений пользователя
+  public int unread_symphaties;  // количество непрочитанных симпатий
+  public int money;              // количество монет у пользователя
+  public int power;              // количество энергии пользователя
+  public int average_rate;       // средняя оценка текущего пользователя
+  public int city_id;            // идентификтаор города пользователя
   public String status;          // статус пользователя
   public String city_name;       // название города пользователя
   public String city_full;       // полное название города пользвоателя
@@ -62,6 +63,7 @@ public class Profile extends AbstractData {
         profile.unread_rates    = resp.optInt("unread_rates");
         profile.unread_likes    = resp.optInt("unread_likes");
         profile.unread_messages = resp.optInt("unread_messages");
+        profile.unread_symphaties = resp.optInt("unread_symphaties");
         profile.average_rate    = resp.optInt("average_rate");
         profile.money = resp.optInt("money");
         profile.power = resp.optInt("power");

@@ -29,7 +29,7 @@ public class FormInfo {
       case 5: return mResources.getString(mSex==0?R.string.profile_form_education_female_5:R.string.profile_form_education_male_5);
       case 6: return mResources.getString(mSex==0?R.string.profile_form_education_female_6:R.string.profile_form_education_male_6);
       case 7: return mResources.getString(mSex==0?R.string.profile_form_education_female_7:R.string.profile_form_education_male_7);
-      default: return mResources.getString(R.string.profile_form_empty);
+      default: return null;//mResources.getString(R.string.profile_form_empty);
     }
   }
   //---------------------------------------------------------------------------
@@ -47,7 +47,7 @@ public class FormInfo {
       case 2: return mResources.getString(mSex==0?R.string.profile_form_communication_female_2:R.string.profile_form_communication_male_2);
       case 3: return mResources.getString(mSex==0?R.string.profile_form_communication_female_3:R.string.profile_form_communication_male_3);
       case 4: return mResources.getString(mSex==0?R.string.profile_form_communication_female_4:R.string.profile_form_communication_male_4);
-      default: return mResources.getString(R.string.profile_form_empty);
+      default: return null;//mResources.getString(R.string.profile_form_empty);
     }    
   }
   //---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ public class FormInfo {
       case 5: return mResources.getString(mSex==0?R.string.profile_form_character_female_5:R.string.profile_form_character_male_5);
       case 6: return mResources.getString(mSex==0?R.string.profile_form_character_female_6:R.string.profile_form_character_male_6);
       case 7: return mResources.getString(mSex==0?R.string.profile_form_character_female_7:R.string.profile_form_character_male_7);
-      default: return mResources.getString(R.string.profile_form_empty);
+      default: return null;//mResources.getString(R.string.profile_form_empty);
     }
   }
   //---------------------------------------------------------------------------
@@ -87,7 +87,7 @@ public class FormInfo {
       case 3: return mResources.getString(mSex==0?R.string.profile_form_alcohol_female_3:R.string.profile_form_alcohol_male_3);
       case 4: return mResources.getString(mSex==0?R.string.profile_form_alcohol_female_4:R.string.profile_form_alcohol_male_4);
       case 5: return mResources.getString(mSex==0?R.string.profile_form_alcohol_female_5:R.string.profile_form_alcohol_male_5);
-      default: return mResources.getString(R.string.profile_form_empty);
+      default: return null;//mResources.getString(R.string.profile_form_empty);
     }   
   }
   //---------------------------------------------------------------------------
@@ -107,7 +107,7 @@ public class FormInfo {
       case 4: return mResources.getString(mSex==0?R.string.profile_form_fitness_female_4:R.string.profile_form_fitness_male_4);
       case 5: return mResources.getString(mSex==0?R.string.profile_form_fitness_female_5:R.string.profile_form_fitness_male_5);
       case 6: return mResources.getString(mSex==0?R.string.profile_form_fitness_female_6:R.string.profile_form_fitness_male_6);
-      default: return mResources.getString(R.string.profile_form_empty);
+      default: return null;//mResources.getString(R.string.profile_form_empty);
     }    
   }
   //---------------------------------------------------------------------------
@@ -130,7 +130,7 @@ public class FormInfo {
       case 8: return mResources.getString(mSex==0?R.string.profile_form_job_female_8:R.string.profile_form_job_male_8);
       case 9: return mResources.getString(mSex==0?R.string.profile_form_job_female_9:R.string.profile_form_job_male_9);
       case 10: return mResources.getString(mSex==0?R.string.profile_form_job_female_10:R.string.profile_form_job_male_10);
-      default: return mResources.getString(R.string.profile_form_empty);
+      default: return null;//mResources.getString(R.string.profile_form_empty);
     } 
   }
   //---------------------------------------------------------------------------
@@ -143,7 +143,7 @@ public class FormInfo {
       case 5: return mResources.getString(mSex==0?R.string.profile_form_marriage_female_5:R.string.profile_form_marriage_male_5);
       case 6: return mResources.getString(mSex==0?R.string.profile_form_marriage_female_6:R.string.profile_form_marriage_male_6);
       case 7: return mResources.getString(mSex==0?R.string.profile_form_marriage_female_7:R.string.profile_form_marriage_male_7);
-      default: return mResources.getString(R.string.profile_form_empty);
+      default: return null;//mResources.getString(R.string.profile_form_empty);
     } 
   }
   //---------------------------------------------------------------------------
@@ -164,7 +164,7 @@ public class FormInfo {
       case 5: return mResources.getString(mSex==0?R.string.profile_form_finances_female_5:R.string.profile_form_finances_male_5);
       case 6: return mResources.getString(mSex==0?R.string.profile_form_finances_female_6:R.string.profile_form_finances_male_6);
       case 7: return mResources.getString(mSex==0?R.string.profile_form_finances_female_7:R.string.profile_form_finances_male_7);
-      default: return mResources.getString(R.string.profile_form_empty);
+      default: return null;//mResources.getString(R.string.profile_form_empty);
     } 
   }
   //---------------------------------------------------------------------------
@@ -184,7 +184,7 @@ public class FormInfo {
       case 4: return mResources.getString(mSex==0?R.string.profile_form_smoking_female_4:R.string.profile_form_smoking_male_4);
       case 5: return mResources.getString(mSex==0?R.string.profile_form_smoking_female_5:R.string.profile_form_smoking_male_5);
       case 6: return mResources.getString(mSex==0?R.string.profile_form_smoking_female_6:R.string.profile_form_smoking_male_6);
-      default: return mResources.getString(R.string.profile_form_empty);
+      default: return null;//mResources.getString(R.string.profile_form_empty);
     }    
   }
   //---------------------------------------------------------------------------

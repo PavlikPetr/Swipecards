@@ -1,19 +1,9 @@
 package com.sonetica.topface.ui.likes;
 
-import com.sonetica.topface.R;
-import com.sonetica.topface.data.Like;
-import com.sonetica.topface.ui.ThumbView;
-import com.sonetica.topface.ui.GalleryGridManager;
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-
 /*
  *  Класс адаптера для отображения галереи в Like активити
  */
-public class LikesGridAdapterEx extends BaseAdapter {
+public class LikesGridAdapterEx{} /* extends BaseAdapter {
   // Data
   Context mContext;
   private LayoutInflater mInflater;
@@ -72,3 +62,4 @@ public class LikesGridAdapterEx extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
 }
+*/

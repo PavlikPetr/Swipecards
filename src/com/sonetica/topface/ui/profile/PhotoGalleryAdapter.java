@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
-import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.LeaksManager;
 import android.content.Context;
@@ -55,12 +54,9 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
   //---------------------------------------------------------------------------
   @Override
   public View getView(int position,View convertView,ViewGroup parent) {
-    Debug.log(">>>>>>>>>>>>>>>>>>>>>>","HORIZONT convertView:"+convertView);
-    
     if(convertView == null) {
       convertView = new ProfileThumbView(mContext);
       ((ProfileThumbView)convertView).setScaleType(ScaleType.CENTER_CROP);
-      //convertView.setBackgroundResource(R.drawable.profile_bg_gallery);
     }
 
     if(position==0 && mOwner==true) {
@@ -76,7 +72,7 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
     if(bitmap!=null)
       ((ProfileThumbView)convertView).setImageBitmap(bitmap);
     else {
-      //((ProfileThumbView)convertView).setImageResource(R.drawable.profile_bg_gallery);
+      ((ProfileThumbView)convertView).setImageBitmap(null);
       loadingImage(position,((ProfileThumbView)convertView));
     }
     
@@ -85,7 +81,6 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
   //---------------------------------------------------------------------------
   private void loadingImage(final int position,final ProfileThumbView view) {
     final Album album = (Album)getItem(position);
-    //mThreadsPool.execute(new Runnable() {
     Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
