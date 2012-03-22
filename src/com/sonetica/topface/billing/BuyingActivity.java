@@ -120,7 +120,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
           ; //showDialog(DIALOG_BILLING_NOT_SUPPORTED_ID);
         break;
       case R.id.btnBuyingPower: {
-        if(!mBillingService.requestPurchase("android.test.item_unavailable",null)) // topface.power
+        if(!mBillingService.requestPurchase("android.test.item_unavailable",null)) // topface.energy
           ; //showDialog(DIALOG_BILLING_NOT_SUPPORTED_ID);
       }
         break;
