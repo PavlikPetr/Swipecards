@@ -5,7 +5,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.ProfileRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.LogActivity;
 import com.sonetica.topface.ui.LeaksActivity;
@@ -97,7 +97,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     ProfileRequest profileRequest = new ProfileRequest(this,false);
     profileRequest.callback(new ApiHandler() {
       @Override
-      public void success(final Response response) {
+      public void success(final ApiResponse response) {
         Profile profile = Profile.parse(response,false);
         if(profile==null) {
           mBlock=true;
@@ -108,7 +108,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         Imager.avatarOwnerPreloading(DashboardActivity.this.getApplicationContext());
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
         mBlock=true;
       }
     }).exec();
@@ -119,6 +119,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     super.onStart();
     
     System.gc();
+    
+    if(Data.SSID==null)
+      finish();
     
     if(Data.SSID.length()>0)
       return;
@@ -184,7 +187,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     mNotifyHandler  = null;
     
     Data.clear();
-    
+
     Recycle.release();
     
     System.gc();
@@ -254,7 +257,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       ProfileRequest profileRequest = new ProfileRequest(DashboardActivity.this.getApplicationContext(),true);
       profileRequest.callback(new ApiHandler() {
         @Override
-        public void success(final Response response) {
+        public void success(final ApiResponse response) {
           Profile profile = Profile.parse(response,true);
           Data.updateNotification(profile);
           invalidateNotification();
@@ -265,7 +268,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
           Debug.log(DashboardActivity.this,"up");
         }
         @Override
-        public void fail(int codeError,Response response) {
+        public void fail(int codeError,ApiResponse response) {
         }
       }).exec();
     }

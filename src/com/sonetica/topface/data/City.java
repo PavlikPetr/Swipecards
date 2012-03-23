@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class City extends AbstractData {
@@ -12,7 +12,7 @@ public class City extends AbstractData {
   public String name; // строка наименования города в русскоязычной локали
   public String full; // строка наименования города в русскоязычной локали
   //---------------------------------------------------------------------------
-  public static LinkedList<City> parse(Response response) {
+  public static LinkedList<City> parse(ApiResponse response) {
     LinkedList<City> cities = new LinkedList<City>();
     
     try {

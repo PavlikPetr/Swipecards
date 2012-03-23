@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import com.sonetica.topface.utils.Debug;
 
-public class Response {
+public class ApiResponse {
   // Data
   public int code=-1;
   public JSONObject mJSONResult;
@@ -31,17 +31,19 @@ public class Response {
   public static final int INVERIFIED_RECEIPT = 18;
   public static final int ITUNES_CONNECTION = 19;
   public static final int INVERIFIED_TOKEN = 20;
-  public static final int FATAL_ERROR = 99;
+  // local
+  public static final int NULL_RESPONSE  = 100;
+  public static final int WRONG_RESPONSE = 101;
   //---------------------------------------------------------------------------
   public JSONObject getSearch() {
     return mJSONResult;
   }
   //---------------------------------------------------------------------------
-  public Response(String response) {
+  public ApiResponse(String response) {
     try {
       if(response == null) {
         Debug.log(this,"json response is null");
-        code = FATAL_ERROR;
+        code = NULL_RESPONSE;
         return;
       }
       
@@ -52,9 +54,9 @@ public class Response {
       } else if(!mJSONResult.isNull("result"))
         mJSONResult = mJSONResult.getJSONObject("result");
       else
-        code = FATAL_ERROR;
+        code = WRONG_RESPONSE;
     } catch (Exception e) {
-      code = FATAL_ERROR;
+      code = WRONG_RESPONSE;
       Debug.log(this,"json resonse is wrong:" + response);
     }
   }

@@ -6,7 +6,7 @@ import com.sonetica.topface.data.History;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.HistoryRequest;
 import com.sonetica.topface.net.MessageRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.ui.profile.ProfileActivity;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Imager;
@@ -106,7 +106,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
         message.userid  = mUserId;
         message.callback(new ApiHandler() {
           @Override
-          public void success(Response response) {
+          public void success(ApiResponse response) {
             History history = new History();
             history.code=0;
             history.gift=0;
@@ -120,7 +120,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
             mProgressDialog.cancel();
           }
           @Override
-          public void fail(int codeError,Response response) {
+          public void fail(int codeError,ApiResponse response) {
             //Toast.makeText(ChatActivity.this,"msg sending failed",Toast.LENGTH_SHORT).show();
           }
         }).exec();
@@ -155,7 +155,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     historyRequest.limit  = LIMIT;
     historyRequest.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         LinkedList<History> dataList = History.parse(response);
         mAdapter.setDataList(dataList);
         mAdapter.notifyDataSetChanged();
@@ -164,7 +164,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
           mProgressDialog.cancel();
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
         //mListView.onRefreshComplete();
       }
     }).exec();

@@ -5,7 +5,7 @@ import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.FilterRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.net.SettingsRequest;
 import com.sonetica.topface.ui.CitySearchActivity;
 import com.sonetica.topface.utils.Debug;
@@ -192,11 +192,11 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     request.ageend   = mTemp.age_end; 
     request.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         //Toast.makeText(FilterActivity.this,"filter success",Toast.LENGTH_SHORT).show();
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
       }
     }).exec();
   }
@@ -371,11 +371,11 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     settings.lng = location.getLongitude();
     settings.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         mLocationManager.removeUpdates(FilterActivity.this);
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
         mLocationManager.removeUpdates(FilterActivity.this);
       }
     }).exec();

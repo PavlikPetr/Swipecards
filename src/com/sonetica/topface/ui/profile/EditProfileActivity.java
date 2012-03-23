@@ -4,7 +4,7 @@ import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.QuestionaryRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.net.SettingsRequest;
 import com.sonetica.topface.ui.CitySearchActivity;
 import com.sonetica.topface.utils.Debug;
@@ -218,10 +218,10 @@ public class EditProfileActivity extends PreferenceActivity {
     }
     settings.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
       }
     }).exec();
   }
@@ -274,10 +274,10 @@ public class EditProfileActivity extends PreferenceActivity {
     }
     questionary.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
       }
     }).exec();
   }

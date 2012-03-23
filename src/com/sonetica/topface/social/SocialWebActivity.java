@@ -6,7 +6,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.Auth;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.AuthRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.os.Bundle;
@@ -77,7 +77,7 @@ public class SocialWebActivity extends Activity {
         authRequest.clienttype = Global.CLIENT_TYPE;
         authRequest.callback(new ApiHandler() {
           @Override
-          public void success(Response response) {
+          public void success(ApiResponse response) {
             // запись ssid
             Auth auth = Auth.parse(response);
             Data.saveSSID(SocialWebActivity.this,auth.ssid);
@@ -85,7 +85,7 @@ public class SocialWebActivity extends Activity {
             finish();
           }
           @Override
-          public void fail(int codeError,Response response) {
+          public void fail(int codeError,ApiResponse response) {
             Debug.log(SocialWebActivity.this,"ssid is wrong");
             setResult(Activity.RESULT_CANCELED);
             finish();

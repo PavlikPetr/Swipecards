@@ -1,10 +1,10 @@
-package com.sonetica.topface.ui.dating;
+package com.sonetica.topface.ui.profile;
 
+import java.util.LinkedList;
 import com.sonetica.topface.R;
-import com.sonetica.topface.data.SearchUser;
+import com.sonetica.topface.data.Album;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Http;
-import com.sonetica.topface.utils.Imager;
 import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.MemoryCache;
 import android.content.Context;
@@ -12,64 +12,39 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
-public class DatingGalleryAdapter extends BaseAdapter {
+public class PhotoAlbumGalleryAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
   static class ViewHolder {
-    ProgressBar mProgressBar;
     ImageView mImageView;
   };
   //---------------------------------------------------------------------------
   // Data
   private int mPrevPosition;         // предыдущая позиция фото в альбоме
   private int mPreRunning;           // текущая пред загружаемое фото
-  private Bitmap mMainBitmap;        // жесткая ссылка на оцениваемую фотографию
   private MemoryCache mCache;        // кеш фоток
-  private SearchUser  mUserData;     // данные пользователя               
+  private LinkedList<Album> mAlbumsList;
   private LayoutInflater mInflater;          
-  private DatingControl  mDatingControl;
-  private AlphaAnimation mAlphaAnimation;
   //---------------------------------------------------------------------------
-  public DatingGalleryAdapter(Context context,DatingControl datingControl) {
+  public PhotoAlbumGalleryAdapter(Context context,LinkedList<Album> albumList) {
+    mAlbumsList = albumList;
     mInflater = LayoutInflater.from(context);
-    mDatingControl  = datingControl;
-    mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-    mAlphaAnimation.setDuration(200L);
     mCache = new MemoryCache();
   }
   //---------------------------------------------------------------------------
-  public void setUserData(SearchUser user) {
-    mUserData = user;
-    // очистка
-    mPreRunning = 0;
-    mPrevPosition = 0;
-    if(mMainBitmap!=null)
-      mMainBitmap.recycle();
-    mMainBitmap = null;
-    mCache.clear();
-  }
-  //---------------------------------------------------------------------------
   public int getCount() {
-    if(mUserData==null)
-      return 0;
-    return mUserData.avatars_big.length;
+    return mAlbumsList.size();
   }
   //---------------------------------------------------------------------------
   public Object getItem(int position) {
-    if(mUserData==null)
-      return null;
-    return mUserData.avatars_big[position];
+    return mAlbumsList.get(position);
   }
   //---------------------------------------------------------------------------
   public long getItemId(int position) {
-    if(mUserData==null)
-      return 0;
     return position;
   }
   //---------------------------------------------------------------------------
@@ -80,78 +55,44 @@ public class DatingGalleryAdapter extends BaseAdapter {
       holder = new ViewHolder();
       convertView = (ViewGroup)mInflater.inflate(R.layout.item_album_gallery, null, false);
       holder.mImageView = (ImageView)convertView.findViewById(R.id.ivPreView);
-      holder.mImageView.setMinimumWidth(mDatingControl.getWidth());
-      holder.mImageView.setMinimumHeight(mDatingControl.getHeight());
-      holder.mProgressBar = (ProgressBar)convertView.findViewById(R.id.pgrsAlbum);
       convertView.setTag(holder);
     } else 
       holder = (ViewHolder)convertView.getTag();
     
-    if(mUserData==null)
-      return convertView;
-    
     Bitmap bitmap = mCache.get(position);
     if(bitmap!=null && position==0) {
       holder.mImageView.setImageBitmap(bitmap);
-      holder.mProgressBar.setVisibility(View.INVISIBLE);
     } else if(bitmap!=null && position!=0)
       holder.mImageView.setImageBitmap(bitmap);
     else {
-      loadingImage(position, holder.mImageView,holder.mProgressBar);
+      loadingImage(position, holder.mImageView);
     }
     
     int prePosition = position>=mPrevPosition ? position+1 : position-1;
     if(prePosition>0 && position<(getCount()-1))
       preLoading(prePosition);
     
-    // кнопка back
-    if(position>2 && position==getCount()-1)
-      mDatingControl.controlVisibility(DatingControl.V_SHOW_BACK);
-    
     mPrevPosition = position;
 
     return convertView;
   }
   //---------------------------------------------------------------------------
-  public void loadingImage(final int position,final ImageView view,final ProgressBar progressBar) {
+  public void loadingImage(final int position,final ImageView view) {
     Thread t = new Thread() {
       @Override
       public void run() {
-        
-        //if(view.getWidth()==0)
-          //return;
-        
-        Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);
-        
-        if(rawBitmap!=null && position==0)
-          rawBitmap = Imager.clipping(rawBitmap,mDatingControl.getWidth(),mDatingControl.getHeight());
-        
-        final Bitmap bitmap = rawBitmap;
-        
+        final Bitmap rawBitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink());
         view.post(new Runnable() {
           @Override
           public void run() {
-            
-            if(bitmap==null) {
+            if(rawBitmap!=null)
+              view.setImageBitmap(rawBitmap);
+            else
               view.setImageResource(R.drawable.icon_people);
-              mDatingControl.controlVisibility(DatingControl.V_SHOW_INFO);
-              return;
-            }
-            
-            if(position==0) {
-              progressBar.setVisibility(View.INVISIBLE);
-              view.setAlpha(255);
-              view.setImageBitmap(bitmap);
-              mDatingControl.controlVisibility(DatingControl.V_SHOW_INFO);
-              view.startAnimation(mAlphaAnimation);
-              mMainBitmap = bitmap;
-            } else
-              view.setImageBitmap(bitmap);
-            
-            mCache.put(position,bitmap);
           }
-        }); // view.post
-        
+        });
+        if(mCache!=null && rawBitmap!=null)
+          mCache.put(position,rawBitmap);
       }
     };
     t.setPriority(Thread.MAX_PRIORITY);
@@ -171,7 +112,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
     Thread t = new Thread() {
       @Override
       public void run() {
-        Bitmap rawBitmap  = Http.bitmapLoader(mUserData.avatars_big[position]);
+        Bitmap rawBitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink());
         if(mCache!=null)
           mCache.put(position,rawBitmap);
       }
@@ -184,36 +125,8 @@ public class DatingGalleryAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   public void release() {
-    if(mMainBitmap!=null)
-      mMainBitmap.recycle();
-    mMainBitmap = null;
     mCache.clear();
     mCache = null;
   }
   //---------------------------------------------------------------------------
 }
-
-//  Http.imageLoaderExp(url,view);
-
-/*
-// утечка памяти при работе с пулами
-  mThreadsPool.execute(new Thread() {
-    @Override
-    public void run() {
-      final Bitmap bitmap = Http.bitmapLoader(url);
-      if(bitmap != null)
-        view.post(new Runnable() {
-          @Override
-          public void run() {
-            if(position==0) {
-              view.setAlpha(255);
-              view.setImageBitmap(bitmap);
-              view.startAnimation(mAlphaAnimation);
-              mDatingControl.controlVisibility(DatingControl.V_INFO);
-            } else
-              view.setImageBitmap(bitmap);
-          }
-        });
-    }
-  });
-*/

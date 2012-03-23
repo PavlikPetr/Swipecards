@@ -137,7 +137,7 @@ public class TopsActivity extends Activity {
     topRequest.city = mActionData.city_id;
     topRequest.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         mTopsList.clear();
         mTopsList = TopUser.parse(response);
         mGalleryGridManager.setDataList(mTopsList);
@@ -145,9 +145,8 @@ public class TopsActivity extends Activity {
         mProgressDialog.cancel();
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
         mProgressDialog.cancel();
-        //update();
       }
     }).exec();
   }
@@ -181,13 +180,13 @@ public class TopsActivity extends Activity {
     citiesRequest.type = "top";
     citiesRequest.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         Data.s_CitiesList = City.parse(response);
         mProgressDialog.cancel();
         showCitiesDialog();
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
         mProgressDialog.cancel();
       }
     }).exec();

@@ -1,13 +1,13 @@
 package com.sonetica.topface.data;
 
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class Message extends AbstractData {
   // Data
   public boolean completed;
   //---------------------------------------------------------------------------
-  public static Message parse(Response response) {
+  public static Message parse(ApiResponse response) {
     Message msg = new Message();
     
     try {

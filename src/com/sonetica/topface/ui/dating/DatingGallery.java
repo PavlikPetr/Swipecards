@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.profile;
+package com.sonetica.topface.ui.dating;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,13 +7,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Gallery;
 
-public class AlbumGallery extends Gallery implements View.OnTouchListener {
+public class DatingGallery extends Gallery implements View.OnTouchListener {
   // Data
   //private float   mStartX = -1;
   //private float[] mLastXs = new float[EVENT_COUNT];
   //private static final int EVENT_COUNT = 3;
   //---------------------------------------------------------------------------
-  public AlbumGallery(Context context, AttributeSet attrs) {
+  public DatingGallery(Context context, AttributeSet attrs) {
     super(context, attrs);
     //this.setOnTouchListener(this);
   }

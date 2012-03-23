@@ -5,6 +5,7 @@ import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.billing.BuyingActivity;
 import com.sonetica.topface.data.Album;
+import com.sonetica.topface.data.PhotoAdd;
 import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.data.ProfileUser;
 import com.sonetica.topface.net.AlbumRequest;
@@ -12,7 +13,7 @@ import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.MessageRequest;
 import com.sonetica.topface.net.PhotoAddRequest;
 import com.sonetica.topface.net.ProfilesRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.social.Socium;
 import com.sonetica.topface.social.Socium.AuthException;
@@ -47,9 +48,8 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
   private boolean mOwner;
   private boolean mAddEroState;
   private boolean mChatInvoke;
-  //private SwapView mSwapView;
-  private TextView mHeaderTitle;
   private Button mProfileButton;
+  private TextView mHeaderTitle;
   private ViewGroup mEroViewGroup;
   private FrameImageView mFramePhoto;
   private HorizontalListView mListView;
@@ -77,7 +77,6 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
   //private TextView mStatus;
   //private TextView mJob;
   private TextView mAbout;
-  //private boolean swap = true;  // проверить на оптимизацию
   private String mUserAvatarUrl;
   // Arrows
   private ImageView mGR;
@@ -102,10 +101,6 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     
     LeaksManager.getInstance().monitorObject(this);
     
-    // Swap
-    //mSwapView = ((SwapView)findViewById(R.id.swapFormView));
-    //if(Data.s_gridColumn > 2)
-      //mSwapView.setOnSwapListener(this);
     // Profile Header Button 
     mProfileButton = ((Button)findViewById(R.id.btnHeader));
     mProfileButton.setOnClickListener(this);
@@ -170,6 +165,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     mListEroView.setAdapter(mListEroAdapter);
     mListEroView.setOnItemClickListener(this);
     
+    // Avatar
     mFramePhoto = (FrameImageView)findViewById(R.id.ivProfileFramePhoto);
     
     // Info
@@ -269,21 +265,19 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     profileRequest.uids.add(userId);
     profileRequest.callback(new ApiHandler() {
       @Override
-      public void success(final Response response) {
-        if(ProfileActivity.this==null)
-          return;
+      public void success(final ApiResponse response) {
         ProfileUser profile = ProfileUser.parse(userId,response);
         
         mHeaderTitle.setText(profile.first_name);
         
         mUserAvatarUrl=profile.avatars_small;
         
-        // грузим галерею
-        getUserAlbum(userId);
-        
         // avatar
         mFramePhoto.mOnlineState = profile.online;
         Http.imageLoader(profile.getBigLink(),mFramePhoto);
+        
+        // грузим галерею
+        getUserAlbum(userId);
 
         int fieldCounter=0;
         
@@ -377,15 +371,16 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
        
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
+        mProgressDialog.cancel();
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
   private void getAlbum() {
     // кнопки добавления
-    mPhotoList.add(new Album()); // добавление элемента кнопки загрузки новых сообщений
-    mEroList.add(new Album());   // кнопка
+    mPhotoList.add(new Album()); // добавление элемента кнопки загрузки
+    mEroList.add(new Album());   // новых сообщений
 
     // сортируем эро и не эро
     LinkedList<Album> albumList = Data.s_Profile.albums;
@@ -424,7 +419,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     albumRequest.uid  = uid;
     albumRequest.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         // отключаем прогресс
         mProgressDialog.cancel();
         
@@ -460,7 +455,8 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
         }
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
+        mProgressDialog.cancel();
       }
     }).exec();
   }
@@ -476,10 +472,6 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     mAddPhotoDialog = builder.create();
     mAddPhotoDialog.show();   
   }
-  //---------------------------------------------------------------------------
-//  public void onSwap() {
-//    swap=!swap; // костыль на скорую руку
-//  }
   //---------------------------------------------------------------------------
   // обработчик нажатия на кнопки
   @Override
@@ -511,19 +503,9 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
         startActivity(new Intent(getApplicationContext(),BuyingActivity.class));
       } break;
       case R.id.btnHeader: {
-        // mCurrForm = mCurrForm == FORM_TOP ? FORM_BOTTOM : FORM_TOP;
-        //if(Data.s_gridColumn > 2)
-          //mSwapView.snapToScreen(swap?FORM_BOTTOM:FORM_TOP);
-        /*
-        if(!swap) {
-          mProfileButton.setText(R.string.profile_header_title);
-        } else {
-          mProfileButton.setText(R.string.profile_btn_form);
-        }
-        */
+        // выпилили
       } break;
-      // popup
-      case R.id.btnAddPhotoAlbum: {
+      case R.id.btnAddPhotoAlbum: {     // popup
         Intent intent = new Intent();
         intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -536,17 +518,19 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
         mAddPhotoDialog.cancel();
       } break;
       case R.id.btnProfileAsk: {
-        findViewById(R.id.btnProfileAsk).setVisibility(View.INVISIBLE);
+        //findViewById(R.id.btnProfileAsk).setVisibility(View.INVISIBLE);
+        findViewById(R.id.btnProfileAsk).setEnabled(false);
         MessageRequest message = new MessageRequest(ProfileActivity.this.getApplicationContext());
         message.message = getString(R.string.profile_msg_ask); 
         message.userid  = mUserId;
         message.callback(new ApiHandler() {
           @Override
-          public void success(Response response) {
+          public void success(ApiResponse response) {
             Toast.makeText(getApplicationContext(),getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
           }
           @Override
-          public void fail(int codeError,Response response) {
+          public void fail(int codeError,ApiResponse response) {
+            mProgressDialog.cancel();
           }
         }).exec();
       } break;
@@ -627,7 +611,6 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     mMarriage=null;
     mFinances=null;
     mSmoking=null;
-    //mSwapView=null;
     mProfileButton=null;
     mEroViewGroup=null;
     
@@ -721,8 +704,10 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
             addPhotoRequest.cost=price;
           addPhotoRequest.callback(new ApiHandler() {
             @Override
-            public void success(Response response) {
-              //PhotoAdd add = PhotoAdd.parse(response);
+            public void success(ApiResponse response) {
+              PhotoAdd add = PhotoAdd.parse(response);
+              if(!add.completed)
+                return; 
               
               Album album = new Album();
               album.big   = result[0];
@@ -738,7 +723,8 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
               
             }
             @Override
-            public void fail(int codeError,Response response) {
+            public void fail(int codeError,ApiResponse response) {
+              mProgressDialog.cancel();
             }
           }).exec();
         }

@@ -1,13 +1,13 @@
 package com.sonetica.topface.data;
 
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class PhotoDelete extends AbstractData {
   // Data
   public boolean completed;
   //---------------------------------------------------------------------------
-  public static PhotoDelete parse(Response response) {
+  public static PhotoDelete parse(ApiResponse response) {
     PhotoDelete delete = new PhotoDelete();
     
     try {

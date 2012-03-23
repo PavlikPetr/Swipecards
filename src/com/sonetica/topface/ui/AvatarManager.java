@@ -80,9 +80,6 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
           
           imagePost(imageView,roundBitmap);
           
-          //clippedBitmap.recycle();
-          //clippedBitmap = null;
-          
           mCache.put(position,roundBitmap);
 
         } catch (Exception e) {

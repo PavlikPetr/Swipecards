@@ -9,7 +9,7 @@ import com.sonetica.topface.data.SearchUser;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.DoRateRequest;
 import com.sonetica.topface.net.MessageRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.net.SearchRequest;
 import com.sonetica.topface.ui.dating.DatingControl.OnNeedUpdateListener;
 import com.sonetica.topface.ui.dating.StarsView.OnRateListener;
@@ -108,7 +108,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     request.online = Data.s_Profile.filter_online;
     request.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         LinkedList<SearchUser> userList = SearchUser.parse(response);
         if(firstQuery) {
           Debug.log(this,"update add");
@@ -122,7 +122,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
         mProgress.setVisibility(View.INVISIBLE);
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
         update(true);
         //Toast.makeText(DatingActivity.this,"dating update fail",Toast.LENGTH_SHORT).show();
       }
@@ -135,14 +135,14 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     doRate.rate   = rate;
     doRate.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         DoRate rate = DoRate.parse(response);
         Data.s_Power = rate.power;
         Data.s_Money = rate.money;
         Data.s_AverageRate = rate.average;
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
         //Toast.makeText(DatingActivity.this,"dating rate failed",Toast.LENGTH_SHORT).show();
       }
     }).exec();
@@ -192,11 +192,11 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
         message.userid  = uid;
         message.callback(new ApiHandler() {
           @Override
-          public void success(Response response) {
+          public void success(ApiResponse response) {
             Toast.makeText(getApplicationContext(),getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
           }
           @Override
-          public void fail(int codeError,Response response) {
+          public void fail(int codeError,ApiResponse response) {
           }
         }).exec();
         

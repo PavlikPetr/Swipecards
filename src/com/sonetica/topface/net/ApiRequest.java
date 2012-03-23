@@ -1,5 +1,6 @@
 package com.sonetica.topface.net;
 
+import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.data.Auth;
@@ -15,6 +16,7 @@ public abstract class ApiRequest {
   public String ssid;  // volatile
   private Context mContext;
   private ApiHandler mHandler;
+  private static int LOOP = 5;
   //---------------------------------------------------------------------------
   public ApiRequest(Context context) {
     ssid = "";
@@ -28,14 +30,22 @@ public abstract class ApiRequest {
   //---------------------------------------------------------------------------
   public void exec() {
     ssid = Data.SSID;
-    Thread t = new Thread() {
+    Thread t = new Thread("api request") {
       @Override
       public void run() {
-        String rawResponse = Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString());
-        if(rawResponse==null)
+        String rawResponse = null;
+        
+        int counter = 0;
+        do {
+          if(counter == LOOP) break;
+          else counter++;
           rawResponse = Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString());
-        Response response = new Response(rawResponse);
-        if(response.code == Response.SESSION_NOT_FOUND) // ошибка авторизации
+          Debug.log(App.TAG,"loop");
+        } while(rawResponse == null);
+        
+        ApiResponse response = new ApiResponse(rawResponse);
+        
+        if(response.code == ApiResponse.SESSION_NOT_FOUND) // ошибка авторизации
           reAuth();  // реавторизация на сервере топфейса
         else 
           mHandler.sendMessage(Message.obtain(null,0,response));
@@ -59,13 +69,13 @@ public abstract class ApiRequest {
     authRequest.clientdevice  = Global.CLIENT_DEVICE;
     authRequest.clientid      = Global.CLIENT_ID;
 
-    Response response = new Response(Http.httpSendTpRequest(Global.API_URL,authRequest.toString()));
-    if(response.code == Response.RESULT_OK) {
+    ApiResponse response = new ApiResponse(Http.httpSendTpRequest(Global.API_URL,authRequest.toString()));
+    if(response.code == ApiResponse.RESULT_OK) {
       Auth auth = Auth.parse(response);
       Data.saveSSID(mContext,auth.ssid);
       ssid = Data.SSID;
       
-      response = new Response(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
+      response = new ApiResponse(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
       
       mHandler.sendMessage(Message.obtain(null,0,response));
     } else

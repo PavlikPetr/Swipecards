@@ -1,6 +1,6 @@
 package com.sonetica.topface.data;
 
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class DoRate extends AbstractData {
@@ -9,7 +9,7 @@ public class DoRate extends AbstractData {
   public int power;   // текущее значение энергии пользователя
   public int average;  // средняя оценка пользователя
   //---------------------------------------------------------------------------
-  public static DoRate parse(Response response) {
+  public static DoRate parse(ApiResponse response) {
     DoRate doRate = new DoRate();
     
     try {

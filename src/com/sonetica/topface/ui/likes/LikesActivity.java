@@ -6,7 +6,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.Like;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.LikesRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.p2r.PullToRefreshGridView;
 import com.sonetica.topface.p2r.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.ui.DoubleBigButton;
@@ -113,7 +113,7 @@ public class LikesActivity extends Activity {
     likesRequest.only_new = mOnlyNewData;
     likesRequest.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         mDoubleButton.setChecked(mOnlyNewData ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
         mLikesDataList.clear();
         mLikesDataList = Like.parse(response);
@@ -123,9 +123,9 @@ public class LikesActivity extends Activity {
         mGallery.onRefreshComplete();
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
         mProgressDialog.cancel();
-        //update(true);
+        mGallery.onRefreshComplete();
       }
     }).exec();
   }

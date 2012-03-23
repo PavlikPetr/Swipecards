@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 //import org.json.JSONObject;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 /*
@@ -36,7 +36,7 @@ public class Symphaty extends AbstractData {
   При выполнении запроса с указанием new:true симпатии, являющиеся непрочитанными, становятся прочитанными.
   */
   //---------------------------------------------------------------------------
-  public static LinkedList<Symphaty> parse(Response response) {
+  public static LinkedList<Symphaty> parse(ApiResponse response) {
     LinkedList<Symphaty> symphatyList = new LinkedList<Symphaty>();
     
     try {
@@ -49,7 +49,7 @@ public class Symphaty extends AbstractData {
           symphatyList.add(symphaty);
         }
     } catch(Exception e) {
-      Debug.log("TopUser.class","Wrong response parsing: " + e);
+      Debug.log("Symphaty.class","Wrong response parsing: " + e);
     }
     
     return symphatyList;

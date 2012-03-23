@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class Album extends AbstractData {
@@ -17,7 +17,7 @@ public class Album extends AbstractData {
   public int likes;      // количество одобрительных отзывов
   public int dislikes;   // количество отрицательных отзывов
   //---------------------------------------------------------------------------
-  public static LinkedList<Album> parse(Response response) {
+  public static LinkedList<Album> parse(ApiResponse response) {
     LinkedList<Album> albumsList = new LinkedList<Album>();
     
     try {

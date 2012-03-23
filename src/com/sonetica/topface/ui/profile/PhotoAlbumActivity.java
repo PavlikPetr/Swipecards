@@ -1,13 +1,12 @@
 package com.sonetica.topface.ui.profile;
 
-import java.util.LinkedList;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
-import com.sonetica.topface.data.Album;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.MainRequest;
 import com.sonetica.topface.net.PhotoDeleteRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
+import com.sonetica.topface.ui.dating.DatingGallery;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
@@ -27,11 +26,9 @@ public class PhotoAlbumActivity extends Activity {
   // Data
   private boolean mOwner;
   private TextView mCounter;
-  private AlbumGallery  mGallery;
-  private LinkedList<Album> mAlbumsList;
+  private DatingGallery mGallery;
+  private PhotoAlbumGalleryAdapter mGalleryAdapter;
   private ProgressDialog mProgressDialog;
-  private AlbumGalleryManager mGalleryManager;
-  private AlbumGalleryAdapter mGalleryAdapter;
   // Constants
   public static final String INTENT_OWNER = "owner";
   public static final String INTENT_USER_ID = "user_id";
@@ -54,8 +51,6 @@ public class PhotoAlbumActivity extends Activity {
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
-    mAlbumsList = Data.s_PhotoAlbum;
-    
     mOwner = getIntent().getBooleanExtra(INTENT_OWNER,false);
     
     int uid = getIntent().getIntExtra(INTENT_USER_ID,-1);  // нахуя он нужен, разобраться почему это здесь написано!!!
@@ -67,23 +62,22 @@ public class PhotoAlbumActivity extends Activity {
     }
     
     // Gallery Adapter
-    mGalleryManager = new AlbumGalleryManager(getApplicationContext(),mAlbumsList);
-    mGalleryAdapter = new AlbumGalleryAdapter(getApplicationContext(),mGalleryManager);
+    mGalleryAdapter = new PhotoAlbumGalleryAdapter(getApplicationContext(),Data.s_PhotoAlbum);
 
     // Gallery
-    mGallery = (AlbumGallery)findViewById(R.id.galleryAlbum);
+    mGallery = (DatingGallery)findViewById(R.id.galleryAlbum);
     mGallery.setAdapter(mGalleryAdapter);
     mGallery.setSelection(position,true);
     mGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> arg0,View arg1,int position,long arg3) {
-        PhotoAlbumActivity.this.setCounter(position+1,mAlbumsList.size()); //  УПРАВЛЕНИЕ СЧЕТЧИКОМ
+        PhotoAlbumActivity.this.setCounter(position+1,Data.s_PhotoAlbum.size()); //  УПРАВЛЕНИЕ СЧЕТЧИКОМ
       }
       @Override
       public void onNothingSelected(AdapterView<?> arg0) {}
     });
     
-    setCounter(position+1,mAlbumsList.size());
+    setCounter(position+1,Data.s_PhotoAlbum.size());
   }
   //---------------------------------------------------------------------------
   // счетчик галереи
@@ -94,10 +88,8 @@ public class PhotoAlbumActivity extends Activity {
   //---------------------------------------------------------------------------  
   @Override
   protected void onDestroy() {
-    mAlbumsList = null;
     mGallery = null;
-    mGalleryManager.release();
-    mGalleryManager = null;
+    mGalleryAdapter.release();
     mGalleryAdapter = null;
     
     System.gc();
@@ -124,14 +116,14 @@ public class PhotoAlbumActivity extends Activity {
     switch(item.getItemId()) {
       case MENU_MAIN: {
         MainRequest request = new MainRequest(getApplicationContext());
-        request.photoid = mAlbumsList.get(mGallery.getSelectedItemPosition()).id;
+        request.photoid = Data.s_PhotoAlbum.get(mGallery.getSelectedItemPosition()).id;
         request.callback(new ApiHandler() {
           @Override
-          public void success(Response response) {
+          public void success(ApiResponse response) {
             Toast.makeText(PhotoAlbumActivity.this,getString(R.string.album_menu_did_main),Toast.LENGTH_SHORT).show();
           }
           @Override
-          public void fail(int codeError,Response response) {
+          public void fail(int codeError,ApiResponse response) {
           }
         }).exec();
       } break;
@@ -160,14 +152,14 @@ public class PhotoAlbumActivity extends Activity {
   //---------------------------------------------------------------------------
   private void deletePhoto() {
     PhotoDeleteRequest request = new PhotoDeleteRequest(getApplicationContext());
-    request.photoid = mAlbumsList.get(mGallery.getSelectedItemPosition()).id;
+    request.photoid = Data.s_PhotoAlbum.get(mGallery.getSelectedItemPosition()).id;
     request.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         Toast.makeText(PhotoAlbumActivity.this,getString(R.string.album_menu_did_delete),Toast.LENGTH_SHORT).show();
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
       }
     }).exec();    
   }

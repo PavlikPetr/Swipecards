@@ -24,10 +24,10 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
   private Handler mHandler;
   private BillingService mBillingService;
   // Constants
-  private static final int PRICE_COINS_6 = 6;
-  private static final int PRICE_COINS_40 = 40;
+  private static final int PRICE_COINS_6   = 6;
+  private static final int PRICE_COINS_40  = 40;
   private static final int PRICE_COINS_100 = 100;
-  private static final int PRICE_ENERGY = 10000;
+  private static final int PRICE_ENERGY    = 10000;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {

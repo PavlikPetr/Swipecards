@@ -6,7 +6,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.InboxRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.p2r.PullToRefreshListView;
 import com.sonetica.topface.p2r.PullToRefreshBase.OnRefreshListener;
 import com.sonetica.topface.ui.AvatarManager;
@@ -114,7 +114,7 @@ public class InboxActivity extends Activity {
     inboxRequest.only_new = mOnlyNewData;
     inboxRequest.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         mDoubleButton.setChecked(mOnlyNewData ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
         mInboxDataList.clear();
         mInboxDataList = Inbox.parse(response);
@@ -124,9 +124,9 @@ public class InboxActivity extends Activity {
         mListView.onRefreshComplete();
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
         mProgressDialog.cancel();
-        //update(true);
+        mListView.onRefreshComplete();
       }
     }).exec();
   }

@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 /*
@@ -55,7 +55,7 @@ public class Profile extends AbstractData {
   public int questionary_weight;           // вес пользователя
   public int questionary_height;           // рост пользователя
   //---------------------------------------------------------------------------
-  public static Profile parse(Response response,boolean isNotification) {
+  public static Profile parse(ApiResponse response,boolean isNotification) {
     Profile profile = new Profile();
     
     try {

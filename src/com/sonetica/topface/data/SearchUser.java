@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class SearchUser extends AbstractData {
@@ -24,7 +24,7 @@ public class SearchUser extends AbstractData {
   //public String geo_coord_lat; // широта нахождения пользоавтеля
   //public String geo_coord_lng; // долгота нахождения пользователя
   //---------------------------------------------------------------------------
-  public static LinkedList<SearchUser> parse(Response response) {
+  public static LinkedList<SearchUser> parse(ApiResponse response) {
     LinkedList<SearchUser> userList = new LinkedList<SearchUser>();
     
     try {

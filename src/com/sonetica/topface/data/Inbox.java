@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class Inbox extends AbstractData {
@@ -32,7 +32,7 @@ public class Inbox extends AbstractData {
   public static final int MESSAGE_WISH = 4;      // Тайное желание
   public static final int MESSAGE_SEXUALITY = 5; // Оценка сексуальности
   //--------------------------------------------------------------------------- 
-  public static LinkedList<Inbox> parse(Response response) {
+  public static LinkedList<Inbox> parse(ApiResponse response) {
     LinkedList<Inbox> userList = new LinkedList<Inbox>();
     
     try {

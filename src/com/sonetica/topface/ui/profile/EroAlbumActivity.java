@@ -9,7 +9,7 @@ import com.sonetica.topface.data.PhotoOpen;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.PhotoOpenRequest;
 import com.sonetica.topface.net.PhotoVoteRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.LeaksManager;
@@ -136,11 +136,11 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
     photoVoteRequest.vote  = vote; 
     photoVoteRequest.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         //PhotoVote photoVote = PhotoVote.parse(response);
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
         
       }
     }).exec();
@@ -177,7 +177,7 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
       photoOpenRequest.photo = album.id;
       photoOpenRequest.callback(new ApiHandler() {
         @Override
-        public void success(Response response) {
+        public void success(ApiResponse response) {
           PhotoOpen photoOpen = PhotoOpen.parse(response);
           if(photoOpen.completed) {
             Data.s_Money = photoOpen.money;
@@ -192,8 +192,8 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
             startActivity(new Intent(EroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));  // окно на покупку монет
         }
         @Override
-        public void fail(int codeError,Response response) {
-          if(codeError==Response.PAYMENT)
+        public void fail(int codeError,ApiResponse response) {
+          if(codeError==ApiResponse.PAYMENT)
             startActivity(new Intent(EroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));
           EroAlbumActivity.this.finish();
         }

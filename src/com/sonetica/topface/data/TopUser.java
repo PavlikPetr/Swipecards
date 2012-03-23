@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 /*
@@ -15,7 +15,7 @@ public class TopUser extends AbstractData {
   public int liked;    // процент абсолютного значения красоты
   public String photo; // URL аватарки красивого пользователя
   //---------------------------------------------------------------------------
-  public static LinkedList<TopUser> parse(Response response) {
+  public static LinkedList<TopUser> parse(ApiResponse response) {
     LinkedList<TopUser> userList = new LinkedList<TopUser>();
     
     try {

@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class Like extends AbstractData {
@@ -21,7 +21,7 @@ public class Like extends AbstractData {
   public String avatars_big;     // большая аватарка пользователя
   public String avatars_small;   // маленькая аватарка пользователя
   //---------------------------------------------------------------------------
-  public static LinkedList<Like> parse(Response response) {
+  public static LinkedList<Like> parse(ApiResponse response) {
     LinkedList<Like> likesList = new LinkedList<Like>();
     
     try {

@@ -8,7 +8,6 @@ import com.sonetica.topface.ui.dating.DatingActivity;
 import com.sonetica.topface.ui.dating.RateControl;
 import com.sonetica.topface.ui.dating.ResourcesView;
 import com.sonetica.topface.ui.dating.FaceView;
-import com.sonetica.topface.ui.profile.AlbumGallery;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -40,7 +39,7 @@ public class DatingControl extends ViewGroup {
   private int mGallerySize;    // кол-во фото у оцениваемого пользователя
   private int mGalleryPrevPos; // предыдущая позиция в альбоме
   // Gallery
-  private AlbumGallery mDatingGallery;
+  private DatingGallery mDatingGallery;
   private DatingGalleryAdapter mGalleryAdapter;
   // Views
   private Button mBackButton;      // кнопка возврата к оцениваемой фотографии
@@ -77,7 +76,7 @@ public class DatingControl extends ViewGroup {
     });
     
     // Gallery
-    mDatingGallery = new AlbumGallery(context, attrs);
+    mDatingGallery = new DatingGallery(context, attrs);
     mDatingGallery.setAdapter(mGalleryAdapter);
     mDatingGallery.setSpacing(0);
     mDatingGallery.setBackgroundColor(Color.TRANSPARENT);

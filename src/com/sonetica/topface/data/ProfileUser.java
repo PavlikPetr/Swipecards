@@ -1,7 +1,7 @@
 package com.sonetica.topface.data;
 
 import org.json.JSONObject;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 /*
@@ -44,7 +44,7 @@ public class ProfileUser extends AbstractData {
   // {Object} geo.coordinates.lat - широта нахождения пользоавтеля
   // {Object} geo.coordinates.lng - долгота нахождения пользователя
   //---------------------------------------------------------------------------
-  public static ProfileUser parse(int userId,Response response) {    //нужно знать userId
+  public static ProfileUser parse(int userId,ApiResponse response) {    //нужно знать userId
     ProfileUser profile = new ProfileUser();
     
     try {

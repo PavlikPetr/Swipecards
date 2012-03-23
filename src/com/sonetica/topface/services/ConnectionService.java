@@ -10,7 +10,7 @@ import com.sonetica.topface.data.Auth;
 import com.sonetica.topface.net.AuthRequest;
 import com.sonetica.topface.net.Packet;
 import com.sonetica.topface.net.ApiRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.social.AuthToken;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.utils.Debug;
@@ -30,7 +30,7 @@ public class ConnectionService extends Service {
     @Override
     public void handleMessage(Message msg) {
       Packet packet = (Packet)msg.obj;
-      Response response = new Response(sendPacket(packet));
+      ApiResponse response = new ApiResponse(sendPacket(packet));
       if(response.code==3)
         reAuth(packet);
       else
@@ -66,12 +66,12 @@ public class ConnectionService extends Service {
       @Override
       public void handleMessage(Message msg) {
         super.handleMessage(msg);
-        Response ssidResponse = (Response)msg.obj;
+        ApiResponse ssidResponse = (ApiResponse)msg.obj;
         if(ssidResponse.code==0) {
           Auth auth = Auth.parse(ssidResponse);
           Data.saveSSID(ConnectionService.this.getApplicationContext(),auth.ssid);
           packet.mRequest.ssid = auth.ssid;
-          Response response = new Response(sendPacket(packet));
+          ApiResponse response = new ApiResponse(sendPacket(packet));
           packet.sendMessage(Message.obtain(null,0,response));
         } else if(ssidResponse.code>0) {
             ; // ?????????

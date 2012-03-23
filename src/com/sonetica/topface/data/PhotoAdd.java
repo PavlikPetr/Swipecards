@@ -1,13 +1,13 @@
 package com.sonetica.topface.data;
 
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class PhotoAdd extends AbstractData {
   // Data
   public boolean completed;
   //---------------------------------------------------------------------------
-  public static PhotoAdd parse(Response response) {
+  public static PhotoAdd parse(ApiResponse response) {
     PhotoAdd add = new PhotoAdd();
     
     try {

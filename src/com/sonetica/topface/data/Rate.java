@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class Rate extends AbstractData {
@@ -22,7 +22,7 @@ public class Rate extends AbstractData {
   public String avatars_big;     // большая аватарка пользователя
   public String avatars_small;   // маленькая аватарка пользователя
   //---------------------------------------------------------------------------
-  public static LinkedList<Rate> parse(Response response) {
+  public static LinkedList<Rate> parse(ApiResponse response) {
     LinkedList<Rate> ratesList = new LinkedList<Rate>();
     
     try {

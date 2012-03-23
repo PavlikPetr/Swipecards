@@ -5,7 +5,7 @@ import com.sonetica.topface.R;
 import com.sonetica.topface.data.City;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.CitiesRequest;
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.net.SearchCitiesRequest;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
@@ -125,13 +125,13 @@ public class CitySearchActivity extends Activity {
     citiesRequest.type = "top";
     citiesRequest.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         mTopCitiesList = City.parse(response);
         fillData(mTopCitiesList);
         mProgressDialog.cancel();
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
       }
     }).exec();
   }
@@ -141,12 +141,12 @@ public class CitySearchActivity extends Activity {
     searchCitiesRequest.prefix = prefix;
     searchCitiesRequest.callback(new ApiHandler() {
       @Override
-      public void success(Response response) {
+      public void success(ApiResponse response) {
         LinkedList<City> citiesList = City.parse(response);
         fillData(citiesList);
       }
       @Override
-      public void fail(int codeError,Response response) {
+      public void fail(int codeError,ApiResponse response) {
       }
     }).exec();
   }

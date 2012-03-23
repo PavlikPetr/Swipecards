@@ -11,7 +11,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-import com.sonetica.topface.Data;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,6 +29,7 @@ public class Http {
   private static final String TAG = "Http"; 
   private static final int HTTP_GET_REQUEST  = 0;
   private static final int HTTP_POST_REQUEST = 1;
+  private static final int HTTP_TIMEOUT = 8*1000;
   //---------------------------------------------------------------------------
   // Проверка на наличие интернета
   public static boolean isOnline(Context context) {
@@ -53,10 +53,10 @@ public class Http {
   //---------------------------------------------------------------------------
   //  запрос к TopFace API
   public static String httpSendTpRequest(String request,String postParams) {
-    
+    /*
     if(Data.s_LogList!=null)
       Data.s_LogList.add("   [REQ]: "+postParams);  // JSON LOG   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    
+    */
     return httpRequest(HTTP_POST_REQUEST,request,postParams,null,null,true);
   }
   //---------------------------------------------------------------------------
@@ -71,7 +71,8 @@ public class Http {
   }
   //---------------------------------------------------------------------------
   private static String httpRequest(int typeRequest, String request,String postParams,byte[] dataParams,InputStream is,boolean isJson) {
-    Debug.log(TAG,"req:"+postParams);
+    
+    Debug.log(TAG,"req:"+postParams);   // REQUEST
     
     String response = null;
     HttpURLConnection httpConnection = null;
@@ -80,7 +81,9 @@ public class Http {
       // запрос
       httpConnection = (HttpURLConnection)new URL(request).openConnection();
       httpConnection.setUseCaches(false);
-
+      httpConnection.setConnectTimeout(HTTP_TIMEOUT);
+      httpConnection.setReadTimeout(HTTP_TIMEOUT);
+      
       // опция для запроса на TopFace API сервер
       if(isJson)
         httpConnection.setRequestProperty("Content-Type", "application/json");
@@ -120,8 +123,6 @@ public class Http {
         String boundary   = "0xKhTmLbOuNdArY";
         httpConnection.setRequestMethod("POST");
         httpConnection.setDoOutput(true);
-        httpConnection.setConnectTimeout(10*1000);
-        httpConnection.setReadTimeout(10*1000);
         httpConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
         DataOutputStream dos = new DataOutputStream(httpConnection.getOutputStream());
         dos.writeBytes(twoHyphens + boundary + lineEnd);
@@ -153,28 +154,28 @@ public class Http {
         responseBuilder.append(line);
       response = responseBuilder.toString();
       
+      /*
       if(response.length()>500 && Data.s_LogList!=null)               // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Data.s_LogList.add("   [RESP]: "+response.substring(0,500));
-      else
+      else if(Data.s_LogList!=null)
         Data.s_LogList.add("   [RESP]: "+response);
-      
+      */
     
     } catch(SocketTimeoutException e) {
-      Debug.log(TAG,"socket timeout:" + e);
-    } catch(MalformedURLException e) {
-      Debug.log(TAG,"url is wrong:" + e);
+      Debug.log(TAG,"socket timeout:" + postParams);
     } catch(IOException e) {
-      Debug.log(TAG,"io is fail #1:" + e);
+      Debug.log(TAG,"io exception:" + e);
+    } catch(Exception e) {
+      Debug.log(TAG,"http exception:" + e);
     } finally {
-      Debug.log(TAG,"resp:" + response);
-      if(buffReader!=null)
-        try {
-          buffReader.close();
-        } catch(IOException e) {
-          Debug.log(TAG,"io is fail #2:" + e);
-        }
-      if(httpConnection!=null)
-        httpConnection.disconnect();
+      try {
+        if(buffReader!=null) buffReader.close();
+        if(httpConnection!=null) httpConnection.disconnect();
+      } catch(Exception e) {
+        Debug.log(TAG,"error:" + e);
+      }
+      
+      Debug.log(TAG,"resp:" + response);   // RESPONSE
     }
     return response;
   }

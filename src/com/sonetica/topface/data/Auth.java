@@ -1,6 +1,6 @@
 package com.sonetica.topface.data;
 
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class Auth extends AbstractData {
@@ -8,7 +8,7 @@ public class Auth extends AbstractData {
   public int api_version;
   public String ssid; //id (ssid) сессии нужен для подписи запросов к лицемеру
   //---------------------------------------------------------------------------
-  public static Auth parse(Response response) {
+  public static Auth parse(ApiResponse response) {
     Auth auth = new Auth();
     
     try {

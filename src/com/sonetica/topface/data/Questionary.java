@@ -1,13 +1,13 @@
 package com.sonetica.topface.data;
 
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class Questionary extends AbstractData {
   // Data
   public boolean completed; // всегда TRUE
   //---------------------------------------------------------------------------
-  public static Questionary parse(Response response) {
+  public static Questionary parse(ApiResponse response) {
     Questionary questionary = new Questionary();
     
     try {

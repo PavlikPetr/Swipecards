@@ -1,13 +1,13 @@
 package com.sonetica.topface.data;
 
-import com.sonetica.topface.net.Response;
+import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class Settings extends AbstractData {
   // Data
   public boolean completed;
   //---------------------------------------------------------------------------
-  public static Settings parse(Response response) {
+  public static Settings parse(ApiResponse response) {
     Settings settings = new Settings();
     
     try {
