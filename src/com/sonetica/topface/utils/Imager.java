@@ -65,6 +65,9 @@ public class Imager {
     } else
       // у вертикальной режим с верху
       clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,bitmapWidth,bitmapHeight,null,false);
+    
+    rawBitmap.recycle();
+    rawBitmap = null;
       
     scaledBitmap.recycle();
     scaledBitmap = null;

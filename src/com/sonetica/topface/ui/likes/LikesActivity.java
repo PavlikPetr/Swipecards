@@ -36,7 +36,7 @@ public class LikesActivity extends Activity {
   private ProgressDialog mProgressDialog;
   private DoubleBigButton mDoubleButton;
   // Constants
-  private static final int LIMIT = 60;
+  private static final int LIMIT = 84;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {

@@ -179,11 +179,22 @@ public class Http {
     return response;
   }
   //---------------------------------------------------------------------------
+  public static Bitmap bitmapLoader(String url) {
+    Bitmap bitmap = null;
+    BufferedInputStream bin = null;
+    try {
+      bin = new BufferedInputStream(new URL(url).openStream());
+      bitmap = BitmapFactory.decodeStream(bin);
+      bin.close();
+    } catch (Exception e) {}
+    return bitmap;
+  }
+  //---------------------------------------------------------------------------
   /*
    *  для использования необходим отдельный поток
    *  при обрыве связи при скачивании фабрика возвращает null  
    */
-  public static Bitmap bitmapLoader(String url) {
+  public static Bitmap bitmapLoaderEx(String url) {
     HttpURLConnection   httpConnection  = null;
     BufferedInputStream buffInputStream = null;
     Bitmap bitmap = null;

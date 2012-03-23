@@ -99,6 +99,9 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
           // вырезаем
           Bitmap clippedBitmap = Imager.clipping(rawBitmap,mBitmapWidth,mBitmapHeight);
           
+          rawBitmap.recycle();
+          rawBitmap = null;
+          
           // отображаем
           imagePost(imageView,clippedBitmap);
           
@@ -106,15 +109,10 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
           mMemoryCache.put(position,clippedBitmap);
           mStorageCache.save(mDataList.get(position).getSmallLink(),clippedBitmap);
           
-          //clippedBitmap.recycle();  // нельзя !
           clippedBitmap = null;
           
         } catch (Exception e) {
           Debug.log(App.TAG,"thread error:"+e);
-        } finally {
-          if(rawBitmap!=null)
-            rawBitmap.recycle();
-          rawBitmap = null;
         }
       } // run
     }); // thread
