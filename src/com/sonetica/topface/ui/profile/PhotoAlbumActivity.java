@@ -1,5 +1,6 @@
 package com.sonetica.topface.ui.profile;
 
+import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.net.ApiHandler;
@@ -17,6 +18,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ public class PhotoAlbumActivity extends Activity {
   private boolean mOwner;
   private TextView mCounter;
   private DatingGallery mGallery;
+  private ViewGroup mHeaderBar;
   private PhotoAlbumGalleryAdapter mGalleryAdapter;
   private ProgressDialog mProgressDialog;
   // Constants
@@ -43,6 +46,9 @@ public class PhotoAlbumActivity extends Activity {
     System.gc();
     
     LeaksManager.getInstance().monitorObject(this);
+    
+    //Header
+    mHeaderBar = (ViewGroup)findViewById(R.id.tvHeaderBar);
 
     // Title Header
     mCounter = ((TextView)findViewById(R.id.tvHeaderTitle));
@@ -68,6 +74,16 @@ public class PhotoAlbumActivity extends Activity {
     mGallery = (DatingGallery)findViewById(R.id.galleryAlbum);
     mGallery.setAdapter(mGalleryAdapter);
     mGallery.setSelection(position,true);
+    mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> arg0,View arg1,int arg2,long arg3) {
+        int visibility = mHeaderBar.getVisibility();
+        if(visibility==View.INVISIBLE)
+          mHeaderBar.setVisibility(View.VISIBLE);
+        else
+          mHeaderBar.setVisibility(View.INVISIBLE);
+      }
+    });
     mGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> arg0,View arg1,int position,long arg3) {
@@ -84,6 +100,18 @@ public class PhotoAlbumActivity extends Activity {
   public void setCounter(int index,int size) {
     mCounter.setText(index+"/"+size);
     mCounter.invalidate();
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    App.unbind();
+    super.onStop();
   }
   //---------------------------------------------------------------------------  
   @Override

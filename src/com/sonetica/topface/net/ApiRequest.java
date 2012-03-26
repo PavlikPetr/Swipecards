@@ -36,11 +36,17 @@ public abstract class ApiRequest {
         String rawResponse = null;
         
         int counter = 0;
+        
         do {
-          if(counter == LOOP) break;
-          else counter++;
           rawResponse = Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString());
-          Debug.log(App.TAG,"loop");
+          
+          if(rawResponse==null)
+            Debug.log(App.TAG,"loop:"+counter);
+
+          if(counter == LOOP) 
+            break;
+          else 
+            counter++;
         } while(rawResponse == null);
         
         ApiResponse response = new ApiResponse(rawResponse);

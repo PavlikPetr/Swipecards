@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.inbox;
 
 import java.util.LinkedList;
+import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
@@ -101,6 +102,8 @@ public class InboxActivity extends Activity {
     create();
     update(true);
     
+    App.delete();
+    
     // обнуление информера непрочитанных сообщений
     Data.s_Messages = 0;
   }
@@ -153,6 +156,18 @@ public class InboxActivity extends Activity {
     mProgressDialog = null;
     
     Data.s_UserDrw = null;
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    App.unbind();
+    super.onStop();
   }
   //---------------------------------------------------------------------------
   @Override

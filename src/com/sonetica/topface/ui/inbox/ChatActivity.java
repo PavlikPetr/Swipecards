@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.inbox;
 
 import java.util.LinkedList;
+import com.sonetica.topface.App;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.History;
 import com.sonetica.topface.net.ApiHandler;
@@ -95,6 +96,11 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     btnSend.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        final String text = mEdBox.getText().toString();
+        
+        if(text==null || text.length()==0)
+          return;
+        
         mProgressDialog.show();
 
         InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -112,7 +118,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
             history.gift=0;
             history.owner_id=0;
             history.created=System.currentTimeMillis();
-            history.text=mEdBox.getText().toString();
+            history.text=text;
             history.type=History.MESSAGE;
             mAdapter.addSentMessage(history);
             mAdapter.notifyDataSetChanged();
@@ -200,6 +206,18 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     mAdapter = null;
     mHistoryList = null;
     mProgressDialog = null;
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    App.unbind();
+    super.onStop();
   }
   //---------------------------------------------------------------------------
   @Override

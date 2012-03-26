@@ -1,6 +1,8 @@
-package com.sonetica.topface;
+package com.sonetica.topface.ui;
 
-import com.sonetica.topface.services.StatisticService;
+import com.sonetica.topface.Data;
+import com.sonetica.topface.Global;
+import com.sonetica.topface.R;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.dashboard.DashboardActivity;
 import com.sonetica.topface.utils.Debug;
@@ -30,7 +32,7 @@ public class MainActivity extends Activity {
     
     //startService(new Intent(this,ConnectionService.class));
     
-    startService(new Intent(getApplicationContext(),StatisticService.class));
+    //startService(new Intent(getApplicationContext(),StatisticService.class));
     
     if(Data.SSID.length()>0) {
       Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);

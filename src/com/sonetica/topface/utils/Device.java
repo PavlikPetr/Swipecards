@@ -28,29 +28,36 @@ public class Device {
   public static final int LANDSCAPE = 1;
   public static final int WTF = 2;
   //---------------------------------------------------------------------------
-  public static void init(Context context) {
-    if(getOrientation(context)==LANDSCAPE)
-      width = getDisplay(context).getHeight();
-    else
-      width = getDisplay(context).getWidth();
+  public static boolean init(Context context) {
+    try {
+      if(getOrientation(context)==LANDSCAPE)
+        width = getDisplay(context).getHeight();
+      else
+        width = getDisplay(context).getWidth();
 
-    switch(width) {
-      case 240:
-      case 320:
-        Data.s_gridColumn = 2;
-        break;
-      case 480:
-        Data.s_gridColumn = 3;
-        break;
-      case 720:
-      case 800:
-        Data.s_gridColumn = 4;
-        break;
-      default:
-        Data.s_gridColumn = 4;
-        break;
+      switch(width) {
+        case 240:
+        case 320:
+          Data.s_gridColumn = 2;
+          break;
+        case 480:
+          Data.s_gridColumn = 3;
+          break;
+        case 720:
+        case 800:
+          Data.s_gridColumn = 4;
+          break;
+        default:
+          Data.s_gridColumn = 4;
+          break;
+      }
+      
+      if(width == 0)
+        return false;
+    } catch (Exception e) {
+      return false;
     }
-
+    return true;
   }
   //---------------------------------------------------------------------------
   public static Display getDisplay(Context context) {

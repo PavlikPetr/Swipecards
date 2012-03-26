@@ -35,6 +35,7 @@
   <string name="chat_wish_out">Secret wish sent.</string>
   <string name="chat_sexuality_in">Sexuality rated.</string>
   <string name="chat_sexuality_out">You have your sexuality rated.</string> 
+  <string name="chat_money_in">You got a coin</string>
   
   <!-- Tops Activity -->
   <string name="tops_header_title">Most popular</string>

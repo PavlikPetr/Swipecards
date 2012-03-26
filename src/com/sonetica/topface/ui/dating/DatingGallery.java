@@ -48,13 +48,18 @@ public class DatingGallery extends Gallery implements View.OnTouchListener {
   //---------------------------------------------------------------------------
   private boolean isScrollingLeft(MotionEvent e1, MotionEvent e2){ 
     return e2.getX() > e1.getX(); 
-   }
+  }
   //---------------------------------------------------------------------------
-  public static final int LEFT  = -1;
-  public static final int RIGHT = 1;
-  public int side=0;
   @Override
   public boolean onTouch(View v,MotionEvent event) {
+    return false;
+  }
+  //---------------------------------------------------------------------------
+  //public static final int LEFT  = -1;
+  //public static final int RIGHT = 1;
+  //public int side=0;
+  //@Override
+  //public boolean onTouch(View v,MotionEvent event) {
     /*
     if(this.getSelectedItemId()==0 || this.getSelectedItemId()==this.getCount()-1)
       switch (event.getAction()) {
@@ -114,8 +119,8 @@ public class DatingGallery extends Gallery implements View.OnTouchListener {
         } break;
       }
       */
-    return false;
-  }
+    //return false;
+  //}
   //---------------------------------------------------------------------------
 }
 

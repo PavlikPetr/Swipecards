@@ -34,7 +34,8 @@
   <string name="chat_wish_in">Вам отправили Тайное Желание.</string>
   <string name="chat_wish_out">Вы отправили Тайное Желание.</string>
   <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>
-  <string name="chat_sexuality_out">Вы оценили сексуальность.</string> 
+  <string name="chat_sexuality_out">Вы оценили сексуальность.</string>
+  <string name="chat_money_in">Вам начислена монета</string>
   
   <!-- Tops Activity -->
   <string name="tops_header_title">Самые красивые</string>

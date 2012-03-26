@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <item type="id" name="gridview"/>
-  <item type="id" name="datingLayout"/>
   <item type="id" name="starsView"/>
   <item type="id" name="chatBtn"/>
   <item type="id" name="profileBtn"/>
   <item type="id" name="datingRes"/>
   <item type="id" name="datingPlus"/>
+  <item type="id" name="datingLayout"/>
 </resources>

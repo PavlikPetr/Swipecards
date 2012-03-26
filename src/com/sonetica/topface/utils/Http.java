@@ -29,7 +29,7 @@ public class Http {
   private static final String TAG = "Http"; 
   private static final int HTTP_GET_REQUEST  = 0;
   private static final int HTTP_POST_REQUEST = 1;
-  private static final int HTTP_TIMEOUT = 8*1000;
+  private static final int HTTP_TIMEOUT = 5*1000;
   //---------------------------------------------------------------------------
   // Проверка на наличие интернета
   public static boolean isOnline(Context context) {

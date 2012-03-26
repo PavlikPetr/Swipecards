@@ -1,5 +1,6 @@
 package com.sonetica.topface.ui.dashboard;
 
+import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Profile;
@@ -9,7 +10,6 @@ import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.ui.LogActivity;
 import com.sonetica.topface.ui.LeaksActivity;
-import com.sonetica.topface.ui.Recycle;
 import com.sonetica.topface.ui.dating.DatingActivity;
 import com.sonetica.topface.ui.inbox.InboxActivity;
 import com.sonetica.topface.ui.likes.LikesActivity;
@@ -40,14 +40,11 @@ import android.widget.Toast;
  */
 public class DashboardActivity extends Activity implements View.OnClickListener {
   // Data
-  private boolean mBlock;
-  private boolean mIsUpdateNotify;
+  private boolean start;
   private TextView mLikesNotify;
   private TextView mInboxNotify;
   private TextView mRatesNotify;
-  private NotifyHandler  mNotifyHandler;
   private ProgressDialog mProgressDialog;
-  private int sleep_time = 1000*60;   // ВРЕМЯ ОБНОВЛЕНИЯ НОТИФИКАЦИЙ
   // Constants
   public static final int INTENT_DASHBOARD = 100;
   //---------------------------------------------------------------------------
@@ -59,94 +56,105 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     
     LeaksManager.getInstance().monitorObject(this);
     
-    Recycle.init(this);
-    
-    mLikesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyLikes);
-    mInboxNotify = (TextView)findViewById(R.id.tvDshbrdNotifyChat);
-    mRatesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyRates);
-
-    ((Button)findViewById(R.id.btnDshbrdDating)).setOnClickListener(this);
-    ((Button)findViewById(R.id.btnDshbrdLikes)).setOnClickListener(this);
-    ((Button)findViewById(R.id.btnDshbrdRates)).setOnClickListener(this);
-    ((Button)findViewById(R.id.btnDshbrdChat)).setOnClickListener(this);
-    ((Button)findViewById(R.id.btnDshbrdTops)).setOnClickListener(this);
-    ((Button)findViewById(R.id.btnDshbrdProfile)).setOnClickListener(this);
-
-    if(/*!App.cached &&*/ !Http.isOnline(this)){
-      Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
-      return;
+    if(App.init && Data.SSID.length() > 0) {
+      //startService(new Intent(this,ConnectionService.class));
+      //startService(new Intent(getApplicationContext(),StatisticService.class));
+      //Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+      //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+      //startActivity(intent);
+      //mNotifyHandler.sendEmptyMessageDelayed(0,sleep_time);
+      
+      // Progress Bar
+      mProgressDialog = new ProgressDialog(this);
+      mProgressDialog.setMessage(getString(R.string.dialog_loading));
+      mProgressDialog.show();
+      
+      mLikesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyLikes);
+      mInboxNotify = (TextView)findViewById(R.id.tvDshbrdNotifyChat);
+      mRatesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyRates);
+  
+      ((Button)findViewById(R.id.btnDshbrdDating)).setOnClickListener(this);
+      ((Button)findViewById(R.id.btnDshbrdLikes)).setOnClickListener(this);
+      ((Button)findViewById(R.id.btnDshbrdRates)).setOnClickListener(this);
+      ((Button)findViewById(R.id.btnDshbrdChat)).setOnClickListener(this);
+      ((Button)findViewById(R.id.btnDshbrdTops)).setOnClickListener(this);
+      ((Button)findViewById(R.id.btnDshbrdProfile)).setOnClickListener(this);
+      
+      Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_bar_header);
+      Data.s_HeaderHeight = bitmap.getHeight();
+      bitmap.recycle();
+      
+      if(!Http.isOnline(this)){
+        Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
+        return;
+      }
+      
+      update();
+      
+    } else { 
+      startActivity(new Intent(getApplicationContext(),SocialActivity.class));
+      finish();
     }
-    
-    // Progress Bar
-    mProgressDialog = new ProgressDialog(this);
-    mProgressDialog.setMessage(getString(R.string.dialog_loading));
-    mProgressDialog.show();
-    
-    mNotifyHandler = new NotifyHandler();
-    
-    Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_bar_header);
-    Data.s_HeaderHeight = bitmap.getHeight();
-    bitmap.recycle();
-    
-    update();
-    
-    //mNotifyHandler.sendEmptyMessageDelayed(0,sleep_time);
   }
   //---------------------------------------------------------------------------
   private void update() {
+    start = true;
+    
     ProfileRequest profileRequest = new ProfileRequest(this,false);
     profileRequest.callback(new ApiHandler() {
       @Override
       public void success(final ApiResponse response) {
         Profile profile = Profile.parse(response,false);
-        if(profile==null) {
-          mBlock=true;
-          Toast.makeText(DashboardActivity.this.getApplicationContext(),"Profile is null",Toast.LENGTH_SHORT).show();
-        }
         Data.setProfile(profile);
         mProgressDialog.cancel();
         Imager.avatarOwnerPreloading(DashboardActivity.this.getApplicationContext());
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
-        mBlock=true;
       }
     }).exec();
   }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    
-    System.gc();
-    
-    if(Data.SSID==null)
-      finish();
-    
-    if(Data.SSID.length()>0)
-      return;
+  //---------------------------------------------------------------------------
+  private void updateNotify() {
+    ProfileRequest profileRequest = new ProfileRequest(getApplicationContext(),true);
+    profileRequest.callback(new ApiHandler() {
+      @Override
+      public void success(final ApiResponse response) {
+        Profile profile = Profile.parse(response,true);
+        Data.updateNotification(profile);
+        invalidateNotification();
+        Debug.log(DashboardActivity.this,"up");
+      }
+      @Override
+      public void fail(int codeError,ApiResponse response) {
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  private void invalidateNotification() {
+    if(Data.s_Likes > 0) {
+      mLikesNotify.setText(" "+Data.s_Likes+" ");
+      mLikesNotify.setVisibility(View.VISIBLE);
+    } else
+      mLikesNotify.setVisibility(View.INVISIBLE);
 
-    startActivity(new Intent(getApplicationContext(),SocialActivity.class));
-    finish();
- }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onResume() {
-    super.onResume();
+    if(Data.s_Messages > 0) {
+      mInboxNotify.setText(" "+Data.s_Messages+" ");
+      mInboxNotify.setVisibility(View.VISIBLE);
+    } else
+      mInboxNotify.setVisibility(View.INVISIBLE);
     
-    mIsUpdateNotify = true;
-    invalidateNotification();
+    if(Data.s_Rates > 0) {
+      mRatesNotify.setText(" "+Data.s_Rates+" ");
+      mRatesNotify.setVisibility(View.VISIBLE);
+    } else
+      mRatesNotify.setVisibility(View.INVISIBLE);
   }
   //---------------------------------------------------------------------------
   @Override
   public void onClick(View view) {  
-    if(/*!App.cached &&*/ !Http.isOnline(this)){
+    if(!Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
-      return;
-    }
-    
-    if(mBlock==true) {
-      Toast.makeText(this,"profile is null",Toast.LENGTH_SHORT).show();
       return;
     }
 
@@ -171,50 +179,42 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       } break;      
       default:
     }
-
   }
   //---------------------------------------------------------------------------  
   @Override
-  protected void onPause() {
-    super.onPause();
+  protected void onStart() {
+    super.onStart();
+
+    System.gc();
     
-    mIsUpdateNotify = false;
+    App.bind(getBaseContext());
+    
+    if(start && Data.SSID.length() > 0) {
+      invalidateNotification();
+      updateNotify();
+      return;
+    }
+    
+    startActivity(new Intent(getApplicationContext(),SocialActivity.class));
+    finish();
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    
+    App.unbind();
+
+    super.onStop();
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    mIsUpdateNotify = false;
-    mNotifyHandler  = null;
-    
-    Data.clear();
-
-    Recycle.release();
+    start = false;
     
     System.gc();
     
     Debug.log(this,"-onDestroy");
     super.onDestroy();
-  }
-  //---------------------------------------------------------------------------
-  private void invalidateNotification() {
-    if(Data.s_Likes > 0) {
-      mLikesNotify.setText(" "+Data.s_Likes+" ");
-      mLikesNotify.setVisibility(View.VISIBLE);
-    } else
-      mLikesNotify.setVisibility(View.INVISIBLE);
-
-    if(Data.s_Messages > 0) {
-      mInboxNotify.setText(" "+Data.s_Messages+" ");
-      mInboxNotify.setVisibility(View.VISIBLE);
-    } else
-      mInboxNotify.setVisibility(View.INVISIBLE);
-    
-    if(Data.s_Rates > 0) {
-      mRatesNotify.setText(" "+Data.s_Rates+" ");
-      mRatesNotify.setVisibility(View.VISIBLE);
-    } else
-      mRatesNotify.setVisibility(View.INVISIBLE);
-    
   }
   //---------------------------------------------------------------------------
   // Menu
@@ -231,7 +231,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   //---------------------------------------------------------------------------
   @Override
   public boolean onMenuItemSelected(int featureId,MenuItem item) {
-    switch (item.getItemId()) {
+    switch(item.getItemId()) {
       case MENU_LOG:
         startActivity(new Intent(getApplicationContext(),LogActivity.class));
         break;
@@ -248,11 +248,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
-      
-      if(!mIsUpdateNotify) {
-        NotifyHandler.this.sendEmptyMessageDelayed(0,sleep_time);
-        return;
-      }
 
       ProfileRequest profileRequest = new ProfileRequest(DashboardActivity.this.getApplicationContext(),true);
       profileRequest.callback(new ApiHandler() {
@@ -263,7 +258,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
           invalidateNotification();
           
           //sendEmptyMessageDelayed(0,sleep_time);
-          mNotifyHandler.sendEmptyMessageDelayed(0,sleep_time);
+          //mNotifyHandler.sendEmptyMessageDelayed(0,sleep_time);
           
           Debug.log(DashboardActivity.this,"up");
         }

@@ -1,5 +1,6 @@
 package com.sonetica.topface.billing;
 
+import com.sonetica.topface.App;
 import com.sonetica.topface.R;
 import com.sonetica.topface.billing.BillingService.RequestPurchase;
 import com.sonetica.topface.billing.BillingService.RestoreTransactions;
@@ -89,12 +90,14 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
   @Override
   protected void onStart() {
     super.onStart();
+    App.bind(getBaseContext());
     ResponseHandler.register(mTopfacePurchaseObserver);
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onStop() {
     super.onStop();
+    App.unbind();
     ResponseHandler.unregister(mTopfacePurchaseObserver);
   }
   //---------------------------------------------------------------------------

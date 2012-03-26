@@ -2,7 +2,6 @@ package com.sonetica.topface;
 
 import com.sonetica.topface.R;
 import android.content.Context;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 
 /*
@@ -27,21 +26,22 @@ public class Global {
   public static final int W = 640;  // максимально разрешение для отправки фото на ТФ сервер
   public static final int H = 960;
   //---------------------------------------------------------------------------
-  public static void init(Context context) {
-    API_VERSION            = context.getResources().getInteger(R.integer.api_version);
-    API_URL                = context.getString(R.string.api_url);
-    EXTERANAL_CACHE_DIR    = context.getString(R.string.sdcard_root_path)+context.getString(R.string.sdcard_cache_path);
-    SHARED_PREFERENCES_TAG = context.getString(R.string.general_preferences_name);
-    TOKEN_PREFERENCES_TAG  = context.getString(R.string.token_preferences_name);
-    LOCALE                 = context.getApplicationContext().getResources().getConfiguration().locale.getLanguage();
+  public static boolean init(Context context) {
     try {
-      CLIENT_VERSION       = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-    } catch(NameNotFoundException e) {
-      CLIENT_VERSION = "0.0";
+      API_VERSION            = context.getResources().getInteger(R.integer.api_version);
+      API_URL                = context.getString(R.string.api_url);
+      EXTERANAL_CACHE_DIR    = context.getString(R.string.sdcard_root_path)+context.getString(R.string.sdcard_cache_path);
+      SHARED_PREFERENCES_TAG = context.getString(R.string.general_preferences_name);
+      TOKEN_PREFERENCES_TAG  = context.getString(R.string.token_preferences_name);
+      LOCALE                 = context.getApplicationContext().getResources().getConfiguration().locale.getLanguage();
+      CLIENT_VERSION         = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+      CLIENT_TYPE            = "android";
+      CLIENT_DEVICE          = Build.BRAND + " " + Build.MANUFACTURER;
+      CLIENT_ID              = Build.ID;
+    }catch (Exception e) {
+      return false;
     }
-    CLIENT_TYPE            = "android";
-    CLIENT_DEVICE          = Build.BRAND + " " + Build.MANUFACTURER;
-    CLIENT_ID              = Build.ID;
+    return true;
   }
   //---------------------------------------------------------------------------
 }

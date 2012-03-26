@@ -1,5 +1,6 @@
 package com.sonetica.topface.ui.tops;
 
+import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
@@ -214,6 +215,18 @@ public class TopsActivity extends Activity {
     });
     AlertDialog alert = builder.create();
     alert.show();
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    App.unbind();
+    super.onStop();
   }
   //---------------------------------------------------------------------------  
   @Override

@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.likes;
 
 import java.util.LinkedList;
+import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Like;
@@ -151,6 +152,18 @@ public class LikesActivity extends Activity {
 
     mLikesDataList=null;
     mProgressDialog=null;
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    App.unbind();
+    super.onStop();
   }
   //---------------------------------------------------------------------------
   @Override

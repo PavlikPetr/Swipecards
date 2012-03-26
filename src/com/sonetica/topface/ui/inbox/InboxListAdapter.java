@@ -111,6 +111,10 @@ public class InboxListAdapter extends BaseAdapter {
         holder.mText.setText(inbox.text);
         break;
       case Inbox.PHOTO:
+        if(inbox.code>100500) {
+          holder.mText.setText(mContext.getString(R.string.chat_money_in) + /*" " + msg.code +*/ ".");
+          break;
+        }
         holder.mText.setText(mContext.getString(R.string.chat_rate_in) + " " + inbox.code + ".");
         break;
       case Inbox.GIFT:

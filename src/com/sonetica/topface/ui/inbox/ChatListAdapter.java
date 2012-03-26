@@ -123,6 +123,10 @@ public class ChatListAdapter extends BaseAdapter {
         holder.mMessage.setText(msg.text);
         break;
       case History.PHOTO: {
+        if(msg.code>100500) {
+          holder.mMessage.setText(mContext.getString(R.string.chat_money_in) + /*" " + msg.code +*/ ".");
+          break;
+        }
         switch(type) {
           case T_FRIEND_PHOTO:
           case T_FRIEND_EXT:{ 

@@ -34,25 +34,15 @@ public class Data {
   public static int s_AverageRate;
   
   // Topface ssid key
-  public static String SSID;  // ключ для запросов к TP серверу
+  public static String SSID = "";  // ключ для запросов к TP серверу
   //---------------------------------------------------------------------------
-  public static void init(Context context) {
+  public static boolean init(Context context) {
     SSID = Data.loadSSID(context);
     //s_LogList = new LinkedList<String>();
-  }
-  //---------------------------------------------------------------------------
-  public static void setProfile(Profile profile) {
-    s_Profile = profile;
-    updateNotification(profile);
-  }
-  //---------------------------------------------------------------------------
-  public static void updateNotification(Profile profile) {
-    s_Power = profile.power;
-    s_Money = profile.money;
-    s_Rates = profile.unread_rates;
-    s_Likes = profile.unread_likes;
-    s_Messages = profile.unread_messages;
-    s_AverageRate = profile.average_rate;
+    if(SSID!=null)
+      return true;
+    else
+      return false;
   }
   //---------------------------------------------------------------------------
   public static void saveSSID(Context context,String ssid) {
@@ -80,6 +70,20 @@ public class Data {
     SharedPreferences.Editor editor = preferences.edit();
     editor.putString(context.getString(R.string.s_ssid),SSID);
     editor.commit();
+  }
+  //---------------------------------------------------------------------------
+  public static void setProfile(Profile profile) {
+    s_Profile = profile;
+    updateNotification(profile);
+  }
+  //---------------------------------------------------------------------------
+  public static void updateNotification(Profile profile) {
+    s_Power = profile.power;
+    s_Money = profile.money;
+    s_Rates = profile.unread_rates;
+    s_Likes = profile.unread_likes;
+    s_Messages = profile.unread_messages;
+    s_AverageRate = profile.average_rate;
   }
   //---------------------------------------------------------------------------
   public static void clear() {

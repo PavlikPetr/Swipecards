@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.profile;
 
 import java.util.LinkedList;
+import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.billing.BuyingActivity;
@@ -206,14 +207,6 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     else 
       getAlbum();  // грузим галерею
   }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onStart() {
-    super.onStart();
-    
-    if(mOwner)
-      getProfile();
-  }  
   //---------------------------------------------------------------------------
   // свой профиль
   private void getProfile() {
@@ -640,6 +633,20 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     Data.s_PhotoAlbum=null;
     
     mAddPhotoDialog=null;
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    App.bind(getBaseContext());
+    if(mOwner)
+      getProfile();
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    App.unbind();
+    super.onStop();
   }
   //---------------------------------------------------------------------------
   @Override

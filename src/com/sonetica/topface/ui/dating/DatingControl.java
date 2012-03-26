@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /*    ЛАПША КОД - СКОРОСТЬ превыше КАЧЕСТВА
@@ -48,6 +49,7 @@ public class DatingControl extends ViewGroup {
   private RateControl mRateControl;      // звезды
   private ResourcesView mResourcesView;    // монеты и энергия
   private LinkedList<SearchUser> mDataList;  // массив пользователей под оценку
+  private ProgressBar mProgressBar;
   private OnNeedUpdateListener mOnNeedUpdateListener;  // нужно подтянуть еще пользователей под оценку
   // Visible States
   public static final int V_SWAP_ALL  = 0;  // состояния скрытия элементов на экране
@@ -74,6 +76,11 @@ public class DatingControl extends ViewGroup {
       @Override
       public void onInvalidated() {}
     });
+    
+    // Progress
+    mProgressBar = new ProgressBar(getContext());
+    //Widget.ProgressBar.Small
+    addView(mProgressBar);
     
     // Gallery
     mDatingGallery = new DatingGallery(context, attrs);
@@ -149,6 +156,8 @@ public class DatingControl extends ViewGroup {
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
     super.onMeasure(widthMeasureSpec,heightMeasureSpec);
     
+    mProgressBar.measure(0,0);
+    
     mDatingGallery.measure(widthMeasureSpec,heightMeasureSpec);
     
     int offset_y = Data.s_HeaderHeight;
@@ -169,10 +178,15 @@ public class DatingControl extends ViewGroup {
     
     int offset_y = Data.s_HeaderHeight;
     
+    int x = (right-mProgressBar.getMeasuredWidth())/2;
+    int y = (bottom-mProgressBar.getMeasuredHeight())/2;
+    mProgressBar.layout(x,y,x+mProgressBar.getMeasuredWidth(),y+mProgressBar.getMeasuredHeight());
+    
+    
     mFaceView.layout(0,offset_y,right,bottom);
     
-    int x = mBackButton.getMeasuredWidth()/10;
-    int y = (mRateControl.getMeasuredHeight()-mBackButton.getMeasuredHeight())/2;
+    x = mBackButton.getMeasuredWidth()/10;
+    y = (mRateControl.getMeasuredHeight()-mBackButton.getMeasuredHeight())/2;
     
     mBackButton.layout(x,y,x+mBackButton.getMeasuredWidth(),y+mBackButton.getMeasuredHeight());
     
@@ -259,21 +273,23 @@ public class DatingControl extends ViewGroup {
           mBackButton.setVisibility(View.VISIBLE);          
         }
       }  break;
-      case V_SHOW_INFO: {
-        // активировать
-        mNotHide = true;
-        mRateControl.setBlock(true);
-        visibility=mResourcesView.getVisibility();
-        if(visibility==View.VISIBLE) {
-          mFaceView.setVisibility(View.VISIBLE);
-          mCounter.setVisibility(View.VISIBLE);
-        }
-      } break;
       case V_SHOW_BACK: {
         visibility=mBackButton.getVisibility();
         if(visibility==View.INVISIBLE) {
           mBackButton.setVisibility(View.VISIBLE);
           DatingActivity.mHeaderBar.setVisibility(View.VISIBLE);
+        }
+      } break;
+      case V_SHOW_INFO: {
+        // активировать
+        mNotHide = true;
+        mRateControl.setBlock(true);
+        mDatingGallery.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
+        visibility = mResourcesView.getVisibility();
+        if(visibility == View.VISIBLE) {
+          mFaceView.setVisibility(View.VISIBLE);
+          mCounter.setVisibility(View.VISIBLE);
         }
       } break;
     }
@@ -282,11 +298,15 @@ public class DatingControl extends ViewGroup {
   // Установка следующего пользователя для оценки
   public void next() {
     Debug.log(this,"next");
-    // блокировать
-    mFaceView.setVisibility(View.INVISIBLE);
-    mCounter.setVisibility(View.INVISIBLE);
-    mRateControl.setBlock(false);
-    mNotHide = false;
+    
+    { // блокировать
+      mFaceView.setVisibility(View.INVISIBLE);
+      mCounter.setVisibility(View.INVISIBLE);
+      mRateControl.setBlock(false);
+      mDatingGallery.setVisibility(View.INVISIBLE);
+      mProgressBar.setVisibility(View.VISIBLE);
+      mNotHide = false;
+    }
     
     int count = mDataList.size()-1;
     

@@ -1,6 +1,7 @@
 package com.sonetica.topface.ui.dating;
 
 import java.util.LinkedList;
+import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.billing.BuyingActivity;
@@ -31,7 +32,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +43,6 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   private Dialog mCommentDialog;
   private EditText mCommentText;
   private InputMethodManager mInputManager;
-  private ProgressBar mProgress;
   // Constants
   public static ViewGroup mHeaderBar;
   //---------------------------------------------------------------------------
@@ -63,9 +62,6 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     
     // Resources Buying Button
     ((ResourcesView)findViewById(R.id.datingRes)).setOnClickListener(this);
-    
-    // Progress Bar
-    mProgress = (ProgressBar)findViewById(R.id.pgrsDating);
     
     // Resourse Plus
     View ivDatingPlus = findViewById(R.id.datingPlus);
@@ -119,7 +115,6 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
           if(mDatingControl!=null)
             mDatingControl.setDataList(userList);
         }
-        mProgress.setVisibility(View.INVISIBLE);
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
@@ -245,6 +240,18 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
       Debug.log(this,"filterActivity->datingResult");
       update(true);
     }
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    App.unbind();
+    super.onStop();
   }
   //---------------------------------------------------------------------------
   @Override
