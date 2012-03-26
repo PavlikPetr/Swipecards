@@ -99,8 +99,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       //mNotifyHandler = new Handler();
       //mNotifyHandler.postDelayed(new RunTask(),TIMER);
       
-      mNotificationReceiver = new NotificationReceiver();
-      
       update();
     } else { 
       startActivity(new Intent(getApplicationContext(),SocialActivity.class));
@@ -113,9 +111,14 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     super.onStart();
     System.gc();
     //App.bind(getBaseContext());
+    
     if(start && Data.SSID.length() > 0) {
-      if(mNotificationReceiver != null)
+      
+      if(mNotificationReceiver == null) {
+        mNotificationReceiver = new NotificationReceiver();
         registerReceiver(mNotificationReceiver,new IntentFilter(ACTION));
+      }
+      
       invalidateNotification();
       updateNotify();
       return;
@@ -127,8 +130,11 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onStop() {
     //App.unbind();
-    if(mNotificationReceiver!=null)
+    
+    if(mNotificationReceiver != null) {
       unregisterReceiver(mNotificationReceiver);
+      mNotificationReceiver = null;
+    }
 
     super.onStop();
   }
@@ -137,7 +143,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   protected void onDestroy() {
     start = false;
     System.gc();
-    mNotificationReceiver = null;
+    
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }

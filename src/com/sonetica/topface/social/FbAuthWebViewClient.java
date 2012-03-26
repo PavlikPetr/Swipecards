@@ -28,8 +28,8 @@ public class FbAuthWebViewClient extends WebViewClient {
   private Handler mHandler;
   private View    mProgressIndicator;
   // RegExp
-  private Pattern mRegExpToken = Pattern.compile("login_success.html#(.*access_token=.+)$");
-  private Pattern mRegExpError = Pattern.compile("login_success.html#(.*error=.+)$");
+  private Pattern mRegExpToken  = Pattern.compile("login_success.html#(.*access_token=.+)$");
+  private Pattern mRegExpError  = Pattern.compile("login_success.html#(.*error=.+)$");
   private Pattern mRegExpLogout = Pattern.compile("(.*act=logout.+)$");
   // Constants
   private static final long CLIENT_ID = 161347997227885L;

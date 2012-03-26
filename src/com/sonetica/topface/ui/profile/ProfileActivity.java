@@ -17,6 +17,7 @@ import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.social.SocialActivity;
 import com.sonetica.topface.social.Socium;
 import com.sonetica.topface.social.Socium.AuthException;
+import com.sonetica.topface.ui.dating.ResourcesView;
 import com.sonetica.topface.ui.inbox.ChatActivity;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Http;
@@ -51,6 +52,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
   private Button mProfileButton;
   private TextView mHeaderTitle;
   private ViewGroup mEroViewGroup;
+  private ResourcesView mResources;
   private FrameImageView mFramePhoto;
   private HorizontalListView mListView;
   private HorizontalListView mListEroView;
@@ -105,6 +107,9 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     // Profile Header Button 
     mProfileButton = ((Button)findViewById(R.id.btnHeader));
     mProfileButton.setOnClickListener(this);
+    
+    // Resources
+    mResources = (ResourcesView)findViewById(R.id.datingRes);
     
     // свой - чужой профиль
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
@@ -212,8 +217,12 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
   protected void onStart() {
     super.onStart();
     //App.bind(getBaseContext());
-    if(mOwner)
+    
+    if(mOwner) {
       getProfile();
+      mResources.setResources(Data.s_Power,Data.s_Money);
+      mResources.invalidate();
+    }
   }
   //---------------------------------------------------------------------------  
   @Override

@@ -22,6 +22,10 @@ public class SocialActivity extends Activity implements View.OnClickListener {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_social);
     
+    // clear web cache
+    //deleteDatabase("webview.db");
+    //deleteDatabase("webviewCache.db");
+    
     // VKontakte Button
     ((Button)findViewById(R.id.btnSocialVk)).setOnClickListener(this);
     
@@ -31,9 +35,9 @@ public class SocialActivity extends Activity implements View.OnClickListener {
   //---------------------------------------------------------------------------
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-    if(requestCode!=SocialWebActivity.INTENT_SOCIAL_WEB)
+    if(requestCode != SocialWebActivity.INTENT_SOCIAL_WEB)
       return;
-    if(resultCode==Activity.RESULT_OK) {
+    if(resultCode == Activity.RESULT_OK) {
       startActivity(new Intent(this,DashboardActivity.class));
       finish();
     }

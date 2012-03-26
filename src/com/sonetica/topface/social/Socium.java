@@ -13,7 +13,7 @@ public class Socium {
   public Socium(Context context) throws AuthException {
     AuthToken.Token token = new AuthToken(context).getToken();
     if(token == null)
-      throw new AuthException("VkAuthToken is not valid or empty");
+      throw new AuthException("AuthToken is not valid or empty");
     
     if(token.getSocialNet().equals(AuthToken.SN_VKONTAKTE))
       mApi = new VkApi(context,token);
