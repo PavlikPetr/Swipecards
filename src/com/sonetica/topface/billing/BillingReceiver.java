@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 
 public class BillingReceiver extends BroadcastReceiver {
+  //---------------------------------------------------------------------------
   @Override
   public void onReceive(Context context,Intent intent) {
     String action = intent.getAction();
@@ -36,7 +37,7 @@ public class BillingReceiver extends BroadcastReceiver {
       checkResponseCode(context,requestId,responseCodeIndex);
     }
   }
-
+  //---------------------------------------------------------------------------
   private void purchaseStateChanged(Context context,String signedData,String signature) {
     Intent intent = new Intent(Consts.ACTION_PURCHASE_STATE_CHANGED);
     intent.setClass(context,BillingService.class);
@@ -44,14 +45,14 @@ public class BillingReceiver extends BroadcastReceiver {
     intent.putExtra(Consts.INAPP_SIGNATURE,signature);
     context.startService(intent);
   }
-
+  //---------------------------------------------------------------------------
   private void notify(Context context,String notifyId) {
     Intent intent = new Intent(Consts.ACTION_GET_PURCHASE_INFORMATION);
     intent.setClass(context,BillingService.class);
     intent.putExtra(Consts.NOTIFICATION_ID,notifyId);
     context.startService(intent);
   }
-
+  //---------------------------------------------------------------------------
   private void checkResponseCode(Context context,long requestId,int responseCodeIndex) {
     Intent intent = new Intent(Consts.ACTION_RESPONSE_CODE);
     intent.setClass(context,BillingService.class);
@@ -59,4 +60,5 @@ public class BillingReceiver extends BroadcastReceiver {
     intent.putExtra(Consts.INAPP_RESPONSE_CODE,responseCodeIndex);
     context.startService(intent);
   }
+  //---------------------------------------------------------------------------
 }

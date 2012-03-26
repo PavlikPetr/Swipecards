@@ -128,6 +128,19 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
     
     showImage();
   }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onDestroy() {
+    mAlbumsList = null;
+    mLikeButton = null;
+    mDislikeButton = null;
+    mBuyButton = null;
+    mProgressDialog = null;
+    mEroView = null;
+    
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();  
+  }
   //---------------------------------------------------------------------------
   public void voteImage(int vote) {
     PhotoVoteRequest photoVoteRequest = new PhotoVoteRequest(getApplicationContext());
@@ -272,19 +285,6 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
         mNextButton.setVisibility(View.VISIBLE);
       } break;
     }
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onDestroy() {
-    mAlbumsList = null;
-    mLikeButton = null;
-    mDislikeButton = null;
-    mBuyButton = null;
-    mProgressDialog = null;
-    mEroView = null;
-    
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();  
   }
   //---------------------------------------------------------------------------
   // class LoaderEroPhoto

@@ -2,10 +2,6 @@
 
 package com.sonetica.topface.billing;
 
-import com.sonetica.topface.billing.BillingService.RequestPurchase;
-import com.sonetica.topface.billing.BillingService.RestoreTransactions;
-import com.sonetica.topface.billing.Consts.PurchaseState;
-import com.sonetica.topface.billing.Consts.ResponseCode;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
@@ -14,6 +10,10 @@ import android.content.IntentSender;
 import android.os.Handler;
 import android.util.Log;
 import java.lang.reflect.Method;
+import com.sonetica.topface.billing.BillingService.RequestPurchase;
+import com.sonetica.topface.billing.BillingService.RestoreTransactions;
+import com.sonetica.topface.billing.Consts.PurchaseState;
+import com.sonetica.topface.billing.Consts.ResponseCode;
 
 public abstract class PurchaseObserver {
   // Data
@@ -25,16 +25,16 @@ public abstract class PurchaseObserver {
   
   @SuppressWarnings("rawtypes")
   private static final Class[] START_INTENT_SENDER_SIG = new Class[]{IntentSender.class,Intent.class,int.class,int.class,int.class};
-
-  // Methods
+  //---------------------------------------------------------------------------
   public PurchaseObserver(Activity activity,Handler handler) {
     mActivity = activity;
     mHandler = handler;
     initCompatibilityLayer();
   }
-
+  //---------------------------------------------------------------------------
   public abstract void onBillingSupported(boolean supported);
-  public abstract void onPurchaseStateChange(PurchaseState purchaseState,String itemId,int quantity,long purchaseTime,String developerPayload);
+  public abstract void onPurchaseStateChange(PurchaseState purchaseState,String data, String signature);
+  //public abstract void onPurchaseStateChange(PurchaseState purchaseState,String itemId,int quantity,long purchaseTime,String developerPayload);
   public abstract void onRequestPurchaseResponse(RequestPurchase request,ResponseCode responseCode);
   public abstract void onRestoreTransactionsResponse(RestoreTransactions request,ResponseCode responseCode);
 
@@ -47,7 +47,7 @@ public abstract class PurchaseObserver {
       mStartIntentSender = null;
     }
   }
-
+  //---------------------------------------------------------------------------
   void startBuyPageActivity(PendingIntent pendingIntent,Intent intent) {
     if(mStartIntentSender != null) {
       try {
@@ -68,12 +68,13 @@ public abstract class PurchaseObserver {
       }
     }
   }
-
-  void postPurchaseStateChange(final PurchaseState purchaseState,final String itemId,final int quantity,final long purchaseTime,final String developerPayload) {
+  //---------------------------------------------------------------------------
+  void postPurchaseStateChange(final PurchaseState purchaseState,final String data,final String signature) {
     mHandler.post(new Runnable() {
       public void run() {
-        onPurchaseStateChange(purchaseState,itemId,quantity,purchaseTime,developerPayload);
+        onPurchaseStateChange(purchaseState,data,signature);
       }
     });
   }
+  //---------------------------------------------------------------------------
 }

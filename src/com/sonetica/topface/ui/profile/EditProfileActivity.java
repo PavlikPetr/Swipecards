@@ -1,6 +1,5 @@
 package com.sonetica.topface.ui.profile;
 
-import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.net.ApiHandler;
@@ -168,6 +167,24 @@ public class EditProfileActivity extends PreferenceActivity {
     character.setEntryValues(mFormInfo.getCharacterValues());
     character.setOnPreferenceChangeListener(mOnCharacterListener);
   }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    //App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    //App.unbind();
+    super.onStop();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
+  }
   //---------------------------------------------------------------------------
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
@@ -182,24 +199,6 @@ public class EditProfileActivity extends PreferenceActivity {
       
       sendProfileData(PROFILE_CITYID,Data.s_Profile.city_id);
     }
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    App.bind(getBaseContext());
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    App.unbind();
-    super.onStop();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
   }
   //---------------------------------------------------------------------------
   // data sending

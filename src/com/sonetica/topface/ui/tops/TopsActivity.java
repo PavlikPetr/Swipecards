@@ -1,6 +1,5 @@
 package com.sonetica.topface.ui.tops;
 
-import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
@@ -127,6 +126,44 @@ public class TopsActivity extends Activity {
     create();
     update();
   }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    //App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    //App.unbind();
+    super.onStop();
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onDestroy() {
+    // Сохранение параметров
+    SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = preferences.edit();
+    editor.putInt(getString(R.string.s_tops_sex),mActionData.sex);
+    editor.putInt(getString(R.string.s_tops_city_id),mActionData.city_id);
+    editor.putString(getString(R.string.s_tops_city_name),mActionData.city_name);
+    editor.putInt(getString(R.string.s_tops_city_position),mActionData.city_popup_position);
+    editor.commit();
+    
+    release();
+    
+    ThumbView.release();
+    
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
+  private void create() {
+    mGalleryGridManager = new GalleryGridManager<TopUser>(getApplicationContext(),mTopsList);
+    mGridAdapter = new TopsGridAdapter(getApplicationContext(),mGalleryGridManager);
+    mGallery.setAdapter(mGridAdapter);
+    mGallery.setOnScrollListener(mGalleryGridManager);
+  }
   //---------------------------------------------------------------------------
   private void update() {
     mProgressDialog.show();
@@ -150,13 +187,6 @@ public class TopsActivity extends Activity {
         mProgressDialog.cancel();
       }
     }).exec();
-  }
-  //---------------------------------------------------------------------------
-  private void create() {
-    mGalleryGridManager = new GalleryGridManager<TopUser>(getApplicationContext(),mTopsList);
-    mGridAdapter = new TopsGridAdapter(getApplicationContext(),mGalleryGridManager);
-    mGallery.setAdapter(mGridAdapter);
-    mGallery.setOnScrollListener(mGalleryGridManager);
   }
   //---------------------------------------------------------------------------
   private void release() {
@@ -215,37 +245,6 @@ public class TopsActivity extends Activity {
     });
     AlertDialog alert = builder.create();
     alert.show();
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    App.bind(getBaseContext());
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    App.unbind();
-    super.onStop();
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onDestroy() {
-    // Сохранение параметров
-    SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
-    SharedPreferences.Editor editor = preferences.edit();
-    editor.putInt(getString(R.string.s_tops_sex),mActionData.sex);
-    editor.putInt(getString(R.string.s_tops_city_id),mActionData.city_id);
-    editor.putString(getString(R.string.s_tops_city_name),mActionData.city_name);
-    editor.putInt(getString(R.string.s_tops_city_position),mActionData.city_popup_position);
-    editor.commit();
-    
-    release();
-    
-    ThumbView.release();
-    
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
   }
   //---------------------------------------------------------------------------
 }

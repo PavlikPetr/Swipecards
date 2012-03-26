@@ -27,9 +27,10 @@ public class Security {
   private static final String KEY_FACTORY_ALGORITHM = "RSA";
   private static final String SIGNATURE_ALGORITHM = "SHA1withRSA";
   private static final SecureRandom RANDOM = new SecureRandom();
-
   private static HashSet<Long> sKnownNonces = new HashSet<Long>();
-
+  //---------------------------------------------------------------------------
+  // class VerifiedPurchase
+  //---------------------------------------------------------------------------
   public static class VerifiedPurchase {
     public PurchaseState purchaseState;
     public String notificationId;
@@ -47,21 +48,21 @@ public class Security {
       this.developerPayload = developerPayload;
     }
   }
-
+  //---------------------------------------------------------------------------
   public static long generateNonce() {
     long nonce = RANDOM.nextLong();
     sKnownNonces.add(nonce);
     return nonce;
   }
-
+  //---------------------------------------------------------------------------
   public static void removeNonce(long nonce) {
     sKnownNonces.remove(nonce);
   }
-
+  //---------------------------------------------------------------------------
   public static boolean isNonceKnown(long nonce) {
     return sKnownNonces.contains(nonce);
   }
-
+  //---------------------------------------------------------------------------
   public static ArrayList<VerifiedPurchase> verifyPurchase(String signedData,String signature) {
     if(signedData == null) {
       Log.e(TAG,"data is null");
@@ -130,7 +131,7 @@ public class Security {
     removeNonce(nonce);
     return purchases;
   }
-
+  //---------------------------------------------------------------------------
   public static PublicKey generatePublicKey(String encodedPublicKey) {
     try {
       byte[] decodedKey = Base64.decode(encodedPublicKey);
@@ -146,7 +147,7 @@ public class Security {
       throw new IllegalArgumentException(e);
     }
   }
-
+  //---------------------------------------------------------------------------
   public static boolean verify(PublicKey publicKey,String signedData,String signature) {
     if(Consts.DEBUG) {
       Log.i(TAG,"signature: " + signature);
@@ -172,4 +173,5 @@ public class Security {
     }
     return false;
   }
+  //---------------------------------------------------------------------------
 }

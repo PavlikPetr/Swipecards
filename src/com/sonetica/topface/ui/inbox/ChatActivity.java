@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.inbox;
 
 import java.util.LinkedList;
-import com.sonetica.topface.App;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.History;
 import com.sonetica.topface.net.ApiHandler;
@@ -23,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
  *            "Диалоги"
@@ -127,7 +127,8 @@ public class ChatActivity extends Activity implements View.OnClickListener {
           }
           @Override
           public void fail(int codeError,ApiResponse response) {
-            //Toast.makeText(ChatActivity.this,"msg sending failed",Toast.LENGTH_SHORT).show();
+            mProgressDialog.cancel();
+            Toast.makeText(ChatActivity.this,"not sent",Toast.LENGTH_SHORT).show();
           }
         }).exec();
       }
@@ -136,18 +137,31 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     create();
     update(0,false);
   }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    //App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    //App.unbind();
+    super.onStop();
+  }
   //---------------------------------------------------------------------------
   @Override
-  public void onClick(View v) {
-    if(mProfileInvoke) {
-      finish();
-      return;
-    }
-    Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
-    intent.putExtra(ProfileActivity.INTENT_USER_ID,mUserId);
-    intent.putExtra(ProfileActivity.INTENT_CHAT_INVOKE,true);
-    intent.putExtra(ProfileActivity.INTENT_USER_NAME,mHeaderTitle.getText());
-    startActivity(intent);
+  protected void onDestroy() {
+    release();
+    
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
+  private void create() {
+    mAdapter = new ChatListAdapter(getApplicationContext(),mUserId,mHistoryList);
+    mAdapter.setOnAvatarListener(this);
+    mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
   private void update(final int offset,final boolean isRefresh) {
@@ -174,28 +188,6 @@ public class ChatActivity extends Activity implements View.OnClickListener {
         //mListView.onRefreshComplete();
       }
     }).exec();
-    
-
-    /*
-    InboxRequest inboxRequest = new InboxRequest(ChatActivity.this);
-    inboxRequest.offset = offset;
-    inboxRequest.limit  = 6;
-    ConnectionService.sendRequest(inboxRequest,new Handler() {
-      @Override
-      public void handleMessage(Message msg) {
-        Toast.makeText(ChatActivity.this,"result",Toast.LENGTH_SHORT).show();
-        try {Thread.sleep(1000*4);} catch(InterruptedException e) {}
-        mListView.onRefreshComplete();
-      }
-    });
-    */
-  }
-  //---------------------------------------------------------------------------
-  private void create() {
-    // ListAdapter
-    mAdapter = new ChatListAdapter(getApplicationContext(),mUserId,mHistoryList);
-    mAdapter.setOnAvatarListener(this);
-    mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
   private void release() {
@@ -207,25 +199,18 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     mHistoryList = null;
     mProgressDialog = null;
   }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    App.bind(getBaseContext());
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    App.unbind();
-    super.onStop();
-  }
   //---------------------------------------------------------------------------
   @Override
-  protected void onDestroy() {
-    release();
-    
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
+  public void onClick(View v) {
+    if(mProfileInvoke) {
+      finish();
+      return;
+    }
+    Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
+    intent.putExtra(ProfileActivity.INTENT_USER_ID,mUserId);
+    intent.putExtra(ProfileActivity.INTENT_CHAT_INVOKE,true);
+    intent.putExtra(ProfileActivity.INTENT_USER_NAME,mHeaderTitle.getText());
+    startActivity(intent);
   }
   //---------------------------------------------------------------------------
 }

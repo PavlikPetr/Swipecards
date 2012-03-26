@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.inbox;
 
 import java.util.LinkedList;
-import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Inbox;
@@ -10,12 +9,15 @@ import com.sonetica.topface.net.InboxRequest;
 import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.p2r.PullToRefreshListView;
 import com.sonetica.topface.p2r.PullToRefreshBase.OnRefreshListener;
+import com.sonetica.topface.services.NotificationService;
 import com.sonetica.topface.ui.AvatarManager;
 import com.sonetica.topface.ui.DoubleBigButton;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -36,6 +38,7 @@ public class InboxActivity extends Activity {
   private AvatarManager<Inbox> mAvatarManager;
   private ProgressDialog mProgressDialog;
   private DoubleBigButton mDoubleButton;
+  private NotificationManager mNotificationManager;
   // Constants
   private static final int LIMIT = 40;
   //---------------------------------------------------------------------------
@@ -46,6 +49,8 @@ public class InboxActivity extends Activity {
     Debug.log(this,"+onCreate");
     
     LeaksManager.getInstance().monitorObject(this);
+    
+    mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
     
     // Data
     mInboxDataList = new LinkedList<Inbox>();
@@ -102,15 +107,44 @@ public class InboxActivity extends Activity {
     create();
     update(true);
     
-    App.delete();
+    //App.delete();
     
     // обнуление информера непрочитанных сообщений
     Data.s_Messages = 0;
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    //App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    //App.unbind();
+    super.onStop();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {   
+    release();
+    
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
+  private void create() {
+    mAvatarManager = new AvatarManager<Inbox>(getApplicationContext(),mInboxDataList);
+    mAdapter = new InboxListAdapter(getApplicationContext(),mAvatarManager);
+    mListView.setOnScrollListener(mAvatarManager);    
+    mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
   private void update(boolean isProgress) {
     if(isProgress)
       mProgressDialog.show();
+    
+    mNotificationManager.cancel(NotificationService.TP_NOTIFICATION);
     
     InboxRequest inboxRequest = new InboxRequest(getApplicationContext());
     inboxRequest.limit = LIMIT;
@@ -134,13 +168,6 @@ public class InboxActivity extends Activity {
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void create() {
-    mAvatarManager = new AvatarManager<Inbox>(getApplicationContext(),mInboxDataList);
-    mAdapter = new InboxListAdapter(getApplicationContext(),mAvatarManager);
-    mListView.setOnScrollListener(mAvatarManager);    
-    mListView.setAdapter(mAdapter);
-  }
-  //---------------------------------------------------------------------------
   private void release() {
     mListView = null;
     if(mAdapter!=null)
@@ -156,26 +183,6 @@ public class InboxActivity extends Activity {
     mProgressDialog = null;
     
     Data.s_UserDrw = null;
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    App.bind(getBaseContext());
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    App.unbind();
-    super.onStop();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {   
-    release();
-    
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
   }
   //---------------------------------------------------------------------------
 }

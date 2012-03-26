@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.dating;
 
 import java.util.LinkedList;
-import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.billing.BuyingActivity;
@@ -38,10 +37,10 @@ import android.widget.Toast;
 /* "оценка фото" */
 public class DatingActivity extends Activity implements OnNeedUpdateListener,OnRateListener,OnClickListener{
   // Data
-  private TextView mHeaderTitle;
-  private DatingControl mDatingControl;
   private Dialog mCommentDialog;
   private EditText mCommentText;
+  private TextView mHeaderTitle;
+  private DatingControl mDatingControl;
   private InputMethodManager mInputManager;
   // Constants
   public static ViewGroup mHeaderBar;
@@ -56,48 +55,68 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
 
     // Header Bar
     mHeaderBar = (ViewGroup)findViewById(R.id.loHeader);
-    
     // Title Header
     mHeaderTitle = ((TextView)findViewById(R.id.tvHeaderTitle));
-    
     // Resources Buying Button
     ((ResourcesView)findViewById(R.id.datingRes)).setOnClickListener(this);
-    
     // Resourse Plus
     View ivDatingPlus = findViewById(R.id.datingPlus);
     ivDatingPlus.setVisibility(View.VISIBLE);
     ivDatingPlus.setEnabled(true);
-    
     // Chat Button
     ((Button)findViewById(R.id.chatBtn)).setOnClickListener(this);
-    
     // Profile Button
     ((Button)findViewById(R.id.profileBtn)).setOnClickListener(this);
-    
     // Dating Gallery
     mDatingControl = (DatingControl)findViewById(R.id.galleryDating);
     mDatingControl.setOnNeedUpdateListener(this);
-    
     // Stars Button
     ((StarsView)findViewById(R.id.starsView)).setOnRateListener(this);
-
     // Клавиатура
     mInputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-    
     // Comment window
     mCommentDialog = new Dialog(this);
     mCommentDialog.setTitle(R.string.chat_comment);    
     mCommentDialog.setContentView(R.layout.popup_comment); //,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
     mCommentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     //mCommentDialog.getWindow().setBackgroundDrawableResource(R.drawable.popup_comment);
-    
     mCommentText = (EditText)mCommentDialog.findViewById(R.id.etPopupComment);
    
     update(true);
   }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    //App.bind(getBaseContext());
+    if(Data.s_Profile.filter_sex == 0)
+      mHeaderTitle.setText(getString(R.string.dating_header_title_her));
+    else
+      mHeaderTitle.setText(getString(R.string.dating_header_title_him));
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    //App.unbind();
+    super.onStop();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    mDatingControl.release();
+    mDatingControl = null;
+    mCommentDialog = null;
+    mCommentText = null;
+
+    mHeaderBar = null;
+
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
+  }
   //---------------------------------------------------------------------------
   private void update(final boolean firstQuery) {
     Debug.log(this,"update");
+    
     SearchRequest request = new SearchRequest(this.getApplicationContext());
     request.limit  = 20;
     request.geo    = Data.s_Profile.filter_geo;
@@ -125,6 +144,8 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   }
   //---------------------------------------------------------------------------
   private void rate(final int userid,final int rate) {
+    Debug.log(this,"rate");
+    
     DoRateRequest doRate = new DoRateRequest(this.getApplicationContext());
     doRate.userid = userid;
     doRate.rate   = rate;
@@ -147,16 +168,6 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   public void needUpdate() {
     update(false);
   }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onResume() {
-    super.onResume();
-    
-    if(Data.s_Profile.filter_sex == 0)
-      mHeaderTitle.setText(getString(R.string.dating_header_title_her));
-    else
-      mHeaderTitle.setText(getString(R.string.dating_header_title_him));
-  }
   //---------------------------------------------------------------------------
   @Override
   public void onRate(final int rate) {
@@ -165,12 +176,10 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
       mDatingControl.next();
       return;
     }
-     
     if(rate==10 && Data.s_Money <= 0) {
       startActivity(new Intent(getApplicationContext(),BuyingActivity.class));
       return;
     }
-    
     // кнопка на окне комментария оценки 10 и 9
     ((Button)mCommentDialog.findViewById(R.id.btnPopupCommentSend)).setOnClickListener(new OnClickListener() {
       @Override
@@ -197,13 +206,10 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
         
         // отправка оценки
         rate(uid,rate);
-        
         mCommentDialog.cancel();
         mCommentText.setText("");
-        
         // скрыть клавиатуру
         mInputManager.hideSoftInputFromWindow(mCommentText.getWindowToken(),InputMethodManager.HIDE_IMPLICIT_ONLY);
-        
         // подгрузка следующего
         mDatingControl.next();
       }
@@ -230,7 +236,8 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
         intent.putExtra(ProfileActivity.INTENT_USER_NAME,mDatingControl.getUserName());
       } break;
     }
-    startActivity(intent);
+    if(intent!=null)
+      startActivity(intent);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -240,31 +247,6 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
       Debug.log(this,"filterActivity->datingResult");
       update(true);
     }
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    App.bind(getBaseContext());
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    App.unbind();
-    super.onStop();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    mDatingControl.release();
-    mDatingControl = null;
-    mCommentDialog = null;
-    mCommentText = null;
-
-    mHeaderBar = null;
-
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
   }
   //---------------------------------------------------------------------------
   // Menu

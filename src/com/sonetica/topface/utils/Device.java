@@ -52,11 +52,15 @@ public class Device {
           break;
       }
       
-      if(width == 0)
+      if(width == 0) {
+        Debug.log("Device","init error");
         return false;
+      }
     } catch (Exception e) {
+      Debug.log("Device","init exception:" + e);
       return false;
     }
+    
     return true;
   }
   //---------------------------------------------------------------------------
@@ -77,6 +81,7 @@ public class Device {
     Display display = getDisplay(context);
     DisplayMetrics displayMetrics = new DisplayMetrics();
     display.getMetrics(displayMetrics);
+    
     return displayMetrics;
   }
   //---------------------------------------------------------------------------

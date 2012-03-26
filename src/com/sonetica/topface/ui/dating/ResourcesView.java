@@ -19,10 +19,6 @@ public class ResourcesView extends LinearLayout {
   private TextView  mMoneyTxt;
   private ImageView mBuying;
   //---------------------------------------------------------------------------
-  public ResourcesView(Context context) {
-    this(context,null);
-  }
-  //---------------------------------------------------------------------------
   public ResourcesView(Context context,AttributeSet attrs) {
     super(context,attrs);
     

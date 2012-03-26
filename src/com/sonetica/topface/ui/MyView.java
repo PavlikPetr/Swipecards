@@ -1,15 +1,6 @@
 package com.sonetica.topface.ui;
 
-import com.sonetica.topface.utils.Debug;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Toast;
-
-public class MyView extends View implements View.OnTouchListener {
+public class MyView{}/* extends View implements View.OnTouchListener {
   //Data
   Paint paint = new Paint();
   //---------------------------------------------------------------------------
@@ -55,3 +46,4 @@ public class MyView extends View implements View.OnTouchListener {
   }
   //---------------------------------------------------------------------------  
 }
+*/

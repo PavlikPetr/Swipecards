@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.likes;
 
 import java.util.LinkedList;
-import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Like;
@@ -49,10 +48,10 @@ public class LikesActivity extends Activity {
     
     // Data
     mLikesDataList  = new LinkedList<Like>();
-    
-    // Title Header
-   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likes_header_title));
    
+   // Title Header
+   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likes_header_title));
+
    // Double Button
    mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
    mDoubleButton.setLeftText(getString(R.string.likes_btn_dbl_left));
@@ -105,6 +104,34 @@ public class LikesActivity extends Activity {
    // обнуление информера непросмотренных лайков
    Data.s_Likes = 0;
   }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    //App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    //App.unbind();
+    super.onStop();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    release();
+    ThumbView.release();
+    
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
+  private void create() {
+    mGalleryGridManager = new GalleryGridManager<Like>(getApplicationContext(),mLikesDataList);
+    mAdapter = new LikesGridAdapter(getApplicationContext(),mGalleryGridManager);
+    mGallery.getRefreshableView().setAdapter(mAdapter);
+    mGallery.setOnScrollListener(mGalleryGridManager);
+  }
   //---------------------------------------------------------------------------
   private void update(boolean isProgress) {
     if(isProgress)
@@ -131,13 +158,6 @@ public class LikesActivity extends Activity {
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void create() {
-    mGalleryGridManager = new GalleryGridManager<Like>(getApplicationContext(),mLikesDataList);
-    mAdapter = new LikesGridAdapter(getApplicationContext(),mGalleryGridManager);
-    mGallery.getRefreshableView().setAdapter(mAdapter);
-    mGallery.setOnScrollListener(mGalleryGridManager);
-  }
-  //---------------------------------------------------------------------------
   private void release() {
     if(mGalleryGridManager!=null) { 
       mGalleryGridManager.release();
@@ -152,29 +172,6 @@ public class LikesActivity extends Activity {
 
     mLikesDataList=null;
     mProgressDialog=null;
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    App.bind(getBaseContext());
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    App.unbind();
-    super.onStop();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    
-    release();
-    
-    ThumbView.release();
-    
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
   }
   //---------------------------------------------------------------------------
 }

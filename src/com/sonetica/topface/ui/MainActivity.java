@@ -1,21 +1,9 @@
 package com.sonetica.topface.ui;
 
-import com.sonetica.topface.Data;
-import com.sonetica.topface.Global;
-import com.sonetica.topface.R;
-import com.sonetica.topface.social.SocialActivity;
-import com.sonetica.topface.ui.dashboard.DashboardActivity;
-import com.sonetica.topface.utils.Debug;
-import com.sonetica.topface.utils.Device;
-import com.sonetica.topface.utils.LeaksManager;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-
 /*
  * Класс стартового активити для показа прелоадера и инициализации данных
  */
-public class MainActivity extends Activity {
+public class MainActivity{}/* extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +40,7 @@ public class MainActivity extends Activity {
   }
   //---------------------------------------------------------------------------
 }
-
+*/
 // onActivityResult should be called after onStart and before onResume.
 /*
   onCreate

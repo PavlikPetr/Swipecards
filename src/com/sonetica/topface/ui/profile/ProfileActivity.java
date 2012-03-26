@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.profile;
 
 import java.util.LinkedList;
-import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.billing.BuyingActivity;
@@ -91,6 +90,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
   public static final int FORM_TOP = 0;
   public static final int FORM_BOTTOM = 1;
   public static final int GALLARY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+  public static final int ALBUM_ACTIVITY_REQUEST_CODE = 101;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -206,6 +206,30 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
       getUserProfile(mUserId);
     else 
       getAlbum();  // грузим галерею
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    //App.bind(getBaseContext());
+    if(mOwner)
+      getProfile();
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    //App.unbind();
+    super.onStop();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    release();
+    
+    System.gc();
+
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
   }
   //---------------------------------------------------------------------------
   // свой профиль
@@ -383,7 +407,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
       else
         mPhotoList.add(album);
     
-    // обнавляем галереи
+    // обновляем галереи
     if(mPhotoList.size()>0) {
       mListAdapter.setDataList(mPhotoList);
       mListAdapter.notifyDataSetChanged();
@@ -405,6 +429,59 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
       mEGR.setVisibility(View.VISIBLE);
       mEGL.setVisibility(View.VISIBLE);
     }
+  }
+  //---------------------------------------------------------------------------
+  private void updateAlbum() {
+    AlbumRequest albumRequest = new AlbumRequest(getApplicationContext());
+    albumRequest.uid  = Data.s_Profile.uid;
+    albumRequest.callback(new ApiHandler() {
+      @Override
+      public void success(ApiResponse response) {
+        mPhotoList.clear();
+        mEroList.clear();
+        
+        // кнопки добавления
+        mPhotoList.add(new Album()); // добавление элемента кнопки загрузки
+        mEroList.add(new Album());   // новых сообщений
+        
+        // сортируем эро и не эро
+        LinkedList<Album> albumList = Album.parse(response);
+        Data.s_Profile.albums.clear();
+        Data.s_Profile.albums = albumList;
+        for(Album album : albumList)
+          if(album.ero)
+            mEroList.add(album);
+          else
+            mPhotoList.add(album);
+        
+        // обнавляем галереи
+        if(mPhotoList.size()>0) {
+          mListAdapter.setDataList(mPhotoList);
+        }
+        mListAdapter.notifyDataSetChanged();
+
+        if(mEroList.size()>0) {
+          mListEroAdapter.setDataList(mEroList);
+          mEroTitle.setVisibility(View.VISIBLE);
+          mEroViewGroup.setVisibility(View.VISIBLE);
+        }
+        mListEroAdapter.notifyDataSetChanged();
+        
+        if(mPhotoList.size() > Data.s_gridColumn+1) {
+          mGR.setVisibility(View.VISIBLE);
+          mGL.setVisibility(View.VISIBLE);
+        }
+
+        if(mEroList.size() > Data.s_gridColumn+1) {
+          mEGR.setVisibility(View.VISIBLE);
+          mEGL.setVisibility(View.VISIBLE);
+        }
+      }
+      @Override
+      public void fail(int codeError,ApiResponse response) {
+        mProgressDialog.cancel();
+      }
+    }).exec();
   }
   //---------------------------------------------------------------------------
   private void getUserAlbum(int uid) {
@@ -551,7 +628,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
           intent.putExtra(PhotoAlbumActivity.INTENT_USER_ID,mUserId);
           intent.putExtra(PhotoAlbumActivity.INTENT_ALBUM_POS,position);
 
-          startActivity(intent);
+          startActivityForResult(intent,ALBUM_ACTIVITY_REQUEST_CODE);
         }
       } break;
       case R.id.lvEroAlbumPreview: {     // ERO ALBUM
@@ -573,7 +650,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
           intent.putExtra(EroAlbumActivity.INTENT_USER_ID,mUserId);
           intent.putExtra(EroAlbumActivity.INTENT_ALBUM_POS,position);
 
-          startActivity(intent);
+          startActivityForResult(intent,ALBUM_ACTIVITY_REQUEST_CODE);
         }        
       } break;
     }
@@ -582,6 +659,9 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
   // получение фото из галереи и отправка на сервер
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+      updateAlbum();
+    }
     if(requestCode == GALLARY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
       Uri imageUri = data != null ? data.getData() : null;
       if(imageUri==null)
@@ -633,30 +713,6 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     Data.s_PhotoAlbum=null;
     
     mAddPhotoDialog=null;
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    App.bind(getBaseContext());
-    if(mOwner)
-      getProfile();
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    App.unbind();
-    super.onStop();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    release();
-    
-    System.gc();
-
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
   }
   //---------------------------------------------------------------------------
   // class AsyncTaskUploader
@@ -720,6 +776,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
               album.big   = result[0];
               album.small = result[2];
               
+              /*
               if(mAddEroState) {
                 mEroList.add(album);
                 mListEroAdapter.notifyDataSetChanged();
@@ -727,6 +784,8 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
                 mPhotoList.add(album);
                 mListAdapter.notifyDataSetChanged();
               }
+              */
+              updateAlbum();
               
             }
             @Override

@@ -18,7 +18,6 @@ public class Data {
   
   public static LinkedList<City>   s_CitiesList;
   public static LinkedList<Album>  s_PhotoAlbum;
-  //public static LinkedList<String> s_LogList;
   
   public static Profile s_Profile;
   
@@ -38,7 +37,7 @@ public class Data {
   //---------------------------------------------------------------------------
   public static boolean init(Context context) {
     SSID = Data.loadSSID(context);
-    //s_LogList = new LinkedList<String>();
+
     if(SSID!=null)
       return true;
     else
@@ -66,6 +65,7 @@ public class Data {
   //---------------------------------------------------------------------------
   public static void removeSSID(Context context) {
     SSID = "";
+    
     SharedPreferences preferences   = context.getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = preferences.edit();
     editor.putString(context.getString(R.string.s_ssid),SSID);
@@ -74,6 +74,7 @@ public class Data {
   //---------------------------------------------------------------------------
   public static void setProfile(Profile profile) {
     s_Profile = profile;
+    
     updateNotification(profile);
   }
   //---------------------------------------------------------------------------
@@ -87,10 +88,6 @@ public class Data {
   }
   //---------------------------------------------------------------------------
   public static void clear() {
-//    if(s_LogList!=null)
-//      s_LogList.clear();
-//    s_LogList = null;
-    
     if(s_PhotoAlbum!=null)
       s_PhotoAlbum.clear();
     s_PhotoAlbum = null;

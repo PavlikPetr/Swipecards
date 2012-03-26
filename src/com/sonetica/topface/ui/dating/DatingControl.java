@@ -136,7 +136,7 @@ public class DatingControl extends ViewGroup {
     addView(mFaceView);
 
     // Power and Money
-    mResourcesView = new ResourcesView(context);
+    mResourcesView = new ResourcesView(context,null);
     addView(mResourcesView);
     
     // Rate Control

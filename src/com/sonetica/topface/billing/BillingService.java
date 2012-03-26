@@ -78,8 +78,7 @@ public class BillingService extends Service implements ServiceConnection {
 
     abstract protected long run() throws RemoteException;
 
-    protected void responseCodeReceived(ResponseCode responseCode) {
-    }
+    protected void responseCodeReceived(ResponseCode responseCode) {}
 
     protected Bundle makeRequestBundle(String method) {
       Bundle request = new Bundle();
@@ -230,25 +229,24 @@ public class BillingService extends Service implements ServiceConnection {
     }
   }
   //---------------------------------------------------------------------------
-  // Methods
   public BillingService() {
     super();
   }
-
+  //---------------------------------------------------------------------------
   public void setContext(Context context) {
     attachBaseContext(context);
   }
-
+  //---------------------------------------------------------------------------
   @Override
   public IBinder onBind(Intent intent) {
     return null;
   }
-
+  //---------------------------------------------------------------------------
   @Override
   public void onStart(Intent intent,int startId) {
     handleCommand(intent,startId);
   }
-
+  //---------------------------------------------------------------------------
   public void handleCommand(Intent intent,int startId) {
     String action = intent.getAction();
     if(Consts.ACTION_CONFIRM_NOTIFICATION.equals(action)) {
@@ -268,7 +266,7 @@ public class BillingService extends Service implements ServiceConnection {
       checkResponseCode(requestId,responseCode);
     }
   }
-
+  //---------------------------------------------------------------------------
   private boolean bindToMarketBillingService() {
     try {
       boolean bindResult = bindService(new Intent(Consts.MARKET_BILLING_SERVICE_ACTION),this,Context.BIND_AUTO_CREATE);
@@ -278,27 +276,27 @@ public class BillingService extends Service implements ServiceConnection {
     }
     return false;
   }
-
+  //---------------------------------------------------------------------------
   public boolean checkBillingSupported() {
     return new CheckBillingSupported().runRequest();
   }
-
+  //---------------------------------------------------------------------------
   public boolean requestPurchase(String productId,String developerPayload) {
     return new RequestPurchase(productId,developerPayload).runRequest();
   }
-
+  //---------------------------------------------------------------------------
   public boolean restoreTransactions() {
     return new RestoreTransactions().runRequest();
   }
-
+  //---------------------------------------------------------------------------
   private boolean confirmNotifications(int startId,String[] notifyIds) {
     return new ConfirmNotifications(startId,notifyIds).runRequest();
   }
-
+  //---------------------------------------------------------------------------
   private boolean getPurchaseInformation(int startId,String[] notifyIds) {
     return new GetPurchaseInformation(startId,notifyIds).runRequest();
   }
-
+  //---------------------------------------------------------------------------
   private void purchaseStateChanged(int startId,String signedData,String signature) {
     ArrayList<Security.VerifiedPurchase> purchases;
     purchases = Security.verifyPurchase(signedData,signature);
@@ -309,14 +307,15 @@ public class BillingService extends Service implements ServiceConnection {
     for(VerifiedPurchase vp : purchases) {
       if(vp.notificationId != null)
         notifyList.add(vp.notificationId);
-      ResponseHandler.purchaseResponse(this,vp.purchaseState,vp.productId,vp.orderId,vp.purchaseTime,vp.developerPayload);
+      ResponseHandler.purchaseResponse(vp.purchaseState,signedData,signature);
+      //ResponseHandler.purchaseResponse(this,vp.purchaseState,vp.productId,vp.orderId,vp.purchaseTime,vp.developerPayload);
     }
     if(!notifyList.isEmpty()) {
       String[] notifyIds = notifyList.toArray(new String[notifyList.size()]);
       confirmNotifications(startId,notifyIds);
     }
   }
-
+  //---------------------------------------------------------------------------
   private void checkResponseCode(long requestId,ResponseCode responseCode) {
     BillingRequest request = mSentRequests.get(requestId);
     if(request != null)
@@ -326,7 +325,7 @@ public class BillingService extends Service implements ServiceConnection {
       }
     mSentRequests.remove(requestId);
   }
-
+  //---------------------------------------------------------------------------
   private void runPendingRequests() {
     int maxStartId = -1;
     BillingRequest request;
@@ -343,20 +342,20 @@ public class BillingService extends Service implements ServiceConnection {
     if(maxStartId >= 0)
       stopSelf(maxStartId);
   }
-
+  //---------------------------------------------------------------------------
   public void onServiceConnected(ComponentName name,IBinder service) {
     mService = IMarketBillingService.Stub.asInterface(service);
     runPendingRequests();
   }
-
+  //---------------------------------------------------------------------------
   public void onServiceDisconnected(ComponentName name) {
     mService = null;
   }
-
+  //---------------------------------------------------------------------------
   public void unbind() {
     try {
       unbindService(this);
-    } catch(IllegalArgumentException e) {
-    }
+    } catch(IllegalArgumentException e) {}
   }
+  //---------------------------------------------------------------------------
 }//BillingService

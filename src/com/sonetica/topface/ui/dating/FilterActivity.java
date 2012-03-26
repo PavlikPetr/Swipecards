@@ -1,6 +1,5 @@
 package com.sonetica.topface.ui.dating;
 
-import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
@@ -155,6 +154,24 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     // сервис определения координар
     mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
   }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    //App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    //App.unbind();
+    super.onStop();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
+  }
   //---------------------------------------------------------------------------
   public void getCoords() {
     boolean gpsEnabled = false;
@@ -215,24 +232,6 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
       mNearby.setChecked(false);
       mAllCities.setChecked(false);
     }
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    App.bind(getBaseContext());
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    App.unbind();
-    super.onStop();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
   }
   //---------------------------------------------------------------------------
   // Menu

@@ -1,6 +1,7 @@
 package com.sonetica.topface;
 
 import com.sonetica.topface.R;
+import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 import android.os.Build;
 
@@ -30,7 +31,7 @@ public class Global {
     try {
       API_VERSION            = context.getResources().getInteger(R.integer.api_version);
       API_URL                = context.getString(R.string.api_url);
-      EXTERANAL_CACHE_DIR    = context.getString(R.string.sdcard_root_path)+context.getString(R.string.sdcard_cache_path);
+      EXTERANAL_CACHE_DIR    = context.getString(R.string.sdcard_root_path) + context.getString(R.string.sdcard_cache_path);
       SHARED_PREFERENCES_TAG = context.getString(R.string.general_preferences_name);
       TOKEN_PREFERENCES_TAG  = context.getString(R.string.token_preferences_name);
       LOCALE                 = context.getApplicationContext().getResources().getConfiguration().locale.getLanguage();
@@ -39,6 +40,7 @@ public class Global {
       CLIENT_DEVICE          = Build.BRAND + " " + Build.MANUFACTURER;
       CLIENT_ID              = Build.ID;
     }catch (Exception e) {
+      Debug.log("Global","init exception:" + e);
       return false;
     }
     return true;

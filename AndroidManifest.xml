@@ -67,7 +67,7 @@
     </receiver>
     
     <!-- services -->
-        <service android:name=".services.NotificationService" android:process=":remote" />
+    <service android:name=".services.NotificationService" /> <!-- android:process=":notification" -->
     <service android:name=".services.StatisticService" />
     <service android:name=".services.ConnectionService" />
     <service android:name=".billing.BillingService" />

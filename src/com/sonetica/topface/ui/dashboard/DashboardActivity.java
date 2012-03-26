@@ -22,12 +22,13 @@ import com.sonetica.topface.utils.Imager;
 import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,8 +46,14 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   private TextView mInboxNotify;
   private TextView mRatesNotify;
   private ProgressDialog mProgressDialog;
+  // Notification
+  //private Handler mNotifyHandler;
+  //private Intent mNotificationRecieverIntent;
+  private NotificationReceiver mNotificationReceiver;
   // Constants
-  public static final int INTENT_DASHBOARD = 100;
+  //private static final long TIMER = 1000L * 15;
+  public  static final int INTENT_DASHBOARD = 100;
+  public  static final String ACTION = "com.sonetica.topface.DASHBOARD_NOTIFICATION";
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +96,50 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         return;
       }
       
-      update();
+      //mNotifyHandler = new Handler();
+      //mNotifyHandler.postDelayed(new RunTask(),TIMER);
       
+      mNotificationReceiver = new NotificationReceiver();
+      
+      update();
     } else { 
       startActivity(new Intent(getApplicationContext(),SocialActivity.class));
       finish();
     }
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    System.gc();
+    //App.bind(getBaseContext());
+    if(start && Data.SSID.length() > 0) {
+      if(mNotificationReceiver != null)
+        registerReceiver(mNotificationReceiver,new IntentFilter(ACTION));
+      invalidateNotification();
+      updateNotify();
+      return;
+    }
+    startActivity(new Intent(getApplicationContext(),SocialActivity.class));
+    finish();
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    //App.unbind();
+    if(mNotificationReceiver!=null)
+      unregisterReceiver(mNotificationReceiver);
+
+    super.onStop();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    start = false;
+    System.gc();
+    mNotificationReceiver = null;
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
   }
   //---------------------------------------------------------------------------
   private void update() {
@@ -180,42 +225,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       default:
     }
   }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-
-    System.gc();
-    
-    App.bind(getBaseContext());
-    
-    if(start && Data.SSID.length() > 0) {
-      invalidateNotification();
-      updateNotify();
-      return;
-    }
-    
-    startActivity(new Intent(getApplicationContext(),SocialActivity.class));
-    finish();
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    
-    App.unbind();
-
-    super.onStop();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    start = false;
-    
-    System.gc();
-    
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
-  }
   //---------------------------------------------------------------------------
   // Menu
   //---------------------------------------------------------------------------
@@ -242,30 +251,23 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     return super.onMenuItemSelected(featureId,item);
   }
   //---------------------------------------------------------------------------
-  // NotifyHandler
+  // class RunTask
   //---------------------------------------------------------------------------
-  class NotifyHandler extends Handler {
+//  class RunTask implements Runnable {
+//    public void run() {
+//      invalidateNotification();
+//      mNotifyHandler.postDelayed(this,TIMER);
+//    }
+//  }
+  //---------------------------------------------------------------------------
+  // class NotificationReceiver
+  //---------------------------------------------------------------------------
+  public class NotificationReceiver extends BroadcastReceiver {
     @Override
-    public void handleMessage(Message msg) {
-      super.handleMessage(msg);
-
-      ProfileRequest profileRequest = new ProfileRequest(DashboardActivity.this.getApplicationContext(),true);
-      profileRequest.callback(new ApiHandler() {
-        @Override
-        public void success(final ApiResponse response) {
-          Profile profile = Profile.parse(response,true);
-          Data.updateNotification(profile);
-          invalidateNotification();
-          
-          //sendEmptyMessageDelayed(0,sleep_time);
-          //mNotifyHandler.sendEmptyMessageDelayed(0,sleep_time);
-          
-          Debug.log(DashboardActivity.this,"up");
-        }
-        @Override
-        public void fail(int codeError,ApiResponse response) {
-        }
-      }).exec();
+    public void onReceive(Context context, Intent intent) {
+      if(intent.getAction().equals(ACTION)) {
+        invalidateNotification();
+      }
     }
   }
   //---------------------------------------------------------------------------

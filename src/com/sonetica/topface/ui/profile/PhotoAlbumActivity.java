@@ -1,6 +1,5 @@
 package com.sonetica.topface.ui.profile;
 
-import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.net.ApiHandler;
@@ -95,22 +94,16 @@ public class PhotoAlbumActivity extends Activity {
     
     setCounter(position+1,Data.s_PhotoAlbum.size());
   }
-  //---------------------------------------------------------------------------
-  // счетчик галереи
-  public void setCounter(int index,int size) {
-    mCounter.setText(index+"/"+size);
-    mCounter.invalidate();
-  }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStart() {
     super.onStart();
-    App.bind(getBaseContext());
+    //App.bind(getBaseContext());
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStop() {
-    App.unbind();
+    //App.unbind();
     super.onStop();
   }
   //---------------------------------------------------------------------------  
@@ -124,6 +117,12 @@ public class PhotoAlbumActivity extends Activity {
     
     Debug.log(this,"-onDestroy");
     super.onDestroy();  
+  }
+  //---------------------------------------------------------------------------
+  // счетчик галереи
+  public void setCounter(int index,int size) {
+    mCounter.setText(index+"/"+size);
+    mCounter.invalidate();
   }
   //---------------------------------------------------------------------------
   // Menu
@@ -185,6 +184,9 @@ public class PhotoAlbumActivity extends Activity {
       @Override
       public void success(ApiResponse response) {
         Toast.makeText(PhotoAlbumActivity.this,getString(R.string.album_menu_did_delete),Toast.LENGTH_SHORT).show();
+        //Data.s_PhotoAlbum.remove(mGallery.getSelectedItemPosition());
+        //mGalleryAdapter.notifyDataSetChanged();
+        setResult(RESULT_OK);
       }
       @Override
       public void fail(int codeError,ApiResponse response) {

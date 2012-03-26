@@ -1,7 +1,6 @@
 package com.sonetica.topface.ui.rates;
 
 import java.util.LinkedList;
-import com.sonetica.topface.App;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Rate;
@@ -103,6 +102,33 @@ public class RatesActivity extends Activity {
    // обнуление информера непросмотренных оценок
    Data.s_Rates = 0;
   }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    //App.bind(getBaseContext());
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    //App.unbind();
+    super.onStop();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    release();
+    
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
+  private void create() {
+    mAvatarManager = new AvatarManager<Rate>(this,mRatesDataList);
+    mAdapter = new RatesListAdapter(getApplicationContext(),mAvatarManager);
+    mListView.setOnScrollListener(mAvatarManager);
+    mListView.setAdapter(mAdapter);
+  }
   //---------------------------------------------------------------------------
   private void update(boolean isProgress) {
     if(isProgress)
@@ -130,13 +156,6 @@ public class RatesActivity extends Activity {
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void create() {
-    mAvatarManager = new AvatarManager<Rate>(this,mRatesDataList);
-    mAdapter = new RatesListAdapter(getApplicationContext(),mAvatarManager);
-    mListView.setOnScrollListener(mAvatarManager);
-    mListView.setAdapter(mAdapter);
-  }
-  //---------------------------------------------------------------------------
   private void release() {
     mListView=null;
     
@@ -152,26 +171,6 @@ public class RatesActivity extends Activity {
     }
     
     mProgressDialog=null;
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    App.bind(getBaseContext());
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    App.unbind();
-    super.onStop();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    release();
-    
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
   }
   //---------------------------------------------------------------------------
 }
