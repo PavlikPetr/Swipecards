@@ -22,9 +22,22 @@ public class SocialActivity extends Activity implements View.OnClickListener {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_social);
     
-    // clear web cache
-    //deleteDatabase("webview.db");
-    //deleteDatabase("webviewCache.db");
+    /*// clear web cache
+    mWebView.clearCache(true);
+    mWebView.clearFormData();
+    mWebView.clearView();
+    mWebView.clearHistory();
+    WebSettings webSettings = mWebView.getSettings();
+    webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+    webSettings.setAppCacheEnabled(false);
+    webSettings.setAppCacheMaxSize(0);
+    webSettings.setDatabaseEnabled(false);
+    webSettings.setSavePassword(false);
+    webSettings.setSaveFormData(false);
+    deleteDatabase("webview.db");
+    deleteDatabase("webviewCache.db");
+    CookieManager.getInstance().removeAllCookie();
+    */
     
     // VKontakte Button
     ((Button)findViewById(R.id.btnSocialVk)).setOnClickListener(this);

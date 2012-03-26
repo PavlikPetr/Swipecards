@@ -85,7 +85,7 @@ public class VkAuthWebViewClient extends WebViewClient {
       AuthToken.Token token = authToken.setToken(AuthToken.SN_VKONTAKTE,userId,tokenKey,expiresIn);
       mHandler.sendMessage(Message.obtain(null,AuthToken.AUTH_COMPLETE,token));
     } else if(mMatcherError.find() || mMatcherLogout.find()) {
-      view.stopLoading();
+      //view.stopLoading();
       // Очистка токена при отмене аутентификации
       new AuthToken(mContext).remove();
       mHandler.sendMessage(Message.obtain(null,AuthToken.AUTH_ERROR));

@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.webkit.WebSettings;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 
 /*
@@ -40,20 +40,7 @@ public class SocialWebActivity extends Activity {
     mWebView.getSettings().setJavaScriptEnabled(true);
     mWebView.setVerticalScrollbarOverlay(true);
     mWebView.setVerticalFadingEdgeEnabled(true);
-    
-    WebSettings webSettings = mWebView.getSettings();
-    webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-    webSettings.setAppCacheEnabled(false);
-    webSettings.setAppCacheMaxSize(0);
-    webSettings.setDatabaseEnabled(false);
-    webSettings.setSavePassword(false);
-    webSettings.setSaveFormData(false);
-    
-    mWebView.clearCache(true);
-    mWebView.clearFormData();
-    mWebView.clearView();
-    mWebView.clearHistory();
-    
+
     int type_network = getIntent().getIntExtra(TYPE,-1);
     
     if(type_network == TYPE_VKONTAKTE)
@@ -66,13 +53,11 @@ public class SocialWebActivity extends Activity {
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    mWebView.clearCache(true);
-    mWebView.clearFormData();
-    mWebView.clearView();
-    mWebView.clearHistory();
+    mProgressBar = null;
+    CookieManager.getInstance().removeAllCookie();
     mWebView.destroy();
     mWebView = null;
-    mProgressBar = null;
+    
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
