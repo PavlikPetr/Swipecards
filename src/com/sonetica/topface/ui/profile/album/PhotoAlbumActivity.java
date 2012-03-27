@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.profile;
+package com.sonetica.topface.ui.profile.album;
 
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
@@ -6,7 +6,7 @@ import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.MainRequest;
 import com.sonetica.topface.net.PhotoDeleteRequest;
 import com.sonetica.topface.net.ApiResponse;
-import com.sonetica.topface.ui.dating.DatingGallery;
+import com.sonetica.topface.ui.dating.DatingAlbum;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
@@ -27,9 +27,9 @@ public class PhotoAlbumActivity extends Activity {
   // Data
   private boolean mOwner;
   private TextView mCounter;
-  private DatingGallery mGallery;
+  private DatingAlbum mGallery;
   private ViewGroup mHeaderBar;
-  private PhotoAlbumGalleryAdapter mGalleryAdapter;
+  private PhotoAlbumAdapter mGalleryAdapter;
   private ProgressDialog mProgressDialog;
   // Constants
   public static final String INTENT_OWNER = "owner";
@@ -67,10 +67,10 @@ public class PhotoAlbumActivity extends Activity {
     }
     
     // Gallery Adapter
-    mGalleryAdapter = new PhotoAlbumGalleryAdapter(getApplicationContext(),Data.s_PhotoAlbum);
+    mGalleryAdapter = new PhotoAlbumAdapter(getApplicationContext(),Data.s_PhotoAlbum);
 
     // Gallery
-    mGallery = (DatingGallery)findViewById(R.id.galleryAlbum);
+    mGallery = (DatingAlbum)findViewById(R.id.galleryAlbum);
     mGallery.setAdapter(mGalleryAdapter);
     mGallery.setSelection(position,true);
     mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {

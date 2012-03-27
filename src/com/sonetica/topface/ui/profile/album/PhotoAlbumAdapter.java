@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.profile;
+package com.sonetica.topface.ui.profile.album;
 
 import java.util.LinkedList;
 import com.sonetica.topface.R;
@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-public class PhotoAlbumGalleryAdapter extends BaseAdapter {
+public class PhotoAlbumAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
@@ -30,7 +30,7 @@ public class PhotoAlbumGalleryAdapter extends BaseAdapter {
   private LinkedList<Album> mAlbumsList;
   private LayoutInflater mInflater;          
   //---------------------------------------------------------------------------
-  public PhotoAlbumGalleryAdapter(Context context,LinkedList<Album> albumList) {
+  public PhotoAlbumAdapter(Context context,LinkedList<Album> albumList) {
     mAlbumsList = albumList;
     mInflater = LayoutInflater.from(context);
     mCache = new MemoryCache();

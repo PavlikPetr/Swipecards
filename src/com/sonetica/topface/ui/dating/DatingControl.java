@@ -40,8 +40,8 @@ public class DatingControl extends ViewGroup {
   private int mGallerySize;    // кол-во фото у оцениваемого пользователя
   private int mGalleryPrevPos; // предыдущая позиция в альбоме
   // Gallery
-  private DatingGallery mDatingGallery;
-  private DatingGalleryAdapter mGalleryAdapter;
+  private DatingAlbum mDatingGallery;
+  private DatingAlbumAdapter mGalleryAdapter;
   // Views
   private Button mBackButton;      // кнопка возврата к оцениваемой фотографии
   private TextView mCounter;         // счетчик позиции в галерее пользователя
@@ -66,7 +66,7 @@ public class DatingControl extends ViewGroup {
     mDataList = new LinkedList<SearchUser>();
     
     // Adapter
-    mGalleryAdapter = new DatingGalleryAdapter(context,this);
+    mGalleryAdapter = new DatingAlbumAdapter(context,this);
     mGalleryAdapter.registerDataSetObserver(new DataSetObserver() {
       @Override
       public void onChanged() {
@@ -83,7 +83,7 @@ public class DatingControl extends ViewGroup {
     addView(mProgressBar);
     
     // Gallery
-    mDatingGallery = new DatingGallery(context, attrs);
+    mDatingGallery = new DatingAlbum(context, attrs);
     mDatingGallery.setAdapter(mGalleryAdapter);
     mDatingGallery.setSpacing(0);
     mDatingGallery.setBackgroundColor(Color.TRANSPARENT);

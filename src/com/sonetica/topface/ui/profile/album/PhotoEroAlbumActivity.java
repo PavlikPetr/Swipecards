@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.profile;
+package com.sonetica.topface.ui.profile.album;
 
 import java.util.LinkedList;
 import com.sonetica.topface.Data;
@@ -25,7 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class EroAlbumActivity extends Activity implements View.OnClickListener {
+public class PhotoEroAlbumActivity extends Activity implements View.OnClickListener {
   // Data
   private int mCurrentPos;
   private int mUserId;
@@ -202,13 +202,13 @@ public class EroAlbumActivity extends Activity implements View.OnClickListener {
             t.start();
             
           } else
-            startActivity(new Intent(EroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));  // окно на покупку монет
+            startActivity(new Intent(PhotoEroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));  // окно на покупку монет
         }
         @Override
         public void fail(int codeError,ApiResponse response) {
           if(codeError==ApiResponse.PAYMENT)
-            startActivity(new Intent(EroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));
-          EroAlbumActivity.this.finish();
+            startActivity(new Intent(PhotoEroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));
+          PhotoEroAlbumActivity.this.finish();
         }
       }).exec();
       

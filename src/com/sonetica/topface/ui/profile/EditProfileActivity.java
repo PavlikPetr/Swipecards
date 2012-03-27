@@ -8,6 +8,7 @@ import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.net.SettingsRequest;
 import com.sonetica.topface.ui.CitySearchActivity;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.FormInfo;
 import com.sonetica.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.AlertDialog;

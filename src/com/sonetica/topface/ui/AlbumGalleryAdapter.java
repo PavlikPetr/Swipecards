@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.profile;
+package com.sonetica.topface.ui;
 
 public class AlbumGalleryAdapter{} /* extends BaseAdapter {
   // Data

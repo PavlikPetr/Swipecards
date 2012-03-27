@@ -17,7 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-public class DatingGalleryAdapter extends BaseAdapter {
+public class DatingAlbumAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
@@ -36,7 +36,7 @@ public class DatingGalleryAdapter extends BaseAdapter {
   private DatingControl  mDatingControl;
   private AlphaAnimation mAlphaAnimation;
   //---------------------------------------------------------------------------
-  public DatingGalleryAdapter(Context context,DatingControl datingControl) {
+  public DatingAlbumAdapter(Context context,DatingControl datingControl) {
     mInflater = LayoutInflater.from(context);
     mDatingControl  = datingControl;
     mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);

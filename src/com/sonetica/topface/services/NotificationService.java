@@ -3,9 +3,11 @@ package com.sonetica.topface.services;
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Profile;
+import com.sonetica.topface.data.Verify;
 import com.sonetica.topface.net.ApiHandler;
 import com.sonetica.topface.net.ApiResponse;
 import com.sonetica.topface.net.ProfileRequest;
+import com.sonetica.topface.net.VerifyRequest;
 import com.sonetica.topface.ui.dashboard.DashboardActivity;
 import com.sonetica.topface.ui.inbox.InboxActivity;
 import com.sonetica.topface.utils.Debug;
@@ -16,6 +18,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -30,9 +33,12 @@ public class NotificationService extends Service {
   private NotificationManager mNotificationManager;
   private Runnable mLooper;
   // Constants
-  public  static final int MSG_BIND   = 101;
-  public  static final int MSG_UNBIND = 102;
-  public  static final int MSG_DELETE = 103;
+  public  static final int MSG_BIND     = 101;
+  public  static final int MSG_UNBIND   = 102;
+  public  static final int MSG_DELETE   = 103;
+  public  static final int MSG_PURCHASE = 104;
+  public  static final String INTENT_DATA = "data";
+  public  static final String INTENT_SIGNATURE = "signature";
   public  static final int TP_NOTIFICATION = 1001;
   private static final long TIMER = 1000L * 10;
   //---------------------------------------------------------------------------
@@ -44,7 +50,7 @@ public class NotificationService extends Service {
   @Override
   public void onCreate() {
     super.onCreate();
-    Debug.log("notifyService","onCreate");
+    Debug.log("NotifyService","onCreate");
     
     mMessenger = new Messenger(new IncomingHandler());
     mServiceHandler = new Handler();
@@ -55,8 +61,7 @@ public class NotificationService extends Service {
   //---------------------------------------------------------------------------
   @Override
   public int onStartCommand(Intent intent,int flags,int startId) {
-    Debug.log("notifyService","onStartCommand");
-    
+    Debug.log("NotifyService","onStartCommand");
     mRunning = true;
     return START_STICKY; //super.onStartCommand(intent,flags,startId);
   }
@@ -74,16 +79,39 @@ public class NotificationService extends Service {
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
-  private void createNotification(int messages,int likes, int rates) {
-    Debug.log("notifyService","create notify:"+messages);
-    
+  private void broadcast(String action) {
+    Intent intent = new Intent(action);
+    sendBroadcast(intent);
+  }
+  //---------------------------------------------------------------------------
+  private void notifacations(int messages,int likes, int rates) {
     Data.s_Messages = messages;
     Data.s_Likes    = likes;
     Data.s_Rates    = rates;
-   
-    Intent intent = new Intent(DashboardActivity.ACTION);
-    sendBroadcast(intent);
-    
+  }
+  //---------------------------------------------------------------------------
+  private void resources(int power,int money) {
+    Data.s_Power = power;
+    Data.s_Money = money;
+  }
+  //---------------------------------------------------------------------------
+  private void verifyPurchase(final String data,final String signature) {
+    VerifyRequest verifyRequest = new VerifyRequest(getApplicationContext());
+    verifyRequest.data = data;
+    verifyRequest.signature = signature;
+    verifyRequest.callback(new ApiHandler() {
+      @Override
+      public void success(ApiResponse response) {
+        Verify verify = Verify.parse(response);
+        resources(verify.power,verify.money);
+      }
+      @Override
+      public void fail(int codeError,ApiResponse response) {
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  private void updateNotification(int messages) {
     int icon = R.drawable.ic_launcher;
     CharSequence tickerText;
     if(messages > 1)
@@ -127,15 +155,18 @@ public class NotificationService extends Service {
     public void handleMessage(Message msg) {
       switch (msg.what) {
         case MSG_BIND:
-          //Debug.log("notifyService","bind:" + mCounter);
           break;
         case MSG_UNBIND:
-          //Debug.log("notifyService","unbind:" + mCounter);
           break;
         case MSG_DELETE:
           deleteNotification();
-          //Debug.log("notifyService","delete:" + mCounter);
           break;
+        case MSG_PURCHASE: {
+          Bundle bundle = msg.getData();
+          String data = bundle.getString(INTENT_DATA);
+          String signature = bundle.getString(INTENT_SIGNATURE);
+          verifyPurchase(data,signature);
+        } break;
         default:
           super.handleMessage(msg);
       }
@@ -146,7 +177,6 @@ public class NotificationService extends Service {
   //---------------------------------------------------------------------------
   class RunTask implements Runnable {
     public void run() {
-      
       if(!mRunning)
         return;
       
@@ -155,20 +185,18 @@ public class NotificationService extends Service {
         return;
       }
       
-      // проверка на интернет и ssid
       ProfileRequest profileRequest = new ProfileRequest(getApplicationContext(),true);
       profileRequest.callback(new ApiHandler() {
         @Override
         public void success(final ApiResponse response) {
           Profile profile = Profile.parse(response,true);
-          createNotification(profile.unread_messages,profile.unread_likes,profile.unread_rates);
+          notifacations(profile.unread_messages,profile.unread_likes,profile.unread_rates);
         }
         @Override
         public void fail(int codeError,ApiResponse response) {
         }
       }).exec();
       
-
       mServiceHandler.postDelayed(this,TIMER);
     }
   }

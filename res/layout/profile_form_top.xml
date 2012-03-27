@@ -189,7 +189,7 @@
 		        android:visibility="invisible"
 		        android:src="@drawable/profile_arrow_left" />
 		    
-		    <com.sonetica.topface.ui.profile.HorizontalListView
+		    <com.sonetica.topface.ui.profile.gallery.HorizontalListView
 		        android:id="@+id/lvAlbumPreview"
 		        android:layout_width="wrap_content"
 		        android:layout_height="0dp"
@@ -238,7 +238,7 @@
 		        android:visibility="invisible"
 		        android:src="@drawable/profile_arrow_left" />
 		    
-		    <com.sonetica.topface.ui.profile.HorizontalListView
+		    <com.sonetica.topface.ui.profile.gallery.HorizontalListView
 		        android:id="@+id/lvEroAlbumPreview"
 		        android:layout_width="wrap_content"
 		        android:layout_height="0dp"

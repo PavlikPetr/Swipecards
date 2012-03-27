@@ -19,7 +19,13 @@ import com.sonetica.topface.social.Socium;
 import com.sonetica.topface.social.Socium.AuthException;
 import com.sonetica.topface.ui.dating.ResourcesView;
 import com.sonetica.topface.ui.inbox.ChatActivity;
+import com.sonetica.topface.ui.profile.album.PhotoEroAlbumActivity;
+import com.sonetica.topface.ui.profile.album.PhotoAlbumActivity;
+import com.sonetica.topface.ui.profile.gallery.HorizontalListView;
+import com.sonetica.topface.ui.profile.gallery.PhotoEroGalleryAdapter;
+import com.sonetica.topface.ui.profile.gallery.PhotoGalleryAdapter;
 import com.sonetica.topface.utils.Debug;
+import com.sonetica.topface.utils.FormInfo;
 import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.Imager;
 import com.sonetica.topface.utils.LeaksManager;
@@ -43,7 +49,7 @@ import android.widget.Toast;
 /*
  *      "Профиль"
  */
-public class ProfileActivity extends Activity implements /*SwapView.OnSwapListener,*/ View.OnClickListener, AdapterView.OnItemClickListener {
+public class ProfileActivity extends Activity{
   // Data
   private int mUserId;
   private boolean mOwner;
@@ -101,27 +107,36 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     Debug.log(this,"+onCreate");
 
     System.gc();
-    
     LeaksManager.getInstance().monitorObject(this);
     
+    // Title Header
+    mHeaderTitle = (TextView)findViewById(R.id.tvHeaderTitle);
+    // Albums
+    mPhotoList = new LinkedList<Album>();
+    mEroList   = new LinkedList<Album>();
+    // Avatar
+    mFramePhoto = (FrameImageView)findViewById(R.id.ivProfileFramePhoto);
     // Profile Header Button 
     mProfileButton = ((Button)findViewById(R.id.btnHeader));
-    mProfileButton.setOnClickListener(this);
-    
+    mProfileButton.setOnClickListener(mOnClickListener);
     // Resources
     mResources = (ResourcesView)findViewById(R.id.datingRes);
+    // Progress Bar
+    mProgressDialog = new ProgressDialog(this);
+    mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    // Arrows
+    mGR  = (ImageView)findViewById(R.id.ivProfileArrowGL);
+    mGL  = (ImageView)findViewById(R.id.ivProfileArrowGR);
+    mEGR = (ImageView)findViewById(R.id.ivProfileArrowEGR);
+    mEGL = (ImageView)findViewById(R.id.ivProfileArrowEGL);
     
+    // пришли из чата
+    mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE,false);    
     // свой - чужой профиль
     mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
-
-    // пришли из чата
-    mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE,false);
-    
     // name
     String name = getIntent().getStringExtra(INTENT_USER_NAME);
 
-    // Title Header
-    mHeaderTitle = (TextView)findViewById(R.id.tvHeaderTitle);
     if(name!=null)
       mHeaderTitle.setText(name);  // пришли из likes, rates, chat
     else if(name==null && mUserId>0)
@@ -130,83 +145,66 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
       mHeaderTitle.setText(getString(R.string.profile_header_title)); // свой профиль
     
     // Buttons
-    if(mUserId==-1) {  
-      mOwner = true;           // СВОЙ ПРОФИЛЬ
+    if(mUserId==-1) {  // СВОЙ ПРОФИЛЬ
+      mOwner = true;   
       mUserId = Data.s_Profile.uid;
       
       // Edit button
       View btnEdit = findViewById(R.id.btnProfileEdit);
       btnEdit.setVisibility(View.VISIBLE);
-      btnEdit.setOnClickListener(this);
+      btnEdit.setOnClickListener(mOnClickListener);
       
       // Exit button
       View btnExit = findViewById(R.id.btnProfileExit);
       btnExit.setVisibility(View.VISIBLE);
-      btnExit.setOnClickListener(this);
+      btnExit.setOnClickListener(mOnClickListener);
       
       // Buying Button
       findViewById(R.id.loProfileBuying).setVisibility(View.VISIBLE);
       View btnBuying = findViewById(R.id.btnProfileBuying);
-      btnBuying.setOnClickListener(this);
-    } else {
+      btnBuying.setOnClickListener(mOnClickListener);
+      
+    } else {  // ЧУЖОЙ ПРОФИЛЬ
       // Chat button
       View btnChat = findViewById(R.id.btnProfileChat);
       btnChat.setVisibility(View.VISIBLE);
-      btnChat.setOnClickListener(this);
+      btnChat.setOnClickListener(mOnClickListener);
     }
-
+    
     // Gallary and Adapter
     mListAdapter = new PhotoGalleryAdapter(getApplicationContext(),mOwner);
     mListView = (HorizontalListView)findViewById(R.id.lvAlbumPreview);
-    //mListView.setBackgroundResource(R.drawable.profile_bg_gallery);
     mListView.setAdapter(mListAdapter);
-    mListView.setOnItemClickListener(this);
-    
+    mListView.setOnItemClickListener(mOnItemClickListener);
     // Ero Gallary and Adapter
     mEroTitle = (TextView)findViewById(R.id.tvEroTitle);
     mEroViewGroup = (ViewGroup)findViewById(R.id.loEroAlbum);
     mListEroAdapter = new PhotoEroGalleryAdapter(getApplicationContext(),mOwner);
     mListEroView = (HorizontalListView)findViewById(R.id.lvEroAlbumPreview);
-    //mListEroView.setBackgroundResource(R.drawable.profile_bg_gallery);
     mListEroView.setAdapter(mListEroAdapter);
-    mListEroView.setOnItemClickListener(this);
-    
-    // Avatar
-    mFramePhoto = (FrameImageView)findViewById(R.id.ivProfileFramePhoto);
-    
-    // Info
-    mName = (TextView)findViewById(R.id.tvProfileName);
-    mCity = (TextView)findViewById(R.id.tvProfileCity);
-    mHeight = (TextView)findViewById(R.id.tvProfileHeight);
-    mWeight = (TextView)findViewById(R.id.tvProfileWeight);
-    mEducation = (TextView)findViewById(R.id.tvProfileEducation);
-    mCommunication = (TextView)findViewById(R.id.tvProfileCommutability);
-    mCharacter = (TextView)findViewById(R.id.tvProfileCharacter);
-    mAlcohol = (TextView)findViewById(R.id.tvProfileAlcohol);
-    mFitness = (TextView)findViewById(R.id.tvProfileFitness);
-    mMarriage = (TextView)findViewById(R.id.tvProfileMarriage);
-    if(Data.s_Profile.sex==0)
-      mMarriage.setText(getString(R.string.profile_marriage_female));
-    mFinances = (TextView)findViewById(R.id.tvProfileFinances);
-    mSmoking = (TextView)findViewById(R.id.tvProfileSmoking);
-    //mJob = (TextView)findViewById(R.id.tvProfileJob);
-    //mStatus = (TextView)findViewById(R.id.tvProfileStatus);
-    mAbout = (TextView)findViewById(R.id.tvProfileAbout);
-    
-    // Progress Bar
-    mProgressDialog = new ProgressDialog(this);
-    mProgressDialog.setMessage(getString(R.string.dialog_loading));
-    
-    // Albums
-    mPhotoList = new LinkedList<Album>();
-    mEroList   = new LinkedList<Album>();
-    
-    // Arrows
-    mGR  = (ImageView)findViewById(R.id.ivProfileArrowGL);
-    mGL  = (ImageView)findViewById(R.id.ivProfileArrowGR);
-    mEGR = (ImageView)findViewById(R.id.ivProfileArrowEGR);
-    mEGL = (ImageView)findViewById(R.id.ivProfileArrowEGL);
+    mListEroView.setOnItemClickListener(mOnItemClickListener);
 
+    {
+      // Info
+      mName = (TextView)findViewById(R.id.tvProfileName);
+      mCity = (TextView)findViewById(R.id.tvProfileCity);
+      mHeight = (TextView)findViewById(R.id.tvProfileHeight);
+      mWeight = (TextView)findViewById(R.id.tvProfileWeight);
+      mEducation = (TextView)findViewById(R.id.tvProfileEducation);
+      mCommunication = (TextView)findViewById(R.id.tvProfileCommutability);
+      mCharacter = (TextView)findViewById(R.id.tvProfileCharacter);
+      mAlcohol = (TextView)findViewById(R.id.tvProfileAlcohol);
+      mFitness = (TextView)findViewById(R.id.tvProfileFitness);
+      mMarriage = (TextView)findViewById(R.id.tvProfileMarriage);
+      if(Data.s_Profile.sex==0)
+        mMarriage.setText(getString(R.string.profile_marriage_female));
+      mFinances = (TextView)findViewById(R.id.tvProfileFinances);
+      mSmoking = (TextView)findViewById(R.id.tvProfileSmoking);
+      //mJob = (TextView)findViewById(R.id.tvProfileJob);
+      //mStatus = (TextView)findViewById(R.id.tvProfileStatus);
+      mAbout = (TextView)findViewById(R.id.tvProfileAbout);
+    }
+    
     if(!mOwner)
       getUserProfile(mUserId);
     else 
@@ -231,10 +229,23 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     super.onStop();
   }
   //---------------------------------------------------------------------------
+  // получение фото из галереи и отправка на сервер
+  @Override
+  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+      updateAlbum();
+    }
+    if(requestCode == GALLARY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+      Uri imageUri = data != null ? data.getData() : null;
+      if(imageUri==null)
+        return;
+      new AsyncTaskUploader().execute(imageUri);
+    }
+  }
+  //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
     release();
-    
     System.gc();
 
     Debug.log(this,"-onDestroy");
@@ -392,7 +403,7 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
         if(fieldCounter < 2) {
           View btnAsk = findViewById(R.id.btnProfileAsk);
           btnAsk.setVisibility(View.VISIBLE);
-          btnAsk.setOnClickListener(ProfileActivity.this);
+          btnAsk.setOnClickListener(mOnClickListener);
         }
        
       }
@@ -545,154 +556,17 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(getString(R.string.album_add_photo_title));
     View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.profile_add_photo,null);
-    view.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(this);
-    view.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(this);
+    view.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mOnAddPhotoClickListener);
+    view.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(mOnAddPhotoClickListener);
     builder.setView(view);
     mAddPhotoDialog = builder.create();
     mAddPhotoDialog.show();   
   }
   //---------------------------------------------------------------------------
-  // обработчик нажатия на кнопки
-  @Override
-  public void onClick(View view) {
-    switch(view.getId()) {
-      case R.id.btnProfileChat: {
-        if(mChatInvoke) {
-          finish();
-          return;
-        }
-        Imager.avatarUserPreloading(getApplicationContext(),mUserAvatarUrl);
-        Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
-        intent.putExtra(ChatActivity.INTENT_USER_ID,mUserId);
-        intent.putExtra(ChatActivity.INTENT_USER_NAME,mName.getText());
-        intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE,true);
-        startActivity(intent);
-      } break;
-      case R.id.btnProfileEdit: {
-        startActivity(new Intent(getApplicationContext(),EditProfileActivity.class));
-      } break;
-      case R.id.btnProfileExit: {
-        Data.removeSSID(getApplicationContext());
-        Intent intent = new Intent(getApplicationContext(), SocialActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
-        finish();
-      } break;
-      case R.id.btnProfileBuying: {
-        startActivity(new Intent(getApplicationContext(),BuyingActivity.class));
-      } break;
-      case R.id.btnHeader: {
-        // выпилили
-      } break;
-      case R.id.btnAddPhotoAlbum: {     // popup
-        Intent intent = new Intent();
-        intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
-        mAddPhotoDialog.cancel();
-      } break;
-      case R.id.btnAddPhotoCamera: {
-        Intent intent = new Intent();
-        intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
-        mAddPhotoDialog.cancel();
-      } break;
-      case R.id.btnProfileAsk: {
-        //findViewById(R.id.btnProfileAsk).setVisibility(View.INVISIBLE);
-        findViewById(R.id.btnProfileAsk).setEnabled(false);
-        MessageRequest message = new MessageRequest(ProfileActivity.this.getApplicationContext());
-        message.message = getString(R.string.profile_msg_ask); 
-        message.userid  = mUserId;
-        message.callback(new ApiHandler() {
-          @Override
-          public void success(ApiResponse response) {
-            Toast.makeText(getApplicationContext(),getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
-          }
-          @Override
-          public void fail(int codeError,ApiResponse response) {
-            mProgressDialog.cancel();
-          }
-        }).exec();
-      } break;
-    }
-  }
-  //---------------------------------------------------------------------------
-  // обработчик нажатия на итем галереи
-  @Override
-  public void onItemClick(AdapterView<?> parent,View arg1,int position,long arg3) {
-    switch(parent.getId()) {
-      case R.id.lvAlbumPreview: {        // ALBUM
-        if(position==0 && mOwner==true)  // нажатие на добавление фотки в своем альбоме
-          addPhoto(false);
-        else {
-          Intent intent = new Intent(getApplicationContext(),PhotoAlbumActivity.class);
-          if(mOwner==true) {
-            --position;
-            Data.s_PhotoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
-            Data.s_PhotoAlbum.addAll(mPhotoList);
-            Data.s_PhotoAlbum.removeFirst();
-            intent.putExtra(PhotoAlbumActivity.INTENT_OWNER,true);
-          } else {
-            Data.s_PhotoAlbum = mPhotoList;
-          }
-          intent.putExtra(PhotoAlbumActivity.INTENT_USER_ID,mUserId);
-          intent.putExtra(PhotoAlbumActivity.INTENT_ALBUM_POS,position);
-
-          startActivityForResult(intent,ALBUM_ACTIVITY_REQUEST_CODE);
-        }
-      } break;
-      case R.id.lvEroAlbumPreview: {     // ERO ALBUM
-        if(position==0 && mOwner==true)  // нажатие на добавление эро фотки в своем альбоме
-          addPhoto(true);
-        else {
-          Intent intent = null;
-          if(mOwner==true) {
-            --position;
-            Data.s_PhotoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
-            Data.s_PhotoAlbum.addAll(mEroList);
-            Data.s_PhotoAlbum.removeFirst();
-            intent = new Intent(getApplicationContext(),PhotoAlbumActivity.class);
-            intent.putExtra(PhotoAlbumActivity.INTENT_OWNER,true);
-          } else {
-            Data.s_PhotoAlbum = mEroList;
-            intent = new Intent(getApplicationContext(),EroAlbumActivity.class);
-          }
-          intent.putExtra(EroAlbumActivity.INTENT_USER_ID,mUserId);
-          intent.putExtra(EroAlbumActivity.INTENT_ALBUM_POS,position);
-
-          startActivityForResult(intent,ALBUM_ACTIVITY_REQUEST_CODE);
-        }        
-      } break;
-    }
-  }
-  //---------------------------------------------------------------------------
-  // получение фото из галереи и отправка на сервер
-  @Override
-  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-    if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-      updateAlbum();
-    }
-    if(requestCode == GALLARY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-      Uri imageUri = data != null ? data.getData() : null;
-      if(imageUri==null)
-        return;
-      new AsyncTaskUploader().execute(imageUri);
-    }
-  }
-  //---------------------------------------------------------------------------
   public void release() {
-    mName=null;
-    mCity=null;
-    mEroTitle=null;
-    mHeight=null;
-    mWeight=null;
-    mEducation=null;
-    mCommunication=null;
-    mCharacter=null;
-    mAlcohol=null;
-    mFitness=null;
-    mMarriage=null;
-    mFinances=null;
-    mSmoking=null;
+    mName=mCity=mEroTitle=mHeight=mWeight=mEducation=mCommunication=null;
+    mCharacter=mAlcohol=mFitness=mMarriage=mFinances=mSmoking=null;
+
     mProfileButton=null;
     mEroViewGroup=null;
     
@@ -708,20 +582,17 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
     mListEroAdapter=null;
     
     mProgressDialog=null;
+    mAddPhotoDialog=null;
     
     if(mPhotoList!=null)
       mPhotoList.clear();
     mPhotoList=null;
     
-    if(mEroList!=null)
-      mEroList.clear();
+    if(mEroList!=null) mEroList.clear();
     mEroList=null;
     
-    if(Data.s_PhotoAlbum!=null)
-      Data.s_PhotoAlbum.clear();
+    if(Data.s_PhotoAlbum!=null) Data.s_PhotoAlbum.clear();
     Data.s_PhotoAlbum=null;
-    
-    mAddPhotoDialog=null;
   }
   //---------------------------------------------------------------------------
   // class AsyncTaskUploader
@@ -806,5 +677,128 @@ public class ProfileActivity extends Activity implements /*SwapView.OnSwapListen
       });//runOnUiThread
     }
   }
+  //---------------------------------------------------------------------------
+  private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+      switch(view.getId()) {
+        case R.id.btnHeader: {
+          // выпилили
+        } break;
+        case R.id.btnProfileChat: {
+          if(mChatInvoke) {
+            finish();
+            return;
+          }
+          Imager.avatarUserPreloading(getApplicationContext(),mUserAvatarUrl);
+          Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+          intent.putExtra(ChatActivity.INTENT_USER_ID,mUserId);
+          intent.putExtra(ChatActivity.INTENT_USER_NAME,mName.getText());
+          intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE,true);
+          startActivity(intent);
+        } break;
+        case R.id.btnProfileEdit: {
+          startActivity(new Intent(getApplicationContext(),EditProfileActivity.class));
+        } break;
+        case R.id.btnProfileExit: {
+          Data.removeSSID(getApplicationContext());
+          Intent intent = new Intent(getApplicationContext(), SocialActivity.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+          startActivity(intent);
+          finish();
+        } break;
+        case R.id.btnProfileBuying: {
+          startActivity(new Intent(getApplicationContext(),BuyingActivity.class));
+        } break;
+        case R.id.btnProfileAsk: {
+          findViewById(R.id.btnProfileAsk).setVisibility(View.INVISIBLE);
+          //findViewById(R.id.btnProfileAsk).setEnabled(false);
+          MessageRequest message = new MessageRequest(ProfileActivity.this.getApplicationContext());
+          message.message = getString(R.string.profile_msg_ask); 
+          message.userid  = mUserId;
+          message.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+              Toast.makeText(getApplicationContext(),getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void fail(int codeError,ApiResponse response) {
+              mProgressDialog.cancel();
+            }
+          }).exec();
+        } break;
+      }
+    }
+  };
+  //---------------------------------------------------------------------------
+  private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+      switch(view.getId()) {
+        case R.id.btnAddPhotoAlbum: {
+          Intent intent = new Intent();
+          intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+          startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
+          mAddPhotoDialog.cancel();
+        } break;
+        case R.id.btnAddPhotoCamera: {
+          Intent intent = new Intent();
+          intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+          startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
+          mAddPhotoDialog.cancel();
+        } break;
+      }
+    }
+  };
+  //---------------------------------------------------------------------------
+  private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+    @Override
+    public void onItemClick(AdapterView<?> parent,View arg1,int position,long arg3) {
+      switch(parent.getId()) {
+        case R.id.lvAlbumPreview: {        // ALBUM
+          if(position==0 && mOwner==true)  // нажатие на добавление фотки в своем альбоме
+            addPhoto(false);
+          else {
+            Intent intent = new Intent(getApplicationContext(),PhotoAlbumActivity.class);
+            if(mOwner==true) {
+              --position;
+              Data.s_PhotoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
+              Data.s_PhotoAlbum.addAll(mPhotoList);
+              Data.s_PhotoAlbum.removeFirst();
+              intent.putExtra(PhotoAlbumActivity.INTENT_OWNER,true);
+            } else {
+              Data.s_PhotoAlbum = mPhotoList;
+            }
+            intent.putExtra(PhotoAlbumActivity.INTENT_USER_ID,mUserId);
+            intent.putExtra(PhotoAlbumActivity.INTENT_ALBUM_POS,position);
+
+            startActivityForResult(intent,ALBUM_ACTIVITY_REQUEST_CODE);
+          }
+        } break;
+        case R.id.lvEroAlbumPreview: {     // ERO ALBUM
+          if(position==0 && mOwner==true)  // нажатие на добавление эро фотки в своем альбоме
+            addPhoto(true);
+          else {
+            Intent intent = null;
+            if(mOwner==true) {
+              --position;
+              Data.s_PhotoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
+              Data.s_PhotoAlbum.addAll(mEroList);
+              Data.s_PhotoAlbum.removeFirst();
+              intent = new Intent(getApplicationContext(),PhotoAlbumActivity.class);
+              intent.putExtra(PhotoAlbumActivity.INTENT_OWNER,true);
+            } else {
+              Data.s_PhotoAlbum = mEroList;
+              intent = new Intent(getApplicationContext(),PhotoEroAlbumActivity.class);
+            }
+            intent.putExtra(PhotoEroAlbumActivity.INTENT_USER_ID,mUserId);
+            intent.putExtra(PhotoEroAlbumActivity.INTENT_ALBUM_POS,position);
+
+            startActivityForResult(intent,ALBUM_ACTIVITY_REQUEST_CODE);
+          }        
+        } break;
+      }
+    }    
+  };
   //---------------------------------------------------------------------------
 }

@@ -1,30 +1,22 @@
 package com.sonetica.topface;
 
 import com.sonetica.topface.services.NotificationService;
-import com.sonetica.topface.services.StatisticService;
 import com.sonetica.topface.ui.Recycle;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Device;
 import android.app.Application;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
-//import org.acra.ACRA;
-//import org.acra.annotation.ReportsCrashes;
+import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
 
 /*
  *    Контекст приложения
  */
-//@ReportsCrashes(formKey="dGxzMXhjeWNiei15RWM0TzJxUzR3c1E6MQ")
-public class App extends Application implements ServiceConnection {
+@ReportsCrashes(formKey="dEdjcUtaMmJqNmlSdlZmUTlwejlXUlE6MQ")
+public class App extends Application /*implements ServiceConnection*/ {
   // Data
   public static boolean init;
-  private Messenger mNotificationService;
+  //private Messenger mNotificationService;
   // Constants
   public static final String TAG = "TopFace";
   //---------------------------------------------------------------------------
@@ -32,8 +24,7 @@ public class App extends Application implements ServiceConnection {
   public void onCreate() {
     super.onCreate();
     Debug.log("App","++onCreate");
-    
-    //ACRA.init(this);
+    ACRA.init(this);
     
     /*
     ActivityManager manager = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
@@ -42,7 +33,7 @@ public class App extends Application implements ServiceConnection {
         return;
         
     // Data.SSID рассинхрон между процессами
-       * 
+
     */
     
     // App initialization
@@ -51,12 +42,12 @@ public class App extends Application implements ServiceConnection {
     init = Device.init(getApplicationContext());
     init = Recycle.init(getApplicationContext());
     
-    startService(new Intent(getApplicationContext(),StatisticService.class));
+    //startService(new Intent(getApplicationContext(),StatisticService.class));
     startService(new Intent(getApplicationContext(),NotificationService.class));
-    bindService(new Intent(this,NotificationService.class),this,Context.BIND_AUTO_CREATE);
-
+    //bindService(new Intent(this,NotificationService.class),this,Context.BIND_AUTO_CREATE);
   }
   //---------------------------------------------------------------------------
+  /*
   public void bind(Context context) {
     try {
       if(mNotificationService != null) {
@@ -111,6 +102,7 @@ public class App extends Application implements ServiceConnection {
       Debug.log("App","onServiceDisconnected:"+e);
     }
   }
+  */
   //---------------------------------------------------------------------------
   @Override
   protected void finalize() throws Throwable {

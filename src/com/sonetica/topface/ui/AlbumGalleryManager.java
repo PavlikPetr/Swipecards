@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.profile;
+package com.sonetica.topface.ui;
 
 /*
  *  Менеджер изображений, загрузает и кеширует изображения

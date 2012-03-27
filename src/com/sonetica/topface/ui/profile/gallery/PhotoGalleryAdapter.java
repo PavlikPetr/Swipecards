@@ -1,10 +1,9 @@
-package com.sonetica.topface.ui.profile;
+package com.sonetica.topface.ui.profile.gallery;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Album;
-import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.LeaksManager;
 import android.content.Context;
@@ -16,7 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView.ScaleType;
 
-public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollListener  {
+public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListener  {
   // Data
   private boolean mOwner;
   private Context mContext;
@@ -25,7 +24,7 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
   //private ExecutorService mThreadsPool;
   private boolean mBusy; 
   //---------------------------------------------------------------------------
-  public PhotoEroGalleryAdapter(Context context,boolean bOwner) {
+  public PhotoGalleryAdapter(Context context,boolean bOwner) {
     mContext = context;
     mOwner = bOwner;
     mCache = new HashMap<Integer,Bitmap>();
@@ -56,54 +55,45 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
   @Override
   public View getView(int position,View convertView,ViewGroup parent) {
     if(convertView == null) {
-      convertView = new ProfileEroThumbView(mContext);
-      ((ProfileEroThumbView)convertView).setScaleType(ScaleType.CENTER_CROP);
-      ((ProfileEroThumbView)convertView).mOwner = mOwner;
-      //((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_frame_gallery);
+      convertView = new ProfileThumbView(mContext);
+      ((ProfileThumbView)convertView).setScaleType(ScaleType.CENTER_CROP);
     }
 
     if(position==0 && mOwner==true) {
-      ((ProfileEroThumbView)convertView).mIsAddButton = true;
-      ((ProfileEroThumbView)convertView).setPadding(0,0,0,20);
-      ((ProfileEroThumbView)convertView).setScaleType(ScaleType.CENTER_INSIDE);
-      ((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_add_photo);
+      ((ProfileThumbView)convertView).mIsAddButton = true;
+      ((ProfileThumbView)convertView).setPadding(0,0,0,20);
+      ((ProfileThumbView)convertView).setScaleType(ScaleType.CENTER_INSIDE);
+      ((ProfileThumbView)convertView).setImageResource(R.drawable.profile_add_photo);
       return convertView;
     } else
-      ((ProfileEroThumbView)convertView).mIsAddButton = false;
+      ((ProfileThumbView)convertView).mIsAddButton = false;
     
     Bitmap bitmap = mCache.get(position);
     if(bitmap!=null)
-      ((ProfileEroThumbView)convertView).setImageBitmap(bitmap);
+      ((ProfileThumbView)convertView).setImageBitmap(bitmap);
     else {
-      ((ProfileEroThumbView)convertView).setImageBitmap(null);
-      loadingImage(position,((ProfileEroThumbView)convertView));
+      ((ProfileThumbView)convertView).setImageBitmap(null);
+      loadingImage(position,((ProfileThumbView)convertView));
     }
     
     return convertView;
   }
   //---------------------------------------------------------------------------
-  private void loadingImage(final int position,final ProfileEroThumbView view) {
+  private void loadingImage(final int position,final ProfileThumbView view) {
     final Album album = (Album)getItem(position);
-    view.cost = album.cost;
-    view.likes = album.likes;
-    view.dislikes = album.dislikes;
     Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
-        try {
-          if(!mBusy) {
-            final Bitmap bitmap = Http.bitmapLoader(album.getSmallLink());
-            if(bitmap!=null)
-              mCache.put(position,bitmap);
-              view.post(new Runnable() {
-                @Override
-                public void run() {
-                  view.setImageBitmap(bitmap);
-                }
-              });
-          }
-        } catch(Exception e){
-          Debug.log(this,"tread error: " + e);
+        if(!mBusy) {
+          final Bitmap bitmap = Http.bitmapLoader(album.getSmallLink());
+          if(bitmap!=null && mCache!=null)
+            mCache.put(position,bitmap);
+            view.post(new Runnable() {
+              @Override
+              public void run() {
+                view.setImageBitmap(bitmap);
+              }
+            });
         }
       }
     });
@@ -118,7 +108,7 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     mAlbumList=null;
     if(mCache!=null)
       mCache.clear();
-    mCache=null;
+    mCache=null;    
   }
   //---------------------------------------------------------------------------
   @Override

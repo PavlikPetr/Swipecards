@@ -1,6 +1,6 @@
 package com.sonetica.topface.ui.dating;
 
-public class DatingGalleryAdapterEx{} /* extends BaseAdapter {
+public class DatingAlbumAdapterEx{} /* extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------

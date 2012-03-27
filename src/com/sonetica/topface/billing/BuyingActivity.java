@@ -1,28 +1,32 @@
 package com.sonetica.topface.billing;
 
-import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.billing.BillingService.RequestPurchase;
 import com.sonetica.topface.billing.BillingService.RestoreTransactions;
 import com.sonetica.topface.billing.Consts.PurchaseState;
 import com.sonetica.topface.billing.Consts.ResponseCode;
-import com.sonetica.topface.data.Verify;
-import com.sonetica.topface.net.ApiHandler;
-import com.sonetica.topface.net.ApiResponse;
-import com.sonetica.topface.net.VerifyRequest;
+import com.sonetica.topface.services.NotificationService;
 import com.sonetica.topface.ui.dating.ResourcesView;
 import com.sonetica.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class BuyingActivity extends Activity implements View.OnClickListener {
+public class BuyingActivity extends Activity implements ServiceConnection, View.OnClickListener {
   // Data
   private ResourcesView mResources;
   private ViewGroup mMoney6;
@@ -30,6 +34,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
   private ViewGroup mMoney100;
   private ViewGroup mPower;
   private Handler mHandler;
+  private Messenger mNotificationService;
   private BillingService mBillingService;
   private TopfacePurchaseObserver mTopfacePurchaseObserver;
   private ProgressDialog mProgressDialog;
@@ -44,6 +49,8 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_buying);
     Debug.log(this,"+onCreate");
+    
+    bindService(new Intent(this,NotificationService.class),this,Context.BIND_AUTO_CREATE);
 
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.buying_header_title));
@@ -104,32 +111,16 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
   }
   //---------------------------------------------------------------------------
   @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mBillingService.unbind();
+  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    super.onActivityResult(requestCode,resultCode,data);
   }
   //---------------------------------------------------------------------------
-  private void sendPerchaseData(String data,String signature) {
-    VerifyRequest verifyRequest = new VerifyRequest(getApplicationContext());
-    verifyRequest.data = data;
-    verifyRequest.signature = signature;
-    verifyRequest.callback(new ApiHandler() {
-      @Override
-      public void success(ApiResponse response) {
-        Verify verify = Verify.parse(response);
-        Data.s_Money = verify.money;
-        Data.s_Power = verify.power;
-        mResources.setResources(verify.power,verify.money);
-        mResources.invalidate();
-        Debug.log("BuyingActivity","success:"+response);
-        mProgressDialog.cancel();
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-        Debug.log("BuyingActivity","fail:"+response);
-        mProgressDialog.cancel();
-      }
-    }).exec();
+  @Override
+  protected void onDestroy() {
+    unbindService(this);
+    mNotificationService=null;
+    mBillingService.unbind();
+    super.onDestroy();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -147,6 +138,25 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
       case R.id.btnBuyingPower:
         mBillingService.requestPurchase("android.test.item_unavailable",null); // topface.energy
         break;
+    }
+    //mProgressDialog.show();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onServiceConnected(ComponentName name,IBinder service) {
+    try {
+      mNotificationService = new Messenger(service);
+    } catch (Exception e) {
+      Debug.log("BuyingActivity","onServiceConnected:"+e);
+    }
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onServiceDisconnected(ComponentName name) {
+    try {
+      mNotificationService = null;
+    } catch (Exception e) {
+      Debug.log("BuyingActivity","onServiceDisconnected:"+e);
     }
   }
   //---------------------------------------------------------------------------
@@ -173,21 +183,20 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         Toast.makeText(getApplicationContext(),"Play Market not available",Toast.LENGTH_SHORT).show();
       }
     }
-    /*
-    @Override
-    public void onPurchaseStateChange(PurchaseState purchaseState,String itemId,int quantity,long purchaseTime,String developerPayload) {
-      if(purchaseState == PurchaseState.PURCHASED)
-        ;
-      else
-        ;
-    }
-    */    
     @Override
     public void onPurchaseStateChange(PurchaseState purchaseState,String data,String signature) {
       if(purchaseState != PurchaseState.PURCHASED)
         return;
-        mProgressDialog.show();
-        sendPerchaseData(data,signature);
+      try {
+        Bundle boundle = new Bundle();
+        boundle.putString(NotificationService.INTENT_DATA,data);
+        boundle.putString(NotificationService.INTENT_SIGNATURE,signature);
+        Message msg = Message.obtain(null, NotificationService.MSG_PURCHASE,0,0);
+        msg.setData(boundle);
+        mNotificationService.send(msg);
+      } catch(RemoteException e) {
+        Debug.log("BuyingActivity","message sending error");
+      }
     }
     @Override
     public void onRequestPurchaseResponse(RequestPurchase request,ResponseCode responseCode) {

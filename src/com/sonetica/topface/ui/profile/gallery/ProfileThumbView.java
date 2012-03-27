@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.profile;
+package com.sonetica.topface.ui.profile.gallery;
 
 import com.sonetica.topface.R;
 import com.sonetica.topface.ui.Recycle;

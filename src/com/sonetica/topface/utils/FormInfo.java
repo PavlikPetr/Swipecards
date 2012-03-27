@@ -1,4 +1,4 @@
-package com.sonetica.topface.ui.profile;
+package com.sonetica.topface.utils;
 
 import com.sonetica.topface.R;
 import android.content.Context;

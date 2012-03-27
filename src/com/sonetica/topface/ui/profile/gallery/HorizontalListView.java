@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  *
  */
-package com.sonetica.topface.ui.profile;
+package com.sonetica.topface.ui.profile.gallery;
 
 import java.util.LinkedList;
 import java.util.Queue;
