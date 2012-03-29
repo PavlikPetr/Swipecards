@@ -5,7 +5,7 @@ import com.sonetica.topface.Global;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.City;
 import com.sonetica.topface.data.TopUser;
-import com.sonetica.topface.net.*;
+import com.sonetica.topface.requests.*;
 import com.sonetica.topface.ui.DoubleButton;
 import com.sonetica.topface.ui.GalleryGridManager;
 import com.sonetica.topface.ui.ThumbView;

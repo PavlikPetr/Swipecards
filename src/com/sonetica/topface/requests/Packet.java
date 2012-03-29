@@ -1,4 +1,4 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.requests;
 
 import android.os.Handler;
 import android.os.Message;

@@ -1,6 +1,6 @@
 package com.sonetica.topface.data;
 
-import com.sonetica.topface.net.ApiResponse;
+import com.sonetica.topface.requests.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class PhotoOpen extends AbstractData {

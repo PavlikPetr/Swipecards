@@ -1,17 +1,16 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
-public class PhotoOpenRequest extends ApiRequest {
+public class MainRequest extends ApiRequest {
   // Data
-  private String service = "photoOpen";
-  public int uid;    // идентификатор пользователя хозяина фотографии
-  public int photo;  // идентификатор эротической фотографии
+  private String service = "main";
+  public int photoid ;    // идентификатор фотографии для установки в качестве главной
   //---------------------------------------------------------------------------
-  public PhotoOpenRequest(Context context) {
+  public MainRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -21,8 +20,7 @@ public class PhotoOpenRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("uid",uid)
-                                      .put("photo",photo));
+      root.put("data",new JSONObject().put("photoid",photoid));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }

@@ -2,10 +2,10 @@ package com.sonetica.topface.ui.profile;
 
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
-import com.sonetica.topface.net.ApiHandler;
-import com.sonetica.topface.net.QuestionaryRequest;
-import com.sonetica.topface.net.ApiResponse;
-import com.sonetica.topface.net.SettingsRequest;
+import com.sonetica.topface.requests.ApiHandler;
+import com.sonetica.topface.requests.ApiResponse;
+import com.sonetica.topface.requests.QuestionaryRequest;
+import com.sonetica.topface.requests.SettingsRequest;
 import com.sonetica.topface.ui.CitySearchActivity;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.FormInfo;

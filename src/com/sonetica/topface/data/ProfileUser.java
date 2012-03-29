@@ -1,7 +1,7 @@
 package com.sonetica.topface.data;
 
 import org.json.JSONObject;
-import com.sonetica.topface.net.ApiResponse;
+import com.sonetica.topface.requests.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 /*

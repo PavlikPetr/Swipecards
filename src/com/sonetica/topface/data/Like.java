@@ -3,7 +3,7 @@ package com.sonetica.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.sonetica.topface.net.ApiResponse;
+import com.sonetica.topface.requests.ApiResponse;
 import com.sonetica.topface.utils.Debug;
 
 public class Like extends AbstractData {

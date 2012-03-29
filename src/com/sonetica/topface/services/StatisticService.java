@@ -1,20 +1,12 @@
 package com.sonetica.topface.services;
 
-import com.sonetica.topface.Data;
-import com.sonetica.topface.data.Profile;
-import com.sonetica.topface.net.ApiHandler;
-import com.sonetica.topface.net.ApiResponse;
-import com.sonetica.topface.net.ProfileRequest;
-import com.sonetica.topface.services.NotificationService.RunTask;
 import com.sonetica.topface.utils.Debug;
-import com.sonetica.topface.utils.Http;
 import com.sonetica.topface.utils.LeaksManager;
 import com.sonetica.topface.utils.Memory;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 
 public class StatisticService extends Service {
   // Data

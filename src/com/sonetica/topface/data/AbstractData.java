@@ -1,6 +1,6 @@
 package com.sonetica.topface.data;
 
-import com.sonetica.topface.net.ApiResponse;
+import com.sonetica.topface.requests.ApiResponse;
 
 /*
  *   Абстрактный класс для пакетов полученных с сервера на запросы

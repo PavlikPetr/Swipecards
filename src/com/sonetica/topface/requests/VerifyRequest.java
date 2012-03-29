@@ -1,16 +1,17 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
-public class SearchCitiesRequest extends ApiRequest {
+public class VerifyRequest extends ApiRequest {
   // Data
-  private String service = "searchCities";
-  public  String prefix;   // начальный текст наименования города в UTF-8. Минимальный размер текста - 3 символа
+  private String service = "verify";
+  public String  data;       // строка данных заказа от Google Play
+  public String  signature;  // подпись данных заказа
   //---------------------------------------------------------------------------
-  public SearchCitiesRequest(Context context) {
+  public VerifyRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -20,7 +21,8 @@ public class SearchCitiesRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("prefix",prefix));
+      JSONObject jsondata = new JSONObject().put("data",data).put("signature",signature);
+      root.put("data",jsondata);
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }
@@ -29,4 +31,3 @@ public class SearchCitiesRequest extends ApiRequest {
   }
   //---------------------------------------------------------------------------
 }
-

@@ -1,18 +1,16 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
-public class SearchRequest extends ApiRequest {
+public class SearchCitiesRequest extends ApiRequest {
   // Data
-  private String service = "search";
-  public int limit;    // размер получаемой выборки 10 <= limit <= 50
-  public boolean geo;   // необходимости геопозиционного поиска
-  public boolean online; // необходимость выборки только онлайн-пользователей
+  private String service = "searchCities";
+  public  String prefix;   // начальный текст наименования города в UTF-8. Минимальный размер текста - 3 символа
   //---------------------------------------------------------------------------
-  public SearchRequest(Context context) {
+  public SearchCitiesRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -22,9 +20,7 @@ public class SearchRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("limit",limit)
-                                      .put("geo",geo)
-                                      .put("online",online));
+      root.put("data",new JSONObject().put("prefix",prefix));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }
@@ -33,3 +29,4 @@ public class SearchRequest extends ApiRequest {
   }
   //---------------------------------------------------------------------------
 }
+

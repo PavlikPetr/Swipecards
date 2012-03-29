@@ -1,6 +1,6 @@
 package com.sonetica.topface.ui;
 
-public class MyView{}/* extends View implements View.OnTouchListener {
+public class MyView{} /*extends View implements View.OnTouchListener {
   //Data
   Paint paint = new Paint();
   //---------------------------------------------------------------------------

@@ -1,19 +1,17 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.requests;
 
-import java.util.ArrayList;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
-public class ProfilesRequest extends ApiRequest {
+public class TopsRequest extends ApiRequest {
   // Data
-  private String service = "profiles";
-  public  ArrayList<Integer> uids   = new ArrayList<Integer>(); // массив id пользователя в топфейсе
-  public  ArrayList<String>  fields = new ArrayList<String>();  // массив интересующих полей профиля
+  private String service = "top";
+  public  int sex;   // пол самых красивых 
+  public  int city;  // город самых красивых
   //---------------------------------------------------------------------------
-  public ProfilesRequest(Context context) {
+  public TopsRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -23,7 +21,7 @@ public class ProfilesRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("uids",new JSONArray(uids)));
+      root.put("data",new JSONObject().put("sex",sex).put("city",city));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }

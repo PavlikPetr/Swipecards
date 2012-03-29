@@ -1,17 +1,17 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
-public class VerifyRequest extends ApiRequest {
+public class DoRateRequest extends ApiRequest {
   // Data
-  private String service = "verify";
-  public String  data;       // строка данных заказа от Google Play
-  public String  signature;  // подпись данных заказа
+  private String service = "rate";
+  public  int userid;   // идентификатор пользователя для оценки
+  public  int rate;     // оценка пользователя. ОДЗ: 1 <= RATE <= 10
   //---------------------------------------------------------------------------
-  public VerifyRequest(Context context) {
+  public DoRateRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -21,8 +21,8 @@ public class VerifyRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      JSONObject jsondata = new JSONObject().put("data",data).put("signature",signature);
-      root.put("data",jsondata);
+      root.put("data",new JSONObject().put("userid",userid)
+                                      .put("rate",rate));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }

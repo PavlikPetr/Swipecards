@@ -2,10 +2,10 @@ package com.sonetica.topface.ui.profile.album;
 
 import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
-import com.sonetica.topface.net.ApiHandler;
-import com.sonetica.topface.net.MainRequest;
-import com.sonetica.topface.net.PhotoDeleteRequest;
-import com.sonetica.topface.net.ApiResponse;
+import com.sonetica.topface.requests.ApiHandler;
+import com.sonetica.topface.requests.ApiResponse;
+import com.sonetica.topface.requests.MainRequest;
+import com.sonetica.topface.requests.PhotoDeleteRequest;
 import com.sonetica.topface.ui.dating.DatingAlbum;
 import com.sonetica.topface.utils.Debug;
 import com.sonetica.topface.utils.LeaksManager;

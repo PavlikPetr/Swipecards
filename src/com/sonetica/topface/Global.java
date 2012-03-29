@@ -39,7 +39,7 @@ public class Global {
       CLIENT_TYPE            = "android";
       CLIENT_DEVICE          = Build.BRAND + " " + Build.MANUFACTURER;
       CLIENT_ID              = Build.ID;
-    }catch (Exception e) {
+    } catch (Exception e) {
       Debug.log("Global","init exception:" + e);
       return false;
     }

@@ -43,7 +43,7 @@ public class App extends Application /*implements ServiceConnection*/ {
     init = Device.init(getApplicationContext());
     init = Recycle.init(getApplicationContext());
     
-    startService(new Intent(getApplicationContext(),StatisticService.class));
+    //startService(new Intent(getApplicationContext(),StatisticService.class));
     startService(new Intent(getApplicationContext(),NotificationService.class));
     //bindService(new Intent(this,NotificationService.class),this,Context.BIND_AUTO_CREATE);
   }

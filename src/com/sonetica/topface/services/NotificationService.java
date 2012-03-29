@@ -4,10 +4,10 @@ import com.sonetica.topface.Data;
 import com.sonetica.topface.R;
 import com.sonetica.topface.data.Profile;
 import com.sonetica.topface.data.Verify;
-import com.sonetica.topface.net.ApiHandler;
-import com.sonetica.topface.net.ApiResponse;
-import com.sonetica.topface.net.ProfileRequest;
-import com.sonetica.topface.net.VerifyRequest;
+import com.sonetica.topface.requests.ApiHandler;
+import com.sonetica.topface.requests.ApiResponse;
+import com.sonetica.topface.requests.ProfileRequest;
+import com.sonetica.topface.requests.VerifyRequest;
 import com.sonetica.topface.ui.dashboard.DashboardActivity;
 import com.sonetica.topface.ui.inbox.InboxActivity;
 import com.sonetica.topface.utils.Debug;
@@ -40,7 +40,7 @@ public class NotificationService extends Service {
   public  static final String INTENT_DATA = "data";
   public  static final String INTENT_SIGNATURE = "signature";
   public  static final int TP_NOTIFICATION = 1001;
-  private static final long TIMER = 1000L * 10;
+  private static final long TIMER = 1000L * 60*60;
   //---------------------------------------------------------------------------
   @Override
   public IBinder onBind(Intent intent) {

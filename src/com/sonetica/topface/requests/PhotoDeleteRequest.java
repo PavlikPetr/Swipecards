@@ -1,17 +1,16 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
-public class DoRateRequest extends ApiRequest {
+public class PhotoDeleteRequest extends ApiRequest {
   // Data
-  private String service = "rate";
-  public  int userid;   // идентификатор пользователя для оценки
-  public  int rate;     // оценка пользователя. ОДЗ: 1 <= RATE <= 10
+  private String service = "photoDelete";
+  public int photoid ;    // идентификатор фотографии для установки в качестве главной
   //---------------------------------------------------------------------------
-  public DoRateRequest(Context context) {
+  public PhotoDeleteRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -21,8 +20,7 @@ public class DoRateRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("userid",userid)
-                                      .put("rate",rate));
+      root.put("data",new JSONObject().put("photoid",photoid));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }

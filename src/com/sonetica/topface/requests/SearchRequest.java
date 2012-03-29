@@ -1,17 +1,18 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
-public class MessageRequest extends ApiRequest {
+public class SearchRequest extends ApiRequest {
   // Data
-  private String service = "message";
-  public int userid;      // идентификатор пользователя, кому послали сообщение
-  public String message;  // текст сообщения в UTF-8. min размер текста - 1 символ, max - 1024 
+  private String service = "search";
+  public int limit;    // размер получаемой выборки 10 <= limit <= 50
+  public boolean geo;   // необходимости геопозиционного поиска
+  public boolean online; // необходимость выборки только онлайн-пользователей
   //---------------------------------------------------------------------------
-  public MessageRequest(Context context) {
+  public SearchRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -21,7 +22,9 @@ public class MessageRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("userid",userid).put("message",message));
+      root.put("data",new JSONObject().put("limit",limit)
+                                      .put("geo",geo)
+                                      .put("online",online));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }
@@ -30,4 +33,3 @@ public class MessageRequest extends ApiRequest {
   }
   //---------------------------------------------------------------------------
 }
-

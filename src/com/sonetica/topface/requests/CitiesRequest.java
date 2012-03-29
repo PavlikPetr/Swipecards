@@ -1,20 +1,16 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
-public class SymphatyRequest extends ApiRequest {
+public class CitiesRequest extends ApiRequest {
   // Data
-  private String service = "feedSymphaty";
-  /*
-  * {Number} limit - максимальный размер выборки входящих симпатий
-  {Number} from - начальный идентификатор симпатии для выборки
-  {Boolean} new - осуществлять выборку только по непрочитанным симпатиям
-  */
+  private String service = "cities";
+  public  String type;  // тип выборки перечня городов. Пока поддерживается только “top”
   //---------------------------------------------------------------------------
-  public SymphatyRequest(Context context) {
+  public CitiesRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -24,7 +20,7 @@ public class SymphatyRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      //root.put("data",new JSONObject().put("sex",sex).put("city",city));
+      root.put("data",new JSONObject().put("type",type));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }
@@ -33,3 +29,4 @@ public class SymphatyRequest extends ApiRequest {
   }
   //---------------------------------------------------------------------------
 }
+

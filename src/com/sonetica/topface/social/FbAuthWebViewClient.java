@@ -33,7 +33,7 @@ public class FbAuthWebViewClient extends WebViewClient {
   private Pattern mRegExpLogout = Pattern.compile("(.*act=logout.+)$");
   // Constants
   private static final long CLIENT_ID = 161347997227885L;
-  private static final String SCOPE   = "manage_pages,user_photos,user_videos,publish_stream,offline_access,user_checkins,friends_checkins";
+  private static final String SCOPE   = "user_photos,publish_stream,email,user_birthday,friends_online_presence";
   //---------------------------------------------------------------------------
   /**
    * @param webView в котором будет происходить авторизация

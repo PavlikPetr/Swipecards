@@ -1,19 +1,19 @@
-package com.sonetica.topface.net;
+package com.sonetica.topface.requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sonetica.topface.utils.Debug;
 import android.content.Context;
 
-public class InboxRequest extends ApiRequest {
+public class RatesRequest extends ApiRequest {
   // Data
-  private String service = "feedInbox";
-  public  int offset;        // смещение выбираемых сообщений
-  public  int limit;         // максимальный размер выбираемых сообщений
-  public  int from;          // идентификатор сообщения, от которого делать выборку
-  public  boolean only_new;  // осуществлять выборку только по новым сообщения, или по всем
+  private String service = "feedRates";
+  public  int offset;  // смещение выбираемых оценок
+  public  int limit;   // максимальный размер выборки
+  public  int from;    // идентификатор оценки, от которой делать выборку
+  public  boolean only_new;  // осуществлять выборку только по новым оценкам, или по всем
   //---------------------------------------------------------------------------
-  public InboxRequest(Context context) {
+  public RatesRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
