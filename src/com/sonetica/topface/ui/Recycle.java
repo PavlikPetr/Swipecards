@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class Recycle {
-  //   // Data
+  // Data
   public static Bitmap s_People;
   public static Bitmap s_Online;
   public static Bitmap s_Offline;

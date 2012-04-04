@@ -66,11 +66,11 @@ public class Imager {
       // у вертикальной режим с верху
       clippedBitmap = Bitmap.createBitmap(scaledBitmap,0,0,bitmapWidth,bitmapHeight,null,false);
     
-    rawBitmap.recycle();
-    rawBitmap = null;
+    //rawBitmap.recycle();
+    //rawBitmap = null;
       
-    scaledBitmap.recycle();
-    scaledBitmap = null;
+    //scaledBitmap.recycle();
+    //scaledBitmap = null;
     
     return clippedBitmap;
   }
@@ -84,9 +84,6 @@ public class Imager {
     Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
     
     Bitmap clippedBitmap = clipping(bitmap,width,height);
-    
-    bitmap.recycle();
-    bitmap=null;
 
     Canvas canvas = new Canvas(output);
 
@@ -101,6 +98,9 @@ public class Imager {
 
     paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
     canvas.drawBitmap(clippedBitmap, rect, rect, paint);
+    
+    //bitmap.recycle();
+    bitmap = null;
 
     return output;
   }

@@ -74,7 +74,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       // Progress Bar
       mProgressDialog = new ProgressDialog(this);
       mProgressDialog.setMessage(getString(R.string.dialog_loading));
-      mProgressDialog.show();
       
       mLikesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyLikes);
       mInboxNotify = (TextView)findViewById(R.id.tvDshbrdNotifyChat);
@@ -98,6 +97,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       
       //mNotifyHandler = new Handler();
       //mNotifyHandler.postDelayed(new RunTask(),TIMER);
+      
+      mProgressDialog.show();
       
       update();
     } else { 
@@ -144,6 +145,10 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     start = false;
     System.gc();
     
+    if(mProgressDialog!=null && mProgressDialog.isShowing())
+      mProgressDialog.cancel();
+    mProgressDialog = null;
+    
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
@@ -158,7 +163,12 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         Profile profile = Profile.parse(response,false);
         Data.setProfile(profile);
         mProgressDialog.cancel();
-        Imager.avatarOwnerPreloading(DashboardActivity.this.getApplicationContext());
+        new Thread(new Runnable() {
+          @Override
+          public void run() {
+            Imager.avatarOwnerPreloading(DashboardActivity.this.getApplicationContext());
+          }
+        }).start();
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
