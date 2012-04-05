@@ -10,7 +10,7 @@
       android:layout_centerInParent="true"
       style="@android:style/Widget.ProgressBar.Small" />
      -->
-	<com.sonetica.topface.ui.ThumbView
+	<com.topface.topface.ui.ThumbView
 	    android:id="@+id/ivTG"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"	/>

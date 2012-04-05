@@ -13,7 +13,7 @@
   <!-- <include layout="@layout/bar_double_button" /> -->
   
   <!-- gallary -->
-  <com.sonetica.topface.p2r.PullToRefreshGridView
+  <com.topface.topface.p2r.PullToRefreshGridView
     android:id="@+id/grdLikesGallary"
     android:layout_width="fill_parent"
     android:layout_height="0dip"

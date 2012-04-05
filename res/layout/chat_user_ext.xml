@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:sonetica="http://schemas.android.com/apk/res/com.sonetica.topface"
+                xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -37,8 +37,8 @@
     </LinearLayout>
 
     <!-- avatar -->
-    <com.sonetica.topface.ui.RoundedImageView
-            sonetica:frame="chat"
+    <com.topface.topface.ui.RoundedImageView
+            topface:frame="chat"
             android:id="@+id/left_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

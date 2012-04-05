@@ -5,7 +5,7 @@
       android:layout_height="wrap_content"
       android:background="@drawable/im_bar_button" >
     
-	  <com.sonetica.topface.ui.DoubleBigButton
+	  <com.topface.topface.ui.DoubleBigButton
 	      android:id="@+id/btnDoubleBig"
 	      android:layout_width="wrap_content"
         android:layout_height="wrap_content" 

@@ -10,7 +10,7 @@
   <string name="vk_album_name">ТопФейс http://vkontakte.ru/app2257829</string>
 
   <!-- External directory -->
-  <string name="sdcard_root_path">Android/data/com.sonetica.topface/</string>
+  <string name="sdcard_root_path">Android/data/com.topface.topface/</string>
   <string name="sdcard_cache_path">cache/</string>
   <string name="sdcard_data_path">data</string>
   <string name="sdcard_images_path">images</string>

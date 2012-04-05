@@ -23,7 +23,7 @@
 		      android:stretchColumns="1" >
 		    <TableRow >
 			    <!-- Frame -->
-			    <com.sonetica.topface.ui.profile.FrameImageView
+			    <com.topface.topface.ui.profile.FrameImageView
 			        android:id="@+id/ivProfileFramePhoto"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
 		        android:gravity="center_vertical" >
 		
 		      <!-- Resources -->
-			    <com.sonetica.topface.ui.dating.ResourcesView
+			    <com.topface.topface.ui.dating.ResourcesView
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:layout_marginLeft="12dp"
@@ -189,7 +189,7 @@
 		        android:visibility="invisible"
 		        android:src="@drawable/profile_arrow_left" />
 		    
-		    <com.sonetica.topface.ui.profile.gallery.HorizontalListView
+		    <com.topface.topface.ui.profile.gallery.HorizontalListView
 		        android:id="@+id/lvAlbumPreview"
 		        android:layout_width="wrap_content"
 		        android:layout_height="0dp"
@@ -238,7 +238,7 @@
 		        android:visibility="invisible"
 		        android:src="@drawable/profile_arrow_left" />
 		    
-		    <com.sonetica.topface.ui.profile.gallery.HorizontalListView
+		    <com.topface.topface.ui.profile.gallery.HorizontalListView
 		        android:id="@+id/lvEroAlbumPreview"
 		        android:layout_width="wrap_content"
 		        android:layout_height="0dp"

@@ -1,0 +1,272 @@
+package com.topface.topface.ui.dating;
+
+import java.util.LinkedList;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.data.DoRate;
+import com.topface.topface.data.SearchUser;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DoRateRequest;
+import com.topface.topface.requests.MessageRequest;
+import com.topface.topface.requests.SearchRequest;
+import com.topface.topface.ui.dating.DatingControl.OnNeedUpdateListener;
+import com.topface.topface.ui.dating.StarsView.OnRateListener;
+import com.topface.topface.ui.inbox.ChatActivity;
+import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.LeaksManager;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+/* "оценка фото" */
+public class DatingActivity extends Activity implements OnNeedUpdateListener,OnRateListener,OnClickListener{
+  // Data
+  private Dialog mCommentDialog;
+  private EditText mCommentText;
+  private TextView mHeaderTitle;
+  private DatingControl mDatingControl;
+  private InputMethodManager mInputManager;
+  // Constants
+  public static ViewGroup mHeaderBar;
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.ac_dating);
+    Debug.log(this,"+onCreate");
+    
+    LeaksManager.getInstance().monitorObject(this);
+
+    // Header Bar
+    mHeaderBar = (ViewGroup)findViewById(R.id.loHeader);
+    // Title Header
+    mHeaderTitle = ((TextView)findViewById(R.id.tvHeaderTitle));
+    // Resources Buying Button
+    ((ResourcesView)findViewById(R.id.datingRes)).setOnClickListener(this);
+    // Resourse Plus
+    View ivDatingPlus = findViewById(R.id.datingPlus);
+    ivDatingPlus.setVisibility(View.VISIBLE);
+    ivDatingPlus.setEnabled(true);
+    // Chat Button
+    ((Button)findViewById(R.id.chatBtn)).setOnClickListener(this);
+    // Profile Button
+    ((Button)findViewById(R.id.profileBtn)).setOnClickListener(this);
+    // Dating Gallery
+    mDatingControl = (DatingControl)findViewById(R.id.galleryDating);
+    mDatingControl.setOnNeedUpdateListener(this);
+    // Stars Button
+    ((StarsView)findViewById(R.id.starsView)).setOnRateListener(this);
+    // Клавиатура
+    mInputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    // Comment window
+    mCommentDialog = new Dialog(this);
+    mCommentDialog.setTitle(R.string.chat_comment);    
+    mCommentDialog.setContentView(R.layout.popup_comment); //,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+    mCommentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    //mCommentDialog.getWindow().setBackgroundDrawableResource(R.drawable.popup_comment);
+    mCommentText = (EditText)mCommentDialog.findViewById(R.id.etPopupComment);
+   
+    update(true);
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStart() {
+    super.onStart();
+    //App.bind(getBaseContext());
+    if(Data.s_Profile.filter_sex == 0)
+      mHeaderTitle.setText(getString(R.string.dating_header_title_her));
+    else
+      mHeaderTitle.setText(getString(R.string.dating_header_title_him));
+  }
+  //---------------------------------------------------------------------------  
+  @Override
+  protected void onStop() {
+    //App.unbind();
+    super.onStop();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onDestroy() {
+    mDatingControl.release();
+    mDatingControl = null;
+    mCommentDialog = null;
+    mCommentText = null;
+
+    mHeaderBar = null;
+
+    Debug.log(this,"-onDestroy");
+    super.onDestroy();
+  }
+  //---------------------------------------------------------------------------
+  private void update(final boolean firstQuery) {
+    Debug.log(this,"update");
+    
+    SearchRequest request = new SearchRequest(this.getApplicationContext());
+    request.limit  = 20;
+    request.geo    = Data.s_Profile.filter_geo;
+    request.online = Data.s_Profile.filter_online;
+    request.callback(new ApiHandler() {
+      @Override
+      public void success(ApiResponse response) {
+        LinkedList<SearchUser> userList = SearchUser.parse(response);
+        if(firstQuery) {
+          Debug.log(this,"update add");
+          if(mDatingControl!=null)                  // придумать блокировку запроса !!!
+            mDatingControl.addDataList(userList);
+        } else {
+          Debug.log(this,"update set");
+          if(mDatingControl!=null)
+            mDatingControl.setDataList(userList);
+        }
+      }
+      @Override
+      public void fail(int codeError,ApiResponse response) {
+        update(true);
+        //Toast.makeText(DatingActivity.this,"dating update fail",Toast.LENGTH_SHORT).show();
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  private void rate(final int userid,final int rate) {
+    Debug.log(this,"rate");
+    
+    DoRateRequest doRate = new DoRateRequest(this.getApplicationContext());
+    doRate.userid = userid;
+    doRate.rate   = rate;
+    doRate.callback(new ApiHandler() {
+      @Override
+      public void success(ApiResponse response) {
+        DoRate rate = DoRate.parse(response);
+        Data.s_Power = rate.power;
+        Data.s_Money = rate.money;
+        Data.s_AverageRate = rate.average;
+      }
+      @Override
+      public void fail(int codeError,ApiResponse response) {
+        //Toast.makeText(DatingActivity.this,"dating rate failed",Toast.LENGTH_SHORT).show();
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void needUpdate() {
+    update(false);
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onRate(final int rate) {
+    if(rate < 9) {
+      rate(mDatingControl.getUserId(),rate);
+      mDatingControl.next();
+      return;
+    }
+    if(rate==10 && Data.s_Money <= 0) {
+      startActivity(new Intent(getApplicationContext(),BuyingActivity.class));
+      return;
+    }
+    // кнопка на окне комментария оценки 10 и 9
+    ((Button)mCommentDialog.findViewById(R.id.btnPopupCommentSend)).setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        String comment = mCommentText.getText().toString();
+        if(comment.equals(""))
+          return;
+        
+        int uid = mDatingControl.getUserId();
+        
+        // отправка комментария к оценке
+        MessageRequest message = new MessageRequest(DatingActivity.this.getApplicationContext());
+        message.message = comment; 
+        message.userid  = uid;
+        message.callback(new ApiHandler() {
+          @Override
+          public void success(ApiResponse response) {
+            Toast.makeText(getApplicationContext(),getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
+          }
+          @Override
+          public void fail(int codeError,ApiResponse response) {
+          }
+        }).exec();
+        
+        // отправка оценки
+        rate(uid,rate);
+        mCommentDialog.cancel();
+        mCommentText.setText("");
+        // скрыть клавиатуру
+        mInputManager.hideSoftInputFromWindow(mCommentText.getWindowToken(),InputMethodManager.HIDE_IMPLICIT_ONLY);
+        // подгрузка следующего
+        mDatingControl.next();
+      }
+    });
+    
+    mCommentDialog.show(); // окно сообщения
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onClick(View view) {
+    Intent intent = null;
+    switch(view.getId()) {
+      case R.id.datingRes: {
+        intent = new Intent(getApplicationContext(),BuyingActivity.class);
+      } break;
+      case R.id.chatBtn: {
+        intent = new Intent(getApplicationContext(),ChatActivity.class);
+        intent.putExtra(ChatActivity.INTENT_USER_ID,mDatingControl.getUserId());
+        intent.putExtra(ChatActivity.INTENT_USER_NAME,mDatingControl.getUserName());
+      } break;
+      case R.id.profileBtn: {
+        intent = new Intent(getApplicationContext(),ProfileActivity.class);
+        intent.putExtra(ProfileActivity.INTENT_USER_ID,mDatingControl.getUserId());
+        intent.putExtra(ProfileActivity.INTENT_USER_NAME,mDatingControl.getUserName());
+      } break;
+    }
+    if(intent!=null)
+      startActivity(intent);
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    super.onActivityResult(requestCode,resultCode,data);
+    if(resultCode == Activity.RESULT_OK && requestCode == FilterActivity.INTENT_FILTER_ACTIVITY) {
+      Debug.log(this,"filterActivity->datingResult");
+      update(true);
+    }
+  }
+  //---------------------------------------------------------------------------
+  // Menu
+  //---------------------------------------------------------------------------
+  private static final int MENU_FILTER = 0;
+  @Override
+  public boolean onCreatePanelMenu(int featureId,Menu menu) {
+    menu.add(0,MENU_FILTER,0,getString(R.string.dating_menu_one));
+    return super.onCreatePanelMenu(featureId,menu);
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public boolean onMenuItemSelected(int featureId,MenuItem item) {
+    switch(item.getItemId()) {
+      case MENU_FILTER:
+        Intent intent = new Intent(this.getApplicationContext(),FilterActivity.class);
+        startActivityForResult(intent,FilterActivity.INTENT_FILTER_ACTIVITY);
+      break;
+    }
+    return super.onMenuItemSelected(featureId,item);
+  }
+  //---------------------------------------------------------------------------  
+}

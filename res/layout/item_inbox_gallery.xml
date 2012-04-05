@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
   <RelativeLayout 
       xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:sonetica="http://schemas.android.com/apk/res/com.sonetica.topface" 
+      xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface" 
       android:layout_width="fill_parent" 
       android:layout_height="wrap_content" 
       android:padding="4dp">
       
     <!-- аватар -->
-    <com.sonetica.topface.ui.RoundedImageView
+    <com.topface.topface.ui.RoundedImageView
         android:id="@+id/ivAvatar"
-        sonetica:frame="dialog"
+        topface:frame="dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
