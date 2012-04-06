@@ -1,7 +1,6 @@
 package com.topface.topface;
 
 import com.topface.topface.services.NotificationService;
-import com.topface.topface.services.StatisticService;
 import com.topface.topface.ui.Recycle;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
@@ -17,9 +16,9 @@ import org.acra.annotation.ReportsCrashes;
 public class App extends Application /*implements ServiceConnection*/ {
   // Data
   public static boolean init;
-  //private Messenger mNotificationService;
   // Constants
   public static final String TAG = "TopFace";
+  //private Messenger mNotificationService;
   //---------------------------------------------------------------------------
   @Override
   public void onCreate() {

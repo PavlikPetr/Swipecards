@@ -7,6 +7,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.services.NotificationService;
 import com.topface.topface.social.SocialActivity;
 import com.topface.topface.ui.LeaksActivity;
 import com.topface.topface.ui.LogActivity;
@@ -23,12 +24,18 @@ import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,21 +46,19 @@ import android.widget.Toast;
 /*
  *  Класс главного активити для навигации по приложению  "TopFace"
  */
-public class DashboardActivity extends Activity implements View.OnClickListener {
+public class DashboardActivity extends Activity implements ServiceConnection, View.OnClickListener {
   // Data
-  private boolean start;
   private TextView mLikesNotify;
   private TextView mInboxNotify;
   private TextView mRatesNotify;
   private ProgressDialog mProgressDialog;
-  // Notification
-  //private Handler mNotifyHandler;
-  //private Intent mNotificationRecieverIntent;
+  // Notification Reciever 
   private NotificationReceiver mNotificationReceiver;
+  // Notification Service
+  private Messenger mNotificationService;
   // Constants
-  //private static final long TIMER = 1000L * 15;
-  public  static final int INTENT_DASHBOARD = 100;
-  public  static final String ACTION = "com.topface.topface.DASHBOARD_NOTIFICATION";
+  public static final int INTENT_DASHBOARD = 100;
+  public static final String BROADCAST_ACTION = "com.topface.topface.DASHBOARD_NOTIFICATION";
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -63,14 +68,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     
     LeaksManager.getInstance().monitorObject(this);
     
-    if(App.init && Data.SSID.length() > 0) {
-      //startService(new Intent(this,ConnectionService.class));
-      //startService(new Intent(getApplicationContext(),StatisticService.class));
-      //Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
-      //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-      //startActivity(intent);
-      //mNotifyHandler.sendEmptyMessageDelayed(0,sleep_time);
-      
+    if(App.init && Data.SSID!=null && Data.SSID.length() > 0) {
       // Progress Bar
       mProgressDialog = new ProgressDialog(this);
       mProgressDialog.setMessage(getString(R.string.dialog_loading));
@@ -95,11 +93,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         return;
       }
       
-      //mNotifyHandler = new Handler();
-      //mNotifyHandler.postDelayed(new RunTask(),TIMER);
+      bindService(new Intent(this,NotificationService.class),this,Context.BIND_AUTO_CREATE);
       
       mProgressDialog.show();
-      
       update();
     } else { 
       startActivity(new Intent(getApplicationContext(),SocialActivity.class));
@@ -110,28 +106,43 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onStart() {
     super.onStart();
-    System.gc();
-    //App.bind(getBaseContext());
     
-    if(start && Data.SSID.length() > 0) {
+    System.gc();
+    
+    if(Data.SSID!=null && Data.SSID.length() > 0) {
+      // start acceleration 
+      if(mNotificationService != null)
+        try {
+          mNotificationService.send(Message.obtain(null, NotificationService.MSG_ACCEL,0,0));
+        } catch(RemoteException e) {
+          Debug.log(this,"onStop:remote exception");
+        }
       
+      // stop broadcaster
       if(mNotificationReceiver == null) {
         mNotificationReceiver = new NotificationReceiver();
-        registerReceiver(mNotificationReceiver,new IntentFilter(ACTION));
+        registerReceiver(mNotificationReceiver,new IntentFilter(BROADCAST_ACTION));
       }
       
       invalidateNotification();
       updateNotify();
-      return;
+    } else {
+      startActivity(new Intent(getApplicationContext(),SocialActivity.class));
+      finish();
     }
-    startActivity(new Intent(getApplicationContext(),SocialActivity.class));
-    finish();
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStop() {
-    //App.unbind();
+    // stop acceleration    
+    if(mNotificationService != null)
+      try {
+        mNotificationService.send(Message.obtain(null, NotificationService.MSG_DEACCEL,0,0));
+      } catch(RemoteException e) {
+        Debug.log(this,"onStop:remote exception");
+      }
     
+    // stop broadcaster
     if(mNotificationReceiver != null) {
       unregisterReceiver(mNotificationReceiver);
       mNotificationReceiver = null;
@@ -142,20 +153,19 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    start = false;
     System.gc();
     
     if(mProgressDialog!=null && mProgressDialog.isShowing())
       mProgressDialog.cancel();
     mProgressDialog = null;
     
+    unbindService(this);
+    
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
   private void update() {
-    start = true;
-    
     ProfileRequest profileRequest = new ProfileRequest(this,false);
     profileRequest.callback(new ApiHandler() {
       @Override
@@ -267,22 +277,34 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     return super.onMenuItemSelected(featureId,item);
   }
   //---------------------------------------------------------------------------
-  // class RunTask
+  // Overriden from ServiceConnection
   //---------------------------------------------------------------------------
-//  class RunTask implements Runnable {
-//    public void run() {
-//      invalidateNotification();
-//      mNotifyHandler.postDelayed(this,TIMER);
-//    }
-//  }
+  @Override
+  public void onServiceConnected(ComponentName name,IBinder service) {
+    try {
+      if(mNotificationService == null)
+        mNotificationService = new Messenger(service);
+    } catch (Exception e) {
+      Debug.log("App","onServiceConnected:"+e);
+    }
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onServiceDisconnected(ComponentName name) {
+    try {
+      mNotificationService = null;
+    } catch (Exception e) {
+      Debug.log("App","onServiceDisconnected:"+e);
+    }
+  }
   //---------------------------------------------------------------------------
   // class NotificationReceiver
   //---------------------------------------------------------------------------
   public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-      if(intent.getAction().equals(ACTION)) {
-        invalidateNotification();
+      if(intent.getAction().equals(BROADCAST_ACTION)) {
+        DashboardActivity.this.invalidateNotification();
       }
     }
   }

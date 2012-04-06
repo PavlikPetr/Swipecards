@@ -3,6 +3,7 @@ package com.topface.topface.requests;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.Global;
+import com.topface.topface.R;
 import com.topface.topface.data.Auth;
 import com.topface.topface.social.AuthToken;
 import com.topface.topface.utils.Debug;
@@ -10,10 +11,11 @@ import com.topface.topface.utils.Http;
 import com.topface.topface.utils.LeaksManager;
 import android.content.Context;
 import android.os.Message;
+import android.widget.Toast;
 
 public abstract class ApiRequest {
   // Data
-  public String ssid;  // volatile
+  public String ssid;  // volatile ?
   private Context mContext;
   private ApiHandler mHandler;
   private static int LOOP = 5;
@@ -29,6 +31,11 @@ public abstract class ApiRequest {
   }
   //---------------------------------------------------------------------------
   public void exec() {
+    if(!Http.isOnline(mContext)){
+      Toast.makeText(mContext,mContext.getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
+      return;
+    }
+    
     ssid = Data.SSID;
     Thread t = new Thread("api request") {
       @Override

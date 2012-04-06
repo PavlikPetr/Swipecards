@@ -8,6 +8,7 @@
   <string name="token_preferences_name">auth-token</string>
   <string name="api_url">http://api.topface.ru/?v=1</string>
   <string name="vk_album_name">ТопФейс http://vkontakte.ru/app2257829</string>
+  <string name="order">order</string>
 
   <!-- External directory -->
   <string name="sdcard_root_path">Android/data/com.topface.topface/</string>

@@ -10,6 +10,8 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.VerifyRequest;
 import com.topface.topface.ui.dashboard.DashboardActivity;
 import com.topface.topface.ui.inbox.InboxActivity;
+import com.topface.topface.ui.likes.LikesActivity;
+import com.topface.topface.ui.rates.RatesActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
 import android.app.Notification;
@@ -26,21 +28,25 @@ import android.os.Messenger;
 
 public class NotificationService extends Service {
   // Data
-  //private int mCounter;
-  private boolean mRunning;
+  private boolean   mRunning;
+  private Runnable  mLooper;
   private Messenger mMessenger;
-  private Handler mServiceHandler;
+  private Handler   mServiceHandler;
   private NotificationManager mNotificationManager;
-  private Runnable mLooper;
   // Constants
-  public  static final int MSG_BIND     = 101;
-  public  static final int MSG_UNBIND   = 102;
-  public  static final int MSG_DELETE   = 103;
   public  static final int MSG_PURCHASE = 104;
-  public  static final String INTENT_DATA = "data";
-  public  static final String INTENT_SIGNATURE = "signature";
-  public  static final int TP_NOTIFICATION = 1001;
-  private static final long TIMER = 1000L * 60*60;
+  public  static final int MSG_ACCEL    = 105;
+  public  static final int MSG_DEACCEL  = 106;
+  // Timer
+  private static final long DEF_TIME   = 1000L * 60*60;
+  private static final long ACCEL_TIME = 1000L * 60;
+  private long _timer = DEF_TIME;
+  // Intents
+  public static final String INTENT_DATA = "data";
+  public static final String INTENT_SIGNATURE = "signature";
+  // Notification
+  public static final int TP_MSG_NOTIFICATION   = 1001;
+  public static final int TP_RATES_NOTIFICATION = 1002;
   //---------------------------------------------------------------------------
   @Override
   public IBinder onBind(Intent intent) {
@@ -51,11 +57,11 @@ public class NotificationService extends Service {
   public void onCreate() {
     super.onCreate();
     Debug.log("NotifyService","onCreate");
-    
+
+    mLooper = new RunTask();
     mMessenger = new Messenger(new IncomingHandler());
     mServiceHandler = new Handler();
-    mLooper = new RunTask();
-    mServiceHandler.postDelayed(mLooper,TIMER);
+    mServiceHandler.postDelayed(mLooper,_timer);
     mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
   }
   //---------------------------------------------------------------------------
@@ -63,14 +69,16 @@ public class NotificationService extends Service {
   public int onStartCommand(Intent intent,int flags,int startId) {
     Debug.log("NotifyService","onStartCommand");
     mRunning = true;
-    return START_STICKY; //super.onStartCommand(intent,flags,startId);
+    return START_STICKY;
   }
   //---------------------------------------------------------------------------
   @Override
   public void onDestroy() {
     mRunning = false;
+    
     mServiceHandler.removeCallbacks(mLooper);
     mServiceHandler.removeCallbacksAndMessages(NotificationService.class);
+    mNotificationManager = null;
     mServiceHandler = null;
     mMessenger = null;
     mLooper = null;
@@ -79,23 +87,8 @@ public class NotificationService extends Service {
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
-  private void broadcast(String action) {
-    Intent intent = new Intent(action);
-    sendBroadcast(intent);
-  }
-  //---------------------------------------------------------------------------
-  private void notifacations(int messages,int likes, int rates) {
-    Data.s_Messages = messages;
-    Data.s_Likes    = likes;
-    Data.s_Rates    = rates;
-  }
-  //---------------------------------------------------------------------------
-  private void resources(int power,int money) {
-    Data.s_Power = power;
-    Data.s_Money = money;
-  }
-  //---------------------------------------------------------------------------
   private void verifyPurchase(final String data,final String signature) {
+    // сохранить ордер
     VerifyRequest verifyRequest = new VerifyRequest(getApplicationContext());
     verifyRequest.data = data;
     verifyRequest.signature = signature;
@@ -104,73 +97,109 @@ public class NotificationService extends Service {
       public void success(ApiResponse response) {
         Verify verify = Verify.parse(response);
         resources(verify.power,verify.money);
+        
+        // затереть ордер
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
+        // обратитесь в суппорт, ваш ордер
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void updateNotification(int messages) {
+  private void resources(int power,int money) {
+    Data.s_Power = power;
+    Data.s_Money = money;
+  }
+  //---------------------------------------------------------------------------
+  private void notifacations(int messages,int likes, int rates) {
+    boolean update = false;
+    
+    if(Data.s_Messages != messages) {
+      update = true;
+      Data.s_Messages = messages;
+      if(_timer!=ACCEL_TIME)
+        updateMessagesNotification(messages);
+    }
+    
+    if((Data.s_Likes+Data.s_Rates) != (likes+rates)) {
+      update = true;
+      Data.s_Likes = likes;
+      Data.s_Rates = rates;
+      if(_timer!=ACCEL_TIME)
+        updateRatesNotification(likes,rates);
+    }
+    
+    if(update && _timer==ACCEL_TIME)
+      broadcast(DashboardActivity.BROADCAST_ACTION);
+  }
+  //---------------------------------------------------------------------------
+  private void updateRatesNotification(int likes,int rates) {
+    if(likes+rates == 0) {
+      deleteNotification(TP_RATES_NOTIFICATION);
+      return;
+    }
+    
     int icon = R.drawable.ic_launcher;
-    CharSequence tickerText;
-    if(messages > 1)
-      tickerText = "Вы получили новые сообщения";
-    else
-      tickerText = "Вы получили новое сообщение";
+    CharSequence text = "Вы получили новые оценки";
     long when = System.currentTimeMillis();
-    Notification notification = new Notification(icon,tickerText,when);
-    String contentTitle = "Topface";
-    StringBuilder contentText = new StringBuilder("У вас есть ");
+    Notification notification = new Notification(icon,text,when);
+    String title = "Topface";
+    StringBuilder body = new StringBuilder("У вас есть новые оценки");
+    Intent intent = null;
+    if(likes > rates)
+      intent = new Intent(getApplicationContext(),LikesActivity.class);
+    else
+      intent = new Intent(getApplicationContext(),RatesActivity.class);
+    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,intent,0);
+    notification.setLatestEventInfo(getApplicationContext(),title,body,pendingIntent);
+    mNotificationManager.notify(TP_RATES_NOTIFICATION, notification);
+  }
+  //---------------------------------------------------------------------------
+  private void updateMessagesNotification(int messages) {
+    if(messages == 0) {
+      deleteNotification(TP_MSG_NOTIFICATION);
+      return;
+    }
+    
+    int icon = R.drawable.ic_launcher;
+    CharSequence text;
+    if(messages > 1)
+      text = "Вы получили новые сообщения";
+    else
+      text = "Вы получили новое сообщение";
+    
+    long when = System.currentTimeMillis();
+    
+    Notification notification = new Notification(icon,text,when);
+    String title = "Topface";
+    StringBuilder body = new StringBuilder("У вас есть ");
     switch(messages) {
-      case 0:
-        deleteNotification();
-        return;
       case 1:
-        contentText.append("одно новое сообщение");
+        body.append("одно новое сообщение");
         break;
       case 2:
       case 3:
       case 4:
-        contentText.append(messages + " новых сообщения");
+        body.append(messages + " новых сообщения");
         break;
       default:
-        contentText.append(messages + " новых сообщений");
+        body.append(messages + " новых сообщений");
         break;
     }    
-    Intent notificationIntent = new Intent(getApplicationContext(),InboxActivity.class);
-    PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(),0,notificationIntent,0);
-    notification.setLatestEventInfo(getApplicationContext(),contentTitle,contentText,contentIntent);
-    mNotificationManager.notify(TP_NOTIFICATION, notification);
+    Intent intent = new Intent(getApplicationContext(),InboxActivity.class);
+    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,intent,0);
+    notification.setLatestEventInfo(getApplicationContext(),title,body,pendingIntent);
+    mNotificationManager.notify(TP_MSG_NOTIFICATION, notification);
   }
   //---------------------------------------------------------------------------
-  private void deleteNotification() {
-    mNotificationManager.cancel(TP_NOTIFICATION);
+  private void deleteNotification(int notify) {
+    mNotificationManager.cancel(notify);
   }
   //---------------------------------------------------------------------------
-  // class IncomingHandler
-  //---------------------------------------------------------------------------
-  class IncomingHandler extends Handler {
-    @Override
-    public void handleMessage(Message msg) {
-      switch (msg.what) {
-        case MSG_BIND:
-          break;
-        case MSG_UNBIND:
-          break;
-        case MSG_DELETE:
-          deleteNotification();
-          break;
-        case MSG_PURCHASE: {
-          Bundle bundle = msg.getData();
-          String data = bundle.getString(INTENT_DATA);
-          String signature = bundle.getString(INTENT_SIGNATURE);
-          verifyPurchase(data,signature);
-        } break;
-        default:
-          super.handleMessage(msg);
-      }
-    }
+  private void broadcast(String action) {
+    Intent intent = new Intent(action);
+    sendBroadcast(intent);
   }
   //---------------------------------------------------------------------------
   // class RunTask
@@ -181,9 +210,12 @@ public class NotificationService extends Service {
         return;
       
       if(!Http.isOnline(NotificationService.this) || Data.SSID == null || Data.SSID.length()==0) {
-        mServiceHandler.postDelayed(this,TIMER);
+        _timer = DEF_TIME;
+        mServiceHandler.postDelayed(this,_timer);
         return;
       }
+      
+      Debug.log("NotifyService","RunTask");
       
       ProfileRequest profileRequest = new ProfileRequest(getApplicationContext(),true);
       profileRequest.callback(new ApiHandler() {
@@ -197,7 +229,35 @@ public class NotificationService extends Service {
         }
       }).exec();
       
-      mServiceHandler.postDelayed(this,TIMER);
+      mServiceHandler.postDelayed(this,_timer);
+    }
+  }
+  //---------------------------------------------------------------------------
+  // class IncomingHandler
+  //---------------------------------------------------------------------------
+  class IncomingHandler extends Handler {
+    @Override
+    public void handleMessage(Message msg) {
+      switch (msg.what) {
+        case MSG_DEACCEL:
+          _timer = DEF_TIME;
+          Debug.log("NotifyService","MSG_DEACCEL");
+          mServiceHandler.postDelayed(mLooper,_timer);
+          break;
+        case MSG_ACCEL:
+          _timer = ACCEL_TIME;
+          Debug.log("NotifyService","MSG_ACCEL");
+          mServiceHandler.postDelayed(mLooper,_timer);
+          break;
+        case MSG_PURCHASE: {
+          Bundle bundle = msg.getData();
+          String data = bundle.getString(INTENT_DATA);
+          String signature = bundle.getString(INTENT_SIGNATURE);
+          verifyPurchase(data,signature);
+        } break;
+        default:
+          super.handleMessage(msg);
+      }
     }
   }
   //---------------------------------------------------------------------------
