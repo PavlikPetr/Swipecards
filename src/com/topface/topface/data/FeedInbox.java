@@ -6,15 +6,15 @@ import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class Inbox extends AbstractData {
+public class FeedInbox extends AbstractData implements IAlbumData {
   // Data
+  public static int unread_count; // количество оставшихся непрочитанных
   public int uid;              // идентификатор фотографии в альбоме пользвоателя
   public int age;              // возраст пользователя
   public int type;             // тип сообщения
   public int gift;             // идентификатор подарка
   public int code;             // код входящего уведомления
   public int city_id;          // идентификатор города отправителя сообщения
-  public int unread_count;     // количество оставшихся непрочитанных
   public long created;         // время отправления оценки
   public boolean online;       // флаг нахождения пользователя в онлайне
   public boolean unread;       // флаг прочитанного сообщения
@@ -32,21 +32,21 @@ public class Inbox extends AbstractData {
   public static final int MESSAGE_WISH = 4;      // Тайное желание
   public static final int MESSAGE_SEXUALITY = 5; // Оценка сексуальности
   //--------------------------------------------------------------------------- 
-  public static LinkedList<Inbox> parse(ApiResponse response) {
-    LinkedList<Inbox> userList = new LinkedList<Inbox>();
+  public static LinkedList<FeedInbox> parse(ApiResponse response) {
+    LinkedList<FeedInbox> userList = new LinkedList<FeedInbox>();
     
     try {
       JSONArray arr = response.mJSONResult.getJSONArray("feed");
       if(arr.length()>0)
-        userList = new LinkedList<Inbox>();
+        userList = new LinkedList<FeedInbox>();
         for(int i=0;i<arr.length();i++) {
           JSONObject item = arr.getJSONObject(i);
-          Inbox msg = new Inbox();
+          FeedInbox.unread_count = response.mJSONResult.getInt("unread");
+          FeedInbox msg = new FeedInbox();
             msg.first_name = item.optString("first_name");
             msg.online     = item.optBoolean("online");
             msg.unread     = item.optBoolean("unread");
             msg.created    = item.optLong("created"); // время приходит в секундах *1000
-            msg.unread_count = response.mJSONResult.getInt("unread");
             msg.uid        = item.optInt("uid");
             msg.age        = item.optInt("age");
             msg.type       = item.optInt("type");
@@ -92,7 +92,7 @@ public class Inbox extends AbstractData {
           userList.add(msg);
         }
     } catch(Exception e) {
-      Debug.log("Inbox.class","Wrong response parsing: " + e);
+      Debug.log("FeedInbox.class","Wrong response parsing: " + e);
     }
     
     return userList;

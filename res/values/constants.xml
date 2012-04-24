@@ -2,12 +2,16 @@
 <resources>
     
   <integer name="api_version">1</integer>
+  <integer name="photo_width">640</integer>
+  <integer name="photo_height">960</integer>
   
   <!-- General -->
   <string name="general_preferences_name">preferences</string>
+    <string name="profile_preferences_name">profile</string>
   <string name="token_preferences_name">auth-token</string>
   <string name="api_url">http://api.topface.ru/?v=1</string>
-  <string name="vk_album_name">ТопФейс http://vkontakte.ru/app2257829</string>
+  <string name="vk_album_name">Topface http://vkontakte.ru/app2257829</string>
+  <string name="platform">android</string>
   <string name="order">order</string>
 
   <!-- External directory -->

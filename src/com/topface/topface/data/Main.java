@@ -19,14 +19,4 @@ public class Main extends AbstractData {
     return main;
   }
   //---------------------------------------------------------------------------
-  @Override
-  public String getBigLink() {
-    return null;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public String getSmallLink() {
-    return null;
-  }
-  //---------------------------------------------------------------------------
 }

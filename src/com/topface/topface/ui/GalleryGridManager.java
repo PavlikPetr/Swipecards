@@ -3,7 +3,7 @@ package com.topface.topface.ui;
 import java.util.HashMap;
 import java.util.LinkedList;
 import com.topface.topface.App;
-import com.topface.topface.Data;
+import com.topface.topface.Global;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.utils.CacheManager;
 import com.topface.topface.utils.Debug;
@@ -46,7 +46,7 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
     mMemoryCache  = new MemoryCache();
     mStorageCache = new StorageCache(context,CacheManager.EXTERNAL_CACHE);
     
-    int columnNumber = Data.s_gridColumn;
+    int columnNumber = Global.GRID_COLUMN;
     mBitmapWidth  = Device.getDisplay(context).getWidth()/(columnNumber);
     mBitmapHeight = (int)(mBitmapWidth*1.25);
   }

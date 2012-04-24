@@ -3,12 +3,12 @@ package com.topface.topface.ui.likes;
 import java.util.LinkedList;
 import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.data.Like;
+import com.topface.topface.data.FeedLike;
 import com.topface.topface.p2r.PullToRefreshGridView;
 import com.topface.topface.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.LikesRequest;
+import com.topface.topface.requests.FeedLikesRequest;
 import com.topface.topface.ui.DoubleBigButton;
 import com.topface.topface.ui.GalleryGridManager;
 import com.topface.topface.ui.ThumbView;
@@ -31,8 +31,8 @@ public class LikesActivity extends Activity {
   private boolean mOnlyNewData;
   private PullToRefreshGridView mGallery;
   private LikesGridAdapter mAdapter;
-  private GalleryGridManager<Like> mGalleryGridManager;
-  private LinkedList<Like> mLikesDataList;
+  private GalleryGridManager<FeedLike> mGalleryGridManager;
+  private LinkedList<FeedLike> mLikesDataList;
   private ProgressDialog mProgressDialog;
   private DoubleBigButton mDoubleButton;
   // Constants
@@ -47,7 +47,7 @@ public class LikesActivity extends Activity {
     LeaksManager.getInstance().monitorObject(this);
     
     // Data
-    mLikesDataList  = new LinkedList<Like>();
+    mLikesDataList  = new LinkedList<FeedLike>();
    
    // Title Header
    ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likes_header_title));
@@ -127,7 +127,7 @@ public class LikesActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mGalleryGridManager = new GalleryGridManager<Like>(getApplicationContext(),mLikesDataList);
+    mGalleryGridManager = new GalleryGridManager<FeedLike>(getApplicationContext(),mLikesDataList);
     mAdapter = new LikesGridAdapter(getApplicationContext(),mGalleryGridManager);
     mGallery.getRefreshableView().setAdapter(mAdapter);
     mGallery.setOnScrollListener(mGalleryGridManager);
@@ -136,7 +136,7 @@ public class LikesActivity extends Activity {
   private void update(boolean isProgress) {
     if(isProgress)
       mProgressDialog.show();
-    LikesRequest likesRequest = new LikesRequest(getApplicationContext());
+    FeedLikesRequest likesRequest = new FeedLikesRequest(getApplicationContext());
     likesRequest.limit = LIMIT;
     likesRequest.only_new = mOnlyNewData;
     likesRequest.callback(new ApiHandler() {
@@ -144,7 +144,7 @@ public class LikesActivity extends Activity {
       public void success(ApiResponse response) {
         mDoubleButton.setChecked(mOnlyNewData ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
         mLikesDataList.clear();
-        mLikesDataList = Like.parse(response);
+        mLikesDataList = FeedLike.parse(response);
         mGalleryGridManager.setDataList(mLikesDataList);
         mAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="time_now">Right now"</string>
+    <string name="time_now">Right now</string>
     <string name="time_hour_0">%d hour ago</string>
     <string name="time_hour_1">%d hours ago</string>
     <string name="time_hours">%d hours ago</string>

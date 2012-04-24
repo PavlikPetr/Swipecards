@@ -1,16 +1,18 @@
 package com.topface.topface.ui.dating;
 
 import java.util.LinkedList;
-import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.data.SearchUser;
+import com.topface.topface.data.Search;
 import com.topface.topface.ui.dating.DatingActivity;
 import com.topface.topface.ui.dating.FaceView;
 import com.topface.topface.ui.dating.RateControl;
 import com.topface.topface.ui.dating.ResourcesView;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
@@ -39,6 +41,7 @@ public class DatingControl extends ViewGroup {
   private int mDataPosition;   // позиция в массиве пользователей на оценку
   private int mGallerySize;    // кол-во фото у оцениваемого пользователя
   private int mGalleryPrevPos; // предыдущая позиция в альбоме
+  private int mHeaderHeight;   // высота хедера для смещения контролов окна оценок
   // Gallery
   private DatingAlbum mDatingGallery;
   private DatingAlbumAdapter mGalleryAdapter;
@@ -48,7 +51,7 @@ public class DatingControl extends ViewGroup {
   private FaceView mFaceView;          // информация о пользователе
   private RateControl mRateControl;      // звезды
   private ResourcesView mResourcesView;    // монеты и энергия
-  private LinkedList<SearchUser> mDataList;  // массив пользователей под оценку
+  private LinkedList<Search> mDataList;  // массив пользователей под оценку
   private ProgressBar mProgressBar;
   private OnNeedUpdateListener mOnNeedUpdateListener;  // нужно подтянуть еще пользователей под оценку
   // Visible States
@@ -63,7 +66,11 @@ public class DatingControl extends ViewGroup {
     super(context,attrs);
 
     // Data
-    mDataList = new LinkedList<SearchUser>();
+    mDataList = new LinkedList<Search>();
+    
+    Bitmap bmpHeader = BitmapFactory.decodeResource(getResources(),R.drawable.im_bar_header);
+    mHeaderHeight = bmpHeader.getHeight();
+    bmpHeader.recycle();
     
     // Adapter
     mGalleryAdapter = new DatingAlbumAdapter(context,this);
@@ -79,7 +86,6 @@ public class DatingControl extends ViewGroup {
     
     // Progress
     mProgressBar = new ProgressBar(getContext());
-    //Widget.ProgressBar.Small
     addView(mProgressBar);
     
     // Gallery
@@ -160,7 +166,7 @@ public class DatingControl extends ViewGroup {
     
     mDatingGallery.measure(widthMeasureSpec,heightMeasureSpec);
     
-    int offset_y = Data.s_HeaderHeight;
+    int offset_y = mHeaderHeight;
     
     int mode = MeasureSpec.getMode(heightMeasureSpec);
     int h = MeasureSpec.getSize(heightMeasureSpec);
@@ -176,7 +182,7 @@ public class DatingControl extends ViewGroup {
   @Override
   protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
     
-    int offset_y = Data.s_HeaderHeight;
+    int offset_y = mHeaderHeight;
     
     int x = (right-mProgressBar.getMeasuredWidth())/2;
     int y = (bottom-mProgressBar.getMeasuredHeight())/2;
@@ -203,13 +209,13 @@ public class DatingControl extends ViewGroup {
     mCounter.layout(0,(int)(getMeasuredHeight()-mCounter.getMeasuredHeight()*1.5),getMeasuredWidth(),getMeasuredHeight());
   }
   //---------------------------------------------------------------------------
-  public void addDataList(LinkedList<SearchUser> dataList) {
+  public void addDataList(LinkedList<Search> dataList) {
     mDataList.clear();
     mDataList.addAll(dataList);
     next();
   }
   //---------------------------------------------------------------------------
-  public void setDataList(LinkedList<SearchUser> dataList) {
+  public void setDataList(LinkedList<Search> dataList) {
     mDataList.addAll(dataList);
   }
   //---------------------------------------------------------------------------
@@ -320,7 +326,7 @@ public class DatingControl extends ViewGroup {
     if(mDataPosition==count-5)
       mOnNeedUpdateListener.needUpdate();
     
-    SearchUser user = mDataList.get(++mDataPosition);
+    Search user = mDataList.get(++mDataPosition);
     
     mFaceView.age    = user.age;
     mFaceView.city   = user.city_name;
@@ -328,7 +334,7 @@ public class DatingControl extends ViewGroup {
     mFaceView.online = user.online;
     mFaceView.status = user.status;
     
-    mResourcesView.setResources(Data.s_Power,Data.s_Money);
+    mResourcesView.setResources(CacheProfile.power,CacheProfile.money);
     
     mGallerySize = user.avatars_big.length;
 

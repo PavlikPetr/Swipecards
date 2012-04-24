@@ -1,4 +1,4 @@
-package com.topface.topface.ui.likes;
+package com.topface.topface.ui.symphaty;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
@@ -13,7 +13,7 @@ import android.widget.BaseAdapter;
 /*
  *  Класс адаптера для отображения галереи в Like активити
  */
-public class LikesGridAdapter extends BaseAdapter {
+public class SymphatyGridAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
@@ -26,7 +26,7 @@ public class LikesGridAdapter extends BaseAdapter {
   private LayoutInflater mInflater;
   private GalleryGridManager<FeedLike> mGalleryManager;
   //---------------------------------------------------------------------------
-  public LikesGridAdapter(Context context,GalleryGridManager<FeedLike> galleryManager) {
+  public SymphatyGridAdapter(Context context,GalleryGridManager<FeedLike> galleryManager) {
     mContext = context;
     mInflater = LayoutInflater.from(context);
     mGalleryManager = galleryManager;

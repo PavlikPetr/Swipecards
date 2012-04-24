@@ -2,7 +2,7 @@ package com.topface.topface.ui.inbox;
 
 import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.data.Inbox;
+import com.topface.topface.data.FeedInbox;
 import com.topface.topface.ui.AvatarManager;
 import com.topface.topface.ui.RoundedImageView;
 import com.topface.topface.utils.Utils;
@@ -29,7 +29,7 @@ public class InboxListAdapter extends BaseAdapter {
   // Data
   private Context mContext;
   private LayoutInflater mInflater;
-  private AvatarManager<Inbox> mAvatarManager;
+  private AvatarManager<FeedInbox> mAvatarManager;
   private int mOwnerCityID;
   // Constants
   private static final int T_ALL   = 0;
@@ -37,7 +37,7 @@ public class InboxListAdapter extends BaseAdapter {
   private static final int T_COUNT = 2;
   //private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   //---------------------------------------------------------------------------
-  public InboxListAdapter(Context context,AvatarManager<Inbox> avatarManager) {
+  public InboxListAdapter(Context context,AvatarManager<FeedInbox> avatarManager) {
     mContext = context;
     mAvatarManager = avatarManager;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -51,7 +51,7 @@ public class InboxListAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   @Override
-  public Inbox getItem(int position) {
+  public FeedInbox getItem(int position) {
     return mAvatarManager.get(position);
   }
   //---------------------------------------------------------------------------
@@ -100,33 +100,33 @@ public class InboxListAdapter extends BaseAdapter {
     } else
       holder = (ViewHolder)convertView.getTag();
     
-    Inbox inbox = getItem(position);
+    FeedInbox inbox = getItem(position);
     
     mAvatarManager.getImage(position,holder.mAvatar);
     holder.mName.setText(inbox.first_name+", "+inbox.age);
     
     // text
     switch(inbox.type) {
-      case Inbox.DEFAULT:
+      case FeedInbox.DEFAULT:
         holder.mText.setText(inbox.text);
         break;
-      case Inbox.PHOTO:
+      case FeedInbox.PHOTO:
         if(inbox.code>100500) {
           holder.mText.setText(mContext.getString(R.string.chat_money_in) + /*" " + msg.code +*/ ".");
           break;
         }
         holder.mText.setText(mContext.getString(R.string.chat_rate_in) + " " + inbox.code + ".");
         break;
-      case Inbox.GIFT:
+      case FeedInbox.GIFT:
         holder.mText.setText(mContext.getString(R.string.chat_gift_in));
         break;
-      case Inbox.MESSAGE:
+      case FeedInbox.MESSAGE:
         holder.mText.setText(inbox.text);
         break;
-      case Inbox.MESSAGE_WISH:
+      case FeedInbox.MESSAGE_WISH:
         holder.mText.setText(mContext.getString(R.string.chat_wish_in));
         break;
-      case Inbox.MESSAGE_SEXUALITY:
+      case FeedInbox.MESSAGE_SEXUALITY:
         holder.mText.setText(mContext.getString(R.string.chat_sexuality_in));
         break;
     }

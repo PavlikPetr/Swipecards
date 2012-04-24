@@ -19,14 +19,4 @@ public class Filter extends AbstractData {
     return filter;
   }
   //---------------------------------------------------------------------------
-  @Override
-  public String getBigLink() {
-    return null;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public String getSmallLink() {
-    return null;
-  }
-  //---------------------------------------------------------------------------
 }

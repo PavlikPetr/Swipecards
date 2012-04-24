@@ -19,14 +19,4 @@ public class Settings extends AbstractData {
     return settings;
   }
   //---------------------------------------------------------------------------
-  @Override
-  public String getBigLink() {
-    return null;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public String getSmallLink() {
-    return null;
-  }
-  //---------------------------------------------------------------------------
 }

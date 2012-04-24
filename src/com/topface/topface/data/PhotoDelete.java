@@ -19,14 +19,4 @@ public class PhotoDelete extends AbstractData {
     return delete;
   }
   //---------------------------------------------------------------------------
-  @Override
-  public String getBigLink() {
-    return null;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public String getSmallLink() {
-    return null;
-  }
-  //---------------------------------------------------------------------------
 }

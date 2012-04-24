@@ -7,13 +7,13 @@ import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Album;
 import com.topface.topface.data.PhotoAdd;
 import com.topface.topface.data.Profile;
-import com.topface.topface.data.ProfileUser;
+import com.topface.topface.data.User;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.PhotoAddRequest;
-import com.topface.topface.requests.ProfilesRequest;
+import com.topface.topface.requests.UserRequest;
 import com.topface.topface.social.SocialActivity;
 import com.topface.topface.social.Socium;
 import com.topface.topface.social.Socium.AuthException;
@@ -298,12 +298,12 @@ public class ProfileActivity extends Activity{
   private void getUserProfile(final int userId) {
     // включаем прогресс
     mProgressDialog.show();
-    ProfilesRequest profileRequest = new ProfilesRequest(getApplicationContext());
+    UserRequest profileRequest = new UserRequest(getApplicationContext());
     profileRequest.uids.add(userId);
     profileRequest.callback(new ApiHandler() {
       @Override
       public void success(final ApiResponse response) {
-        ProfileUser profile = ProfileUser.parse(userId,response);
+        User profile = User.parse(userId,response);
         
         mHeaderTitle.setText(profile.first_name);
         

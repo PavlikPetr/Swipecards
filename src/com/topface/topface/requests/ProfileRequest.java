@@ -9,12 +9,18 @@ import android.content.Context;
 public class ProfileRequest extends ApiRequest {
   // Data
   private String  service = "profile";
-  //private String  fields;  //массив интересующих полей профиля
-  private boolean update_data;
+  public int part;  // часть профиля, необходимая для загрузки
+  //public String  fields;  //массив интересующих полей профиля
+  // Constants
+  public static final int P_ALL = 0;
+  public static final int P_NOTIFICATION = 1;
+  public static final int P_FILTER = 2;
+  public static final int P_QUESTIONARY = 3;
+  public static final int P_ALBUM = 4;
+  public static final int P_DATA = 5;
   //---------------------------------------------------------------------------
-  public ProfileRequest(Context context,boolean update) {
+  public ProfileRequest(Context context) {
     super(context);
-    update_data = update;
   }
   //---------------------------------------------------------------------------
   @Override
@@ -23,19 +29,81 @@ public class ProfileRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      if(update_data)
-        root.put("data",new JSONObject().put("fields",new JSONArray().put("unread_rates")
-                                                                     .put("unread_likes")
-                                                                     .put("unread_messages")
-                                                                     .put("money")
-                                                                     .put("power")
-                                                                     .put("average_rate")));
-
+      JSONArray fields = null;
+      switch(part) {
+        case P_NOTIFICATION:
+          fields = getNotification();
+          break;
+        case P_FILTER:
+          fields = getFilter();
+          break;
+        case P_QUESTIONARY:
+          fields = getQuestionary();
+          break;
+        case P_ALBUM:
+          fields = getAlbum();
+          break;
+        case P_DATA:
+          fields = getData();
+          break;
+        case P_ALL:
+        default:
+          fields = new JSONArray();
+          break;
+      }
+      root.put("data",new JSONObject().put("fields",fields));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }
     
     return root.toString();
+  }
+  //---------------------------------------------------------------------------
+  private JSONArray getNotification() {
+    JSONArray array = new JSONArray();
+    array.put("money")
+         .put("power")
+         .put("average_rate")
+         .put("unread_rates")
+         .put("unread_likes")
+         .put("unread_messages");
+    
+    return array;
+  }
+  //---------------------------------------------------------------------------
+  private JSONArray getFilter() {
+    JSONArray array = new JSONArray();
+    array.put("dating");
+    
+    return array;
+  }
+  //---------------------------------------------------------------------------
+  private JSONArray getQuestionary() {
+    JSONArray array = new JSONArray();
+    array.put("questionary");
+    
+    return array;
+  }
+  //---------------------------------------------------------------------------
+  private JSONArray getAlbum() {
+    JSONArray array = new JSONArray();
+    array.put("album");
+    
+    return array;
+  }
+  //---------------------------------------------------------------------------
+  private JSONArray getData() {
+    JSONArray array = new JSONArray();
+    array.put("uid")
+         .put("first_name")
+         .put("age")
+         .put("sex")
+         .put("city")
+         .put("avatars")
+         .put("status")
+         .put(getNotification().toString());
+    
+    return array;
   }
   //---------------------------------------------------------------------------
 }

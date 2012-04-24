@@ -1,19 +1,18 @@
 package com.topface.topface.requests;
 
-import java.util.ArrayList;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.topface.topface.utils.Debug;
 import android.content.Context;
 
-public class ProfilesRequest extends ApiRequest {
+public class FeedRatesRequest extends ApiRequest {
   // Data
-  private String service = "profiles";
-  public  ArrayList<Integer> uids   = new ArrayList<Integer>(); // массив id пользователя в топфейсе
-  public  ArrayList<String>  fields = new ArrayList<String>();  // массив интересующих полей профиля
+  private String service = "feedRates";
+  public  int limit;   // максимальный размер выборки
+  public  int from;    // идентификатор оценки, от которой делать выборку
+  public  boolean only_new;  // осуществлять выборку только по новым оценкам, или по всем
   //---------------------------------------------------------------------------
-  public ProfilesRequest(Context context) {
+  public FeedRatesRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -23,7 +22,12 @@ public class ProfilesRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("uids",new JSONArray(uids)));
+      JSONObject data = new JSONObject().put("limit",limit);
+      if(from>0)
+        data.put("from",from);
+      if(only_new)
+        data.put("new",only_new);
+      root.put("data",data);
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }

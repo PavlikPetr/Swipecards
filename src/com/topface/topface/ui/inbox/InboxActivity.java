@@ -3,12 +3,12 @@ package com.topface.topface.ui.inbox;
 import java.util.LinkedList;
 import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.data.Inbox;
+import com.topface.topface.data.FeedInbox;
 import com.topface.topface.p2r.PullToRefreshListView;
 import com.topface.topface.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.InboxRequest;
+import com.topface.topface.requests.FeedInboxRequest;
 import com.topface.topface.services.NotificationService;
 import com.topface.topface.ui.AvatarManager;
 import com.topface.topface.ui.DoubleBigButton;
@@ -34,8 +34,8 @@ public class InboxActivity extends Activity {
   private boolean mOnlyNewData;
   private PullToRefreshListView mListView;
   private InboxListAdapter mAdapter;
-  private LinkedList<Inbox> mInboxDataList;
-  private AvatarManager<Inbox> mAvatarManager;
+  private LinkedList<FeedInbox> mInboxDataList;
+  private AvatarManager<FeedInbox> mAvatarManager;
   private ProgressDialog mProgressDialog;
   private DoubleBigButton mDoubleButton;
   private NotificationManager mNotificationManager;
@@ -53,7 +53,7 @@ public class InboxActivity extends Activity {
     mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
     
     // Data
-    mInboxDataList = new LinkedList<Inbox>();
+    mInboxDataList = new LinkedList<FeedInbox>();
     
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.inbox_header_title));
@@ -134,7 +134,7 @@ public class InboxActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mAvatarManager = new AvatarManager<Inbox>(getApplicationContext(),mInboxDataList);
+    mAvatarManager = new AvatarManager<FeedInbox>(getApplicationContext(),mInboxDataList);
     mAdapter = new InboxListAdapter(getApplicationContext(),mAvatarManager);
     mListView.setOnScrollListener(mAvatarManager);    
     mListView.setAdapter(mAdapter);
@@ -144,9 +144,9 @@ public class InboxActivity extends Activity {
     if(isProgress)
       mProgressDialog.show();
     
-    mNotificationManager.cancel(NotificationService.TP_NOTIFICATION);
+    mNotificationManager.cancel(NotificationService.TP_MSG_NOTIFICATION);
     
-    InboxRequest inboxRequest = new InboxRequest(getApplicationContext());
+    FeedInboxRequest inboxRequest = new FeedInboxRequest(getApplicationContext());
     inboxRequest.limit = LIMIT;
     inboxRequest.only_new = mOnlyNewData;
     inboxRequest.callback(new ApiHandler() {
@@ -154,7 +154,7 @@ public class InboxActivity extends Activity {
       public void success(ApiResponse response) {
         mDoubleButton.setChecked(mOnlyNewData ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
         mInboxDataList.clear();
-        mInboxDataList = Inbox.parse(response);
+        mInboxDataList = FeedInbox.parse(response);
         mAvatarManager.setDataList(mInboxDataList);
         mAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();

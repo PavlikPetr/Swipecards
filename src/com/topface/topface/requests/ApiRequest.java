@@ -1,7 +1,6 @@
 package com.topface.topface.requests;
 
 import com.topface.topface.App;
-import com.topface.topface.Data;
 import com.topface.topface.Global;
 import com.topface.topface.R;
 import com.topface.topface.data.Auth;
@@ -36,7 +35,7 @@ public abstract class ApiRequest {
       return;
     }
     
-    ssid = Data.SSID;
+    ssid = App.SSID;
     Thread t = new Thread("api request") {
       @Override
       public void run() {
@@ -85,8 +84,8 @@ public abstract class ApiRequest {
     ApiResponse response = new ApiResponse(Http.httpSendTpRequest(Global.API_URL,authRequest.toString()));
     if(response.code == ApiResponse.RESULT_OK) {
       Auth auth = Auth.parse(response);
-      Data.saveSSID(mContext,auth.ssid);
-      ssid = Data.SSID;
+      ssid = auth.ssid;
+      App.saveSSID(mContext,ssid);
       
       response = new ApiResponse(Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString()));
       

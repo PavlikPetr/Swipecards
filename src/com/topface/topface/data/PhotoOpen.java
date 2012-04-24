@@ -21,14 +21,4 @@ public class PhotoOpen extends AbstractData {
     return open;
   }
   //---------------------------------------------------------------------------
-  @Override
-  public String getBigLink() {
-    return null;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public String getSmallLink() {
-    return null;
-  }
-  //---------------------------------------------------------------------------
 }

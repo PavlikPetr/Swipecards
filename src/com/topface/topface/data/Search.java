@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class SearchUser extends AbstractData {
+public class Search extends AbstractData implements IAlbumData {
   // Data
   public int uid;                 // идентификатор пользователя
   public int age;                 // возраст пользователя
@@ -24,14 +24,14 @@ public class SearchUser extends AbstractData {
   //public String geo_coord_lat; // широта нахождения пользоавтеля
   //public String geo_coord_lng; // долгота нахождения пользователя
   //---------------------------------------------------------------------------
-  public static LinkedList<SearchUser> parse(ApiResponse response) {
-    LinkedList<SearchUser> userList = new LinkedList<SearchUser>();
+  public static LinkedList<Search> parse(ApiResponse response) {
+    LinkedList<Search> userList = new LinkedList<Search>();
     
     try {
       JSONArray array = response.mJSONResult.getJSONArray("users");
       if(array.length()>0)
         for(int i=0;i<array.length();i++) {
-          SearchUser search = new SearchUser();
+          Search search = new Search();
           JSONObject item = array.getJSONObject(i);
             search.uid        = item.optInt("uid");
             search.age        = item.optInt("age");

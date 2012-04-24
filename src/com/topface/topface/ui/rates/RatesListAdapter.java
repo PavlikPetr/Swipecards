@@ -2,7 +2,7 @@ package com.topface.topface.ui.rates;
 
 import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.data.Rate;
+import com.topface.topface.data.FeedRate;
 import com.topface.topface.ui.AvatarManager;
 import com.topface.topface.ui.RoundedImageView;
 import com.topface.topface.utils.Utils;
@@ -28,14 +28,14 @@ public class RatesListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // Data
   private LayoutInflater mInflater;
-  private AvatarManager<Rate> mAvatarManager;
+  private AvatarManager<FeedRate> mAvatarManager;
   private int mOwnerCityID;
   // Constants
   private static final int T_ALL   = 0;
   private static final int T_CITY  = 1;
   private static final int T_COUNT = 2;
   //---------------------------------------------------------------------------
-  public RatesListAdapter(Context context,AvatarManager<Rate> avatarManager) {
+  public RatesListAdapter(Context context,AvatarManager<FeedRate> avatarManager) {
     mAvatarManager = avatarManager;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     //mInflater = LayoutInflater.from(context);
@@ -48,7 +48,7 @@ public class RatesListAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   @Override
-  public Rate getItem(int position) {
+  public FeedRate getItem(int position) {
     return mAvatarManager.get(position);
   }
   //---------------------------------------------------------------------------
@@ -97,7 +97,7 @@ public class RatesListAdapter extends BaseAdapter {
     } else
       holder = (ViewHolder)convertView.getTag();
     
-    Rate rate = getItem(position);
+    FeedRate rate = getItem(position);
     /*
     Bitmap bitmap = mAvatarManager.getImage(inbox.avatars_small);
     if(bitmap!=null) {

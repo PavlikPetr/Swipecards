@@ -4,7 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.*;
 import android.os.Process;
-import com.topface.topface.Data;
+import com.topface.topface.App;
 import com.topface.topface.Global;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiRequest;
@@ -40,7 +40,7 @@ public class ConnectionService extends Service {
   //---------------------------------------------------------------------------
   // формирование запроса внутри приложения к коннект сервису
   public static void sendRequest(ApiRequest request, Handler handler) {
-    request.ssid = Data.SSID;
+    request.ssid = App.SSID;
     serviceHandler.sendMessage(Message.obtain(null,0,new Packet(request,handler)));
   }
   //---------------------------------------------------------------------------
@@ -69,7 +69,7 @@ public class ConnectionService extends Service {
         ApiResponse ssidResponse = (ApiResponse)msg.obj;
         if(ssidResponse.code==0) {
           Auth auth = Auth.parse(ssidResponse);
-          Data.saveSSID(ConnectionService.this.getApplicationContext(),auth.ssid);
+          App.saveSSID(ConnectionService.this.getApplicationContext(),auth.ssid);
           packet.mRequest.ssid = auth.ssid;
           ApiResponse response = new ApiResponse(sendPacket(packet));
           packet.sendMessage(Message.obtain(null,0,response));

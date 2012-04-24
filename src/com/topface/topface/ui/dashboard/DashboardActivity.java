@@ -1,13 +1,11 @@
 package com.topface.topface.ui.dashboard;
 
 import com.topface.topface.App;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.services.NotificationService;
 import com.topface.topface.social.SocialActivity;
 import com.topface.topface.ui.LeaksActivity;
 import com.topface.topface.ui.LogActivity;
@@ -17,25 +15,17 @@ import com.topface.topface.ui.likes.LikesActivity;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.rates.RatesActivity;
 import com.topface.topface.ui.tops.TopsActivity;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
-import com.topface.topface.utils.Imager;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,19 +36,27 @@ import android.widget.Toast;
 /*
  *  Класс главного активити для навигации по приложению  "TopFace"
  */
-public class DashboardActivity extends Activity implements ServiceConnection, View.OnClickListener {
+public class DashboardActivity extends Activity implements View.OnClickListener {
   // Data
   private TextView mLikesNotify;
   private TextView mInboxNotify;
   private TextView mRatesNotify;
+  private NotificationReceiver mNotificationReceiver; 
   private ProgressDialog mProgressDialog;
-  // Notification Reciever 
-  private NotificationReceiver mNotificationReceiver;
-  // Notification Service
-  private Messenger mNotificationService;
   // Constants
   public static final int INTENT_DASHBOARD = 100;
   public static final String BROADCAST_ACTION = "com.topface.topface.DASHBOARD_NOTIFICATION";
+  //---------------------------------------------------------------------------
+  // class NotificationReceiver
+  //---------------------------------------------------------------------------
+  public class NotificationReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      if(intent.getAction().equals(BROADCAST_ACTION)) {
+        DashboardActivity.this.refreshNotifications();
+      }
+    }
+  }
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -68,80 +66,59 @@ public class DashboardActivity extends Activity implements ServiceConnection, Vi
     
     LeaksManager.getInstance().monitorObject(this);
     
-    if(App.init && Data.SSID!=null && Data.SSID.length() > 0) {
-      // Progress Bar
-      mProgressDialog = new ProgressDialog(this);
-      mProgressDialog.setMessage(getString(R.string.dialog_loading));
-      
-      mLikesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyLikes);
-      mInboxNotify = (TextView)findViewById(R.id.tvDshbrdNotifyChat);
-      mRatesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyRates);
-  
-      ((Button)findViewById(R.id.btnDshbrdDating)).setOnClickListener(this);
-      ((Button)findViewById(R.id.btnDshbrdLikes)).setOnClickListener(this);
-      ((Button)findViewById(R.id.btnDshbrdRates)).setOnClickListener(this);
-      ((Button)findViewById(R.id.btnDshbrdChat)).setOnClickListener(this);
-      ((Button)findViewById(R.id.btnDshbrdTops)).setOnClickListener(this);
-      ((Button)findViewById(R.id.btnDshbrdProfile)).setOnClickListener(this);
-      
-      Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.im_bar_header);
-      Data.s_HeaderHeight = bitmap.getHeight();
-      bitmap.recycle();
-      
-      if(!Http.isOnline(this)){
-        Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
-        return;
-      }
-      
-      bindService(new Intent(this,NotificationService.class),this,Context.BIND_AUTO_CREATE);
-      
-      mProgressDialog.show();
-      update();
-    } else { 
+    if(!App.init && App.SSID==null || App.SSID.length()==0) {
       startActivity(new Intent(getApplicationContext(),SocialActivity.class));
       finish();
     }
+    
+    // Progress Bar
+    mProgressDialog = new ProgressDialog(this);
+    mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    
+    // notifications
+    mLikesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyLikes);
+    mInboxNotify = (TextView)findViewById(R.id.tvDshbrdNotifyChat);
+    mRatesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyRates);
+
+    //Buttons
+    ((Button)findViewById(R.id.btnDshbrdDating)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDshbrdLikes)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDshbrdRates)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDshbrdChat)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDshbrdTops)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDshbrdProfile)).setOnClickListener(this);
+    
+    // is online
+    if(!Http.isOnline(this)){
+      Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
+      return;
+    }
+
+    update();
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStart() {
     super.onStart();
     
-    System.gc();
-    
-    if(Data.SSID!=null && Data.SSID.length() > 0) {
-      // start acceleration 
-      if(mNotificationService != null)
-        try {
-          mNotificationService.send(Message.obtain(null, NotificationService.MSG_ACCEL,0,0));
-        } catch(RemoteException e) {
-          Debug.log(this,"onStop:remote exception");
-        }
-      
-      // stop broadcaster
-      if(mNotificationReceiver == null) {
-        mNotificationReceiver = new NotificationReceiver();
-        registerReceiver(mNotificationReceiver,new IntentFilter(BROADCAST_ACTION));
-      }
-      
-      invalidateNotification();
-      updateNotify();
-    } else {
+    if(App.SSID==null && App.SSID.length()>0) {
       startActivity(new Intent(getApplicationContext(),SocialActivity.class));
-      finish();
+      finish();      
     }
+    
+    updateNotifications();
+    
+    // start broadcaster
+    if(mNotificationReceiver == null) {
+      mNotificationReceiver = new NotificationReceiver();
+      registerReceiver(mNotificationReceiver,new IntentFilter(BROADCAST_ACTION));
+    }
+    
+    System.gc();
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStop() {
-    // stop acceleration    
-    if(mNotificationService != null)
-      try {
-        mNotificationService.send(Message.obtain(null, NotificationService.MSG_DEACCEL,0,0));
-      } catch(RemoteException e) {
-        Debug.log(this,"onStop:remote exception");
-      }
-    
     // stop broadcaster
     if(mNotificationReceiver != null) {
       unregisterReceiver(mNotificationReceiver);
@@ -159,64 +136,64 @@ public class DashboardActivity extends Activity implements ServiceConnection, Vi
       mProgressDialog.cancel();
     mProgressDialog = null;
     
-    unbindService(this);
-    
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
   private void update() {
-    ProfileRequest profileRequest = new ProfileRequest(this,false);
+    mProgressDialog.show();
+    
+    ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
+    profileRequest.part = ProfileRequest.P_DATA;
     profileRequest.callback(new ApiHandler() {
       @Override
       public void success(final ApiResponse response) {
-        Profile profile = Profile.parse(response,false);
-        Data.setProfile(profile);
+        CacheProfile.set(Profile.parse(response));
+        refreshNotifications();
         mProgressDialog.cancel();
-        new Thread(new Runnable() {
-          @Override
-          public void run() {
-            Imager.avatarOwnerPreloading(DashboardActivity.this.getApplicationContext());
-          }
-        }).start();
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
+        mLikesNotify.setVisibility(View.INVISIBLE);
+        mInboxNotify.setVisibility(View.INVISIBLE);
+        mRatesNotify.setVisibility(View.INVISIBLE);
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void updateNotify() {
-    ProfileRequest profileRequest = new ProfileRequest(getApplicationContext(),true);
+  private void updateNotifications() {
+    ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
+    profileRequest.part = ProfileRequest.P_NOTIFICATION;
     profileRequest.callback(new ApiHandler() {
       @Override
       public void success(final ApiResponse response) {
-        Profile profile = Profile.parse(response,true);
-        Data.updateNotification(profile);
-        invalidateNotification();
-        Debug.log(DashboardActivity.this,"up");
+        CacheProfile.updateNotifications(Profile.parse(response));
+        refreshNotifications();
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
+        mLikesNotify.setVisibility(View.INVISIBLE);
+        mInboxNotify.setVisibility(View.INVISIBLE);
+        mRatesNotify.setVisibility(View.INVISIBLE);
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void invalidateNotification() {
-    if(Data.s_Likes > 0) {
-      mLikesNotify.setText(" "+Data.s_Likes+" ");
+  private void refreshNotifications() {
+    if(CacheProfile.unread_likes > 0) {
+      mLikesNotify.setText(" "+CacheProfile.unread_likes+" ");
       mLikesNotify.setVisibility(View.VISIBLE);
     } else
       mLikesNotify.setVisibility(View.INVISIBLE);
 
-    if(Data.s_Messages > 0) {
-      mInboxNotify.setText(" "+Data.s_Messages+" ");
+    if(CacheProfile.unread_messages > 0) {
+      mInboxNotify.setText(" "+CacheProfile.unread_messages+" ");
       mInboxNotify.setVisibility(View.VISIBLE);
     } else
       mInboxNotify.setVisibility(View.INVISIBLE);
     
-    if(Data.s_Rates > 0) {
-      mRatesNotify.setText(" "+Data.s_Rates+" ");
+    if(CacheProfile.unread_rates > 0) {
+      mRatesNotify.setText(" "+CacheProfile.unread_rates+" ");
       mRatesNotify.setVisibility(View.VISIBLE);
     } else
       mRatesNotify.setVisibility(View.INVISIBLE);
@@ -258,8 +235,8 @@ public class DashboardActivity extends Activity implements ServiceConnection, Vi
   private static final int MENU_LEAKS = 3;
   @Override
   public boolean onCreatePanelMenu(int featureId, Menu menu) {
-    menu.add(0,MENU_LOG,0,"Log");
-    menu.add(0,MENU_LEAKS,0,"Leaks");
+    //menu.add(0,MENU_LOG,0,"Log");
+    //menu.add(0,MENU_LEAKS,0,"Leaks");
     
     return super.onCreatePanelMenu(featureId, menu);
   }
@@ -276,37 +253,4 @@ public class DashboardActivity extends Activity implements ServiceConnection, Vi
     }
     return super.onMenuItemSelected(featureId,item);
   }
-  //---------------------------------------------------------------------------
-  // Overriden from ServiceConnection
-  //---------------------------------------------------------------------------
-  @Override
-  public void onServiceConnected(ComponentName name,IBinder service) {
-    try {
-      if(mNotificationService == null)
-        mNotificationService = new Messenger(service);
-    } catch (Exception e) {
-      Debug.log("App","onServiceConnected:"+e);
-    }
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public void onServiceDisconnected(ComponentName name) {
-    try {
-      mNotificationService = null;
-    } catch (Exception e) {
-      Debug.log("App","onServiceDisconnected:"+e);
-    }
-  }
-  //---------------------------------------------------------------------------
-  // class NotificationReceiver
-  //---------------------------------------------------------------------------
-  public class NotificationReceiver extends BroadcastReceiver {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      if(intent.getAction().equals(BROADCAST_ACTION)) {
-        DashboardActivity.this.invalidateNotification();
-      }
-    }
-  }
-  //---------------------------------------------------------------------------
 }

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class Album extends AbstractData {
+public class Album extends AbstractData implements IAlbumData {
   // Data
   public int id;         // идентификатор фотографии в альбоме пользвоателя
   public String  small;  // строка URL маленького изображения пользователя

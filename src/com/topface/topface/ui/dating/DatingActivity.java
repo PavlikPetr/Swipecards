@@ -1,20 +1,20 @@
 package com.topface.topface.ui.dating;
 
 import java.util.LinkedList;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.DoRate;
-import com.topface.topface.data.SearchUser;
+import com.topface.topface.data.Rate;
+import com.topface.topface.data.Search;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DoRateRequest;
+import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.ui.dating.DatingControl.OnNeedUpdateListener;
 import com.topface.topface.ui.dating.StarsView.OnRateListener;
 import com.topface.topface.ui.inbox.ChatActivity;
 import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
@@ -53,27 +53,27 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     
     LeaksManager.getInstance().monitorObject(this);
 
-    // Header Bar
     mHeaderBar = (ViewGroup)findViewById(R.id.loHeader);
-    // Title Header
     mHeaderTitle = ((TextView)findViewById(R.id.tvHeaderTitle));
-    // Resources Buying Button
+    
+    // Buttons
     ((ResourcesView)findViewById(R.id.datingRes)).setOnClickListener(this);
+    ((StarsView)findViewById(R.id.starsView)).setOnRateListener(this);
+    ((Button)findViewById(R.id.chatBtn)).setOnClickListener(this);
+    ((Button)findViewById(R.id.profileBtn)).setOnClickListener(this);
+    
     // Resourse Plus
     View ivDatingPlus = findViewById(R.id.datingPlus);
     ivDatingPlus.setVisibility(View.VISIBLE);
     ivDatingPlus.setEnabled(true);
-    // Chat Button
-    ((Button)findViewById(R.id.chatBtn)).setOnClickListener(this);
-    // Profile Button
-    ((Button)findViewById(R.id.profileBtn)).setOnClickListener(this);
+    
     // Dating Gallery
     mDatingControl = (DatingControl)findViewById(R.id.galleryDating);
     mDatingControl.setOnNeedUpdateListener(this);
-    // Stars Button
-    ((StarsView)findViewById(R.id.starsView)).setOnRateListener(this);
+    
     // Клавиатура
     mInputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    
     // Comment window
     mCommentDialog = new Dialog(this);
     mCommentDialog.setTitle(R.string.chat_comment);    
@@ -81,15 +81,15 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     mCommentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     //mCommentDialog.getWindow().setBackgroundDrawableResource(R.drawable.popup_comment);
     mCommentText = (EditText)mCommentDialog.findViewById(R.id.etPopupComment);
-   
+    
     update(true);
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStart() {
     super.onStart();
-    //App.bind(getBaseContext());
-    if(Data.s_Profile.filter_sex == 0)
+
+    if(CacheProfile.filter_sex == 0)
       mHeaderTitle.setText(getString(R.string.dating_header_title_her));
     else
       mHeaderTitle.setText(getString(R.string.dating_header_title_him));
@@ -97,7 +97,6 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   //---------------------------------------------------------------------------  
   @Override
   protected void onStop() {
-    //App.unbind();
     super.onStop();
   }
   //---------------------------------------------------------------------------
@@ -107,7 +106,6 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     mDatingControl = null;
     mCommentDialog = null;
     mCommentText = null;
-
     mHeaderBar = null;
 
     Debug.log(this,"-onDestroy");
@@ -119,12 +117,12 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
     
     SearchRequest request = new SearchRequest(this.getApplicationContext());
     request.limit  = 20;
-    request.geo    = Data.s_Profile.filter_geo;
-    request.online = Data.s_Profile.filter_online;
+    request.geo    = CacheProfile.filter_geo;
+    request.online = CacheProfile.filter_online;
     request.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
-        LinkedList<SearchUser> userList = SearchUser.parse(response);
+        LinkedList<Search> userList = Search.parse(response);
         if(firstQuery) {
           Debug.log(this,"update add");
           if(mDatingControl!=null)                  // придумать блокировку запроса !!!
@@ -146,16 +144,16 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   private void rate(final int userid,final int rate) {
     Debug.log(this,"rate");
     
-    DoRateRequest doRate = new DoRateRequest(this.getApplicationContext());
+    RateRequest doRate = new RateRequest(this.getApplicationContext());
     doRate.userid = userid;
     doRate.rate   = rate;
     doRate.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
-        DoRate rate = DoRate.parse(response);
-        Data.s_Power = rate.power;
-        Data.s_Money = rate.money;
-        Data.s_AverageRate = rate.average;
+        Rate rate = Rate.parse(response);
+        CacheProfile.power = rate.power;
+        CacheProfile.money = rate.money;
+        CacheProfile.average_rate = rate.average;
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
@@ -176,7 +174,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
       mDatingControl.next();
       return;
     }
-    if(rate==10 && Data.s_Money <= 0) {
+    if(rate==10 && CacheProfile.money <= 0) {
       startActivity(new Intent(getApplicationContext(),BuyingActivity.class));
       return;
     }

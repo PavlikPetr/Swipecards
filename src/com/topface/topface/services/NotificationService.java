@@ -1,6 +1,6 @@
 package com.topface.topface.services;
 
-import com.topface.topface.Data;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.Verify;
@@ -12,6 +12,7 @@ import com.topface.topface.ui.dashboard.DashboardActivity;
 import com.topface.topface.ui.inbox.InboxActivity;
 import com.topface.topface.ui.likes.LikesActivity;
 import com.topface.topface.ui.rates.RatesActivity;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
 import android.app.Notification;
@@ -108,24 +109,24 @@ public class NotificationService extends Service {
   }
   //---------------------------------------------------------------------------
   private void resources(int power,int money) {
-    Data.s_Power = power;
-    Data.s_Money = money;
+    CacheProfile.power = power;
+    CacheProfile.money = money;
   }
   //---------------------------------------------------------------------------
   private void notifacations(int messages,int likes, int rates) {
     boolean update = false;
     
-    if(Data.s_Messages != messages) {
+    if(CacheProfile.unread_messages != messages) {
       update = true;
-      Data.s_Messages = messages;
+      CacheProfile.unread_messages = messages;
       if(_timer!=ACCEL_TIME)
         updateMessagesNotification(messages);
     }
     
-    if((Data.s_Likes+Data.s_Rates) != (likes+rates)) {
+    if((CacheProfile.unread_likes+CacheProfile.unread_rates) != (likes+rates)) {
       update = true;
-      Data.s_Likes = likes;
-      Data.s_Rates = rates;
+      CacheProfile.unread_likes = likes;
+      CacheProfile.unread_rates = rates;
       if(_timer!=ACCEL_TIME)
         updateRatesNotification(likes,rates);
     }
@@ -209,7 +210,7 @@ public class NotificationService extends Service {
       if(!mRunning)
         return;
       
-      if(!Http.isOnline(NotificationService.this) || Data.SSID == null || Data.SSID.length()==0) {
+      if(!Http.isOnline(NotificationService.this) || App.SSID == null || App.SSID.length()==0) {
         _timer = DEF_TIME;
         mServiceHandler.postDelayed(this,_timer);
         return;
@@ -217,11 +218,12 @@ public class NotificationService extends Service {
       
       Debug.log("NotifyService","RunTask");
       
-      ProfileRequest profileRequest = new ProfileRequest(getApplicationContext(),true);
+      ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
+      profileRequest.part = ProfileRequest.P_NOTIFICATION;
       profileRequest.callback(new ApiHandler() {
         @Override
         public void success(final ApiResponse response) {
-          Profile profile = Profile.parse(response,true);
+          Profile profile = Profile.parse(response);
           notifacations(profile.unread_messages,profile.unread_likes,profile.unread_rates);
         }
         @Override

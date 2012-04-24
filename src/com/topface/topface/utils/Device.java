@@ -1,6 +1,5 @@
 package com.topface.topface.utils;
 
-import com.topface.topface.Data;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
@@ -34,23 +33,6 @@ public class Device {
         width = getDisplay(context).getHeight();
       else
         width = getDisplay(context).getWidth();
-
-      switch(width) {
-        case 240:
-        case 320:
-          Data.s_gridColumn = 2;
-          break;
-        case 480:
-          Data.s_gridColumn = 3;
-          break;
-        case 720:
-        case 800:
-          Data.s_gridColumn = 4;
-          break;
-        default:
-          Data.s_gridColumn = 4;
-          break;
-      }
       
       if(width == 0) {
         Debug.log("Device","init error");

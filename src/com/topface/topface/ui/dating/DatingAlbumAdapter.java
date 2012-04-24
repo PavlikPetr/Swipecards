@@ -1,7 +1,7 @@
 package com.topface.topface.ui.dating;
 
 import com.topface.topface.R;
-import com.topface.topface.data.SearchUser;
+import com.topface.topface.data.Search;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
 import com.topface.topface.utils.Imager;
@@ -31,7 +31,7 @@ public class DatingAlbumAdapter extends BaseAdapter {
   private int mPreRunning;           // текущая пред загружаемое фото
   private Bitmap mMainBitmap;        // жесткая ссылка на оцениваемую фотографию
   private MemoryCache mCache;        // кеш фоток
-  private SearchUser  mUserData;     // данные пользователя               
+  private Search  mUserData;     // данные пользователя               
   private LayoutInflater mInflater;          
   private DatingControl  mDatingControl;
   private AlphaAnimation mAlphaAnimation;
@@ -44,7 +44,7 @@ public class DatingAlbumAdapter extends BaseAdapter {
     mCache = new MemoryCache();
   }
   //---------------------------------------------------------------------------
-  public void setUserData(SearchUser user) {
+  public void setUserData(Search user) {
     mUserData = user;
     // очистка
     mPreRunning = 0;

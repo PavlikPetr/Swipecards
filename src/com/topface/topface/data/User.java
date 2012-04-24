@@ -7,20 +7,17 @@ import com.topface.topface.utils.Debug;
 /*
  *   Класс чужого профиля
  */
-public class ProfileUser extends AbstractData {
+public class User extends AbstractData implements IAlbumData {
   // Data
   public int uid;                    // идентификатор пользователя
+  public String first_name;          // имя пользователя
+  public String platform;            // платформа пользователя
   public int age;                    // возраст пользователя
   public int sex;                    // секс пользователя
   public int last_visit;             // таймстамп последнего посещения приложения
-  public int city_id;                // идентификатор города пользователя
-  public boolean online;             // флаг наличия пользвоателя в онлайне
-  public String city_name;           // наименование города пользователя
-  public String city_full;           // полное наименование города пользователя
   public String status;              // статус пользователя
-  public String first_name;          // имя пользователя
+  public boolean online;             // флаг наличия пользвоателя в онлайне
   public String first_name_translit; // имя пользователя в транслитерации
-  public String platform;            // платформа пользователя
   public String avatars_big;         // большая аватарка пользователя
   public String avatars_small;       // маленькая аватарка пользователя
   // Questionary
@@ -39,13 +36,20 @@ public class ProfileUser extends AbstractData {
   public int questionary_weight;           // вес пользователя
   public int questionary_height;           // рост пользователя
   
+  public int city_id;                // идентификатор города пользователя
+  public String city_name;           // наименование города пользователя
+  public String city_full;           // полное наименование города пользователя
+  
+  public boolean ero;    // флаг наличия эротических фотографий
+  public boolean mutual; // флаг наличия симпатии к авторизованному пользователю
+  
   // {Null} geo.distance - дистация до пользователя (всегда NULL)
   // {Object} geo.coordinates - координаты пользователя
   // {Object} geo.coordinates.lat - широта нахождения пользоавтеля
   // {Object} geo.coordinates.lng - долгота нахождения пользователя
   //---------------------------------------------------------------------------
-  public static ProfileUser parse(int userId,ApiResponse response) {    //нужно знать userId
-    ProfileUser profile = new ProfileUser();
+  public static User parse(int userId,ApiResponse response) {    //нужно знать userId
+    User profile = new User();
     
     try {
       JSONObject item = response.mJSONResult.getJSONObject("profiles");
@@ -58,6 +62,8 @@ public class ProfileUser extends AbstractData {
         profile.last_visit = item.optInt("last_visit");
         profile.online     = item.optBoolean("online");
         profile.status     = item.optString("status");
+        profile.ero         = item.optBoolean("ero");
+        profile.mutual     = item.optBoolean("mutual");
         
       /*
       JSONObject geo = item.getJSONObject("geo");
@@ -92,7 +98,7 @@ public class ProfileUser extends AbstractData {
         profile.questionary_weight = questionary.optInt("weight");
         profile.questionary_height = questionary.optInt("height");
     } catch(Exception e) {
-      Debug.log("ProfileUser.class","Wrong response parsing: " + e);
+      Debug.log("User.class","Wrong response parsing: " + e);
     }
     
     return profile;

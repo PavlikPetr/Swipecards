@@ -48,9 +48,9 @@ public class FbApi extends SnApi {
       is.close();
       int width = options.outWidth, height = options.outHeight;
       int scale = 1;
-      if(width>Global.W && height>Global.H) // определили степень уменьшения
+      if(width>Global.PHOTO_WIDTH && height>Global.PHOTO_HEIGHT) // определили степень уменьшения
         while (true) {
-          if((width/2)<Global.W && (height/2)<Global.H)
+          if((width/2)<Global.PHOTO_WIDTH && (height/2)<Global.PHOTO_HEIGHT)
             break;
           width  /= 2;
           height /= 2;

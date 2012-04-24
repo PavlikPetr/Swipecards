@@ -4,7 +4,7 @@ import com.topface.topface.Data;
 import com.topface.topface.Global;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
-import com.topface.topface.data.TopUser;
+import com.topface.topface.data.Top;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.DoubleButton;
 import com.topface.topface.ui.GalleryGridManager;
@@ -34,8 +34,8 @@ public class TopsActivity extends Activity {
   // Data
   private GridView mGallery;
   private TopsGridAdapter mGridAdapter;
-  private GalleryGridManager<TopUser>  mGalleryGridManager;
-  private LinkedList<TopUser> mTopsList;
+  private GalleryGridManager<Top>  mGalleryGridManager;
+  private LinkedList<Top> mTopsList;
   private ProgressDialog  mProgressDialog;
   private Button mCityButton;
   // class Action Data
@@ -68,7 +68,7 @@ public class TopsActivity extends Activity {
     mActionData.city_popup_position = preferences.getInt(getString(R.string.s_tops_city_position),-1);
     
     // Data
-    mTopsList = new LinkedList<TopUser>();
+    mTopsList = new LinkedList<Top>();
 
     // Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.tops_header_title));
@@ -159,7 +159,7 @@ public class TopsActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mGalleryGridManager = new GalleryGridManager<TopUser>(getApplicationContext(),mTopsList);
+    mGalleryGridManager = new GalleryGridManager<Top>(getApplicationContext(),mTopsList);
     mGridAdapter = new TopsGridAdapter(getApplicationContext(),mGalleryGridManager);
     mGallery.setAdapter(mGridAdapter);
     mGallery.setOnScrollListener(mGalleryGridManager);
@@ -170,14 +170,14 @@ public class TopsActivity extends Activity {
     
     mGallery.setSelection(0);
     
-    TopsRequest topRequest = new TopsRequest(getApplicationContext());
+    TopRequest topRequest = new TopRequest(getApplicationContext());
     topRequest.sex  = mActionData.sex;
     topRequest.city = mActionData.city_id;
     topRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
         mTopsList.clear();
-        mTopsList = TopUser.parse(response);
+        mTopsList = Top.parse(response);
         mGalleryGridManager.setDataList(mTopsList);
         mGridAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();

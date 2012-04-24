@@ -5,15 +5,14 @@ import org.json.JSONObject;
 import com.topface.topface.utils.Debug;
 import android.content.Context;
 
-public class InboxRequest extends ApiRequest {
+public class FeedSymphatyRequest extends ApiRequest {
   // Data
-  private String service = "feedInbox";
-  public  int offset;        // смещение выбираемых сообщений
-  public  int limit;         // максимальный размер выбираемых сообщений
-  public  int from;          // идентификатор сообщения, от которого делать выборку
-  public  boolean only_new;  // осуществлять выборку только по новым сообщения, или по всем
+  private String service = "feedSymphaty";
+  public  int limit;  // максимальный размер выборки входящих симпатий
+  public  int from;   // начальный идентификатор симпатии для выборки
+  public  boolean only_new; // осуществлять выборку только по непрочитанным симпатиям
   //---------------------------------------------------------------------------
-  public InboxRequest(Context context) {
+  public FeedSymphatyRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------

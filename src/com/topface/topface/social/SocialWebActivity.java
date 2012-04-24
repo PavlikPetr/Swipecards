@@ -1,6 +1,6 @@
 package com.topface.topface.social;
 
-import com.topface.topface.Data;
+import com.topface.topface.App;
 import com.topface.topface.Global;
 import com.topface.topface.R;
 import com.topface.topface.data.Auth;
@@ -81,7 +81,7 @@ public class SocialWebActivity extends Activity {
           public void success(ApiResponse response) {
             // запись ssid
             Auth auth = Auth.parse(response);
-            Data.saveSSID(SocialWebActivity.this,auth.ssid);
+            App.saveSSID(getApplicationContext(),auth.ssid);
             setResult(Activity.RESULT_OK);
             finish();
           }
@@ -94,7 +94,7 @@ public class SocialWebActivity extends Activity {
         }).exec();
       } else {
         // стирание ssid
-        Data.saveSSID(SocialWebActivity.this,"");
+        App.removeSSID(getApplicationContext());
         setResult(Activity.RESULT_CANCELED);
         finish();
       }

@@ -1,6 +1,7 @@
 package com.topface.topface.ui;
 
 import com.topface.topface.R;
+import com.topface.topface.utils.Debug;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -45,6 +46,7 @@ public class Recycle {
       s_StarYellowActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow_pressed);
       s_StarYellow = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow);
     } catch (Exception e) {
+      Debug.log("Recycle","init exception:" + e);
       return false;
     }
     return true;

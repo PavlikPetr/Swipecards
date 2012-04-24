@@ -6,7 +6,7 @@
           android:versionName="1.0" >
      <!-- android:installLocation="preferExternal" INSTALL_FAILED_INSUFFICIENT_STORAGE  -->
   
-  <uses-sdk android:minSdkVersion="7" />
+  <uses-sdk android:minSdkVersion="8" />
   
   <!-- permissions -->
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -26,13 +26,14 @@
     
 
     <!-- activities -->
-    <activity android:name=".ui.dashboard.DashboardActivity" android:screenOrientation="portrait" >
+    <activity android:name=".ui.MainActivity" android:screenOrientation="portrait" >
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
     
+    <activity android:name=".ui.dashboard.DashboardActivity" android:screenOrientation="portrait" />
     <activity android:name=".ui.rates.RatesActivity"         android:screenOrientation="portrait" />
     <activity android:name=".ui.inbox.InboxActivity"         android:screenOrientation="portrait" />
     <activity android:name=".ui.inbox.ChatActivity"          android:screenOrientation="portrait" />
@@ -43,7 +44,7 @@
     <activity android:name=".ui.CitySearchActivity"          android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
     <activity android:name=".ui.LeaksActivity"               android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.ProfileActivity"     android:screenOrientation="portrait" />
-    <activity android:name=".ui.profile.album.PhotoEroAlbumActivity"    android:screenOrientation="portrait" />
+    <activity android:name=".ui.profile.album.PhotoEroAlbumActivity" android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.album.PhotoAlbumActivity"  android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.AddPhotoActivity"    android:screenOrientation="portrait" />
     <activity android:name=".ui.profile.EditProfileActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
@@ -54,7 +55,7 @@
     <activity android:name=".social.SocialActivity"    android:screenOrientation="portrait" />
     <activity android:name=".social.SocialWebActivity" android:screenOrientation="portrait" />
     
-    <!--Log -->
+    <!-- log -->
     <activity android:name=".ui.LogActivity"   android:screenOrientation="portrait" />
     
     <!-- receivers -->

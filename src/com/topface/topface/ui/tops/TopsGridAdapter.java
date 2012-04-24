@@ -1,7 +1,7 @@
 package com.topface.topface.ui.tops;
 
 import com.topface.topface.R;
-import com.topface.topface.data.TopUser;
+import com.topface.topface.data.Top;
 import com.topface.topface.ui.GalleryGridManager;
 import com.topface.topface.ui.ThumbView;
 import android.content.Context;
@@ -23,9 +23,9 @@ public class TopsGridAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // Data
   private LayoutInflater mInflater;
-  private GalleryGridManager<TopUser> mGalleryManager;
+  private GalleryGridManager<Top> mGalleryManager;
   //---------------------------------------------------------------------------
-  public TopsGridAdapter(Context context,GalleryGridManager<TopUser> galleryManager) {
+  public TopsGridAdapter(Context context,GalleryGridManager<Top> galleryManager) {
     mInflater = LayoutInflater.from(context);
     mGalleryManager = galleryManager;
   }
@@ -49,7 +49,7 @@ public class TopsGridAdapter extends BaseAdapter {
     } else 
       holder = (ViewHolder)convertView.getTag();
 
-    holder.mThumbView.mPercent = ((TopUser)mGalleryManager.get(position)).liked;
+    holder.mThumbView.mPercent = ((Top)mGalleryManager.get(position)).liked;
     
     mGalleryManager.getImage(position,holder.mThumbView);
     

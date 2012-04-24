@@ -5,15 +5,14 @@ import org.json.JSONObject;
 import com.topface.topface.utils.Debug;
 import android.content.Context;
 
-public class LikesRequest extends ApiRequest {
+public class FeedLikesRequest extends ApiRequest {
   // Data
   private String service = "feedLike";
-  public  int offset;  // смещение выборки понравившихся
   public  int limit;   // максимальный размер выборки
   public  int from;    // идентификатор лайка, от которого делать выборку
   public  boolean only_new;  // осуществлять выборку только по новым лайкам, или по всем
   //---------------------------------------------------------------------------
-  public LikesRequest(Context context) {
+  public FeedLikesRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------

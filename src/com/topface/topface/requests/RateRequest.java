@@ -5,13 +5,14 @@ import org.json.JSONObject;
 import com.topface.topface.utils.Debug;
 import android.content.Context;
 
-public class TopsRequest extends ApiRequest {
+public class RateRequest extends ApiRequest {
   // Data
-  private String service = "top";
-  public  int sex;   // пол самых красивых 
-  public  int city;  // город самых красивых
+  private String service = "rate";
+  public  int userid;   // идентификатор пользователя для оценки
+  public  int rate;     // оценка пользователя. ОДЗ: 1 <= RATE <= 10
+  public  int mutualId; // идентификатор сообщения из ленты, на который отправляется взаимная симпатия
   //---------------------------------------------------------------------------
-  public TopsRequest(Context context) {
+  public RateRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -21,7 +22,9 @@ public class TopsRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("sex",sex).put("city",city));
+      root.put("data",new JSONObject().put("userid",userid)
+                                      .put("rate",rate)
+                                      .put("mutualId",mutualId));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }

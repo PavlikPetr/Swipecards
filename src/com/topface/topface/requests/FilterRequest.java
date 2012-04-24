@@ -9,7 +9,7 @@ public class FilterRequest extends ApiRequest {
   // Data
   private String service = "filter";
   public  int sex;      // код пола пользователей для поиска
-  public  int city ;    // идентификатор города для поиска пользователей
+  public  int city;     // идентификатор города для поиска пользователей
   public  int agebegin; // начальный возраст пользователей в выборке поиска
   public  int ageend;   // конечный возраст пользователей в выборке поиска
   //---------------------------------------------------------------------------
