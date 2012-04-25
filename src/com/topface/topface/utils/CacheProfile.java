@@ -27,7 +27,7 @@ public class CacheProfile {
   public static String avatar_big;      // аватарка пользователя большого размера
   public static String avatar_small;    // аватарки пользователя маленького размера
   // city
-  public static int    city_id;         // идентификтаор города пользователя
+  public static int city_id;            // идентификтаор города пользователя
   public static String city_name;       // название города пользователя
   public static String city_full;       // полное название города пользвоателя
   // dating filter
