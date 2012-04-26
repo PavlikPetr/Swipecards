@@ -112,7 +112,7 @@ public class ProfileRequest extends ApiRequest {
   //---------------------------------------------------------------------------
   private JSONArray getDashboard() {
     JSONArray array = getNotification();
-    array.put("uid").put("sex").put("city").put("dating").put("avatars");
+    array.put("city").put("dating").put("avatars");
     
     return array;
   }

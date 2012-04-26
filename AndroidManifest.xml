@@ -34,6 +34,7 @@
     </activity>
     
     <activity android:name=".ui.dashboard.DashboardActivity" android:screenOrientation="portrait" />
+    <activity android:name=".ui.symphaty.SymphatyActivity"   android:screenOrientation="portrait" />
     <activity android:name=".ui.rates.RatesActivity"         android:screenOrientation="portrait" />
     <activity android:name=".ui.inbox.InboxActivity"         android:screenOrientation="portrait" />
     <activity android:name=".ui.inbox.ChatActivity"          android:screenOrientation="portrait" />

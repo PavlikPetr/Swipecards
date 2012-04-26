@@ -15,7 +15,7 @@ abstract public class ApiHandler extends Handler {
       else
         success(response);
     } catch(Exception e) {
-      fail(response.code,response);
+      //fail(response.code,response);
       Debug.log(this,"api handler exception:"+e);
     }
   }

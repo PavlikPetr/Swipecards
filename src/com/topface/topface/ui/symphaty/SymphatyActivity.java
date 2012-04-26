@@ -1,18 +1,17 @@
 package com.topface.topface.ui.symphaty;
 
 import java.util.LinkedList;
-import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.data.FeedLike;
-import com.topface.topface.p2r.PullToRefreshGridView;
+import com.topface.topface.data.FeedSymphaty;
+import com.topface.topface.p2r.PullToRefreshListView;
 import com.topface.topface.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.FeedLikesRequest;
+import com.topface.topface.requests.FeedSymphatyRequest;
+import com.topface.topface.ui.AvatarManager;
 import com.topface.topface.ui.DoubleBigButton;
-import com.topface.topface.ui.GalleryGridManager;
-import com.topface.topface.ui.ThumbView;
 import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
@@ -22,21 +21,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 /*
- *      "симпатии"
+ *     "Симпатии"
  */
 public class SymphatyActivity extends Activity {
   // Data
   private boolean mOnlyNewData;
-  private PullToRefreshGridView mGallery;
-  private SymphatyGridAdapter mAdapter;
-  private GalleryGridManager<FeedLike> mGalleryGridManager;
-  private LinkedList<FeedLike> mLikesDataList;
+  private PullToRefreshListView mListView;
+  private SymphatyListAdapter mAdapter;
+  private LinkedList<FeedSymphaty> mRatesDataList;
+  private AvatarManager<FeedSymphaty> mAvatarManager;
   private ProgressDialog mProgressDialog;
   private DoubleBigButton mDoubleButton;
   // Constants
-  private static final int LIMIT = 84;
+  private static final int LIMIT = 44;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +47,15 @@ public class SymphatyActivity extends Activity {
     LeaksManager.getInstance().monitorObject(this);
     
     // Data
-    mLikesDataList  = new LinkedList<FeedLike>();
+    mRatesDataList = new LinkedList<FeedSymphaty>();
+    
+    // Title Header
+   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.rates_header_title));
    
-   // Title Header
-   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likes_header_title));
-
    // Double Button
    mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
-   mDoubleButton.setLeftText(getString(R.string.likes_btn_dbl_left));
-   mDoubleButton.setRightText(getString(R.string.likes_btn_dbl_right));
+   mDoubleButton.setLeftText(getString(R.string.rates_btn_dbl_left));
+   mDoubleButton.setRightText(getString(R.string.rates_btn_dbl_right));
    mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
    mDoubleButton.setLeftListener(new View.OnClickListener() {
      @Override
@@ -72,20 +72,18 @@ public class SymphatyActivity extends Activity {
      }
    });
 
-   // Gallery
-   mGallery = (PullToRefreshGridView)findViewById(R.id.grdLikesGallary);
-   mGallery.setAnimationCacheEnabled(false);
-   
-   mGallery.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+   // ListView
+   mListView = (PullToRefreshListView)findViewById(R.id.lvRatesList);
+   mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(SymphatyActivity.this.getApplicationContext(),ProfileActivity.class);
-       intent.putExtra(ProfileActivity.INTENT_USER_ID,mLikesDataList.get(position).uid);
-       intent.putExtra(ProfileActivity.INTENT_USER_NAME,mLikesDataList.get(position).first_name);
+       intent.putExtra(ProfileActivity.INTENT_USER_ID,mRatesDataList.get(position).uid);
+       intent.putExtra(ProfileActivity.INTENT_USER_NAME,mRatesDataList.get(position).first_name);
        startActivityForResult(intent,0);
      }
    });
-   mGallery.setOnRefreshListener(new OnRefreshListener() {
+   mListView.setOnRefreshListener(new OnRefreshListener() {
      @Override
      public void onRefresh() {
        update(false);
@@ -93,16 +91,16 @@ public class SymphatyActivity extends Activity {
    });
    
    // Progress Bar
-   mProgressDialog = new ProgressDialog(this); // getApplicationContext() падает
+   mProgressDialog = new ProgressDialog(this);
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
-   
-   
+
+   mOnlyNewData = CacheProfile.unread_rates > 0 ? true : false;
    
    create();
    update(true);
-
-   // обнуление информера непросмотренных лайков
    
+   // обнуление информера непросмотренных оценок
+   CacheProfile.unread_rates = 0;
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -120,57 +118,58 @@ public class SymphatyActivity extends Activity {
   @Override
   protected void onDestroy() {
     release();
-    ThumbView.release();
     
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mGalleryGridManager = new GalleryGridManager<FeedLike>(getApplicationContext(),mLikesDataList);
-    mAdapter = new SymphatyGridAdapter(getApplicationContext(),mGalleryGridManager);
-    mGallery.getRefreshableView().setAdapter(mAdapter);
-    mGallery.setOnScrollListener(mGalleryGridManager);
+    mAvatarManager = new AvatarManager<FeedSymphaty>(this,mRatesDataList);
+    mAdapter = new SymphatyListAdapter(getApplicationContext(),mAvatarManager);
+    mListView.setOnScrollListener(mAvatarManager);
+    mListView.setAdapter(mAdapter);
   }
   //---------------------------------------------------------------------------
   private void update(boolean isProgress) {
     if(isProgress)
       mProgressDialog.show();
-    FeedLikesRequest likesRequest = new FeedLikesRequest(getApplicationContext());
+
+    FeedSymphatyRequest likesRequest = new FeedSymphatyRequest(getApplicationContext());
     likesRequest.limit = LIMIT;
     likesRequest.only_new = mOnlyNewData;
-    likesRequest.callback(new ApiHandler() {
+    likesRequest.callback(new ApiHandler(){
       @Override
       public void success(ApiResponse response) {
-        mDoubleButton.setChecked(mOnlyNewData ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
-        mLikesDataList.clear();
-        mLikesDataList = FeedLike.parse(response);
-        mGalleryGridManager.setDataList(mLikesDataList);
+        mDoubleButton.setChecked(mOnlyNewData?DoubleBigButton.RIGHT_BUTTON:DoubleBigButton.LEFT_BUTTON);
+        mRatesDataList.clear();
+        mRatesDataList = FeedSymphaty.parse(response);
+        mAvatarManager.setDataList(mRatesDataList);
         mAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();
-        mGallery.onRefreshComplete();
+        mListView.onRefreshComplete();
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
         mProgressDialog.cancel();
-        mGallery.onRefreshComplete();
+        mListView.onRefreshComplete();
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
   private void release() {
-    if(mGalleryGridManager!=null) { 
-      mGalleryGridManager.release();
-      mGalleryGridManager=null;
-    }
-
-    mGallery=null;
+    mListView=null;
     
     if(mAdapter!=null)
       mAdapter.release();
     mAdapter = null;
-
-    mLikesDataList=null;
+    
+    mRatesDataList=null;
+    
+    if(mAvatarManager!=null) {
+      mAvatarManager.release();
+      mAvatarManager=null;
+    }
+    
     mProgressDialog=null;
   }
   //---------------------------------------------------------------------------

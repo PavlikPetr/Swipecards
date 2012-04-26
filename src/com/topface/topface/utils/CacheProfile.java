@@ -80,8 +80,6 @@ public class CacheProfile {
   }
   //---------------------------------------------------------------------------
   public static void setData(Profile profile) {
-    uid = profile.uid;
-    sex = profile.sex;
     updateAvatars(profile);
     updateCity(profile);
     updateDating(profile);

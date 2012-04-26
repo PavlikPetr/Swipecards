@@ -68,7 +68,7 @@ public class ProfileActivity extends Activity{
   private HorizontalListView mListEroView;
   private PhotoGalleryAdapter mListAdapter;
   private PhotoEroGalleryAdapter mListEroAdapter;
-  private ProgressDialog mProgressDialog;
+  //private ProgressDialog mProgressDialog;
   private LinkedList<Album> mPhotoList; 
   private LinkedList<Album> mEroList;
   private AlertDialog mAddPhotoDialog;
@@ -127,8 +127,8 @@ public class ProfileActivity extends Activity{
     mProfileButton.setOnClickListener(mOnClickListener);
     
     // Progress Bar
-    mProgressDialog = new ProgressDialog(this);
-    mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    //mProgressDialog = new ProgressDialog(this);
+    //mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
     // Arrows
     mGR  = (ImageView)findViewById(R.id.ivProfileArrowGL);
@@ -151,7 +151,6 @@ public class ProfileActivity extends Activity{
     // Buttons
     if(mUserId==-1) {  // СВОЙ ПРОФИЛЬ
       mIsOwner = true;   
-      mUserId = CacheProfile.uid;
       
       // Edit button
       View btnEdit = findViewById(R.id.btnProfileEdit);
@@ -199,8 +198,6 @@ public class ProfileActivity extends Activity{
     mAlcohol = (TextView)findViewById(R.id.tvProfileAlcohol);
     mFitness = (TextView)findViewById(R.id.tvProfileFitness);
     mMarriage = (TextView)findViewById(R.id.tvProfileMarriage);
-    if(CacheProfile.sex==0)
-      mMarriage.setText(getString(R.string.profile_marriage_female));
     mFinances = (TextView)findViewById(R.id.tvProfileFinances);
     mSmoking = (TextView)findViewById(R.id.tvProfileSmoking);
     //mJob = (TextView)findViewById(R.id.tvProfileJob);
@@ -250,7 +247,7 @@ public class ProfileActivity extends Activity{
   }
   //---------------------------------------------------------------------------
   private void getProfile() {
-    mProgressDialog.show();
+    //mProgressDialog.show();
     if(mIsOwner) {
       ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
       profileRequest.part = ProfileRequest.P_ALL;
@@ -258,11 +255,11 @@ public class ProfileActivity extends Activity{
         @Override
         public void success(final ApiResponse response) {
           getOwnerProfile(Profile.parse(response));
-          mProgressDialog.cancel();
+          //mProgressDialog.cancel();
         }
         @Override
         public void fail(int codeError,ApiResponse response) {
-          mProgressDialog.cancel();
+          //mProgressDialog.cancel();
         }
       }).exec();
     } else {
@@ -272,11 +269,11 @@ public class ProfileActivity extends Activity{
         @Override
         public void success(final ApiResponse response) {
           getUserProfile(User.parse(mUserId,response));
-          mProgressDialog.cancel();
+          //mProgressDialog.cancel();
         }
         @Override
         public void fail(int codeError,ApiResponse response) {
-          mProgressDialog.cancel();
+          //mProgressDialog.cancel();
         }
       }).exec();
     }
@@ -285,6 +282,11 @@ public class ProfileActivity extends Activity{
   // свой профиль
   private void getOwnerProfile(Profile profile) {
     CacheProfile.setProfile(profile);
+    
+    mUserId = CacheProfile.uid;
+    if(CacheProfile.sex==0)
+      mMarriage.setText(getString(R.string.profile_marriage_female));
+    
     Http.imageLoader(CacheProfile.avatar_big,mFramePhoto);
     getOwnerAlbum();
     
@@ -505,7 +507,7 @@ public class ProfileActivity extends Activity{
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
-        mProgressDialog.cancel();
+        //mProgressDialog.cancel();
       }
     }).exec();
   }
@@ -517,7 +519,7 @@ public class ProfileActivity extends Activity{
       @Override
       public void success(ApiResponse response) {
         // отключаем прогресс
-        mProgressDialog.cancel();
+        //mProgressDialog.cancel();
         
         // сортируем эро и не эро
         LinkedList<Album> albumList = Album.parse(response);        
@@ -552,7 +554,7 @@ public class ProfileActivity extends Activity{
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
-        mProgressDialog.cancel();
+        //mProgressDialog.cancel();
       }
     }).exec();
   }
@@ -587,7 +589,7 @@ public class ProfileActivity extends Activity{
       mListEroAdapter.release();
     mListEroAdapter=null;
     
-    mProgressDialog=null;
+    //mProgressDialog=null;
     mAddPhotoDialog=null;
     
     if(mPhotoList!=null)
@@ -607,7 +609,7 @@ public class ProfileActivity extends Activity{
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mProgressDialog.show();
+        //mProgressDialog.show();
     }
     @Override
     protected String[] doInBackground(Uri... uri) {
@@ -623,7 +625,7 @@ public class ProfileActivity extends Activity{
     @Override
     protected void onPostExecute(final String[] result) {
       super.onPostExecute(result);
-      mProgressDialog.cancel();  
+      //mProgressDialog.cancel();  
 
       if(mAddEroState) {
         // попап с выбором цены эро фотографии
@@ -676,7 +678,7 @@ public class ProfileActivity extends Activity{
             }
             @Override
             public void fail(int codeError,ApiResponse response) {
-              mProgressDialog.cancel();
+              //mProgressDialog.cancel();
             }
           }).exec();
         }
@@ -729,7 +731,7 @@ public class ProfileActivity extends Activity{
             }
             @Override
             public void fail(int codeError,ApiResponse response) {
-              mProgressDialog.cancel();
+              //mProgressDialog.cancel();
             }
           }).exec();
         } break;

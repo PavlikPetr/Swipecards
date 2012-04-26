@@ -14,6 +14,7 @@ import com.topface.topface.ui.inbox.InboxActivity;
 import com.topface.topface.ui.likes.LikesActivity;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.rates.RatesActivity;
+import com.topface.topface.ui.symphaty.SymphatyActivity;
 import com.topface.topface.ui.tops.TopsActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -159,6 +160,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
+        if(mProgressDialog!=null)
         mProgressDialog.cancel();
         mLikesNotify.setVisibility(View.INVISIBLE);
         mInboxNotify.setVisibility(View.INVISIBLE);
@@ -202,7 +204,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         startActivity(new Intent(this.getApplicationContext(),LikesActivity.class));
       } break;
       case R.id.btnDshbrdRates: {
-        startActivity(new Intent(this.getApplicationContext(),RatesActivity.class));
+        //startActivity(new Intent(this.getApplicationContext(),RatesActivity.class));
+        startActivity(new Intent(this.getApplicationContext(),SymphatyActivity.class));
       } break;
       case R.id.btnDshbrdChat: {
         startActivity(new Intent(this.getApplicationContext(),InboxActivity.class));

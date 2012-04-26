@@ -206,8 +206,8 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     
     SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = preferences.edit();
-    editor.putBoolean(getString(R.string.s_ssid), mTemp.online);
-    editor.putBoolean(getString(R.string.s_ssid), mTemp.geo);
+    editor.putBoolean(getString(R.string.cache_profile_filter_online), mTemp.online);
+    editor.putBoolean(getString(R.string.cache_profile_filter_geo), mTemp.geo);
     editor.commit();
     
     FilterRequest request = new FilterRequest(this.getApplicationContext());

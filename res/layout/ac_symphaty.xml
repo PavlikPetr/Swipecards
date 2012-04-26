@@ -1,30 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/list_bkgrd"
-    android:orientation="vertical" >
+    android:layout_height="fill_parent" 
+    android:orientation="vertical" 
+    android:background="@drawable/list_bkgrd" >
     
   <!-- header bar -->
   <include layout="@layout/bar_header" />
-
-    <!-- button bar -->
-  <include layout="@layout/bar_double_big_button" />
-  <!-- <include layout="@layout/bar_double_button" /> -->
   
-  <!-- gallary -->
-  <com.topface.topface.p2r.PullToRefreshGridView
-    android:id="@+id/grdLikesGallary"
-    android:layout_width="fill_parent"
-    android:layout_height="0dip"
-    android:listSelector="@android:color/transparent"
-    android:layout_weight="1"
-    android:fadingEdge="none"
-    android:horizontalSpacing="0px"
-    android:verticalSpacing="0px"
-    android:layout_margin="0px"
-    android:padding="0px"
-    android:fadeScrollbars="true" 
-    android:background="@android:color/transparent" />
-
+  <!-- button bar -->
+  <include layout="@layout/bar_double_big_button" />
+  
+  <com.topface.topface.p2r.PullToRefreshListView
+      android:id="@+id/lvRatesList"
+      android:layout_width="wrap_content" 
+      android:layout_height="0dip"
+      android:layout_weight="1"
+      android:fadeScrollbars="true"
+      android:background="@android:color/transparent" />
+  
 </LinearLayout>
