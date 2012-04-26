@@ -75,7 +75,7 @@ public class SymphatyActivity extends Activity {
    // Gallery
    mGallery = (PullToRefreshGridView)findViewById(R.id.grdLikesGallary);
    mGallery.setAnimationCacheEnabled(false);
-   mGallery.setNumColumns(Data.s_gridColumn);
+   
    mGallery.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -96,13 +96,13 @@ public class SymphatyActivity extends Activity {
    mProgressDialog = new ProgressDialog(this); // getApplicationContext() падает
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
    
-   mOnlyNewData = Data.s_Likes > 0 ? true : false;
+   
    
    create();
    update(true);
 
    // обнуление информера непросмотренных лайков
-   Data.s_Likes = 0;
+   
   }
   //---------------------------------------------------------------------------  
   @Override

@@ -5,6 +5,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedRate;
 import com.topface.topface.ui.AvatarManager;
 import com.topface.topface.ui.RoundedImageView;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -39,7 +40,7 @@ public class RatesListAdapter extends BaseAdapter {
     mAvatarManager = avatarManager;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     //mInflater = LayoutInflater.from(context);
-    mOwnerCityID = Data.s_Profile.city_id;
+    mOwnerCityID = CacheProfile.city_id;
   }
   //---------------------------------------------------------------------------
   @Override

@@ -7,6 +7,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.CitySearchActivity;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.LeaksManager;
@@ -62,7 +63,7 @@ public class EditProfileActivity extends PreferenceActivity {
     
     LeaksManager.getInstance().monitorObject(this);
     
-    mFormInfo = new FormInfo(getApplicationContext(),Data.s_Profile.sex);
+    mFormInfo = new FormInfo(getApplicationContext(),CacheProfile.sex);
      
     /*
      *  PROFILE
@@ -70,12 +71,12 @@ public class EditProfileActivity extends PreferenceActivity {
     
     // name
     Preference name = findPreference(getString(R.string.s_profile_name));
-    name.setSummary(Data.s_Profile.first_name);
+    name.setSummary(CacheProfile.first_name);
     name.setOnPreferenceClickListener(mOnNameListener);
     
     // sex
     Preference sex = findPreference(getString(R.string.s_profile_sex));
-    if(Data.s_Profile.sex==0)
+    if(CacheProfile.sex==0)
       sex.setSummary(getString(R.string.profile_sex_girl));
     else
       sex.setSummary(getString(R.string.profile_sex_boy));
@@ -83,12 +84,12 @@ public class EditProfileActivity extends PreferenceActivity {
 
     // age
     Preference age = findPreference(getString(R.string.s_profile_age));
-    age.setSummary(""+Data.s_Profile.age);
+    age.setSummary(""+CacheProfile.age);
     age.setOnPreferenceClickListener(mOnAgeListener);
     
     // city
     mCity = findPreference(getString(R.string.s_profile_city));
-    mCity.setSummary(Data.s_Profile.city_name);
+    mCity.setSummary(CacheProfile.city_name);
     mCity.setOnPreferenceClickListener(mOnCityListener);
     
     /*
@@ -97,73 +98,73 @@ public class EditProfileActivity extends PreferenceActivity {
     
     // about
     Preference about = findPreference(getString(R.string.s_profile_about));
-    about.setSummary(Data.s_Profile.status);
+    about.setSummary(CacheProfile.status);
     about.setOnPreferenceClickListener(mOnAboutListener);
     
     // height
     Preference height = findPreference(getString(R.string.s_profile_height));
-    height.setSummary(""+Data.s_Profile.questionary_height);
+    height.setSummary(""+CacheProfile.questionary_height);
     height.setOnPreferenceClickListener(mOnHeightListener);
     
     // weight
     Preference weight = findPreference(getString(R.string.s_profile_weight));
-    weight.setSummary(""+Data.s_Profile.questionary_weight);
+    weight.setSummary(""+CacheProfile.questionary_weight);
     weight.setOnPreferenceClickListener(mOnWeightListener);
     
     // fitness
     ListPreference fitness = (ListPreference)findPreference(getString(R.string.s_profile_fitness));
-    fitness.setSummary(mFormInfo.getFitness(Data.s_Profile.questionary_fitness_id));
+    fitness.setSummary(mFormInfo.getFitness(CacheProfile.questionary_fitness_id));
     fitness.setEntries(mFormInfo.getFitnessEntries());
     fitness.setEntryValues(mFormInfo.getFitnessValues());
     fitness.setOnPreferenceChangeListener(mOnFitnessListener);
     
     // marriage
     ListPreference marriage = (ListPreference)findPreference(getString(R.string.s_profile_marriage));
-    marriage.setSummary(mFormInfo.getMarriage(Data.s_Profile.questionary_marriage_id));
+    marriage.setSummary(mFormInfo.getMarriage(CacheProfile.questionary_marriage_id));
     marriage.setEntries(mFormInfo.getMarriageEntries());
     marriage.setEntryValues(mFormInfo.getMarriageValues());
-    if(Data.s_Profile.sex==0)
+    if(CacheProfile.sex==0)
       marriage.setTitle(getString(R.string.profile_marriage_female));
     marriage.setOnPreferenceChangeListener(mOnMarriageListener);
     
     // education
     ListPreference education = (ListPreference)findPreference(getString(R.string.s_profile_education));
-    education.setSummary(mFormInfo.getEducation(Data.s_Profile.questionary_education_id));
+    education.setSummary(mFormInfo.getEducation(CacheProfile.questionary_education_id));
     education.setEntries(mFormInfo.getEducationEntries());
     education.setEntryValues(mFormInfo.getEducationValues());
     education.setOnPreferenceChangeListener(mOnEducationListener);
     
     // finances
     ListPreference finances = (ListPreference)findPreference(getString(R.string.s_profile_finances));
-    finances.setSummary(mFormInfo.getFinances(Data.s_Profile.questionary_finances_id));
+    finances.setSummary(mFormInfo.getFinances(CacheProfile.questionary_finances_id));
     finances.setEntries(mFormInfo.getFinancesEntries());
     finances.setEntryValues(mFormInfo.getFinancesValues());
     finances.setOnPreferenceChangeListener(mOnFinancesListener);
     
     // smoking
     ListPreference smoking = (ListPreference)findPreference(getString(R.string.s_profile_smoking));
-    smoking.setSummary(mFormInfo.getSmoking(Data.s_Profile.questionary_smoking_id));
+    smoking.setSummary(mFormInfo.getSmoking(CacheProfile.questionary_smoking_id));
     smoking.setEntries(mFormInfo.getSmokingEntries());
     smoking.setEntryValues(mFormInfo.getSmokingValues());
     smoking.setOnPreferenceChangeListener(mOnSmokingListener);
     
     // alcohol
     ListPreference alcohol = (ListPreference)findPreference(getString(R.string.s_profile_alcohol));
-    alcohol.setSummary(mFormInfo.getAlcohol(Data.s_Profile.questionary_alcohol_id));
+    alcohol.setSummary(mFormInfo.getAlcohol(CacheProfile.questionary_alcohol_id));
     alcohol.setEntries(mFormInfo.getAlcoholEntries());
     alcohol.setEntryValues(mFormInfo.getAlcoholValues());
     alcohol.setOnPreferenceChangeListener(mOnAlcoholListener);
     
     // commutability
     ListPreference commutability = (ListPreference)findPreference(getString(R.string.s_profile_commutability));
-    commutability.setSummary(mFormInfo.getCommunication(Data.s_Profile.questionary_communication_id));
+    commutability.setSummary(mFormInfo.getCommunication(CacheProfile.questionary_communication_id));
     commutability.setEntries(mFormInfo.getCommunicationEntries());
     commutability.setEntryValues(mFormInfo.getCommunicationValues());
     commutability.setOnPreferenceChangeListener(mOnCommutabilityListener);
     
     // character
     ListPreference character = (ListPreference)findPreference(getString(R.string.s_profile_character));
-    character.setSummary(mFormInfo.getCharacter(Data.s_Profile.questionary_character_id));
+    character.setSummary(mFormInfo.getCharacter(CacheProfile.questionary_character_id));
     character.setEntries(mFormInfo.getCharacterEntries());
     character.setEntryValues(mFormInfo.getCharacterValues());
     character.setOnPreferenceChangeListener(mOnCharacterListener);
@@ -193,12 +194,12 @@ public class EditProfileActivity extends PreferenceActivity {
     if (resultCode == Activity.RESULT_OK && requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
       Bundle extras = data.getExtras();
 
-      Data.s_Profile.city_id   = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
-      Data.s_Profile.city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
+      CacheProfile.city_id   = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
+      CacheProfile.city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
       
-      mCity.setSummary(Data.s_Profile.city_name);
+      mCity.setSummary(CacheProfile.city_name);
       
-      sendProfileData(PROFILE_CITYID,Data.s_Profile.city_id);
+      sendProfileData(PROFILE_CITYID,CacheProfile.city_id);
     }
   }
   //---------------------------------------------------------------------------
@@ -312,7 +313,7 @@ public class EditProfileActivity extends PreferenceActivity {
           if(value.equals(""))
             return;
           preference.setSummary(editBox.getText().toString());
-          Data.s_Profile.first_name = value;
+          CacheProfile.first_name = value;
           sendProfileData(PROFILE_NAME,value);
         }
       });
@@ -357,7 +358,7 @@ public class EditProfileActivity extends PreferenceActivity {
         public void onClick(DialogInterface arg0, int arg1) {
           preference.setSummary(age.getText());
           int value = Integer.parseInt(age.getText().toString());
-          Data.s_Profile.age = value;
+          CacheProfile.age = value;
           sendProfileData(PROFILE_AGE,value);
         }
       });
@@ -378,7 +379,7 @@ public class EditProfileActivity extends PreferenceActivity {
       builder.setItems(items, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int value) {
           preference.setSummary(items[value]);
-          Data.s_Profile.sex = value;
+          CacheProfile.sex = value;
           mFormInfo.setSex(value);
           sendProfileData(PROFILE_SEX,value);
         }
@@ -413,7 +414,7 @@ public class EditProfileActivity extends PreferenceActivity {
         public void onClick(DialogInterface arg0, int arg1) {
           String value = editBox.getText().toString();
           preference.setSummary(value);
-          Data.s_Profile.status = value;
+          CacheProfile.status = value;
           sendProfileData(PROFILE_ABOUT,value);
         }
       });
@@ -440,7 +441,7 @@ public class EditProfileActivity extends PreferenceActivity {
             return;
           Integer value = Integer.parseInt(editBox.getText().toString());
           preference.setSummary(""+value);
-          Data.s_Profile.questionary_height = value;
+          CacheProfile.questionary_height = value;
           sendFormData(FORM_HEIGHT,value);
         }
       });
@@ -467,7 +468,7 @@ public class EditProfileActivity extends PreferenceActivity {
             return;
           Integer value = Integer.parseInt(editBox.getText().toString());
           preference.setSummary(""+value);
-          Data.s_Profile.questionary_weight = value;
+          CacheProfile.questionary_weight = value;
           sendFormData(FORM_WEIGHT,value);
         }
       });
@@ -485,7 +486,7 @@ public class EditProfileActivity extends PreferenceActivity {
       Integer i = Integer.parseInt(newValue.toString());
       String value = mFormInfo.getFitness(i);
       preference.setSummary(value);
-      Data.s_Profile.questionary_fitness_id = i;
+      CacheProfile.questionary_fitness_id = i;
       sendFormData(FORM_FITNESS,i);
       
       return true;
@@ -499,7 +500,7 @@ public class EditProfileActivity extends PreferenceActivity {
       Integer i = Integer.parseInt(newValue.toString());
       String value = mFormInfo.getMarriage(i);
       preference.setSummary(value);
-      Data.s_Profile.questionary_marriage_id = i;
+      CacheProfile.questionary_marriage_id = i;
       sendFormData(FORM_MARRIAGE,i);
       
       return true;
@@ -513,7 +514,7 @@ public class EditProfileActivity extends PreferenceActivity {
       Integer i = Integer.parseInt(newValue.toString());
       String value = mFormInfo.getEducation(i);
       preference.setSummary(value);
-      Data.s_Profile.questionary_education_id = i;
+      CacheProfile.questionary_education_id = i;
       sendFormData(FORM_EDUCATION,i);
       
       return true;
@@ -527,7 +528,7 @@ public class EditProfileActivity extends PreferenceActivity {
       Integer i = Integer.parseInt(newValue.toString());
       String value = mFormInfo.getFinances(i);
       preference.setSummary(value);
-      Data.s_Profile.questionary_finances_id = i;
+      CacheProfile.questionary_finances_id = i;
       sendFormData(FORM_FINANCES,i);
       
       return true;
@@ -541,7 +542,7 @@ public class EditProfileActivity extends PreferenceActivity {
       Integer i = Integer.parseInt(newValue.toString());
       String value = mFormInfo.getSmoking(i);
       preference.setSummary(value);
-      Data.s_Profile.questionary_smoking_id = i;
+      CacheProfile.questionary_smoking_id = i;
       sendFormData(FORM_SMOKING,i);
       
       return true;
@@ -555,7 +556,7 @@ public class EditProfileActivity extends PreferenceActivity {
       Integer i = Integer.parseInt(newValue.toString());
       String value = mFormInfo.getAlcohol(i);
       preference.setSummary(value);
-      Data.s_Profile.questionary_alcohol_id = i;
+      CacheProfile.questionary_alcohol_id = i;
       sendFormData(FORM_ALCOHOL,i);
       
       return true;
@@ -569,7 +570,7 @@ public class EditProfileActivity extends PreferenceActivity {
       Integer i = Integer.parseInt(newValue.toString());
       String value = mFormInfo.getCommunication(i);
       preference.setSummary(value);
-      Data.s_Profile.questionary_communication_id = i;
+      CacheProfile.questionary_communication_id = i;
       sendFormData(FORM_COMMUNICATE,i);
       
       return true;
@@ -583,7 +584,7 @@ public class EditProfileActivity extends PreferenceActivity {
       Integer i = Integer.parseInt(newValue.toString());
       String value = mFormInfo.getCharacter(i);
       preference.setSummary(value);
-      Data.s_Profile.questionary_character_id = i;
+      CacheProfile.questionary_character_id = i;
       sendFormData(FORM_CHARACTER,i);
       
       return true;

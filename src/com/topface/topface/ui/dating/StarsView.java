@@ -1,8 +1,8 @@
 package com.topface.topface.ui.dating;
 
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.ui.Recycle;
+import com.topface.topface.utils.CacheProfile;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -84,7 +84,7 @@ public class StarsView extends View implements View.OnTouchListener {
     mLastYs = new float[EVENT_COUNT];
     mInformerView = informer;
     
-    mAverageRate = Data.s_AverageRate;
+    mAverageRate = CacheProfile.average_rate;
     
     setId(R.id.starsView);
     setOnTouchListener(this);
@@ -215,7 +215,7 @@ public class StarsView extends View implements View.OnTouchListener {
   }
   //---------------------------------------------------------------------------
   public void setBlock(boolean block) {
-    mAverageRate = Data.s_AverageRate;    // Костыль по обновлению средней оценки
+    mAverageRate = CacheProfile.average_rate;    // Костыль по обновлению средней оценки
     this.setEnabled(block);
   }
   //---------------------------------------------------------------------------

@@ -12,6 +12,7 @@ import com.topface.topface.requests.FeedInboxRequest;
 import com.topface.topface.services.NotificationService;
 import com.topface.topface.ui.AvatarManager;
 import com.topface.topface.ui.DoubleBigButton;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
@@ -19,6 +20,7 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -88,8 +90,9 @@ public class InboxActivity extends Activity {
     });
     mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
       @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) { 
-        Data.s_UserDrw = ((ImageView)view.findViewById(R.id.ivAvatar)).getDrawable();
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        ImageView iv = (ImageView)view.findViewById(R.id.ivAvatar);
+        Data.s_UserAvatar = ((BitmapDrawable)iv.getDrawable()).getBitmap();
         
         Intent intent = new Intent(InboxActivity.this.getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxDataList.get(position).uid);
@@ -102,7 +105,7 @@ public class InboxActivity extends Activity {
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
 
-    mOnlyNewData = Data.s_Messages > 0 ? true : false;
+    mOnlyNewData = CacheProfile.unread_messages > 0 ? true : false;
     
     create();
     update(true);
@@ -110,7 +113,7 @@ public class InboxActivity extends Activity {
     //App.delete();
     
     // обнуление информера непрочитанных сообщений
-    Data.s_Messages = 0;
+    CacheProfile.unread_messages = 0;
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -182,7 +185,7 @@ public class InboxActivity extends Activity {
     mInboxDataList = null;
     mProgressDialog = null;
     
-    Data.s_UserDrw = null;
+    Data.s_UserAvatar = null;
   }
   //---------------------------------------------------------------------------
 }

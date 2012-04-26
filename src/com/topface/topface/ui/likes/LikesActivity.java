@@ -1,7 +1,7 @@
 package com.topface.topface.ui.likes;
 
 import java.util.LinkedList;
-import com.topface.topface.Data;
+import com.topface.topface.Global;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.p2r.PullToRefreshGridView;
@@ -13,6 +13,7 @@ import com.topface.topface.ui.DoubleBigButton;
 import com.topface.topface.ui.GalleryGridManager;
 import com.topface.topface.ui.ThumbView;
 import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
@@ -36,7 +37,7 @@ public class LikesActivity extends Activity {
   private ProgressDialog mProgressDialog;
   private DoubleBigButton mDoubleButton;
   // Constants
-  private static final int LIMIT = 84;
+  private static final int LIMIT = 44;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,7 @@ public class LikesActivity extends Activity {
    // Gallery
    mGallery = (PullToRefreshGridView)findViewById(R.id.grdLikesGallary);
    mGallery.setAnimationCacheEnabled(false);
-   mGallery.setNumColumns(Data.s_gridColumn);
+   mGallery.setNumColumns(Global.GRID_COLUMN);
    mGallery.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -96,24 +97,22 @@ public class LikesActivity extends Activity {
    mProgressDialog = new ProgressDialog(this); // getApplicationContext() падает
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
    
-   mOnlyNewData = Data.s_Likes > 0 ? true : false;
+   mOnlyNewData = CacheProfile.unread_likes > 0 ? true : false;
    
    create();
    update(true);
 
    // обнуление информера непросмотренных лайков
-   Data.s_Likes = 0;
+   CacheProfile.unread_likes = 0;
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStart() {
     super.onStart();
-    //App.bind(getBaseContext());
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStop() {
-    //App.unbind();
     super.onStop();
   }
   //---------------------------------------------------------------------------
@@ -163,13 +162,12 @@ public class LikesActivity extends Activity {
       mGalleryGridManager.release();
       mGalleryGridManager=null;
     }
-
-    mGallery=null;
-    
+   
     if(mAdapter!=null)
       mAdapter.release();
     mAdapter = null;
 
+    mGallery=null;
     mLikesDataList=null;
     mProgressDialog=null;
   }

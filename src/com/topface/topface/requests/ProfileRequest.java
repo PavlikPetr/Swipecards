@@ -17,7 +17,8 @@ public class ProfileRequest extends ApiRequest {
   public static final int P_FILTER = 2;
   public static final int P_QUESTIONARY = 3;
   public static final int P_ALBUM = 4;
-  public static final int P_DATA = 5;
+  public static final int P_INFO = 5;
+  public static final int P_DASHBOARD = 6;
   //---------------------------------------------------------------------------
   public ProfileRequest(Context context) {
     super(context);
@@ -43,8 +44,11 @@ public class ProfileRequest extends ApiRequest {
         case P_ALBUM:
           fields = getAlbum();
           break;
-        case P_DATA:
-          fields = getData();
+        case P_DASHBOARD :
+          fields = getDashboard();
+          break;
+        case P_INFO:
+          fields = getInfo();
           break;
         case P_ALL:
         default:
@@ -66,7 +70,8 @@ public class ProfileRequest extends ApiRequest {
          .put("average_rate")
          .put("unread_rates")
          .put("unread_likes")
-         .put("unread_messages");
+         .put("unread_messages")
+         .put("unread_symphaties");
     
     return array;
   }
@@ -92,16 +97,22 @@ public class ProfileRequest extends ApiRequest {
     return array;
   }
   //---------------------------------------------------------------------------
-  private JSONArray getData() {
-    JSONArray array = new JSONArray();
+  private JSONArray getInfo() {
+    JSONArray array = getNotification();
     array.put("uid")
          .put("first_name")
          .put("age")
          .put("sex")
          .put("city")
          .put("avatars")
-         .put("status")
-         .put(getNotification().toString());
+         .put("status");
+    
+    return array;
+  }
+  //---------------------------------------------------------------------------
+  private JSONArray getDashboard() {
+    JSONArray array = getNotification();
+    array.put("uid").put("sex").put("city").put("dating").put("avatars");
     
     return array;
   }

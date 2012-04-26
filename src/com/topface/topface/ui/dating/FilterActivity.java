@@ -1,6 +1,5 @@
 package com.topface.topface.ui.dating;
 
-import com.topface.topface.Data;
 import com.topface.topface.Global;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiHandler;
@@ -8,6 +7,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FilterRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.CitySearchActivity;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
@@ -15,6 +15,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -64,18 +65,20 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     
     LeaksManager.getInstance().monitorObject(this);
     
+    SharedPreferences preferences = getSharedPreferences(Global.PROFILE_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    
     // подтягивание данных
     mTemp = new TempFilter();
-    mTemp.city_name = Data.s_Profile.filter_city_name;
-    mTemp.city_id   = Data.s_Profile.filter_city_id;
-    mTemp.sex       = Data.s_Profile.filter_sex;
-    mTemp.age_start = Data.s_Profile.filter_age_start;
-    mTemp.age_end   = Data.s_Profile.filter_age_end;
-    mTemp.online    = Data.s_Profile.filter_online;
-    mTemp.geo       = Data.s_Profile.filter_geo;
+    mTemp.city_name = CacheProfile.dating_city_name;
+    mTemp.city_id   = CacheProfile.dating_city_id;
+    mTemp.sex       = CacheProfile.dating_sex;
+    mTemp.age_start = CacheProfile.dating_age_start;
+    mTemp.age_end   = CacheProfile.dating_age_end;
+    mTemp.geo    = preferences.getBoolean(getString(R.string.cache_profile_filter_geo),false);
+    mTemp.online = preferences.getBoolean(getString(R.string.cache_profile_filter_online),false);
     
     // sex button
-    Preference sex = findPreference(getString(R.string.s_filter_sex));
+    Preference sex = findPreference(getString(R.string.s_dating_sex));
     if(mTemp.sex==Global.GIRL)
       sex.setSummary(getString(R.string.filter_girl));
     else
@@ -83,12 +86,12 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     sex.setOnPreferenceClickListener(mOnSexListener);
     
     // age button
-    Preference age = findPreference(getString(R.string.s_filter_age));
+    Preference age = findPreference(getString(R.string.s_dating_age));
     age.setSummary(getString(R.string.filter_from)+" "+mTemp.age_start+" "+getString(R.string.filter_to)+" "+mTemp.age_end);
     age.setOnPreferenceClickListener(mOnAgeListener);
     
     // online button
-    Preference online = findPreference(getString(R.string.s_filter_online));
+    Preference online = findPreference(getString(R.string.cache_profile_filter_online));
     if(mTemp.online==false)
       online.setSummary(getString(R.string.filter_all));
     else
@@ -96,18 +99,18 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     online.setOnPreferenceClickListener(mOnOnelineListener);
     
     // cities group    
-    mNearby = (CheckBoxPreference)findPreference(getString(R.string.s_filter_nearby));
+    mNearby = (CheckBoxPreference)findPreference(getString(R.string.s_dating_nearby));
     mNearby.setChecked(false);
     
-    mAllCities = (CheckBoxPreference)findPreference(getString(R.string.s_filter_cities_all));
+    mAllCities = (CheckBoxPreference)findPreference(getString(R.string.s_dating_cities_all));
     mAllCities.setChecked(false);
     
-    mCity = (CheckBoxPreference)findPreference(getString(R.string.s_filter_city));
+    mCity = (CheckBoxPreference)findPreference(getString(R.string.s_dating_city));
     mCity.setChecked(false);
 
     if(mTemp.city_id == 0) {
       mAllCities.setChecked(true);
-      mCity.setTitle(Data.s_Profile.city_name);
+      mCity.setTitle(CacheProfile.city_name);
     } else {
       mCity.setChecked(true);
       mCity.setTitle(mTemp.city_name);
@@ -134,8 +137,8 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
           mAllCities.setChecked(false);
           if(mTemp.city_id == 0) {
             mTemp.geo = false;
-            mTemp.city_id = Data.s_Profile.city_id;
-            mTemp.city_name = Data.s_Profile.city_name;
+            mTemp.city_id = CacheProfile.city_id;
+            mTemp.city_name = CacheProfile.city_name;
           }
         }
         
@@ -148,7 +151,7 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     mCity.setOnPreferenceChangeListener(citiesChangeListener);
     
     // выбор города
-    Preference selectCity = findPreference(getString(R.string.s_filter_select_city));
+    Preference selectCity = findPreference(getString(R.string.s_dating_select_city));
     selectCity.setOnPreferenceClickListener(mOnSelectCityListener);
     
     // сервис определения координар
@@ -195,13 +198,17 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
   //---------------------------------------------------------------------------
   public void sendFilter() {
     // сохранение данных
-    Data.s_Profile.filter_city_name = mTemp.city_name;
-    Data.s_Profile.filter_city_id   = mTemp.city_id;
-    Data.s_Profile.filter_online    = mTemp.online;
-    Data.s_Profile.filter_geo       = mTemp.geo;
-    Data.s_Profile.filter_sex       = mTemp.sex;
-    Data.s_Profile.filter_age_start = mTemp.age_start;
-    Data.s_Profile.filter_age_end   = mTemp.age_end;
+    CacheProfile.dating_city_name = mTemp.city_name;
+    CacheProfile.dating_city_id   = mTemp.city_id;
+    CacheProfile.dating_sex       = mTemp.sex;
+    CacheProfile.dating_age_start = mTemp.age_start;
+    CacheProfile.dating_age_end   = mTemp.age_end;
+    
+    SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = preferences.edit();
+    editor.putBoolean(getString(R.string.s_ssid), mTemp.online);
+    editor.putBoolean(getString(R.string.s_ssid), mTemp.geo);
+    editor.commit();
     
     FilterRequest request = new FilterRequest(this.getApplicationContext());
     request.city     = mTemp.city_id;  // ЧТО СТАВИМ ПРИ ЗАПРОСЕ С КООРДИНАТАМИ

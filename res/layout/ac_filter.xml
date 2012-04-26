@@ -5,19 +5,19 @@
     <PreferenceCategory android:title="@string/filter_filter" >
       <!-- sex -->
       <Preference
-          android:key="@string/s_filter_sex"
+          android:key="@string/s_dating_sex"
           android:title="@string/filter_sex" 
           android:summary="" />
       
       <!-- age -->
       <Preference
-          android:key="@string/s_filter_age"
+          android:key="@string/s_dating_age"
           android:title="@string/filter_age"
           android:summary="" />
       
       <!-- online -->
       <Preference
-          android:key="@string/s_filter_online"
+          android:key="@string/cache_profile_filter_online"
           android:title="@string/filter_online"
           android:summary="" />
     </PreferenceCategory>
@@ -27,25 +27,25 @@
       
       <!-- nearby -->
       <CheckBoxPreference
-          android:key="@string/s_filter_nearby"
+          android:key="@string/s_dating_nearby"
           android:title="@string/filter_nearby"
           android:defaultValue="false" />
       
       <!-- all cities -->
       <CheckBoxPreference
-          android:key="@string/s_filter_cities_all"
+          android:key="@string/s_dating_cities_all"
           android:title="@string/filter_cities_all"
           android:defaultValue="false" />
       
       <!-- current city -->
       <CheckBoxPreference
-          android:key="@string/s_filter_city" 
+          android:key="@string/s_dating_city" 
           android:title="@string/filter_city"
           android:defaultValue="false" />
       
       <!-- select city -->
       <Preference
-          android:key="@string/s_filter_select_city"
+          android:key="@string/s_dating_select_city"
           android:title="@string/filter_select_city" />
       
    </PreferenceCategory>

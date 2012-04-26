@@ -33,16 +33,16 @@ public class App extends Application {
   }
   //---------------------------------------------------------------------------
   public static void init(Context context) {
-    // ssid
-    loadSSID(context);
-
-    // App init
+    // app init
     init = Device.init(context);
     init = Global.init(context);
     init = Recycle.init(context);
     init = CacheProfile.init(context);
 
     if(!init) return;
+    
+    // ssid
+    loadSSID(context);
     
     context.startService(new Intent(context,NotificationService.class));
     //context.startService(new Intent(context,StatisticService.class));
@@ -51,22 +51,20 @@ public class App extends Application {
   public static String loadSSID(Context context) {
     SharedPreferences preferences = context.getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     SSID = preferences.getString(context.getString(R.string.s_ssid),"");
-    
     return SSID;
   }
   //---------------------------------------------------------------------------
   public static void saveSSID(Context context,String ssid) {
     SSID = (ssid==null || ssid.length()==0) ? "" : ssid;
-    
     SharedPreferences preferences = context.getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = preferences.edit();
     editor.putString(context.getString(R.string.s_ssid),SSID);
     editor.commit();
+    SSID = (ssid==null || ssid.length()==0) ? "" : ssid;
   }
   //---------------------------------------------------------------------------
   public static void removeSSID(Context context) {
     SSID = "";
-    
     SharedPreferences preferences   = context.getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = preferences.edit();
     editor.putString(context.getString(R.string.s_ssid),SSID);

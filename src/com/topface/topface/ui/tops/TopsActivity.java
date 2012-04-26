@@ -10,6 +10,7 @@ import com.topface.topface.ui.DoubleButton;
 import com.topface.topface.ui.GalleryGridManager;
 import com.topface.topface.ui.ThumbView;
 import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
@@ -49,7 +50,6 @@ public class TopsActivity extends Activity {
   // Constats
   private static int GIRLS  = 0;
   private static int BOYS   = 1;
-  private static int MOSCOW = 1;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +63,8 @@ public class TopsActivity extends Activity {
     mActionData = new ActionData();
     SharedPreferences preferences = getSharedPreferences(Global.SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE);
     mActionData.sex       = preferences.getInt(getString(R.string.s_tops_sex),GIRLS);
-    mActionData.city_id   = preferences.getInt(getString(R.string.s_tops_city_id),MOSCOW);
-    mActionData.city_name = preferences.getString(getString(R.string.s_tops_city_name),getString(R.string.default_city));
+    mActionData.city_id   = preferences.getInt(getString(R.string.s_tops_city_id),CacheProfile.city_id);
+    mActionData.city_name = preferences.getString(getString(R.string.s_tops_city_name),CacheProfile.city_name/*getString(R.string.default_city)*/);
     mActionData.city_popup_position = preferences.getInt(getString(R.string.s_tops_city_position),-1);
     
     // Data
@@ -109,7 +109,7 @@ public class TopsActivity extends Activity {
     mGallery = (GridView)findViewById(R.id.grdTopsGallary);
     mGallery.setAnimationCacheEnabled(false);
     mGallery.setScrollingCacheEnabled(false);
-    mGallery.setNumColumns(Data.s_gridColumn);
+    mGallery.setNumColumns(Global.GRID_COLUMN);
     mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

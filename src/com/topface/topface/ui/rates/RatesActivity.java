@@ -1,7 +1,6 @@
 package com.topface.topface.ui.rates;
 
 import java.util.LinkedList;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedRate;
 import com.topface.topface.p2r.PullToRefreshListView;
@@ -12,6 +11,7 @@ import com.topface.topface.requests.FeedRatesRequest;
 import com.topface.topface.ui.AvatarManager;
 import com.topface.topface.ui.DoubleBigButton;
 import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
@@ -36,7 +36,7 @@ public class RatesActivity extends Activity {
   private ProgressDialog mProgressDialog;
   private DoubleBigButton mDoubleButton;
   // Constants
-  private static final int LIMIT = 60;
+  private static final int LIMIT = 44;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -94,13 +94,13 @@ public class RatesActivity extends Activity {
    mProgressDialog = new ProgressDialog(this);
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
 
-   mOnlyNewData = Data.s_Rates > 0 ? true : false;
+   mOnlyNewData = CacheProfile.unread_rates > 0 ? true : false;
    
    create();
    update(true);
    
    // обнуление информера непросмотренных оценок
-   Data.s_Rates = 0;
+   CacheProfile.unread_rates = 0;
   }
   //---------------------------------------------------------------------------  
   @Override

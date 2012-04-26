@@ -87,8 +87,8 @@ public class ChatListAdapter extends BaseAdapter {
             holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
             holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
             holder.mAvatar.setOnClickListener(mOnAvatarListener);
-            if(Data.s_UserDrw!=null)
-              holder.mAvatar.setImageDrawable(Data.s_UserDrw);
+            if(Data.s_UserAvatar!=null)
+              holder.mAvatar.setImageBitmap(Data.s_UserAvatar);
         } break;
         case T_FRIEND_EXT: {
             convertView     = mInflater.inflate(R.layout.chat_friend_ext, null, false);
@@ -101,7 +101,7 @@ public class ChatListAdapter extends BaseAdapter {
             holder.mAvatar  = (RoundedImageView)convertView.findViewById(R.id.left_icon);
             holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
             holder.mDate    = (TextView)convertView.findViewById(R.id.chat_date);
-            holder.mAvatar.setImageDrawable(Data.s_OwnerDrw);
+            holder.mAvatar.setImageBitmap(Data.s_OwnerAvatar);
         } break;
         case T_USER_EXT: {
             convertView     = mInflater.inflate(R.layout.chat_user_ext, null, false);

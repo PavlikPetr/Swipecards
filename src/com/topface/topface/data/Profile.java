@@ -28,15 +28,13 @@ public class Profile extends AbstractData implements IAlbumData {
   public int power;              // количество энергии пользователя
   public int average_rate;       // средняя оценка текущего пользователя
  
-  // Dating filter
-  public int filter_sex;           // пол пользователей для поиска
-  public int filter_age_start;     // начальный возраст для пользователей
-  public int filter_age_end;       // конечный возраст для пользователей
-  public int filter_city_id;       // идентификатор города для поиска пользователей
-  public String filter_city_name;  // наименование пользователя в русской локали
-  public String filter_city_full;  // полное наименование города
-  public boolean filter_geo;       // идентификатор города для поиска пользователей
-  public boolean filter_online;    // идентификатор города для поиска пользователей
+  // Dating
+  public int dating_sex;           // пол пользователей для поиска
+  public int dating_age_start;     // начальный возраст для пользователей
+  public int dating_age_end;       // конечный возраст для пользователей
+  public int dating_city_id;       // идентификатор города для поиска пользователей
+  public String dating_city_name;  // наименование пользователя в русской локали
+  public String dating_city_full;  // полное наименование города
   
   // Questionary
   public int questionary_job_id;           // идентификатор рабочей партии пользователя
@@ -55,7 +53,6 @@ public class Profile extends AbstractData implements IAlbumData {
   public int questionary_height;           // рост пользователя
   
   public LinkedList<Album> albums; // альбом пользователя
-  
   public String status;            // статус пользователя
   //---------------------------------------------------------------------------
   public static Profile parse(ApiResponse response) {
@@ -118,13 +115,13 @@ public class Profile extends AbstractData implements IAlbumData {
       // dating filter
       if(!resp.isNull("dating")) {
         JSONObject dating = resp.getJSONObject("dating");
-        profile.filter_sex       = dating.optInt("sex");
-        profile.filter_age_start = dating.optInt("age_start");
-        profile.filter_age_end   = dating.optInt("age_end");
+        profile.dating_sex       = dating.optInt("sex");
+        profile.dating_age_start = dating.optInt("age_start");
+        profile.dating_age_end   = dating.optInt("age_end");
         JSONObject datingCity = dating.getJSONObject("city");
-          profile.filter_city_id   = datingCity.optInt("id");            
-          profile.filter_city_name = datingCity.optString("name");
-          profile.filter_city_full = datingCity.optString("full");
+          profile.dating_city_id   = datingCity.optInt("id");            
+          profile.dating_city_name = datingCity.optString("name");
+          profile.dating_city_full = datingCity.optString("full");
       }
           
       // questionary

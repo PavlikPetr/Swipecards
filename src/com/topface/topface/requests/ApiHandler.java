@@ -15,7 +15,8 @@ abstract public class ApiHandler extends Handler {
       else
         success(response);
     } catch(Exception e) {
-      Debug.log(this,"api handler exception");
+      fail(response.code,response);
+      Debug.log(this,"api handler exception:"+e);
     }
   }
   abstract public void success(ApiResponse response) throws NullPointerException;

@@ -72,7 +72,7 @@ public class Http {
   //---------------------------------------------------------------------------
   private static String httpRequest(int typeRequest, String request,String postParams,byte[] dataParams,InputStream is,boolean isJson) {
     
-    //Debug.log(TAG,"req:"+postParams);   // REQUEST
+    Debug.log(TAG,"req:"+postParams);   // REQUEST
     
     String response = null;
     HttpURLConnection httpConnection = null;
@@ -175,7 +175,7 @@ public class Http {
         Debug.log(TAG,"error:" + e);
       }
       
-      //Debug.log(TAG,"resp:" + response);   // RESPONSE
+      Debug.log(TAG,"resp:" + response);   // RESPONSE
     }
     return response;
   }

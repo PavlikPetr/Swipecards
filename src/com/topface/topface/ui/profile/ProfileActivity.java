@@ -1,7 +1,9 @@
 package com.topface.topface.ui.profile;
 
 import java.util.LinkedList;
+import com.topface.topface.App;
 import com.topface.topface.Data;
+import com.topface.topface.Global;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Album;
@@ -13,10 +15,11 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.PhotoAddRequest;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.UserRequest;
-import com.topface.topface.social.SocialActivity;
 import com.topface.topface.social.Socium;
 import com.topface.topface.social.Socium.AuthException;
+import com.topface.topface.ui.MainActivity;
 import com.topface.topface.ui.dating.ResourcesView;
 import com.topface.topface.ui.inbox.ChatActivity;
 import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
@@ -24,6 +27,7 @@ import com.topface.topface.ui.profile.album.PhotoEroAlbumActivity;
 import com.topface.topface.ui.profile.gallery.HorizontalListView;
 import com.topface.topface.ui.profile.gallery.PhotoEroGalleryAdapter;
 import com.topface.topface.ui.profile.gallery.PhotoGalleryAdapter;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.Http;
@@ -52,7 +56,7 @@ import android.widget.Toast;
 public class ProfileActivity extends Activity{
   // Data
   private int mUserId;
-  private boolean mOwner;
+  private boolean mIsOwner;
   private boolean mAddEroState;
   private boolean mChatInvoke;
   private Button mProfileButton;
@@ -99,6 +103,7 @@ public class ProfileActivity extends Activity{
   public static final int FORM_BOTTOM = 1;
   public static final int GALLARY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
   public static final int ALBUM_ACTIVITY_REQUEST_CODE = 101;
+  public static final int EDITOR_ACTIVITY_REQUEST_CODE = 102;
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -109,45 +114,44 @@ public class ProfileActivity extends Activity{
     System.gc();
     LeaksManager.getInstance().monitorObject(this);
     
-    // Title Header
-    mHeaderTitle = (TextView)findViewById(R.id.tvHeaderTitle);
     // Albums
     mPhotoList = new LinkedList<Album>();
     mEroList   = new LinkedList<Album>();
-    // Avatar
+    
+    mHeaderTitle = (TextView)findViewById(R.id.tvHeaderTitle);
     mFramePhoto = (FrameImageView)findViewById(R.id.ivProfileFramePhoto);
-    // Profile Header Button 
+    mResources = (ResourcesView)findViewById(R.id.datingRes);
+    
+    // Header profile button 
     mProfileButton = ((Button)findViewById(R.id.btnHeader));
     mProfileButton.setOnClickListener(mOnClickListener);
-    // Resources
-    mResources = (ResourcesView)findViewById(R.id.datingRes);
+    
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    
     // Arrows
     mGR  = (ImageView)findViewById(R.id.ivProfileArrowGL);
     mGL  = (ImageView)findViewById(R.id.ivProfileArrowGR);
     mEGR = (ImageView)findViewById(R.id.ivProfileArrowEGR);
     mEGL = (ImageView)findViewById(R.id.ivProfileArrowEGL);
     
-    // пришли из чата
-    mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE,false);    
-    // свой - чужой профиль
-    mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
-    // name
-    String name = getIntent().getStringExtra(INTENT_USER_NAME);
-
-    if(name!=null)
-      mHeaderTitle.setText(name);  // пришли из likes, rates, chat
-    else if(name==null && mUserId>0)
-      mHeaderTitle.setText("");    // пришли из tops
-    else
-      mHeaderTitle.setText(getString(R.string.profile_header_title)); // свой профиль
+    { // Params
+      mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE,false); // пришли из чата    
+      mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1); // свой - чужой профиль
+      String name = getIntent().getStringExtra(INTENT_USER_NAME); // name
+      if(name!=null)
+        mHeaderTitle.setText(name);  // пришли из likes, rates, chat
+      else if(name==null && mUserId>0)
+        mHeaderTitle.setText("");    // пришли из tops
+      else
+        mHeaderTitle.setText(getString(R.string.profile_header_title)); // свой профиль
+    }
     
     // Buttons
     if(mUserId==-1) {  // СВОЙ ПРОФИЛЬ
-      mOwner = true;   
-      mUserId = Data.s_Profile.uid;
+      mIsOwner = true;   
+      mUserId = CacheProfile.uid;
       
       // Edit button
       View btnEdit = findViewById(R.id.btnProfileEdit);
@@ -172,69 +176,62 @@ public class ProfileActivity extends Activity{
     }
     
     // Gallary and Adapter
-    mListAdapter = new PhotoGalleryAdapter(getApplicationContext(),mOwner);
+    mListAdapter = new PhotoGalleryAdapter(getApplicationContext(),mIsOwner);
     mListView = (HorizontalListView)findViewById(R.id.lvAlbumPreview);
     mListView.setAdapter(mListAdapter);
     mListView.setOnItemClickListener(mOnItemClickListener);
     // Ero Gallary and Adapter
     mEroTitle = (TextView)findViewById(R.id.tvEroTitle);
     mEroViewGroup = (ViewGroup)findViewById(R.id.loEroAlbum);
-    mListEroAdapter = new PhotoEroGalleryAdapter(getApplicationContext(),mOwner);
+    mListEroAdapter = new PhotoEroGalleryAdapter(getApplicationContext(),mIsOwner);
     mListEroView = (HorizontalListView)findViewById(R.id.lvEroAlbumPreview);
     mListEroView.setAdapter(mListEroAdapter);
     mListEroView.setOnItemClickListener(mOnItemClickListener);
 
-    {
-      // Info
-      mName = (TextView)findViewById(R.id.tvProfileName);
-      mCity = (TextView)findViewById(R.id.tvProfileCity);
-      mHeight = (TextView)findViewById(R.id.tvProfileHeight);
-      mWeight = (TextView)findViewById(R.id.tvProfileWeight);
-      mEducation = (TextView)findViewById(R.id.tvProfileEducation);
-      mCommunication = (TextView)findViewById(R.id.tvProfileCommutability);
-      mCharacter = (TextView)findViewById(R.id.tvProfileCharacter);
-      mAlcohol = (TextView)findViewById(R.id.tvProfileAlcohol);
-      mFitness = (TextView)findViewById(R.id.tvProfileFitness);
-      mMarriage = (TextView)findViewById(R.id.tvProfileMarriage);
-      if(Data.s_Profile.sex==0)
-        mMarriage.setText(getString(R.string.profile_marriage_female));
-      mFinances = (TextView)findViewById(R.id.tvProfileFinances);
-      mSmoking = (TextView)findViewById(R.id.tvProfileSmoking);
-      //mJob = (TextView)findViewById(R.id.tvProfileJob);
-      //mStatus = (TextView)findViewById(R.id.tvProfileStatus);
-      mAbout = (TextView)findViewById(R.id.tvProfileAbout);
-    }
+    // Info
+    mName = (TextView)findViewById(R.id.tvProfileName);
+    mCity = (TextView)findViewById(R.id.tvProfileCity);
+    mHeight = (TextView)findViewById(R.id.tvProfileHeight);
+    mWeight = (TextView)findViewById(R.id.tvProfileWeight);
+    mEducation = (TextView)findViewById(R.id.tvProfileEducation);
+    mCommunication = (TextView)findViewById(R.id.tvProfileCommutability);
+    mCharacter = (TextView)findViewById(R.id.tvProfileCharacter);
+    mAlcohol = (TextView)findViewById(R.id.tvProfileAlcohol);
+    mFitness = (TextView)findViewById(R.id.tvProfileFitness);
+    mMarriage = (TextView)findViewById(R.id.tvProfileMarriage);
+    if(CacheProfile.sex==0)
+      mMarriage.setText(getString(R.string.profile_marriage_female));
+    mFinances = (TextView)findViewById(R.id.tvProfileFinances);
+    mSmoking = (TextView)findViewById(R.id.tvProfileSmoking);
+    //mJob = (TextView)findViewById(R.id.tvProfileJob);
+    //mStatus = (TextView)findViewById(R.id.tvProfileStatus);
+    mAbout = (TextView)findViewById(R.id.tvProfileAbout);
     
-    if(!mOwner)
-      getUserProfile(mUserId);
-    else 
-      getAlbum();  // грузим галерею
+    getProfile();
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStart() {
     super.onStart();
-    //App.bind(getBaseContext());
     
-    if(mOwner) {
-      getProfile();
-      mResources.setResources(Data.s_Power,Data.s_Money);
+    if(mIsOwner) {
+      mResources.setResources(CacheProfile.power,CacheProfile.money);
       mResources.invalidate();
     }
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStop() {
-    //App.unbind();
     super.onStop();
   }
   //---------------------------------------------------------------------------
   // получение фото из галереи и отправка на сервер
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-    if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-      updateAlbum();
-    }
+    if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK)
+      getOwnerProfile(CacheProfile.getProfile());
+    if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK)
+      updateOwnerAlbum();
     if(requestCode == GALLARY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
       Uri imageUri = data != null ? data.getData() : null;
       if(imageUri==null)
@@ -252,175 +249,186 @@ public class ProfileActivity extends Activity{
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
-  // свой профиль
   private void getProfile() {
-    Profile profile = Data.s_Profile;
+    mProgressDialog.show();
+    if(mIsOwner) {
+      ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
+      profileRequest.part = ProfileRequest.P_ALL;
+      profileRequest.callback(new ApiHandler() {
+        @Override
+        public void success(final ApiResponse response) {
+          getOwnerProfile(Profile.parse(response));
+          mProgressDialog.cancel();
+        }
+        @Override
+        public void fail(int codeError,ApiResponse response) {
+          mProgressDialog.cancel();
+        }
+      }).exec();
+    } else {
+      UserRequest userRequest = new UserRequest(getApplicationContext());
+      userRequest.uids.add(mUserId);
+      userRequest.callback(new ApiHandler() {
+        @Override
+        public void success(final ApiResponse response) {
+          getUserProfile(User.parse(mUserId,response));
+          mProgressDialog.cancel();
+        }
+        @Override
+        public void fail(int codeError,ApiResponse response) {
+          mProgressDialog.cancel();
+        }
+      }).exec();
+    }
+  }
+  //---------------------------------------------------------------------------
+  // свой профиль
+  private void getOwnerProfile(Profile profile) {
+    CacheProfile.setProfile(profile);
+    Http.imageLoader(CacheProfile.avatar_big,mFramePhoto);
+    getOwnerAlbum();
     
-    // avatar
     mFramePhoto.mOnlineState = true;
-    Http.imageLoader(profile.getBigLink(),mFramePhoto);
     
     // основная информация
-    mName.setText(profile.first_name);
-    mCity.setText(profile.age+", "+profile.city_name);
-    
-    mHeight.setText(""+profile.questionary_height);
+    mName.setText(CacheProfile.first_name);
+    mCity.setText(CacheProfile.age+", "+CacheProfile.city_name);
+    mHeight.setText(""+CacheProfile.questionary_height);
     findViewById(R.id.rowProfileHeight).setVisibility(View.VISIBLE);
-    mWeight.setText(""+profile.questionary_weight);
+    mWeight.setText(""+CacheProfile.questionary_weight);
     findViewById(R.id.rowProfileWeight).setVisibility(View.VISIBLE);
     
     // анкета
-    FormInfo formInfo = new FormInfo(getApplicationContext(),profile.sex);
-    mEducation.setText(formInfo.getEducation(profile.questionary_education_id));
+    FormInfo formInfo = new FormInfo(getApplicationContext(),CacheProfile.sex);
+    mEducation.setText(formInfo.getEducation(CacheProfile.questionary_education_id));
     findViewById(R.id.rowProfileEducation).setVisibility(View.VISIBLE);
-    mCommunication.setText(formInfo.getCommunication(profile.questionary_communication_id));
+    mCommunication.setText(formInfo.getCommunication(CacheProfile.questionary_communication_id));
     findViewById(R.id.rowProfileCommutability).setVisibility(View.VISIBLE);
-    mCharacter.setText(formInfo.getCharacter(profile.questionary_character_id));
+    mCharacter.setText(formInfo.getCharacter(CacheProfile.questionary_character_id));
     findViewById(R.id.rowProfileCharacter).setVisibility(View.VISIBLE);
-    mAlcohol.setText(formInfo.getAlcohol(profile.questionary_alcohol_id));
+    mAlcohol.setText(formInfo.getAlcohol(CacheProfile.questionary_alcohol_id));
     findViewById(R.id.rowProfileAlcohol).setVisibility(View.VISIBLE);
-    mFitness.setText(formInfo.getFitness(profile.questionary_fitness_id));
+    mFitness.setText(formInfo.getFitness(CacheProfile.questionary_fitness_id));
     findViewById(R.id.rowProfileFitness).setVisibility(View.VISIBLE);
-    mMarriage.setText(formInfo.getMarriage(profile.questionary_marriage_id));
+    mMarriage.setText(formInfo.getMarriage(CacheProfile.questionary_marriage_id));
     findViewById(R.id.rowProfileMarriage).setVisibility(View.VISIBLE);
-    mFinances.setText(formInfo.getFinances(profile.questionary_finances_id));
+    mFinances.setText(formInfo.getFinances(CacheProfile.questionary_finances_id));
     findViewById(R.id.rowProfileFinances).setVisibility(View.VISIBLE);
-    mSmoking.setText(formInfo.getSmoking(profile.questionary_smoking_id));
+    mSmoking.setText(formInfo.getSmoking(CacheProfile.questionary_smoking_id));
     findViewById(R.id.rowProfileSmoking).setVisibility(View.VISIBLE);
     //mStatus.setText(profile.status);
     //mJob.setText(formInfo.getJob(profile.questionary_job_id));
-    mAbout.setText(profile.status);
+    mAbout.setText(CacheProfile.status);
     findViewById(R.id.rowProfileAbout).setVisibility(View.VISIBLE);
     
   }
   //---------------------------------------------------------------------------
   // чужой профиль
-  private void getUserProfile(final int userId) {
-    // включаем прогресс
-    mProgressDialog.show();
-    UserRequest profileRequest = new UserRequest(getApplicationContext());
-    profileRequest.uids.add(userId);
-    profileRequest.callback(new ApiHandler() {
-      @Override
-      public void success(final ApiResponse response) {
-        User profile = User.parse(userId,response);
+  private void getUserProfile(User profile) {
+    Http.imageLoader(profile.getBigLink(),mFramePhoto);
+    getUserAlbum();
+    
+    mHeaderTitle.setText(profile.first_name);
+    mUserAvatarUrl=profile.avatars_small;
+    mFramePhoto.mOnlineState = profile.online;
+    
+    int fieldCounter=0;
+    // основная информация
+    mName.setText(profile.first_name);
+    mCity.setText(profile.age+", "+profile.city_name);
+    if(profile.questionary_height > 0) {
+      mHeight.setText(""+profile.questionary_height);
+      findViewById(R.id.rowProfileHeight).setVisibility(View.VISIBLE);
+      fieldCounter++;
+    }
+    if(profile.questionary_weight > 0) {
+      mWeight.setText(""+profile.questionary_weight);
+      findViewById(R.id.rowProfileWeight).setVisibility(View.VISIBLE);
+      fieldCounter++;
+    }
+    // анкета
+    FormInfo formInfo = new FormInfo(ProfileActivity.this.getApplicationContext(),profile.sex);
+    String value = formInfo.getEducation(profile.questionary_education_id);
+    if(value!=null) {
+      mEducation.setText(value);
+      findViewById(R.id.rowProfileEducation).setVisibility(View.VISIBLE);
+      fieldCounter++;
+    }
+    
+    value = formInfo.getCommunication(profile.questionary_communication_id);
+    if(value!=null) {
+      mCommunication.setText(value);
+      findViewById(R.id.rowProfileCommutability).setVisibility(View.VISIBLE);
+      fieldCounter++;
+    }
+    
+    value = formInfo.getCharacter(profile.questionary_character_id);
+    if(value!=null) {
+      mCharacter.setText(value);
+      findViewById(R.id.rowProfileCharacter).setVisibility(View.VISIBLE);
+      fieldCounter++;
+    }
+    
+    value = formInfo.getAlcohol(profile.questionary_alcohol_id);
+    if(value!=null) {
+      mAlcohol.setText(value);
+      findViewById(R.id.rowProfileAlcohol).setVisibility(View.VISIBLE);
+      fieldCounter++;
+    }
+    
+    value = formInfo.getFitness(profile.questionary_fitness_id);
+    if(value!=null) {
+      mFitness.setText(value);
+      findViewById(R.id.rowProfileFitness).setVisibility(View.VISIBLE);
+      fieldCounter++;
+    }
+    
+    value = formInfo.getMarriage(profile.questionary_marriage_id);
+    if(value!=null) {
+      mMarriage.setText(value);
+      findViewById(R.id.rowProfileMarriage).setVisibility(View.VISIBLE);
+      fieldCounter++;
+    }
+    
+    value = formInfo.getFinances(profile.questionary_finances_id);
+    if(value!=null) {
+      mFinances.setText(value);
+      findViewById(R.id.rowProfileFinances).setVisibility(View.VISIBLE);
+      fieldCounter++;
+    }
+    
+    value = formInfo.getSmoking(profile.questionary_smoking_id);
+    if(value!=null) {
+      mSmoking.setText(value);
+      findViewById(R.id.rowProfileSmoking).setVisibility(View.VISIBLE);
+      fieldCounter++;
+    }
         
-        mHeaderTitle.setText(profile.first_name);
-        
-        mUserAvatarUrl=profile.avatars_small;
-        
-        // avatar
-        mFramePhoto.mOnlineState = profile.online;
-        Http.imageLoader(profile.getBigLink(),mFramePhoto);
-        
-        // грузим галерею
-        getUserAlbum(userId);
-
-        int fieldCounter=0;
-        
-        // основная информация
-        mName.setText(profile.first_name);
-        mCity.setText(profile.age+", "+profile.city_name);
-        if(profile.questionary_height > 0) {
-          mHeight.setText(""+profile.questionary_height);
-          findViewById(R.id.rowProfileHeight).setVisibility(View.VISIBLE);
-          fieldCounter++;
-        }
-        if(profile.questionary_weight > 0) {
-          mWeight.setText(""+profile.questionary_weight);
-          findViewById(R.id.rowProfileWeight).setVisibility(View.VISIBLE);
-          fieldCounter++;
-        }
-        
-        // анкета
-        FormInfo formInfo = new FormInfo(ProfileActivity.this.getApplicationContext(),profile.sex);
-        String value = formInfo.getEducation(profile.questionary_education_id);
-        if(value!=null) {
-          mEducation.setText(value);
-          findViewById(R.id.rowProfileEducation).setVisibility(View.VISIBLE);
-          fieldCounter++;
-        }
-        
-        value = formInfo.getCommunication(profile.questionary_communication_id);
-        if(value!=null) {
-          mCommunication.setText(value);
-          findViewById(R.id.rowProfileCommutability).setVisibility(View.VISIBLE);
-          fieldCounter++;
-        }
-        
-        value = formInfo.getCharacter(profile.questionary_character_id);
-        if(value!=null) {
-          mCharacter.setText(value);
-          findViewById(R.id.rowProfileCharacter).setVisibility(View.VISIBLE);
-          fieldCounter++;
-        }
-        
-        value = formInfo.getAlcohol(profile.questionary_alcohol_id);
-        if(value!=null) {
-          mAlcohol.setText(value);
-          findViewById(R.id.rowProfileAlcohol).setVisibility(View.VISIBLE);
-          fieldCounter++;
-        }
-        
-        value = formInfo.getFitness(profile.questionary_fitness_id);
-        if(value!=null) {
-          mFitness.setText(value);
-          findViewById(R.id.rowProfileFitness).setVisibility(View.VISIBLE);
-          fieldCounter++;
-        }
-        
-        value = formInfo.getMarriage(profile.questionary_marriage_id);
-        if(value!=null) {
-          mMarriage.setText(value);
-          findViewById(R.id.rowProfileMarriage).setVisibility(View.VISIBLE);
-          fieldCounter++;
-        }
-        
-        value = formInfo.getFinances(profile.questionary_finances_id);
-        if(value!=null) {
-          mFinances.setText(value);
-          findViewById(R.id.rowProfileFinances).setVisibility(View.VISIBLE);
-          fieldCounter++;
-        }
-        
-        value = formInfo.getSmoking(profile.questionary_smoking_id);
-        if(value!=null) {
-          mSmoking.setText(value);
-          findViewById(R.id.rowProfileSmoking).setVisibility(View.VISIBLE);
-          fieldCounter++;
-        }
-        
-        //mStatus.setText(profile.status);
-        //mJob.setText(formInfo.getJob(profile.questionary_job_id));
-        
-        value = profile.status;
-        if(value!=null && value.length()>1) {
-          mAbout.setText(value);
-          findViewById(R.id.rowProfileAbout).setVisibility(View.VISIBLE);
-          fieldCounter++;
-        }
-        
-        if(fieldCounter < 2) {
-          View btnAsk = findViewById(R.id.btnProfileAsk);
-          btnAsk.setVisibility(View.VISIBLE);
-          btnAsk.setOnClickListener(mOnClickListener);
-        }
-       
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-        mProgressDialog.cancel();
-      }
-    }).exec();
+    //mStatus.setText(profile.status);
+    //mJob.setText(formInfo.getJob(profile.questionary_job_id));
+    
+    value = profile.status;
+    if(value!=null && value.length()>1) {
+      mAbout.setText(value);
+      findViewById(R.id.rowProfileAbout).setVisibility(View.VISIBLE);
+      fieldCounter++;
+    }
+    
+    if(fieldCounter < 2) {
+      View btnAsk = findViewById(R.id.btnProfileAsk);
+      btnAsk.setVisibility(View.VISIBLE);
+      btnAsk.setOnClickListener(mOnClickListener);
+    }
   }
   //---------------------------------------------------------------------------
-  private void getAlbum() {
-    // кнопки добавления
+  private void getOwnerAlbum() {
+    mPhotoList.clear();
+    mEroList.clear();
     mPhotoList.add(new Album()); // добавление элемента кнопки загрузки
     mEroList.add(new Album());   // новых сообщений
 
     // сортируем эро и не эро
-    LinkedList<Album> albumList = Data.s_Profile.albums;
+    LinkedList<Album> albumList = CacheProfile.albums;
     for(Album album : albumList)
       if(album.ero)
         mEroList.add(album);
@@ -430,44 +438,89 @@ public class ProfileActivity extends Activity{
     // обновляем галереи
     if(mPhotoList.size()>0) {
       mListAdapter.setDataList(mPhotoList);
-      mListAdapter.notifyDataSetChanged();
     }
+    mListAdapter.notifyDataSetChanged();
 
     if(mEroList.size()>0) {
       mListEroAdapter.setDataList(mEroList);
-      mListEroAdapter.notifyDataSetChanged();
       mEroTitle.setVisibility(View.VISIBLE);
       mEroViewGroup.setVisibility(View.VISIBLE);
     }
+    mListEroAdapter.notifyDataSetChanged();
     
-    if(mPhotoList.size() > Data.s_gridColumn+1) {
+    if(mPhotoList.size() > Global.GRID_COLUMN+1) {
       mGR.setVisibility(View.VISIBLE);
       mGL.setVisibility(View.VISIBLE);
     }
 
-    if(mEroList.size() > Data.s_gridColumn+1) {
+    if(mEroList.size() > Global.GRID_COLUMN+1) {
       mEGR.setVisibility(View.VISIBLE);
       mEGL.setVisibility(View.VISIBLE);
     }
   }
   //---------------------------------------------------------------------------
-  private void updateAlbum() {
+  private void updateOwnerAlbum() {
     AlbumRequest albumRequest = new AlbumRequest(getApplicationContext());
-    albumRequest.uid  = Data.s_Profile.uid;
+    albumRequest.uid  = CacheProfile.uid;
     albumRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
         mPhotoList.clear();
         mEroList.clear();
-        
-        // кнопки добавления
         mPhotoList.add(new Album()); // добавление элемента кнопки загрузки
         mEroList.add(new Album());   // новых сообщений
         
         // сортируем эро и не эро
         LinkedList<Album> albumList = Album.parse(response);
-        Data.s_Profile.albums.clear();
-        Data.s_Profile.albums = albumList;
+        CacheProfile.albums.clear();
+        CacheProfile.albums = albumList;
+        for(Album album : albumList)
+          if(album.ero)
+            mEroList.add(album);
+          else
+            mPhotoList.add(album);
+        
+        // обновляем галереи
+        if(mPhotoList.size()>0) {
+          mListAdapter.setDataList(mPhotoList);
+        }
+        mListAdapter.notifyDataSetChanged();
+
+        if(mEroList.size()>0) {
+          mListEroAdapter.setDataList(mEroList);
+          mEroTitle.setVisibility(View.VISIBLE);
+          mEroViewGroup.setVisibility(View.VISIBLE);
+        }
+        mListEroAdapter.notifyDataSetChanged();
+        
+        if(mPhotoList.size() > Global.GRID_COLUMN+1) {
+          mGR.setVisibility(View.VISIBLE);
+          mGL.setVisibility(View.VISIBLE);
+        }
+
+        if(mEroList.size() > Global.GRID_COLUMN+1) {
+          mEGR.setVisibility(View.VISIBLE);
+          mEGL.setVisibility(View.VISIBLE);
+        }
+      }
+      @Override
+      public void fail(int codeError,ApiResponse response) {
+        mProgressDialog.cancel();
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  private void getUserAlbum() {
+    AlbumRequest albumRequest = new AlbumRequest(getApplicationContext());
+    albumRequest.uid  = mUserId;
+    albumRequest.callback(new ApiHandler() {
+      @Override
+      public void success(ApiResponse response) {
+        // отключаем прогресс
+        mProgressDialog.cancel();
+        
+        // сортируем эро и не эро
+        LinkedList<Album> albumList = Album.parse(response);        
         for(Album album : albumList)
           if(album.ero)
             mEroList.add(album);
@@ -487,59 +540,12 @@ public class ProfileActivity extends Activity{
         }
         mListEroAdapter.notifyDataSetChanged();
         
-        if(mPhotoList.size() > Data.s_gridColumn+1) {
+        if(mPhotoList.size() > Global.GRID_COLUMN+1) {
           mGR.setVisibility(View.VISIBLE);
           mGL.setVisibility(View.VISIBLE);
         }
 
-        if(mEroList.size() > Data.s_gridColumn+1) {
-          mEGR.setVisibility(View.VISIBLE);
-          mEGL.setVisibility(View.VISIBLE);
-        }
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-        mProgressDialog.cancel();
-      }
-    }).exec();
-  }
-  //---------------------------------------------------------------------------
-  private void getUserAlbum(int uid) {
-    AlbumRequest albumRequest = new AlbumRequest(getApplicationContext());
-    albumRequest.uid  = uid;
-    albumRequest.callback(new ApiHandler() {
-      @Override
-      public void success(ApiResponse response) {
-        // отключаем прогресс
-        mProgressDialog.cancel();
-        
-        // сортируем эро и не эро
-        LinkedList<Album> albumList = Album.parse(response);        
-        for(Album album : albumList)
-          if(album.ero)
-            mEroList.add(album);
-          else
-            mPhotoList.add(album);
-        
-        // обнавляем галереи
-        if(mPhotoList.size()>0) {
-          mListAdapter.setDataList(mPhotoList);
-          mListAdapter.notifyDataSetChanged();
-        }
-
-        if(mEroList.size()>0) {
-          mListEroAdapter.setDataList(mEroList);
-          mListEroAdapter.notifyDataSetChanged();
-          mEroTitle.setVisibility(View.VISIBLE);
-          mEroViewGroup.setVisibility(View.VISIBLE);
-        }
-        
-        if(mPhotoList.size() > Data.s_gridColumn+1) {
-          mGR.setVisibility(View.VISIBLE);
-          mGL.setVisibility(View.VISIBLE);
-        }
-
-        if(mEroList.size() > Data.s_gridColumn+1) {
+        if(mEroList.size() > Global.GRID_COLUMN+1) {
           mEGR.setVisibility(View.VISIBLE);
           mEGL.setVisibility(View.VISIBLE);
         }
@@ -665,7 +671,7 @@ public class ProfileActivity extends Activity{
                 mListAdapter.notifyDataSetChanged();
               }
               */
-              updateAlbum();
+              updateOwnerAlbum();
               
             }
             @Override
@@ -698,12 +704,12 @@ public class ProfileActivity extends Activity{
           startActivity(intent);
         } break;
         case R.id.btnProfileEdit: {
-          startActivity(new Intent(getApplicationContext(),EditProfileActivity.class));
+          startActivityForResult(new Intent(getApplicationContext(),EditProfileActivity.class),EDITOR_ACTIVITY_REQUEST_CODE);
         } break;
         case R.id.btnProfileExit: {
-          Data.removeSSID(getApplicationContext());
-          Intent intent = new Intent(getApplicationContext(), SocialActivity.class);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+          App.removeSSID(getApplicationContext());
+          Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
           startActivity(intent);
           finish();
         } break;
@@ -756,11 +762,11 @@ public class ProfileActivity extends Activity{
     public void onItemClick(AdapterView<?> parent,View arg1,int position,long arg3) {
       switch(parent.getId()) {
         case R.id.lvAlbumPreview: {        // ALBUM
-          if(position==0 && mOwner==true)  // нажатие на добавление фотки в своем альбоме
+          if(position==0 && mIsOwner==true)  // нажатие на добавление фотки в своем альбоме
             addPhoto(false);
           else {
             Intent intent = new Intent(getApplicationContext(),PhotoAlbumActivity.class);
-            if(mOwner==true) {
+            if(mIsOwner==true) {
               --position;
               Data.s_PhotoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
               Data.s_PhotoAlbum.addAll(mPhotoList);
@@ -776,11 +782,11 @@ public class ProfileActivity extends Activity{
           }
         } break;
         case R.id.lvEroAlbumPreview: {     // ERO ALBUM
-          if(position==0 && mOwner==true)  // нажатие на добавление эро фотки в своем альбоме
+          if(position==0 && mIsOwner==true)  // нажатие на добавление эро фотки в своем альбоме
             addPhoto(true);
           else {
             Intent intent = null;
-            if(mOwner==true) {
+            if(mIsOwner==true) {
               --position;
               Data.s_PhotoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
               Data.s_PhotoAlbum.addAll(mEroList);

@@ -10,23 +10,24 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
-import android.graphics.drawable.BitmapDrawable;
 import com.topface.topface.Data;
 
 public class Imager {
   //---------------------------------------------------------------------------
   public static void avatarOwnerPreloading(Context context) {
-    if(Data.s_OwnerDrw!=null)
+    if(Data.s_OwnerAvatar!=null)
       return;
-    Bitmap ava = Http.bitmapLoader(Data.s_Profile.avatar_small);
+    Bitmap ava = Http.bitmapLoader(CacheProfile.avatar_small);
+    if(ava==null) return;
     ava = getRoundedCornerBitmap(ava,ava.getWidth(),ava.getHeight(),12);
-    Data.s_OwnerDrw = new BitmapDrawable(context.getResources(),ava);
+    Data.s_OwnerAvatar = ava; //new BitmapDrawable(context.getResources(),ava);
   }
   //---------------------------------------------------------------------------
   public static void avatarUserPreloading(Context context,String url) {
     Bitmap ava = Http.bitmapLoader(url);
+    if(ava==null) return;
     ava = getRoundedCornerBitmap(ava,ava.getWidth(),ava.getHeight(),12);
-    Data.s_UserDrw = new BitmapDrawable(context.getResources(),ava);
+    Data.s_UserAvatar = ava; //new BitmapDrawable(context.getResources(),ava);
   }
   //---------------------------------------------------------------------------
   public static Bitmap clipping(Bitmap rawBitmap,int bitmapWidth,int bitmapHeight) {

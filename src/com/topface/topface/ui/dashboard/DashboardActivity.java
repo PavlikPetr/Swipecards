@@ -18,6 +18,7 @@ import com.topface.topface.ui.tops.TopsActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
+import com.topface.topface.utils.Imager;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -38,13 +39,13 @@ import android.widget.Toast;
  */
 public class DashboardActivity extends Activity implements View.OnClickListener {
   // Data
+  private boolean mUpdate;
   private TextView mLikesNotify;
   private TextView mInboxNotify;
   private TextView mRatesNotify;
   private NotificationReceiver mNotificationReceiver; 
   private ProgressDialog mProgressDialog;
   // Constants
-  public static final int INTENT_DASHBOARD = 100;
   public static final String BROADCAST_ACTION = "com.topface.topface.DASHBOARD_NOTIFICATION";
   //---------------------------------------------------------------------------
   // class NotificationReceiver
@@ -52,9 +53,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-      if(intent.getAction().equals(BROADCAST_ACTION)) {
+      if(intent.getAction().equals(BROADCAST_ACTION))
         DashboardActivity.this.refreshNotifications();
-      }
     }
   }
   //---------------------------------------------------------------------------
@@ -71,16 +71,12 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       finish();
     }
     
-    // Progress Bar
-    mProgressDialog = new ProgressDialog(this);
-    mProgressDialog.setMessage(getString(R.string.dialog_loading));
-    
     // notifications
     mLikesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyLikes);
     mInboxNotify = (TextView)findViewById(R.id.tvDshbrdNotifyChat);
     mRatesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyRates);
 
-    //Buttons
+    // Buttons
     ((Button)findViewById(R.id.btnDshbrdDating)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDshbrdLikes)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDshbrdRates)).setOnClickListener(this);
@@ -88,13 +84,15 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     ((Button)findViewById(R.id.btnDshbrdTops)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDshbrdProfile)).setOnClickListener(this);
     
+    // Progress Bar
+    mProgressDialog = new ProgressDialog(this);
+    mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    
     // is online
     if(!Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }
-
-    update();
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -106,13 +104,13 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       finish();      
     }
     
-    updateNotifications();
-    
     // start broadcaster
     if(mNotificationReceiver == null) {
       mNotificationReceiver = new NotificationReceiver();
       registerReceiver(mNotificationReceiver,new IntentFilter(BROADCAST_ACTION));
     }
+    
+    updateProfile();
     
     System.gc();
   }
@@ -130,48 +128,38 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    System.gc();
-    
     if(mProgressDialog!=null && mProgressDialog.isShowing())
       mProgressDialog.cancel();
     mProgressDialog = null;
     
+    System.gc();
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
-  private void update() {
-    mProgressDialog.show();
-    
+  private void updateProfile() {
     ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
-    profileRequest.part = ProfileRequest.P_DATA;
+    if(!mUpdate) {
+      mProgressDialog.show();
+      profileRequest.part = ProfileRequest.P_DASHBOARD;
+    } else
+      profileRequest.part = ProfileRequest.P_NOTIFICATION;
     profileRequest.callback(new ApiHandler() {
       @Override
       public void success(final ApiResponse response) {
-        CacheProfile.set(Profile.parse(response));
+        if(!mUpdate) {
+          mUpdate = true;
+          CacheProfile.setData(Profile.parse(response));
+          Imager.avatarOwnerPreloading(getApplicationContext());
+        }
+        else
+          CacheProfile.updateNotifications(Profile.parse(response));
         refreshNotifications();
         mProgressDialog.cancel();
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
-        mLikesNotify.setVisibility(View.INVISIBLE);
-        mInboxNotify.setVisibility(View.INVISIBLE);
-        mRatesNotify.setVisibility(View.INVISIBLE);
-      }
-    }).exec();
-  }
-  //---------------------------------------------------------------------------
-  private void updateNotifications() {
-    ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
-    profileRequest.part = ProfileRequest.P_NOTIFICATION;
-    profileRequest.callback(new ApiHandler() {
-      @Override
-      public void success(final ApiResponse response) {
-        CacheProfile.updateNotifications(Profile.parse(response));
-        refreshNotifications();
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
+        mProgressDialog.cancel();
         mLikesNotify.setVisibility(View.INVISIBLE);
         mInboxNotify.setVisibility(View.INVISIBLE);
         mRatesNotify.setVisibility(View.INVISIBLE);
@@ -236,8 +224,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   public boolean onCreatePanelMenu(int featureId, Menu menu) {
     //menu.add(0,MENU_LOG,0,"Log");
-    //menu.add(0,MENU_LEAKS,0,"Leaks");
-    
+    menu.add(0,MENU_LEAKS,0,"Leaks");
     return super.onCreatePanelMenu(featureId, menu);
   }
   //---------------------------------------------------------------------------
@@ -253,4 +240,5 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     }
     return super.onMenuItemSelected(featureId,item);
   }
+  //---------------------------------------------------------------------------
 }

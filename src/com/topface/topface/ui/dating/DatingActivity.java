@@ -1,6 +1,7 @@
 package com.topface.topface.ui.dating;
 
 import java.util.LinkedList;
+import com.topface.topface.Global;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Rate;
@@ -21,6 +22,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -89,7 +91,7 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   protected void onStart() {
     super.onStart();
 
-    if(CacheProfile.filter_sex == 0)
+    if(CacheProfile.dating_sex == 0)
       mHeaderTitle.setText(getString(R.string.dating_header_title_her));
     else
       mHeaderTitle.setText(getString(R.string.dating_header_title_him));
@@ -114,11 +116,11 @@ public class DatingActivity extends Activity implements OnNeedUpdateListener,OnR
   //---------------------------------------------------------------------------
   private void update(final boolean firstQuery) {
     Debug.log(this,"update");
-    
+    SharedPreferences preferences = getSharedPreferences(Global.PROFILE_PREFERENCES_TAG, Context.MODE_PRIVATE);
     SearchRequest request = new SearchRequest(this.getApplicationContext());
     request.limit  = 20;
-    request.geo    = CacheProfile.filter_geo;
-    request.online = CacheProfile.filter_online;
+    request.geo    = preferences.getBoolean(getString(R.string.cache_profile_filter_geo),false);
+    request.online = preferences.getBoolean(getString(R.string.cache_profile_filter_online),false);
     request.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {

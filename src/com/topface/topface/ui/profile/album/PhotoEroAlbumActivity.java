@@ -10,6 +10,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoOpenRequest;
 import com.topface.topface.requests.PhotoVoteRequest;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
 import com.topface.topface.utils.LeaksManager;
@@ -193,7 +194,7 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
         public void success(ApiResponse response) {
           PhotoOpen photoOpen = PhotoOpen.parse(response);
           if(photoOpen.completed) {
-            Data.s_Money = photoOpen.money;
+            CacheProfile.money = photoOpen.money;
             album.buy = true;
             controlVisibility(S_SHOW_LIKE_DISLIKE);
             
@@ -218,7 +219,7 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
   // счетчик галереи
   public void updateCounter() {
     // money
-    mMoney.setText(""+Data.s_Money);
+    mMoney.setText(""+CacheProfile.money);
     mMoney.invalidate();
     // counter
     mCounter.setText((mCurrentPos+1)+"/"+mAlbumsList.size());

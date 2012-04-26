@@ -1,7 +1,7 @@
 package com.topface.topface.ui.dating;
 
-import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.utils.CacheProfile;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -33,7 +33,7 @@ public class ResourcesView extends LinearLayout {
 
     // power
     mPowerTxt = new TextView(context);
-    mPowerTxt.setText(""+Data.s_Power);
+    mPowerTxt.setText(""+CacheProfile.power);
     mPowerTxt.setTextColor(Color.WHITE);
     mPowerTxt.setPadding(0,0,padding,0);
     mPowerTxt.setTypeface(Typeface.DEFAULT_BOLD);
@@ -43,7 +43,7 @@ public class ResourcesView extends LinearLayout {
 
     // money
     mMoneyTxt = new TextView(context);
-    mMoneyTxt.setText(""+Data.s_Money);
+    mMoneyTxt.setText(""+CacheProfile.money);
     mMoneyTxt.setTextColor(Color.WHITE);
     mMoneyTxt.setPadding(0,0,padding,0);
     mMoneyTxt.setTypeface(Typeface.DEFAULT_BOLD);
