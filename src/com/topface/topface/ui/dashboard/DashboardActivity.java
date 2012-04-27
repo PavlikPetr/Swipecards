@@ -11,9 +11,8 @@ import com.topface.topface.ui.LeaksActivity;
 import com.topface.topface.ui.LogActivity;
 import com.topface.topface.ui.dating.DatingActivity;
 import com.topface.topface.ui.inbox.InboxActivity;
-import com.topface.topface.ui.likes.LikesActivity;
+import com.topface.topface.ui.likes2.Likes2Activity;
 import com.topface.topface.ui.profile.ProfileActivity;
-import com.topface.topface.ui.rates.RatesActivity;
 import com.topface.topface.ui.symphaty.SymphatyActivity;
 import com.topface.topface.ui.tops.TopsActivity;
 import com.topface.topface.utils.CacheProfile;
@@ -43,7 +42,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   private boolean mUpdate;
   private TextView mLikesNotify;
   private TextView mInboxNotify;
-  private TextView mRatesNotify;
+  private TextView mSymphatyNotify;
   private NotificationReceiver mNotificationReceiver; 
   private ProgressDialog mProgressDialog;
   // Constants
@@ -75,12 +74,12 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     // notifications
     mLikesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyLikes);
     mInboxNotify = (TextView)findViewById(R.id.tvDshbrdNotifyChat);
-    mRatesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyRates);
+    mSymphatyNotify = (TextView)findViewById(R.id.tvDshbrdNotifySymphaty);
 
     // Buttons
     ((Button)findViewById(R.id.btnDshbrdDating)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDshbrdLikes)).setOnClickListener(this);
-    ((Button)findViewById(R.id.btnDshbrdRates)).setOnClickListener(this);
+    ((Button)findViewById(R.id.btnDshbrdSymphaty)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDshbrdChat)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDshbrdTops)).setOnClickListener(this);
     ((Button)findViewById(R.id.btnDshbrdProfile)).setOnClickListener(this);
@@ -164,7 +163,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         mProgressDialog.cancel();
         mLikesNotify.setVisibility(View.INVISIBLE);
         mInboxNotify.setVisibility(View.INVISIBLE);
-        mRatesNotify.setVisibility(View.INVISIBLE);
+        mSymphatyNotify.setVisibility(View.INVISIBLE);
       }
     }).exec();
   }
@@ -183,10 +182,10 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       mInboxNotify.setVisibility(View.INVISIBLE);
     
     if(CacheProfile.unread_rates > 0) {
-      mRatesNotify.setText(" "+CacheProfile.unread_rates+" ");
-      mRatesNotify.setVisibility(View.VISIBLE);
+      mSymphatyNotify.setText(" "+CacheProfile.unread_rates+" ");
+      mSymphatyNotify.setVisibility(View.VISIBLE);
     } else
-      mRatesNotify.setVisibility(View.INVISIBLE);
+      mSymphatyNotify.setVisibility(View.INVISIBLE);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -201,9 +200,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         startActivity(new Intent(this.getApplicationContext(),DatingActivity.class));
       } break;
       case R.id.btnDshbrdLikes: {
-        startActivity(new Intent(this.getApplicationContext(),LikesActivity.class));
+        startActivity(new Intent(this.getApplicationContext(),Likes2Activity.class));
       } break;
-      case R.id.btnDshbrdRates: {
+      case R.id.btnDshbrdSymphaty: {
         //startActivity(new Intent(this.getApplicationContext(),RatesActivity.class));
         startActivity(new Intent(this.getApplicationContext(),SymphatyActivity.class));
       } break;

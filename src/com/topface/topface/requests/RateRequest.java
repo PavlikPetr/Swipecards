@@ -10,7 +10,7 @@ public class RateRequest extends ApiRequest {
   private String service = "rate";
   public  int userid;   // идентификатор пользователя для оценки
   public  int rate;     // оценка пользователя. ОДЗ: 1 <= RATE <= 10
-  public  int mutualId; // идентификатор сообщения из ленты, на который отправляется взаимная симпатия
+  public  int mutualid; // идентификатор сообщения из ленты, на который отправляется взаимная симпатия
   //---------------------------------------------------------------------------
   public RateRequest(Context context) {
     super(context);
@@ -24,7 +24,7 @@ public class RateRequest extends ApiRequest {
       root.put("ssid",ssid);
       root.put("data",new JSONObject().put("userid",userid)
                                       .put("rate",rate)
-                                      .put("mutualId",mutualId));
+                                      .put("mutualid",mutualid));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }

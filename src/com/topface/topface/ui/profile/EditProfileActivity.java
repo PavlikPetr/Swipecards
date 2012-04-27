@@ -1,6 +1,5 @@
 package com.topface.topface.ui.profile;
 
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;

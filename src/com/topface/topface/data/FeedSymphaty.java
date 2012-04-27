@@ -64,4 +64,14 @@ public class FeedSymphaty extends AbstractData {
     return symphatyList;
   }
   //---------------------------------------------------------------------------
+  @Override
+  public String getBigLink() {
+    return avatars_big;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public String getSmallLink() {
+    return avatars_small;
+  }
+  //---------------------------------------------------------------------------
 }

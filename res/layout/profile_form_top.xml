@@ -117,6 +117,27 @@
 			          android:drawableLeft="@drawable/profile_logout"
 			          android:drawablePadding="4dp" />
 			      </FrameLayout>
+			      
+			      <!-- Mutual Button -->
+            <FrameLayout 
+               android:id="@+id/btnProfileMutual"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" 
+               android:layout_marginTop="10dp"
+               android:visibility="gone"
+               android:background="@drawable/profile_btn_selector" >
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:textColor="#303030"
+                android:textSize="12sp"
+                android:text="@string/profile_btn_mutual"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/profile_mutual"
+                android:drawablePadding="4dp" />
+            </FrameLayout>
 			    </LinearLayout>
 		    
 		    </TableRow>

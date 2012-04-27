@@ -16,7 +16,7 @@
   <!-- Dashboard Activity -->
   <string name="dashbrd_btn_dating">Оценка фото</string>
   <string name="dashbrd_btn_likes">Я нравлюсь</string>
-  <string name="dashbrd_btn_rates">Меня оценили</string>
+  <string name="dashbrd_btn_sympahty">Взаимно</string>
   <string name="dashbrd_btn_chats">Диалоги</string>
   <string name="dashbrd_btn_tops">Топы</string>
   <string name="dashbrd_btn_profile">Профиль</string>
@@ -51,6 +51,7 @@
   <string name="profile_btn_add">Добавить</string>
   <string name="profile_btn_buy">Купить</string>
   <string name="profile_btn_exit">Выйти</string>
+  <string name="profile_btn_mutual">Взаимно</string>
   <string name="profile_sex_boy">Парень</string>
   <string name="profile_sex_girl">Девушка</string>
   <string name="profile_form">Анкета</string>
@@ -112,6 +113,11 @@
   <string name="likes_header_title">Я нравлюсь</string>
   <string name="likes_btn_dbl_left">Все</string>
   <string name="likes_btn_dbl_right">Непрочитанные</string>
+  
+  <!-- Symphaty Activity -->
+  <string name="symphaty_header_title">Взаимно</string>
+  <string name="symphaty_btn_dbl_left">Все</string>
+  <string name="symphaty_btn_dbl_right">Непрочитанные</string>
   
   <!-- Rates Activity -->
   <string name="rates_header_title">Мои оценки</string>

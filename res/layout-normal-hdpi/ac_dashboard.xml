@@ -12,20 +12,10 @@
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/logo" />
-
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_below="@id/ivLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:text="@string/social_title"
-        android:textSize="12sp" />
     
     <!-- 1 -->    <LinearLayout
           android:id="@+id/loDshbrdL1"
-          android:layout_below="@id/tvTitle"
+          android:layout_below="@id/ivLogo"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerHorizontal="true"
@@ -89,28 +79,28 @@
           android:layout_centerHorizontal="true"
           android:orientation="horizontal" >
       
-      <!-- Rates -->
+      <!-- Symphaty -->
       <RelativeLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" >
 
           <Button
-              android:id="@+id/btnDshbrdRates"
+              android:id="@+id/btnDshbrdSymphaty"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:paddingBottom="10dp"
               android:textColor="#FFFFFF"
               android:gravity="bottom|center_horizontal"
-              android:text="@string/dashbrd_btn_rates"
+              android:text="@string/dashbrd_btn_sympahty"
               android:textSize="12sp"
-              android:background="@drawable/dashbrd_rates_selector" />
+              android:background="@drawable/dashbrd_mutual_selector" />
 
           <TextView
-              android:id="@+id/tvDshbrdNotifyRates"
+              android:id="@+id/tvDshbrdNotifySymphaty"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_alignParentTop="true"
-              android:layout_alignRight="@id/btnDshbrdRates"
+              android:layout_alignRight="@id/btnDshbrdSymphaty"
               android:background="@drawable/im_informer"
               android:gravity="center"
               android:visibility="invisible"

@@ -6,11 +6,16 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +23,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
 
@@ -29,7 +35,7 @@ public class Http {
   private static final String TAG = "Http"; 
   private static final int HTTP_GET_REQUEST  = 0;
   private static final int HTTP_POST_REQUEST = 1;
-  private static final int HTTP_TIMEOUT = 5*1000;
+  private static final int HTTP_TIMEOUT = 6*1000;
   //---------------------------------------------------------------------------
   // Проверка на наличие интернета
   public static boolean isOnline(Context context) {
@@ -43,12 +49,12 @@ public class Http {
   //---------------------------------------------------------------------------
   //  Get запрос
   public static String httpGetRequest(String request) {
-    return httpRequest(HTTP_GET_REQUEST,request,null,null,null,false);
+    return httpRequest(HTTP_GET_REQUEST,request,null,null,null);
   }
   //---------------------------------------------------------------------------
   //  Post запрос
   public static String httpPostRequest(String request,String postParams) {
-    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,null,false);
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,null);
   }
   //---------------------------------------------------------------------------
   //  запрос к TopFace API
@@ -57,54 +63,60 @@ public class Http {
     if(Data.s_LogList!=null)
       Data.s_LogList.add("   [REQ]: "+postParams);  // JSON LOG   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     */
-    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,null,true);
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,null);
   }
   //---------------------------------------------------------------------------
   // загрузка фото в соц сеть, массив данных
   public static String httpPostDataRequest(String request, String postParams, byte[] dataParams) {
-    return httpRequest(HTTP_POST_REQUEST,request,postParams,dataParams,null,false);
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,dataParams,null);
   }
   //---------------------------------------------------------------------------
   // загрузка фото в соц сеть, потоком
   public static String httpPostDataRequest(String request, String postParams, InputStream is) {
-    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,is,false);
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,is);
   }
   //---------------------------------------------------------------------------
-  private static String httpRequest(int typeRequest, String request,String postParams,byte[] dataParams,InputStream is,boolean isJson) {
-    
-    Debug.log(TAG,"req:"+postParams);   // REQUEST
+  private static String httpRequest(int typeRequest, String request,String postParams,byte[] dataParams,InputStream is) {
     
     String response = null;
     HttpURLConnection httpConnection = null;
     BufferedReader buffReader = null;
+    InputStream in = null;
+    OutputStream out = null;
+    byte[] buff = null;
     try {
       // запрос
       httpConnection = (HttpURLConnection)new URL(request).openConnection();
       httpConnection.setUseCaches(false);
       httpConnection.setConnectTimeout(HTTP_TIMEOUT);
       httpConnection.setReadTimeout(HTTP_TIMEOUT);
+      httpConnection.setRequestMethod("POST");
+      httpConnection.setDoOutput(true);
+      httpConnection.setDoInput(true);
+      httpConnection.setRequestProperty("Content-Type", "application/json");
+      httpConnection.setRequestProperty("Connection", "Keep-Alive");
       
-      // опция для запроса на TopFace API сервер
-      if(isJson)
-        httpConnection.setRequestProperty("Content-Type", "application/json");
+      httpConnection.connect();
       
+      Debug.log(TAG,"req:"+postParams);   // REQUEST
+
       // отправляем post параметры
       if(typeRequest == HTTP_POST_REQUEST && postParams != null) {
-        httpConnection.setRequestMethod("POST");
-        httpConnection.setDoOutput(true);
-        OutputStreamWriter osw = new OutputStreamWriter(httpConnection.getOutputStream());
-        osw.write(postParams);
-        osw.flush();
-        osw.close();
+        Debug.log(TAG,"111:");   // REQUEST
+        out  = httpConnection.getOutputStream();
+        buff = postParams.getBytes("UTF8");
+        out.write(buff);
+        out.flush();
+        out.close();
+        Debug.log(TAG,"222:");   // REQUEST
       }
+      in = httpConnection.getInputStream();
       
-     // отправляем data параметры
+     // отправляем dataParams параметры
       if(typeRequest == HTTP_POST_REQUEST && dataParams != null) {
         String lineEnd    = "\r\n";
         String twoHyphens = "--";
         String boundary   = "0xKhTmLbOuNdArY";
-        httpConnection.setRequestMethod("POST");
-        httpConnection.setDoOutput(true);
         httpConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
         DataOutputStream dos = new DataOutputStream(httpConnection.getOutputStream());
         dos.writeBytes(twoHyphens + boundary + lineEnd);
@@ -116,37 +128,37 @@ public class Http {
         dos.close();
       }
       
+      
       // отправляем inputStream
       if(typeRequest == HTTP_POST_REQUEST && is != null) {
         String lineEnd    = "\r\n";
         String twoHyphens = "--";
         String boundary   = "0xKhTmLbOuNdArY";
-        httpConnection.setRequestMethod("POST");
-        httpConnection.setDoOutput(true);
         httpConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
         DataOutputStream dos = new DataOutputStream(httpConnection.getOutputStream());
         dos.writeBytes(twoHyphens + boundary + lineEnd);
         dos.writeBytes("Content-Disposition: form-data; name=\"photo\";filename=\"photo.jpg\"" + lineEnd);
         dos.writeBytes("Content-Type: image/jpg" + lineEnd + lineEnd);
         BufferedInputStream bis = new BufferedInputStream(is);
-        byte[] buff = new byte[1024];
-        while(bis.read(buff) > 0) {
-          dos.write(buff); 
+        byte[] buffer = new byte[1024];
+        while(bis.read(buffer) > 0) {
+          dos.write(buffer); 
         }
         dos.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
         dos.flush();
         dos.close();
       }
-      
+
       // проверяет код ответа сервера
       int responseCode = httpConnection.getResponseCode();
       if(responseCode != HttpURLConnection.HTTP_OK) {
         Debug.log(TAG,"server response code:" + responseCode);
+        if(httpConnection!=null) httpConnection.disconnect();
         return null;
       }
 
       // чтение ответа
-      buffReader = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
+      buffReader = new BufferedReader(new InputStreamReader(in));
       
       StringBuilder responseBuilder = new StringBuilder();
       String line;
@@ -161,22 +173,37 @@ public class Http {
         Data.s_LogList.add("   [RESP]: "+response);
       */
     
-    } catch(SocketTimeoutException e) {
-      Debug.log(TAG,"socket timeout:" + postParams);
-    } catch(IOException e) {
-      Debug.log(TAG,"io exception:" + e);
     } catch(Exception e) {
       Debug.log(TAG,"http exception:" + e);
     } finally {
       try {
+        Debug.log(TAG,"disconnect");
         if(buffReader!=null) buffReader.close();
         if(httpConnection!=null) httpConnection.disconnect();
       } catch(Exception e) {
-        Debug.log(TAG,"error:" + e);
+        Debug.log(TAG,"http error:" + e);
       }
-      
       Debug.log(TAG,"resp:" + response);   // RESPONSE
     }
+    return response;
+  }
+//---------------------------------------------------------------------------
+  public static String httpTPRequest(String request,String postParams) {
+    String response = null;
+    Debug.log(TAG,"tp_req:"+postParams);   // REQUEST
+    try {
+      HttpClient httpClient = new DefaultHttpClient();
+      HttpPost   httpPost   = new HttpPost(request);
+      httpPost.addHeader("Content-Type","application/json");
+      httpPost.setEntity(new StringEntity(postParams));
+      HttpResponse httpResponse = httpClient.execute(httpPost);
+      BasicResponseHandler handler = new BasicResponseHandler();
+      response = handler.handleResponse(httpResponse);
+    } catch(Exception e) {
+      Log.d(TAG,"Service::request: " + e);
+    }
+    
+    Debug.log(TAG,"tp_resp:" + response);   // RESPONSE
     return response;
   }
   //---------------------------------------------------------------------------
@@ -209,21 +236,17 @@ public class Http {
 
       bitmap = BitmapFactory.decodeStream(buffInputStream,null,new BitmapFactory.Options());
       
-      buffInputStream.close();
-      httpConnection.disconnect();      
     } catch(MalformedURLException e) {
       Debug.log(TAG,"url is wrong:" + e);
     } catch(IOException e) {
       Debug.log(TAG,"io is fail #1:" + e);
     } finally {
       try {
-        if(buffInputStream!=null)
-          buffInputStream.close();
+        if(buffInputStream!=null) buffInputStream.close();
+        if(httpConnection!=null) httpConnection.disconnect();
       } catch(IOException e) {
         Debug.log(TAG,"io is fail #2:" + e);
       }
-      if(httpConnection!=null)
-        httpConnection.disconnect();
     }
     
     Debug.log(TAG,"bitmap loading");

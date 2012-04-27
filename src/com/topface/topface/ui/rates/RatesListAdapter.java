@@ -1,6 +1,5 @@
 package com.topface.topface.ui.rates;
 
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedRate;
 import com.topface.topface.ui.AvatarManager;

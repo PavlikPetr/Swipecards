@@ -17,7 +17,7 @@ public abstract class ApiRequest {
   public String ssid;  // volatile ?
   private Context mContext;
   private ApiHandler mHandler;
-  private static int LOOP = 5;
+  private static int LOOP = 3;
   //---------------------------------------------------------------------------
   public ApiRequest(Context context) {
     ssid = "";
@@ -45,6 +45,7 @@ public abstract class ApiRequest {
         
         do {
           rawResponse = Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString());
+          //rawResponse = Http.httpTPRequest(Global.API_URL,ApiRequest.this.toString());
           
           if(rawResponse==null)
             Debug.log(App.TAG,"loop:"+counter);

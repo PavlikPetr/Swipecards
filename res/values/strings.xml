@@ -16,7 +16,7 @@
   <!-- Dashboard Activity -->
   <string name="dashbrd_btn_dating">Rating photos</string>
   <string name="dashbrd_btn_likes">Likes you</string>
-  <string name="dashbrd_btn_rates">Feed</string>
+  <string name="dashbrd_btn_sympahty">Mutual</string>
   <string name="dashbrd_btn_chats">My messages</string>
   <string name="dashbrd_btn_tops">Most popular</string>
   <string name="dashbrd_btn_profile">Profile</string>
@@ -51,6 +51,7 @@
   <string name="profile_btn_add">Add</string>
   <string name="profile_btn_buy">Buy coins/energy</string>
   <string name="profile_btn_exit">Logout</string>
+  <string name="profile_btn_mutual">Mutual</string>
   <string name="profile_sex_boy">Male</string>
   <string name="profile_sex_girl">Female</string>
   <string name="profile_form">Questionnaire</string>
@@ -112,6 +113,11 @@
   <string name="likes_header_title">Likes you</string>
   <string name="likes_btn_dbl_left">All</string>
   <string name="likes_btn_dbl_right">Unread</string>
+  
+  <!-- Symphaty Activity -->
+  <string name="symphaty_header_title">Mutual</string>
+  <string name="symphaty_btn_dbl_left">All</string>
+  <string name="symphaty_btn_dbl_right">Unread</string>
   
   <!-- Rates Activity -->
   <string name="rates_header_title">Feed</string>

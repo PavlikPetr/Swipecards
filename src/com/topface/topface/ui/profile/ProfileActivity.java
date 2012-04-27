@@ -9,6 +9,7 @@ import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Album;
 import com.topface.topface.data.PhotoAdd;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.Rate;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiHandler;
@@ -16,6 +17,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.social.Socium;
 import com.topface.topface.social.Socium.AuthException;
@@ -35,7 +37,6 @@ import com.topface.topface.utils.Imager;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -56,10 +57,12 @@ import android.widget.Toast;
 public class ProfileActivity extends Activity{
   // Data
   private int mUserId;
+  private int mMutualId;
   private boolean mIsOwner;
   private boolean mAddEroState;
   private boolean mChatInvoke;
   private Button mProfileButton;
+  private View mMutualButton;
   private TextView mHeaderTitle;
   private ViewGroup mEroViewGroup;
   private ResourcesView mResources;
@@ -97,6 +100,7 @@ public class ProfileActivity extends Activity{
   private ImageView mEGR;
   //Constants
   public static final String INTENT_USER_ID = "user_id";
+  public static final String INTENT_MUTUAL_ID = "mutual_id";
   public static final String INTENT_USER_NAME = "user_name";
   public static final String INTENT_CHAT_INVOKE = "chat_invoke";
   public static final int FORM_TOP = 0;
@@ -139,6 +143,7 @@ public class ProfileActivity extends Activity{
     { // Params
       mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE,false); // пришли из чата    
       mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1); // свой - чужой профиль
+      mMutualId = getIntent().getIntExtra(INTENT_MUTUAL_ID,-1);
       String name = getIntent().getStringExtra(INTENT_USER_NAME); // name
       if(name!=null)
         mHeaderTitle.setText(name);  // пришли из likes, rates, chat
@@ -172,6 +177,10 @@ public class ProfileActivity extends Activity{
       View btnChat = findViewById(R.id.btnProfileChat);
       btnChat.setVisibility(View.VISIBLE);
       btnChat.setOnClickListener(mOnClickListener);
+      
+      // Mutual button
+      mMutualButton = findViewById(R.id.btnProfileMutual);
+      mMutualButton.setOnClickListener(mOnClickListener);
     }
     
     // Gallary and Adapter
@@ -225,10 +234,13 @@ public class ProfileActivity extends Activity{
   // получение фото из галереи и отправка на сервер
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-    if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK)
+    if(requestCode == EDITOR_ACTIVITY_REQUEST_CODE/* && resultCode == RESULT_OK*/) {
       getOwnerProfile(CacheProfile.getProfile());
-    if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK)
-      updateOwnerAlbum();
+      //getOwnerAlbum();
+    }
+    if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE/* && resultCode == RESULT_OK*/)
+      if(mIsOwner)
+        updateOwnerAlbum();
     if(requestCode == GALLARY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
       Uri imageUri = data != null ? data.getData() : null;
       if(imageUri==null)
@@ -255,6 +267,8 @@ public class ProfileActivity extends Activity{
         @Override
         public void success(final ApiResponse response) {
           getOwnerProfile(Profile.parse(response));
+          getOwnerAlbum();
+          updateOwnerAlbum();
           //mProgressDialog.cancel();
         }
         @Override
@@ -288,7 +302,7 @@ public class ProfileActivity extends Activity{
       mMarriage.setText(getString(R.string.profile_marriage_female));
     
     Http.imageLoader(CacheProfile.avatar_big,mFramePhoto);
-    getOwnerAlbum();
+    //getOwnerAlbum();
     
     mFramePhoto.mOnlineState = true;
     
@@ -329,6 +343,9 @@ public class ProfileActivity extends Activity{
   private void getUserProfile(User profile) {
     Http.imageLoader(profile.getBigLink(),mFramePhoto);
     getUserAlbum();
+    
+    if(!profile.mutual)
+      mMutualButton.setVisibility(View.VISIBLE);
     
     mHeaderTitle.setText(profile.first_name);
     mUserAvatarUrl=profile.avatars_small;
@@ -714,6 +731,26 @@ public class ProfileActivity extends Activity{
           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
           startActivity(intent);
           finish();
+        } break;
+        case R.id.btnProfileMutual: {
+          mMutualButton.setVisibility(View.INVISIBLE);
+          RateRequest doRate = new RateRequest(getApplicationContext());
+          doRate.userid   = mUserId;
+          doRate.mutualid = mMutualId;
+          doRate.rate     = 9;
+          doRate.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+              Rate rate = Rate.parse(response);
+              CacheProfile.power = rate.power;
+              CacheProfile.money = rate.money;
+              CacheProfile.average_rate = rate.average;
+            }
+            @Override
+            public void fail(int codeError,ApiResponse response) {
+              //
+            }
+          }).exec();
         } break;
         case R.id.btnProfileBuying: {
           startActivity(new Intent(getApplicationContext(),BuyingActivity.class));

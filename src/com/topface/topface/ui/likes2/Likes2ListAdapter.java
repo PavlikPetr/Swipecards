@@ -1,7 +1,7 @@
-package com.topface.topface.ui.symphaty;
+package com.topface.topface.ui.likes2;
 
 import com.topface.topface.R;
-import com.topface.topface.data.FeedSymphaty;
+import com.topface.topface.data.FeedLike;
 import com.topface.topface.ui.AvatarManager;
 import com.topface.topface.ui.RoundedImageView;
 import com.topface.topface.utils.CacheProfile;
@@ -14,7 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SymphatyListAdapter extends BaseAdapter {
+public class Likes2ListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
@@ -28,17 +28,16 @@ public class SymphatyListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // Data
   private LayoutInflater mInflater;
-  private AvatarManager<FeedSymphaty> mAvatarManager;
+  private AvatarManager<FeedLike> mAvatarManager;
   private int mOwnerCityID;
   // Constants
   private static final int T_ALL   = 0;
   private static final int T_CITY  = 1;
   private static final int T_COUNT = 2;
   //---------------------------------------------------------------------------
-  public SymphatyListAdapter(Context context,AvatarManager<FeedSymphaty> avatarManager) {
+  public Likes2ListAdapter(Context context,AvatarManager<FeedLike> avatarManager) {
     mAvatarManager = avatarManager;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    //mInflater = LayoutInflater.from(context);
     mOwnerCityID = CacheProfile.city_id;
   }
   //---------------------------------------------------------------------------
@@ -48,7 +47,7 @@ public class SymphatyListAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   @Override
-  public FeedSymphaty getItem(int position) {
+  public FeedLike getItem(int position) {
     return mAvatarManager.get(position);
   }
   //---------------------------------------------------------------------------
@@ -76,12 +75,12 @@ public class SymphatyListAdapter extends BaseAdapter {
     if(convertView==null) {
       holder = new ViewHolder();
       
-      convertView = mInflater.inflate(R.layout.item_symphaty_gallery, null, false);
+      convertView = mInflater.inflate(R.layout.item_likes2_gallery, null, false);
       
       holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.ivAvatar);
       holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
       holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);
-      holder.mHeart  = (ImageView)convertView.findViewById(R.id.ivArrow);
+      holder.mHeart  = (ImageView)convertView.findViewById(R.id.ivHeart);
       holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
       
       switch(type) {
@@ -97,12 +96,15 @@ public class SymphatyListAdapter extends BaseAdapter {
     } else
       holder = (ViewHolder)convertView.getTag();
     
+
     mAvatarManager.getImage(position,holder.mAvatar);
 
-    FeedSymphaty symphaty = getItem(position);
-    holder.mName.setText(symphaty.first_name+" "+symphaty.age+", "+symphaty.city_name);
-    Utils.formatTime(holder.mTime,symphaty.created);
+    FeedLike likes = getItem(position);
+    holder.mName.setText(likes.first_name+", "+likes.age);
+    Utils.formatTime(holder.mTime,likes.created);
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
+    if(likes.rate==10)
+      holder.mHeart.setImageResource(R.drawable.mutual_heart_top);
     
     return convertView;
   }

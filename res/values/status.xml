@@ -89,7 +89,7 @@
     <string name="profile_form_character_male_4">Soft</string>
     <string name="profile_form_character_male_5">Calm</string>
     <string name="profile_form_character_male_6">Uneasy</string>
-    <string name="profile_form_character_male_7">Noone complained</string>
+    <string name="profile_form_character_male_7">None complained</string>
 
     <string name="profile_form_character_female_1">Easy going</string>
     <string name="profile_form_character_female_2">Bad tempered</string>
@@ -97,7 +97,7 @@
     <string name="profile_form_character_female_4">Soft</string>
     <string name="profile_form_character_female_5">Calm</string>
     <string name="profile_form_character_female_6">Uneasy</string>
-    <string name="profile_form_character_female_7">Noone complained</string>
+    <string name="profile_form_character_female_7">None complained</string>
     
     <string-array name="profile_form_character_male">
         <item>Easy going</item>
@@ -106,7 +106,7 @@
         <item>Soft</item>
         <item>Calm</item>
         <item>Uneasy</item>
-        <item>Noone complained</item>
+        <item>None complained</item>
     </string-array>
     
     <string-array name="profile_form_character_female">
@@ -116,7 +116,7 @@
         <item>Soft</item>
         <item>Calm</item>
         <item>Uneasy</item>
-        <item>Noone complained</item>
+        <item>None complained</item>
     </string-array>
     
     <string-array name="profile_form_character_values">

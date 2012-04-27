@@ -1,13 +1,13 @@
-package com.topface.topface.ui.symphaty;
+package com.topface.topface.ui.likes2;
 
 import java.util.LinkedList;
 import com.topface.topface.R;
-import com.topface.topface.data.FeedSymphaty;
+import com.topface.topface.data.FeedLike;
 import com.topface.topface.p2r.PullToRefreshListView;
 import com.topface.topface.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.FeedSymphatyRequest;
+import com.topface.topface.requests.FeedLikesRequest;
 import com.topface.topface.ui.AvatarManager;
 import com.topface.topface.ui.DoubleBigButton;
 import com.topface.topface.ui.profile.ProfileActivity;
@@ -26,13 +26,13 @@ import android.widget.AdapterView.OnItemClickListener;
 /*
  *     "Симпатии"
  */
-public class SymphatyActivity extends Activity {
+public class Likes2Activity extends Activity {
   // Data
   private boolean mOnlyNewData;
   private PullToRefreshListView mListView;
-  private SymphatyListAdapter mAdapter;
-  private LinkedList<FeedSymphaty> mSymphatyDataList;
-  private AvatarManager<FeedSymphaty> mAvatarManager;
+  private Likes2ListAdapter mAdapter;
+  private LinkedList<FeedLike> mLikesDataList;
+  private AvatarManager<FeedLike> mAvatarManager;
   private ProgressDialog mProgressDialog;
   private DoubleBigButton mDoubleButton;
   // Constants
@@ -41,21 +41,21 @@ public class SymphatyActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.ac_symphaty);
+    setContentView(R.layout.ac_likes2);
     Debug.log(this,"+onCreate");
     
     LeaksManager.getInstance().monitorObject(this);
     
     // Data
-    mSymphatyDataList = new LinkedList<FeedSymphaty>();
+    mLikesDataList = new LinkedList<FeedLike>();
     
     // Title Header
-   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.symphaty_header_title));
+   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.likes_header_title));
    
    // Double Button
    mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
-   mDoubleButton.setLeftText(getString(R.string.symphaty_btn_dbl_left));
-   mDoubleButton.setRightText(getString(R.string.symphaty_btn_dbl_right));
+   mDoubleButton.setLeftText(getString(R.string.likes_btn_dbl_left));
+   mDoubleButton.setRightText(getString(R.string.likes_btn_dbl_right));
    mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
    mDoubleButton.setLeftListener(new View.OnClickListener() {
      @Override
@@ -73,13 +73,14 @@ public class SymphatyActivity extends Activity {
    });
 
    // ListView
-   mListView = (PullToRefreshListView)findViewById(R.id.lvSymphatyList);
+   mListView = (PullToRefreshListView)findViewById(R.id.lvLikes2List);
    mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       Intent intent = new Intent(SymphatyActivity.this.getApplicationContext(),ProfileActivity.class);
-       intent.putExtra(ProfileActivity.INTENT_USER_ID,mSymphatyDataList.get(position).uid);
-       intent.putExtra(ProfileActivity.INTENT_USER_NAME,mSymphatyDataList.get(position).first_name);
+       Intent intent = new Intent(Likes2Activity.this.getApplicationContext(),ProfileActivity.class);
+       intent.putExtra(ProfileActivity.INTENT_USER_ID,mLikesDataList.get(position).uid);
+       intent.putExtra(ProfileActivity.INTENT_USER_NAME,mLikesDataList.get(position).first_name);
+       intent.putExtra(ProfileActivity.INTENT_MUTUAL_ID,mLikesDataList.get(position).id);
        startActivityForResult(intent,0);
      }
    });
@@ -122,8 +123,8 @@ public class SymphatyActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void create() {
-    mAvatarManager = new AvatarManager<FeedSymphaty>(this,mSymphatyDataList);
-    mAdapter = new SymphatyListAdapter(getApplicationContext(),mAvatarManager);
+    mAvatarManager = new AvatarManager<FeedLike>(this,mLikesDataList);
+    mAdapter = new Likes2ListAdapter(getApplicationContext(),mAvatarManager);
     mListView.setOnScrollListener(mAvatarManager);
     mListView.setAdapter(mAdapter);
   }
@@ -132,16 +133,16 @@ public class SymphatyActivity extends Activity {
     if(isProgress)
       mProgressDialog.show();
 
-    FeedSymphatyRequest symphatyRequest = new FeedSymphatyRequest(getApplicationContext());
-    symphatyRequest.limit = LIMIT;
-    symphatyRequest.only_new = mOnlyNewData;
-    symphatyRequest.callback(new ApiHandler(){
+    FeedLikesRequest likesRequest = new FeedLikesRequest(getApplicationContext());
+    likesRequest.limit = LIMIT;
+    likesRequest.only_new = mOnlyNewData;
+    likesRequest.callback(new ApiHandler(){
       @Override
       public void success(ApiResponse response) {
         mDoubleButton.setChecked(mOnlyNewData?DoubleBigButton.RIGHT_BUTTON:DoubleBigButton.LEFT_BUTTON);
-        mSymphatyDataList.clear();
-        mSymphatyDataList = FeedSymphaty.parse(response);
-        mAvatarManager.setDataList(mSymphatyDataList);
+        mLikesDataList.clear();
+        mLikesDataList = FeedLike.parse(response);
+        mAvatarManager.setDataList(mLikesDataList);
         mAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();
         mListView.onRefreshComplete();
@@ -161,7 +162,7 @@ public class SymphatyActivity extends Activity {
       mAdapter.release();
     mAdapter = null;
     
-    mSymphatyDataList=null;
+    mLikesDataList=null;
     
     if(mAvatarManager!=null) {
       mAvatarManager.release();

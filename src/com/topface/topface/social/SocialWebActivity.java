@@ -68,6 +68,7 @@ public class SocialWebActivity extends Activity {
     @Override
     public void handleMessage(Message msg) {
       if(msg.what==AuthToken.AUTH_COMPLETE) {
+        mProgressBar.setVisibility(View.VISIBLE);
         // отправка токена на TP сервер
         AuthToken.Token token   = (AuthToken.Token)msg.obj;
         AuthRequest authRequest = new AuthRequest(SocialWebActivity.this);
@@ -83,10 +84,12 @@ public class SocialWebActivity extends Activity {
             Auth auth = Auth.parse(response);
             App.saveSSID(getApplicationContext(),auth.ssid);
             setResult(Activity.RESULT_OK);
+            mProgressBar.setVisibility(View.GONE);
             finish();
           }
           @Override
           public void fail(int codeError,ApiResponse response) {
+            mProgressBar.setVisibility(View.GONE);
             Debug.log(SocialWebActivity.this,"ssid is wrong");
             setResult(Activity.RESULT_CANCELED);
             finish();
