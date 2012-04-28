@@ -2,7 +2,6 @@ package com.topface.topface.ui;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import com.topface.topface.App;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
@@ -83,7 +82,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
           mCache.put(position,roundBitmap);
 
         } catch (Exception e) {
-          Debug.log(App.TAG,"thread error:"+e);
+          Debug.log(this,"thread error:"+e);
         } finally {
           if(rawBitmap!=null)
             rawBitmap.recycle();

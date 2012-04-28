@@ -19,6 +19,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -26,7 +28,7 @@ import android.widget.AdapterView.OnItemClickListener;
 /*
  *     "Симпатии"
  */
-public class Likes2Activity extends Activity {
+public class Likes2Activity extends Activity implements OnScrollListener {
   // Data
   private boolean mOnlyNewData;
   private PullToRefreshListView mListView;
@@ -90,18 +92,19 @@ public class Likes2Activity extends Activity {
        update(false);
      }
    });
+   mListView.setOnScrollListener(this);
    
    // Progress Bar
    mProgressDialog = new ProgressDialog(this);
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
 
-   mOnlyNewData = CacheProfile.unread_rates > 0 ? true : false;
+   mOnlyNewData = CacheProfile.unread_likes > 0 ? true : false;
    
    create();
    update(true);
    
    // обнуление информера непросмотренных оценок
-   CacheProfile.unread_rates = 0;
+   CacheProfile.unread_likes = 0;
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -170,6 +173,20 @@ public class Likes2Activity extends Activity {
     }
     
     mProgressDialog=null;
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
+//    if(!isScrolled) {
+//      startPosition = firstVisibleItem;
+//      endPosition   = startPosition + 10; 
+//    }
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  public void onScrollStateChanged(AbsListView view,int scrollState) {
+    //isScrolled = (scrollState==SCROLL_STATE_IDLE) ? false : true;
+    //Debug.log(this,"state : " + isScrolled);
   }
   //---------------------------------------------------------------------------
 }

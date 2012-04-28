@@ -21,7 +21,6 @@ import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.social.Socium;
 import com.topface.topface.social.Socium.AuthException;
-import com.topface.topface.ui.MainActivity;
 import com.topface.topface.ui.dating.ResourcesView;
 import com.topface.topface.ui.inbox.ChatActivity;
 import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
@@ -727,9 +726,6 @@ public class ProfileActivity extends Activity{
         } break;
         case R.id.btnProfileExit: {
           App.removeSSID(getApplicationContext());
-          Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-          startActivity(intent);
           finish();
         } break;
         case R.id.btnProfileMutual: {

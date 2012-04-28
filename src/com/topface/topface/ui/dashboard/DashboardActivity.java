@@ -1,6 +1,7 @@
 package com.topface.topface.ui.dashboard;
 
 import com.topface.topface.App;
+import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
@@ -43,8 +44,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   private TextView mLikesNotify;
   private TextView mInboxNotify;
   private TextView mSymphatyNotify;
-  private NotificationReceiver mNotificationReceiver; 
   private ProgressDialog mProgressDialog;
+  private NotificationReceiver mNotificationReceiver; 
   // Constants
   public static final String BROADCAST_ACTION = "com.topface.topface.DASHBOARD_NOTIFICATION";
   //---------------------------------------------------------------------------
@@ -66,11 +67,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     
     LeaksManager.getInstance().monitorObject(this);
     
-    if(!App.init && App.SSID==null || App.SSID.length()==0) {
-      startActivity(new Intent(getApplicationContext(),SocialActivity.class));
-      finish();
-    }
-    
     // notifications
     mLikesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyLikes);
     mInboxNotify = (TextView)findViewById(R.id.tvDshbrdNotifyChat);
@@ -89,19 +85,20 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
     // is online
-    if(!Http.isOnline(this)){
+    if(!Http.isOnline(this))
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
-      return;
-    }
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStart() {
     super.onStart();
     
-    if(App.SSID==null && App.SSID.length()>0) {
+    if(!App.init && App.SSID==null || App.SSID.length()==0) {
       startActivity(new Intent(getApplicationContext(),SocialActivity.class));
-      finish();      
+      Data.s_OwnerAvatar = null;
+      Data.s_UserAvatar  = null;
+      finish();
+      return;
     }
     
     // start broadcaster
@@ -148,9 +145,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       @Override
       public void success(final ApiResponse response) {
         if(!mUpdate) {
-          mUpdate = true;
           CacheProfile.setData(Profile.parse(response));
           Imager.avatarOwnerPreloading(getApplicationContext());
+          mUpdate = true;
         }
         else
           CacheProfile.updateNotifications(Profile.parse(response));
@@ -181,8 +178,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     } else
       mInboxNotify.setVisibility(View.INVISIBLE);
     
-    if(CacheProfile.unread_rates > 0) {
-      mSymphatyNotify.setText(" "+CacheProfile.unread_rates+" ");
+    if(CacheProfile.unread_symphaties > 0) {
+      mSymphatyNotify.setText(" "+CacheProfile.unread_symphaties+" ");
       mSymphatyNotify.setVisibility(View.VISIBLE);
     } else
       mSymphatyNotify.setVisibility(View.INVISIBLE);

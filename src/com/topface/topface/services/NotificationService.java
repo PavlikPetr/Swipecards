@@ -113,7 +113,7 @@ public class NotificationService extends Service {
     CacheProfile.money = money;
   }
   //---------------------------------------------------------------------------
-  private void notifacations(int messages,int likes, int rates) {
+  private void notifacations(int messages,int likes, int symphaty) {
     boolean update = false;
     
     if(CacheProfile.unread_messages != messages) {
@@ -123,12 +123,12 @@ public class NotificationService extends Service {
         updateMessagesNotification(messages);
     }
     
-    if((CacheProfile.unread_likes+CacheProfile.unread_rates) != (likes+rates)) {
+    if((CacheProfile.unread_likes+CacheProfile.unread_symphaties) != (likes+symphaty)) {
       update = true;
       CacheProfile.unread_likes = likes;
-      CacheProfile.unread_rates = rates;
+      CacheProfile.unread_symphaties = symphaty;
       if(_timer!=ACCEL_TIME)
-        updateRatesNotification(likes,rates);
+        updateRatesNotification(likes,symphaty);
     }
     
     if(update && _timer==ACCEL_TIME)

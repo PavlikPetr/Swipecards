@@ -1,19 +1,11 @@
 package com.topface.topface.ui;
 
-import com.topface.topface.App;
-import com.topface.topface.R;
-import com.topface.topface.social.SocialActivity;
-import com.topface.topface.ui.dashboard.DashboardActivity;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
 
 /*
  * Класс стартового активити для показа прелоадера и инициализации данных
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity {} /*
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +33,7 @@ public class MainActivity extends Activity {
   }
   //---------------------------------------------------------------------------
 }
-
+*/
 // onActivityResult should be called after onStart and before onResume.
 /*
   onCreate

@@ -94,13 +94,13 @@ public class SymphatyActivity extends Activity {
    mProgressDialog = new ProgressDialog(this);
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
 
-   mOnlyNewData = CacheProfile.unread_rates > 0 ? true : false;
+   mOnlyNewData = CacheProfile.unread_symphaties > 0 ? true : false;
    
    create();
    update(true);
    
    // обнуление информера непросмотренных оценок
-   CacheProfile.unread_rates = 0;
+   CacheProfile.unread_symphaties = 0;
   }
   //---------------------------------------------------------------------------  
   @Override

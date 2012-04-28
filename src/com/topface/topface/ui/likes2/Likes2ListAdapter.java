@@ -100,7 +100,7 @@ public class Likes2ListAdapter extends BaseAdapter {
     mAvatarManager.getImage(position,holder.mAvatar);
 
     FeedLike likes = getItem(position);
-    holder.mName.setText(likes.first_name+", "+likes.age);
+    holder.mName.setText(likes.first_name+" "+likes.age+", "+likes.city_name);
     Utils.formatTime(holder.mTime,likes.created);
     holder.mArrow.setImageResource(R.drawable.im_item_gallery_arrow);
     if(likes.rate==10)

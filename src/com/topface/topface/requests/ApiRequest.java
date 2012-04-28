@@ -7,7 +7,6 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.social.AuthToken;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
-import com.topface.topface.utils.LeaksManager;
 import android.content.Context;
 import android.os.Message;
 import android.widget.Toast;
@@ -34,9 +33,26 @@ public abstract class ApiRequest {
       Toast.makeText(mContext,mContext.getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }
+    /*
+    s_ThreadsPool.execute(new Runnable() {
+      @Override
+      public void run() {
+        Looper.prepare();
+        
+        ssid = App.SSID;
+        
+        ApiResponse response = new ApiResponse(Http.httpTPRequest(Global.API_URL,ApiRequest.this.toString()));
+        if(response.code == 3)
+          reAuth();
+        else
+          mHandler.sendMessage(Message.obtain(null,0,response));
+        
+        Looper.loop();
+      }
+    });
+    */
     
-    ssid = App.SSID;
-    Thread t = new Thread("api request") {
+    new Thread(new Runnable() {
       @Override
       public void run() {
         String rawResponse = null;
@@ -44,6 +60,7 @@ public abstract class ApiRequest {
         int counter = 0;
         
         do {
+          ApiRequest.this.ssid = App.SSID;
           rawResponse = Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString());
           //rawResponse = Http.httpTPRequest(Global.API_URL,ApiRequest.this.toString());
           
@@ -62,9 +79,10 @@ public abstract class ApiRequest {
           reAuth();
         else 
           mHandler.sendMessage(Message.obtain(null,0,response));
-    }};
-    LeaksManager.getInstance().monitorObject(t);
-    t.start();
+      }
+    }).start();
+    
+    //LeaksManager.getInstance().monitorObject(t);
   }
   //---------------------------------------------------------------------------
   // перерегистрация на сервере TP

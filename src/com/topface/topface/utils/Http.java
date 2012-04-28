@@ -5,17 +5,10 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,7 +16,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.util.Pair;
 import android.widget.ImageView;
 
@@ -35,7 +27,7 @@ public class Http {
   private static final String TAG = "Http"; 
   private static final int HTTP_GET_REQUEST  = 0;
   private static final int HTTP_POST_REQUEST = 1;
-  private static final int HTTP_TIMEOUT = 6*1000;
+  private static final int HTTP_TIMEOUT = 25*1000;
   //---------------------------------------------------------------------------
   // Проверка на наличие интернета
   public static boolean isOnline(Context context) {
@@ -77,38 +69,43 @@ public class Http {
   }
   //---------------------------------------------------------------------------
   private static String httpRequest(int typeRequest, String request,String postParams,byte[] dataParams,InputStream is) {
-    
     String response = null;
-    HttpURLConnection httpConnection = null;
-    BufferedReader buffReader = null;
     InputStream in = null;
     OutputStream out = null;
-    byte[] buff = null;
+    BufferedReader buffReader = null;
+    HttpURLConnection httpConnection = null;
+    
     try {
+      //System.setProperty("http.keepAlive", "false");
+      Debug.log(TAG,"enter");
       // запрос
       httpConnection = (HttpURLConnection)new URL(request).openConnection();
-      httpConnection.setUseCaches(false);
+      //httpConnection.setUseCaches(false);
       httpConnection.setConnectTimeout(HTTP_TIMEOUT);
       httpConnection.setReadTimeout(HTTP_TIMEOUT);
       httpConnection.setRequestMethod("POST");
       httpConnection.setDoOutput(true);
       httpConnection.setDoInput(true);
       httpConnection.setRequestProperty("Content-Type", "application/json");
-      httpConnection.setRequestProperty("Connection", "Keep-Alive");
-      
+      //httpConnection.setRequestProperty("Content-Length", Integer.toString(postParams.length()));
+      //httpConnection.setRequestProperty("Connection", "close");
+      //httpConnection.setRequestProperty("Connection", "Keep-Alive");
+      //httpConnection.setChunkedStreamingMode(0);
+
       httpConnection.connect();
+      
       
       Debug.log(TAG,"req:"+postParams);   // REQUEST
 
       // отправляем post параметры
       if(typeRequest == HTTP_POST_REQUEST && postParams != null) {
-        Debug.log(TAG,"111:");   // REQUEST
+        Debug.log(TAG,"begin:");
         out  = httpConnection.getOutputStream();
-        buff = postParams.getBytes("UTF8");
-        out.write(buff);
+        byte[] buffer = postParams.getBytes("UTF8");
+        out.write(buffer);
         out.flush();
         out.close();
-        Debug.log(TAG,"222:");   // REQUEST
+        Debug.log(TAG,"end:");
       }
       in = httpConnection.getInputStream();
       
@@ -118,7 +115,7 @@ public class Http {
         String twoHyphens = "--";
         String boundary   = "0xKhTmLbOuNdArY";
         httpConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-        DataOutputStream dos = new DataOutputStream(httpConnection.getOutputStream());
+        DataOutputStream dos = new DataOutputStream(out = httpConnection.getOutputStream());
         dos.writeBytes(twoHyphens + boundary + lineEnd);
         dos.writeBytes("Content-Disposition: form-data; name=\"photo\";filename=\"photo.jpg\"" + lineEnd);
         dos.writeBytes("Content-Type: image/jpg" + lineEnd + lineEnd);
@@ -126,6 +123,7 @@ public class Http {
         dos.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
         dos.flush();
         dos.close();
+        out.close();
       }
       
       
@@ -135,75 +133,53 @@ public class Http {
         String twoHyphens = "--";
         String boundary   = "0xKhTmLbOuNdArY";
         httpConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-        DataOutputStream dos = new DataOutputStream(httpConnection.getOutputStream());
+        DataOutputStream dos = new DataOutputStream(out = httpConnection.getOutputStream());
         dos.writeBytes(twoHyphens + boundary + lineEnd);
         dos.writeBytes("Content-Disposition: form-data; name=\"photo\";filename=\"photo.jpg\"" + lineEnd);
         dos.writeBytes("Content-Type: image/jpg" + lineEnd + lineEnd);
         BufferedInputStream bis = new BufferedInputStream(is);
         byte[] buffer = new byte[1024];
-        while(bis.read(buffer) > 0) {
+        while(bis.read(buffer) > 0)
           dos.write(buffer); 
-        }
         dos.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
         dos.flush();
         dos.close();
+        out.close();
       }
 
-      // проверяет код ответа сервера
-      int responseCode = httpConnection.getResponseCode();
-      if(responseCode != HttpURLConnection.HTTP_OK) {
-        Debug.log(TAG,"server response code:" + responseCode);
-        if(httpConnection!=null) httpConnection.disconnect();
-        return null;
-      }
-
-      // чтение ответа
-      buffReader = new BufferedReader(new InputStreamReader(in));
+      // проверяет код ответа сервера и считываем данные
+      if(httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+        StringBuilder responseBuilder = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(in = httpConnection.getInputStream());
+        byte[] buffer = new byte[1024];
+        int n;
+        while((n=bis.read(buffer)) > 0)
+          responseBuilder.append(new String(buffer,0,n)); 
+        response = responseBuilder.toString();
+        bis.close();
+      }        
       
-      StringBuilder responseBuilder = new StringBuilder();
-      String line;
-      while((line=buffReader.readLine()) != null)
-        responseBuilder.append(line);
-      response = responseBuilder.toString();
-      
-      /*
-      if(response.length()>500 && Data.s_LogList!=null)               // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        Data.s_LogList.add("   [RESP]: "+response.substring(0,500));
-      else if(Data.s_LogList!=null)
-        Data.s_LogList.add("   [RESP]: "+response);
-      */
-    
+        /*
+        if(response.length()>500 && Data.s_LogList!=null)               // JSON LOG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          Data.s_LogList.add("   [RESP]: "+response.substring(0,500));
+        else if(Data.s_LogList!=null)
+          Data.s_LogList.add("   [RESP]: "+response);
+        */
+      Debug.log(TAG,"resp:" + response);   // RESPONSE
+      Debug.log(TAG,"exit");
     } catch(Exception e) {
       Debug.log(TAG,"http exception:" + e);
     } finally {
       try {
         Debug.log(TAG,"disconnect");
+        //if(httpConnection!=null) httpConnection.disconnect();
+        if(in!=null) in.close();
+        if(out!=null) out.close();
         if(buffReader!=null) buffReader.close();
-        if(httpConnection!=null) httpConnection.disconnect();
       } catch(Exception e) {
         Debug.log(TAG,"http error:" + e);
       }
-      Debug.log(TAG,"resp:" + response);   // RESPONSE
     }
-    return response;
-  }
-//---------------------------------------------------------------------------
-  public static String httpTPRequest(String request,String postParams) {
-    String response = null;
-    Debug.log(TAG,"tp_req:"+postParams);   // REQUEST
-    try {
-      HttpClient httpClient = new DefaultHttpClient();
-      HttpPost   httpPost   = new HttpPost(request);
-      httpPost.addHeader("Content-Type","application/json");
-      httpPost.setEntity(new StringEntity(postParams));
-      HttpResponse httpResponse = httpClient.execute(httpPost);
-      BasicResponseHandler handler = new BasicResponseHandler();
-      response = handler.handleResponse(httpResponse);
-    } catch(Exception e) {
-      Log.d(TAG,"Service::request: " + e);
-    }
-    
-    Debug.log(TAG,"tp_resp:" + response);   // RESPONSE
     return response;
   }
   //---------------------------------------------------------------------------

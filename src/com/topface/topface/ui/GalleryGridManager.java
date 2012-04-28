@@ -2,7 +2,6 @@ package com.topface.topface.ui;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import com.topface.topface.App;
 import com.topface.topface.Global;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.utils.CacheManager;
@@ -112,7 +111,7 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
           clippedBitmap = null;
           
         } catch (Exception e) {
-          Debug.log(App.TAG,"thread error:"+e);
+          Debug.log(this,"thread error:"+e);
         }
       } // run
     }); // thread
