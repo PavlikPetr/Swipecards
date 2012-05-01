@@ -8,9 +8,9 @@ import android.content.Context;
 public class RateRequest extends ApiRequest {
   // Data
   private String service = "rate";
-  public  int userid;   // идентификатор пользователя для оценки
-  public  int rate;     // оценка пользователя. ОДЗ: 1 <= RATE <= 10
-  public  int mutualid; // идентификатор сообщения из ленты, на который отправляется взаимная симпатия
+  public int userid;   // идентификатор пользователя для оценки
+  public int rate;     // оценка пользователя. ОДЗ: 1 <= RATE <= 10
+  public int mutualid; // идентификатор сообщения из ленты, на который отправляется взаимная симпатия
   //---------------------------------------------------------------------------
   public RateRequest(Context context) {
     super(context);

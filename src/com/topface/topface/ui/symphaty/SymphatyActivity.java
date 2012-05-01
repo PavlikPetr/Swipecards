@@ -17,7 +17,10 @@ import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -29,8 +32,9 @@ import android.widget.AdapterView.OnItemClickListener;
 public class SymphatyActivity extends Activity {
   // Data
   private boolean mOnlyNewData;
+  private TextView mFooterView;
   private PullToRefreshListView mListView;
-  private SymphatyListAdapter mAdapter;
+  private SymphatyListAdapter mListAdapter;
   private LinkedList<FeedSymphaty> mSymphatyDataList;
   private AvatarManager<FeedSymphaty> mAvatarManager;
   private ProgressDialog mProgressDialog;
@@ -89,28 +93,39 @@ public class SymphatyActivity extends Activity {
        update(false);
      }
    });
+   mFooterView = new TextView(getApplicationContext());
+   mFooterView.setOnClickListener(new View.OnClickListener() {
+     @Override
+     public void onClick(View v) {
+       getHistory();
+     }
+   });
+   
+   // Footer
+   mFooterView.setBackgroundResource(R.drawable.gallery_item_all_selector);
+   mFooterView.setText(getString(R.string.footer_previous));
+   mFooterView.setTextColor(Color.DKGRAY);
+   mFooterView.setGravity(Gravity.CENTER);
+   mFooterView.setVisibility(View.GONE);
+   mFooterView.setTypeface(Typeface.DEFAULT_BOLD);
+   mListView.getRefreshableView().addFooterView(mFooterView);
    
    // Progress Bar
    mProgressDialog = new ProgressDialog(this);
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
 
+   // control create
+   mAvatarManager = new AvatarManager<FeedSymphaty>(this,mSymphatyDataList);
+   mListAdapter = new SymphatyListAdapter(getApplicationContext(),mAvatarManager);
+   mListView.setOnScrollListener(mAvatarManager);
+   mListView.setAdapter(mListAdapter);
+   
    mOnlyNewData = CacheProfile.unread_symphaties > 0 ? true : false;
    
-   create();
    update(true);
    
    // обнуление информера непросмотренных оценок
    CacheProfile.unread_symphaties = 0;
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    super.onStop();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -121,16 +136,11 @@ public class SymphatyActivity extends Activity {
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
-  private void create() {
-    mAvatarManager = new AvatarManager<FeedSymphaty>(this,mSymphatyDataList);
-    mAdapter = new SymphatyListAdapter(getApplicationContext(),mAvatarManager);
-    mListView.setOnScrollListener(mAvatarManager);
-    mListView.setAdapter(mAdapter);
-  }
-  //---------------------------------------------------------------------------
   private void update(boolean isProgress) {
     if(isProgress)
       mProgressDialog.show();
+    
+    mDoubleButton.setChecked(mOnlyNewData?DoubleBigButton.RIGHT_BUTTON:DoubleBigButton.LEFT_BUTTON);
 
     FeedSymphatyRequest symphatyRequest = new FeedSymphatyRequest(getApplicationContext());
     symphatyRequest.limit = LIMIT;
@@ -138,11 +148,39 @@ public class SymphatyActivity extends Activity {
     symphatyRequest.callback(new ApiHandler(){
       @Override
       public void success(ApiResponse response) {
-        mDoubleButton.setChecked(mOnlyNewData?DoubleBigButton.RIGHT_BUTTON:DoubleBigButton.LEFT_BUTTON);
+        if(mOnlyNewData)
+          mFooterView.setVisibility(View.GONE);
+        else
+          mFooterView.setVisibility(View.VISIBLE);
         mSymphatyDataList.clear();
-        mSymphatyDataList = FeedSymphaty.parse(response);
-        mAvatarManager.setDataList(mSymphatyDataList);
-        mAdapter.notifyDataSetChanged();
+        mSymphatyDataList.addAll(FeedSymphaty.parse(response));
+        mListAdapter.notifyDataSetChanged();
+        mProgressDialog.cancel();
+        mListView.onRefreshComplete();
+      }
+      @Override
+      public void fail(int codeError,ApiResponse response) {
+        mProgressDialog.cancel();
+        mListView.onRefreshComplete();
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  private void getHistory() {
+    mProgressDialog.show();
+    FeedSymphatyRequest symphatyRequest = new FeedSymphatyRequest(getApplicationContext());
+    symphatyRequest.limit = LIMIT;
+    symphatyRequest.only_new = false;
+    symphatyRequest.from = mSymphatyDataList.get(mSymphatyDataList.size()-1).id;
+    symphatyRequest.callback(new ApiHandler() {
+      @Override
+      public void success(ApiResponse response) {
+        LinkedList<FeedSymphaty> symphatiesList = FeedSymphaty.parse(response);
+        if(symphatiesList.size() > 0) {
+          mSymphatyDataList.addAll(symphatiesList);
+          mListAdapter.notifyDataSetChanged();
+        } else
+          mFooterView.setVisibility(View.GONE);
         mProgressDialog.cancel();
         mListView.onRefreshComplete();
       }
@@ -155,20 +193,21 @@ public class SymphatyActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void release() {
+    mProgressDialog=null;
     mListView=null;
     
-    if(mAdapter!=null)
-      mAdapter.release();
-    mAdapter = null;
-    
-    mSymphatyDataList=null;
+    if(mListAdapter!=null)
+      mListAdapter.release();
+    mListAdapter = null;
     
     if(mAvatarManager!=null) {
       mAvatarManager.release();
       mAvatarManager=null;
     }
     
-    mProgressDialog=null;
+    if(mSymphatyDataList!=null)
+      mSymphatyDataList.clear();
+    mSymphatyDataList=null;
   }
   //---------------------------------------------------------------------------
 }

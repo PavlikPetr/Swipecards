@@ -9,7 +9,8 @@ import com.topface.topface.utils.Debug;
 public class FeedInbox extends AbstractData implements IAlbumData {
   // Data
   public static int unread_count; // количество оставшихся непрочитанных
-  public int uid;              // идентификатор фотографии в альбоме пользвоателя
+  public int id;               // идентификатор сообщения 
+  public int uid;              // идентификатор отправителя
   public int age;              // возраст пользователя
   public int type;             // тип сообщения
   public int gift;             // идентификатор подарка
@@ -47,6 +48,7 @@ public class FeedInbox extends AbstractData implements IAlbumData {
             msg.online     = item.optBoolean("online");
             msg.unread     = item.optBoolean("unread");
             msg.created    = item.optLong("created"); // время приходит в секундах *1000
+            msg.id         = item.optInt("id");
             msg.uid        = item.optInt("uid");
             msg.age        = item.optInt("age");
             msg.type       = item.optInt("type");

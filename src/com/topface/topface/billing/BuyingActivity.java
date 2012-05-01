@@ -7,34 +7,30 @@ import com.topface.topface.billing.Consts.PurchaseState;
 import com.topface.topface.billing.Consts.ResponseCode;
 import com.topface.topface.services.NotificationService;
 import com.topface.topface.ui.dating.ResourcesView;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class BuyingActivity extends Activity implements ServiceConnection, View.OnClickListener {
+public class BuyingActivity extends Activity implements /*ServiceConnection,*/ View.OnClickListener {
   // Data
-  private ResourcesView mResources;
+  private Handler mHandler;
   private ViewGroup mMoney6;
   private ViewGroup mMoney40;
   private ViewGroup mMoney100;
   private ViewGroup mPower;
-  private Handler mHandler;
-  private Messenger mNotificationService;
+  private ResourcesView mResources;
+  //private Messenger mNotificationService;
   private BillingService mBillingService;
   private TopfacePurchaseObserver mTopfacePurchaseObserver;
   private ProgressDialog mProgressDialog;
@@ -43,6 +39,18 @@ public class BuyingActivity extends Activity implements ServiceConnection, View.
   private static final int PRICE_COINS_40  = 40;
   private static final int PRICE_COINS_100 = 100;
   private static final int PRICE_ENERGY    = 10000;
+  public static final String PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
+  //---------------------------------------------------------------------------
+  // class NotificationReceiver
+  //---------------------------------------------------------------------------
+  public class PurchaseReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+     if(intent.getAction().equals(PURCHASE_ACTION))
+       mResources.setResources(CacheProfile.power,CacheProfile.money);
+       mResources.invalidate();
+    }
+  }
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +58,7 @@ public class BuyingActivity extends Activity implements ServiceConnection, View.
     setContentView(R.layout.ac_buying);
     Debug.log(this,"+onCreate");
     
-    bindService(new Intent(this,NotificationService.class),this,Context.BIND_AUTO_CREATE);
+    //bindService(new Intent(this,NotificationService.class),this,Context.BIND_AUTO_CREATE);
 
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.buying_header_title));
@@ -117,8 +125,8 @@ public class BuyingActivity extends Activity implements ServiceConnection, View.
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    unbindService(this);
-    mNotificationService=null;
+    //unbindService(this);
+    //mNotificationService=null;
     mBillingService.unbind();
     super.onDestroy();
   }
@@ -142,6 +150,7 @@ public class BuyingActivity extends Activity implements ServiceConnection, View.
     //mProgressDialog.show();
   }
   //---------------------------------------------------------------------------
+  /*
   @Override
   public void onServiceConnected(ComponentName name,IBinder service) {
     try {
@@ -159,6 +168,7 @@ public class BuyingActivity extends Activity implements ServiceConnection, View.
       Debug.log("BuyingActivity","onServiceDisconnected:"+e);
     }
   }
+  */
   //---------------------------------------------------------------------------
   // class TopfacePurchaseObserver
   //---------------------------------------------------------------------------
@@ -187,16 +197,19 @@ public class BuyingActivity extends Activity implements ServiceConnection, View.
     public void onPurchaseStateChange(PurchaseState purchaseState,String data,String signature) {
       if(purchaseState != PurchaseState.PURCHASED)
         return;
+      /*
       try {
         Bundle boundle = new Bundle();
-        boundle.putString(NotificationService.INTENT_DATA,data);
-        boundle.putString(NotificationService.INTENT_SIGNATURE,signature);
+        boundle.putString(NotificationService.PURCHASE_DATA,data);
+        boundle.putString(NotificationService.PURCHASE_SIGNATURE,signature);
         Message msg = Message.obtain(null, NotificationService.MSG_PURCHASE,0,0);
         msg.setData(boundle);
         mNotificationService.send(msg);
-      } catch(RemoteException e) {
+      } catch(Exception e) {
         Debug.log("BuyingActivity","message sending error");
       }
+      */
+      NotificationService.purchase(getApplicationContext(),data,signature);
     }
     @Override
     public void onRequestPurchaseResponse(RequestPurchase request,ResponseCode responseCode) {

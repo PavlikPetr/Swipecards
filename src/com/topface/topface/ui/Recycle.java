@@ -19,12 +19,14 @@ public class Recycle {
   public static Bitmap s_ProfileGalleryFrame;
   public static Bitmap s_ProfileEroInfo;
   public static Bitmap s_StarPopupBG;
-  public static Bitmap s_StarBlueActive;
+  public static Bitmap s_StarBluePressed;
   public static Bitmap s_StarBlue;
-  public static Bitmap s_StarGreyActive;
+  public static Bitmap s_StarGreyPressed;
   public static Bitmap s_StarGrey;
-  public static Bitmap s_StarYellowActive;
+  public static Bitmap s_StarYellowPressed;
   public static Bitmap s_StarYellow;
+  public static Bitmap s_Star10Pressed;
+  public static Bitmap s_Star10;
   //---------------------------------------------------------------------------
   public static boolean init(Context context) {
     try {
@@ -39,12 +41,14 @@ public class Recycle {
       s_ProfileGalleryFrame = BitmapFactory.decodeResource(context.getResources(),R.drawable.profile_frame_gallery);
       s_ProfileEroInfo = BitmapFactory.decodeResource(context.getResources(),R.drawable.profile_ero_info);
       s_StarPopupBG = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_popup);
-      s_StarBlueActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_blue_pressed);
+      s_StarBluePressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_blue_pressed);
       s_StarBlue = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_blue);
-      s_StarGreyActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_grey_pressed);
+      s_StarGreyPressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_grey_pressed);
       s_StarGrey = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_grey);
-      s_StarYellowActive = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow_pressed);
+      s_StarYellowPressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow_pressed);
       s_StarYellow = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_yellow);
+      s_Star10Pressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_10_pressed);
+      s_Star10 = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_star_10);
     } catch (Exception e) {
       Debug.log("Recycle","init exception:" + e);
       return false;
@@ -78,18 +82,22 @@ public class Recycle {
     s_ProfileEroInfo=null;
     s_StarPopupBG.recycle();
     s_StarPopupBG=null;
-    s_StarBlueActive.recycle();
-    s_StarBlueActive=null;
+    s_StarBluePressed.recycle();
+    s_StarBluePressed=null;
     s_StarBlue.recycle();
     s_StarBlue=null;
-    s_StarGreyActive.recycle();
-    s_StarGreyActive=null;
+    s_StarGreyPressed.recycle();
+    s_StarGreyPressed=null;
     s_StarGrey.recycle();
     s_StarGrey=null;
-    s_StarYellowActive.recycle();
-    s_StarYellowActive=null;
+    s_StarYellowPressed.recycle();
+    s_StarYellowPressed=null;
     s_StarYellow.recycle();
     s_StarYellow=null;
+    s_Star10Pressed.recycle();
+    s_Star10Pressed=null;
+    s_Star10.recycle();
+    s_Star10=null;
   }
   //---------------------------------------------------------------------------
 }

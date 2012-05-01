@@ -93,6 +93,13 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   protected void onStart() {
     super.onStart();
     
+    //((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+    
+    if(!Http.isOnline(this)){
+      Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
+      return;
+    }
+    
     if(!App.init && App.SSID==null || App.SSID.length()==0) {
       startActivity(new Intent(getApplicationContext(),SocialActivity.class));
       Data.s_OwnerAvatar = null;
@@ -107,6 +114,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       registerReceiver(mNotificationReceiver,new IntentFilter(BROADCAST_ACTION));
     }
     
+    //NotificationService.startAcceleration(getApplicationContext());
+    
     updateProfile();
     
     System.gc();
@@ -120,6 +129,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       mNotificationReceiver = null;
     }
 
+    //NotificationService.stopAcceleration(getApplicationContext());
+    
     super.onStop();
   }
   //---------------------------------------------------------------------------
@@ -156,8 +167,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
-        if(mProgressDialog!=null)
-        mProgressDialog.cancel();
+        if(mProgressDialog != null)
+          mProgressDialog.cancel();
         mLikesNotify.setVisibility(View.INVISIBLE);
         mInboxNotify.setVisibility(View.INVISIBLE);
         mSymphatyNotify.setVisibility(View.INVISIBLE);
@@ -223,7 +234,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   public boolean onCreatePanelMenu(int featureId, Menu menu) {
     //menu.add(0,MENU_LOG,0,"Log");
-    menu.add(0,MENU_LEAKS,0,"Leaks");
+    //menu.add(0,MENU_LEAKS,0,"Leaks");
     return super.onCreatePanelMenu(featureId, menu);
   }
   //---------------------------------------------------------------------------

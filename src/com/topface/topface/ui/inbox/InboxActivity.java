@@ -20,8 +20,11 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -34,8 +37,9 @@ import android.widget.TextView;
 public class InboxActivity extends Activity {
   // Data
   private boolean mOnlyNewData;
+  private TextView mFooterView;
   private PullToRefreshListView mListView;
-  private InboxListAdapter mAdapter;
+  private InboxListAdapter mListAdapter;
   private LinkedList<FeedInbox> mInboxDataList;
   private AvatarManager<FeedInbox> mAvatarManager;
   private ProgressDialog mProgressDialog;
@@ -101,31 +105,38 @@ public class InboxActivity extends Activity {
       }
     });
     
+    // Footer
+    mFooterView = new TextView(getApplicationContext());
+    mFooterView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        getHistory();
+      }
+    });
+    mFooterView.setBackgroundResource(R.drawable.gallery_item_all_selector);
+    mFooterView.setText(getString(R.string.footer_previous));
+    mFooterView.setTextColor(Color.DKGRAY);
+    mFooterView.setGravity(Gravity.CENTER);
+    mFooterView.setVisibility(View.GONE);
+    mFooterView.setTypeface(Typeface.DEFAULT_BOLD);
+    mListView.getRefreshableView().addFooterView(mFooterView);
+    
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
 
+    // control create
+    mAvatarManager = new AvatarManager<FeedInbox>(getApplicationContext(),mInboxDataList);
+    mListAdapter = new InboxListAdapter(getApplicationContext(),mAvatarManager);
+    mListView.setOnScrollListener(mAvatarManager);    
+    mListView.setAdapter(mListAdapter);
+    
     mOnlyNewData = CacheProfile.unread_messages > 0 ? true : false;
     
-    create();
     update(true);
-    
-    //App.delete();
     
     // обнуление информера непрочитанных сообщений
     CacheProfile.unread_messages = 0;
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    //App.bind(getBaseContext());
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    //App.unbind();
-    super.onStop();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -136,18 +147,13 @@ public class InboxActivity extends Activity {
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
-  private void create() {
-    mAvatarManager = new AvatarManager<FeedInbox>(getApplicationContext(),mInboxDataList);
-    mAdapter = new InboxListAdapter(getApplicationContext(),mAvatarManager);
-    mListView.setOnScrollListener(mAvatarManager);    
-    mListView.setAdapter(mAdapter);
-  }
-  //---------------------------------------------------------------------------
   private void update(boolean isProgress) {
     if(isProgress)
       mProgressDialog.show();
     
-    mNotificationManager.cancel(NotificationService.TP_MSG_NOTIFICATION);
+    mDoubleButton.setChecked(mOnlyNewData ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
+    
+    mNotificationManager.cancel(NotificationService.NOTIFICATION_MESSAGES);
     
     FeedInboxRequest inboxRequest = new FeedInboxRequest(getApplicationContext());
     inboxRequest.limit = LIMIT;
@@ -155,11 +161,39 @@ public class InboxActivity extends Activity {
     inboxRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
-        mDoubleButton.setChecked(mOnlyNewData ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
+        if(mOnlyNewData)
+          mFooterView.setVisibility(View.GONE);
+        else
+          mFooterView.setVisibility(View.VISIBLE);
         mInboxDataList.clear();
-        mInboxDataList = FeedInbox.parse(response);
-        mAvatarManager.setDataList(mInboxDataList);
-        mAdapter.notifyDataSetChanged();
+        mInboxDataList.addAll(FeedInbox.parse(response));
+        mListAdapter.notifyDataSetChanged();
+        mProgressDialog.cancel();
+        mListView.onRefreshComplete();
+      }
+      @Override
+      public void fail(int codeError,ApiResponse response) {
+        mProgressDialog.cancel();
+        mListView.onRefreshComplete();
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  private void getHistory() {
+    mProgressDialog.show();
+    FeedInboxRequest inboxRequest = new FeedInboxRequest(getApplicationContext());
+    inboxRequest.limit = LIMIT;
+    inboxRequest.only_new = false;
+    inboxRequest.from = mInboxDataList.get(mInboxDataList.size()-1).id;
+    inboxRequest.callback(new ApiHandler() {
+      @Override
+      public void success(ApiResponse response) {
+        LinkedList<FeedInbox> inboxList = FeedInbox.parse(response);
+        if(inboxList.size() > 0) {
+          mInboxDataList.addAll(inboxList);
+          mListAdapter.notifyDataSetChanged();
+        } else
+          mFooterView.setVisibility(View.GONE);
         mProgressDialog.cancel();
         mListView.onRefreshComplete();
       }
@@ -172,19 +206,21 @@ public class InboxActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   private void release() {
+    mProgressDialog = null;
     mListView = null;
-    if(mAdapter!=null)
-      mAdapter.release();
-    mAdapter = null;
-    if(mAvatarManager!=null) {
+    
+    if(mListAdapter!=null)
+      mListAdapter.release();
+    mListAdapter = null;
+    
+    if(mAvatarManager!=null)
       mAvatarManager.release();
-      mAvatarManager = null;
-    }
+    mAvatarManager = null;
+    
     if(mInboxDataList!=null)
       mInboxDataList.clear();
     mInboxDataList = null;
-    mProgressDialog = null;
-    
+
     Data.s_UserAvatar = null;
   }
   //---------------------------------------------------------------------------

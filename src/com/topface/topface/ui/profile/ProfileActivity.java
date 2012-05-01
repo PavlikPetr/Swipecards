@@ -141,8 +141,8 @@ public class ProfileActivity extends Activity{
     
     { // Params
       mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE,false); // пришли из чата    
-      mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1); // свой - чужой профиль
-      mMutualId = getIntent().getIntExtra(INTENT_MUTUAL_ID,-1);
+      mUserId     = getIntent().getIntExtra(INTENT_USER_ID,-1); // свой - чужой профиль
+      mMutualId   = getIntent().getIntExtra(INTENT_MUTUAL_ID,-1);
       String name = getIntent().getStringExtra(INTENT_USER_NAME); // name
       if(name!=null)
         mHeaderTitle.setText(name);  // пришли из likes, rates, chat
@@ -343,7 +343,7 @@ public class ProfileActivity extends Activity{
     Http.imageLoader(profile.getBigLink(),mFramePhoto);
     getUserAlbum();
     
-    if(!profile.mutual)
+    if(!profile.mutual && mMutualId>0)
       mMutualButton.setVisibility(View.VISIBLE);
     
     mHeaderTitle.setText(profile.first_name);
@@ -730,11 +730,11 @@ public class ProfileActivity extends Activity{
         } break;
         case R.id.btnProfileMutual: {
           mMutualButton.setVisibility(View.INVISIBLE);
-          RateRequest doRate = new RateRequest(getApplicationContext());
-          doRate.userid   = mUserId;
-          doRate.mutualid = mMutualId;
-          doRate.rate     = 9;
-          doRate.callback(new ApiHandler() {
+          RateRequest rateRequest = new RateRequest(getApplicationContext());
+          rateRequest.userid   = mUserId;
+          rateRequest.mutualid = mMutualId;
+          rateRequest.rate     = 9;
+          rateRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
               Rate rate = Rate.parse(response);

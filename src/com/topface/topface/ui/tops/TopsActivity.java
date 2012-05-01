@@ -35,7 +35,7 @@ public class TopsActivity extends Activity {
   // Data
   private GridView mGallery;
   private TopsGridAdapter mGridAdapter;
-  private GalleryGridManager<Top>  mGalleryGridManager;
+  private GalleryGridManager<Top> mGalleryGridManager;
   private LinkedList<Top> mTopsList;
   private ProgressDialog  mProgressDialog;
   private Button mCityButton;
@@ -123,19 +123,22 @@ public class TopsActivity extends Activity {
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
-    create();
+    // Control create
+    mGalleryGridManager = new GalleryGridManager<Top>(getApplicationContext(),mTopsList);
+    mGridAdapter = new TopsGridAdapter(getApplicationContext(),mGalleryGridManager);
+    mGallery.setAdapter(mGridAdapter);
+    mGallery.setOnScrollListener(mGalleryGridManager);
+    
     update();
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStart() {
     super.onStart();
-    //App.bind(getBaseContext());
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStop() {
-    //App.unbind();
     super.onStop();
   }
   //---------------------------------------------------------------------------  
@@ -156,13 +159,6 @@ public class TopsActivity extends Activity {
     
     Debug.log(this,"-onDestroy");
     super.onDestroy();
-  }
-  //---------------------------------------------------------------------------
-  private void create() {
-    mGalleryGridManager = new GalleryGridManager<Top>(getApplicationContext(),mTopsList);
-    mGridAdapter = new TopsGridAdapter(getApplicationContext(),mGalleryGridManager);
-    mGallery.setAdapter(mGridAdapter);
-    mGallery.setOnScrollListener(mGalleryGridManager);
   }
   //---------------------------------------------------------------------------
   private void update() {

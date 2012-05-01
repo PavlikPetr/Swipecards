@@ -42,26 +42,42 @@ public class StarsView extends View implements View.OnTouchListener {
       _rect = new Rect(_x,_y,_x+_widht,_y+_height);
     }
     public void draw(Canvas canvas) {
-      if(_index==mAverageRate)  // средняя оценка
+      if(_index==mAverageRate) {  // средняя оценка
         if(!pressed)
           canvas.drawBitmap(Recycle.s_StarGrey,_x,_bmp_y,paintStar);
         else
-          canvas.drawBitmap(Recycle.s_StarGreyActive,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(Recycle.s_StarGreyPressed,_x,_bmp_y,paintStar);
+        // Star Index         вынести расчеты !!!!!!!!
+        canvas.drawText(""+_index,(float)(_x+Recycle.s_StarYellow.getWidth()/2),(float)(_bmp_y+Recycle.s_StarYellow.getHeight()/1.6),paintStarNumber);
+      }
       
-      if(_index>mAverageRate) // yellow stars
+      if(_index>mAverageRate && _index<10) { // yellow stars
         if(!pressed)
           canvas.drawBitmap(Recycle.s_StarYellow,_x,_bmp_y,paintStar);
         else
-          canvas.drawBitmap(Recycle.s_StarYellowActive,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(Recycle.s_StarYellowPressed,_x,_bmp_y,paintStar);
+        // Star Index         вынести расчеты !!!!!!!!
+        canvas.drawText(""+_index,(float)(_x+Recycle.s_StarYellow.getWidth()/2),(float)(_bmp_y+Recycle.s_StarYellow.getHeight()/1.6),paintHeartNumber);
+      }
       
-      if(_index<mAverageRate)
+      if(_index<mAverageRate) {
         if(!pressed)
           canvas.drawBitmap(Recycle.s_StarBlue,_x,_bmp_y,paintStar);
         else
-          canvas.drawBitmap(Recycle.s_StarBlueActive,_x,_bmp_y,paintStar);
+          canvas.drawBitmap(Recycle.s_StarBluePressed,_x,_bmp_y,paintStar);
+        // Star Index         вынести расчеты !!!!!!!!
+        canvas.drawText(""+_index,(float)(_x+Recycle.s_StarYellow.getWidth()/2),(float)(_bmp_y+Recycle.s_StarYellow.getHeight()/1.6),paintStarNumber);
+      }
       
-      // Star Index         вынести расчеты !!!!!!!!
-      canvas.drawText(""+_index,(float)(_x+Recycle.s_StarYellow.getWidth()/2),(float)(_bmp_y+Recycle.s_StarYellow.getHeight()/1.6),paintNumber);
+      if(_index==10) { // 10
+        if(!pressed)
+          canvas.drawBitmap(Recycle.s_Star10,_x,_bmp_y,paintStar);
+        else
+          canvas.drawBitmap(Recycle.s_Star10Pressed,_x,_bmp_y,paintStar);
+        // Star Index         вынести расчеты !!!!!!!!
+        canvas.drawText(""+_index,(float)(_x+Recycle.s_StarYellow.getWidth()/2),(float)(_bmp_y+Recycle.s_StarYellow.getHeight()/1.6),paintHeartNumber);
+      }
+
     }
   }
   //---------------------------------------------------------------------------
@@ -73,7 +89,8 @@ public class StarsView extends View implements View.OnTouchListener {
   private OnRateListener mRateListener;  // listener на клик по звезде
   // Paints
   private Paint paintStar   = new Paint();
-  private Paint paintNumber = new Paint();
+  private Paint paintStarNumber = new Paint();
+  private Paint paintHeartNumber = new Paint();
   // Constants
   private static final int EVENT_COUNT = 3;   // число последних запоминаемых координат пальца
   private static final int STARS_COUNT = 10;  // кол-во звезд на фрейме
@@ -90,11 +107,17 @@ public class StarsView extends View implements View.OnTouchListener {
     setOnTouchListener(this);
     setBackgroundColor(Color.TRANSPARENT);
     
-    paintNumber.setColor(Color.WHITE);
-    paintNumber.setTextSize(getResources().getDimension(R.dimen.dating_star_number));
-    paintNumber.setTypeface(Typeface.DEFAULT_BOLD);
-    paintNumber.setAntiAlias(true);
-    paintNumber.setTextAlign(Paint.Align.CENTER);
+    paintStarNumber.setColor(Color.DKGRAY);
+    paintStarNumber.setTextSize(getResources().getDimension(R.dimen.dating_star_number));
+    paintStarNumber.setTypeface(Typeface.DEFAULT_BOLD);
+    paintStarNumber.setAntiAlias(true);
+    paintStarNumber.setTextAlign(Paint.Align.CENTER);
+    
+    paintHeartNumber.setColor(Color.WHITE);
+    paintHeartNumber.setTextSize(getResources().getDimension(R.dimen.dating_star_number));
+    paintHeartNumber.setTypeface(Typeface.DEFAULT_BOLD);
+    paintHeartNumber.setAntiAlias(true);
+    paintHeartNumber.setTextAlign(Paint.Align.CENTER);
   }
   //---------------------------------------------------------------------------
   // index 
@@ -223,7 +246,7 @@ public class StarsView extends View implements View.OnTouchListener {
     mStars = null;
     mRateListener = null;
     paintStar = null;
-    paintNumber = null;
+    paintStarNumber = null;
   }
   //---------------------------------------------------------------------------
 }

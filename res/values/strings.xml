@@ -7,6 +7,7 @@
   <string name="dialog_loading">Loading</string>
   <string name="default_city">Moscow</string>
   <string name="btn_ok">Ok</string>
+  <string name="footer_previous">Previous messages</string>
   
   <!-- Social Activity  -->
   <string name="social_btn_vk">Login via VKontakte</string>

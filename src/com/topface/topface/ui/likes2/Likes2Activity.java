@@ -17,10 +17,11 @@ import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -28,11 +29,12 @@ import android.widget.AdapterView.OnItemClickListener;
 /*
  *     "Симпатии"
  */
-public class Likes2Activity extends Activity implements OnScrollListener {
+public class Likes2Activity extends Activity {
   // Data
   private boolean mOnlyNewData;
+  private TextView mFooterView;
   private PullToRefreshListView mListView;
-  private Likes2ListAdapter mAdapter;
+  private Likes2ListAdapter mListAdapter;
   private LinkedList<FeedLike> mLikesDataList;
   private AvatarManager<FeedLike> mAvatarManager;
   private ProgressDialog mProgressDialog;
@@ -92,29 +94,39 @@ public class Likes2Activity extends Activity implements OnScrollListener {
        update(false);
      }
    });
-   mListView.setOnScrollListener(this);
+   
+   // Footer
+   mFooterView = new TextView(getApplicationContext());
+   mFooterView.setOnClickListener(new View.OnClickListener() {
+     @Override
+     public void onClick(View v) {
+       getHistory();
+     }
+   });
+   mFooterView.setBackgroundResource(R.drawable.gallery_item_all_selector);
+   mFooterView.setText(getString(R.string.footer_previous));
+   mFooterView.setTextColor(Color.DKGRAY);
+   mFooterView.setGravity(Gravity.CENTER);
+   mFooterView.setVisibility(View.GONE);
+   mFooterView.setTypeface(Typeface.DEFAULT_BOLD);
+   mListView.getRefreshableView().addFooterView(mFooterView);
    
    // Progress Bar
    mProgressDialog = new ProgressDialog(this);
    mProgressDialog.setMessage(getString(R.string.dialog_loading));
 
+   // control create
+   mAvatarManager = new AvatarManager<FeedLike>(this,mLikesDataList);
+   mListAdapter = new Likes2ListAdapter(getApplicationContext(),mAvatarManager);
+   mListView.setOnScrollListener(mAvatarManager);
+   mListView.setAdapter(mListAdapter);
+   
    mOnlyNewData = CacheProfile.unread_likes > 0 ? true : false;
    
-   create();
    update(true);
    
    // обнуление информера непросмотренных оценок
    CacheProfile.unread_likes = 0;
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    super.onStop();
   }
   //---------------------------------------------------------------------------
   @Override
@@ -125,16 +137,11 @@ public class Likes2Activity extends Activity implements OnScrollListener {
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
-  private void create() {
-    mAvatarManager = new AvatarManager<FeedLike>(this,mLikesDataList);
-    mAdapter = new Likes2ListAdapter(getApplicationContext(),mAvatarManager);
-    mListView.setOnScrollListener(mAvatarManager);
-    mListView.setAdapter(mAdapter);
-  }
-  //---------------------------------------------------------------------------
   private void update(boolean isProgress) {
     if(isProgress)
       mProgressDialog.show();
+    
+    mDoubleButton.setChecked(mOnlyNewData?DoubleBigButton.RIGHT_BUTTON:DoubleBigButton.LEFT_BUTTON);
 
     FeedLikesRequest likesRequest = new FeedLikesRequest(getApplicationContext());
     likesRequest.limit = LIMIT;
@@ -142,11 +149,39 @@ public class Likes2Activity extends Activity implements OnScrollListener {
     likesRequest.callback(new ApiHandler(){
       @Override
       public void success(ApiResponse response) {
-        mDoubleButton.setChecked(mOnlyNewData?DoubleBigButton.RIGHT_BUTTON:DoubleBigButton.LEFT_BUTTON);
+        if(mOnlyNewData)
+          mFooterView.setVisibility(View.GONE);
+        else
+          mFooterView.setVisibility(View.VISIBLE);
         mLikesDataList.clear();
-        mLikesDataList = FeedLike.parse(response);
-        mAvatarManager.setDataList(mLikesDataList);
-        mAdapter.notifyDataSetChanged();
+        mLikesDataList.addAll(FeedLike.parse(response));
+        mListAdapter.notifyDataSetChanged();
+        mProgressDialog.cancel();
+        mListView.onRefreshComplete();
+      }
+      @Override
+      public void fail(int codeError,ApiResponse response) {
+        mProgressDialog.cancel();
+        mListView.onRefreshComplete();
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
+  private void getHistory() {
+    mProgressDialog.show();
+    FeedLikesRequest likesRequest = new FeedLikesRequest(getApplicationContext());
+    likesRequest.limit = LIMIT;
+    likesRequest.only_new = false;
+    likesRequest.from = mLikesDataList.get(mLikesDataList.size()-1).id;
+    likesRequest.callback(new ApiHandler() {
+      @Override
+      public void success(ApiResponse response) {
+        LinkedList<FeedLike> likesList = FeedLike.parse(response);
+        if(likesList.size() > 0) {
+          mLikesDataList.addAll(likesList);
+          mListAdapter.notifyDataSetChanged();
+        } else
+          mFooterView.setVisibility(View.GONE);
         mProgressDialog.cancel();
         mListView.onRefreshComplete();
       }
@@ -159,34 +194,20 @@ public class Likes2Activity extends Activity implements OnScrollListener {
   }
   //---------------------------------------------------------------------------
   private void release() {
+    mProgressDialog=null;
     mListView=null;
     
-    if(mAdapter!=null)
-      mAdapter.release();
-    mAdapter = null;
+    if(mListAdapter!=null)
+      mListAdapter.release();
+    mListAdapter = null;
     
-    mLikesDataList=null;
-    
-    if(mAvatarManager!=null) {
+    if(mAvatarManager!=null)
       mAvatarManager.release();
-      mAvatarManager=null;
-    }
+    mAvatarManager=null;
     
-    mProgressDialog=null;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
-//    if(!isScrolled) {
-//      startPosition = firstVisibleItem;
-//      endPosition   = startPosition + 10; 
-//    }
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public void onScrollStateChanged(AbsListView view,int scrollState) {
-    //isScrolled = (scrollState==SCROLL_STATE_IDLE) ? false : true;
-    //Debug.log(this,"state : " + isScrolled);
+    if(mLikesDataList!=null)
+      mLikesDataList.clear();
+    mLikesDataList = null;
   }
   //---------------------------------------------------------------------------
 }

@@ -7,6 +7,7 @@
   <string name="dialog_loading">Загрузка</string>
   <string name="default_city">Москва</string>
   <string name="btn_ok">Ok</string>
+  <string name="footer_previous">Предыдущие сообщения</string>
   
   <!-- Social Activity  -->
   <string name="social_btn_vk">Войти через ВКонтакте</string>

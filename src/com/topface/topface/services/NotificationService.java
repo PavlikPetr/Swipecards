@@ -2,6 +2,7 @@ package com.topface.topface.services;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiHandler;
@@ -10,8 +11,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.VerifyRequest;
 import com.topface.topface.ui.dashboard.DashboardActivity;
 import com.topface.topface.ui.inbox.InboxActivity;
-import com.topface.topface.ui.likes.LikesActivity;
-import com.topface.topface.ui.rates.RatesActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
@@ -21,33 +20,35 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.os.Messenger;
 
 public class NotificationService extends Service {
   // Data
+  private long _timer;
   private boolean   mRunning;
   private Runnable  mLooper;
   private Messenger mMessenger;
   private Handler   mServiceHandler;
   private NotificationManager mNotificationManager;
   // Constants
-  public  static final int MSG_PURCHASE = 104;
-  public  static final int MSG_ACCEL    = 105;
-  public  static final int MSG_DEACCEL  = 106;
+  public static final int MSG_PURCHASE = 104;
+  public static final int MSG_ACCEL    = 105;
+  public static final int MSG_DEACCEL  = 106;
   // Timer
-  private static final long DEF_TIME   = 1000L * 60*60;
-  private static final long ACCEL_TIME = 1000L * 60;
-  private long _timer = DEF_TIME;
+  private static final long TIMER_DEFAULT = 1000L * 60 * 60;
+  private static final long TIMER_ACCEL   = 1000L * 60;
   // Intents
-  public static final String INTENT_DATA = "data";
-  public static final String INTENT_SIGNATURE = "signature";
+  public static final String PURCHASE_DATA = "data";
+  public static final String PURCHASE_SIGNATURE = "signature";
   // Notification
-  public static final int TP_MSG_NOTIFICATION   = 1001;
-  public static final int TP_RATES_NOTIFICATION = 1002;
+  public static final int NOTIFICATION_MESSAGES = 1001;
+  public static final int NOTIFICATION_LIKES    = 1002;
+  // Actions
+  private static final String ACTION_START_ACCEL = "com.topface.topface.START_ACCEL";
+  private static final String ACTION_STOP_ACCEL  = "com.topface.topface.STOP_ACCEL";
+  private static final String ACTION_PURCHASE    = "com.topface.topface.PURCHASE";
   //---------------------------------------------------------------------------
   @Override
   public IBinder onBind(Intent intent) {
@@ -59,16 +60,31 @@ public class NotificationService extends Service {
     super.onCreate();
     Debug.log("NotifyService","onCreate");
 
+    _timer  = TIMER_DEFAULT;
     mLooper = new RunTask();
-    mMessenger = new Messenger(new IncomingHandler());
+    //mMessenger = new Messenger(new IncomingHandler());
     mServiceHandler = new Handler();
-    mServiceHandler.postDelayed(mLooper,_timer);
+    mServiceHandler.post(mLooper);
     mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
   }
   //---------------------------------------------------------------------------
   @Override
   public int onStartCommand(Intent intent,int flags,int startId) {
     Debug.log("NotifyService","onStartCommand");
+    String action = intent.getAction();
+    if(action!=null) {
+      if(action.equals(ACTION_START_ACCEL)) {
+        _timer = TIMER_ACCEL;
+        mServiceHandler.post(mLooper);
+      } else if(action.equals(ACTION_STOP_ACCEL)) {
+        _timer = TIMER_DEFAULT;
+        mServiceHandler.post(mLooper);
+      } else if(action.equals(ACTION_PURCHASE)) {
+        String data = intent.getStringExtra(PURCHASE_DATA);
+        String signature = intent.getStringExtra(PURCHASE_SIGNATURE);
+        verifyPurchase(data,signature);
+      }
+    }
     mRunning = true;
     return START_STICKY;
   }
@@ -88,56 +104,73 @@ public class NotificationService extends Service {
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
-  private void verifyPurchase(final String data,final String signature) {
+  public static void startAcceleration(Context context) {
+    Intent intent = new Intent(context, NotificationService.class);
+    intent.setAction(ACTION_START_ACCEL);
+    context.startService(intent);
+  }
+  //---------------------------------------------------------------------------
+  public static void stopAcceleration(Context context) {
+    Intent intent = new Intent(context, NotificationService.class);
+    intent.setAction(ACTION_STOP_ACCEL);
+    context.startService(intent);
+  }
+  //---------------------------------------------------------------------------
+  public static void purchase(Context context, String data, String signature) {
+    Intent intent = new Intent(context, NotificationService.class);
+    intent.setAction(ACTION_PURCHASE);
+    intent.putExtra(PURCHASE_DATA,data);
+    intent.putExtra(PURCHASE_SIGNATURE,signature);
+    context.startService(intent);
+  }
+  //---------------------------------------------------------------------------
+  private void verifyPurchase(final String data, final String signature) {
     // сохранить ордер
-    VerifyRequest verifyRequest = new VerifyRequest(getApplicationContext());
+    final VerifyRequest verifyRequest = new VerifyRequest(getApplicationContext());
     verifyRequest.data = data;
     verifyRequest.signature = signature;
     verifyRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
         Verify verify = Verify.parse(response);
-        resources(verify.power,verify.money);
-        
+        CacheProfile.power = verify.power;
+        CacheProfile.money = verify.money;
         // затереть ордер
+        broadcast(BuyingActivity.PURCHASE_ACTION);
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
+        verifyRequest.exec();
         // обратитесь в суппорт, ваш ордер
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
-  private void resources(int power,int money) {
-    CacheProfile.power = power;
-    CacheProfile.money = money;
-  }
-  //---------------------------------------------------------------------------
-  private void notifacations(int messages,int likes, int symphaty) {
-    boolean update = false;
+  private void notifications(int messages,int likes, int symphaty) {
+    //boolean update = false;
     
     if(CacheProfile.unread_messages != messages) {
-      update = true;
       CacheProfile.unread_messages = messages;
-      if(_timer!=ACCEL_TIME)
-        updateMessagesNotification(messages);
+      //update = true;
+      //if(_timer!=TIMER_ACCEL)
+      //updateMessagesNotification(messages);
     }
     
     if((CacheProfile.unread_likes+CacheProfile.unread_symphaties) != (likes+symphaty)) {
-      update = true;
+      //update = true;
       CacheProfile.unread_likes = likes;
       CacheProfile.unread_symphaties = symphaty;
-      if(_timer!=ACCEL_TIME)
-        updateRatesNotification(likes,symphaty);
+      //if(_timer!=TIMER_ACCEL)
+      //updateLikesNotification(likes,symphaty);
     }
     
-    if(update && _timer==ACCEL_TIME)
-      broadcast(DashboardActivity.BROADCAST_ACTION);
+    //if(update && _timer==TIMER_ACCEL)
+      //broadcast(DashboardActivity.BROADCAST_ACTION);
   }
   //---------------------------------------------------------------------------
-  private void updateRatesNotification(int likes,int rates) {
-    if(likes+rates == 0) {
-      deleteNotification(TP_RATES_NOTIFICATION);
+  private void updateLikesNotification(int likes,int symphaty) {
+    if(likes+symphaty == 0) {
+      deleteNotification(NOTIFICATION_LIKES);
       return;
     }
     
@@ -148,18 +181,20 @@ public class NotificationService extends Service {
     String title = "Topface";
     StringBuilder body = new StringBuilder("У вас есть новые оценки");
     Intent intent = null;
-    if(likes > rates)
+    /*
+    if(likes > symphaty)
       intent = new Intent(getApplicationContext(),LikesActivity.class);
     else
-      intent = new Intent(getApplicationContext(),RatesActivity.class);
+    */
+      intent = new Intent(getApplicationContext(),DashboardActivity.class); //SymphatyActivity
     PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,intent,0);
     notification.setLatestEventInfo(getApplicationContext(),title,body,pendingIntent);
-    mNotificationManager.notify(TP_RATES_NOTIFICATION, notification);
+    mNotificationManager.notify(NOTIFICATION_LIKES, notification);
   }
   //---------------------------------------------------------------------------
   private void updateMessagesNotification(int messages) {
     if(messages == 0) {
-      deleteNotification(TP_MSG_NOTIFICATION);
+      deleteNotification(NOTIFICATION_MESSAGES);
       return;
     }
     
@@ -191,7 +226,7 @@ public class NotificationService extends Service {
     Intent intent = new Intent(getApplicationContext(),InboxActivity.class);
     PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,intent,0);
     notification.setLatestEventInfo(getApplicationContext(),title,body,pendingIntent);
-    mNotificationManager.notify(TP_MSG_NOTIFICATION, notification);
+    mNotificationManager.notify(NOTIFICATION_MESSAGES, notification);
   }
   //---------------------------------------------------------------------------
   private void deleteNotification(int notify) {
@@ -211,7 +246,7 @@ public class NotificationService extends Service {
         return;
       
       if(!Http.isOnline(NotificationService.this) || App.SSID == null || App.SSID.length()==0) {
-        _timer = DEF_TIME;
+        //_timer = TIMER_DEFAULT;
         mServiceHandler.postDelayed(this,_timer);
         return;
       }
@@ -224,10 +259,11 @@ public class NotificationService extends Service {
         @Override
         public void success(final ApiResponse response) {
           Profile profile = Profile.parse(response);
-          notifacations(profile.unread_messages,profile.unread_likes,profile.unread_rates);
+          notifications(profile.unread_messages,profile.unread_likes,profile.unread_rates);
         }
         @Override
         public void fail(int codeError,ApiResponse response) {
+          //
         }
       }).exec();
       
@@ -237,30 +273,30 @@ public class NotificationService extends Service {
   //---------------------------------------------------------------------------
   // class IncomingHandler
   //---------------------------------------------------------------------------
-  class IncomingHandler extends Handler {
-    @Override
-    public void handleMessage(Message msg) {
-      switch (msg.what) {
-        case MSG_DEACCEL:
-          _timer = DEF_TIME;
-          Debug.log("NotifyService","MSG_DEACCEL");
-          mServiceHandler.postDelayed(mLooper,_timer);
-          break;
-        case MSG_ACCEL:
-          _timer = ACCEL_TIME;
-          Debug.log("NotifyService","MSG_ACCEL");
-          mServiceHandler.postDelayed(mLooper,_timer);
-          break;
-        case MSG_PURCHASE: {
-          Bundle bundle = msg.getData();
-          String data = bundle.getString(INTENT_DATA);
-          String signature = bundle.getString(INTENT_SIGNATURE);
-          verifyPurchase(data,signature);
-        } break;
-        default:
-          super.handleMessage(msg);
-      }
-    }
-  }
+//  class IncomingHandler extends Handler {
+//    @Override
+//    public void handleMessage(Message msg) {
+//      switch (msg.what) {
+//        case MSG_DEACCEL:
+//          _timer = DEF_TIME;
+//          Debug.log("NotifyService","MSG_DEACCEL");
+//          mServiceHandler.postDelayed(mLooper,_timer);
+//          break;
+//        case MSG_ACCEL:
+//          _timer = ACCEL_TIME;
+//          Debug.log("NotifyService","MSG_ACCEL");
+//          mServiceHandler.postDelayed(mLooper,_timer);
+//          break;
+//        case MSG_PURCHASE: {
+//          Bundle bundle = msg.getData();
+//          String data = bundle.getString(INTENT_DATA);
+//          String signature = bundle.getString(INTENT_SIGNATURE);
+//          verifyPurchase(data,signature);
+//        } break;
+//        default:
+//          super.handleMessage(msg);
+//      }
+//    }
+//  }
   //---------------------------------------------------------------------------
 }

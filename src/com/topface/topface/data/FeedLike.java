@@ -10,7 +10,7 @@ public class FeedLike extends AbstractData implements IAlbumData {
   // Data
   public static int unread_count; // количество оставшихся непрочитанных
   public int id;                  // идентификатор сообщения 
-  public int uid;                 // идентификатор фотографии в альбоме пользователя
+  public int uid;                 // идентификатор отправителя
   public int age;                 // возраст пользователя
   public int city_id;             // идентификатор города отправителя оценки
   public boolean online;          // флаг нахождения пользователя в онлайне

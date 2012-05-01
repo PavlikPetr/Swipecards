@@ -62,7 +62,7 @@ public class User extends AbstractData implements IAlbumData {
         profile.last_visit = item.optInt("last_visit");
         profile.online     = item.optBoolean("online");
         profile.status     = item.optString("status");
-        profile.ero         = item.optBoolean("ero");
+        profile.ero        = item.optBoolean("ero");
         profile.mutual     = item.optBoolean("mutual");
         
       /*

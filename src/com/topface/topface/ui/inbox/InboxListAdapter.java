@@ -33,15 +33,15 @@ public class InboxListAdapter extends BaseAdapter {
   private int mOwnerCityID;
   // Constants
   private static final int T_ALL   = 0;
-  private static final int T_CITY  = 1; // PITER
+  private static final int T_CITY  = 1;
   private static final int T_COUNT = 2;
   //private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
   //---------------------------------------------------------------------------
   public InboxListAdapter(Context context,AvatarManager<FeedInbox> avatarManager) {
     mContext = context;
     mAvatarManager = avatarManager;
-    mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    //mInflater = LayoutInflater.from(context);
+    //mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    mInflater = LayoutInflater.from(context);
     mOwnerCityID = CacheProfile.city_id;
   }
   //---------------------------------------------------------------------------
