@@ -148,12 +148,17 @@ public class SymphatyActivity extends Activity {
     symphatyRequest.callback(new ApiHandler(){
       @Override
       public void success(ApiResponse response) {
+        mSymphatyDataList.clear();
+        mSymphatyDataList.addAll(FeedSymphaty.parse(response));
+        
         if(mOnlyNewData)
           mFooterView.setVisibility(View.GONE);
         else
           mFooterView.setVisibility(View.VISIBLE);
-        mSymphatyDataList.clear();
-        mSymphatyDataList.addAll(FeedSymphaty.parse(response));
+        
+        if(mSymphatyDataList.size() == 0)
+          mFooterView.setVisibility(View.GONE);
+        
         mListAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();
         mListView.onRefreshComplete();

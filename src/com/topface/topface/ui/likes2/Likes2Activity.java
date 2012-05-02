@@ -149,12 +149,17 @@ public class Likes2Activity extends Activity {
     likesRequest.callback(new ApiHandler(){
       @Override
       public void success(ApiResponse response) {
+        mLikesDataList.clear();
+        mLikesDataList.addAll(FeedLike.parse(response));
+
         if(mOnlyNewData)
           mFooterView.setVisibility(View.GONE);
         else
           mFooterView.setVisibility(View.VISIBLE);
-        mLikesDataList.clear();
-        mLikesDataList.addAll(FeedLike.parse(response));
+        
+        if(mLikesDataList.size() == 0)
+          mFooterView.setVisibility(View.GONE);
+        
         mListAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();
         mListView.onRefreshComplete();

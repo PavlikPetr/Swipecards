@@ -63,9 +63,12 @@ public class SocialActivity extends Activity implements View.OnClickListener {
       case R.id.btnSocialVk:
         intent.putExtra(SocialWebActivity.TYPE,SocialWebActivity.TYPE_VKONTAKTE);
         break;
-      case R.id.btnSocialFb:
-        intent.putExtra(SocialWebActivity.TYPE,SocialWebActivity.TYPE_FACEBOOK);
-        break;
+      case R.id.btnSocialFb: {
+        //intent.putExtra(SocialWebActivity.TYPE,SocialWebActivity.TYPE_FACEBOOK);
+        
+        
+        
+      } break;
     }
     startActivityForResult(intent,SocialWebActivity.INTENT_SOCIAL_WEB);
   }

@@ -9,16 +9,13 @@ import com.topface.topface.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedInboxRequest;
-import com.topface.topface.services.NotificationService;
 import com.topface.topface.ui.AvatarManager;
 import com.topface.topface.ui.DoubleBigButton;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -44,7 +41,6 @@ public class InboxActivity extends Activity {
   private AvatarManager<FeedInbox> mAvatarManager;
   private ProgressDialog mProgressDialog;
   private DoubleBigButton mDoubleButton;
-  private NotificationManager mNotificationManager;
   // Constants
   private static final int LIMIT = 40;
   //---------------------------------------------------------------------------
@@ -55,8 +51,6 @@ public class InboxActivity extends Activity {
     Debug.log(this,"+onCreate");
     
     LeaksManager.getInstance().monitorObject(this);
-    
-    mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
     
     // Data
     mInboxDataList = new LinkedList<FeedInbox>();
@@ -153,20 +147,23 @@ public class InboxActivity extends Activity {
     
     mDoubleButton.setChecked(mOnlyNewData ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
     
-    mNotificationManager.cancel(NotificationService.NOTIFICATION_MESSAGES);
-    
     FeedInboxRequest inboxRequest = new FeedInboxRequest(getApplicationContext());
     inboxRequest.limit = LIMIT;
     inboxRequest.only_new = mOnlyNewData;
     inboxRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
+        mInboxDataList.clear();
+        mInboxDataList.addAll(FeedInbox.parse(response));
+
         if(mOnlyNewData)
           mFooterView.setVisibility(View.GONE);
         else
           mFooterView.setVisibility(View.VISIBLE);
-        mInboxDataList.clear();
-        mInboxDataList.addAll(FeedInbox.parse(response));
+        
+        if(mInboxDataList.size() == 0)
+          mFooterView.setVisibility(View.GONE);
+        
         mListAdapter.notifyDataSetChanged();
         mProgressDialog.cancel();
         mListView.onRefreshComplete();

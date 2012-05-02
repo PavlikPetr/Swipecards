@@ -70,7 +70,11 @@ public class SocialWebActivity extends Activity {
       if(msg.what==AuthToken.AUTH_COMPLETE) {
         mProgressBar.setVisibility(View.VISIBLE);
         // отправка токена на TP сервер
-        AuthToken.Token token   = (AuthToken.Token)msg.obj;
+        AuthToken.Token token = (AuthToken.Token)msg.obj;
+        if(token==null) {
+          finish();
+          return;
+        }
         AuthRequest authRequest = new AuthRequest(SocialWebActivity.this);
         authRequest.platform   = token.getSocialNet();
         authRequest.sid        = token.getUserId();

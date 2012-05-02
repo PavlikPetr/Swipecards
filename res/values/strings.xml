@@ -8,6 +8,16 @@
   <string name="default_city">Moscow</string>
   <string name="btn_ok">Ok</string>
   <string name="footer_previous">Previous messages</string>
+  <string name="purchasing_error">Please write message about purchasing error to support@topface.ru</string>
+  <string name="notification_title_message">You have new message</string>
+  <string name="notification_title_messages">You have new messages</string>
+  <string name="notification_title_rates">You have new rates</string>
+  <string name="notification_have">You have</string>
+  <string name="notification_message">new message</string>
+  <string name="notification_messages">new messages</string>
+  <string name="notification_messages1">new messages</string>
+  <string name="notification_rates">and new rates</string>
+  <string name="notification_rates1">new rates</string>
   
   <!-- Social Activity  -->
   <string name="social_btn_vk">Login via VKontakte</string>

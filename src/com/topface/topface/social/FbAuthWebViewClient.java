@@ -31,9 +31,10 @@ public class FbAuthWebViewClient extends WebViewClient {
   private Pattern mRegExpToken  = Pattern.compile("login_success.html#(.*access_token=.+)$");
   private Pattern mRegExpError  = Pattern.compile("login_success.html#(.*error=.+)$");
   private Pattern mRegExpLogout = Pattern.compile("(.*act=logout.+)$");
+  WebView mWebView;
   // Constants
   private static final long CLIENT_ID = 161347997227885L;
-  private static final String SCOPE   = "user_photos,publish_stream,email,user_birthday,friends_online_presence";
+  private static final String SCOPE   = "user_photos,publish_stream,email,user_birthday,friends_online_presence,user_about_me";
   //---------------------------------------------------------------------------
   /**
    * @param webView в котором будет происходить авторизация
@@ -49,7 +50,8 @@ public class FbAuthWebViewClient extends WebViewClient {
     mProgressIndicator = progressIndicator;
 
     // Передаем строку запроса на авторизацию в соц.сети
-    webView.loadUrl(getAuthUrl());
+    mWebView = webView;
+    mWebView.loadUrl(getAuthUrl());
   }
   //---------------------------------------------------------------------------
   /**
@@ -136,7 +138,7 @@ public class FbAuthWebViewClient extends WebViewClient {
     try {
       id = (String)jsonResult.get("id");
     } catch(JSONException e) {
-
+      e.printStackTrace();
     } 
     return id;
   }

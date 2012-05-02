@@ -5,6 +5,8 @@ import com.topface.topface.App;
 
 public class Debug {
   public static void log(Object obj,String msg) {
+    //if(true) return;
+    
     if(obj == null)
       Log.i(App.TAG,"::" + msg);
     else if(obj instanceof String)

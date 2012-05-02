@@ -7,6 +7,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.services.NotificationService;
 import com.topface.topface.social.SocialActivity;
 import com.topface.topface.ui.LeaksActivity;
 import com.topface.topface.ui.LogActivity;
@@ -22,11 +23,11 @@ import com.topface.topface.utils.Http;
 import com.topface.topface.utils.Imager;
 import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,7 +46,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   private TextView mInboxNotify;
   private TextView mSymphatyNotify;
   private ProgressDialog mProgressDialog;
-  private NotificationReceiver mNotificationReceiver; 
+  //private NotificationReceiver mNotificationReceiver; 
   // Constants
   public static final String BROADCAST_ACTION = "com.topface.topface.DASHBOARD_NOTIFICATION";
   //---------------------------------------------------------------------------
@@ -92,8 +93,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onStart() {
     super.onStart();
-    
-    //((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+
+    ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
     
     if(!Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
@@ -107,14 +108,15 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       finish();
       return;
     }
-    
+    /*
     // start broadcaster
     if(mNotificationReceiver == null) {
       mNotificationReceiver = new NotificationReceiver();
       registerReceiver(mNotificationReceiver,new IntentFilter(BROADCAST_ACTION));
     }
+    */
     
-    //NotificationService.startAcceleration(getApplicationContext());
+    NotificationService.startAcceleration(getApplicationContext());
     
     updateProfile();
     
@@ -123,13 +125,15 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   //---------------------------------------------------------------------------  
   @Override
   protected void onStop() {
+    /*
     // stop broadcaster
     if(mNotificationReceiver != null) {
       unregisterReceiver(mNotificationReceiver);
       mNotificationReceiver = null;
     }
-
-    //NotificationService.stopAcceleration(getApplicationContext());
+    */
+    
+    NotificationService.stopAcceleration(getApplicationContext());
     
     super.onStop();
   }

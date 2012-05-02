@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +32,7 @@ public class BuyingActivity extends Activity implements /*ServiceConnection,*/ V
   private ViewGroup mPower;
   private ResourcesView mResources;
   //private Messenger mNotificationService;
+  private PurchaseReceiver mPurchaseReceiver;
   private BillingService mBillingService;
   private TopfacePurchaseObserver mTopfacePurchaseObserver;
   private ProgressDialog mProgressDialog;
@@ -39,14 +41,14 @@ public class BuyingActivity extends Activity implements /*ServiceConnection,*/ V
   private static final int PRICE_COINS_40  = 40;
   private static final int PRICE_COINS_100 = 100;
   private static final int PRICE_ENERGY    = 10000;
-  public static final String PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
+  public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
   //---------------------------------------------------------------------------
   // class NotificationReceiver
   //---------------------------------------------------------------------------
   public class PurchaseReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-     if(intent.getAction().equals(PURCHASE_ACTION))
+     if(intent.getAction().equals(BROADCAST_PURCHASE_ACTION))
        mResources.setResources(CacheProfile.power,CacheProfile.money);
        mResources.invalidate();
     }
@@ -119,14 +121,29 @@ public class BuyingActivity extends Activity implements /*ServiceConnection,*/ V
   }
   //---------------------------------------------------------------------------
   @Override
-  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-    super.onActivityResult(requestCode,resultCode,data);
+  protected void onStart() {
+    super.onStart();
+    
+    // start broadcaster
+    if(mPurchaseReceiver == null) {
+      mPurchaseReceiver = new PurchaseReceiver();
+      registerReceiver(mPurchaseReceiver,new IntentFilter(BROADCAST_PURCHASE_ACTION));
+    }
+  }
+  //---------------------------------------------------------------------------
+  @Override
+  protected void onStop() {
+    // stop broadcaster
+    if(mPurchaseReceiver != null) {
+      unregisterReceiver(mPurchaseReceiver);
+      mPurchaseReceiver = null;
+    }
+    
+    super.onStop();
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
-    //unbindService(this);
-    //mNotificationService=null;
     mBillingService.unbind();
     super.onDestroy();
   }
@@ -135,16 +152,16 @@ public class BuyingActivity extends Activity implements /*ServiceConnection,*/ V
   public void onClick(View view) {
     switch(view.getId()) {
       case R.id.btnBuyingMoney6:
-        mBillingService.requestPurchase("android.test.purchased",null); // topface.coins.6
+        mBillingService.requestPurchase("topface.coins.6",null); // topface.coins.6
         break;
       case R.id.btnBuyingMoney40:
-        mBillingService.requestPurchase("android.test.canceled",null); // topface.coins.40
+        mBillingService.requestPurchase("topface.coins.40",null); // topface.coins.40
         break;
       case R.id.btnBuyingMoney100:
-        mBillingService.requestPurchase("android.test.refunded",null); // topface.coins.100
+        mBillingService.requestPurchase("topface.coins.100",null); // topface.coins.100
         break;
       case R.id.btnBuyingPower:
-        mBillingService.requestPurchase("android.test.item_unavailable",null); // topface.energy
+        mBillingService.requestPurchase("topface.energy.10000",null); // topface.energy.10000
         break;
     }
     //mProgressDialog.show();

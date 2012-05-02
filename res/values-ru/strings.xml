@@ -8,6 +8,16 @@
   <string name="default_city">Москва</string>
   <string name="btn_ok">Ok</string>
   <string name="footer_previous">Предыдущие сообщения</string>
+  <string name="purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
+  <string name="notification_title_message">Вы получили новое сообщение</string>
+  <string name="notification_title_messages">Вы получили новые сообщения</string>
+  <string name="notification_title_rates">Вы получили новые оценки</string>
+  <string name="notification_have">У вас есть</string>
+  <string name="notification_message">одно новое сообщение</string>
+  <string name="notification_messages">новых сообщения</string>
+  <string name="notification_messages1">новых сообщений</string>
+  <string name="notification_rates">и новые оценки</string>
+  <string name="notification_rates1">новые оценки</string>
   
   <!-- Social Activity  -->
   <string name="social_btn_vk">Войти через ВКонтакте</string>

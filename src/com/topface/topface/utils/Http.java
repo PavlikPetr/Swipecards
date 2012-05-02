@@ -83,7 +83,10 @@ public class Http {
       //httpConnection.setUseCaches(false);
       httpConnection.setConnectTimeout(HTTP_TIMEOUT);
       httpConnection.setReadTimeout(HTTP_TIMEOUT);
-      httpConnection.setRequestMethod("POST");
+      if(typeRequest==HTTP_POST_REQUEST)
+        httpConnection.setRequestMethod("POST");
+      else
+        httpConnection.setRequestMethod("GET");
       httpConnection.setDoOutput(true);
       httpConnection.setDoInput(true);
       httpConnection.setRequestProperty("Content-Type", "application/json");
@@ -98,7 +101,7 @@ public class Http {
       Debug.log(TAG,"req:"+postParams);   // REQUEST
 
       // отправляем post параметры
-      if(typeRequest == HTTP_POST_REQUEST && postParams != null) {
+      if(typeRequest == HTTP_POST_REQUEST && postParams != null && dataParams == null) {
         Debug.log(TAG,"begin:");
         out  = httpConnection.getOutputStream();
         byte[] buffer = postParams.getBytes("UTF8");
@@ -168,6 +171,20 @@ public class Http {
       Debug.log(TAG,"resp:" + response);   // RESPONSE
       Debug.log(TAG,"exit");
     } catch(Exception e) {
+      /*
+      try {
+        StringBuilder responseBuilder = new StringBuilder();
+        BufferedInputStream bis = new BufferedInputStream(in = httpConnection.getErrorStream());
+        byte[] buffer = new byte[1024];
+        int n;
+        while((n=bis.read(buffer)) > 0)
+          responseBuilder.append(new String(buffer,0,n)); 
+        response = responseBuilder.toString();
+        bis.close();
+      } catch(Exception e1) {
+        Debug.log(TAG,"http error:" + e1);
+      }
+      */
       Debug.log(TAG,"http exception:" + e);
     } finally {
       try {
