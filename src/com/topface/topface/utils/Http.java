@@ -171,7 +171,7 @@ public class Http {
       Debug.log(TAG,"resp:" + response);   // RESPONSE
       Debug.log(TAG,"exit");
     } catch(Exception e) {
-      /*
+      String errorResponse = null;
       try {
         StringBuilder responseBuilder = new StringBuilder();
         BufferedInputStream bis = new BufferedInputStream(in = httpConnection.getErrorStream());
@@ -179,13 +179,12 @@ public class Http {
         int n;
         while((n=bis.read(buffer)) > 0)
           responseBuilder.append(new String(buffer,0,n)); 
-        response = responseBuilder.toString();
+        errorResponse = responseBuilder.toString();
         bis.close();
       } catch(Exception e1) {
         Debug.log(TAG,"http error:" + e1);
       }
-      */
-      Debug.log(TAG,"http exception:" + e);
+      Debug.log(TAG,"http exception:" + e + errorResponse);
     } finally {
       try {
         Debug.log(TAG,"disconnect");

@@ -72,16 +72,18 @@ public class NotificationService extends Service {
   @Override
   public int onStartCommand(Intent intent,int flags,int startId) {
     Debug.log("NotifyService","onStartCommand");
-    String action = intent.getAction();
-    if(action!=null) {
-      if(action.equals(ACTION_START_ACCEL))
-        mDashboard = true;
-      else if(action.equals(ACTION_STOP_ACCEL))
-        mDashboard = false;
-      else if(action.equals(ACTION_PURCHASE)) {
-        String data = intent.getStringExtra(PURCHASE_DATA);
-        String signature = intent.getStringExtra(PURCHASE_SIGNATURE);
-        verifyPurchase(data,signature);
+    if(intent!=null) {
+      String action = intent.getAction();
+      if(action!=null) {
+        if(action.equals(ACTION_START_ACCEL))
+          mDashboard = true;
+        else if(action.equals(ACTION_STOP_ACCEL))
+          mDashboard = false;
+        else if(action.equals(ACTION_PURCHASE)) {
+          String data = intent.getStringExtra(PURCHASE_DATA);
+          String signature = intent.getStringExtra(PURCHASE_SIGNATURE);
+          verifyPurchase(data,signature);
+        }
       }
     }
     mRunning = true;
