@@ -18,10 +18,12 @@ import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.ui.dashboard.DashboardActivity;
 import com.topface.topface.utils.Debug;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 /**
@@ -31,6 +33,7 @@ public class SocialActivity extends Activity implements View.OnClickListener {
   // Data
   private Facebook mFacebook;
   private AsyncFacebookRunner mAsyncFacebookRunner;
+  private ProgressDialog mProgressDialog;
   // Constants
   private static final String APP_ID = "161347997227885";
   private static final String[] FB_PERMISSIONS = {"user_photos","publish_stream,email","user_birthday","friends_online_presence","user_about_me"};
@@ -43,22 +46,9 @@ public class SocialActivity extends Activity implements View.OnClickListener {
     mFacebook = new Facebook(APP_ID);
     mAsyncFacebookRunner = new AsyncFacebookRunner(mFacebook);
     
-    /*// clear web cache
-    mWebView.clearCache(true);
-    mWebView.clearFormData();
-    mWebView.clearView();
-    mWebView.clearHistory();
-    WebSettings webSettings = mWebView.getSettings();
-    webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-    webSettings.setAppCacheEnabled(false);
-    webSettings.setAppCacheMaxSize(0);
-    webSettings.setDatabaseEnabled(false);
-    webSettings.setSavePassword(false);
-    webSettings.setSaveFormData(false);
-    deleteDatabase("webview.db");
-    deleteDatabase("webviewCache.db");
-    CookieManager.getInstance().removeAllCookie();
-    */
+    // Progress Bar
+    mProgressDialog = new ProgressDialog(this);
+    mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
     // VKontakte Button
     ((Button)findViewById(R.id.btnSocialVk)).setOnClickListener(this);
@@ -71,12 +61,13 @@ public class SocialActivity extends Activity implements View.OnClickListener {
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    mFacebook.authorizeCallback(requestCode, resultCode, data);
-    if(requestCode != SocialWebActivity.INTENT_SOCIAL_WEB)
-      return;
-    if(resultCode == Activity.RESULT_OK) {
+    Debug.log("FB","onActivityResult");
+    if(requestCode==SocialWebActivity.INTENT_SOCIAL_WEB && resultCode==Activity.RESULT_OK) {
       startActivity(new Intent(this,DashboardActivity.class));
       finish();
+    } else if (resultCode==Activity.RESULT_OK) {
+      mProgressDialog.show();
+      mFacebook.authorizeCallback(requestCode, resultCode, data);
     }
   }
   //---------------------------------------------------------------------------
@@ -90,14 +81,16 @@ public class SocialActivity extends Activity implements View.OnClickListener {
     authRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
+        Debug.log("FB","Auth");
         Auth auth = Auth.parse(response);
         App.saveSSID(getApplicationContext(),auth.ssid);
         startActivity(new Intent(getApplicationContext(),DashboardActivity.class));
+        mProgressDialog.cancel();
         finish();
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
-        //
+        mProgressDialog.cancel();
       }
     }).exec();
   }
@@ -128,27 +121,50 @@ public class SocialActivity extends Activity implements View.OnClickListener {
   private DialogListener mDialogListener = new DialogListener(){
     @Override
     public void onComplete(Bundle values) {
+      Debug.log("FB","DialogListener");
       mAsyncFacebookRunner.request("/me",mRequestListener);
     }
     @Override
-    public void onFacebookError(FacebookError e) {}
+    public void onFacebookError(FacebookError e) {
+      Debug.log("FB","*onFacebookError:"+e.getMessage());
+      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+    }
     @Override
-    public void onError(DialogError e) {}
+    public void onError(DialogError e) {
+      Debug.log("FB","*onError");
+      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+    }
     @Override
-    public void onCancel() {}};
+    public void onCancel() {
+      Debug.log("FB","*onCancel");
+    }
+  };
   //---------------------------------------------------------------------------
   private RequestListener mRequestListener = new RequestListener() {
     @Override
-    public void onMalformedURLException(MalformedURLException e,Object state) {}
+    public void onMalformedURLException(MalformedURLException e,Object state) {
+      Debug.log("FB","onMalformedURLException");
+      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+    }
     @Override
-    public void onIOException(IOException e,Object state) {}
+    public void onIOException(IOException e,Object state) {
+      Debug.log("FB","onIOException");
+      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+    }
     @Override
-    public void onFileNotFoundException(FileNotFoundException e,Object state) {}
+    public void onFileNotFoundException(FileNotFoundException e,Object state) {
+      Debug.log("FB","onFileNotFoundException");
+      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+    }
     @Override
-    public void onFacebookError(FacebookError e,Object state) {}
+    public void onFacebookError(FacebookError e,Object state) {
+      Debug.log("FB","onFacebookError:"+e+":"+state);
+      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+    }
     @Override
     public void onComplete(String response,Object state) {
       try {
+        Debug.log("FB","RequestListener");
         JSONObject jsonResult = new JSONObject(response);
         String user_id = jsonResult.getString("id");
         AuthToken authToken = new AuthToken(getApplicationContext());
@@ -166,3 +182,20 @@ public class SocialActivity extends Activity implements View.OnClickListener {
   };
   //---------------------------------------------------------------------------
 }
+
+/*// clear web cache
+mWebView.clearCache(true);
+mWebView.clearFormData();
+mWebView.clearView();
+mWebView.clearHistory();
+WebSettings webSettings = mWebView.getSettings();
+webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+webSettings.setAppCacheEnabled(false);
+webSettings.setAppCacheMaxSize(0);
+webSettings.setDatabaseEnabled(false);
+webSettings.setSavePassword(false);
+webSettings.setSaveFormData(false);
+deleteDatabase("webview.db");
+deleteDatabase("webviewCache.db");
+CookieManager.getInstance().removeAllCookie();
+*/

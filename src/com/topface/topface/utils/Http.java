@@ -184,7 +184,7 @@ public class Http {
       } catch(Exception e1) {
         Debug.log(TAG,"http error:" + e1);
       }
-      Debug.log(TAG,"http exception:" + e + errorResponse);
+      Debug.log(TAG,"http exception:" + e + "" + errorResponse);
     } finally {
       try {
         Debug.log(TAG,"disconnect");

@@ -23,6 +23,7 @@ public class App extends Application {
   public static String SSID;
   // Constants
   public static final String TAG = "TopFace";
+  public static final boolean DEBUG = false;
   //---------------------------------------------------------------------------
   @Override
   public void onCreate() {
