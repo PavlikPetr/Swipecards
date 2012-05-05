@@ -94,7 +94,7 @@ public class SocialWebActivity extends Activity {
           @Override
           public void fail(int codeError,ApiResponse response) {
             mProgressBar.setVisibility(View.GONE);
-            Debug.log(SocialWebActivity.this,"ssid is wrong");
+            Debug.log(SocialWebActivity.this,"ssid is wrong:"+codeError);
             setResult(Activity.RESULT_CANCELED);
             finish();
           }

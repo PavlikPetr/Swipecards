@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 
 /**
@@ -31,20 +30,16 @@ import android.widget.Toast;
  */
 public class SocialActivity extends Activity implements View.OnClickListener {
   // Data
-  private Facebook mFacebook;
   private AsyncFacebookRunner mAsyncFacebookRunner;
   private ProgressDialog mProgressDialog;
   // Constants
-  private static final String APP_ID = "161347997227885";
   private static final String[] FB_PERMISSIONS = {"user_photos","publish_stream,email","user_birthday","friends_online_presence","user_about_me"};
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.ac_social);
-    
-    mFacebook = new Facebook(APP_ID);
-    mAsyncFacebookRunner = new AsyncFacebookRunner(mFacebook);
+    mAsyncFacebookRunner = new AsyncFacebookRunner(App.s_Facebook);
     
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
@@ -67,7 +62,7 @@ public class SocialActivity extends Activity implements View.OnClickListener {
       finish();
     } else if (resultCode==Activity.RESULT_OK) {
       mProgressDialog.show();
-      mFacebook.authorizeCallback(requestCode, resultCode, data);
+      App.s_Facebook.authorizeCallback(requestCode, resultCode, data);
     }
   }
   //---------------------------------------------------------------------------
@@ -105,8 +100,8 @@ public class SocialActivity extends Activity implements View.OnClickListener {
         break;
       case R.id.btnSocialFb: {
         //intent.putExtra(SocialWebActivity.TYPE,SocialWebActivity.TYPE_FACEBOOK);
-        if(!mFacebook.isSessionValid()) 
-          mFacebook.authorize(this, FB_PERMISSIONS, mDialogListener);
+        if(!App.s_Facebook.isSessionValid()) 
+          App.s_Facebook.authorize(this, FB_PERMISSIONS, mDialogListener);
       } break;
     }
     //startActivityForResult(intent,SocialWebActivity.INTENT_SOCIAL_WEB);
@@ -127,12 +122,10 @@ public class SocialActivity extends Activity implements View.OnClickListener {
     @Override
     public void onFacebookError(FacebookError e) {
       Debug.log("FB","*onFacebookError:"+e.getMessage());
-      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onError(DialogError e) {
       Debug.log("FB","*onError");
-      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onCancel() {
@@ -144,22 +137,18 @@ public class SocialActivity extends Activity implements View.OnClickListener {
     @Override
     public void onMalformedURLException(MalformedURLException e,Object state) {
       Debug.log("FB","onMalformedURLException");
-      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onIOException(IOException e,Object state) {
       Debug.log("FB","onIOException");
-      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onFileNotFoundException(FileNotFoundException e,Object state) {
       Debug.log("FB","onFileNotFoundException");
-      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onFacebookError(FacebookError e,Object state) {
       Debug.log("FB","onFacebookError:"+e+":"+state);
-      Toast.makeText(SocialActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onComplete(String response,Object state) {
@@ -168,7 +157,7 @@ public class SocialActivity extends Activity implements View.OnClickListener {
         JSONObject jsonResult = new JSONObject(response);
         String user_id = jsonResult.getString("id");
         AuthToken authToken = new AuthToken(getApplicationContext());
-        final AuthToken.Token token = authToken.setToken(AuthToken.SN_FACEBOOK,user_id,mFacebook.getAccessToken(),""+mFacebook.getAccessExpires());
+        final AuthToken.Token token = authToken.setToken(AuthToken.SN_FACEBOOK,user_id,App.s_Facebook.getAccessToken(),""+App.s_Facebook.getAccessExpires());
         runOnUiThread(new Runnable() {
           @Override
           public void run() {

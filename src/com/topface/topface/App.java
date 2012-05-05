@@ -1,5 +1,6 @@
 package com.topface.topface;
 
+import com.facebook.android.Facebook;
 import com.topface.topface.services.NotificationService;
 import com.topface.topface.ui.Recycle;
 import com.topface.topface.utils.CacheProfile;
@@ -19,11 +20,13 @@ import org.acra.annotation.ReportsCrashes;
 public class App extends Application {
   // Data
   public static boolean init;
+  public static Facebook s_Facebook;
   // SSID key
   public static String SSID;
   // Constants
-  public static final String TAG = "TopFace";
-  public static final boolean DEBUG = false;
+  public static final String  TAG = "TopFace";
+  private static final String APP_ID = "161347997227885";
+  public static final boolean DEBUG = true;
   //---------------------------------------------------------------------------
   @Override
   public void onCreate() {
@@ -41,6 +44,8 @@ public class App extends Application {
     init = CacheProfile.init(context);
 
     if(!init) return;
+    
+    s_Facebook = new Facebook(APP_ID);
     
     // ssid
     loadSSID(context);

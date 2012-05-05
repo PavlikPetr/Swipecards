@@ -33,24 +33,6 @@ public abstract class ApiRequest {
       Toast.makeText(mContext,mContext.getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
       return;
     }
-    /*
-    s_ThreadsPool.execute(new Runnable() {
-      @Override
-      public void run() {
-        Looper.prepare();
-        
-        ssid = App.SSID;
-        
-        ApiResponse response = new ApiResponse(Http.httpTPRequest(Global.API_URL,ApiRequest.this.toString()));
-        if(response.code == 3)
-          reAuth();
-        else
-          mHandler.sendMessage(Message.obtain(null,0,response));
-        
-        Looper.loop();
-      }
-    });
-    */
     
     new Thread(new Runnable() {
       @Override
@@ -61,8 +43,8 @@ public abstract class ApiRequest {
         
         do {
           ApiRequest.this.ssid = App.SSID;
-          rawResponse = Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString());
-          //rawResponse = Http.httpTPRequest(Global.API_URL,ApiRequest.this.toString());
+          //rawResponse = Http.httpSendTpRequest(Global.API_URL,ApiRequest.this.toString());
+          rawResponse = Http.httpTPRequest(Global.API_URL,ApiRequest.this.toString());
           
           if(rawResponse==null)
             Debug.log(App.TAG,"loop:"+counter);
@@ -90,6 +72,10 @@ public abstract class ApiRequest {
     Debug.log(this,"reAuth");
 
     final AuthToken.Token token   = new AuthToken(mContext).getToken();
+    
+    if(token==null) 
+      return;
+    
     final AuthRequest authRequest = new AuthRequest(mContext);
     authRequest.platform      = token.getSocialNet();
     authRequest.sid           = token.getUserId();
@@ -165,4 +151,23 @@ class LooperThread extends Thread {
     Looper.loop();
   }
 }
+*/
+
+/*
+s_ThreadsPool.execute(new Runnable() {
+  @Override
+  public void run() {
+    Looper.prepare();
+    
+    ssid = App.SSID;
+    
+    ApiResponse response = new ApiResponse(Http.httpTPRequest(Global.API_URL,ApiRequest.this.toString()));
+    if(response.code == 3)
+      reAuth();
+    else
+      mHandler.sendMessage(Message.obtain(null,0,response));
+    
+    Looper.loop();
+  }
+});
 */

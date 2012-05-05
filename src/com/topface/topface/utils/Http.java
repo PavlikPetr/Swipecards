@@ -5,10 +5,19 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -305,6 +314,46 @@ public class Http {
     Debug.log(TAG,"raw streaming");
     
     return new Pair<InputStream,HttpURLConnection>(buffInputStream,httpConnection);
+  }
+  //---------------------------------------------------------------------------
+  public static String httpTPRequest(String url,String params) {
+    String result = null;
+    HttpPost httpPost = new HttpPost(url);
+    httpPost.addHeader("Content-Type","application/json");
+    HttpParams httpParams = new BasicHttpParams();
+    DefaultHttpClient httpClient = new DefaultHttpClient(httpParams);
+    HttpConnectionParams.setConnectionTimeout(httpParams, HTTP_TIMEOUT);
+    HttpConnectionParams.setSoTimeout(httpParams, HTTP_TIMEOUT);
+    try {
+      httpPost.setEntity(new StringEntity(params,"UTF-8"));
+      HttpResponse response = httpClient.execute(httpPost);
+      HttpEntity entity = response.getEntity();
+      if(entity != null) {
+        InputStream stream = entity.getContent();
+        result = convertStreamToString(stream);
+        stream.close();
+      }
+    } catch (Exception e) {
+      result = null;
+    }
+    return result;
+  }
+  //---------------------------------------------------------------------------
+  public static String convertStreamToString(InputStream stream) {
+    StringBuilder stringBuilder = new StringBuilder();
+    try {
+      BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+      String line;
+      while ((line = reader.readLine()) != null)
+        stringBuilder.append(line);
+    } catch (IOException e) {
+    } finally {
+      try {
+        stream.close();
+      } catch (IOException e) {
+      }
+    }
+    return stringBuilder.toString();
   }
   //---------------------------------------------------------------------------
 }

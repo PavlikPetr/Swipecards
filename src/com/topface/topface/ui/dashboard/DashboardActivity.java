@@ -115,6 +115,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       registerReceiver(mNotificationReceiver,new IntentFilter(BROADCAST_ACTION));
     }
     */
+    App.s_Facebook.extendAccessTokenIfNeeded(this, null);
     
     NotificationService.startAcceleration(getApplicationContext());
     

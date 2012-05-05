@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" 
           package="com.topface.topface"
-          android:versionCode="9"
+          android:versionCode="11"
           android:installLocation="preferExternal"
-          android:versionName="1.0.1" >
+          android:versionName="1.0.2" >
   
-  <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8" />
+  <uses-sdk android:minSdkVersion="7" />
   
    <supports-screens
         android:smallScreens  = "false"
@@ -26,7 +26,7 @@
                android:icon="@drawable/ic_launcher"
                android:label="@string/app_name"
                android:theme="@android:style/Theme.NoTitleBar"
-               android:screenOrientation="portrait" >
+               android:screenOrientation="portrait" android:debuggable="true">
     
 
     <!-- activities -->

@@ -91,27 +91,6 @@ public class CitySearchActivity extends Activity {
       }
     });
     
-    /*
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-        android.R.layout.simple_list_item_1, 
-        android.R.id.text1, 
-        strings);
-    */
-    /*
-        SimpleAdapter adapter = new SimpleAdapter(this, 
-        createSensorsList(), 
-        android.R.layout.simple_list_item_2, 
-        new String[] {"title", "vendor"}, 
-        new int[] {android.R.id.text1, android.R.id.text2});
-    */
-    /*
-        SimpleAdapter adapter = new SimpleAdapter(this, 
-        createSensorsList(), 
-        R.layout.sensor_layout, 
-        new String[] {"title", "vendor", "power"}, 
-        new int[] {R.id.title, R.id.content, R.id.range});
-    */
-    
     // Progress Bar
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
@@ -126,12 +105,16 @@ public class CitySearchActivity extends Activity {
     citiesRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
-        mTopCitiesList = City.parse(response);
-        fillData(mTopCitiesList);
+        LinkedList<City> citiesList = City.parse(response);
+        if(citiesList.size()>0) {
+          mTopCitiesList.addAll(citiesList);
+          fillData(mTopCitiesList);
+        }
         mProgressDialog.cancel();
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
+        mProgressDialog.cancel();
       }
     }).exec();
   }
@@ -143,10 +126,12 @@ public class CitySearchActivity extends Activity {
       @Override
       public void success(ApiResponse response) {
         LinkedList<City> citiesList = City.parse(response);
-        fillData(citiesList);
+        if(citiesList.size()>0)
+          fillData(citiesList);
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
+        fillData(mTopCitiesList);
       }
     }).exec();
   }
@@ -168,3 +153,25 @@ public class CitySearchActivity extends Activity {
   }
   //---------------------------------------------------------------------------
 }
+
+
+/*
+    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+    android.R.layout.simple_list_item_1, 
+    android.R.id.text1, 
+    strings);
+*/
+/*
+    SimpleAdapter adapter = new SimpleAdapter(this, 
+    createSensorsList(), 
+    android.R.layout.simple_list_item_2, 
+    new String[] {"title", "vendor"}, 
+    new int[] {android.R.id.text1, android.R.id.text2});
+*/
+/*
+    SimpleAdapter adapter = new SimpleAdapter(this, 
+    createSensorsList(), 
+    R.layout.sensor_layout, 
+    new String[] {"title", "vendor", "power"}, 
+    new int[] {R.id.title, R.id.content, R.id.range});
+*/

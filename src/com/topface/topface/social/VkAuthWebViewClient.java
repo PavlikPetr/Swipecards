@@ -81,7 +81,7 @@ public class VkAuthWebViewClient extends WebViewClient {
       String expiresIn = queryMap.get("expires_in");
 
       // Запись данных и получение объекта токена
-      AuthToken authToken   = new AuthToken(mContext);
+      AuthToken authToken = new AuthToken(mContext);
       AuthToken.Token token = authToken.setToken(AuthToken.SN_VKONTAKTE,userId,tokenKey,expiresIn);
       mHandler.sendMessage(Message.obtain(null,AuthToken.AUTH_COMPLETE,token));
     } else if(mMatcherError.find() || mMatcherLogout.find()) {
