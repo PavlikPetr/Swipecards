@@ -18,6 +18,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -329,9 +330,11 @@ public class Http {
       HttpResponse response = httpClient.execute(httpPost);
       HttpEntity entity = response.getEntity();
       if(entity != null) {
-        InputStream stream = entity.getContent();
-        result = convertStreamToString(stream);
-        stream.close();
+        //InputStream stream = entity.getContent();
+        result = EntityUtils.toString(entity);
+        //result = convertStreamToString(stream);
+        //stream.close();
+        //entity.getContent().close();
       }
     } catch (Exception e) {
       result = null;

@@ -48,19 +48,19 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   private TextView mSymphatyNotify;
   private ProgressDialog mProgressDialog;
   private NotificationManager mNotificationManager;
-  private NotificationReceiver mNotificationReceiver;
+  private Intent mRegisteredReceiverIntent;
   // Constants
   public static final String BROADCAST_ACTION = "com.topface.topface.DASHBOARD_NOTIFICATION";
   //---------------------------------------------------------------------------
   // class NotificationReceiver
   //---------------------------------------------------------------------------
-  class NotificationReceiver extends BroadcastReceiver {
+  private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
       if(intent.getAction().equals(C2DMUtils.C2DM_NOTIFICATION))
         DashboardActivity.this.refreshNotifications();
     }
-  }
+  };
   //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -124,9 +124,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     
     
     // start broadcaster
-    if(mNotificationReceiver == null) {
-      mNotificationReceiver = new NotificationReceiver();
-      registerReceiver(mNotificationReceiver,new IntentFilter(C2DMUtils.C2DM_NOTIFICATION));
+    if(mRegisteredReceiverIntent == null) {
+      mRegisteredReceiverIntent = registerReceiver(mNotificationReceiver,new IntentFilter(C2DMUtils.C2DM_NOTIFICATION));
     }
     
     //NotificationService.startAcceleration(getApplicationContext());
@@ -148,9 +147,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     
     
     // stop broadcaster
-    if(mNotificationReceiver != null) {
+    if(mRegisteredReceiverIntent != null) {
       unregisterReceiver(mNotificationReceiver);
-      mNotificationReceiver = null;
+      mRegisteredReceiverIntent = null;
     }
 
     
