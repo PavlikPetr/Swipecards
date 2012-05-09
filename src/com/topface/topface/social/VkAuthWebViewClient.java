@@ -31,7 +31,7 @@ public class VkAuthWebViewClient extends WebViewClient {
   //https://login.vk.com/?act=logout
   // Constants
   private static final int CLIENT_ID = 2664589; //vokrug 2454030  //tf 2257829 //tf-d 2664589
-  private static final String SCOPE  = "notify,friends,photos,wall,groups,offline,messages";
+  private static final String SCOPE  = "notify,photos,offline,messages";
   //---------------------------------------------------------------------------
   /**
    * @param webView в котором будет происходить авторизация

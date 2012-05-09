@@ -26,7 +26,7 @@ public class App extends Application {
   // Constants
   public static final String  TAG = "TopFace";
   private static final String APP_ID = "161347997227885";
-  public static final boolean DEBUG = true;
+  public static final boolean DEBUG = false;
   //---------------------------------------------------------------------------
   @Override
   public void onCreate() {

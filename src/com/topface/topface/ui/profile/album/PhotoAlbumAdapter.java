@@ -95,7 +95,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
           mCache.put(position,rawBitmap);
       }
     };
-    t.setPriority(Thread.MAX_PRIORITY);
+    //t.setPriority(Thread.MAX_PRIORITY);
     LeaksManager.getInstance().monitorObject(t);
     t.start();
   }
@@ -117,7 +117,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
           mCache.put(position,rawBitmap);
       }
     };
-    t.setPriority(Thread.MIN_PRIORITY);
+    //t.setPriority(Thread.MIN_PRIORITY);
     LeaksManager.getInstance().monitorObject(t);
     t.start();
     

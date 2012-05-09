@@ -3,9 +3,9 @@
           package="com.topface.topface"
           android:versionCode="11"
           android:installLocation="preferExternal"
-          android:versionName="1.0.2" >
+          android:versionName="1.0.3" >
   
-  <uses-sdk android:minSdkVersion="7" />
+  <uses-sdk android:minSdkVersion="8" />
   
    <supports-screens
         android:smallScreens  = "false"
@@ -14,11 +14,16 @@
         android:anyDensity    = "true" />
   
   <!-- permissions -->
+  <permission android:name="com.topface.topface.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+  <uses-permission android:name="com.topface.topface.permission.C2D_MESSAGE" />
+  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.VIBRATE" />
   <uses-permission android:name="com.android.vending.BILLING" />
           
   <!-- application -->
@@ -26,11 +31,13 @@
                android:icon="@drawable/ic_launcher"
                android:label="@string/app_name"
                android:theme="@android:style/Theme.NoTitleBar"
-               android:screenOrientation="portrait" android:debuggable="true">
-    
+               android:screenOrientation="portrait" 
+               android:debuggable="false">
 
     <!-- activities -->
-    <activity android:name=".ui.dashboard.DashboardActivity" android:screenOrientation="portrait" android:launchMode="singleInstance" >
+    <activity android:name=".ui.dashboard.DashboardActivity" 
+              android:screenOrientation="portrait"
+              android:launchMode="singleInstance" >
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
@@ -64,6 +71,12 @@
     <activity android:name=".ui.LogActivity"   android:screenOrientation="portrait" />
     <activity android:name=".ui.LeaksActivity" android:screenOrientation="portrait" />
     
+    <!-- services  android:process=":notification"  -->
+    <service android:name=".services.NotificationService" />
+    <service android:name=".services.StatisticService" />
+    <service android:name=".services.ConnectionService" />
+    <service android:name=".billing.BillingService" />
+    
     <!-- receivers -->
     <receiver android:name=".billing.BillingReceiver">
         <intent-filter>
@@ -73,11 +86,19 @@
         </intent-filter>
     </receiver>
     
-    <!-- services  android:process=":notification"  -->
-    <service android:name=".services.NotificationService" />
-    <service android:name=".services.StatisticService" />
-    <service android:name=".services.ConnectionService" />
-    <service android:name=".billing.BillingService" />
+    <!-- c2dm -->
+    <service android:name=".C2DMReceiver" />
+    <receiver android:name="com.google.android.c2dm.C2DMBroadcastReceiver"
+              android:permission="com.google.android.c2dm.permission.SEND">
+        <intent-filter>
+            <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+            <category android:name="com.topface.topface"/>
+        </intent-filter>
+        <intent-filter>
+            <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+            <category android:name="com.topface.topface"/>
+        </intent-filter>
+     </receiver>
     
   </application>
   

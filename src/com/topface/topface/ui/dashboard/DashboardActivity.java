@@ -1,13 +1,13 @@
 package com.topface.topface.ui.dashboard;
 
 import com.topface.topface.App;
+import com.topface.topface.C2DMUtils;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.services.NotificationService;
 import com.topface.topface.social.SocialActivity;
 import com.topface.topface.ui.LeaksActivity;
 import com.topface.topface.ui.LogActivity;
@@ -28,6 +28,7 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,16 +47,17 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   private TextView mInboxNotify;
   private TextView mSymphatyNotify;
   private ProgressDialog mProgressDialog;
-  //private NotificationReceiver mNotificationReceiver; 
+  private NotificationManager mNotificationManager;
+  private NotificationReceiver mNotificationReceiver;
   // Constants
   public static final String BROADCAST_ACTION = "com.topface.topface.DASHBOARD_NOTIFICATION";
   //---------------------------------------------------------------------------
   // class NotificationReceiver
   //---------------------------------------------------------------------------
-  public class NotificationReceiver extends BroadcastReceiver {
+  class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-      if(intent.getAction().equals(BROADCAST_ACTION))
+      if(intent.getAction().equals(C2DMUtils.C2DM_NOTIFICATION))
         DashboardActivity.this.refreshNotifications();
     }
   }
@@ -85,6 +87,11 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     mProgressDialog = new ProgressDialog(this);
     mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
+    // C2DM
+    C2DMUtils.init(this);
+    
+    mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+    
     // is online
     if(!Http.isOnline(this))
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
@@ -93,8 +100,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   @Override
   protected void onStart() {
     super.onStart();
-
-    ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
     
     if(!Http.isOnline(this)){
       Toast.makeText(this,getString(R.string.internet_off),Toast.LENGTH_SHORT).show();
@@ -117,7 +122,14 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     */
     App.s_Facebook.extendAccessTokenIfNeeded(this, null);
     
-    NotificationService.startAcceleration(getApplicationContext());
+    
+    // start broadcaster
+    if(mNotificationReceiver == null) {
+      mNotificationReceiver = new NotificationReceiver();
+      registerReceiver(mNotificationReceiver,new IntentFilter(C2DMUtils.C2DM_NOTIFICATION));
+    }
+    
+    //NotificationService.startAcceleration(getApplicationContext());
     
     updateProfile();
     
@@ -134,7 +146,15 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     }
     */
     
-    NotificationService.stopAcceleration(getApplicationContext());
+    
+    // stop broadcaster
+    if(mNotificationReceiver != null) {
+      unregisterReceiver(mNotificationReceiver);
+      mNotificationReceiver = null;
+    }
+
+    
+    //NotificationService.stopAcceleration(getApplicationContext());
     
     super.onStop();
   }
@@ -182,6 +202,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
   }
   //---------------------------------------------------------------------------
   private void refreshNotifications() {
+    mNotificationManager.cancel(C2DMUtils.C2DM_NOTIFICATION_ID);
+    
     if(CacheProfile.unread_likes > 0) {
       mLikesNotify.setText(" "+CacheProfile.unread_likes+" ");
       mLikesNotify.setVisibility(View.VISIBLE);

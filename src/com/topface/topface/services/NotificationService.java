@@ -62,10 +62,10 @@ public class NotificationService extends Service {
     Debug.log("NotifyService","onCreate");
 
     _timer  = TIMER_DEFAULT;
-    mLooper = new RunTask();
+    //mLooper = new RunTask();
     //mMessenger = new Messenger(new IncomingHandler());
-    mServiceHandler = new Handler();
-    mServiceHandler.post(mLooper);
+    //mServiceHandler = new Handler();
+    //mServiceHandler.post(mLooper);
     mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
   }
   //---------------------------------------------------------------------------
