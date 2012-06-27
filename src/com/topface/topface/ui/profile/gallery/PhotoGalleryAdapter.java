@@ -5,13 +5,13 @@ import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
 import com.topface.topface.utils.Http;
-import com.topface.topface.utils.LeaksManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView.ScaleType;
 
@@ -20,14 +20,14 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
   private boolean mOwner;
   private Context mContext;
   private LinkedList<Album> mAlbumList;
-  private HashMap<Integer,Bitmap> mCache;
+  private HashMap<Integer, Bitmap> mCache;
   //private ExecutorService mThreadsPool;
   private boolean mBusy; 
   //---------------------------------------------------------------------------
   public PhotoGalleryAdapter(Context context,boolean bOwner) {
     mContext = context;
     mOwner = bOwner;
-    mCache = new HashMap<Integer,Bitmap>();
+    mCache = new HashMap<Integer, Bitmap>();
     mAlbumList = new LinkedList<Album>();
     //mThreadsPool = Executors.newFixedThreadPool(2);
   }
@@ -79,26 +79,29 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
     return convertView;
   }
   //---------------------------------------------------------------------------
-  private void loadingImage(final int position,final ProfileThumbView view) {
+  private void loadingImage(final int position, final ProfileThumbView view) {
     final Album album = (Album)getItem(position);
     Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
-        if(!mBusy) {
-          final Bitmap bitmap = Http.bitmapLoader(album.getSmallLink());
-          if(bitmap!=null && mCache!=null)
-            mCache.put(position,bitmap);
-            view.post(new Runnable() {
-              @Override
-              public void run() {
-                view.setImageBitmap(bitmap);
-              }
-            });
-        }
+        if(mBusy) return;
+        Bitmap bitmap = Http.bitmapLoader(album.getSmallLink());
+        if(bitmap==null || mCache==null) return;
+        mCache.put(position, bitmap);
+        imagePost(view, bitmap);
+        bitmap = null;
       }
     });
-    LeaksManager.getInstance().monitorObject(t);
     t.start();
+  }
+  //---------------------------------------------------------------------------
+  private void imagePost(final ImageView imageView,final Bitmap bitmap) {
+    imageView.post(new Runnable() {
+      @Override
+      public void run() {
+        imageView.setImageBitmap(bitmap);
+      }
+    });
   }
   //---------------------------------------------------------------------------
   public void release() {
@@ -106,8 +109,16 @@ public class PhotoGalleryAdapter extends BaseAdapter implements  OnScrollListene
     if(mAlbumList!=null)
       mAlbumList.clear();
     mAlbumList=null;
-    if(mCache!=null)
-      mCache.clear();
+    
+    int size = mCache.size(); 
+    for(int i=0; i<size; ++i) {
+      Bitmap bitmap = mCache.get(i);
+      if(bitmap!=null) {
+        bitmap.recycle();
+        mCache.put(i,null); // хз
+      }
+    }
+    mCache.clear();
     mCache=null;    
   }
   //---------------------------------------------------------------------------

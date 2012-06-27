@@ -6,11 +6,6 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
-/*
- *  Менеджер работающий с железной частью устройства
- *  собирает и отдает параметры и характеристики:
- *  клавы,экрана,процессора,сенсоров,
- */
 public class Device {
   // Data
   public static int width;

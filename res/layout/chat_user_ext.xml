@@ -37,7 +37,7 @@
     </LinearLayout>
 
     <!-- avatar -->
-    <com.topface.topface.ui.RoundedImageView
+    <com.topface.topface.ui.views.RoundedImageView
             topface:frame="chat"
             android:id="@+id/left_icon"
             android:layout_width="wrap_content"

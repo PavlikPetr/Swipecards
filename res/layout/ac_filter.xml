@@ -25,12 +25,12 @@
     <!-- place -->
     <PreferenceCategory android:title="@string/filter_place">
       
-      <!-- nearby -->
+      <!-- nearby
       <CheckBoxPreference
           android:key="@string/s_dating_nearby"
           android:title="@string/filter_nearby"
           android:defaultValue="false" />
-      
+       -->
       <!-- all cities -->
       <CheckBoxPreference
           android:key="@string/s_dating_cities_all"

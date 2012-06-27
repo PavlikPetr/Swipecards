@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="#080808" >
 
-    <com.topface.topface.ui.dating.DatingControl
-        android:id="@+id/galleryDating"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" /> 
-
-    <RelativeLayout
-        android:id="@+id/loHeader"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" >
-          <include layout="@layout/bar_header" />
-    </RelativeLayout>
+       <!-- Dating Album -->
+       <com.topface.topface.ui.views.DatingAlbum
+           android:id="@+id/glrDatingAlbum"
+           android:layout_width="fill_parent" 
+           android:layout_height="fill_parent" />
+    
+    <include layout="@layout/dating_control" />
+    
+     <TextView
+         android:id="@+id/tvDatingCounter"
+         android:layout_width="wrap_content" 
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_centerHorizontal="true" />
+    
+  <ProgressBar
+      android:id="@+id/prsDatingLoading"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:visibility="gone"
+      style="@android:style/Widget.ProgressBar.Small" />
+  
+          <ImageView
+              android:id="@+id/ivNewbie"
+              android:layout_width="fill_parent" 
+              android:layout_height="wrap_content" 
+              android:layout_alignParentTop="true"
+              android:visibility="invisible" />
 
 </RelativeLayout>

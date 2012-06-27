@@ -5,7 +5,7 @@
       android:layout_height="wrap_content" 
       android:background="@drawable/im_bar_button">
       
-	  <com.topface.topface.ui.DoubleButton
+	  <com.topface.topface.ui.views.DoubleButton
 	      android:id="@+id/btnDoubleTops"
 	      android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:text="@string/tops_btn_city"
-        android:textColor="@drawable/clr_text_btn"
+        android:textColor="@drawable/clr_text_selector"
         android:textSize="12dp"
         android:drawableRight="@drawable/tops_city_arrow_selector"
         android:background="@drawable/tops_city_selector"

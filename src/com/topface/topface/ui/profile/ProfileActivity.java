@@ -1,9 +1,8 @@
 package com.topface.topface.ui.profile;
 
 import java.util.LinkedList;
-import com.topface.topface.App;
+import com.google.android.c2dm.C2DMessaging;
 import com.topface.topface.Data;
-import com.topface.topface.Global;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Album;
@@ -19,23 +18,22 @@ import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.UserRequest;
-import com.topface.topface.social.Socium;
-import com.topface.topface.social.Socium.AuthException;
-import com.topface.topface.ui.dating.ResourcesView;
-import com.topface.topface.ui.inbox.ChatActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
 import com.topface.topface.ui.profile.album.PhotoEroAlbumActivity;
 import com.topface.topface.ui.profile.gallery.HorizontalListView;
 import com.topface.topface.ui.profile.gallery.PhotoEroGalleryAdapter;
 import com.topface.topface.ui.profile.gallery.PhotoGalleryAdapter;
+import com.topface.topface.ui.views.FrameImageView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.Http;
-import com.topface.topface.utils.Imager;
-import com.topface.topface.utils.LeaksManager;
+import com.topface.topface.utils.Socium;
+import com.topface.topface.utils.Utils;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -47,6 +45,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,18 +62,21 @@ public class ProfileActivity extends Activity{
   private boolean mChatInvoke;
   private Button mProfileButton;
   private View mMutualButton;
+  private TextView mResourcesPower;
+  private TextView mResourcesMoney;
   private TextView mHeaderTitle;
   private ViewGroup mEroViewGroup;
-  private ResourcesView mResources;
   private FrameImageView mFramePhoto;
   private HorizontalListView mListView;
   private HorizontalListView mListEroView;
   private PhotoGalleryAdapter mListAdapter;
   private PhotoEroGalleryAdapter mListEroAdapter;
-  //private ProgressDialog mProgressDialog;
   private LinkedList<Album> mPhotoList; 
   private LinkedList<Album> mEroList;
   private AlertDialog mAddPhotoDialog;
+  private ProgressBar mProgressBar;
+  private ScrollView mProfileGroupView;
+  private ProgressDialog mProgressDialog;
   // Info
   private TextView mName;
   private TextView mCity;
@@ -88,10 +91,14 @@ public class ProfileActivity extends Activity{
   private TextView mMarriage;
   private TextView mFinances;
   private TextView mSmoking;
+  private TextView mMarriageFieldName;
   //private TextView mStatus;
   //private TextView mJob;
   private TextView mAbout;
   private String mUserAvatarUrl;
+  private ProfileRequest profileRequest;
+  private UserRequest userRequest;
+  private AlbumRequest albumRequest;
   // Arrows
   private ImageView mGR;
   private ImageView mGL;
@@ -115,7 +122,6 @@ public class ProfileActivity extends Activity{
     Debug.log(this,"+onCreate");
 
     System.gc();
-    LeaksManager.getInstance().monitorObject(this);
     
     // Albums
     mPhotoList = new LinkedList<Album>();
@@ -123,15 +129,23 @@ public class ProfileActivity extends Activity{
     
     mHeaderTitle = (TextView)findViewById(R.id.tvHeaderTitle);
     mFramePhoto = (FrameImageView)findViewById(R.id.ivProfileFramePhoto);
-    mResources = (ResourcesView)findViewById(R.id.datingRes);
+    
+    // Resources
+    mResourcesPower = (TextView)findViewById(R.id.tvResourcesPower);
+    mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+    mResourcesPower.setText(""+CacheProfile.power+"%");
+    mResourcesMoney = (TextView)findViewById(R.id.tvResourcesMoney);
+    mResourcesMoney.setText(""+CacheProfile.money);
     
     // Header profile button 
     mProfileButton = ((Button)findViewById(R.id.btnHeader));
     mProfileButton.setOnClickListener(mOnClickListener);
     
-    // Progress Bar
-    //mProgressDialog = new ProgressDialog(this);
-    //mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    // Progress
+    mProgressBar = (ProgressBar)findViewById(R.id.prsProfileLoading);
+    mProfileGroupView = (ScrollView)findViewById(R.id.svProfileForm);
+    mProgressDialog = new ProgressDialog(this);
+    mProgressDialog.setMessage(getString(R.string.general_dialog_loading));
     
     // Arrows
     mGR  = (ImageView)findViewById(R.id.ivProfileArrowGL);
@@ -212,16 +226,18 @@ public class ProfileActivity extends Activity{
     //mStatus = (TextView)findViewById(R.id.tvProfileStatus);
     mAbout = (TextView)findViewById(R.id.tvProfileAbout);
     
+    mMarriageFieldName = (TextView)findViewById(R.id.tvProfileFieldNameMarriage);
+    
     getProfile();
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStart() {
     super.onStart();
-    
     if(mIsOwner) {
-      mResources.setResources(CacheProfile.power,CacheProfile.money);
-      mResources.invalidate();
+      mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+      mResourcesPower.setText(""+CacheProfile.power+"%");
+      mResourcesMoney.setText(""+CacheProfile.money);
     }
   }
   //---------------------------------------------------------------------------  
@@ -234,8 +250,7 @@ public class ProfileActivity extends Activity{
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
     if(requestCode == EDITOR_ACTIVITY_REQUEST_CODE/* && resultCode == RESULT_OK*/) {
-      getOwnerProfile(CacheProfile.getProfile());
-      //getOwnerAlbum();
+      setOwnerProfileInfo(CacheProfile.getProfile());
     }
     if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE/* && resultCode == RESULT_OK*/)
       if(mIsOwner)
@@ -250,58 +265,85 @@ public class ProfileActivity extends Activity{
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
+    
+    if(profileRequest!=null) profileRequest.cancel();
+    if(userRequest!=null) userRequest.cancel();
+    if(albumRequest!=null) albumRequest.cancel();
+    
     release();
     System.gc();
-
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
   private void getProfile() {
-    //mProgressDialog.show();
     if(mIsOwner) {
-      ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
+      profileRequest = new ProfileRequest(getApplicationContext());
       profileRequest.part = ProfileRequest.P_ALL;
       profileRequest.callback(new ApiHandler() {
         @Override
         public void success(final ApiResponse response) {
-          getOwnerProfile(Profile.parse(response));
-          getOwnerAlbum();
-          updateOwnerAlbum();
-          //mProgressDialog.cancel();
+          post(new Runnable() {
+            @Override
+            public void run() {
+              setOwnerProfileInfo(Profile.parse(response));
+              updateOwnerAlbum(); // ХАК для обновления всех фотографий
+              mProgressBar.setVisibility(View.GONE);
+              mProfileGroupView.setVisibility(View.VISIBLE);
+            }
+          });
         }
         @Override
         public void fail(int codeError,ApiResponse response) {
-          //mProgressDialog.cancel();
+          post(new Runnable() {
+            @Override
+            public void run() {
+              Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+              mProgressBar.setVisibility(View.GONE);
+            }
+          });
         }
       }).exec();
     } else {
-      UserRequest userRequest = new UserRequest(getApplicationContext());
+      userRequest = new UserRequest(getApplicationContext());
       userRequest.uids.add(mUserId);
       userRequest.callback(new ApiHandler() {
         @Override
         public void success(final ApiResponse response) {
-          getUserProfile(User.parse(mUserId,response));
-          //mProgressDialog.cancel();
+          post(new Runnable() {
+            @Override
+            public void run() {
+              setUserProfile(User.parse(mUserId,response));
+              mProgressBar.setVisibility(View.GONE);
+              mProfileGroupView.setVisibility(View.VISIBLE);
+            }
+          });
         }
         @Override
         public void fail(int codeError,ApiResponse response) {
-          //mProgressDialog.cancel();
+          post(new Runnable() {
+            @Override
+            public void run() {
+              Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+              mProgressBar.setVisibility(View.GONE);
+            }
+          });
         }
       }).exec();
     }
   }
   //---------------------------------------------------------------------------
   // свой профиль
-  private void getOwnerProfile(Profile profile) {
+  private void setOwnerProfileInfo(Profile profile) {
     CacheProfile.setProfile(profile);
     
     mUserId = CacheProfile.uid;
-    if(CacheProfile.sex==0)
-      mMarriage.setText(getString(R.string.profile_marriage_female));
+    if(CacheProfile.sex == 0)
+      mMarriageFieldName.setText(getString(R.string.profile_marriage_female));
     
     Http.imageLoader(CacheProfile.avatar_big,mFramePhoto);
-    //getOwnerAlbum();
+    
+    setOwnerAlbum(); 
     
     mFramePhoto.mOnlineState = true;
     
@@ -338,10 +380,116 @@ public class ProfileActivity extends Activity{
     
   }
   //---------------------------------------------------------------------------
+  private void setOwnerAlbum() {
+    mPhotoList.clear();
+    mEroList.clear();
+    mPhotoList.add(new Album()); // добавление элемента кнопки загрузки
+    mEroList.add(new Album());   // новых сообщений
+
+    // сортируем эро и не эро
+    LinkedList<Album> albumList = CacheProfile.albums;
+    for(Album album : albumList)
+      if(album.ero)
+        mEroList.add(album);
+      else
+        mPhotoList.add(album);
+    
+    // обновляем галереи
+    if(mPhotoList.size()>0) {
+      mListAdapter.setDataList(mPhotoList);
+    }
+    mListAdapter.notifyDataSetChanged();
+
+    if(mEroList.size()>0) {
+      mListEroAdapter.setDataList(mEroList);
+      mEroTitle.setVisibility(View.VISIBLE);
+      mEroViewGroup.setVisibility(View.VISIBLE);
+    }
+    mListEroAdapter.notifyDataSetChanged();
+    
+    if(mPhotoList.size() > Data.GRID_COLUMN+1) {
+      mGR.setVisibility(View.VISIBLE);
+      mGL.setVisibility(View.VISIBLE);
+    }
+
+    if(mEroList.size() > Data.GRID_COLUMN+1) {
+      mEGR.setVisibility(View.VISIBLE);
+      mEGL.setVisibility(View.VISIBLE);
+    }
+  }
+  //---------------------------------------------------------------------------
+  private void updateOwnerAlbum() {
+    albumRequest = new AlbumRequest(getApplicationContext());
+    albumRequest.uid  = CacheProfile.uid;
+    albumRequest.callback(new ApiHandler() {
+      @Override
+      public void success(ApiResponse response) {
+        mPhotoList.clear();
+        mEroList.clear();
+        mPhotoList.add(new Album()); // добавление элемента кнопки загрузки
+        mEroList.add(new Album());   // новых сообщений
+        
+        // сортируем эро и не эро
+        LinkedList<Album> albumList = Album.parse(response);
+        CacheProfile.albums.clear();
+        CacheProfile.albums = albumList;
+        for(Album album : albumList)
+          if(album.ero)
+            mEroList.add(album);
+          else
+            mPhotoList.add(album);
+        
+        // обновляем галереи
+        if(mPhotoList.size()>0)
+          mListAdapter.setDataList(mPhotoList);
+        if(mEroList.size()>0)
+          mListEroAdapter.setDataList(mEroList);
+
+
+        post(new Runnable() {
+          @Override
+          public void run() {
+            if(mEroList.size()>0) {
+              mEroTitle.setVisibility(View.VISIBLE);
+              mEroViewGroup.setVisibility(View.VISIBLE);
+            }
+            
+            mListAdapter.notifyDataSetChanged();
+            mListEroAdapter.notifyDataSetChanged();
+            
+            if(mPhotoList.size() > Data.GRID_COLUMN+1) {
+              mGR.setVisibility(View.VISIBLE);
+              mGL.setVisibility(View.VISIBLE);
+            }
+
+            if(mEroList.size() > Data.GRID_COLUMN+1) {
+              mEGR.setVisibility(View.VISIBLE);
+              mEGL.setVisibility(View.VISIBLE);
+            }
+          }
+        });
+      }
+      @Override
+      public void fail(int codeError,ApiResponse response) {
+        post(new Runnable() {
+          @Override
+          public void run() {
+            Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            mProgressBar.setVisibility(View.GONE);
+          }
+        });
+      }
+    }).exec();
+  }
+  //---------------------------------------------------------------------------
   // чужой профиль
-  private void getUserProfile(User profile) {
+  private void setUserProfile(User profile) {
     Http.imageLoader(profile.getBigLink(),mFramePhoto);
-    getUserAlbum();
+
+    setUserAlbum();
+    
+    if(profile.sex == 0)
+      mMarriageFieldName.setText(getString(R.string.profile_marriage_female));
     
     if(!profile.mutual && mMutualId>0)
       mMutualButton.setVisibility(View.VISIBLE);
@@ -439,103 +587,12 @@ public class ProfileActivity extends Activity{
     }
   }
   //---------------------------------------------------------------------------
-  private void getOwnerAlbum() {
-    mPhotoList.clear();
-    mEroList.clear();
-    mPhotoList.add(new Album()); // добавление элемента кнопки загрузки
-    mEroList.add(new Album());   // новых сообщений
-
-    // сортируем эро и не эро
-    LinkedList<Album> albumList = CacheProfile.albums;
-    for(Album album : albumList)
-      if(album.ero)
-        mEroList.add(album);
-      else
-        mPhotoList.add(album);
-    
-    // обновляем галереи
-    if(mPhotoList.size()>0) {
-      mListAdapter.setDataList(mPhotoList);
-    }
-    mListAdapter.notifyDataSetChanged();
-
-    if(mEroList.size()>0) {
-      mListEroAdapter.setDataList(mEroList);
-      mEroTitle.setVisibility(View.VISIBLE);
-      mEroViewGroup.setVisibility(View.VISIBLE);
-    }
-    mListEroAdapter.notifyDataSetChanged();
-    
-    if(mPhotoList.size() > Global.GRID_COLUMN+1) {
-      mGR.setVisibility(View.VISIBLE);
-      mGL.setVisibility(View.VISIBLE);
-    }
-
-    if(mEroList.size() > Global.GRID_COLUMN+1) {
-      mEGR.setVisibility(View.VISIBLE);
-      mEGL.setVisibility(View.VISIBLE);
-    }
-  }
-  //---------------------------------------------------------------------------
-  private void updateOwnerAlbum() {
-    AlbumRequest albumRequest = new AlbumRequest(getApplicationContext());
-    albumRequest.uid  = CacheProfile.uid;
-    albumRequest.callback(new ApiHandler() {
-      @Override
-      public void success(ApiResponse response) {
-        mPhotoList.clear();
-        mEroList.clear();
-        mPhotoList.add(new Album()); // добавление элемента кнопки загрузки
-        mEroList.add(new Album());   // новых сообщений
-        
-        // сортируем эро и не эро
-        LinkedList<Album> albumList = Album.parse(response);
-        CacheProfile.albums.clear();
-        CacheProfile.albums = albumList;
-        for(Album album : albumList)
-          if(album.ero)
-            mEroList.add(album);
-          else
-            mPhotoList.add(album);
-        
-        // обновляем галереи
-        if(mPhotoList.size()>0) {
-          mListAdapter.setDataList(mPhotoList);
-        }
-        mListAdapter.notifyDataSetChanged();
-
-        if(mEroList.size()>0) {
-          mListEroAdapter.setDataList(mEroList);
-          mEroTitle.setVisibility(View.VISIBLE);
-          mEroViewGroup.setVisibility(View.VISIBLE);
-        }
-        mListEroAdapter.notifyDataSetChanged();
-        
-        if(mPhotoList.size() > Global.GRID_COLUMN+1) {
-          mGR.setVisibility(View.VISIBLE);
-          mGL.setVisibility(View.VISIBLE);
-        }
-
-        if(mEroList.size() > Global.GRID_COLUMN+1) {
-          mEGR.setVisibility(View.VISIBLE);
-          mEGL.setVisibility(View.VISIBLE);
-        }
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-        //mProgressDialog.cancel();
-      }
-    }).exec();
-  }
-  //---------------------------------------------------------------------------
-  private void getUserAlbum() {
-    AlbumRequest albumRequest = new AlbumRequest(getApplicationContext());
+  private void setUserAlbum() {
+    albumRequest = new AlbumRequest(getApplicationContext());
     albumRequest.uid  = mUserId;
     albumRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
-        // отключаем прогресс
-        //mProgressDialog.cancel();
         
         // сортируем эро и не эро
         LinkedList<Album> albumList = Album.parse(response);        
@@ -546,31 +603,43 @@ public class ProfileActivity extends Activity{
             mPhotoList.add(album);
         
         // обнавляем галереи
-        if(mPhotoList.size()>0) {
+        if(mPhotoList.size()>0)
           mListAdapter.setDataList(mPhotoList);
-        }
-        mListAdapter.notifyDataSetChanged();
-
-        if(mEroList.size()>0) {
+        if(mEroList.size()>0)
           mListEroAdapter.setDataList(mEroList);
-          mEroTitle.setVisibility(View.VISIBLE);
-          mEroViewGroup.setVisibility(View.VISIBLE);
-        }
-        mListEroAdapter.notifyDataSetChanged();
-        
-        if(mPhotoList.size() > Global.GRID_COLUMN+1) {
-          mGR.setVisibility(View.VISIBLE);
-          mGL.setVisibility(View.VISIBLE);
-        }
 
-        if(mEroList.size() > Global.GRID_COLUMN+1) {
-          mEGR.setVisibility(View.VISIBLE);
-          mEGL.setVisibility(View.VISIBLE);
-        }
+        post(new Runnable() {
+          @Override
+          public void run() {
+            if(mEroList.size()>0) {
+              mEroTitle.setVisibility(View.VISIBLE);
+              mEroViewGroup.setVisibility(View.VISIBLE);
+            }
+            
+            mListAdapter.notifyDataSetChanged();
+            mListEroAdapter.notifyDataSetChanged();
+            
+            if(mPhotoList.size() > Data.GRID_COLUMN+1) {
+              mGR.setVisibility(View.VISIBLE);
+              mGL.setVisibility(View.VISIBLE);
+            }
+
+            if(mEroList.size() > Data.GRID_COLUMN+1) {
+              mEGR.setVisibility(View.VISIBLE);
+              mEGL.setVisibility(View.VISIBLE);
+            }
+          }
+        });
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
-        //mProgressDialog.cancel();
+        post(new Runnable() {
+          @Override
+          public void run() {
+            Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            mProgressBar.setVisibility(View.GONE);
+          }
+        });
       }
     }).exec();
   }
@@ -615,8 +684,8 @@ public class ProfileActivity extends Activity{
     if(mEroList!=null) mEroList.clear();
     mEroList=null;
     
-    if(Data.s_PhotoAlbum!=null) Data.s_PhotoAlbum.clear();
-    Data.s_PhotoAlbum=null;
+    if(Data.photoAlbum!=null) Data.photoAlbum.clear();
+    Data.photoAlbum=null;
   }
   //---------------------------------------------------------------------------
   // class AsyncTaskUploader
@@ -624,24 +693,17 @@ public class ProfileActivity extends Activity{
   class AsyncTaskUploader extends AsyncTask<Uri, Void, String[]> {
     @Override
     protected void onPreExecute() {
-        super.onPreExecute();
-        //mProgressDialog.show();
+      super.onPreExecute();
+      mProgressDialog.show();
     }
     @Override
     protected String[] doInBackground(Uri... uri) {
-      try {
-        Socium soc = new Socium(ProfileActivity.this.getApplicationContext());
-        // сжатие и поворот
-        return soc.uploadPhoto(uri[0]);
-      } catch(AuthException e) {
-        e.printStackTrace();
-      }
-      return null;
+      Socium soc = new Socium(getApplicationContext());
+      return soc.uploadPhoto(uri[0]);
     }
     @Override
     protected void onPostExecute(final String[] result) {
       super.onPostExecute(result);
-      //mProgressDialog.cancel();  
 
       if(mAddEroState) {
         // попап с выбором цены эро фотографии
@@ -659,7 +721,7 @@ public class ProfileActivity extends Activity{
         sendAddRequest(result,0);
     }
     private void sendAddRequest(final String[] result,final int price) {
-      ProfileActivity.this.runOnUiThread(new Runnable() {
+      runOnUiThread(new Runnable() {
         @Override
         public void run() {
           PhotoAddRequest addPhotoRequest = new PhotoAddRequest(ProfileActivity.this.getApplicationContext());
@@ -680,21 +742,23 @@ public class ProfileActivity extends Activity{
               album.big   = result[0];
               album.small = result[2];
               
-              /*
-              if(mAddEroState) {
-                mEroList.add(album);
-                mListEroAdapter.notifyDataSetChanged();
-              } else {
-                mPhotoList.add(album);
-                mListAdapter.notifyDataSetChanged();
-              }
-              */
-              updateOwnerAlbum();
-              
+              post(new Runnable() {
+                @Override
+                public void run() {
+                  updateOwnerAlbum();
+                  mProgressDialog.hide();
+                }
+              });
             }
             @Override
             public void fail(int codeError,ApiResponse response) {
-              //mProgressDialog.cancel();
+              post(new Runnable() {
+                @Override
+                public void run() {
+                  Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+                  mProgressDialog.hide();
+                }
+              });
             }
           }).exec();
         }
@@ -714,7 +778,7 @@ public class ProfileActivity extends Activity{
             finish();
             return;
           }
-          Imager.avatarUserPreloading(getApplicationContext(),mUserAvatarUrl);
+          Http.avatarUserPreloading(mUserAvatarUrl);
           Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
           intent.putExtra(ChatActivity.INTENT_USER_ID,mUserId);
           intent.putExtra(ChatActivity.INTENT_USER_NAME,mName.getText());
@@ -725,7 +789,8 @@ public class ProfileActivity extends Activity{
           startActivityForResult(new Intent(getApplicationContext(),EditProfileActivity.class),EDITOR_ACTIVITY_REQUEST_CODE);
         } break;
         case R.id.btnProfileExit: {
-          App.removeSSID(getApplicationContext());
+          Data.removeSSID(getApplicationContext());
+          C2DMessaging.unregister(getApplicationContext());
           finish();
         } break;
         case R.id.btnProfileMutual: {
@@ -760,11 +825,23 @@ public class ProfileActivity extends Activity{
           message.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-              Toast.makeText(getApplicationContext(),getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
+              post(new Runnable() {
+                @Override
+                public void run() {
+                  Toast.makeText(ProfileActivity.this,getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
+                  mProgressBar.setVisibility(View.GONE);
+                }
+              });
             }
             @Override
             public void fail(int codeError,ApiResponse response) {
-              //mProgressDialog.cancel();
+              post(new Runnable() {
+                @Override
+                public void run() {
+                  Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+                  mProgressBar.setVisibility(View.GONE);
+                }
+              });
             }
           }).exec();
         } break;
@@ -780,15 +857,15 @@ public class ProfileActivity extends Activity{
           Intent intent = new Intent();
           intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
           startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
-          mAddPhotoDialog.cancel();
         } break;
         case R.id.btnAddPhotoCamera: {
           Intent intent = new Intent();
           intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
           startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
-          mAddPhotoDialog.cancel();
         } break;
       }
+      if(mAddPhotoDialog!=null && mAddPhotoDialog.isShowing())
+        mAddPhotoDialog.cancel();
     }
   };
   //---------------------------------------------------------------------------
@@ -803,12 +880,12 @@ public class ProfileActivity extends Activity{
             Intent intent = new Intent(getApplicationContext(),PhotoAlbumActivity.class);
             if(mIsOwner==true) {
               --position;
-              Data.s_PhotoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
-              Data.s_PhotoAlbum.addAll(mPhotoList);
-              Data.s_PhotoAlbum.removeFirst();
+              Data.photoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
+              Data.photoAlbum.addAll(mPhotoList);
+              Data.photoAlbum.removeFirst();
               intent.putExtra(PhotoAlbumActivity.INTENT_OWNER,true);
             } else {
-              Data.s_PhotoAlbum = mPhotoList;
+              Data.photoAlbum = mPhotoList;
             }
             intent.putExtra(PhotoAlbumActivity.INTENT_USER_ID,mUserId);
             intent.putExtra(PhotoAlbumActivity.INTENT_ALBUM_POS,position);
@@ -823,13 +900,13 @@ public class ProfileActivity extends Activity{
             Intent intent = null;
             if(mIsOwner==true) {
               --position;
-              Data.s_PhotoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
-              Data.s_PhotoAlbum.addAll(mEroList);
-              Data.s_PhotoAlbum.removeFirst();
+              Data.photoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
+              Data.photoAlbum.addAll(mEroList);
+              Data.photoAlbum.removeFirst();
               intent = new Intent(getApplicationContext(),PhotoAlbumActivity.class);
               intent.putExtra(PhotoAlbumActivity.INTENT_OWNER,true);
             } else {
-              Data.s_PhotoAlbum = mEroList;
+              Data.photoAlbum = mEroList;
               intent = new Intent(getApplicationContext(),PhotoEroAlbumActivity.class);
             }
             intent.putExtra(PhotoEroAlbumActivity.INTENT_USER_ID,mUserId);

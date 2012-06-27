@@ -9,7 +9,6 @@ import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
-import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -60,14 +59,8 @@ public class EditProfileActivity extends PreferenceActivity {
     addPreferencesFromResource(R.layout.ac_edit_profile);
     Debug.log(this,"+onCreate");
     
-    LeaksManager.getInstance().monitorObject(this);
-    
     mFormInfo = new FormInfo(getApplicationContext(),CacheProfile.sex);
      
-    /*
-     *  PROFILE
-     */
-    
     // name
     Preference name = findPreference(getString(R.string.s_profile_name));
     name.setSummary(CacheProfile.first_name);
@@ -102,12 +95,12 @@ public class EditProfileActivity extends PreferenceActivity {
     
     // height
     Preference height = findPreference(getString(R.string.s_profile_height));
-    height.setSummary(""+CacheProfile.questionary_height);
+    height.setSummary(CacheProfile.questionary_height>0?""+CacheProfile.questionary_height:"");
     height.setOnPreferenceClickListener(mOnHeightListener);
     
     // weight
     Preference weight = findPreference(getString(R.string.s_profile_weight));
-    weight.setSummary(""+CacheProfile.questionary_weight);
+    weight.setSummary(CacheProfile.questionary_weight>0?""+CacheProfile.questionary_weight:"");
     weight.setOnPreferenceClickListener(mOnWeightListener);
     
     // fitness
@@ -231,11 +224,9 @@ public class EditProfileActivity extends PreferenceActivity {
     }
     settings.callback(new ApiHandler() {
       @Override
-      public void success(ApiResponse response) {
-      }
+      public void success(ApiResponse response) {}
       @Override
-      public void fail(int codeError,ApiResponse response) {
-      }
+      public void fail(int codeError,ApiResponse response) {}
     }).exec();
   }
   //---------------------------------------------------------------------------
@@ -287,11 +278,9 @@ public class EditProfileActivity extends PreferenceActivity {
     }
     questionary.callback(new ApiHandler() {
       @Override
-      public void success(ApiResponse response) {
-      }
+      public void success(ApiResponse response) {}
       @Override
-      public void fail(int codeError,ApiResponse response) {
-      }
+      public void fail(int codeError,ApiResponse response) {}
     }).exec();
   }
   //---------------------------------------------------------------------------

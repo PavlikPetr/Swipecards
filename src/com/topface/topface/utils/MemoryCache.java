@@ -1,6 +1,6 @@
 package com.topface.topface.utils;
 
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import android.graphics.Bitmap;
 
@@ -9,10 +9,10 @@ import android.graphics.Bitmap;
  */
 public class MemoryCache {
   // Data
-  private HashMap<Integer,SoftReference<Bitmap>> mCache;
+  private HashMap<Integer,WeakReference<Bitmap>> mCache;
   //---------------------------------------------------------------------------
   public MemoryCache() {
-    mCache = new HashMap<Integer, SoftReference<Bitmap>>();
+    mCache = new HashMap<Integer, WeakReference<Bitmap>>();
   }
   //---------------------------------------------------------------------------
   public boolean containsKey(Integer key) {
@@ -20,20 +20,23 @@ public class MemoryCache {
   }
   //---------------------------------------------------------------------------
   public Bitmap get(Integer position){
-    SoftReference<Bitmap> ref = mCache.get(position);
+    WeakReference<Bitmap> ref = mCache.get(position);
     return ref != null ? ref.get() : null;
   }
   //---------------------------------------------------------------------------
   public void put(Integer key, Bitmap bitmap){
-    mCache.put(key,new SoftReference<Bitmap>(bitmap));
+    mCache.put(key,new WeakReference<Bitmap>(bitmap));
   }
   //---------------------------------------------------------------------------
   public void clear() {
     Debug.log(this,"memory cache clearing");
-    for(int i=0;i<mCache.size();i++) {
+    int size = mCache.size(); 
+    for(int i=0; i<size; i++) {
       Bitmap bitmap = get(i);
-      if(bitmap!=null)
+      if(bitmap!=null) {
         bitmap.recycle();
+        mCache.put(i,null); // хз
+      }
     }
     mCache.clear();
   }

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class FeedInbox extends AbstractData implements IAlbumData {
+public class FeedInbox extends AbstractData {
   // Data
   public static int unread_count; // количество оставшихся непрочитанных
   public int id;               // идентификатор сообщения 
@@ -99,6 +99,10 @@ public class FeedInbox extends AbstractData implements IAlbumData {
     
     return userList;
   }
+  //---------------------------------------------------------------------------
+  public int getUid() { 
+    return uid; 
+  };
   //---------------------------------------------------------------------------
   @Override
   public String getBigLink() {

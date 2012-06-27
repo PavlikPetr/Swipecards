@@ -6,7 +6,7 @@ import com.topface.topface.utils.Debug;
 
 public class ApiResponse {
   // Data
-  public int code=-1;
+  public int code = -1;
   public JSONObject mJSONResult;
   // Constants
   public static final int RESULT_OK = -1;
@@ -48,6 +48,28 @@ public class ApiResponse {
       }
       
       mJSONResult = new JSONObject(response);
+      if(!mJSONResult.isNull("error")) {
+        mJSONResult = mJSONResult.getJSONObject("error");
+        code = mJSONResult.getInt("code");
+      } else if(!mJSONResult.isNull("result"))
+        mJSONResult = mJSONResult.getJSONObject("result");
+      else
+        code = WRONG_RESPONSE;
+    } catch (Exception e) {
+      code = WRONG_RESPONSE;
+      Debug.log(this,"json resonse is wrong:" + response);
+    }
+  }
+  //---------------------------------------------------------------------------
+  public ApiResponse(JSONObject response) {
+    try {
+      if(response == null) {
+        Debug.log(this,"json response is null");
+        code = NULL_RESPONSE;
+        return;
+      }
+      
+      mJSONResult = response;
       if(!mJSONResult.isNull("error")) {
         mJSONResult = mJSONResult.getJSONObject("error");
         code = mJSONResult.getInt("code");

@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import com.google.android.c2dm.C2DMessaging;
 import com.topface.topface.R;
-import com.topface.topface.ui.dashboard.DashboardActivity;
+import com.topface.topface.ui.MainActivity;
 
 public class C2DMUtils {
   // Data
@@ -17,7 +17,7 @@ public class C2DMUtils {
   public static final String C2DM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
   //---------------------------------------------------------------------------
   public static void init(Context context) {
-    SharedPreferences preferences = context.getSharedPreferences(Global.SHARED_PREFERENCES_TAG,Context.MODE_PRIVATE);
+    SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
     Boolean registered = preferences.getBoolean(C2DM_REGISTERED,false);
 
     //Проверяем, зарегестрированны ли мы (т.е. есть ли у нас токен) и то, что мы удачно отправили его на сервер
@@ -28,7 +28,7 @@ public class C2DMUtils {
   }
   //---------------------------------------------------------------------------
   public static void setRegisteredFlag(Context context) {
-    SharedPreferences preferences = context.getSharedPreferences(Global.SHARED_PREFERENCES_TAG,Context.MODE_PRIVATE);
+    SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
     SharedPreferences.Editor editor = preferences.edit();
     editor.putBoolean(C2DM_REGISTERED,true);
     editor.commit();
@@ -42,12 +42,12 @@ public class C2DMUtils {
       Notification notification = new Notification(R.drawable.ic_statusbar,data,System.currentTimeMillis());
 
       notification.defaults |= Notification.DEFAULT_SOUND;
-      notification.defaults |= Notification.DEFAULT_VIBRATE;
+      //notification.defaults |= Notification.DEFAULT_VIBRATE;
       notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
       //HELLO_ID;
       int notificationId = C2DM_NOTIFICATION_ID;
-      Intent i = new Intent(context,DashboardActivity.class);
+      Intent i = new Intent(context,MainActivity.class);
       i.putExtra("C2DM",true);
 
       //Активити, котолрое будет запущено после уведомления

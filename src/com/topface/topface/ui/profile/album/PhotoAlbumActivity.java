@@ -6,9 +6,8 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.MainRequest;
 import com.topface.topface.requests.PhotoDeleteRequest;
-import com.topface.topface.ui.dating.DatingAlbum;
+import com.topface.topface.ui.views.DatingAlbum;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -44,8 +43,6 @@ public class PhotoAlbumActivity extends Activity {
     
     System.gc();
     
-    LeaksManager.getInstance().monitorObject(this);
-    
     //Header
     mHeaderBar = (ViewGroup)findViewById(R.id.tvHeaderBar);
 
@@ -54,7 +51,7 @@ public class PhotoAlbumActivity extends Activity {
     
     // Progress Dialog
     mProgressDialog = new ProgressDialog(this);
-    mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    mProgressDialog.setMessage(getString(R.string.general_dialog_loading));
     
     mOwner = getIntent().getBooleanExtra(INTENT_OWNER,false);
     
@@ -67,7 +64,7 @@ public class PhotoAlbumActivity extends Activity {
     }
     
     // Gallery Adapter
-    mGalleryAdapter = new PhotoAlbumAdapter(getApplicationContext(),Data.s_PhotoAlbum);
+    mGalleryAdapter = new PhotoAlbumAdapter(getApplicationContext(),Data.photoAlbum);
 
     // Gallery
     mGallery = (DatingAlbum)findViewById(R.id.galleryAlbum);
@@ -86,13 +83,13 @@ public class PhotoAlbumActivity extends Activity {
     mGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> arg0,View arg1,int position,long arg3) {
-        PhotoAlbumActivity.this.setCounter(position+1,Data.s_PhotoAlbum.size()); //  УПРАВЛЕНИЕ СЧЕТЧИКОМ
+        PhotoAlbumActivity.this.setCounter(position+1,Data.photoAlbum.size()); //  УПРАВЛЕНИЕ СЧЕТЧИКОМ
       }
       @Override
       public void onNothingSelected(AdapterView<?> arg0) {}
     });
     
-    setCounter(position+1,Data.s_PhotoAlbum.size());
+    setCounter(position+1,Data.photoAlbum.size());
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -143,15 +140,19 @@ public class PhotoAlbumActivity extends Activity {
     switch(item.getItemId()) {
       case MENU_MAIN: {
         MainRequest request = new MainRequest(getApplicationContext());
-        request.photoid = Data.s_PhotoAlbum.get(mGallery.getSelectedItemPosition()).id;
+        request.photoid = Data.photoAlbum.get(mGallery.getSelectedItemPosition()).id;
         request.callback(new ApiHandler() {
           @Override
           public void success(ApiResponse response) {
-            Toast.makeText(PhotoAlbumActivity.this,getString(R.string.album_menu_did_main),Toast.LENGTH_SHORT).show();
+            post(new Runnable() {
+              @Override
+              public void run() {
+                Toast.makeText(PhotoAlbumActivity.this,getString(R.string.album_menu_did_main),Toast.LENGTH_SHORT).show(); 
+              }
+            });
           }
           @Override
-          public void fail(int codeError,ApiResponse response) {
-          }
+          public void fail(int codeError,ApiResponse response) {}
         }).exec();
       } break;
       case MENU_DELETE: {
@@ -179,18 +180,22 @@ public class PhotoAlbumActivity extends Activity {
   //---------------------------------------------------------------------------
   private void deletePhoto() {
     PhotoDeleteRequest request = new PhotoDeleteRequest(getApplicationContext());
-    request.photoid = Data.s_PhotoAlbum.get(mGallery.getSelectedItemPosition()).id;
+    request.photoid = Data.photoAlbum.get(mGallery.getSelectedItemPosition()).id;
     request.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
-        Toast.makeText(PhotoAlbumActivity.this,getString(R.string.album_menu_did_delete),Toast.LENGTH_SHORT).show();
+        post(new Runnable() {
+          @Override
+          public void run() {
+            Toast.makeText(PhotoAlbumActivity.this,getString(R.string.album_menu_did_delete),Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK);
+          }
+        });
         //Data.s_PhotoAlbum.remove(mGallery.getSelectedItemPosition());
         //mGalleryAdapter.notifyDataSetChanged();
-        setResult(RESULT_OK);
       }
       @Override
-      public void fail(int codeError,ApiResponse response) {
-      }
+      public void fail(int codeError,ApiResponse response) {}
     }).exec();    
   }
   //---------------------------------------------------------------------------

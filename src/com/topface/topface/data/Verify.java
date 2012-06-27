@@ -16,7 +16,9 @@ public class Verify extends AbstractData {
     try {
       verify.completed = response.mJSONResult.optBoolean("completed");
       verify.money     = response.mJSONResult.optInt("money");
-      verify.power     = response.mJSONResult.optInt("power");
+      int power = response.mJSONResult.optInt("power");
+      //if(power > 10000) power = 10000;
+      verify.power = (int)(power * 0.01);
       verify.order     = response.mJSONResult.optString("order");
     } catch(Exception e) {
       Debug.log("Verify.class","Wrong response parsing: " + e);

@@ -5,7 +5,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.Album;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
-import com.topface.topface.utils.LeaksManager;
 import com.topface.topface.utils.MemoryCache;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -60,13 +59,10 @@ public class PhotoAlbumAdapter extends BaseAdapter {
       holder = (ViewHolder)convertView.getTag();
     
     Bitmap bitmap = mCache.get(position);
-    if(bitmap!=null && position==0) {
+    if(bitmap!=null)
       holder.mImageView.setImageBitmap(bitmap);
-    } else if(bitmap!=null && position!=0)
-      holder.mImageView.setImageBitmap(bitmap);
-    else {
+    else
       loadingImage(position, holder.mImageView);
-    }
     
     int prePosition = position>=mPrevPosition ? position+1 : position-1;
     if(prePosition>0 && position<(getCount()-1))
@@ -77,26 +73,29 @@ public class PhotoAlbumAdapter extends BaseAdapter {
     return convertView;
   }
   //---------------------------------------------------------------------------
+//  int x = -1;
   public void loadingImage(final int position,final ImageView view) {
+//    if(x == position)
+//      return;
+//    x = position;
     Thread t = new Thread() {
       @Override
       public void run() {
-        final Bitmap rawBitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink());
+        final Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink());
         view.post(new Runnable() {
           @Override
           public void run() {
-            if(rawBitmap!=null)
-              view.setImageBitmap(rawBitmap);
+            if(bitmap!=null)
+              view.setImageBitmap(bitmap);
             else
-              view.setImageResource(R.drawable.icon_people);
+              view.setImageResource(R.drawable.im_photo_error);
           }
         });
-        if(mCache!=null && rawBitmap!=null)
-          mCache.put(position,rawBitmap);
+        if(bitmap==null || mCache==null) return;
+        mCache.put(position, bitmap);
       }
     };
-    //t.setPriority(Thread.MAX_PRIORITY);
-    LeaksManager.getInstance().monitorObject(t);
+    t.setPriority(Thread.MAX_PRIORITY);
     t.start();
   }
   //---------------------------------------------------------------------------
@@ -112,13 +111,13 @@ public class PhotoAlbumAdapter extends BaseAdapter {
     Thread t = new Thread() {
       @Override
       public void run() {
-        Bitmap rawBitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink());
-        if(mCache!=null)
-          mCache.put(position,rawBitmap);
+        Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink());
+        if(bitmap==null || mCache==null) return;
+        mCache.put(position,bitmap);
+        bitmap = null;
       }
     };
-    //t.setPriority(Thread.MIN_PRIORITY);
-    LeaksManager.getInstance().monitorObject(t);
+    t.setPriority(Thread.MIN_PRIORITY);
     t.start();
     
     mPreRunning = position;

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class FeedRate extends AbstractData implements IAlbumData {
+public class FeedRate extends AbstractData {
   // Data
   public static int unread_count; // количество оставшихся непрочитанных
   public int uid;    // идентификатор фотографии в альбоме пользвоателя
@@ -58,6 +58,10 @@ public class FeedRate extends AbstractData implements IAlbumData {
     
     return ratesList;
   }
+  //---------------------------------------------------------------------------
+  public int getUid() { 
+    return uid; 
+  };
   //---------------------------------------------------------------------------
   @Override
   public String getBigLink() {

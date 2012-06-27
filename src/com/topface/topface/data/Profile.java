@@ -9,7 +9,7 @@ import com.topface.topface.utils.Debug;
 /*
  *  Класс профиля владельца устройства
  */
-public class Profile extends AbstractData implements IAlbumData {
+public class Profile extends AbstractData {
   // Data
   public int uid;                // id пользователя в топфейсе
   public String first_name;      // имя пользователя
@@ -52,8 +52,9 @@ public class Profile extends AbstractData implements IAlbumData {
   public int questionary_weight;           // вес пользователя
   public int questionary_height;           // рост пользователя
   
-  public LinkedList<Album> albums; // альбом пользователя
-  public String status;            // статус пользователя
+  public LinkedList<Album> albums;   // альбом пользователя
+  public String status;              // статус пользователя
+  public boolean isNewbie;    // поле новичка
   //---------------------------------------------------------------------------
   public static Profile parse(ApiResponse response) {
     Profile profile = new Profile();
@@ -66,7 +67,10 @@ public class Profile extends AbstractData implements IAlbumData {
         profile.unread_symphaties = resp.optInt("unread_symphaties");
         profile.average_rate    = resp.optInt("average_rate");
         profile.money = resp.optInt("money");
-        profile.power = resp.optInt("power");
+        
+        int power = resp.optInt("power");
+        //if(power > 10000) power = 10000;
+        profile.power = (int)(power * 0.01);
         
         profile.uid  = resp.optInt("uid");
         profile.age  = resp.optInt("age");
@@ -142,12 +146,29 @@ public class Profile extends AbstractData implements IAlbumData {
         profile.questionary_weight = questionary.optInt("weight");
         profile.questionary_height = questionary.optInt("height");
       }
+      
+      // newbie
+      if(!resp.isNull("flags")) {
+        JSONArray flags = resp.getJSONArray("flags");
+        for(int i=0;i<flags.length();i++) {
+          profile.isNewbie = true;
+          String item = flags.getString(i);
+          if(item.equals("NOVICE_ENERGY")) {
+            profile.isNewbie = false;
+            break;
+          }
+        }
+      }
     } catch(Exception e) {
       Debug.log("Profile.class","Wrong response parsing: " + e);
     }
     
     return profile;
   }
+  //---------------------------------------------------------------------------
+  public int getUid() { 
+    return uid; 
+  };
   //---------------------------------------------------------------------------
   @Override
   public String getBigLink() {
@@ -160,3 +181,4 @@ public class Profile extends AbstractData implements IAlbumData {
   }
   //---------------------------------------------------------------------------
 }
+  // "ADMIN_MESSAGE","QUESTIONARY_FILLED","CHANGE_PHOTO","STANDALONE_BONUS","STANDALONE","GUARDBIT","ADMIN_MESSAGES_WITH_ID","IS_TOPFACE_MEMBER","IS_LICE_MER_MEMBER","MAXSTATS_WATCHED","MAXSTATS_CHECKED","MESSAGES_FEW","MESSAGES_MANY","GIFTS_NO","GIFTS_FEW","GIFTS_MANY","ACTIVE","SEXUALITY_FIRST_SEND","FACEBOOK_VIRUS_ACTION_OLD","FACEBOOK_VIRUS_ACTION_OLD_2","FACEBOOK_VIRUS_ACTION_OLD_3","FACEBOOK_VIRUS_ACTION_OLD_4","FACEBOOK_VIRUS_ACTION_OLD_5","FACEBOOK_VIRUS_ACTION_OLD_6","FRIENDS_DUMPED","MY_FRIENDS_CANNOT_SEE_ME","FACEBOOK_VIRUS_ACTION","HAS_RESET_SEXUALITY","HAS_RESET_SEXUALITY_2","IN_SEARCH","SHOW_NEWDESIGN_TIPS","MOBILE_USER","PHONE_APP_USED","NOVICE_BONUS_SHOW","PHONE_APP_ADMSG_RECEIVED"

@@ -9,7 +9,7 @@ import com.topface.topface.utils.Debug;
 /*
  * Класс профиля окна топов
  */
-public class Top extends AbstractData implements IAlbumData {
+public class Top extends AbstractData {
   // Data
   public int uid;      // идентификатор красивого пользователя 
   public int liked;    // процент абсолютного значения красоты
@@ -35,6 +35,10 @@ public class Top extends AbstractData implements IAlbumData {
     
     return userList;
   }
+  //---------------------------------------------------------------------------
+  public int getUid() { 
+    return uid; 
+  };
   //---------------------------------------------------------------------------
   @Override
   public String getBigLink() {

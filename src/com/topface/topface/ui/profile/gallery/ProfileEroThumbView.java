@@ -1,7 +1,7 @@
 package com.topface.topface.ui.profile.gallery;
 
 import com.topface.topface.R;
-import com.topface.topface.ui.Recycle;
+import com.topface.topface.Recycle;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -56,7 +56,7 @@ public class ProfileEroThumbView extends ImageView {
         paint.setTextAlign(Align.CENTER);
         paint.setColor(Color.DKGRAY);
         paint.setAntiAlias(true);
-        paint.setTextSize(19);
+        paint.setTextSize((14 * getResources().getDisplayMetrics().density + 0.5f));
         canvas.drawText(getContext().getString(R.string.profile_btn_add),getWidth()/2,getHeight()-paint.getTextSize(),paint);
       }
       

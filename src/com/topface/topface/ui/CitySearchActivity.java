@@ -9,7 +9,6 @@ import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.utils.Debug;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,7 +20,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CitySearchActivity extends Activity {
   // Data
@@ -31,10 +32,12 @@ public class CitySearchActivity extends Activity {
   private LinkedList<City> mTopCitiesList;
   private LinkedList<City> mDataList;
   private LinkedList<String> mNameList;
-  private ProgressDialog mProgressDialog;
+  private ProgressBar mProgressBar;
+  private CitiesRequest citiesRequest;
+  private SearchCitiesRequest searchCitiesRequest;
   // Constants
   public static final int INTENT_CITY_SEARCH_ACTIVITY = 100;
-  public static final String INTENT_CITY_ID   = "city_id";
+  public static final String INTENT_CITY_ID = "city_id";
   public static final String INTENT_CITY_NAME = "city_name";
   //---------------------------------------------------------------------------
   @Override
@@ -44,12 +47,16 @@ public class CitySearchActivity extends Activity {
     setContentView(R.layout.ac_city);
     Debug.log(this,"+onCreate");
     
+    // Data
+    mTopCitiesList = new LinkedList<City>();
+    mDataList = new LinkedList<City>();
+    mNameList = new LinkedList<String>();
+    
     // Title Header
     ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.filter_city));
     
-    // Data
-    mDataList = new LinkedList<City>();
-    mNameList = new LinkedList<String>();
+    // Progress
+    mProgressBar = (ProgressBar)findViewById(R.id.prsCityLoading);
     
     // ListAdapter
     mListAdapter = new ArrayAdapter<String>(this,
@@ -66,8 +73,11 @@ public class CitySearchActivity extends Activity {
       @Override
       public void onItemClick(AdapterView<?> arg0,View arg1,int position,long arg3) {
         Intent intent = CitySearchActivity.this.getIntent();
-        intent.putExtra(INTENT_CITY_ID,   mDataList.get(position).id);
+        intent.putExtra(INTENT_CITY_ID, mDataList.get(position).id);
         intent.putExtra(INTENT_CITY_NAME, mDataList.get(position).name);
+        
+        Debug.log(CitySearchActivity.this,"1.city_id:"+mDataList.get(position).id);
+        
         CitySearchActivity.this.setResult(RESULT_OK, intent);
         CitySearchActivity.this.finish();
       }
@@ -77,61 +87,83 @@ public class CitySearchActivity extends Activity {
     mCityInputView = (EditText)findViewById(R.id.etCityInput);
     mCityInputView.addTextChangedListener(new TextWatcher() {
       @Override
-      public void beforeTextChanged(CharSequence s,int start,int count,int after) {
-      }
+      public void beforeTextChanged(CharSequence s,int start,int count,int after) {}
+      @Override
+      public void afterTextChanged(Editable s) {}
       @Override
       public void onTextChanged(CharSequence s,int start,int before,int count) {
         if(s.length()>2)
           city(s.toString());
-        else
+        else {
           fillData(mTopCitiesList);
-      }
-      @Override
-      public void afterTextChanged(Editable s) {
+          mListAdapter.notifyDataSetChanged();
+        }
       }
     });
-    
-    // Progress Bar
-    mProgressDialog = new ProgressDialog(this);
-    mProgressDialog.setMessage(getString(R.string.dialog_loading));
     
     update();
   }
   //---------------------------------------------------------------------------
   private void update() {
-    mProgressDialog.show();
-    CitiesRequest citiesRequest = new CitiesRequest(this);
+    mProgressBar.setVisibility(View.VISIBLE);
+    
+    citiesRequest = new CitiesRequest(this);
     citiesRequest.type = "top";
     citiesRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
         LinkedList<City> citiesList = City.parse(response);
-        if(citiesList.size()>0) {
-          mTopCitiesList.addAll(citiesList);
-          fillData(mTopCitiesList);
-        }
-        mProgressDialog.cancel();
+        if(citiesList.size() ==0  )
+          return;
+        mTopCitiesList.addAll(citiesList);
+        fillData(mTopCitiesList);
+        post(new Runnable() {
+          @Override
+          public void run() {
+            mListAdapter.notifyDataSetChanged();
+            mProgressBar.setVisibility(View.GONE);
+          }
+        });
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
-        mProgressDialog.cancel();
+        post(new Runnable() {
+          @Override
+          public void run() {
+            Toast.makeText(CitySearchActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            mProgressBar.setVisibility(View.GONE);
+          }
+        });
       }
     }).exec();
   }
   //---------------------------------------------------------------------------
   private void city(String prefix) {
-    SearchCitiesRequest searchCitiesRequest = new SearchCitiesRequest(this);
+    searchCitiesRequest = new SearchCitiesRequest(this);
     searchCitiesRequest.prefix = prefix;
     searchCitiesRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
         LinkedList<City> citiesList = City.parse(response);
-        if(citiesList.size()>0)
-          fillData(citiesList);
+        if(citiesList.size()==0)
+          return;
+        fillData(citiesList);
+        post(new Runnable() {
+          @Override
+          public void run() {
+            mListAdapter.notifyDataSetChanged();
+          }
+        });
       }
       @Override
       public void fail(int codeError,ApiResponse response) {
         fillData(mTopCitiesList);
+        post(new Runnable() {
+          @Override
+          public void run() {
+            mListAdapter.notifyDataSetChanged();
+          }
+        });
       }
     }).exec();
   }
@@ -142,12 +174,13 @@ public class CitySearchActivity extends Activity {
     mNameList.clear();
     for(City city : mDataList)
       mNameList.add(city.full);
-    
-    mListAdapter.notifyDataSetChanged();
   }
   //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
+    if(citiesRequest!=null) citiesRequest.cancel();
+    if(searchCitiesRequest!=null) searchCitiesRequest.cancel();
+    
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
