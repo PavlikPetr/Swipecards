@@ -114,7 +114,7 @@ public final class AndroidHttpClient implements HttpClient {
         // Turn off stale checking.  Our connections break all the time anyway,
         // and it's not worth it to pay the penalty of checking every time.
         HttpConnectionParams.setStaleCheckingEnabled(params, false);
-        //HttpConnectionParams.setTcpNoDelay(params, true);                       // САМОПАЛ
+        //HttpConnectionParams.setTcpNoDelay(params, true);                                     // САМОПАЛ
         HttpConnectionParams.setConnectionTimeout(params, SOCKET_REQUEST_TIMEOUT);
         HttpConnectionParams.setSoTimeout(params, SOCKET_OPERATION_TIMEOUT);
         HttpConnectionParams.setSocketBufferSize(params, 8192);

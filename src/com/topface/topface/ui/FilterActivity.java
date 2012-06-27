@@ -44,7 +44,7 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
   //---------------------------------------------------------------------------
   // Data
   private TempFilter mTemp;
-  private CheckBoxPreference mNearby_;  // геопозиционирование отключено
+  //private CheckBoxPreference mNearby_;  // геопозиционирование отключено
   private CheckBoxPreference mAllCities;
   private CheckBoxPreference mCity;
   private LocationManager mLocationManager;
@@ -429,9 +429,7 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     if(mIsChanged) {
       sendFilter();
       setResult(RESULT_OK, null);
-      Debug.log(this,"Filter Success");
-    } else
-      Debug.log(this,"Filter Fail");
+    }
     super.onBackPressed();
   }
   //---------------------------------------------------------------------------  

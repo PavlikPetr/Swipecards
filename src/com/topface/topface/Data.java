@@ -4,6 +4,10 @@ import java.util.LinkedList;
 import com.facebook.android.Facebook;
 import com.topface.topface.data.Album;
 import com.topface.topface.data.City;
+import com.topface.topface.data.FeedInbox;
+import com.topface.topface.data.FeedLike;
+import com.topface.topface.data.FeedSympathy;
+import com.topface.topface.data.Top;
 import com.topface.topface.utils.Device;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,15 +23,32 @@ public class Data {
   public static LinkedList<Album> photoAlbum;
   public static int GRID_COLUMN;
   public static int screen_width;
+  // Data cache
+  public static LinkedList<Top> topsList;
+  public static LinkedList<FeedLike> likesList;
+  public static LinkedList<FeedInbox> inboxList;
+  public static LinkedList<FeedSympathy> sympathyList;
   //---------------------------------------------------------------------------
   public static void init(Context context) {
-    //removeSSID(context);
+    //removeSSID(context); // for test
     loadSSID(context);
+    
+    // Facebook Connection
     facebook = new Facebook(Static.AUTH_FACEBOOK_ID);
     
+    // Data Cache
+    if(topsList == null)
+      topsList = new LinkedList<Top>();
+    if(inboxList == null)
+      inboxList = new LinkedList<FeedInbox>();
+    if(likesList == null)
+      likesList = new LinkedList<FeedLike>();
+    if(sympathyList == null)
+      sympathyList = new LinkedList<FeedSympathy>();
+    
     screen_width = (Device.getOrientation(context) == Device.LANDSCAPE) 
-                ? Device.getDisplay(context).getHeight()
-                : Device.getDisplay(context).getWidth();
+                   ? Device.getDisplay(context).getHeight()
+                   : Device.getDisplay(context).getWidth();
                 
     switch(screen_width) {
       case Device.W_240:
@@ -41,6 +62,13 @@ public class Data {
         GRID_COLUMN = 4;
         break;
     }
+  }
+  //---------------------------------------------------------------------------
+  public static void release() {
+    if(topsList != null) topsList.clear();
+    if(inboxList != null) inboxList.clear();
+    if(likesList != null) likesList.clear();
+    if(sympathyList != null) sympathyList.clear();
   }
   //---------------------------------------------------------------------------
   public static boolean isSSID() {

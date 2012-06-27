@@ -19,7 +19,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.frames.FrameActivity;
 import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
 import com.topface.topface.ui.profile.album.PhotoEroAlbumActivity;
 import com.topface.topface.ui.profile.gallery.HorizontalListView;
@@ -32,6 +31,7 @@ import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.Http;
 import com.topface.topface.utils.Socium;
 import com.topface.topface.utils.Utils;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -53,7 +53,7 @@ import android.widget.Toast;
 /*
  *      "Профиль"
  */
-public class ProfileActivity extends FrameActivity {
+public class UserActivity extends Activity{
   // Data
   private int mUserId;
   private int mMutualId;
@@ -117,7 +117,7 @@ public class ProfileActivity extends FrameActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.ac_profile);
+    setContentView(R.layout.ac_user);
     Debug.log(this,"+onCreate");
 
     //System.gc();
@@ -298,7 +298,7 @@ public class ProfileActivity extends FrameActivity {
           post(new Runnable() {
             @Override
             public void run() {
-              Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+              Toast.makeText(UserActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
               mProgressBar.setVisibility(View.GONE);
             }
           });
@@ -324,7 +324,7 @@ public class ProfileActivity extends FrameActivity {
           post(new Runnable() {
             @Override
             public void run() {
-              Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+              Toast.makeText(UserActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
               mProgressBar.setVisibility(View.GONE);
             }
           });
@@ -474,7 +474,7 @@ public class ProfileActivity extends FrameActivity {
         post(new Runnable() {
           @Override
           public void run() {
-            Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
             mProgressBar.setVisibility(View.GONE);
           }
         });
@@ -510,7 +510,7 @@ public class ProfileActivity extends FrameActivity {
       fieldCounter++;
     }
     // анкета
-    FormInfo formInfo = new FormInfo(ProfileActivity.this.getApplicationContext(),profile.sex);
+    FormInfo formInfo = new FormInfo(UserActivity.this.getApplicationContext(),profile.sex);
     String value = formInfo.getEducation(profile.questionary_education_id);
     if(value!=null) {
       mEducation.setText(value);
@@ -633,7 +633,7 @@ public class ProfileActivity extends FrameActivity {
         post(new Runnable() {
           @Override
           public void run() {
-            Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
             mProgressBar.setVisibility(View.GONE);
           }
         });
@@ -707,7 +707,7 @@ public class ProfileActivity extends FrameActivity {
         final CharSequence[] items = {getString(R.string.profile_coin_1), 
                                       getString(R.string.profile_coin_2),
                                       getString(R.string.profile_coin_3)};
-        new AlertDialog.Builder(ProfileActivity.this)
+        new AlertDialog.Builder(UserActivity.this)
         .setTitle(getString(R.string.profile_ero_price))
         .setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
@@ -721,7 +721,7 @@ public class ProfileActivity extends FrameActivity {
       runOnUiThread(new Runnable() {
         @Override
         public void run() {
-          PhotoAddRequest addPhotoRequest = new PhotoAddRequest(ProfileActivity.this.getApplicationContext());
+          PhotoAddRequest addPhotoRequest = new PhotoAddRequest(UserActivity.this.getApplicationContext());
           addPhotoRequest.big    = result[0];
           addPhotoRequest.medium = result[1];
           addPhotoRequest.small  = result[2];
@@ -752,7 +752,7 @@ public class ProfileActivity extends FrameActivity {
               post(new Runnable() {
                 @Override
                 public void run() {
-                  Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+                  Toast.makeText(UserActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
                   mProgressDialog.hide();
                 }
               });
@@ -816,7 +816,7 @@ public class ProfileActivity extends FrameActivity {
         case R.id.btnProfileAsk: {
           findViewById(R.id.btnProfileAsk).setVisibility(View.INVISIBLE);
           //findViewById(R.id.btnProfileAsk).setEnabled(false);
-          MessageRequest message = new MessageRequest(ProfileActivity.this.getApplicationContext());
+          MessageRequest message = new MessageRequest(UserActivity.this.getApplicationContext());
           message.message = getString(R.string.profile_msg_ask); 
           message.userid  = mUserId;
           message.callback(new ApiHandler() {
@@ -825,7 +825,7 @@ public class ProfileActivity extends FrameActivity {
               post(new Runnable() {
                 @Override
                 public void run() {
-                  Toast.makeText(ProfileActivity.this,getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
+                  Toast.makeText(UserActivity.this,getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
                   mProgressBar.setVisibility(View.GONE);
                 }
               });
@@ -835,7 +835,7 @@ public class ProfileActivity extends FrameActivity {
               post(new Runnable() {
                 @Override
                 public void run() {
-                  Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+                  Toast.makeText(UserActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
                   mProgressBar.setVisibility(View.GONE);
                 }
               });
@@ -915,17 +915,5 @@ public class ProfileActivity extends FrameActivity {
       }
     }    
   };
-  //---------------------------------------------------------------------------
-  // FrameActivity
-  //---------------------------------------------------------------------------
-  @Override
-  public void clearLayout() {
-    
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public void fillLayout() {
-
-  }
   //---------------------------------------------------------------------------
 }

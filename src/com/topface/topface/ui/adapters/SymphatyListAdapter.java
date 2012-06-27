@@ -1,7 +1,7 @@
 package com.topface.topface.ui.adapters;
 
 import com.topface.topface.R;
-import com.topface.topface.data.FeedSymphaty;
+import com.topface.topface.data.FeedSympathy;
 import com.topface.topface.ui.views.RoundedImageView;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
@@ -28,14 +28,14 @@ public class SymphatyListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   // Data
   private LayoutInflater mInflater;
-  private AvatarManager<FeedSymphaty> mAvatarManager;
+  private AvatarManager<FeedSympathy> mAvatarManager;
   private int mOwnerCityID;
   // Constants
   private static final int T_ALL   = 0;
   private static final int T_CITY  = 1;
   private static final int T_COUNT = 2;
   //---------------------------------------------------------------------------
-  public SymphatyListAdapter(Context context,AvatarManager<FeedSymphaty> avatarManager) {
+  public SymphatyListAdapter(Context context,AvatarManager<FeedSympathy> avatarManager) {
     mAvatarManager = avatarManager;
     mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     //mInflater = LayoutInflater.from(context);
@@ -48,7 +48,7 @@ public class SymphatyListAdapter extends BaseAdapter {
   }
   //---------------------------------------------------------------------------
   @Override
-  public FeedSymphaty getItem(int position) {
+  public FeedSympathy getItem(int position) {
     return mAvatarManager.get(position);
   }
   //---------------------------------------------------------------------------
@@ -99,7 +99,7 @@ public class SymphatyListAdapter extends BaseAdapter {
     
     mAvatarManager.getImage(position,holder.mAvatar);
 
-    FeedSymphaty symphaty = getItem(position);
+    FeedSympathy symphaty = getItem(position);
     holder.mName.setText(symphaty.first_name+" "+symphaty.age+", "+symphaty.city_name);
     Utils.formatTime(holder.mTime,symphaty.created);
     //holder.mArrow.setImageResource(R.drawable.im_item_arrow);

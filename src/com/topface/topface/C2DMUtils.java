@@ -42,7 +42,7 @@ public class C2DMUtils {
       Notification notification = new Notification(R.drawable.ic_statusbar,data,System.currentTimeMillis());
 
       notification.defaults |= Notification.DEFAULT_SOUND;
-      //notification.defaults |= Notification.DEFAULT_VIBRATE;
+      notification.defaults |= Notification.DEFAULT_VIBRATE;
       notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
       //HELLO_ID;

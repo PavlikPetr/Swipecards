@@ -2,20 +2,16 @@ package com.topface.topface.requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.content.Context;
 import com.topface.topface.utils.Debug;
+import android.content.Context;
 
-public class BannerRequest extends ApiRequest {
+public class DialogsRequest extends ApiRequest  {
   // Data
-  private String service = "banner";
-  public String place;   // идентификатор места отображения баннера. Возможные значения: LIKE, MUTUAL, MESSAGES, TOP
-  // Constants
-  public static final String TOP = "TOP";
-  public static final String LIKE = "LIKE";
-  public static final String INBOX = "MESSAGES";
-  public static final String SYMPATHY = "MUTUAL";
+  private String service = "dialogs";
+  public int limit;  // максимальное количество запрашиваемых диалогов. ОДЗ: 0 < limit <= 50
+  public int before; // идентификатор последнего диалога для отображения. В случае отсутствия параметра диалоги возвращаются от последнего
   //---------------------------------------------------------------------------
-  public BannerRequest(Context context) {
+  public DialogsRequest(Context context) {
     super(context);
   }
   //---------------------------------------------------------------------------
@@ -25,7 +21,7 @@ public class BannerRequest extends ApiRequest {
     try {
       root.put("service",service);
       root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("place",place));
+      root.put("data",new JSONObject().put("limit",limit).put("before",before));
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);
     }

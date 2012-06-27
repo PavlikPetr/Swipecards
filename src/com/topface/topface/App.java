@@ -7,7 +7,7 @@ import android.app.Application;
 public class App extends Application {
   // Constants
   public static final String TAG = "TopFace";
-  public static final boolean DEBUG = false;
+  public static final boolean DEBUG = true;
   //---------------------------------------------------------------------------
   @Override
   public void onCreate() {
@@ -22,8 +22,8 @@ public class App extends Application {
 
 /*
 // status bar height
-19px for LDPI
-25px for MDPI
-38px for HDPI
-50px for XHDPI
+ 19px for LDPI
+ 25px for MDPI
+ 38px for HDPI
+ 50px for XHDPI
 */

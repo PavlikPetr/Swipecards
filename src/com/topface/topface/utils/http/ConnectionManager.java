@@ -40,7 +40,7 @@ public class ConnectionManager {
   public static final String TAG = "CM";
   //---------------------------------------------------------------------------
   private ConnectionManager() {
-    mHttpClient = AndroidHttpClient.newInstance("Android");
+    mHttpClient = AndroidHttpClient.newInstance("Android"); // For Avatar Bitmaps
     mWorker = Executors.newFixedThreadPool(2);
     //mWorker = Executors.newSingleThreadExecutor();
     //java.lang.System.setProperty("java.net.preferIPv4Stack", "true");
@@ -139,19 +139,19 @@ public class ConnectionManager {
       localHttpPost.setHeader("Content-Type", "application/json");
       localHttpPost.setEntity(new ByteArrayEntity(authRequest.toString().getBytes("UTF8")));
       
-      Debug.log(TAG,"cm_reauth:req_0:" + authRequest.toString());
+      Debug.log(TAG,"cm_reauth:req0:" + authRequest.toString());
       rawResponse = request(httpClient, localHttpPost);  // REQUEST
-      Debug.log(TAG,"cm_reauth:resp_0:" + rawResponse);
+      Debug.log(TAG,"cm_reauth:resp0:" + rawResponse);
       
       response = new ApiResponse(rawResponse);
       if(response.code == ApiResponse.RESULT_OK) {
         Auth auth = Auth.parse(response);
         Data.saveSSID(context, auth.ssid);
         request.ssid = auth.ssid;
-        Debug.log(TAG,"cm_reauth:req_1:" + request.toString());
+        Debug.log(TAG,"cm_reauth:req1:" + request.toString());
         httpPost.setEntity(new ByteArrayEntity(request.toString().getBytes("UTF8")));
         rawResponse = request(httpClient, httpPost);
-        Debug.log(TAG,"cm_reauth:resp_1:" + rawResponse);
+        Debug.log(TAG,"cm_reauth:resp1:" + rawResponse);
         response = new ApiResponse(rawResponse);
       } else
         Data.removeSSID(context);

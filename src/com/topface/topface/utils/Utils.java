@@ -104,7 +104,10 @@ public class Utils {
     paint.setAntiAlias(true);
     paint.setColor(0xff424242);
     canvas.drawARGB(0, 0, 0, 0);
-    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+    
+    // Mask
+    //canvas.drawRoundRect(rectF, roundPx, roundPx, paint); //  закругленные углы
+    canvas.drawCircle(width/2, height/2, width/2, paint);   //  круглый аватар
 
     paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
     canvas.drawBitmap(clippedBitmap, rect, rect, paint);

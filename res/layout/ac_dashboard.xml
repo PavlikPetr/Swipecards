@@ -100,7 +100,7 @@
           android:layout_centerHorizontal="true"
           android:orientation="horizontal" >
       
-      <!-- Sympathy -->
+      <!-- Symphaty -->
       <RelativeLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" >
@@ -112,7 +112,7 @@
               android:paddingBottom="10dp"
               android:textColor="#FFFFFF"
               android:gravity="bottom|center_horizontal"
-              android:text="@string/dashbrd_btn_mutual"
+              android:text="@string/dashbrd_btn_sympathy"
               android:textSize="12sp"
               android:background="@drawable/dashbrd_mutual_selector" />
 

@@ -40,15 +40,15 @@ public class Recycle {
       s_ProfilePhotoFrame = BitmapFactory.decodeResource(context.getResources(),R.drawable.profile_frame_photo);
       s_ProfileGalleryFrame = BitmapFactory.decodeResource(context.getResources(),R.drawable.profile_frame_gallery);
       s_ProfileEroInfo = BitmapFactory.decodeResource(context.getResources(),R.drawable.profile_ero_info);
-      s_DatingInformer = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_informer);
-      s_RateHighPressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_high_pressed);
-      s_RateHigh = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_high);
-      s_RateTopPressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_top_pressed);
-      s_RateTop = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_top);
-      s_RateLowPressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_low_pressed);
-      s_RateLow = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_low);
-      s_RateAveragePressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_avarage_pressed);
-      s_RateAverage = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_avarage);
+//      s_DatingInformer = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_informer);
+//      s_RateHighPressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_high_pressed);
+//      s_RateHigh = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_high);
+//      s_RateTopPressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_top_pressed);
+//      s_RateTop = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_top);
+//      s_RateLowPressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_low_pressed);
+//      s_RateLow = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_low);
+//      s_RateAveragePressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_avarage_pressed);
+//      s_RateAverage = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_avarage);
     } catch (Exception e) {
       Debug.log("Recycle","init exception:" + e);
       return false;

@@ -9,13 +9,17 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.ui.frames.DatingActivity;
+import com.topface.topface.ui.frames.InboxActivity;
+import com.topface.topface.ui.frames.LikesActivity;
+import com.topface.topface.ui.frames.SympathyActivity;
+import com.topface.topface.ui.frames.TopsActivity;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
 import com.topface.topface.utils.Newbie;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,7 +28,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -117,11 +120,9 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       ((Button)findViewById(R.id.btnDshbrdSymphaty)).setOnClickListener(this);
       ((Button)findViewById(R.id.btnDshbrdChat)).setOnClickListener(this);
     }
-    
+
     if(!Http.isOnline(this))
       Toast.makeText(this,getString(R.string.general_internet_off),Toast.LENGTH_SHORT).show();
-    else
-      ratingPopup();
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -142,7 +143,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       finish();
       return;
     }
-    
+
     updateProfile();
   }
   //---------------------------------------------------------------------------  
@@ -198,7 +199,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       mNewbieView.setVisibility(View.VISIBLE);
       mNewbieView.startAnimation(mAlphaAnimation);
     }
-
+    
     editor.commit(); 
   }
   //---------------------------------------------------------------------------
@@ -270,67 +271,6 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
       mSymphatyNotify.setVisibility(View.INVISIBLE);
   }
   //---------------------------------------------------------------------------
-  private void ratingPopup() {
-    // Rating popup
-
-    long date_start = mPreferences.getLong(Static.PREFERENCES_RATING, 1);
-    
-    if(date_start == 0)
-      return;
-    else if(date_start == 1) {
-      SharedPreferences.Editor editor = mPreferences.edit();
-      editor.putLong(Static.PREFERENCES_RATING, new java.util.Date().getTime());
-      editor.commit();
-      return;
-    }
-    
-    long date_now = new java.util.Date().getTime();
-    if(date_now-date_start < 1000*60*60*24*3)
-      return;
-    
-    final Dialog ratingPopup = new Dialog(this) {
-      @Override
-      public void onBackPressed() {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(Static.PREFERENCES_RATING, new java.util.Date().getTime());
-        editor.commit();
-        super.onBackPressed();
-      }
-    };
-    ratingPopup.setTitle(R.string.dashbrd_popup_title);
-    ratingPopup.setContentView(R.layout.popup_rating);
-    ratingPopup.show();
-    
-    ((Button)ratingPopup.findViewById(R.id.btnRatingPopupRate)).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.topface.topface")));
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(Static.PREFERENCES_RATING, 0);
-        editor.commit();
-        ratingPopup.cancel();
-      }
-    });
-    ((Button)ratingPopup.findViewById(R.id.btnRatingPopupLate)).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(Static.PREFERENCES_RATING, new java.util.Date().getTime());
-        editor.commit();
-        ratingPopup.cancel();
-      }
-    });
-    ((Button)ratingPopup.findViewById(R.id.btnRatingPopupCancel)).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(Static.PREFERENCES_RATING, 0);
-        editor.commit();
-        ratingPopup.cancel();
-      }
-    });
-  }
-  //---------------------------------------------------------------------------
   @Override
   public void onClick(View view) {  
     if(!Http.isOnline(this)){
@@ -354,7 +294,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         intent = new Intent(this.getApplicationContext(),LikesActivity.class);
       } break;
       case R.id.btnDshbrdSymphaty: {
-        intent = new Intent(this.getApplicationContext(),SymphatyActivity.class);
+        intent = new Intent(this.getApplicationContext(),SympathyActivity.class);
       } break;
       case R.id.btnDshbrdChat: {
         intent = new Intent(this.getApplicationContext(),InboxActivity.class);
