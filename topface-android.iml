@@ -3,6 +3,7 @@
   <component name="EclipseModuleManager" forced_jdk="true">
     <libelement value="jar://$MODULE_DIR$/libs/gson-1.7.1.jar!/" />
     <libelement value="jar://$MODULE_DIR$/libs/android-support-v4.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/acra-4.2.3.jar!/" />
     <conelement value="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK" />
     <conelement value="com.android.ide.eclipse.adt.LIBRARIES" />
     <src_description expected_position="3">
@@ -30,6 +31,11 @@
         <option name="RUN_PROCESS_RESOURCES_MAVEN_TASK" value="true" />
         <option name="GENERATE_UNSIGNED_APK" value="false" />
         <option name="CUSTOM_DEBUG_KEYSTORE_PATH" value="" />
+        <option name="PACK_TEST_CODE" value="false" />
+        <option name="RUN_PROGUARD" value="false" />
+        <option name="PROGUARD_CFG_PATH" value="/proguard-project.txt" />
+        <resOverlayFolders />
+        <includeSystemProguardFile>false</includeSystemProguardFile>
       </configuration>
     </facet>
   </component>
@@ -41,18 +47,9 @@
       <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="library" name="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK" level="application" />
-    <orderEntry type="library" name="com.android.ide.eclipse.adt.LIBRARIES" level="application" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library name="android-support-v4.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/android-support-v4.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" exported="" name="acra-4.2.3" level="project" />
+    <orderEntry type="library" exported="" name="android-support-v4" level="project" />
   </component>
 </module>
 
