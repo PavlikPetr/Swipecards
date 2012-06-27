@@ -5,7 +5,7 @@
     android:orientation="vertical" >
   
   <!-- gallery -->
-  <com.topface.topface.ui.dating.DatingAlbum
+  <com.topface.topface.ui.views.DatingAlbum
       android:id="@+id/galleryAlbum"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"

@@ -1,9 +1,10 @@
 package com.topface.topface.utils;
 
-import android.util.Log;
 import com.topface.topface.App;
+import android.util.Log;
 
 public class Debug {
+  //---------------------------------------------------------------------------
   public static void log(Object obj,String msg) {
     if(App.DEBUG) {
       if(obj == null)
@@ -14,4 +15,5 @@ public class Debug {
         Log.i(App.TAG,obj.getClass().getSimpleName() + "::" + msg);
     }
   }
+  //---------------------------------------------------------------------------
 }

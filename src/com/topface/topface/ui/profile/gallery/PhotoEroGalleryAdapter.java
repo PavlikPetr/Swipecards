@@ -4,15 +4,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
-import com.topface.topface.utils.LeaksManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView.ScaleType;
 
@@ -75,7 +74,7 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     if(bitmap!=null)
       ((ProfileEroThumbView)convertView).setImageBitmap(bitmap);
     else {
-      ((ProfileEroThumbView)convertView).setImageBitmap(null);
+      ((ProfileEroThumbView)convertView).setImageBitmap(null);  // ??? нахуя
       loadingImage(position,((ProfileEroThumbView)convertView));
     }
     
@@ -90,25 +89,24 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
-        try {
-          if(!mBusy) {
-            final Bitmap bitmap = Http.bitmapLoader(album.getSmallLink());
-            if(bitmap!=null)
-              mCache.put(position,bitmap);
-              view.post(new Runnable() {
-                @Override
-                public void run() {
-                  view.setImageBitmap(bitmap);
-                }
-              });
-          }
-        } catch(Exception e){
-          Debug.log(this,"tread error: " + e);
-        }
+        if(mBusy) return;
+        Bitmap bitmap = Http.bitmapLoader(album.getSmallLink());
+        if(bitmap==null) return;
+        mCache.put(position, bitmap);
+        imagePost(view, bitmap);
+        bitmap = null;
       }
     });
-    LeaksManager.getInstance().monitorObject(t);
     t.start();
+  }
+  //---------------------------------------------------------------------------
+  private void imagePost(final ImageView imageView,final Bitmap bitmap) {
+    imageView.post(new Runnable() {
+      @Override
+      public void run() {
+        imageView.setImageBitmap(bitmap);
+      }
+    });
   }
   //---------------------------------------------------------------------------
   public void release() {
@@ -116,9 +114,17 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements  OnScrollList
     if(mAlbumList!=null)
       mAlbumList.clear();
     mAlbumList=null;
-    if(mCache!=null)
-      mCache.clear();
-    mCache=null;
+    
+    int size = mCache.size(); 
+    for(int i=0; i<size; ++i) {
+      Bitmap bitmap = mCache.get(i);
+      if(bitmap!=null) {
+        bitmap.recycle();
+        mCache.put(i,null); // хз
+      }
+    }
+    mCache.clear();
+    mCache=null;  
   }
   //---------------------------------------------------------------------------
   @Override

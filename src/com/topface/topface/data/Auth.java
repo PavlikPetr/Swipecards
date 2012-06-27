@@ -5,8 +5,8 @@ import com.topface.topface.utils.Debug;
 
 public class Auth extends AbstractData {
   // Data
-  public int api_version; // идентификатор активной версии API
-  public String ssid;     // id (ssid) сессии нужен для подписи запросов к лицемеру
+  public int api_version;
+  public String ssid;
   //---------------------------------------------------------------------------
   public static Auth parse(ApiResponse response) {
     Auth auth = new Auth();

@@ -1,47 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/list_bkgrd"
-    android:orientation="vertical" >
+    android:background="@drawable/im_list_bkgrd" >
     
-  <!-- header bar -->
-  <include layout="@layout/bar_btn_header" />
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical" >
+	    
+	  <!-- header bar -->
+	  <include layout="@layout/bar_btn_header" />
 
-    
-  <ScrollView 
-      android:layout_width="fill_parent" 
-      android:layout_height="fill_parent"
-      android:fadeScrollbars="true"  >
-    <LinearLayout      
-         android:layout_width="fill_parent" 
-         android:layout_height="wrap_content"
-         android:orientation="vertical">
-       <include layout="@layout/profile_form_top" />
-       <include layout="@layout/profile_form_bottom" />
-    </LinearLayout>
-  </ScrollView>
-
-   
-  <!--  
-  <com.topface.topface.ui.profile.SwapView
-      android:id="@+id/swapFormView"
-      android:layout_width="fill_parent" 
-      android:layout_height="fill_parent" >
-      
-    <include layout="@layout/profile_form_top" />
-    <include layout="@layout/profile_form_bottom" />
-    
-  </com.topface.topface.ui.profile.SwapView>
-    -->
-  
-  <!-- view pager -->
-<!-- 
-  <android.support.v4.view.ViewPager
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent"
-    android:id="@+id/viewPagerProfile"/>
--->
-</LinearLayout>
+	  <!-- form -->	    
+	  <ScrollView
+	      android:id="@+id/svProfileForm" 
+	      android:layout_width="fill_parent" 
+	      android:layout_height="fill_parent"
+	      android:fadeScrollbars="true"
+	      android:visibility="gone"  >
+	    <LinearLayout      
+	         android:layout_width="fill_parent" 
+	         android:layout_height="wrap_content"
+	         android:orientation="vertical">
+	       <include layout="@layout/profile_form_top" />
+	       <include layout="@layout/profile_form_bottom" />
+	    </LinearLayout>
+	  </ScrollView>
+	
+	</LinearLayout>
+	
+	  <ProgressBar
+      android:id="@+id/prsProfileLoading"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:visibility="visible"
+      style="@android:style/Widget.ProgressBar.Small" />
+	
+</RelativeLayout>
 </merge>

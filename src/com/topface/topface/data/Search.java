@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class Search extends AbstractData implements IAlbumData {
+public class Search extends AbstractData {
   // Data
   public int uid;                 // идентификатор пользователя
   public int age;                 // возраст пользователя
@@ -65,6 +65,10 @@ public class Search extends AbstractData implements IAlbumData {
     
     return userList;
   }
+  //---------------------------------------------------------------------------
+  public int getUid() { 
+    return uid; 
+  };
   //---------------------------------------------------------------------------
   @Override
   public String getBigLink() {

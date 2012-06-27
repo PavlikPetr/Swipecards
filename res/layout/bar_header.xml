@@ -6,14 +6,6 @@
       android:layout_height="wrap_content"  
       android:background="@drawable/im_bar_header" >
       
-    <!-- 
-    <ImageView
-        android:id="@+id/ivHeaderBkgrd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/im_bar_header" />
-     -->
-     
 	  <TextView
 	      android:id="@+id/tvHeaderTitle"
 	      android:textColor="#FFFFFF"
@@ -31,6 +23,22 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"  />
+	  
+    <TextView
+        android:id="@+id/tvDatingFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:drawableLeft="@drawable/im_divider"
+        android:drawablePadding="16dp"
+        android:textColor="#EEEEEE"
+        android:textSize="12sp"
+        android:gravity="center_vertical"
+        android:visibility="invisible"
+        android:text="@string/dating_menu_one"  />
+    
+    <!-- android:background="@drawable/dating_filter_selector"  -->
 	  
   </RelativeLayout>
 </merge>

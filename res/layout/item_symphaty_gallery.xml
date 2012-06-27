@@ -7,7 +7,7 @@
       android:padding="4dp">
       
     <!-- аватар -->
-    <com.topface.topface.ui.RoundedImageView
+    <com.topface.topface.ui.views.RoundedImageView
         android:id="@+id/ivAvatar"
         topface:frame="dialog"
         android:layout_width="wrap_content"
@@ -49,6 +49,6 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:paddingRight="2dp"
-        android:src="@drawable/im_item_gallery_arrow" />
+        android:src="@drawable/im_item_arrow" />
     
   </RelativeLayout>

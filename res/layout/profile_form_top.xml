@@ -23,7 +23,7 @@
 		      android:stretchColumns="1" >
 		    <TableRow >
 			    <!-- Frame -->
-			    <com.topface.topface.ui.profile.FrameImageView
+			    <com.topface.topface.ui.views.FrameImageView
 			        android:id="@+id/ivProfileFramePhoto"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
@@ -150,11 +150,12 @@
 		        android:gravity="center_vertical" >
 		
 		      <!-- Resources -->
-			    <com.topface.topface.ui.dating.ResourcesView
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			        android:layout_marginLeft="12dp"
-			        android:layout_column="0" />
+		      <RelativeLayout
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="10dp" >
+            <include layout="@layout/resources_profile" />
+			    </RelativeLayout>
 			    
 			    <!-- Buying Button -->
 			    <LinearLayout 

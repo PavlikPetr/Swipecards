@@ -13,7 +13,6 @@ import com.topface.topface.requests.PhotoVoteRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
-import com.topface.topface.utils.LeaksManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -60,13 +59,11 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
     setContentView(R.layout.ac_ero_album);
     Debug.log(this,"+onCreate");
     
-    LeaksManager.getInstance().monitorObject(this);
-    
     // Title Header
     mCounter = (TextView)findViewById(R.id.tvHeaderTitle);
     
     // Data List
-    mAlbumsList = Data.s_PhotoAlbum;
+    mAlbumsList = Data.photoAlbum;
     
     // Image Ero
     mEroView = ((ImageView)findViewById(R.id.ivEroPhoto));
@@ -116,7 +113,7 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
     
     // Progress Dialog
     mProgressDialog = new ProgressDialog(this);
-    mProgressDialog.setMessage(getString(R.string.dialog_loading));
+    mProgressDialog.setMessage(getString(R.string.general_dialog_loading));
     //mProgressDialog.show();
     
     // Money
@@ -126,8 +123,7 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
     mMoney.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl,null);
     
     updateCounter();
-    
-    showImage();
+    showImage();      
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -154,9 +150,7 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
         //PhotoVote photoVote = PhotoVote.parse(response);
       }
       @Override
-      public void fail(int codeError,ApiResponse response) {
-        
-      }
+      public void fail(int codeError,ApiResponse response) {}
     }).exec();
   }
   //---------------------------------------------------------------------------
@@ -182,7 +176,6 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
       }
       
       Thread t = new Thread(new LoaderEroPhoto());     // загрузка эро фотографии
-      LeaksManager.getInstance().monitorObject(t);
       t.start();
 
     } else {  // запрос на покупку
@@ -196,20 +189,35 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
           if(photoOpen.completed) {
             CacheProfile.money = photoOpen.money;
             album.buy = true;
-            controlVisibility(S_SHOW_LIKE_DISLIKE);
+            
+            post(new Runnable() {
+              @Override
+              public void run() {
+                controlVisibility(S_SHOW_LIKE_DISLIKE);
+              }
+            });
             
             Thread t = new Thread(new LoaderEroPhoto());     // загрузка эро фотографии
-            LeaksManager.getInstance().monitorObject(t);
             t.start();
             
           } else
-            startActivity(new Intent(PhotoEroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));  // окно на покупку монет
+            post(new Runnable() {
+              @Override
+              public void run() {
+                startActivity(new Intent(PhotoEroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));  // окно на покупку монет
+              }
+            });
         }
         @Override
-        public void fail(int codeError,ApiResponse response) {
-          if(codeError==ApiResponse.PAYMENT)
-            startActivity(new Intent(PhotoEroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));
-          PhotoEroAlbumActivity.this.finish();
+        public void fail(final int codeError,ApiResponse response) {
+          post(new Runnable() {
+            @Override
+            public void run() {
+              if(codeError==ApiResponse.PAYMENT)
+                startActivity(new Intent(PhotoEroAlbumActivity.this.getApplicationContext(),BuyingActivity.class));
+              PhotoEroAlbumActivity.this.finish();
+            }
+          });
         }
       }).exec();
       
@@ -218,12 +226,8 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
   //---------------------------------------------------------------------------
   // счетчик галереи
   public void updateCounter() {
-    // money
     mMoney.setText(""+CacheProfile.money);
-    mMoney.invalidate();
-    // counter
     mCounter.setText((mCurrentPos+1)+"/"+mAlbumsList.size());
-    mCounter.invalidate();
   }
   //---------------------------------------------------------------------------
   @Override

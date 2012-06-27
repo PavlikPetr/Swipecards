@@ -3,7 +3,6 @@ package com.topface.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-//import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
@@ -63,6 +62,10 @@ public class FeedSymphaty extends AbstractData {
     
     return symphatyList;
   }
+  //---------------------------------------------------------------------------
+  public int getUid() { 
+    return uid; 
+  };
   //---------------------------------------------------------------------------
   @Override
   public String getBigLink() {

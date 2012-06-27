@@ -3,7 +3,7 @@ package com.topface.topface.utils;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.regex.Pattern;
-import com.topface.topface.Global;
+import com.topface.topface.Static;
 import android.os.Environment;
 
 /*
@@ -93,7 +93,7 @@ public class FileSystem {
   }
   //---------------------------------------------------------------------------
   public static File getExternalCacheDirectory() {
-    return new File(getExternalDirectory(),Global.EXTERANAL_CACHE_DIR);
+    return new File(getExternalDirectory(),Static.EXTERANAL_CACHE_DIR);
   }
   //---------------------------------------------------------------------------
   public static boolean isExternalCardAvailable() {

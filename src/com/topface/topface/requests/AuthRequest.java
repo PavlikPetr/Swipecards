@@ -2,8 +2,10 @@ package com.topface.topface.requests;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
 import android.content.Context;
+import android.os.Build;
 
 public class AuthRequest extends ApiRequest {
   // Data
@@ -20,6 +22,15 @@ public class AuthRequest extends ApiRequest {
   //---------------------------------------------------------------------------
   public AuthRequest(Context context) {
     super(context);
+    try {
+      locale = context.getResources().getConfiguration().locale.getLanguage();
+      clienttype    = Static.CLIENT_TYPE;
+      clientversion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+      clientdevice  = Build.BRAND + " " + Build.MANUFACTURER;
+      clientid      = Build.ID;
+    } catch(Exception e) {
+      Debug.log(this,"Wrong request compiling: " + e);
+    }
   }
   //---------------------------------------------------------------------------
   public String toString() {
@@ -30,12 +41,12 @@ public class AuthRequest extends ApiRequest {
       root.put("ssid",ssid);
       root.put("data",new JSONObject().put("sid",sid)
                                       .put("token",token)
-                                      .put("platform",platform)           // vk, fb, mm, st
-                                      .put("locale",locale)               // ru, en
-                                      .put("clienttype",clienttype)       // iphone, ipod, ipad
-                                      .put("clientversion",clientversion) // 1.2, 2.0
-                                      .put("clientdevice",clientdevice)   // apple, htc, lg, samsung   
-                                      .put("clientid",clientid)           // id
+                                      .put("platform",platform)
+                                      .put("locale",locale)
+                                      .put("clienttype",clienttype)
+                                      .put("clientversion",clientversion)
+                                      .put("clientdevice",clientdevice)   
+                                      .put("clientid",clientid)
                                       .put("sandbox",sandbox));           
     } catch(JSONException e) {
       Debug.log(this,"Wrong request compiling: " + e);

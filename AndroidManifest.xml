@@ -1,106 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
-          package="com.topface.topface"
-          android:versionCode="12"
-          android:installLocation="preferExternal"
-          android:versionName="1.0.4" >
-  
-  <uses-sdk android:minSdkVersion="8" />
-  
-   <supports-screens
-        android:smallScreens  = "false"
-        android:normalScreens = "true"
-        android:largeScreens  = "true"
-        android:anyDensity    = "true" />
-  
-  <!-- permissions -->
-  <permission android:name="com.topface.topface.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-  <uses-permission android:name="com.topface.topface.permission.C2D_MESSAGE" />
-  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-  <uses-permission android:name="android.permission.WAKE_LOCK" />
-  <uses-permission android:name="android.permission.VIBRATE" />
-  <uses-permission android:name="com.android.vending.BILLING" />
-          
-  <!-- application -->
-  <application android:name=".App"
-               android:icon="@drawable/ic_launcher"
-               android:label="@string/app_name"
-               android:theme="@android:style/Theme.NoTitleBar"
-               android:screenOrientation="portrait" 
-               android:debuggable="false">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.topface.topface"
+    android:installLocation="preferExternal"
+    android:versionCode="24"
+    android:versionName="1.3.1" >
 
-    <!-- activities -->
-    <activity android:name=".ui.dashboard.DashboardActivity" 
-              android:screenOrientation="portrait"
-              android:launchMode="singleInstance" >
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
+    <uses-sdk android:minSdkVersion="7" />
     
-    <activity android:name=".ui.symphaty.SymphatyActivity"   android:screenOrientation="portrait" />
-    <activity android:name=".ui.rates.RatesActivity"         android:screenOrientation="portrait" />
-    <activity android:name=".ui.inbox.InboxActivity"         android:screenOrientation="portrait" />
-    <activity android:name=".ui.inbox.ChatActivity"          android:screenOrientation="portrait" />
-    <activity android:name=".ui.tops.TopsActivity"           android:screenOrientation="portrait" />
-    <activity android:name=".ui.likes.LikesActivity"         android:screenOrientation="portrait" />
-    <activity android:name=".ui.likes2.Likes2Activity"       android:screenOrientation="portrait" />
-    <activity android:name=".ui.dating.DatingActivity"       android:screenOrientation="portrait" />
-    <activity android:name=".ui.dating.FilterActivity"       android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
-    <activity android:name=".ui.CitySearchActivity"          android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
-    <activity android:name=".ui.profile.ProfileActivity"     android:screenOrientation="portrait" />
-    <activity android:name=".ui.profile.album.PhotoEroAlbumActivity" android:screenOrientation="portrait" />
-    <activity android:name=".ui.profile.album.PhotoAlbumActivity"    android:screenOrientation="portrait" />
-    <activity android:name=".ui.profile.AddPhotoActivity"    android:screenOrientation="portrait" />
-    <activity android:name=".ui.profile.EditProfileActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Light" />
-    
-    <!-- billing activity -->
-    <activity android:name=".billing.BuyingActivity"   android:screenOrientation="portrait" />
-
-    <!-- social activity -->
-    <activity android:name=".social.SocialActivity"    android:screenOrientation="portrait" />
-    <activity android:name=".social.SocialWebActivity" android:screenOrientation="portrait" />
-    
-    <!-- leaks and log -->
-    <activity android:name=".ui.LogActivity"   android:screenOrientation="portrait" />
-    <activity android:name=".ui.LeaksActivity" android:screenOrientation="portrait" />
-    
-    <!-- services  android:process=":notification"  -->
-    <service android:name=".services.NotificationService" />
-    <service android:name=".services.StatisticService" />
-    <service android:name=".services.ConnectionService" />
-    <service android:name=".billing.BillingService" />
-    
-    <!-- receivers -->
-    <receiver android:name=".billing.BillingReceiver">
-        <intent-filter>
-            <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
-            <action android:name="com.android.vending.billing.RESPONSE_CODE" />
-            <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
-        </intent-filter>
-    </receiver>
-    
-    <!-- c2dm -->
-    <service android:name=".C2DMReceiver" />
-    <receiver android:name="com.google.android.c2dm.C2DMBroadcastReceiver"
-              android:permission="com.google.android.c2dm.permission.SEND">
-        <intent-filter>
-            <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-            <category android:name="com.topface.topface"/>
-        </intent-filter>
-        <intent-filter>
-            <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
-            <category android:name="com.topface.topface"/>
-        </intent-filter>
-     </receiver>
-    
-  </application>
+    <!-- 
+    <supports-screens
+       android:smallScreens  = "true"
+       android:normalScreens = "true"
+       android:largeScreens  = "true"
+       android:anyDensity    = "true" />
+     -->
   
+	  <!-- permissions -->
+	  <permission android:name="com.topface.topface.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	  <uses-permission android:name="com.topface.topface.permission.C2D_MESSAGE" />
+	  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+	  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	  <uses-permission android:name="android.permission.INTERNET" />
+	  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+	  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	  <uses-permission android:name="android.permission.WAKE_LOCK" />
+	  <uses-permission android:name="android.permission.VIBRATE" />
+	  <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application 
+        android:name=".App"
+        android:label="@string/app_name"
+        android:icon="@drawable/ic_launcher"
+        android:theme="@android:style/Theme.NoTitleBar" 
+        android:debuggable="false" >
+        
+        <!-- main Activity -->
+        <activity android:name=".ui.MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- activity -->
+        <activity android:name=".ui.AuthActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.WebAuthActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.TopfaceActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.DashboardActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.DatingActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.LikesActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.InboxActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.TopsActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.ProfileActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.SymphatyActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.ChatActivity" />
+        <activity android:name=".ui.FilterActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.CitySearchActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.profile.ProfileActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.profile.EditProfileActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.profile.album.PhotoAlbumActivity" />
+        <activity android:name=".ui.profile.album.PhotoEroAlbumActivity" />
+        <activity android:name=".billing.BuyingActivity" android:screenOrientation="portrait" />
+        
+        <!-- services -->
+        <service android:name=".services.NotificationService" />
+        <service android:name=".services.ConnectionService" />
+        <service android:name=".billing.BillingService" />
+        
+        <!-- receivers -->
+        <receiver android:name=".billing.BillingReceiver">
+	        <intent-filter>
+	            <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
+	            <action android:name="com.android.vending.billing.RESPONSE_CODE" />
+	            <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
+	        </intent-filter>
+        </receiver>
+        
+		    <!-- c2dm -->
+		    <service android:name=".C2DMReceiver" />
+		    <receiver android:name="com.google.android.c2dm.C2DMBroadcastReceiver"
+		              android:permission="com.google.android.c2dm.permission.SEND">
+		        <intent-filter>
+		            <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+		            <category android:name="com.topface.topface"/>
+		        </intent-filter>
+		        <intent-filter>
+		            <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+		            <category android:name="com.topface.topface"/>
+		        </intent-filter>
+		     </receiver>
+
+    </application>
+
 </manifest>
-

@@ -49,8 +49,7 @@ public class C2DMessaging {
             String senderId) {
         Intent registrationIntent = new Intent(REQUEST_REGISTRATION_INTENT);
         registrationIntent.setPackage(GSF_PACKAGE);
-        registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT,
-                PendingIntent.getBroadcast(context, 0, new Intent(), 0));
+        registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT,PendingIntent.getBroadcast(context, 0, new Intent(), 0));
         registrationIntent.putExtra(EXTRA_SENDER, senderId);
         context.startService(registrationIntent);
         // TODO: if intent not found, notification on need to have GSF
@@ -62,8 +61,7 @@ public class C2DMessaging {
     public static void unregister(Context context) {
         Intent regIntent = new Intent(REQUEST_UNREGISTRATION_INTENT);
         regIntent.setPackage(GSF_PACKAGE);
-        regIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, PendingIntent.getBroadcast(context,
-                0, new Intent(), 0));
+        regIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, PendingIntent.getBroadcast(context,0, new Intent(), 0));
         context.startService(regIntent);
     }
 

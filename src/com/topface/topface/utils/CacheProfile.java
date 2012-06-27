@@ -54,6 +54,7 @@ public class CacheProfile {
   
   public static LinkedList<Album> albums; // альбом пользователя
   public static String status;            // статус пользователя
+  public static boolean isNewbie;         // поле новичка
   //---------------------------------------------------------------------------
   public static boolean init(Context context) {
     try {
@@ -84,6 +85,7 @@ public class CacheProfile {
     updateCity(profile);
     updateDating(profile);
     updateNotifications(profile);
+    isNewbie = profile.isNewbie;
   }
   //---------------------------------------------------------------------------
   public static void updateAvatars(Profile profile) {
@@ -156,6 +158,7 @@ public class CacheProfile {
     profile.questionary_height=questionary_height;        
     profile.albums=albums;
     profile.status=status;
+    profile.isNewbie=isNewbie;
     return profile;
   }
   //---------------------------------------------------------------------------
@@ -198,6 +201,7 @@ public class CacheProfile {
     questionary_height=profile.questionary_height;        
     albums=profile.albums;
     status=profile.status;
+    isNewbie=profile.isNewbie;
   }
   //---------------------------------------------------------------------------
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+  <LinearLayout
+      android:layout_width="wrap_content" 
+      android:layout_height="wrap_content"
+      android:orientation="vertical" >
+
+     <TextView
+	      android:id="@+id/tvDatingUserName" 
+	      android:layout_width="wrap_content"
+	      android:layout_height="wrap_content"
+	      android:textColor="#FFFFFF"
+	      android:textSize="30sp"
+	      android:drawableRight="@drawable/im_offline"
+	      android:drawablePadding="4dp" />
+     
+    <TextView
+        android:id="@+id/tvDatingUserStatus" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxWidth="200dp"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+     
+    <TextView
+        android:id="@+id/tvDatingUserCity" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+    
+  </LinearLayout>
+</merge>

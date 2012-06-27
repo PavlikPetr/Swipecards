@@ -1,29 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/list_bkgrd"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical" >
+    android:background="@drawable/im_list_bkgrd" >
     
-  <!-- header bar -->
-  <include layout="@layout/bar_header" />
-  
- <!--  <com.topface.topface.module.pull2refresh.PullToRefreshListView  -->
- <ListView
-      android:id="@+id/lvChatList"
-      android:layout_width="wrap_content" 
-      android:layout_height="0dip"
-      android:layout_weight="1"
-      android:listSelector="@android:color/transparent"
-      android:transcriptMode="alwaysScroll"
-      android:stackFromBottom="true"
-      android:cacheColorHint="#00000000"
-      android:divider="@android:color/transparent"
-      android:dividerHeight="0dp"
-      android:fadeScrollbars="true" />
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:focusable="true"
+	    android:focusableInTouchMode="true"
+	    android:orientation="vertical" >
+	    
+	  <!-- header bar -->
+	  <include layout="@layout/bar_header" />
+	  
+	  <ListView
+	      android:id="@+id/lvChatList"
+	      android:layout_width="wrap_content" 
+	      android:layout_height="0dip"
+	      android:layout_weight="1"
+	      android:listSelector="@android:color/transparent"
+	      android:transcriptMode="alwaysScroll"
+	      android:stackFromBottom="true"
+	      android:cacheColorHint="#00000000"
+	      android:divider="@android:color/transparent"
+	      android:dividerHeight="0dp"
+	      android:fadeScrollbars="true" />
+	
+	  <include layout="@layout/chat_footer_send" />
+	
+	</LinearLayout>
+	
+	  <ProgressBar
+      android:id="@+id/prsChatLoading"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:visibility="gone"
+      style="@android:style/Widget.ProgressBar.Small" />
 
-  <include layout="@layout/chat_footer_send" />
-
-</LinearLayout>
+</RelativeLayout> 

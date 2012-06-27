@@ -7,7 +7,7 @@ import com.topface.topface.utils.Debug;
 /*
  *   Класс чужого профиля
  */
-public class User extends AbstractData implements IAlbumData {
+public class User extends AbstractData {
   // Data
   public int uid;                    // идентификатор пользователя
   public String first_name;          // имя пользователя
@@ -103,6 +103,10 @@ public class User extends AbstractData implements IAlbumData {
     
     return profile;
   }
+  //---------------------------------------------------------------------------
+  public int getUid() { 
+    return uid; 
+  };
   //---------------------------------------------------------------------------
   @Override
   public String getBigLink() {

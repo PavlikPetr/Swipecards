@@ -64,4 +64,9 @@ public class History extends AbstractData {
     return historyList; 
   }
   //---------------------------------------------------------------------------
+  public int getUid() { 
+    return owner_id; 
+  };
+  //---------------------------------------------------------------------------
+  
 }
