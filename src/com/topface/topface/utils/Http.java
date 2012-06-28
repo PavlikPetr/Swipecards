@@ -61,10 +61,7 @@ public class Http {
   public static boolean isOnline(Context context) {
     ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-    if(networkInfo != null && networkInfo.isConnected())
-      return true;
-    else
-      return false;
+    return networkInfo != null && networkInfo.isConnected();
   }
   //---------------------------------------------------------------------------
   public static String httpGetRequest(String request) {
@@ -205,7 +202,7 @@ public class Http {
     Debug.log(TAG,"req_next:" + params); // REQUEST
     
     HttpPost httpPost = null;
-    AndroidHttpClient httpClient = null;
+    AndroidHttpClient httpClient;
     String rawResponse = Static.EMPTY;
     
     try {    
@@ -258,7 +255,7 @@ public class Http {
         float w = bitmap.getWidth(); 
         float ratio = w/Data.screen_width;
         int height = (int)(bitmap.getHeight()/ratio);
-        final Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Data.screen_width, height, false); 
+        final Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Data.screen_width, height, true);
         if(resizedBitmap != null)
           view.post(new Runnable() {
             @Override
