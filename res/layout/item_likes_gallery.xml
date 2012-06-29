@@ -4,7 +4,7 @@
       xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"  
       android:layout_width="fill_parent" 
       android:layout_height="wrap_content" 
-      android:padding="4dp">
+      android:background="@drawable/item_list_selector" >
       
     <!-- аватар -->
     <com.topface.topface.ui.views.RoundedImageView
@@ -12,42 +12,49 @@
         topface:frame="dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="4dp"
         android:layout_marginRight="6dp"
-     />
+        android:layout_marginLeft="6dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
     
-    <!-- имя, возраст -->
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_toRightOf="@id/ivAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:textColor="#414141"
-        android:textSize="16dp" 
-        android:textStyle="bold"/>
-    
-    <!-- город -->
-    <TextView
-        android:id="@+id/tvCity"
-        android:layout_below="@id/tvName"
-        android:layout_toRightOf="@id/ivAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#4C4C4C" />
+    <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_toRightOf="@id/ivAvatar"
+          android:layout_centerVertical="true" 
+          android:orientation="vertical" >
+          
+	    <!-- имя -->
+	    <TextView
+	        android:id="@+id/tvName"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:singleLine="true"
+	        android:ellipsize="end"
+	        android:textColor="#FFFFFF"
+	        android:textSize="16dp" 
+	        android:textStyle="normal"
+	        style="@style/ShadowItemFont" />
+	    
+	    <!-- возраст, город -->
+	    <TextView
+	        android:id="@+id/tvCity"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="#FFFFFF" 
+	        android:textSize="14dp" 
+          android:textStyle="normal"
+          style="@style/ShadowItemFont" />
+
+	    </LinearLayout>
     
     <!-- время -->
     <TextView
         android:id="@+id/tvTime"
-        android:layout_below="@id/tvCity"
-        android:layout_toRightOf="@id/ivAvatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#707070"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"/>
     
     <!-- стрелка -->
@@ -57,17 +64,27 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:paddingRight="2dp"
+        android:paddingRight="4dp"
         android:src="@drawable/im_item_arrow" />
     
-    <!-- звезда -->
+    <!-- сердце -->
     <ImageView
         android:id="@+id/ivHeart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/ivArrow"
         android:layout_centerVertical="true"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/im_item_mutual_heart" />
+        android:layout_marginRight="8dp"  />
+    
+    <!-- online -->
+    <ImageView
+        android:id="@+id/ivOnline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="4dp"
+        android:src="@drawable/list_online_selector"
+        android:visibility="invisible" />
     
   </RelativeLayout>

@@ -6,8 +6,8 @@ import android.widget.FrameLayout;
 
 public class WindowLayout extends FrameLayout {
 
-  public WindowLayout(Context context,AttributeSet attrs) {
-    super(context,attrs);
-  }
+    public WindowLayout(Context context,AttributeSet attrs) {
+        super(context, attrs);
+    }
 
 }

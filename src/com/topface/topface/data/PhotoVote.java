@@ -4,19 +4,19 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
 public class PhotoVote extends AbstractData {
-  // Data
-  public boolean completed;
-  //---------------------------------------------------------------------------
-  public static PhotoVote parse(ApiResponse response) {
-    PhotoVote vote = new PhotoVote();
-    
-    try {
-      vote.completed = response.mJSONResult.optBoolean("completed");
-    } catch(Exception e) {
-      Debug.log("PhotoVote.class","Wrong response parsing: " + e);
+    // Data
+    public boolean completed;
+    //---------------------------------------------------------------------------
+    public static PhotoVote parse(ApiResponse response) {
+        PhotoVote vote = new PhotoVote();
+
+        try {
+            vote.completed = response.mJSONResult.optBoolean("completed");
+        } catch(Exception e) {
+            Debug.log("PhotoVote.class", "Wrong response parsing: " + e);
+        }
+
+        return vote;
     }
-    
-    return vote;
-  }
-  //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
 }

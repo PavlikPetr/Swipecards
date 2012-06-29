@@ -3,8 +3,8 @@
       xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface" 
       android:layout_width="fill_parent" 
-      android:layout_height="wrap_content" 
-      android:padding="4dp">
+      android:layout_height="wrap_content"
+      android:background="@drawable/item_list_selector" >
       
     <!-- аватар -->
     <com.topface.topface.ui.views.RoundedImageView
@@ -12,46 +12,86 @@
         topface:frame="dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="4dp"
         android:layout_marginRight="6dp"
-     />
+        android:layout_marginLeft="6dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
     
-    <!-- имя, возраст -->
-    <TextView
-        android:id="@+id/tvName"
-        android:textColor="#414141"
-        android:layout_toRightOf="@id/ivAvatar"
-        android:layout_width="wrap_content"
+      <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:textSize="16dp" 
-        android:textStyle="bold"/>
-    
-    <!-- текст -->
-    <TextView
-        android:id="@+id/tvText"
-        android:textColor="#414141"
         android:layout_toRightOf="@id/ivAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="2"
         android:layout_marginRight="20dp"
-        android:layout_below="@id/tvName"  />
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
     
-    <!-- время -->
-    <TextView
-        android:id="@+id/tvTime"
-        android:layout_below="@id/tvText"
-        android:textColor="#707070"
-        android:layout_toRightOf="@id/ivAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+					    <!-- имя, возраст -->
+					    <TextView
+			            android:id="@+id/tvName"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:textColor="#FFFFFF"
+			            android:textSize="16dp" 
+			            android:textStyle="normal"
+			            style="@style/ShadowItemFont" />
+					    
+					    <!-- город -->
+		          <TextView
+		              android:id="@+id/tvCity"
+		              android:layout_width="wrap_content"
+		              android:layout_height="wrap_content"
+		              android:singleLine="true"
+		              android:ellipsize="end"
+		              android:textColor="#FFFFFF"
+		              android:textSize="16dp" 
+		              android:textStyle="normal"
+		              style="@style/ShadowItemFont" />
+          
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+		          
+					<!-- текст -->
+					<TextView
+					    android:id="@+id/tvText"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:layout_gravity="left|bottom"
+              android:singleLine="true"
+              android:ellipsize="end"
+			        android:textColor="#B8B8B8" 
+			        android:textSize="14dp" 
+			        android:textStyle="normal"
+		         style="@style/ShadowItemFont" />
+					
+		    <!-- время -->
+		    <TextView
+		        android:id="@+id/tvTime"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="right|bottom"
+		    android:shadowColor="#222222"
+        android:shadowRadius="1"
+        android:shadowDx="0"
+        android:shadowDy="-1"
+		        android:textColor="#737373"
+            android:textSize="12dp" 
+            android:textStyle="normal"
+		        style="@style/ShadowItemFont" />
     
+				</LinearLayout>
+			    
+     </LinearLayout>
+       
     <!-- стрелка -->
     <ImageView
         android:id="@+id/ivArrow"
@@ -59,7 +99,18 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:paddingRight="2dp"
+        android:layout_marginRight="6dp"
         android:src="@drawable/im_item_arrow" />
+    
+    <!-- online -->
+    <ImageView
+        android:id="@+id/ivOnline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="6dp"
+        android:src="@drawable/list_online_selector"
+        android:visibility="invisible" />
     
   </RelativeLayout>
