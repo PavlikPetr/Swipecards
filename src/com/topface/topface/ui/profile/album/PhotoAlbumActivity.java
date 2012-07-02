@@ -55,7 +55,7 @@ public class PhotoAlbumActivity extends Activity {
     
     mOwner = getIntent().getBooleanExtra(INTENT_OWNER,false);
     
-    int uid = getIntent().getIntExtra(INTENT_USER_ID,-1);  // нахуя он нужен, разобраться почему это здесь написано!!!
+    int uid = getIntent().getIntExtra(INTENT_USER_ID, -1);  // нахуя он нужен, разобраться почему это здесь написано!!!
     final int position = getIntent().getIntExtra(INTENT_ALBUM_POS,0);
 
     if(uid==-1) {

@@ -314,8 +314,9 @@ public class Utils {
                     (int) Math.round(
                             Math.log(
                                     size /
-                                    (double) Math.max(options.outHeight, options.outWidth)) /
-                                    Math.log(0.5)
+                                    (double) Math.max(options.outHeight, options.outWidth)
+                            ) /
+                            Math.log(0.5)
                     )
             );
         }
