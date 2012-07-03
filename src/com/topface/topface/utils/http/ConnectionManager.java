@@ -94,7 +94,9 @@ public class ConnectionManager {
                     Debug.log(TAG, "cm_req exception::" + e.toString());
                     if (httpPost != null && !httpPost.isAborted()) httpPost.abort();
                 }
-                httpClient.close();
+                if (httpClient != null) {
+                    httpClient.close();
+                }
             }
         });
     }
@@ -297,15 +299,16 @@ public class ConnectionManager {
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 InputStream is = entity.getContent();
+                FlushedInputStream fis = new FlushedInputStream(is);
 
                 //Если передан максимальный необходимый размер битмапа, то для экономии оперативки,
                 //мы создаем уже уменьшенный битмап, не загружая в память его полную версию
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 if (maxSize > 0) {
-                    options.inSampleSize = Utils.getBitmapScale(is, maxSize);
+                    options.inSampleSize = Utils.getBitmapScale(fis, maxSize);
                 }
 
-                bitmap = BitmapFactory.decodeStream(new FlushedInputStream(is), null, null);
+                bitmap = BitmapFactory.decodeStream(fis);
                 is.close();
             }
         } catch (Exception e) {

@@ -23,7 +23,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   static class ViewHolder {
     ImageView mImageView;
-  };
+  }
   //---------------------------------------------------------------------------
   // Data
   private int mPrevPosition;         // предыдущая позиция фото в альбоме
@@ -86,7 +86,8 @@ public class PhotoAlbumAdapter extends BaseAdapter {
       @Override
       public void run() {
         final Bitmap bitmap = Http.bitmapLoader(
-                mAlbumsList.get(position).getBigLink()
+                mAlbumsList.get(position).getBigLink(),
+                Device.getCurrentDisplayWidth(mContext)
         );
         view.post(new Runnable() {
           @Override

@@ -309,7 +309,7 @@ public class Utils {
         BitmapFactory.decodeStream(in, null, options);
 
         //Определяем во сколько раз нужно уменьшить изображение для создания битмапа
-        if (options.outHeight > size || options.outWidth > size) {
+        if (/*options.outHeight > size || */options.outWidth > size) {
             scale = (int) Math.pow(2,
                     (int) Math.round(
                             Math.log(
