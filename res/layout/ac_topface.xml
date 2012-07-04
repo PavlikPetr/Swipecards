@@ -54,7 +54,7 @@
                 android:drawableLeft="@drawable/topface_dating"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_dating"
                 android:textColor="#FFFFFF" />
         </RelativeLayout>
@@ -73,7 +73,7 @@
                 android:drawableLeft="@drawable/topface_likes"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_likes"
                 android:textColor="#FFFFFF" />
 
@@ -135,7 +135,7 @@
                 android:drawableLeft="@drawable/topface_chat"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_chat"
                 android:textColor="#FFFFFF" />
 
@@ -166,7 +166,7 @@
                 android:drawableLeft="@drawable/topface_tops"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_tops"
                 android:textColor="#FFFFFF" />
         </RelativeLayout>
@@ -185,7 +185,7 @@
                 android:drawableLeft="@drawable/topface_settings"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_settings"
                 android:textColor="#FFFFFF" />
         </RelativeLayout>

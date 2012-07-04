@@ -9,13 +9,16 @@ import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,19 +31,22 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     // Data
     private int mUserId;
     private boolean mProfileInvoke;
+    private boolean mIsAddPanelOpened;
     private ListView mListView;
     private ChatListAdapter mAdapter;
     private LinkedList<History> mHistoryList;
-    private EditText mEdBox;
+    private EditText mEditBox;
     private TextView mHeaderTitle;
     private ProgressBar mProgressBar;
     private MessageRequest messageRequest;
     private HistoryRequest historyRequest;
+    private SwapControl mSwapControl;
     // Constants
     private static final int LIMIT = 50;
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
+    boolean bibi;
     //---------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +57,16 @@ public class ChatActivity extends Activity implements View.OnClickListener {
         // Data
         mHistoryList = new LinkedList<History>();
 
+        // Swap Control
+        mSwapControl = ((SwapControl)findViewById(R.id.swapFormView));
+
         // Title Header
         mHeaderTitle = ((TextView)findViewById(R.id.tvHeaderTitle));
-
-        // ListView
-        mListView = (ListView)findViewById(R.id.lvChatList);
 
         // Progress
         mProgressBar = (ProgressBar)findViewById(R.id.prsChatLoading);
 
-        // params
+        // Params
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
         mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME));
@@ -70,61 +76,26 @@ public class ChatActivity extends Activity implements View.OnClickListener {
         btnProfile.setVisibility(View.VISIBLE);
         btnProfile.setOnClickListener(this);
 
+        // Add Button        
+        ((Button)findViewById(R.id.btnChatAdd)).setOnClickListener(this);
+
+        // Gift Button
+        ((Button)findViewById(R.id.btnChatGift)).setOnClickListener(this);
+
+        // Place Button
+        ((Button)findViewById(R.id.btnChatPlace)).setOnClickListener(this);
+
+        // Map Button
+        ((Button)findViewById(R.id.btnChatMap)).setOnClickListener(this);
+
         // Edit Box
-        mEdBox = (EditText)findViewById(R.id.edChatBox);
+        mEditBox = (EditText)findViewById(R.id.edChatBox);
+        mEditBox.setOnEditorActionListener(mEditorActionListener);
 
-        // Send Button
-        Button btnSend = (Button)findViewById(R.id.btnChatSend);
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String text = mEdBox.getText().toString();
+        // ListView
+        mListView = (ListView)findViewById(R.id.lvChatList);
 
-                if (text == null || text.length() == 0)
-                    return;
-
-                mProgressBar.setVisibility(View.VISIBLE);
-
-                InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mEdBox.getWindowToken(), 0);
-
-                messageRequest = new MessageRequest(ChatActivity.this.getApplicationContext());
-                messageRequest.message = mEdBox.getText().toString();
-                messageRequest.userid = mUserId;
-                messageRequest.callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                History history = new History();
-                                history.code = 0;
-                                history.gift = 0;
-                                history.owner_id = 0;
-                                history.created = System.currentTimeMillis();
-                                history.text = text;
-                                history.type = History.MESSAGE;
-                                mAdapter.addSentMessage(history);
-                                mAdapter.notifyDataSetChanged();
-                                mEdBox.getText().clear();
-                                mProgressBar.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                    @Override
-                    public void fail(int codeError,ApiResponse response) {
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(ChatActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                                mProgressBar.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                }).exec();
-            }
-        });
-
+        // Adapter
         mAdapter = new ChatListAdapter(getApplicationContext(), mUserId, mHistoryList);
         mAdapter.setOnAvatarListener(this);
         mListView.setAdapter(mAdapter);
@@ -178,7 +149,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     }
     //---------------------------------------------------------------------------
     private void release() {
-        mEdBox = null;
+        mEditBox = null;
         mListView = null;
         if (mAdapter != null)
             mAdapter.release();
@@ -188,15 +159,89 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     //---------------------------------------------------------------------------
     @Override
     public void onClick(View v) {
-        if (mProfileInvoke) {
-            finish();
-            return;
+        switch (v.getId()) {
+            case R.id.btnChatAdd: {
+                if (mIsAddPanelOpened)
+                    mSwapControl.snapToScreen(0);
+                else
+                    mSwapControl.snapToScreen(1);
+                mIsAddPanelOpened = !mIsAddPanelOpened;
+            } break;
+            case R.id.btnChatGift: {
+                Toast.makeText(ChatActivity.this, "Gift", Toast.LENGTH_SHORT).show();
+            } break;
+            case R.id.btnChatPlace: {
+                Toast.makeText(ChatActivity.this, "Place", Toast.LENGTH_SHORT).show();
+            } break;
+            case R.id.btnChatMap: {
+                Toast.makeText(ChatActivity.this, "Map", Toast.LENGTH_SHORT).show();
+            } break;
+            default: {
+                if (mProfileInvoke) {
+                    finish();
+                    return;
+                }
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                intent.putExtra(ProfileActivity.INTENT_USER_ID, mUserId);
+                intent.putExtra(ProfileActivity.INTENT_CHAT_INVOKE, true);
+                intent.putExtra(ProfileActivity.INTENT_USER_NAME, mHeaderTitle.getText());
+                startActivity(intent);
+            } break;
         }
-        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-        intent.putExtra(ProfileActivity.INTENT_USER_ID, mUserId);
-        intent.putExtra(ProfileActivity.INTENT_CHAT_INVOKE, true);
-        intent.putExtra(ProfileActivity.INTENT_USER_NAME, mHeaderTitle.getText());
-        startActivity(intent);
     }
+    //---------------------------------------------------------------------------
+    private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v,int actionId,KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                final String text = v.getText().toString();
+
+                if (text == null || text.length() == 0)
+                    return false;
+
+                mProgressBar.setVisibility(View.VISIBLE);
+
+                InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mEditBox.getWindowToken(), 0);
+
+                messageRequest = new MessageRequest(ChatActivity.this.getApplicationContext());
+                messageRequest.message = mEditBox.getText().toString();
+                messageRequest.userid = mUserId;
+                messageRequest.callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                History history = new History();
+                                history.code = 0;
+                                history.gift = 0;
+                                history.owner_id = 0;
+                                history.created = System.currentTimeMillis();
+                                history.text = text;
+                                history.type = History.MESSAGE;
+                                mAdapter.addSentMessage(history);
+                                mAdapter.notifyDataSetChanged();
+                                mEditBox.getText().clear();
+                                mProgressBar.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                    @Override
+                    public void fail(int codeError,ApiResponse response) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(ChatActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                                mProgressBar.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }).exec();
+                return true;
+            }
+            return false;
+        }
+    };
     //---------------------------------------------------------------------------
 }
