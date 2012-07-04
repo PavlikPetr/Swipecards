@@ -95,7 +95,7 @@ public class GiftsDialog extends Dialog {
                                                         .setContent(mGiftsTabContent));
                         mTabHost.addTab(mTabHost.newTabSpec(Integer.toString(Gift.PRESENT))
                                                         .setIndicator(mContext.getResources().getText(Gift.getTypeNameResId(Gift.PRESENT)))
-                                                        .setContent(mGiftsTabContent));                        
+                                                        .setContent(mGiftsTabContent));
                         for (GiftsAdapter adapter : mGridAdapters)
                             adapter.notifyDataSetChanged();
                         
