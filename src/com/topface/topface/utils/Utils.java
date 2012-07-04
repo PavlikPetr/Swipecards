@@ -17,12 +17,11 @@ import android.text.format.DateUtils;
 import android.widget.TextView;
 
 public class Utils {
-    
+    //---------------------------------------------------------------------------
     public static int unixtime() {
         return (int) (System.currentTimeMillis() / 1000L);
     }
-
-    
+    //---------------------------------------------------------------------------
     public static String md5(String value) {
         if (value == null)
             return null;
@@ -38,8 +37,7 @@ public class Utils {
             return null;
         }
     }
-
-    
+    //---------------------------------------------------------------------------    
     public static Bitmap clipping(Bitmap rawBitmap, int bitmapWidth, int bitmapHeight) {
         if (rawBitmap == null || bitmapWidth <= 0 || bitmapHeight <= 0)
             return null;
@@ -85,8 +83,7 @@ public class Utils {
 
         return clippedBitmap;
     }
-
-    
+    //---------------------------------------------------------------------------
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int width, int height, int roundPx) {
         if (width < height)
             height = width;
@@ -100,13 +97,15 @@ public class Utils {
         Canvas canvas = new Canvas(output);
 
         final Rect rect = new Rect(0, 0, width, height);
-        final RectF rectF = new RectF(rect);
+        //final RectF rectF = new RectF(rect);
         final Paint paint = new Paint();
 
         paint.setAntiAlias(true);
         paint.setColor(0xff424242);
         canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        //canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        int r = width/2;
+        canvas.drawCircle(r, r, r-2, paint);
 
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
@@ -116,8 +115,7 @@ public class Utils {
 
         return output;
     }
-
-    
+    //---------------------------------------------------------------------------
     public static void formatTime(TextView tv, long time) {
         Context context = tv.getContext();
         String text;
@@ -143,8 +141,7 @@ public class Utils {
         }
         tv.setText(text);
     }
-
-    
+    //---------------------------------------------------------------------------
     public static String formatHour(Context context, long hours) {
         byte caseValue = 0;
         if ((hours < 11) || (hours > 19)) {
@@ -162,8 +159,7 @@ public class Utils {
                 return String.format(context.getString(R.string.time_hours), hours);
         }
     }
-
-    
+    //---------------------------------------------------------------------------
     public static String formatMinute(Context context, long minutes) {
         byte caseValue = 0;
         if ((minutes < 11) || (minutes > 19)) {
@@ -181,7 +177,7 @@ public class Utils {
                 return String.format(context.getString(R.string.time_minutes), minutes);
         }
     }
-
+    //---------------------------------------------------------------------------
     public static int getBatteryResource(int power) {
         int n = 50 * CacheProfile.power / 100;
         switch (n) {
@@ -291,7 +287,7 @@ public class Utils {
                 return R.drawable.battery_50;
         }
     }
-
+    //---------------------------------------------------------------------------
     /**
      * Возвращает делитель, во сколько раз уменьшить размер изображения при создании битмапа
      *
@@ -322,7 +318,7 @@ public class Utils {
 
         return scale;
     }
-
+    //---------------------------------------------------------------------------
     public static Bitmap getMemorySafeBitmap(Uri uri, int size, Context ctx) {
         Bitmap bitmap = null;
         //Decode with inSampleSize
@@ -340,7 +336,6 @@ public class Utils {
         }
 
         return bitmap;
-
     }
-
+    //---------------------------------------------------------------------------
 }
