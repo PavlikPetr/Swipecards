@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import java.util.LinkedList;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.History;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -244,4 +245,22 @@ public class ChatActivity extends Activity implements View.OnClickListener {
         }
     };
     //---------------------------------------------------------------------------
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+        if(resultCode != RESULT_OK)
+          return;
+        
+        History history = new History();
+        history.code = 0;
+        history.gift = History.GIFT;
+        history.owner_id = 0;
+        history.created = System.currentTimeMillis();
+        history.text = Static.EMPTY;
+        history.type = History.MESSAGE;
+        mAdapter.addSentMessage(history);
+        mAdapter.notifyDataSetChanged();
+        mEditBox.getText().clear();
+        mProgressBar.setVisibility(View.GONE);
+    }
+    
 }

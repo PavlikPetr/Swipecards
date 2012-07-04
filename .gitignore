@@ -1,5 +1,8 @@
 /bin
 /gen
+/out
 /.idea
 /.settings
-/*.iml
+*.iml
+.project
+.classpath

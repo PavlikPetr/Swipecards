@@ -56,38 +56,35 @@ public class Http {
             }
             return totalBytesSkipped;
         }
-    } // FlushedInputStream
-      //---------------------------------------------------------------------------
-    public static boolean isOnline(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected())
-            return true;
-        else
-            return false;
-    }
-    //---------------------------------------------------------------------------
-    public static String httpGetRequest(String request) {
-        return httpRequest(HTTP_GET_REQUEST, request, null, null, null);
-    }
-    //---------------------------------------------------------------------------
-    public static String httpPostRequest(String request,String postParams) {
-        return httpRequest(HTTP_POST_REQUEST, request, postParams, null, null);
-    }
-    //---------------------------------------------------------------------------
-    public static String httpPostDataRequest(String request,String postParams,byte[] dataParams) {
-        return httpRequest(HTTP_POST_REQUEST, request, postParams, dataParams, null);
-    }
-    //---------------------------------------------------------------------------
-    public static String httpPostDataRequest(String request,String postParams,InputStream is) {
-        return httpRequest(HTTP_POST_REQUEST, request, postParams, null, is);
-    }
-    //---------------------------------------------------------------------------
-    public static String httpRequest(int typeRequest,String request,String postParams,byte[] dataParams,InputStream is) {
-        String response = Static.EMPTY;
-        InputStream in = null;
-        OutputStream out = null;
-        HttpURLConnection httpConnection = null;
+  } // FlushedInputStream
+  //---------------------------------------------------------------------------
+  public static boolean isOnline(Context context) {
+    ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+    return networkInfo != null && networkInfo.isConnected();
+  }
+  //---------------------------------------------------------------------------
+  public static String httpGetRequest(String request) {
+    return httpRequest(HTTP_GET_REQUEST,request,null,null,null);
+  }
+  //---------------------------------------------------------------------------
+  public static String httpPostRequest(String request,String postParams) {
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,null);
+  }
+  //---------------------------------------------------------------------------
+  public static String httpPostDataRequest(String request,String postParams,byte[] dataParams) {
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,dataParams,null);
+  }
+  //---------------------------------------------------------------------------
+  public static String httpPostDataRequest(String request,String postParams,InputStream is) {
+    return httpRequest(HTTP_POST_REQUEST,request,postParams,null,is);
+  }
+  //---------------------------------------------------------------------------
+  public static String httpRequest(int typeRequest,String request,String postParams,byte[] dataParams,InputStream is) {
+    String response = Static.EMPTY;
+    InputStream in = null;
+    OutputStream out = null;
+    HttpURLConnection httpConnection = null;
 
         try {
             Debug.log(TAG, "enter");
@@ -203,9 +200,23 @@ public class Http {
         }
         return response;
     }
-    //---------------------------------------------------------------------------
-    public static String httpTPRequest(String url,String params) {
-        Debug.log(TAG, "req_next:" + params); // REQUEST
+    return response;
+  }
+  //---------------------------------------------------------------------------
+  public static String httpTPRequest(String url,String params) {
+    Debug.log(TAG,"req_next:" + params); // REQUEST
+    
+    HttpPost httpPost = null;
+    AndroidHttpClient httpClient;
+    String rawResponse = Static.EMPTY;
+    
+    try {    
+      httpClient = AndroidHttpClient.newInstance("Android");
+      httpPost = new HttpPost(url);
+      httpPost.addHeader("Accept-Encoding", "gzip");
+      httpPost.addHeader("Content-Type", "application/json");
+      httpPost.setHeader("Content-Type", "application/json");   
+      httpPost.setEntity(new ByteArrayEntity(params.getBytes("UTF8")));
 
         HttpPost httpPost = null;
         AndroidHttpClient httpClient = null;
@@ -246,16 +257,28 @@ public class Http {
 
         return rawResponse;
     }
-    //---------------------------------------------------------------------------
-    public static Bitmap bitmapLoader(String url) { // Exp
-        if (url == null)
-            return null;
-        //return ConnectionService.bitmapRequest(url);
-        return ConnectionManager.getInstance().bitmapLoader(url);
-    }
-    //---------------------------------------------------------------------------
-    public static void bannerLoader(final String url,final ImageView view) {
-        Thread t = new Thread() {
+
+    return rawResponse;
+  }
+  //---------------------------------------------------------------------------
+  public static Bitmap bitmapLoader(String url) { // Exp
+    if(url == null) return null;
+    //return ConnectionService.bitmapRequest(url);
+    return ConnectionManager.getInstance().bitmapLoader(url);
+  }
+  //---------------------------------------------------------------------------
+  public static void bannerLoader(final String url,final ImageView view) {
+    Thread t = new Thread() {
+      @Override
+      public void run() {
+        Bitmap bitmap = bitmapLoader(url);
+        if(bitmap==null) return;
+        float w = bitmap.getWidth(); 
+        float ratio = w/Data.screen_width;
+        int height = (int)(bitmap.getHeight()/ratio);
+        final Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Data.screen_width, height, true);
+        if(resizedBitmap != null)
+          view.post(new Runnable() {
             @Override
             public void run() {
                 Bitmap bitmap = bitmapLoader(url);
