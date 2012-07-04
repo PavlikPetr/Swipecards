@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import com.topface.topface.Data;
 import com.topface.topface.data.AbstractData;
-import com.topface.topface.ui.GiftsDialog;
+import com.topface.topface.data.Gift;
+import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.utils.CacheManager;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.MemoryCache;
@@ -20,7 +20,7 @@ import android.widget.ImageView;
 /*
  *  РњРµРЅРµРґР¶РµСЂ РёР·РѕР±СЂР°Р¶РµРЅРёР№, Р·Р°РіСЂСѓР·Р°РµС‚ Рё РєРµС€РёСЂСѓРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
  */
-public class GiftGalleryGridManager<T extends AbstractData> implements OnScrollListener {
+public class GiftGalleryManager<T extends AbstractData> implements OnScrollListener {
     class Queue { // РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ
         // Data
         private HashMap<Integer, Bitmap> mQueue = new HashMap<Integer, Bitmap>(20);
@@ -57,15 +57,15 @@ public class GiftGalleryGridManager<T extends AbstractData> implements OnScrollL
     // СЃРєСЂРѕР»РёРЅРі
     public boolean mBusy;
     //---------------------------------------------------------------------------
-    public GiftGalleryGridManager(Context context,LinkedList<T> dataList) {
+    public GiftGalleryManager(Context context,LinkedList<T> dataList) {
         mDataList = dataList;
         mMemoryCache = new MemoryCache();
         mStorageCache = new StorageCache(context, CacheManager.EXTERNAL_CACHE);
         mWorker = Executors.newFixedThreadPool(3);
 
-        int columnNumber = GiftsDialog.GIFTS_COLUMN;
+        int columnNumber = GiftsActivity.GIFTS_COLUMN;
         mBitmapWidth = Device.getDisplay(context).getWidth() / (columnNumber);        
-        mBitmapHeight = (int)(mBitmapWidth * 1.25);
+        mBitmapHeight = (int)(mBitmapWidth);
     }
     //---------------------------------------------------------------------------
     public void update() {
@@ -88,12 +88,12 @@ public class GiftGalleryGridManager<T extends AbstractData> implements OnScrollL
         else {
             imageView.setImageBitmap(null); // С…Р· ??
             if (!mBusy) {
-//                bitmap = mStorageCache.load(mDataList.get(position).getSmallLink());
-//                if (bitmap != null) {
-//                    imageView.setImageBitmap(bitmap);
-//                    mMemoryCache.put(position, bitmap);
-//                } else
-                    loadingImages(position, imageView);
+                bitmap = mStorageCache.load(((Gift)mDataList.get(position)).id);
+                if (bitmap != null) {
+                    imageView.setImageBitmap(bitmap);
+                    mMemoryCache.put(position, bitmap);
+            } else
+                loadingImages(position, imageView);
             }
         }
         bitmap = null;
@@ -124,7 +124,7 @@ public class GiftGalleryGridManager<T extends AbstractData> implements OnScrollL
 
                     // Р·Р°Р»РёРІР°РµРј РІ РєРµС€
                     mMemoryCache.put(position, roundBitmap);
-                    mStorageCache.save(mDataList.get(position).getSmallLink(), roundBitmap);
+                    mStorageCache.save(Integer.toString(((Gift)mDataList.get(position)).id), roundBitmap);
 
                     roundBitmap = null;
 

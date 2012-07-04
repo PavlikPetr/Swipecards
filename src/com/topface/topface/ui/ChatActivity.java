@@ -169,7 +169,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
             } break;
             case R.id.btnChatGift: {
 //                Toast.makeText(ChatActivity.this, "Gift", Toast.LENGTH_SHORT).show();
-                (new GiftsDialog(this,this)).show();
+                startActivity(new Intent(this, GiftsActivity.class));
             } break;
             case R.id.btnChatPlace: {
                 Toast.makeText(ChatActivity.this, "Place", Toast.LENGTH_SHORT).show();

@@ -1,24 +1,30 @@
 package com.topface.topface.ui.adapters;
 
+import com.topface.topface.R;
 import com.topface.topface.data.Gift;
-import com.topface.topface.utils.GiftGalleryGridManager;
+import com.topface.topface.ui.adapters.TopsGridAdapter.ViewHolder;
+import com.topface.topface.ui.views.ThumbView;
+import com.topface.topface.utils.GiftGalleryManager;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class GiftsAdapter extends BaseAdapter{
 
 	private Context mContext;
+	private LayoutInflater mInflater;
 	
 //	private LayoutInflater mInflater;
-	private GiftGalleryGridManager<Gift> mGalleryManager;
+	private GiftGalleryManager<Gift> mGalleryManager;
 	
-	public GiftsAdapter(Context context, GiftGalleryGridManager<Gift> galleryManager) {
+	public GiftsAdapter(Context context, GiftGalleryManager<Gift> galleryManager) {
 		mContext = context;
-//		mInflater = LayoutInflater.from(context);
+		mInflater = LayoutInflater.from(context);
 	    mGalleryManager = galleryManager;
 	}
 	
@@ -29,11 +35,25 @@ public class GiftsAdapter extends BaseAdapter{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if(convertView==null) {
-			convertView = new ImageView(mContext);
+		ViewHolder holder = null;
+	    
+	    if(convertView==null) {
+	        convertView = (ViewGroup)mInflater.inflate(R.layout.item_gift, null, false);
+            
+	        holder = new ViewHolder();
+            holder.mGiftImage = (ImageView)convertView.findViewById(R.id.giftImage);
+            holder.mPriceText = (TextView) convertView.findViewById(R.id.giftPrice);
+
+            convertView.setTag(holder);
+	    } else {
+	        holder = (ViewHolder)convertView.getTag();
 	    }
 		
-	    mGalleryManager.getImage(position,(ImageView) convertView);
+	    holder.mGiftImage.getLayoutParams().width = mGalleryManager.mBitmapWidth;
+	    holder.mGiftImage.getLayoutParams().height = mGalleryManager.mBitmapHeight;
+	    
+	    mGalleryManager.getImage(position,(ImageView) holder.mGiftImage);
+	    holder.mPriceText.setText(Integer.toString(((Gift)mGalleryManager.get(position)).price));
 	    
 	    return convertView;
 	}
@@ -47,4 +67,13 @@ public class GiftsAdapter extends BaseAdapter{
 	public long getItemId(int position) {
 		return position;
 	}	
+	
+	class ViewHolder {
+	    ImageView mGiftImage;
+	    TextView mPriceText;
+	}
+	
+	public void release() {
+	    mGalleryManager.release();
+	}
 }

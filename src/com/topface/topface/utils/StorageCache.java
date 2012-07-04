@@ -63,6 +63,30 @@ public class StorageCache {
         return bitmap;
     }
     //---------------------------------------------------------------------------
+    public Bitmap load(int id) {
+        Bitmap bitmap = null;
+        BufferedInputStream bis = null;
+        try {
+            File file = new File(mCacheDir, Integer.toString(id));
+            if (!file.exists())
+                return null;
+            bis = new BufferedInputStream(new FileInputStream(file));
+            bitmap = BitmapFactory.decodeStream(bis);
+        } catch(FileNotFoundException e) {
+            Debug.log(this, "bitmap loading, file not found #1 " + e);
+        } catch(Exception e) {
+            Debug.log(this, "bitmap loading, exception: " + e);
+        } finally {
+            try {
+                if (bis != null)
+                    bis.close();
+            } catch(IOException e) {
+                Debug.log(this, "bitmap loading, input stream not closed #2 " + e);
+            }
+        }
+        return bitmap;
+    }
+    //---------------------------------------------------------------------------
     public void save(final String fileName,final Bitmap bitmap) {
         //mThreadPool.execute(new Runnable() {
         new Thread(new Runnable() {

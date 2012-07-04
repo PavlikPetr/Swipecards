@@ -125,7 +125,7 @@ public class Utils {
         int bitmapHeight = bitmap.getHeight();
         int multWidth = (int) (bitmapWidth * radiusMult);
         
-        Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Config.ARGB_8888);        
+        Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Config.ARGB_8888);
 
         Canvas canvas = new Canvas(output);
 
@@ -149,12 +149,10 @@ public class Utils {
         canvasPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(bitmap, src, dst, canvasPaint);
 
-        //bitmap.recycle();
+        bitmap.recycle();
         bitmap = null;
         
-        output = Bitmap.createScaledBitmap(output, width, height, true);
-        
-        return output;
+        return Bitmap.createScaledBitmap(output, width, height, true);
     }
     //---------------------------------------------------------------------------
     public static void formatTime(TextView tv,long time) {
