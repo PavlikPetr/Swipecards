@@ -49,7 +49,7 @@ public class DialogActivity extends FrameActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_inbox);
+        setContentView(R.layout.ac_dialog);
         Debug.log(this, "+onCreate");
 
         // Data

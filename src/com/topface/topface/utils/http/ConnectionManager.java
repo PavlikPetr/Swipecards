@@ -170,16 +170,17 @@ public class ConnectionManager {
             @Override
             public void run() {
                 Socket socket = null;
+                String rawResponse = Static.EMPTY;
                 try {
-                    String rawResponse = null;
                     apiRequest.ssid = Data.SSID;
 
                     Debug.log(TAG, "s_req::" + apiRequest.toString()); // REQUEST
 
                     socket = new Socket();
+                    socket.connect(new InetSocketAddress("46.182.29.182", 80), 5000);
                     socket.setKeepAlive(false);
-                    socket.setSoTimeout(2900); //20000
-                    socket.connect(new InetSocketAddress("46.182.29.182", 80), 2900);
+                    socket.setSoTimeout(10000);
+
                     String path = "/?v=1";
                     BufferedWriter output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF8"));
                     byte[] buffer = apiRequest.toString().getBytes("UTF8");
@@ -189,7 +190,7 @@ public class ConnectionManager {
                     output.write("\r\n");
                     output.write(apiRequest.toString());
                     output.flush();
-                    output.close();
+                    //output.close();
 
                     BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     String line = null;
@@ -202,9 +203,25 @@ public class ConnectionManager {
                         }
                     }
                     rawResponse = sb.toString();
-                    input.close();
+                    //input.close();
 
-                    socket.close();
+                    Debug.log(TAG, "s_resp::" + rawResponse); // RESPONSE
+
+                } catch(Exception e) {
+                    rawResponse = e.toString();
+
+                    Debug.log(TAG, "s_exception:" + e.getMessage());
+                    for (StackTraceElement st : e.getStackTrace())
+                        Debug.log(TAG, "s_trace: " + st.toString());
+                } finally {
+
+                    try {
+                        socket.shutdownInput();
+                        socket.shutdownOutput();
+                        socket.close();
+                    } catch(IOException e1) {
+                        Debug.log(TAG, "s_exception CLOSE:" + e1.getMessage());
+                    }
 
                     if (apiRequest.handler != null) {
                         ApiResponse apiResponse = new ApiResponse(rawResponse);
@@ -212,14 +229,6 @@ public class ConnectionManager {
                             apiResponse = reAuthNew(apiRequest.context, apiRequest);
                         apiRequest.handler.response(apiResponse);
                     }
-
-                    Debug.log(TAG, "s_resp::" + rawResponse); // RESPONSE
-
-                } catch(Exception e) {
-                    Debug.log(TAG, "s_exception:" + e.getMessage());
-                    for (StackTraceElement st : e.getStackTrace())
-                        Debug.log(TAG, "s_trace: " + st.toString());
-                } finally {
                     try {
                         if (socket != null && !socket.isClosed())
                             socket.close();
@@ -243,26 +252,32 @@ public class ConnectionManager {
         authRequest.platform = token.getSocialNet();
         authRequest.sid = token.getUserId();
         authRequest.token = token.getTokenKey();
+        
+        String rawResponse = Static.EMPTY;
+        ApiResponse response = null;
 
-        final HttpPost localHttpPost = new HttpPost(Static.API_URL);
-        localHttpPost.addHeader("Accept-Encoding", "gzip");
-        localHttpPost.setHeader("Content-Type", "application/json");
         try {
-            localHttpPost.setEntity(new ByteArrayEntity(authRequest.toString().getBytes("UTF8")));
-        } catch(Exception e) {
-        }
-
-        String rawResponse = request(httpClient, localHttpPost);
-        ApiResponse response = new ApiResponse(rawResponse);
-        if (response.code == ApiResponse.RESULT_OK) {
-            Auth auth = Auth.parse(response);
-            Data.saveSSID(context, auth.ssid);
-            request.ssid = auth.ssid;
-            rawResponse = request(httpClient, httpPost);
+            final HttpPost localHttpPost = new HttpPost(Static.API_URL);
+            localHttpPost.addHeader("Accept-Encoding", "gzip");
+            localHttpPost.setHeader("Content-Type", "application/json");
+            try {
+                localHttpPost.setEntity(new ByteArrayEntity(authRequest.toString().getBytes("UTF8")));
+            } catch(Exception e) {
+            }
+    
+            rawResponse = request(httpClient, localHttpPost);
             response = new ApiResponse(rawResponse);
-        } else
-            Data.removeSSID(context);
-
+            if (response.code == ApiResponse.RESULT_OK) {
+                Auth auth = Auth.parse(response);
+                Data.saveSSID(context, auth.ssid);
+                request.ssid = auth.ssid;
+                httpPost.setEntity(new ByteArrayEntity(request.toString().getBytes("UTF8")));
+                rawResponse = request(httpClient, httpPost);
+                response = new ApiResponse(rawResponse);
+            } else
+                Data.removeSSID(context);
+        } catch (Exception e) {
+        }
         Debug.log(TAG, "cm_reauth::" + rawResponse); // RESPONSE
         return response;
     }

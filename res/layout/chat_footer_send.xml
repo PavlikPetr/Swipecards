@@ -2,37 +2,34 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
   <LinearLayout
       android:layout_width="fill_parent" 
-      android:layout_height="wrap_content" 
-      android:orientation="horizontal" 
-      android:gravity="center_vertical"
-      android:paddingTop="4dp"
-      android:paddingLeft="4dp"
-      android:paddingRight="4dp"
+      android:layout_height="wrap_content"
+      android:paddingLeft="6dp"
+      android:paddingRight="6dp" 
+      android:orientation="horizontal"
       android:background="@drawable/chat_footer_send">
+      
+    <Button  
+        android:id="@+id/btnChatAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/chat_add_selector" />
     
     <EditText 
         android:id="@+id/edChatBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="4dp"
         android:layout_weight="1"
-        android:textSize="16sp"
-        android:singleLine="true"
-        android:inputType="text"
-        android:textColor="#3D3D3D"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp"
-        android:background="@drawable/chat_editbox" />
-    
-    <Button  
-        android:id="@+id/btnChatSend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/chat_send_selector"
-        android:textColor="@drawable/clr_text_selector"
-        android:text="@string/chat_btn_send" />
+        android:layout_marginLeft="6dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textSize="18sp"
+        android:singleLine="true"
+        android:imeOptions="actionSend"
+        android:inputType="text"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/chat_editbox" />
        
   </LinearLayout>
 </merge>

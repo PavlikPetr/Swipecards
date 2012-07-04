@@ -1,42 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/im_list_bkgrd" >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="@drawable/chat_list_bg" >
     
-	<LinearLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:focusable="true"
-	    android:focusableInTouchMode="true"
-	    android:orientation="vertical" >
-	    
-	  <!-- header bar -->
-	  <include layout="@layout/bar_header" />
-	  
-	  <ListView
-	      android:id="@+id/lvChatList"
-	      android:layout_width="wrap_content" 
-	      android:layout_height="0dip"
-	      android:layout_weight="1"
-	      android:listSelector="@android:color/transparent"
-	      android:transcriptMode="alwaysScroll"
-	      android:stackFromBottom="true"
-	      android:cacheColorHint="#00000000"
-	      android:divider="@android:color/transparent"
-	      android:dividerHeight="0dp"
-	      android:fadeScrollbars="true" />
-	
-	  <include layout="@layout/chat_footer_send" />
-	
-	</LinearLayout>
-	
-	  <ProgressBar
-      android:id="@+id/prsChatLoading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" />
+    <!-- progress -->
+    <ProgressBar
+         android:id="@+id/prsChatLoading"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerInParent="true"
+         android:visibility="gone"
+         style="@android:style/Widget.ProgressBar.Small" />
+        
+    <!-- header bar -->
+    <RelativeLayout
+        android:id="@+id/loChatHeader" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+          <include layout="@layout/bar_header" />  
+    </RelativeLayout>
+    
+    
+    <com.topface.topface.ui.views.SwapControl
+        android:id="@+id/swapFormView"
+        android:layout_below="@id/loChatHeader"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent" >
 
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+    
+              <ListView
+                  android:id="@+id/lvChatList"
+                  android:layout_width="fill_parent" 
+                  android:layout_height="0dip"
+                  android:layout_weight="1"
+                  android:fadeScrollbars="true"
+                  android:listSelector="@android:color/transparent"
+                  android:transcriptMode="alwaysScroll"
+                  android:stackFromBottom="true"
+                  android:cacheColorHint="#00000000"
+                  android:divider="@android:color/transparent"
+                  android:dividerHeight="0dp" />
+            
+              <include layout="@layout/chat_footer_send" />
+        
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/chat_add_panel_bg"
+            android:paddingTop="2dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+              
+            <Button  
+		        android:id="@+id/btnChatGift"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:background="@drawable/chat_gift_selector" />
+            
+            <Button  
+		        android:id="@+id/btnChatPlace"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="12dp"
+		        android:background="@drawable/chat_place_selector" />
+                
+            <Button  
+		        android:id="@+id/btnChatMap"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="12dp"
+		        android:background="@drawable/chat_map_selector" />
+         
+         </LinearLayout>
+      
+    
+    </com.topface.topface.ui.views.SwapControl>
+    
+    
 </RelativeLayout> 
