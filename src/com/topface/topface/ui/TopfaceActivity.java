@@ -314,13 +314,7 @@ public class TopfaceActivity extends ActivityGroup {
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
-    //---------------------------------------------------------------------------
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        (new GiftsDialog(this,this)).show();
-        return super.onCreateOptionsMenu(menu);
-    }
+    //---------------------------------------------------------------------------    
 }
 /* RelativeLayout.LayoutParams params = new
  * RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
