@@ -22,6 +22,7 @@ import com.topface.topface.utils.Http;
 import android.app.ActivityGroup;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -314,6 +315,12 @@ public class TopfaceActivity extends ActivityGroup {
         super.onDestroy();
     }
     //---------------------------------------------------------------------------
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        (new GiftsDialog(this,this)).show();
+        return super.onCreateOptionsMenu(menu);
+    }
 }
 /* RelativeLayout.LayoutParams params = new
  * RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,

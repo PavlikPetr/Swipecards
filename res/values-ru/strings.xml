@@ -164,5 +164,10 @@
     <string name="pull_to_refresh_release_label">Отпустите</string>
     <string name="pull_to_refresh_refreshing_label">Обновление</string>
     <string name="pull_to_refresh_tap_label">Нажмите</string>
-  
+
+    <!-- Gifts Dialog -->
+    <string name="gifts_romantic">Романтические</string>
+    <string name="gifts_friends">Дружеские</string>
+    <string name="gifts">Выберите подарок</string>
+    <string name="gifts_present">Поздравительные</string>    
 </resources>

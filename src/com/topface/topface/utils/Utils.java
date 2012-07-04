@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
@@ -43,38 +44,38 @@ public class Utils {
         if (rawBitmap == null || bitmapWidth <= 0 || bitmapHeight <= 0)
             return null;
 
-        // Исходный размер загруженного изображения
+        // Р�СЃС…РѕРґРЅС‹Р№ СЂР°Р·РјРµСЂ Р·Р°РіСЂСѓР¶РµРЅРЅРѕРіРѕ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
         int width = rawBitmap.getWidth();
         int height = rawBitmap.getHeight();
 
-        // буль, длинная фото или высокая
+        // Р±СѓР»СЊ, РґР»РёРЅРЅР°СЏ С„РѕС‚Рѕ РёР»Рё РІС‹СЃРѕРєР°СЏ
         boolean LEG = false;
 
         if (width >= height)
             LEG = true;
 
-        // коффициент сжатия фотографии
+        // РєРѕС„С„РёС†РёРµРЅС‚ СЃР¶Р°С‚РёСЏ С„РѕС‚РѕРіСЂР°С„РёРё
         float ratio = Math.max(((float)bitmapWidth) / width, ((float)bitmapHeight) / height);
 
-        // на получение оригинального размера по ширине или высоте
+        // РЅР° РїРѕР»СѓС‡РµРЅРёРµ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ СЂР°Р·РјРµСЂР° РїРѕ С€РёСЂРёРЅРµ РёР»Рё РІС‹СЃРѕС‚Рµ
         if (ratio == 0)
             ratio = 1;
 
-        // матрица сжатия
+        // РјР°С‚СЂРёС†Р° СЃР¶Р°С‚РёСЏ
         Matrix matrix = new Matrix();
         matrix.postScale(ratio, ratio);
 
-        // сжатие изображения
+        // СЃР¶Р°С‚РёРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
         Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, width, height, matrix, true);
 
-        // вырезаем необходимый размер
+        // РІС‹СЂРµР·Р°РµРј РЅРµРѕР±С…РѕРґРёРјС‹Р№ СЂР°Р·РјРµСЂ
         Bitmap clippedBitmap;
         if (LEG) {
-            // у горизонтальной, вырезаем по центру
+            // Сѓ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕР№, РІС‹СЂРµР·Р°РµРј РїРѕ С†РµРЅС‚СЂСѓ
             int offset_x = (scaledBitmap.getWidth() - bitmapWidth) / 2;
             clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, bitmapWidth, bitmapHeight, null, false);
         } else
-            // у вертикальной режим с верху
+            // Сѓ РІРµСЂС‚РёРєР°Р»СЊРЅРѕР№ СЂРµР¶РёРј СЃ РІРµСЂС…Сѓ
             clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, bitmapWidth, bitmapHeight, null, false);
 
         //rawBitmap.recycle();
@@ -107,8 +108,8 @@ public class Utils {
         canvas.drawARGB(0, 0, 0, 0);
 
         // Mask
-        //canvas.drawRoundRect(rectF, roundPx, roundPx, paint); //  закругленные углы
-        canvas.drawCircle(width / 2, height / 2, width / 2 - 2, paint); //  круглый аватар
+        //canvas.drawRoundRect(rectF, roundPx, roundPx, paint); //  Р·Р°РєСЂСѓРіР»РµРЅРЅС‹Рµ СѓРіР»С‹
+        canvas.drawCircle(width / 2, height / 2, width / 2 - 2, paint); //  РєСЂСѓРіР»С‹Р№ Р°РІР°С‚Р°СЂ
 
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
@@ -116,6 +117,43 @@ public class Utils {
         //bitmap.recycle();
         bitmap = null;
 
+        return output;
+    }
+    //---------------------------------------------------------------------------
+    public static Bitmap getRoundBitmap(Bitmap bitmap,int width,int height,float radiusMult) {
+        int bitmapWidth  = bitmap.getWidth();
+        int bitmapHeight = bitmap.getHeight();
+        int multWidth = (int) (bitmapWidth * radiusMult);
+        
+        Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Config.ARGB_8888);        
+
+        Canvas canvas = new Canvas(output);
+
+        final Rect src = new Rect(0, 0, bitmapWidth, bitmapHeight);
+        final Rect dst = new Rect((multWidth - bitmapWidth)/2, (multWidth - bitmapHeight)/2, (multWidth + bitmapWidth)/2, (multWidth - bitmapHeight)/2 + bitmapHeight);        
+        
+        final Paint circlePaint = new Paint();
+        circlePaint.setAntiAlias(true);
+        circlePaint.setColor(Color.WHITE);
+        
+        final Paint canvasPaint = new Paint();
+        canvasPaint.setAntiAlias(true);
+        canvasPaint.setColor(0xff424242);
+        
+        canvas.drawARGB(0, 0, 0, 0);
+        
+        // Mask
+        //canvas.drawRoundRect(rectF, roundPx, roundPx, paint); //  Р·Р°РєСЂСѓРіР»РµРЅРЅС‹Рµ СѓРіР»С‹
+        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint); //  РєСЂСѓРіР»С‹Р№ Р°РІР°С‚Р°СЂ
+
+        canvasPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, src, dst, canvasPaint);
+
+        //bitmap.recycle();
+        bitmap = null;
+        
+        output = Bitmap.createScaledBitmap(output, width, height, true);
+        
         return output;
     }
     //---------------------------------------------------------------------------

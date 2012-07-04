@@ -164,5 +164,12 @@
     <string name="pull_to_refresh_release_label">Release to refresh</string>
     <string name="pull_to_refresh_refreshing_label">Loading</string>
     <string name="pull_to_refresh_tap_label">Tap to refresh</string>
+    
+    <!-- Gifts Dialog -->
+    <string name="gifts_romantic">Romantic</string>
+    <string name="gifts_friends">Friends</string>
+    <string name="gifts">Choose gift</string>
+    <string name="gifts_present">Present</string>
+    
   
 </resources>
