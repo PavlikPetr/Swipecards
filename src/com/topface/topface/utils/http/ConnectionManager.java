@@ -2,23 +2,18 @@ package com.topface.topface.utils.http;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import android.util.Log;
 import com.topface.topface.utils.Utils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.protocol.BasicHttpContext;
 import android.content.Context;
@@ -63,7 +58,7 @@ public class ConnectionManager {
         mWorker.execute(new Runnable() {
             @Override
             public void run() {
-                String rawResponse = Static.EMPTY;
+                String rawResponse;
                 AndroidHttpClient httpClient = null;
                 HttpPost httpPost = null;
 
@@ -139,9 +134,9 @@ public class ConnectionManager {
         authRequest.sid = token.getUserId();
         authRequest.token = token.getTokenKey();
 
-        String rawResponse = Static.EMPTY;
+        String rawResponse;
         ApiResponse response = null;
-        HttpPost localHttpPost = null;
+        HttpPost localHttpPost;
 
         try {
             localHttpPost = new HttpPost(Static.API_URL);
@@ -172,109 +167,6 @@ public class ConnectionManager {
         return response;
     }
 
-    //---------------------------------------------------------------------------
-    public void sendRequestNew(final ApiRequest apiRequest) {
-        mWorker.execute(new Runnable() {
-            @Override
-            public void run() {
-                Socket socket = null;
-                try {
-                    String rawResponse = null;
-                    apiRequest.ssid = Data.SSID;
-
-                    Debug.log(TAG, "s_req::" + apiRequest.toString());   // REQUEST
-
-                    socket = new Socket();
-                    socket.setKeepAlive(false);
-                    socket.setSoTimeout(2900); //20000
-                    socket.connect(new InetSocketAddress("46.182.29.182", 80), 2900);
-                    String path = "/?v=1";
-                    BufferedWriter output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF8"));
-                    byte[] buffer = apiRequest.toString().getBytes("UTF8");
-                    output.write("POST " + path + " HTTP/1.0\r\n");
-                    output.write("Content-Length: " + buffer.length + "\r\n");
-                    output.write("Content-Type: application/json\r\n");
-                    output.write("\r\n");
-                    output.write(apiRequest.toString());
-                    output.flush();
-                    output.close();
-
-                    BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    String line = null;
-                    StringBuilder sb = new StringBuilder();
-                    boolean reading = false;
-                    for (line = input.readLine(); line != null; line = input.readLine()) {
-                        if (line.equals("") || reading == true) {
-                            reading = true;
-                            sb.append(line);
-                        }
-                    }
-                    rawResponse = sb.toString();
-                    input.close();
-
-                    socket.close();
-
-                    if (apiRequest.handler != null) {
-                        ApiResponse apiResponse = new ApiResponse(rawResponse);
-                        if (apiResponse.code == ApiResponse.SESSION_NOT_FOUND)
-                            apiResponse = reAuthNew(apiRequest.context, apiRequest);
-                        apiRequest.handler.response(apiResponse);
-                    }
-
-                    Debug.log(TAG, "s_resp::" + rawResponse);   // RESPONSE
-
-                } catch (Exception e) {
-                    Debug.log(TAG, "s_exception:" + e.getMessage());
-                    for (StackTraceElement st : e.getStackTrace())
-                        Debug.log(TAG, "s_trace: " + st.toString());
-                } finally {
-                    try {
-                        if (socket != null && !socket.isClosed()) socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    //---------------------------------------------------------------------------
-    private ApiResponse reAuthNew(Context context, ApiRequest request) {
-        Debug.log(this, "reAuth");
-        AndroidHttpClient httpClient = AndroidHttpClient.newInstance("Android");
-        HttpPost httpPost = new HttpPost(Static.API_URL);
-        httpPost.addHeader("Accept-Encoding", "gzip");
-        httpPost.setHeader("Content-Type", "application/json");
-
-        AuthToken token = new AuthToken(context);
-        AuthRequest authRequest = new AuthRequest(context);
-        authRequest.platform = token.getSocialNet();
-        authRequest.sid = token.getUserId();
-        authRequest.token = token.getTokenKey();
-
-        final HttpPost localHttpPost = new HttpPost(Static.API_URL);
-        localHttpPost.addHeader("Accept-Encoding", "gzip");
-        localHttpPost.setHeader("Content-Type", "application/json");
-        try {
-            localHttpPost.setEntity(new ByteArrayEntity(authRequest.toString().getBytes("UTF8")));
-        } catch (Exception e) {
-        }
-
-        String rawResponse = request(httpClient, localHttpPost);
-        ApiResponse response = new ApiResponse(rawResponse);
-        if (response.code == ApiResponse.RESULT_OK) {
-            Auth auth = Auth.parse(response);
-            Data.saveSSID(context, auth.ssid);
-            request.ssid = auth.ssid;
-            rawResponse = request(httpClient, httpPost);
-            response = new ApiResponse(rawResponse);
-        } else
-            Data.removeSSID(context);
-
-        Debug.log(TAG, "cm_reauth::" + rawResponse);   // RESPONSE
-        return response;
-    }
-
     /**
      * Возвращает bitmap изображения по его url
      *
@@ -298,17 +190,26 @@ public class ConnectionManager {
 
             HttpEntity entity = response.getEntity();
             if (entity != null) {
-                InputStream is = entity.getContent();
-                FlushedInputStream fis = new FlushedInputStream(is);
+                BufferedHttpEntity bufferedHttpEntity = new BufferedHttpEntity(entity);
+                InputStream is = bufferedHttpEntity.getContent();
 
                 //Если передан максимальный необходимый размер битмапа, то для экономии оперативки,
                 //мы создаем уже уменьшенный битмап, не загружая в память его полную версию
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 if (maxSize > 0) {
-                    options.inSampleSize = Utils.getBitmapScale(fis, maxSize);
+                    //Опция, сообщающая что не нужно грузить изображение в память, а только считать его данные
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeStream(is, null, options);
+                    options.inSampleSize = Utils.getBitmapScale(options, maxSize);
+                    //Используем тот же объект опций, что бы повторно его не создавать, переключая на режим
+                    options.inJustDecodeBounds = false;
+                    //Закрываем отработавший поток, из которого мы получили размеры изображения
+                    is.close();
+                    //И открываем новый поток, что бы уже создать битмап
+                    is = bufferedHttpEntity.getContent();
                 }
 
-                bitmap = BitmapFactory.decodeStream(fis);
+                bitmap = BitmapFactory.decodeStream(new FlushedInputStream(is), null, options);
                 is.close();
             }
         } catch (Exception e) {

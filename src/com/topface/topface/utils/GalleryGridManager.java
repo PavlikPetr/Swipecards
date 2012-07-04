@@ -108,7 +108,7 @@ public class GalleryGridManager<T extends AbstractData> implements OnScrollListe
           if(rawBitmap==null) return;
 
           // вырезаем
-          Bitmap clippedBitmap = Utils.clipping(rawBitmap,mBitmapWidth,mBitmapHeight);
+          Bitmap clippedBitmap = Utils.clipping(rawBitmap, mBitmapWidth, mBitmapHeight);
           
           //rawBitmap.recycle();
           rawBitmap = null;

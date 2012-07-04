@@ -12,6 +12,7 @@ import com.topface.topface.requests.PhotoOpenRequest;
 import com.topface.topface.requests.PhotoVoteRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Http;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -297,7 +298,7 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
   class LoaderEroPhoto implements Runnable {
     @Override
     public void run() {
-      final Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(mCurrentPos).getBigLink());
+      final Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(mCurrentPos).getBigLink(), Device.getCurrentDisplayWidth(getApplicationContext()));
       if(bitmap!=null)
         mEroView.post(new Runnable() {
           @Override

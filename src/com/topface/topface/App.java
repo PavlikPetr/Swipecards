@@ -7,7 +7,7 @@ import android.app.Application;
 //@ReportsCrashes(formKey="dEdjcUtaMmJqNmlSdlZmUTlwejlXUlE6MQ")
 public class App extends Application {
   // Constants
-  public static final String TAG = "TopFace";
+  public static final String TAG = "Topface";
   public static final boolean DEBUG = false;
   private static Context mContext;
   //---------------------------------------------------------------------------
