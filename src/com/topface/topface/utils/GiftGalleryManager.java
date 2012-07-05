@@ -55,7 +55,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
     public int mBitmapWidth;
     public int mBitmapHeight;
     // СЃРєСЂРѕР»РёРЅРі
-    public boolean mBusy;
+//    public boolean mBusy = false;
     //---------------------------------------------------------------------------
     public GiftGalleryManager(Context context,LinkedList<T> dataList) {
         mDataList = dataList;
@@ -87,14 +87,15 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
             imageView.setImageBitmap(bitmap);
         else {
             imageView.setImageBitmap(null); // С…Р· ??
-            if (!mBusy) {
+//            if (!mBusy) {
                 bitmap = mStorageCache.load(((Gift)mDataList.get(position)).id);
                 if (bitmap != null) {
                     imageView.setImageBitmap(bitmap);
                     mMemoryCache.put(position, bitmap);
-            } else
-                loadingImages(position, imageView);
-            }
+                } else {
+                    loadingImages(position, imageView);
+                }
+//            }
         }
         bitmap = null;
     }
@@ -104,8 +105,8 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
             @Override
             public void run() {
                 try {
-                    if (mBusy)
-                        return;
+//                    if (mBusy)
+//                        return;
 
                     // РєР°С‡Р°РµРј            
                     Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink()); // getBigLink() РѕРґРЅРѕ Рё С‚РѕР¶Рµ РІ Tops 
@@ -153,7 +154,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
         if (mDataList != null)
             mDataList.clear();
         mDataList = null;
-    }
+    }    
     //---------------------------------------------------------------------------
     @Override
     public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
@@ -161,18 +162,19 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
     //---------------------------------------------------------------------------
     @Override
     public void onScrollStateChanged(AbsListView view,int scrollState) {
-        switch (scrollState) {
-            case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-                mBusy = true;
-                break;
-            case OnScrollListener.SCROLL_STATE_FLING:
-                mBusy = true;
-                break;
-            case OnScrollListener.SCROLL_STATE_IDLE:
-                mBusy = false;
-                view.invalidateViews(); //  РџР РђР’Р�Р›Р¬РќРћ ???
-                break;
-        }
+//        switch (scrollState) {
+//            case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+//                mBusy = true;
+//                break;
+//            case OnScrollListener.SCROLL_STATE_FLING:
+//                mBusy = true;
+//                break;
+//            case OnScrollListener.SCROLL_STATE_IDLE:
+//                mBusy = false;
+//                view.invalidateViews(); //  РџР РђР’Р�Р›Р¬РќРћ ???
+//                break;
+//        }
+//        mBusy = false;
     }
     //---------------------------------------------------------------------------
 }

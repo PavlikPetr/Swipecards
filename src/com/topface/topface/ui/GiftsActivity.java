@@ -8,15 +8,13 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.ui.adapters.GiftsAdapter;
+import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.utils.GiftGalleryManager;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.LocalActivityManager;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
@@ -26,6 +24,9 @@ import android.widget.TabHost;
 
 public class GiftsActivity extends Activity {
 
+    public static final String INTENT_GIFT_ID = "gift_id";
+    public static final String INTENT_GIFT_URL = "gift_url";
+    
 //    private Context mContext;
 //    private Activity mActivity;
 
@@ -36,7 +37,7 @@ public class GiftsActivity extends Activity {
 
 //    private LayoutInflater inflater;    
     private List<GiftsAdapter> mGridAdapters;
-    private List<GiftGalleryManager<Gift>> mGalleryGridManagers;
+    private List<GiftGalleryManager<Gift>> mGalleryManagers;
     private ProgressBar mProgressBar;
     private TabHost mTabHost;
     
@@ -56,7 +57,7 @@ public class GiftsActivity extends Activity {
         mProgressBar = (ProgressBar)this.findViewById(R.id.prsGiftsLoading);
         
         mGridAdapters = new LinkedList<GiftsAdapter>();
-        mGalleryGridManagers = new LinkedList<GiftGalleryManager<Gift>>();
+        mGalleryManagers = new LinkedList<GiftGalleryManager<Gift>>();
         mGiftsCollection = new GiftsCollection();
         
         mTabHost = (TabHost)findViewById(R.id.giftsTabHost);
@@ -92,8 +93,9 @@ public class GiftsActivity extends Activity {
                         for (GiftsAdapter adapter : mGridAdapters)
                             adapter.notifyDataSetChanged();
                         
-                        for (GiftGalleryManager<Gift> manager : mGalleryGridManagers)
-                            manager.update();
+                        for (GiftGalleryManager<Gift> manager : mGalleryManagers) {
+                            manager.update();                            
+                        }
                     }
                 });
             }
@@ -158,7 +160,15 @@ public class GiftsActivity extends Activity {
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
-                    
+                    Intent intent = GiftsActivity.this.getIntent();
+                    if (view.getTag() instanceof ViewHolder) {
+                        ViewHolder holder = ((ViewHolder)view.getTag());
+                        intent.putExtra(INTENT_GIFT_ID, holder.mGift.id);
+                        intent.putExtra(INTENT_GIFT_URL, holder.mGift.link);                    
+
+                        GiftsActivity.this.setResult(RESULT_OK, intent);
+                        GiftsActivity.this.finish();
+                    }
                 }
             });
 
@@ -168,7 +178,7 @@ public class GiftsActivity extends Activity {
             gridView.setOnScrollListener(gridManager);
 
             mGridAdapters.add(gridAdapter);
-            mGalleryGridManagers.add(gridManager);
+            mGalleryManagers.add(gridManager);
             
             return gridView;
         }

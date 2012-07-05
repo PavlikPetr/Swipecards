@@ -53,7 +53,8 @@ public class GiftsAdapter extends BaseAdapter{
 	    holder.mGiftImage.getLayoutParams().height = mGalleryManager.mBitmapHeight;
 	    
 	    mGalleryManager.getImage(position,(ImageView) holder.mGiftImage);
-	    holder.mPriceText.setText(Integer.toString(((Gift)mGalleryManager.get(position)).price));
+	    holder.mGift = ((Gift)mGalleryManager.get(position));
+	    holder.mPriceText.setText(Integer.toString(holder.mGift.price));
 	    
 	    return convertView;
 	}
@@ -68,9 +69,10 @@ public class GiftsAdapter extends BaseAdapter{
 		return position;
 	}	
 	
-	class ViewHolder {
+	public class ViewHolder {
 	    ImageView mGiftImage;
 	    TextView mPriceText;
+	    public Gift mGift;
 	}
 	
 	public void release() {
