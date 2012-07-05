@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Http;
 import com.topface.topface.utils.MemoryCache;
 import android.content.Context;
@@ -15,12 +16,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 public class PhotoAlbumAdapter extends BaseAdapter {
-  //---------------------------------------------------------------------------
+  private final Context mContext;
+
+    //---------------------------------------------------------------------------
   // class ViewHolder
   //---------------------------------------------------------------------------
   static class ViewHolder {
     ImageView mImageView;
-  };
+  }
   //---------------------------------------------------------------------------
   // Data
   private int mPrevPosition;         // предыдущая позиция фото в альбоме
@@ -31,7 +34,8 @@ public class PhotoAlbumAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
   public PhotoAlbumAdapter(Context context,LinkedList<Album> albumList) {
     mAlbumsList = albumList;
-    mInflater = LayoutInflater.from(context);
+    mContext = context;
+    mInflater = LayoutInflater.from(mContext);
     mCache = new MemoryCache();
   }
   //---------------------------------------------------------------------------
@@ -81,7 +85,10 @@ public class PhotoAlbumAdapter extends BaseAdapter {
     Thread t = new Thread() {
       @Override
       public void run() {
-        final Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink());
+        final Bitmap bitmap = Http.bitmapLoader(
+                mAlbumsList.get(position).getBigLink(),
+                Device.getCurrentDisplayWidth(mContext)
+        );
         view.post(new Runnable() {
           @Override
           public void run() {
@@ -111,7 +118,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
     Thread t = new Thread() {
       @Override
       public void run() {
-        Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink());
+        Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink(), Device.getCurrentDisplayWidth(mContext));
         if(bitmap==null || mCache==null) return;
         mCache.put(position,bitmap);
         bitmap = null;

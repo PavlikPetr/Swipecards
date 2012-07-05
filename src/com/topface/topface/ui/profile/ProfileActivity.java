@@ -484,7 +484,7 @@ public class ProfileActivity extends Activity{
   //---------------------------------------------------------------------------
   // чужой профиль
   private void setUserProfile(User profile) {
-    Http.imageLoader(profile.getBigLink(),mFramePhoto);
+    Http.imageLoader(profile.getBigLink(), mFramePhoto);
 
     setUserAlbum();
     

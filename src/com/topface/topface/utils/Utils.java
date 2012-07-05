@@ -295,52 +295,29 @@ public class Utils {
     /**
      * Возвращает делитель, во сколько раз уменьшить размер изображения при создании битмапа
      *
-     * @param in   InputStrem к изображению, для того, что бы получить его размеры, не загружая его в память
+     * @param options   InputStrem к изображению, для того, что бы получить его размеры, не загружая его в память
      * @param size размер до которого нужно уменьшить
      * @return делитель размера битмапа
      * @throws java.io.FileNotFoundException
      */
-    public static int getBitmapScale(InputStream in, int size) throws FileNotFoundException {
+    public static int getBitmapScale(BitmapFactory.Options options, int size) throws FileNotFoundException {
         //1 по умолчанию, значит что битмап нет необходимости уменьшать
         int scale = 1;
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        //Опция, сообщающая что не нужно грузить изображение в память
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(in, null, options);
 
         //Определяем во сколько раз нужно уменьшить изображение для создания битмапа
-        if (options.outHeight > size || options.outWidth > size) {
+        if (/*options.outHeight > size || */options.outWidth > size) {
             scale = (int) Math.pow(2,
                     (int) Math.round(
                             Math.log(
                                     size /
-                                    (double) Math.max(options.outHeight, options.outWidth)) /
-                                    Math.log(0.5)
+                                    (double) Math.max(options.outHeight, options.outWidth)
+                            ) /
+                            Math.log(0.5)
                     )
             );
         }
 
         return scale;
-    }
-
-    public static Bitmap getMemorySafeBitmap(Uri uri, int size, Context ctx) {
-        Bitmap bitmap = null;
-        //Decode with inSampleSize
-        try {
-            InputStream in = ctx.getContentResolver().openInputStream(uri);
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = getBitmapScale(in, size);
-            in.close();
-
-            in = ctx.getContentResolver().openInputStream(uri);
-            bitmap = BitmapFactory.decodeStream(in, null, o2);
-            in.close();
-        } catch (Exception e) {
-            android.util.Log.w(App.TAG, "Can't get memory safe bitmap", e);
-        }
-
-        return bitmap;
-
     }
 
 }
