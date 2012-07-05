@@ -252,12 +252,12 @@ public class ChatActivity extends Activity implements View.OnClickListener {
           return;
         
         History history = new History();
-        history.code = 100500;
-        history.gift = History.GIFT;
+        history.code = 0;
+        history.gift = 100500;
         history.owner_id = CacheProfile.uid;
         history.created = System.currentTimeMillis();
         history.text = Static.EMPTY;
-        history.type = History.MESSAGE;
+        history.type = History.GIFT;
         mAdapter.addSentMessage(history);
         mAdapter.notifyDataSetChanged();
     }

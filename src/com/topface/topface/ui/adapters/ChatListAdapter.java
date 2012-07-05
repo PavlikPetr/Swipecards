@@ -6,8 +6,11 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.ui.views.RoundedImageView;
+import com.topface.topface.utils.Http;
+import com.topface.topface.utils.StorageCache;
 import com.topface.topface.utils.Utils;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -171,7 +174,13 @@ public class ChatListAdapter extends BaseAdapter {
             case History.GIFT: {
               holder.mInfoGroup.setVisibility(View.INVISIBLE);
               holder.mGift.setVisibility(View.VISIBLE);
-              holder.mGift.setImageResource(R.drawable.dating_love);
+              
+              Bitmap bmp = (new StorageCache(mContext)).load("");
+              if(bmp != null)
+                  holder.mGift.setImageBitmap(bmp);
+              else
+                  Http.imageLoader(msg.link, holder.mGift);
+              
             } break;
             case History.MESSAGE:
                 holder.mMessage.setText(msg.text);
@@ -246,8 +255,8 @@ public class ChatListAdapter extends BaseAdapter {
                 mItemLayoutList.add(T_USER_PHOTO);
             prev_id = history.owner_id;
             
-            mItemTimeList.put(0,0);
-            mItemLayoutList.add(T_DATE);  // DATE
+            //mItemTimeList.put(0,0);
+            //mItemLayoutList.add(T_DATE);  // DATE
         }
     }
     //---------------------------------------------------------------------------
