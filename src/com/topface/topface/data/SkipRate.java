@@ -15,6 +15,7 @@ public class SkipRate extends AbstractData {
         try {
             skip.money = response.mJSONResult.optInt("money");
             skip.power = response.mJSONResult.optInt("power");
+            skip.power = (int)(skip.power * 0.01);
             skip.completed = response.mJSONResult.optBoolean("completed");
         } catch(Exception e) {
             Debug.log("SkipRate.class", "Wrong response parsing: " + e);

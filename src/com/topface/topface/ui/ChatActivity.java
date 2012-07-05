@@ -11,6 +11,7 @@ import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.SwapControl;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
 import android.app.Activity;
@@ -217,7 +218,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                                 History history = new History();
                                 history.code = 0;
                                 history.gift = 0;
-                                history.owner_id = 0;
+                                history.owner_id = CacheProfile.uid;
                                 history.created = System.currentTimeMillis();
                                 history.text = text;
                                 history.type = History.MESSAGE;
@@ -245,22 +246,20 @@ public class ChatActivity extends Activity implements View.OnClickListener {
         }
     };
     //---------------------------------------------------------------------------
-    @Override
-    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+
+    protected void onActivityResult2(int requestCode,int resultCode,Intent data) {
         if(resultCode != RESULT_OK)
           return;
         
         History history = new History();
-        history.code = 0;
+        history.code = 100500;
         history.gift = History.GIFT;
-        history.owner_id = 0;
+        history.owner_id = CacheProfile.uid;
         history.created = System.currentTimeMillis();
         history.text = Static.EMPTY;
         history.type = History.MESSAGE;
         mAdapter.addSentMessage(history);
         mAdapter.notifyDataSetChanged();
-        mEditBox.getText().clear();
-        mProgressBar.setVisibility(View.GONE);
     }
-    
+    //---------------------------------------------------------------------------    
 }
