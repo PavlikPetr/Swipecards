@@ -24,8 +24,7 @@
             android:name=".App"
             android:label="@string/app_name"
             android:icon="@drawable/ic_launcher"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:debuggable="true">
+            android:theme="@android:style/Theme.NoTitleBar">
 
         <!-- main Activity -->
         <activity android:name=".ui.MainActivity">
