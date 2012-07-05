@@ -2,15 +2,21 @@ package com.topface.topface.ui;
 
 import java.util.LinkedList;
 import com.topface.topface.R;
+import com.topface.topface.data.Gift;
 import com.topface.topface.data.History;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.MessageRequest;
+import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.SwapControl;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.GiftGalleryManager;
 import com.topface.topface.utils.Http;
 import android.app.Activity;
 import android.content.Context;
@@ -18,6 +24,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -252,6 +259,34 @@ public class ChatActivity extends Activity implements View.OnClickListener {
             int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);            
             String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
             Debug.log(this, "id:" + id + " url:" + url);
+            SendGiftRequest sendGift = new SendGiftRequest(this);
+            sendGift.giftId = id;
+            sendGift.userId = CacheProfile.uid;
+            mSwapControl.snapToScreen(0);
+            sendGift.callback(new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) throws NullPointerException {
+                    SendGiftAnswer answer = SendGiftAnswer.parse(response);
+                    Debug.log(ChatActivity.this, "power:" + answer.power + " money:" + answer.money);
+                    post(new Runnable() {
+                        @Override
+                        public void run() {              
+                            //TODO add progress bar gone, change power and money
+                        }
+                    });
+                }
+                
+                @Override
+                public void fail(int codeError,ApiResponse response) throws NullPointerException {
+                    post(new Runnable() {
+                        @Override
+                        public void run() {
+                          Toast.makeText(ChatActivity.this,ChatActivity.this.getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+                          //TODO add progress bar gone
+                        }
+                    });
+                }
+            }).exec();
         }
     }
 }

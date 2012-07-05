@@ -10,7 +10,7 @@ import android.content.Context;
 public class SendGiftRequest extends ApiRequest {
 
 	static final String USER_ID = "userid";
-	static final String GIFT_ID = "userid";
+	static final String GIFT_ID = "giftid";
 	
 	private String service = "gift";
 	public int userId;
