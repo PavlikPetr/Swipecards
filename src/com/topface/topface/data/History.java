@@ -8,12 +8,14 @@ import com.topface.topface.utils.Debug;
 
 public class History extends AbstractData {
     // Data
+    public int id;       // идентификатор сообщения
     public int owner_id; // идентификатор пользователя, отправившего сообщение
-    public int type; // тип сообщения
-    public int gift; // идентификатор подарка. Если сообщение является подарком
-    public int code; // код входящего уведомления. Если сообщение является уведомлением
+    public int type;     // тип сообщения
+    public int gift;     // идентификатор подарка. Если сообщение является подарком
+    public String link;  // ссылка на изображение подарка. Поле устанавливается, если сообщение является подарком
+    public int code;     // код входящего уведомления. Если сообщение является уведомлением
     public long created; // время создания сообщения
-    public String text; // текст сообщения. Если входящее сообщение является текстовым
+    public String text;  // текст сообщения. Если входящее сообщение является текстовым
     // Constants
     public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
     public static final int PHOTO = 1; // Рекламное уведомление
@@ -44,15 +46,15 @@ public class History extends AbstractData {
                             break;
                         case GIFT:
                             history.gift = item.optInt("gift");
+                            history.link = item.optString("link");
                             break;
                         case MESSAGE:
                             history.text = item.optString("text");
                             break;
                         case MESSAGE_WISH:
-                            break;
                         case MESSAGE_SEXUALITY:
-                            break;
                         default:
+                            history.text = item.optString("text");
                             break;
                     }
                     historyList.addFirst(history);

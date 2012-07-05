@@ -7,14 +7,12 @@
                 android:background="@android:color/transparent"
                 android:id="@+id/layout" >
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:id="@+id/user_info"
+    <LinearLayout android:id="@+id/user_info"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_toLeftOf="@id/left_icon"
-                  android:layout_marginLeft="10dp"
-                  android:layout_marginRight="3dp"
-                  android:background="@drawable/bg_message_friend_ext"
+                  android:layout_marginLeft="4dp"
+                  android:background="@drawable/bg_message_user_ext"
                   android:orientation="vertical">
 
         <!-- message -->
@@ -22,19 +20,24 @@
         android:id="@+id/chat_message"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:textColor="#4D4D4D"
-        />
+        android:textSize="16sp"
+        android:textColor="#527b94" />
 
         <!-- date -->
         <TextView
                 android:id="@+id/chat_date"
-                android:textColor="#999999"
+                android:textColor="#acc2d8"
                 android:textSize="12sp"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
     </LinearLayout>
+    
+    <ImageView
+        android:id="@+id/chat_gift"
+        android:layout_toLeftOf="@id/left_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <!-- avatar -->
     <com.topface.topface.ui.views.RoundedImageView

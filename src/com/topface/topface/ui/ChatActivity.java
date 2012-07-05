@@ -224,7 +224,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                                 History history = new History();
                                 history.code = 0;
                                 history.gift = 0;
-                                history.owner_id = 0;
+                                history.owner_id = CacheProfile.uid;
                                 history.created = System.currentTimeMillis();
                                 history.text = text;
                                 history.type = History.MESSAGE;
@@ -290,4 +290,20 @@ public class ChatActivity extends Activity implements View.OnClickListener {
             }).exec();
         }
     }
+
+    protected void onActivityResult2(int requestCode,int resultCode,Intent data) {
+        if(resultCode != RESULT_OK)
+          return;
+        
+        History history = new History();
+        history.code = 0;
+        history.gift = 100500;
+        history.owner_id = CacheProfile.uid;
+        history.created = System.currentTimeMillis();
+        history.text = Static.EMPTY;
+        history.type = History.GIFT;
+        mAdapter.addSentMessage(history);
+        mAdapter.notifyDataSetChanged();
+    }
+    //---------------------------------------------------------------------------    
 }
