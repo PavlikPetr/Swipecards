@@ -53,6 +53,7 @@
     <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>
     <string name="chat_sexuality_out">Вы оценили сексуальность.</string>
     <string name="chat_money_in">Вам начислена монета</string>
+    <string name="chat_message_copied">Сообщение скопировано</string>
     
     <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Взаимно</string>

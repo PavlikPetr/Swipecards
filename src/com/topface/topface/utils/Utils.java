@@ -7,6 +7,7 @@ import java.util.Calendar;
 
 import android.graphics.*;
 import android.net.Uri;
+import android.text.ClipboardManager;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import android.content.Context;
@@ -320,4 +321,8 @@ public class Utils {
         return scale;
     }
 
+    public static void copyTextToClipboard(String text, Context context) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.setText(text);
+    }
 }
