@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
+import com.topface.topface.Static;
 import com.topface.topface.data.History;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiHandler;
