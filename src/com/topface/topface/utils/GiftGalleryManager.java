@@ -124,9 +124,6 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
                     // РІС‹СЂРµР·Р°РµРј
                     Bitmap roundBitmap = Utils.getRoundBitmap(rawBitmap, mBitmapWidth, mBitmapWidth, 1.2f);//Bitmap.createScaledBitmap(rawBitmap, mBitmapWidth, mBitmapWidth, true);
 
-                    //rawBitmap.recycle();
-                    rawBitmap = null;
-
                     // РѕС‚РѕР±СЂР°Р¶Р°РµРј
                     imagePost(imageView, roundBitmap);
 
@@ -135,6 +132,8 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
                     mStorageCache.save(Integer.toString(((Gift)mDataList.get(position)).id), rawBitmap, false);
 
                     roundBitmap = null;
+                    //rawBitmap.recycle();
+                    rawBitmap = null;
 
                 } catch(Exception e) {
                     Debug.log(this, "thread error:" + e);

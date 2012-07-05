@@ -175,11 +175,11 @@ public class ChatListAdapter extends BaseAdapter {
               holder.mInfoGroup.setVisibility(View.INVISIBLE);
               holder.mGift.setVisibility(View.VISIBLE);
               
-              Bitmap bmp = (new StorageCache(mContext)).load("");
+              Bitmap bmp = (new StorageCache(mContext)).load(msg.gift);
               if(bmp != null)
                   holder.mGift.setImageBitmap(bmp);
-              else
-                  Http.imageLoader(msg.link, holder.mGift);
+              //else
+                  //Http.imageLoader(msg.link, holder.mGift);
               
             } break;
             case History.MESSAGE:

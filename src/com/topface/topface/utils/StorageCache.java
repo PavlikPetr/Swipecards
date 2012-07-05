@@ -133,7 +133,7 @@ public class StorageCache {
                     if (file.exists())
                         return;
                     bos = new BufferedOutputStream(new FileOutputStream(file));
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 85, bos);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 85, bos);
                 } catch(FileNotFoundException e) {
                     Debug.log(this, "bitmap saving, file not found #1 " + e);
                 } catch(Exception e) {

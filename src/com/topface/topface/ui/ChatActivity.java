@@ -257,12 +257,12 @@ public class ChatActivity extends Activity implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
             Bundle extras = data.getExtras();
-            int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);            
-            String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);            
+            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
             Debug.log(this, "id:" + id + " url:" + url);
             SendGiftRequest sendGift = new SendGiftRequest(this);
             sendGift.giftId = id;
-            sendGift.userId = CacheProfile.uid;
+            sendGift.userId = mUserId;
             mSwapControl.snapToScreen(0);
             sendGift.callback(new ApiHandler() {
                 @Override
@@ -273,6 +273,16 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                         @Override
                         public void run() {              
                             //TODO add progress bar gone, change power and money
+                        	History history = new History();
+                            history.code = 0;
+                            history.gift = id;
+                            history.owner_id = CacheProfile.uid;
+                            history.created = System.currentTimeMillis();
+                            history.text = Static.EMPTY;
+                            history.type = History.GIFT;
+                            history.link = url;
+                            mAdapter.addSentMessage(history);
+                            mAdapter.notifyDataSetChanged();
                         }
                     });
                 }
@@ -291,19 +301,19 @@ public class ChatActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    protected void onActivityResult2(int requestCode,int resultCode,Intent data) {
-        if(resultCode != RESULT_OK)
-          return;
-        
-        History history = new History();
-        history.code = 0;
-        history.gift = 100500;
-        history.owner_id = CacheProfile.uid;
-        history.created = System.currentTimeMillis();
-        history.text = Static.EMPTY;
-        history.type = History.GIFT;
-        mAdapter.addSentMessage(history);
-        mAdapter.notifyDataSetChanged();
-    }
+//    protected void onActivityResult2(int requestCode,int resultCode,Intent data) {
+//        if(resultCode != RESULT_OK)
+//          return;
+//        
+//        History history = new History();
+//        history.code = 0;
+//        history.gift = 100500;
+//        history.owner_id = CacheProfile.uid;
+//        history.created = System.currentTimeMillis();
+//        history.text = Static.EMPTY;
+//        history.type = History.GIFT;
+//        mAdapter.addSentMessage(history);
+//        mAdapter.notifyDataSetChanged();
+//    }
     //---------------------------------------------------------------------------    
 }
