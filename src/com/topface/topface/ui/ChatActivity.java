@@ -168,8 +168,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                 mIsAddPanelOpened = !mIsAddPanelOpened;
             } break;
             case R.id.btnChatGift: {
-//                Toast.makeText(ChatActivity.this, "Gift", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, GiftsActivity.class));
+                startActivityForResult(new Intent(this, GiftsActivity.class), GiftsActivity.INTENT_REQUEST_GIFT);
             } break;
             case R.id.btnChatPlace: {
                 Toast.makeText(ChatActivity.this, "Place", Toast.LENGTH_SHORT).show();
@@ -245,4 +244,14 @@ public class ChatActivity extends Activity implements View.OnClickListener {
         }
     };
     //---------------------------------------------------------------------------
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+            Bundle extras = data.getExtras();
+            int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);            
+            String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+            Debug.log(this, "id:" + id + " url:" + url);
+        }
+    }
 }

@@ -83,6 +83,12 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
     public void getImage(final int position,final ImageView imageView) {
         Bitmap bitmap = mMemoryCache.get(position);
 
+        if (bitmap != null) {
+            if (bitmap.isRecycled()) {
+                mMemoryCache.put(position, null);
+            }
+        }
+        
         if (bitmap != null)
             imageView.setImageBitmap(bitmap);
         else {
@@ -90,6 +96,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
 //            if (!mBusy) {
                 bitmap = mStorageCache.load(((Gift)mDataList.get(position)).id);
                 if (bitmap != null) {
+                    bitmap = Utils.getRoundBitmap(bitmap, mBitmapWidth, mBitmapWidth, 1.2f);
                     imageView.setImageBitmap(bitmap);
                     mMemoryCache.put(position, bitmap);
                 } else {
@@ -109,7 +116,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
 //                        return;
 
                     // РєР°С‡Р°РµРј            
-                    Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink()); // getBigLink() РѕРґРЅРѕ Рё С‚РѕР¶Рµ РІ Tops 
+                    Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink()); // getBigLink() РѕРґРЅРѕ Рё С‚РѕР¶Рµ РІ Tops 
 
                     if (rawBitmap == null)
                         return;
@@ -125,7 +132,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
 
                     // Р·Р°Р»РёРІР°РµРј РІ РєРµС€
                     mMemoryCache.put(position, roundBitmap);
-                    mStorageCache.save(Integer.toString(((Gift)mDataList.get(position)).id), roundBitmap);
+                    mStorageCache.save(Integer.toString(((Gift)mDataList.get(position)).id), rawBitmap, false);
 
                     roundBitmap = null;
 

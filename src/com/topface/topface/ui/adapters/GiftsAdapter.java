@@ -2,8 +2,6 @@ package com.topface.topface.ui.adapters;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
-import com.topface.topface.ui.adapters.TopsGridAdapter.ViewHolder;
-import com.topface.topface.ui.views.ThumbView;
 import com.topface.topface.utils.GiftGalleryManager;
 
 import android.content.Context;
@@ -16,14 +14,14 @@ import android.widget.TextView;
 
 public class GiftsAdapter extends BaseAdapter{
 
-	private Context mContext;
+//	private Context mContext;
 	private LayoutInflater mInflater;
 	
 //	private LayoutInflater mInflater;
 	private GiftGalleryManager<Gift> mGalleryManager;
 	
 	public GiftsAdapter(Context context, GiftGalleryManager<Gift> galleryManager) {
-		mContext = context;
+//		mContext = context;
 		mInflater = LayoutInflater.from(context);
 	    mGalleryManager = galleryManager;
 	}

@@ -2,12 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@drawable/chat_list_bg" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/giftsTypeChooseLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" 
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" >
+
+        <include layout="@layout/btn_triple" />
+
+    </LinearLayout>
 
     <TabHost
         android:id="@+id/giftsTabHost"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent" 
+        android:layout_below="@id/giftsTypeChooseLayout">
 
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,7 +34,7 @@
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="0dp" />
 
             <FrameLayout
                 android:id="@android:id/tabcontent"

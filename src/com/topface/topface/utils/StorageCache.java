@@ -115,6 +115,41 @@ public class StorageCache {
         }).start();
     }
     //---------------------------------------------------------------------------
+    public void save(final String fileName,final Bitmap bitmap,final boolean usemd5) {
+        //mThreadPool.execute(new Runnable() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                BufferedOutputStream bos = null;
+                try {
+                    String name = Utils.md5(fileName);
+                    if (usemd5) {
+                        name = Utils.md5(fileName);
+                    } else {
+                        name = fileName;
+                    }
+                    
+                    File file = new File(mCacheDir, name);                    
+                    if (file.exists())
+                        return;
+                    bos = new BufferedOutputStream(new FileOutputStream(file));
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 85, bos);
+                } catch(FileNotFoundException e) {
+                    Debug.log(this, "bitmap saving, file not found #1 " + e);
+                } catch(Exception e) {
+                    Debug.log(this, "bitmap loading, exception: " + e);
+                } finally {
+                    try {
+                        if (bos != null)
+                            bos.close();
+                    } catch(IOException e) {
+                        Debug.log(this, "bitmap saving, output stream not closed #2 " + e);
+                    }
+                }
+            }
+        }).start();
+    }
+    //---------------------------------------------------------------------------
     private File getCacheDirectory() {
         return mCacheType == EXTERNAL_CACHE ? FileSystem.getExternalCacheDirectory() : mContext.getCacheDir();
     }

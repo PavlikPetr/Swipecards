@@ -100,7 +100,7 @@ public class Utils {
         Canvas canvas = new Canvas(output);
 
         final Rect rect = new Rect(0, 0, width, height);
-        final RectF rectF = new RectF(rect);
+//        final RectF rectF = new RectF(rect);
         final Paint paint = new Paint();
 
         paint.setAntiAlias(true);
@@ -148,13 +148,15 @@ public class Utils {
 
         canvasPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(bitmap, src, dst, canvasPaint);
+//        canvas.drawBitmap(Data, src, dst, canvasPaint);
+        
 
-        bitmap.recycle();
+//        bitmap.recycle();
         bitmap = null;
         
         return Bitmap.createScaledBitmap(output, width, height, true);
     }
-    //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------    
     public static void formatTime(TextView tv,long time) {
         Context context = tv.getContext();
         String text;
