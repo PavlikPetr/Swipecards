@@ -2,13 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:paddingLeft="8dp"
+    android:paddingTop="8dp">
 
-    <ImageView
-        android:id="@+id/giftImage"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:background="@drawable/inbox_frame_photo"/>
+        android:layout_height="wrap_content" > 
+        <ImageView
+            android:id="@+id/giftImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+		<ImageView
+            android:id="@+id/giftMask"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/inbox_frame_photo" 
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="-4dp"
+            android:layout_marginRight="-4dp"
+            android:layout_marginBottom="10dp"
+            />        
+                
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -20,10 +37,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <ImageView            
+        <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:src="@drawable/dating_money"/>
+            android:layout_height="wrap_content"
+            android:src="@drawable/dating_money" />
     </LinearLayout>
 
 </LinearLayout>
