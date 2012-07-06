@@ -2,17 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
 
-    <ImageView
-        android:id="@+id/giftImage"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:background="@drawable/im_avatar_frame"/>
+        android:layout_height="wrap_content"        
+        android:layout_gravity="center_horizontal">        
+        
+        <ImageView
+            android:id="@+id/giftImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+        <ImageView
+            android:id="@+id/giftMask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/foto_frame" 
+            android:layout_centerInParent="true"/>
+                
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal" >
 
         <TextView
@@ -20,10 +36,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <ImageView            
+        <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:src="@drawable/dating_money"/>
+            android:layout_height="wrap_content"
+            android:src="@drawable/dating_money" />
     </LinearLayout>
 
 </LinearLayout>

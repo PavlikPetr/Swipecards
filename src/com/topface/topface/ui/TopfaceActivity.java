@@ -262,7 +262,12 @@ public class TopfaceActivity extends ActivityGroup {
 
         // Preferences, Last opened frame  // !!!!!!!!!!!!!!!!!!!!!!!!!
     }
-    //---------------------------------------------------------------------------
+    @Override
+	protected void onStart() {    	
+		super.onStart();
+		Data.facebook.extendAccessTokenIfNeeded(this, null);
+	}
+	//---------------------------------------------------------------------------
     private void openFrame(final Button button) {
         if (button.isSelected()) {
             loFrameWindow.layout(0, 0, mTabHost.getMeasuredWidth(), mTabHost.getMeasuredHeight());
