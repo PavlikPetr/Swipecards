@@ -174,7 +174,7 @@ public class Utils {
         
         // Mask
         //canvas.drawRoundRect(rectF, roundPx, roundPx, paint); //  Р·Р°РєСЂСѓРіР»РµРЅРЅС‹Рµ СѓРіР»С‹
-        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint); //  РєСЂСѓРіР»С‹Р№ Р°РІР°С‚Р°СЂ
+        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2 -5, circlePaint); //  РєСЂСѓРіР»С‹Р№ Р°РІР°С‚Р°СЂ
 
         canvasPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(bitmap, src, dst, canvasPaint);

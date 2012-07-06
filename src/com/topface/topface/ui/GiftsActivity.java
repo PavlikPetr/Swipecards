@@ -14,6 +14,7 @@ import com.topface.topface.utils.GiftGalleryManager;
 import android.app.Activity;
 import android.app.LocalActivityManager;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,7 +33,8 @@ public class GiftsActivity extends Activity {
     public static final String INTENT_GIFT_ID = "gift_id";
     public static final String INTENT_GIFT_URL = "gift_url";
     
-    public static final int GIFTS_COLUMN = 3;
+    public static final int GIFTS_COLUMN_PORTRAIT = 3;
+    public static final int GIFTS_COLUMN_LANDSCAPE = 5;
     public static int dialogWidth = 0;
 
     private GiftsRequest giftRequest;
@@ -80,7 +82,7 @@ public class GiftsActivity extends Activity {
         
         mBtnLeft.setText(Gift.getTypeNameResId(Gift.ROMANTIC));
         mBtnMiddle.setText(Gift.getTypeNameResId(Gift.FRIENDS));
-        mBtnRight.setText(Gift.getTypeNameResId(Gift.PRESENT));
+        mBtnRight.setText(Gift.getTypeNameResId(Gift.PRESENT)); 
         
         mBtnLeft.setChecked(true);
         
@@ -155,6 +157,9 @@ public class GiftsActivity extends Activity {
 //                                }
                             }
                         });                        
+                                                
+                        if(mBtnMiddle.isChecked()) mTabHost.setCurrentTabByTag(Integer.toString(Gift.FRIENDS));;
+                        if(mBtnRight.isChecked()) mTabHost.setCurrentTabByTag(Integer.toString(Gift.PRESENT));;
 
                         mProgressBar.setVisibility(View.GONE);
                         for (GiftsAdapter adapter : mGridAdapters)
@@ -211,7 +216,8 @@ public class GiftsActivity extends Activity {
             gridView.setScrollingCacheEnabled(false);
             gridView.setScrollbarFadingEnabled(true);
             gridView.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
-            gridView.setNumColumns(GIFTS_COLUMN);
+            int columns = this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? GIFTS_COLUMN_PORTRAIT : GIFTS_COLUMN_LANDSCAPE; 
+            gridView.setNumColumns(columns);
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent,View view,int position,long id) {

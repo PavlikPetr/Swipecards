@@ -12,6 +12,7 @@ import com.topface.topface.utils.Device;
 import com.topface.topface.utils.MemoryCache;
 import com.topface.topface.utils.StorageCache;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -63,7 +64,9 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
         mStorageCache = new StorageCache(context, CacheManager.EXTERNAL_CACHE);
         mWorker = Executors.newFixedThreadPool(3);
 
-        int columnNumber = GiftsActivity.GIFTS_COLUMN;
+        int orientation = context.getResources().getConfiguration().orientation;
+        int columnNumber = orientation == Configuration.ORIENTATION_PORTRAIT ? GiftsActivity.GIFTS_COLUMN_PORTRAIT : GiftsActivity.GIFTS_COLUMN_LANDSCAPE;
+//        int columnNumber = GiftsActivity.GIFTS_COLUMN_PORTRAIT;
         mBitmapWidth = Device.getDisplay(context).getWidth() / (columnNumber);        
         mBitmapHeight = (int)(mBitmapWidth);
     }
@@ -96,7 +99,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
 //            if (!mBusy) {
                 bitmap = mStorageCache.load(((Gift)mDataList.get(position)).id);
                 if (bitmap != null) {
-                    bitmap = Utils.getRoundBitmap(bitmap, mBitmapWidth, mBitmapWidth, 1.2f);
+                    bitmap = Utils.getRoundBitmap(bitmap, mBitmapWidth, mBitmapWidth, 1.3f);
                     imageView.setImageBitmap(bitmap);
                     mMemoryCache.put(position, bitmap);
                 } else {
