@@ -5,15 +5,6 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:background="@drawable/chat_list_bg" >
-    
-    <!-- progress -->
-    <ProgressBar
-         android:id="@+id/prsChatLoading"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_centerInParent="true"
-         android:visibility="gone"
-         style="@android:style/Widget.ProgressBar.Small" />
         
     <!-- header bar -->
     <RelativeLayout
@@ -87,6 +78,15 @@
       
     
     </com.topface.topface.ui.views.SwapControl>
+    
+    <!-- progress -->
+    <ProgressBar
+         android:id="@+id/prsChatLoading"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerInParent="true"
+         android:visibility="gone"
+         style="@android:style/Widget.ProgressBar.Small" />
     
     
 </RelativeLayout> 

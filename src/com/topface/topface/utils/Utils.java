@@ -9,22 +9,11 @@ import android.net.Uri;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import android.content.Context;
-
 import android.graphics.Bitmap.Config;
-
-
-
-
 import android.graphics.PorterDuff.Mode;
-
-
-
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.widget.TextView;
-
-
-
 
 public class Utils {
     //---------------------------------------------------------------------------
@@ -47,62 +36,40 @@ public class Utils {
             return null;
         }
     }
-
-
     //---------------------------------------------------------------------------    
     public static Bitmap clipping(Bitmap rawBitmap, int bitmapWidth, int bitmapHeight) {
         if (rawBitmap == null || bitmapWidth <= 0 || bitmapHeight <= 0)
             return null;
 
-
-
         // Исходный размер загруженного изображения
         int width = rawBitmap.getWidth();
         int height = rawBitmap.getHeight();
 
-
-
         // буль, длинная фото или высокая
         boolean LEG = false;
-
         if (width >= height)
             LEG = true;
-
-
 
         // коффициент сжатия фотографии
         float ratio = Math.max(((float) bitmapWidth) / width, ((float) bitmapHeight) / height);
 
-
-
         // на получение оригинального размера по ширине или высоте
         if (ratio == 0) ratio = 1;
-
-
-
 
         // матрица сжатия
         Matrix matrix = new Matrix();
         matrix.postScale(ratio, ratio);
 
-
-
         // сжатие изображения
         Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, width, height, matrix, true);
-
-
 
         // вырезаем необходимый размер
         Bitmap clippedBitmap;
         if (LEG) {
-
-
             // у горизонтальной, вырезаем по центру
             int offset_x = (scaledBitmap.getWidth() - bitmapWidth) / 2;
             clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, bitmapWidth, bitmapHeight, null, false);
         } else
-
-
             // у вертикальной режим с верху
             clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, bitmapWidth, bitmapHeight, null, false);
 
@@ -128,18 +95,14 @@ public class Utils {
         Canvas canvas = new Canvas(output);
 
         final Rect rect = new Rect(0, 0, width, height);
-        //final RectF rectF = new RectF(rect);
+        final RectF rectF = new RectF(rect);
         final Paint paint = new Paint();
 
         paint.setAntiAlias(true);
         paint.setColor(0xff424242);
         canvas.drawARGB(0, 0, 0, 0);
 
-
-        //canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-        int r = width/2;
-        canvas.drawCircle(r, r, r-2, paint);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
 
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
@@ -150,10 +113,23 @@ public class Utils {
         return output;
     }
     //---------------------------------------------------------------------------
-	public static Bitmap getRoundBitmap(Bitmap bitmap,int width,int height,float radiusMult) {
-        int bitmapWidth  = bitmap.getWidth();
-        int bitmapHeight = bitmap.getHeight();
-        int multWidth = (int) (bitmapWidth * radiusMult);
+    public static Bitmap getRoundedBitmap(Bitmap bitmap) {
+        if (bitmap == null)
+            return null;
+        
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+        
+        int width = (w > h) ? w : h;
+
+        return getScaleAndRoundBitmap(bitmap, width, width, 1);
+    }
+    //---------------------------------------------------------------------------
+	public static Bitmap getScaleAndRoundBitmap(Bitmap bitmap, final int width, final int height, float radiusMult) {
+        final int bitmapWidth  = bitmap.getWidth();
+        final int bitmapHeight = bitmap.getHeight();
+       
+        final int multWidth = (int) (((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
         
         Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Config.ARGB_8888);
 
@@ -162,35 +138,33 @@ public class Utils {
         final Rect src = new Rect(0, 0, bitmapWidth, bitmapHeight);
         final Rect dst = new Rect((multWidth - bitmapWidth)/2, (multWidth - bitmapHeight)/2, (multWidth + bitmapWidth)/2, (multWidth - bitmapHeight)/2 + bitmapHeight);        
         
-        final Paint circlePaint = new Paint();
+        Paint circlePaint = new Paint();
         circlePaint.setAntiAlias(true);
         circlePaint.setColor(Color.WHITE);
         
-        final Paint canvasPaint = new Paint();
+        Paint canvasPaint = new Paint();
         canvasPaint.setAntiAlias(true);
         canvasPaint.setColor(0xff424242);
         
         canvas.drawARGB(0, 0, 0, 0);
         
-        // Mask
-        //canvas.drawRoundRect(rectF, roundPx, roundPx, paint); //  Р·Р°РєСЂСѓРіР»РµРЅРЅС‹Рµ СѓРіР»С‹
-        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint); //  РєСЂСѓРіР»С‹Р№ Р°РІР°С‚Р°СЂ
-
+        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2 - 1, circlePaint);  // -2 ???
         canvasPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(bitmap, src, dst, canvasPaint);
-//        canvas.drawBitmap(Data, src, dst, canvasPaint);
-        
 
-//        bitmap.recycle();
+        Bitmap scaledBitmap = null;
+        
+        if(multWidth != width)
+            scaledBitmap = Bitmap.createScaledBitmap(output, width, height, true);
+        else
+            scaledBitmap = output;
+
         bitmap = null;
-        
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(output, width, height, true); 
-        
         output = null;
         
         return scaledBitmap;
     }
-
+    //---------------------------------------------------------------------------
     public static void formatTime(TextView tv, long time) {
         Context context = tv.getContext();
         String text;
@@ -251,6 +225,10 @@ public class Utils {
             default:
                 return String.format(context.getString(R.string.time_minutes), minutes);
         }
+    }
+    //---------------------------------------------------------------------------
+    public static String formatDate(Context context, long time) {
+        return context.getString(R.string.time_today);
     }
     //---------------------------------------------------------------------------
     public static int getBatteryResource(int power) {
@@ -363,15 +341,6 @@ public class Utils {
         }
     }
     //---------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
     /**
      * Возвращает делитель, во сколько раз уменьшить размер изображения при создании битмапа
      *

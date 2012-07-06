@@ -8,7 +8,7 @@
         android:id="@+id/giftImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
-        android:background="@drawable/inbox_frame_photo"/>
+        android:background="@drawable/im_avatar_frame"/>
 
     <LinearLayout
         android:layout_width="fill_parent"

@@ -2,11 +2,13 @@ package com.topface.topface.utils;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import com.topface.topface.R;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.AbsListView.OnScrollListener;
@@ -16,12 +18,14 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
     // Data
     private LinkedList<T> mDataList;
     private HashMap<Integer, Bitmap> mCache;
+    private int mFrameWidth;
     private boolean mBusy;
-    private int mRadius = 12; // хард кор !!!!!!!
+    //private int mRadius = 12; // хард кор !!!!!!!
     //---------------------------------------------------------------------------
     public AvatarManager(Context context,LinkedList<T> dataList) {
         mDataList = dataList;
         mCache = new HashMap<Integer, Bitmap>();
+        mFrameWidth = BitmapFactory.decodeResource(context.getResources(), R.drawable.im_avatar_frame).getWidth();
     }
     //---------------------------------------------------------------------------
     public void setDataList(LinkedList<T> dataList) {
@@ -49,7 +53,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
         mCache.clear();
     }
     //---------------------------------------------------------------------------
-    public void getImage(final int position,final ImageView imageView) {
+    public void getImage(final int position, final ImageView imageView) {
         int uid = mDataList.get(position).getUid();
         Bitmap bitmap = mCache.get(uid);
 
@@ -62,7 +66,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
         }
     }
     //---------------------------------------------------------------------------
-    private void loadingImages(final int position,final int uid,final ImageView imageView) {
+    private void loadingImages(final int position, final int uid, final ImageView imageView) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -77,7 +81,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
                         return;
 
                     // округляем
-                    Bitmap roundBitmap = Utils.getRoundedCornerBitmap(rawBitmap, imageView.getWidth(), imageView.getHeight(), mRadius);
+                    Bitmap roundBitmap = Utils.getScaleAndRoundBitmap(rawBitmap, mFrameWidth, mFrameWidth, 1);
                     imagePost(imageView, roundBitmap);
                     mCache.put(uid, roundBitmap);
 
@@ -94,7 +98,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
         t.start();
     }
     //---------------------------------------------------------------------------
-    private void imagePost(final ImageView imageView,final Bitmap bitmap) {
+    private void imagePost(final ImageView imageView, final Bitmap bitmap) {
         imageView.post(new Runnable() {
             @Override
             public void run() {
@@ -110,11 +114,11 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
     }
     //---------------------------------------------------------------------------
     @Override
-    public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     }
     //---------------------------------------------------------------------------
     @Override
-    public void onScrollStateChanged(final AbsListView view,int scrollState) {
+    public void onScrollStateChanged(final AbsListView view, int scrollState) {
         switch (scrollState) {
             case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
                 mBusy = true;

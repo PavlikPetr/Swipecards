@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import java.util.LinkedList;
 import com.topface.topface.R;
+import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Gift;
 import com.topface.topface.Static;
 import com.topface.topface.data.History;
@@ -209,9 +210,6 @@ public class ChatActivity extends Activity implements View.OnClickListener {
 
                 mProgressBar.setVisibility(View.VISIBLE);
 
-                InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mEditBox.getWindowToken(), 0);
-
                 messageRequest = new MessageRequest(ChatActivity.this.getApplicationContext());
                 messageRequest.message = mEditBox.getText().toString();
                 messageRequest.userid = mUserId;
@@ -221,6 +219,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                
                                 History history = new History();
                                 history.code = 0;
                                 history.gift = 0;
@@ -232,6 +231,9 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                                 mAdapter.notifyDataSetChanged();
                                 mEditBox.getText().clear();
                                 mProgressBar.setVisibility(View.GONE);
+                                
+                                InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mEditBox.getWindowToken(), 0);
                             }
                         });
                     }
@@ -256,6 +258,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     protected void onActivityResult(int requestCode,int resultCode,Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+            mProgressBar.setVisibility(View.VISIBLE);
             Bundle extras = data.getExtras();
             final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);            
             final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
@@ -268,11 +271,12 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                 @Override
                 public void success(ApiResponse response) throws NullPointerException {
                     SendGiftAnswer answer = SendGiftAnswer.parse(response);
+                    CacheProfile.power = answer.power;
+                    CacheProfile.money = answer.money;
                     Debug.log(ChatActivity.this, "power:" + answer.power + " money:" + answer.money);
                     post(new Runnable() {
                         @Override
                         public void run() {              
-                            //TODO add progress bar gone, change power and money
                         	History history = new History();
                             history.code = 0;
                             history.gift = id;
@@ -283,37 +287,23 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                             history.link = url;
                             mAdapter.addSentMessage(history);
                             mAdapter.notifyDataSetChanged();
+                            mProgressBar.setVisibility(View.GONE);
                         }
                     });
                 }
                 
                 @Override
-                public void fail(int codeError,ApiResponse response) throws NullPointerException {
+                public void fail(int codeError,final ApiResponse response) throws NullPointerException {
                     post(new Runnable() {
                         @Override
                         public void run() {
-                          Toast.makeText(ChatActivity.this,ChatActivity.this.getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
-                          //TODO add progress bar gone
+                            if(response.code==ApiResponse.PAYMENT)
+                                startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
                         }
                     });
                 }
             }).exec();
         }
     }
-
-//    protected void onActivityResult2(int requestCode,int resultCode,Intent data) {
-//        if(resultCode != RESULT_OK)
-//          return;
-//        
-//        History history = new History();
-//        history.code = 0;
-//        history.gift = 100500;
-//        history.owner_id = CacheProfile.uid;
-//        history.created = System.currentTimeMillis();
-//        history.text = Static.EMPTY;
-//        history.type = History.GIFT;
-//        mAdapter.addSentMessage(history);
-//        mAdapter.notifyDataSetChanged();
-//    }
     //---------------------------------------------------------------------------    
 }

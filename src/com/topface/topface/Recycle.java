@@ -34,7 +34,7 @@ public class Recycle {
             s_Online = BitmapFactory.decodeResource(context.getResources(), R.drawable.im_online);
             s_Offline = BitmapFactory.decodeResource(context.getResources(), R.drawable.im_offline);
             s_ChatFrame = BitmapFactory.decodeResource(context.getResources(), R.drawable.chat_frame_photo);
-            s_InboxFrame = BitmapFactory.decodeResource(context.getResources(), R.drawable.inbox_frame_photo);
+            s_InboxFrame = BitmapFactory.decodeResource(context.getResources(), R.drawable.im_avatar_frame);
             s_Heart = BitmapFactory.decodeResource(context.getResources(), R.drawable.tops_heart);
             s_Money = BitmapFactory.decodeResource(context.getResources(), R.drawable.dating_money);
             s_ProfilePhotoFrame = BitmapFactory.decodeResource(context.getResources(), R.drawable.profile_frame_photo);

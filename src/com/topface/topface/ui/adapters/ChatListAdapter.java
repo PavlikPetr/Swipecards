@@ -1,5 +1,6 @@
 package com.topface.topface.ui.adapters;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import com.topface.topface.Data;
@@ -33,9 +34,9 @@ public class ChatListAdapter extends BaseAdapter {
     private Context mContext;
     private int mUserId;
     private LayoutInflater mInflater;
-    private LinkedList<History> mList; // data
+    private LinkedList<History> mDataList; // data
     private LinkedList<Integer> mItemLayoutList; // types
-    private HashMap<Integer,Integer> mItemTimeList; // date
+    private HashMap<Integer, String> mItemTimeList; // date
     private View.OnClickListener mOnAvatarListener;
     // Type Item
     private static final int T_USER_PHOTO = 0;
@@ -47,10 +48,9 @@ public class ChatListAdapter extends BaseAdapter {
     //---------------------------------------------------------------------------
     public ChatListAdapter(Context context,int userId,LinkedList<History> dataList) {
         mContext = context;
-        mList = dataList;
         mUserId = userId;
         mItemLayoutList = new LinkedList<Integer>();
-        mItemTimeList = new HashMap<Integer,Integer>();
+        mItemTimeList = new HashMap<Integer, String>();
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         prepare(dataList);
     }
@@ -61,12 +61,12 @@ public class ChatListAdapter extends BaseAdapter {
     //---------------------------------------------------------------------------
     @Override
     public int getCount() {
-        return mList.size();
+        return mDataList.size();
     }
     //---------------------------------------------------------------------------
     @Override
     public History getItem(int position) {
-        return mList.get(position);
+        return mDataList.get(position);
     }
     //---------------------------------------------------------------------------
     @Override
@@ -86,7 +86,7 @@ public class ChatListAdapter extends BaseAdapter {
     //---------------------------------------------------------------------------
     @Override
     public View getView(int position,View convertView,ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         int type = getItemViewType(position);
 
         if (convertView == null) {
@@ -139,17 +139,17 @@ public class ChatListAdapter extends BaseAdapter {
         } else
             holder = (ViewHolder)convertView.getTag();
 
-        History msg = getItem(position);
+        final History msg = getItem(position);
         
         // Date divider
         if(type == T_DATE) {
-            holder.mDate.setText("СЕГОДНЯ");
+            holder.mDate.setText("d: "+mItemTimeList.get(position));
             return convertView;
         }
 
         // восстанавливаем состояние объектов
         holder.mInfoGroup.setVisibility(View.VISIBLE);
-        holder.mGift.setVisibility(View.INVISIBLE);
+        holder.mGift.setVisibility(View.GONE);
 
         switch (msg.type) {
             case History.DEFAULT:
@@ -175,12 +175,25 @@ public class ChatListAdapter extends BaseAdapter {
               holder.mInfoGroup.setVisibility(View.INVISIBLE);
               holder.mGift.setVisibility(View.VISIBLE);
               
-              Bitmap bmp = (new StorageCache(mContext)).load(msg.gift);
-              if(bmp != null)
-                  holder.mGift.setImageBitmap(bmp);
-              //else
-                  //Http.imageLoader(msg.link, holder.mGift);
-              
+              Bitmap bitmap = (new StorageCache(mContext)).load(msg.gift);
+              if(bitmap != null) {
+                  holder.mGift.setImageBitmap(bitmap);
+              } else {
+                  new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Bitmap rawBitmap = Http.bitmapLoader(msg.link);
+                        final Bitmap roundedBitmap = Utils.getScaleAndRoundBitmap(rawBitmap, rawBitmap.getWidth(), rawBitmap.getHeight(), 1.5f);
+                        holder.mGift.post(new Runnable() {
+                          @Override
+                          public void run() {
+                              holder.mGift.setImageBitmap(roundedBitmap);
+                          }
+                      });
+                    }
+                }).start();
+              }
+
             } break;
             case History.MESSAGE:
                 holder.mMessage.setText(msg.text);
@@ -217,53 +230,73 @@ public class ChatListAdapter extends BaseAdapter {
     }
     //---------------------------------------------------------------------------
     public void addSentMessage(History msg) {
-        int position = mList.size() - 1;
+        int position = mDataList.size() - 1;
         if (position < 0)
             mItemLayoutList.add(T_USER_PHOTO);
         else {
-            History history = mList.get(mList.size() - 1);
+            History history = mDataList.get(mDataList.size() - 1);
             if (history.owner_id == mUserId)
                 mItemLayoutList.add(T_USER_PHOTO);
             else
                 mItemLayoutList.add(T_USER_EXT);
         }
 
-        mList.add(msg);
+        mDataList.add(msg);
     }
     //---------------------------------------------------------------------------
     public void setDataList(LinkedList<History> dataList) {
         prepare(dataList);
-        mList.addAll(dataList);
     }
     //---------------------------------------------------------------------------
     public void prepare(LinkedList<History> dataList) {
-        //long now = System.currentTimeMillis() / 1000;
+        long now = System.currentTimeMillis() / 1000;
+        long day = 60*60*24;
+        
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        
+        long noon = cal.getTimeInMillis() / 1000;
+        
+        mDataList = new LinkedList<History>();
         
         int count = dataList.size();
         int prev_id = 0;
-        //long prev_date = 0;
+        long prev_date = 0;
+        boolean z = false;
         for (int i = 0; i < count; i++) {
             History history = dataList.get(i);
+            
+            long g = history.created;
+            
+            mItemLayoutList.add(T_DATE);  // DATE
+            mItemTimeList.put(mItemLayoutList.size()-1, Utils.formatDate(mContext, history.created));
+            
+            mDataList.add(null);
+            z = true;
+
+
             if (history.owner_id == mUserId) {
                 if (history.owner_id == prev_id)
                     mItemLayoutList.add(T_FRIEND_EXT);
                 else
                     mItemLayoutList.add(T_FRIEND_PHOTO);
-            } else if (history.owner_id == prev_id)
-                mItemLayoutList.add(T_USER_EXT);
-            else
-                mItemLayoutList.add(T_USER_PHOTO);
-            prev_id = history.owner_id;
-            
-            //mItemTimeList.put(0,0);
-            //mItemLayoutList.add(T_DATE);  // DATE
-        }
+                } else if (history.owner_id == prev_id)
+                    mItemLayoutList.add(T_USER_EXT);
+                else
+                    mItemLayoutList.add(T_USER_PHOTO);
+                prev_id = history.owner_id;
+                
+                mDataList.add(history);
+            }
+
     }
     //---------------------------------------------------------------------------
     public void release() {
-        if (mList != null)
-            mList.clear();
-        mList = null;
+        if (mDataList != null)
+            mDataList.clear();
+        mDataList = null;
         mInflater = null;
         if (mItemLayoutList != null)
             mItemLayoutList.clear();

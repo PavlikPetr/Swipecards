@@ -9,4 +9,12 @@
     <string name="time_minutes">%d minutes ago</string>
     <string name="time_yesterday">Yesterday</string>
     <string name="time_today">Today</string>
+    
+    <string name="time_monday">Monday</string>
+    <string name="time_tuesday">Tuesday</string>
+    <string name="time_wednesday">Wednesday</string>
+    <string name="time_thursday">Thursday</string>
+    <string name="time_friday">Friday</string>
+    <string name="time_saturday">Saturday</string>
+    <string name="time_sunday">Sunday</string>
 </resources>

@@ -118,7 +118,7 @@ public class LikesActivity extends FrameActivity {
         mListView.getRefreshableView().addFooterView(mFooterView);
 
         // Control creating
-        mAvatarManager = new AvatarManager<FeedLike>(this, Data.likesList);
+        mAvatarManager = new AvatarManager<FeedLike>(getApplicationContext(), Data.likesList);
         mListAdapter = new LikesListAdapter(getApplicationContext(), mAvatarManager);
         mListView.setOnScrollListener(mAvatarManager);
         mListView.setAdapter(mListAdapter);

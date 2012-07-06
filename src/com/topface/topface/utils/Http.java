@@ -314,7 +314,7 @@ public class Http {
                 Bitmap ava = Http.bitmapLoader(CacheProfile.avatar_small);
                 if (ava == null)
                     return;
-                ava = Utils.getRoundedCornerBitmap(ava, ava.getWidth(), ava.getHeight(), 12);
+                ava = Utils.getRoundedBitmap(ava);
                 Data.ownerAvatar = ava;
             }
         });
@@ -329,7 +329,7 @@ public class Http {
                 Bitmap ava = Http.bitmapLoader(url);
                 if (ava == null)
                     return;
-                ava = Utils.getRoundedCornerBitmap(ava, ava.getWidth(), ava.getHeight(), 12);
+                ava = Utils.getRoundedBitmap(ava);
                 Data.userAvatar = ava;
             }
         });
