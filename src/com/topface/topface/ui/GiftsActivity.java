@@ -181,11 +181,25 @@ public class GiftsActivity extends Activity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         for (GiftsAdapter adapter : mGridAdapters) {
             adapter.release();
         }
+    }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        for (GiftsAdapter adapter : mGridAdapters) {
+//            adapter.release();
+//        }
+    }
+    
+    @Override
+    protected void onPause() {
+    	// TODO Auto-generated method stub
+    	super.onPause();
     }
     
     private GridView createGridView(int type) {

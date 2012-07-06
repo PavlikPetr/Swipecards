@@ -184,7 +184,11 @@ public class Utils {
 //        bitmap.recycle();
         bitmap = null;
         
-        return Bitmap.createScaledBitmap(output, width, height, true);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(output, width, height, true); 
+        
+        output = null;
+        
+        return scaledBitmap;
     }
 
     public static void formatTime(TextView tv, long time) {
