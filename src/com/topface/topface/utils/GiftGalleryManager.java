@@ -1,9 +1,10 @@
 package com.topface.topface.utils;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import com.topface.topface.R;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.data.Gift;
 import com.topface.topface.ui.GiftsActivity;
@@ -14,6 +15,7 @@ import com.topface.topface.utils.StorageCache;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
@@ -64,11 +66,16 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
         mStorageCache = new StorageCache(context, CacheManager.EXTERNAL_CACHE);
         mWorker = Executors.newFixedThreadPool(3);
 
-        int orientation = context.getResources().getConfiguration().orientation;
-        int columnNumber = orientation == Configuration.ORIENTATION_PORTRAIT ? GiftsActivity.GIFTS_COLUMN_PORTRAIT : GiftsActivity.GIFTS_COLUMN_LANDSCAPE;
+//        int orientation = context.getResources().getConfiguration().orientation;
+//        int columnNumber = orientation == Configuration.ORIENTATION_PORTRAIT ? GiftsActivity.GIFTS_COLUMN_PORTRAIT : GiftsActivity.GIFTS_COLUMN_LANDSCAPE;
 //        int columnNumber = GiftsActivity.GIFTS_COLUMN_PORTRAIT;
-        mBitmapWidth = Device.getDisplay(context).getWidth() / (columnNumber);        
-        mBitmapHeight = (int)(mBitmapWidth);
+        
+        Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.foto_frame);
+        
+        mBitmapWidth = bmp.getWidth()-8;        
+        mBitmapHeight = bmp.getWidth()-8;
+        bmp.recycle();
+        bmp = null;
     }
     //---------------------------------------------------------------------------
     public void update() {

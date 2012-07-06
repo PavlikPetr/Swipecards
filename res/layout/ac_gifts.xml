@@ -2,29 +2,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@drawable/chat_list_bg">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/giftsTypeChooseLayout"
+        android:id="@+id/giftHeader"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp" 
-        android:background="@drawable/im_bar_button">
+        android:orientation="vertical" >
 
-        <include layout="@layout/btn_triple" />
+        <include layout="@layout/bar_header" />
 
+        <include layout="@layout/bar_triple_btn" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/giftHeaderDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"        
+        android:background="@drawable/chat_divider_bg"
+        android:layout_below="@id/giftHeader"
+        />
 
     <TabHost
         android:id="@+id/giftsTabHost"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" 
-        android:layout_below="@id/giftsTypeChooseLayout"
-        android:background="@drawable/chat_list_bg">
+        android:layout_height="fill_parent"
+        android:layout_below="@id/giftHeaderDivider"
+        android:background="@drawable/chat_list_bg" 
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="16dp">
+        
 
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -40,10 +50,8 @@
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-				android:paddingTop="8dp"
-				android:paddingRight="8dp"
-				android:paddingBottom="8dp"/>
+                android:layout_height="wrap_content" 
+                android:layout_gravity="center_horizontal"/>
         </LinearLayout>
     </TabHost>
 

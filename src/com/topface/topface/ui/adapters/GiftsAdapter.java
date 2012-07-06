@@ -14,14 +14,11 @@ import android.widget.TextView;
 
 public class GiftsAdapter extends BaseAdapter{
 
-//	private Context mContext;
 	private LayoutInflater mInflater;
 	
-//	private LayoutInflater mInflater;
 	private GiftGalleryManager<Gift> mGalleryManager;
 	
 	public GiftsAdapter(Context context, GiftGalleryManager<Gift> galleryManager) {
-//		mContext = context;
 		mInflater = LayoutInflater.from(context);
 	    mGalleryManager = galleryManager;
 	}
