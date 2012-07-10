@@ -100,8 +100,9 @@ public class InboxActivity extends Activity {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ImageView iv = (ImageView)view.findViewById(R.id.ivAvatar);
-        Data.userAvatar = ((BitmapDrawable)iv.getDrawable()).getBitmap();
-        
+        BitmapDrawable div = (BitmapDrawable) iv.getDrawable();
+        Data.userAvatar = div != null ? div.getBitmap() : null;
+
         Intent intent = new Intent(InboxActivity.this.getApplicationContext(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID,mInboxDataList.get(position).uid);
         intent.putExtra(ChatActivity.INTENT_USER_NAME,mInboxDataList.get(position).first_name);
@@ -126,12 +127,12 @@ public class InboxActivity extends Activity {
     mListView.getRefreshableView().addFooterView(mFooterView);
 
     // Control creating
-    mAvatarManager = new AvatarManager<FeedInbox>(getApplicationContext(),mInboxDataList);
+    mAvatarManager = new AvatarManager<FeedInbox>(mInboxDataList);
     mListAdapter = new InboxListAdapter(getApplicationContext(),mAvatarManager);
     mListView.setOnScrollListener(mAvatarManager);    
     mListView.setAdapter(mListAdapter);
     
-    mNewUpdating = CacheProfile.unread_messages > 0 ? true : false;
+    mNewUpdating = CacheProfile.unread_messages > 0;
     CacheProfile.unread_messages = 0;
     
     banner();

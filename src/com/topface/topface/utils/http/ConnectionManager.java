@@ -7,18 +7,11 @@ import java.io.InputStreamReader;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.topface.topface.utils.Utils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.protocol.BasicHttpContext;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
 import com.topface.topface.data.Auth;
@@ -37,7 +30,6 @@ public class ConnectionManager {
     // Constants
     public static final String TAG = "CM";
 
-    //---------------------------------------------------------------------------
     private ConnectionManager() {
         mHttpClient = AndroidHttpClient.newInstance("Android");
         mWorker = Executors.newFixedThreadPool(2);
@@ -46,14 +38,12 @@ public class ConnectionManager {
         //java.lang.System.setProperty("java.net.preferIPv6Addresses", "false");
     }
 
-    //---------------------------------------------------------------------------
     public static ConnectionManager getInstance() {
         if (mInstanse == null)
             mInstanse = new ConnectionManager();
         return mInstanse;
     }
 
-    //---------------------------------------------------------------------------
     public void sendRequest(final ApiRequest apiRequest) {
         mWorker.execute(new Runnable() {
             @Override
@@ -96,7 +86,6 @@ public class ConnectionManager {
         });
     }
 
-    //---------------------------------------------------------------------------
     private String request(AndroidHttpClient httpClient, HttpPost httpPost) {
         String rawResponse = Static.EMPTY;
 
@@ -124,7 +113,6 @@ public class ConnectionManager {
         return rawResponse;
     }
 
-    //---------------------------------------------------------------------------
     private ApiResponse reAuth(Context context, AndroidHttpClient httpClient, HttpPost httpPost, ApiRequest request) {
         Debug.log(this, "reAuth");
 
@@ -167,63 +155,13 @@ public class ConnectionManager {
         return response;
     }
 
-    /**
-     * Возвращает bitmap изображения по его url
-     *
-     * @param url адрес картинки для создания из нее битмапа
-     * @param maxSize максимальный размер создаваемого битмапа,
-     *                если исходное изображение меньше, оно не будет уменьшено
-     * @return битмап созданный из скачанного изображения
-     */
-    public Bitmap bitmapLoader(String url, int maxSize) {
-        if (url == null) return null;
-        Bitmap bitmap = null;
-        HttpGet httpGet = new HttpGet(url);
-        try {
-            BasicHttpContext localContext = new BasicHttpContext();
-            HttpResponse response = mHttpClient.execute(httpGet, localContext);
-            final int statusCode = response.getStatusLine().getStatusCode();
-            if (statusCode != HttpStatus.SC_OK) {
-                Debug.log(TAG, "Bitmap loading wrong status:: " + statusCode);
-                return null;
-            }
-
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                BufferedHttpEntity bufferedHttpEntity = new BufferedHttpEntity(entity);
-                InputStream is = bufferedHttpEntity.getContent();
-
-                //Если передан максимальный необходимый размер битмапа, то для экономии оперативки,
-                //мы создаем уже уменьшенный битмап, не загружая в память его полную версию
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                if (maxSize > 0) {
-                    //Опция, сообщающая что не нужно грузить изображение в память, а только считать его данные
-                    options.inJustDecodeBounds = true;
-                    BitmapFactory.decodeStream(is, null, options);
-                    options.inSampleSize = Utils.getBitmapScale(options, maxSize);
-                    //Используем тот же объект опций, что бы повторно его не создавать, переключая на режим
-                    options.inJustDecodeBounds = false;
-                    //Закрываем отработавший поток, из которого мы получили размеры изображения
-                    is.close();
-                    //И открываем новый поток, что бы уже создать битмап
-                    is = bufferedHttpEntity.getContent();
-                }
-
-                bitmap = BitmapFactory.decodeStream(new FlushedInputStream(is), null, options);
-                is.close();
-            }
-        } catch (Exception e) {
-            if (!httpGet.isAborted()) httpGet.abort();
-            Debug.log(TAG, "Bitmap loading error::" + e.getMessage());
-        }
-        return bitmap;
+    public AndroidHttpClient getHttpClient() {
+        return mHttpClient;
     }
 
-    //---------------------------------------------------------------------------
     @Override
     protected void finalize() throws Throwable {
         if (mHttpClient != null) mHttpClient.close();/*mHttpClient.getConnectionManager().shutdown();*/
         super.finalize();
     }
-    //---------------------------------------------------------------------------
 }

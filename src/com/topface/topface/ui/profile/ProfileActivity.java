@@ -25,12 +25,7 @@ import com.topface.topface.ui.profile.gallery.HorizontalListView;
 import com.topface.topface.ui.profile.gallery.PhotoEroGalleryAdapter;
 import com.topface.topface.ui.profile.gallery.PhotoGalleryAdapter;
 import com.topface.topface.ui.views.FrameImageView;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.FormInfo;
-import com.topface.topface.utils.Http;
-import com.topface.topface.utils.Socium;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -109,8 +104,6 @@ public class ProfileActivity extends Activity{
   public static final String INTENT_MUTUAL_ID = "mutual_id";
   public static final String INTENT_USER_NAME = "user_name";
   public static final String INTENT_CHAT_INVOKE = "chat_invoke";
-  public static final int FORM_TOP = 0;
-  public static final int FORM_BOTTOM = 1;
   public static final int GALLARY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
   public static final int ALBUM_ACTIVITY_REQUEST_CODE = 101;
   public static final int EDITOR_ACTIVITY_REQUEST_CODE = 102;
@@ -158,9 +151,9 @@ public class ProfileActivity extends Activity{
       mUserId     = getIntent().getIntExtra(INTENT_USER_ID,-1); // свой - чужой профиль
       mMutualId   = getIntent().getIntExtra(INTENT_MUTUAL_ID,-1);
       String name = getIntent().getStringExtra(INTENT_USER_NAME); // name
-      if(name!=null)
+      if(name != null)
         mHeaderTitle.setText(name);  // пришли из likes, rates, chat
-      else if(name==null && mUserId>0)
+      else if(mUserId > 0)
         mHeaderTitle.setText("");    // пришли из tops
       else
         mHeaderTitle.setText(getString(R.string.profile_header_title)); // свой профиль
@@ -340,9 +333,9 @@ public class ProfileActivity extends Activity{
     mUserId = CacheProfile.uid;
     if(CacheProfile.sex == 0)
       mMarriageFieldName.setText(getString(R.string.profile_marriage_female));
-    
-    Http.imageLoader(CacheProfile.avatar_big,mFramePhoto);
-    
+
+    SmartBitmapFactory.getInstance().setBitmapByUrl(CacheProfile.avatar_big, mFramePhoto);
+
     setOwnerAlbum(); 
     
     mFramePhoto.mOnlineState = true;
@@ -449,7 +442,7 @@ public class ProfileActivity extends Activity{
         post(new Runnable() {
           @Override
           public void run() {
-            if(mEroList.size()>0) {
+            if(mEroList != null && mEroList.size()>0) {
               mEroTitle.setVisibility(View.VISIBLE);
               mEroViewGroup.setVisibility(View.VISIBLE);
             }
@@ -457,12 +450,12 @@ public class ProfileActivity extends Activity{
             mListAdapter.notifyDataSetChanged();
             mListEroAdapter.notifyDataSetChanged();
             
-            if(mPhotoList.size() > Data.GRID_COLUMN+1) {
+            if(mPhotoList != null && mPhotoList.size() > Data.GRID_COLUMN+1) {
               mGR.setVisibility(View.VISIBLE);
               mGL.setVisibility(View.VISIBLE);
             }
 
-            if(mEroList.size() > Data.GRID_COLUMN+1) {
+            if(mEroList != null && mEroList.size() > Data.GRID_COLUMN+1) {
               mEGR.setVisibility(View.VISIBLE);
               mEGL.setVisibility(View.VISIBLE);
             }
@@ -484,7 +477,7 @@ public class ProfileActivity extends Activity{
   //---------------------------------------------------------------------------
   // чужой профиль
   private void setUserProfile(User profile) {
-    Http.imageLoader(profile.getBigLink(), mFramePhoto);
+    SmartBitmapFactory.getInstance().setBitmapByUrl(profile.getBigLink(), mFramePhoto);
 
     setUserAlbum();
     
@@ -611,7 +604,7 @@ public class ProfileActivity extends Activity{
         post(new Runnable() {
           @Override
           public void run() {
-            if(mEroList.size()>0) {
+            if(mEroList != null && mEroList.size()>0) {
               mEroTitle.setVisibility(View.VISIBLE);
               mEroViewGroup.setVisibility(View.VISIBLE);
             }
@@ -619,12 +612,12 @@ public class ProfileActivity extends Activity{
             mListAdapter.notifyDataSetChanged();
             mListEroAdapter.notifyDataSetChanged();
             
-            if(mPhotoList.size() > Data.GRID_COLUMN+1) {
+            if(mPhotoList != null && mPhotoList.size() > Data.GRID_COLUMN+1) {
               mGR.setVisibility(View.VISIBLE);
               mGL.setVisibility(View.VISIBLE);
             }
 
-            if(mEroList.size() > Data.GRID_COLUMN+1) {
+            if(mEroList != null && mEroList.size() > Data.GRID_COLUMN+1) {
               mEGR.setVisibility(View.VISIBLE);
               mEGL.setVisibility(View.VISIBLE);
             }
@@ -854,13 +847,11 @@ public class ProfileActivity extends Activity{
     public void onClick(View view) {
       switch(view.getId()) {
         case R.id.btnAddPhotoAlbum: {
-          Intent intent = new Intent();
-          intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+          Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
           startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
         } break;
         case R.id.btnAddPhotoCamera: {
-          Intent intent = new Intent();
-          intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+          Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
           startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
         } break;
       }
@@ -874,11 +865,11 @@ public class ProfileActivity extends Activity{
     public void onItemClick(AdapterView<?> parent,View arg1,int position,long arg3) {
       switch(parent.getId()) {
         case R.id.lvAlbumPreview: {        // ALBUM
-          if(position==0 && mIsOwner==true)  // нажатие на добавление фотки в своем альбоме
+          if(position==0 && mIsOwner)  // нажатие на добавление фотки в своем альбоме
             addPhoto(false);
           else {
             Intent intent = new Intent(getApplicationContext(),PhotoAlbumActivity.class);
-            if(mIsOwner==true) {
+            if(mIsOwner) {
               --position;
               Data.photoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
               Data.photoAlbum.addAll(mPhotoList);
@@ -894,11 +885,11 @@ public class ProfileActivity extends Activity{
           }
         } break;
         case R.id.lvEroAlbumPreview: {     // ERO ALBUM
-          if(position==0 && mIsOwner==true)  // нажатие на добавление эро фотки в своем альбоме
+          if(position==0 && mIsOwner)  // нажатие на добавление эро фотки в своем альбоме
             addPhoto(true);
           else {
-            Intent intent = null;
-            if(mIsOwner==true) {
+            Intent intent;
+            if(mIsOwner) {
               --position;
               Data.photoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
               Data.photoAlbum.addAll(mEroList);
@@ -909,6 +900,7 @@ public class ProfileActivity extends Activity{
               Data.photoAlbum = mEroList;
               intent = new Intent(getApplicationContext(),PhotoEroAlbumActivity.class);
             }
+
             intent.putExtra(PhotoEroAlbumActivity.INTENT_USER_ID,mUserId);
             intent.putExtra(PhotoEroAlbumActivity.INTENT_ALBUM_POS,position);
 

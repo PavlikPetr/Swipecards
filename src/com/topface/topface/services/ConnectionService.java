@@ -41,11 +41,8 @@ public class ConnectionService extends Service {
     else
       mService.send(request);
   }
-  //---------------------------------------------------------------------------
-  public static Bitmap bitmapRequest0(String url) {
-    return mService.bitmapLoader(url);
-  }
-  //---------------------------------------------------------------------------
+
+    //---------------------------------------------------------------------------
   @Override
   public IBinder onBind(Intent intent) {
     return null;
@@ -160,30 +157,4 @@ public class ConnectionService extends Service {
     Debug.log(TAG,"cc_reauth::" + rawResponse);   // RESPONSE
     return response;
   }
-  //---------------------------------------------------------------------------
-  public Bitmap bitmapLoader(String url) {
-    if(url == null) return null;
-    Bitmap bitmap = null;
-    HttpGet httpGet = new HttpGet(url);
-    try {
-      BasicHttpContext localContext = new BasicHttpContext();
-      HttpResponse response = mHttpClient.execute(httpGet,localContext);
-      final int statusCode = response.getStatusLine().getStatusCode();
-      if(statusCode != HttpStatus.SC_OK)
-        return null;
-      HttpEntity entity = response.getEntity();
-      if(entity != null) {
-        InputStream is = entity.getContent();
-        bitmap = BitmapFactory.decodeStream(new FlushedInputStream(is));
-        is.close();
-        entity.consumeContent();
-      }
-    } catch(Exception e) {
-      if(httpGet != null) httpGet.abort();
-      if(mHttpClient != null) mHttpClient.close();
-      create();
-    }
-    return bitmap;
-  }
-  //---------------------------------------------------------------------------
 }

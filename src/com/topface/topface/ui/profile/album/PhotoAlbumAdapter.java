@@ -1,12 +1,10 @@
 package com.topface.topface.ui.profile.album;
 
 import java.util.LinkedList;
+
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Device;
-import com.topface.topface.utils.Http;
-import com.topface.topface.utils.MemoryCache;
+import com.topface.topface.utils.*;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -16,123 +14,114 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 public class PhotoAlbumAdapter extends BaseAdapter {
-  private final Context mContext;
 
-    //---------------------------------------------------------------------------
-  // class ViewHolder
-  //---------------------------------------------------------------------------
-  static class ViewHolder {
-    ImageView mImageView;
-  }
-  //---------------------------------------------------------------------------
-  // Data
-  private int mPrevPosition;         // предыдущая позиция фото в альбоме
-  private int mPreRunning;           // текущая пред загружаемое фото
-  private MemoryCache mCache;        // кеш фоток
-  private LinkedList<Album> mAlbumsList;
-  private LayoutInflater mInflater;          
-  //---------------------------------------------------------------------------
-  public PhotoAlbumAdapter(Context context,LinkedList<Album> albumList) {
-    mAlbumsList = albumList;
-    mContext = context;
-    mInflater = LayoutInflater.from(mContext);
-    mCache = new MemoryCache();
-  }
-  //---------------------------------------------------------------------------
-  public int getCount() {
-    return mAlbumsList.size();
-  }
-  //---------------------------------------------------------------------------
-  public Object getItem(int position) {
-    return mAlbumsList.get(position);
-  }
-  //---------------------------------------------------------------------------
-  public long getItemId(int position) {
-    return position;
-  }
-  //---------------------------------------------------------------------------
-  public View getView(final int position,View convertView, ViewGroup parent) {
-    ViewHolder holder = null;
-    
-    if(convertView==null) {
-      holder = new ViewHolder();
-      convertView = (ViewGroup)mInflater.inflate(R.layout.item_album_gallery, null, false);
-      holder.mImageView = (ImageView)convertView.findViewById(R.id.ivPreView);
-      convertView.setTag(holder);
-    } else 
-      holder = (ViewHolder)convertView.getTag();
-    
-    Bitmap bitmap = mCache.get(position);
-    if(bitmap!=null)
-      holder.mImageView.setImageBitmap(bitmap);
-    else
-      loadingImage(position, holder.mImageView);
-    
-    int prePosition = position>=mPrevPosition ? position+1 : position-1;
-    if(prePosition>0 && position<(getCount()-1))
-      preLoading(prePosition);
-    
-    mPrevPosition = position;
 
-    return convertView;
-  }
-  //---------------------------------------------------------------------------
-//  int x = -1;
-  public void loadingImage(final int position,final ImageView view) {
-//    if(x == position)
-//      return;
-//    x = position;
-    Thread t = new Thread() {
-      @Override
-      public void run() {
-        final Bitmap bitmap = Http.bitmapLoader(
+    // class ViewHolder
+    
+    static class ViewHolder {
+        ImageView mImageView;
+    }
+
+    
+    // Data
+    private int mPrevPosition;         // предыдущая позиция фото в альбоме
+    private int mPreRunning;           // текущая пред загружаемое фото
+    private MemoryCache mCache;        // кеш фоток
+    private LinkedList<Album> mAlbumsList;
+    private LayoutInflater mInflater;
+
+    
+    public PhotoAlbumAdapter(Context context, LinkedList<Album> albumList) {
+        mAlbumsList = albumList;
+        mInflater = LayoutInflater.from(context);
+        mCache = new MemoryCache();
+    }
+
+    
+    public int getCount() {
+        return mAlbumsList.size();
+    }
+
+    
+    public Object getItem(int position) {
+        return mAlbumsList.get(position);
+    }
+
+    
+    public long getItemId(int position) {
+        return position;
+    }
+
+    
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+
+        if (convertView == null) {
+            holder = new ViewHolder();
+            convertView = mInflater.inflate(R.layout.item_album_gallery, null, false);
+            holder.mImageView = (ImageView) convertView.findViewById(R.id.ivPreView);
+            convertView.setTag(holder);
+        } else
+            holder = (ViewHolder) convertView.getTag();
+
+        Bitmap bitmap = mCache.get(position);
+        if (bitmap != null)
+            holder.mImageView.setImageBitmap(bitmap);
+        else
+            loadingImage(position, holder.mImageView);
+
+        int prePosition = position >= mPrevPosition ? position + 1 : position - 1;
+        if (prePosition > 0 && position < (getCount() - 1))
+            preLoading(prePosition);
+
+        mPrevPosition = position;
+
+        return convertView;
+    }
+
+    public void loadingImage(final int position, ImageView view) {
+        SmartBitmapFactory.getInstance().setBitmapByUrl(
                 mAlbumsList.get(position).getBigLink(),
-                Device.getCurrentDisplayWidth(mContext)
+                view,
+                new SmartBitmapFactory.BitmapHandler() {
+                    @Override
+                    public void handleBitmap(Bitmap bitmap) {
+                        if (bitmap != null && mCache != null) {
+                            mCache.put(position, bitmap);
+                        }
+                    }
+                }
         );
-        view.post(new Runnable() {
-          @Override
-          public void run() {
-            if(bitmap!=null)
-              view.setImageBitmap(bitmap);
-            else
-              view.setImageResource(R.drawable.im_photo_error);
-          }
-        });
-        if(bitmap==null || mCache==null) return;
-        mCache.put(position, bitmap);
-      }
-    };
-    t.setPriority(Thread.MAX_PRIORITY);
-    t.start();
-  }
-  //---------------------------------------------------------------------------
-  public void preLoading(final int position) {
-    if(position==mPreRunning)
-      return;
+    }
+
+    public void preLoading(final int position) {
+        if (position == mPreRunning)
+            return;
+
+        if (mCache.containsKey(position))
+            return;
+
+        Debug.log(this, "preloader:" + mPrevPosition + ":" + position);
+
+        SmartBitmapFactory.getInstance().loadBitmapByUrl(
+                mAlbumsList.get(position).getBigLink(),
+                new SmartBitmapFactory.BitmapHandler() {
+                    @Override
+                    public void handleBitmap(Bitmap bitmap) {
+                        if (bitmap != null && mCache != null) {
+                            mCache.put(position, bitmap);
+                        }
+                    }
+                }
+        );
+
+        mPreRunning = position;
+    }
+
     
-    if(mCache.containsKey(position))
-      return;
+    public void release() {
+        mCache.clear();
+        mCache = null;
+    }
     
-    Debug.log(this,"preloader:"+mPrevPosition+":"+position);
-    
-    Thread t = new Thread() {
-      @Override
-      public void run() {
-        Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink(), Device.getCurrentDisplayWidth(mContext));
-        if(bitmap==null || mCache==null) return;
-        mCache.put(position,bitmap);
-        bitmap = null;
-      }
-    };
-    t.setPriority(Thread.MIN_PRIORITY);
-    t.start();
-    
-    mPreRunning = position;
-  }
-  //---------------------------------------------------------------------------
-  public void release() {
-    mCache.clear();
-    mCache = null;
-  }
-  //---------------------------------------------------------------------------
 }

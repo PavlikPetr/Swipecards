@@ -25,7 +25,7 @@ public class ProfileThumbView extends ImageView {
   @Override
   protected void onDraw(Canvas canvas) {
     
-    if(mIsAddButton) {
+    if(!mIsAddButton) {
       int x = (Recycle.s_ProfileGalleryFrame.getWidth()-Recycle.s_People.getWidth())/2;
       int y = (Recycle.s_ProfileGalleryFrame.getHeight()-Recycle.s_People.getHeight())/2;
       canvas.drawBitmap(Recycle.s_People,x,y,null);
