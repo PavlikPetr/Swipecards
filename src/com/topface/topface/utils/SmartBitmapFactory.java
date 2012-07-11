@@ -10,7 +10,6 @@ import com.topface.topface.R;
 import com.topface.topface.utils.http.ConnectionManager;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.protocol.BasicHttpContext;
@@ -45,6 +44,7 @@ public class SmartBitmapFactory {
         Thread t = new Thread() {
             @Override
             public void run() {
+                Debug.log("Try load image: " + url);
                 int maxSize = Math.max(height, width);
                 Bitmap bitmap = getBitmapByUrl(url, maxSize);
                 //Обрезаем bitmap под размер imageView
@@ -101,7 +101,7 @@ public class SmartBitmapFactory {
                 if (clip) {
                     bitmap = clipBitmap(bitmap, width, height);
                 }
-                Debug.log("Preloading!!");
+                Debug.log("Preload image: " + url);
                 sendHandlerMessage(bitmap, handler);
 
             }
@@ -188,7 +188,7 @@ public class SmartBitmapFactory {
             BasicHttpContext localContext = new BasicHttpContext();
             HttpResponse response = ConnectionManager.getInstance().getHttpClient().execute(httpGet, localContext);
             final int statusCode = response.getStatusLine().getStatusCode();
-            if (statusCode != HttpStatus.SC_OK) {
+            if (isBadStatusCode(statusCode)) {
                 Debug.log("Bitmap loading wrong status:: " + statusCode);
                 return null;
             }
@@ -220,6 +220,16 @@ public class SmartBitmapFactory {
         }
 
         return bitmap;
+    }
+
+    /**
+     * Проверяем на то, что http код при запросе картинки не ошибка
+     *
+     * @param statusCode http код ответа
+     * @return является ли валидным код ответа
+     */
+    private boolean isBadStatusCode(int statusCode) {
+        return statusCode == 403 || statusCode == 404 || statusCode >= 500;
     }
 
     /**

@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.topface.topface.utils.Http;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -95,7 +96,7 @@ public class ConnectionManager {
             HttpEntity httpEntity = httpResponse.getEntity();
             if (httpEntity != null) {
                 InputStream is = AndroidHttpClient.getUngzippedContent(httpEntity);
-                BufferedReader r = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FlushedInputStream(is), 8192)));
+                BufferedReader r = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FlushedInputStream(is), Http.BUFFER_SIZE)));
                 StringBuilder sb = new StringBuilder();
                 for (String line = r.readLine(); line != null; line = r.readLine())
                     sb.append(line);

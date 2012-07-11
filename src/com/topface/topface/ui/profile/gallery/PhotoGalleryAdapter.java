@@ -59,8 +59,8 @@ public class PhotoGalleryAdapter extends BaseAdapter implements OnScrollListener
         }
 
         if (position == 0 && mOwner) {
+            convertView.setPadding(0, 0, 0, 20);
             ((ProfileThumbView) convertView).mIsAddButton = true;
-            ((ProfileThumbView) convertView).setPadding(0, 0, 0, 20);
             ((ProfileThumbView) convertView).setScaleType(ScaleType.CENTER_INSIDE);
             ((ProfileThumbView) convertView).setImageResource(R.drawable.profile_add_photo);
             return convertView;
