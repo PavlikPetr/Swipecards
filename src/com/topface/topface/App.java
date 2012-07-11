@@ -3,34 +3,29 @@ package com.topface.topface;
 import android.content.Context;
 import com.topface.topface.utils.Debug;
 import android.app.Application;
+import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
 
-//@ReportsCrashes(formKey="dEdjcUtaMmJqNmlSdlZmUTlwejlXUlE6MQ")
+@ReportsCrashes(formKey = "dERGQ3d6dTNjbHhlTGhfdkpfWF9EbVE6MQ")
 public class App extends Application {
-  // Constants
-  public static final String TAG = "Topface";
-  public static final boolean DEBUG = false;
-  private static Context mContext;
-  //---------------------------------------------------------------------------
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    mContext = getApplicationContext();
-    Debug.log("App","+onCreate");
-    //ACRA.init(this);
-    Data.init(getApplicationContext());
-    Recycle.init(getApplicationContext());
-  }
+    // Constants
+    public static final String TAG = "Topface";
+    public static final boolean DEBUG = true;
+    private static Context mContext;
 
-  public static Context getContext() {
-      return mContext;
-  }
-  //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
+    @Override
+    public void onCreate() {
+        ACRA.init(this);
+        super.onCreate();
+        mContext = getApplicationContext();
+        Debug.log("App", "+onCreate");
+        Data.init(getApplicationContext());
+        Recycle.init(getApplicationContext());
+    }
+
+    public static Context getContext() {
+        return mContext;
+    }
 }
 
-/*
-// status bar height
-19px for LDPI
-25px for MDPI
-38px for HDPI
-50px for XHDPI
-*/

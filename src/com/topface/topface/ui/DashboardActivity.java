@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.os.Looper;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.C2DMUtils;
@@ -48,6 +47,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     private ProfileRequest profileRequest;
     private SharedPreferences mPreferences;
     private AlphaAnimation mAlphaAnimation;
+
     // class NotificationReceiver
     private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
         @Override
