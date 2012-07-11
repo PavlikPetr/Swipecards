@@ -16,6 +16,7 @@
 
 package com.topface.topface.utils.http;
 
+import com.topface.topface.utils.Http;
 import org.acra.util.Base64;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -35,6 +36,7 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -117,11 +119,11 @@ public final class AndroidHttpClient implements HttpClient {
         //HttpConnectionParams.setTcpNoDelay(params, true);                       // САМОПАЛ
         HttpConnectionParams.setConnectionTimeout(params, SOCKET_REQUEST_TIMEOUT);
         HttpConnectionParams.setSoTimeout(params, SOCKET_OPERATION_TIMEOUT);
-        HttpConnectionParams.setSocketBufferSize(params, 8192);
+        HttpConnectionParams.setSocketBufferSize(params, Http.BUFFER_SIZE);
 
         // Don't handle redirects -- return them to the caller.  Our code
         // often wants to re-POST after a redirect, which we must do ourselves.
-        HttpClientParams.setRedirecting(params, false);
+        HttpClientParams.setRedirecting(params, true);
 
         // Use a session cache for SSL sockets
         ///SSLSessionCache sessionCache = context == null ? null : new SSLSessionCache(context);
@@ -130,7 +132,7 @@ public final class AndroidHttpClient implements HttpClient {
         HttpProtocolParams.setUserAgent(params, userAgent);
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-        //schemeRegistry.register(new Scheme("https", SSLCertificateSocketFactory.getHttpSocketFactory(SOCKET_OPERATION_TIMEOUT, sessionCache), 443));
+        schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
 
         ClientConnectionManager manager = new ThreadSafeClientConnManager(params, schemeRegistry);
         //ClientConnectionManager manager = new PoolingClientConnectionManager(schemeRegistry);

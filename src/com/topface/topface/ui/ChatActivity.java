@@ -156,8 +156,12 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                 post(new Runnable() {
                     @Override
                     public void run() {
-                        mProgressBar.setVisibility(View.GONE);
-                        mAdapter.notifyDataSetChanged();
+                        if (mProgressBar != null) {
+                            mProgressBar.setVisibility(View.GONE);
+                        }
+                        if (mAdapter != null) {
+                            mAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
             }

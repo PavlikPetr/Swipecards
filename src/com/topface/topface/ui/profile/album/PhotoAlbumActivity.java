@@ -64,7 +64,9 @@ public class PhotoAlbumActivity extends Activity {
     }
     
     // Gallery Adapter
-    mGalleryAdapter = new PhotoAlbumAdapter(getApplicationContext(),Data.photoAlbum);
+    mGalleryAdapter = Data.photoAlbum != null ?
+            new PhotoAlbumAdapter(getApplicationContext(), Data.photoAlbum) :
+            null;
 
     // Gallery
     mGallery = (DatingAlbum)findViewById(R.id.galleryAlbum);
@@ -107,9 +109,11 @@ public class PhotoAlbumActivity extends Activity {
   @Override
   protected void onDestroy() {
     mGallery = null;
-    mGalleryAdapter.release();
-    mGalleryAdapter = null;
-    
+    if (mGalleryAdapter != null) {
+        mGalleryAdapter.release();
+        mGalleryAdapter = null;
+    }
+
     System.gc();
     
     Debug.log(this,"-onDestroy");

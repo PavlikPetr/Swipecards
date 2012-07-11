@@ -5,17 +5,15 @@ import java.util.LinkedList;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
-import com.topface.topface.utils.Device;
-import com.topface.topface.utils.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView.ScaleType;
+import com.topface.topface.utils.SmartBitmapFactory;
 
 public class PhotoGalleryAdapter extends BaseAdapter implements OnScrollListener {
     // Data
@@ -31,15 +29,12 @@ public class PhotoGalleryAdapter extends BaseAdapter implements OnScrollListener
         mOwner = bOwner;
         mCache = new HashMap<Integer, Bitmap>();
         mAlbumList = new LinkedList<Album>();
-        //mThreadsPool = Executors.newFixedThreadPool(2);
     }
 
     public void setDataList(LinkedList<Album> dataList) {
         mAlbumList = dataList;
         mCache.clear();
     }
-
-    ;
 
     @Override
     public int getCount() {
@@ -63,14 +58,15 @@ public class PhotoGalleryAdapter extends BaseAdapter implements OnScrollListener
             ((ProfileThumbView) convertView).setScaleType(ScaleType.CENTER_CROP);
         }
 
-        if (position == 0 && mOwner == true) {
+        if (position == 0 && mOwner) {
+            convertView.setPadding(0, 0, 0, 20);
             ((ProfileThumbView) convertView).mIsAddButton = true;
-            ((ProfileThumbView) convertView).setPadding(0, 0, 0, 20);
             ((ProfileThumbView) convertView).setScaleType(ScaleType.CENTER_INSIDE);
             ((ProfileThumbView) convertView).setImageResource(R.drawable.profile_add_photo);
             return convertView;
-        } else
+        } else {
             ((ProfileThumbView) convertView).mIsAddButton = false;
+        }
 
         Bitmap bitmap = mCache.get(position);
         if (bitmap != null)
@@ -85,27 +81,20 @@ public class PhotoGalleryAdapter extends BaseAdapter implements OnScrollListener
 
     private void loadingImage(final int position, final ProfileThumbView view) {
         final Album album = (Album) getItem(position);
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (mBusy) return;
-                Bitmap bitmap = Http.bitmapLoader(album.getSmallLink());
-                if (bitmap == null || mCache == null) return;
-                mCache.put(position, bitmap);
-                imagePost(view, bitmap);
-                bitmap = null;
-            }
-        });
-        t.start();
-    }
-
-    private void imagePost(final ImageView imageView, final Bitmap bitmap) {
-        imageView.post(new Runnable() {
-            @Override
-            public void run() {
-                imageView.setImageBitmap(bitmap);
-            }
-        });
+        if (!mBusy) {
+            SmartBitmapFactory.getInstance().setBitmapByUrl(
+                    album.getSmallLink(),
+                    view,
+                    new SmartBitmapFactory.BitmapHandler() {
+                        @Override
+                        public void handleBitmap(Bitmap bitmap) {
+                            if (bitmap != null && mCache != null) {
+                                mCache.put(position, bitmap);
+                            }
+                        }
+                    }
+            );
+        }
     }
 
     public void release() {
