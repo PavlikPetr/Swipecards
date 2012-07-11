@@ -10,7 +10,7 @@ import org.acra.annotation.ReportsCrashes;
 public class App extends Application {
     // Constants
     public static final String TAG = "Topface";
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     private static Context mContext;
 
     //---------------------------------------------------------------------------
