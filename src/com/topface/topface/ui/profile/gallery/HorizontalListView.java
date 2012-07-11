@@ -212,6 +212,8 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
   }
   //---------------------------------------------------------------------------
   private void fillListRight(int rightEdge, final int dx) {
+    if (mAdapter == null)
+        return;
     while(rightEdge + dx < getWidth() && mRightViewIndex < mAdapter.getCount()) {
       
       View child = mAdapter.getView(mRightViewIndex, mRemovedViewQueue.poll(), this);

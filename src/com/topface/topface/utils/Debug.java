@@ -17,7 +17,9 @@ public class Debug {
     }
 
     public static void log(String msg) {
-        Log.i(App.TAG, msg);
+        if (App.DEBUG) {
+            Log.i(App.TAG, msg);
+        }
     }
 
     public static void error(String msg, Exception e) {
