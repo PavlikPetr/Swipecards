@@ -3,6 +3,8 @@ package com.topface.topface.ui.adapters;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
+
+import com.google.android.maps.MapView;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
@@ -27,6 +29,7 @@ public class ChatListAdapter extends BaseAdapter {
         TextView mMessage;
         TextView mDate;
         ImageView mGift;
+        MapView mMap;
         View mInfoGroup;
     }
     //---------------------------------------------------------------------------
@@ -44,7 +47,7 @@ public class ChatListAdapter extends BaseAdapter {
     private static final int T_FRIEND_PHOTO = 2;
     private static final int T_FRIEND_EXT = 3;
     private static final int T_DATE = 4;
-    private static final int T_COUNT = 5;
+    private static final int T_COUNT = 5;    
     //---------------------------------------------------------------------------
     public ChatListAdapter(Context context,int userId,LinkedList<History> dataList) {
         mContext = context;
@@ -110,6 +113,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.mDate = (TextView)convertView.findViewById(R.id.chat_date);
                     holder.mInfoGroup = convertView.findViewById(R.id.user_info);
                     holder.mGift = (ImageView)convertView.findViewById(R.id.chat_gift);
+                    holder.mMap = (MapView)convertView.findViewById(R.id.chat_map);
                 } break;
                 case T_USER_PHOTO: {
                     convertView = mInflater.inflate(R.layout.chat_user, null, false);

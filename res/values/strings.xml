@@ -48,6 +48,11 @@
     <string name="chat_sexuality_in">Sexuality rated.</string>
     <string name="chat_sexuality_out">You have your sexuality rated.</string> 
     <string name="chat_money_in">You got a coin</string>
+      <string name="chat_dialog_btn_gps_settings">GPS Settings</string>
+      <string name="chat_dialog_gps">GPS is disabled! Would you like to enable it?</string>    
+      <string name="chat_dialog_btn_gps_cancel">Cancel</string>
+      <string name="chat_dialog_agps">GPS is disabled! Would you like to enable it or use Network to locate?</string>      
+      <string name="chat_dialog_btn_agps_continue">Use Network</string>
     
     <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Mutual</string>
@@ -165,12 +170,17 @@
     <string name="pull_to_refresh_refreshing_label">Loading</string>
     <string name="pull_to_refresh_tap_label">Tap to refresh</string>
     
-    <!-- Gifts Dialog -->
+    <!-- Gifts Activity -->
     <string name="gifts_romantic">Romantic</string>
     <string name="gifts_friends">Friends</string>
     <string name="gifts">Choose gift</string>
     <string name="gifts_present">Present</string>
     <string name="gifts_title">Select a gift</string>
     
+    <!-- Map Activity -->
+    <string name="map_search">Search</string>
+    <string name="map_location_progress">Locating</string>
+    <string name="map_confirm">Send</string>
+    <string name="map_address">Enter address</string>    
   
 </resources>

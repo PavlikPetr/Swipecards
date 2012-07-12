@@ -48,6 +48,12 @@
 	  <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>
 	  <string name="chat_sexuality_out">Вы оценили сексуальность.</string>
 	  <string name="chat_money_in">Вам начислена монета</string>
+	  <string name="chat_dialog_gps">GPS выключен! Включить?</string>    
+      <string name="chat_dialog_btn_gps_settings">Настройки</string>
+      <string name="chat_dialog_btn_gps_cancel">Отмена</string>
+      <string name="chat_dialog_agps">GPS выключен! Включить или использовать Интернет соединения для определния местоположения?</string>
+      <string name="chat_dialog_btn_agps_settings">Настройки</string>
+      <string name="chat_dialog_btn_agps_continue">Использовать сеть</string>
 	  
 	  <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Взаимно</string>
@@ -165,10 +171,17 @@
     <string name="pull_to_refresh_refreshing_label">Обновление</string>
     <string name="pull_to_refresh_tap_label">Нажмите</string>
 
-    <!-- Gifts Dialog -->
+    <!-- Gifts Activity -->
     <string name="gifts_romantic">Романтические</string>
     <string name="gifts_friends">Дружеские</string>
     <string name="gifts">Выберите подарок</string>
     <string name="gifts_present">Поздравительные</string>
-    <string name="gifts_title">Выберите подарок</string>    
+    <string name="gifts_title">Выберите подарок</string>
+    
+    <!-- Map Activity -->
+    <string name="map_search">Поиск</string>
+    <string name="map_location_progress">Определяю местоположение</string>
+    <string name="map_confirm">Отправить</string>
+    <string name="map_address">Введите адрес</string>
+    
 </resources>

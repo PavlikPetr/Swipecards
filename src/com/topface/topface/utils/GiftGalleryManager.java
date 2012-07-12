@@ -7,13 +7,10 @@ import java.util.concurrent.Executors;
 import com.topface.topface.R;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.data.Gift;
-import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.utils.CacheManager;
-import com.topface.topface.utils.Device;
 import com.topface.topface.utils.MemoryCache;
 import com.topface.topface.utils.StorageCache;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.AbsListView;
@@ -24,30 +21,6 @@ import android.widget.ImageView;
  *  РњРµРЅРµРґР¶РµСЂ РёР·РѕР±СЂР°Р¶РµРЅРёР№, Р·Р°РіСЂСѓР·Р°РµС‚ Рё РєРµС€РёСЂСѓРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
  */
 public class GiftGalleryManager<T extends AbstractData> implements OnScrollListener {
-//    class Queue { // РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ
-//        // Data
-//        private HashMap<Integer, Bitmap> mQueue = new HashMap<Integer, Bitmap>(20);
-//        // Methods
-//        public Bitmap get(int key) {
-//            return mQueue.get(key);
-//        }
-//        public void put(int key,Bitmap value) {
-//            mQueue.put(key, value);
-//        }
-//        public void clear() {
-//            Debug.log(this, "memory cache clearing");
-//            int size = mQueue.size();
-//            for (int i = 0; i < size; i++) {
-//                Bitmap bitmap = mQueue.get(i);
-//                if (bitmap != null) {
-//                    bitmap.recycle();
-//                    mQueue.put(i, null); // С…Р·
-//                }
-//            }
-//            mQueue.clear();
-//        }
-//    }
-    //---------------------------------------------------------------------------
     // Data
     private LinkedList<T> mDataList;
     private ExecutorService mWorker;
@@ -93,12 +66,6 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
     public void getImage(final int position,final ImageView imageView) {
         Bitmap bitmap = mMemoryCache.get(position);
 
-//        if (bitmap != null) {
-//            if (bitmap.isRecycled()) {
-//                mMemoryCache.put(position, null);
-//            }
-//        }
-        
         if (bitmap != null)
             imageView.setImageBitmap(bitmap);
         else {

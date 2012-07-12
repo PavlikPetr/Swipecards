@@ -11,7 +11,6 @@ import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.utils.GiftGalleryManager;
-import com.topface.topface.utils.PixelsUtils;
 
 import android.app.Activity;
 import android.app.LocalActivityManager;

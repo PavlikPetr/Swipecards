@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <com.google.android.maps.MapView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mapView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:apiKey="0esBRa6fF4TuK2GrbWw6wRGFijK_puzqgunUVDw"
+        android:background="#FFFFFF"
+        android:clickable="true" />
+    <!-- DEBUGv kirussell: 0esBRa6fF4TuK2GrbWw6wRGFijK_puzqgunUVDw -->
+    <!-- PRODUCTION: 0-JKy7KX15mHPhyYQ4lBv_GhepNzV5s0ikPPyg -->    
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_footer_send"
+        android:orientation="horizontal"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"         
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/mapBtnMyLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/chat_add_selector" />
+
+        <AutoCompleteTextView
+            android:id="@+id/mapAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"            
+            android:layout_weight="1"
+            android:background="@drawable/chat_editbox"
+            android:imeOptions="actionSend"
+            android:inputType="text"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:singleLine="true"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" 
+            android:hint="@string/map_address"/>
+        
+        <Button
+            android:id="@+id/mapBtnConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"            
+            android:text="@string/map_confirm" 
+            android:background="@drawable/chat_send_selector"/>
+    </LinearLayout>    
+
+</RelativeLayout>

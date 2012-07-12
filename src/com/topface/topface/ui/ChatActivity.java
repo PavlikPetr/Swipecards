@@ -1,9 +1,10 @@
 package com.topface.topface.ui;
 
 import java.util.LinkedList;
+
+import com.google.android.maps.MapActivity;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.Gift;
 import com.topface.topface.Static;
 import com.topface.topface.data.History;
 import com.topface.topface.data.SendGiftAnswer;
@@ -13,20 +14,24 @@ import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.ui.adapters.ChatListAdapter;
-import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.GiftGalleryManager;
+import com.topface.topface.utils.GeoLocationManager;
+import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.Http;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -36,7 +41,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ChatActivity extends Activity implements View.OnClickListener {
+public class ChatActivity extends MapActivity implements View.OnClickListener, LocationListener {
     // Data
     private int mUserId;
     private boolean mProfileInvoke;
@@ -55,6 +60,12 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
+    private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
+    private static final int DIALOG_GPS_ENABLE_WITH_AGPS_ID = 2;
+    
+    //Managers
+    private GeoLocationManager mGeoManager = null;
+    
     boolean bibi;
     //---------------------------------------------------------------------------
     @Override
@@ -179,11 +190,13 @@ public class ChatActivity extends Activity implements View.OnClickListener {
             case R.id.btnChatGift: {
                 startActivityForResult(new Intent(this, GiftsActivity.class), GiftsActivity.INTENT_REQUEST_GIFT);
             } break;
-            case R.id.btnChatPlace: {
-                Toast.makeText(ChatActivity.this, "Place", Toast.LENGTH_SHORT).show();
+            case R.id.btnChatPlace: {            	
+            	sendUserPlace();
+//                Toast.makeText(ChatActivity.this, "Place", Toast.LENGTH_SHORT).show();
             } break;
             case R.id.btnChatMap: {
-                Toast.makeText(ChatActivity.this, "Map", Toast.LENGTH_SHORT).show();
+            	startActivityForResult(new Intent(this, GeoMapActivity.class), GeoMapActivity.INTENT_REQUEST_GEO);            	
+//                Toast.makeText(ChatActivity.this, "Map", Toast.LENGTH_SHORT).show();
             } break;
             default: {
                 if (mProfileInvoke) {
@@ -257,53 +270,176 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            Bundle extras = data.getExtras();
-            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);            
-            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
-            Debug.log(this, "id:" + id + " url:" + url);
-            SendGiftRequest sendGift = new SendGiftRequest(this);
-            sendGift.giftId = id;
-            sendGift.userId = mUserId;
-            mSwapControl.snapToScreen(0);
-            sendGift.callback(new ApiHandler() {
-                @Override
-                public void success(ApiResponse response) throws NullPointerException {
-                    SendGiftAnswer answer = SendGiftAnswer.parse(response);
-                    CacheProfile.power = answer.power;
-                    CacheProfile.money = answer.money;
-                    Debug.log(ChatActivity.this, "power:" + answer.power + " money:" + answer.money);
-                    post(new Runnable() {
-                        @Override
-                        public void run() {              
-                        	History history = new History();
-                            history.code = 0;
-                            history.gift = id;
-                            history.owner_id = CacheProfile.uid;
-                            history.created = System.currentTimeMillis();
-                            history.text = Static.EMPTY;
-                            history.type = History.GIFT;
-                            history.link = url;
-                            mAdapter.addSentMessage(history);
-                            mAdapter.notifyDataSetChanged();
-                            mProgressBar.setVisibility(View.GONE);
-                        }
-                    });
-                }
+        if (resultCode == Activity.RESULT_OK) {
+        	if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+	            mProgressBar.setVisibility(View.VISIBLE);
+	            Bundle extras = data.getExtras();
+	            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);            
+	            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+	            Debug.log(this, "id:" + id + " url:" + url);
+	            SendGiftRequest sendGift = new SendGiftRequest(this);
+	            sendGift.giftId = id;
+	            sendGift.userId = mUserId;
+//	            if (mIsAddPanelOpened)
+//                    mSwapControl.snapToScreen(0);                
+//                mIsAddPanelOpened = false;
                 
-                @Override
-                public void fail(int codeError,final ApiResponse response) throws NullPointerException {
-                    post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(response.code==ApiResponse.PAYMENT)
-                                startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
-                        }
-                    });
-                }
-            }).exec();
+	            sendGift.callback(new ApiHandler() {
+	                @Override
+	                public void success(ApiResponse response) throws NullPointerException {
+	                    SendGiftAnswer answer = SendGiftAnswer.parse(response);
+	                    CacheProfile.power = answer.power;
+	                    CacheProfile.money = answer.money;
+	                    Debug.log(ChatActivity.this, "power:" + answer.power + " money:" + answer.money);
+	                    post(new Runnable() {
+	                        @Override
+	                        public void run() {              
+	                        	History history = new History();
+	                            history.code = 0;
+	                            history.gift = id;
+	                            history.owner_id = CacheProfile.uid;
+	                            history.created = System.currentTimeMillis();
+	                            history.text = Static.EMPTY;
+	                            history.type = History.GIFT;
+	                            history.link = url;
+	                            mAdapter.addSentMessage(history);
+	                            mAdapter.notifyDataSetChanged();
+	                            mProgressBar.setVisibility(View.GONE);
+	                        }
+	                    });
+	                }
+	                
+	                @Override
+	                public void fail(int codeError,final ApiResponse response) throws NullPointerException {
+	                    post(new Runnable() {
+	                        @Override
+	                        public void run() {
+	                            if(response.code==ApiResponse.PAYMENT)
+	                                startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
+	                        }
+	                    });
+	                }
+	            }).exec();
+        	} else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
+        		Bundle extras = data.getExtras();
+        		double latitude = extras.getDouble(GeoMapActivity.INTENT_LATITUDE_ID);
+        		double longitude = extras.getDouble(GeoMapActivity.INTENT_LONGITUDE_ID);
+        		Debug.log(this, latitude + " / " + longitude);
+        		History history = new History();
+                history.code = 0;
+                history.gift = 0;
+                history.owner_id = CacheProfile.uid;
+                history.created = System.currentTimeMillis();
+                if (mGeoManager == null)
+                	mGeoManager = new GeoLocationManager(this);
+                history.text = latitude + " / " + longitude + ":" + mGeoManager.getLocationAddress(GeoLocationManager.toGeoPoint(latitude,longitude));
+                history.type = History.MESSAGE;
+                mAdapter.addSentMessage(history);
+                mAdapter.notifyDataSetChanged();
+                mEditBox.getText().clear();
+//                if (mIsAddPanelOpened)
+//                    mSwapControl.snapToScreen(0);                
+//                mIsAddPanelOpened = false;
+//                mProgressBar.setVisibility(View.GONE);                
+        	}
         }
     }
-    //---------------------------------------------------------------------------    
+    //---------------------------------------------------------------------------
+    private void sendUserPlace() {   
+    	if (mGeoManager == null)
+    		mGeoManager = new GeoLocationManager(this);
+    	if(mGeoManager.availableLocationProvider() == LocationProviderType.GPS) {
+    		mGeoManager.setLocationListener(LocationProviderType.GPS, this);
+    	} else if (mGeoManager.availableLocationProvider() == LocationProviderType.AGPS){
+    		showDialog(DIALOG_GPS_ENABLE_WITH_AGPS_ID);    		
+    	} else {
+    		showDialog(DIALOG_GPS_ENABLE_NO_AGPS_ID);	
+    	}
+    }
+    //---------------------------------------------------------------------------
+	@Override
+	public void onLocationChanged(Location location) {
+		Debug.log(this, location.getLatitude() + " / " + location.getLongitude());
+		
+		History history = new History();
+        history.code = 0;
+        history.gift = 0;
+        history.owner_id = CacheProfile.uid;
+        history.created = System.currentTimeMillis();
+        history.text = location.getLatitude() + " / " + location.getLongitude() + 
+        				":" + mGeoManager.getLocationAddress(GeoLocationManager.toGeoPoint(location));
+        history.type = History.MESSAGE;
+        mAdapter.addSentMessage(history);
+        mAdapter.notifyDataSetChanged();
+        mEditBox.getText().clear();
+        mProgressBar.setVisibility(View.GONE);
+        
+        mGeoManager.removeLocationListener(this);
+	}
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub		
+	}
+	//---------------------------------------------------------------------------
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		if (id == DIALOG_GPS_ENABLE_NO_AGPS_ID) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);  
+			builder.setMessage(this.getText(R.string.chat_dialog_gps))  
+			     .setCancelable(false)  
+			     .setPositiveButton(this.getText(R.string.chat_dialog_btn_gps_settings),  
+			          new DialogInterface.OnClickListener(){  
+			          public void onClick(DialogInterface dialog, int id){  
+			        	  Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);  
+			              startActivity(gpsOptionsIntent);  
+			          }  
+			     });  
+			     builder.setNegativeButton(this.getText(R.string.chat_dialog_btn_gps_cancel),
+			          new DialogInterface.OnClickListener(){  
+			          public void onClick(DialogInterface dialog, int id){  
+			               dialog.cancel();
+			          }  
+			     });  
+			AlertDialog alert = builder.create();  
+			return alert;
+		} else if(id == DIALOG_GPS_ENABLE_WITH_AGPS_ID) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);  
+			builder.setMessage(this.getText(R.string.chat_dialog_agps))  
+			     .setCancelable(false)  
+			     .setPositiveButton(this.getText(R.string.chat_dialog_btn_gps_settings),  
+			          new DialogInterface.OnClickListener(){  
+			          public void onClick(DialogInterface dialog, int id){  
+			        	  Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);  
+			              startActivity(gpsOptionsIntent);  
+			          }  
+			     });  
+			     builder.setNegativeButton(this.getText(R.string.chat_dialog_btn_agps_continue),
+			          new DialogInterface.OnClickListener(){  
+			          public void onClick(DialogInterface dialog, int id){  
+			               dialog.cancel();
+			               mGeoManager.setLocationListener(LocationProviderType.AGPS, ChatActivity.this);
+			          }  
+			     });  
+			AlertDialog alert = builder.create();  
+			return alert;
+		} else {
+			return super.onCreateDialog(id);
+		}
+	}
+	
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

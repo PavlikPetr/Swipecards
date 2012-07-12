@@ -23,6 +23,7 @@ public class History extends AbstractData {
     public static final int MESSAGE = 3; // Текстовое сообщение
     public static final int MESSAGE_WISH = 4; // Тайное желание
     public static final int MESSAGE_SEXUALITY = 5; // Оценка сексуальности
+    public static final int MAP = 6; // Карта 
     //---------------------------------------------------------------------------
     public static LinkedList<History> parse(ApiResponse response) {
         LinkedList<History> historyList = new LinkedList<History>();
