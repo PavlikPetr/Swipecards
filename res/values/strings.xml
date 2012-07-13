@@ -53,8 +53,7 @@
       <string name="chat_dialog_btn_gps_settings">GPS Settings</string>
       <string name="chat_dialog_gps">GPS is disabled! Would you like to enable it?</string>    
       <string name="chat_dialog_btn_gps_cancel">Cancel</string>
-      <string name="chat_dialog_agps">GPS is disabled! Would you like to enable it or use Network to locate?</string>      
-      <string name="chat_dialog_btn_agps_continue">Use Network</string>
+      <string name="chat_toast_fail_location">Unable to determine the current location</string>
     
     <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Mutual</string>

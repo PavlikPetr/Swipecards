@@ -100,6 +100,24 @@ public class GeoLocationManager {
 		return LocationProviderType.NONE;
     }
 	
+	public boolean availableLocationProvider(LocationProviderType type) {
+        String provider = null;
+
+        switch (type) {
+		case GPS:
+			provider = LocationManager.GPS_PROVIDER;
+			break;
+		case AGPS:
+			provider = LocationManager.NETWORK_PROVIDER;
+			break;
+		default:
+			provider = LocationManager.PASSIVE_PROVIDER;
+			break;
+		}
+        
+        return mLocationManager.isProviderEnabled(provider);
+    }
+	
  	public boolean isAvailable(LocationProviderType type) {
  		String internalType = LocationManager.PASSIVE_PROVIDER;
  		switch (type) {

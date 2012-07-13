@@ -13,10 +13,12 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -27,6 +29,7 @@ import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -103,6 +106,20 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 			mAddressView.setOnClickListener(this);
 //			mAddressView.setThreshold(THRESHOLD);
 			
+//			TextView.OnEditorActionListener listener = new TextView.OnEditorActionListener(){
+//
+//				@Override
+//				public boolean onEditorAction(TextView arg0, int actionId,
+//						KeyEvent event) {
+//					if (actionId == EditorInfo.IME_ACTION_DONE && event.getAction() == KeyEvent.ACTION_DOWN) { 
+//						hideKeyboard();
+//					}
+//					return true;
+//				}
+//				
+//			};
+//			mAddressView.setOnEditorActionListener(listener);
+			
 			onCurrentLocationRequest();
 			
 			((Button)findViewById(R.id.mapBtnConfirm)).setOnClickListener(new OnClickListener() {
@@ -135,6 +152,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 	}
 	
 	private void onCurrentLocationRequest() {
+		mLocationDetected = false;
 		LocationProviderType providerType = mGeoLocationManager.availableLocationProvider(); 
 		switch (providerType) {
 		case GPS:
@@ -165,8 +183,9 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 						mGeoLocationManager.removeLocationListener(GeoMapActivity.this);
 						if (mGeoLocationManager.isAvailable(LocationProviderType.AGPS)) 
 								mGeoLocationManager.setLocationListener(LocationProviderType.AGPS, GeoMapActivity.this);
-						else
+						else {
 							mProgressDialog.dismiss();
+						}
 					}
 				}
 			}

@@ -14,7 +14,7 @@ import com.topface.topface.Static;
 
 public class OSM {	
 	
-	public static final boolean OSMEnabled = true;
+	public static final boolean OSMEnabled = false;
 	
 	public static final String OSM_URL = "http://nominatim.openstreetmap.org";
 	public static final String OSM_SEARCH_SUB = "search";
