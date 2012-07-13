@@ -247,7 +247,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 			GeoPoint point = GeoLocationManager.toGeoPoint(mAddressList.get(arg2).getLatitude(),mAddressList.get(arg2).getLongitude());
 			mGeoLocationManager.setOverlayItem(this, mMapView, point, MAP_INITIAL_ZOOM);
 			mMapView.getController().animateTo(point);
-			//hideKeyboard();
+			hideKeyboard();
 		}
 	}
 
