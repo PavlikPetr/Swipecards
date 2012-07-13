@@ -1,5 +1,6 @@
 package com.topface.topface;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import com.facebook.android.Facebook;
 import com.topface.topface.data.Album;
@@ -24,6 +25,7 @@ public class Data {
     public static LinkedList<Album> photoAlbum;
     public static int GRID_COLUMN;
     public static int screen_width;
+    public static long midnight;
     // Data cache
     public static LinkedList<Top> topsList;
     public static LinkedList<Dialog> dialogList;
@@ -68,6 +70,13 @@ public class Data {
                 GRID_COLUMN = 4;
                 break;
         }
+        
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        
+        midnight = cal.getTimeInMillis();
     }
     //---------------------------------------------------------------------------
     public static void release() {

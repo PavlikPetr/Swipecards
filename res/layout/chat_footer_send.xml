@@ -22,14 +22,16 @@
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
+        android:singleLine="false"
         android:textSize="18sp"
-        android:singleLine="true"
+        android:maxLines="3"
         android:imeOptions="actionSend"
         android:inputType="text"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/chat_editbox" />
+        android:textColor="#000000"
+        android:background="@drawable/chat_editbox_selector" />
        
   </LinearLayout>
 </merge>

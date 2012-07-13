@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface" 
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content" >
+      
+        <LinearLayout
+	          android:layout_toLeftOf="@id/left_icon"
+	          android:layout_width="wrap_content" 
+	          android:layout_height="wrap_content"
+	          android:orientation="vertical"
+	          android:background="@drawable/chat_item_map_bg" >
+          
+	            <ImageView
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:background="@drawable/chat_item_map"  />
+	              
+	            <TextView
+	                android:id="@+id/tvChatMapAddress"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content" />
+                
+       </LinearLayout>
+    
+    <!-- avatar -->
+    <com.topface.topface.ui.views.RoundedImageView
+            topface:frame="chat"
+            android:id="@+id/left_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="3dp"
+            android:visibility="visible" />
+
+       
+</RelativeLayout>
+

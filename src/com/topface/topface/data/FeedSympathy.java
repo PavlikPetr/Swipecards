@@ -39,7 +39,7 @@ public class FeedSympathy extends AbstractData {
                     symphaty.age = item.optInt("age");
                     symphaty.online = item.optBoolean("online");
                     symphaty.unread = item.optBoolean("unread");
-                    symphaty.created = item.optLong("created");
+                    symphaty.created = item.optLong("created") * 1000;
 
                     // city  
                     JSONObject city = item.getJSONObject("city");

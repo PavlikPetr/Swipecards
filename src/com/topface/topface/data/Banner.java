@@ -6,6 +6,7 @@ import com.topface.topface.utils.Debug;
 
 public class Banner extends AbstractData {
     // Data
+    public String name; // - наименование баннера 
     public String url; // - URL адрес изображения баннера
     public String action; // - идентификатор возможного действия с баннером. Возможные значения: URL, PAGE
     public String parameter; // - дополнительный параметр действия
@@ -18,9 +19,10 @@ public class Banner extends AbstractData {
 
         try {
             JSONObject item = response.mJSONResult;
-            banner.url = item.optString("url", "");
-            banner.action = item.optString("action", "");
-            banner.parameter = item.optString("parameter", "");
+            banner.name = item.optString("name");
+            banner.url = item.optString("url");
+            banner.action = item.optString("action");
+            banner.parameter = item.optString("parameter");
         } catch(Exception e) {
             Debug.log("Banner.class", "Wrong response parsing: " + e);
         }

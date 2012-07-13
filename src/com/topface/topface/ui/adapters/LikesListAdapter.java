@@ -19,7 +19,7 @@ public class LikesListAdapter extends BaseAdapter {
     // class ViewHolder
     //---------------------------------------------------------------------------
     static class ViewHolder {
-        public RoundedImageView mAvatar;
+        public ImageView mAvatar;
         public TextView mName;
         public TextView mCity;
         public TextView mTime;
@@ -79,7 +79,7 @@ public class LikesListAdapter extends BaseAdapter {
 
             convertView = mInflater.inflate(R.layout.item_likes_gallery, null, false);
 
-            holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.ivAvatar);
+            holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
             holder.mName = (TextView)convertView.findViewById(R.id.tvName);
             holder.mCity = (TextView)convertView.findViewById(R.id.tvCity);
             holder.mTime = (TextView)convertView.findViewById(R.id.tvTime);

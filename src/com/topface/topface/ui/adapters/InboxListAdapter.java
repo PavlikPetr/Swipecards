@@ -20,7 +20,7 @@ public class InboxListAdapter extends BaseAdapter {
     // class ViewHolder
     //---------------------------------------------------------------------------
     static class ViewHolder {
-        public RoundedImageView mAvatar;
+        public ImageView mAvatar;
         public TextView mName;
         public TextView mCity;
         public TextView mText;
@@ -84,7 +84,7 @@ public class InboxListAdapter extends BaseAdapter {
 
             convertView = mInflater.inflate(R.layout.item_inbox_gallery, null, false);
 
-            holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.ivAvatar);
+            holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
             holder.mName = (TextView)convertView.findViewById(R.id.tvName);
             holder.mCity = (TextView)convertView.findViewById(R.id.tvCity);
             holder.mText = (TextView)convertView.findViewById(R.id.tvText);
@@ -148,7 +148,7 @@ public class InboxListAdapter extends BaseAdapter {
         else
             holder.mOnline.setVisibility(View.INVISIBLE);
 
-        Utils.formatTime(holder.mTime, inbox.created);
+        //holder.mTime.setText(Utils.formatTime(mContext, inbox.created));
         //holder.mArrow.setImageResource(R.drawable.im_item_arrow); // ??? зачем
 
         return convertView;

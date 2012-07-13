@@ -1,7 +1,9 @@
 package com.topface.topface.ui.adapters;
 
+import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.data.Dialog;
+import com.topface.topface.data.History;
 import com.topface.topface.ui.views.RoundedImageView;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
@@ -19,7 +21,7 @@ public class DialogListAdapter extends BaseAdapter {
     // class ViewHolder
     //---------------------------------------------------------------------------
     static class ViewHolder {
-        public RoundedImageView mAvatar;
+        public ImageView mAvatar;
         public TextView mName;
         public TextView mCity;
         public TextView mText;
@@ -29,6 +31,7 @@ public class DialogListAdapter extends BaseAdapter {
     }
     //---------------------------------------------------------------------------
     // Data
+    private Context mContext;
     private LayoutInflater mInflater;
     private AvatarManager<Dialog> mAvatarManager;
     private int mOwnerCityID;
@@ -38,7 +41,8 @@ public class DialogListAdapter extends BaseAdapter {
     private static final int T_COUNT = 2;
     //private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
     //---------------------------------------------------------------------------
-    public DialogListAdapter(Context context, AvatarManager<Dialog> avatarManager) {
+    public DialogListAdapter(Context context,AvatarManager<Dialog> avatarManager) {
+        mContext = context;
         mAvatarManager = avatarManager;
         //mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mInflater = LayoutInflater.from(context);
@@ -81,7 +85,7 @@ public class DialogListAdapter extends BaseAdapter {
 
             convertView = mInflater.inflate(R.layout.item_inbox_gallery, null, false);
 
-            holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.ivAvatar);
+            holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
             holder.mName = (TextView)convertView.findViewById(R.id.tvName);
             holder.mCity = (TextView)convertView.findViewById(R.id.tvCity);
             holder.mText = (TextView)convertView.findViewById(R.id.tvText);
@@ -100,7 +104,7 @@ public class DialogListAdapter extends BaseAdapter {
         holder.mName.setText(dialog.first_name + ", " + dialog.age);
         holder.mCity.setText("  " + dialog.city_name);
         holder.mText.setText(dialog.text);
-        /*switch(type) {
+        /* switch(type) {
          * case T_ALL:
          * holder.mCity.setTextColor(Color.parseColor("#FFFFFF"));
          * //(R.color.color_item_all);
@@ -110,39 +114,37 @@ public class DialogListAdapter extends BaseAdapter {
          * //(R.color.color_item_city);
          * break;
          * } */
-        /*// text
-         * switch(dialog.type) {
-         * case FeedInbox.DEFAULT:
-         * holder.mText.setText(dialog.text);
-         * break;
-         * case FeedInbox.PHOTO:
-         * if(dialog.code>100500) {
-         * holder.mText.setText(mContext.getString(R.string.chat_money_in) +
-         * /*" " + msg.code +* / ".");
-         * break;
-         * }
-         * holder.mText.setText(mContext.getString(R.string.chat_rate_in) + " "
-         * + dialog.code + ".");
-         * break;
-         * case FeedInbox.GIFT:
-         * holder.mText.setText(mContext.getString(R.string.chat_gift_in));
-         * break;
-         * case FeedInbox.MESSAGE:
-         * holder.mText.setText(inbox.text);
-         * break;
-         * case FeedInbox.MESSAGE_WISH:
-         * holder.mText.setText(mContext.getString(R.string.chat_wish_in));
-         * break;
-         * case FeedInbox.MESSAGE_SEXUALITY:
-         * holder.mText.setText(mContext.getString(R.string.chat_sexuality_in));
-         * break;
-         * } */
+
+        // text
+        switch (dialog.type) {
+            case Dialog.DEFAULT:
+                holder.mText.setText(dialog.text);
+                break;
+            case Dialog.GIFT:
+                if(dialog.target==Dialog.TARGET_IN)
+                    holder.mText.setText(mContext.getString(R.string.chat_gift_in));
+                else
+                    holder.mText.setText(mContext.getString(R.string.chat_gift_out));
+                break;
+            case Dialog.MESSAGE:
+                holder.mText.setText(dialog.text);
+                break;
+            case Dialog.LIKE:
+                holder.mText.setText(dialog.text);
+                break;
+            case Dialog.SYMPATHY:
+                holder.mText.setText(dialog.text);
+                break;
+            default:
+                holder.mText.setText("");
+                break;
+        }
         if (dialog.online)
             holder.mOnline.setVisibility(View.VISIBLE);
         else
             holder.mOnline.setVisibility(View.INVISIBLE);
 
-        Utils.formatTime(holder.mTime, dialog.created);
+        holder.mTime.setText(Utils.formatTime(mContext, dialog.created));
         //holder.mArrow.setImageResource(R.drawable.im_item_arrow); // ??? зачем
 
         return convertView;

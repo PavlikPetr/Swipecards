@@ -48,10 +48,11 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="@drawable/chat_add_panel_bg"
-            android:paddingTop="2dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="8dp"
-            android:gravity="center_vertical"
+            android:paddingTop="50dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="50dp"
+            android:gravity="center"
             android:orientation="horizontal" >
               
             <Button  
@@ -64,14 +65,14 @@
 		        android:id="@+id/btnChatPlace"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="12dp"
+		        android:layout_marginLeft="6dp"
 		        android:background="@drawable/chat_place_selector" />
                 
             <Button  
 		        android:id="@+id/btnChatMap"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="12dp"
+		        android:layout_marginLeft="6dp"
 		        android:background="@drawable/chat_map_selector" />
          
          </LinearLayout>

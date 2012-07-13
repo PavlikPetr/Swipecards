@@ -23,6 +23,7 @@ public class History extends AbstractData {
     public static final int MESSAGE = 3; // Текстовое сообщение
     public static final int MESSAGE_WISH = 4; // Тайное желание
     public static final int MESSAGE_SEXUALITY = 5; // Оценка сексуальности
+    public static final int MESSAGE_WINK = 8; // подмигивание
     //---------------------------------------------------------------------------
     public static LinkedList<History> parse(ApiResponse response) {
         LinkedList<History> historyList = new LinkedList<History>();
@@ -33,10 +34,15 @@ public class History extends AbstractData {
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
                     History history = new History();
-                    history.created = item.optLong("created"); // время приходит в секундах *1000
+                    history.created = item.optLong("created") * 1000; // время приходит в секундах *1000
                     history.owner_id = item.optInt("owner_id");
                     history.type = item.optInt("type");
-
+                    
+                    history.text = item.optString("text");
+                    history.code = item.optInt("code");
+                    history.gift = item.optInt("gift");
+                    history.link = item.optString("link");
+                    /*
                     switch (history.type) {
                         case DEFAULT:
                             history.text = item.optString("text");
@@ -51,12 +57,14 @@ public class History extends AbstractData {
                         case MESSAGE:
                             history.text = item.optString("text");
                             break;
-                        case MESSAGE_WISH:
-                        case MESSAGE_SEXUALITY:
+                        case WISH:
+                        case SEXUALITY:
+                        case WINK:
                         default:
                             history.text = item.optString("text");
                             break;
                     }
+                    */
                     historyList.addFirst(history);
                 }
         } catch(Exception e) {

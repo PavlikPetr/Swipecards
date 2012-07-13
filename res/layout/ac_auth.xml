@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#080808" >
+    android:background="@drawable/auth_bg" >
     
     <ProgressBar
       android:id="@+id/prsAuthLoading"
@@ -44,6 +44,6 @@
           android:layout_height="wrap_content"
           android:layout_marginBottom="40dp"
           android:layout_centerHorizontal="true"
-          android:src="@drawable/im_logo" />
+          android:src="@drawable/auth_logo" />
 
 </RelativeLayout>

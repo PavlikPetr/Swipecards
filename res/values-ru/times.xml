@@ -7,14 +7,47 @@
     <string name="time_minute_0">%d минуту назад</string>
     <string name="time_minute_1">%d минуты назад</string>
     <string name="time_minutes">%d минут назад</string>
+    
     <string name="time_yesterday">Вчера</string>
     <string name="time_today">Сегодня</string>
     
-    <string name="time_monday">Monday</string>
-    <string name="time_tuesday">Tuesday</string>
-    <string name="time_wednesday">Wednesday</string>
-    <string name="time_thursday">Thursday</string>
-    <string name="time_friday">Friday</string>
-    <string name="time_saturday">Saturday</string>
-    <string name="time_sunday">Sunday</string>
+    <string name="time_monday">Пнд</string>
+    <string name="time_monday_full">Понедельник</string>
+    <string name="time_tuesday">Втр</string>
+    <string name="time_tuesday_full">Вторник</string>
+    <string name="time_wednesday">Срд</string>
+    <string name="time_wednesday_full">Среда</string>
+    <string name="time_thursday">Чтв</string>
+    <string name="time_thursday_full">Четверг</string>
+    <string name="time_friday">Птн</string>
+    <string name="time_friday_full">Пятница</string>
+    <string name="time_saturday">Сбт</string>
+    <string name="time_saturday_full">Суббота</string>
+    <string name="time_sunday">Вск</string>
+    <string name="time_sunday_full">Воскресенье</string>
+    
+    <string name="time_january">Янв</string>
+    <string name="time_january_full">Январь</string>
+    <string name="time_february">Фев</string>
+    <string name="time_february_full">Февраль</string>
+    <string name="time_march">Мрт</string>
+    <string name="time_march_full">Март</string>
+    <string name="time_april">Апр</string>
+    <string name="time_april_full">Апрель</string>
+    <string name="time_may">Май</string>
+    <string name="time_may_full">Май</string>
+    <string name="time_june">Июн </string>
+    <string name="time_june_full">Июнь</string>
+    <string name="time_july">Июл</string>
+    <string name="time_july_full">Июль</string>
+    <string name="time_august">Авг</string>
+    <string name="time_august_full">Август</string>
+    <string name="time_september">Сен</string>
+    <string name="time_september_full">Сентябрь</string>
+    <string name="time_october">Окт</string>
+    <string name="time_october_full">Октябрь</string>
+    <string name="time_november">Нбр</string>
+    <string name="time_november_full">Ноябрь</string>
+    <string name="time_december">Дек</string>
+    <string name="time_december_full">Декабрь</string>
 </resources>

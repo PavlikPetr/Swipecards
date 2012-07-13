@@ -47,6 +47,8 @@
 	  <string name="chat_wish_out">Вы отправили Тайное Желание.</string>
 	  <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>
 	  <string name="chat_sexuality_out">Вы оценили сексуальность.</string>
+	  <string name="chat_wink_in">Вам подмигнули.</string>
+      <string name="chat_wink_out">Вы подмигнули.</string>
 	  <string name="chat_money_in">Вам начислена монета</string>
 	  
 	  <!-- Symphaty Activity -->

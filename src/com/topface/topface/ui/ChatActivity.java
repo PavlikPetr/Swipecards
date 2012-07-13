@@ -51,7 +51,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
     private HistoryRequest historyRequest;
     private SwapControl mSwapControl;
     // Constants
-    private static final int LIMIT = 50;
+    private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
@@ -291,12 +291,12 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                         }
                     });
                 }
-                
                 @Override
                 public void fail(int codeError,final ApiResponse response) throws NullPointerException {
                     post(new Runnable() {
                         @Override
                         public void run() {
+                            mProgressBar.setVisibility(View.GONE);
                             if(response.code==ApiResponse.PAYMENT)
                                 startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
                         }
