@@ -181,7 +181,7 @@
     <!-- Map Activity -->
     <string name="map_search">Поиск</string>
     <string name="map_location_progress">Определяю местоположение</string>
-    <string name="map_confirm">Отправить</string>
+    <string name="map_confirm">Отпр.</string>
     <string name="map_address">Введите адрес</string>
     
 </resources>

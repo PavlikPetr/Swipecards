@@ -12,11 +12,15 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -24,6 +28,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 /**
  * GeoLocationManager: 
@@ -36,16 +45,28 @@ import android.location.LocationManager;
  */
 public class GeoLocationManager {
 
+	private static int mPinHeight = 0;
+	private static int mAddressHeight = 0;
+	
 	public static enum LocationProviderType {GPS,AGPS,NONE}; 
 	
 	public GeoPoint currentPoint;
+	public String currentAddress;
 	
 	private LocationManager mLocationManager;	
 	private Geocoder mGeocoder;
 	
+	private LayoutInflater mInflater;
+	
+	private static Drawable mPinDrawable; 
+	
 	public GeoLocationManager(Context context) {
 		mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);	
 		mGeocoder = new Geocoder(context, Locale.getDefault());
+		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mAddressHeight =  context.getResources().getDrawable(R.drawable.map_background_address).getMinimumHeight();
+		mPinDrawable = context.getResources().getDrawable(R.drawable.map_pin);
+		mPinHeight = mPinDrawable.getMinimumHeight();
 	}
 	
 	/**
@@ -130,18 +151,22 @@ public class GeoLocationManager {
 	 * @return specific address correlating with input coordinates
 	 */
 	public String getLocationAddress(double latitude, double longitude) {
-		String location = "";
+		StringBuilder sBLocation = new StringBuilder();		
+		StringBuilder sBFullLocation = new StringBuilder();
 		try {
 		    List<Address> listAddresses = mGeocoder.getFromLocation(latitude, longitude, 1);
 		    if(null != listAddresses && listAddresses.size() > 0){
-		        location = listAddresses.get(0).getAddressLine(0);
-		        location += ", " + listAddresses.get(0).getAddressLine(1);
+		    	sBLocation.append(listAddresses.get(0).getAddressLine(0));
+		    	sBLocation.append(", \n").append(listAddresses.get(0).getAddressLine(1));
+		    	sBFullLocation.append(listAddresses.get(0).getAddressLine(0));
+		    	sBFullLocation.append(", ").append(listAddresses.get(0).getAddressLine(1));
+		    	sBFullLocation.append(", ").append(listAddresses.get(0).getAddressLine(2));
 		    }
+		    currentAddress = sBFullLocation.toString();
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}		
-		
-		return location;
+		return sBLocation.toString();
 	}
 	
 	/**
@@ -181,18 +206,16 @@ public class GeoLocationManager {
 	 * @param zoom
 	 */
 	public void setOverlayItem(Context context, MapView mapView, GeoPoint point, int zoom) {
-		List<Overlay> mapOverlays = mapView.getOverlays();
-		Drawable drawable = context.getResources().getDrawable(R.drawable.ic_launcher);
-		GeoItemizedOverlay itemizedoverlay = new GeoItemizedOverlay(drawable, context);
+		List<Overlay> mapOverlays = mapView.getOverlays();		
+//		mPinHeight = mPinDrawable.getIntrinsicHeight();
+		GeoItemizedOverlay itemizedoverlay = new GeoItemizedOverlay(mPinDrawable, context);		
 		
 		String address = getLocationAddress(point);
 		OverlayItem overlayitem = new OverlayItem(point, "", address);
-		
-		mapOverlays.clear();
-		itemizedoverlay.addOverlay(overlayitem);
-		mapOverlays.add(itemizedoverlay);		
+				
 		shiftToPoint(mapView, point, zoom);
-		currentPoint = point;
+		itemizedoverlay.addOverlay(overlayitem,mapView);
+		mapOverlays.add(itemizedoverlay);						
 	}
 	
 	/**
@@ -232,10 +255,12 @@ public class GeoLocationManager {
 		private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 
 		Context mContext;
+		View mAddressView;
 
 		public GeoItemizedOverlay(Drawable defaultMarker, Context context) {
 			super(boundCenterBottom(defaultMarker));
 			mContext = context;
+			mAddressView = mInflater.inflate(R.layout.item_map_address, null);
 		}
 
 		@Override
@@ -243,10 +268,42 @@ public class GeoLocationManager {
 			return mOverlays.get(i);
 		}
 
-		public void addOverlay(OverlayItem overlay) {
+		public void addOverlay(OverlayItem overlay, final MapView mapView) {
 			mOverlays.clear();
 			mOverlays.add(overlay);
 			populate();
+			
+			final GeoPoint point = overlay.getPoint();
+			
+			mapView.removeAllViewsInLayout();						
+			Point screenPoint = new Point();
+	        mapView.getProjection().toPixels(point, screenPoint);
+	        GeoPoint p = mapView.getProjection().fromPixels(screenPoint.x, screenPoint.y - mPinHeight);
+	        final MapView.LayoutParams lParams = new MapView.LayoutParams(MapView.LayoutParams.WRAP_CONTENT,
+	                MapView.LayoutParams.WRAP_CONTENT, p, MapView.LayoutParams.BOTTOM_CENTER);	        
+	        mapView.addView(mAddressView, lParams);
+	        
+	        final TextView tvAddress = (TextView) mAddressView.findViewById(R.id.map_address);
+	        tvAddress.setText(Static.EMPTY);
+	        final ProgressBar progressBar = (ProgressBar) mAddressView.findViewById(R.id.prsMapAddressLoading);
+	        progressBar.setVisibility(View.VISIBLE);
+	        (new Thread() {
+	        	public void run() {
+	        		final String address = GeoLocationManager.this.getLocationAddress(point.getLatitudeE6()/1E6, point.getLongitudeE6()/1E6);
+	    	        tvAddress.post(new Runnable() {
+						
+						@Override
+						public void run() {
+							tvAddress.setText(address);
+							progressBar.setVisibility(View.INVISIBLE);
+							mapView.invalidate();														
+						}
+					});
+	    	        
+	        		
+	        	};
+	        }).start();
+	        currentPoint = point;
 		}
 
 		@Override
@@ -256,42 +313,17 @@ public class GeoLocationManager {
 		
 		@Override
 		public boolean onTap(GeoPoint p, MapView mapView) {			
-			String address = GeoLocationManager.this.getLocationAddress(p.getLatitudeE6()/1E6, p.getLongitudeE6()/1E6);
-			currentPoint = p;
-			addOverlay(new OverlayItem(p, "", address));
-			return super.onTap(p, mapView);
+			//String address = GeoLocationManager.this.getLocationAddress(p.getLatitudeE6()/1E6, p.getLongitudeE6()/1E6);
+			currentPoint = p;			
+			addOverlay(new OverlayItem(p, "", ""),mapView);			
+	        
+			return true;
 		}
 		
 		@Override
 	    public void draw(android.graphics.Canvas canvas, MapView mapView, boolean shadow)
 	    {
-	        super.draw(canvas, mapView, shadow);
-
-	        if (shadow == false)
-	        {
-	            //cycle through all overlays
-	            for (int index = 0; index < mOverlays.size(); index++)
-	            {
-	                OverlayItem item = mOverlays.get(index);
-
-	                // Converts lat/lng-Point to coordinates on the screen
-	                GeoPoint point = item.getPoint();
-	                Point ptScreenCoord = new Point() ;
-	                mapView.getProjection().toPixels(point, ptScreenCoord);
-
-	                //Paint
-	                Paint paint = new Paint();
-	                paint.setTextAlign(Paint.Align.CENTER);
-	                paint.setTypeface(Typeface.DEFAULT_BOLD);
-	                paint.setTextSize(16);
-	                paint.setARGB(150, 0, 0, 0); // alpha, r, g, b (Black, semi see-through)
-
-	                //show text to the right of the icon
-	                canvas.drawText(item.getSnippet(), ptScreenCoord.x, ptScreenCoord.y+16, paint);
-	            }
-	        }
+	        super.draw(canvas, mapView, false);
 	    }
-
-
 	}
 }

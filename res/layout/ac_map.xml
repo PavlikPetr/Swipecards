@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:descendantFocusability="beforeDescendants"
+	android:focusableInTouchMode="true">
 
     <com.google.android.maps.MapView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -29,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/chat_add_selector" />
+            android:background="@drawable/map_pin_selector" />
 
         <AutoCompleteTextView
             android:id="@+id/mapAddress"
@@ -38,14 +40,12 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="6dp"            
             android:layout_weight="1"
-            android:background="@drawable/chat_editbox"
-            android:imeOptions="actionSend"
-            android:inputType="text"
+            android:background="@drawable/map_text_input_selector"            
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:singleLine="true"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" 
+            android:textColor="#000000"
+            android:textSize="18sp"
             android:hint="@string/map_address"/>
         
         <Button
@@ -54,8 +54,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="6dp"            
-            android:text="@string/map_confirm" 
-            android:background="@drawable/chat_send_selector"/>
+            android:text="@string/map_confirm"
+            android:textColor="#FFFFFF" 
+            android:background="@drawable/map_send_selector"/>
     </LinearLayout>    
 
 </RelativeLayout>

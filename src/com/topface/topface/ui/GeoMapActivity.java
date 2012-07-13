@@ -48,10 +48,11 @@ import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 public class GeoMapActivity extends MapActivity implements LocationListener, OnItemClickListener, OnClickListener{
 
 	//Constants
-	public static final int INTENT_REQUEST_GEO = 222;
+	public static final int INTENT_REQUEST_GEO = 112;
 	
 	public static final String INTENT_LONGITUDE_ID = "geo_longitude";
 	public static final String INTENT_LATITUDE_ID = "geo_latitude";
+	public static final String INTENT_ADDRESS_ID = "geo_address";
 	
 	private static final int DIALOG_LOCATION_PROGRESS_ID = 0;
 	
@@ -110,6 +111,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 						Intent intent = GeoMapActivity.this.getIntent();
 						intent.putExtra(INTENT_LONGITUDE_ID, (double)(mGeoLocationManager.currentPoint.getLongitudeE6()/1E6));
 						intent.putExtra(INTENT_LATITUDE_ID, (double)(mGeoLocationManager.currentPoint.getLatitudeE6()/1E6));
+						intent.putExtra(INTENT_ADDRESS_ID, mGeoLocationManager.currentAddress);
 
 						GeoMapActivity.this.setResult(RESULT_OK, intent);
 					} 
@@ -197,8 +199,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 	//methods for Locations
 	@Override
 	public void onLocationChanged(Location location) {
-		synchronized (mGeoLocationManager) {
-			mMapView.getOverlays().clear();
+		synchronized (mGeoLocationManager) {			
 			GeoPoint point = GeoLocationManager.toGeoPoint(location);
 			mGeoLocationManager.setOverlayItem(this, mMapView, point, MAP_INITIAL_ZOOM);
 			mGeoLocationManager.removeLocationListener(this);
@@ -225,7 +226,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 			GeoPoint point = GeoLocationManager.toGeoPoint(mAddressList.get(arg2).getLatitude(),mAddressList.get(arg2).getLongitude());
 			mGeoLocationManager.setOverlayItem(this, mMapView, point, MAP_INITIAL_ZOOM);
 			mMapView.getController().animateTo(point);
-			hideKeyboard();
+			//hideKeyboard();
 		}
 	}
 

@@ -191,7 +191,7 @@ public class ChatActivity extends MapActivity implements View.OnClickListener, L
                 startActivityForResult(new Intent(this, GiftsActivity.class), GiftsActivity.INTENT_REQUEST_GIFT);
             } break;
             case R.id.btnChatPlace: {            	
-            	sendUserPlace();
+            	sendUserCurrentLocation();
 //                Toast.makeText(ChatActivity.this, "Place", Toast.LENGTH_SHORT).show();
             } break;
             case R.id.btnChatMap: {
@@ -280,9 +280,9 @@ public class ChatActivity extends MapActivity implements View.OnClickListener, L
 	            SendGiftRequest sendGift = new SendGiftRequest(this);
 	            sendGift.giftId = id;
 	            sendGift.userId = mUserId;
-//	            if (mIsAddPanelOpened)
-//                    mSwapControl.snapToScreen(0);                
-//                mIsAddPanelOpened = false;
+	            if (mIsAddPanelOpened)
+                    mSwapControl.snapToScreen(0);                
+                mIsAddPanelOpened = false;
                 
 	            sendGift.callback(new ApiHandler() {
 	                @Override
@@ -324,28 +324,16 @@ public class ChatActivity extends MapActivity implements View.OnClickListener, L
         		Bundle extras = data.getExtras();
         		double latitude = extras.getDouble(GeoMapActivity.INTENT_LATITUDE_ID);
         		double longitude = extras.getDouble(GeoMapActivity.INTENT_LONGITUDE_ID);
-        		Debug.log(this, latitude + " / " + longitude);
-        		History history = new History();
-                history.code = 0;
-                history.gift = 0;
-                history.owner_id = CacheProfile.uid;
-                history.created = System.currentTimeMillis();
-                if (mGeoManager == null)
-                	mGeoManager = new GeoLocationManager(this);
-                history.text = latitude + " / " + longitude + ":" + mGeoManager.getLocationAddress(GeoLocationManager.toGeoPoint(latitude,longitude));
-                history.type = History.MESSAGE;
-                mAdapter.addSentMessage(history);
-                mAdapter.notifyDataSetChanged();
-                mEditBox.getText().clear();
-//                if (mIsAddPanelOpened)
-//                    mSwapControl.snapToScreen(0);                
-//                mIsAddPanelOpened = false;
-//                mProgressBar.setVisibility(View.GONE);                
+        		String address = extras.getString(GeoMapActivity.INTENT_ADDRESS_ID);
+        		Debug.log(this, latitude + " / " + longitude + "/" + address);
+        		if (mIsAddPanelOpened)
+                    mSwapControl.snapToScreen(0);                
+                mIsAddPanelOpened = false;
         	}
         }
     }
     //---------------------------------------------------------------------------
-    private void sendUserPlace() {   
+    private void sendUserCurrentLocation() {   
     	if (mGeoManager == null)
     		mGeoManager = new GeoLocationManager(this);
     	if(mGeoManager.availableLocationProvider() == LocationProviderType.GPS) {
@@ -354,26 +342,15 @@ public class ChatActivity extends MapActivity implements View.OnClickListener, L
     		showDialog(DIALOG_GPS_ENABLE_WITH_AGPS_ID);    		
     	} else {
     		showDialog(DIALOG_GPS_ENABLE_NO_AGPS_ID);	
-    	}
+    	}        
     }
     //---------------------------------------------------------------------------
 	@Override
 	public void onLocationChanged(Location location) {
-		Debug.log(this, location.getLatitude() + " / " + location.getLongitude());
-		
-		History history = new History();
-        history.code = 0;
-        history.gift = 0;
-        history.owner_id = CacheProfile.uid;
-        history.created = System.currentTimeMillis();
-        history.text = location.getLatitude() + " / " + location.getLongitude() + 
-        				":" + mGeoManager.getLocationAddress(GeoLocationManager.toGeoPoint(location));
-        history.type = History.MESSAGE;
-        mAdapter.addSentMessage(history);
-        mAdapter.notifyDataSetChanged();
-        mEditBox.getText().clear();
-        mProgressBar.setVisibility(View.GONE);
-        
+		Debug.log(this, location.getLatitude() + " / " + location.getLongitude());		
+		if (mIsAddPanelOpened)
+            mSwapControl.snapToScreen(0);                
+        mIsAddPanelOpened = false;
         mGeoManager.removeLocationListener(this);
 	}
 	@Override
