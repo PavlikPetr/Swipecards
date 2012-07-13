@@ -41,7 +41,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ChatActivity extends MapActivity implements View.OnClickListener, LocationListener {
+public class ChatActivity extends Activity implements View.OnClickListener, LocationListener {
     // Data
     private int mUserId;
     private boolean mProfileInvoke;
@@ -412,10 +412,5 @@ public class ChatActivity extends MapActivity implements View.OnClickListener, L
 			return super.onCreateDialog(id);
 		}
 	}
-	
-	@Override
-	protected boolean isRouteDisplayed() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    //---------------------------------------------------------------------------
 }

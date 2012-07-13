@@ -122,7 +122,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.mMessage = (TextView)convertView.findViewById(R.id.chat_message);
                     holder.mDate = (TextView)convertView.findViewById(R.id.chat_date);
                     //holder.mInfoGroup = convertView.findViewById(R.id.user_info);
-                    holder.mMap = (MapView)convertView.findViewById(R.id.chat_map);
+                    //holder.mMap = (MapView)convertView.findViewById(R.id.chat_map);
                 } break;
                 case T_USER_PHOTO: {
                     convertView = mInflater.inflate(R.layout.chat_user, null, false);

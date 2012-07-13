@@ -49,14 +49,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone" />
-    
-    <com.google.android.maps.MapView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/chat_map"
-        android:layout_width="290dp"
-        android:layout_height="290dp"        
-        android:apiKey="0pD2MnDaGp2ZCEz4g6jGVXL5dBRtgN3_t_IE8Fw"        
-        android:clickable="true" 
-        android:visibility="gone"/>
 
 </RelativeLayout>    
