@@ -34,7 +34,9 @@ import com.google.android.maps.MapView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.utils.GeoLocationManager;
+import com.topface.topface.utils.OSM;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
+import com.topface.topface.utils.OSM.OSMAddress;
 
 /**
  * Activity for map displaying 
@@ -237,28 +239,32 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 		@Override
 		protected FilterResults performFiltering(final CharSequence constraint) {
 			List<Address> addressList = null;
-			if (constraint != null) {
-				addressList = mGeoLocationManager.getSuggestionAddresses((String) constraint, 5);
-			}			
-			if (addressList == null) {
-				addressList = new ArrayList<Address>();
-			}
-			
-			//TODO delete empty addresses
-			List<Address> emptyAddresses = new ArrayList<Address>();
-			for (Address address : addressList) {				
-				String addressString  = createFormattedAddressFromAddress(address);
-				addressString = addressString.replace(" ", Static.EMPTY);
-				if (addressString.length() == 0) {
-					emptyAddresses.add(address);
+			if (!OSM.OSMEnabled) {
+				if (constraint != null) {
+					addressList = mGeoLocationManager.getSuggestionAddresses((String) constraint, 5);
+				}			
+				if (addressList == null) {
+					addressList = new ArrayList<Address>();
 				}
+				
+				//TODO delete empty addresses
+				List<Address> emptyAddresses = new ArrayList<Address>();
+				for (Address address : addressList) {				
+					String addressString  = createFormattedAddressFromAddress(address);
+					addressString = addressString.replace(" ", Static.EMPTY);
+					if (addressString.length() == 0) {
+						emptyAddresses.add(address);
+					}
+				}			
+				
+				addressList.removeAll(emptyAddresses);
+			} else {
+				addressList = OSM.getSuggestionAddresses((String)constraint, 5);
 			}
-			
-			addressList.removeAll(emptyAddresses);
 			
 			final FilterResults filterResults = new FilterResults();
 			filterResults.values = addressList;
-			filterResults.count = addressList.size();			
+			filterResults.count = addressList.size();
 			
 			mAddressList = addressList;
 			
@@ -266,17 +272,21 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 		}
 
 		private String createFormattedAddressFromAddress(final Address address) {
-			mSb.setLength(0);
-			final int addressLineSize = address.getMaxAddressLineIndex();
-			for (int i = 0; i < addressLineSize; i++) {
-				if (address.getAddressLine(i) != null) {
-					mSb.append(address.getAddressLine(i));
-					if (i != addressLineSize - 1) {					
-						mSb.append(", ");
+			if (address instanceof OSMAddress) {
+				return ((OSMAddress) address).getAddress();
+			} else {
+				mSb.setLength(0);
+				final int addressLineSize = address.getMaxAddressLineIndex();
+				for (int i = 0; i < addressLineSize; i++) {
+					if (address.getAddressLine(i) != null) {
+						mSb.append(address.getAddressLine(i));
+						if (i != addressLineSize - 1) {					
+							mSb.append(", ");
+						}
 					}
 				}
+				return mSb.toString();
 			}
-			return mSb.toString();
 		}
 		
 		@SuppressWarnings("unchecked")

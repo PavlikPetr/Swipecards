@@ -1,0 +1,116 @@
+package com.topface.topface.utils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.location.Address;
+
+import com.topface.topface.Static;
+
+public class OSM {	
+	
+	public static final boolean OSMEnabled = true;
+	
+	public static final String OSM_URL = "http://nominatim.openstreetmap.org";
+	public static final String OSM_SEARCH_SUB = "search";
+	public static final String OSM_REVERSE_SUB = "reverse";
+	public static final String OSM_QUERY = "q";
+	public static final String OSM_RESULT_FORMAT = "format";
+	public static final String OSM_LATITUDE = "lat";
+	public static final String OSM_LONGITUDE = "lon";
+	public static final String OSM_ZOOM = "zoom";
+	public static final String OSM_DETALIZATION = "addressdetails";
+	public static final String OSM_POLYGON = "polygon";
+	public static final String OSM_DISPLAY_NAME = "display_name";
+	
+	
+	public static String resultFormat = "json";
+	public static final String zoom = "18";
+	public static final String detalization = "0";
+	public static final String polygon = "0";
+	
+	public static String getAddress(double lat, double lon) {
+		String result = "";
+		
+		try {
+			JSONObject responseJSON = new JSONObject(Http.httpGetRequest(getAddressRequest(lat, lon)));
+			result = responseJSON.getString(OSM_DISPLAY_NAME);
+		} catch (JSONException e) {
+			Debug.log("OSM",e.toString());
+		}
+		return result;
+	}
+	
+	public static List<Address> getSuggestionAddresses(String text, int maxNumber) {
+		List<Address> result = new ArrayList<Address>();
+		
+		try {
+			JSONArray responseJSON = new JSONArray(Http.httpGetRequest(getSearchRequest(text)));
+			for (int i = 0; i < responseJSON.length() || i < maxNumber; i++) {
+				JSONObject item = responseJSON.getJSONObject(i);
+				String address = item.getString(OSM_DISPLAY_NAME);
+				double lat = item.getDouble(OSM_LATITUDE);
+				double lon = item.getDouble(OSM_LONGITUDE);				
+				result.add(new OSMAddress(Locale.getDefault(), address, lat, lon));
+			}
+		} catch (JSONException e) {
+			Debug.log("OSM",e.toString());
+		}
+		
+		return result;
+	}	
+	
+	private static String getAddressRequest (double lat, double lon) {
+		StringBuilder sB = new StringBuilder();
+		sB.append(OSM_URL).append(Static.SLASH).append(OSM_REVERSE_SUB).append(Static.QUESTION);
+		sB.append(OSM_RESULT_FORMAT).append(Static.EQUAL).append(resultFormat);
+		sB.append(Static.AMPERSAND).append(OSM_LATITUDE).append(Static.EQUAL).append(lat);
+		sB.append(Static.AMPERSAND).append(OSM_LONGITUDE).append(Static.EQUAL).append(lon);
+		sB.append(Static.AMPERSAND).append(OSM_ZOOM).append(Static.EQUAL).append(zoom);
+		sB.append(Static.AMPERSAND).append(OSM_DETALIZATION).append(Static.EQUAL).append(detalization);
+		return sB.toString(); 
+	}
+	
+	private static String getSearchRequest (String text) {
+		StringBuilder sB = new StringBuilder();
+		sB.append(OSM_URL).append(Static.SLASH).append(OSM_SEARCH_SUB).append(Static.QUESTION);
+		sB.append(OSM_QUERY).append(Static.EQUAL).append(text);
+		sB.append(Static.AMPERSAND).append(OSM_RESULT_FORMAT).append(Static.EQUAL).append(resultFormat);
+		sB.append(Static.AMPERSAND).append(OSM_POLYGON).append(Static.EQUAL).append(polygon);
+		sB.append(Static.AMPERSAND).append(OSM_DETALIZATION).append(Static.EQUAL).append(detalization);
+		return sB.toString(); 
+	} 
+	
+	public static class OSMAddress extends Address {
+
+		private String mAddress;
+		private double mLattitude;
+		private double mLongitude;
+		
+		public OSMAddress(Locale locale, String address, double lat, double lon) {			
+			super(locale);
+			mAddress = address;
+			mLattitude = lat;
+			mLongitude = lon;
+		}
+
+		@Override
+		public double getLatitude() {
+			return mLattitude;
+		}
+
+		@Override
+		public double getLongitude() {
+			return mLongitude;
+		}
+		
+		public String getAddress() {
+			return mAddress;
+		}
+	}
+}

@@ -80,7 +80,7 @@ public class Http {
         return httpRequest(HTTP_POST_REQUEST, request, postParams, null, is);
     }
     //---------------------------------------------------------------------------
-    public static String httpRequest(int typeRequest,String request,String postParams,byte[] dataParams,InputStream is) {
+    public static String httpRequest(int typeRequest,String url,String postParams,byte[] dataParams,InputStream is) {
         String response = Static.EMPTY;
         InputStream in = null;
         OutputStream out = null;
@@ -89,7 +89,7 @@ public class Http {
         try {
             Debug.log(TAG, "enter");
 
-            httpConnection = (HttpURLConnection)new URL(request).openConnection();
+            httpConnection = (HttpURLConnection)new URL(url).openConnection();
             httpConnection.setConnectTimeout(HTTP_TIMEOUT);
             httpConnection.setReadTimeout(HTTP_TIMEOUT);
             if (typeRequest == HTTP_POST_REQUEST)

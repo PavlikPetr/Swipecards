@@ -46,7 +46,6 @@ import android.widget.TextView;
 public class GeoLocationManager {
 
 	private static int mPinHeight = 0;
-	private static int mAddressHeight = 0;
 	
 	public static enum LocationProviderType {GPS,AGPS,NONE}; 
 	
@@ -64,7 +63,6 @@ public class GeoLocationManager {
 		mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);	
 		mGeocoder = new Geocoder(context, Locale.getDefault());
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		mAddressHeight =  context.getResources().getDrawable(R.drawable.map_background_address).getMinimumHeight();
 		mPinDrawable = context.getResources().getDrawable(R.drawable.map_pin);
 		mPinHeight = mPinDrawable.getMinimumHeight();
 	}

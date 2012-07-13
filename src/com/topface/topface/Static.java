@@ -8,6 +8,10 @@ public class Static {
     public static final int PHOTO_WIDTH = 640;
     public static final int PHOTO_HEIGHT = 960;
     public static final String EMPTY = "";
+    public static final String SLASH = "/";
+    public static final String QUESTION = "?";
+    public static final String EQUAL = "=";
+    public static final String AMPERSAND = "&";
     public static final String CLIENT_TYPE = "android";
     public static final String API_URL = "http://api.topface.ru/?v=1";
     public static final String AUTH_VKONTAKTE_ID = "2664589";
