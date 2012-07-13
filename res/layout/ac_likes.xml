@@ -17,13 +17,12 @@
 	  
 	    <com.topface.topface.ui.p2r.PullToRefreshListView
 	      android:id="@+id/lvLikesList"
-	      android:layout_width="wrap_content" 
+	      android:layout_width="fill_parent" 
 	      android:layout_height="0dip"
 	      android:layout_weight="1"
 	      android:dividerHeight="0dp"
 	      android:fadeScrollbars="true"
-	      android:fadingEdge="none"
-	      android:background="@android:color/transparent" />
+	      android:fadingEdge="none" />
 	    
 	  <ImageView
 	      android:id="@+id/ivBanner"

@@ -40,7 +40,7 @@ public class FeedLike extends AbstractData {
                     like.online = item.optBoolean("online");
                     like.unread = item.optBoolean("unread");
                     like.rate = item.optInt("rate");
-                    like.created = item.optLong("created");
+                    like.created = item.optLong("created") * 1000;
 
                     // city  
                     JSONObject city = item.getJSONObject("city");

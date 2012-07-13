@@ -56,7 +56,7 @@ public class ChatActivity extends MapActivity implements View.OnClickListener, L
     private HistoryRequest historyRequest;
     private SwapControl mSwapControl;
     // Constants
-    private static final int LIMIT = 50;
+    private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
@@ -283,7 +283,6 @@ public class ChatActivity extends MapActivity implements View.OnClickListener, L
 	            if (mIsAddPanelOpened)
                     mSwapControl.snapToScreen(0);                
                 mIsAddPanelOpened = false;
-                
 	            sendGift.callback(new ApiHandler() {
 	                @Override
 	                public void success(ApiResponse response) throws NullPointerException {

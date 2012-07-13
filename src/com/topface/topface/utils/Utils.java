@@ -3,11 +3,14 @@ package com.topface.topface.utils;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import android.graphics.*;
 import android.net.Uri;
 import com.topface.topface.App;
+import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import android.content.Context;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
@@ -37,41 +40,61 @@ public class Utils {
         }
     }
     //---------------------------------------------------------------------------    
-    public static Bitmap clipping(Bitmap rawBitmap, int bitmapWidth, int bitmapHeight) {
-        if (rawBitmap == null || bitmapWidth <= 0 || bitmapHeight <= 0)
+    public static Bitmap clippingBitmap(Bitmap bitmap) {
+        if (bitmap == null || bitmap.getWidth() <= 0 || bitmap.getHeight() <= 0)
             return null;
 
         // Исходный размер загруженного изображения
-        int width = rawBitmap.getWidth();
-        int height = rawBitmap.getHeight();
+        int width  = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        
+        // длинная фото или высокая
+        Bitmap clippedBitmap = null;
+        if (width >= height) {  // горизонтальная, вырезаем по центру
+            int offset_x = (width - height) / 2;
+            clippedBitmap = Bitmap.createBitmap(bitmap, offset_x, 0, height, height, null, false);
+        } else {                // вертикальная, вырезаем сверху
+            clippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, width, null, false);
+        }
+
+        return clippedBitmap;
+    }
+    //---------------------------------------------------------------------------    
+    public static Bitmap clipAndScaleBitmap(Bitmap rawBitmap, int dstWidth, int dstHeight) {
+        if (rawBitmap == null || rawBitmap.getWidth()<= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
+            return null;
+
+        // Исходный размер загруженного изображения
+        int srcWidth  = rawBitmap.getWidth();
+        int srcHeight = rawBitmap.getHeight();
 
         // буль, длинная фото или высокая
-        boolean LEG = false;
-        if (width >= height)
-            LEG = true;
+        boolean LAND = false;
+        if (srcWidth >= srcHeight)
+            LAND = true;
 
         // коффициент сжатия фотографии
-        float ratio = Math.max(((float) bitmapWidth) / width, ((float) bitmapHeight) / height);
+        float ratio = Math.max(((float) dstWidth) / srcWidth, ((float) dstHeight) / srcHeight);
 
         // на получение оригинального размера по ширине или высоте
-        if (ratio == 0) ratio = 1;
+        if (ratio <= 0) ratio = 1;
 
         // матрица сжатия
         Matrix matrix = new Matrix();
         matrix.postScale(ratio, ratio);
 
         // сжатие изображения
-        Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, width, height, matrix, true);
+        Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
 
         // вырезаем необходимый размер
         Bitmap clippedBitmap;
-        if (LEG) {
+        if (LAND) {
             // у горизонтальной, вырезаем по центру
-            int offset_x = (scaledBitmap.getWidth() - bitmapWidth) / 2;
-            clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, bitmapWidth, bitmapHeight, null, false);
+            int offset_x = (scaledBitmap.getWidth() - dstWidth) / 2;
+            clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, dstWidth, dstHeight, null, false);
         } else
             // у вертикальной режим с верху
-            clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, bitmapWidth, bitmapHeight, null, false);
+            clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
 
         //rawBitmap.recycle();
         //rawBitmap = null;
@@ -82,54 +105,97 @@ public class Utils {
         return clippedBitmap;
     }
     //---------------------------------------------------------------------------
-    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int width, int height, int roundPx) {
-        if (width < height)
-            height = width;
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int dstWidth, int dstHeight, int roundPx) {
+        if (dstWidth < dstHeight)
+            dstHeight = dstWidth;
         else
-            width = height;
+            dstWidth = dstHeight;
 
-        Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+        Bitmap output = Bitmap.createBitmap(dstWidth, dstHeight, Config.ARGB_8888);
 
-        Bitmap clippedBitmap = clipping(bitmap, width, height);
+        Bitmap clippedBitmap = clipAndScaleBitmap(bitmap, dstWidth, dstHeight);
 
         Canvas canvas = new Canvas(output);
 
-        final Rect rect = new Rect(0, 0, width, height);
+        final Rect rect = new Rect(0, 0, dstWidth, dstHeight);
         final RectF rectF = new RectF(rect);
         final Paint paint = new Paint();
 
         paint.setAntiAlias(true);
         paint.setColor(0xff424242);
         canvas.drawARGB(0, 0, 0, 0);
-
         canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
-
-        //bitmap.recycle();
-        bitmap = null;
 
         return output;
     }
     //---------------------------------------------------------------------------
-    public static Bitmap getRoundedBitmap(Bitmap bitmap) {
-        if (bitmap == null)
-            return null;
-        
-        int w = bitmap.getWidth();
-        int h = bitmap.getHeight();
-        
-        int width = (w > h) ? w : h;
-
-        return getScaleAndRoundBitmap(bitmap, width, width, 1);
+    public static Bitmap getRoundedBitmap(Bitmap bitmap) { 
+        return getRoundedBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight());
     }
     //---------------------------------------------------------------------------
-	public static Bitmap getScaleAndRoundBitmap(Bitmap bitmap, final int width, final int height, float radiusMult) {
+    public static Bitmap getRoundedBitmap(Bitmap bitmap, int dstWidth, int dstHeight) {
+        if(bitmap == null)
+            return null;
+        
+        int width  = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        
+        if(dstWidth < dstHeight)
+            dstHeight = dstWidth;
+        else
+            dstWidth = dstHeight;
+          
+          Bitmap output = Bitmap.createBitmap(dstWidth, dstHeight, Config.ARGB_8888);
+          
+          Bitmap clippedBitmap = null;
+          if (width == dstWidth && height == dstHeight)
+              clippedBitmap = clippingBitmap(bitmap);
+          else
+              clippedBitmap = clipAndScaleBitmap(bitmap, dstWidth, dstWidth);
+              
+          
+          Canvas canvas = new Canvas(output);
+
+          Rect  rect  = new Rect(0, 0, dstWidth, dstWidth);
+          Paint paint = new Paint();
+
+
+          paint.setAntiAlias(true);
+          paint.setColor(0xff424242);
+          canvas.drawARGB(0, 0, 0, 0);
+          
+          canvas.drawCircle(dstWidth/2, dstWidth/2, dstWidth/2, paint);
+
+          paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+          canvas.drawBitmap(clippedBitmap, rect, rect, paint);
+          
+          bitmap = null;
+
+          return output;
+    }
+    //---------------------------------------------------------------------------
+    public static final int RADIUS_OUT = 0 ;
+    public static final int RADIUS_IN  = 1 ;
+	public static Bitmap getScaleAndRoundBitmapOut(Bitmap bitmap, final int width, final int height, float radiusMult) {
+        return getScaleAndRoundBitmap(RADIUS_OUT, bitmap, width, height, radiusMult);
+    }
+    //---------------------------------------------------------------------------
+	public static Bitmap getScaleAndRoundBitmapIn(Bitmap bitmap, final int width, final int height, float radiusMult) {
+	    return getScaleAndRoundBitmap(RADIUS_IN, bitmap, width, height, radiusMult);
+	}
+    //---------------------------------------------------------------------------
+    private static Bitmap getScaleAndRoundBitmap(int type, Bitmap bitmap, final int width, final int height, float radiusMult) {
         final int bitmapWidth  = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
        
-        final int multWidth = (int) (((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
+        int multWidth = 0;
+        if(type == RADIUS_OUT)
+            multWidth = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
+        else
+            multWidth = (int) (((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
+        
         
         Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Config.ARGB_8888);
 
@@ -148,7 +214,7 @@ public class Utils {
         
         canvas.drawARGB(0, 0, 0, 0);
         
-        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2 - 1, circlePaint);  // -2 ???
+        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint);
         canvasPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(bitmap, src, dst, canvasPaint);
 
@@ -165,10 +231,28 @@ public class Utils {
         return scaledBitmap;
     }
     //---------------------------------------------------------------------------
-    public static void formatTime(TextView tv, long time) {
+    public static String formatTime(Context context, long time) {
+        String text = Static.EMPTY;
+        
+        long day  = 1000*60*60*24;
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time);
+                 
+        if (time > Data.midnight)
+            text = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
+        else if(time > Data.midnight - day * 5)
+            text = formatMonth(context, cal.get(Calendar.MONTH));
+        else
+            text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH));
+        
+        return text;
+    }
+    //---------------------------------------------------------------------------
+    public static void formatTimeOld(TextView tv, long time) {
         Context context = tv.getContext();
         String text;
-        long now = System.currentTimeMillis() / 1000;
+        long now = System.currentTimeMillis() / 1000; // передумать
         long full_time = time * 1000;
         long t = now - time;
         if ((time > now) || t < 60)
@@ -227,8 +311,75 @@ public class Utils {
         }
     }
     //---------------------------------------------------------------------------
-    public static String formatDate(Context context, long time) {
-        return context.getString(R.string.time_today);
+    public static String formatDayOfWeek(Context context, int dayOfWeek) {
+        int resurseId = 0;
+        switch (dayOfWeek) {
+            case Calendar.SUNDAY:
+                resurseId = R.string.time_sunday;
+                break;
+            case Calendar.MONDAY:
+                resurseId = R.string.time_monday;
+                break;
+            case Calendar.TUESDAY:
+                resurseId = R.string.time_tuesday;
+                break;
+            case Calendar.WEDNESDAY:
+                resurseId = R.string.time_wednesday;
+                break;
+            case Calendar.THURSDAY:
+                resurseId = R.string.time_thursday;
+                break;
+            case Calendar.FRIDAY:
+                resurseId = R.string.time_friday;
+                break;
+            case Calendar.SATURDAY:
+                resurseId = R.string.time_saturday;
+                break;
+        }
+        return context.getString(resurseId);
+    }
+    //---------------------------------------------------------------------------
+    public static String formatMonth(Context context, int month) {
+        int resurseId = 0;
+        switch (month) {
+            case Calendar.JANUARY:
+                resurseId = R.string.time_january;
+                break;
+            case Calendar.FEBRUARY:
+                resurseId = R.string.time_february;
+                break;
+            case Calendar.MARCH:
+                resurseId = R.string.time_march;
+                break;
+            case Calendar.APRIL:
+                resurseId = R.string.time_april;
+                break;
+            case Calendar.MAY:
+                resurseId = R.string.time_may;
+                break;
+            case Calendar.JUNE:
+                resurseId = R.string.time_june;
+                break;
+            case Calendar.JULY:
+                resurseId = R.string.time_july;
+                break;
+            case Calendar.AUGUST:
+                resurseId = R.string.time_august;
+                break;
+            case Calendar.SEPTEMBER:
+                resurseId = R.string.time_september;
+                break;
+            case Calendar.OCTOBER:
+                resurseId = R.string.time_october;
+                break;
+            case Calendar.NOVEMBER:
+                resurseId = R.string.time_november;
+                break;
+            case Calendar.DECEMBER:
+                resurseId = R.string.time_december;
+                break;
+        }
+        return context.getString(resurseId);
     }
     //---------------------------------------------------------------------------
     public static int getBatteryResource(int power) {
@@ -392,3 +543,50 @@ public class Utils {
     }
     //---------------------------------------------------------------------------
 }
+
+/*
+public static Bitmap clipAndScaleBitmap(Bitmap rawBitmap, int dstWidth, int dstHeight) {
+    if (rawBitmap == null || rawBitmap.getWidth()<= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
+        return null;
+
+    // Исходный размер загруженного изображения
+    int srcWidth  = rawBitmap.getWidth();
+    int srcHeight = rawBitmap.getHeight();
+
+    // буль, длинная фото или высокая
+    boolean LAND = false;
+    if (srcWidth >= srcHeight)
+        LAND = true;
+
+    // коффициент сжатия фотографии
+    float ratio = Math.max(((float) dstWidth) / srcWidth, ((float) dstHeight) / srcHeight);
+
+    // на получение оригинального размера по ширине или высоте
+    if (ratio <= 0) ratio = 1;
+
+    // матрица сжатия
+    Matrix matrix = new Matrix();
+    matrix.postScale(ratio, ratio);
+
+    // сжатие изображения
+    Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
+
+    // вырезаем необходимый размер
+    Bitmap clippedBitmap;
+    if (LAND) {
+        // у горизонтальной, вырезаем по центру
+        int offset_x = (scaledBitmap.getWidth() - dstWidth) / 2;
+        clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, dstWidth, dstHeight, null, false);
+    } else
+        // у вертикальной режим с верху
+        clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
+
+    //rawBitmap.recycle();
+    //rawBitmap = null;
+
+    //scaledBitmap.recycle();
+    //scaledBitmap = null;
+
+    return clippedBitmap;
+}
+*/

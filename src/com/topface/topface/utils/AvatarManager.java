@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import java.util.HashMap;
 import java.util.LinkedList;
 import com.topface.topface.R;
+import com.topface.topface.Recycle;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
@@ -22,10 +23,10 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
     private boolean mBusy;
     //private int mRadius = 12; // хард кор !!!!!!!
     //---------------------------------------------------------------------------
-    public AvatarManager(Context context,LinkedList<T> dataList) {
+    public AvatarManager(Context context, LinkedList<T> dataList) {
         mDataList = dataList;
         mCache = new HashMap<Integer, Bitmap>();
-        mFrameWidth = BitmapFactory.decodeResource(context.getResources(), R.drawable.im_avatar_frame).getWidth();
+        mFrameWidth = BitmapFactory.decodeResource(context.getResources(), R.drawable.im_avatar_list_frame).getWidth();
     }
     //---------------------------------------------------------------------------
     public void setDataList(LinkedList<T> dataList) {
@@ -76,12 +77,12 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
                         return;
 
                     //качаем
-                    rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink());
+                    rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink()); //.getBigLink()
                     if (rawBitmap == null)
                         return;
 
                     // округляем
-                    Bitmap roundBitmap = Utils.getScaleAndRoundBitmap(rawBitmap, mFrameWidth, mFrameWidth, 1);
+                    Bitmap roundBitmap = Utils.getRoundedBitmap(rawBitmap, mFrameWidth, mFrameWidth);  // !!!!!
                     imagePost(imageView, roundBitmap);
                     mCache.put(uid, roundBitmap);
 

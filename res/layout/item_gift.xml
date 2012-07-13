@@ -20,7 +20,7 @@
             android:id="@+id/giftMask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/foto_frame" 
+            android:background="@drawable/gift_frame" 
             android:layout_centerInParent="true"/>
                 
     </RelativeLayout>
@@ -34,12 +34,11 @@
         <TextView
             android:id="@+id/giftPrice"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <ImageView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/dating_money" />
+            android:textColor="#FFFFFF"
+            android:drawableRight="@drawable/dating_money"
+            android:drawablePadding="2dp" />
+
     </LinearLayout>
 
 </LinearLayout>

@@ -19,7 +19,7 @@ public class SymphatyListAdapter extends BaseAdapter {
     // class ViewHolder
     //---------------------------------------------------------------------------
     static class ViewHolder {
-        public RoundedImageView mAvatar;
+        public ImageView mAvatar;
         public TextView mName;
         public TextView mCity;
         public TextView mTime;
@@ -29,6 +29,7 @@ public class SymphatyListAdapter extends BaseAdapter {
     }
     //---------------------------------------------------------------------------
     // Data
+    private Context mContext;
     private LayoutInflater mInflater;
     private AvatarManager<FeedSympathy> mAvatarManager;
     private int mOwnerCityID;
@@ -38,6 +39,7 @@ public class SymphatyListAdapter extends BaseAdapter {
     private static final int T_COUNT = 2;
     //---------------------------------------------------------------------------
     public SymphatyListAdapter(Context context,AvatarManager<FeedSympathy> avatarManager) {
+        mContext = context;
         mAvatarManager = avatarManager;
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //mInflater = LayoutInflater.from(context);
@@ -80,7 +82,7 @@ public class SymphatyListAdapter extends BaseAdapter {
 
             convertView = mInflater.inflate(R.layout.item_symphaty_gallery, null, false);
 
-            holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.ivAvatar);
+            holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
             holder.mName = (TextView)convertView.findViewById(R.id.tvName);
             holder.mCity = (TextView)convertView.findViewById(R.id.tvCity);
             holder.mTime = (TextView)convertView.findViewById(R.id.tvTime);
@@ -113,7 +115,7 @@ public class SymphatyListAdapter extends BaseAdapter {
         else
             holder.mOnline.setVisibility(View.INVISIBLE);
 
-        Utils.formatTime(holder.mTime, symphaty.created);
+        //holder.mTime.setText(Utils.formatTime(mContext, symphaty.created));
         //holder.mArrow.setImageResource(R.drawable.im_item_arrow);
 
         return convertView;

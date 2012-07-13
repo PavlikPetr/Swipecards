@@ -43,7 +43,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
 //        int columnNumber = orientation == Configuration.ORIENTATION_PORTRAIT ? GiftsActivity.GIFTS_COLUMN_PORTRAIT : GiftsActivity.GIFTS_COLUMN_LANDSCAPE;
 //        int columnNumber = GiftsActivity.GIFTS_COLUMN_PORTRAIT;
         
-        Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.foto_frame);
+        Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.gift_frame);
         
         mBitmapWidth = bmp.getWidth()-8;        
         mBitmapHeight = bmp.getWidth()-8;
@@ -73,7 +73,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
 //            if (!mBusy) {
                 bitmap = mStorageCache.load(((Gift)mDataList.get(position)).id);
                 if (bitmap != null) {
-                    bitmap = Utils.getScaleAndRoundBitmap(bitmap, mBitmapWidth, mBitmapWidth, 1.2f);
+                    bitmap = Utils.getScaleAndRoundBitmapOut(bitmap, mBitmapWidth, mBitmapWidth, 1.2f);
                     imageView.setImageBitmap(bitmap);
                     mMemoryCache.put(position, bitmap);
                 } else {
@@ -99,7 +99,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
                         return;
 
                     // РІС‹СЂРµР·Р°РµРј
-                    Bitmap roundBitmap = Utils.getScaleAndRoundBitmap(rawBitmap, mBitmapWidth, mBitmapWidth, 1.2f);//Bitmap.createScaledBitmap(rawBitmap, mBitmapWidth, mBitmapWidth, true);
+                    Bitmap roundBitmap = Utils.getScaleAndRoundBitmapOut(rawBitmap, mBitmapWidth, mBitmapWidth, 1.2f);//Bitmap.createScaledBitmap(rawBitmap, mBitmapWidth, mBitmapWidth, true);
 
                     // РѕС‚РѕР±СЂР°Р¶Р°РµРј
                     imagePost(imageView, roundBitmap);

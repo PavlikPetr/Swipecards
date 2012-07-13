@@ -35,7 +35,7 @@ public class FeedRate extends AbstractData {
                     rate.first_name = item.optString("first_name");
                     rate.online = item.optBoolean("online");
                     rate.unread = item.optBoolean("unread");
-                    rate.created = item.optLong("created"); // время приходит в секундах  *1000
+                    rate.created = item.optLong("created") * 1000; // время приходит в секундах  *1000
                     rate.uid = item.optInt("uid");
                     rate.age = item.optInt("age");
                     rate.rate = item.optInt("rate");
