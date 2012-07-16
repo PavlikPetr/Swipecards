@@ -40,13 +40,16 @@ public class RoundedImageView extends ImageView {
   //---------------------------------------------------------------------------
   @Override
   protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-    if(mFrameType==INBOX)
-      setMeasuredDimension(Recycle.s_InboxFrame.getWidth(),Recycle.s_InboxFrame.getHeight());
-    else if(mFrameType==CHAT)
-      setMeasuredDimension(Recycle.s_ChatFrame.getWidth(),Recycle.s_ChatFrame.getHeight());
-    else
-      setMeasuredDimension(0,0);
-  }  
+    if(mFrameType == INBOX) {
+        setMeasuredDimension(Recycle.s_InboxFrame.getWidth(),Recycle.s_InboxFrame.getHeight());
+    }
+    else if(mFrameType == CHAT) {
+        setMeasuredDimension(Recycle.s_ChatFrame.getWidth(),Recycle.s_ChatFrame.getHeight());
+    }
+    else {
+        setMeasuredDimension(0,0);
+    }
+  }
   //---------------------------------------------------------------------------
   @Override
   protected void onDraw(Canvas canvas) {

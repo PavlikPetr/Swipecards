@@ -35,344 +35,350 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DashboardActivity extends Activity implements View.OnClickListener {
-  // Data
-  private boolean mNotification;
-  private TextView mLikesNotify;
-  private TextView mInboxNotify;
-  private TextView mSymphatyNotify;
-  private View mButtonsGroup;
-  private ProgressBar mProgressBar;
-  private Button mDatingButton;
-  private Button mProfileButton;
-  private Button mTopsButton;
-  private Button mLikesButton;
-  private ImageView mNewbieView;
-  private Newbie mNewbie;
-  private ProfileRequest profileRequest;
-  private SharedPreferences mPreferences;
-  private AlphaAnimation mAlphaAnimation;
-  // Constants
-  public static final String BROADCAST_ACTION = "com.topface.topface.DASHBOARD_NOTIFICATION";
-  //---------------------------------------------------------------------------
-  // class NotificationReceiver
-  //---------------------------------------------------------------------------
-  private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      if(intent.getAction().equals(C2DMUtils.C2DM_NOTIFICATION))
-        DashboardActivity.this.refreshNotifications();
-    }
-  };
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.ac_dashboard);
-    Debug.log(this,"+onCreate");
-    
-    // C2DM
-    C2DMUtils.init(this);
-    
-    // Version
-    if(App.DEBUG)
-      try {
-        //String app_ver = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
-        PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-        ((TextView)findViewById(R.id.tvVersion)).setText("version: " + pinfo.versionName + "b [" + pinfo.versionCode + "]");
-      } catch(NameNotFoundException e) {}
-    
-    // Preferences
-    mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-    
-    // Newbie
-    mNewbie = new Newbie(mPreferences);
-    mNewbieView = (ImageView)findViewById(R.id.ivNewbie);
-    mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-    mAlphaAnimation.setDuration(200L);
-    
-    // Notifications
-    mLikesNotify = (TextView)findViewById(R.id.tvDshbrdNotifyLikes);
-    mInboxNotify = (TextView)findViewById(R.id.tvDshbrdNotifyChat);
-    mSymphatyNotify = (TextView)findViewById(R.id.tvDshbrdNotifySymphaty);
-    
-    // Progress
-    mProgressBar = (ProgressBar)findViewById(R.id.prsDashboardLoading);
-    
-    // Layouts
-    mButtonsGroup = findViewById(R.id.loDshbrdGroup);
+    // Data
+    private boolean mNotification;
+    private TextView mLikesNotify;
+    private TextView mInboxNotify;
+    private TextView mSymphatyNotify;
+    private View mButtonsGroup;
+    private ProgressBar mProgressBar;
+    private ImageView mNewbieView;
+    private Newbie mNewbie;
+    private ProfileRequest profileRequest;
+    private SharedPreferences mPreferences;
+    private AlphaAnimation mAlphaAnimation;
 
-    { // Buttons
-      mDatingButton = ((Button)findViewById(R.id.btnDshbrdDating));
-      mDatingButton.setOnClickListener(this);
-  
-      mProfileButton = ((Button)findViewById(R.id.btnDshbrdProfile));
-      mProfileButton.setOnClickListener(this);
-      
-      mTopsButton = ((Button)findViewById(R.id.btnDshbrdTops));
-      mTopsButton.setOnClickListener(this);
-      
-      mLikesButton = ((Button)findViewById(R.id.btnDshbrdLikes));
-      mLikesButton.setOnClickListener(this);
-      
-      ((Button)findViewById(R.id.btnDshbrdSymphaty)).setOnClickListener(this);
-      ((Button)findViewById(R.id.btnDshbrdChat)).setOnClickListener(this);
-    }
-    
-    if(!Http.isOnline(this))
-      Toast.makeText(this,getString(R.string.general_internet_off),Toast.LENGTH_SHORT).show();
-    else
-      ratingPopup();
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStart() {
-    super.onStart();
-    System.gc();
-    
-    if(!Http.isOnline(this))
-      Toast.makeText(this,getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
-    
-    registerReceiver(mNotificationReceiver, new IntentFilter(C2DMUtils.C2DM_NOTIFICATION));
-    Data.facebook.extendAccessTokenIfNeeded(this, null);
-    
-    if(!Data.isSSID()) {
-      startActivity(new Intent(getApplicationContext(), MainActivity.class));
-      Data.ownerAvatar = null;
-      Data.userAvatar  = null;
-      finish();
-      return;
-    }
-    
-    updateProfile();
-  }
-  //---------------------------------------------------------------------------  
-  @Override
-  protected void onStop() {
-    mNewbieView.setVisibility(View.INVISIBLE);
-    unregisterReceiver(mNotificationReceiver);
-    super.onStop();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    if(profileRequest!=null) 
-      profileRequest.cancel();
-    
-    System.gc();
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
-  }
-  //---------------------------------------------------------------------------
-  public void showNewbie() {
-    if(mNewbie.isDashboardCompleted())
-      return;
-    
-    mNewbieView.setVisibility(View.INVISIBLE);
-    SharedPreferences.Editor editor = mPreferences.edit();
-    
-    if(mNewbie.profile != true) {
-      mNewbie.profile = true;
-      editor.putBoolean(Static.PREFERENCES_NEWBIE_DASHBOARD_PROFILE, true);
-      mNewbieView.setBackgroundResource(R.drawable.newbie_profile);
-      mNewbieView.setVisibility(View.VISIBLE);
-      mNewbieView.startAnimation(mAlphaAnimation);
-      
-    } else if(mNewbie.dating != true) {
-      mNewbie.dating = true;
-      editor.putBoolean(Static.PREFERENCES_NEWBIE_DASHBOARD_DATING, true);
-      mNewbieView.setBackgroundResource(R.drawable.newbie_dating);
-      mNewbieView.setVisibility(View.VISIBLE);
-      mNewbieView.startAnimation(mAlphaAnimation);
-      
-    } else if(mNewbie.likes!=true && CacheProfile.unread_likes>0) {
-      mNewbie.likes = true;
-      editor.putBoolean(Static.PREFERENCES_NEWBIE_DASHBOARD_LIKES, true);
-      mNewbieView.setBackgroundResource(R.drawable.newbie_likes);
-      mNewbieView.setVisibility(View.VISIBLE);
-      mNewbieView.startAnimation(mAlphaAnimation);
-      
-    } else if(mNewbie.tops != true) {
-      mNewbie.tops = true;
-      editor.putBoolean(Static.PREFERENCES_NEWBIE_DASHBOARD_TOPS, true);
-      mNewbieView.setBackgroundResource(R.drawable.newbie_tops);
-      mNewbieView.setVisibility(View.VISIBLE);
-      mNewbieView.startAnimation(mAlphaAnimation);
-    }
-
-    editor.commit(); 
-  }
-  //---------------------------------------------------------------------------
-  private void updateProfile() {
-    profileRequest = new ProfileRequest(getApplicationContext());
-    if(!mNotification)
-      profileRequest.part = ProfileRequest.P_DASHBOARD;
-    else
-      profileRequest.part = ProfileRequest.P_NOTIFICATION;
-    profileRequest.callback(new ApiHandler() {
-      @Override
-      public void success(final ApiResponse response) {
-        if(!mNotification) {
-          CacheProfile.setData(Profile.parse(response));
-          Http.avatarOwnerPreloading();
-        } else
-          CacheProfile.updateNotifications(Profile.parse(response));
-        post(new Runnable() {
-          @Override
-          public void run() {
-            if(!mNotification) {
-              mProgressBar.setVisibility(View.GONE);
-              mNotification = true;
-            }
-            mButtonsGroup.setVisibility(View.VISIBLE);
-            refreshNotifications();
-            showNewbie();
-          }
-        });
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-        post(new Runnable() {
-          @Override
-          public void run() {
-            if(!mNotification)
-              Toast.makeText(DashboardActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
-            mButtonsGroup.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.GONE);
-            mLikesNotify.setVisibility(View.INVISIBLE);
-            mInboxNotify.setVisibility(View.INVISIBLE);
-            mSymphatyNotify.setVisibility(View.INVISIBLE);
-          }
-        });
-      }
-    }).exec();
-  }
-  //---------------------------------------------------------------------------
-  private void refreshNotifications() {
-    // clear notification
-    ((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).cancel(C2DMUtils.C2DM_NOTIFICATION_ID);
-    
-    if(CacheProfile.unread_likes > 0) {
-      mLikesNotify.setText(" "+CacheProfile.unread_likes+" ");
-      mLikesNotify.setVisibility(View.VISIBLE);
-    } else
-      mLikesNotify.setVisibility(View.INVISIBLE);
-
-    if(CacheProfile.unread_messages > 0) {
-      mInboxNotify.setText(" "+CacheProfile.unread_messages+" ");
-      mInboxNotify.setVisibility(View.VISIBLE);
-    } else
-      mInboxNotify.setVisibility(View.INVISIBLE);
-    
-    if(CacheProfile.unread_symphaties > 0) {
-      mSymphatyNotify.setText(" "+CacheProfile.unread_symphaties+" ");
-      mSymphatyNotify.setVisibility(View.VISIBLE);
-    } else
-      mSymphatyNotify.setVisibility(View.INVISIBLE);
-  }
-  //---------------------------------------------------------------------------
-  private void ratingPopup() {
-    // Rating popup
-
-    long date_start = mPreferences.getLong(Static.PREFERENCES_RATING, 1);
-    
-    if(date_start == 0)
-      return;
-    else if(date_start == 1) {
-      SharedPreferences.Editor editor = mPreferences.edit();
-      editor.putLong(Static.PREFERENCES_RATING, new java.util.Date().getTime());
-      editor.commit();
-      return;
-    }
-    
-    long date_now = new java.util.Date().getTime();
-    if(date_now-date_start < 1000*60*60*24*3)
-      return;
-    
-    final Dialog ratingPopup = new Dialog(this) {
-      @Override
-      public void onBackPressed() {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(Static.PREFERENCES_RATING, new java.util.Date().getTime());
-        editor.commit();
-        super.onBackPressed();
-      }
+    // class NotificationReceiver
+    private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(C2DMUtils.C2DM_NOTIFICATION))
+                DashboardActivity.this.refreshNotifications();
+        }
     };
-    ratingPopup.setTitle(R.string.dashbrd_popup_title);
-    ratingPopup.setContentView(R.layout.popup_rating);
-    ratingPopup.show();
-    
-    ((Button)ratingPopup.findViewById(R.id.btnRatingPopupRate)).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.topface.topface")));
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(Static.PREFERENCES_RATING, 0);
-        editor.commit();
-        ratingPopup.cancel();
-      }
-    });
-    ((Button)ratingPopup.findViewById(R.id.btnRatingPopupLate)).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(Static.PREFERENCES_RATING, new java.util.Date().getTime());
-        editor.commit();
-        ratingPopup.cancel();
-      }
-    });
-    ((Button)ratingPopup.findViewById(R.id.btnRatingPopupCancel)).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(Static.PREFERENCES_RATING, 0);
-        editor.commit();
-        ratingPopup.cancel();
-      }
-    });
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public void onClick(View view) {  
-    if(!Http.isOnline(this)){
-      Toast.makeText(this,getString(R.string.general_internet_off),Toast.LENGTH_SHORT).show();
-      return;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ac_dashboard);
+        Debug.log(this, "+onCreate");
+
+        // C2DM
+        C2DMUtils.init(this);
+
+        // Version
+        if (App.DEBUG)
+            try {
+                //String app_ver = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+                PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                ((TextView) findViewById(R.id.tvVersion)).setText("version: " + pinfo.versionName + "b [" + pinfo.versionCode + "]");
+            } catch (NameNotFoundException e) {
+                Debug.error(e);
+            }
+
+        // Preferences
+        mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+
+        // Newbie
+        mNewbie = new Newbie(mPreferences);
+        mNewbieView = (ImageView) findViewById(R.id.ivNewbie);
+        mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+        mAlphaAnimation.setDuration(200L);
+
+        // Notifications
+        mLikesNotify = (TextView) findViewById(R.id.tvDshbrdNotifyLikes);
+        mInboxNotify = (TextView) findViewById(R.id.tvDshbrdNotifyChat);
+        mSymphatyNotify = (TextView) findViewById(R.id.tvDshbrdNotifySymphaty);
+
+        // Progress
+        mProgressBar = (ProgressBar) findViewById(R.id.prsDashboardLoading);
+
+        // Layouts
+        mButtonsGroup = findViewById(R.id.loDshbrdGroup);
+
+        { // Buttons
+            Button datingButton = ((Button) findViewById(R.id.btnDshbrdDating));
+            datingButton.setOnClickListener(this);
+
+            Button profileButton = ((Button) findViewById(R.id.btnDshbrdProfile));
+            profileButton.setOnClickListener(this);
+
+            Button topsButton = ((Button) findViewById(R.id.btnDshbrdTops));
+            topsButton.setOnClickListener(this);
+
+            Button likesButton = ((Button) findViewById(R.id.btnDshbrdLikes));
+            likesButton.setOnClickListener(this);
+
+            findViewById(R.id.btnDshbrdSymphaty).setOnClickListener(this);
+            findViewById(R.id.btnDshbrdChat).setOnClickListener(this);
+        }
+
+        if (!Http.isOnline(this))
+            Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
+        else
+            ratingPopup();
     }
-    
-    if(CacheProfile.city_id == 0) {
-      mNotification = false;
-      mProgressBar.setVisibility(View.VISIBLE);
-      mButtonsGroup.setVisibility(View.GONE);
-      updateProfile();
-      return;
+
+      
+    @Override
+    protected void onStart() {
+        super.onStart();
+        System.gc();
+
+        if (!Http.isOnline(this))
+            Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
+
+        registerReceiver(mNotificationReceiver, new IntentFilter(C2DMUtils.C2DM_NOTIFICATION));
+        Data.facebook.extendAccessTokenIfNeeded(this, null);
+
+        if (!Data.isSSID()) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            Data.ownerAvatar = null;
+            Data.userAvatar = null;
+            finish();
+            return;
+        }
+
+        updateProfile();
     }
-    Intent intent = null;
-    switch(view.getId()) {
-      case R.id.btnDshbrdDating: {
-        intent = new Intent(this.getApplicationContext(),DatingActivity.class);
-      } break;
-      case R.id.btnDshbrdLikes: {
-        intent = new Intent(this.getApplicationContext(),LikesActivity.class);
-      } break;
-      case R.id.btnDshbrdSymphaty: {
-        intent = new Intent(this.getApplicationContext(),SymphatyActivity.class);
-      } break;
-      case R.id.btnDshbrdChat: {
-        intent = new Intent(this.getApplicationContext(),InboxActivity.class);
-      } break;
-      case R.id.btnDshbrdTops: {
-        intent = new Intent(this.getApplicationContext(),TopsActivity.class);
-      } break;
-      case R.id.btnDshbrdProfile: {
-        intent = new Intent(Intent.ACTION_VIEW);
-        //intent.setData(Uri.parse("market://details?id=com.topface.topface"));
-        //intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.topface.topface"));
-        intent = new Intent(this.getApplicationContext(),ProfileActivity.class);
-      } break;      
-      default:
+
+      
+    @Override
+    protected void onStop() {
+        mNewbieView.setVisibility(View.INVISIBLE);
+        unregisterReceiver(mNotificationReceiver);
+        super.onStop();
     }
-    startActivity(intent);
-  }
-  //---------------------------------------------------------------------------
+
+    @Override
+    protected void onDestroy() {
+        if (profileRequest != null)
+            profileRequest.cancel();
+
+        System.gc();
+        Debug.log(this, "-onDestroy");
+        super.onDestroy();
+    }
+
+    public void showNewbie() {
+        if (mNewbie.isDashboardCompleted())
+            return;
+
+        mNewbieView.setVisibility(View.INVISIBLE);
+        SharedPreferences.Editor editor = mPreferences.edit();
+
+        if (!mNewbie.profile) {
+            mNewbie.profile = true;
+            editor.putBoolean(Static.PREFERENCES_NEWBIE_DASHBOARD_PROFILE, true);
+            mNewbieView.setBackgroundResource(R.drawable.newbie_profile);
+            mNewbieView.setVisibility(View.VISIBLE);
+            mNewbieView.startAnimation(mAlphaAnimation);
+
+        } else if (!mNewbie.dating) {
+            mNewbie.dating = true;
+            editor.putBoolean(Static.PREFERENCES_NEWBIE_DASHBOARD_DATING, true);
+            mNewbieView.setBackgroundResource(R.drawable.newbie_dating);
+            mNewbieView.setVisibility(View.VISIBLE);
+            mNewbieView.startAnimation(mAlphaAnimation);
+
+        } else if (!mNewbie.likes && CacheProfile.unread_likes > 0) {
+            mNewbie.likes = true;
+            editor.putBoolean(Static.PREFERENCES_NEWBIE_DASHBOARD_LIKES, true);
+            mNewbieView.setBackgroundResource(R.drawable.newbie_likes);
+            mNewbieView.setVisibility(View.VISIBLE);
+            mNewbieView.startAnimation(mAlphaAnimation);
+
+        } else if (!mNewbie.tops) {
+            mNewbie.tops = true;
+            editor.putBoolean(Static.PREFERENCES_NEWBIE_DASHBOARD_TOPS, true);
+            mNewbieView.setBackgroundResource(R.drawable.newbie_tops);
+            mNewbieView.setVisibility(View.VISIBLE);
+            mNewbieView.startAnimation(mAlphaAnimation);
+        }
+
+        editor.commit();
+    }
+
+    private void updateProfile() {
+        profileRequest = new ProfileRequest(getApplicationContext());
+        if (!mNotification)
+            profileRequest.part = ProfileRequest.P_DASHBOARD;
+        else
+            profileRequest.part = ProfileRequest.P_NOTIFICATION;
+
+        profileRequest.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                if (!mNotification) {
+                    CacheProfile.setData(Profile.parse(response));
+                    Debug.log("Avatar downloaded!");
+                } else {
+                    CacheProfile.updateNotifications(Profile.parse(response));
+                }
+
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!mNotification) {
+                            mProgressBar.setVisibility(View.GONE);
+                            mNotification = true;
+                        }
+                        mButtonsGroup.setVisibility(View.VISIBLE);
+                        refreshNotifications();
+                        showNewbie();
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!mNotification)
+                            Toast.makeText(DashboardActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        mButtonsGroup.setVisibility(View.VISIBLE);
+                        mProgressBar.setVisibility(View.GONE);
+                        mLikesNotify.setVisibility(View.INVISIBLE);
+                        mInboxNotify.setVisibility(View.INVISIBLE);
+                        mSymphatyNotify.setVisibility(View.INVISIBLE);
+                    }
+                });
+            }
+        }).exec();
+    }
+
+    private void refreshNotifications() {
+        // clear notification
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(C2DMUtils.C2DM_NOTIFICATION_ID);
+
+        if (CacheProfile.unread_likes > 0) {
+            mLikesNotify.setText(" " + CacheProfile.unread_likes + " ");
+            mLikesNotify.setVisibility(View.VISIBLE);
+        } else
+            mLikesNotify.setVisibility(View.INVISIBLE);
+
+        if (CacheProfile.unread_messages > 0) {
+            mInboxNotify.setText(" " + CacheProfile.unread_messages + " ");
+            mInboxNotify.setVisibility(View.VISIBLE);
+        } else
+            mInboxNotify.setVisibility(View.INVISIBLE);
+
+        if (CacheProfile.unread_symphaties > 0) {
+            mSymphatyNotify.setText(" " + CacheProfile.unread_symphaties + " ");
+            mSymphatyNotify.setVisibility(View.VISIBLE);
+        } else
+            mSymphatyNotify.setVisibility(View.INVISIBLE);
+    }
+
+    private void ratingPopup() {
+        // Rating popup
+
+        long date_start = mPreferences.getLong(Static.PREFERENCES_RATING, 1);
+
+        if (date_start == 0)
+            return;
+        else if (date_start == 1) {
+            SharedPreferences.Editor editor = mPreferences.edit();
+            editor.putLong(Static.PREFERENCES_RATING, new java.util.Date().getTime());
+            editor.commit();
+            return;
+        }
+
+        long date_now = new java.util.Date().getTime();
+        if (date_now - date_start < 1000 * 60 * 60 * 24 * 3)
+            return;
+
+        final Dialog ratingPopup = new Dialog(this) {
+            @Override
+            public void onBackPressed() {
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putLong(Static.PREFERENCES_RATING, new java.util.Date().getTime());
+                editor.commit();
+                super.onBackPressed();
+            }
+        };
+        ratingPopup.setTitle(R.string.dashbrd_popup_title);
+        ratingPopup.setContentView(R.layout.popup_rating);
+        ratingPopup.show();
+
+        ratingPopup.findViewById(R.id.btnRatingPopupRate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.topface.topface")));
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putLong(Static.PREFERENCES_RATING, 0);
+                editor.commit();
+                ratingPopup.cancel();
+            }
+        });
+        ratingPopup.findViewById(R.id.btnRatingPopupLate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putLong(Static.PREFERENCES_RATING, new java.util.Date().getTime());
+                editor.commit();
+                ratingPopup.cancel();
+            }
+        });
+        ratingPopup.findViewById(R.id.btnRatingPopupCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putLong(Static.PREFERENCES_RATING, 0);
+                editor.commit();
+                ratingPopup.cancel();
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (!Http.isOnline(this)) {
+            Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (CacheProfile.city_id == 0) {
+            mNotification = false;
+            mProgressBar.setVisibility(View.VISIBLE);
+            mButtonsGroup.setVisibility(View.GONE);
+            updateProfile();
+            return;
+        }
+        Intent intent = null;
+        switch (view.getId()) {
+            case R.id.btnDshbrdDating: {
+                intent = new Intent(this.getApplicationContext(), DatingActivity.class);
+            }
+            break;
+            case R.id.btnDshbrdLikes: {
+                intent = new Intent(this.getApplicationContext(), LikesActivity.class);
+            }
+            break;
+            case R.id.btnDshbrdSymphaty: {
+                intent = new Intent(this.getApplicationContext(), SymphatyActivity.class);
+            }
+            break;
+            case R.id.btnDshbrdChat: {
+                intent = new Intent(this.getApplicationContext(), InboxActivity.class);
+            }
+            break;
+            case R.id.btnDshbrdTops: {
+                intent = new Intent(this.getApplicationContext(), TopsActivity.class);
+            }
+            break;
+            case R.id.btnDshbrdProfile: {
+                //intent = new Intent(Intent.ACTION_VIEW);
+                //intent.setData(Uri.parse("market://details?id=com.topface.topface"));
+                //intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.topface.topface"));
+                intent = new Intent(this.getApplicationContext(), ProfileActivity.class);
+            }
+            break;
+            default:
+        }
+        startActivity(intent);
+    }
 }
 
 

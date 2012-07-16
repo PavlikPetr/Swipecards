@@ -53,6 +53,8 @@
     <string name="chat_sexuality_in">Sexuality rated.</string>
     <string name="chat_sexuality_out">You have your sexuality rated.</string> 
     <string name="chat_money_in">You got a coin</string>
+    <string name="chat_message_copied">Message copied</string>
+
     
     <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Mutual</string>

@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
+import com.topface.topface.App;
 
 public class Device {
     // Data
@@ -64,9 +65,18 @@ public class Device {
         return displayMetrics;
     }
 
-    public static int getCurrentDisplayWidth(Context context) {
+    /**
+     * Возвращает максимальную сторону дисплея, т.е. ширину, если альбомная ориентация и высоту, если портретная
+     * @param context контекст выполнения
+     * @return размер дисплея по максимальной стороне
+     */
+    public static int getMaxDisplaySize(Context context) {
         return getOrientation(context) == LANDSCAPE ?
-                getDisplay(context).getHeight() :
-                getDisplay(context).getWidth();
+                getDisplay(context).getWidth() :
+                getDisplay(context).getHeight();
+    }
+
+    public static int getMaxDisplaySize() {
+        return getMaxDisplaySize(App.getContext());
     }
 }

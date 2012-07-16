@@ -124,13 +124,13 @@ public class SymphatyActivity extends Activity {
    mListView.getRefreshableView().addFooterView(mFooterView);
 
    // Control creating
-   mAvatarManager = new AvatarManager<FeedSymphaty>(this,mSymphatyDataList);
+   mAvatarManager = new AvatarManager<FeedSymphaty>(mSymphatyDataList);
    mListAdapter = new SymphatyListAdapter(getApplicationContext(),mAvatarManager);
    mListView.setOnScrollListener(mAvatarManager);
    mListView.setAdapter(mListAdapter);
    
    
-   mNewUpdating = CacheProfile.unread_symphaties > 0 ? true : false;
+   mNewUpdating = CacheProfile.unread_symphaties > 0;
    CacheProfile.unread_symphaties = 0;
    
    banner();
@@ -183,7 +183,9 @@ public class SymphatyActivity extends Activity {
           public void run() {
             mProgressBar.setVisibility(View.GONE);
             Toast.makeText(SymphatyActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
-            mListView.onRefreshComplete(); 
+            if (mListView != null) {
+                mListView.onRefreshComplete();
+            }
           }
         });
       }

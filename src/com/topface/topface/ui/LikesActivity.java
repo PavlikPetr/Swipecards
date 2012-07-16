@@ -125,12 +125,12 @@ public class LikesActivity extends Activity {
    
 
    // Control creating
-   mAvatarManager = new AvatarManager<FeedLike>(this,mLikesDataList);
+   mAvatarManager = new AvatarManager<FeedLike>(mLikesDataList);
    mListAdapter = new LikesListAdapter(getApplicationContext(),mAvatarManager);
    mListView.setOnScrollListener(mAvatarManager);
    mListView.setAdapter(mListAdapter);
    
-   mNewUpdating = CacheProfile.unread_likes > 0 ? true : false;
+   mNewUpdating = CacheProfile.unread_likes > 0;
    CacheProfile.unread_likes = 0;
    
    banner();
@@ -220,10 +220,14 @@ public class LikesActivity extends Activity {
         post(new Runnable() {
           @Override
           public void run() {
-            mFooterView.setVisibility(View.GONE);
-            mProgressBar.setVisibility(View.GONE);
+            if (mFooterView != null && mProgressBar != null) {
+                mFooterView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.GONE);
+            }
             Toast.makeText(LikesActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
-            mListView.onRefreshComplete();
+            if (mListView != null) {
+                mListView.onRefreshComplete();
+            }
           }
         });
       }

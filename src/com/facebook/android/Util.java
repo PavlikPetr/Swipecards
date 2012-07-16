@@ -29,6 +29,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
+import com.topface.topface.utils.Http;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -222,7 +223,7 @@ public final class Util {
 
     private static String read(InputStream in) throws IOException {
         StringBuilder sb = new StringBuilder();
-        BufferedReader r = new BufferedReader(new InputStreamReader(in), 1000);
+        BufferedReader r = new BufferedReader(new InputStreamReader(in), Http.BUFFER_SIZE);
         for (String line = r.readLine(); line != null; line = r.readLine()) {
             sb.append(line);
         }

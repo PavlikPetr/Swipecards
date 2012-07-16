@@ -7,6 +7,7 @@ import java.util.Calendar;
 
 import android.graphics.*;
 import android.net.Uri;
+import android.text.ClipboardManager;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import android.content.Context;
@@ -31,8 +32,7 @@ public class Utils {
             MessageDigest digester = MessageDigest.getInstance("MD5");
             digester.update(value.getBytes());
             byte[] bytes = digester.digest();
-            for (int i = 0; i < bytes.length; i++)
-                hexString.append(Integer.toHexString(0xFF & bytes[i]));
+            for (byte aByte : bytes) hexString.append(Integer.toHexString(0xFF & aByte));
             return hexString.toString();
         } catch (Exception e) {
             return null;
@@ -69,19 +69,21 @@ public class Utils {
 
         // вырезаем необходимый размер
         Bitmap clippedBitmap;
-        if (LEG) {
-            // у горизонтальной, вырезаем по центру
-            int offset_x = (scaledBitmap.getWidth() - bitmapWidth) / 2;
-            clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, bitmapWidth, bitmapHeight, null, false);
-        } else
-            // у вертикальной режим с верху
-            clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, bitmapWidth, bitmapHeight, null, false);
+        try {
+            if (LEG) {
+                // у горизонтальной, вырезаем по центру
+                int offset_x = (scaledBitmap.getWidth() - bitmapWidth) / 2;
+                clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, bitmapWidth, bitmapHeight, null, false);
+            } else {
+                // у вертикальной режим с верху
+                clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, bitmapWidth, bitmapHeight, null, false);
+            }
+        }
+        catch (Exception e) {
+            Debug.error("Bitmap clip error", e);
+            clippedBitmap = null;
+        }
 
-        //rawBitmap.recycle();
-        //rawBitmap = null;
-
-        //scaledBitmap.recycle();
-        //scaledBitmap = null;
 
         return clippedBitmap;
     }
@@ -320,4 +322,8 @@ public class Utils {
         return scale;
     }
 
+    public static void copyTextToClipboard(String text, Context context) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.setText(text);
+    }
 }
