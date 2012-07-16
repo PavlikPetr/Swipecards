@@ -334,7 +334,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     //---------------------------------------------------------------------------
     private void sendUserCurrentLocation() {   
     	if (mGeoManager == null)
-    		mGeoManager = new GeoLocationManager(this);
+    		mGeoManager = new GeoLocationManager(getApplicationContext());
     	if(mGeoManager.availableLocationProvider() == LocationProviderType.GPS) {
     		mGeoManager.setLocationListener(LocationProviderType.GPS, this);
     	} else if (mGeoManager.availableLocationProvider() == LocationProviderType.AGPS){

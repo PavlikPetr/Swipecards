@@ -319,17 +319,20 @@ public class ChatListAdapter extends BaseAdapter {
     }
     //---------------------------------------------------------------------------
     public void addSentMessage(History msg) {
-        int position = mDataList.size() - 1;
-        if (position < 0)
-            mItemLayoutList.add(T_USER_PHOTO);
-        else {
-            History history = mDataList.get(mDataList.size() - 1);
-            if (history.owner_id == mUserId)
+        if (msg.type == History.MESSAGE ) {
+            int position = mDataList.size() - 1;
+            if (position < 0) {
                 mItemLayoutList.add(T_USER_PHOTO);
-            else
-                mItemLayoutList.add(T_USER_EXT);
+            } else {
+                History history = mDataList.get(mDataList.size() - 1);
+                if (history.owner_id == mUserId)
+                    mItemLayoutList.add(T_USER_PHOTO);
+                else
+                    mItemLayoutList.add(T_USER_EXT);
+            }
+        } else if(msg.type == History.GIFT) {
+            mItemLayoutList.add(T_USER_GIFT);            
         }
-
         mDataList.add(msg);
     }
     //---------------------------------------------------------------------------
