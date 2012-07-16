@@ -4,10 +4,12 @@
         xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/item_all_selector"
+        android:id="@+id/bar_search"
         android:padding="4dp">
 
     <!-- аватар -->
-    <com.topface.topface.ui.views.RoundedImageView
+   <com.topface.topface.ui.views.RoundedImageView
             android:id="@+id/ivAvatar"
             topface:frame="dialog"
             android:layout_width="wrap_content"
@@ -18,7 +20,7 @@
             android:layout_marginRight="6dp"
             />
 
-    <!-- имя, возраст -->
+    <!-- имя -->
     <TextView
             android:id="@+id/tvName"
             android:textColor="#414141"
@@ -29,9 +31,10 @@
             android:singleLine="true"
             android:ellipsize="end"
             android:textSize="16dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:text="Andrey Mischenko"/>
 
-    <!-- текст -->
+    <!-- телефон -->
     <TextView
             android:id="@+id/tvText"
             android:textColor="#414141"
@@ -40,19 +43,10 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:layout_marginRight="20dp"
-            android:layout_below="@id/tvName"/>
+            android:layout_below="@id/tvName"
+            android:text="+7-909-577-31-17"/>
 
-    <!-- время -->
-    <TextView
-            android:id="@+id/tvTime"
-            android:layout_below="@id/tvText"
-            android:textColor="#707070"
-            android:layout_toRightOf="@id/ivAvatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
-
-    <!-- стрелка -->
+    <!-- чекбокс -->
     <ImageView
             android:id="@+id/ivArrow"
             android:layout_width="wrap_content"
@@ -60,6 +54,6 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:paddingRight="2dp"
-            android:src="@drawable/im_item_arrow"/>
+            android:src="@android:drawable/checkbox_on_background"/>
 
 </RelativeLayout>

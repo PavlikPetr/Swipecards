@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/im_list_bkgrd"
+        android:orientation="vertical" >
+
+    <include layout="@layout/bar_search"  android:id="@+id/bar_search"/>
+
+    <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/inviteList">
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <include layout="@layout/item_invite"/>
+            <include layout="@layout/item_invite"/>
+            <include layout="@layout/item_invite"/>
+            <include layout="@layout/item_invite"/>
+            <include layout="@layout/item_invite"/>
+            <include layout="@layout/item_invite"/>
+            <include layout="@layout/item_invite"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:padding="10dip"
+        android:background="@drawable/im_bar_button"
+        android:orientation="vertical"
+        >
+            <TextView
+                    android:id="@+id/inviteDescription"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:text="Тут будет длинный текст, описывающий как получить бонус, и что все это бесплатно"
+                    />
+            <Button
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_below="@id/inviteDescription"
+                    android:layout_centerHorizontal="true"
+                    android:text="Отправить"
+                    />
+    </RelativeLayout>
+</LinearLayout>

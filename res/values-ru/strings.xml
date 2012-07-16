@@ -170,5 +170,6 @@
     <string name="pull_to_refresh_release_label">Отпустите</string>
     <string name="pull_to_refresh_refreshing_label">Обновление</string>
     <string name="pull_to_refresh_tap_label">Нажмите</string>
-  
+    <string name="search_hint">Поиск</string>
+
 </resources>
