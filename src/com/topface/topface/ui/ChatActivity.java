@@ -2,7 +2,6 @@ package com.topface.topface.ui;
 
 import java.util.LinkedList;
 
-import com.google.android.maps.MapActivity;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.Static;
@@ -24,12 +23,14 @@ import com.topface.topface.utils.Http;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -55,13 +56,17 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     private MessageRequest messageRequest;
     private HistoryRequest historyRequest;
     private SwapControl mSwapControl;
+    private ProgressDialog mProgressDialog;
+    private boolean mLocationDetected = false;
+    
     // Constants
     private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
-    private static final int DIALOG_GPS_ENABLE_WITH_AGPS_ID = 2;
+    private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
+    private static long LOCATION_PROVIDER_TIMEOUT = 10000;
     
     //Managers
     private GeoLocationManager mGeoManager = null;
@@ -324,33 +329,57 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         		double latitude = extras.getDouble(GeoMapActivity.INTENT_LATITUDE_ID);
         		double longitude = extras.getDouble(GeoMapActivity.INTENT_LONGITUDE_ID);
         		String address = extras.getString(GeoMapActivity.INTENT_ADDRESS_ID);
-        		Debug.log(this, latitude + " / " + longitude + "/" + address);
         		if (mIsAddPanelOpened)
                     mSwapControl.snapToScreen(0);                
                 mIsAddPanelOpened = false;
+                
+                Toast.makeText(this, address, Toast.LENGTH_SHORT).show();
         	}
         }
     }
     //---------------------------------------------------------------------------
-    private void sendUserCurrentLocation() {   
+    private void sendUserCurrentLocation() {
+    	mLocationDetected = false;
+    	showDialog(DIALOG_LOCATION_PROGRESS_ID);
     	if (mGeoManager == null)
     		mGeoManager = new GeoLocationManager(getApplicationContext());
-    	if(mGeoManager.availableLocationProvider() == LocationProviderType.GPS) {
+    	if(mGeoManager.availableLocationProvider(LocationProviderType.AGPS)) {
+    		mGeoManager.setLocationListener(LocationProviderType.AGPS, this);
+    	} else if (mGeoManager.availableLocationProvider(LocationProviderType.GPS)){
     		mGeoManager.setLocationListener(LocationProviderType.GPS, this);
-    	} else if (mGeoManager.availableLocationProvider() == LocationProviderType.AGPS){
-    		showDialog(DIALOG_GPS_ENABLE_WITH_AGPS_ID);    		
+    		(new CountDownTimer(LOCATION_PROVIDER_TIMEOUT,LOCATION_PROVIDER_TIMEOUT) {
+    			
+    			@Override
+    			public void onTick(long millisUntilFinished) {
+    				
+    			}
+    			
+    			@Override
+    			public void onFinish() {
+    				synchronized (mGeoManager) {
+    					if (!mLocationDetected) {						
+    						mGeoManager.removeLocationListener(ChatActivity.this);
+    						mProgressDialog.dismiss();    
+    						Toast.makeText(ChatActivity.this, R.string.chat_toast_fail_location, Toast.LENGTH_SHORT).show();
+    					}
+    				}
+    			}
+    		}).start();	
     	} else {
-    		showDialog(DIALOG_GPS_ENABLE_NO_AGPS_ID);	
+    		showDialog(DIALOG_GPS_ENABLE_NO_AGPS_ID);
     	}        
     }
     //---------------------------------------------------------------------------
 	@Override
 	public void onLocationChanged(Location location) {
-		Debug.log(this, location.getLatitude() + " / " + location.getLongitude());		
+		//Debug.log(this, location.getLatitude() + " / " + location.getLongitude());
+		Toast.makeText(this, mGeoManager.getLocationAddress(location.getLatitude(), location.getLongitude()), Toast.LENGTH_SHORT).show();
 		if (mIsAddPanelOpened)
             mSwapControl.snapToScreen(0);                
         mIsAddPanelOpened = false;
         mGeoManager.removeLocationListener(this);
+        mLocationDetected = true;
+        mProgressDialog.dismiss();
 	}
 	@Override
 	public void onProviderDisabled(String provider) {
@@ -369,8 +398,11 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	//---------------------------------------------------------------------------
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		if (id == DIALOG_GPS_ENABLE_NO_AGPS_ID) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);  
+		AlertDialog.Builder builder;
+		AlertDialog alert;
+		switch(id) {
+		case DIALOG_GPS_ENABLE_NO_AGPS_ID:
+			builder = new AlertDialog.Builder(this);  
 			builder.setMessage(this.getText(R.string.chat_dialog_gps))  
 			     .setCancelable(false)  
 			     .setPositiveButton(this.getText(R.string.chat_dialog_btn_gps_settings),  
@@ -386,30 +418,16 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 			               dialog.cancel();
 			          }  
 			     });  
-			AlertDialog alert = builder.create();  
-			return alert;
-		} else if(id == DIALOG_GPS_ENABLE_WITH_AGPS_ID) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);  
-			builder.setMessage(this.getText(R.string.chat_dialog_agps))  
-			     .setCancelable(false)  
-			     .setPositiveButton(this.getText(R.string.chat_dialog_btn_gps_settings),  
-			          new DialogInterface.OnClickListener(){  
-			          public void onClick(DialogInterface dialog, int id){  
-			        	  Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);  
-			              startActivity(gpsOptionsIntent);  
-			          }  
-			     });  
-			     builder.setNegativeButton(this.getText(R.string.chat_dialog_btn_agps_continue),
-			          new DialogInterface.OnClickListener(){  
-			          public void onClick(DialogInterface dialog, int id){  
-			               dialog.cancel();
-			               mGeoManager.setLocationListener(LocationProviderType.AGPS, ChatActivity.this);
-			          }  
-			     });  
-			AlertDialog alert = builder.create();  
-			return alert;
-		} else {
+			alert = builder.create();  
+			return alert;			
+		case DIALOG_LOCATION_PROGRESS_ID:
+			mProgressDialog = new ProgressDialog(this);
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			mProgressDialog.setMessage(this.getText(R.string.map_location_progress));
+			return mProgressDialog;
+		default:
 			return super.onCreateDialog(id);
+		
 		}
 	}
     //---------------------------------------------------------------------------

@@ -3,7 +3,6 @@ package com.topface.topface.utils;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.security.MessageDigest;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import android.graphics.*;
 import android.net.Uri;

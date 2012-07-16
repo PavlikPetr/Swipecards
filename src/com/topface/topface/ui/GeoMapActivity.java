@@ -12,11 +12,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -24,9 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Filter;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -70,7 +64,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 
 	//Variables
 	private GeoLocationManager mGeoLocationManager;
-	private List<Address> mAddressList = new ArrayList<Address>();
+	private ArrayList<Address> mAddressList = new ArrayList<Address>();
 	private boolean mLocationDetected = false;
 	
 	@Override
@@ -102,6 +96,20 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 			mAddressView.setOnItemClickListener(this);
 			mAddressView.setOnClickListener(this);
 //			mAddressView.setThreshold(THRESHOLD);
+			
+//			TextView.OnEditorActionListener listener = new TextView.OnEditorActionListener(){
+//
+//				@Override
+//				public boolean onEditorAction(TextView arg0, int actionId,
+//						KeyEvent event) {
+//					if (actionId == EditorInfo.IME_ACTION_DONE && event.getAction() == KeyEvent.ACTION_DOWN) { 
+//						hideKeyboard();
+//					}
+//					return true;
+//				}
+//				
+//			};
+//			mAddressView.setOnEditorActionListener(listener);
 			
 			onCurrentLocationRequest();
 			
@@ -135,6 +143,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 	}
 	
 	private void onCurrentLocationRequest() {
+		mLocationDetected = false;
 		LocationProviderType providerType = mGeoLocationManager.availableLocationProvider(); 
 		switch (providerType) {
 		case GPS:
@@ -165,8 +174,9 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 						mGeoLocationManager.removeLocationListener(GeoMapActivity.this);
 						if (mGeoLocationManager.isAvailable(LocationProviderType.AGPS)) 
 								mGeoLocationManager.setLocationListener(LocationProviderType.AGPS, GeoMapActivity.this);
-						else
+						else {
 							mProgressDialog.dismiss();
+						}
 					}
 				}
 			}
@@ -228,7 +238,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 			GeoPoint point = GeoLocationManager.toGeoPoint(mAddressList.get(arg2).getLatitude(),mAddressList.get(arg2).getLongitude());
 			mGeoLocationManager.setOverlayItem(this, mMapView, point, MAP_INITIAL_ZOOM);
 			mMapView.getController().animateTo(point);
-			//hideKeyboard();
+			hideKeyboard();
 		}
 	}
 
@@ -238,17 +248,16 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 		
 		@Override
 		protected FilterResults performFiltering(final CharSequence constraint) {
-			List<Address> addressList = null;
-			if (!OSM.OSMEnabled) {
+			ArrayList<Address> addressList = null;
+			if (!OSM.OSMSearchEnabled) {
 				if (constraint != null) {
 					addressList = mGeoLocationManager.getSuggestionAddresses((String) constraint, 5);
-				}			
-				if (addressList == null) {
-					addressList = new ArrayList<Address>();
 				}
+				if (addressList == null)
+					addressList = new ArrayList<Address>();
 				
 				//TODO delete empty addresses
-				List<Address> emptyAddresses = new ArrayList<Address>();
+				ArrayList<Address> emptyAddresses = new ArrayList<Address>();
 				for (Address address : addressList) {				
 					String addressString  = createFormattedAddressFromAddress(address);
 					addressString = addressString.replace(" ", Static.EMPTY);
@@ -260,7 +269,9 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 				addressList.removeAll(emptyAddresses);
 			} else {
 				addressList = OSM.getSuggestionAddresses((String)constraint, 5);
-			}
+				if (addressList == null)
+					addressList = new ArrayList<Address>();
+			}			
 			
 			final FilterResults filterResults = new FilterResults();
 			filterResults.values = addressList;
@@ -294,13 +305,15 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 		protected void publishResults(final CharSequence contraint, final FilterResults results) {
 			if (mAddressAdapter != null) {
 				mAddressAdapter.clear();
-				for (Address address : (List<Address>) results.values) {
-					mAddressAdapter.add(createFormattedAddressFromAddress(address));
-				}
-				if (results.count > 0) {
-					mAddressAdapter.notifyDataSetChanged();
-				} else {
-					mAddressAdapter.notifyDataSetInvalidated();
+				if (results.values != null) {
+					for (Address address : (List<Address>) results.values) {
+						mAddressAdapter.add(createFormattedAddressFromAddress(address));
+					}
+					if (results.count > 0) {
+						mAddressAdapter.notifyDataSetChanged();
+					} else {
+						mAddressAdapter.notifyDataSetInvalidated();
+					}
 				}
 			}
 		}

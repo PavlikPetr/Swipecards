@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import com.google.android.maps.MapView;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;

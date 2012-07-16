@@ -2,7 +2,8 @@ package com.topface.topface.ui;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
+
+import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.requests.ApiHandler;
@@ -12,6 +13,7 @@ import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.utils.GiftGalleryManager;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.LocalActivityManager;
 import android.content.Intent;
@@ -43,10 +45,11 @@ public class GiftsActivity extends Activity {
 
 	private TextView mTitle;
 	
-	private List<GiftsAdapter> mGridAdapters;
-	private List<GiftGalleryManager<Gift>> mGalleryManagers;
+	private LinkedList<GiftsAdapter> mGridAdapters;
+	private LinkedList<GiftGalleryManager<Gift>> mGalleryManagers;
 	private ProgressBar mProgressBar;
 	private TabHost mTabHost;
+	@SuppressLint("UseSparseArrays")
 	private HashMap<Integer, GridView> mGridViews = new HashMap<Integer, GridView>();
 
 	private RadioButton mBtnLeft;
@@ -90,86 +93,25 @@ public class GiftsActivity extends Activity {
 		mBtnRight.setText(Gift.getTypeNameResId(Gift.PRESENT));
 
 		mBtnLeft.setChecked(true);
-
-		update();
+		if (Data.giftsList != null && Data.giftsList.size() > 0) {
+			mProgressBar.setVisibility(View.VISIBLE);
+			mGiftsCollection.add(Data.giftsList);
+			initControls();
+		} else {
+			update();
+		}
 	}
 
 	private void update() {
-		mProgressBar.setVisibility(View.VISIBLE);
+		mProgressBar.setVisibility(View.VISIBLE);		
 		giftRequest = new GiftsRequest(this);
 		giftRequest.callback(new ApiHandler() {
 			@Override
 			public void success(ApiResponse response) {
-				mGiftsCollection.add(Gift.parse(response));
-				mGridViews.put(Gift.ROMANTIC, createGridView(Gift.ROMANTIC));
-				mGridViews.put(Gift.FRIENDS, createGridView(Gift.FRIENDS));
-				mGridViews.put(Gift.PRESENT, createGridView(Gift.PRESENT));
+				Data.giftsList = Gift.parse(response);
+				mGiftsCollection.add(Data.giftsList);				
 
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-
-						mTabHost.addTab(mTabHost
-								.newTabSpec(Integer.toString(Gift.ROMANTIC))
-								.setIndicator(
-										getResources()
-												.getText(
-														Gift.getTypeNameResId(Gift.ROMANTIC)))
-								.setContent(mGiftsTabContent));
-						mTabHost.addTab(mTabHost
-								.newTabSpec(Integer.toString(Gift.FRIENDS))
-								.setIndicator(
-										getResources()
-												.getText(
-														Gift.getTypeNameResId(Gift.FRIENDS)))
-								.setContent(mGiftsTabContent));
-						mTabHost.addTab(mTabHost
-								.newTabSpec(Integer.toString(Gift.PRESENT))
-								.setIndicator(
-										getResources()
-												.getText(
-														Gift.getTypeNameResId(Gift.PRESENT)))
-								.setContent(mGiftsTabContent));
-
-						mBtnLeft.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View v) {
-								mTabHost.setCurrentTabByTag(Integer.toString(Gift.ROMANTIC));
-							}
-						});
-
-						mBtnMiddle.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View v) {
-								mTabHost.setCurrentTabByTag(Integer.toString(Gift.FRIENDS));
-							}
-						});
-
-						mBtnRight.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View v) {
-								mTabHost.setCurrentTabByTag(Integer.toString(Gift.PRESENT));
-							}
-						});
-
-						if (mBtnMiddle.isChecked())
-							mTabHost.setCurrentTabByTag(Integer
-									.toString(Gift.FRIENDS));
-						;
-						if (mBtnRight.isChecked())
-							mTabHost.setCurrentTabByTag(Integer
-									.toString(Gift.PRESENT));
-						;
-
-						mProgressBar.setVisibility(View.GONE);
-						for (GiftsAdapter adapter : mGridAdapters)
-							adapter.notifyDataSetChanged();
-
-						for (GiftGalleryManager<Gift> manager : mGalleryManagers) {
-							manager.update();
-						}
-					}
-				});
+				initControls();
 			}
 
 			@Override
@@ -189,6 +131,77 @@ public class GiftsActivity extends Activity {
 		}).exec();
 	}
 
+	private void initControls() {
+		mGridViews.put(Gift.ROMANTIC, createGridView(Gift.ROMANTIC));
+		mGridViews.put(Gift.FRIENDS, createGridView(Gift.FRIENDS));
+		mGridViews.put(Gift.PRESENT, createGridView(Gift.PRESENT));
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+
+				mTabHost.addTab(mTabHost
+						.newTabSpec(Integer.toString(Gift.ROMANTIC))
+						.setIndicator(
+								getResources()
+										.getText(
+												Gift.getTypeNameResId(Gift.ROMANTIC)))
+						.setContent(mGiftsTabContent));
+				mTabHost.addTab(mTabHost
+						.newTabSpec(Integer.toString(Gift.FRIENDS))
+						.setIndicator(
+								getResources()
+										.getText(
+												Gift.getTypeNameResId(Gift.FRIENDS)))
+						.setContent(mGiftsTabContent));
+				mTabHost.addTab(mTabHost
+						.newTabSpec(Integer.toString(Gift.PRESENT))
+						.setIndicator(
+								getResources()
+										.getText(
+												Gift.getTypeNameResId(Gift.PRESENT)))
+						.setContent(mGiftsTabContent));
+
+				mBtnLeft.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						mTabHost.setCurrentTabByTag(Integer.toString(Gift.ROMANTIC));
+					}
+				});
+
+				mBtnMiddle.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						mTabHost.setCurrentTabByTag(Integer.toString(Gift.FRIENDS));
+					}
+				});
+
+				mBtnRight.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						mTabHost.setCurrentTabByTag(Integer.toString(Gift.PRESENT));
+					}
+				});
+
+				if (mBtnMiddle.isChecked())
+					mTabHost.setCurrentTabByTag(Integer
+							.toString(Gift.FRIENDS));
+				;
+				if (mBtnRight.isChecked())
+					mTabHost.setCurrentTabByTag(Integer
+							.toString(Gift.PRESENT));
+				;
+
+				mProgressBar.setVisibility(View.GONE);
+				for (GiftsAdapter adapter : mGridAdapters)
+					adapter.notifyDataSetChanged();
+
+				for (GiftGalleryManager<Gift> manager : mGalleryManagers) {
+					manager.update();
+				}
+			}
+		});
+	}
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -243,14 +256,14 @@ public class GiftsActivity extends Activity {
 
 	class GiftsCollection {
 		public int defaultType = Gift.FRIENDS;
-		private List<Gift> mAllGifts = new LinkedList<Gift>();
+		private LinkedList<Gift> mAllGifts = new LinkedList<Gift>();
 
-		public void add(List<Gift> gifts) {
+		public void add(LinkedList<Gift> gifts) {
 			mAllGifts.addAll(gifts);
 		}
 
-		public List<Gift> getGifts(int type) {
-			List<Gift> result = new LinkedList<Gift>();
+		public LinkedList<Gift> getGifts(int type) {
+			LinkedList<Gift> result = new LinkedList<Gift>();
 			for (Gift gift : mAllGifts) {
 				if (gift.type == type) {
 					result.add(gift);
@@ -260,7 +273,7 @@ public class GiftsActivity extends Activity {
 			return result;
 		}
 
-		public List<Gift> getGifts() {
+		public LinkedList<Gift> getGifts() {
 			return getGifts(defaultType);
 		}
 

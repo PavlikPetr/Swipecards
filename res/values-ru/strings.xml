@@ -53,9 +53,8 @@
 	  <string name="chat_dialog_gps">GPS выключен! Включить?</string>    
       <string name="chat_dialog_btn_gps_settings">Настройки</string>
       <string name="chat_dialog_btn_gps_cancel">Отмена</string>
-      <string name="chat_dialog_agps">GPS выключен! Включить или использовать Интернет соединения для определния местоположения?</string>
       <string name="chat_dialog_btn_agps_settings">Настройки</string>
-      <string name="chat_dialog_btn_agps_continue">Использовать сеть</string>
+      <string name="chat_toast_fail_location">Не удалось определить местоположение</string>
 	  
 	  <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Взаимно</string>
