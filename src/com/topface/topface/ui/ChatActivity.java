@@ -93,17 +93,18 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                         post(new Runnable() {
                             @Override
                             public void run() {
-                                History history = new History();
-                                history.code = 0;
-                                history.gift = 0;
-                                history.owner_id = 0;
-                                history.created = System.currentTimeMillis();
-                                history.text = text;
-                                history.type = History.MESSAGE;
-                                mAdapter.addSentMessage(history);
-                                mAdapter.notifyDataSetChanged();
-                                mEdBox.getText().clear();
-                                mProgressBar.setVisibility(View.GONE);
+                                if (mAdapter != null) {
+                                    History history = new History();
+                                    history.code = 0;
+                                    history.gift = 0;
+                                    history.owner_id = 0;
+                                    history.created = System.currentTimeMillis();
+                                    history.text = text;
+                                    history.type = History.MESSAGE;
+
+                                    mAdapter.addSentMessage(history);
+                                    mAdapter.notifyDataSetChanged();
+                                }
                             }
                         });
                     }

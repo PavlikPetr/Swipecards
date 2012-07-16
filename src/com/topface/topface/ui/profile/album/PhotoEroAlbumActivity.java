@@ -231,8 +231,10 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
 
     // счетчик галереи
     public void updateCounter() {
-        mMoney.setText("" + CacheProfile.money);
-        mCounter.setText((mCurrentPos + 1) + "/" + mAlbumsList.size());
+        if (mCounter != null && mMoney != null) {
+            mMoney.setText("" + CacheProfile.money);
+            mCounter.setText((mCurrentPos + 1) + "/" + mAlbumsList.size());
+        }
     }
 
     @Override

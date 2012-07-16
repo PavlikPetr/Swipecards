@@ -10,7 +10,7 @@
 
     <!-- аватар -->
    <com.topface.topface.ui.views.RoundedImageView
-            android:id="@+id/ivAvatar"
+            android:id="@+id/contactAvatar"
             topface:frame="dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,33 +22,32 @@
 
     <!-- имя -->
     <TextView
-            android:id="@+id/tvName"
+            android:id="@+id/contactName"
             android:textColor="#414141"
-            android:layout_toRightOf="@id/ivAvatar"
+            android:layout_toRightOf="@id/contactAvatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:singleLine="true"
             android:ellipsize="end"
             android:textSize="16dp"
-            android:textStyle="bold"
-            android:text="Andrey Mischenko"/>
+            android:textStyle="bold"/>
 
     <!-- телефон -->
     <TextView
-            android:id="@+id/tvText"
+            android:id="@+id/contactPhone"
             android:textColor="#414141"
-            android:layout_toRightOf="@id/ivAvatar"
+            android:layout_toRightOf="@id/contactAvatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:layout_marginRight="20dp"
-            android:layout_below="@id/tvName"
+            android:layout_below="@id/contactName"
             android:text="+7-909-577-31-17"/>
 
     <!-- чекбокс -->
     <ImageView
-            android:id="@+id/ivArrow"
+            android:id="@+id/contactCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
