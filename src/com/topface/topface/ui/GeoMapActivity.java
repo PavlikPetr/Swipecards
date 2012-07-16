@@ -12,13 +12,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -26,10 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Filter;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -73,7 +64,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 
 	//Variables
 	private GeoLocationManager mGeoLocationManager;
-	private List<Address> mAddressList = new ArrayList<Address>();
+	private ArrayList<Address> mAddressList = new ArrayList<Address>();
 	private boolean mLocationDetected = false;
 	
 	@Override
@@ -257,17 +248,16 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 		
 		@Override
 		protected FilterResults performFiltering(final CharSequence constraint) {
-			List<Address> addressList = null;
-			if (!OSM.OSMEnabled) {
+			ArrayList<Address> addressList = null;
+			if (!OSM.OSMSearchEnabled) {
 				if (constraint != null) {
 					addressList = mGeoLocationManager.getSuggestionAddresses((String) constraint, 5);
-				}			
-				if (addressList == null) {
-					addressList = new ArrayList<Address>();
 				}
+				if (addressList == null)
+					addressList = new ArrayList<Address>();
 				
 				//TODO delete empty addresses
-				List<Address> emptyAddresses = new ArrayList<Address>();
+				ArrayList<Address> emptyAddresses = new ArrayList<Address>();
 				for (Address address : addressList) {				
 					String addressString  = createFormattedAddressFromAddress(address);
 					addressString = addressString.replace(" ", Static.EMPTY);
@@ -279,7 +269,9 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 				addressList.removeAll(emptyAddresses);
 			} else {
 				addressList = OSM.getSuggestionAddresses((String)constraint, 5);
-			}
+				if (addressList == null)
+					addressList = new ArrayList<Address>();
+			}			
 			
 			final FilterResults filterResults = new FilterResults();
 			filterResults.values = addressList;
@@ -313,13 +305,15 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 		protected void publishResults(final CharSequence contraint, final FilterResults results) {
 			if (mAddressAdapter != null) {
 				mAddressAdapter.clear();
-				for (Address address : (List<Address>) results.values) {
-					mAddressAdapter.add(createFormattedAddressFromAddress(address));
-				}
-				if (results.count > 0) {
-					mAddressAdapter.notifyDataSetChanged();
-				} else {
-					mAddressAdapter.notifyDataSetInvalidated();
+				if (results.values != null) {
+					for (Address address : (List<Address>) results.values) {
+						mAddressAdapter.add(createFormattedAddressFromAddress(address));
+					}
+					if (results.count > 0) {
+						mAddressAdapter.notifyDataSetChanged();
+					} else {
+						mAddressAdapter.notifyDataSetInvalidated();
+					}
 				}
 			}
 		}

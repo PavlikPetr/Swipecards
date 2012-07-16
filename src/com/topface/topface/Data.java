@@ -9,6 +9,7 @@ import com.topface.topface.data.Dialog;
 import com.topface.topface.data.FeedInbox;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedSympathy;
+import com.topface.topface.data.Gift;
 import com.topface.topface.data.Top;
 import com.topface.topface.utils.Device;
 import android.content.Context;
@@ -23,6 +24,7 @@ public class Data {
     public static Facebook facebook;
     public static LinkedList<City> cityList;
     public static LinkedList<Album> photoAlbum;
+    public static LinkedList<Gift> giftsList;
     public static int GRID_COLUMN;
     public static int screen_width;
     public static long midnight;

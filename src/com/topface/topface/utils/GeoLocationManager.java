@@ -2,7 +2,6 @@ package com.topface.topface.utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,19 +15,13 @@ import com.topface.topface.Static;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -167,22 +160,32 @@ public class GeoLocationManager {
 	 * @return specific address correlating with input coordinates
 	 */
 	public String getLocationAddress(double latitude, double longitude) {
-		StringBuilder sBLocation = new StringBuilder();		
-		StringBuilder sBFullLocation = new StringBuilder();
-		try {
-		    List<Address> listAddresses = mGeocoder.getFromLocation(latitude, longitude, 1);
-		    if(null != listAddresses && listAddresses.size() > 0){
-		    	sBLocation.append(listAddresses.get(0).getAddressLine(0));
-		    	sBLocation.append(", \n").append(listAddresses.get(0).getAddressLine(1));
-		    	sBFullLocation.append(listAddresses.get(0).getAddressLine(0));
-		    	sBFullLocation.append(", ").append(listAddresses.get(0).getAddressLine(1));
-		    	sBFullLocation.append(", ").append(listAddresses.get(0).getAddressLine(2));
-		    }
-		    currentAddress = sBFullLocation.toString();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}		
-		return sBLocation.toString();
+		if (OSM.OSMReverseEnabled) {
+			currentAddress = OSM.getAddress(latitude, longitude);
+			return currentAddress;
+		} else {
+			StringBuilder sBShortLocation = new StringBuilder();		
+			StringBuilder sBFullLocation = new StringBuilder();
+			try {
+				List<Address> listAddresses = mGeocoder.getFromLocation(latitude, longitude, 1);
+			    if(null != listAddresses && listAddresses.size() > 0){
+			    	final String street = listAddresses.get(0).getAddressLine(0);
+			    	final String city = listAddresses.get(0).getAddressLine(1);
+			    	final String country = listAddresses.get(0).getAddressLine(2);
+			    	sBShortLocation.append(street);
+			    	if (city != null) sBShortLocation.append(",\n").append(city);
+			    	
+			    	sBFullLocation.append(street);
+			    	if (city != null) sBFullLocation.append(", ").append(city);
+			    	if (country != null) sBFullLocation.append(", ").append(country);
+			    }
+			    currentAddress = sBFullLocation.toString();
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}		
+			return sBShortLocation.toString();
+		}
+		
 	}
 	
 	/**
@@ -201,10 +204,10 @@ public class GeoLocationManager {
 	 * @param maxResultsNumber
 	 * @return addresses' suggestions
 	 */
-	public List<Address> getSuggestionAddresses(String text, int maxResultsNumber) {
-		List<Address> result = new LinkedList<Address>();
+	public ArrayList<Address> getSuggestionAddresses(String text, int maxResultsNumber) {
+		ArrayList<Address> result = new ArrayList<Address>();
 		try {
-			result = mGeocoder.getFromLocationName(text, maxResultsNumber);
+			result.addAll(mGeocoder.getFromLocationName(text, maxResultsNumber));
         } catch (IOException ex) {
         	Debug.log(this, "Failed to get autocomplete suggestions \n" + ex.toString());
         }
@@ -222,7 +225,8 @@ public class GeoLocationManager {
 	 * @param zoom
 	 */
 	public void setOverlayItem(Context context, MapView mapView, GeoPoint point, int zoom) {
-		List<Overlay> mapOverlays = mapView.getOverlays();		
+		List<Overlay> mapOverlays = mapView.getOverlays();	
+		mapOverlays.clear();
 //		mPinHeight = mPinDrawable.getIntrinsicHeight();
 		GeoItemizedOverlay itemizedoverlay = new GeoItemizedOverlay(mPinDrawable, context);		
 		
@@ -291,28 +295,24 @@ public class GeoLocationManager {
 			
 			final GeoPoint point = overlay.getPoint();
 			
-			mapView.removeAllViewsInLayout();						
-			Point screenPoint = new Point();
-	        mapView.getProjection().toPixels(point, screenPoint);
-	        GeoPoint p = mapView.getProjection().fromPixels(screenPoint.x, screenPoint.y - mPinHeight);
-	        final MapView.LayoutParams lParams = new MapView.LayoutParams(MapView.LayoutParams.WRAP_CONTENT,
-	                MapView.LayoutParams.WRAP_CONTENT, p, MapView.LayoutParams.BOTTOM_CENTER);	        
-	        mapView.addView(mAddressView, lParams);
-	        
+			mapView.removeAllViewsInLayout();									
+			mapView.addView(mAddressView, getTipLayout(mapView, point));
+			
 	        final TextView tvAddress = (TextView) mAddressView.findViewById(R.id.map_address);
 	        tvAddress.setText(Static.EMPTY);
 	        final ProgressBar progressBar = (ProgressBar) mAddressView.findViewById(R.id.prsMapAddressLoading);
 	        progressBar.setVisibility(View.VISIBLE);
 	        (new Thread() {
-	        	public void run() {
+	        	public void run() {	
 	        		final String address = GeoLocationManager.this.getLocationAddress(point.getLatitudeE6()/1E6, point.getLongitudeE6()/1E6);
+	        		
 	    	        tvAddress.post(new Runnable() {
 						
 						@Override
 						public void run() {
 							tvAddress.setText(address);
 							progressBar.setVisibility(View.INVISIBLE);
-							mapView.invalidate();														
+							mapView.invalidate();
 						}
 					});
 	    	        
@@ -322,6 +322,15 @@ public class GeoLocationManager {
 	        currentPoint = point;
 		}
 
+		private MapView.LayoutParams getTipLayout(MapView mapView, GeoPoint point) {
+			Point screenPoint = new Point();
+	        mapView.getProjection().toPixels(point, screenPoint);
+	        GeoPoint p = mapView.getProjection().fromPixels(screenPoint.x, screenPoint.y - mPinHeight);
+	        final MapView.LayoutParams lParams = new MapView.LayoutParams(MapView.LayoutParams.WRAP_CONTENT,
+	                MapView.LayoutParams.WRAP_CONTENT, p, MapView.LayoutParams.BOTTOM_CENTER);
+	        return lParams;
+		}
+		
 		@Override
 		public int size() {
 			return mOverlays.size();
@@ -340,6 +349,9 @@ public class GeoLocationManager {
 	    public void draw(android.graphics.Canvas canvas, MapView mapView, boolean shadow)
 	    {
 	        super.draw(canvas, mapView, false);
+	        if (!shadow) {
+	        	mAddressView.setLayoutParams(getTipLayout(mapView, currentPoint));
+	        }
 	    }
 	}
 }

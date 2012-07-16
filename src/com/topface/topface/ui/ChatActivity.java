@@ -2,7 +2,6 @@ package com.topface.topface.ui;
 
 import java.util.LinkedList;
 
-import com.google.android.maps.MapActivity;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.Static;
@@ -66,7 +65,6 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
-    private static final int DIALOG_GPS_ENABLE_WITH_AGPS_ID = 2;
     private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
     private static long LOCATION_PROVIDER_TIMEOUT = 10000;
     

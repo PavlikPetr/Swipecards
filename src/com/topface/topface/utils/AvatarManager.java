@@ -3,7 +3,6 @@ package com.topface.topface.utils;
 import java.util.HashMap;
 import java.util.LinkedList;
 import com.topface.topface.R;
-import com.topface.topface.Recycle;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;

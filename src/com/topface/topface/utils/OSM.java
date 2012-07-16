@@ -1,7 +1,6 @@
 package com.topface.topface.utils;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import org.json.JSONArray;
@@ -14,7 +13,8 @@ import com.topface.topface.Static;
 
 public class OSM {	
 	
-	public static final boolean OSMEnabled = false;
+	public static final boolean OSMSearchEnabled = false;
+	public static final boolean OSMReverseEnabled = false;
 	
 	public static final String OSM_URL = "http://nominatim.openstreetmap.org";
 	public static final String OSM_SEARCH_SUB = "search";
@@ -31,26 +31,41 @@ public class OSM {
 	
 	public static String resultFormat = "json";
 	public static final String zoom = "18";
-	public static final String detalization = "0";
+	public static final String detalization = "1";
 	public static final String polygon = "0";
 	
 	public static String getAddress(double lat, double lon) {
-		String result = "";
+		StringBuilder resultSB = new StringBuilder();
 		
 		try {
 			JSONObject responseJSON = new JSONObject(Http.httpGetRequest(getAddressRequest(lat, lon)));
-			result = responseJSON.getString(OSM_DISPLAY_NAME);
+			//result = responseJSON.getString(OSM_DISPLAY_NAME);
+			JSONObject details = responseJSON.getJSONObject("address");
+			resultSB.append(details.getString("road"));
+			resultSB.append(", ").append(details.getString("house_number"));			
+			resultSB.append(",\n").append(details.getString("state"));
+			resultSB.append(", ").append(details.getString("country"));
+			
+			// DEBUG
+//			Iterator iter = details.keys(); 
+//			while (iter.hasNext()) {
+//				String val = (String)iter.next();
+//				Debug.log("OSM", val+"::"+details.getString(val));
+//			}
+			
 		} catch (JSONException e) {
 			Debug.log("OSM",e.toString());
 		}
-		return result;
+		return resultSB.toString();
 	}
 	
-	public static List<Address> getSuggestionAddresses(String text, int maxNumber) {
-		List<Address> result = new ArrayList<Address>();
+	public static ArrayList<Address> getSuggestionAddresses(String text, int maxNumber) {
+		ArrayList<Address> result = new ArrayList<Address>();
+		
+		String query = text.replace(" ", "%20");
 		
 		try {
-			JSONArray responseJSON = new JSONArray(Http.httpGetRequest(getSearchRequest(text)));
+			JSONArray responseJSON = new JSONArray(Http.httpGetRequest(getSearchRequest(query)));
 			for (int i = 0; i < responseJSON.length() || i < maxNumber; i++) {
 				JSONObject item = responseJSON.getJSONObject(i);
 				String address = item.getString(OSM_DISPLAY_NAME);
