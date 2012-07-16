@@ -111,7 +111,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 //			};
 //			mAddressView.setOnEditorActionListener(listener);
 			
-			onCurrentLocationRequest();
+			onCurrentLocationRequest(); 
 			
 			((Button)findViewById(R.id.mapBtnConfirm)).setOnClickListener(new OnClickListener() {
 				
