@@ -34,6 +34,7 @@ public class History extends AbstractData {
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
                     History history = new History();
+                    history.id = item.optInt("id");
                     history.created = item.optLong("created") * 1000; // время приходит в секундах *1000
                     history.owner_id = item.optInt("owner_id");
                     history.type = item.optInt("type");

@@ -10,7 +10,9 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.History;
 import com.topface.topface.ui.views.RoundedImageView;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
+import com.topface.topface.utils.MemorySyncCache;
 import com.topface.topface.utils.StorageCache;
 import com.topface.topface.utils.Utils;
 import android.content.Context;
@@ -45,6 +47,8 @@ public class ChatListAdapter extends BaseAdapter {
     private HashMap<Integer, String> mItemTimeList; // date
     private View.OnClickListener mOnAvatarListener;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+    private MemorySyncCache mMemorySyncCache;
+    private StorageCache mStorageCache;
     private int mGiftFrameWidth;
     // Type Item
     private static final int T_USER_PHOTO = 0;
@@ -65,6 +69,8 @@ public class ChatListAdapter extends BaseAdapter {
         mItemTimeList = new HashMap<Integer, String>();
         mGiftFrameWidth = BitmapFactory.decodeResource(context.getResources(), R.drawable.chat_gift_frame).getWidth();
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mMemorySyncCache  = new MemorySyncCache();
+        mStorageCache = new StorageCache(mContext, StorageCache.EXTERNAL_CACHE);
         prepare(dataList);
     }
     //---------------------------------------------------------------------------
@@ -429,20 +435,27 @@ public class ChatListAdapter extends BaseAdapter {
     }
     //---------------------------------------------------------------------------
     private void giftLoading(final ImageView iv, final History history) {
-        Bitmap bitmap = (new StorageCache(mContext)).load(history.gift);
-        if(bitmap != null) {
-            bitmap = Utils.getScaleAndRoundBitmapOut(bitmap, mGiftFrameWidth, mGiftFrameWidth, 1.5f);
+        Debug.log(this, "#id:"+history.id);
+        Bitmap bitmap = mMemorySyncCache.get(history.gift);
+        if (bitmap != null) {
             iv.setImageBitmap(bitmap);
             iv.setVisibility(View.VISIBLE);
-        } else {
-            new Thread(new Runnable() {
-              @Override
-              public void run() {
-                  Bitmap rawBitmap = Http.bitmapLoader(history.link);
-                  if (rawBitmap == null)
-                      return;
-                  final Bitmap roundedBitmap = Utils.getScaleAndRoundBitmapOut(rawBitmap, mGiftFrameWidth, mGiftFrameWidth, 1.5f);
-                  iv.post(new Runnable() {
+            return;
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap rawBitmap = mStorageCache.load(history.gift);
+                if(rawBitmap == null)
+                    rawBitmap = Http.bitmapLoader(history.link);
+                
+                if (rawBitmap == null)
+                    return;
+                
+                final Bitmap roundedBitmap = Utils.getScaleAndRoundBitmapOut(rawBitmap, mGiftFrameWidth, mGiftFrameWidth, 1.5f);
+
+                iv.post(new Runnable() {
                     @Override
                     public void run() {
                         if (iv!=null) {
@@ -451,10 +464,9 @@ public class ChatListAdapter extends BaseAdapter {
                         }
                     }
                 });
+                mMemorySyncCache.put(history.gift, roundedBitmap);
               }
           }).start();
-        }
-        
     }
     //---------------------------------------------------------------------------
     public void release() {
