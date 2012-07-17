@@ -349,7 +349,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         Intent intent = null;
         switch (view.getId()) {
             case R.id.btnDshbrdDating: {
-                intent = new Intent(this.getApplicationContext(), DatingActivity.class);
+                intent = new Intent(this.getApplicationContext(), InviteActivity.class);
             }
             break;
             case R.id.btnDshbrdLikes: {

@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import com.topface.topface.R;
+import com.topface.topface.requests.InviteRequest;
+import com.topface.topface.ui.adapters.ContactsListAdapter;
+import com.topface.topface.utils.TriggersList;
 
 /**
  * Активити с приглашением друзей в приложение
@@ -26,7 +30,8 @@ public class InviteActivity extends Activity {
      */
     public static final String HAS_PHONE_NUMBER = "'1'";
     private ListView mContactList;
-    private SimpleCursorAdapter mAdapter;
+    private ContactsListAdapter mAdapter;
+    private TriggersList<Long, InviteRequest.Recipient> mTriggersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,15 @@ public class InviteActivity extends Activity {
         setContentView(R.layout.ac_invite);
 
         mContactList = (ListView) findViewById(R.id.contactsList);
+        mTriggersList = new TriggersList<Long, InviteRequest.Recipient>();
+        mContactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mTriggersList.toggle(((ContactsListAdapter.ViewHolder) view.getTag()).contactId);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
         EditText filterText = (EditText) findViewById(R.id.searchField);
         filterText.addTextChangedListener(filterTextListener);
         setContactsAdapater();
@@ -42,11 +56,7 @@ public class InviteActivity extends Activity {
 
     private void setContactsAdapater() {
         Cursor cursor = getContacts("");
-        String[] fields = new String[] {
-                ContactsContract.Data.DISPLAY_NAME
-        };
-        mAdapter = new SimpleCursorAdapter(this, R.layout.item_invite, cursor,
-                fields, new int[] {R.id.contactName});
+        mAdapter = new ContactsListAdapter(this, cursor, mTriggersList);
         mContactList.setAdapter(mAdapter);
         mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
             @Override
@@ -61,20 +71,55 @@ public class InviteActivity extends Activity {
      */
     private Cursor getContacts(String filter) {
         // Run query
-        Uri uri = ContactsContract.Contacts.CONTENT_URI;
+        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
         String[] projection = new String[] {
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.DISPLAY_NAME
+                ContactsContract.CommonDataKinds.Phone._ID,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.NUMBER,
+                ContactsContract.CommonDataKinds.Phone.PHOTO_ID,
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID
         };
 
-        String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = " + IN_VISIBLE_GROUP;
-        selection += " AND " + ContactsContract.Contacts.HAS_PHONE_NUMBER + " = " + HAS_PHONE_NUMBER;
+        String selection = ContactsContract.CommonDataKinds.Phone.IN_VISIBLE_GROUP + " = " + IN_VISIBLE_GROUP;
+        selection += " AND " + ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER + " = " + HAS_PHONE_NUMBER;
+        selection += " AND " + ContactsContract.CommonDataKinds.Phone.TYPE + " = " + ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
+        //Если пользователь вводит запрос на поиск, то вносим его в запрос
         if (filter != null && !filter.equals("")) {
-            selection += " AND " + ContactsContract.Contacts.DISPLAY_NAME + " LIKE '%" + filter.trim() + "%'";
+            selection += " AND " +  getCaseFixLike(filter.trim());
         }
         String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
         return managedQuery(uri, projection, selection, null, sortOrder);
+    }
+
+    /**
+     * В связи с тем, что sqlite не имеет встроенное поддержки регистра для не ASCII символов,
+     * пока используем просто более сложный запрос, который покроет большинство видов написаний
+     * @param filter строка для котопрой необходимо сделать запрос в разных регистрах
+     * @return Like запрос
+     */
+    private String getCaseFixLike(String filter) {
+        StringBuilder like = new StringBuilder(ContactsContract.Contacts.DISPLAY_NAME)
+                .append(" LIKE '%")
+                .append(filter)
+                .append("%'");
+        like.append(" OR ")
+                .append(ContactsContract.Contacts.DISPLAY_NAME)
+                .append(" LIKE '%")
+                .append(filter.toLowerCase())
+                .append("%'");
+        like.append(" OR ")
+                .append(ContactsContract.Contacts.DISPLAY_NAME)
+                .append(" LIKE '%")
+                .append(filter.toUpperCase())
+                .append("%'");
+        like.append(" OR ")
+                .append(ContactsContract.Contacts.DISPLAY_NAME)
+                .append(" LIKE '%")
+                .append(filter.substring(0, 1).toUpperCase())
+                .append(filter.substring(1).toLowerCase())
+                .append("%'");
+        return like.toString();
     }
 
 

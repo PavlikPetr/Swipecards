@@ -18,6 +18,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="4dp"
             android:layout_marginRight="6dp"
+            android:minHeight="50dip"
+            android:minWidth="50dip"
             />
 
     <!-- имя -->
@@ -42,8 +44,7 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:layout_marginRight="20dp"
-            android:layout_below="@id/contactName"
-            android:text="+7-909-577-31-17"/>
+            android:layout_below="@id/contactName"/>
 
     <!-- чекбокс -->
     <ImageView
@@ -53,6 +54,6 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:paddingRight="2dp"
-            android:src="@android:drawable/checkbox_on_background"/>
+            android:src="@android:drawable/checkbox_off_background"/>
 
 </RelativeLayout>

@@ -11,11 +11,11 @@ import java.util.ArrayList;
 public class InviteRequest extends ApiRequest {
     // Data
     private static final String service = "invite";
-    private ArrayList<Recepient> recipients;       // строка данных заказа от Google Play
+    private ArrayList<Recipient> recipients;       // строка данных заказа от Google Play
 
     public InviteRequest(Context context) {
         super(context);
-        recipients = new ArrayList<Recepient>();
+        recipients = new ArrayList<Recipient>();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class InviteRequest extends ApiRequest {
 
     private JSONArray getRecipientsJson() throws JSONException {
         JSONArray recipientsJson = new JSONArray();
-        for (final Recepient user : recipients) {
+        for (final Recipient user : recipients) {
             recipientsJson.put(getJSONFromRecepient(user));
         }
         return recipientsJson;
@@ -44,7 +44,7 @@ public class InviteRequest extends ApiRequest {
 
     public boolean addRecipient(String name, String phone) {
         return isValidPhone(phone) &&
-               recipients.add(new Recepient(name, phone));
+               recipients.add(new Recipient(name, phone));
 
     }
 
@@ -52,7 +52,7 @@ public class InviteRequest extends ApiRequest {
         return phone != null && phone.length() >= 10;
     }
     
-    private JSONObject getJSONFromRecepient(Recepient recipient) throws JSONException {
+    private JSONObject getJSONFromRecepient(Recipient recipient) throws JSONException {
         JSONObject json = new JSONObject();
         json.put("name", recipient.name);
         json.put("phone", recipient.phone);
@@ -60,8 +60,8 @@ public class InviteRequest extends ApiRequest {
         return json;
     }
 
-    private static class Recepient {
-        public Recepient(String name, String phone) {
+    public static class Recipient {
+        public Recipient(String name, String phone) {
             this.name = name;
             this.phone = phone;
         }

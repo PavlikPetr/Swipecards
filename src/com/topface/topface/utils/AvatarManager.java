@@ -17,7 +17,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
     private LinkedList<T> mDataList;
     private HashMap<Integer, Bitmap> mCache;
     private boolean mBusy;
-    private int mRadius = 12;  // хард кор !!!!!!!
+    public int AVATAR_ROUND_RADIUS = 12;  // хард кор !!!!!!!
 
     public AvatarManager(LinkedList<T> dataList) {
         mDataList = dataList;
@@ -68,7 +68,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
                                 return;
 
                             // округляем
-                            bitmap = Utils.getRoundedCornerBitmap(bitmap, imageView.getWidth(), imageView.getHeight(), mRadius);
+                            bitmap = Utils.getRoundedCornerBitmap(bitmap, imageView.getWidth(), imageView.getHeight(), AVATAR_ROUND_RADIUS);
                             imageView.setImageBitmap(bitmap);
 
                             if (mCache != null) {
