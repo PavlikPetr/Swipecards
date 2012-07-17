@@ -3,6 +3,7 @@ package com.topface.topface.ui.frames;
 import java.util.LinkedList;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -33,6 +34,7 @@ public class LikesActivity extends FrameActivity {
     // Data
     private boolean mNewUpdating;
     private TextView mFooterView;
+    private int mFooterHeight;
     private PullToRefreshListView mListView;
     private LikesListAdapter mListAdapter;
     private AvatarManager<FeedLike> mAvatarManager;
@@ -109,12 +111,14 @@ public class LikesActivity extends FrameActivity {
                 updateDataHistory();
             }
         });
-        mFooterView.setBackgroundResource(R.drawable.item_list_selector);
-        mFooterView.setText(getString(R.string.general_footer_previous));
+//        mFooterView.setBackgroundResource(R.drawable.item_list_selector);
+//        mFooterView.setText(getString(R.string.general_footer_previous));
         mFooterView.setTextColor(Color.DKGRAY);
         mFooterView.setGravity(Gravity.CENTER);
         mFooterView.setTypeface(Typeface.DEFAULT_BOLD);
-        mFooterView.setVisibility(View.GONE);
+//        mFooterView.setVisibility(View.GONE);
+        mFooterHeight = getResources().getDrawable(R.drawable.item_list_selector).getMinimumHeight();
+        onLikeFeedsExausted();
         mListView.getRefreshableView().addFooterView(mFooterView);
 
         // Control creating
@@ -144,17 +148,22 @@ public class LikesActivity extends FrameActivity {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        if (mNewUpdating)
-                            mFooterView.setVisibility(View.GONE);
-                        else
-                            mFooterView.setVisibility(View.VISIBLE);
-
-                        if (Data.likesList.size() == 0 || Data.likesList.size() < LIMIT / 2)
-                            mFooterView.setVisibility(View.GONE);
-
-                        mProgressBar.setVisibility(View.GONE);
+                        if (mNewUpdating) {
+//                            mFooterView.setVisibility(View.GONE);
+                            onLikeFeedsExausted();
+                        } else {
+//                            mFooterView.setVisibility(View.VISIBLE);
+                            onLikeFeedsExists();
+                        }
+                        
+                        if (Data.likesList.size() == 0 || Data.likesList.size() < LIMIT / 2) {
+//                            mFooterView.setVisibility(View.GONE);
+                            onLikeFeedsExausted();
+                        }
+                        
+                        mProgressBar.setVisibility(View.GONE);                        
+                        mListAdapter.notifyDataSetChanged();  
                         mListView.onRefreshComplete();
-                        mListAdapter.notifyDataSetChanged();
                         mListView.setVisibility(View.VISIBLE);
                     }
                 });
@@ -188,10 +197,13 @@ public class LikesActivity extends FrameActivity {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        if (feedLikesList.size() == 0 || feedLikesList.size() < LIMIT / 2)
-                            mFooterView.setVisibility(View.GONE);
-                        else
-                            mFooterView.setVisibility(View.VISIBLE);
+                        if (feedLikesList.size() == 0 || feedLikesList.size() < LIMIT / 2) {
+//                            mFooterView.setVisibility(View.GONE);
+                        	onLikeFeedsExausted();
+                        } else {
+//                            mFooterView.setVisibility(View.VISIBLE);
+                        	onLikeFeedsExists();
+                        }
                         mProgressBar.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListAdapter.notifyDataSetChanged();
@@ -203,7 +215,8 @@ public class LikesActivity extends FrameActivity {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        mFooterView.setVisibility(View.GONE);
+//                        mFooterView.setVisibility(View.GONE);
+//                    	onLikeFeedsExausted();
                         mProgressBar.setVisibility(View.GONE);
                         Toast.makeText(LikesActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mListView.onRefreshComplete();
@@ -227,6 +240,19 @@ public class LikesActivity extends FrameActivity {
 
         updateBanner(mBannerView, BannerRequest.LIKE);
         updateData(false);
+    }
+    //---------------------------------------------------------------------------
+    private void onLikeFeedsExausted() {
+    	mFooterView.setBackgroundResource(android.R.color.transparent);
+    	mFooterView.setText(Static.EMPTY);
+        mFooterView.setHeight(mFooterHeight);
+        mFooterView.setEnabled(false);
+    }
+    //---------------------------------------------------------------------------
+    private void onLikeFeedsExists() {        
+        mFooterView.setBackgroundResource(R.drawable.item_list_selector);
+        mFooterView.setText(getString(R.string.general_footer_previous));        
+        mFooterView.setEnabled(true);
     }
     //---------------------------------------------------------------------------
     @Override

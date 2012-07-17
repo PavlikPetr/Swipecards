@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 import com.topface.topface.R;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.data.Gift;
-import com.topface.topface.utils.CacheManager;
 import com.topface.topface.utils.MemoryCache;
 import com.topface.topface.utils.StorageCache;
 import android.content.Context;
@@ -36,7 +35,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
     public GiftGalleryManager(Context context,LinkedList<T> dataList) {
         mDataList = dataList;
         mMemoryCache = new MemoryCache();
-        mStorageCache = new StorageCache(context, CacheManager.EXTERNAL_CACHE);
+        mStorageCache = new StorageCache(context, StorageCache.INTERNAL_FILES);
         mWorker = Executors.newFixedThreadPool(3);
 
 //        int orientation = context.getResources().getConfiguration().orientation;

@@ -339,12 +339,14 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     }
     //---------------------------------------------------------------------------
     private void sendUserCurrentLocation() {
-    	mLocationDetected = false;
-    	showDialog(DIALOG_LOCATION_PROGRESS_ID);
+    	mLocationDetected = false;    	
+    	
     	if (mGeoManager == null)
     		mGeoManager = new GeoLocationManager(getApplicationContext());
+    	
     	if(mGeoManager.availableLocationProvider(LocationProviderType.AGPS)) {
     		mGeoManager.setLocationListener(LocationProviderType.AGPS, this);
+    		showDialog(DIALOG_LOCATION_PROGRESS_ID);
     	} else if (mGeoManager.availableLocationProvider(LocationProviderType.GPS)){
     		mGeoManager.setLocationListener(LocationProviderType.GPS, this);
     		(new CountDownTimer(LOCATION_PROVIDER_TIMEOUT,LOCATION_PROVIDER_TIMEOUT) {
@@ -365,6 +367,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     				}
     			}
     		}).start();	
+    		showDialog(DIALOG_LOCATION_PROGRESS_ID);
     	} else {
     		showDialog(DIALOG_GPS_ENABLE_NO_AGPS_ID);
     	}        

@@ -10,6 +10,7 @@ import java.io.IOException;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 /* Класс для сохранения и загрузки изображений на карту памяти */
 public class StorageCache {
@@ -20,6 +21,7 @@ public class StorageCache {
     private int mCacheType;
     // Constants
     public static final int INTERNAL_CACHE = 0;
+    public static final int INTERNAL_FILES = 2;
     public static final int EXTERNAL_CACHE = 1;
     //---------------------------------------------------------------------------
     public StorageCache(Context context) {
@@ -151,7 +153,17 @@ public class StorageCache {
     }
     //---------------------------------------------------------------------------
     private File getCacheDirectory() {
-        return mCacheType == EXTERNAL_CACHE ? FileSystem.getExternalCacheDirectory() : mContext.getCacheDir();
+    	switch (mCacheType) {
+		case EXTERNAL_CACHE:			
+			return FileSystem.getExternalCacheDirectory();
+		case INTERNAL_CACHE:
+			return mContext.getCacheDir();
+		case INTERNAL_FILES:
+			Log.d("OLOLO",mContext.getFilesDir().toString());
+			return mContext.getFilesDir();
+		default:
+			return FileSystem.getExternalCacheDirectory();
+		}
     }
     //---------------------------------------------------------------------------  
     public void clear() {
