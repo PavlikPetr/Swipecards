@@ -72,7 +72,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
 //            if (!mBusy) {
                 bitmap = mStorageCache.load(((Gift)mDataList.get(position)).id);
                 if (bitmap != null) {
-                    bitmap = Utils.getScaleAndRoundBitmapOut(bitmap, mBitmapWidth, mBitmapWidth, 1.2f);
+                    bitmap = Utils.getScaleAndRoundBitmapOut(bitmap, mBitmapWidth+5, mBitmapWidth+5, 1.2f);
                     imageView.setImageBitmap(bitmap);
                     mMemoryCache.put(position, bitmap);
                 } else {

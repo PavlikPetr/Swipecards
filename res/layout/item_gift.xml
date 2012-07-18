@@ -36,8 +36,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
-            android:drawableRight="@drawable/dating_money"
-            android:drawablePadding="2dp" />
+            android:layout_gravity="center"
+            android:drawableRight="@drawable/coins"
+            android:drawablePadding="2dp"            
+            android:textSize="12dp"/>
 
     </LinearLayout>
 

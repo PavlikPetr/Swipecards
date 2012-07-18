@@ -425,6 +425,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 			return alert;			
 		case DIALOG_LOCATION_PROGRESS_ID:
 			mProgressDialog = new ProgressDialog(this);
+			mProgressDialog.setCancelable(false);
 			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			mProgressDialog.setMessage(this.getText(R.string.map_location_progress));
 			return mProgressDialog;

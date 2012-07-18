@@ -3,10 +3,15 @@ package com.topface.topface.data;
 import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import android.view.View;
+
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.adapters.IListLoader;
+import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.utils.Debug;
 
-public class FeedLike extends AbstractData {
+public class FeedLike extends AbstractData implements IListLoader{	
     // Data
     public static int unread_count; // количество оставшихся непрочитанных
     public int id; // идентификатор сообщения 
@@ -22,6 +27,26 @@ public class FeedLike extends AbstractData {
     public String avatars_small; // маленькая аватарка пользователя
     public int rate; // значение “понравилось”
     public long created; // таймштамп отправления “понравилось”
+    
+    public boolean isListLoader = false;
+    public boolean isListLoaderRetry = false;
+    //---------------------------------------------------------------------------
+    public FeedLike() {
+    	
+    }
+    //---------------------------------------------------------------------------
+    public FeedLike(IListLoader.ItemType type) {
+    	switch (type) {
+		case LOADER:
+			isListLoader = true;
+			break;
+		case RETRY:
+			isListLoaderRetry = true;
+			break;
+		default:			
+			break;
+		}     	
+    }
     //---------------------------------------------------------------------------
     public static LinkedList<FeedLike> parse(ApiResponse response) {
         LinkedList<FeedLike> likesList = new LinkedList<FeedLike>();
@@ -76,4 +101,19 @@ public class FeedLike extends AbstractData {
         return avatars_small;
     }
     //---------------------------------------------------------------------------
+	@Override
+	public boolean isLoader() {		
+		return isListLoader;
+	}
+	
+	@Override
+	public boolean isLoaderRetry() {
+		return isListLoaderRetry;
+	}
+	
+	@Override
+	public void switchToLoader() {
+		isListLoader = false;
+		isListLoaderRetry = true;
+	}
 }

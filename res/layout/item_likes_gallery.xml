@@ -1,94 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-  <RelativeLayout 
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"  
-      android:layout_width="fill_parent" 
-      android:layout_height="wrap_content" 
-      android:background="@drawable/item_list_selector" >
-      
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_list_selector" >
+
     <!-- аватар -->
-    <RelativeLayout 
+
+    <RelativeLayout
         android:id="@+id/loAvatarGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="6dp"
-        android:layout_marginLeft="6dp" >
-        
-      <ImageView
-        android:id="@+id/ivAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
-      
-      <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/im_avatar_list_frame" />
-        
-    </RelativeLayout>
-    
-    <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_toRightOf="@id/loAvatarGroup"
-          android:layout_centerVertical="true" 
-          android:orientation="vertical" >
-          
-	    <!-- имя -->
-	    <TextView
-	        android:id="@+id/tvName"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:singleLine="true"
-	        android:ellipsize="end"
-	        android:textColor="#FFFFFF"
-	        android:textSize="16dp" 
-	        android:textStyle="normal"
-	        style="@style/ShadowItemFont" />
-	    
-	    <!-- возраст, город -->
-	    <TextView
-	        android:id="@+id/tvCity"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:textColor="#FFFFFF" 
-	        android:textSize="14dp" 
-          android:textStyle="normal"
-          style="@style/ShadowItemFont" />
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" >
 
-	    </LinearLayout>
-    
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            android:id="@+id/ivAvatarMask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/im_avatar_list_frame" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/loAvatarGroup"
+        android:orientation="vertical" >
+
+        <!-- имя -->
+
+        <TextView
+            android:id="@+id/tvName"
+            style="@style/ShadowItemFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#FFFFFF"
+            android:textSize="16dp"
+            android:textStyle="normal" />
+
+        <!-- возраст, город -->
+
+        <TextView
+            android:id="@+id/tvCity"
+            style="@style/ShadowItemFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="14dp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
     <!-- время -->
+
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:textColor="#707070"
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"/>
-    
+        android:visibility="gone" />
+
     <!-- стрелка -->
+
     <ImageView
         android:id="@+id/ivArrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:paddingRight="4dp"
         android:src="@drawable/im_item_arrow" />
-    
+
     <!-- сердце -->
+
     <ImageView
         android:id="@+id/ivHeart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/ivArrow"
         android:layout_centerVertical="true"
-        android:layout_marginRight="8dp"  />
-    
+        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@id/ivArrow" />
+
     <!-- online -->
+
     <ImageView
         android:id="@+id/ivOnline"
         android:layout_width="wrap_content"
@@ -98,5 +103,21 @@
         android:layout_marginRight="4dp"
         android:src="@drawable/list_online_selector"
         android:visibility="invisible" />
+
+    <TextView 
+        android:id="@+id/tvLoaderText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+       	android:layout_centerInParent="true"
+        android:text="@string/general_dialog_retry"/>
     
-  </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/prsLoader"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

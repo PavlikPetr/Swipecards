@@ -116,7 +116,7 @@ public class SympathyActivity extends FrameActivity {
         mListView.getRefreshableView().addFooterView(mFooterView);
 
         // Control creating
-        mAvatarManager = new AvatarManager<FeedSympathy>(getApplicationContext(), Data.sympathyList);
+        mAvatarManager = new AvatarManager<FeedSympathy>(getApplicationContext(), Data.sympathyList, null);
         mListAdapter = new SymphatyListAdapter(getApplicationContext(), mAvatarManager);
         mListView.setOnScrollListener(mAvatarManager);
         mListView.setAdapter(mListAdapter);

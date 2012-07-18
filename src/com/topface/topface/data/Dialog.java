@@ -74,10 +74,15 @@ public class Dialog extends AbstractData {
                 }
 
                 // avatars
-                JSONObject avatars = item.getJSONObject("avatars");
-                dialog.avatars_big = avatars.optString("big");
-                dialog.avatars_small = avatars.optString("small");
-                
+//                JSONObject avatars = item.getJSONObject("avatar");
+                JSONObject avatars = item.optJSONObject("avatar");
+                if (avatars != null) {
+	                dialog.avatars_big = avatars.optString("big");
+	                dialog.avatars_small = avatars.optString("small");
+                } else {
+                	dialog.avatars_big = "";
+                	dialog.avatars_small = "";
+                }
                 dialog.created = item.optLong("created") * 1000; // время приходит в секундах *1000
                 dialog.target  = item.optInt("target");
 

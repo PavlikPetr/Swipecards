@@ -119,7 +119,7 @@ public class DialogActivity extends FrameActivity {
         mListView.getRefreshableView().addFooterView(mFooterView);
 
         // Control creating
-        mAvatarManager = new AvatarManager<Dialog>(getApplicationContext(), Data.dialogList);
+        mAvatarManager = new AvatarManager<Dialog>(getApplicationContext(), Data.dialogList,null);
         mListAdapter = new DialogListAdapter(getApplicationContext(), mAvatarManager);
         mListView.setOnScrollListener(mAvatarManager);
         mListView.setAdapter(mListAdapter);

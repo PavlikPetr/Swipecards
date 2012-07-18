@@ -12,6 +12,7 @@ import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.utils.GiftGalleryManager;
+import com.topface.topface.utils.PixelsUtils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -104,7 +105,7 @@ public class GiftsActivity extends Activity {
 
 	private void update() {
 		mProgressBar.setVisibility(View.VISIBLE);		
-		giftRequest = new GiftsRequest(this);
+		giftRequest = new GiftsRequest(getApplicationContext());
 		giftRequest.callback(new ApiHandler() {
 			@Override
 			public void success(ApiResponse response) {
@@ -120,7 +121,7 @@ public class GiftsActivity extends Activity {
 					@Override
 					public void run() {
 						Toast.makeText(
-								GiftsActivity.this,
+								getApplicationContext(),
 								GiftsActivity.this
 										.getString(R.string.general_data_error),
 								Toast.LENGTH_SHORT).show();
@@ -211,15 +212,18 @@ public class GiftsActivity extends Activity {
 	}
 
 	private GridView createGridView(int type) {
-		GridView gridView = new GridView(GiftsActivity.this);
+		GridView gridView = new GridView(getApplicationContext());
 		gridView.setAnimationCacheEnabled(false);
 		gridView.setScrollingCacheEnabled(false);
 		gridView.setScrollbarFadingEnabled(true);
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-//		int margin = PixelsUtils.convertDpToPixel(8, this);
+		
+		int sideDp = PixelsUtils.convertDpToPixel(8, getApplicationContext());
+		int topDp = PixelsUtils.convertDpToPixel(8, getApplicationContext());
 //		lp.setMargins(0, margin, 0, 0);
-		gridView.setLayoutParams(lp);		
+		gridView.setLayoutParams(lp);
+		gridView.setPadding(sideDp, topDp, sideDp, topDp);
 		
 		int columns = this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? GIFTS_COLUMN_PORTRAIT
 				: GIFTS_COLUMN_LANDSCAPE;
@@ -241,9 +245,9 @@ public class GiftsActivity extends Activity {
 		});
 
 		GiftGalleryManager<Gift> gridManager = new GiftGalleryManager<Gift>(
-				GiftsActivity.this,
+				getApplicationContext(),
 				(LinkedList<Gift>) mGiftsCollection.getGifts(type));// mCurrentGifts);
-		GiftsAdapter gridAdapter = new GiftsAdapter(GiftsActivity.this,
+		GiftsAdapter gridAdapter = new GiftsAdapter(getApplicationContext(),
 				gridManager);
 		gridView.setAdapter(gridAdapter);
 		gridView.setOnScrollListener(gridManager);

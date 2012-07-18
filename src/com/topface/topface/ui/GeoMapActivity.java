@@ -6,6 +6,8 @@ import java.util.List;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Location;
@@ -72,7 +74,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 		super.onCreate(icicle);
 		setContentView(R.layout.ac_map);
 		
-		mGeoLocationManager = new GeoLocationManager(this);
+		mGeoLocationManager = new GeoLocationManager(getApplicationContext());
 		
 		mMapView = (MapView) findViewById(R.id.mapView);				
 		
@@ -85,7 +87,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 		} else {		
 			//init address autocompletion
 			mAddressView = (AutoCompleteTextView) findViewById(R.id.mapAddress);
-			mAddressAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>()) {
+			mAddressAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, new ArrayList<String>()) {
 				Filter mFilter = new AddressFilter();
 				@Override
 				public Filter getFilter() {
@@ -187,7 +189,8 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DIALOG_LOCATION_PROGRESS_ID:
-			mProgressDialog = new ProgressDialog(this);
+			mProgressDialog = new ProgressDialog(getApplicationContext());
+			mProgressDialog.setCancelable(false);
 			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			mProgressDialog.setMessage(this.getText(R.string.map_location_progress));
 			return mProgressDialog;
@@ -200,7 +203,8 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 	@Override
 	protected void onDestroy() {		
 		super.onDestroy();
-		mProgressDialog.dismiss();		
+		mProgressDialog.dismiss();
+		mGeoLocationManager.removeLocationListener(this);
 	}
 	
 	@Override
@@ -213,7 +217,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 	public void onLocationChanged(Location location) {
 		synchronized (mGeoLocationManager) {			
 			GeoPoint point = GeoLocationManager.toGeoPoint(location);
-			mGeoLocationManager.setOverlayItem(this, mMapView, point, MAP_INITIAL_ZOOM);
+			mGeoLocationManager.setOverlayItem(getApplicationContext(), mMapView, point, MAP_INITIAL_ZOOM);
 			mGeoLocationManager.removeLocationListener(this);
 			mLocationDetected = true;
 			mProgressDialog.dismiss();
@@ -236,7 +240,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		if (arg2 < mAddressList.size()) {
 			GeoPoint point = GeoLocationManager.toGeoPoint(mAddressList.get(arg2).getLatitude(),mAddressList.get(arg2).getLongitude());
-			mGeoLocationManager.setOverlayItem(this, mMapView, point, MAP_INITIAL_ZOOM);
+			mGeoLocationManager.setOverlayItem(getApplicationContext(), mMapView, point, MAP_INITIAL_ZOOM);
 			mMapView.getController().animateTo(point);
 			hideKeyboard();
 		}

@@ -9,6 +9,7 @@ import com.topface.topface.utils.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.AbsListView.OnScrollListener;
@@ -20,12 +21,14 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
     private HashMap<Integer, Bitmap> mCache;
     private int mFrameWidth;
     private boolean mBusy;
+    private Handler mHandler;
     //private int mRadius = 12; // хард кор !!!!!!!
     //---------------------------------------------------------------------------
-    public AvatarManager(Context context, LinkedList<T> dataList) {
+    public AvatarManager(Context context, LinkedList<T> dataList, Handler handler) {
         mDataList = dataList;
         mCache = new HashMap<Integer, Bitmap>();
         mFrameWidth = BitmapFactory.decodeResource(context.getResources(), R.drawable.im_avatar_list_frame).getWidth();
+        mHandler = handler;
     }
     //---------------------------------------------------------------------------
     public void setDataList(LinkedList<T> dataList) {
@@ -115,6 +118,11 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
     //---------------------------------------------------------------------------
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    	if (visibleItemCount != 0
+                && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
+    		if (mHandler != null)
+    			mHandler.sendEmptyMessage(0);
+    	}
     }
     //---------------------------------------------------------------------------
     @Override

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class LikesListAdapter extends BaseAdapter {
@@ -20,12 +21,15 @@ public class LikesListAdapter extends BaseAdapter {
     //---------------------------------------------------------------------------
     static class ViewHolder {
         public ImageView mAvatar;
+        public ImageView mAvatarMask;
         public TextView mName;
         public TextView mCity;
         public TextView mTime;
         public ImageView mHeart;
         public ImageView mArrow;
         public ImageView mOnline;
+        public ProgressBar mProgressBar;
+        public TextView mRetryText;
     }
     //---------------------------------------------------------------------------
     // Data
@@ -35,7 +39,10 @@ public class LikesListAdapter extends BaseAdapter {
     // Constants
     private static final int T_ALL = 0;
     private static final int T_CITY = 1;
-    private static final int T_COUNT = 2;
+    private static final int T_LOADER = 2;
+    private static final int T_RETRIER = 3;
+    private static final int T_COUNT = 4;
+    
     //---------------------------------------------------------------------------
     public LikesListAdapter(Context context,AvatarManager<FeedLike> avatarManager) {
         mAvatarManager = avatarManager;
@@ -65,7 +72,12 @@ public class LikesListAdapter extends BaseAdapter {
     //---------------------------------------------------------------------------
     @Override
     public int getItemViewType(int position) {
-        return mAvatarManager.get(position).city_id == mOwnerCityID ? T_CITY : T_ALL;
+    	if (mAvatarManager.get(position).isListLoader) 
+    		return T_LOADER;
+    	if (mAvatarManager.get(position).isListLoaderRetry) 
+    		return T_RETRIER;
+        
+    	return mAvatarManager.get(position).city_id == mOwnerCityID ? T_CITY : T_ALL;
     }
     //---------------------------------------------------------------------------
     @Override
@@ -80,12 +92,15 @@ public class LikesListAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.item_likes_gallery, null, false);
 
             holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
+            holder.mAvatarMask = (ImageView)convertView.findViewById(R.id.ivAvatarMask);
             holder.mName = (TextView)convertView.findViewById(R.id.tvName);
             holder.mCity = (TextView)convertView.findViewById(R.id.tvCity);
             holder.mTime = (TextView)convertView.findViewById(R.id.tvTime);
             holder.mHeart = (ImageView)convertView.findViewById(R.id.ivHeart);
             holder.mArrow = (ImageView)convertView.findViewById(R.id.ivArrow);
             holder.mOnline = (ImageView)convertView.findViewById(R.id.ivOnline);
+            holder.mRetryText = (TextView)convertView.findViewById(R.id.tvLoaderText);
+            holder.mProgressBar = (ProgressBar)convertView.findViewById(R.id.prsLoader);
 
             /*switch(type) {
              * case T_ALL:
@@ -94,33 +109,74 @@ public class LikesListAdapter extends BaseAdapter {
              * case T_CITY:
              * convertView.setBackgroundResource(R.drawable.item_city_selector);
              * break;
-             * } */
+             * } */            
 
             convertView.setTag(holder);
         } else
             holder = (ViewHolder)convertView.getTag();
 
-        mAvatarManager.getImage(position, holder.mAvatar);
-
-        FeedLike likes = getItem(position);
-
-        holder.mName.setText(likes.first_name);
-        holder.mCity.setText(likes.age + ", " + likes.city_name);
-
-        if (likes.rate == 10)
-            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart_top);
-        else
-            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart);
-
-        if (likes.online)
-            holder.mOnline.setVisibility(View.VISIBLE);
-        else
-            holder.mOnline.setVisibility(View.INVISIBLE);
-
+        
+        if (type == T_LOADER) {        	        	
+        	holder.mAvatar.setVisibility(View.GONE);
+        	holder.mAvatarMask.setVisibility(View.GONE);
+            holder.mName.setVisibility(View.GONE);
+            holder.mCity.setVisibility(View.GONE);
+            holder.mTime.setVisibility(View.GONE);
+            holder.mHeart.setVisibility(View.GONE);
+            holder.mArrow.setVisibility(View.GONE);
+            holder.mOnline.setVisibility(View.GONE);
+            holder.mRetryText.setVisibility(View.GONE);
+        	holder.mProgressBar.setVisibility(View.VISIBLE);       	        	
+        } else if (type == T_RETRIER) {
+        	holder.mAvatar.setVisibility(View.GONE);
+        	holder.mAvatarMask.setVisibility(View.GONE);
+            holder.mName.setVisibility(View.GONE);
+            holder.mCity.setVisibility(View.GONE);
+            holder.mTime.setVisibility(View.GONE);
+            holder.mHeart.setVisibility(View.GONE);
+            holder.mArrow.setVisibility(View.GONE);
+            holder.mOnline.setVisibility(View.GONE);            
+            holder.mProgressBar.setVisibility(View.GONE);
+            holder.mRetryText.setVisibility(View.VISIBLE);
+        } else {        	
+        	holder.mAvatar.setVisibility(View.VISIBLE);
+        	holder.mAvatarMask.setVisibility(View.VISIBLE);
+            holder.mName.setVisibility(View.VISIBLE);
+            holder.mCity.setVisibility(View.VISIBLE);
+            holder.mTime.setVisibility(View.VISIBLE);
+            holder.mHeart.setVisibility(View.VISIBLE);
+            holder.mArrow.setVisibility(View.VISIBLE);  
+            holder.mRetryText.setVisibility(View.GONE);
+        	holder.mProgressBar.setVisibility(View.GONE);
+        	
+	        mAvatarManager.getImage(position, holder.mAvatar);
+	
+	        FeedLike likes = getItem(position);
+	
+	        holder.mName.setText(likes.first_name);
+	        holder.mCity.setText(likes.age + ", " + likes.city_name);
+	
+	        if (likes.rate == 10)
+	            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart_top);
+	        else
+	            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart);
+	
+	        if (likes.online)
+	            holder.mOnline.setVisibility(View.VISIBLE);
+	        else
+	            holder.mOnline.setVisibility(View.INVISIBLE);	        
+        }
         //Utils.formatTime(holder.mTime,likes.created);
         //holder.mArrow.setImageResource(R.drawable.im_item_arrow); // ??? зачем
 
         return convertView;
+    }
+    //---------------------------------------------------------------------------
+    @Override
+    public boolean isEnabled(int position) {
+    	if (getItemViewType(position) == T_LOADER)
+    		return false;
+    	return true;
     }
     //---------------------------------------------------------------------------
     public void release() {

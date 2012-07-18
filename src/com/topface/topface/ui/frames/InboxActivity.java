@@ -119,7 +119,7 @@ public class InboxActivity extends FrameActivity {
         mListView.getRefreshableView().addFooterView(mFooterView);
 
         // Control creating
-        mAvatarManager = new AvatarManager<FeedInbox>(getApplicationContext(), Data.inboxList);
+        mAvatarManager = new AvatarManager<FeedInbox>(getApplicationContext(), Data.inboxList,null);
         mListAdapter = new InboxListAdapter(getApplicationContext(), mAvatarManager);
         mListView.setOnScrollListener(mAvatarManager);
         mListView.setAdapter(mListAdapter);
