@@ -12,6 +12,7 @@
     <string name="general_purchasing_error">Please write message about purchasing error to support@topface.ru</string>
     <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
     <string name="general_popup_rating">Did you like our application? Raise our rating! The higher rating the more people you will meet in \"TopFace\""</string>
+    <string name="general_dialog_retry">Retry</string>
     
     <!-- Auth Activity  -->
     <string name="auth_btn_vk">Login via VKontakte</string>
