@@ -1,5 +1,7 @@
 package com.topface.topface.utils;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -37,5 +39,9 @@ public class TriggersList<K, V> {
 
     public boolean isOn(K item) {
         return mTriggers.containsKey(item) && mTriggers.get(item) != null;
+    }
+
+    public Collection<V> getList() {
+        return mTriggers.values();
     }
 }

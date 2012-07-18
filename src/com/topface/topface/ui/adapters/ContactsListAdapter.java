@@ -21,8 +21,6 @@ import com.topface.topface.utils.TriggersList;
 import java.io.InputStream;
 
 public class ContactsListAdapter extends CursorAdapter {
-    public static final int HOLDER_TAG_ID = 0;
-    public static final int CONTACT_TAG_ID = 1;
     private LayoutInflater mInflater;
     private TriggersList<Long, InviteRequest.Recipient> mTriggersList;
 
@@ -32,6 +30,7 @@ public class ContactsListAdapter extends CursorAdapter {
         TextView phone;
         ImageView checkbox;
         public long contactId;
+        public InviteRequest.Recipient recipient;
     }
 
     public ContactsListAdapter(Context context, Cursor c, TriggersList<Long, InviteRequest.Recipient> triggers) {
@@ -50,7 +49,7 @@ public class ContactsListAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        ViewHolder holder = (ViewHolder) view.getTag(HOLDER_TAG_ID);
+        ViewHolder holder = (ViewHolder) view.getTag();
         if (holder == null) {
             holder = new ViewHolder();
             holder.name = (TextView) view.findViewById(R.id.contactName);
@@ -60,8 +59,7 @@ public class ContactsListAdapter extends CursorAdapter {
         }
 
         holder.contactId = cursor.getLong(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-        //Сохраняем id контакта во view для обработки нажатия на него
-        view.setTag(HOLDER_TAG_ID, holder);
+
 
         String name = cursor.getString(
                 cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
@@ -69,18 +67,24 @@ public class ContactsListAdapter extends CursorAdapter {
         String phone = cursor.getString(
                 cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
         );
+
+        //Храним данные о пользователя для дальнейшего использования
+        holder.recipient = new InviteRequest.Recipient(name, phone);
+
+        //Сохраняем holder
+        view.setTag(holder);
+
+        //Имя
         holder.name.setText(name);
+        //Телефон
         holder.phone.setText(phone);
 
-        view.setTag(CONTACT_TAG_ID, new InviteRequest.Recipient(name, phone));
 
         //Фото контакта
-        Bitmap bitmap = loadContactPhoto(
+        holder.avatar.setImageBitmap(loadContactPhoto(
                 context.getContentResolver(),
                 holder.contactId
-        );
-
-        holder.avatar.setImageBitmap(bitmap);
+        ));
 
 
         //Состояние чекбокса пункта

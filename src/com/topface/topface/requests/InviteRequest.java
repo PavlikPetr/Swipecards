@@ -7,10 +7,12 @@ import com.topface.topface.utils.Debug;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class InviteRequest extends ApiRequest {
     // Data
     private static final String service = "invite";
+    public static final int MIN_PHONE_LENGTH = 10;
     private ArrayList<Recipient> recipients;       // строка данных заказа от Google Play
 
     public InviteRequest(Context context) {
@@ -48,8 +50,22 @@ public class InviteRequest extends ApiRequest {
 
     }
 
+    public boolean addRecipient(Recipient recipient) {
+        return isValidPhone(recipient.phone) && recipients.add(recipient);
+    }
+
+    public boolean addRecipients(Collection<Recipient> recipientsList) {
+        for (Recipient recipient : recipientsList) {
+            if (isValidPhone(recipient.phone)) {
+                recipients.add(recipient);
+            }
+        }
+
+        return !recipients.isEmpty();
+    }
+
     private boolean isValidPhone(String phone) {
-        return phone != null && phone.length() >= 10;
+        return phone != null && phone.length() >= MIN_PHONE_LENGTH;
     }
     
     private JSONObject getJSONFromRecepient(Recipient recipient) throws JSONException {

@@ -30,6 +30,7 @@
                     android:text="Тут будет длинный текст, описывающий как получить бонус, и что все это бесплатно"
                     />
             <Button
+                    android:id="@+id/btnInviteSend"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_below="@id/inviteDescription"

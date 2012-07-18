@@ -8,14 +8,15 @@ import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.FilterQueryProvider;
-import android.widget.ListView;
+import android.widget.*;
 import com.topface.topface.R;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.InviteRequest;
 import com.topface.topface.ui.adapters.ContactsListAdapter;
 import com.topface.topface.utils.TriggersList;
+
+import java.util.Collection;
 
 /**
  * Активити с приглашением друзей в приложение
@@ -30,8 +31,11 @@ public class InviteActivity extends Activity {
      */
     public static final String HAS_PHONE_NUMBER = "'1'";
     private ListView mContactList;
+    private View mSendButton;
     private ContactsListAdapter mAdapter;
     private TriggersList<Long, InviteRequest.Recipient> mTriggersList;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +44,39 @@ public class InviteActivity extends Activity {
 
         mContactList = (ListView) findViewById(R.id.contactsList);
         mTriggersList = new TriggersList<Long, InviteRequest.Recipient>();
-        mContactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mTriggersList.toggle(((ContactsListAdapter.ViewHolder) view.getTag()).contactId);
-                mAdapter.notifyDataSetChanged();
-            }
-        });
+        mContactList.setOnItemClickListener(mListItemCheckListener);
 
         EditText filterText = (EditText) findViewById(R.id.searchField);
         filterText.addTextChangedListener(filterTextListener);
         setContactsAdapater();
+
+        mSendButton = findViewById(R.id.btnInviteSend);
+        mSendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Collection<InviteRequest.Recipient> recipients = mTriggersList.getList();
+                if (recipients.isEmpty()) {
+
+                }
+                else {
+                    InviteRequest request = new InviteRequest(InviteActivity.this);
+                    if (request.addRecipients(recipients)) {
+                        request.callback(new ApiHandler() {
+                            @Override
+                            public void success(ApiResponse response) throws NullPointerException {
+                                Toast.makeText(InviteActivity.this, "Не удалось отправить сообщение. Попробуйте еще раз", Toast.LENGTH_LONG);
+                            }
+
+                            @Override
+                            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                                Toast.makeText(InviteActivity.this, "Не удалось отправить сообщение. Попробуйте еще раз", Toast.LENGTH_LONG);
+                            }
+                        });
+                        request.exec();
+                    }
+                }
+            }
+        });
     }
 
 
@@ -82,6 +108,8 @@ public class InviteActivity extends Activity {
 
         String selection = ContactsContract.CommonDataKinds.Phone.IN_VISIBLE_GROUP + " = " + IN_VISIBLE_GROUP;
         selection += " AND " + ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER + " = " + HAS_PHONE_NUMBER;
+        //Проверяем длинну
+        selection += " AND length(" + ContactsContract.CommonDataKinds.Phone.NUMBER + ") >= " + InviteRequest.MIN_PHONE_LENGTH;
         selection += " AND " + ContactsContract.CommonDataKinds.Phone.TYPE + " = " + ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
         //Если пользователь вводит запрос на поиск, то вносим его в запрос
         if (filter != null && !filter.equals("")) {
@@ -138,6 +166,15 @@ public class InviteActivity extends Activity {
 
         @Override
         public void afterTextChanged(Editable editable) {}
+    };
+
+    private AdapterView.OnItemClickListener mListItemCheckListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            ContactsListAdapter.ViewHolder holder = (ContactsListAdapter.ViewHolder) view.getTag();
+            mTriggersList.toggle(holder.contactId, holder.recipient);
+            mAdapter.notifyDataSetChanged();
+        }
     };
 
 }
