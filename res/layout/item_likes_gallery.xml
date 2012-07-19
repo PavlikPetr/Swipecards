@@ -102,22 +102,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="4dp"
         android:src="@drawable/list_online_selector"
-        android:visibility="invisible" />
-
-    <TextView 
-        android:id="@+id/tvLoaderText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
-       	android:layout_centerInParent="true"
-        android:text="@string/general_dialog_retry"/>
-    
-    <ProgressBar
-        android:id="@+id/prsLoader"
-        style="@android:style/Widget.ProgressBar.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
+        android:visibility="invisible" />    
 
 </RelativeLayout>

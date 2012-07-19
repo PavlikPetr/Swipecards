@@ -137,8 +137,9 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
             case OnScrollListener.SCROLL_STATE_IDLE: {
                 mBusy = false;
                 view.invalidateViews(); //  ПРАВИЛЬНО ???
-            }
                 break;
+            }
+                
         }
     }
     //---------------------------------------------------------------------------
