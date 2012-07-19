@@ -17,7 +17,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
     private LinkedList<T> mDataList;
     private HashMap<Integer, Bitmap> mCache;
     private boolean mBusy;
-    public int AVATAR_ROUND_RADIUS = 12;  // хард кор !!!!!!!
+    public static final int AVATAR_ROUND_RADIUS = 12;  // хард кор !!!!!!!
 
     public AvatarManager(LinkedList<T> dataList) {
         mDataList = dataList;

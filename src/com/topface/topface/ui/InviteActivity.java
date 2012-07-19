@@ -13,7 +13,7 @@ import com.topface.topface.R;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.InviteRequest;
-import com.topface.topface.ui.adapters.ContactsListAdapter;
+import com.topface.topface.ui.adapters.InviteAdapter;
 import com.topface.topface.utils.TriggersList;
 
 import java.util.Collection;
@@ -32,7 +32,7 @@ public class InviteActivity extends Activity {
     public static final String HAS_PHONE_NUMBER = "'1'";
     private ListView mContactList;
     private View mSendButton;
-    private ContactsListAdapter mAdapter;
+    private InviteAdapter mAdapter;
     private TriggersList<Long, InviteRequest.Recipient> mTriggersList;
 
 
@@ -82,7 +82,7 @@ public class InviteActivity extends Activity {
 
     private void setContactsAdapater() {
         Cursor cursor = getContacts("");
-        mAdapter = new ContactsListAdapter(this, cursor, mTriggersList);
+        mAdapter = new InviteAdapter(this, cursor, mTriggersList);
         mContactList.setAdapter(mAdapter);
         mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
             @Override
@@ -171,7 +171,7 @@ public class InviteActivity extends Activity {
     private AdapterView.OnItemClickListener mListItemCheckListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            ContactsListAdapter.ViewHolder holder = (ContactsListAdapter.ViewHolder) view.getTag();
+            InviteAdapter.ViewHolder holder = (InviteAdapter.ViewHolder) view.getTag();
             mTriggersList.toggle(holder.contactId, holder.recipient);
             mAdapter.notifyDataSetChanged();
         }

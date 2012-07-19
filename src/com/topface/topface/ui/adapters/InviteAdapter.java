@@ -16,16 +16,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.requests.InviteRequest;
+import com.topface.topface.ui.views.RoundedImageView;
+import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.TriggersList;
+import com.topface.topface.utils.Utils;
 
 import java.io.InputStream;
 
-public class ContactsListAdapter extends CursorAdapter {
+public class InviteAdapter extends CursorAdapter {
     private LayoutInflater mInflater;
     private TriggersList<Long, InviteRequest.Recipient> mTriggersList;
 
     public static class ViewHolder {
-        ImageView avatar;
+        RoundedImageView avatar;
         TextView name;
         TextView phone;
         ImageView checkbox;
@@ -33,7 +36,7 @@ public class ContactsListAdapter extends CursorAdapter {
         public InviteRequest.Recipient recipient;
     }
 
-    public ContactsListAdapter(Context context, Cursor c, TriggersList<Long, InviteRequest.Recipient> triggers) {
+    public InviteAdapter(Context context, Cursor c, TriggersList<Long, InviteRequest.Recipient> triggers) {
         super(context, c);
         mInflater = LayoutInflater.from(context);
         mTriggersList = triggers;
@@ -54,7 +57,7 @@ public class ContactsListAdapter extends CursorAdapter {
             holder = new ViewHolder();
             holder.name = (TextView) view.findViewById(R.id.contactName);
             holder.phone = (TextView) view.findViewById(R.id.contactPhone);
-            holder.avatar = (ImageView) view.findViewById(R.id.contactAvatar);
+            holder.avatar = (RoundedImageView) view.findViewById(R.id.contactAvatar);
             holder.checkbox = (ImageView) view.findViewById(R.id.contactCheckbox);
         }
 
@@ -81,10 +84,20 @@ public class ContactsListAdapter extends CursorAdapter {
 
 
         //Фото контакта
-        holder.avatar.setImageBitmap(loadContactPhoto(
+        Bitmap avatarBitmap = loadContactPhoto(
                 context.getContentResolver(),
                 holder.contactId
-        ));
+        );
+        if (avatarBitmap != null) {
+            int avatarSize = Math.min(avatarBitmap.getWidth(), avatarBitmap.getHeight());
+            avatarBitmap = Utils.getRoundedCornerBitmap(
+                    avatarBitmap,
+                    avatarSize,
+                    avatarSize,
+                    AvatarManager.AVATAR_ROUND_RADIUS
+            );
+        }
+        holder.avatar.setImageBitmap(avatarBitmap);
 
 
         //Состояние чекбокса пункта
