@@ -8,6 +8,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedLikesRequest;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.adapters.LikesListAdapter;
@@ -85,13 +86,11 @@ public class LikesActivity extends FrameActivity {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						if (!mIsUpdating
-								&& Data.likesList.get(position).isLoaderRetry()) {
+						if (!mIsUpdating && Data.likesList.get(position).isLoaderRetry()) {
 							updateUI(new Runnable() {
 								public void run() {
 									removeLoaderListItem();
-									Data.likesList.add(new FeedLike(
-											ItemType.LOADER));
+									Data.likesList.add(new FeedLike(ItemType.LOADER));
 									mListAdapter.notifyDataSetChanged();
 								}
 							});
@@ -100,17 +99,11 @@ public class LikesActivity extends FrameActivity {
 						} else {
 							try {
 								// Open profile activity
-								Intent intent = new Intent(
-										getApplicationContext(),
-										ProfileActivity.class);
-								intent.putExtra(ProfileActivity.INTENT_USER_ID,
-										Data.likesList.get(position).uid);
-								intent.putExtra(
-										ProfileActivity.INTENT_USER_NAME,
-										Data.likesList.get(position).first_name);
-								intent.putExtra(
-										ProfileActivity.INTENT_MUTUAL_ID,
-										Data.likesList.get(position).id);
+								Intent intent = new Intent(getApplicationContext(),	ProfileActivity.class);
+								intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.likesList.get(position).uid);
+								intent.putExtra(ChatActivity.INTENT_USER_URL, Data.likesList.get(position).getSmallLink());
+								intent.putExtra(ProfileActivity.INTENT_USER_NAME, Data.likesList.get(position).first_name);
+								intent.putExtra(ProfileActivity.INTENT_MUTUAL_ID, Data.likesList.get(position).id);
 								startActivity(intent);
 							} catch (Exception e) {
 								Debug.log(

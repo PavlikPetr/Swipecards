@@ -248,9 +248,7 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
     }
     //---------------------------------------------------------------------------
     @Override
-    public void onClick(View view) {
-        Data.userAvatar = null;
-        Http.avatarUserPreloading(mUserSearchList.get(mCurrentUserPos).getSmallLink());
+    public void onClick(View view) {        
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
@@ -278,7 +276,8 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
             case R.id.btnDatingChat: {
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
-                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
+                intent.putExtra(ChatActivity.INTENT_USER_URL, mUserSearchList.get(mCurrentUserPos).getSmallLink());                
+                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);                
                 startActivity(intent);
             }
                 break;

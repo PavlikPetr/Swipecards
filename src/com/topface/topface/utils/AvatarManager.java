@@ -9,6 +9,7 @@ import com.topface.topface.utils.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.widget.AbsListView;
 import android.widget.ImageView;
@@ -27,7 +28,8 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
     public AvatarManager(Context context, LinkedList<T> dataList, Handler handler) {
         mDataList = dataList;
         mCache = new HashMap<Integer, Bitmap>();
-        mFrameWidth = BitmapFactory.decodeResource(context.getResources(), R.drawable.im_avatar_list_frame).getWidth();
+        mFrameWidth = ((BitmapDrawable)context.getResources().getDrawable(R.drawable.im_avatar_list_frame)).getBitmap().getWidth();
+//        mFrameWidth = BitmapFactory.decodeResource(context.getResources(), R.drawable.im_avatar_list_frame).getWidth();
         mHandler = handler;
     }
     //---------------------------------------------------------------------------

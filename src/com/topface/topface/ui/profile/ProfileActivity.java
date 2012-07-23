@@ -53,7 +53,7 @@ import android.widget.Toast;
 /* "Профиль" */
 public class ProfileActivity extends FrameActivity {
     // Data
-    private int mUserId;
+    private int mUserId;    
     private int mMutualId;
     private boolean mIsOwner;
     private boolean mAddEroState;
@@ -776,9 +776,10 @@ public class ProfileActivity extends FrameActivity {
                         finish();
                         return;
                     }
-                    Http.avatarUserPreloading(mUserAvatarUrl);
+//                    Http.avatarUserPreloading(mUserAvatarUrl);
                     Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                     intent.putExtra(ChatActivity.INTENT_USER_ID, mUserId);
+                    intent.putExtra(ChatActivity.INTENT_USER_URL, mUserAvatarUrl);
                     intent.putExtra(ChatActivity.INTENT_USER_NAME, mName.getText());
                     intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
                     startActivity(intent);
