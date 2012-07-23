@@ -4,11 +4,8 @@ import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.view.View;
-
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.adapters.IListLoader;
-import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.utils.Debug;
 
 public class FeedLike extends AbstractData implements IListLoader{	

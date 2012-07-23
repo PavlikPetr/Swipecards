@@ -21,8 +21,8 @@
 	      android:layout_height="0dip"
 	      android:layout_weight="1"
 	      android:fadeScrollbars="true"
-	      android:fadingEdge="none"
-	      android:background="@android:color/transparent" />
+	      android:fadingEdge="none"	      
+	      android:cacheColorHint="#00000000"/>
      
     <ImageView
         android:id="@+id/ivBanner"

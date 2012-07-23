@@ -4,9 +4,10 @@ import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
 
-public class Dialog extends AbstractData {
+public class Dialog extends AbstractData implements IListLoader{
     // Data
     public int type; // идентификатор типа сообщения диалога
     public String text; // текст сообщения, если type = MESSAGE
@@ -40,7 +41,28 @@ public class Dialog extends AbstractData {
 
     public static final int TARGET_OUT = 0;
     public static final int TARGET_IN  = 1;
-    //--------------------------------------------------------------------------- 
+    
+    //Loader indicators
+    public boolean isListLoader = false;
+    public boolean isListLoaderRetry = false;
+    //---------------------------------------------------------------------------
+    public Dialog() {
+    	
+    }
+    //---------------------------------------------------------------------------
+    public Dialog(IListLoader.ItemType type) {
+    	switch (type) {
+		case LOADER:
+			isListLoader = true;
+			break;
+		case RETRY:
+			isListLoaderRetry = true;
+			break;
+		default:			
+			break;
+		}     	
+    }
+    //---------------------------------------------------------------------------
     public static LinkedList<Dialog> parse(ApiResponse response) {
         LinkedList<Dialog> dialogList = new LinkedList<Dialog>();
 
@@ -109,4 +131,17 @@ public class Dialog extends AbstractData {
         return avatars_small;
     }
     //---------------------------------------------------------------------------
+	@Override
+	public boolean isLoader() {
+		return isListLoader;
+	}
+	@Override
+	public boolean isLoaderRetry() {
+		return isListLoaderRetry;
+	}
+	@Override
+	public void switchToLoader() {
+		isListLoader = false;
+		isListLoaderRetry = true;
+	}
 }

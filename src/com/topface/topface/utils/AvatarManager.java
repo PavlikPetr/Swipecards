@@ -114,6 +114,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
         clear();
         mCache = null;
         mDataList = null;
+        mHandler = null;
     }
     //---------------------------------------------------------------------------
     @Override

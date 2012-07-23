@@ -8,7 +8,9 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedSympathyRequest;
+import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.adapters.SymphatyListAdapter;
+import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.ProfileActivity;
@@ -17,30 +19,29 @@ import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class SympathyActivity extends FrameActivity {
     // Data
     private boolean mNewUpdating;
-    private TextView mFooterView;
+//    private TextView mFooterView;
     private PullToRefreshListView mListView;
     private SymphatyListAdapter mListAdapter;
     private AvatarManager<FeedSympathy> mAvatarManager;
     private DoubleBigButton mDoubleButton;
     private ProgressBar mProgressBar;
     private ImageView mBannerView;
+    private boolean mIsUpdating = false;
     // Constants
-    private static final int LIMIT = 44;
+    private static final int LIMIT = 40;
     //---------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,14 +83,26 @@ public class SympathyActivity extends FrameActivity {
         mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
-                try {
-                    Intent intent = new Intent(SympathyActivity.this.getApplicationContext(), ProfileActivity.class);
-                    intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.sympathyList.get(position).uid);
-                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, Data.sympathyList.get(position).first_name);
-                    startActivityForResult(intent, 0);
-                } catch(Exception e) {
-                    Debug.log(SympathyActivity.this, "start ProfileActivity exception:" + e.toString());
-                }
+            	if (!mIsUpdating && Data.sympathyList.get(position).isLoaderRetry()) {
+            		updateUI(new Runnable() {
+						public void run() {
+							removeLoaderListItem();
+							Data.sympathyList.add(new FeedSympathy(ItemType.LOADER));
+							mListAdapter.notifyDataSetChanged();
+						}
+					});
+            		
+            		updateDataHistory();
+            	} else {
+	                try {
+	                    Intent intent = new Intent(SympathyActivity.this.getApplicationContext(), ProfileActivity.class);
+	                    intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.sympathyList.get(position).uid);
+	                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, Data.sympathyList.get(position).first_name);
+	                    startActivityForResult(intent, 0);
+	                } catch(Exception e) {
+	                    Debug.log(SympathyActivity.this, "start ProfileActivity exception:" + e.toString());
+	                }
+            	}
             }
         });
         mListView.setOnRefreshListener(new OnRefreshListener() {
@@ -100,23 +113,31 @@ public class SympathyActivity extends FrameActivity {
         });
 
         // Footer
-        mFooterView = new TextView(getApplicationContext());
-        mFooterView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateDataHistory();
-            }
-        });
-        mFooterView.setBackgroundResource(R.drawable.item_list_selector);
-        mFooterView.setText(getString(R.string.general_footer_previous));
-        mFooterView.setTextColor(Color.DKGRAY);
-        mFooterView.setGravity(Gravity.CENTER);
-        mFooterView.setTypeface(Typeface.DEFAULT_BOLD);
-        mFooterView.setVisibility(View.GONE);
-        mListView.getRefreshableView().addFooterView(mFooterView);
+//        mFooterView = new TextView(getApplicationContext());
+//        mFooterView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                updateDataHistory();
+//            }
+//        });
+//        mFooterView.setBackgroundResource(R.drawable.item_list_selector);
+//        mFooterView.setText(getString(R.string.general_footer_previous));
+//        mFooterView.setTextColor(Color.DKGRAY);
+//        mFooterView.setGravity(Gravity.CENTER);
+//        mFooterView.setTypeface(Typeface.DEFAULT_BOLD);
+//        mFooterView.setVisibility(View.GONE);
+//        mListView.getRefreshableView().addFooterView(mFooterView);
 
         // Control creating
-        mAvatarManager = new AvatarManager<FeedSympathy>(getApplicationContext(), Data.sympathyList, null);
+        mAvatarManager = new AvatarManager<FeedSympathy>(getApplicationContext(), Data.sympathyList, new Handler() {
+        	@Override
+        	public void handleMessage(Message msg) {
+        		if (Data.sympathyList.getLast().isLoader() && !mIsUpdating)
+        			updateDataHistory();
+        		
+        		super.handleMessage(msg);
+        	}
+        });
         mListAdapter = new SymphatyListAdapter(getApplicationContext(), mAvatarManager);
         mListView.setOnScrollListener(mAvatarManager);
         mListView.setAdapter(mListAdapter);
@@ -126,6 +147,7 @@ public class SympathyActivity extends FrameActivity {
     }
     //---------------------------------------------------------------------------
     private void updateData(boolean isPushUpdating) {
+    	mIsUpdating = true;
         if (!isPushUpdating)
             mProgressBar.setVisibility(View.VISIBLE);
 
@@ -138,22 +160,26 @@ public class SympathyActivity extends FrameActivity {
             @Override
             public void success(ApiResponse response) {
                 Data.sympathyList.clear();
-                Data.sympathyList.addAll(FeedSympathy.parse(response));
+                Data.sympathyList.addAll(FeedSympathy.parse(response));               
+                
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        if (mNewUpdating)
-                            mFooterView.setVisibility(View.GONE);
-                        else
-                            mFooterView.setVisibility(View.VISIBLE);
-
-                        if (Data.sympathyList.size() == 0 || Data.sympathyList.size() < LIMIT / 2)
-                            mFooterView.setVisibility(View.GONE);
+                    	if (mNewUpdating) {
+                     		if (FeedSympathy.unread_count > 0) {
+                     			Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                     		}
+                     	} else {
+                     		if (!(Data.sympathyList.size() == 0 || Data.sympathyList.size() < LIMIT / 2)) {
+                     			Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                     		}
+                     	}
 
                         mProgressBar.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListAdapter.notifyDataSetChanged();
                         mListView.setVisibility(View.VISIBLE);
+                        mIsUpdating = false;
                     }
                 });
             }
@@ -162,9 +188,11 @@ public class SympathyActivity extends FrameActivity {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
+                    	Toast.makeText(SympathyActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mProgressBar.setVisibility(View.GONE);
-                        Toast.makeText(SympathyActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mListView.onRefreshComplete();
+                        mListView.setVisibility(View.VISIBLE);
+                        mIsUpdating = false;
                     }
                 });
             }
@@ -172,28 +200,44 @@ public class SympathyActivity extends FrameActivity {
     }
     //---------------------------------------------------------------------------
     private void updateDataHistory() {
-        mProgressBar.setVisibility(View.VISIBLE);
+    	mIsUpdating = true;
+    	mNewUpdating = mDoubleButton.isRightButtonChecked();
 
         FeedSympathyRequest symphatyRequest = new FeedSympathyRequest(getApplicationContext());
         symphatyRequest.limit = LIMIT;
-        symphatyRequest.only_new = false;
-        symphatyRequest.from = Data.sympathyList.get(Data.sympathyList.size() - 1).id;
+        symphatyRequest.only_new = mNewUpdating;
+        if (!mNewUpdating) {
+        	if (Data.sympathyList.getLast().isLoader() || Data.sympathyList.getLast().isLoaderRetry()) {
+        		symphatyRequest.from = Data.sympathyList.get(Data.sympathyList.size() - 2).id;
+        	} else {
+        		symphatyRequest.from = Data.sympathyList.get(Data.sympathyList.size() - 1).id;
+        	}        	
+        }
         symphatyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
                 final LinkedList<FeedSympathy> feedSymphatyList = FeedSympathy.parse(response);
-                if (feedSymphatyList.size() > 0)
-                    Data.sympathyList.addAll(feedSymphatyList);
+                
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        if (feedSymphatyList.size() == 0 || feedSymphatyList.size() < LIMIT / 2)
-                            mFooterView.setVisibility(View.GONE);
-                        else
-                            mProgressBar.setVisibility(View.VISIBLE);
+                    	removeLoaderListItem();
+                    	
+                    	if (feedSymphatyList.size() > 0) {
+                            Data.sympathyList.addAll(feedSymphatyList);
+                            if (mNewUpdating) {
+                        		if (FeedSympathy.unread_count > 0)
+                        			Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                        	} else {
+                        		if (!(Data.sympathyList.size() == 0 || Data.sympathyList.size() < (LIMIT/2)))
+                        			Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                        	}
+                        }
+                    	
                         mProgressBar.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListAdapter.notifyDataSetChanged();
+                        mIsUpdating = false;                    
                     }
                 });
             }
@@ -202,9 +246,13 @@ public class SympathyActivity extends FrameActivity {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(SympathyActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mProgressBar.setVisibility(View.GONE);
+                    	mProgressBar.setVisibility(View.GONE);
+                        Toast.makeText(SympathyActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();                        
+                        mIsUpdating = false;
+                    	removeLoaderListItem();
+                        Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.RETRY));
                         mListView.onRefreshComplete();
+                        mListAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -239,6 +287,14 @@ public class SympathyActivity extends FrameActivity {
             mAvatarManager.release();
             mAvatarManager = null;
         }
+    }
+    //---------------------------------------------------------------------------
+    private void removeLoaderListItem() {
+    	if (Data.sympathyList.size() > 0 ) {
+	    	if (Data.sympathyList.getLast().isLoader() || Data.sympathyList.getLast().isLoaderRetry()) {
+	    		Data.sympathyList.remove(Data.sympathyList.size() - 1);
+	    	}
+    	}
     }
     //---------------------------------------------------------------------------
 }

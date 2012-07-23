@@ -1,25 +1,19 @@
 package com.topface.topface.ui.adapters;
 
-import org.w3c.dom.Text;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.utils.AvatarManager;
-import com.topface.topface.ui.views.RoundedImageView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Utils;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class LikesListAdapter extends BaseAdapter {
+public class LikesListAdapter extends LoadingListAdapter {
     //---------------------------------------------------------------------------
     // class ViewHolder
     //---------------------------------------------------------------------------
@@ -39,17 +33,11 @@ public class LikesListAdapter extends BaseAdapter {
     // Data
     private LayoutInflater mInflater;
     private AvatarManager<FeedLike> mAvatarManager;
-    private int mOwnerCityID;
-    private View mLoaderRetrier;
-    private TextView mLoaderRetrierText;
-    private ProgressBar mLoaderRetrierProgress;
+    private int mOwnerCityID;    
     
-    // Constants
-    private static final int T_ALL = 0;
-    private static final int T_CITY = 1;
-    private static final int T_LOADER = 2;
-    private static final int T_RETRIER = 3;
-    private static final int T_COUNT = 4;
+    // Constants    
+    private static final int T_CITY = 3;
+    private static final int T_COUNT = 1;
     
     //---------------------------------------------------------------------------
     public LikesListAdapter(Context context,AvatarManager<FeedLike> avatarManager) {
@@ -79,17 +67,17 @@ public class LikesListAdapter extends BaseAdapter {
     //---------------------------------------------------------------------------
     @Override
     public int getViewTypeCount() {
-        return T_COUNT;
+    	return super.getViewTypeCount() + T_COUNT;
     }
     //---------------------------------------------------------------------------
     @Override
     public int getItemViewType(int position) {
-    	if (mAvatarManager.get(position).isListLoader) 
-    		return T_LOADER;
-    	if (mAvatarManager.get(position).isListLoaderRetry) 
-    		return T_RETRIER;
-        
-    	return mAvatarManager.get(position).city_id == mOwnerCityID ? T_CITY : T_ALL;
+    	int typeOfSuperMethod = super.getItemViewType(position); 
+    	if (typeOfSuperMethod == T_NONE) {
+    		return mAvatarManager.get(position).city_id == mOwnerCityID ? T_CITY : T_ALL;
+    	} else {
+    		return typeOfSuperMethod;
+    	}
     }
     //---------------------------------------------------------------------------
     @Override
@@ -100,30 +88,10 @@ public class LikesListAdapter extends BaseAdapter {
         int type = getItemViewType(position);        
         
         if (type == T_LOADER) {        	        	        	
-//        	holder.mAvatar.setVisibility(View.GONE);
-//        	holder.mAvatarMask.setVisibility(View.GONE);
-//            holder.mName.setVisibility(View.GONE);
-//            holder.mCity.setVisibility(View.GONE);
-//            holder.mTime.setVisibility(View.GONE);
-//            holder.mHeart.setVisibility(View.GONE);
-//            holder.mArrow.setVisibility(View.GONE);
-//            holder.mOnline.setVisibility(View.GONE);
-//            holder.mRetryText.setVisibility(View.GONE);
-//        	holder.mProgressBar.setVisibility(View.VISIBLE);
         	mLoaderRetrierProgress.setVisibility(View.VISIBLE);
         	mLoaderRetrierText.setVisibility(View.INVISIBLE);
         	return mLoaderRetrier;
         } else if (type == T_RETRIER) {
-//        	holder.mAvatar.setVisibility(View.GONE);
-//        	holder.mAvatarMask.setVisibility(View.GONE);
-//            holder.mName.setVisibility(View.GONE);
-//            holder.mCity.setVisibility(View.GONE);
-//            holder.mTime.setVisibility(View.GONE);
-//            holder.mHeart.setVisibility(View.GONE);
-//            holder.mArrow.setVisibility(View.GONE);
-//            holder.mOnline.setVisibility(View.GONE);            
-//            holder.mProgressBar.setVisibility(View.GONE);
-//            holder.mRetryText.setVisibility(View.VISIBLE);
         	mLoaderRetrierProgress.setVisibility(View.INVISIBLE);
         	mLoaderRetrierText.setVisibility(View.VISIBLE);
         	return mLoaderRetrier;
@@ -141,8 +109,6 @@ public class LikesListAdapter extends BaseAdapter {
                 holder.mHeart = (ImageView)convertView.findViewById(R.id.ivHeart);
                 holder.mArrow = (ImageView)convertView.findViewById(R.id.ivArrow);
                 holder.mOnline = (ImageView)convertView.findViewById(R.id.ivOnline);
-//                holder.mRetryText = (TextView)convertView.findViewById(R.id.tvLoaderText);
-//                holder.mProgressBar = (ProgressBar)convertView.findViewById(R.id.prsLoader);
 
                 /*switch(type) {
                  * case T_ALL:
@@ -154,17 +120,9 @@ public class LikesListAdapter extends BaseAdapter {
                  * } */            
 
                 convertView.setTag(holder);
-            } else
+            } else {
                 holder = (ViewHolder)convertView.getTag();
-//        	holder.mAvatar.setVisibility(View.VISIBLE);
-//        	holder.mAvatarMask.setVisibility(View.VISIBLE);
-//            holder.mName.setVisibility(View.VISIBLE);
-//            holder.mCity.setVisibility(View.VISIBLE);
-//            holder.mTime.setVisibility(View.VISIBLE);
-//            holder.mHeart.setVisibility(View.VISIBLE);
-//            holder.mArrow.setVisibility(View.VISIBLE);  
-//            holder.mRetryText.setVisibility(View.GONE);
-//        	holder.mProgressBar.setVisibility(View.GONE);
+            }
         	
 	        mAvatarManager.getImage(position, holder.mAvatar);
 	

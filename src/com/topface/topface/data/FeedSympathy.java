@@ -4,10 +4,11 @@ import java.util.LinkedList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
 
 /* Класс профиля окна топов */
-public class FeedSympathy extends AbstractData {
+public class FeedSympathy extends AbstractData implements IListLoader{
     // Data
     public static int unread_count; // количество оставшихся непрочитанных
     public int id; // идентификатор симпатии в ленте
@@ -22,6 +23,26 @@ public class FeedSympathy extends AbstractData {
     public String avatars_big; // фото большого размера
     public String avatars_small; // фото маленького размера
     public long created; // таймстамп отправления симпатии
+    
+    public boolean isListLoader = false;
+    public boolean isListLoaderRetry = false;
+    //---------------------------------------------------------------------------
+    public FeedSympathy() {
+		// TODO Auto-generated constructor stub
+	}    
+    //---------------------------------------------------------------------------
+    public FeedSympathy(IListLoader.ItemType type) {
+    	switch (type) {
+		case LOADER:
+			isListLoader = true;
+			break;
+		case RETRY:
+			isListLoaderRetry = true;
+			break;
+		default:			
+			break;
+		}     	
+    }
     //---------------------------------------------------------------------------
     public static LinkedList<FeedSympathy> parse(ApiResponse response) {
         LinkedList<FeedSympathy> symphatyList = new LinkedList<FeedSympathy>();
@@ -75,4 +96,17 @@ public class FeedSympathy extends AbstractData {
         return avatars_small;
     }
     //---------------------------------------------------------------------------
+	@Override
+	public boolean isLoader() {
+		return isListLoader;
+	}
+	@Override
+	public boolean isLoaderRetry() {
+		return isListLoaderRetry;
+	}
+	@Override
+	public void switchToLoader() {
+		isListLoader = false;
+		isListLoaderRetry = true;
+	}
 }

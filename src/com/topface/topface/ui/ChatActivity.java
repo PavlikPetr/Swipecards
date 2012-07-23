@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import java.util.LinkedList;
 
+import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.Static;
@@ -138,6 +139,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
             historyRequest.cancel();
 
         release();
+//        Data.userAvatar = null;
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
