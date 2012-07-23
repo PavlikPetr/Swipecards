@@ -101,11 +101,12 @@ public class DialogActivity extends FrameActivity {
             		
             		updateDataHistory();
             	} else {
-	                ImageView iv = (ImageView)view.findViewById(R.id.ivAvatar);
-	                Data.userAvatar = ((BitmapDrawable)iv.getDrawable()).getBitmap();
+//	                ImageView iv = (ImageView)view.findViewById(R.id.ivAvatar);
+//	                Data.userAvatar = ((BitmapDrawable)iv.getDrawable()).getBitmap();
 	                try {
 	                    Intent intent = new Intent(DialogActivity.this.getApplicationContext(), ChatActivity.class);
 	                    intent.putExtra(ChatActivity.INTENT_USER_ID, Data.dialogList.get(position).uid);
+	                    intent.putExtra(ChatActivity.INTENT_USER_URL, Data.dialogList.get(position).getSmallLink());
 	                    intent.putExtra(ChatActivity.INTENT_USER_NAME, Data.dialogList.get(position).first_name);
 	                    startActivity(intent);
 	                } catch(Exception e) {

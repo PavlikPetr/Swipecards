@@ -19,6 +19,7 @@ import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.Http;
 import android.app.Activity;
@@ -46,6 +47,8 @@ import android.widget.Toast;
 public class ChatActivity extends Activity implements View.OnClickListener, LocationListener {
     // Data
     private int mUserId;
+    private String mUserAvatarUrl;
+    private int mAvatarWidth;
     private boolean mProfileInvoke;
     private boolean mIsAddPanelOpened;
     private ListView mListView;
@@ -63,6 +66,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     // Constants
     private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public static final String INTENT_USER_ID = "user_id";
+    public static final String INTENT_USER_URL = "user_url";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
@@ -94,9 +98,12 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 
         // Params
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
+        mUserAvatarUrl = getIntent().getStringExtra(INTENT_USER_URL);
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
-        mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME));
-
+        mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME));        
+        mAvatarWidth = getResources().getDrawable(R.drawable.chat_avatar_frame).getIntrinsicWidth();
+        
+        
         // Profile Button
         View btnProfile = findViewById(R.id.btnChatProfile);
         btnProfile.setVisibility(View.VISIBLE);
@@ -139,7 +146,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
             historyRequest.cancel();
 
         release();
-//        Data.userAvatar = null;
+        Data.userAvatar = null;
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
@@ -152,6 +159,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         historyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
+            	Data.userAvatar = Utils.getRoundedBitmap(Http.bitmapLoader(mUserAvatarUrl), mAvatarWidth, mAvatarWidth);
                 LinkedList<History> dataList = History.parse(response);
                 mAdapter.setDataList(dataList);
                 post(new Runnable() {
