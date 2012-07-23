@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
+import com.topface.topface.App;
 
 public class Device {
     // Data
@@ -21,7 +22,7 @@ public class Device {
     public static final int PORTRAIT = 0;
     public static final int LANDSCAPE = 1;
     public static final int WTF = 2;
-    //---------------------------------------------------------------------------
+
     public static boolean init(Context context) {
         try {
             if (getOrientation(context) == LANDSCAPE)
@@ -40,20 +41,22 @@ public class Device {
 
         return true;
     }
-    //---------------------------------------------------------------------------
+
     public static Display getDisplay(Context context) {
         return ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
     }
-    //---------------------------------------------------------------------------
+
     public static int getOrientation(Context context) {
-        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             return PORTRAIT;
-        else if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+        }
+        else if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             return LANDSCAPE;
+        }
 
         return WTF;
     }
-    //---------------------------------------------------------------------------
+
     public static DisplayMetrics getDisplayMetrics(Context context) {
         Display display = getDisplay(context);
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -61,5 +64,19 @@ public class Device {
 
         return displayMetrics;
     }
-    //---------------------------------------------------------------------------
+
+    /**
+     * Возвращает максимальную сторону дисплея, т.е. ширину, если альбомная ориентация и высоту, если портретная
+     * @param context контекст выполнения
+     * @return размер дисплея по максимальной стороне
+     */
+    public static int getMaxDisplaySize(Context context) {
+        return getOrientation(context) == LANDSCAPE ?
+                getDisplay(context).getWidth() :
+                getDisplay(context).getHeight();
+    }
+
+    public static int getMaxDisplaySize() {
+        return getMaxDisplaySize(App.getContext());
+    }
 }

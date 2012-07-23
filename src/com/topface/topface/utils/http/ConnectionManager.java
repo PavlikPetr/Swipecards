@@ -89,7 +89,9 @@ public class ConnectionManager {
                     if (httpPost != null && !httpPost.isAborted())
                         httpPost.abort();
                 }
+                if (httpClient != null) {
                 httpClient.close();
+            }
             }
         });
     }
@@ -313,6 +315,10 @@ public class ConnectionManager {
         if (mHttpClient != null)
             mHttpClient.close();/* mHttpClient.getConnectionManager().shutdown(); */
         super.finalize();
+    }
+
+    public AndroidHttpClient getHttpClient() {
+        return mHttpClient;
     }
     //---------------------------------------------------------------------------
 }

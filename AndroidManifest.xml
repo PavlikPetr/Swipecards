@@ -2,48 +2,39 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.topface.topface"
     android:installLocation="preferExternal"
-    android:versionCode="25"
+    android:versionCode="26"
     android:versionName="2.0" >
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
-    
-    <!--
-    <supports-screens
-       android:smallScreens  = "true"
-       android:normalScreens = "true"
-       android:largeScreens  = "true"
-       android:anyDensity    = "true" />
-     -->
 
-	  <!-- permissions -->
-	  <permission android:name="com.topface.topface.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-	  <uses-permission android:name="com.topface.topface.permission.C2D_MESSAGE" />
-	  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-	  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	  <uses-permission android:name="android.permission.INTERNET" />
-	  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-	  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	  <uses-permission android:name="android.permission.WAKE_LOCK" />
-	  <uses-permission android:name="android.permission.VIBRATE" />
-	  <uses-permission android:name="com.android.vending.BILLING" />
+    <!-- permissions -->
+    <permission android:name="com.topface.topface.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
+    <uses-permission android:name="com.topface.topface.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="com.android.vending.BILLING"/>
 
     <application 
         android:name=".App"
         android:label="@string/app_name"
         android:icon="@drawable/ic_launcher"
-        android:theme="@android:style/Theme.NoTitleBar" 
-        android:debuggable="true" >
+        android:theme="@android:style/Theme.NoTitleBar">
         <uses-library android:name="com.google.android.maps" />
         
         <!-- main Activity -->
-        <activity android:name=".ui.MainActivity" >
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        
+
         <!-- activity -->
         <activity android:name=".ui.AuthActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.ChatActivity" />
@@ -68,32 +59,32 @@
         <activity android:name=".ui.GeoMapActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize"/>
         
         <!-- services -->
-        <service android:name=".services.NotificationService" />
-        <service android:name=".services.ConnectionService" />
-        <service android:name=".billing.BillingService" />
-        
+        <service android:name=".services.NotificationService"/>
+        <service android:name=".services.ConnectionService"/>
+        <service android:name=".billing.BillingService"/>
+
         <!-- receivers -->
         <receiver android:name=".billing.BillingReceiver">
-	        <intent-filter>
-	            <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
-	            <action android:name="com.android.vending.billing.RESPONSE_CODE" />
-	            <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
-	        </intent-filter>
+            <intent-filter>
+                <action android:name="com.android.vending.billing.IN_APP_NOTIFY"/>
+                <action android:name="com.android.vending.billing.RESPONSE_CODE"/>
+                <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED"/>
+            </intent-filter>
         </receiver>
-        
-		    <!-- c2dm -->
-		    <service android:name=".C2DMReceiver" />
-		    <receiver android:name="com.google.android.c2dm.C2DMBroadcastReceiver"
-		              android:permission="com.google.android.c2dm.permission.SEND">
-		        <intent-filter>
-		            <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-		            <category android:name="com.topface.topface"/>
-		        </intent-filter>
-		        <intent-filter>
-		            <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
-		            <category android:name="com.topface.topface"/>
-		        </intent-filter>
-		     </receiver>
+
+        <!-- c2dm -->
+        <service android:name=".C2DMReceiver"/>
+        <receiver android:name="com.google.android.c2dm.C2DMBroadcastReceiver"
+                  android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="com.topface.topface"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+                <category android:name="com.topface.topface"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

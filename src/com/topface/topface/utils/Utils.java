@@ -6,6 +6,7 @@ import java.security.MessageDigest;
 import java.util.Calendar;
 import android.graphics.*;
 import android.net.Uri;
+import android.text.ClipboardManager;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
@@ -31,8 +32,7 @@ public class Utils {
             MessageDigest digester = MessageDigest.getInstance("MD5");
             digester.update(value.getBytes());
             byte[] bytes = digester.digest();
-            for (int i = 0; i < bytes.length; i++)
-                hexString.append(Integer.toHexString(0xFF & bytes[i]));
+            for (byte aByte : bytes) hexString.append(Integer.toHexString(0xFF & aByte));
             return hexString.toString();
         } catch (Exception e) {
             return null;
@@ -95,11 +95,6 @@ public class Utils {
             // у вертикальной режим с верху
             clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
 
-        //rawBitmap.recycle();
-        //rawBitmap = null;
-
-        //scaledBitmap.recycle();
-        //scaledBitmap = null;
 
         return clippedBitmap;
     }
@@ -494,98 +489,33 @@ public class Utils {
     /**
      * Возвращает делитель, во сколько раз уменьшить размер изображения при создании битмапа
      *
-     * @param in   InputStrem к изображению, для того, что бы получить его размеры, не загружая его в память
+     * @param options   InputStrem к изображению, для того, что бы получить его размеры, не загружая его в память
      * @param size размер до которого нужно уменьшить
      * @return делитель размера битмапа
      * @throws java.io.FileNotFoundException
      */
-    public static int getBitmapScale(InputStream in, int size) throws FileNotFoundException {
+    public static int getBitmapScale(BitmapFactory.Options options, int size) throws FileNotFoundException {
         //1 по умолчанию, значит что битмап нет необходимости уменьшать
         int scale = 1;
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        //Опция, сообщающая что не нужно грузить изображение в память
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(in, null, options);
 
         //Определяем во сколько раз нужно уменьшить изображение для создания битмапа
-        if (options.outHeight > size || options.outWidth > size) {
+        if (/*options.outHeight > size || */options.outWidth > size) {
             scale = (int) Math.pow(2,
                     (int) Math.round(
                             Math.log(
                                     size /
-                                    (double) Math.max(options.outHeight, options.outWidth)) /
-                                    Math.log(0.5)
+                                    (double) Math.max(options.outHeight, options.outWidth)
+                            ) /
+                            Math.log(0.5)
                     )
             );
         }
 
         return scale;
     }
-    //---------------------------------------------------------------------------
-    public static Bitmap getMemorySafeBitmap(Uri uri, int size, Context ctx) {
-        Bitmap bitmap = null;
-        //Decode with inSampleSize
-        try {
-            InputStream in = ctx.getContentResolver().openInputStream(uri);
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = getBitmapScale(in, size);
-            in.close();
 
-            in = ctx.getContentResolver().openInputStream(uri);
-            bitmap = BitmapFactory.decodeStream(in, null, o2);
-            in.close();
-        } catch (Exception e) {
-            android.util.Log.w(App.TAG, "Can't get memory safe bitmap", e);
-        }
-
-        return bitmap;
+    public static void copyTextToClipboard(String text, Context context) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.setText(text);
     }
-    //---------------------------------------------------------------------------
 }
-
-/*
-public static Bitmap clipAndScaleBitmap(Bitmap rawBitmap, int dstWidth, int dstHeight) {
-    if (rawBitmap == null || rawBitmap.getWidth()<= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
-        return null;
-
-    // Исходный размер загруженного изображения
-    int srcWidth  = rawBitmap.getWidth();
-    int srcHeight = rawBitmap.getHeight();
-
-    // буль, длинная фото или высокая
-    boolean LAND = false;
-    if (srcWidth >= srcHeight)
-        LAND = true;
-
-    // коффициент сжатия фотографии
-    float ratio = Math.max(((float) dstWidth) / srcWidth, ((float) dstHeight) / srcHeight);
-
-    // на получение оригинального размера по ширине или высоте
-    if (ratio <= 0) ratio = 1;
-
-    // матрица сжатия
-    Matrix matrix = new Matrix();
-    matrix.postScale(ratio, ratio);
-
-    // сжатие изображения
-    Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
-
-    // вырезаем необходимый размер
-    Bitmap clippedBitmap;
-    if (LAND) {
-        // у горизонтальной, вырезаем по центру
-        int offset_x = (scaledBitmap.getWidth() - dstWidth) / 2;
-        clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, dstWidth, dstHeight, null, false);
-    } else
-        // у вертикальной режим с верху
-        clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
-
-    //rawBitmap.recycle();
-    //rawBitmap = null;
-
-    //scaledBitmap.recycle();
-    //scaledBitmap = null;
-
-    return clippedBitmap;
-}
-*/

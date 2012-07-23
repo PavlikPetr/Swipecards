@@ -14,6 +14,7 @@
 
 package com.topface.topface.utils.http;
 
+import com.topface.topface.utils.Http;
 import org.acra.util.Base64;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -115,11 +116,11 @@ public final class AndroidHttpClient implements HttpClient {
         //HttpConnectionParams.setTcpNoDelay(params, true);                                     // САМОПАЛ
         HttpConnectionParams.setConnectionTimeout(params, SOCKET_REQUEST_TIMEOUT);
         HttpConnectionParams.setSoTimeout(params, SOCKET_OPERATION_TIMEOUT);
-        HttpConnectionParams.setSocketBufferSize(params, 8192);
+        HttpConnectionParams.setSocketBufferSize(params, Http.BUFFER_SIZE);
 
         // Don't handle redirects -- return them to the caller.  Our code
         // often wants to re-POST after a redirect, which we must do ourselves.
-        HttpClientParams.setRedirecting(params, false);
+        HttpClientParams.setRedirecting(params, true);
 
         // Use a session cache for SSL sockets
         ///SSLSessionCache sessionCache = context == null ? null : new SSLSessionCache(context);

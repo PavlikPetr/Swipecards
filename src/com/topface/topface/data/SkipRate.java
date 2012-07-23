@@ -23,5 +23,4 @@ public class SkipRate extends AbstractData {
 
         return skip;
     }
-    //---------------------------------------------------------------------------
 }

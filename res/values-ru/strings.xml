@@ -55,6 +55,7 @@
       <string name="chat_dialog_btn_gps_cancel">Отмена</string>
       <string name="chat_dialog_btn_agps_settings">Настройки</string>
       <string name="chat_toast_fail_location">Не удалось определить местоположение</string>
+      <string name="chat_message_copied">Сообщение скопировано</string>
 	  
 	  <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Взаимно</string>

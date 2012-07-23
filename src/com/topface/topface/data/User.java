@@ -54,6 +54,7 @@ public class User extends AbstractData {
             item = item.getJSONObject("" + userId);
             profile.uid = item.optInt("uid");
             profile.age = item.optInt("age");
+        profile.sex        = item.optInt("sex");
             profile.first_name = item.optString("first_name");
             profile.first_name_translit = item.optString("first_name_translit");
             profile.platform = item.optString("platform");
