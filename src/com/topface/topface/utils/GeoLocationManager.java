@@ -12,6 +12,10 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Confirmation;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.ChatActivity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -26,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * GeoLocationManager: 
@@ -51,6 +56,8 @@ public class GeoLocationManager {
 	private LayoutInflater mInflater;
 	
 	private static Drawable mPinDrawable; 
+	
+	private boolean mTouchable = true;
 	
 	public GeoLocationManager(Context context) {
 		mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);	
@@ -271,6 +278,10 @@ public class GeoLocationManager {
 		return new GeoPoint((int)(latitude*1E6), (int)(longitude*1E6));
 	}
 	
+	public void setItemOverlayOnTouch(boolean touchable) {
+		mTouchable = touchable;
+	}
+	
 	class GeoItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 		private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 
@@ -339,10 +350,14 @@ public class GeoLocationManager {
 		@Override
 		public boolean onTap(GeoPoint p, MapView mapView) {			
 			//String address = GeoLocationManager.this.getLocationAddress(p.getLatitudeE6()/1E6, p.getLongitudeE6()/1E6);
-			currentPoint = p;			
-			addOverlay(new OverlayItem(p, "", ""),mapView);			
-	        
-			return true;
+			if (mTouchable) {
+				currentPoint = p;			
+				addOverlay(new OverlayItem(p, "", ""),mapView);			
+		        
+				return true;
+			} else {
+				return false;
+			}
 		}
 		
 		@Override
@@ -353,5 +368,29 @@ public class GeoLocationManager {
 	        	mAddressView.setLayoutParams(getTipLayout(mapView, currentPoint));
 	        }
 	    }
+	}
+	
+	public static class SendCoordinatesHandler extends ApiHandler {
+
+		private Context mContext;
+		
+		public SendCoordinatesHandler(Context context) {
+			mContext = context;
+		}
+		
+		@Override
+		public void success(ApiResponse response) throws NullPointerException {
+			final Confirmation confirm = Confirmation.parse(response);
+			if (!confirm.completed) {
+				Toast.makeText(mContext, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+			}
+		}
+		
+		@Override
+		public void fail(int codeError, ApiResponse response)
+				throws NullPointerException {
+			Toast.makeText(mContext, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+		}
+		
 	}
 }

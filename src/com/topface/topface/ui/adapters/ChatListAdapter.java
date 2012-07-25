@@ -1,5 +1,6 @@
 package com.topface.topface.ui.adapters;
 
+import java.lang.ref.SoftReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -9,21 +10,28 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.History;
+import com.topface.topface.ui.GeoMapActivity;
 import com.topface.topface.ui.views.RoundedImageView;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.Http;
 import com.topface.topface.utils.MemorySyncCache;
+import com.topface.topface.utils.OSM;
 import com.topface.topface.utils.StorageCache;
+import com.topface.topface.utils.MemoryCacheTemplate;
 import com.topface.topface.utils.Utils;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class ChatListAdapter extends BaseAdapter {
@@ -35,6 +43,8 @@ public class ChatListAdapter extends BaseAdapter {
         TextView mDate;
         ImageView mGift;
         TextView mAddress;
+        ImageView mMapBackground;
+        ProgressBar mPrgsAddress;
         //View mInfoGroup;
     }
     //---------------------------------------------------------------------------
@@ -48,6 +58,8 @@ public class ChatListAdapter extends BaseAdapter {
     private View.OnClickListener mOnAvatarListener;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
     private MemorySyncCache mMemorySyncCache;
+//    private HashMap<String, SoftReference<String>> mAddressesCache;
+    private MemoryCacheTemplate<String, String> mAddressesCache;
     private StorageCache mStorageCache;
     private int mGiftFrameWidth;
     // Type Item
@@ -70,6 +82,7 @@ public class ChatListAdapter extends BaseAdapter {
         mGiftFrameWidth = BitmapFactory.decodeResource(context.getResources(), R.drawable.chat_gift_frame).getWidth();
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mMemorySyncCache  = new MemorySyncCache();
+        mAddressesCache = new MemoryCacheTemplate<String, String>();
         mStorageCache = new StorageCache(mContext, StorageCache.EXTERNAL_CACHE);
         prepare(dataList);
     }
@@ -164,12 +177,16 @@ public class ChatListAdapter extends BaseAdapter {
                     convertView = mInflater.inflate(R.layout.chat_user_map, null, false);
                     holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.left_icon);
                     holder.mAddress = (TextView)convertView.findViewById(R.id.tvChatMapAddress);
+                    holder.mMapBackground = (ImageView)convertView.findViewById(R.id.ivUserMapBg);
+                    holder.mPrgsAddress = (ProgressBar)convertView.findViewById(R.id.prgsUserMapAddress);
                     //holder.mDate = (TextView)convertView.findViewById(R.id.tvChatDateDivider);
                 } break;
                 case T_FRIEND_MAP: {
                     convertView = mInflater.inflate(R.layout.chat_friend_map, null, false);
                     holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.left_icon);
                     holder.mAddress = (TextView)convertView.findViewById(R.id.tvChatMapAddress);
+                    holder.mMapBackground = (ImageView)convertView.findViewById(R.id.ivFriendMapBg);
+                    holder.mPrgsAddress = (ProgressBar)convertView.findViewById(R.id.prgsFriendMapAddress);
                     //holder.mDate = (TextView)convertView.findViewById(R.id.tvChatDateDivider);
                 } break;
             }
@@ -205,16 +222,60 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.mAvatar.setImageBitmap(Data.userAvatar);                
                 return convertView;
             }
-            case T_USER_MAP: {
-                holder.mAddress.setText("address");
+            case T_USER_MAP: {     
+            	holder.mAddress.setText(Static.EMPTY);
                 holder.mAvatar.setImageBitmap(Data.ownerAvatar);
+                if (history.currentLocation) {
+                	holder.mMapBackground.setBackgroundResource(R.drawable.chat_item_place);
+                } else {
+                	holder.mMapBackground.setBackgroundResource(R.drawable.chat_item_map);
+                }
+
+                holder.mMapBackground.setTag(history);
+                holder.mMapBackground.setOnClickListener(mOnAvatarListener);
+
+//                holder.mMapBackground.setOnClickListener(new OnClickListener() {
+//					
+//					@Override
+//					public void onClick(View v) {
+//						Intent intent = new Intent(mContext, GeoMapActivity.class);
+//						intent.putExtra(GeoMapActivity.INTENT_LATITUDE_ID, history.latitude);
+//						intent.putExtra(GeoMapActivity.INTENT_LONGITUDE_ID, history.longitude);
+//						mContext.startActivity(intent);
+//					}
+//				});
+                
+                mapAddressDetection(history, holder.mAddress, holder.mPrgsAddress);
                 return convertView;
             }
-            case T_FRIEND_MAP: {
-                holder.mAddress.setText("address");
+            case T_FRIEND_MAP: {                
+            	holder.mAddress.setText(Static.EMPTY);
                 holder.mAvatar.setOnClickListener(mOnAvatarListener);
-                if (Data.userAvatar != null)
+                if (Data.userAvatar != null) {
                     holder.mAvatar.setImageBitmap(Data.userAvatar);
+                }
+                
+                if (history.currentLocation) {
+                	holder.mMapBackground.setBackgroundResource(R.drawable.chat_item_place);
+                } else {
+                	holder.mMapBackground.setBackgroundResource(R.drawable.chat_item_map);
+                }
+                
+                holder.mMapBackground.setTag(history);
+                holder.mMapBackground.setOnClickListener(mOnAvatarListener);
+                
+//                holder.mMapBackground.setOnClickListener(new OnClickListener() {
+//					
+//					@Override
+//					public void onClick(View v) {
+//						Intent intent = new Intent(mContext, GeoMapActivity.class);
+//						intent.putExtra(GeoMapActivity.INTENT_LATITUDE_ID, history.latitude);
+//						intent.putExtra(GeoMapActivity.INTENT_LONGITUDE_ID, history.longitude);
+//						mContext.startActivity(intent);
+//					}
+//				});
+                
+                mapAddressDetection(history, holder.mAddress, holder.mPrgsAddress);
                 return convertView;
             }
         }
@@ -337,7 +398,12 @@ public class ChatListAdapter extends BaseAdapter {
             }
         } else if(msg.type == History.GIFT) {
             mItemLayoutList.add(T_USER_GIFT);            
+        } else if (msg.type == History.CURRENT_LOCATION) {
+        	mItemLayoutList.add(T_USER_MAP);
+        } else if (msg.type == History.LOCATION) {
+        	mItemLayoutList.add(T_USER_MAP);
         }
+        
         mDataList.add(msg);
     }
     //---------------------------------------------------------------------------
@@ -467,6 +533,35 @@ public class ChatListAdapter extends BaseAdapter {
                 mMemorySyncCache.put(history.gift, roundedBitmap);
               }
           }).start();
+    }
+    //---------------------------------------------------------------------------
+    private void mapAddressDetection(final History history, final TextView tv,final ProgressBar prgsBar) {    	
+    	StringBuilder sb = new StringBuilder();
+    	sb.append(history.latitude).append(history.longitude);    	
+    	final String key = sb.toString();
+    	String cachedAddress = mAddressesCache.get(key);	
+    	
+    	if (cachedAddress != null) {
+    		tv.setText(cachedAddress);
+    		return;
+    	}
+    	
+	    prgsBar.setVisibility(View.VISIBLE);
+	    new Thread(new Runnable() {
+	    	@Override
+	        public void run() {
+	    		final String address = OSM.getAddress(history.latitude, history.longitude);
+	           	mAddressesCache.put(key, address);
+	               tv.post(new Runnable() {
+	                   @Override
+	                   public void run() {
+	                	   tv.setText(address);	                    	
+	                	   prgsBar.setVisibility(View.GONE);
+	                   }
+	               });                
+	             }
+	    }).start();
+    	
     }
     //---------------------------------------------------------------------------
     public void release() {

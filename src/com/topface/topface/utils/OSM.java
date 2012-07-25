@@ -14,7 +14,7 @@ import com.topface.topface.Static;
 public class OSM {	
 	
 	public static final boolean OSMSearchEnabled = false;
-	public static final boolean OSMReverseEnabled = false;
+	public static final boolean OSMReverseEnabled = true;
 	
 	public static final String OSM_URL = "http://nominatim.openstreetmap.org";
 	public static final String OSM_SEARCH_SUB = "search";
@@ -27,6 +27,7 @@ public class OSM {
 	public static final String OSM_DETALIZATION = "addressdetails";
 	public static final String OSM_POLYGON = "polygon";
 	public static final String OSM_DISPLAY_NAME = "display_name";
+	public static final String OSM_LOCALE = "accept-language";
 	
 	
 	public static String resultFormat = "json";
@@ -37,14 +38,26 @@ public class OSM {
 	public static String getAddress(double lat, double lon) {
 		StringBuilder resultSB = new StringBuilder();
 		
-		try {
+		try {			
 			JSONObject responseJSON = new JSONObject(Http.httpGetRequest(getAddressRequest(lat, lon)));
 			//result = responseJSON.getString(OSM_DISPLAY_NAME);
 			JSONObject details = responseJSON.getJSONObject("address");
 			resultSB.append(details.getString("road"));
-			resultSB.append(", ").append(details.getString("house_number"));			
-			resultSB.append(",\n").append(details.getString("state"));
-			resultSB.append(", ").append(details.getString("country"));
+			
+			String str = details.getString("house_number");
+			if (str.length() > 0) {
+				resultSB.append(", ").append(str);
+			}
+			
+			str = details.getString("state");
+			if (str.length() > 0) {
+				resultSB.append(",\n").append(str);
+			}
+			
+			str = details.getString("country");
+			if (str.length() > 0) {
+				resultSB.append(", ").append(str);
+			}			
 			
 			// DEBUG
 //			Iterator iter = details.keys(); 
@@ -57,7 +70,7 @@ public class OSM {
 			Debug.log("OSM",e.toString());
 		}
 		return resultSB.toString();
-	}
+	}	
 	
 	public static ArrayList<Address> getSuggestionAddresses(String text, int maxNumber) {
 		ArrayList<Address> result = new ArrayList<Address>();
@@ -88,6 +101,7 @@ public class OSM {
 		sB.append(Static.AMPERSAND).append(OSM_LONGITUDE).append(Static.EQUAL).append(lon);
 		sB.append(Static.AMPERSAND).append(OSM_ZOOM).append(Static.EQUAL).append(zoom);
 		sB.append(Static.AMPERSAND).append(OSM_DETALIZATION).append(Static.EQUAL).append(detalization);
+		sB.append(Static.AMPERSAND).append(OSM_LOCALE).append(Static.EQUAL).append(Locale.getDefault());
 		return sB.toString(); 
 	}
 	

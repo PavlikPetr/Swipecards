@@ -5,11 +5,13 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Album;
+import com.topface.topface.data.Confirmation;
 import com.topface.topface.data.PhotoOpen;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoOpenRequest;
 import com.topface.topface.requests.PhotoVoteRequest;
+import com.topface.topface.ui.FilterActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
@@ -24,6 +26,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PhotoEroAlbumActivity extends Activity implements View.OnClickListener {
     // Data
@@ -147,6 +150,16 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
         photoVoteRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
+            	final Confirmation confirm = Confirmation.parse(response);
+            	runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+		            	if (!confirm.completed) {
+		            		Toast.makeText(PhotoEroAlbumActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+		            	}
+					}
+				});
+            	
                 //PhotoVote photoVote = PhotoVote.parse(response);
             }
             @Override

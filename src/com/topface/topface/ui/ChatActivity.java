@@ -6,10 +6,12 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.Static;
+import com.topface.topface.data.Confirmation;
 import com.topface.topface.data.History;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.CoordinatesRequest;
 import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SendGiftRequest;
@@ -39,6 +41,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -60,7 +63,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     private MessageRequest messageRequest;
     private HistoryRequest historyRequest;
     private SwapControl mSwapControl;
-    private ProgressDialog mProgressDialog;
+    private static ProgressDialog mProgressDialog;
     private boolean mLocationDetected = false;
     
     // Constants
@@ -102,7 +105,6 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
         mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME));        
         mAvatarWidth = getResources().getDrawable(R.drawable.chat_avatar_frame).getIntrinsicWidth();
-        
         
         // Profile Button
         View btnProfile = findViewById(R.id.btnChatProfile);
@@ -194,6 +196,17 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     //---------------------------------------------------------------------------
     @Override
     public void onClick(View v) {
+    	if (v instanceof ImageView) {
+    		if (v.getTag() instanceof History) {
+    			History history = (History)v.getTag();
+				Intent intent = new Intent(this, GeoMapActivity.class);
+				intent.putExtra(GeoMapActivity.INTENT_LATITUDE_ID, history.latitude);
+				intent.putExtra(GeoMapActivity.INTENT_LONGITUDE_ID, history.longitude);
+				startActivity(intent);
+				return;
+    		}
+    	} 
+    	
         switch (v.getId()) {
             case R.id.btnChatAdd: {
                 if (mIsAddPanelOpened)
@@ -244,24 +257,28 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                 messageRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        runOnUiThread(new Runnable() {
+                    	final Confirmation confirm = Confirmation.parse(response);
+                        runOnUiThread(new Runnable() {                        	
                             @Override
                             public void run() {
-                                
-                                History history = new History();
-                                history.code = 0;
-                                history.gift = 0;
-                                history.owner_id = CacheProfile.uid;
-                                history.created = System.currentTimeMillis();
-                                history.text = text;
-                                history.type = History.MESSAGE;
-                                mAdapter.addSentMessage(history);
-                                mAdapter.notifyDataSetChanged();
-                                mEditBox.getText().clear();
-                                mProgressBar.setVisibility(View.GONE);
-                                
-                                InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(mEditBox.getWindowToken(), 0);
+                                if (confirm.completed) {
+	                                History history = new History();
+	                                history.code = 0;
+	                                history.gift = 0;
+	                                history.owner_id = CacheProfile.uid;
+	                                history.created = System.currentTimeMillis();
+	                                history.text = text;
+	                                history.type = History.MESSAGE;
+	                                mAdapter.addSentMessage(history);
+	                                mAdapter.notifyDataSetChanged();
+	                                mEditBox.getText().clear();
+	                                mProgressBar.setVisibility(View.GONE);
+	                                
+	                                InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+	                                imm.hideSoftInputFromWindow(mEditBox.getWindowToken(), 0);
+                                } else {
+                                	Toast.makeText(ChatActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+                                }	
                             }
                         });
                     }
@@ -292,7 +309,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);            
 	            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
 	            Debug.log(this, "id:" + id + " url:" + url);
-	            SendGiftRequest sendGift = new SendGiftRequest(this);
+	            SendGiftRequest sendGift = new SendGiftRequest(getApplicationContext());
 	            sendGift.giftId = id;
 	            sendGift.userId = mUserId;
 	            if (mIsAddPanelOpened)
@@ -305,7 +322,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	                    CacheProfile.power = answer.power;
 	                    CacheProfile.money = answer.money;
 	                    Debug.log(ChatActivity.this, "power:" + answer.power + " money:" + answer.money);
-	                    post(new Runnable() {
+	                    runOnUiThread(new Runnable() {
 	                        @Override
 	                        public void run() {              
 	                        	History history = new History();
@@ -325,7 +342,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	                
 	                @Override
 	                public void fail(int codeError,final ApiResponse response) throws NullPointerException {
-	                    post(new Runnable() {
+	                	runOnUiThread(new Runnable() {
 	                        @Override
 	                        public void run() {
 	                            if(response.code==ApiResponse.PAYMENT)
@@ -336,14 +353,56 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	            }).exec();
         	} else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
         		Bundle extras = data.getExtras();
-        		double latitude = extras.getDouble(GeoMapActivity.INTENT_LATITUDE_ID);
-        		double longitude = extras.getDouble(GeoMapActivity.INTENT_LONGITUDE_ID);
-        		String address = extras.getString(GeoMapActivity.INTENT_ADDRESS_ID);
+        		final double latitude = extras.getDouble(GeoMapActivity.INTENT_LATITUDE_ID);
+        		final double longitude = extras.getDouble(GeoMapActivity.INTENT_LONGITUDE_ID);
+//        		final String address = extras.getString(GeoMapActivity.INTENT_ADDRESS_ID);        		
+        		
+        		CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+        		coordRequest.userid = mUserId;
+        		coordRequest.latitude = latitude;
+        		coordRequest.longitude = longitude;
+        		mProgressBar.setVisibility(View.VISIBLE);
+        		coordRequest.callback(new ApiHandler() {
+        			
+        			@Override
+        			public void success(ApiResponse response) throws NullPointerException {
+        				final Confirmation confirm = Confirmation.parse(response);
+        				runOnUiThread(new Runnable() {                        	
+                            @Override
+                            public void run() {
+                            	mProgressBar.setVisibility(View.GONE);
+                            	if (confirm.completed) {
+                            		History history = new History();
+        					        history.type = History.LOCATION;
+        					        history.currentLocation = false;
+                                    history.latitude = latitude;
+                                    history.longitude = longitude;
+                                    mAdapter.addSentMessage(history);
+                                    mAdapter.notifyDataSetChanged();
+                            		
+//                					Toast.makeText(ChatActivity.this, latitude + " " + longitude, Toast.LENGTH_SHORT).show();			
+                				} else {
+                					Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                				}
+                            }
+        				});
+        			}
+        			
+        			@Override
+        			public void fail(int codeError, ApiResponse response)
+        					throws NullPointerException {
+        				runOnUiThread(new Runnable() {                        	
+                            @Override
+                            public void run() {
+                            	Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            }
+        				});
+        			}
+        		}).exec();
+        		
         		if (mIsAddPanelOpened)
                     mSwapControl.snapToScreen(0);                
                 mIsAddPanelOpened = false;
-                
-                Toast.makeText(this, address, Toast.LENGTH_SHORT).show();
         	}
         }
     }
@@ -362,9 +421,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     		(new CountDownTimer(LOCATION_PROVIDER_TIMEOUT,LOCATION_PROVIDER_TIMEOUT) {
     			
     			@Override
-    			public void onTick(long millisUntilFinished) {
-    				
-    			}
+    			public void onTick(long millisUntilFinished) { }
     			
     			@Override
     			public void onFinish() {
@@ -385,29 +442,70 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     //---------------------------------------------------------------------------
 	@Override
 	public void onLocationChanged(Location location) {
-		//Debug.log(this, location.getLatitude() + " / " + location.getLongitude());
-		Toast.makeText(this, mGeoManager.getLocationAddress(location.getLatitude(), location.getLongitude()), Toast.LENGTH_SHORT).show();
-		if (mIsAddPanelOpened)
-            mSwapControl.snapToScreen(0);                
-        mIsAddPanelOpened = false;
+//		Debug.log(this, location.getLatitude() + " / " + location.getLongitude());
+		final double latitude = location.getLatitude();
+		final double longitude = location.getLongitude();
+		CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+		coordRequest.userid = mUserId;
+		coordRequest.latitude = latitude;
+		coordRequest.longitude = longitude;
+		coordRequest.callback(new ApiHandler() {
+			
+			@Override
+			public void success(ApiResponse response) throws NullPointerException {
+				final Confirmation confirm = Confirmation.parse(response);
+//				final String address = mGeoManager.getLocationAddress(latitude, longitude);
+				runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {						
+						if (confirm.completed) {				
+							if (mIsAddPanelOpened)
+					            mSwapControl.snapToScreen(0);                
+					        mIsAddPanelOpened = false;
+
+					        History history = new History();
+					        history.type = History.CURRENT_LOCATION;
+					        history.currentLocation = true;
+                            history.latitude = latitude;
+                            history.longitude = longitude;
+                            mAdapter.addSentMessage(history);
+                            mAdapter.notifyDataSetChanged();
+                            
+//					        Toast.makeText(ChatActivity.this, history.latitude + " " + history.longitude, Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+						}				
+						mProgressDialog.dismiss();
+					}
+				});
+				
+			}
+			
+			@Override
+			public void fail(int codeError, ApiResponse response)
+					throws NullPointerException {
+				runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						mProgressDialog.dismiss();
+						Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+					}
+				});
+				
+			}
+		}).exec();
+				
         mGeoManager.removeLocationListener(this);
-        mLocationDetected = true;
-        mProgressDialog.dismiss();
+        mLocationDetected = true;        
 	}
 	@Override
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onProviderDisabled(String provider) { }
 	@Override
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onProviderEnabled(String provider) { }
 	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub		
-	}
+	public void onStatusChanged(String provider, int status, Bundle extras) { }
 	//---------------------------------------------------------------------------
 	@Override
 	protected Dialog onCreateDialog(int id) {

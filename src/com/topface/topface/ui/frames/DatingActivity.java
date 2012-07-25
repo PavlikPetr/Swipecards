@@ -1,10 +1,10 @@
 package com.topface.topface.ui.frames;
 
 import java.util.LinkedList;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.data.Confirmation;
 import com.topface.topface.data.NovicePower;
 import com.topface.topface.data.Rate;
 import com.topface.topface.data.Search;
@@ -24,7 +24,6 @@ import com.topface.topface.ui.views.DatingAlbum;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Http;
 import com.topface.topface.utils.Newbie;
 import com.topface.topface.utils.Utils;
 import android.app.Activity;
@@ -318,6 +317,17 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
                 messageRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
+						final Confirmation confirm = Confirmation.parse(response);
+                    	updateUI(new Runnable() {
+							
+							@Override
+							public void run() {
+		                    	if (!confirm.completed) {
+		                    		Toast.makeText(DatingActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+		                    	}
+							}
+						});
+                    	
                         //Toast.makeText(getApplicationContext(),getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
                     }
                     @Override
@@ -401,16 +411,20 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
             @Override
             public void success(ApiResponse response) {
                 SkipRate skipRate = SkipRate.parse(response);
-                CacheProfile.power = skipRate.power;
-                CacheProfile.money = skipRate.money;
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
-                        mResourcesPower.setText("" + CacheProfile.power + "%");
-                        mResourcesMoney.setText("" + CacheProfile.money);
-                    }
-                });
+                if (skipRate.completed) {
+	                CacheProfile.power = skipRate.power;
+	                CacheProfile.money = skipRate.money;
+	                updateUI(new Runnable() {
+	                    @Override
+	                    public void run() {
+	                        mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+	                        mResourcesPower.setText("" + CacheProfile.power + "%");
+	                        mResourcesMoney.setText("" + CacheProfile.money);
+	                    }
+	                });
+            	} else {
+            		Toast.makeText(DatingActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+            	}
             }
             @Override
             public void fail(int codeError,ApiResponse response) {

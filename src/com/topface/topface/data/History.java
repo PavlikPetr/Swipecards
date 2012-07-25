@@ -16,6 +16,10 @@ public class History extends AbstractData {
     public int code;     // код входящего уведомления. Если сообщение является уведомлением
     public long created; // время создания сообщения
     public String text;  // текст сообщения. Если входящее сообщение является текстовым
+    public double longitude; // координаты - долгота
+    public double latitude; // координаты - широта
+    public boolean currentLocation = false; // флаг , указывающий на тип карты (true - текущее местоположение, false - указанное на карте)
+    
     // Constants
     public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
     public static final int PHOTO = 1; // Рекламное уведомление
@@ -24,6 +28,9 @@ public class History extends AbstractData {
     public static final int MESSAGE_WISH = 4; // Тайное желание
     public static final int MESSAGE_SEXUALITY = 5; // Оценка сексуальности
     public static final int MESSAGE_WINK = 8; // подмигивание
+    
+    public static final int CURRENT_LOCATION = 6; // Текущее местоположение
+    public static final int LOCATION = 7; // Местоположение, указаное через карту
     //---------------------------------------------------------------------------
     public static LinkedList<History> parse(ApiResponse response) {
         LinkedList<History> historyList = new LinkedList<History>();

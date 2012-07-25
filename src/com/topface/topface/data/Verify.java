@@ -3,18 +3,22 @@ package com.topface.topface.data;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class Verify extends AbstractData {
-    // Data
-    public boolean completed; // результат выполнения команды. В случае успешного выполнения, возвращает true
+public class Verify extends Confirmation {    
+	// Data
     public int money; // количество монет пользователя
     public int power; // количество энергии пользователя
     public String order; // идентификатор верифицированного заказа
+    
+    //---------------------------------------------------------------------------
+    public Verify(ApiResponse response) {
+		super(response);
+		// TODO Auto-generated constructor stub
+	}
     //---------------------------------------------------------------------------
     public static Verify parse(ApiResponse response) {
-        Verify verify = new Verify();
+        Verify verify = new Verify(response);
 
         try {
-            verify.completed = response.mJSONResult.optBoolean("completed");
             verify.money = response.mJSONResult.optInt("money");
             int power = response.mJSONResult.optInt("power");
             //if(power > 10000) power = 10000;

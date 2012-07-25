@@ -2,6 +2,7 @@ package com.topface.topface.ui.profile.album;
 
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.data.Confirmation;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.MainRequest;
@@ -145,10 +146,15 @@ public class PhotoAlbumActivity extends Activity {
                 request.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
+                    	final Confirmation confirm = Confirmation.parse(response);                    	
                         post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(PhotoAlbumActivity.this, getString(R.string.album_menu_did_main), Toast.LENGTH_SHORT).show();
+                            	if (confirm.completed) {
+                            		Toast.makeText(PhotoAlbumActivity.this, getString(R.string.album_menu_did_main), Toast.LENGTH_SHORT).show();
+                            	} else {
+                            		Toast.makeText(PhotoAlbumActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+                            	}
                             }
                         });
                     }
@@ -185,11 +191,16 @@ public class PhotoAlbumActivity extends Activity {
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                post(new Runnable() {
+            	final Confirmation confirm = Confirmation.parse(response);
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(PhotoAlbumActivity.this, getString(R.string.album_menu_did_delete), Toast.LENGTH_SHORT).show();
-                        setResult(RESULT_OK);
+                    	if (confirm.completed) {
+	                        Toast.makeText(PhotoAlbumActivity.this, getString(R.string.album_menu_did_delete), Toast.LENGTH_SHORT).show();
+	                        setResult(RESULT_OK);
+                    	} else {
+                    		Toast.makeText(PhotoAlbumActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();                    		
+                    	}
                     }
                 });
                 //Data.s_PhotoAlbum.remove(mGallery.getSelectedItemPosition());

@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Confirmation;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FilterRequest;
@@ -27,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FilterActivity extends PreferenceActivity implements LocationListener {
     //---------------------------------------------------------------------------
@@ -222,6 +224,17 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
         filterRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
+            	final Confirmation confirm = Confirmation.parse(response); 
+            	runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						if (!confirm.completed) {
+		            		Toast.makeText(FilterActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+		            	}
+					}
+				});
+            	
                 //Toast.makeText(FilterActivity.this,"filter success",Toast.LENGTH_SHORT).show();
             }
             @Override
@@ -410,6 +423,16 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
         settingsRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
+            	final Confirmation confirm = Confirmation.parse(response);
+            	runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if (!confirm.completed) {
+		            		Toast.makeText(FilterActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+		            	}
+					}
+				});
+            	
                 mLocationManager.removeUpdates(FilterActivity.this);
             }
             @Override

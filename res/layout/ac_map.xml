@@ -11,13 +11,15 @@
         android:id="@+id/mapView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:apiKey="0esBRa6fF4TuK2GrbWw6wRGFijK_puzqgunUVDw"
+        android:apiKey="0esBRa6fF4Tv5zV7GQCpVOOhF2nxB4D_PQmujeA"
         android:background="#FFFFFF"
         android:clickable="true" />
     <!-- DEBUGv kirussell: 0esBRa6fF4TuK2GrbWw6wRGFijK_puzqgunUVDw -->
+    <!-- DEBUGv pavel: 0esBRa6fF4Tv5zV7GQCpVOOhF2nxB4D_PQmujeA -->
     <!-- PRODUCTION: 0-JKy7KX15mHPhyYQ4lBv_GhepNzV5s0ikPPyg -->    
 
     <LinearLayout
+        android:id="@+id/inputBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/chat_footer_send"

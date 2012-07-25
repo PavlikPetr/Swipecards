@@ -6,7 +6,7 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Album;
-import com.topface.topface.data.PhotoAdd;
+import com.topface.topface.data.Confirmation;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.Rate;
 import com.topface.topface.data.User;
@@ -731,8 +731,8 @@ public class UserActivity extends Activity {
                     addPhotoRequest.callback(new ApiHandler() {
                         @Override
                         public void success(ApiResponse response) {
-                            PhotoAdd add = PhotoAdd.parse(response);
-                            if (!add.completed)
+                            Confirmation confirm = Confirmation.parse(response);
+                            if (!confirm.completed)
                                 return;
 
                             Album album = new Album();
@@ -828,10 +828,15 @@ public class UserActivity extends Activity {
                     message.callback(new ApiHandler() {
                         @Override
                         public void success(ApiResponse response) {
+                        	final Confirmation confirm = Confirmation.parse(response);
                             post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(UserActivity.this, getString(R.string.profile_msg_sent), Toast.LENGTH_SHORT).show();
+                                	if (confirm.completed) {
+                                		Toast.makeText(UserActivity.this, getString(R.string.profile_msg_sent), Toast.LENGTH_SHORT).show();
+                                	} else {
+                                		Toast.makeText(UserActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+                                	}
                                     mProgressBar.setVisibility(View.GONE);
                                 }
                             });

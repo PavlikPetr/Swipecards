@@ -1,6 +1,7 @@
 package com.topface.topface.ui.profile;
 
 import com.topface.topface.R;
+import com.topface.topface.data.Confirmation;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.QuestionaryRequest;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EditProfileActivity extends PreferenceActivity {
     // Data
@@ -223,6 +225,15 @@ public class EditProfileActivity extends PreferenceActivity {
         settings.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
+            	final Confirmation confirm = Confirmation.parse(response);
+            	runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if (!confirm.completed) {
+		            		Toast.makeText(EditProfileActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+		            	}
+					}
+				});
             }
             @Override
             public void fail(int codeError,ApiResponse response) {
@@ -279,6 +290,15 @@ public class EditProfileActivity extends PreferenceActivity {
         questionary.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
+            	final Confirmation confirm = Confirmation.parse(response);
+            	runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+		            	if (!confirm.completed) {
+		            		Toast.makeText(EditProfileActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+		            	}
+					}
+				});
             }
             @Override
             public void fail(int codeError,ApiResponse response) {
