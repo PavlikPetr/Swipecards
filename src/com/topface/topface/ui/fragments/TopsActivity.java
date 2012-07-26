@@ -24,7 +24,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -55,22 +57,21 @@ public class TopsActivity extends BaseFragment {
     }
     //---------------------------------------------------------------------------
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_tops);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+      View view = inflater.inflate(R.layout.ac_tops, null);
         Debug.log(this, "+onCreate");
 
         // Data
         Data.topsList = new LinkedList<Top>();
 
         // Progress
-        mProgressBar = (ProgressBar)findViewById(R.id.prsTopsLoading);
+        mProgressBar = (ProgressBar)view.findViewById(R.id.prsTopsLoading);
 
         // Banner
-        mBannerView = (ImageView)findViewById(R.id.ivBanner);
+        mBannerView = (ImageView)view.findViewById(R.id.ivBanner);
 
         // Preferences
-        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
 
         // Action
         mActionData = new ActionData();
@@ -80,7 +81,7 @@ public class TopsActivity extends BaseFragment {
         mActionData.city_popup_pos = preferences.getInt(Static.PREFERENCES_TOPS_CITY_POS, -1);
 
         // Double Button
-        DoubleButton btnDouble = (DoubleButton)findViewById(R.id.btnDoubleTops);
+        DoubleButton btnDouble = (DoubleButton)view.findViewById(R.id.btnDoubleTops);
         btnDouble.setLeftText(getString(R.string.tops_btn_boys));
         btnDouble.setRightText(getString(R.string.tops_btn_girls));
         btnDouble.setChecked(mActionData.sex == 0 ? DoubleButton.RIGHT_BUTTON : DoubleButton.LEFT_BUTTON);
@@ -102,7 +103,7 @@ public class TopsActivity extends BaseFragment {
         });
 
         // City Button
-        mCityButton = (Button)findViewById(R.id.btnTopsBarCity);
+        mCityButton = (Button)view.findViewById(R.id.btnTopsBarCity);
         mCityButton.setText(mActionData.city_name);
         mCityButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +113,7 @@ public class TopsActivity extends BaseFragment {
         });
 
         // Gallery
-        mGallery = (GridView)findViewById(R.id.grdTopsGallary);
+        mGallery = (GridView)view.findViewById(R.id.grdTopsGallary);
         mGallery.setAnimationCacheEnabled(false);
         mGallery.setScrollingCacheEnabled(false);
         mGallery.setNumColumns(Data.GRID_COLUMN);
@@ -120,7 +121,7 @@ public class TopsActivity extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
                 try {
-                    Intent intent = new Intent(TopsActivity.this.getApplicationContext(), ProfileActivity.class);
+                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
                     intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.topsList.get(position).uid);
                     startActivityForResult(intent, 0);
                 } catch(Exception e) {
@@ -130,15 +131,16 @@ public class TopsActivity extends BaseFragment {
         });
 
         // Control creating
-        mGalleryGridManager = new GalleryGridManager<Top>(getApplicationContext(), Data.topsList);
-        mGridAdapter = new TopsGridAdapter(getApplicationContext(), mGalleryGridManager);
+        mGalleryGridManager = new GalleryGridManager<Top>(getActivity(), Data.topsList);
+        mGridAdapter = new TopsGridAdapter(getActivity(), mGalleryGridManager);
         mGallery.setAdapter(mGridAdapter);
         mGallery.setOnScrollListener(mGalleryGridManager);
+        return view;
     }
     //---------------------------------------------------------------------------  
     @Override
-    protected void onDestroy() {
-        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+    public void onDestroyView() {
+        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(Static.PREFERENCES_TOPS_SEX, mActionData.sex);
         editor.putInt(Static.PREFERENCES_TOPS_CITY_ID, mActionData.city_id);
@@ -156,7 +158,7 @@ public class TopsActivity extends BaseFragment {
         mProgressBar.setVisibility(View.VISIBLE);
         mGallery.setSelection(0);
 
-        TopRequest topRequest = new TopRequest(getApplicationContext());
+        TopRequest topRequest = new TopRequest(getActivity());
         topRequest.sex = mActionData.sex;
         topRequest.city = mActionData.city_id;
         topRequest.callback(new ApiHandler() {
@@ -179,7 +181,7 @@ public class TopsActivity extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(TopsActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mProgressBar.setVisibility(View.GONE);
                     }
                 });
@@ -193,7 +195,7 @@ public class TopsActivity extends BaseFragment {
             return;
         }
         mProgressBar.setVisibility(View.VISIBLE);
-        CitiesRequest citiesRequest = new CitiesRequest(getApplicationContext());
+        CitiesRequest citiesRequest = new CitiesRequest(getActivity());
         citiesRequest.type = "top";
         citiesRequest.callback(new ApiHandler() {
             @Override
@@ -212,7 +214,7 @@ public class TopsActivity extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(TopsActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mProgressBar.setVisibility(View.GONE);
                     }
                 });
@@ -221,7 +223,7 @@ public class TopsActivity extends BaseFragment {
     }
     //---------------------------------------------------------------------------
     private void showCitiesDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.filter_select_city));
         int arraySize = Data.cityList.size();
         String[] cities = new String[arraySize];

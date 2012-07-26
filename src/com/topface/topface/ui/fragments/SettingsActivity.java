@@ -3,15 +3,18 @@ package com.topface.topface.ui.fragments;
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 public class SettingsActivity extends BaseFragment {
     // Data
     //---------------------------------------------------------------------------
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+      View view = inflater.inflate(R.layout.ac_settings, null);  
         Debug.log(this, "+onCreate");
-        setContentView(R.layout.ac_settings);
+        return view;
     }
     //---------------------------------------------------------------------------
     // FrameActivity

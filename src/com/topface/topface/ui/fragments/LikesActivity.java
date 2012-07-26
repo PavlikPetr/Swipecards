@@ -23,7 +23,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -45,22 +47,21 @@ public class LikesActivity extends BaseFragment {
 
 	// ---------------------------------------------------------------------------
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.ac_likes);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+    View view = inflater.inflate(R.layout.ac_likes, null);
 		Debug.log(this, "+onCreate");
-
+		
 		// Data
 		Data.likesList = new LinkedList<FeedLike>();
 
 		// Progress
-		mProgressBar = (ProgressBar) findViewById(R.id.prsLikesLoading);
+		mProgressBar = (ProgressBar) view.findViewById(R.id.prsLikesLoading);
 
 		// Banner
-		mBannerView = (ImageView) findViewById(R.id.ivBanner);
+		mBannerView = (ImageView) view.findViewById(R.id.ivBanner);
 
 		// Double Button
-		mDoubleButton = (DoubleBigButton) findViewById(R.id.btnDoubleBig);
+		mDoubleButton = (DoubleBigButton) view.findViewById(R.id.btnDoubleBig);
 		mDoubleButton.setLeftText(getString(R.string.likes_btn_dbl_left));
 		mDoubleButton.setRightText(getString(R.string.likes_btn_dbl_right));
 		mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
@@ -80,7 +81,7 @@ public class LikesActivity extends BaseFragment {
 		});
 
 		// ListView
-		mListView = (PullToRefreshListView) findViewById(R.id.lvLikesList);
+		mListView = (PullToRefreshListView) view.findViewById(R.id.lvLikesList);
 		mListView.getRefreshableView().setOnItemClickListener(
 				new OnItemClickListener() {
 					@Override
@@ -99,7 +100,7 @@ public class LikesActivity extends BaseFragment {
 						} else {
 							try {
 								// Open profile activity
-								Intent intent = new Intent(getApplicationContext(),	ProfileActivity.class);
+								Intent intent = new Intent(getActivity(),	ProfileActivity.class);
 								intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.likesList.get(position).uid);
 								intent.putExtra(ChatActivity.INTENT_USER_URL, Data.likesList.get(position).getSmallLink());
 								intent.putExtra(ProfileActivity.INTENT_USER_NAME, Data.likesList.get(position).first_name);
@@ -122,7 +123,7 @@ public class LikesActivity extends BaseFragment {
 		});
 
 		// Control creating
-		mAvatarManager = new AvatarManager<FeedLike>(getApplicationContext(),
+		mAvatarManager = new AvatarManager<FeedLike>(getActivity(),
 				Data.likesList, new Handler() {
 					@Override
 					public void handleMessage(Message msg) {
@@ -132,13 +133,14 @@ public class LikesActivity extends BaseFragment {
 						super.handleMessage(msg);
 					}
 				});
-		mListAdapter = new LikesListAdapter(getApplicationContext(),
+		mListAdapter = new LikesListAdapter(getActivity(),
 				mAvatarManager);
 		mListView.setOnScrollListener(mAvatarManager);
 		mListView.setAdapter(mListAdapter);
 
 		mNewUpdating = CacheProfile.unread_likes > 0 ? true : false;
 		CacheProfile.unread_likes = 0;
+		return view;
 	}
 
 	// ---------------------------------------------------------------------------
@@ -150,8 +152,7 @@ public class LikesActivity extends BaseFragment {
 		mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON
 				: DoubleBigButton.LEFT_BUTTON);
 
-		FeedLikesRequest likesRequest = new FeedLikesRequest(
-				getApplicationContext());
+		FeedLikesRequest likesRequest = new FeedLikesRequest(getActivity());
 		likesRequest.limit = LIMIT;
 		likesRequest.only_new = mNewUpdating;
 		likesRequest.callback(new ApiHandler() {
@@ -189,7 +190,7 @@ public class LikesActivity extends BaseFragment {
 				updateUI(new Runnable() {
 					@Override
 					public void run() {
-						Toast.makeText(LikesActivity.this,
+						Toast.makeText(getActivity(),
 								getString(R.string.general_data_error),
 								Toast.LENGTH_SHORT).show();
 						mProgressBar.setVisibility(View.GONE);
@@ -208,7 +209,7 @@ public class LikesActivity extends BaseFragment {
 		mNewUpdating = mDoubleButton.isRightButtonChecked();
 
 		FeedLikesRequest likesRequest = new FeedLikesRequest(
-				getApplicationContext());
+				getActivity());
 		likesRequest.limit = LIMIT;
 		likesRequest.only_new = mNewUpdating;
 		if (!mNewUpdating) {
@@ -260,7 +261,7 @@ public class LikesActivity extends BaseFragment {
 					@Override
 					public void run() {
 						mProgressBar.setVisibility(View.GONE);
-						Toast.makeText(LikesActivity.this,
+						Toast.makeText(getActivity()  ,
 								getString(R.string.general_data_error),
 								Toast.LENGTH_SHORT).show();
 						mIsUpdating = false;

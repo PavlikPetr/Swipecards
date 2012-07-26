@@ -50,6 +50,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
             scrollTo(mScrollX, 0);
             postInvalidate();
         } else if (mPrevX != mScrollX) {
+            mPrevX = mScrollX;
             endAnimation(mAnimation);              
         }
     }
@@ -77,6 +78,14 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 
     public void openMenu() {
         snapToScreen(EXPAND);
+    }
+    
+    public void closeMenu() {
+        snapToScreen(COLLAPSE);
+    }
+    
+    public int getAnimationState() {
+        return mAnimation;  
     }
 
     public void endAnimation(int Animation) {
@@ -117,7 +126,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
             default:
                 break;
         }
-        snapToScreen(FragmentSwitchController.EXPAND_FULL);
+        snapToScreen(EXPAND_FULL);
     }
 }
 

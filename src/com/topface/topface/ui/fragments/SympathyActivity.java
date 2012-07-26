@@ -22,7 +22,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -44,22 +46,21 @@ public class SympathyActivity extends BaseFragment {
     private static final int LIMIT = 40;
     //---------------------------------------------------------------------------
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_sympathy);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+      View view = inflater.inflate(R.layout.ac_sympathy, null);      
         Debug.log(this, "+onCreate");
 
         // Data
         Data.sympathyList = new LinkedList<FeedSympathy>();
 
         // Progress
-        mProgressBar = (ProgressBar)findViewById(R.id.prsSymphatyLoading);
+        mProgressBar = (ProgressBar)view.findViewById(R.id.prsSymphatyLoading);
 
         // Banner
-        mBannerView = (ImageView)findViewById(R.id.ivBanner);
+        mBannerView = (ImageView)view.findViewById(R.id.ivBanner);
 
         // Double Button
-        mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
+        mDoubleButton = (DoubleBigButton)view.findViewById(R.id.btnDoubleBig);
         mDoubleButton.setLeftText(getString(R.string.symphaty_btn_dbl_left));
         mDoubleButton.setRightText(getString(R.string.symphaty_btn_dbl_right));
         mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
@@ -79,7 +80,7 @@ public class SympathyActivity extends BaseFragment {
         });
 
         // ListView
-        mListView = (PullToRefreshListView)findViewById(R.id.lvSymphatyList);
+        mListView = (PullToRefreshListView)view.findViewById(R.id.lvSymphatyList);
         mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
@@ -95,7 +96,7 @@ public class SympathyActivity extends BaseFragment {
             		updateDataHistory();
             	} else {
 	                try {
-	                    Intent intent = new Intent(SympathyActivity.this.getApplicationContext(), ProfileActivity.class);
+	                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
 	                    intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.sympathyList.get(position).uid);
 	                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, Data.sympathyList.get(position).first_name);
 	                    startActivityForResult(intent, 0);
@@ -129,7 +130,7 @@ public class SympathyActivity extends BaseFragment {
 //        mListView.getRefreshableView().addFooterView(mFooterView);
 
         // Control creating
-        mAvatarManager = new AvatarManager<FeedSympathy>(getApplicationContext(), Data.sympathyList, new Handler() {
+        mAvatarManager = new AvatarManager<FeedSympathy>(getActivity(), Data.sympathyList, new Handler() {
         	@Override
         	public void handleMessage(Message msg) {
         		if (Data.sympathyList.getLast().isLoader() && !mIsUpdating)
@@ -138,12 +139,13 @@ public class SympathyActivity extends BaseFragment {
         		super.handleMessage(msg);
         	}
         });
-        mListAdapter = new SymphatyListAdapter(getApplicationContext(), mAvatarManager);
+        mListAdapter = new SymphatyListAdapter(getActivity(), mAvatarManager);
         mListView.setOnScrollListener(mAvatarManager);
         mListView.setAdapter(mListAdapter);
 
         mNewUpdating = CacheProfile.unread_symphaties > 0 ? true : false;
         CacheProfile.unread_symphaties = 0;
+        return view;
     }
     //---------------------------------------------------------------------------
     private void updateData(boolean isPushUpdating) {
@@ -153,7 +155,7 @@ public class SympathyActivity extends BaseFragment {
 
         mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
 
-        FeedSympathyRequest symphatyRequest = new FeedSympathyRequest(getApplicationContext());
+        FeedSympathyRequest symphatyRequest = new FeedSympathyRequest(getActivity());
         symphatyRequest.limit = LIMIT;
         symphatyRequest.only_new = mNewUpdating;
         symphatyRequest.callback(new ApiHandler() {
@@ -188,7 +190,7 @@ public class SympathyActivity extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                    	Toast.makeText(SympathyActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                    	Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mProgressBar.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListView.setVisibility(View.VISIBLE);
@@ -203,7 +205,7 @@ public class SympathyActivity extends BaseFragment {
     	mIsUpdating = true;
     	mNewUpdating = mDoubleButton.isRightButtonChecked();
 
-        FeedSympathyRequest symphatyRequest = new FeedSympathyRequest(getApplicationContext());
+        FeedSympathyRequest symphatyRequest = new FeedSympathyRequest(getActivity());
         symphatyRequest.limit = LIMIT;
         symphatyRequest.only_new = mNewUpdating;
         if (!mNewUpdating) {
@@ -247,7 +249,7 @@ public class SympathyActivity extends BaseFragment {
                     @Override
                     public void run() {
                     	mProgressBar.setVisibility(View.GONE);
-                        Toast.makeText(SympathyActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();                        
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();                        
                         mIsUpdating = false;
                     	removeLoaderListItem();
                         Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.RETRY));

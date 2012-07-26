@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
@@ -19,13 +20,13 @@ public class FragmentFrameAdapter {
     public FragmentFrameAdapter(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
 
-        mFragmentProfile = new Fragment0();
-        mFragmentDating = new Fragment1();
-        mFragmentLikes = new Fragment2();
-        mFragmentMutual = new Fragment3();
-        mFragmentDialogs = new mFragmentDialogs();
-        mFragmentTops = new mFragmentTops();
-        mFragmentSettings = new mFragmentTops();
+        mFragmentProfile  = new DatingActivity();
+        mFragmentDating   = new DatingActivity();
+        mFragmentLikes    = new LikesActivity();
+        mFragmentMutual   = new SympathyActivity();
+        mFragmentDialogs  = new DialogActivity();
+        mFragmentTops     = new TopsActivity();
+        mFragmentSettings = new SettingsActivity();
         
         fragmentManager.beginTransaction().add(R.id.fragment_profile, mFragmentProfile).hide(mFragmentProfile).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_dating, mFragmentDating).hide(mFragmentDating).commit();

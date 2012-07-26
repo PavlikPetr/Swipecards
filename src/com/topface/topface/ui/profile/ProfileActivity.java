@@ -32,6 +32,7 @@ import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.Socium;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.Http;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -51,7 +52,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /* "Профиль" */
-public class ProfileActivity extends BaseFragment {
+public class ProfileActivity extends Activity {
     // Data
     private int mUserId;    
     private int mMutualId;
@@ -935,14 +936,14 @@ public class ProfileActivity extends BaseFragment {
     //---------------------------------------------------------------------------
     // FrameActivity
     //---------------------------------------------------------------------------
-    @Override
-    public void clearLayout() {
-
-    }
-    //---------------------------------------------------------------------------
-    @Override
-    public void fillLayout() {
-
-    }
+//    @Override
+//    public void clearLayout() {
+//
+//    }
+//    //---------------------------------------------------------------------------
+//    @Override
+//    public void fillLayout() {
+//
+//    }
     //---------------------------------------------------------------------------
 }

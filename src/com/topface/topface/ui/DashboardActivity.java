@@ -10,7 +10,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.fragments.DatingActivity;
-import com.topface.topface.ui.fragments.InboxActivity;
+
 import com.topface.topface.ui.fragments.LikesActivity;
 import com.topface.topface.ui.fragments.SympathyActivity;
 import com.topface.topface.ui.fragments.TopsActivity;
@@ -301,7 +301,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
             }
                 break;
             case R.id.btnDshbrdChat: {
-                intent = new Intent(this.getApplicationContext(), InboxActivity.class);
+                //intent = new Intent(this.getApplicationContext(), InboxActivity.class);
             }
                 break;
             case R.id.btnDshbrdTops: {

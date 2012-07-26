@@ -23,7 +23,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -45,22 +47,21 @@ public class DialogActivity extends BaseFragment {
     private static final int LIMIT = 40;
     //---------------------------------------------------------------------------
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_dialog);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        View view = inflater.inflate(R.layout.ac_dialog, null);
         Debug.log(this, "+onCreate");
 
         // Data
         Data.dialogList = new LinkedList<Dialog>();
 
         // Progress
-        mProgressBar = (ProgressBar)findViewById(R.id.prsInboxLoading);
+        mProgressBar = (ProgressBar)view.findViewById(R.id.prsInboxLoading);
 
         // Banner
-        mBannerView = (ImageView)findViewById(R.id.ivBanner);
+        mBannerView = (ImageView)view.findViewById(R.id.ivBanner);
 
         // Double Button
-        mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
+        mDoubleButton = (DoubleBigButton)view.findViewById(R.id.btnDoubleBig);
         mDoubleButton.setLeftText(getString(R.string.inbox_btn_dbl_left));
         mDoubleButton.setRightText(getString(R.string.inbox_btn_dbl_right));
         mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
@@ -80,7 +81,7 @@ public class DialogActivity extends BaseFragment {
         });
 
         // ListView
-        mListView = (PullToRefreshListView)findViewById(R.id.lvInboxList);
+        mListView = (PullToRefreshListView)view.findViewById(R.id.lvInboxList);
         mListView.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -104,7 +105,7 @@ public class DialogActivity extends BaseFragment {
 //	                ImageView iv = (ImageView)view.findViewById(R.id.ivAvatar);
 //	                Data.userAvatar = ((BitmapDrawable)iv.getDrawable()).getBitmap();
 	                try {
-	                    Intent intent = new Intent(DialogActivity.this.getApplicationContext(), ChatActivity.class);
+	                    Intent intent = new Intent(getActivity(), ChatActivity.class);
 	                    intent.putExtra(ChatActivity.INTENT_USER_ID, Data.dialogList.get(position).uid);
 	                    intent.putExtra(ChatActivity.INTENT_USER_URL, Data.dialogList.get(position).getSmallLink());
 	                    intent.putExtra(ChatActivity.INTENT_USER_NAME, Data.dialogList.get(position).first_name);
@@ -133,7 +134,7 @@ public class DialogActivity extends BaseFragment {
 //        mListView.getRefreshableView().addFooterView(mFooterView);
 
         // Control creating
-        mAvatarManager = new AvatarManager<Dialog>(getApplicationContext(), Data.dialogList, new Handler() {
+        mAvatarManager = new AvatarManager<Dialog>(getActivity(), Data.dialogList, new Handler() {
         	@Override
         	public void handleMessage(Message msg) {
         		if (Data.dialogList.getLast().isLoader() && !mIsUpdating)
@@ -142,12 +143,13 @@ public class DialogActivity extends BaseFragment {
         		super.handleMessage(msg);
         	}
         });
-        mListAdapter = new DialogListAdapter(getApplicationContext(), mAvatarManager);
+        mListAdapter = new DialogListAdapter(getActivity(), mAvatarManager);
         mListView.setOnScrollListener(mAvatarManager);
         mListView.setAdapter(mListAdapter);
 
         mNewUpdating = CacheProfile.unread_messages > 0 ? true : false;
         CacheProfile.unread_messages = 0;
+        return view;
     }
     //---------------------------------------------------------------------------
     private void updateData(boolean isPushUpdating) {
@@ -157,7 +159,7 @@ public class DialogActivity extends BaseFragment {
 
         mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
 
-        DialogRequest dialogRequest = new DialogRequest(getApplicationContext());
+        DialogRequest dialogRequest = new DialogRequest(getActivity());
         dialogRequest.limit = LIMIT;
         dialogRequest.callback(new ApiHandler() {
             @Override
@@ -193,7 +195,7 @@ public class DialogActivity extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                    	Toast.makeText(DialogActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                    	Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mProgressBar.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListView.setVisibility(View.VISIBLE);
@@ -208,7 +210,7 @@ public class DialogActivity extends BaseFragment {
     	mIsUpdating = true;
     	mNewUpdating = mDoubleButton.isRightButtonChecked();
 
-        DialogRequest dialogRequest = new DialogRequest(getApplicationContext());
+        DialogRequest dialogRequest = new DialogRequest(getActivity());
         dialogRequest.limit = LIMIT;        
         if (!mNewUpdating) {
         	if (Data.dialogList.getLast().isLoader() || Data.dialogList.getLast().isLoaderRetry()) {
@@ -245,7 +247,7 @@ public class DialogActivity extends BaseFragment {
                     @Override
                     public void run() {
                     	mProgressBar.setVisibility(View.GONE);
-                        Toast.makeText(DialogActivity.this.getApplicationContext(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();                        
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();                        
                         mIsUpdating = false;
                     	removeLoaderListItem();
                         Data.dialogList.add(new Dialog(IListLoader.ItemType.RETRY));

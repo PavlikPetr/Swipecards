@@ -51,13 +51,13 @@
         <activity android:name=".billing.BuyingActivity" android:screenOrientation="portrait" />
         
         <!-- fragment -->
-        <activity android:name=".ui.frames.DatingActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.frames.LikesActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.frames.InboxActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.frames.DialogActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.frames.TopsActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.frames.SympathyActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.frames.SettingsActivity" android:screenOrientation="portrait" />
+        
+        
+        
+        
+        
+        
+        
         
         <!-- services -->
         <service android:name=".services.NotificationService"/>
