@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Http;
+import com.topface.topface.utils.http.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

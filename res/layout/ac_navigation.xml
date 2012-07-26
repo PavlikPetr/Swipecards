@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+    <FrameLayout
+        android:id="@+id/fragment_menu"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+    
+    <com.topface.topface.ui.fragments.FragmentSwitchController
+        android:id="@+id/frameAnimation"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent" >
+        
+	    <RelativeLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent" >
+             
+		    <ImageView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentRight="true" 
+		        android:src="@drawable/topface_shadow" />
+		        
+        </RelativeLayout>
+        
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+		        
+		    <include layout="@layout/fragment_container"
+		        android:id="@+id/fragment_container" />
+	     
+	    </RelativeLayout>
+        
+    </com.topface.topface.ui.fragments.FragmentSwitchController>
+
+</RelativeLayout>
+

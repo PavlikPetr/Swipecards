@@ -1,4 +1,4 @@
-package com.topface.topface.ui.frames;
+package com.topface.topface.ui.fragments;
 
 import java.util.LinkedList;
 import com.topface.topface.R;
@@ -34,9 +34,11 @@ import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
@@ -51,7 +53,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DatingActivity extends FrameActivity implements View.OnClickListener, ILocker {
+public class DatingActivity extends BaseFragment implements View.OnClickListener, ILocker {
     // Data
     private boolean mIsHide;
     private int mCurrentUserPos;
@@ -82,10 +84,9 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
     private SharedPreferences mPreferences;
     //---------------------------------------------------------------------------
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        View view = inflater.inflate(R.layout.ac_dating, null);
         Debug.log(this, "+onCreate");
-        setContentView(R.layout.ac_dating);
 
         // Data
         mUserSearchList = new LinkedList<Search>();
@@ -94,56 +95,56 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
         mCurrentUserPos = -1;
 
         // Dating controls
-        mDatingGroup = findViewById(R.id.loDatingGroup);
+        mDatingGroup = view.findViewById(R.id.loDatingGroup);
 
         // Preferences
-        mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        mPreferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
 
         // Newbie
         mNewbie = new Newbie(mPreferences);
-        mNewbieView = (ImageView)findViewById(R.id.ivNewbie);
+        mNewbieView = (ImageView)view.findViewById(R.id.ivNewbie);
 
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
         mAlphaAnimation.setDuration(400L);
 
         // Resources
-        mResourcesControl = findViewById(R.id.loDatingResources);
+        mResourcesControl = view.findViewById(R.id.loDatingResources);
         mResourcesControl.setOnClickListener(this);
-        mResourcesPower = (TextView)findViewById(R.id.tvResourcesPower);
+        mResourcesPower = (TextView)view.findViewById(R.id.tvResourcesPower);
         mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
         mResourcesPower.setText("" + CacheProfile.power + "%");
-        mResourcesMoney = (TextView)findViewById(R.id.tvResourcesMoney);
+        mResourcesMoney = (TextView)view.findViewById(R.id.tvResourcesMoney);
         mResourcesMoney.setText("" + CacheProfile.money);
 
         // Control Buttons
-        mLoveBtn = (Button)findViewById(R.id.btnDatingLove);
+        mLoveBtn = (Button)view.findViewById(R.id.btnDatingLove);
         mLoveBtn.setOnClickListener(this);
-        mSympathyBtn = (Button)findViewById(R.id.btnDatingSympathy);
+        mSympathyBtn = (Button)view.findViewById(R.id.btnDatingSympathy);
         mSympathyBtn.setOnClickListener(this);
-        mSkipBtn = (Button)findViewById(R.id.btnDatingSkip);
+        mSkipBtn = (Button)view.findViewById(R.id.btnDatingSkip);
         mSkipBtn.setOnClickListener(this);
-        mProfileBtn = (Button)findViewById(R.id.btnDatingProfile);
+        mProfileBtn = (Button)view.findViewById(R.id.btnDatingProfile);
         mProfileBtn.setOnClickListener(this);
-        mChatBtn = (Button)findViewById(R.id.btnDatingChat);
+        mChatBtn = (Button)view.findViewById(R.id.btnDatingChat);
         mChatBtn.setOnClickListener(this);
 
         // User Info
-        mUserInfoName = ((TextView)findViewById(R.id.tvDatingUserName));
-        mUserInfoCity = ((TextView)findViewById(R.id.tvDatingUserCity));
-        mUserInfoStatus = ((TextView)findViewById(R.id.tvDatingUserStatus));
+        mUserInfoName = ((TextView)view.findViewById(R.id.tvDatingUserName));
+        mUserInfoCity = ((TextView)view.findViewById(R.id.tvDatingUserCity));
+        mUserInfoStatus = ((TextView)view.findViewById(R.id.tvDatingUserStatus));
 
         // Counter
-        mCounter = ((TextView)findViewById(R.id.tvDatingCounter));
+        mCounter = ((TextView)view.findViewById(R.id.tvDatingCounter));
 
         // Keyboard
-        mInputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        mInputManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         // Progress
-        mProgressBar = (ProgressBar)findViewById(R.id.prsDatingLoading);
+        mProgressBar = (ProgressBar)view.findViewById(R.id.prsDatingLoading);
 
         // Dating Adapter
-        mDatingAlbumAdapter = new DatingAlbumAdapter(getApplicationContext(), this);
+        mDatingAlbumAdapter = new DatingAlbumAdapter(getActivity(), this);
         mDatingAlbumAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -155,7 +156,7 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
         });
 
         // Dating Album
-        mDatingAlbum = ((DatingAlbum)findViewById(R.id.glrDatingAlbum));
+        mDatingAlbum = ((DatingAlbum)view.findViewById(R.id.glrDatingAlbum));
         mDatingAlbum.setAdapter(mDatingAlbumAdapter);
         mDatingAlbum.setSpacing(0);
         mDatingAlbum.setFadingEdgeLength(0);
@@ -185,29 +186,30 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
         });
 
         // Comment window
-        mCommentDialog = new Dialog(this);
+        mCommentDialog = new Dialog(getActivity());
         mCommentDialog.setTitle(R.string.chat_comment);
         mCommentDialog.setContentView(R.layout.popup_comment); //,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
         mCommentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         mCommentText = (EditText)mCommentDialog.findViewById(R.id.etPopupComment);
         //mCommentDialog.getWindow().setBackgroundDrawableResource(R.drawable.popup_comment);
 
-        updateData(false);
+        //updateData(false);
+        return view;
     }
     //---------------------------------------------------------------------------
-    @Override
-    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == FilterActivity.INTENT_FILTER_ACTIVITY)
-            updateData(false);
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode == Activity.RESULT_OK && requestCode == FilterActivity.INTENT_FILTER_ACTIVITY)
+//            updateData(false);
+//    }
     //---------------------------------------------------------------------------
     private void updateData(final boolean isAddition) {
         if (!isAddition)
             mProgressBar.setVisibility(View.VISIBLE);
         Debug.log(this, "update");
-        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
-        SearchRequest searchRequest = new SearchRequest(this.getApplicationContext());
+        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
+        SearchRequest searchRequest = new SearchRequest(getActivity());
         searchRequest.limit = 20;
         searchRequest.geo = preferences.getBoolean(getString(R.string.cache_profile_filter_geo), false);
         searchRequest.online = preferences.getBoolean(getString(R.string.cache_profile_filter_online), false);
@@ -238,7 +240,7 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(DatingActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mProgressBar.setVisibility(View.GONE);
                     }
                 });
@@ -250,7 +252,7 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
     public void onClick(View view) {        
         switch (view.getId()) {
             case R.id.loDatingResources: {
-                startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
+                startActivity(new Intent(getActivity(), BuyingActivity.class));
             }
                 break;
             case R.id.btnDatingLove: {
@@ -266,14 +268,14 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
             }
                 break;
             case R.id.btnDatingProfile: {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
                 intent.putExtra(ProfileActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
                 intent.putExtra(ProfileActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
                 startActivity(intent);
             }
                 break;
             case R.id.btnDatingChat: {
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                Intent intent = new Intent(getActivity(), ChatActivity.class);
                 intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
                 intent.putExtra(ChatActivity.INTENT_USER_URL, mUserSearchList.get(mCurrentUserPos).getSmallLink());                
                 intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);                
@@ -297,7 +299,7 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
             return;
         }
         if (rate == 10 && CacheProfile.money <= 0) {
-            startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
+            startActivity(new Intent(getActivity(), BuyingActivity.class));
             return;
         }
         // кнопка на окне комментария оценки 10 и 9
@@ -311,7 +313,7 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
                 int uid = mUserSearchList.get(mCurrentUserPos).uid;
 
                 // отправка комментария к оценке
-                MessageRequest messageRequest = new MessageRequest(DatingActivity.this.getApplicationContext());
+                MessageRequest messageRequest = new MessageRequest(getActivity());
                 messageRequest.message = comment;
                 messageRequest.userid = uid;
                 messageRequest.callback(new ApiHandler() {
@@ -323,7 +325,7 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
 							@Override
 							public void run() {
 		                    	if (!confirm.completed) {
-		                    		Toast.makeText(DatingActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+		                    		Toast.makeText(getActivity(), getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
 		                    	}
 							}
 						});
@@ -350,7 +352,7 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
     //---------------------------------------------------------------------------
     private void sendRate(final int userid,final int rate) {
         Debug.log(this, "rate");
-        RateRequest doRate = new RateRequest(this.getApplicationContext());
+        RateRequest doRate = new RateRequest(getActivity());
         doRate.userid = userid;
         doRate.rate = rate;
         doRate.callback(new ApiHandler() {
@@ -405,7 +407,7 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
     }
     //---------------------------------------------------------------------------
     private void skipUser() {
-        SkipRateRequest skipRateRequest = new SkipRateRequest(this.getApplicationContext());
+        SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
         skipRateRequest.userid = 0;
         skipRateRequest.callback(new ApiHandler() {
             @Override
@@ -423,7 +425,7 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
 	                    }
 	                });
             	} else {
-            		Toast.makeText(DatingActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+            		Toast.makeText(getActivity(), getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
             	}
             }
             @Override
@@ -540,13 +542,13 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
                         mailAnimation.start();
                 }
             });
-            NovicePowerRequest novicePowerRequest = new NovicePowerRequest(getApplicationContext());
+            NovicePowerRequest novicePowerRequest = new NovicePowerRequest(getActivity());
             novicePowerRequest.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
                     NovicePower novicePower = NovicePower.parse(response);
                     CacheProfile.power = (int)(novicePower.power * 0.01);
-                    runOnUiThread(new Runnable() {
+                    updateUI(new Runnable() {
                         @Override
                         public void run() {
                             mResourcesPower.setText("+100%");
@@ -562,23 +564,23 @@ public class DatingActivity extends FrameActivity implements View.OnClickListene
     //---------------------------------------------------------------------------
     // Menu
     //---------------------------------------------------------------------------
-    private static final int MENU_FILTER = 0;
-    @Override
-    public boolean onCreatePanelMenu(int featureId,Menu menu) {
-        menu.add(0, MENU_FILTER, 0, getString(R.string.dating_menu_one));
-        return super.onCreatePanelMenu(featureId, menu);
-    }
-    //---------------------------------------------------------------------------
-    @Override
-    public boolean onMenuItemSelected(int featureId,MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_FILTER:
-                Intent intent = new Intent(this.getApplicationContext(), FilterActivity.class);
-                startActivityForResult(intent, FilterActivity.INTENT_FILTER_ACTIVITY);
-                break;
-        }
-        return super.onMenuItemSelected(featureId, item);
-    }
+//    private static final int MENU_FILTER = 0;
+//    @Override
+//    public boolean onCreatePanelMenu(int featureId,Menu menu) {
+//        menu.add(0, MENU_FILTER, 0, getString(R.string.dating_menu_one));
+//        return super.onCreatePanelMenu(featureId, menu);
+//    }
+//    //---------------------------------------------------------------------------
+//    @Override
+//    public boolean onMenuItemSelected(int featureId,MenuItem item) {
+//        switch (item.getItemId()) {
+//            case MENU_FILTER:
+//                Intent intent = new Intent(this.getApplicationContext(), FilterActivity.class);
+//                startActivityForResult(intent, FilterActivity.INTENT_FILTER_ACTIVITY);
+//                break;
+//        }
+//        return super.onMenuItemSelected(featureId, item);
+//    }
     //---------------------------------------------------------------------------
     // FrameActivity
     //---------------------------------------------------------------------------

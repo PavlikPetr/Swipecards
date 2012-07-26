@@ -1,4 +1,4 @@
-package com.topface.topface.ui.frames;
+package com.topface.topface.ui.fragments;
 
 import java.util.LinkedList;
 import com.topface.topface.R;
@@ -30,7 +30,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class InboxActivity extends FrameActivity {
+public class InboxActivity extends BaseFragment {
     // Data
     private boolean mNewUpdating;
     private TextView mFooterView;

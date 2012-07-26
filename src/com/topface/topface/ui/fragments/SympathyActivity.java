@@ -1,4 +1,4 @@
-package com.topface.topface.ui.frames;
+package com.topface.topface.ui.fragments;
 
 import java.util.LinkedList;
 import com.topface.topface.Data;
@@ -29,7 +29,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class SympathyActivity extends FrameActivity {
+public class SympathyActivity extends BaseFragment {
     // Data
     private boolean mNewUpdating;
 //    private TextView mFooterView;

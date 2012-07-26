@@ -1,10 +1,10 @@
-package com.topface.topface.ui.frames;
+package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
 import android.os.Bundle;
 
-public class SettingsActivity extends FrameActivity {
+public class SettingsActivity extends BaseFragment {
     // Data
     //---------------------------------------------------------------------------
     @Override

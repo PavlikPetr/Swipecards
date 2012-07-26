@@ -1,4 +1,4 @@
-package com.topface.topface.ui.frames;
+package com.topface.topface.ui.fragments;
 
 import java.util.LinkedList;
 import com.topface.topface.R;
@@ -32,7 +32,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class TopsActivity extends FrameActivity {
+public class TopsActivity extends BaseFragment {
     // Data
     private GridView mGallery;
     private TopsGridAdapter mGridAdapter;

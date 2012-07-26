@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
-import com.topface.topface.utils.Http;
+import com.topface.topface.utils.http.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;

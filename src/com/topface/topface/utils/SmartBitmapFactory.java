@@ -8,6 +8,7 @@ import android.os.Message;
 import android.widget.ImageView;
 import com.topface.topface.R;
 import com.topface.topface.utils.http.ConnectionManager;
+import com.topface.topface.utils.http.Http;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;

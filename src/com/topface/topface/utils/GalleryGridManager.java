@@ -10,6 +10,7 @@ import com.topface.topface.utils.CacheManager;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.MemoryCache;
 import com.topface.topface.utils.StorageCache;
+import com.topface.topface.utils.http.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.AbsListView;

@@ -14,7 +14,6 @@
 
 package com.topface.topface.utils.http;
 
-import com.topface.topface.utils.Http;
 import org.acra.util.Base64;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;

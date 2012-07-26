@@ -1,4 +1,4 @@
-package com.topface.topface.ui.frames;
+package com.topface.topface.ui.fragments;
 
 import java.util.LinkedList;
 import com.topface.topface.Data;
@@ -30,7 +30,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class LikesActivity extends FrameActivity {
+public class LikesActivity extends BaseFragment {
 	// Data
 	private boolean mNewUpdating;
 	private PullToRefreshListView mListView;
