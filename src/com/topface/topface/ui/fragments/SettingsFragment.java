@@ -7,11 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class SettingsActivity extends BaseFragment {
+public class SettingsFragment extends BaseFragment {
     // Data
     //---------------------------------------------------------------------------
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        super.onCreateView(inflater, container, saved);
       View view = inflater.inflate(R.layout.ac_settings, null);  
         Debug.log(this, "+onCreate");
         return view;

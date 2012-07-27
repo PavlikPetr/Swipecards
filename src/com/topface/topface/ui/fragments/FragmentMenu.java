@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class FragmentMenu extends Fragment {
+    
+    View mRootLayout;
     View.OnClickListener mOnClickListener;
 
     @Override
@@ -24,17 +26,22 @@ public class FragmentMenu extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        View v = inflater.inflate(R.layout.fragment_menu, null);
+        if(mRootLayout != null)
+            return mRootLayout;
         
-        ((Button)v.findViewById(R.id.btnFragmentProfile)).setOnClickListener(mOnClickListener);
-        ((Button)v.findViewById(R.id.btnFragmentDating)).setOnClickListener(mOnClickListener);
-        ((Button)v.findViewById(R.id.btnFragmentLikes)).setOnClickListener(mOnClickListener);
-        ((Button)v.findViewById(R.id.btnFragmentMutual)).setOnClickListener(mOnClickListener);
-        ((Button)v.findViewById(R.id.btnFragmentDialogs)).setOnClickListener(mOnClickListener);
-        ((Button)v.findViewById(R.id.btnFragmentTops)).setOnClickListener(mOnClickListener);
-        ((Button)v.findViewById(R.id.btnFragmentSettings)).setOnClickListener(mOnClickListener);
+        mRootLayout = inflater.inflate(R.layout.fragment_menu, null);
         
-        return v;
+        ((Button)mRootLayout.findViewById(R.id.btnFragmentProfile)).setOnClickListener(mOnClickListener);
+        ((Button)mRootLayout.findViewById(R.id.btnFragmentDating)).setOnClickListener(mOnClickListener);
+        ((Button)mRootLayout.findViewById(R.id.btnFragmentLikes)).setOnClickListener(mOnClickListener);
+        ((Button)mRootLayout.findViewById(R.id.btnFragmentMutual)).setOnClickListener(mOnClickListener);
+        ((Button)mRootLayout.findViewById(R.id.btnFragmentDialogs)).setOnClickListener(mOnClickListener);
+        ((Button)mRootLayout.findViewById(R.id.btnFragmentTops)).setOnClickListener(mOnClickListener);
+        ((Button)mRootLayout.findViewById(R.id.btnFragmentSettings)).setOnClickListener(mOnClickListener);
+        
+        mRootLayout.setVisibility(View.INVISIBLE);
+        
+        return mRootLayout;
     }
 
     @Override
@@ -74,5 +81,9 @@ public class FragmentMenu extends Fragment {
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
         mOnClickListener = onClickListener;
+    }
+    
+    public void setVisibility(int visibility) {
+        mRootLayout.setVisibility(visibility);        
     }
 }

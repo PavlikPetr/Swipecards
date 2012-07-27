@@ -34,7 +34,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class TopsActivity extends BaseFragment {
+public class TopsFragment extends BaseFragment {
     // Data
     private GridView mGallery;
     private TopsGridAdapter mGridAdapter;
@@ -58,8 +58,9 @@ public class TopsActivity extends BaseFragment {
     //---------------------------------------------------------------------------
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        super.onCreateView(inflater, container, saved);
       View view = inflater.inflate(R.layout.ac_tops, null);
-        Debug.log(this, "+onCreate");
+        
 
         // Data
         Data.topsList = new LinkedList<Top>();
@@ -125,7 +126,7 @@ public class TopsActivity extends BaseFragment {
                     intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.topsList.get(position).uid);
                     startActivityForResult(intent, 0);
                 } catch(Exception e) {
-                    Debug.log(TopsActivity.this, "start ProfileActivity exception:" + e.toString());
+                    Debug.log(TopsFragment.this, "start ProfileActivity exception:" + e.toString());
                 }
             }
         });

@@ -31,7 +31,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class SympathyActivity extends BaseFragment {
+public class MutualFragment extends BaseFragment {
     // Data
     private boolean mNewUpdating;
 //    private TextView mFooterView;
@@ -47,8 +47,9 @@ public class SympathyActivity extends BaseFragment {
     //---------------------------------------------------------------------------
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        super.onCreateView(inflater, container, saved);
       View view = inflater.inflate(R.layout.ac_sympathy, null);      
-        Debug.log(this, "+onCreate");
+        
 
         // Data
         Data.sympathyList = new LinkedList<FeedSympathy>();
@@ -101,7 +102,7 @@ public class SympathyActivity extends BaseFragment {
 	                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, Data.sympathyList.get(position).first_name);
 	                    startActivityForResult(intent, 0);
 	                } catch(Exception e) {
-	                    Debug.log(SympathyActivity.this, "start ProfileActivity exception:" + e.toString());
+	                    Debug.log(MutualFragment.this, "start ProfileActivity exception:" + e.toString());
 	                }
             	}
             }

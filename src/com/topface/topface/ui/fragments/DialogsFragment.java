@@ -32,7 +32,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class DialogActivity extends BaseFragment {
+public class DialogsFragment extends BaseFragment {
     // Data
     private boolean mNewUpdating;
 //    private TextView mFooterView;
@@ -48,8 +48,9 @@ public class DialogActivity extends BaseFragment {
     //---------------------------------------------------------------------------
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.ac_dialog, null);
-        Debug.log(this, "+onCreate");
+        
 
         // Data
         Data.dialogList = new LinkedList<Dialog>();
@@ -111,7 +112,7 @@ public class DialogActivity extends BaseFragment {
 	                    intent.putExtra(ChatActivity.INTENT_USER_NAME, Data.dialogList.get(position).first_name);
 	                    startActivity(intent);
 	                } catch(Exception e) {
-	                    Debug.log(DialogActivity.this, "start ChatActivity exception:" + e.toString());
+	                    Debug.log(DialogsFragment.this, "start ChatActivity exception:" + e.toString());
 	                }
             	}
             }

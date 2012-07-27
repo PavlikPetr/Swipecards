@@ -32,7 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class LikesActivity extends BaseFragment {
+public class LikesFragment extends BaseFragment {
 	// Data
 	private boolean mNewUpdating;
 	private PullToRefreshListView mListView;
@@ -48,8 +48,10 @@ public class LikesActivity extends BaseFragment {
 	// ---------------------------------------------------------------------------
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+	    super.onCreateView(inflater, container, saved);
+	    
     View view = inflater.inflate(R.layout.ac_likes, null);
-		Debug.log(this, "+onCreate");
+		
 		
 		// Data
 		Data.likesList = new LinkedList<FeedLike>();
@@ -108,7 +110,7 @@ public class LikesActivity extends BaseFragment {
 								startActivity(intent);
 							} catch (Exception e) {
 								Debug.log(
-										LikesActivity.this,
+										LikesFragment.this,
 										"start ProfileActivity exception:"
 												+ e.toString());
 							}

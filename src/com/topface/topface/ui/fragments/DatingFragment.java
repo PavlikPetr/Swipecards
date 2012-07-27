@@ -53,7 +53,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DatingActivity extends BaseFragment implements View.OnClickListener, ILocker {
+public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker {
     // Data
     private boolean mIsHide;
     private int mCurrentUserPos;
@@ -85,8 +85,9 @@ public class DatingActivity extends BaseFragment implements View.OnClickListener
     //---------------------------------------------------------------------------
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.ac_dating, null);
-        Debug.log(this, "+onCreate");
+        
 
         // Data
         mUserSearchList = new LinkedList<Search>();
