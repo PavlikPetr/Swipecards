@@ -12,6 +12,7 @@ public class App extends Application {
     public static final String TAG = "Topface";
     public static final boolean DEBUG = true;
     private static Context mContext;
+//    private static PluralResources mPluralResources;
 
     //---------------------------------------------------------------------------
     @Override
@@ -27,5 +28,7 @@ public class App extends Application {
     public static Context getContext() {
         return mContext;
     }
+
+
 }
 

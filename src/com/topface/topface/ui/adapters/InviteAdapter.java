@@ -103,8 +103,8 @@ public class InviteAdapter extends CursorAdapter {
         //Состояние чекбокса пункта
         holder.checkbox.setImageResource(
                 mTriggersList.isOn(holder.contactId) ?
-                        android.R.drawable.checkbox_on_background :
-                        android.R.drawable.checkbox_off_background
+                        R.drawable.invite_checkbox_on:
+                        R.drawable.invite_checkbox_off
         );
 
     }

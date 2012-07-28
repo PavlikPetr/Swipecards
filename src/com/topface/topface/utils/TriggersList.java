@@ -44,4 +44,8 @@ public class TriggersList<K, V> {
     public Collection<V> getList() {
         return mTriggers.values();
     }
+
+    public int getSize() {
+        return mTriggers.size();
+    }
 }

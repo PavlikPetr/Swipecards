@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Данный конфиг используется для IllustratedTextView -->
+    <string-array name="itv_templates">
+        <item>{{coins}}</item>
+        <!--
+            здесь вы можете добавить ваши шаблоны,
+            которые будут заменены картинками из массива itv_icons
+        -->
+    </string-array>
+
+    <array name="itv_icons" >
+        <item>@drawable/resources_coins</item>
+        <!--
+            тут соответсвующие шаблонам из itv_templates изображения
+        -->
+    </array>
+
+</resources>

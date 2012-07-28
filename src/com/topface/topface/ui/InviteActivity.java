@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.*;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.*;
 import com.topface.topface.R;
@@ -16,7 +16,10 @@ import com.topface.topface.requests.InviteRequest;
 import com.topface.topface.ui.adapters.InviteAdapter;
 import com.topface.topface.utils.TriggersList;
 
+import java.io.PrintStream;
+import java.text.Format;
 import java.util.Collection;
+import java.util.Formatter;
 
 /**
  * Активити с приглашением друзей в приложение
@@ -31,34 +34,52 @@ public class InviteActivity extends Activity {
      */
     public static final String HAS_PHONE_NUMBER = "'1'";
     private ListView mContactList;
-    private View mSendButton;
     private InviteAdapter mAdapter;
     private TriggersList<Long, InviteRequest.Recipient> mTriggersList;
-
+    private TextView mBonusText;
+    private static final int COINS_BONUS = 10;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_invite);
+        //Устанавливаем заголовок активити
+        ((TextView) findViewById(R.id.tvHeaderTitle)).setText(R.string.activity_title_invite);
 
         mContactList = (ListView) findViewById(R.id.contactsList);
         mTriggersList = new TriggersList<Long, InviteRequest.Recipient>();
         mContactList.setOnItemClickListener(mListItemCheckListener);
+        mBonusText = (TextView) findViewById(R.id.inviteBonusText);
 
         EditText filterText = (EditText) findViewById(R.id.searchField);
         filterText.addTextChangedListener(filterTextListener);
-        setContactsAdapater();
 
-        mSendButton = findViewById(R.id.btnInviteSend);
-        mSendButton.setOnClickListener(new View.OnClickListener() {
+        setClearSearchListener(filterText);
+
+        setContactsAdapater();
+        setSendButtonListener();
+    }
+
+    private void setClearSearchListener(final EditText searchField) {
+        View clearSearch = findViewById(R.id.searchClear);
+        clearSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchField.setText(null);
+            }
+        });
+    }
+
+    private void setSendButtonListener() {
+        View sendButton = findViewById(R.id.btnInviteSend);
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Collection<InviteRequest.Recipient> recipients = mTriggersList.getList();
                 if (recipients.isEmpty()) {
 
-                }
-                else {
+                } else {
                     InviteRequest request = new InviteRequest(InviteActivity.this);
                     if (request.addRecipients(recipients)) {
                         request.callback(new ApiHandler() {
@@ -174,7 +195,15 @@ public class InviteActivity extends Activity {
             InviteAdapter.ViewHolder holder = (InviteAdapter.ViewHolder) view.getTag();
             mTriggersList.toggle(holder.contactId, holder.recipient);
             mAdapter.notifyDataSetChanged();
+            setBonusText(mTriggersList.getSize());
         }
     };
+
+    private void setBonusText(int friendsCnt) {
+        String text;
+        friendsCnt = friendsCnt > 0 ? friendsCnt : 1;
+        text = getResources().getQuantityString(R.plurals.invite_bonus_text, friendsCnt, friendsCnt * COINS_BONUS, friendsCnt);
+        mBonusText.setText(text);
+    }
 
 }

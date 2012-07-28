@@ -1,13 +1,12 @@
 package com.topface.topface.utils;
 
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.Calendar;
 
 import android.graphics.*;
-import android.net.Uri;
 import android.text.ClipboardManager;
+import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import android.content.Context;
@@ -18,7 +17,9 @@ import android.text.format.DateUtils;
 import android.widget.TextView;
 
 public class Utils {
-    
+
+    private static PluralResources mPluralResources;
+
     public static int unixtime() {
         return (int) (System.currentTimeMillis() / 1000L);
     }
@@ -325,5 +326,14 @@ public class Utils {
     public static void copyTextToClipboard(String text, Context context) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setText(text);
+    }
+
+    public static String getQuantityString(int id, int quantity, Object... formatArgs) {
+        try {
+            mPluralResources = new PluralResources(App.getContext().getResources());
+        } catch (Exception e) {
+            Debug.error("Plural resources error", e);
+        }
+        return mPluralResources.getQuantityString(id, quantity, formatArgs);
     }
 }

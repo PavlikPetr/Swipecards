@@ -173,4 +173,10 @@
     <string name="pull_to_refresh_tap_label">Tap to refresh</string>
     <string name="search_hint">Search</string>
 
+    <string name="activity_title_invite">Приглашения</string>
+    <string name="send_invite">Отправить</string>
+    <string name="invite_bonus_text">Пригласите друзей и получите за каждого по 20 {{coins}}</string>
+    <string name="invite_bonus_value">Вы собираетесь пригласить друзей и получите за каждого по 20 {{coins}}</string>
+    <string name="invite_is_free">Отправка приглашения бесплатна</string>
+
 </resources>
