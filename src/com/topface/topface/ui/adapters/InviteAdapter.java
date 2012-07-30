@@ -109,6 +109,13 @@ public class InviteAdapter extends CursorAdapter {
 
     }
 
+    /**
+     * Возвращает фотографию контакта по его id
+     *
+     * @param cr ContentResolver из которого получаем фото
+     * @param id контакта
+     * @return Bitmap c фото контакта
+     */
     public static Bitmap loadContactPhoto(ContentResolver cr, long  id) {
         Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id);
         InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(cr, uri);

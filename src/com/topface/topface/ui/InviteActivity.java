@@ -6,20 +6,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.*;
-import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.*;
 import com.topface.topface.R;
+import com.topface.topface.data.Invite;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.InviteRequest;
 import com.topface.topface.ui.adapters.InviteAdapter;
 import com.topface.topface.utils.TriggersList;
+import com.topface.topface.utils.Utils;
 
-import java.io.PrintStream;
-import java.text.Format;
 import java.util.Collection;
-import java.util.Formatter;
 
 /**
  * Активити с приглашением друзей в приложение
@@ -33,11 +31,15 @@ public class InviteActivity extends Activity {
      * Показывать пользователей только с телефоном
      */
     public static final String HAS_PHONE_NUMBER = "'1'";
+    /**
+     * Бонус в монетах за каждого приглашенного друга
+     */
+    private static final int COINS_BONUS = 10;
+
     private ListView mContactList;
     private InviteAdapter mAdapter;
     private TriggersList<Long, InviteRequest.Recipient> mTriggersList;
     private TextView mBonusText;
-    private static final int COINS_BONUS = 10;
 
 
     @Override
@@ -48,16 +50,24 @@ public class InviteActivity extends Activity {
         ((TextView) findViewById(R.id.tvHeaderTitle)).setText(R.string.activity_title_invite);
 
         mContactList = (ListView) findViewById(R.id.contactsList);
-        mTriggersList = new TriggersList<Long, InviteRequest.Recipient>();
         mContactList.setOnItemClickListener(mListItemCheckListener);
-        mBonusText = (TextView) findViewById(R.id.inviteBonusText);
 
+        //Здесь будем хранить все выделенные элементы списка
+        mTriggersList = new TriggersList<Long, InviteRequest.Recipient>();
+        //Текст с информацией о бонусах
+        mBonusText = (TextView) findViewById(R.id.inviteBonusText);
+        //Ставим текст по умолчанию
+        setBonusText(0);
+
+        //Поле поиска
         EditText filterText = (EditText) findViewById(R.id.searchField);
         filterText.addTextChangedListener(filterTextListener);
 
+        //Кнопка очистки поля поиска
         setClearSearchListener(filterText);
 
         setContactsAdapater();
+        //Кнопка отправки приглашений
         setSendButtonListener();
     }
 
@@ -71,6 +81,9 @@ public class InviteActivity extends Activity {
         });
     }
 
+    /**
+     * Устанавливает Листенер нажатия на кнопку "отправить
+     */
     private void setSendButtonListener() {
         View sendButton = findViewById(R.id.btnInviteSend);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -78,19 +91,24 @@ public class InviteActivity extends Activity {
             public void onClick(View view) {
                 Collection<InviteRequest.Recipient> recipients = mTriggersList.getList();
                 if (recipients.isEmpty()) {
-
+                    Toast.makeText(InviteActivity.this, R.string.invite_completed, Toast.LENGTH_LONG);
                 } else {
                     InviteRequest request = new InviteRequest(InviteActivity.this);
                     if (request.addRecipients(recipients)) {
                         request.callback(new ApiHandler() {
                             @Override
                             public void success(ApiResponse response) throws NullPointerException {
-                                Toast.makeText(InviteActivity.this, "Не удалось отправить сообщение. Попробуйте еще раз", Toast.LENGTH_LONG);
+                                if (Invite.parse(response).completed) {
+                                    Toast.makeText(InviteActivity.this, R.string.invite_completed, Toast.LENGTH_LONG);
+                                }
+                                else {
+                                    onInviteError();
+                                }
                             }
 
                             @Override
                             public void fail(int codeError, ApiResponse response) throws NullPointerException {
-                                Toast.makeText(InviteActivity.this, "Не удалось отправить сообщение. Попробуйте еще раз", Toast.LENGTH_LONG);
+                                onInviteError();
                             }
                         });
                         request.exec();
@@ -100,11 +118,21 @@ public class InviteActivity extends Activity {
         });
     }
 
+    /**
+     * Вызывается при ошибке отправки инвайта на сервер
+     */
+    private void onInviteError() {
+        Toast.makeText(this, R.string.invite_error, Toast.LENGTH_LONG);
+    }
 
+    /**
+     * Устанавливает курсор в адаптер и адаптер в ListView
+     */
     private void setContactsAdapater() {
-        Cursor cursor = getContacts("");
+        Cursor cursor = getContacts(null);
         mAdapter = new InviteAdapter(this, cursor, mTriggersList);
         mContactList.setAdapter(mAdapter);
+        //Указываем адаптеру, как производить запрос при установке на него фильтра
         mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
             @Override
             public Cursor runQuery(CharSequence charSequence) {
@@ -114,7 +142,10 @@ public class InviteActivity extends Activity {
     }
 
     /**
-     * Возвращает
+     * Возвращает курсор контактов с учетом фильтра и всех настроек выборки
+     *
+     * @param filter подстрока имени контакта по которой производится поиск
+     * @return курсок к базе из ContactsCobtract
      */
     private Cursor getContacts(String filter) {
         // Run query
@@ -144,6 +175,7 @@ public class InviteActivity extends Activity {
     /**
      * В связи с тем, что sqlite не имеет встроенное поддержки регистра для не ASCII символов,
      * пока используем просто более сложный запрос, который покроет большинство видов написаний
+     *
      * @param filter строка для котопрой необходимо сделать запрос в разных регистрах
      * @return Like запрос
      */
@@ -178,7 +210,7 @@ public class InviteActivity extends Activity {
     private TextWatcher filterTextListener = new TextWatcher() {
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            //Если изменился текст в поле, то обновляем список
+            //Если изменился текст в поле поиска, то обновляем список
             mAdapter.getFilter().filter(charSequence);
         }
 
@@ -189,20 +221,31 @@ public class InviteActivity extends Activity {
         public void afterTextChanged(Editable editable) {}
     };
 
+    /**
+     * Листенер нажатия на элемент списка
+     */
     private AdapterView.OnItemClickListener mListItemCheckListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            //При клике на элемент списка, переключаем его состояние
             InviteAdapter.ViewHolder holder = (InviteAdapter.ViewHolder) view.getTag();
             mTriggersList.toggle(holder.contactId, holder.recipient);
+            //Не забываем обновить view списка
             mAdapter.notifyDataSetChanged();
+            //Сообщение о бонусе
             setBonusText(mTriggersList.getSize());
         }
     };
 
+    /**
+     * В зависимости от количества выделенных контактов, меняем текст сообщения
+     * @param friendsCnt количество выделенных контактов в списке
+     */
     private void setBonusText(int friendsCnt) {
         String text;
-        friendsCnt = friendsCnt > 0 ? friendsCnt : 1;
-        text = getResources().getQuantityString(R.plurals.invite_bonus_text, friendsCnt, friendsCnt * COINS_BONUS, friendsCnt);
+        int multiplicator = friendsCnt > 0 ? friendsCnt : 1;
+
+        text = Utils.getQuantityString(R.plurals.invite_bonus_text, friendsCnt, multiplicator * COINS_BONUS, friendsCnt);
         mBonusText.setText(text);
     }
 

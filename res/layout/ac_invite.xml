@@ -51,7 +51,6 @@
                 android:textColor="#FFFFFF"
                 android:paddingRight="5dip"
                 android:paddingBottom="5dip"
-                android:text="@string/invite_bonus_text"
                 />
         <TextView
                 android:id="@id/inviteFreeText"

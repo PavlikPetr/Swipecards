@@ -170,11 +170,12 @@
     <string name="pull_to_refresh_release_label">Отпустите</string>
     <string name="pull_to_refresh_refreshing_label">Обновление</string>
     <string name="pull_to_refresh_tap_label">Нажмите</string>
-    <string name="search_hint">Найти друзей</string>
 
+
+    <!-- Экран приглашений -->
+    <string name="search_hint">Найти друзей</string>
     <string name="activity_title_invite">Приглашения</string>
     <string name="send_invite">Отправить</string>
-    <string name="invite_bonus_value">В</string>
     <plurals name="invite_bonus_text">
         <item quantity="zero">Пригласите друзей и получите за каждого по 20 {{coins}}</item>
         <item quantity="one">Вы собираетесь отправить приглашение %2$d другу и получите за это %1$d {{coins}}</item>
@@ -182,5 +183,8 @@
         <item quantity="other">Вы собираетесь отправить приглашения %2$d друзьям и получите за это %1$d {{coins}}</item>
     </plurals>
     <string name="invite_is_free">Отправка приглашения бесплатна</string>
+    <string name="invite_need_select">Выберите одного или нескольких друзей для отправки приглашения</string>
+    <string name="invite_error">Не удалось отправить приглашения. Попробуйте еще раз</string>
+    <string name="invite_completed">Приглашение отправлено</string>
 
 </resources>
