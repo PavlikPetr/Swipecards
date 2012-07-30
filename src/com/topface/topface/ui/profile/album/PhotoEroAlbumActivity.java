@@ -14,7 +14,7 @@ import com.topface.topface.requests.PhotoVoteRequest;
 import com.topface.topface.ui.FilterActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Http;
+import com.topface.topface.utils.http.Http;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;

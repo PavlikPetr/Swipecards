@@ -29,7 +29,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-import com.topface.topface.utils.Http;
+import com.topface.topface.utils.http.Http;
 import org.json.JSONException;
 import org.json.JSONObject;
 

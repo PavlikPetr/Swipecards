@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <LinearLayout
-        android:id="@+id/loTFGroupMenu"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:visibility="invisible" >
+        android:orientation="vertical" >
 
         <!-- Profile -->
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/btnTFProfile"
+                android:id="@+id/btnFragmentProfile"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
                 android:gravity="left|center_vertical"
-                android:text="@string/dashbrd_btn_profile"
+                android:text="Profile"
                 android:textColor="#FFFFFF" />
 
             <TextView
@@ -32,49 +23,39 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/im_informer"
                 android:gravity="center"
-                android:text="99"
                 android:textColor="#FFFFFF"
                 android:textSize="12dp"
-                android:visibility="visible" />
+                android:visibility="invisible" />
         </RelativeLayout>
 
         <!-- Dating -->
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/btnTFDating"
+                android:id="@+id/btnFragmentDating"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
-                android:drawableLeft="@drawable/topface_dating"
-                android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="10dp"
-                android:text="@string/dashbrd_btn_dating"
+                android:text="Dating"
                 android:textColor="#FFFFFF" />
         </RelativeLayout>
 
         <!-- Likes -->
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/btnTFLikes"
+                android:id="@+id/btnFragmentLikes"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
-                android:drawableLeft="@drawable/topface_likes"
-                android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="10dp"
-                android:text="@string/dashbrd_btn_likes"
+                android:text="Likes"
                 android:textColor="#FFFFFF" />
 
             <TextView
@@ -83,7 +64,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/im_informer"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="12dp"
@@ -91,21 +71,17 @@
         </RelativeLayout>
 
         <!-- Mutual - Sympathy -->
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/btnTFSympathy"
+                android:id="@+id/btnFragmentMutual"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
-                android:drawableLeft="@drawable/topface_sympathy"
-                android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="15dp"
-                android:text="@string/dashbrd_btn_sympathy"
+                android:text="Sympathy"
                 android:textColor="#FFFFFF" />
 
             <TextView
@@ -114,7 +90,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/im_informer"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="12dp"
@@ -128,15 +103,12 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/btnTFChat"
+                android:id="@+id/btnFragmentDialogs"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
-                android:drawableLeft="@drawable/topface_chat"
-                android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="10dp"
-                android:text="@string/dashbrd_btn_chat"
+                android:text="Dialogs"
                 android:textColor="#FFFFFF" />
 
             <TextView
@@ -145,7 +117,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/im_informer"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="12dp"
@@ -153,87 +124,32 @@
         </RelativeLayout>
 
         <!-- Tops -->
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/btnTFTops"
+                android:id="@+id/btnFragmentTops"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
-                android:drawableLeft="@drawable/topface_tops"
-                android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="10dp"
-                android:text="@string/dashbrd_btn_tops"
+                android:text="Tops"
                 android:textColor="#FFFFFF" />
         </RelativeLayout>
 
         <!-- Settings -->
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/btnTFSettings"
+                android:id="@+id/btnFragmentSettings"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
-                android:drawableLeft="@drawable/topface_settings"
-                android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="10dp"
-                android:text="@string/dashbrd_btn_settings"
+                android:text="Settings"
                 android:textColor="#FFFFFF" />
         </RelativeLayout>
-    </LinearLayout>
-
-    <!-- Frame Window -->
-
-    <LinearLayout
-        android:id="@+id/loTFWindow"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal" >
-
-        <ImageView
-            android:id="@+id/ivTFShadow"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:src="@drawable/topface_shadow"
-            android:visibility="gone" />
-
-        <TabHost
-            android:id="@android:id/tabhost"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="#000000" >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@android:color/transparent"
-                android:orientation="vertical" >
-
-                <include layout="@layout/bar_tab_header" />
-
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
-                    android:visibility="gone" />
-
-                <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:background="#FFFFFF" />
-                
-            </LinearLayout>
-        </TabHost>
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
         if (Data.isSSID())
             //startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
             //startActivity(new Intent(getApplicationContext(), AuthActivity.class));
-            startActivity(new Intent(getApplicationContext(), TopfaceActivity.class));
+            startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
         else
             startActivity(new Intent(getApplicationContext(), AuthActivity.class));
 

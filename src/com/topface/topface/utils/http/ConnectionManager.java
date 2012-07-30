@@ -29,7 +29,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.utils.AuthToken;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Http.FlushedInputStream;
+import com.topface.topface.utils.http.Http.FlushedInputStream;
 
 public class ConnectionManager {
     // Data

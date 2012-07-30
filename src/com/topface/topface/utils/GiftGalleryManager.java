@@ -9,6 +9,7 @@ import com.topface.topface.data.AbstractData;
 import com.topface.topface.data.Gift;
 import com.topface.topface.utils.MemoryCache;
 import com.topface.topface.utils.StorageCache;
+import com.topface.topface.utils.http.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

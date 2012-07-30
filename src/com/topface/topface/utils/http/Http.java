@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.http;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -18,8 +18,9 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.protocol.BasicHttpContext;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
-import com.topface.topface.utils.http.AndroidHttpClient;
-import com.topface.topface.utils.http.ConnectionManager;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;

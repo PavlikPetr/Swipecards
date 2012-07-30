@@ -24,7 +24,7 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
-import com.topface.topface.utils.Http;
+import com.topface.topface.utils.http.Http;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;

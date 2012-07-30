@@ -19,7 +19,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.frames.FrameActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
 import com.topface.topface.ui.profile.album.PhotoEroAlbumActivity;
 import com.topface.topface.ui.profile.gallery.HorizontalListView;
@@ -30,9 +30,10 @@ import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
-import com.topface.topface.utils.Http;
 import com.topface.topface.utils.Socium;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.http.Http;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -52,7 +53,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /* "Профиль" */
-public class ProfileActivity extends FrameActivity {
+public class ProfileActivity extends Activity {
     // Data
     private int mUserId;    
     private int mMutualId;
@@ -936,14 +937,14 @@ public class ProfileActivity extends FrameActivity {
     //---------------------------------------------------------------------------
     // FrameActivity
     //---------------------------------------------------------------------------
-    @Override
-    public void clearLayout() {
-
-    }
-    //---------------------------------------------------------------------------
-    @Override
-    public void fillLayout() {
-
-    }
+//    @Override
+//    public void clearLayout() {
+//
+//    }
+//    //---------------------------------------------------------------------------
+//    @Override
+//    public void fillLayout() {
+//
+//    }
     //---------------------------------------------------------------------------
 }

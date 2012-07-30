@@ -9,16 +9,16 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.ui.frames.DatingActivity;
-import com.topface.topface.ui.frames.InboxActivity;
-import com.topface.topface.ui.frames.LikesActivity;
-import com.topface.topface.ui.frames.SympathyActivity;
-import com.topface.topface.ui.frames.TopsActivity;
+import com.topface.topface.ui.fragments.DatingFragment;
+
+import com.topface.topface.ui.fragments.LikesFragment;
+import com.topface.topface.ui.fragments.MutualFragment;
+import com.topface.topface.ui.fragments.TopsFragment;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Http;
 import com.topface.topface.utils.Newbie;
+import com.topface.topface.utils.http.Http;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -289,23 +289,23 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         Intent intent = null;
         switch (view.getId()) {
             case R.id.btnDshbrdDating: {
-                intent = new Intent(this.getApplicationContext(), DatingActivity.class);
+                intent = new Intent(this.getApplicationContext(), DatingFragment.class);
             }
                 break;
             case R.id.btnDshbrdLikes: {
-                intent = new Intent(this.getApplicationContext(), LikesActivity.class);
+                intent = new Intent(this.getApplicationContext(), LikesFragment.class);
             }
                 break;
             case R.id.btnDshbrdSymphaty: {
-                intent = new Intent(this.getApplicationContext(), SympathyActivity.class);
+                intent = new Intent(this.getApplicationContext(), MutualFragment.class);
             }
                 break;
             case R.id.btnDshbrdChat: {
-                intent = new Intent(this.getApplicationContext(), InboxActivity.class);
+                //intent = new Intent(this.getApplicationContext(), InboxActivity.class);
             }
                 break;
             case R.id.btnDshbrdTops: {
-                intent = new Intent(this.getApplicationContext(), TopsActivity.class);
+                intent = new Intent(this.getApplicationContext(), TopsFragment.class);
             }
                 break;
             case R.id.btnDshbrdProfile: {
