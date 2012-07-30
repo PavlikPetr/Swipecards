@@ -11,11 +11,15 @@ import com.facebook.android.Facebook.*;
 import com.topface.topface.R;
 import com.topface.topface.Data;
 import com.topface.topface.data.Auth;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.utils.AuthToken;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.http.Http;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,14 +29,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class AuthActivity extends Activity implements View.OnClickListener {
-    // Data
     private Button mFBButton;
     private Button mVKButton;
     private ProgressBar mProgressBar;
     private AsyncFacebookRunner mAsyncFacebookRunner;
-    private AuthRequest authRequest;
     private String[] FB_PERMISSIONS = {"user_photos","publish_stream","email","publish_actions"};
-    //---------------------------------------------------------------------------
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,17 +51,28 @@ public class AuthActivity extends Activity implements View.OnClickListener {
 
         // Progress
         mProgressBar = (ProgressBar)findViewById(R.id.prsAuthLoading);
+        
+        if (!Http.isOnline(this))
+            Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
+
+        if (Data.isSSID()) {
+            mFBButton.setVisibility(View.INVISIBLE);
+            mVKButton.setVisibility(View.INVISIBLE);
+            mProgressBar.setVisibility(View.VISIBLE);
+            getProfile();
+        }
+        
     }
-    //---------------------------------------------------------------------------
+    
     @Override
     protected void onDestroy() {
         Debug.log(this, "-onDestroy");
         mAsyncFacebookRunner = null;
-        if (authRequest != null)
-            authRequest.cancel();
+//        if (authRequest != null)
+//            authRequest.cancel();
         super.onDestroy();
     }
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -72,7 +85,7 @@ public class AuthActivity extends Activity implements View.OnClickListener {
             Data.facebook.authorizeCallback(requestCode, resultCode, data);
         }
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnAuthVK) {
@@ -83,7 +96,7 @@ public class AuthActivity extends Activity implements View.OnClickListener {
             Data.facebook.authorize(this, FB_PERMISSIONS, mDialogListener);
         }
     }
-    //---------------------------------------------------------------------------
+    
     private void showButtons() {
         runOnUiThread(new Runnable() {
             @Override
@@ -94,7 +107,7 @@ public class AuthActivity extends Activity implements View.OnClickListener {
             }
         });
     }
-    //---------------------------------------------------------------------------
+
     private void hideButtons() {
         runOnUiThread(new Runnable() {
             @Override
@@ -105,9 +118,9 @@ public class AuthActivity extends Activity implements View.OnClickListener {
             }
         });
     }
-    //---------------------------------------------------------------------------
+
     private void auth(AuthToken token) {
-        authRequest = new AuthRequest(getApplicationContext());
+        AuthRequest authRequest = new AuthRequest(getApplicationContext());
         authRequest.platform = token.getSocialNet();
         authRequest.sid = token.getUserId();
         authRequest.token = token.getTokenKey();
@@ -137,7 +150,35 @@ public class AuthActivity extends Activity implements View.OnClickListener {
             }
         }).exec();
     }
-    //---------------------------------------------------------------------------
+
+    private void getProfile() {
+        ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
+        profileRequest.part = ProfileRequest.P_DASHBOARD;
+        profileRequest.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                CacheProfile.setData(Profile.parse(response));
+                Http.avatarOwnerPreloading();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
+                        finish();
+                    }
+                });
+            }
+            @Override
+            public void fail(int codeError,ApiResponse response) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(AuthActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).exec();
+    }
+
     private DialogListener mDialogListener = new DialogListener() {
         @Override
         public void onComplete(Bundle values) {
@@ -161,7 +202,7 @@ public class AuthActivity extends Activity implements View.OnClickListener {
             showButtons();
         }
     };
-    //---------------------------------------------------------------------------
+
     private RequestListener mRequestListener = new RequestListener() {
         @Override
         public void onComplete(String response,Object state) {
@@ -203,5 +244,4 @@ public class AuthActivity extends Activity implements View.OnClickListener {
             showButtons();
         }
     };
-    //---------------------------------------------------------------------------
 }

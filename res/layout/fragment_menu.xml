@@ -14,19 +14,11 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center_vertical"
-                android:text="Profile"
+                android:background="@drawable/navigation_menu_item_selector"
+                android:paddingLeft="10dp"
+                android:text="@string/dashbrd_btn_profile"
                 android:textColor="#FFFFFF" />
 
-            <TextView
-                android:id="@+id/tvTFNotifyProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:textColor="#FFFFFF"
-                android:textSize="12dp"
-                android:visibility="invisible" />
         </RelativeLayout>
 
         <!-- Dating -->
@@ -39,9 +31,11 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center_vertical"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:paddingLeft="10dp"
-                android:text="Dating"
+                android:text="@string/dashbrd_btn_dating"
                 android:textColor="#FFFFFF" />
+            
         </RelativeLayout>
 
         <!-- Likes -->
@@ -54,12 +48,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center_vertical"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:paddingLeft="10dp"
-                android:text="Likes"
+                android:text="@string/dashbrd_btn_likes"
                 android:textColor="#FFFFFF" />
 
             <TextView
-                android:id="@+id/tvTFNotifyLikes"
+                android:id="@+id/tvNotifyLikes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -68,6 +63,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="12dp"
                 android:visibility="invisible" />
+            
         </RelativeLayout>
 
         <!-- Mutual - Sympathy -->
@@ -80,12 +76,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="15dp"
-                android:text="Sympathy"
+                android:background="@drawable/navigation_menu_item_selector"
+                android:paddingLeft="10dp"
+                android:text="@string/dashbrd_btn_sympathy"
                 android:textColor="#FFFFFF" />
 
             <TextView
-                android:id="@+id/tvTFNotifySympathy"
+                android:id="@+id/tvNotifyMutual"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -97,7 +94,6 @@
         </RelativeLayout>
 
         <!-- Messages - Chat -->
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
@@ -107,12 +103,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center_vertical"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:paddingLeft="10dp"
-                android:text="Dialogs"
+                android:text="@string/dashbrd_btn_chat"
                 android:textColor="#FFFFFF" />
 
             <TextView
-                android:id="@+id/tvTFNotifyChat"
+                android:id="@+id/tvNotifyDialogs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -121,6 +118,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="12dp"
                 android:visibility="invisible" />
+            
         </RelativeLayout>
 
         <!-- Tops -->
@@ -133,8 +131,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center_vertical"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:paddingLeft="10dp"
-                android:text="Tops"
+                android:text="@string/dashbrd_btn_tops"
                 android:textColor="#FFFFFF" />
         </RelativeLayout>
 
@@ -148,8 +147,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center_vertical"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:paddingLeft="10dp"
-                android:text="Settings"
+                android:text="@string/dashbrd_btn_settings"
                 android:textColor="#FFFFFF" />
+            
         </RelativeLayout>
 </LinearLayout>

@@ -46,16 +46,14 @@ public class TopsFragment extends BaseFragment {
     // Constats
     private static int GIRLS = 0;
     private static int BOYS = 1;
-    //---------------------------------------------------------------------------
-    // class Action Data
-    //---------------------------------------------------------------------------
+
     private class ActionData {
         public int sex;
         public int city_id;
         public int city_popup_pos;
         public String city_name;
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
@@ -138,7 +136,7 @@ public class TopsFragment extends BaseFragment {
         mGallery.setOnScrollListener(mGalleryGridManager);
         return view;
     }
-    //---------------------------------------------------------------------------  
+
     @Override
     public void onDestroyView() {
         SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
@@ -151,10 +149,9 @@ public class TopsFragment extends BaseFragment {
 
         ThumbView.release();
 
-        Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
-    //---------------------------------------------------------------------------
+
     private void updateData() {
         mProgressBar.setVisibility(View.VISIBLE);
         mGallery.setSelection(0);
@@ -189,7 +186,7 @@ public class TopsFragment extends BaseFragment {
             }
         }).exec();
     }
-    //---------------------------------------------------------------------------
+
     private void choiceCity() {
         if (Data.cityList != null && Data.cityList.size() > 0) {
             showCitiesDialog();
@@ -222,7 +219,7 @@ public class TopsFragment extends BaseFragment {
             }
         }).exec();
     }
-    //---------------------------------------------------------------------------
+
     private void showCitiesDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.filter_select_city));
@@ -246,25 +243,10 @@ public class TopsFragment extends BaseFragment {
         AlertDialog alert = builder.create();
         alert.show();
     }
-    //---------------------------------------------------------------------------
-    // FrameActivity
-    //---------------------------------------------------------------------------
-    @Override
-    public void clearLayout() {
-        Debug.log(this, "TopsActivity::clearLayout");
-        mGallery.setVisibility(View.INVISIBLE);
-    }
-    //---------------------------------------------------------------------------
-    @Override
-    public void fillLayout() {
-        Debug.log(this, "TopsActivity::fillLayout");
 
-        updateBanner(mBannerView, BannerRequest.TOP);
-        updateData();
-    }
-    //---------------------------------------------------------------------------
     @Override
-    public void release() {
+    public void onDestroy() {
+        super.onDestroy();
         if (mGalleryGridManager != null) {
             mGalleryGridManager.release();
             mGalleryGridManager = null;
@@ -273,5 +255,18 @@ public class TopsFragment extends BaseFragment {
         mGallery = null;
         mGridAdapter = null;
     }
-    //---------------------------------------------------------------------------
+    
+    @Override
+    public void clearLayout() {
+        Debug.log(this, "TopsActivity::clearLayout");
+        mGallery.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void fillLayout() {
+        Debug.log(this, "TopsActivity::fillLayout");
+
+        updateBanner(mBannerView, BannerRequest.TOP);
+        updateData();
+    }
 }

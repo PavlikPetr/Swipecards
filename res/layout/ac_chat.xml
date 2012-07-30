@@ -11,7 +11,7 @@
         android:id="@+id/loChatHeader" 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
-          <include layout="@layout/bar_header" />  
+          <include layout="@layout/bar_chat_header" />  
     </RelativeLayout>
     
     

@@ -21,7 +21,7 @@
                 android:id="@+id/btnTFProfile"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:gravity="left|center_vertical"
                 android:text="@string/dashbrd_btn_profile"
                 android:textColor="#FFFFFF" />
@@ -50,7 +50,7 @@
                 android:id="@+id/btnTFDating"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:drawableLeft="@drawable/topface_dating"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
@@ -69,7 +69,7 @@
                 android:id="@+id/btnTFLikes"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:drawableLeft="@drawable/topface_likes"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
@@ -100,7 +100,7 @@
                 android:id="@+id/btnTFSympathy"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:drawableLeft="@drawable/topface_sympathy"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
@@ -131,7 +131,7 @@
                 android:id="@+id/btnTFChat"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:drawableLeft="@drawable/topface_chat"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
@@ -162,7 +162,7 @@
                 android:id="@+id/btnTFTops"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:drawableLeft="@drawable/topface_tops"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
@@ -181,7 +181,7 @@
                 android:id="@+id/btnTFSettings"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/topface_item_selector"
+                android:background="@drawable/navigation_menu_item_selector"
                 android:drawableLeft="@drawable/topface_settings"
                 android:drawablePadding="5dp"
                 android:gravity="left|center_vertical"
@@ -218,7 +218,7 @@
                 android:background="@android:color/transparent"
                 android:orientation="vertical" >
 
-                <include layout="@layout/bar_tab_header" />
+                <include layout="@layout/bar_chat_header" />
 
                 <TabWidget
                     android:id="@android:id/tabs"

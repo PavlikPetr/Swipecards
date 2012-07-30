@@ -32,7 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class MutualFragment extends BaseFragment {
-    // Data
+
     private boolean mNewUpdating;
 //    private TextView mFooterView;
     private PullToRefreshListView mListView;
@@ -44,7 +44,7 @@ public class MutualFragment extends BaseFragment {
     private boolean mIsUpdating = false;
     // Constants
     private static final int LIMIT = 40;
-    //---------------------------------------------------------------------------
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
@@ -148,7 +148,7 @@ public class MutualFragment extends BaseFragment {
         CacheProfile.unread_symphaties = 0;
         return view;
     }
-    //---------------------------------------------------------------------------
+
     private void updateData(boolean isPushUpdating) {
     	mIsUpdating = true;
         if (!isPushUpdating)
@@ -201,7 +201,7 @@ public class MutualFragment extends BaseFragment {
             }
         }).exec();
     }
-    //---------------------------------------------------------------------------
+
     private void updateDataHistory() {
     	mIsUpdating = true;
     	mNewUpdating = mDoubleButton.isRightButtonChecked();
@@ -261,25 +261,18 @@ public class MutualFragment extends BaseFragment {
             }
         }).exec();
     }
-    //---------------------------------------------------------------------------
-    // FrameActivity
-    //---------------------------------------------------------------------------
-    @Override
-    public void clearLayout() {
-        Debug.log(this, "SympathyActivity::clearLayout");
-        mListView.setVisibility(View.INVISIBLE);
-    }
-    //---------------------------------------------------------------------------
-    @Override
-    public void fillLayout() {
-        Debug.log(this, "SympathyActivity::fillLayout");
 
-        updateBanner(mBannerView, BannerRequest.SYMPATHY);
-        updateData(false);
+    private void removeLoaderListItem() {
+    	if (Data.sympathyList.size() > 0 ) {
+	    	if (Data.sympathyList.getLast().isLoader() || Data.sympathyList.getLast().isLoaderRetry()) {
+	    		Data.sympathyList.remove(Data.sympathyList.size() - 1);
+	    	}
+    	}
     }
-    //---------------------------------------------------------------------------
+    
     @Override
-    public void release() {
+    public void onDestroy() {
+        super.onDestroy();
         mListView = null;
 
         if (mListAdapter != null)
@@ -291,13 +284,18 @@ public class MutualFragment extends BaseFragment {
             mAvatarManager = null;
         }
     }
-    //---------------------------------------------------------------------------
-    private void removeLoaderListItem() {
-    	if (Data.sympathyList.size() > 0 ) {
-	    	if (Data.sympathyList.getLast().isLoader() || Data.sympathyList.getLast().isLoaderRetry()) {
-	    		Data.sympathyList.remove(Data.sympathyList.size() - 1);
-	    	}
-    	}
+
+    @Override
+    public void clearLayout() {
+        Debug.log(this, "SympathyActivity::clearLayout");
+        mListView.setVisibility(View.INVISIBLE);
     }
-    //---------------------------------------------------------------------------
+
+    @Override
+    public void fillLayout() {
+        Debug.log(this, "SympathyActivity::fillLayout");
+
+        updateBanner(mBannerView, BannerRequest.SYMPATHY);
+        updateData(false);
+    }
 }

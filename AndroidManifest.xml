@@ -28,7 +28,7 @@
         <uses-library android:name="com.google.android.maps" />
         
         <!-- main Activity -->
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.AuthActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -36,7 +36,6 @@
         </activity>
 
         <!-- activity -->
-        <activity android:name=".ui.AuthActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.WebAuthActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.NavigationActivity" android:screenOrientation="portrait" />        
         <activity android:name=".ui.CitySearchActivity" android:screenOrientation="portrait" />

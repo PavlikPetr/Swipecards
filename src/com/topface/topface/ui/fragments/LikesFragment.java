@@ -43,9 +43,8 @@ public class LikesFragment extends BaseFragment {
 	private ImageView mBannerView;
 	private boolean mIsUpdating = false;
 	// Constants
-	private static final int LIMIT = 44;
+	private static final int LIMIT = 40;
 
-	// ---------------------------------------------------------------------------
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
 	    super.onCreateView(inflater, container, saved);
@@ -145,7 +144,6 @@ public class LikesFragment extends BaseFragment {
 		return view;
 	}
 
-	// ---------------------------------------------------------------------------
 	private void updateData(boolean isPushUpdating) {
 		mIsUpdating = true;
 		if (!isPushUpdating)
@@ -205,7 +203,6 @@ public class LikesFragment extends BaseFragment {
 		}).exec();
 	}
 
-	// ---------------------------------------------------------------------------
 	private void updateDataHistory() {
 		mIsUpdating = true;
 		mNewUpdating = mDoubleButton.isRightButtonChecked();
@@ -277,28 +274,19 @@ public class LikesFragment extends BaseFragment {
 			}
 		}).exec();
 	}
+	
+    private void removeLoaderListItem() {
+        if (Data.likesList.size() > 0) {
+            if (Data.likesList.getLast().isLoader()
+                    || Data.likesList.getLast().isLoaderRetry()) {
+                Data.likesList.remove(Data.likesList.size() - 1);
+            }
+        }
+    }
 
-	// ---------------------------------------------------------------------------
-	// FrameActivity
-	// ---------------------------------------------------------------------------
-	@Override
-	public void clearLayout() {
-		Debug.log(this, "LikesActivity::clearLayout");
-		mListView.setVisibility(View.INVISIBLE);
-	}
-
-	// ---------------------------------------------------------------------------
-	@Override
-	public void fillLayout() {
-		Debug.log(this, "LikesActivity::fillLayout");
-
-		updateBanner(mBannerView, BannerRequest.LIKE);
-		updateData(false);
-	}
-
-	// ---------------------------------------------------------------------------
-	@Override
-	public void release() {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 		mListView = null;
 
 		if (mListAdapter != null)
@@ -309,15 +297,19 @@ public class LikesFragment extends BaseFragment {
 			mAvatarManager.release();
 		mAvatarManager = null;
 	}
+	
+    @Override
+    public void clearLayout() {
+        Debug.log(this, "LikesActivity::clearLayout");
+        mListView.setVisibility(View.INVISIBLE);
+    }
 
-	// ---------------------------------------------------------------------------
-	private void removeLoaderListItem() {
-		if (Data.likesList.size() > 0) {
-			if (Data.likesList.getLast().isLoader()
-					|| Data.likesList.getLast().isLoaderRetry()) {
-				Data.likesList.remove(Data.likesList.size() - 1);
-			}
-		}
-	}
-	// ---------------------------------------------------------------------------
+
+    @Override
+    public void fillLayout() {
+        Debug.log(this, "LikesActivity::fillLayout");
+
+        updateBanner(mBannerView, BannerRequest.LIKE);
+        updateData(false);
+    }
 }

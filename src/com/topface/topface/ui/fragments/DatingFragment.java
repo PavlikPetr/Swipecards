@@ -17,7 +17,6 @@ import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.FilterActivity;
 import com.topface.topface.ui.adapters.DatingAlbumAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DatingAlbum;
@@ -26,7 +25,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Newbie;
 import com.topface.topface.utils.Utils;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -35,8 +33,6 @@ import android.database.DataSetObserver;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -54,7 +50,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker {
-    // Data
     private boolean mIsHide;
     private int mCurrentUserPos;
     private int mCurrentPhotoPrevPos;
@@ -82,12 +77,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private ImageView mNewbieView;
     private AlphaAnimation mAlphaAnimation;
     private SharedPreferences mPreferences;
-    //---------------------------------------------------------------------------
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.ac_dating, null);
-        
 
         // Data
         mUserSearchList = new LinkedList<Search>();
@@ -194,17 +188,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mCommentText = (EditText)mCommentDialog.findViewById(R.id.etPopupComment);
         //mCommentDialog.getWindow().setBackgroundDrawableResource(R.drawable.popup_comment);
 
-        //updateData(false);
         return view;
     }
-    //---------------------------------------------------------------------------
+
 //    @Override
 //    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
 //        if (resultCode == Activity.RESULT_OK && requestCode == FilterActivity.INTENT_FILTER_ACTIVITY)
 //            updateData(false);
 //    }
-    //---------------------------------------------------------------------------
+
     private void updateData(final boolean isAddition) {
         if (!isAddition)
             mProgressBar.setVisibility(View.VISIBLE);
@@ -248,7 +241,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         }).exec();
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public void onClick(View view) {        
         switch (view.getId()) {
@@ -286,7 +279,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             default:
         }
     }
-    //---------------------------------------------------------------------------
+    
     // HEARTS
     public void onRate(final int rate) {
         Debug.log(this, "rate:" + rate);
@@ -350,7 +343,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         });
         mCommentDialog.show(); // окно сообщения
     }
-    //---------------------------------------------------------------------------
+
     private void sendRate(final int userid,final int rate) {
         Debug.log(this, "rate");
         RateRequest doRate = new RateRequest(getActivity());
@@ -383,7 +376,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         }).exec();
     }
-    //---------------------------------------------------------------------------
+
     private void showNextUser() {
         if (mCurrentUserPos < mUserSearchList.size() - 1) {
             ++mCurrentUserPos;
@@ -406,7 +399,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         showNewbie(); // NEWBIE
     }
-    //---------------------------------------------------------------------------
+
     private void skipUser() {
         SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
         skipRateRequest.userid = 0;
@@ -436,7 +429,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }).exec();
         showNextUser();
     }
-    //---------------------------------------------------------------------------
+
     private void showNewbie() {
         mNewbieView.setVisibility(View.INVISIBLE);
 
@@ -485,7 +478,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         editor.commit();
     }
-    //---------------------------------------------------------------------------  
+
     @Override
     public void lockControls() {
         mUserInfoName.setVisibility(View.INVISIBLE);
@@ -501,7 +494,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         //mDatingGroup.setFocusable(false);
         //mDatingGroup.setClickable(false);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public void unlockControls() {
         mUserInfoName.setVisibility(View.VISIBLE);
@@ -517,19 +510,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         //mDatingGroup.setFocusable(true);
         //mDatingGroup.setClickable(true);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public void showControls() {
         mDatingGroup.setVisibility(View.VISIBLE);
         mIsHide = false;
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public void hideControls() {
         mDatingGroup.setVisibility(View.INVISIBLE);
         mIsHide = true;
     }
-    //---------------------------------------------------------------------------
+    
     View.OnClickListener mOnNewbieClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -562,41 +555,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }).exec();
         }
     };
-    //---------------------------------------------------------------------------
-    // Menu
-    //---------------------------------------------------------------------------
-//    private static final int MENU_FILTER = 0;
-//    @Override
-//    public boolean onCreatePanelMenu(int featureId,Menu menu) {
-//        menu.add(0, MENU_FILTER, 0, getString(R.string.dating_menu_one));
-//        return super.onCreatePanelMenu(featureId, menu);
-//    }
-//    //---------------------------------------------------------------------------
-//    @Override
-//    public boolean onMenuItemSelected(int featureId,MenuItem item) {
-//        switch (item.getItemId()) {
-//            case MENU_FILTER:
-//                Intent intent = new Intent(this.getApplicationContext(), FilterActivity.class);
-//                startActivityForResult(intent, FilterActivity.INTENT_FILTER_ACTIVITY);
-//                break;
-//        }
-//        return super.onMenuItemSelected(featureId, item);
-//    }
-    //---------------------------------------------------------------------------
-    // FrameActivity
-    //---------------------------------------------------------------------------
+
+    @Override
+    public void fillLayout() {
+        updateData(false);
+        Debug.log(this, "DatingActivity::fillLayout");
+    }
+    
     @Override
     public void clearLayout() {
         Debug.log(this, "DatingActivity::clearLayout");
     }
-    //---------------------------------------------------------------------------
-    @Override
-    public void fillLayout() {
-        Debug.log(this, "DatingActivity::fillLayout");
-    }
-    //---------------------------------------------------------------------------
-    @Override
-    public void release() {
-    }
-    //---------------------------------------------------------------------------
+
 }

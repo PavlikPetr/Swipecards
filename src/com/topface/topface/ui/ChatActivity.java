@@ -107,7 +107,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         mAvatarWidth = getResources().getDrawable(R.drawable.chat_avatar_frame).getIntrinsicWidth();
         
         // Profile Button
-        View btnProfile = findViewById(R.id.btnChatProfile);
+        View btnProfile = findViewById(R.id.btnHeaderProfile);
         btnProfile.setVisibility(View.VISIBLE);
         btnProfile.setOnClickListener(this);
 
