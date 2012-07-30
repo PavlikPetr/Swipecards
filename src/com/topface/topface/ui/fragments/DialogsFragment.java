@@ -56,7 +56,7 @@ public class DialogsFragment extends BaseFragment {
         Data.dialogList = new LinkedList<Dialog>();
 
         // Progress
-        mLoadingLocker = (LockerView)findViewById(R.id.llvInboxLoading);
+        mLoadingLocker = (LockerView)view.findViewById(R.id.llvInboxLoading);
 
         // Banner
         mBannerView = (ImageView)view.findViewById(R.id.ivBanner);

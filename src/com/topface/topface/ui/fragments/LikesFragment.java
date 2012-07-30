@@ -57,7 +57,7 @@ public class LikesFragment extends BaseFragment {
 		Data.likesList = new LinkedList<FeedLike>();
 
 		// Progress
-		mLoadingLocker = (LockerView) findViewById(R.id.llvLikesLoading);
+		mLoadingLocker = (LockerView) view.findViewById(R.id.llvLikesLoading);
 		
 		// Banner
 		mBannerView = (ImageView) view.findViewById(R.id.ivBanner);

@@ -56,7 +56,7 @@ public class MutualFragment extends BaseFragment {
         Data.sympathyList = new LinkedList<FeedSympathy>();
 
         // Progress
-        mLoadingLocker = (LockerView)findViewById(R.id.llvSympathyLoading);
+        mLoadingLocker = (LockerView)view.findViewById(R.id.llvSympathyLoading);
 
         // Banner
         mBannerView = (ImageView)view.findViewById(R.id.ivBanner);

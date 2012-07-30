@@ -67,7 +67,7 @@ public class TopsFragment extends BaseFragment {
         Data.topsList = new LinkedList<Top>();
 
         // Progress
-        mLoadingLocker = (LockerView)findViewById(R.id.llvTopsLoading);
+        mLoadingLocker = (LockerView)view.findViewById(R.id.llvTopsLoading);
 
         // Banner
         mBannerView = (ImageView)view.findViewById(R.id.ivBanner);
