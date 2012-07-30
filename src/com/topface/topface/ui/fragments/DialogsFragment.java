@@ -33,7 +33,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class DialogsFragment extends BaseFragment {
-    // Data
     private boolean mNewUpdating;
 //    private TextView mFooterView;
     private PullToRefreshListView mListView;
@@ -45,12 +44,11 @@ public class DialogsFragment extends BaseFragment {
     private boolean mIsUpdating = false;
     // Constants
     private static final int LIMIT = 40;
-    //---------------------------------------------------------------------------
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.ac_dialog, null);
-        
 
         // Data
         Data.dialogList = new LinkedList<Dialog>();
@@ -150,6 +148,7 @@ public class DialogsFragment extends BaseFragment {
 
         mNewUpdating = CacheProfile.unread_messages > 0 ? true : false;
         CacheProfile.unread_messages = 0;
+        
         return view;
     }
     //---------------------------------------------------------------------------
@@ -259,43 +258,45 @@ public class DialogsFragment extends BaseFragment {
             }
         }).exec();
     }
-    //---------------------------------------------------------------------------
-    // FrameActivity
-    //---------------------------------------------------------------------------
+
     @Override
-    public void clearLayout() {
-        Debug.log(this, "DialogActivity::clearLayout");
-        mListView.setVisibility(View.INVISIBLE);
+    public void onDestroy() {
+         super.onDestroy();
+         
+         mListView = null;
+
+         if (mListAdapter != null)
+             mListAdapter.release();
+         mListAdapter = null;
+
+         if (mAvatarManager != null)
+             mAvatarManager.release();
+         mAvatarManager = null;
+
+         Data.userAvatar = null;
     }
-    //---------------------------------------------------------------------------
-    @Override
-    public void fillLayout() {
-        Debug.log(this, "DialogActivity::fillLayout");
+    
 
-        updateBanner(mBannerView, BannerRequest.INBOX);
-        updateData(false);
-    }
-    //---------------------------------------------------------------------------
-    @Override
-    public void release() {
-        mListView = null;
 
-        if (mListAdapter != null)
-            mListAdapter.release();
-        mListAdapter = null;
-
-        if (mAvatarManager != null)
-            mAvatarManager.release();
-        mAvatarManager = null;
-
-        Data.userAvatar = null;
-    }
-    //---------------------------------------------------------------------------
     private void removeLoaderListItem() {
     	if (Data.dialogList.size() > 0 ) {
 	    	if (Data.dialogList.getLast().isLoader() || Data.dialogList.getLast().isLoaderRetry()) {
 	    		Data.dialogList.remove(Data.dialogList.size() - 1);
 	    	}
     	}
+    }
+    
+    @Override
+    public void clearLayout() {
+        Debug.log(this, "DialogActivity::clearLayout");
+        mListView.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void fillLayout() {
+        Debug.log(this, "DialogActivity::fillLayout");
+
+        updateBanner(mBannerView, BannerRequest.INBOX);
+        updateData(false);
     }
 }

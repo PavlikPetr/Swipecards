@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments;
 
 import com.topface.topface.Data;
-import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Banner;
 import com.topface.topface.requests.ApiHandler;
@@ -18,16 +17,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 public abstract class BaseFragment extends Fragment {
 
     protected boolean mIsActive;
 
-    abstract public void clearLayout();
     abstract public void fillLayout();
-    abstract public void release();
+    abstract public void clearLayout();
 
     protected void updateUI(Runnable action) {
         //if (mIsActive)
