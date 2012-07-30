@@ -26,13 +26,20 @@
 	
 	</LinearLayout>
 	
-	  <ProgressBar
+	<com.topface.topface.ui.views.LockerView
+	    android:id="@+id/llvProfileLoading"
+		android:layout_width="fill_parent"	
+		android:layout_height="fill_parent"
+		style="@style/LoadingLocker"		
+	    />
+	
+	  <!-- ProgressBar
       android:id="@+id/prsProfileLoading"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
       android:visibility="visible"
-      style="@android:style/Widget.ProgressBar.Small" />
+      style="@android:style/Widget.ProgressBar.Small" /-->
 	
 </RelativeLayout>
 </merge>

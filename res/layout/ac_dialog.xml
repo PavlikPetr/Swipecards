@@ -33,12 +33,19 @@
   
   </LinearLayout>
   
-    <ProgressBar
+  <com.topface.topface.ui.views.LockerView
+	    android:id="@+id/llvInboxLoading"
+		android:layout_width="fill_parent"	
+		android:layout_height="fill_parent"
+		style="@style/LoadingLocker"		
+	    />
+  
+    <!-- ProgressBar
       android:id="@+id/prsInboxLoading"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
       android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" />
+      style="@android:style/Widget.ProgressBar.Small" /-->
   
 </RelativeLayout> 

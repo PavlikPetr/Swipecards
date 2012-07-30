@@ -14,6 +14,7 @@ import com.topface.topface.requests.TopRequest;
 import com.topface.topface.ui.adapters.TopsGridAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.ThumbView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -40,7 +41,7 @@ public class TopsFragment extends BaseFragment {
     private TopsGridAdapter mGridAdapter;
     private GalleryGridManager<Top> mGalleryGridManager;
     private Button mCityButton;
-    private ProgressBar mProgressBar;
+    private LockerView mLoadingLocker;
     private ActionData mActionData;
     private ImageView mBannerView;
     // Constats
@@ -64,7 +65,7 @@ public class TopsFragment extends BaseFragment {
         Data.topsList = new LinkedList<Top>();
 
         // Progress
-        mProgressBar = (ProgressBar)view.findViewById(R.id.prsTopsLoading);
+        mLoadingLocker = (LockerView)findViewById(R.id.llvTopsLoading);
 
         // Banner
         mBannerView = (ImageView)view.findViewById(R.id.ivBanner);
@@ -153,7 +154,7 @@ public class TopsFragment extends BaseFragment {
     }
 
     private void updateData() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        mLoadingLocker.setVisibility(View.VISIBLE);
         mGallery.setSelection(0);
 
         TopRequest topRequest = new TopRequest(getActivity());
@@ -167,7 +168,7 @@ public class TopsFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                         mGridAdapter.notifyDataSetChanged();
                         mGalleryGridManager.update();
                         mGallery.setVisibility(View.VISIBLE);
@@ -180,7 +181,7 @@ public class TopsFragment extends BaseFragment {
                     @Override
                     public void run() {
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                     }
                 });
             }
@@ -192,7 +193,7 @@ public class TopsFragment extends BaseFragment {
             showCitiesDialog();
             return;
         }
-        mProgressBar.setVisibility(View.VISIBLE);
+        mLoadingLocker.setVisibility(View.VISIBLE);        
         CitiesRequest citiesRequest = new CitiesRequest(getActivity());
         citiesRequest.type = "top";
         citiesRequest.callback(new ApiHandler() {
@@ -202,7 +203,7 @@ public class TopsFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                         showCitiesDialog();
                     }
                 });
@@ -212,8 +213,8 @@ public class TopsFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
+					mLoadingLocker.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mProgressBar.setVisibility(View.GONE);
                     }
                 });
             }

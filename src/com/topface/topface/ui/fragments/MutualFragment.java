@@ -15,6 +15,7 @@ import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -39,7 +40,7 @@ public class MutualFragment extends BaseFragment {
     private SymphatyListAdapter mListAdapter;
     private AvatarManager<FeedSympathy> mAvatarManager;
     private DoubleBigButton mDoubleButton;
-    private ProgressBar mProgressBar;
+    private LockerView mLoadingLocker;
     private ImageView mBannerView;
     private boolean mIsUpdating = false;
     // Constants
@@ -55,7 +56,7 @@ public class MutualFragment extends BaseFragment {
         Data.sympathyList = new LinkedList<FeedSympathy>();
 
         // Progress
-        mProgressBar = (ProgressBar)view.findViewById(R.id.prsSymphatyLoading);
+        mLoadingLocker = (LockerView)findViewById(R.id.llvSympathyLoading);
 
         // Banner
         mBannerView = (ImageView)view.findViewById(R.id.ivBanner);
@@ -152,7 +153,7 @@ public class MutualFragment extends BaseFragment {
     private void updateData(boolean isPushUpdating) {
     	mIsUpdating = true;
         if (!isPushUpdating)
-            mProgressBar.setVisibility(View.VISIBLE);
+            mLoadingLocker.setVisibility(View.VISIBLE);
 
         mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
 
@@ -178,7 +179,7 @@ public class MutualFragment extends BaseFragment {
                      		}
                      	}
 
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListAdapter.notifyDataSetChanged();
                         mListView.setVisibility(View.VISIBLE);
@@ -192,7 +193,7 @@ public class MutualFragment extends BaseFragment {
                     @Override
                     public void run() {
                     	Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListView.setVisibility(View.VISIBLE);
                         mIsUpdating = false;
@@ -237,7 +238,7 @@ public class MutualFragment extends BaseFragment {
                         	}
                         }
                     	
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListAdapter.notifyDataSetChanged();
                         mIsUpdating = false;                    
@@ -249,8 +250,8 @@ public class MutualFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                    	mProgressBar.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();                        
+                    	mLoadingLocker.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mIsUpdating = false;
                     	removeLoaderListItem();
                         Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.RETRY));

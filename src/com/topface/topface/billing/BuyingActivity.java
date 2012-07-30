@@ -147,13 +147,13 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
                 mBillingService.requestPurchase("topface.coins.6", null); // topface.coins.6 // android.test.purchased
                 break;
             case R.id.btnBuyingMoney40:
-                mBillingService.requestPurchase("topface.coins.40", null); // topface.coins.40
+                mBillingService.requestPurchase("topface.coins.40", null); // topface.coins.40 // android.test.canceled
                 break;
             case R.id.btnBuyingMoney100:
-                mBillingService.requestPurchase("topface.coins.100", null); // topface.coins.100
+                mBillingService.requestPurchase("topface.coins.100", null); // topface.coins.100 //android.test.refunded
                 break;
             case R.id.btnBuyingPower:
-                mBillingService.requestPurchase("topface.energy.10000", null); // topface.energy.10000
+                mBillingService.requestPurchase("topface.energy.10000", null); // topface.energy.10000 //android.test.item_unavailable
                 break;
         }
     }

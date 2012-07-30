@@ -15,6 +15,7 @@ import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.views.DoubleBigButton;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -38,7 +39,7 @@ public class DialogsFragment extends BaseFragment {
     private DialogListAdapter mListAdapter;
     private AvatarManager<Dialog> mAvatarManager;
     private DoubleBigButton mDoubleButton;
-    private ProgressBar mProgressBar;
+    private LockerView mLoadingLocker;
     private ImageView mBannerView;
     private boolean mIsUpdating = false;
     // Constants
@@ -53,7 +54,7 @@ public class DialogsFragment extends BaseFragment {
         Data.dialogList = new LinkedList<Dialog>();
 
         // Progress
-        mProgressBar = (ProgressBar)view.findViewById(R.id.prsInboxLoading);
+        mLoadingLocker = (LockerView)findViewById(R.id.llvInboxLoading);
 
         // Banner
         mBannerView = (ImageView)view.findViewById(R.id.ivBanner);
@@ -154,7 +155,7 @@ public class DialogsFragment extends BaseFragment {
     private void updateData(boolean isPushUpdating) {
     	mIsUpdating = true;
         if (!isPushUpdating)
-            mProgressBar.setVisibility(View.VISIBLE);
+            mLoadingLocker.setVisibility(View.VISIBLE);
 
         mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
 
@@ -181,7 +182,7 @@ public class DialogsFragment extends BaseFragment {
                      	}
                      	
                     	
-                    	mProgressBar.setVisibility(View.GONE);
+                    	mLoadingLocker.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListAdapter.notifyDataSetChanged();
                         mListView.setVisibility(View.VISIBLE);
@@ -195,7 +196,7 @@ public class DialogsFragment extends BaseFragment {
                     @Override
                     public void run() {
                     	Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListView.setVisibility(View.VISIBLE);
                         mIsUpdating = false;
@@ -233,7 +234,7 @@ public class DialogsFragment extends BaseFragment {
                             	Data.dialogList.add(new Dialog(IListLoader.ItemType.LOADER));
                         }
                     	
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListAdapter.notifyDataSetChanged();
                         mIsUpdating = false;
@@ -245,7 +246,7 @@ public class DialogsFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                    	mProgressBar.setVisibility(View.GONE);
+                    	mLoadingLocker.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();                        
                         mIsUpdating = false;
                     	removeLoaderListItem();

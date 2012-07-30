@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    
-    <style name="ShadowItemFont" >
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:test="http://schemas.android.com/apk/res/com.topface.topface.ui.views.LockerView">
+
+    <style name="ShadowItemFont">
         <item name="android:shadowColor">#222222</item>
         <item name="android:shadowRadius">1</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">-2</item>
     </style>
-    
-    <style name="ShadowButtonFont" >
+
+    <style name="ShadowButtonFont">
         <item name="android:shadowColor">#222222</item>
         <item name="android:shadowRadius">1</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">-2</item>
     </style>
-    
+
+    <style name="LoadingLocker">
+        <item name="android:text">@string/general_dialog_loading</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:background">#55000000</item>
+    </style>
+
 </resources>
