@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.topface.topface"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/im_list_bkgrd" >
@@ -32,13 +33,20 @@
         android:visibility="visible" />
 	  
 	</LinearLayout>
+		
+	<com.topface.topface.ui.views.LockerView
+	    android:id="@+id/llvLikesLoading"
+		android:layout_width="fill_parent"	
+		android:layout_height="fill_parent"
+		style="@style/LoadingLocker"		
+	    />
 	
-	  <ProgressBar
+	  <!-- ProgressBar
       android:id="@+id/prsLikesLoading"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
       android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" />
+      style="@android:style/Widget.ProgressBar.Small" /-->
 	
 </RelativeLayout>

@@ -16,6 +16,30 @@
             <flag name="dialog"  value="0x0" />
             <flag name="chat"    value="0x1" />
         </attr>
+    </declare-styleable>    
+    
+    <declare-styleable name="LockView">
+        <attr name="android:gravity"/>        
+        <attr name="android:text"/>
+        <attr name="android:textColor"/>
+        <attr name="android:textSize"/>        
+        <attr name="android:shadowColor"/>
+        <attr name="android:shadowRadius"/>
+        <attr name="android:shadowDx"/>
+        <attr name="android:shadowDy"/>        
+        <attr name="android:drawableLeft"/>
+        <attr name="android:drawableTop"/>
+        <attr name="android:drawableRight"/>
+        <attr name="android:drawableBottom"/>
+        <attr name="android:drawablePadding"/>
+        <attr name="android:indeterminateDrawable"/>        
+        <attr name="messageGravity" format="integer"/>
+        <attr name="messageBackground" format="reference|color"/>   
+        <attr name="messagePadding" format="dimension"/>
+        <attr name="messagePaddingLeft" format="dimension"/>
+        <attr name="messagePaddingTop" format="dimension"/>
+        <attr name="messagePaddingRight" format="dimension"/>
+        <attr name="messagePaddingBottom" format="dimension"/>
     </declare-styleable>
 
 </resources>

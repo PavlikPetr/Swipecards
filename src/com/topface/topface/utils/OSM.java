@@ -51,7 +51,7 @@ public class OSM {
 			
 			str = details.getString("state");
 			if (str.length() > 0) {
-				resultSB.append(",\n").append(str);
+				resultSB.append(", ").append(str);
 			}
 			
 			str = details.getString("country");

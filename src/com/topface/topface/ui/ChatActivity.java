@@ -17,6 +17,7 @@ import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -59,7 +60,9 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     private LinkedList<History> mHistoryList;
     private EditText mEditBox;
     private TextView mHeaderTitle;
-    private ProgressBar mProgressBar;
+//    private ProgressBar mProgressBar;
+    private LockerView mLoadinLocker;
+    
     private MessageRequest messageRequest;
     private HistoryRequest historyRequest;
     private SwapControl mSwapControl;
@@ -97,7 +100,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         mHeaderTitle = ((TextView)findViewById(R.id.tvHeaderTitle));
 
         // Progress
-        mProgressBar = (ProgressBar)findViewById(R.id.prsChatLoading);
+        mLoadinLocker = (LockerView)findViewById(R.id.llvChatLoading);
 
         // Params
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
@@ -154,7 +157,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     }
     //---------------------------------------------------------------------------
     private void update() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        mLoadinLocker.setVisibility(View.VISIBLE);
         historyRequest = new HistoryRequest(getApplicationContext());
         historyRequest.userid = mUserId;
         historyRequest.limit = LIMIT;
@@ -167,7 +170,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                 post(new Runnable() {
                     @Override
                     public void run() {
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadinLocker.setVisibility(View.GONE);
                         mAdapter.notifyDataSetChanged();
                     }
                 });
@@ -178,7 +181,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                     @Override
                     public void run() {
                         Toast.makeText(ChatActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadinLocker.setVisibility(View.GONE);
                     }
                 });
             }
@@ -249,7 +252,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                 if (text == null || text.length() == 0)
                     return false;
 
-                mProgressBar.setVisibility(View.VISIBLE);
+                mLoadinLocker.setVisibility(View.VISIBLE);
 
                 messageRequest = new MessageRequest(ChatActivity.this.getApplicationContext());
                 messageRequest.message = mEditBox.getText().toString();
@@ -272,7 +275,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	                                mAdapter.addSentMessage(history);
 	                                mAdapter.notifyDataSetChanged();
 	                                mEditBox.getText().clear();
-	                                mProgressBar.setVisibility(View.GONE);
+	                                mLoadinLocker.setVisibility(View.GONE);
 	                                
 	                                InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 	                                imm.hideSoftInputFromWindow(mEditBox.getWindowToken(), 0);
@@ -288,7 +291,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                             @Override
                             public void run() {
                                 Toast.makeText(ChatActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                                mProgressBar.setVisibility(View.GONE);
+                                mLoadinLocker.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -304,7 +307,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
         	if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-	            mProgressBar.setVisibility(View.VISIBLE);
+	            mLoadinLocker.setVisibility(View.VISIBLE);
 	            Bundle extras = data.getExtras();
 	            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);            
 	            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
@@ -335,7 +338,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	                            history.link = url;
 	                            mAdapter.addSentMessage(history);
 	                            mAdapter.notifyDataSetChanged();
-	                            mProgressBar.setVisibility(View.GONE);
+	                            mLoadinLocker.setVisibility(View.GONE);
 	                        }
 	                    });
 	                }
@@ -361,7 +364,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         		coordRequest.userid = mUserId;
         		coordRequest.latitude = latitude;
         		coordRequest.longitude = longitude;
-        		mProgressBar.setVisibility(View.VISIBLE);
+        		mLoadinLocker.setVisibility(View.VISIBLE);
         		coordRequest.callback(new ApiHandler() {
         			
         			@Override
@@ -370,7 +373,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         				runOnUiThread(new Runnable() {                        	
                             @Override
                             public void run() {
-                            	mProgressBar.setVisibility(View.GONE);
+                            	mLoadinLocker.setVisibility(View.GONE);
                             	if (confirm.completed) {
                             		History history = new History();
         					        history.type = History.LOCATION;

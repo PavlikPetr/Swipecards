@@ -11,6 +11,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.GiftGalleryManager;
 import com.topface.topface.utils.PixelsUtils;
 
@@ -48,7 +49,8 @@ public class GiftsActivity extends Activity {
 	
 	private LinkedList<GiftsAdapter> mGridAdapters;
 	private LinkedList<GiftGalleryManager<Gift>> mGalleryManagers;
-	private ProgressBar mProgressBar;
+	private LockerView mLoadingLocker;
+	
 	private TabHost mTabHost;
 	@SuppressLint("UseSparseArrays")
 	private HashMap<Integer, GridView> mGridViews = new HashMap<Integer, GridView>();
@@ -69,7 +71,7 @@ public class GiftsActivity extends Activity {
 		mTitle = (TextView) findViewById(R.id.tvHeaderTitle);
 		mTitle.setText(getResources().getText(R.string.gifts_title));
 		
-		mProgressBar = (ProgressBar) this.findViewById(R.id.prsGiftsLoading);
+		mLoadingLocker = (LockerView) this.findViewById(R.id.llvGiftsLoading);
 
 		mGridAdapters = new LinkedList<GiftsAdapter>();
 		mGalleryManagers = new LinkedList<GiftGalleryManager<Gift>>();
@@ -95,7 +97,7 @@ public class GiftsActivity extends Activity {
 
 		mBtnLeft.setChecked(true);
 		if (Data.giftsList != null && Data.giftsList.size() > 0) {
-			mProgressBar.setVisibility(View.VISIBLE);
+			mLoadingLocker.setVisibility(View.VISIBLE);
 			mGiftsCollection.add(Data.giftsList);
 			initControls();
 		} else {
@@ -104,7 +106,7 @@ public class GiftsActivity extends Activity {
 	}
 
 	private void update() {
-		mProgressBar.setVisibility(View.VISIBLE);		
+		mLoadingLocker.setVisibility(View.VISIBLE);		
 		giftRequest = new GiftsRequest(getApplicationContext());
 		giftRequest.callback(new ApiHandler() {
 			@Override
@@ -125,7 +127,7 @@ public class GiftsActivity extends Activity {
 								GiftsActivity.this
 										.getString(R.string.general_data_error),
 								Toast.LENGTH_SHORT).show();
-						mProgressBar.setVisibility(View.GONE);
+						mLoadingLocker.setVisibility(View.GONE);
 					}
 				});
 			}
@@ -192,7 +194,7 @@ public class GiftsActivity extends Activity {
 							.toString(Gift.PRESENT));
 				;
 
-				mProgressBar.setVisibility(View.GONE);
+				mLoadingLocker.setVisibility(View.GONE);
 				for (GiftsAdapter adapter : mGridAdapters)
 					adapter.notifyDataSetChanged();
 

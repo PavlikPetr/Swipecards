@@ -26,6 +26,7 @@ import com.topface.topface.ui.profile.gallery.HorizontalListView;
 import com.topface.topface.ui.profile.gallery.PhotoEroGalleryAdapter;
 import com.topface.topface.ui.profile.gallery.PhotoGalleryAdapter;
 import com.topface.topface.ui.views.FrameImageView;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
@@ -72,7 +73,7 @@ public class ProfileActivity extends FrameActivity {
     private LinkedList<Album> mPhotoList;
     private LinkedList<Album> mEroList;
     private AlertDialog mAddPhotoDialog;
-    private ProgressBar mProgressBar;
+    private LockerView mLoadingLocker;
     private ScrollView mProfileGroupView;
     private ProgressDialog mProgressDialog;
     // Info
@@ -139,7 +140,7 @@ public class ProfileActivity extends FrameActivity {
         //mProfileButton.setOnClickListener(mOnClickListener);
 
         // Progress
-        mProgressBar = (ProgressBar)findViewById(R.id.prsProfileLoading);
+        mLoadingLocker = (LockerView)findViewById(R.id.llvProfileLoading);
         //mProfileGroupView = (ScrollView)findViewById(R.id.svProfileForm);
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage(getString(R.string.general_dialog_loading));
@@ -291,7 +292,7 @@ public class ProfileActivity extends FrameActivity {
                         public void run() {
                             setOwnerProfileInfo(Profile.parse(response));
                             updateOwnerAlbum(); // ХАК для обновления всех фотографий
-                            mProgressBar.setVisibility(View.GONE);
+                            mLoadingLocker.setVisibility(View.GONE);
                             //mProfileGroupView.setVisibility(View.VISIBLE);
                         }
                     });
@@ -302,7 +303,7 @@ public class ProfileActivity extends FrameActivity {
                         @Override
                         public void run() {
                             Toast.makeText(ProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                            mProgressBar.setVisibility(View.GONE);
+                            mLoadingLocker.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -317,7 +318,7 @@ public class ProfileActivity extends FrameActivity {
                         @Override
                         public void run() {
                             setUserProfile(User.parse(mUserId, response));
-                            mProgressBar.setVisibility(View.GONE);
+                            mLoadingLocker.setVisibility(View.GONE);
                             //mProfileGroupView.setVisibility(View.VISIBLE);
                         }
                     });
@@ -328,7 +329,7 @@ public class ProfileActivity extends FrameActivity {
                         @Override
                         public void run() {
                             Toast.makeText(ProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                            mProgressBar.setVisibility(View.GONE);
+                            mLoadingLocker.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -477,7 +478,7 @@ public class ProfileActivity extends FrameActivity {
                     @Override
                     public void run() {
                         Toast.makeText(ProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                     }
                 });
             }
@@ -636,7 +637,7 @@ public class ProfileActivity extends FrameActivity {
                     @Override
                     public void run() {
                         Toast.makeText(ProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mProgressBar.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                     }
                 });
             }
@@ -838,7 +839,7 @@ public class ProfileActivity extends FrameActivity {
                                 	} else {
                                 		Toast.makeText(ProfileActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
                                 	}
-                                    mProgressBar.setVisibility(View.GONE);
+                                    mLoadingLocker.setVisibility(View.GONE);
                                 }
                             });
                         }
@@ -848,7 +849,7 @@ public class ProfileActivity extends FrameActivity {
                                 @Override
                                 public void run() {
                                     Toast.makeText(ProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                                    mProgressBar.setVisibility(View.GONE);
+                                    mLoadingLocker.setVisibility(View.GONE);
                                 }
                             });
                         }

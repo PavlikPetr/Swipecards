@@ -80,7 +80,14 @@
     
     </com.topface.topface.ui.views.SwapControl>
     
-    <!-- progress -->
+    <com.topface.topface.ui.views.LockerView
+	    android:id="@+id/llvChatLoading"
+		android:layout_width="fill_parent"	
+		android:layout_height="fill_parent"
+		style="@style/LoadingLocker"		
+	    />
+    
+    <!-- progress 
     <ProgressBar
          android:id="@+id/prsChatLoading"
          android:layout_width="wrap_content"
@@ -88,6 +95,6 @@
          android:layout_centerInParent="true"
          android:visibility="gone"
          style="@android:style/Widget.ProgressBar.Small" />
-    
+    -->
     
 </RelativeLayout> 
