@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Scroller;
 
 public class FragmentSwitchController extends ViewGroup implements View.OnClickListener {
@@ -15,7 +17,9 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
     private int mAnimation;
     private Scroller mScroller;
     private FragmentSwitchListener mFragmentSwitchListener;
-    private FragmentMenu mFragmentMenu;
+    private FragmentMenu mFragmentMenu;    
+    
+    private boolean mScrolling = false;
     
     public void setFragmentMenu(FragmentMenu fragmentMenu) {
         mFragmentMenu = fragmentMenu;
@@ -29,11 +33,14 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
     
     public interface FragmentSwitchListener {
         public void endAnimation(int Animation);
-    }
+        public void onSwitchStart();
+    	public void onSwitchEnd();
+    }    
 
     public FragmentSwitchController(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        mScroller = new Scroller(context);
+        super(context, attrs);        
+        mScroller =  new Scroller(context, new AccelerateInterpolator(1.0f)); //new Scroller(context, new DecelerateInterpolator(1.0f));
+        
     }
 
     @Override
@@ -60,36 +67,41 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
     @Override
     public void computeScroll() {
         mScrollX = mScroller.getCurrX();
-        if (mScroller.computeScrollOffset()) {
-            scrollTo(mScrollX, 0);
-            postInvalidate();
-        } else if (mPrevX != mScrollX) {
-            mPrevX = mScrollX;
-            setScrollingCacheEnabled(false);
-            endAnimation();              
+        if (!mScroller.isFinished()) {
+	        if (mScroller.computeScrollOffset()) {
+	            scrollTo(mScrollX, 0);
+	            postInvalidate();
+	            return;
+	        }
         }
+        
+        setScrollingCacheEnabled(false);
+        endAnimation();     
+        
     }
 
     public void snapToScreen(int typeAnimation) {
         mAnimation = typeAnimation;
         setScrollingCacheEnabled(true);
+        mScrolling = true;      
+        mFragmentSwitchListener.onSwitchStart();
         switch (typeAnimation) {
-            case EXPAND:
-                mScroller.startScroll(mPrevX, 0, -mDX, 0, 400);
+            case EXPAND:                	            	
+                mScroller.startScroll(mPrevX, 0, -mDX, 0, 300);
                 break;
             case COLLAPSE:
-                mScroller.startScroll(mPrevX, 0, mDX, 0, 400);
+                mScroller.startScroll(mPrevX, 0, mDX, 0, 300);
                 break;
             case EXPAND_FULL:
-                mScroller.startScroll(mPrevX, 0, -(mFDX), 0, 150);
+                mScroller.startScroll(mPrevX, 0, -(mFDX), 0, 200);
                 break;
             case COLLAPSE_FULL:
-                mScroller.startScroll(mPrevX, 0, mWidth, 0, 500);
+                mScroller.startScroll(mPrevX, 0, mWidth, 0, 300);
                 break;
             default:
                 break;
         }
-        invalidate();        
+        invalidate();
     }
     
     public void setScrollingCacheEnabled(boolean enabled) {
@@ -99,11 +111,11 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
     }
 
     public void openMenu() {
-        snapToScreen(EXPAND);
+        snapToScreen(EXPAND);        
     }
     
     public void closeMenu() {
-        snapToScreen(COLLAPSE);
+        snapToScreen(COLLAPSE);        
     }
     
     public int getAnimationState() {
@@ -111,14 +123,28 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
     }
 
     public void endAnimation() {
-        if(mFragmentSwitchListener != null)
-            mFragmentSwitchListener.endAnimation(mAnimation);
+	    mScroller.abortAnimation();
+		int oldX = getScrollX();
+		int x = mScroller.getCurrX();
+		mPrevX = x;
+		if (oldX != x) {
+			scrollTo(x, 0);	
+		}
+		
+		if (mScrolling) {			
+			mScrolling = false;
+			if(mAnimation != EXPAND_FULL) {
+				mFragmentSwitchListener.onSwitchEnd();				
+			}
+			if(mFragmentSwitchListener != null)
+				mFragmentSwitchListener.endAnimation(mAnimation);			
+		}
     }
 
     public void setFragmentSwitchListener(FragmentSwitchListener fragmentSwitchListener) {
         mFragmentSwitchListener = fragmentSwitchListener;
-    }
-
+    }    
+    
     @Override
     public void onClick(View v) {
     }

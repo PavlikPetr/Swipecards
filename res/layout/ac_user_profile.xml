@@ -208,6 +208,7 @@
            android:id="@+id/llvProfileLoading"
            android:layout_width="fill_parent"  
            android:layout_height="fill_parent"
-           style="@style/LoadingLocker" />
+           style="@style/LoadingLocker"
+           android:visibility="gone" />
     
 </RelativeLayout>

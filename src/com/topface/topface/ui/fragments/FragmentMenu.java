@@ -146,6 +146,16 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         mRootLayout.setVisibility(visibility);        
     }
 
+    public void setClickable(boolean clickable) {
+    	mBtnProfile.setClickable(clickable);
+        mBtnDating.setClickable(clickable);
+        mBtnLikes.setClickable(clickable);
+        mBtnMutual.setClickable(clickable);
+        mBtnDialogs.setClickable(clickable);
+        mBtnTops.setClickable(clickable);
+        mBtnSettings.setClickable(clickable);
+    }
+    
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
