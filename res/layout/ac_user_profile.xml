@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/chat_list_bg" >
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical" >
+	    
+	    <!-- header bar -->
+	    <include layout="@layout/bar_header" />
+	
+	    <!-- static info -->
+	    <RelativeLayout
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" >
+	
+	        <!-- Avatar -->
+	        <RelativeLayout
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="20dp" >
+	            
+		        <ImageView
+		            android:id="@+id/ivUserAvatar"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="20dp"
+		            android:layout_marginRight="10dp" />
+		        
+		        <TextView
+		            android:id="@+id/ivUserName"
+		            android:layout_toRightOf="@id/ivUserAvatar"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginTop="10dp"
+		            android:textColor="#FFFFFF"
+		            android:text="" />
+		        
+		        <TextView
+		            android:id="@+id/ivUserCity"
+		            android:layout_below="@id/ivUserName"
+		            android:layout_toRightOf="@id/ivUserAvatar"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:textColor="#FFFFFF"
+		            android:text="" />
+		        
+	        </RelativeLayout>
+	        
+	        <!-- Rates -->
+	        <LinearLayout
+	            android:id="@+id/loUserRates" 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentRight="true"
+	            android:orientation="vertical" >
+	            
+	            
+	            <Button
+	                android:id="@+id/btnUserDelight" 
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:drawableTop="@drawable/user_delight_selector"
+	                android:background="@drawable/user_delight_bg"
+	                android:paddingTop="0dp"
+	                android:drawablePadding="-10dp"
+	                android:textColor="#FFFFFF"
+	                android:textSize="10sp"
+	                android:shadowColor="#666666"
+	                android:shadowRadius="1.2"
+	                android:shadowDx="1"
+	                android:shadowDy="1"
+	                android:text="@string/dashbrd_btn_love" />
+	            
+	            <Button
+	                android:id="@+id/btnUserMutual"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:drawableTop="@drawable/user_mutual_selector"
+	                android:background="@drawable/user_mutual_bg"
+	                android:paddingTop="5dp"
+	                android:drawablePadding="-15dp"
+	                android:textColor="#FFFFFF"
+	                android:textSize="10sp"
+	                android:shadowColor="#666666"
+	                android:shadowRadius="1.2"
+	                android:shadowDx="1"
+	                android:shadowDy="1"
+	                android:text="@string/dashbrd_btn_sympathy" />
+	            
+	            <Button
+	                android:id="@+id/btnUserChat"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:drawableTop="@drawable/user_chat_selector"
+	                android:background="@drawable/user_chat_bg"
+	                android:paddingTop="5dp"
+	                android:drawablePadding="-12dp"
+	                android:textColor="#FFFFFF"
+	                android:textSize="10sp"
+	                android:shadowColor="#666666"
+	                android:shadowRadius="1.2"
+	                android:shadowDx="1"
+	                android:shadowDy="1"
+	                android:text="@string/profile_btn_chat" />
+	            
+	        </LinearLayout>
+	        
+	        
+	        <com.topface.topface.ui.views.IndicatorView
+	            android:id="@+id/viewUserIndicator"
+	            android:layout_alignBottom="@id/loUserRates"
+                android:layout_width="wrap_content"  
+                android:layout_height="fill_parent" />
+	        
+
+	        <!-- Actions -->
+	        <RadioGroup
+	            android:layout_above="@id/viewUserIndicator"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal" >
+		        
+		        <RadioButton
+		            android:id="@+id/btnUserPhoto"
+		            style="@style/ShadowItemFont"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:drawableTop="@drawable/user_photo_selector"
+		            android:button="@android:color/transparent"
+		            android:background="@android:color/transparent"
+		            android:drawablePadding="-5sp"
+		            android:gravity="center"
+		            android:textSize="10sp"
+		            android:text="Photo" />
+		
+		        <RadioButton
+		            android:id="@+id/btnUserQuestionnaire"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:drawableTop="@drawable/user_questionnaire_selector"
+		            android:button="@android:color/transparent"
+		            android:background="@android:color/transparent"
+		            android:drawablePadding="-5sp"
+		            android:gravity="center"
+		            android:textSize="10sp"
+		            android:text="Questionnaire" />
+		
+		        <RadioButton
+		            android:id="@+id/btnUserGifts"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:drawableTop="@drawable/user_gifts_selector"
+		            android:button="@android:color/transparent"
+		            android:background="@android:color/transparent"
+		            android:drawablePadding="-5sp"
+		            android:gravity="center"
+		            android:textSize="10sp"
+		            android:text="Gifts" />
+		        
+	            <RadioButton
+	                android:id="@+id/btnUserActions"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:drawableTop="@drawable/user_actions_selector"
+	                android:button="@android:color/transparent"
+	                android:background="@android:color/transparent"
+	                android:drawablePadding="-5sp"
+	                android:gravity="center"
+	                android:textSize="10sp"
+	                android:text="Actions" />
+	            
+	      </RadioGroup>
+	        
+	    </RelativeLayout>
+	    
+	    
+	    
+	    <!-- dinamic info -->
+	    <RelativeLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent" >
+	    
+		    <!-- Gallery -->
+		    <RelativeLayout
+		        android:id="@+id/loUserGallery"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent" >
+		        
+		    </RelativeLayout>
+		    
+		    <!-- Questionnaire -->
+	        <RelativeLayout
+	            android:id="@+id/loUserQuestionnaire"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:visibility="invisible" >
+	            
+	        </RelativeLayout>
+	    
+	    </RelativeLayout>
+	    
+	</LinearLayout>
+	
+    <com.topface.topface.ui.views.LockerView
+           android:id="@+id/llvProfileLoading"
+           android:layout_width="fill_parent"  
+           android:layout_height="fill_parent"
+           style="@style/LoadingLocker" />
+    
+</RelativeLayout>

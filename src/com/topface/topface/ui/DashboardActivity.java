@@ -265,8 +265,8 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         } else
             mInboxNotify.setVisibility(View.INVISIBLE);
 
-        if (CacheProfile.unread_symphaties > 0) {
-            mSymphatyNotify.setText(" " + CacheProfile.unread_symphaties + " ");
+        if (CacheProfile.unread_mutual > 0) {
+            mSymphatyNotify.setText(" " + CacheProfile.unread_mutual + " ");
             mSymphatyNotify.setVisibility(View.VISIBLE);
         } else
             mSymphatyNotify.setVisibility(View.INVISIBLE);

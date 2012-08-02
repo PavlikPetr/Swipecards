@@ -8,6 +8,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedSympathyRequest;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.adapters.SymphatyListAdapter;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
@@ -29,7 +30,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class MutualFragment extends BaseFragment {
@@ -98,7 +98,7 @@ public class MutualFragment extends BaseFragment {
             		updateDataHistory();
             	} else {
 	                try {
-	                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+	                    Intent intent = new Intent(getActivity(), UserProfileActivity.class);
 	                    intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.sympathyList.get(position).uid);
 	                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, Data.sympathyList.get(position).first_name);
 	                    startActivityForResult(intent, 0);
@@ -145,8 +145,8 @@ public class MutualFragment extends BaseFragment {
         mListView.setOnScrollListener(mAvatarManager);
         mListView.setAdapter(mListAdapter);
 
-        mNewUpdating = CacheProfile.unread_symphaties > 0 ? true : false;
-        CacheProfile.unread_symphaties = 0;
+        mNewUpdating = CacheProfile.unread_mutual > 0 ? true : false;
+        CacheProfile.unread_mutual = 0;
         return view;
     }
 

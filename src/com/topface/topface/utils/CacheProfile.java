@@ -18,7 +18,7 @@ public class CacheProfile {
     public static int unread_rates; // количество непрочитанных оценок пользователя
     public static int unread_likes; // количество непрочитанных “понравилось” пользователя
     public static int unread_messages; // количество непрочитанных сообщений пользователя
-    public static int unread_symphaties; // количество непрочитанных симпатий
+    public static int unread_mutual; // количество непрочитанных симпатий
     public static int average_rate; // средняя оценка текущего пользователя
     // avatars
     public static String avatar_big; // аватарка пользователя большого размера
@@ -112,7 +112,7 @@ public class CacheProfile {
         unread_rates = profile.unread_rates;
         unread_likes = profile.unread_likes;
         unread_messages = profile.unread_messages;
-        unread_symphaties = profile.unread_symphaties;
+        unread_mutual = profile.unread_symphaties;
         average_rate = profile.average_rate;
     }
     //---------------------------------------------------------------------------
@@ -127,7 +127,7 @@ public class CacheProfile {
         profile.unread_rates = unread_rates;
         profile.unread_likes = unread_likes;
         profile.unread_messages = unread_messages;
-        profile.unread_symphaties = unread_symphaties;
+        profile.unread_symphaties = unread_mutual;
         profile.average_rate = average_rate;
         profile.avatar_big = avatar_big;
         profile.avatar_small = avatar_small;
@@ -170,7 +170,7 @@ public class CacheProfile {
         unread_rates = profile.unread_rates;
         unread_likes = profile.unread_likes;
         unread_messages = profile.unread_messages;
-        unread_symphaties = profile.unread_symphaties;
+        unread_mutual = profile.unread_symphaties;
         average_rate = profile.average_rate;
         avatar_big = profile.avatar_big;
         avatar_small = profile.avatar_small;

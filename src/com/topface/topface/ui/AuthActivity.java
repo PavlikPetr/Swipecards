@@ -79,7 +79,7 @@ public class AuthActivity extends Activity implements View.OnClickListener {
         Debug.log(this, "onActivityResult");
 
         if (requestCode == WebAuthActivity.INTENT_WEB_AUTH && resultCode == Activity.RESULT_OK) {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, AuthActivity.class)); // MainActivity
             finish();
         } else if (requestCode != WebAuthActivity.INTENT_WEB_AUTH && resultCode == Activity.RESULT_OK) {
             Data.facebook.authorizeCallback(requestCode, resultCode, data);

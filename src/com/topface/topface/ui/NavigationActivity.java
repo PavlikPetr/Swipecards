@@ -1,7 +1,6 @@
 package com.topface.topface.ui;
 
 import com.topface.topface.R;
-import com.topface.topface.ui.fragments.DialogsFragment;
 import com.topface.topface.ui.fragments.FragmentContainer;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.ui.fragments.FragmentMenu;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
-
 
 public class NavigationActivity extends FragmentActivity  {
     private int mFragmentId;
@@ -36,6 +34,7 @@ public class NavigationActivity extends FragmentActivity  {
         // Switch Controller
         mSwitchController = (FragmentSwitchController)findViewById(R.id.frameAnimation);
         mSwitchController.setFragmentSwitchListener(mFragmentSwitchListener);
+        mSwitchController.setFragmentMenu(mFragmentMenu);
         
         // last opened
         //mFragmentContainer.showFragment(R.id.fragment_dialogs);
@@ -88,8 +87,8 @@ public class NavigationActivity extends FragmentActivity  {
     @Override
     public void onBackPressed() {
         if(mSwitchController.getAnimationState() == FragmentSwitchController.CLOSED ||
-           mSwitchController.getAnimationState() == FragmentSwitchController.COLLAPSE_FULL) {
-            mFragmentMenu.setVisibility(View.VISIBLE);
+            mSwitchController.getAnimationState() == FragmentSwitchController.COLLAPSE_FULL) {
+            mFragmentMenu.refreshNotifications();
             mSwitchController.openMenu();
         } else {
             super.onBackPressed();
@@ -99,10 +98,10 @@ public class NavigationActivity extends FragmentActivity  {
     View.OnClickListener mOnHomeClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             if (mSwitchController.getAnimationState() == FragmentSwitchController.EXPAND) {
-              mSwitchController.closeMenu();
+                mSwitchController.closeMenu();
             } else {
-              mFragmentMenu.setVisibility(View.VISIBLE);
-              mSwitchController.openMenu();
+                mFragmentMenu.refreshNotifications();
+                mSwitchController.openMenu();
             }
         }
     };
@@ -127,11 +126,13 @@ public class NavigationActivity extends FragmentActivity  {
                 mSwitchController.snapToScreen(FragmentSwitchController.COLLAPSE_FULL);
                 mPrevFragmentId = mFragmentId;
             } else {
-                if(Animation == FragmentSwitchController.COLLAPSE_FULL)
-                    mFragmentMenu.setVisibility(View.INVISIBLE);
-                
-                if(Animation == FragmentSwitchController.COLLAPSE)
-                    mFragmentMenu.setVisibility(View.INVISIBLE);
+                if(Animation == FragmentSwitchController.COLLAPSE_FULL) {
+                    //mFragmentMenu.setVisibility(View.INVISIBLE);
+                    mFragmentContainer.update();
+                }
+                if(Animation == FragmentSwitchController.COLLAPSE) {
+                    ;//mFragmentMenu.setVisibility(View.INVISIBLE);
+                }
             }
         }
     } ;

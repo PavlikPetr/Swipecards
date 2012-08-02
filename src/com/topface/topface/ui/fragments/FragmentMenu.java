@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
+import com.topface.topface.utils.CacheProfile;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,16 +31,6 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         public void onMenuClick(int fragmentID);
     }
     
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//    }
-//
-//    @Override
-//    public void onCreate(Bundle saved) {
-//        super.onCreate(saved);
-//    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         if(mRootLayout != null)
@@ -68,14 +59,15 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         mBtnSettings = (Button)mRootLayout.findViewById(R.id.btnFragmentSettings);
         mBtnSettings.setOnClickListener(this);
         
-        mRootLayout.setVisibility(View.INVISIBLE);
+        //mRootLayout.setVisibility(View.INVISIBLE);
         
         mButtons = new Button[]{mBtnProfile, mBtnDating, mBtnLikes, mBtnMutual, mBtnDialogs, mBtnTops, mBtnSettings};
+        
         
         mTvNotifyLikes = (TextView)mRootLayout.findViewById(R.id.tvNotifyLikes);
         mTvNotifyMutual = (TextView)mRootLayout.findViewById(R.id.tvNotifyMutual);
         mTvNotifyDialogs = (TextView)mRootLayout.findViewById(R.id.tvNotifyDialogs);
-        
+
         return mRootLayout;
     }
     
@@ -127,6 +119,29 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         mFragmentMenuListener = onFragmentMenuListener;
     }
     
+    public void refreshNotifications() {
+        if (CacheProfile.unread_likes > 0) {
+            mTvNotifyLikes.setText(" " + CacheProfile.unread_likes + " ");
+            mTvNotifyLikes.setVisibility(View.VISIBLE);
+        } else {
+            mTvNotifyLikes.setVisibility(View.INVISIBLE);
+        }
+
+        if (CacheProfile.unread_mutual > 0) {
+            mTvNotifyMutual.setText(" " + CacheProfile.unread_mutual + " ");
+            mTvNotifyMutual.setVisibility(View.VISIBLE);
+        } else {
+            mTvNotifyMutual.setVisibility(View.INVISIBLE);
+        }
+        
+        if (CacheProfile.unread_messages > 0) {
+            mTvNotifyDialogs.setText(" " + CacheProfile.unread_messages + " ");
+            mTvNotifyDialogs.setVisibility(View.VISIBLE);
+        } else {
+            mTvNotifyDialogs.setVisibility(View.INVISIBLE);
+        }
+    }
+    
     public void setVisibility(int visibility) {
         mRootLayout.setVisibility(visibility);        
     }
@@ -135,35 +150,5 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//    }
-//    
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//    }
-//    
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//    }
-//
-//    @Override
-//    public void onDestroyView() {
-//         super.onDestroyView();
-//    }
-//
-//    @Override
-//    public void onSaveInstanceState(Bundle toSave) {
-//
-//    }
 
 }

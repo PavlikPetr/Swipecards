@@ -57,8 +57,10 @@
                 android:id="@+id/tvNotifyLikes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="110dp"
+                android:background="@drawable/im_informer"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="12dp"
@@ -85,15 +87,18 @@
                 android:id="@+id/tvNotifyMutual"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="110dp"
+                android:background="@drawable/im_informer"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="12dp"
                 android:visibility="invisible" />
+            
         </RelativeLayout>
 
-        <!-- Messages - Chat -->
+        <!-- Dialogs - Messages - Chat -->
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
@@ -112,8 +117,10 @@
                 android:id="@+id/tvNotifyDialogs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="110dp"
+                android:background="@drawable/im_informer"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="12dp"
@@ -135,6 +142,7 @@
                 android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_tops"
                 android:textColor="#FFFFFF" />
+            
         </RelativeLayout>
 
         <!-- Settings -->
@@ -153,4 +161,5 @@
                 android:textColor="#FFFFFF" />
             
         </RelativeLayout>
+        
 </LinearLayout>

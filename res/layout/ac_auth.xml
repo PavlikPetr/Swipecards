@@ -10,7 +10,7 @@
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
       android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" />
+      style="@android:style/Widget.ProgressBar.Large" />
     
     <LinearLayout
         android:id="@+id/ivAuthGroup"

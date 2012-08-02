@@ -71,9 +71,12 @@ public class FragmentContainer {
                 break;
         }
         mFragmentManager.beginTransaction().show(fragment).commit();
-        fragment.fillLayout();
-
         mCurrentFragmentId = fragmentId;
+    }
+    
+    public void update() {
+        BaseFragment fragment = (BaseFragment)mFragmentManager.findFragmentById(mCurrentFragmentId);
+        fragment.fillLayout();
     }
     
 }
