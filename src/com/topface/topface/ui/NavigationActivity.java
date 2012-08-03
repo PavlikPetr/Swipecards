@@ -16,6 +16,7 @@ public class NavigationActivity extends FragmentActivity  {
     private FragmentMenu mFragmentMenu;
     private FragmentContainer mFragmentContainer;       // занимается переключением фрагментов
     private FragmentSwitchController mSwitchController; // занимается анимацией слоя с фрагментами
+    private Button mHomeButton;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,8 @@ public class NavigationActivity extends FragmentActivity  {
         // last opened
         //mFragmentContainer.showFragment(R.id.fragment_dialogs);
         
-        ((Button)findViewById(R.id.btnHeaderHome)).setOnClickListener(mOnHomeClickListener);
+        mHomeButton = ((Button)findViewById(R.id.btnHeaderHome));
+        mHomeButton.setOnClickListener(mOnHomeClickListener);
     }
     
     @Override
@@ -135,6 +137,18 @@ public class NavigationActivity extends FragmentActivity  {
                 }
             }
         }
-    } ;
+        
+        @Override
+        public void onSwitchStart() {
+        	mFragmentMenu.setClickable(false);
+        	mHomeButton.setClickable(false);
+        };
+        
+        @Override
+        public void onSwitchEnd() {
+        	mFragmentMenu.setClickable(true);
+        	mHomeButton.setClickable(true);
+        };
+    };
 
 }
