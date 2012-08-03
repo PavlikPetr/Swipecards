@@ -1,13 +1,10 @@
 package com.topface.topface.utils;
 
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.Calendar;
 import android.graphics.*;
-import android.net.Uri;
 import android.text.ClipboardManager;
-import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -121,6 +118,24 @@ public class Utils {
         canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
+
+        return output;
+    }
+    //---------------------------------------------------------------------------
+    public static Bitmap getRoundedCornerBitmapByMask(Bitmap bitmap, Bitmap mask) {
+        int width  = mask.getWidth();
+        int height = mask.getHeight();
+
+        Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+        Bitmap clippedBitmap = clipAndScaleBitmap(bitmap, width, height);
+        
+        Canvas canvas = new Canvas(output);
+        
+        Paint paint = new Paint();
+        canvas.drawARGB(0, 0, 0, 0);
+        canvas.drawBitmap(mask, 0, 0, paint);
+        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+        canvas.drawBitmap(clippedBitmap, 0, 0, paint);
 
         return output;
     }

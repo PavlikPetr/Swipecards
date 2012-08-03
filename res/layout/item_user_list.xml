@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/item_list_selector" >
+    
+   	<ImageView
+	    android:id="@+id/ivState"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"	/>
+   	
+   	<TextView
+        android:id="@+id/tvHeader"
+        android:layout_toRightOf="@id/ivState"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true" />
+   	
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_toRightOf="@id/ivState"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    
+    <TextView
+        android:id="@+id/tvData"
+        android:layout_toRightOf="@id/ivState"
+        android:layout_below="@id/tvTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

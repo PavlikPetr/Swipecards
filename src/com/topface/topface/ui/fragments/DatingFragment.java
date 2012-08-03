@@ -24,6 +24,7 @@ import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Newbie;
+import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 import android.app.Dialog;
 import android.content.Context;
@@ -49,7 +50,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker {
+public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker, RateController.OnRateControllerListener {
     private boolean mIsHide;
     private int mCurrentUserPos;
     private int mCurrentPhotoPrevPos;
@@ -68,20 +69,20 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View mDatingGroup;
     private DatingAlbum mDatingAlbum;
     private DatingAlbumAdapter mDatingAlbumAdapter;
-    private Dialog mCommentDialog;
-    private EditText mCommentText;
     private LinkedList<Search> mUserSearchList;
-    private InputMethodManager mInputManager;
     private ProgressBar mProgressBar;
     private Newbie mNewbie;
     private ImageView mNewbieView;
     private AlphaAnimation mAlphaAnimation;
     private SharedPreferences mPreferences;
+    private RateController mRateController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.ac_dating, null);
+        
+        mRateController = new RateController(getActivity());
 
         // Data
         mUserSearchList = new LinkedList<Search>();
@@ -132,9 +133,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Counter
         mCounter = ((TextView)view.findViewById(R.id.tvDatingCounter));
 
-        // Keyboard
-        mInputManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-
         // Progress
         mProgressBar = (ProgressBar)view.findViewById(R.id.prsDatingLoading);
 
@@ -180,23 +178,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         });
 
-        // Comment window
-        mCommentDialog = new Dialog(getActivity());
-        mCommentDialog.setTitle(R.string.chat_comment);
-        mCommentDialog.setContentView(R.layout.popup_comment); //,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        mCommentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        mCommentText = (EditText)mCommentDialog.findViewById(R.id.etPopupComment);
-        //mCommentDialog.getWindow().setBackgroundDrawableResource(R.drawable.popup_comment);
-
         return view;
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == Activity.RESULT_OK && requestCode == FilterActivity.INTENT_FILTER_ACTIVITY)
-//            updateData(false);
-//    }
 
     private void updateData(final boolean isAddition) {
         if (!isAddition)
@@ -250,11 +233,21 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
                 break;
             case R.id.btnDatingLove: {
-                onRate(10);
+                if (mCurrentUserPos > mUserSearchList.size() - 1) {
+                    updateData(true);
+                    return;
+                } else {
+                  mRateController.onRate(mUserSearchList.get(mCurrentUserPos).uid, 10);
+                }
             }
                 break;
             case R.id.btnDatingSympathy: {
-                onRate(9);
+                if (mCurrentUserPos > mUserSearchList.size() - 1) {
+                    updateData(true);
+                    return;
+                } else {
+                  mRateController.onRate(mUserSearchList.get(mCurrentUserPos).uid, 9);
+                }
             }
                 break;
             case R.id.btnDatingSkip: {
@@ -280,103 +273,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
     
-    // HEARTS
-    public void onRate(final int rate) {
-        Debug.log(this, "rate:" + rate);
-        if (mCurrentUserPos > mUserSearchList.size() - 1) {
-            updateData(true);
-            return;
-        }
-        if (rate < 10) {
-            sendRate(mUserSearchList.get(mCurrentUserPos).uid, rate);
-            showNextUser();
-            return;
-        }
-        if (rate == 10 && CacheProfile.money <= 0) {
-            startActivity(new Intent(getActivity(), BuyingActivity.class));
-            return;
-        }
-        // кнопка на окне комментария оценки 10 и 9
-        ((Button)mCommentDialog.findViewById(R.id.btnPopupCommentSend)).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String comment = mCommentText.getText().toString();
-                if (comment.equals(""))
-                    return;
-
-                int uid = mUserSearchList.get(mCurrentUserPos).uid;
-
-                // отправка комментария к оценке
-                MessageRequest messageRequest = new MessageRequest(getActivity());
-                messageRequest.message = comment;
-                messageRequest.userid = uid;
-                messageRequest.callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-						final Confirmation confirm = Confirmation.parse(response);
-                    	updateUI(new Runnable() {
-							
-							@Override
-							public void run() {
-		                    	if (!confirm.completed) {
-		                    		Toast.makeText(getActivity(), getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
-		                    	}
-							}
-						});
-                    	
-                        //Toast.makeText(getApplicationContext(),getString(R.string.profile_msg_sent),Toast.LENGTH_SHORT).show();
-                    }
-                    @Override
-                    public void fail(int codeError,ApiResponse response) {
-                    }
-                }).exec();
-
-                // отправка оценки
-                sendRate(uid, rate);
-                mCommentDialog.cancel();
-                mCommentText.setText("");
-                // скрыть клавиатуру
-                mInputManager.hideSoftInputFromWindow(mCommentText.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
-                // подгрузка следующего
-                showNextUser();
-            }
-        });
-        mCommentDialog.show(); // окно сообщения
-    }
-
-    private void sendRate(final int userid,final int rate) {
-        Debug.log(this, "rate");
-        RateRequest doRate = new RateRequest(getActivity());
-        doRate.userid = userid;
-        doRate.rate = rate;
-        doRate.callback(new ApiHandler() {
-            @Override
-            public void success(ApiResponse response) {
-                Rate rate = Rate.parse(response);
-                CacheProfile.power = rate.power;
-                CacheProfile.money = rate.money;
-                CacheProfile.average_rate = rate.average;
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
-                        mResourcesPower.setText("" + CacheProfile.power + "%");
-                        mResourcesMoney.setText("" + CacheProfile.money);
-                    }
-                });
-            }
-            @Override
-            public void fail(int codeError,ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Toast.makeText(DatingActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }).exec();
-    }
-
     private void showNextUser() {
         if (mCurrentUserPos < mUserSearchList.size() - 1) {
             ++mCurrentUserPos;
@@ -441,7 +337,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mNewbie.free_energy != true && CacheProfile.isNewbie == true) {
             mNewbie.free_energy = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_FREE_ENERGY, true);
-            //mNewbieView.setImageResource(R.drawable.newbie_free_energy);
             mNewbieView.setBackgroundResource(R.drawable.newbie_free_energy);
             mNewbieView.setOnClickListener(mOnNewbieClickListener);
             mNewbieView.setVisibility(View.VISIBLE);
@@ -450,7 +345,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         } else if (mNewbie.rate_it != true) {
             mNewbie.rate_it = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_RATE_IT, true);
-            //mNewbieView.setImageResource(R.drawable.newbie_rate_it);
             mNewbieView.setBackgroundResource(R.drawable.newbie_rate_it);
             mNewbieView.setVisibility(View.VISIBLE);
             mNewbieView.startAnimation(mAlphaAnimation);
@@ -464,7 +358,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         } else if (mNewbie.buy_energy != true && CacheProfile.power <= 30) {
             mNewbie.buy_energy = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_BUY_ENERGY, true);
-            //mNewbieView.setImageResource(R.drawable.newbie_buy_energy);
             mNewbieView.setBackgroundResource(R.drawable.newbie_buy_energy);
             mNewbieView.setVisibility(View.VISIBLE);
             mNewbieView.startAnimation(mAlphaAnimation);
@@ -489,10 +382,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSkipBtn.setVisibility(View.INVISIBLE);
         mProfileBtn.setVisibility(View.INVISIBLE);
         mChatBtn.setVisibility(View.INVISIBLE);
-        //mRateControl.setBlock(false);
-        //mDatingGroup.setEnabled(false);
-        //mDatingGroup.setFocusable(false);
-        //mDatingGroup.setClickable(false);
     }
 
     @Override
@@ -505,10 +394,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSkipBtn.setVisibility(View.VISIBLE);
         mProfileBtn.setVisibility(View.VISIBLE);
         mChatBtn.setVisibility(View.VISIBLE);
-        //mRateControl.setBlock(true);
-        //mDatingGroup.setEnabled(true);
-        //mDatingGroup.setFocusable(true);
-        //mDatingGroup.setClickable(true);
     }
 
     @Override
@@ -565,6 +450,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void clearLayout() {
         Debug.log(this, "DatingActivity::clearLayout");
+    }
+
+    @Override
+    public void successRate() {
+        showNextUser();
     }
 
 }

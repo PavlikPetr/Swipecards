@@ -1,7 +1,7 @@
 package com.topface.topface.ui.views;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 import com.topface.topface.R;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,6 +14,7 @@ import android.view.View;
 public class IndicatorView extends View {
     private int mCurrentId;
     private LinkedHashMap<Integer, Integer> mMeasures;
+    private LinkedHashMap<Integer, Integer> mPoints;
     private Bitmap mIndicator;
     private Bitmap mDivider;
     private Paint mPaint;
@@ -32,10 +33,10 @@ public class IndicatorView extends View {
         mCurrentId = DEFAULT;
         mPaint = new Paint();
         mMeasures = new LinkedHashMap<Integer, Integer>(4);
+        mPoints = new LinkedHashMap<Integer, Integer>(4);
         mIndicator = BitmapFactory.decodeResource(getResources(), R.drawable.user_sign);
         mDivider = BitmapFactory.decodeResource(getResources(), R.drawable.user_divider);
-        
-        mDividerY =  mIndicator.getHeight() - mDivider.getHeight();
+        mDividerY = mIndicator.getHeight() - mDivider.getHeight();
     }
 
     @Override
@@ -46,26 +47,29 @@ public class IndicatorView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        
-        if (mCurrentId < 0) {
-            canvas.drawBitmap(mIndicator, mMeasures.get(mCurrentId), 0, mPaint);
-        }
+
         canvas.drawBitmap(mDivider, 0, mDividerY, mPaint);
+        if (mCurrentId > 0 && mPoints.size() > 0) {
+            int x = mPoints.get(mCurrentId);
+            canvas.drawBitmap(mIndicator, x, 0, mPaint);
+        }
+
     }
     
     public void setButtonMeasure(int id, int measure) {
+        mMeasures.put(id, measure);
+    }
+
+    public void reCompute() {
         int sum = 0;
-        
-        Object[] measures = mMeasures.values().toArray();
-               
-        if (measures.length > 0) {
-            for (Object width : measures) {
-                sum += (Integer)width;
+        mPoints.clear();
+        if (mMeasures.size() > 0) {
+            for (Entry<Integer, Integer> measure : mMeasures.entrySet()) {
+                int point = (measure.getValue()-mIndicator.getWidth())/2;
+                mPoints.put(measure.getKey(), sum+point);
+                sum += measure.getValue();
             }
         }
-        
-        int value = (measure - mIndicator.getWidth())/2;
-        mMeasures.put(id, sum + value); 
     }
     
     public void setIndicator(int id) {

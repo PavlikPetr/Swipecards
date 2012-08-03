@@ -12,7 +12,7 @@ import android.location.Address;
 import com.topface.topface.Static;
 import com.topface.topface.utils.http.Http;
 
-public class OSM {	
+public class Osm {	
 	
 	public static final boolean OSMSearchEnabled = false;
 	public static final boolean OSMReverseEnabled = true;
