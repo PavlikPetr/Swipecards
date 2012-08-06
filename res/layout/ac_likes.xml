@@ -1,53 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/com.topface.topface"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"    
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/im_list_bkgrd" >
-    
-	<LinearLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" 
-	    android:orientation="vertical" >
-	    
-	  <!-- header bar 
-	  <include layout="@layout/bar_header" /> -->
-	  
-	  <!-- button bar -->
-	  <include layout="@layout/bar_double_big_button" />
-	  
-	    <com.topface.topface.ui.p2r.PullToRefreshListView
-	      android:id="@+id/lvLikesList"
-	      android:layout_width="fill_parent" 
-	      android:layout_height="0dip"
-	      android:layout_weight="1"
-	      android:dividerHeight="0dp"
-	      android:fadeScrollbars="true"
-	      android:fadingEdge="none" 
-	      android:cacheColorHint="#00000000"/>
-	    
-	  <ImageView
-	      android:id="@+id/ivBanner"
-	      android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible" />
-	  
-	</LinearLayout>
-		
-	<com.topface.topface.ui.views.LockerView
-	    android:id="@+id/llvLikesLoading"
-		android:layout_width="fill_parent"	
-		android:layout_height="fill_parent"
-		style="@style/LoadingLocker"	
-		android:visibility="gone"	
-	    />
-	
-	  <!-- ProgressBar
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <!--
+      header bar 
+	  <include layout="@layout/bar_header" />
+        -->
+
+
+        <!-- button bar -->
+
+        <include layout="@layout/bar_double_big_button" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#000000" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+                
+            	<ImageView 
+            	    android:layout_width="wrap_content"
+            	    android:layout_height="wrap_content"
+            	    android:layout_gravity="center_horizontal"
+            	    android:src="@drawable/dashbrd_likes_pressed"/>
+            	
+	            <TextView
+	                android:id="@+id/tvBackgroundText"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"	                
+	                android:layout_gravity="center_horizontal"
+	                android:singleLine="true"	
+	                style="@style/BackgroundFont"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+
+                <com.topface.topface.ui.p2r.PullToRefreshListView
+                    android:id="@+id/lvLikesList"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dip"
+                    android:layout_weight="1"
+                    android:cacheColorHint="#00000000"
+                    android:dividerHeight="0dp"
+                    android:fadeScrollbars="true"
+                    android:fadingEdge="none" />
+
+                <ImageView
+                    android:id="@+id/ivBanner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <com.topface.topface.ui.views.LockerView
+        android:id="@+id/llvLikesLoading"
+        style="@style/LoadingLocker"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone" />
+
+    <!--
+      ProgressBar
       android:id="@+id/prsLikesLoading"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
       android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" /-->
-	
+      style="@android:style/Widget.ProgressBar.Small" /
+    -->
+
 </RelativeLayout>

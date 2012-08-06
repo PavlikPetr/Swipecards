@@ -5,6 +5,7 @@ import com.topface.topface.utils.Debug;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 
 public class Recycle {
     // Data
@@ -27,6 +28,9 @@ public class Recycle {
     public static Bitmap s_RateLow;
     public static Bitmap s_RateAveragePressed;
     public static Bitmap s_RateAverage;
+    
+    // Animations
+    public static AnimationDrawable s_Loader; 
     //---------------------------------------------------------------------------
     public static boolean init(Context context) {
         try {
@@ -40,6 +44,9 @@ public class Recycle {
             s_ProfilePhotoFrame = BitmapFactory.decodeResource(context.getResources(), R.drawable.profile_frame_photo);
             s_ProfileGalleryFrame = BitmapFactory.decodeResource(context.getResources(), R.drawable.profile_frame_gallery);
             s_ProfileEroInfo = BitmapFactory.decodeResource(context.getResources(), R.drawable.profile_ero_info);
+            
+            s_Loader = (AnimationDrawable) context.getResources().getDrawable(R.drawable.loader);               
+            
             //      s_DatingInformer = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_informer);
             //      s_RateHighPressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_high_pressed);
             //      s_RateHigh = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_high);

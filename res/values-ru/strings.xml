@@ -32,11 +32,13 @@
     <string name="likes_header_title">Я нравлюсь</string>
     <string name="likes_btn_dbl_left">Все</string>
     <string name="likes_btn_dbl_right">Непрочитанные</string>
+    <string name="likes_background_text">Нет лайков</string>
     
     <!-- Indox & Chat Activity -->
 	  <string name="inbox_header_title">Диалоги</string>
 	  <string name="inbox_btn_dbl_left">Все</string>
 	  <string name="inbox_btn_dbl_right">Непрочитанные</string>
+	  <string name="inbox_background_text">Входящих сообщений нет</string>
 	  <string name="chat_btn_send">Отправить</string>
 	  <string name="chat_comment">Написать сообщение</string>
 	  <string name="chat_gift_in">Вы получили подарок.</string>
@@ -61,6 +63,7 @@
     <string name="symphaty_header_title">Взаимно</string>
     <string name="symphaty_btn_dbl_left">Все</string>
     <string name="symphaty_btn_dbl_right">Непрочитанные</string>
+    <string name="symphaty_background_text">Симпатий нет</string>
     
     <!-- Tops Activity -->
     <string name="tops_header_title">Самые красивые</string>

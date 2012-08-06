@@ -4,18 +4,23 @@ import com.topface.topface.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.RadioGroup;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 public class DoubleBigButton extends LinearLayout implements CompoundButton.OnCheckedChangeListener {
     // Data
+	private RadioGroup mGroup;
     private RadioButton mLeftButton;
-    private RadioButton mRightButoon;
+    private RadioButton mRightButton;
+    private boolean mLeftClickableState;
+    private boolean mRightClickableState;
     // Constants
-    public static final int LEFT_BUTTON = 0;
-    public static final int RIGHT_BUTTON = 1;
+    public static int LEFT_BUTTON = 0;
+    public static int RIGHT_BUTTON = 1;
     //---------------------------------------------------------------------------
     public DoubleBigButton(Context context) {
         super(context, null);
@@ -28,8 +33,18 @@ public class DoubleBigButton extends LinearLayout implements CompoundButton.OnCh
 
         inflater.inflate(R.layout.btn_double_big, this, true);
 
-        mLeftButton = (RadioButton)findViewById(R.id.dblLeft);
-        mRightButoon = (RadioButton)findViewById(R.id.dblRight);
+        mGroup = (RadioGroup)findViewById(R.id.dblGroup);
+        mLeftButton = (RadioButton)mGroup.findViewById(R.id.dblLeft);
+        mRightButton = (RadioButton)mGroup.findViewById(R.id.dblRight);
+        for (int i = 0; i < mGroup.getChildCount(); i++) {
+        	if (mLeftButton == mGroup.getChildAt(i)) {
+        		LEFT_BUTTON = i;
+        	} else if (mRightButton == mGroup.getChildAt(i)) {
+        		RIGHT_BUTTON = i;
+        	}
+		}
+        mLeftClickableState = true;
+		mRightClickableState = true;
     }
     //---------------------------------------------------------------------------
     public void setLeftText(String text) {
@@ -37,18 +52,28 @@ public class DoubleBigButton extends LinearLayout implements CompoundButton.OnCh
     }
     //---------------------------------------------------------------------------
     public void setRightText(String text) {
-        mRightButoon.setText(text);
+        mRightButton.setText(text);
     }
     //---------------------------------------------------------------------------
     public void setChecked(int n) {
-        switch (n) {
-            case LEFT_BUTTON:
-                mLeftButton.setChecked(true);
-                break;
-            case RIGHT_BUTTON:
-                mRightButoon.setChecked(true);
-                break;
-        }
+    	if (n == LEFT_BUTTON) {
+    		mLeftButton.setChecked(true);    
+    		mLeftClickableState = false;
+    		mRightClickableState = true;
+    	} else if(n == RIGHT_BUTTON) {
+    		mRightButton.setChecked(true);
+    		mLeftClickableState = true;
+    		mRightClickableState = false;
+    	}
+    	
+//        switch (n) {
+//            case LEFT_BUTTON:
+//                mLeftButton.setChecked(true);      
+//                break;
+//            case RIGHT_BUTTON:
+//                mRightButton.setChecked(true);                
+//                break;
+//        }
     }
     //---------------------------------------------------------------------------
     public void setLeftListener(OnClickListener onClickListener) {
@@ -57,18 +82,20 @@ public class DoubleBigButton extends LinearLayout implements CompoundButton.OnCh
     }
     //---------------------------------------------------------------------------
     public void setRightListener(OnClickListener onClickListener) {
-        mRightButoon.setOnClickListener(onClickListener);
-        mRightButoon.setOnCheckedChangeListener((OnCheckedChangeListener)this);
+        mRightButton.setOnClickListener(onClickListener);
+        mRightButton.setOnCheckedChangeListener((OnCheckedChangeListener)this);
     }
     //---------------------------------------------------------------------------
     @Override
     public void onCheckedChanged(CompoundButton button,boolean value) {
         switch (button.getId()) {
             case R.id.dblLeft:
-                //mLeftButton.setChecked(true);
+            	mGroup.getChildAt(LEFT_BUTTON).setClickable(!value);            	        		
+        		mLeftClickableState = !value;        		
                 break;
-            case R.id.dblRight:
-                //mRightButoon.setChecked(true);
+            case R.id.dblRight:            	
+        		mGroup.getChildAt(RIGHT_BUTTON).setClickable(!value);
+        		mLeftClickableState =!value;        		
                 break;
             default:
                 break;
@@ -76,7 +103,16 @@ public class DoubleBigButton extends LinearLayout implements CompoundButton.OnCh
     }
     //---------------------------------------------------------------------------
     public boolean isRightButtonChecked() {
-        return mRightButoon.isChecked();
+        return mRightButton.isChecked();
     }
     //---------------------------------------------------------------------------
+    public void setEnabled(boolean clickable) {
+    	if (!clickable) {    		
+    		mGroup.getChildAt(LEFT_BUTTON).setClickable(clickable);
+    		mGroup.getChildAt(RIGHT_BUTTON).setClickable(clickable);
+    	} else {    		
+    		mGroup.getChildAt(LEFT_BUTTON).setClickable(mLeftClickableState);
+    		mGroup.getChildAt(RIGHT_BUTTON).setClickable(mRightClickableState);
+    	}
+    }
 }

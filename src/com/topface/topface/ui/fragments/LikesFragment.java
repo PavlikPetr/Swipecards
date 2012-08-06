@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments;
 import java.util.LinkedList;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.Recycle;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -21,6 +22,7 @@ import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -40,6 +43,7 @@ public class LikesFragment extends BaseFragment {
 	private AvatarManager<FeedLike> mAvatarManager;
 	private DoubleBigButton mDoubleButton;
 	private LockerView mLoadingLocker;
+	private TextView mBackgroundText;
 	private ImageView mBannerView;
 	private boolean mIsUpdating = false;
 	// Constants
@@ -49,14 +53,16 @@ public class LikesFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
 	    super.onCreateView(inflater, container, saved);
 	    
-    View view = inflater.inflate(R.layout.ac_likes, null);
-		
+	    View view = inflater.inflate(R.layout.ac_likes, null);
 		
 		// Data
 		Data.likesList = new LinkedList<FeedLike>();
 
 		// Progress
 		mLoadingLocker = (LockerView) view.findViewById(R.id.llvLikesLoading);
+		
+		// ListView background
+		mBackgroundText = (TextView) view.findViewById(R.id.tvBackgroundText);
 		
 		// Banner
 		mBannerView = (ImageView) view.findViewById(R.id.ivBanner);
@@ -144,10 +150,10 @@ public class LikesFragment extends BaseFragment {
 		return view;
 	}
 
-	private void updateData(boolean isPushUpdating) {
+	private void updateData(final boolean isPushUpdating) {
 		mIsUpdating = true;
 		if (!isPushUpdating)
-			mLoadingLocker.setVisibility(View.VISIBLE);
+			onUpdateStart(isPushUpdating);
 
 		mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON
 				: DoubleBigButton.LEFT_BUTTON);
@@ -176,7 +182,7 @@ public class LikesFragment extends BaseFragment {
 							}
 						}
 
-						mLoadingLocker.setVisibility(View.GONE);
+						onUpdateSuccess(isPushUpdating);
 						mListView.onRefreshComplete();
 						mListAdapter.notifyDataSetChanged();
 						mListView.setVisibility(View.VISIBLE);
@@ -193,7 +199,7 @@ public class LikesFragment extends BaseFragment {
 						Toast.makeText(getActivity(),
 								getString(R.string.general_data_error),
 								Toast.LENGTH_SHORT).show();
-						mLoadingLocker.setVisibility(View.GONE);
+						onUpdateFail(isPushUpdating);
 						mListView.onRefreshComplete();
 						mListView.setVisibility(View.VISIBLE);
 						mIsUpdating = false;
@@ -246,7 +252,7 @@ public class LikesFragment extends BaseFragment {
 							}
 						}
 
-						mLoadingLocker.setVisibility(View.GONE);
+						onUpdateSuccess(true);
 						mListView.onRefreshComplete();
 						mListAdapter.notifyDataSetChanged();
 						mIsUpdating = false;
@@ -259,7 +265,7 @@ public class LikesFragment extends BaseFragment {
 				updateUI(new Runnable() {
 					@Override
 					public void run() {
-						mLoadingLocker.setVisibility(View.GONE);
+						onUpdateFail(true);
 						Toast.makeText(getActivity()  ,
 								getString(R.string.general_data_error),
 								Toast.LENGTH_SHORT).show();
@@ -312,4 +318,60 @@ public class LikesFragment extends BaseFragment {
         updateBanner(mBannerView, BannerRequest.LIKE);
         updateData(false);
     }
+
+    protected void onUpdateStart(boolean isFlyUpdating) {
+//		mLoadingLocker.setVisibility(View.VISIBLE);
+    	if (!isFlyUpdating) {
+			mListView.setVisibility(View.INVISIBLE);
+			mBackgroundText.setText(R.string.general_dialog_loading);
+			mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(Recycle.s_Loader,
+					mBackgroundText.getCompoundDrawables()[1],
+					mBackgroundText.getCompoundDrawables()[2],
+					mBackgroundText.getCompoundDrawables()[3]);
+			((AnimationDrawable)mBackgroundText.getCompoundDrawables()[0]).start();
+			mDoubleButton.setClickable(false);
+    	}
+	}
+
+	@Override
+	protected void onUpdateSuccess(boolean isFlyUpdating) {
+//		mLoadingLocker.setVisibility(View.GONE);
+		if (!isFlyUpdating) {
+			mListView.setVisibility(View.VISIBLE);
+			if (Data.likesList.isEmpty()) {
+				mBackgroundText.setText(R.string.likes_background_text);
+			} else {
+				mBackgroundText.setText("");
+			}		
+			
+			if (mBackgroundText.getCompoundDrawables()[0] != null) {
+				((AnimationDrawable)mBackgroundText.getCompoundDrawables()[0]).stop();
+			}
+			
+			mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(null, 
+					mBackgroundText.getCompoundDrawables()[1],
+					mBackgroundText.getCompoundDrawables()[2],
+					mBackgroundText.getCompoundDrawables()[3]);
+			mDoubleButton.setClickable(true);
+		}
+	}
+
+	@Override
+	protected void onUpdateFail(boolean isFlyUpdating) {
+//		mLoadingLocker.setVisibility(View.GONE);
+		if (!isFlyUpdating) {
+			mListView.setVisibility(View.VISIBLE);
+			mBackgroundText.setText("");		
+			
+			if (mBackgroundText.getCompoundDrawables()[0] != null) {
+				((AnimationDrawable)mBackgroundText.getCompoundDrawables()[0]).stop();
+			}
+			
+			mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(null, 
+					mBackgroundText.getCompoundDrawables()[1],
+					mBackgroundText.getCompoundDrawables()[2],
+					mBackgroundText.getCompoundDrawables()[3]);
+			mDoubleButton.setClickable(true);
+		}
+	}
 }

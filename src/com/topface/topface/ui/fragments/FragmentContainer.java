@@ -76,7 +76,11 @@ public class FragmentContainer {
     
     public void update() {
         BaseFragment fragment = (BaseFragment)mFragmentManager.findFragmentById(mCurrentFragmentId);
-        fragment.fillLayout();
+        
+        if(!fragment.isFilled) {
+	        fragment.fillLayout();
+	        fragment.isFilled = true;
+        }
     }
     
 }
