@@ -183,7 +183,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void updateData(final boolean isAddition) {
         if (!isAddition)
-            mProgressBar.setVisibility(View.VISIBLE);
+        	onUpdateStart(isAddition);
+            
         Debug.log(this, "update");
         SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         SearchRequest searchRequest = new SearchRequest(getActivity());
@@ -206,7 +207,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     updateUI(new Runnable() {
                         @Override
                         public void run() {
-                            mProgressBar.setVisibility(View.GONE);
+                            onUpdateSuccess(isAddition);
                             showNextUser();
                             showControls();
                         }
@@ -218,7 +219,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     @Override
                     public void run() {
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mProgressBar.setVisibility(View.GONE);
+                        onUpdateFail(isAddition);
                     }
                 });
             }
@@ -456,5 +457,26 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void successRate() {
         showNextUser();
     }
+
+	@Override
+	protected void onUpdateStart(boolean isPushUpdating) {
+		if (!isPushUpdating) {
+			mProgressBar.setVisibility(View.VISIBLE);
+		}
+	}
+
+	@Override
+	protected void onUpdateSuccess(boolean isPushUpdating) {
+		if (!isPushUpdating) {
+			mProgressBar.setVisibility(View.GONE);
+		}
+	}
+
+	@Override
+	protected void onUpdateFail(boolean isPushUpdating) {
+		if (!isPushUpdating) {
+			mProgressBar.setVisibility(View.GONE);
+		}
+	}
 
 }
