@@ -176,39 +176,11 @@
 	        
 	    </RelativeLayout>
 	    
-	    
-	    <TextView
-	        android:id="@+id/tvLabel"
-	        android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-	    
-	    <!-- dinamic info -->
-	    <RelativeLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent" >
-	    
-		    <!-- Gallery -->
-			<GridView
-				  android:id="@+id/grdUsersGallary"
-				  android:layout_width="fill_parent"
-				  android:layout_height="fill_parent"
-				  android:listSelector="@android:color/transparent"
-				  android:background="@android:color/transparent" 
-				  android:fadingEdge="none"
-				  android:horizontalSpacing="0px"
-				  android:verticalSpacing="0px"
-				  android:layout_margin="0px"
-				  android:padding="0px"
-				  android:fadeScrollbars="true"  />
-		    
-		    <!-- Questionnaire -->
-	        <ListView
-	            android:id="@+id/lvUserQuestionnaire"
-	            android:layout_width="fill_parent"
-	            android:layout_height="fill_parent"
-	            android:visibility="invisible" />
-	    
-	    </RelativeLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/UserViewPager"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 	    
 	</LinearLayout>
 	

@@ -1,4 +1,4 @@
-package com.topface.topface.ui.adapters;
+package com.topface.topface.ui.profile;
 
 import java.util.LinkedList;
 import com.topface.topface.R;

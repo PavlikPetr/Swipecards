@@ -1,4 +1,4 @@
-package com.topface.topface.ui;
+package com.topface.topface.ui.profile;
 
 import java.util.LinkedList;
 import com.topface.topface.Data;
@@ -9,8 +9,7 @@ import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.UserRequest;
-import com.topface.topface.ui.adapters.UserGridAdapter;
-import com.topface.topface.ui.adapters.UserListAdapter;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.ui.views.LockerView;
@@ -22,6 +21,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -34,7 +35,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UserProfileActivity extends Activity {
+public class UserProfileActivity extends FragmentActivity {
     private int mUserId;
     private int mMutualId;
     private boolean mChatInvoke;
@@ -52,6 +53,8 @@ public class UserProfileActivity extends Activity {
     private RadioButton mUserGifts;
     private RadioButton mUserActions;
     
+    private ViewPager mViewPager;
+    
     private View[] mDataLayouts;
     private IndicatorView mIndicatorView;
     private LockerView mLockerView;
@@ -62,9 +65,7 @@ public class UserProfileActivity extends Activity {
     private UserListAdapter mUserListAdapter;
 
     private User mDataUser;
-    private LinkedList<Album> mUserAlbum;
-    
-    private TextView mLabel;
+
     
     private RateController mRateController;
     
@@ -81,7 +82,7 @@ public class UserProfileActivity extends Activity {
         
         mRateController = new RateController(this);
         
-        mUserAlbum = new LinkedList<Album>();
+
         
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1); // свой - чужой профиль
         mMutualId = getIntent().getIntExtra(INTENT_MUTUAL_ID, -1);        
@@ -114,22 +115,10 @@ public class UserProfileActivity extends Activity {
         
         mUserPhoto.setChecked(true);
         
-        {
-            // GridView
-            mGridAlbum = (GridView)findViewById(R.id.grdUsersGallary);
-            mGridAlbum.setNumColumns(3);
-            mUserGalleryAdapter = new UserGridAdapter(getApplicationContext(), mUserAlbum);
-            mGridAlbum.setAdapter(mUserGalleryAdapter);
-            mGridAlbum.setOnItemClickListener(mOnItemClickListener);
+        mViewPager = (ViewPager)findViewById(R.id.UserViewPager);
+        mViewPager.setAdapter(new UserProfilePageAdapter(getSupportFragmentManager()));
+        mViewPager.setOnPageChangeListener(mOnPageChangeListener);
             
-            // ListView
-            mListQuestionnaire = (ListView)findViewById(R.id.lvUserQuestionnaire);
-            mUserListAdapter = new UserListAdapter(getApplicationContext());
-            mListQuestionnaire.setAdapter(mUserListAdapter);
-            
-            mDataLayouts = new View[] {mGridAlbum, mListQuestionnaire};
-        }
-        
         mIndicatorView = (IndicatorView)findViewById(R.id.viewUserIndicator);
         mIndicatorView.setIndicator(R.id.btnUserPhoto);
         ViewTreeObserver vto = mIndicatorView.getViewTreeObserver();
@@ -148,12 +137,8 @@ public class UserProfileActivity extends Activity {
 
         });
         
-
-        
-        mLabel = (TextView)findViewById(R.id.tvLabel);
         
         getUserProfile();
-        getUserAlbum();
     }
 
     private void getUserProfile() {
@@ -190,32 +175,11 @@ public class UserProfileActivity extends Activity {
         }).exec();
     }
     
-    private void getUserAlbum() {
-        AlbumRequest albumRequest = new AlbumRequest(getApplicationContext());
-        albumRequest.uid = mUserId;
-        albumRequest.callback(new ApiHandler() {
-            @Override
-            public void success(ApiResponse response) {
-                mUserAlbum.addAll(Album.parse(response));
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLabel.setText(mUserAlbum.size() + " photos");
-                        mUserGalleryAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-            @Override
-            public void fail(int codeError,ApiResponse response) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(UserProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }).exec();
-    }
+/*
+        Bundle bundle = new Bundle();
+        bundle.putInt("nAndroids", n);
+        fragment.setArguments(bundle); 
+*/
   
     View.OnClickListener mActionsClickListener = new View.OnClickListener() {
         @Override
@@ -246,23 +210,19 @@ public class UserProfileActivity extends Activity {
             for (View dataView : mDataLayouts)
                 dataView.setVisibility(View.INVISIBLE);
             
-            //mIndicatorView.setIndicator(view.getId());
+            mIndicatorView.setIndicator(view.getId());
             
             switch (view.getId()) {
                 case R.id.btnUserPhoto:
-                    mDataLayouts[0].setVisibility(View.VISIBLE);
                     mIndicatorView.setIndicator(R.id.btnUserPhoto);
                     break;
                 case R.id.btnUserQuestionnaire:
-                    mDataLayouts[1].setVisibility(View.VISIBLE);
                     mIndicatorView.setIndicator(R.id.btnUserQuestionnaire);
                     break;
                 case R.id.btnUserGifts:
-                    mDataLayouts[0].setVisibility(View.VISIBLE);
                     mIndicatorView.setIndicator(R.id.btnUserGifts);
                     break;
                 case R.id.btnUserActions:
-                    mDataLayouts[1].setVisibility(View.VISIBLE);
                     mIndicatorView.setIndicator(R.id.btnUserActions);
                     break;
                 default:
@@ -271,14 +231,18 @@ public class UserProfileActivity extends Activity {
         }
     };
     
-    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+
+
+    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-            Data.photoAlbum = mUserAlbum;
-            Intent intent = new Intent(getApplicationContext(), PhotoAlbumActivity.class);
-            intent.putExtra(PhotoAlbumActivity.INTENT_USER_ID, mUserId);
-            intent.putExtra(PhotoAlbumActivity.INTENT_ALBUM_POS, position);
-            startActivity(intent);
+        public void onPageScrollStateChanged(int arg0) {
+        }
+        @Override
+        public void onPageScrolled(int arg0,float arg1,int arg2) {
+        }
+        @Override
+        public void onPageSelected(int arg0) {
+            mIndicatorView.setIndicator(arg0);
         }
     };
 }
