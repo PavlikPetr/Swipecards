@@ -20,7 +20,7 @@
         <item name="android:text">@string/general_dialog_loading</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="messageBackground">#55000000</item>
+        <item name="android:background">#55000000</item>
         <item name="android:drawableLeft">@drawable/loader</item>
     </style>
 

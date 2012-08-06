@@ -50,9 +50,10 @@ public class GiftsAdapter extends BaseAdapter{
 //	    
 //	    holder.mGiftImage.getLayoutParams().width = holder.mGiftImage.getLayoutParams().width;
 //	    holder.mGiftMask.getLayoutParams().height = holder.mGiftImage.getLayoutParams().height;
+	    	    
+	    holder.mGift = ((Gift)mGalleryManager.get(position));
 	    
 	    mGalleryManager.getImage(position,(ImageView) holder.mGiftImage);
-	    holder.mGift = ((Gift)mGalleryManager.get(position));
 	    holder.mPriceText.setText(Integer.toString(holder.mGift.price));	    
 	    
 	    return convertView;

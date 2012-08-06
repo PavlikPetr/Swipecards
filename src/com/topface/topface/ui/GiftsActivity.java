@@ -21,6 +21,7 @@ import android.app.LocalActivityManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -33,7 +34,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class GiftsActivity extends Activity {
+public class GiftsActivity extends FragmentActivity {
 
 	public static final int INTENT_REQUEST_GIFT = 111;
 	public static final String INTENT_GIFT_ID = "gift_id";

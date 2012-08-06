@@ -15,6 +15,7 @@ public class Gift extends AbstractData {
 	public static final int ROMANTIC = 0;
 	public static final int PRESENT  = 1;
 	public static final int FRIENDS  = 2;
+	public static final int PROFILE = -1;
 	
 	public int id;
 	public int type;
