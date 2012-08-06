@@ -32,4 +32,19 @@ public class SettingsFragment extends BaseFragment {
         Debug.log(this, "SettingsActivity::fillLayout");
     }
 
+	@Override
+	protected void onUpdateStart(boolean isPushUpdating) {
+		Debug.log(this, "SettingsActivity::onUpdateStart");
+	}
+
+	@Override
+	protected void onUpdateSuccess(boolean isPushUpdating) {
+		Debug.log(this, "SettingsActivity::onUpdateSuccess");
+	}
+
+	@Override
+	protected void onUpdateFail(boolean isPushUpdating) {
+		Debug.log(this, "SettingsActivity::onUpdateFail");
+	}
+
 }

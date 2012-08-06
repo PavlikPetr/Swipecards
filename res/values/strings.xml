@@ -38,11 +38,13 @@
     <string name="likes_header_title">Likes you</string>
     <string name="likes_btn_dbl_left">All</string>
     <string name="likes_btn_dbl_right">Unread</string>
+   	<string name="likes_background_text">No likes</string>
     
     <!-- Indox & Chat Activity -->
 	  <string name="inbox_header_title">My messages</string>
 	  <string name="inbox_btn_dbl_left">All</string>
 	  <string name="inbox_btn_dbl_right">Unread</string>
+	  <string name="inbox_background_text">No inbox messages</string>
 	  <string name="chat_btn_send">Send</string>
 	  <string name="chat_comment">Send a message</string>
 	  <string name="chat_gift_in">You got a gift.</string>
@@ -62,10 +64,12 @@
       <string name="chat_toast_fail_location">Unable to determine the current location</string>
     <string name="chat_message_copied">Message copied</string>
     
+    
     <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Mutual</string>
     <string name="symphaty_btn_dbl_left">All</string>
     <string name="symphaty_btn_dbl_right">Unread</string>
+    <string name="symphaty_background_text">No symphaties</string>
     
     <!-- Tops Activity -->
     <string name="tops_header_title">Most popular</string>

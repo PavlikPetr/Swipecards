@@ -74,8 +74,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 	            return;
 	        }
         }
-        
-        setScrollingCacheEnabled(false);
+                
         endAnimation();     
         
     }
@@ -93,7 +92,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
                 mScroller.startScroll(mPrevX, 0, mDX, 0, 300);
                 break;
             case EXPAND_FULL:
-                mScroller.startScroll(mPrevX, 0, -(mFDX), 0, 200);
+                mScroller.startScroll(mPrevX, 0, -(mFDX), 0, 300);
                 break;
             case COLLAPSE_FULL:
                 mScroller.startScroll(mPrevX, 0, mWidth, 0, 300);
@@ -139,6 +138,8 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 			if(mFragmentSwitchListener != null)
 				mFragmentSwitchListener.endAnimation(mAnimation);			
 		}
+		
+		setScrollingCacheEnabled(false);
     }
 
     public void setFragmentSwitchListener(FragmentSwitchListener fragmentSwitchListener) {

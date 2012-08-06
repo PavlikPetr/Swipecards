@@ -43,6 +43,7 @@ public class TopsFragment extends BaseFragment {
     private LockerView mLoadingLocker;
     private ActionData mActionData;
     private ImageView mBannerView;
+    private DoubleButton mBtnDouble;
     // Constats
     private static int GIRLS = 0;
     private static int BOYS = 1;
@@ -80,12 +81,12 @@ public class TopsFragment extends BaseFragment {
         mActionData.city_popup_pos = preferences.getInt(Static.PREFERENCES_TOPS_CITY_POS, -1);
 
         // Double Button
-        DoubleButton btnDouble = (DoubleButton)view.findViewById(R.id.btnDoubleTops);
-        btnDouble.setLeftText(getString(R.string.tops_btn_boys));
-        btnDouble.setRightText(getString(R.string.tops_btn_girls));
-        btnDouble.setChecked(mActionData.sex == 0 ? DoubleButton.RIGHT_BUTTON : DoubleButton.LEFT_BUTTON);
+        mBtnDouble = (DoubleButton)view.findViewById(R.id.btnDoubleTops);
+        mBtnDouble.setLeftText(getString(R.string.tops_btn_boys));
+        mBtnDouble.setRightText(getString(R.string.tops_btn_girls));
+        mBtnDouble.setChecked(mActionData.sex == 0 ? DoubleButton.RIGHT_BUTTON : DoubleButton.LEFT_BUTTON);
         // BOYS
-        btnDouble.setLeftListener(new View.OnClickListener() {
+        mBtnDouble.setLeftListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mActionData.sex = BOYS;
@@ -93,7 +94,7 @@ public class TopsFragment extends BaseFragment {
             }
         });
         // GIRLS
-        btnDouble.setRightListener(new View.OnClickListener() {
+        mBtnDouble.setRightListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mActionData.sex = GIRLS;
@@ -153,7 +154,7 @@ public class TopsFragment extends BaseFragment {
     }
 
     private void updateData() {
-        mLoadingLocker.setVisibility(View.VISIBLE);
+        onUpdateStart(false);
         mGallery.setSelection(0);
 
         TopRequest topRequest = new TopRequest(getActivity());
@@ -167,7 +168,7 @@ public class TopsFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        mLoadingLocker.setVisibility(View.GONE);
+                        onUpdateSuccess(false);
                         mGridAdapter.notifyDataSetChanged();
                         mGalleryGridManager.update();
                         mGallery.setVisibility(View.VISIBLE);
@@ -180,7 +181,7 @@ public class TopsFragment extends BaseFragment {
                     @Override
                     public void run() {
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mLoadingLocker.setVisibility(View.GONE);
+                        onUpdateFail(false);
                     }
                 });
             }
@@ -192,7 +193,7 @@ public class TopsFragment extends BaseFragment {
             showCitiesDialog();
             return;
         }
-        mLoadingLocker.setVisibility(View.VISIBLE);        
+        onUpdateStart(false);        
         CitiesRequest citiesRequest = new CitiesRequest(getActivity());
         citiesRequest.type = "top";
         citiesRequest.callback(new ApiHandler() {
@@ -202,7 +203,7 @@ public class TopsFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        mLoadingLocker.setVisibility(View.GONE);
+                    	onUpdateSuccess(false);
                         showCitiesDialog();
                     }
                 });
@@ -212,7 +213,7 @@ public class TopsFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-					mLoadingLocker.setVisibility(View.GONE);
+                    	onUpdateFail(false);
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -269,4 +270,28 @@ public class TopsFragment extends BaseFragment {
         updateBanner(mBannerView, BannerRequest.TOP);
         updateData();
     }
+
+	@Override
+	protected void onUpdateStart(boolean isPushUpdating) {
+		if(isPushUpdating) {
+			mLoadingLocker.setVisibility(View.VISIBLE);
+			mBtnDouble.setClickable(false);
+		}
+	}
+
+	@Override
+	protected void onUpdateSuccess(boolean isPushUpdating) {
+		if(isPushUpdating) {
+			mLoadingLocker.setVisibility(View.GONE);
+			mBtnDouble.setClickable(true);
+		}
+	}
+
+	@Override
+	protected void onUpdateFail(boolean isPushUpdating) {
+		if(isPushUpdating) {
+			mLoadingLocker.setVisibility(View.GONE);
+			mBtnDouble.setClickable(true);
+		}
+	}
 }

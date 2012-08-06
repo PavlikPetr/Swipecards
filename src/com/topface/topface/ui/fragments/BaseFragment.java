@@ -22,9 +22,14 @@ import android.widget.ImageView;
 public abstract class BaseFragment extends Fragment {
 
     protected boolean mIsActive;
+    public boolean isFilled = false;
 
     abstract public void fillLayout();
     abstract public void clearLayout();
+    
+    abstract protected void onUpdateStart(boolean isFlyUpdating);
+    abstract protected void onUpdateSuccess(boolean isFlyUpdating);
+    abstract protected void onUpdateFail(boolean isFlyUpdating);
 
     protected void updateUI(Runnable action) {
         //if (mIsActive)

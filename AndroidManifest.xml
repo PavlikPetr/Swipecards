@@ -36,6 +36,7 @@
         </activity>
 
         <!-- activity -->
+        <activity android:name=".ui.MainActivity"/>
         <activity android:name=".ui.WebAuthActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.NavigationActivity" android:screenOrientation="portrait" />        
         <activity android:name=".ui.CitySearchActivity" android:screenOrientation="portrait" />
