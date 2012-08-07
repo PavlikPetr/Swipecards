@@ -138,7 +138,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
             mDataList.clear();
         mDataList = null;
     }    
-    //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------    
     @Override
     public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
     }

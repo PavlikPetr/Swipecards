@@ -7,6 +7,10 @@
     android:paddingTop="13dp"
     android:paddingBottom="13dp">
     
-    <include layout="@layout/btn_triple" />
+    <com.topface.topface.ui.views.TripleButton
+	      android:id="@+id/btnTriple"
+	      android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_centerInParent="true"/>
     
 </RelativeLayout>

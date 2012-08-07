@@ -25,8 +25,8 @@
         android:layout_below="@id/giftHeader"
         />
     
-	<android.support.v4.view.ViewPager
-	    android:id="@+id/giftPager"
+	<FrameLayout
+	    android:id="@+id/giftGrid"
 	    android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/giftHeaderDivider"
@@ -58,13 +58,13 @@
                 android:layout_gravity="center_horizontal"
                 />
         </LinearLayout>
-    </TabHost>
+    </TabHost-->
 
     <com.topface.topface.ui.views.LockerView
 	    android:id="@+id/llvGiftsLoading"
-		android:layout_width="fill_parent"	
+		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		style="@style/LoadingLocker"
 		android:visibility="gone"
-	    /-->    
+	    />
 </RelativeLayout>

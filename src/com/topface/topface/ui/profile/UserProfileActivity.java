@@ -64,7 +64,7 @@ public class UserProfileActivity extends FragmentActivity {
     private ListView mListQuestionnaire;
     private UserListAdapter mUserListAdapter;
 
-    private User mDataUser;
+    public User mDataUser;
 
     
     private RateController mRateController;
