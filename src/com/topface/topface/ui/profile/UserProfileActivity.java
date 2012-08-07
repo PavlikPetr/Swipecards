@@ -55,8 +55,11 @@ public class UserProfileActivity extends FragmentActivity {
     private IndicatorView mIndicatorView;
     private LockerView mLockerView;
     private ViewPager mViewPager;
+    
+    private QuestionnaireFragment mQuestionnaireFragment;
+    private GiftsFragment mGiftsFragment;
 
-    public User mDataUser;
+    public User mUser;
     
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_MUTUAL_ID = "mutual_id";
@@ -126,7 +129,6 @@ public class UserProfileActivity extends FragmentActivity {
                 mIndicatorView.setButtonMeasure(R.id.btnUserActions,mUserActions.getMeasuredWidth());
                 mIndicatorView.reCompute();
             }
-
         });
         
         getUserProfile();
@@ -139,16 +141,18 @@ public class UserProfileActivity extends FragmentActivity {
         userRequest.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
-                mDataUser = User.parse(mUserId, response);
-                Bitmap rawBitmap = Http.bitmapLoader(mDataUser.getBigLink());
-                final Bitmap avatar = Utils.getRoundedBitmap(rawBitmap, 100, 100);
+                mUser = User.parse(mUserId, response);
+                Bitmap rawBitmap = Http.bitmapLoader(mUser.getBigLink());
+                final Bitmap avatar = Utils.getRoundedBitmap(rawBitmap, 150, 150);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mLockerView.setVisibility(View.INVISIBLE);
                         mUserAvatar.setImageBitmap(avatar);
-                        mUserName.setText(mDataUser.first_name + ", " + mDataUser.age);
-                        mUserCity.setText(mDataUser.city_name);
+                        mUserName.setText(mUser.first_name + ", " + mUser.age);
+                        mUserCity.setText(mUser.city_name);
+                        if(mQuestionnaireFragment != null)
+                          mQuestionnaireFragment.setUserData(mUser);
                     }
                 });
             }
@@ -176,9 +180,9 @@ public class UserProfileActivity extends FragmentActivity {
                     break;
                 case R.id.btnUserChat:
                     Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
-                    intent.putExtra(ChatActivity.INTENT_USER_ID,   mDataUser.uid);
-                    intent.putExtra(ChatActivity.INTENT_USER_URL,  mDataUser.getSmallLink());                
-                    intent.putExtra(ChatActivity.INTENT_USER_NAME, mDataUser.first_name);                
+                    intent.putExtra(ChatActivity.INTENT_USER_ID,   mUser.uid);
+                    intent.putExtra(ChatActivity.INTENT_USER_URL,  mUser.getSmallLink());                
+                    intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);                
                     startActivity(intent);
                     break;
                 default:
@@ -266,10 +270,10 @@ public class UserProfileActivity extends FragmentActivity {
                     fragment.setArguments(bundle);
                     break;
                 case F_QUESTIONNAIRE:
-                    fragment = new QuestionnaireFragment();
+                    fragment = mQuestionnaireFragment = new QuestionnaireFragment();
                     break;
                 case F_GIFTS:
-                    fragment = new GiftsFragment();
+                    fragment = mGiftsFragment = new GiftsFragment();
                     break;
                 case F_ACTIONS:
                     fragment = new ActionsFragment();

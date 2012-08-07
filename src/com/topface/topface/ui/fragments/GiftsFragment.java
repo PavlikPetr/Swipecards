@@ -55,7 +55,7 @@ public class GiftsFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {		
 		if (activity instanceof UserProfileActivity) {
-			mUser = ((UserProfileActivity)activity).mDataUser;
+			mUser = ((UserProfileActivity)activity).mUser;
 		}		
 		super.onAttach(activity);
 	}

@@ -3,6 +3,7 @@ package com.topface.topface.ui.profile;
 import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.data.User;
+import com.topface.topface.utils.FormInfo;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class UserListAdapter extends BaseAdapter {
+    private Context mContext;
     private LayoutInflater mInflater;
-    private LinkedList<Integer> mUserQuestionnaire;
+    private LinkedList<String> mUserQuestionnaire;
     private LinkedList<Integer> mItemLayoutList;
     
     private static final int T_HEADER = 0;
@@ -27,11 +29,11 @@ public class UserListAdapter extends BaseAdapter {
         public TextView mData;
     }
 
-    public UserListAdapter(Context context, User user) {
+    public UserListAdapter(Context context) {
+        mContext = context;
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mUserQuestionnaire = new LinkedList<Integer>();
+        mUserQuestionnaire = new LinkedList<String>();
         mItemLayoutList = new LinkedList<Integer>();
-        prepare(user);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class UserListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Integer getItem(int position) {
+    public String getItem(int position) {
         return mUserQuestionnaire.get(position);
     }
 
@@ -56,13 +58,13 @@ public class UserListAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-    	return 0;
+    	return mItemLayoutList.get(position);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        //int type = getItemViewType(position);        
+        int type = getItemViewType(position);        
     	if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_user_list, null, false);
             holder = new ViewHolder();
@@ -75,6 +77,16 @@ public class UserListAdapter extends BaseAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
 
+        String str = getItem(position);
+    	switch (type) {
+            case T_HEADER:
+                holder.mHeader.setText("Header:" + str);
+                break;
+            case T_DATA:
+                holder.mTitle.setText("Header:" + str);
+                holder.mData.setText("Data:" + str);
+                break;
+        }
 
 //        if (likes.online)
 //            holder.mOnline.setVisibility(View.VISIBLE);
@@ -89,8 +101,49 @@ public class UserListAdapter extends BaseAdapter {
     }
     
     private void prepare(User user) {
-        for (int i=0;i<10;++i)
-            mUserQuestionnaire.add(i);       
-        //private LinkedList<Integer> mItemLayoutList; // types
+        FormInfo formInfo = new FormInfo(mContext, user.sex);
+//        for (int i=0;i<10;++i)
+//            mUserQuestionnaire.add(i);
+        
+        // header
+        mUserQuestionnaire.add("one");
+        mItemLayoutList.add(T_HEADER);
+        // education
+        mUserQuestionnaire.add(formInfo.getEducation(user.questionary_education_id));        
+        mItemLayoutList.add(T_DATA);
+        // communication
+        mUserQuestionnaire.add(formInfo.getCommunication(user.questionary_communication_id));       
+        mItemLayoutList.add(T_DATA);
+        // character
+        mUserQuestionnaire.add(formInfo.getCharacter(user.questionary_character_id));       
+        mItemLayoutList.add(T_DATA);
+        
+        // header
+        mUserQuestionnaire.add("two");
+        mItemLayoutList.add(T_HEADER);
+        // hight
+        mUserQuestionnaire.add(" " + user.questionary_height);       
+        mItemLayoutList.add(T_DATA);
+        // weight
+        mUserQuestionnaire.add("" + user.questionary_weight);
+        mItemLayoutList.add(T_DATA);
+        // fitness
+        mUserQuestionnaire.add(formInfo.getFitness(user.questionary_fitness_id));       
+        mItemLayoutList.add(T_DATA);
+        // marriage
+        mUserQuestionnaire.add(formInfo.getMarriage(user.questionary_marriage_id));       
+        mItemLayoutList.add(T_DATA);
+        // finances
+        mUserQuestionnaire.add(formInfo.getFinances(user.questionary_finances_id));       
+        mItemLayoutList.add(T_DATA);
+        // smoking
+        mUserQuestionnaire.add(formInfo.getSmoking(user.questionary_smoking_id));       
+        mItemLayoutList.add(T_DATA);
+        // alcohol
+        mUserQuestionnaire.add(formInfo.getAlcohol(user.questionary_alcohol_id));       
+        mItemLayoutList.add(T_DATA);
+        // smoking
+        mUserQuestionnaire.add(formInfo.getSmoking(user.questionary_smoking_id));       
+        mItemLayoutList.add(T_DATA);
     }
 }

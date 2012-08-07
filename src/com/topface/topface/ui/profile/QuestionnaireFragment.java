@@ -11,15 +11,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class QuestionnaireFragment extends Fragment {
-    private User mDataUser;
+    private User mUser;
     private UserListAdapter mUserListAdapter;
     private TextView mTitle;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDataUser = ((UserProfileActivity)getActivity()).mDataUser;
-        mUserListAdapter = new UserListAdapter(getActivity().getApplicationContext(), mDataUser);
+        //mUser = ((UserProfileActivity)getActivity()).mDataUser;
+        mUserListAdapter = new UserListAdapter(getActivity().getApplicationContext());
+        //mUserListAdapter.setUserData(user);
         //mUserListAdapter.setUserData(mDataUser);
     }
     
@@ -30,10 +31,15 @@ public class QuestionnaireFragment extends Fragment {
         listQuestionnaire.setAdapter(mUserListAdapter);
         
         mTitle = (TextView)root.findViewById(R.id.fragmentTitle);
-        
         mTitle.setText("You have 15 something");
         
         return root;
+    }
+    
+    public void setUserData(User user) {
+        mUser = user;
+        mUserListAdapter.setUserData(mUser);
+        mUserListAdapter.notifyDataSetChanged();
     }
     
 }
