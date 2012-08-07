@@ -32,4 +32,22 @@ public class ProfileFragment extends BaseFragment {
         Debug.log(this, "SettingsActivity::fillLayout");
     }
 
+    @Override
+    protected void onUpdateStart(boolean isFlyUpdating) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void onUpdateSuccess(boolean isFlyUpdating) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void onUpdateFail(boolean isFlyUpdating) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

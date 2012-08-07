@@ -9,22 +9,21 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class PhotoFragment extends Fragment {
     private int mUserId;
     private LinkedList<Album> mUserAlbum;
     private UserGridAdapter mUserGridAdapter;
+    private TextView mTitle;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,12 +37,14 @@ public class PhotoFragment extends Fragment {
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_photo, container, false);
-        
-        GridView gridAlbum = (GridView)root.findViewById(R.id.grdUsersGallary);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
+        GridView gridAlbum = (GridView)root.findViewById(R.id.fragmentGrid);
         gridAlbum.setNumColumns(3);
         gridAlbum.setAdapter(mUserGridAdapter);
         gridAlbum.setOnItemClickListener(mOnItemClickListener);
+        
+        mTitle = (TextView)root.findViewById(R.id.fragmentTitle);
+        mTitle.setText(" 15 photos");
 
         return root;
     }
@@ -63,6 +64,7 @@ public class PhotoFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // mTitle.setText(mUserAlbum.size() + "photos");
                         mUserGridAdapter.notifyDataSetChanged();
                     }
                 });
@@ -90,12 +92,4 @@ public class PhotoFragment extends Fragment {
         }
     };
 }
-
-/*
- *             // ListView
-
-            
-            mDataLayouts = new View[] {mGridAlbum, mListQuestionnaire};
-        }
-        */
  

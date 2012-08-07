@@ -118,6 +118,7 @@
 
 	        <!-- Actions -->
 	        <RadioGroup
+	            android:id="@+id/UserRadioGroup"
 	            android:layout_above="@id/viewUserIndicator"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"

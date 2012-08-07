@@ -1,41 +1,38 @@
 package com.topface.topface.ui.profile;
 
-import java.util.LinkedList;
-import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.data.Album;
 import com.topface.topface.data.User;
-import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.Http;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class UserProfileActivity extends FragmentActivity {
+    public static User mDataUser;
+    
     private int mUserId;
     private int mMutualId;
     private boolean mChatInvoke;
@@ -48,49 +45,41 @@ public class UserProfileActivity extends FragmentActivity {
     private Button mUserMutual;
     private Button mUserChat;
     
+    private RadioGroup mUserRadioGroup;
     private RadioButton mUserPhoto;
     private RadioButton mUserQuestionnaire;
     private RadioButton mUserGifts;
     private RadioButton mUserActions;
     
-    private ViewPager mViewPager;
-    
-    private View[] mDataLayouts;
+    private RateController mRateController;    
     private IndicatorView mIndicatorView;
     private LockerView mLockerView;
-    private GridView mGridAlbum;
-    private UserGridAdapter mUserGalleryAdapter;
-    
-    private ListView mListQuestionnaire;
-    private UserListAdapter mUserListAdapter;
+    private ViewPager mViewPager;
 
-    private User mDataUser;
-
-    
-    private RateController mRateController;
-    
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_MUTUAL_ID = "mutual_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_CHAT_INVOKE = "chat_invoke";
+    
+    public static final int F_PHOTO = 0;
+    public static final int F_QUESTIONNAIRE = 1;
+    public static final int F_GIFTS = 2;
+    public static final int F_ACTIONS = 3;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Debug.log(this, "+onCreate");
         setContentView(R.layout.ac_user_profile);
-        
-        mRateController = new RateController(this);
-        
 
-        
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1); // свой - чужой профиль
         mMutualId = getIntent().getIntExtra(INTENT_MUTUAL_ID, -1);        
         mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE, false); // пришли из чата
         
         // Header Name
         String name = getIntent().getStringExtra(INTENT_USER_NAME); // name
-        
+
+        mRateController = new RateController(this);
         mLockerView = (LockerView)findViewById(R.id.llvProfileLoading);
         
         mUserAvatar = (ImageView)findViewById(R.id.ivUserAvatar);
@@ -98,20 +87,21 @@ public class UserProfileActivity extends FragmentActivity {
         mUserCity   = (TextView)findViewById(R.id.ivUserCity);
         
         mUserDelight = (Button)findViewById(R.id.btnUserDelight);
-        mUserDelight.setOnClickListener(mActionsClickListener);
+        mUserDelight.setOnClickListener(mRatesClickListener);
         mUserMutual = (Button)findViewById(R.id.btnUserMutual);
-        mUserMutual.setOnClickListener(mActionsClickListener);
+        mUserMutual.setOnClickListener(mRatesClickListener);
         mUserChat = (Button)findViewById(R.id.btnUserChat);
-        mUserChat.setOnClickListener(mActionsClickListener);
+        mUserChat.setOnClickListener(mRatesClickListener);
         
+        mUserRadioGroup = (RadioGroup)findViewById(R.id.UserRadioGroup);
         mUserPhoto = (RadioButton)findViewById(R.id.btnUserPhoto);
-        mUserPhoto.setOnClickListener(mRatesClickListener);
+        mUserPhoto.setOnClickListener(mInfoClickListener);
         mUserQuestionnaire = (RadioButton)findViewById(R.id.btnUserQuestionnaire);
-        mUserQuestionnaire.setOnClickListener(mRatesClickListener);
+        mUserQuestionnaire.setOnClickListener(mInfoClickListener);
         mUserGifts = (RadioButton)findViewById(R.id.btnUserGifts);
-        mUserGifts.setOnClickListener(mRatesClickListener);
+        mUserGifts.setOnClickListener(mInfoClickListener);
         mUserActions = (RadioButton)findViewById(R.id.btnUserActions);
-        mUserActions.setOnClickListener(mRatesClickListener);
+        mUserActions.setOnClickListener(mInfoClickListener);
         
         mUserPhoto.setChecked(true);
         
@@ -120,7 +110,7 @@ public class UserProfileActivity extends FragmentActivity {
         mViewPager.setOnPageChangeListener(mOnPageChangeListener);
             
         mIndicatorView = (IndicatorView)findViewById(R.id.viewUserIndicator);
-        mIndicatorView.setIndicator(R.id.btnUserPhoto);
+        mIndicatorView.setIndicator(F_PHOTO);
         ViewTreeObserver vto = mIndicatorView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
             @Override
@@ -136,7 +126,6 @@ public class UserProfileActivity extends FragmentActivity {
             }
 
         });
-        
         
         getUserProfile();
     }
@@ -158,8 +147,6 @@ public class UserProfileActivity extends FragmentActivity {
                         mUserAvatar.setImageBitmap(avatar);
                         mUserName.setText(mDataUser.first_name + ", " + mDataUser.age);
                         mUserCity.setText(mDataUser.city_name);
-                        mUserListAdapter.setUserData(mDataUser);
-                        mUserListAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -175,13 +162,7 @@ public class UserProfileActivity extends FragmentActivity {
         }).exec();
     }
     
-/*
-        Bundle bundle = new Bundle();
-        bundle.putInt("nAndroids", n);
-        fragment.setArguments(bundle); 
-*/
-  
-    View.OnClickListener mActionsClickListener = new View.OnClickListener() {
+    View.OnClickListener mRatesClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
@@ -204,34 +185,25 @@ public class UserProfileActivity extends FragmentActivity {
         }
     };
     
-    View.OnClickListener mRatesClickListener = new View.OnClickListener() {
+    View.OnClickListener mInfoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            for (View dataView : mDataLayouts)
-                dataView.setVisibility(View.INVISIBLE);
-            
-            mIndicatorView.setIndicator(view.getId());
-            
             switch (view.getId()) {
                 case R.id.btnUserPhoto:
-                    mIndicatorView.setIndicator(R.id.btnUserPhoto);
+                    mViewPager.setCurrentItem(F_PHOTO);
                     break;
                 case R.id.btnUserQuestionnaire:
-                    mIndicatorView.setIndicator(R.id.btnUserQuestionnaire);
+                    mViewPager.setCurrentItem(F_QUESTIONNAIRE);
                     break;
                 case R.id.btnUserGifts:
-                    mIndicatorView.setIndicator(R.id.btnUserGifts);
+                    mViewPager.setCurrentItem(F_GIFTS);
                     break;
                 case R.id.btnUserActions:
-                    mIndicatorView.setIndicator(R.id.btnUserActions);
-                    break;
-                default:
+                    mViewPager.setCurrentItem(F_ACTIONS);
                     break;
             }
         }
     };
-    
-
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -242,7 +214,62 @@ public class UserProfileActivity extends FragmentActivity {
         }
         @Override
         public void onPageSelected(int arg0) {
-            mIndicatorView.setIndicator(arg0);
+            switch (arg0) {
+                case F_PHOTO:
+                    mIndicatorView.setIndicator(F_PHOTO);
+                    ((RadioButton)mUserRadioGroup.getChildAt(F_PHOTO)).setChecked(true);
+                    break;
+                case F_QUESTIONNAIRE:
+                    mIndicatorView.setIndicator(F_QUESTIONNAIRE);
+                    ((RadioButton)mUserRadioGroup.getChildAt(F_QUESTIONNAIRE)).setChecked(true);
+                    break;
+                case F_GIFTS:
+                    mIndicatorView.setIndicator(F_GIFTS);
+                    ((RadioButton)mUserRadioGroup.getChildAt(F_GIFTS)).setChecked(true);
+                    break;
+                case F_ACTIONS:
+                    mIndicatorView.setIndicator(F_ACTIONS);
+                    ((RadioButton)mUserRadioGroup.getChildAt(F_ACTIONS)).setChecked(true);
+                    break;
+            }
         }
     };
+    
+    /*
+     *     UserProfilePageAdapter
+     */
+    public class UserProfilePageAdapter extends FragmentPagerAdapter {
+
+        public UserProfilePageAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return F_ACTIONS+1;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Fragment fragment = null; 
+            switch (position) {
+                case F_PHOTO:
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(UserProfileActivity.INTENT_USER_ID, mUserId);
+                    fragment = new PhotoFragment();
+                    fragment.setArguments(bundle);
+                    break;
+                case F_QUESTIONNAIRE:
+                    fragment = new QuestionnaireFragment();
+                    break;
+                case F_GIFTS:
+                    fragment = new GiftsFragment();
+                    break;
+                case F_ACTIONS:
+                    fragment = new ActionsFragment();
+                    break;
+            }
+            return fragment;
+        }
+    }
 }

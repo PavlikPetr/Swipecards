@@ -14,6 +14,11 @@ import android.widget.TextView;
 public class UserListAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private LinkedList<Integer> mUserQuestionnaire;
+    private LinkedList<Integer> mItemLayoutList;
+    
+    private static final int T_HEADER = 0;
+    private static final int T_DATA   = 1;
+    private static final int T_COUNT  = 2;
     
     static class ViewHolder {
         public ImageView mState;
@@ -22,9 +27,11 @@ public class UserListAdapter extends BaseAdapter {
         public TextView mData;
     }
 
-    public UserListAdapter(Context context) {
+    public UserListAdapter(Context context, User user) {
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mUserQuestionnaire = new LinkedList<Integer>();
+        mItemLayoutList = new LinkedList<Integer>();
+        prepare(user);
     }
 
     @Override
@@ -44,7 +51,7 @@ public class UserListAdapter extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-    	return super.getViewTypeCount();
+    	return T_COUNT;
     }
 
     @Override
@@ -53,7 +60,7 @@ public class UserListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position,View convertView,ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         //int type = getItemViewType(position);        
     	if (convertView == null) {
@@ -78,7 +85,12 @@ public class UserListAdapter extends BaseAdapter {
     }
     
     public void setUserData(User user) {
+        prepare(user);
+    }
+    
+    private void prepare(User user) {
         for (int i=0;i<10;++i)
-            mUserQuestionnaire.add(i);
+            mUserQuestionnaire.add(i);       
+        private LinkedList<Integer> mItemLayoutList; // types
     }
 }

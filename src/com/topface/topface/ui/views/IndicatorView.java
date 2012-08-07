@@ -1,7 +1,6 @@
 package com.topface.topface.ui.views;
 
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
 import com.topface.topface.R;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -63,6 +62,15 @@ public class IndicatorView extends View {
     public void reCompute() {
         int sum = 0;
         mPoints.clear();
+        int counter = 0;
+        if (mMeasures.size() > 0) {
+            for (Integer width : mMeasures.values()) {
+                int point = (width-mIndicator.getWidth())/2;
+                mPoints.put(counter++, sum+point);
+                sum += width;
+            }
+        }
+        /*
         if (mMeasures.size() > 0) {
             for (Entry<Integer, Integer> measure : mMeasures.entrySet()) {
                 int point = (measure.getValue()-mIndicator.getWidth())/2;
@@ -70,6 +78,7 @@ public class IndicatorView extends View {
                 sum += measure.getValue();
             }
         }
+        */
     }
     
     public void setIndicator(int id) {

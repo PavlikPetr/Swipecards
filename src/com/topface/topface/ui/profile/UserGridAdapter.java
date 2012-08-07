@@ -23,7 +23,6 @@ public class UserGridAdapter extends BaseAdapter {
         ImageView mPhoto;
     };
 
-
     public UserGridAdapter(Context context, LinkedList<Album> userAlbum) {
         mInflater = LayoutInflater.from(context);
         mUserAlbum = userAlbum;
