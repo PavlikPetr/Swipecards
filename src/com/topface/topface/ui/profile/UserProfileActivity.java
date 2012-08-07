@@ -31,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class UserProfileActivity extends FragmentActivity {
-    public static User mDataUser;
     
     private int mUserId;
     private int mMutualId;
@@ -56,6 +55,11 @@ public class UserProfileActivity extends FragmentActivity {
     private LockerView mLockerView;
     private ViewPager mViewPager;
 
+    public User mDataUser;
+
+    
+    private RateController mRateController;
+    
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_MUTUAL_ID = "mutual_id";
     public static final String INTENT_USER_NAME = "user_name";
@@ -196,9 +200,11 @@ public class UserProfileActivity extends FragmentActivity {
                     mViewPager.setCurrentItem(F_QUESTIONNAIRE);
                     break;
                 case R.id.btnUserGifts:
+                    mIndicatorView.setIndicator(R.id.btnUserGifts);
                     mViewPager.setCurrentItem(F_GIFTS);
                     break;
                 case R.id.btnUserActions:
+                    mIndicatorView.setIndicator(R.id.btnUserActions);
                     mViewPager.setCurrentItem(F_ACTIONS);
                     break;
             }

@@ -350,6 +350,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	                        public void run() {
 	                            if(response.code==ApiResponse.PAYMENT)
 	                                startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
+	                            mLoadinLocker.setVisibility(View.GONE);
 	                        }
 	                    });
 	                }
@@ -372,8 +373,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         				final Confirmation confirm = Confirmation.parse(response);
         				runOnUiThread(new Runnable() {                        	
                             @Override
-                            public void run() {
-                            	mLoadinLocker.setVisibility(View.GONE);
+                            public void run() {                            	
                             	if (confirm.completed) {
                             		History history = new History();
         					        history.type = History.LOCATION;
@@ -382,11 +382,10 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                                     history.longitude = longitude;
                                     mAdapter.addSentMessage(history);
                                     mAdapter.notifyDataSetChanged();
-                            		
-//                					Toast.makeText(ChatActivity.this, latitude + " " + longitude, Toast.LENGTH_SHORT).show();			
                 				} else {
                 					Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
                 				}
+                            	mLoadinLocker.setVisibility(View.GONE);
                             }
         				});
         			}
@@ -398,6 +397,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                             @Override
                             public void run() {
                             	Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            	mLoadinLocker.setVisibility(View.GONE);
                             }
         				});
         			}

@@ -3,6 +3,7 @@ package com.topface.topface.requests;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.topface.topface.data.Gift;
 import com.topface.topface.utils.Debug;
 
 import android.content.Context;
@@ -35,6 +36,5 @@ public class SendGiftRequest extends ApiRequest {
 		}
 
 		return root.toString();
-	}
-	
+	}	
 }

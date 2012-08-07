@@ -43,8 +43,8 @@ public class DoubleBigButton extends LinearLayout implements CompoundButton.OnCh
         		RIGHT_BUTTON = i;
         	}
 		}
-        mLeftClickableState = true;
-		mRightClickableState = true;
+        mLeftClickableState = mGroup.getChildAt(LEFT_BUTTON).isClickable();
+		mRightClickableState = mGroup.getChildAt(RIGHT_BUTTON).isClickable();
     }
     //---------------------------------------------------------------------------
     public void setLeftText(String text) {
@@ -95,7 +95,7 @@ public class DoubleBigButton extends LinearLayout implements CompoundButton.OnCh
                 break;
             case R.id.dblRight:            	
         		mGroup.getChildAt(RIGHT_BUTTON).setClickable(!value);
-        		mLeftClickableState =!value;        		
+        		mRightClickableState =!value;        		
                 break;
             default:
                 break;
@@ -106,7 +106,7 @@ public class DoubleBigButton extends LinearLayout implements CompoundButton.OnCh
         return mRightButton.isChecked();
     }
     //---------------------------------------------------------------------------
-    public void setEnabled(boolean clickable) {
+    public void setClickable(boolean clickable) {
     	if (!clickable) {    		
     		mGroup.getChildAt(LEFT_BUTTON).setClickable(clickable);
     		mGroup.getChildAt(RIGHT_BUTTON).setClickable(clickable);

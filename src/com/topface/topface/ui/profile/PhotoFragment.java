@@ -38,6 +38,7 @@ public class PhotoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
+        
         GridView gridAlbum = (GridView)root.findViewById(R.id.fragmentGrid);
         gridAlbum.setNumColumns(3);
         gridAlbum.setAdapter(mUserGridAdapter);

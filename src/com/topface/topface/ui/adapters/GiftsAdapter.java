@@ -12,21 +12,21 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class GiftsAdapter extends BaseAdapter{
+public class GiftsAdapter extends BaseAdapter {
 
 	private LayoutInflater mInflater;
-	
+
 	private GiftGalleryManager<Gift> mGalleryManager;
-	
+
 	public GiftsAdapter(Context context, GiftGalleryManager<Gift> galleryManager) {
 		mInflater = LayoutInflater.from(context);
-	    mGalleryManager = galleryManager;
+		mGalleryManager = galleryManager;
 	}
-	
+
 	@Override
 	public int getCount() {
 		return mGalleryManager.size();
-	}	
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -44,16 +44,23 @@ public class GiftsAdapter extends BaseAdapter{
 	    } else {
 	        holder = (ViewHolder)convertView.getTag();
 	    }
-		
-//	    holder.mGiftImage.getLayoutParams().width = mGalleryManager.mBitmapWidth;
-//	    holder.mGiftImage.getLayoutParams().height = mGalleryManager.mBitmapHeight;
-//	    
-//	    holder.mGiftImage.getLayoutParams().width = holder.mGiftImage.getLayoutParams().width;
-//	    holder.mGiftMask.getLayoutParams().height = holder.mGiftImage.getLayoutParams().height;
-	    
-	    mGalleryManager.getImage(position,(ImageView) holder.mGiftImage);
+		    	    
 	    holder.mGift = ((Gift)mGalleryManager.get(position));
-	    holder.mPriceText.setText(Integer.toString(holder.mGift.price));	    
+	 
+	    if (holder.mGift.type == Gift.PROFILE) {
+	    	mGalleryManager.getImage(position,(ImageView) holder.mGiftImage);
+	    	holder.mGiftMask.setVisibility(View.VISIBLE);
+	    	holder.mPriceText.setVisibility(View.GONE);		    
+	    } else if (holder.mGift.type == Gift.SEND_BTN) {
+	 	    holder.mGiftImage.setImageResource(R.drawable.chat_gift_selector);	    	
+	 	    holder.mGiftMask.setVisibility(View.GONE);
+	 	    holder.mPriceText.setVisibility(View.GONE);
+		} else {
+	    	mGalleryManager.getImage(position,(ImageView) holder.mGiftImage);
+	    	holder.mGiftMask.setVisibility(View.VISIBLE);
+	    	holder.mPriceText.setVisibility(View.VISIBLE);
+		    holder.mPriceText.setText(Integer.toString(holder.mGift.price));
+	    }	    
 	    
 	    return convertView;
 	}
@@ -66,16 +73,16 @@ public class GiftsAdapter extends BaseAdapter{
 	@Override
 	public long getItemId(int position) {
 		return position;
-	}	
-	
-	public class ViewHolder {
-	    ImageView mGiftImage;
-	    ImageView mGiftMask;
-	    TextView mPriceText;
-	    public Gift mGift;
 	}
-	
+
+	public class ViewHolder {
+		ImageView mGiftImage;
+		ImageView mGiftMask;
+		TextView mPriceText;
+		public Gift mGift;
+	}
+
 	public void release() {
-	    mGalleryManager.release();
+		mGalleryManager.release();
 	}
 }

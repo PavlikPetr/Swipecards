@@ -12,6 +12,7 @@ abstract public class ApiHandler extends Handler {
         success(response);
     } catch(Exception e) {
       Debug.error("api handler exception:", e);
+      Debug.log(e.toString());
     }
   }
     abstract public void success(ApiResponse response) throws NullPointerException;
