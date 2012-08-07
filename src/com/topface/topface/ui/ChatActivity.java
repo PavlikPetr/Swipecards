@@ -407,6 +407,10 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                     mSwapControl.snapToScreen(0);                
                 mIsAddPanelOpened = false;
         	}
+        } else {
+        	if (mIsAddPanelOpened)
+                mSwapControl.snapToScreen(0);                
+            mIsAddPanelOpened = false;
         }
     }
     //---------------------------------------------------------------------------

@@ -84,7 +84,7 @@ public class GiftsFragment extends Fragment {
 					Intent intent = getActivity().getIntent();
 					if (view.getTag() instanceof ViewHolder) {
 						ViewHolder holder = ((ViewHolder) view.getTag());
-						if (holder.mGift.type != Gift.PROFILE || holder.mGift.type != Gift.SEND_BTN) {
+						if (holder.mGift.type != Gift.PROFILE && holder.mGift.type != Gift.SEND_BTN) {
 							intent.putExtra(GiftsActivity.INTENT_GIFT_ID, holder.mGift.id);
 							intent.putExtra(GiftsActivity.INTENT_GIFT_URL, holder.mGift.link);
 	
@@ -114,9 +114,9 @@ public class GiftsFragment extends Fragment {
 	}
 	
 	@Override
-	public void onResume() {	
-		Data.giftsList.clear();
+	public void onResume() {			
 		if (mUser != null) {
+			Data.giftsList.clear();
 			Data.giftsList.addAll(Gift.parse(mUser));
 		}
 		update();

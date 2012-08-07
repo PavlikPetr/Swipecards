@@ -12,10 +12,12 @@ import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.TripleButton;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,13 @@ public class GiftsActivity extends FragmentActivity {
 		this.setContentView(R.layout.ac_gifts);
 
 		((TextView) findViewById(R.id.tvHeaderTitle)).setText(R.string.gifts_title);
+		((Button) findViewById(R.id.btnHeaderBack)).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				setResult(Activity.RESULT_CANCELED);
+				finish();
+			}
+		});
 
 		mLoadingLocker = (LockerView) this.findViewById(R.id.llvGiftsLoading);
 
@@ -122,6 +131,8 @@ public class GiftsActivity extends FragmentActivity {
 					@Override
 					public void run() {
 						mLoadingLocker.setVisibility(View.GONE);
+//						((GiftsFragment) getSupportFragmentManager().findFragmentByTag(
+//								GiftsFragment.GIFTS_ALL_TAG)).update();
 					}
 				});
 			}
