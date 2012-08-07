@@ -7,7 +7,7 @@
       android:background="@drawable/im_bar_header" >
       
 	<Button  
-		 android:id="@+id/btnHeaderHome"
+		 android:id="@+id/btnHeaderBack"
 		 android:layout_width="wrap_content"
 		 android:layout_height="wrap_content"
 		 android:layout_centerVertical="true"
