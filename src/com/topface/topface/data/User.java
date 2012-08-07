@@ -46,7 +46,7 @@ public class User extends AbstractData {
     // {Object} geo.coordinates.lat - широта нахождения пользоавтеля
     // {Object} geo.coordinates.lng - долгота нахождения пользователя
     //---------------------------------------------------------------------------
-    public static User parse(int userId,ApiResponse response) { //нужно знать userId
+    public static User parse(int userId, ApiResponse response) { //нужно знать userId
         User profile = new User();
 
         try {
@@ -54,7 +54,7 @@ public class User extends AbstractData {
             item = item.getJSONObject("" + userId);
             profile.uid = item.optInt("uid");
             profile.age = item.optInt("age");
-        profile.sex        = item.optInt("sex");
+            profile.sex = item.optInt("sex");
             profile.first_name = item.optString("first_name");
             profile.first_name_translit = item.optString("first_name_translit");
             profile.platform = item.optString("platform");

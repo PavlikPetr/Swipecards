@@ -129,6 +129,9 @@ public class Utils {
         Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
         Bitmap clippedBitmap = clipAndScaleBitmap(bitmap, width, height);
         
+        if(clippedBitmap == null)
+            return null;
+        
         Canvas canvas = new Canvas(output);
         
         Paint paint = new Paint();

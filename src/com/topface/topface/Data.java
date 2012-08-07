@@ -57,6 +57,9 @@ public class Data {
 
         if (sympathyList == null)
             sympathyList = new LinkedList<FeedSympathy>();
+        
+        if (giftsList == null)
+            giftsList = new LinkedList<Gift>();
 
         screen_width = (Device.getOrientation(context) == Device.LANDSCAPE) ? Device.getDisplay(context).getHeight() : Device.getDisplay(context).getWidth();
 

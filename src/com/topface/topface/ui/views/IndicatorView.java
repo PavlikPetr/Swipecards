@@ -2,6 +2,7 @@ package com.topface.topface.ui.views;
 
 import java.util.LinkedHashMap;
 import com.topface.topface.R;
+import com.topface.topface.utils.Debug;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,6 +47,7 @@ public class IndicatorView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Debug.log(this, "mCurrentId:"+mCurrentId);
 
         canvas.drawBitmap(mDivider, 0, mDividerY, mPaint);
         if (mCurrentId > 0 && mPoints.size() > 0) {

@@ -91,6 +91,6 @@ public class UserListAdapter extends BaseAdapter {
     private void prepare(User user) {
         for (int i=0;i<10;++i)
             mUserQuestionnaire.add(i);       
-        private LinkedList<Integer> mItemLayoutList; // types
+        //private LinkedList<Integer> mItemLayoutList; // types
     }
 }
