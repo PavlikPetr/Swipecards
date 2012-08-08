@@ -11,6 +11,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,7 +55,7 @@ public class GiftsAdapter extends BaseAdapter {
 	    if (holder.mGift.type == Gift.PROFILE) {
 	    	mGalleryManager.getImage(position,(ImageView) holder.mGiftImage);
 	    	holder.mGiftMask.setVisibility(View.VISIBLE);
-	    	holder.mPriceText.setVisibility(View.GONE);		    
+	    	holder.mPriceText.setVisibility(View.GONE);	    
 	    } else if (holder.mGift.type == Gift.SEND_BTN) {
 	 	    holder.mGiftImage.setImageResource(R.drawable.chat_gift_selector);	    	
 	 	    holder.mGiftMask.setVisibility(View.GONE);
@@ -63,7 +65,7 @@ public class GiftsAdapter extends BaseAdapter {
 	    	holder.mGiftMask.setVisibility(View.VISIBLE);
 	    	holder.mPriceText.setVisibility(View.VISIBLE);
 		    holder.mPriceText.setText(Integer.toString(holder.mGift.price));
-	    }	    
+		}
 	    
 	    return convertView;
 	}
