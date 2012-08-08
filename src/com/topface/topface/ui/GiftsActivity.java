@@ -61,8 +61,8 @@ public class GiftsActivity extends FragmentActivity {
 		mTripleButton = (TripleButton) findViewById(R.id.btnTriple);
 		mTripleButton.setLeftText(Gift.getTypeNameResId(Gift.ROMANTIC));
 		mTripleButton.setMiddleText(Gift.getTypeNameResId(Gift.FRIENDS));
-		mTripleButton.setRightText(Gift.getTypeNameResId(Gift.PRESENT));		
-
+		mTripleButton.setRightText(Gift.getTypeNameResId(Gift.PRESENT));				
+		
 		mTripleButton.setLeftListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -108,8 +108,8 @@ public class GiftsActivity extends FragmentActivity {
 		});
 
 		update();
-	}
-
+	}	
+	
 	/**
 	 * Loading array of gifts from server
 	 */
@@ -159,6 +159,27 @@ public class GiftsActivity extends FragmentActivity {
 		}
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		switch (GiftsCollection.currentType) {
+		case Gift.ROMANTIC:
+			mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
+			break;
+		case Gift.FRIENDS:
+			mTripleButton.setChecked(TripleButton.MIDDLE_BUTTON);
+			break;
+		case Gift.PRESENT:
+			mTripleButton.setChecked(TripleButton.RIGHT_BUTTON);
+			break;
+		default:
+			break;
+		}
+	}
+
+
+
 	/**
 	 * Works with array of gifts, categorizes by type
 	 */
@@ -182,11 +203,11 @@ public class GiftsActivity extends FragmentActivity {
 		}
 
 		public LinkedList<Gift> getGifts() {
-			return getGifts(currentType);
+			return getGifts(GiftsCollection.currentType);
 		}
 
 		public void setCurrentType(int type) {
-			currentType = type;
+			GiftsCollection.currentType = type;
 		}
 	}
 }
