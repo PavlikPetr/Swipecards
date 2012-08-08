@@ -144,5 +144,5 @@ public class TripleButton extends LinearLayout implements OnCheckedChangeListene
 	    		mGroup.getChildAt(MIDDLE_BUTTON).setClickable(mMiddleClickableState);
 	    		mGroup.getChildAt(RIGHT_BUTTON).setClickable(mRightClickableState);
 	    	}
-	    }
+	    }	    
 }

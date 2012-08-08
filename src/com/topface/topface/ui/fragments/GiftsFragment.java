@@ -25,8 +25,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.GridLayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
@@ -82,7 +80,7 @@ public class GiftsFragment extends Fragment {
 
 		mGridView = (GridView) view.findViewById(R.id.fragmentGrid);
 		mGridView.setAnimationCacheEnabled(false);
-		mGridView.setScrollingCacheEnabled(false);		
+		mGridView.setScrollingCacheEnabled(true);		
 		
 
 		int columns = this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? GIFTS_COLUMN_PORTRAIT
@@ -125,16 +123,6 @@ public class GiftsFragment extends Fragment {
 
 		mGridView.setAdapter(mGridAdapter);
 		return view;
-	}
-
-	@Override
-	public void onResume() {
-		// if (mUser != null) {
-		// setGifts(Gift.parse(mUser));
-		// }
-		// update();
-
-		super.onResume();
 	}
 
 	@Override

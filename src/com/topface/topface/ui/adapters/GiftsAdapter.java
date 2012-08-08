@@ -1,8 +1,5 @@
 package com.topface.topface.ui.adapters;
 
-import java.util.LinkedList;
-
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.utils.GiftGalleryManager;
@@ -11,8 +8,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
