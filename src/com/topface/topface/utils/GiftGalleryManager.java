@@ -31,7 +31,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
     public int mBitmapWidth;
     public int mBitmapHeight;
     // СЃРєСЂРѕР»РёРЅРі
-//    public boolean mBusy = false;
+    public boolean mBusy = false;
     //---------------------------------------------------------------------------
     public GiftGalleryManager(Context context,LinkedList<T> dataList) {
         mDataList = dataList;
@@ -70,7 +70,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
             imageView.setImageBitmap(bitmap);
         else {
             imageView.setImageBitmap(null); // С…Р· ??
-//            if (!mBusy) {
+            if (!mBusy) {
                 bitmap = mStorageCache.load(((Gift)mDataList.get(position)).id);
                 if (bitmap != null) {
                     bitmap = Utils.getScaleAndRoundBitmapOut(bitmap, mBitmapWidth+5, mBitmapWidth+5, 1.2f);
@@ -79,7 +79,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
                 } else {
                     loadingImages(position, imageView);
                 }
-//            }
+            }
         }
         bitmap = null;
     }
@@ -145,19 +145,19 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
     //---------------------------------------------------------------------------
     @Override
     public void onScrollStateChanged(AbsListView view,int scrollState) {
-//        switch (scrollState) {
-//            case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-//                mBusy = true;
-//                break;
-//            case OnScrollListener.SCROLL_STATE_FLING:
-//                mBusy = true;
-//                break;
-//            case OnScrollListener.SCROLL_STATE_IDLE:
-//                mBusy = false;
-//                view.invalidateViews(); //  РџР РђР’Р�Р›Р¬РќРћ ???
-//                break;
-//        }
-//        mBusy = false;
+        switch (scrollState) {
+            case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+                mBusy = true;
+                break;
+            case OnScrollListener.SCROLL_STATE_FLING:
+                mBusy = true;
+                break;
+            case OnScrollListener.SCROLL_STATE_IDLE:
+                mBusy = false;
+                view.invalidateViews(); //  РџР РђР’Р�Р›Р¬РќРћ ???
+                break;
+        }
+        mBusy = false;
     }
     //---------------------------------------------------------------------------
 }

@@ -32,6 +32,8 @@ public class GiftsActivity extends FragmentActivity {
 
 	private LockerView mLoadingLocker;
 	private TripleButton mTripleButton;
+	
+	private GiftsFragment mGiftFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,10 @@ public class GiftsActivity extends FragmentActivity {
 
 		mLoadingLocker = (LockerView) this.findViewById(R.id.llvGiftsLoading);
 
+		mGiftFragment = new GiftsFragment();
+		getSupportFragmentManager().beginTransaction().replace(R.id.giftGrid,
+				mGiftFragment, GiftsFragment.GIFTS_ALL_TAG).commit();
+		
 		mGiftsCollection = new GiftsCollection();
 
 		// init triple button
@@ -58,8 +64,7 @@ public class GiftsActivity extends FragmentActivity {
 		mTripleButton.setRightText(Gift.getTypeNameResId(Gift.PRESENT));
 
 		mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
-
-		Data.giftsList = new LinkedList<Gift>();		
+		
 		update();
 	}
 
@@ -71,24 +76,20 @@ public class GiftsActivity extends FragmentActivity {
 		mGiftRequest = new GiftsRequest(getApplicationContext());
 		mGiftRequest.callback(new ApiHandler() {
 			@Override
-			public void success(ApiResponse response) {				
-				mGiftsCollection.add(Gift.parse(response));
-				// do not forget to initialize
-				Data.giftsList.addAll(mGiftsCollection.getGifts());
-				
-				getSupportFragmentManager().beginTransaction().replace(R.id.giftGrid,
-						new GiftsFragment(), GiftsFragment.GIFTS_ALL_TAG).commit();
+			public void success(ApiResponse response) {
+				Data.giftsList.addAll(Gift.parse(response));
+				mGiftsCollection.add(Data.giftsList);		
 
+				mGiftFragment.setGifts(mGiftsCollection.getGifts());
+				
 				mTripleButton.setLeftListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						v.post(new Runnable() {							
 							@Override
-							public void run() {
-								Data.giftsList.clear();
-								Data.giftsList.addAll(mGiftsCollection.getGifts(Gift.ROMANTIC));
-								((GiftsFragment) getSupportFragmentManager().findFragmentByTag(
-										GiftsFragment.GIFTS_ALL_TAG)).update();
+							public void run() {																							
+								mGiftFragment.setGifts(mGiftsCollection.getGifts(Gift.ROMANTIC));
+								mGiftFragment.update();								
 							}
 						});
 					}
@@ -100,10 +101,8 @@ public class GiftsActivity extends FragmentActivity {
 						v.post(new Runnable() {							
 							@Override
 							public void run() {
-								Data.giftsList.clear();
-								Data.giftsList.addAll(mGiftsCollection.getGifts(Gift.FRIENDS));
-								((GiftsFragment) getSupportFragmentManager().findFragmentByTag(
-										GiftsFragment.GIFTS_ALL_TAG)).update();
+								mGiftFragment.setGifts(mGiftsCollection.getGifts(Gift.FRIENDS));
+								mGiftFragment.update();
 							}
 						});
 						
@@ -117,29 +116,25 @@ public class GiftsActivity extends FragmentActivity {
 						v.post(new Runnable() {							
 							@Override
 							public void run() {
-								Data.giftsList.clear();
-								Data.giftsList.addAll(mGiftsCollection.getGifts(Gift.PRESENT));
-								((GiftsFragment) getSupportFragmentManager().findFragmentByTag(
-										GiftsFragment.GIFTS_ALL_TAG)).update();
+								mGiftFragment.setGifts(mGiftsCollection.getGifts(Gift.PRESENT));
+								mGiftFragment.update();
 							}
 						});
 					}
-				});
+				});				
 				
 				runOnUiThread(new Runnable() {
 					
 					@Override
-					public void run() {
+					public void run() {						
 						mLoadingLocker.setVisibility(View.GONE);
-//						((GiftsFragment) getSupportFragmentManager().findFragmentByTag(
-//								GiftsFragment.GIFTS_ALL_TAG)).update();
 					}
 				});
 			}
 
 			@Override
 			public void fail(int codeError, ApiResponse response) {
-				post(new Runnable() {
+				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						Toast.makeText(getApplicationContext(),

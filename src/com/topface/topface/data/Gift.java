@@ -48,8 +48,8 @@ public class Gift extends AbstractData {
 	// Gets User gifts
 	public static LinkedList<Gift> parse(User user) {
 		LinkedList<Gift> gifts = new LinkedList<Gift>();
-		
-		
+		gifts.add(Gift.getSendGiftItem());
+		//TODO waiting for server
 		
 		return gifts;
 	}
@@ -67,6 +67,12 @@ public class Gift extends AbstractData {
         }
 	}
 	
+	public static Gift getSendGiftItem() {
+		Gift result = new Gift();
+		result.type = Gift.SEND_BTN;
+		return result;
+	}
+	
 	@Override
 	public String getSmallLink() {
 		return link;
@@ -75,5 +81,5 @@ public class Gift extends AbstractData {
 	@Override
 	public String getBigLink() {		
 		return link;
-	}
+	}	
 }

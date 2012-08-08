@@ -75,8 +75,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 	        }
         }
                 
-        endAnimation();     
-        
+        endAnimation();
     }
 
     public void snapToScreen(int typeAnimation) {

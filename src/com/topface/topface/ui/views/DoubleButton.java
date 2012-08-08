@@ -42,8 +42,8 @@ public class DoubleButton extends LinearLayout implements CompoundButton.OnCheck
         		RIGHT_BUTTON = i;
         	}
 		}
-        mLeftClickableState = true;
-		mRightClickableState = true;
+        mLeftClickableState = mGroup.getChildAt(LEFT_BUTTON).isClickable();
+		mRightClickableState = mGroup.getChildAt(RIGHT_BUTTON).isClickable();
     }
     //---------------------------------------------------------------------------
     public void setLeftText(String text) {
@@ -85,7 +85,7 @@ public class DoubleButton extends LinearLayout implements CompoundButton.OnCheck
             break;
         case R.id.dblRight:            	
     		mGroup.getChildAt(RIGHT_BUTTON).setClickable(!value);
-    		mLeftClickableState =!value;        		
+    		mRightClickableState =!value;        		
             break;
         default:
             break;

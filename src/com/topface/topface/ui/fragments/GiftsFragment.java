@@ -1,5 +1,7 @@
 package com.topface.topface.ui.fragments;
 
+import java.util.LinkedList;
+
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
@@ -40,6 +42,8 @@ import android.widget.GridView;
 public class GiftsFragment extends Fragment {
 
 	// Constants
+	private String mTag;
+	
 	public static final String GIFTS_ALL_TAG = "giftsGridAll";
 	public static final String GIFTS_PROFILE_TAG = "giftsGridProfile";
 	public static final int GIFTS_COLUMN_PORTRAIT = 3;
@@ -51,12 +55,20 @@ public class GiftsFragment extends Fragment {
 	private GridView mGridView;
 	
 	private User mUser;
+	private LinkedList<Gift> mGifts = new LinkedList<Gift>();
 
+	
+	//TODO Data giftsList remove
+	
 	@Override
 	public void onAttach(Activity activity) {		
 		if (activity instanceof UserProfileActivity) {
-			mUser = ((UserProfileActivity)activity).mUser;
-		}		
+			mUser = ((UserProfileActivity)activity).mDataUser;
+			mTag = GIFTS_PROFILE_TAG;
+			setGifts(Gift.parse(mUser));
+		} else if (activity instanceof GiftsActivity) {
+			mTag = GIFTS_ALL_TAG;
+		}
 		super.onAttach(activity);
 	}
 	
@@ -64,7 +76,7 @@ public class GiftsFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_grid, null);
 
-		mGalleryManager = new GiftGalleryManager<Gift>(this.getActivity().getApplicationContext(), Data.giftsList);
+		mGalleryManager = new GiftGalleryManager<Gift>(this.getActivity().getApplicationContext(), mGifts);
 		mGridAdapter = new GiftsAdapter(this.getActivity().getApplicationContext(), mGalleryManager);
 
 		mGridView = (GridView) view.findViewById(R.id.fragmentGrid);
@@ -77,7 +89,7 @@ public class GiftsFragment extends Fragment {
 
 		mGridView.setNumColumns(columns);
 
-		if (getTag() == GIFTS_ALL_TAG) {			
+		if (mTag == GIFTS_ALL_TAG) {			
 			mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {					
@@ -94,7 +106,7 @@ public class GiftsFragment extends Fragment {
 					}
 				}
 			});
-		} else if (getTag() == GIFTS_PROFILE_TAG) {
+		} else if (mTag == GIFTS_PROFILE_TAG) {
 			mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {					
@@ -115,11 +127,10 @@ public class GiftsFragment extends Fragment {
 	
 	@Override
 	public void onResume() {			
-		if (mUser != null) {
-			Data.giftsList.clear();
-			Data.giftsList.addAll(Gift.parse(mUser));
-		}
-		update();
+//		if (mUser != null) {
+//			setGifts(Gift.parse(mUser));
+//		}
+//		update();
 		
 		super.onResume();
 	}
@@ -139,6 +150,7 @@ public class GiftsFragment extends Fragment {
 		            final Gift sendedGift = new Gift();
 		            sendedGift.id = sendGift.giftId;
 		            sendedGift.link = url;
+		            sendedGift.type = Gift.PROFILE;
 		            sendGift.callback(new ApiHandler() {
 		                @Override
 		                public void success(ApiResponse response) throws NullPointerException {
@@ -148,7 +160,7 @@ public class GiftsFragment extends Fragment {
 		                    getActivity().runOnUiThread(new Runnable() {
 		                        @Override
 		                        public void run() {              
-		                        	Data.giftsList.add(sendedGift);
+		                        	mGifts.add(sendedGift);
 		                        	update();
 		                        }
 		                    });
@@ -180,6 +192,11 @@ public class GiftsFragment extends Fragment {
 		mGalleryManager.update();
 	}
 
+	public void setGifts(LinkedList<Gift> gifts) {
+		mGifts.clear();
+		mGifts.addAll(gifts);
+	}
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();

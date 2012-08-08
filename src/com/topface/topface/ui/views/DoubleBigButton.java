@@ -65,15 +65,6 @@ public class DoubleBigButton extends LinearLayout implements CompoundButton.OnCh
     		mLeftClickableState = true;
     		mRightClickableState = false;
     	}
-    	
-//        switch (n) {
-//            case LEFT_BUTTON:
-//                mLeftButton.setChecked(true);      
-//                break;
-//            case RIGHT_BUTTON:
-//                mRightButton.setChecked(true);                
-//                break;
-//        }
     }
     //---------------------------------------------------------------------------
     public void setLeftListener(OnClickListener onClickListener) {

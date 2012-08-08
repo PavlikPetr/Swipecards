@@ -1,5 +1,8 @@
 package com.topface.topface.ui.adapters;
 
+import java.util.LinkedList;
+
+import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.utils.GiftGalleryManager;
@@ -45,8 +48,8 @@ public class GiftsAdapter extends BaseAdapter {
 	        holder = (ViewHolder)convertView.getTag();
 	    }
 		    	    
-	    holder.mGift = ((Gift)mGalleryManager.get(position));
-	 
+	    holder.mGift = ((Gift)mGalleryManager.get(position));	    
+	    
 	    if (holder.mGift.type == Gift.PROFILE) {
 	    	mGalleryManager.getImage(position,(ImageView) holder.mGiftImage);
 	    	holder.mGiftMask.setVisibility(View.VISIBLE);
