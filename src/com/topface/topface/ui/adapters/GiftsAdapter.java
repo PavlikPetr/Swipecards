@@ -45,12 +45,12 @@ public class GiftsAdapter extends BaseAdapter {
 	        holder = (ViewHolder)convertView.getTag();
 	    }
 		    	    
-	    holder.mGift = ((Gift)mGalleryManager.get(position));
-	 
+	    holder.mGift = ((Gift)mGalleryManager.get(position));	    
+	    
 	    if (holder.mGift.type == Gift.PROFILE) {
 	    	mGalleryManager.getImage(position,(ImageView) holder.mGiftImage);
 	    	holder.mGiftMask.setVisibility(View.VISIBLE);
-	    	holder.mPriceText.setVisibility(View.GONE);		    
+	    	holder.mPriceText.setVisibility(View.GONE);	    
 	    } else if (holder.mGift.type == Gift.SEND_BTN) {
 	 	    holder.mGiftImage.setImageResource(R.drawable.chat_gift_selector);	    	
 	 	    holder.mGiftMask.setVisibility(View.GONE);
@@ -60,7 +60,7 @@ public class GiftsAdapter extends BaseAdapter {
 	    	holder.mGiftMask.setVisibility(View.VISIBLE);
 	    	holder.mPriceText.setVisibility(View.VISIBLE);
 		    holder.mPriceText.setText(Integer.toString(holder.mGift.price));
-	    }	    
+		}
 	    
 	    return convertView;
 	}

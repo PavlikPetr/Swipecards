@@ -169,7 +169,7 @@ public class TopsFragment extends BaseFragment {
                     @Override
                     public void run() {
                         onUpdateSuccess(false);
-                        mGridAdapter.notifyDataSetChanged();
+                        mGridAdapter.notifyDataSetChanged();                        
                         mGalleryGridManager.update();
                         mGallery.setVisibility(View.VISIBLE);
                     }
@@ -273,7 +273,7 @@ public class TopsFragment extends BaseFragment {
 
 	@Override
 	protected void onUpdateStart(boolean isPushUpdating) {
-		if(isPushUpdating) {
+		if(!isPushUpdating) {
 			mLoadingLocker.setVisibility(View.VISIBLE);
 			mBtnDouble.setClickable(false);
 		}
@@ -281,7 +281,7 @@ public class TopsFragment extends BaseFragment {
 
 	@Override
 	protected void onUpdateSuccess(boolean isPushUpdating) {
-		if(isPushUpdating) {
+		if(!isPushUpdating) {
 			mLoadingLocker.setVisibility(View.GONE);
 			mBtnDouble.setClickable(true);
 		}
@@ -289,7 +289,7 @@ public class TopsFragment extends BaseFragment {
 
 	@Override
 	protected void onUpdateFail(boolean isPushUpdating) {
-		if(isPushUpdating) {
+		if(!isPushUpdating) {
 			mLoadingLocker.setVisibility(View.GONE);
 			mBtnDouble.setClickable(true);
 		}

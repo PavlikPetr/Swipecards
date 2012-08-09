@@ -28,7 +28,7 @@ public class City extends AbstractData {
                 }
         } catch(Exception e) {
             Debug.log("City.class", "Wrong response parsing: " + e);
-        }
+        }        
 
         return cities;
     }
