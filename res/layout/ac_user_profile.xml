@@ -14,34 +14,49 @@
 	    <!-- static info -->
 	    <RelativeLayout
 	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content" >
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/user_avatar_bg" >
 	
 	        <!-- Avatar -->
 	        <RelativeLayout
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_marginTop="20dp" >
+	            android:layout_marginTop="10dp" >
 	            
-		        <ImageView
-		            android:id="@+id/ivUserAvatar"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:layout_marginLeft="20dp"
-		            android:layout_marginRight="10dp" />
+	            <RelativeLayout
+	                    android:id="@+id/loUserAvatarGroup"
+	                    android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"  
+	                    android:layout_marginLeft="20dp"
+                        android:layout_marginRight="6dp" >
+                        
+                    <ImageView
+                        android:id="@+id/ivUserAvatar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/avatar_frame" />
+                        
+		            <ImageView
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:background="@drawable/avatar_frame" />
+		            
+                </RelativeLayout>
 		        
 		        <TextView
 		            android:id="@+id/ivUserName"
-		            android:layout_toRightOf="@id/ivUserAvatar"
+		            android:layout_toRightOf="@id/loUserAvatarGroup"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
 		            android:layout_marginTop="10dp"
 		            android:textColor="#FFFFFF"
-		            android:text="" />
+		            android:text="" /> 
 		        
 		        <TextView
 		            android:id="@+id/ivUserCity"
 		            android:layout_below="@id/ivUserName"
-		            android:layout_toRightOf="@id/ivUserAvatar"
+		            android:layout_toRightOf="@id/loUserAvatarGroup"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
 		            android:textColor="#FFFFFF"

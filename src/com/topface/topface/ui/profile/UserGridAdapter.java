@@ -1,6 +1,8 @@
 package com.topface.topface.ui.profile;
 
 import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
 import com.topface.topface.utils.Utils;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 public class UserGridAdapter extends BaseAdapter {
     private LayoutInflater mInflater;    
     private LinkedList<Album> mUserAlbum;
+    private ExecutorService mWorker;
     private Bitmap mMask;
 
     static class ViewHolder {
@@ -26,6 +29,7 @@ public class UserGridAdapter extends BaseAdapter {
     public UserGridAdapter(Context context, LinkedList<Album> userAlbum) {
         mInflater = LayoutInflater.from(context);
         mUserAlbum = userAlbum;
+        mWorker = Executors.newFixedThreadPool(3);
         mMask = BitmapFactory.decodeResource(context.getResources(), R.drawable.user_mask_album);
     }
 
@@ -64,7 +68,7 @@ public class UserGridAdapter extends BaseAdapter {
     }
 
     private void loader(final String url, final ImageView iv) {
-        new Thread(new Runnable() {
+        mWorker.execute(new Runnable() {
             @Override
             public void run() {
                 Bitmap rawBitmap = Http.bitmapLoader(url);
@@ -78,6 +82,6 @@ public class UserGridAdapter extends BaseAdapter {
                     });
                 }
             }
-        }).start();
+        });
     }
 }

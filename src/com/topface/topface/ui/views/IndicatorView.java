@@ -50,7 +50,7 @@ public class IndicatorView extends View {
         Debug.log(this, "mCurrentId:"+mCurrentId);
 
         canvas.drawBitmap(mDivider, 0, mDividerY, mPaint);
-        if (mCurrentId > 0 && mPoints.size() > 0) {
+        if (mCurrentId >= 0 && mPoints.size() > 0) {
             int x = mPoints.get(mCurrentId);
             canvas.drawBitmap(mIndicator, x, 0, mPaint);
         }

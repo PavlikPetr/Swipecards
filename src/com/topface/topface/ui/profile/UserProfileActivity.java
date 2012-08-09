@@ -15,6 +15,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.Http;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -58,6 +59,7 @@ public class UserProfileActivity extends FragmentActivity {
     
     private QuestionnaireFragment mQuestionnaireFragment;
     private GiftsFragment mGiftsFragment;
+    private Bitmap mMask;
 
     public User mUser;
     
@@ -131,6 +133,8 @@ public class UserProfileActivity extends FragmentActivity {
             }
         });
         
+        mMask = BitmapFactory.decodeResource(getResources(), R.drawable.avatar_frame_mask);
+        
         getUserProfile();
     }
 
@@ -143,7 +147,7 @@ public class UserProfileActivity extends FragmentActivity {
             public void success(final ApiResponse response) {
                 mUser = User.parse(mUserId, response);
                 Bitmap rawBitmap = Http.bitmapLoader(mUser.getBigLink());
-                final Bitmap avatar = Utils.getRoundedBitmap(rawBitmap, 150, 150);
+                final Bitmap avatar = Utils.getRoundedCornerBitmapByMask(rawBitmap, mMask);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
