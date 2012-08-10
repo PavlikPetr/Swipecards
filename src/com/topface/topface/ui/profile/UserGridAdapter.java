@@ -58,8 +58,7 @@ public class UserGridAdapter extends BaseAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
         
-        Album album = mUserAlbum.get(position);
-        downloading(album.getBigLink(), holder.mPhoto);
+        fetchImage(position, holder.mPhoto);
 
         return convertView;
     }
@@ -74,39 +73,46 @@ public class UserGridAdapter extends BaseAdapter {
         return position;
     }
 
-    private void fetchImage(final int position, final String url, final ImageView view) {
+    // что с потоковой безопасностью ?
+    private void fetchImage(final int position, final ImageView imageView) {
         Bitmap bitmap = mMemoryCache.get(position);
-
-        if (bitmap != null)
-            view.setImageBitmap(bitmap);
-        else {
-            view.setImageBitmap(null); // хз ??
-            if (!mBusy) {
-                bitmap = mStorageCache.load(mDataList.get(position).getSmallLink());
-                if (bitmap != null) {
-                    imageView.setImageBitmap(bitmap);
-                    mMemoryCache.put(position, bitmap);
-                } else
-                    loadingImages(position, imageView);
-            }
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+        } else {
+            imageView.setImageBitmap(null);
+            mWorker.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Album album = mUserAlbum.get(position);
+                    final Bitmap bitmap = mStorageCache.load(album.getSmallLink());
+                    if (bitmap != null) {
+                        imageView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageView.setImageBitmap(bitmap);
+                            }
+                        });
+                        mMemoryCache.put(position, bitmap);
+                    } else {
+                        downloading(position, album.getSmallLink(), imageView);
+                    }
+            }});
         }
         bitmap = null;
     }
-    private void downloading(final String url, final ImageView iv) {
-        mWorker.execute(new Runnable() {
-            @Override
-            public void run() {
-                Bitmap rawBitmap = Http.bitmapLoader(url);
-                final Bitmap bitmap = Utils.getRoundedCornerBitmapByMask(rawBitmap, mMask);
-                if (bitmap != null) {
-                    iv.post(new Runnable() {
-                        @Override
-                        public void run() {
-                          iv.setImageBitmap(bitmap);
-                        }
-                    });
-                }
-            }
-        });
+    
+    private void downloading(final int position, final String url, final ImageView iv) {
+        Bitmap rawBitmap = Http.bitmapLoader(url);
+        final Bitmap bitmap = Utils.getRoundedCornerBitmapByMask(rawBitmap, mMask);
+        if (bitmap != null) {
+          iv.post(new Runnable() {
+              @Override
+              public void run() {
+                  iv.setImageBitmap(bitmap);
+              }
+          });
+        }
+        mMemoryCache.put(position, bitmap);
+        mStorageCache.save(url, bitmap);
     }
 }
