@@ -17,6 +17,7 @@ import com.topface.topface.utils.AuthToken;
 import com.topface.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +28,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class WebAuthActivity extends Activity {
+	
+	public final static String ACCESS_TOKEN = "access_token";
+	public final static String USER_ID = "user_id";
+	public final static String EXPIRES_IN = "expires_in";	
+    
     // Data
     private WebView mWebView;
     private View mProgressBar;
@@ -70,44 +76,23 @@ public class WebAuthActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == AuthToken.AUTH_COMPLETE) {
-                AuthToken token = (AuthToken)msg.obj;
-                if (token == null) {
-                    WebAuthActivity.this.finish();
+            	HashMap<String, String> queryMap = (HashMap<String, String>) msg.obj;
+            	if (queryMap == null) {
+            		setResult(Activity.RESULT_CANCELED);
+            		WebAuthActivity.this.finish();
                     return;
-                }
+            	}
+            		
+            	String token_key = queryMap.get("access_token");
+                String user_id = queryMap.get("user_id");
+                String expires_in = queryMap.get("expires_in");
 
-                mProgressBar.setVisibility(View.VISIBLE);
-
-                AuthRequest authRequest = new AuthRequest(getApplication());
-                authRequest.platform = token.getSocialNet();
-                authRequest.sid = token.getUserId();
-                authRequest.token = token.getTokenKey();
-                authRequest.callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                        Debug.log(WebAuthActivity.this, "web auth ssid is ok");
-                        Auth auth = Auth.parse(response);
-                        Data.saveSSID(WebAuthActivity.this, auth.ssid);
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                setResult(Activity.RESULT_OK);
-                                finish();
-                            }
-                        });
-                    }
-                    @Override
-                    public void fail(int codeError,ApiResponse response) {
-                        Debug.log(WebAuthActivity.this, "web auth ssid is wrong:" + codeError);
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                setResult(Activity.RESULT_CANCELED);
-                                finish();
-                            }
-                        });
-                    }
-                }).exec();
+                Intent intent = WebAuthActivity.this.getIntent();
+				intent.putExtra(ACCESS_TOKEN, token_key);
+				intent.putExtra(USER_ID, user_id);
+				intent.putExtra(EXPIRES_IN, expires_in);
+               	setResult(Activity.RESULT_OK, intent);
+               	finish();
             } else {
                 Debug.log(WebAuthActivity.this, "web auth token is wrong");
                 Data.removeSSID(getApplicationContext());
@@ -150,13 +135,8 @@ public class WebAuthActivity extends Activity {
                 }
 
                 HashMap<String, String> queryMap = parseQueryString(mMatcherToken.group(1));
-                String token_key = queryMap.get("access_token");
-                String user_id = queryMap.get("user_id");
-                String expires_in = queryMap.get("expires_in");
-
-                AuthToken authToken = new AuthToken(getApplicationContext());
-                authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
-                mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_COMPLETE, authToken));
+                
+                mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_COMPLETE, queryMap));
             } else if (mMatcherError.find() || mMatcherLogout.find()) {
                 view.stopLoading();
                 new AuthToken(getApplicationContext()).removeToken();

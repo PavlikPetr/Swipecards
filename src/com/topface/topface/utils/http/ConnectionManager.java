@@ -90,8 +90,8 @@ public class ConnectionManager {
                         httpPost.abort();
                 }
                 if (httpClient != null) {
-                httpClient.close();
-            }
+                	httpClient.close();
+                }
             }
         });
     }
@@ -113,6 +113,7 @@ public class ConnectionManager {
                 rawResponse = sb.toString();
                 is.close();
                 //httpEntity.consumeContent();
+                r.close();
             }
         } catch(Exception e) {
             Debug.log(TAG, "cm exception:" + e.getMessage());
@@ -158,8 +159,9 @@ public class ConnectionManager {
                 rawResponse = request(httpClient, httpPost);
                 Debug.log(TAG, "cm_reauth:resp1:" + rawResponse);
                 response = new ApiResponse(rawResponse);
-            } else
+            } else {
                 Data.removeSSID(context);
+            }
         } catch(Exception e) {
             Debug.log(TAG, "cm_reauth exception:" + e.toString());
         }
