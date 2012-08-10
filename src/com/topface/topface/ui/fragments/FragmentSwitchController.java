@@ -2,10 +2,12 @@ package com.topface.topface.ui.fragments;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Scroller;
 
 public class FragmentSwitchController extends ViewGroup implements View.OnClickListener {
@@ -20,6 +22,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
     private FragmentMenu mFragmentMenu;    
     
     private boolean mScrolling = false;
+    private VelocityTracker mVelocityTracker;
     
     public void setFragmentMenu(FragmentMenu fragmentMenu) {
         mFragmentMenu = fragmentMenu;
@@ -39,8 +42,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 
     public FragmentSwitchController(Context context, AttributeSet attrs) {
         super(context, attrs);        
-        mScroller =  new Scroller(context, new AccelerateInterpolator(1.0f)); //new Scroller(context, new DecelerateInterpolator(1.0f));
-        
+        mScroller =  new Scroller(context, new AccelerateInterpolator(1.0f)); //new Scroller(context, new DecelerateInterpolator(1.0f));        
     }
 
     @Override
@@ -147,7 +149,20 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
     
     @Override
     public void onClick(View v) {
-    }
+    }    
     
+//    @Override
+//    public boolean onInterceptTouchEvent(MotionEvent event) {
+//    	Log.d("OLOLO","Inter:"+event.getAction());
+//    	
+//    	return super.onInterceptTouchEvent(event);
+//    }
+//    
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//    	Log.d("OLOLO","Touch:"+event.getAction());    	
+//    	
+//    	return super.onTouchEvent(event);
+//    }
 }
 

@@ -61,7 +61,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     private EditText mEditBox;
     private TextView mHeaderTitle;
 //    private ProgressBar mProgressBar;
-    private LockerView mLoadinLocker;
+    private LockerView mLoadingLocker;
     
     private MessageRequest messageRequest;
     private HistoryRequest historyRequest;
@@ -100,7 +100,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         mHeaderTitle = ((TextView)findViewById(R.id.tvHeaderTitle));
 
         // Progress
-        mLoadinLocker = (LockerView)findViewById(R.id.llvChatLoading);
+        mLoadingLocker = (LockerView)findViewById(R.id.llvChatLoading);
 
         // Params
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
@@ -157,7 +157,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     }
     //---------------------------------------------------------------------------
     private void update() {
-        mLoadinLocker.setVisibility(View.VISIBLE);
+        mLoadingLocker.setVisibility(View.VISIBLE);
         historyRequest = new HistoryRequest(getApplicationContext());
         historyRequest.userid = mUserId;
         historyRequest.limit = LIMIT;
@@ -170,7 +170,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                 post(new Runnable() {
                     @Override
                     public void run() {
-                        mLoadinLocker.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                         mAdapter.notifyDataSetChanged();
                     }
                 });
@@ -181,7 +181,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                     @Override
                     public void run() {
                         Toast.makeText(ChatActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mLoadinLocker.setVisibility(View.GONE);
+                        mLoadingLocker.setVisibility(View.GONE);
                     }
                 });
             }
@@ -252,7 +252,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                 if (text == null || text.length() == 0)
                     return false;
 
-                mLoadinLocker.setVisibility(View.VISIBLE);
+                mLoadingLocker.setVisibility(View.VISIBLE);
 
                 messageRequest = new MessageRequest(ChatActivity.this.getApplicationContext());
                 messageRequest.message = mEditBox.getText().toString();
@@ -275,7 +275,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	                                mAdapter.addSentMessage(history);
 	                                mAdapter.notifyDataSetChanged();
 	                                mEditBox.getText().clear();
-	                                mLoadinLocker.setVisibility(View.GONE);
+	                                mLoadingLocker.setVisibility(View.GONE);
 	                                
 	                                InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 	                                imm.hideSoftInputFromWindow(mEditBox.getWindowToken(), 0);
@@ -291,7 +291,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                             @Override
                             public void run() {
                                 Toast.makeText(ChatActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                                mLoadinLocker.setVisibility(View.GONE);
+                                mLoadingLocker.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -307,7 +307,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
         	if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-	            mLoadinLocker.setVisibility(View.VISIBLE);
+	            mLoadingLocker.setVisibility(View.VISIBLE);
 	            Bundle extras = data.getExtras();
 	            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);            
 	            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
@@ -338,7 +338,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	                            history.link = url;
 	                            mAdapter.addSentMessage(history);
 	                            mAdapter.notifyDataSetChanged();
-	                            mLoadinLocker.setVisibility(View.GONE);
+	                            mLoadingLocker.setVisibility(View.GONE);
 	                        }
 	                    });
 	                }
@@ -350,7 +350,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	                        public void run() {
 	                            if(response.code==ApiResponse.PAYMENT)
 	                                startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
-	                            mLoadinLocker.setVisibility(View.GONE);
+	                            mLoadingLocker.setVisibility(View.GONE);
 	                        }
 	                    });
 	                }
@@ -365,7 +365,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
         		coordRequest.userid = mUserId;
         		coordRequest.latitude = latitude;
         		coordRequest.longitude = longitude;
-        		mLoadinLocker.setVisibility(View.VISIBLE);
+        		mLoadingLocker.setVisibility(View.VISIBLE);
         		coordRequest.callback(new ApiHandler() {
         			
         			@Override
@@ -385,7 +385,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                 				} else {
                 					Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
                 				}
-                            	mLoadinLocker.setVisibility(View.GONE);
+                            	mLoadingLocker.setVisibility(View.GONE);
                             }
         				});
         			}
@@ -397,7 +397,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                             @Override
                             public void run() {
                             	Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                            	mLoadinLocker.setVisibility(View.GONE);
+                            	mLoadingLocker.setVisibility(View.GONE);
                             }
         				});
         			}
