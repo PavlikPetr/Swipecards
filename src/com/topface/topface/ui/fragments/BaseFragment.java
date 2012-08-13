@@ -1,14 +1,19 @@
 package com.topface.topface.ui.fragments;
 
+import java.util.LinkedList;
+
 import com.topface.topface.Data;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Banner;
 import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.http.Http;
+import com.topface.topface.utils.http.IRequestClient;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,10 +24,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-public abstract class BaseFragment extends Fragment {
-
+public abstract class BaseFragment extends Fragment implements IRequestClient{
+	
     protected boolean mIsActive;
     public boolean isFilled = false;
+    private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
     abstract public void fillLayout();
     abstract public void clearLayout();
@@ -41,6 +47,7 @@ public abstract class BaseFragment extends Fragment {
             return;
 
         BannerRequest bannerRequest = new BannerRequest(getActivity().getApplicationContext());
+        registerRequest(bannerRequest);
         bannerRequest.place = bannerRequestName;
         bannerRequest.callback(new ApiHandler() {
             @Override
@@ -129,6 +136,10 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
          super.onDestroy();
+         for (ApiRequest request : mRequests) {
+        	 request.cancel();        	 
+         }         
+         mRequests.clear();
          Debug.log("onDestroyView:10");
     }
     
@@ -141,6 +152,18 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle toSave) {
 
+    }
+    
+    @Override
+    public void registerRequest(ApiRequest request) {
+    	if (!mRequests.contains(request)) {
+    		mRequests.add(request);
+    	}
+    }
+    
+    @Override
+    public void removeRequest(ApiRequest request) {    	
+    	mRequests.remove(request);
     }
 
 }

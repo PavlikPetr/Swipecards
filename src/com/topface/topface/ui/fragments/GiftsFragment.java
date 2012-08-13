@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,7 @@ import android.widget.GridView;
  * 
  */
 
-public class GiftsFragment extends Fragment {
+public class GiftsFragment extends BaseFragment {
 
 	// Constants
 	private String mTag;
@@ -136,6 +135,7 @@ public class GiftsFragment extends Fragment {
 				if (mUser != null) {
 					SendGiftRequest sendGift = new SendGiftRequest(getActivity()
 							.getApplicationContext());
+					registerRequest(sendGift);
 					sendGift.giftId = id;
 					sendGift.userId = mUser.uid;
 					final Gift sendedGift = new Gift();
@@ -200,4 +200,10 @@ public class GiftsFragment extends Fragment {
 		super.onDestroy();
 		mGridAdapter.release();
 	}
+
+	@Override
+	public void fillLayout() {	}
+
+	@Override
+	public void clearLayout() { }
 }

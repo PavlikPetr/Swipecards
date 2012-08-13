@@ -159,6 +159,7 @@ public class LikesFragment extends BaseFragment {
 				: DoubleBigButton.LEFT_BUTTON);
 
 		FeedLikesRequest likesRequest = new FeedLikesRequest(getActivity());
+		registerRequest(likesRequest);
 		likesRequest.limit = LIMIT;
 		likesRequest.only_new = mNewUpdating;
 		likesRequest.callback(new ApiHandler() {
@@ -215,6 +216,7 @@ public class LikesFragment extends BaseFragment {
 
 		FeedLikesRequest likesRequest = new FeedLikesRequest(
 				getActivity());
+		registerRequest(likesRequest);
 		likesRequest.limit = LIMIT;
 		likesRequest.only_new = mNewUpdating;
 		if (!mNewUpdating) {

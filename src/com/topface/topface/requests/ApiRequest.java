@@ -2,6 +2,9 @@ package com.topface.topface.requests;
 
 import com.topface.topface.Static;
 import com.topface.topface.utils.http.ConnectionManager;
+import com.topface.topface.utils.http.IRequestClient;
+import com.topface.topface.utils.http.RequestConnection;
+
 import android.content.Context;
 
 public abstract class ApiRequest {
@@ -9,11 +12,14 @@ public abstract class ApiRequest {
     public String ssid;
     public ApiHandler handler;
     public Context context;
+    public boolean canceled = false;
+    private RequestConnection connection;
+    
     //---------------------------------------------------------------------------
     public ApiRequest(Context context) {
         ssid = Static.EMPTY;
         this.context = context;
-    }
+    }    
     //---------------------------------------------------------------------------
     public ApiRequest callback(ApiHandler handler) {
         this.handler = handler;
@@ -21,13 +27,16 @@ public abstract class ApiRequest {
     }
     //---------------------------------------------------------------------------
     public void exec() {
-        ConnectionManager.getInstance().sendRequest(this);
+    	connection = ConnectionManager.getInstance().sendRequest(this);
         //ConnectionManager.getInstance().sendRequestNew(this);
         //ConnectionService.sendRequest(mContext,this);
     }
     //---------------------------------------------------------------------------
     public void cancel() {
         handler = null;
+        if (connection != null) 
+        	connection.abort();
+        canceled = true;
         //if(mHttpPost!=null) mHttpPost.abort();
     }
     //---------------------------------------------------------------------------

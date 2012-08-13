@@ -14,21 +14,19 @@ import com.topface.topface.ui.views.TripleButton;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class GiftsActivity extends FragmentActivity {	
+public class GiftsActivity extends BaseFragmentActivity {	
 	
 	public static final int INTENT_REQUEST_GIFT = 111;
 	public static final String INTENT_GIFT_ID = "gift_id";
 	public static final String INTENT_GIFT_URL = "gift_url";
 
 	public GiftsCollection mGiftsCollection;
-	private GiftsRequest mGiftRequest;
 
 	private LockerView mLoadingLocker;
 	private TripleButton mTripleButton;
@@ -117,8 +115,9 @@ public class GiftsActivity extends FragmentActivity {
 		if (Data.giftsList.isEmpty()) {
 			mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
 			mLoadingLocker.setVisibility(View.VISIBLE);
-			mGiftRequest = new GiftsRequest(getApplicationContext());
-			mGiftRequest.callback(new ApiHandler() {
+			GiftsRequest giftRequest = new GiftsRequest(getApplicationContext());
+			registerRequest(giftRequest);	
+			giftRequest.callback(new ApiHandler() {
 				@Override
 				public void success(ApiResponse response) {
 					Data.giftsList.addAll(Gift.parse(response));
@@ -177,9 +176,7 @@ public class GiftsActivity extends FragmentActivity {
 			break;
 		}
 	}
-
-
-
+	
 	/**
 	 * Works with array of gifts, categorizes by type
 	 */

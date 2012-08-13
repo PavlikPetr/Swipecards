@@ -158,6 +158,7 @@ public class TopsFragment extends BaseFragment {
         mGallery.setSelection(0);
 
         TopRequest topRequest = new TopRequest(getActivity());
+        registerRequest(topRequest);
         topRequest.sex = mActionData.sex;
         topRequest.city = mActionData.city_id;
         topRequest.callback(new ApiHandler() {
@@ -195,6 +196,7 @@ public class TopsFragment extends BaseFragment {
         }
         onUpdateStart(false);        
         CitiesRequest citiesRequest = new CitiesRequest(getActivity());
+        registerRequest(citiesRequest);
         citiesRequest.type = "top";
         citiesRequest.callback(new ApiHandler() {
             @Override

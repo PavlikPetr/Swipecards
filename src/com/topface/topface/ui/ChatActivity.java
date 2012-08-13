@@ -44,11 +44,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ChatActivity extends Activity implements View.OnClickListener, LocationListener {
+public class ChatActivity extends BaseFragmentActivity implements View.OnClickListener, LocationListener {
     // Data
     private int mUserId;
     private String mUserAvatarUrl;
@@ -144,12 +143,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     }
     //---------------------------------------------------------------------------
     @Override
-    protected void onDestroy() {
-        if (messageRequest != null)
-            messageRequest.cancel();
-        if (historyRequest != null)
-            historyRequest.cancel();
-
+    protected void onDestroy() {        
         release();
         Data.userAvatar = null;
         Debug.log(this, "-onDestroy");
@@ -159,6 +153,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
     private void update() {
         mLoadingLocker.setVisibility(View.VISIBLE);
         historyRequest = new HistoryRequest(getApplicationContext());
+        registerRequest(historyRequest);
         historyRequest.userid = mUserId;
         historyRequest.limit = LIMIT;
         historyRequest.callback(new ApiHandler() {
@@ -255,6 +250,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
                 mLoadingLocker.setVisibility(View.VISIBLE);
 
                 messageRequest = new MessageRequest(ChatActivity.this.getApplicationContext());
+                registerRequest(messageRequest);
                 messageRequest.message = mEditBox.getText().toString();
                 messageRequest.userid = mUserId;
                 messageRequest.callback(new ApiHandler() {
@@ -313,6 +309,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 	            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
 	            Debug.log(this, "id:" + id + " url:" + url);
 	            SendGiftRequest sendGift = new SendGiftRequest(getApplicationContext());
+	            registerRequest(sendGift);
 	            sendGift.giftId = id;
 	            sendGift.userId = mUserId;
 	            if (mIsAddPanelOpened)
@@ -362,6 +359,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 //        		final String address = extras.getString(GeoMapActivity.INTENT_ADDRESS_ID);        		
         		
         		CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+        		registerRequest(coordRequest);
         		coordRequest.userid = mUserId;
         		coordRequest.latitude = latitude;
         		coordRequest.longitude = longitude;
@@ -453,6 +451,7 @@ public class ChatActivity extends Activity implements View.OnClickListener, Loca
 		final double latitude = location.getLatitude();
 		final double longitude = location.getLongitude();
 		CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+		registerRequest(coordRequest);
 		coordRequest.userid = mUserId;
 		coordRequest.latitude = latitude;
 		coordRequest.longitude = longitude;

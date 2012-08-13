@@ -165,6 +165,7 @@ public class MutualFragment extends BaseFragment {
         mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
 
         FeedSympathyRequest symphatyRequest = new FeedSympathyRequest(getActivity());
+        registerRequest(symphatyRequest);
         symphatyRequest.limit = LIMIT;
         symphatyRequest.only_new = mNewUpdating;
         symphatyRequest.callback(new ApiHandler() {
@@ -215,6 +216,7 @@ public class MutualFragment extends BaseFragment {
     	mNewUpdating = mDoubleButton.isRightButtonChecked();
 
         FeedSympathyRequest symphatyRequest = new FeedSympathyRequest(getActivity());
+        registerRequest(symphatyRequest);
         symphatyRequest.limit = LIMIT;
         symphatyRequest.only_new = mNewUpdating;
         if (!mNewUpdating) {

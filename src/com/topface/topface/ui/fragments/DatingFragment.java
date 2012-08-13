@@ -4,16 +4,12 @@ import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.Confirmation;
 import com.topface.topface.data.NovicePower;
-import com.topface.topface.data.Rate;
 import com.topface.topface.data.Search;
 import com.topface.topface.data.SkipRate;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.NovicePowerRequest;
-import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.ui.ChatActivity;
@@ -26,7 +22,6 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Newbie;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,15 +31,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -188,6 +179,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         Debug.log(this, "update");
         SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         SearchRequest searchRequest = new SearchRequest(getActivity());
+        registerRequest(searchRequest);
         searchRequest.limit = 20;
         searchRequest.geo = preferences.getBoolean(getString(R.string.cache_profile_filter_geo), false);
         searchRequest.online = preferences.getBoolean(getString(R.string.cache_profile_filter_online), false);
@@ -299,6 +291,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void skipUser() {
         SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
+        registerRequest(skipRateRequest);
         skipRateRequest.userid = 0;
         skipRateRequest.callback(new ApiHandler() {
             @Override
@@ -423,6 +416,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
             });
             NovicePowerRequest novicePowerRequest = new NovicePowerRequest(getActivity());
+            registerRequest(novicePowerRequest);
             novicePowerRequest.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
