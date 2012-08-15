@@ -53,16 +53,23 @@ public class ConnectionManager {
         return mInstanse;
     }
     //---------------------------------------------------------------------------
-    public void sendRequest(final ApiRequest apiRequest) {
+    public RequestConnection sendRequest(final ApiRequest apiRequest) {
+    	final RequestConnection connection = new RequestConnection();
+    	
         mWorker.execute(new Runnable() {
             @Override
             public void run() {
                 String rawResponse = Static.EMPTY;
                 AndroidHttpClient httpClient = null;
-                HttpPost httpPost = null;
-
+                HttpPost httpPost = null;                
+                
+                if (apiRequest.canceled)
+                	return;
                 if (apiRequest.handler == null)
                     return;
+                
+                connection.setHttpClient(httpClient);
+                connection.setHttpPost(httpPost);
 
                 apiRequest.ssid = Data.SSID;
 
@@ -94,6 +101,7 @@ public class ConnectionManager {
                 }
             }
         });
+        return connection;
     }
     //---------------------------------------------------------------------------
     private String request(AndroidHttpClient httpClient,HttpPost httpPost) {

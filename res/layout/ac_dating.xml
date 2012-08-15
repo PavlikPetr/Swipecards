@@ -10,14 +10,7 @@
            android:layout_width="fill_parent" 
            android:layout_height="fill_parent" />
     
-    <include layout="@layout/dating_control" />
-    
-     <TextView
-         android:id="@+id/tvDatingCounter"
-         android:layout_width="wrap_content" 
-         android:layout_height="wrap_content"
-         android:layout_alignParentBottom="true"
-         android:layout_centerHorizontal="true" />
+    <include layout="@layout/dating_control" />     
     
   <ProgressBar
       android:id="@+id/prsDatingLoading"

@@ -8,7 +8,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.utils.Debug;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,7 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CitySearchActivity extends Activity {
+public class CitySearchActivity extends BaseFragmentActivity {
     // Data
     private EditText mCityInputView;
     private ListView mCityListView;
@@ -107,6 +106,7 @@ public class CitySearchActivity extends Activity {
         mProgressBar.setVisibility(View.VISIBLE);
 
         citiesRequest = new CitiesRequest(this);
+        registerRequest(citiesRequest);
         citiesRequest.type = "top";
         citiesRequest.callback(new ApiHandler() {
             @Override
@@ -139,6 +139,7 @@ public class CitySearchActivity extends Activity {
     //---------------------------------------------------------------------------
     private void city(String prefix) {
         searchCitiesRequest = new SearchCitiesRequest(this);
+        registerRequest(searchCitiesRequest);
         searchCitiesRequest.prefix = prefix;
         searchCitiesRequest.callback(new ApiHandler() {
             @Override
@@ -176,12 +177,7 @@ public class CitySearchActivity extends Activity {
     }
     //---------------------------------------------------------------------------
     @Override
-    protected void onDestroy() {
-        if (citiesRequest != null)
-            citiesRequest.cancel();
-        if (searchCitiesRequest != null)
-            searchCitiesRequest.cancel();
-
+    protected void onDestroy() {        
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }

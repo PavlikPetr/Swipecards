@@ -9,12 +9,11 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.Http;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseFragmentActivity {
     // Data
     //---------------------------------------------------------------------------
     @Override
@@ -36,6 +35,7 @@ public class MainActivity extends Activity {
     //---------------------------------------------------------------------------
     private void getProfile() {
         ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
+        registerRequest(profileRequest);
         profileRequest.part = ProfileRequest.P_DASHBOARD;
         profileRequest.callback(new ApiHandler() {
             @Override

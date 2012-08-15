@@ -22,7 +22,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -175,6 +174,7 @@ public class DialogsFragment extends BaseFragment {
 				: DoubleBigButton.LEFT_BUTTON);
 
 		DialogRequest dialogRequest = new DialogRequest(getActivity());
+		registerRequest(dialogRequest);
 		dialogRequest.limit = LIMIT;
 		dialogRequest.callback(new ApiHandler() {
 			@Override
@@ -229,6 +229,7 @@ public class DialogsFragment extends BaseFragment {
 		mNewUpdating = mDoubleButton.isRightButtonChecked();
 
 		DialogRequest dialogRequest = new DialogRequest(getActivity());
+		registerRequest(dialogRequest);
 		dialogRequest.limit = LIMIT;
 		if (!mNewUpdating) {
 			if (Data.dialogList.getLast().isLoader() || Data.dialogList.getLast().isLoaderRetry()) {

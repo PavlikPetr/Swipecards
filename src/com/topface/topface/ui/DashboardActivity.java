@@ -19,7 +19,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Newbie;
 import com.topface.topface.utils.http.Http;
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,7 +36,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DashboardActivity extends Activity implements View.OnClickListener {
+public class DashboardActivity extends BaseFragmentActivity implements View.OnClickListener {
     // Data
     private boolean mNotification;
     private TextView mLikesNotify;
@@ -156,10 +155,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     }
     //---------------------------------------------------------------------------
     @Override
-    protected void onDestroy() {
-        if (profileRequest != null)
-            profileRequest.cancel();
-
+    protected void onDestroy() {        
         System.gc();
         Debug.log(this, "-onDestroy");
         super.onDestroy();
@@ -206,6 +202,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
     //---------------------------------------------------------------------------
     private void updateProfile() {
         profileRequest = new ProfileRequest(getApplicationContext());
+        registerRequest(profileRequest);
         if (!mNotification)
             profileRequest.part = ProfileRequest.P_DASHBOARD;
         else

@@ -21,7 +21,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +29,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FilterActivity extends PreferenceActivity implements LocationListener {
+public class FilterActivity extends BasePreferenceActivity implements LocationListener {
     //---------------------------------------------------------------------------
     // class TempFilter
     //---------------------------------------------------------------------------
@@ -173,9 +172,6 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     //---------------------------------------------------------------------------
     @Override
     protected void onDestroy() {
-        if (filterRequest != null)
-            filterRequest.cancel();
-
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
@@ -216,7 +212,8 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
         editor.putBoolean(getString(R.string.cache_profile_filter_online), mTemp.online);
         editor.commit();
 
-        filterRequest = new FilterRequest(this.getApplicationContext());
+        filterRequest = new FilterRequest(this.getApplicationContext());  
+        registerRequest(filterRequest);
         filterRequest.city = mTemp.city_id; // ЧТО СТАВИМ ПРИ ЗАПРОСЕ С КООРДИНАТАМИ
         filterRequest.sex = mTemp.sex;
         filterRequest.agebegin = mTemp.age_start;
@@ -418,6 +415,7 @@ public class FilterActivity extends PreferenceActivity implements LocationListen
     @Override
     public void onLocationChanged(final Location location) {
         SettingsRequest settingsRequest = new SettingsRequest(getApplicationContext());
+        registerRequest(settingsRequest);
         settingsRequest.lat = location.getLatitude();
         settingsRequest.lng = location.getLongitude();
         settingsRequest.callback(new ApiHandler() {

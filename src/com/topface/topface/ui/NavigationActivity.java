@@ -98,7 +98,8 @@ public class NavigationActivity extends FragmentActivity {
 	@Override
 	public void onBackPressed() {
 		if (mSwitchController.getAnimationState() == FragmentSwitchController.CLOSED
-				|| mSwitchController.getAnimationState() == FragmentSwitchController.COLLAPSE_FULL) {
+				|| mSwitchController.getAnimationState() == FragmentSwitchController.COLLAPSE_FULL
+				|| mSwitchController.getAnimationState() == FragmentSwitchController.COLLAPSE) {
 			mFragmentMenu.refreshNotifications();
 			mSwitchController.openMenu();
 		} else {
