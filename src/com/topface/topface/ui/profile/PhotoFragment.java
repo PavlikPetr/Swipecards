@@ -45,7 +45,7 @@ public class PhotoFragment extends Fragment {
         gridAlbum.setOnItemClickListener(mOnItemClickListener);
         
         mTitle = (TextView)root.findViewById(R.id.fragmentTitle);
-        mTitle.setText(" 15 photos");
+        
 
         return root;
     }
@@ -53,6 +53,17 @@ public class PhotoFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+    
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(mUserAlbum.size()>0) {
+            mTitle.setText(mUserAlbum.size() + " фотографий");
+            mTitle.setVisibility(View.VISIBLE);
+        } else {
+            mTitle.setVisibility(View.INVISIBLE);  
+        }
     }
     
     private void getUserAlbum() {
@@ -65,8 +76,11 @@ public class PhotoFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // mTitle.setText(mUserAlbum.size() + "photos");
-                        mUserGridAdapter.notifyDataSetChanged();
+                        if(mUserAlbum.size() > 0) {
+                            mTitle.setText(mUserAlbum.size() + " фотографий");
+                            mTitle.setVisibility(View.VISIBLE);
+                            mUserGridAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
             }

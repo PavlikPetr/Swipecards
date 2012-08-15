@@ -29,4 +29,11 @@
     	<item name="android:textSize">17sp</item> 
     </style>
     
+    <style name="ShadowUserText">
+        <item name="android:shadowColor">#606060</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">2</item>
+    </style>
+    
 </resources>
