@@ -12,10 +12,7 @@ import java.net.URL;
 
 import com.topface.topface.Data;
 import com.topface.topface.Static;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.widget.ImageView;
 
 public class Http {
@@ -49,12 +46,6 @@ public class Http {
             return totalBytesSkipped;
         }
     } // FlushedInputStream
-
-    public static boolean isOnline(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
-    }
 
     public static String httpGetRequest(String request) {
         return httpRequest(HTTP_GET_REQUEST, request, null, null, null);

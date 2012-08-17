@@ -113,7 +113,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
             findViewById(R.id.btnDshbrdChat).setOnClickListener(this);
         }
 
-        if (!Http.isOnline(this))
+        if (!App.isOnline())
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
         else
             ratingPopup();
@@ -125,7 +125,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         super.onStart();
         System.gc();
 
-        if (!Http.isOnline(this))
+        if (!App.isOnline())
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
 
         registerReceiver(mNotificationReceiver, new IntentFilter(C2DMUtils.C2DM_NOTIFICATION));
@@ -334,7 +334,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
 
     @Override
     public void onClick(View view) {
-        if (!Http.isOnline(this)) {
+        if (!App.isOnline()) {
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -349,9 +349,13 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         Intent intent = null;
         switch (view.getId()) {
             case R.id.btnDshbrdDating: {
-                intent = new Intent(this.getApplicationContext(), InviteActivity.class);
+                intent = new Intent(this.getApplicationContext(), DatingActivity.class);
             }
             break;
+            /*case R.id.btnDshbrdInvite: {
+                intent = new Intent(this.getApplicationContext(), InviteActivity.class);
+            }
+            break;*/
             case R.id.btnDshbrdLikes: {
                 intent = new Intent(this.getApplicationContext(), LikesActivity.class);
             }
