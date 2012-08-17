@@ -4,6 +4,7 @@ import com.topface.topface.R;
 import com.topface.topface.ui.fragments.FragmentContainer;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.ui.fragments.FragmentMenu;
+import com.topface.topface.utils.AuthorizationManager;
 import com.topface.topface.utils.Debug;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -26,6 +27,8 @@ public class NavigationActivity extends FragmentActivity {
 		setContentView(R.layout.ac_navigation);
 		Debug.log(this, "onCreate");
 
+		AuthorizationManager.getInstance(this).extendAccessToken();
+		
 		// Menu
 		mFragmentMenu = new FragmentMenu();
 		mFragmentMenu.setOnMenuListener(mOnMenuListener);

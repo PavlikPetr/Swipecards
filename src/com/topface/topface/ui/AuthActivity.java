@@ -68,13 +68,14 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
 		if (!Http.isOnline(this))
 			Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
-					.show();
-
+					.show();				
+		
 		if (Data.isSSID()) {
-			mFBButton.setVisibility(View.INVISIBLE);
-			mVKButton.setVisibility(View.INVISIBLE);
-			mProgressBar.setVisibility(View.VISIBLE);
+			hideButtons();
 			getProfile();
+		} else if (!(new AuthToken(getApplicationContext())).isEmpty()){
+			hideButtons();			
+			mAuthorizationManager.reAuthorize();
 		}
 	}
 
@@ -146,7 +147,15 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 			@Override
 			public void fail(int codeError, ApiResponse response) {
 				if (codeError == ApiResponse.INVERIFIED_TOKEN) {
-					mAuthorizationManager.reAuthorize();
+					mAuthorizationManager.reAuthorize();					
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							hideButtons();
+							startActivity(new Intent(getApplicationContext(), MainActivity.class));
+							finish();
+						}
+					});
 				} else {
 					showButtons();
 					runOnUiThread(new Runnable() {

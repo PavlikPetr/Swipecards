@@ -66,5 +66,12 @@ public class AuthToken {
     public String getExpires() {
         return mExpiresIn;
     }
-    //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------  
+    public boolean isEmpty() {
+    	if (mSnType.equals(Static.EMPTY)) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
 }

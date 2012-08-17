@@ -38,6 +38,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mUserInfoCity;
     private TextView mUserInfoStatus;
     private TextView mCounter;
+    private TextView mDatingLovePrice;
     private View mDatingGroup;
     private DatingAlbum mDatingAlbum;
     private DatingAlbumAdapter mDatingAlbumAdapter;
@@ -67,6 +69,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private AlphaAnimation mAlphaAnimation;
     private SharedPreferences mPreferences;
     private RateController mRateController;
+    private RelativeLayout mDatingLoveBtnLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -106,7 +109,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         // Control Buttons
         mLoveBtn = (Button)view.findViewById(R.id.btnDatingLove);
-        mLoveBtn.setOnClickListener(this);
+        mLoveBtn.setOnClickListener(this);        
         mSympathyBtn = (Button)view.findViewById(R.id.btnDatingSympathy);
         mSympathyBtn.setOnClickListener(this);
         mSkipBtn = (Button)view.findViewById(R.id.btnDatingSkip);
@@ -116,6 +119,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mChatBtn = (Button)view.findViewById(R.id.btnDatingChat);
         mChatBtn.setOnClickListener(this);
 
+        // Dating Love Price
+        mDatingLoveBtnLayout = (RelativeLayout) view.findViewById(R.id.loDatingLove);
+        mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);     
+        mDatingLovePrice.measure(0, 0);
+    	int dx = mLoveBtn.getCompoundDrawables()[1].getIntrinsicWidth() - mDatingLovePrice.getMeasuredWidth();
+        int dy = mLoveBtn.getCompoundDrawables()[1].getIntrinsicHeight() - mDatingLovePrice.getMeasuredHeight();
+        mDatingLovePrice.setPadding(dx, dy, 0, 0);
+        
         // User Info
         mUserInfoName = ((TextView)view.findViewById(R.id.tvDatingUserName));
         mUserInfoCity = ((TextView)view.findViewById(R.id.tvDatingUserCity));
@@ -172,6 +183,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         return view;
     }
 
+    @Override
+    public void onResume() {    	
+    	super.onResume();
+    }
+    
     private void updateData(final boolean isAddition) {
         if (!isAddition)
         	onUpdateStart(isAddition);
@@ -280,7 +296,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             if (mUserSearchList.get(mCurrentUserPos).online)
                 mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.im_online), null);
             else
-                mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.im_offline), null);
+                mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.im_offline), null);            
+            
+            if (mUserSearchList.get(mCurrentUserPos).sex == Static.BOY) {
+            	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
+            			getResources().getDrawable(R.drawable.dating_man_selector), null, null);
+            } else if (mUserSearchList.get(mCurrentUserPos).sex == Static.GIRL) {
+            	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
+            			getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
+            }
+            
             mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
         }
         if (mCurrentUserPos == mUserSearchList.size() - 1 || mUserSearchList.size() - 6 <= mCurrentUserPos)
@@ -371,11 +396,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoName.setVisibility(View.INVISIBLE);
         mUserInfoCity.setVisibility(View.INVISIBLE);
         mUserInfoStatus.setVisibility(View.INVISIBLE);
-        mLoveBtn.setVisibility(View.INVISIBLE);
+//        mLoveBtn.setVisibility(View.INVISIBLE);
         mSympathyBtn.setVisibility(View.INVISIBLE);
         mSkipBtn.setVisibility(View.INVISIBLE);
         mProfileBtn.setVisibility(View.INVISIBLE);
         mChatBtn.setVisibility(View.INVISIBLE);
+        mDatingLoveBtnLayout.setVisibility(View.INVISIBLE);
+        mCounter.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -383,11 +410,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoName.setVisibility(View.VISIBLE);
         mUserInfoCity.setVisibility(View.VISIBLE);
         mUserInfoStatus.setVisibility(View.VISIBLE);
-        mLoveBtn.setVisibility(View.VISIBLE);
+//        mLoveBtn.setVisibility(View.VISIBLE);
         mSympathyBtn.setVisibility(View.VISIBLE);
         mSkipBtn.setVisibility(View.VISIBLE);
         mProfileBtn.setVisibility(View.VISIBLE);
         mChatBtn.setVisibility(View.VISIBLE);
+        mDatingLoveBtnLayout.setVisibility(View.VISIBLE);
+        mCounter.setVisibility(View.VISIBLE);
     }
 
     @Override

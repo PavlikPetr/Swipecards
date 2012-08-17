@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Gallery;
 
-public class DatingAlbum extends Gallery implements View.OnTouchListener {
+public class DatingAlbum extends Gallery {
     // Data
     //---------------------------------------------------------------------------
     public DatingAlbum(Context context,AttributeSet attrs) {
@@ -43,10 +43,21 @@ public class DatingAlbum extends Gallery implements View.OnTouchListener {
     private boolean isScrollingLeft(MotionEvent e1,MotionEvent e2) {
         return e2.getX() > e1.getX();
     }
-    //---------------------------------------------------------------------------
-    @Override
-    public boolean onTouch(View v,MotionEvent event) {
-        return false;
+    
+    public boolean canScrollHorizontally(int direction) {
+        final int offset = computeHorizontalScrollOffset();
+        final int range = computeHorizontalScrollRange() - computeHorizontalScrollExtent();
+        if (range == 0) return false;
+        if (direction < 0) {
+            return offset > 0;
+        } else {
+            return offset < range - 0;
+        }
     }
+    //---------------------------------------------------------------------------
+//    @Override
+//    public boolean onTouch(View v,MotionEvent event) {
+//        return false;
+//    }    
     //---------------------------------------------------------------------------
 }

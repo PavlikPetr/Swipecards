@@ -71,6 +71,10 @@ public class AuthorizationManager {
 		}
 	}
 
+	public void extendAccessToken() {		
+		Data.facebook.extendAccessToken(mParentActivity.getApplicationContext(), null);
+	}
+	
 	private void receiveToken(AuthToken authToken) {
 		if (mHandler != null) {			
 			Message msg = new Message();

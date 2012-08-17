@@ -20,51 +20,69 @@
 
         <!-- Rating hearts -->
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/ratingButtons"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:gravity="bottom"
             android:orientation="horizontal" >
 
-            <Button
-                android:id="@+id/btnDatingSkip"
-                style="@style/DatingButtonsText"
+            <RelativeLayout
+                android:id="@+id/loDatingLove"
+                android:layout_weight="1.0"                
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:background="@android:color/transparent"
-                android:drawableTop="@drawable/dating_skip_selector"
-                android:text="@string/dashbrd_btn_skip" />
+                android:gravity="center"                
+                android:background="@android:color/transparent">
+
+                <Button
+                    android:id="@+id/btnDatingLove"
+                    style="@style/DatingButtonsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:drawableTop="@drawable/dating_love_selector"
+                    android:text="@string/dashbrd_btn_love"
+                    />
+
+                <TextView
+                    android:id="@+id/tvDatingLovePrice"
+                    style="@style/DatingButtonsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"                    
+                    android:background="@android:color/transparent"                    
+                    android:drawableRight="@drawable/coins"                    
+                    android:text="@integer/love_dating_button"
+                    />
+            </RelativeLayout>
 
             <Button
                 android:id="@+id/btnDatingSympathy"
                 style="@style/DatingButtonsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/btnDatingSkip"
+                android:layout_weight="1.0"
                 android:background="@android:color/transparent"
                 android:drawableTop="@drawable/dating_sympathy_selector"
                 android:text="@string/dashbrd_btn_sympathy" />
 
             <Button
-                android:id="@+id/btnDatingLove"
+                android:id="@+id/btnDatingSkip"
                 style="@style/DatingButtonsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/btnDatingSympathy"
+                android:layout_weight="1.0"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/dating_love_selector"
-                android:text="@string/dashbrd_btn_love" />
+                android:drawableTop="@drawable/dating_skip_selector"
+                android:text="@string/dashbrd_btn_skip" />
 
             <Button
                 android:id="@+id/btnDatingChat"
                 style="@style/DatingButtonsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/btnDatingSkip"
+                android:layout_weight="1.0"
                 android:background="@android:color/transparent"
                 android:drawableTop="@drawable/dating_chat_selector"
                 android:text="@string/profile_btn_chat" />
@@ -74,11 +92,11 @@
                 style="@style/DatingButtonsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/btnDatingChat"
+                android:layout_weight="1.0"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/dating_profile_selector"
+                android:drawableTop="@drawable/dating_man_selector"
                 android:text="@string/dashbrd_btn_profile" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <!-- User info -->
 
@@ -101,7 +119,7 @@
                 android:shadowDy="1"
                 android:shadowRadius="1.2"
                 android:textColor="#FFFFFF"
-                android:textSize="30sp" />
+                android:textSize="28sp" />
 
             <TextView
                 android:id="@+id/tvDatingUserStatus"
@@ -114,29 +132,30 @@
                 android:shadowDy="1"
                 android:shadowRadius="1.2"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tvDatingUserCity"
+                style="@style/DatingButtonsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                style="@style/DatingButtonsText"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
-        <TextView            
+        <TextView
             android:id="@+id/tvDatingCounter"
+            style="@style/DatingButtonsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/ratingButtons"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="12dp"
             android:layout_marginRight="6dp"
-            style="@style/DatingButtonsText"
-            android:textSize="16sp" 
-            android:drawableRight="@drawable/user_photo"
-            android:gravity="center_vertical"/>
+            android:drawablePadding="3dp"
+            android:drawableRight="@drawable/user_photo_small"
+            android:gravity="bottom"
+            android:textSize="14sp" />
     </RelativeLayout>
 
 </merge>

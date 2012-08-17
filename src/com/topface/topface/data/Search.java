@@ -10,6 +10,7 @@ public class Search extends AbstractData {
     // Data
     public int uid; // идентификатор пользователя
     public int age; // возраст пользователя
+    public int sex;
     public int city_id; // идентификатор города пользователя
     public boolean online; // флаг нахождения пользователя онлайн
     public String first_name; // имя пользователя
@@ -35,6 +36,7 @@ public class Search extends AbstractData {
                     JSONObject item = array.getJSONObject(i);
                     search.uid = item.optInt("uid");
                     search.age = item.optInt("age");
+                    search.sex = item.optInt("sex");  
                     search.first_name = item.optString("first_name");
                     search.online = item.optBoolean("online");
                     search.status = item.optString("status");

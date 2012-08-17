@@ -111,7 +111,7 @@ public class InformerView extends ViewGroup {
         // Profile btn
         mProfileBtn = new Button(context);
         mProfileBtn.setId(R.id.btnDatingProfile);
-        mProfileBtn.setBackgroundResource(R.drawable.dating_profile_selector);
+        mProfileBtn.setBackgroundResource(R.drawable.dating_man_selector);
         addView(mProfileBtn);
 
         // Informer popup
