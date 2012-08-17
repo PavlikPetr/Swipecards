@@ -108,6 +108,21 @@
     <string name="buying_info">You can buy coins and energy</string>
     <string name="buying_economy_25">Save 25%</string>
     <string name="buying_economy_40">Save 40%</string>
+
+    <!-- Time -->
+    <string name="time_now">Right now</string>
+    <string name="time_yesterday">Yesterday</string>
+    <string name="time_today">Today</string>
+
+    <plurals name="time_hour">
+        <item quantity="one">%d hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+
+    <plurals name="time_minute">
+        <item quantity="one">%d minute ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
     
     <!-- Profile Activity -->
     <string name="profile_header_title">My Profile</string>

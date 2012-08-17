@@ -29,7 +29,7 @@ public class Utils {
         if (value == null)
             return null;
         try {
-            StringBuffer hexString = new StringBuffer();
+            StringBuilder hexString = new StringBuilder();
             MessageDigest digester = MessageDigest.getInstance("MD5");
             digester.update(value.getBytes());
             byte[] bytes = digester.digest();
@@ -114,9 +114,6 @@ public class Utils {
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
 
-        //bitmap.recycle();
-        bitmap = null;
-
         return output;
     }
 
@@ -124,15 +121,15 @@ public class Utils {
     public static void formatTime(TextView tv, long time) {
         Context context = tv.getContext();
         String text;
-        long now = System.currentTimeMillis() / 1000;
+        long now = unixtime();
         long full_time = time * 1000;
         long t = now - time;
         if ((time > now) || t < 60)
             text = context.getString(R.string.time_now);
         else if (t < 3600)
-            text = formatMinute(context, t / 60);
+            text = formatMinute(t / 60);
         else if (t < 6 * 3600)
-            text = formatHour(context, t / 3600);
+            text = formatHour(t / 3600);
         else if (DateUtils.isToday(full_time))
             text = context.getString(R.string.time_today) + DateFormat.format(" kk:mm", full_time).toString();
         else {
@@ -148,41 +145,13 @@ public class Utils {
     }
 
     
-    public static String formatHour(Context context, long hours) {
-        byte caseValue = 0;
-        if ((hours < 11) || (hours > 19)) {
-            if (hours % 10 == 1)
-                caseValue = 1;
-            if ((hours % 10 == 2) || (hours % 10 == 3) || (hours % 10 == 4))
-                caseValue = 2;
-        }
-        switch (caseValue) {
-            case 1:
-                return String.format(context.getString(R.string.time_hour_0), hours);
-            case 2:
-                return String.format(context.getString(R.string.time_hour_1), hours);
-            default:
-                return String.format(context.getString(R.string.time_hours), hours);
-        }
+    public static String formatHour(long hours) {
+        return Utils.getQuantityString(R.plurals.time_hour, (int) hours, (int) hours);
     }
 
     
-    public static String formatMinute(Context context, long minutes) {
-        byte caseValue = 0;
-        if ((minutes < 11) || (minutes > 19)) {
-            if (minutes % 10 == 1)
-                caseValue = 1;
-            if ((minutes % 10 == 2) || (minutes % 10 == 3) || (minutes % 10 == 4))
-                caseValue = 2;
-        }
-        switch (caseValue) {
-            case 1:
-                return String.format(context.getString(R.string.time_minute_0), minutes);
-            case 2:
-                return String.format(context.getString(R.string.time_minute_1), minutes);
-            default:
-                return String.format(context.getString(R.string.time_minutes), minutes);
-        }
+    public static String formatMinute(long minutes) {
+        return Utils.getQuantityString(R.plurals.time_hour, (int) minutes, (int) minutes);
     }
 
     public static int getBatteryResource(int power) {

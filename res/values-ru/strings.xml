@@ -90,7 +90,24 @@
     <string name="dating_header_title_her">Оцени её!</string>
     <string name="dating_menu_one">Фильтр</string>
     <string name="dating_back">К оценкам</string>
-    
+
+    <!-- Time -->
+    <string name="time_now">Прямо сейчас</string>
+    <string name="time_yesterday">Вчера</string>
+    <string name="time_today">Сегодня</string>
+
+    <plurals name="time_hour">
+        <item quantity="one">%d час назад</item>
+        <item quantity="few">%d часа назад</item>
+        <item quantity="other">%d часов назад</item>
+    </plurals>
+
+    <plurals name="time_minute">
+        <item quantity="one">%d минуту назад</item>
+        <item quantity="few">%d минуты назад</item>
+        <item quantity="other">%d минут назад</item>
+    </plurals>
+
     <!-- Buying Activity -->
     <string name="buying_header_title">Покупка</string>
     <string name="buying_money">Покупка монет</string>
