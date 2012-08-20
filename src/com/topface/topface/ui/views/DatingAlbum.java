@@ -27,7 +27,7 @@ public class DatingAlbum extends Gallery {
         velX -= 600;
         int k = 500000;
         int speed = (int)Math.floor(1f / velX * k);
-        setAnimationDuration(speed);
+//        setAnimationDuration(speed);
 
         int kEvent;
         if (isScrollingLeft(e1, e2))

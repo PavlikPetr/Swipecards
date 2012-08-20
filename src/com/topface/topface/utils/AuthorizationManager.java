@@ -40,7 +40,7 @@ public class AuthorizationManager {
 	public final static int AUTHORIZATION_FAILED = 0;
 	public final static int TOKEN_RECEIVED = 1;
 	public final static int DIALOG_COMPLETED = 2;
-	
+
 	// Constants
 	private String[] FB_PERMISSIONS = { "user_photos", "publish_stream", "email", "publish_actions" };
 
@@ -63,7 +63,7 @@ public class AuthorizationManager {
 	// common methods
 	public void reAuthorize() {
 		AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
-		
+
 		if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
 			facebookAuth();
 		} else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
@@ -74,7 +74,7 @@ public class AuthorizationManager {
 	public void extendAccessToken() {		
 		Data.facebook.extendAccessToken(mParentActivity.getApplicationContext(), null);
 	}
-	
+
 	private void receiveToken(AuthToken authToken) {
 		if (mHandler != null) {			
 			Message msg = new Message();
@@ -87,7 +87,7 @@ public class AuthorizationManager {
 	public void setOnAuthorizationHandler(Handler handler) {
 		mHandler = handler;
 	}
-	
+
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == WebAuthActivity.INTENT_WEB_AUTH) {
@@ -95,7 +95,7 @@ public class AuthorizationManager {
 					String token_key = data.getExtras().getString(WebAuthActivity.ACCESS_TOKEN);
 					String user_id = data.getExtras().getString(WebAuthActivity.USER_ID);
 					String expires_in = data.getExtras().getString(WebAuthActivity.EXPIRES_IN);
-	
+
 					AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
 					authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
 					receiveToken(authToken);

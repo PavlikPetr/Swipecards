@@ -10,6 +10,7 @@ public class History extends AbstractData {
     // Data
     public int id;       // идентификатор сообщения
     public int owner_id; // идентификатор пользователя, отправившего сообщение
+    public int target; // 1 для входящих сообщений, 0 для исходящих
     public int type;     // тип сообщения
     public int gift;     // идентификатор подарка. Если сообщение является подарком
     public String link;  // ссылка на изображение подарка. Поле устанавливается, если сообщение является подарком
@@ -31,20 +32,24 @@ public class History extends AbstractData {
     
     public static final int CURRENT_LOCATION = 6; // Текущее местоположение
     public static final int LOCATION = 7; // Местоположение, указаное через карту
+        
+    public static final int OUTPUT_MESSAGE = 0;
+    public static final int INPUT_MESSAGE = 1;
     //---------------------------------------------------------------------------
     public static LinkedList<History> parse(ApiResponse response) {
         LinkedList<History> historyList = new LinkedList<History>();
 
         try {
-            JSONArray array = response.mJSONResult.getJSONArray("history");
+            JSONArray array = response.mJSONResult.getJSONArray("feed");
             if (array.length() > 0)
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
                     History history = new History();
                     history.id = item.optInt("id");
                     history.created = item.optLong("created") * 1000; // время приходит в секундах *1000
-                    history.owner_id = item.optInt("owner_id");
+                    history.owner_id = item.optInt("uid");
                     history.type = item.optInt("type");
+                    history.target = item.optInt("target");
                     
                     history.text = item.optString("text");
                     history.code = item.optInt("code");

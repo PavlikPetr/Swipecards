@@ -16,7 +16,6 @@ import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.views.DoubleBigButton;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -40,8 +39,7 @@ public class DialogsFragment extends BaseFragment {
 	private PullToRefreshListView mListView;
 	private DialogListAdapter mListAdapter;
 	private AvatarManager<Dialog> mAvatarManager;
-	private DoubleBigButton mDoubleButton;
-	private LockerView mLoadingLocker;
+	private DoubleBigButton mDoubleButton;	
 	private TextView mBackgroundText;
 	private ImageView mBannerView;
 	private boolean mIsUpdating = false;
@@ -55,9 +53,6 @@ public class DialogsFragment extends BaseFragment {
 
 		// Data
 		Data.dialogList = new LinkedList<Dialog>();
-
-		// Progress
-		mLoadingLocker = (LockerView) view.findViewById(R.id.llvInboxLoading);
 
 		// ListView background
 		mBackgroundText = (TextView) view.findViewById(R.id.tvBackgroundText);
@@ -336,7 +331,6 @@ public class DialogsFragment extends BaseFragment {
 
 	@Override
 	protected void onUpdateSuccess(boolean isPushUpdating) {
-		// mLoadingLocker.setVisibility(View.GONE);
 		if (!isPushUpdating) {
 			mListView.setVisibility(View.VISIBLE);
 			if (Data.dialogList.isEmpty()) {
@@ -359,7 +353,6 @@ public class DialogsFragment extends BaseFragment {
 
 	@Override
 	protected void onUpdateFail(boolean isPushUpdating) {
-		// mLoadingLocker.setVisibility(View.GONE);
 		if (!isPushUpdating) {
 			mListView.setVisibility(View.VISIBLE);
 			mBackgroundText.setText("");

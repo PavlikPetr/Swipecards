@@ -228,9 +228,12 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 			float dy = y - mLastMotionY;
 			float yDiff = Math.abs(dy);
 			
-			if (canScroll(getChildAt(1), false, (int) dx, (int) x, (int) y)) {								
-				return false;
+//			long a = System.currentTimeMillis();
+			if (canScroll(getChildAt(1), false, (int) dx, (int) x, (int) y)) {
+//				Log.d("TIME", Long.toString(System.currentTimeMillis() - a));
+				return false;				
 			}
+//			Log.d("TIME", Long.toString(System.currentTimeMillis() - a));
 			
 			if(xDiff > mTouchSlop && xDiff > yDiff) {
 				startDragging(x);
@@ -397,7 +400,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 	 *            Y coordinate of the active touch point
 	 * @return true if child views of v can be scrolled by delta of dx.
 	 */
-	protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {		
+	protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {				
 		if (v instanceof ViewGroup) {
 			final ViewGroup group = (ViewGroup) v;
 			if (group.isShown()) {

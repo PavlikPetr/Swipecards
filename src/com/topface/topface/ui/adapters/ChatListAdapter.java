@@ -1,6 +1,5 @@
 package com.topface.topface.ui.adapters;
 
-import java.lang.ref.SoftReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -10,10 +9,8 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.History;
-import com.topface.topface.ui.GeoMapActivity;
 import com.topface.topface.ui.views.RoundedImageView;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.MemorySyncCache;
 import com.topface.topface.utils.Osm;
 import com.topface.topface.utils.StorageCache;
@@ -21,13 +18,11 @@ import com.topface.topface.utils.MemoryCacheTemplate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.Http;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -475,7 +470,7 @@ public class ChatListAdapter extends BaseAdapter {
 
             // Type
             int item_type = 0;
-            if (history.owner_id == mUserId) {
+            if (history.target == History.INPUT_MESSAGE) {
                 if(history.type == History.GIFT) {
                     item_type = T_FRIEND_GIFT;
                 } else if (history.owner_id == prev_id) {
@@ -483,7 +478,7 @@ public class ChatListAdapter extends BaseAdapter {
                 } else {
                     item_type = T_FRIEND_PHOTO;
                 }
-            } else { 
+            } else {
                 if(history.type == History.GIFT) {
                     item_type = T_USER_GIFT;
                 } else if (history.owner_id == prev_id) {

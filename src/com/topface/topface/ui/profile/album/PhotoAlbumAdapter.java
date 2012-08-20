@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 public class PhotoAlbumAdapter extends BaseAdapter {
     //---------------------------------------------------------------------------
@@ -20,6 +21,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
     //---------------------------------------------------------------------------
     static class ViewHolder {
         ImageView mImageView;
+        ProgressBar mProgressBar;
     };
     //---------------------------------------------------------------------------
     // Data
@@ -54,15 +56,19 @@ public class PhotoAlbumAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = (ViewGroup)mInflater.inflate(R.layout.item_album_gallery, null, false);
             holder.mImageView = (ImageView)convertView.findViewById(R.id.ivPreView);
+            holder.mProgressBar = (ProgressBar)convertView.findViewById(R.id.pgrsAlbum);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder)convertView.getTag();
 
         Bitmap bitmap = mCache.get(position);
-        if (bitmap != null)
+        if (bitmap != null) {
+        	holder.mProgressBar.setVisibility(View.INVISIBLE);
             holder.mImageView.setImageBitmap(bitmap);
-        else
-            loadingImage(position, holder.mImageView);
+    	} else {
+        	holder.mProgressBar.setVisibility(View.VISIBLE);
+            loadingImage(position, holder.mImageView, holder.mProgressBar);
+        }
 
         int prePosition = position >= mPrevPosition ? position + 1 : position - 1;
         if (prePosition > 0 && position < (getCount() - 1))
@@ -74,7 +80,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
     }
     //---------------------------------------------------------------------------
     //  int x = -1;
-    public void loadingImage(final int position,final ImageView view) {
+    public void loadingImage(final int position,final ImageView view,final ProgressBar progress) {
         //    if(x == position)
         //      return;
         //    x = position;
@@ -85,10 +91,12 @@ public class PhotoAlbumAdapter extends BaseAdapter {
                 view.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (bitmap != null)
+                        if (bitmap != null) {
+                        	progress.setVisibility(View.GONE);
                             view.setImageBitmap(bitmap);
-                        else
+                        } else {
                             view.setImageResource(R.drawable.im_photo_error);
+                        }
                     }
                 });
                 if (bitmap == null || mCache == null)
