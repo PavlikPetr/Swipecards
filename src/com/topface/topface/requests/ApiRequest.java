@@ -2,7 +2,6 @@ package com.topface.topface.requests;
 
 import com.topface.topface.Static;
 import com.topface.topface.utils.http.ConnectionManager;
-import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.http.RequestConnection;
 
 import android.content.Context;

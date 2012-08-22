@@ -7,11 +7,13 @@ import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LikesListAdapter extends LoadingListAdapter {
     //---------------------------------------------------------------------------
@@ -34,6 +36,7 @@ public class LikesListAdapter extends LoadingListAdapter {
     private LayoutInflater mInflater;
     private AvatarManager<FeedLike> mAvatarManager;
     private int mOwnerCityID;    
+    Context mContext;
     
     // Constants    
     private static final int T_CITY = 3;
@@ -41,6 +44,7 @@ public class LikesListAdapter extends LoadingListAdapter {
     
     //---------------------------------------------------------------------------
     public LikesListAdapter(Context context,AvatarManager<FeedLike> avatarManager) {
+    	mContext = context;
         mAvatarManager = avatarManager;
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mOwnerCityID = CacheProfile.city_id;
@@ -81,7 +85,7 @@ public class LikesListAdapter extends LoadingListAdapter {
     }
     //---------------------------------------------------------------------------
     @Override
-    public View getView(int position,View convertView,ViewGroup parent) {
+    public View getView(final int position,View convertView,ViewGroup parent) {
 //    	long startTime = System.currentTimeMillis();
         ViewHolder holder;
 
@@ -100,7 +104,27 @@ public class LikesListAdapter extends LoadingListAdapter {
                 holder = new ViewHolder();
 
                 convertView = mInflater.inflate(R.layout.item_likes_gallery, null, false);
-
+//                convertView.setOnTouchListener(new View.OnTouchListener() {
+//					float x;
+//					@Override
+//					public boolean onTouch(View v, MotionEvent event) {
+//						switch (event.getAction()) {
+//						case MotionEvent.ACTION_DOWN:
+//							x = event.getX();
+//							break;
+//						case MotionEvent.ACTION_MOVE:
+//							float x1 = event.getX();
+//							if(x-x1>100)
+//								Toast.makeText(mContext, "asd", Toast.LENGTH_LONG).show();
+//							break;
+//						case MotionEvent.ACTION_UP:
+//							break;
+//						
+//						}
+//						return true;
+//					}
+//					
+//				});
                 holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
                 holder.mAvatarMask = (ImageView)convertView.findViewById(R.id.ivAvatarMask);
                 holder.mName = (TextView)convertView.findViewById(R.id.tvName);

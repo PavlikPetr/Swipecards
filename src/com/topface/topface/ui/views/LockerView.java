@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -106,15 +107,29 @@ public class LockerView extends RelativeLayout {
 		mTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
 		mTextView.setSingleLine(false);
-
-		for (Drawable drawable : mTextView.getCompoundDrawables()) {
-			if (drawable instanceof AnimationDrawable) {
-				((AnimationDrawable) drawable).start();
-			}
-		}
+		
 		a.recycle();
 	}
 
+	@Override
+	public void setVisibility(int visibility) {		
+		super.setVisibility(visibility);
+		if (visibility == View.GONE || visibility == View.INVISIBLE) {
+			for (Drawable drawable : mTextView.getCompoundDrawables()) {
+				if (drawable instanceof AnimationDrawable) {
+					((AnimationDrawable) drawable).stop();
+				}
+			}
+		} else {
+			for (Drawable drawable : mTextView.getCompoundDrawables()) {
+				if (drawable instanceof AnimationDrawable) {
+					((AnimationDrawable) drawable).start();
+				}
+			}
+		}
+		
+	}
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		return true;

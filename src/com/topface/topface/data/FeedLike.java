@@ -71,9 +71,12 @@ public class FeedLike extends AbstractData implements IListLoader{
                     like.city_full = city.optString("full");
 
                     // avatars
-                    JSONObject avatar = item.getJSONObject("avatars");
-                    like.avatars_big = avatar.optString("big");
-                    like.avatars_small = avatar.optString("small");
+                    
+                    JSONObject avatar = item.optJSONObject("avatars");
+                    if (avatar != null) {
+	                    like.avatars_big = avatar.optString("big");
+	                    like.avatars_small = avatar.optString("small");
+                    }
 
                     likesList.add(like);
                 }

@@ -8,7 +8,7 @@
        <com.topface.topface.ui.views.DatingAlbum
            android:id="@+id/glrDatingAlbum"
            android:layout_width="fill_parent" 
-           android:layout_height="fill_parent" />
+           android:layout_height="fill_parent"/>
     
     <include layout="@layout/dating_control" />     
     

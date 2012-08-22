@@ -19,8 +19,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.protocol.BasicHttpContext;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.content.LocalBroadcastManager;
+
+import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
 import com.topface.topface.data.Auth;
@@ -31,7 +35,8 @@ import com.topface.topface.utils.AuthToken;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.Http.FlushedInputStream;
 
-public class ConnectionManager {
+public class ConnectionManager {	
+	
     // Data
     private static ConnectionManager mInstanse;
     private AndroidHttpClient mHttpClient;
@@ -54,7 +59,7 @@ public class ConnectionManager {
     }
     //---------------------------------------------------------------------------
     public RequestConnection sendRequest(final ApiRequest apiRequest) {
-    	final RequestConnection connection = new RequestConnection();
+    	final RequestConnection connection = new RequestConnection();    	
     	
         mWorker.execute(new Runnable() {
             @Override
@@ -88,6 +93,12 @@ public class ConnectionManager {
                         ApiResponse apiResponse = new ApiResponse(rawResponse);
                         if (apiResponse.code == ApiResponse.SESSION_NOT_FOUND)
                             apiResponse = reAuth(apiRequest.context, httpClient, httpPost, apiRequest);
+                        if (apiResponse.code == ApiResponse.INVERIFIED_TOKEN) {
+                        	Intent intent = new Intent();
+                        	intent.setAction(ReAuthReceiver.REAUTH_INTENT);
+                        	apiRequest.context.sendBroadcast(intent);
+                        	LocalBroadcastManager.getInstance(apiRequest.context).sendBroadcast(intent);
+                        }
                         apiRequest.handler.response(apiResponse);
                     }
 
@@ -134,6 +145,9 @@ public class ConnectionManager {
         return rawResponse;
     }
     //---------------------------------------------------------------------------
+    
+    public static int counter = 0;
+    
     private ApiResponse reAuth(Context context,AndroidHttpClient httpClient,HttpPost httpPost,ApiRequest request) {
         Debug.log(this, "reAuth");
 
@@ -141,7 +155,7 @@ public class ConnectionManager {
         AuthRequest authRequest = new AuthRequest(context);
         authRequest.platform = token.getSocialNet();
         authRequest.sid = token.getUserId();
-        authRequest.token = token.getTokenKey();
+       	authRequest.token = token.getTokenKey();
 
         String rawResponse = Static.EMPTY;
         ApiResponse response = null;

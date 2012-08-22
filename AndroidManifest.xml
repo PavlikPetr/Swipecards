@@ -87,7 +87,6 @@
                 <category android:name="com.topface.topface"/>
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.R;
 import com.topface.topface.Data;
 import com.topface.topface.data.Auth;
@@ -26,14 +27,15 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 	private Button mFBButton;
 	private Button mVKButton;
 	private ProgressBar mProgressBar;
-
 	private AuthorizationManager mAuthorizationManager;
+
+	private boolean mFromAuthorizationReceiver;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Debug.log(this, "+onCreate");
-		setContentView(R.layout.ac_auth);
+		setContentView(R.layout.ac_auth);		
 
 		mAuthorizationManager = AuthorizationManager.getInstance(this);
 		mAuthorizationManager.setOnAuthorizationHandler(new Handler() {
@@ -47,7 +49,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 					hideButtons();
 					break;
 				case AuthorizationManager.TOKEN_RECEIVED:
-					auth((AuthToken)msg.obj);
+					auth((AuthToken) msg.obj);
 					break;
 				default:
 					super.handleMessage(msg);
@@ -68,27 +70,48 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
 		if (!Http.isOnline(this))
 			Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
-					.show();
+					.show();		
 
+		Data.SSID= "97687";
+		
 		if (Data.isSSID()) {
-			mFBButton.setVisibility(View.INVISIBLE);
-			mVKButton.setVisibility(View.INVISIBLE);
-			mProgressBar.setVisibility(View.VISIBLE);
+			hideButtons();
 			getProfile();
+		} else if (!(new AuthToken(getApplicationContext())).isEmpty()) {
+			hideButtons();
+			mAuthorizationManager.reAuthorize();
 		}
 	}
 
 	@Override
+	protected void onNewIntent(Intent intent) {		
+		super.onNewIntent(intent);
+		Bundle data = this.getIntent().getExtras();
+		if (data != null) {
+			if (data.get(ReAuthReceiver.REAUTH_FROM_RECEIVER) != null) {
+				mFromAuthorizationReceiver = data.getBoolean(
+						ReAuthReceiver.REAUTH_FROM_RECEIVER, false);
+			}
+		}
+		
+		if (!(new AuthToken(getApplicationContext())).isEmpty()) {
+			hideButtons();
+			mAuthorizationManager.reAuthorize();
+		} else {
+			showButtons();
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode,int resultCode,Intent data) {		
+		super.onActivityResult(requestCode, resultCode, data);
+		mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	@Override
 	protected void onDestroy() {
 		Debug.log(this, "-onDestroy");
 		super.onDestroy();
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
-		super.onActivityResult(requestCode, resultCode, data);
-		Debug.log(this, "onActivityResult");
 	}
 
 	@Override
@@ -137,26 +160,21 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						startActivity(new Intent(getApplicationContext(), MainActivity.class));
-						finish();
+						getProfile();
 					}
 				});
 			}
 
 			@Override
 			public void fail(int codeError, ApiResponse response) {
-				if (codeError == ApiResponse.INVERIFIED_TOKEN) {
-					mAuthorizationManager.reAuthorize();
-				} else {
-					showButtons();
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							Toast.makeText(AuthActivity.this, getString(R.string.general_server_error),
-									Toast.LENGTH_SHORT).show();
-						}
-					});
-				}
+				showButtons();
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(AuthActivity.this, getString(R.string.general_server_error),
+								Toast.LENGTH_SHORT).show();
+					}
+				});
 			}
 		}).exec();
 	}
@@ -173,7 +191,9 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
+						if (!mFromAuthorizationReceiver) {
+							startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
+						}
 						finish();
 					}
 				});

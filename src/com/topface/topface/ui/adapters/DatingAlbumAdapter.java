@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -38,7 +40,8 @@ public class DatingAlbumAdapter extends BaseAdapter {
     public DatingAlbumAdapter(Context context,ILocker locker) {
         mInflater = LayoutInflater.from(context);
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-        mAlphaAnimation.setDuration(200L);
+        mAlphaAnimation.setDuration(200L);        
+        
         mCache = new MemoryCache();
         mLocker = locker;
     }
@@ -91,13 +94,17 @@ public class DatingAlbumAdapter extends BaseAdapter {
 
         Bitmap bitmap = mCache.get(position);
 
-        if (bitmap != null && position == 0) {
-            holder.mProgressBar.setVisibility(View.INVISIBLE);
-            holder.mImageView.setImageBitmap(bitmap);
-        } else if (bitmap != null && position != 0)
-            holder.mImageView.setImageBitmap(bitmap);
-        else
+        if (bitmap != null) {
+        	holder.mProgressBar.setVisibility(View.GONE);
+	        if (position == 0) {
+	            holder.mImageView.setImageBitmap(bitmap);
+	        } else if (position != 0) {
+	            holder.mImageView.setImageBitmap(bitmap);
+	        }
+        } else {
+        	holder.mProgressBar.setVisibility(View.VISIBLE);
             loadingImage(position, holder.mImageView, holder.mProgressBar);
+        }
 
         int prePosition = position >= mPrevPosition ? position + 1 : position - 1;
         if (prePosition > 0 && position < (getCount() - 1))
@@ -146,7 +153,7 @@ public class DatingAlbumAdapter extends BaseAdapter {
                             progressBar.setVisibility(View.INVISIBLE);
                             view.setAlpha(255);
                             view.setImageBitmap(rawBitmap);
-                            view.startAnimation(mAlphaAnimation);
+                            view.startAnimation(mAlphaAnimation);                            
                             mMainBitmap = rawBitmap;
                         } else
                             view.setImageBitmap(rawBitmap);

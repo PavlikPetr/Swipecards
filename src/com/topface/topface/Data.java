@@ -12,9 +12,12 @@ import com.topface.topface.data.FeedSympathy;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Top;
 import com.topface.topface.utils.Device;
+
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.support.v4.content.LocalBroadcastManager;
 
 public class Data {
     // Data
@@ -82,6 +85,8 @@ public class Data {
         cal.set(Calendar.SECOND, 0);
         
         midnight = cal.getTimeInMillis();
+        
+        LocalBroadcastManager.getInstance(context).registerReceiver(new ReAuthReceiver(), new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
     }
     //---------------------------------------------------------------------------
     public static void release() {
