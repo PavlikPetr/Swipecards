@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class SymphatyListAdapter extends LoadingListAdapter {
+public class MutualListAdapter extends LoadingListAdapter {
     //---------------------------------------------------------------------------
     // class ViewHolder
     //---------------------------------------------------------------------------
@@ -35,7 +35,7 @@ public class SymphatyListAdapter extends LoadingListAdapter {
     private static final int T_CITY = 3;    
     private static final int T_COUNT = 1;
     //---------------------------------------------------------------------------
-    public SymphatyListAdapter(Context context,AvatarManager<FeedSympathy> avatarManager) {
+    public MutualListAdapter(Context context,AvatarManager<FeedSympathy> avatarManager) {
 //        mContext = context;
         mAvatarManager = avatarManager;
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

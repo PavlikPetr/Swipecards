@@ -10,7 +10,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedSympathyRequest;
 import com.topface.topface.ui.adapters.IListLoader;
-import com.topface.topface.ui.adapters.SymphatyListAdapter;
+import com.topface.topface.ui.adapters.MutualListAdapter;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
@@ -29,9 +29,16 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,12 +47,17 @@ public class MutualFragment extends BaseFragment {
     private boolean mNewUpdating;
 //    private TextView mFooterView;
     private PullToRefreshListView mListView;
-    private SymphatyListAdapter mListAdapter;
+    private MutualListAdapter mListAdapter;
     private AvatarManager<FeedSympathy> mAvatarManager;
     private DoubleBigButton mDoubleButton;
     private LockerView mLoadingLocker;
     private TextView mBackgroundText;
     private ImageView mBannerView;
+    
+    private View mToolsBar;
+    private View mBuBa;
+    private View mFuBa;
+    
     private boolean mIsUpdating = false;
     // Constants
     private static final int LIMIT = 40;
@@ -53,7 +65,29 @@ public class MutualFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-      View view = inflater.inflate(R.layout.ac_sympathy, null);      
+        View view = inflater.inflate(R.layout.ac_sympathy, null);
+
+        mFuBa = view.findViewById(R.id.loFuBa);
+        //mFuBa.setPadding(mFuBa.getPaddingLeft(), -70, mFuBa.getPaddingRight(), mFuBa.getPaddingBottom());
+        mToolsBar = view.findViewById(R.id.loToolsBar);
+        mBuBa = view.findViewById(R.id.btnBuBa);
+        mBuBa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mToolsBar.startAnimation(new ExpandAnimation(mToolsBar, 1000));
+            }
+        });
+        
+        ViewTreeObserver vto = mToolsBar.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ViewTreeObserver obs = mToolsBar.getViewTreeObserver();
+                obs.removeGlobalOnLayoutListener(this);
+
+                //mFuBa.setPadding(mFuBa.getPaddingLeft(), -mToolsBar.getHeight(), mFuBa.getPaddingRight(), mFuBa.getPaddingBottom());
+            }
+        });
         
 
         // Data
@@ -148,7 +182,7 @@ public class MutualFragment extends BaseFragment {
         		super.handleMessage(msg);
         	}
         });
-        mListAdapter = new SymphatyListAdapter(getActivity(), mAvatarManager);
+        mListAdapter = new MutualListAdapter(getActivity(), mAvatarManager);
         mListView.setOnScrollListener(mAvatarManager);
         mListView.setAdapter(mListAdapter);
 
@@ -364,4 +398,74 @@ public class MutualFragment extends BaseFragment {
 			mDoubleButton.setClickable(true);
 		}
 	}
+	
+	
+	
+	public class ExpandAnimation extends Animation {
+	    private View mAnimatedView;
+	    private LinearLayout.LayoutParams mViewLayoutParams;
+	    private int mMarginStart, mMarginEnd;
+	    private boolean mIsVisibleAfter = false;
+	    private boolean mWasEndedAlready = false;
+       
+	    /**
+	     * Initialize the animation
+	     * @param view The layout we want to animate
+	     * @param duration The duration of the animation, in ms
+	     */
+	    public ExpandAnimation(View view, int duration) {
+
+	        setDuration(duration);
+	        mAnimatedView = view;
+	        mViewLayoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
+
+	        // decide to show or hide the view
+	        mIsVisibleAfter = (view.getVisibility() == View.VISIBLE);
+	        
+	        //mToolsBar = view.findViewById(R.id.loToolsBar);
+	        mMarginStart = mViewLayoutParams.bottomMargin;
+	        mMarginEnd = (mMarginStart == 0 ? (0 - view.getHeight()) : 0);
+//	        mMarginStart = mAnimatedView.getPaddingTop();
+	        Debug.log("mMarginStart:"+mMarginStart);
+//	        mMarginEnd = (mMarginStart == 0 ? (0 - mToolsBar.getHeight()) : 0);
+	        Debug.log("mToolsBar.getHeight():"+view.getHeight());
+	        Debug.log("mMarginEnd:"+mMarginEnd);
+
+	        view.setVisibility(View.VISIBLE);
+	    }
+
+	    @Override
+	    protected void applyTransformation(float interpolatedTime, Transformation t) {
+	        super.applyTransformation(interpolatedTime, t);
+
+	        if (interpolatedTime < 1.0f) {
+
+	            int y = (int) ((mMarginEnd - mMarginStart) * interpolatedTime);
+	            // Calculating the new bottom margin, and setting it
+	            mViewLayoutParams.bottomMargin = mMarginStart + y;
+	            
+	            
+	            Debug.log("y:"+y);
+	            Debug.log("time:"+interpolatedTime);
+	            
+//	            mFuBa.setPadding(mFuBa.getPaddingLeft(), y, mFuBa.getPaddingRight(), mFuBa.getPaddingBottom());
+
+	            // Invalidating the layout, making us seeing the changes we made
+	            mAnimatedView.requestLayout();
+
+	        // Making sure we didn't run the ending before (it happens!)
+	        } else if (!mWasEndedAlready) {
+	            mViewLayoutParams.bottomMargin = mMarginEnd;
+	            //mFuBa.setPadding(mFuBa.getPaddingLeft(), mMarginEnd, mFuBa.getPaddingRight(), mFuBa.getPaddingBottom());
+	            mAnimatedView.requestLayout();
+
+	            if (mIsVisibleAfter) {
+	                mAnimatedView.setVisibility(View.GONE);
+	            }
+	            mWasEndedAlready = true;
+	        }
+	    }
+	}
+	
+	
 }

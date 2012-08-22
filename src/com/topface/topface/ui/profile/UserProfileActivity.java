@@ -58,7 +58,6 @@ public class UserProfileActivity extends FragmentActivity {
     private ViewPager mViewPager;
     
     private QuestionnaireFragment mQuestionnaireFragment;
-    private GiftsFragment mGiftsFragment;
     private Bitmap mMask;
 
     public User mUser;
@@ -277,7 +276,7 @@ public class UserProfileActivity extends FragmentActivity {
                     fragment = mQuestionnaireFragment = new QuestionnaireFragment();
                     break;
                 case F_GIFTS:
-                    fragment = mGiftsFragment = new GiftsFragment();
+                    fragment = new GiftsFragment();
                     break;
                 case F_ACTIONS:
                     fragment = new ActionsFragment();

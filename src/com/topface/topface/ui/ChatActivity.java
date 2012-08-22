@@ -80,8 +80,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     //Managers
     private GeoLocationManager mGeoManager = null;
     
-    boolean bibi;
-    //---------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,7 +138,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
         update();
     }
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onDestroy() {        
         release();
@@ -148,7 +146,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
-    //---------------------------------------------------------------------------
+
     private void update() {
         mLoadingLocker.setVisibility(View.VISIBLE);
         historyRequest = new HistoryRequest(getApplicationContext());
@@ -181,7 +179,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             }
         }).exec();
     }
-    //---------------------------------------------------------------------------
+
     private void release() {
         mEditBox = null;
         mListView = null;
@@ -190,7 +188,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mAdapter = null;
         mHistoryList = null;
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public void onClick(View v) {
     	if (v instanceof ImageView) {
@@ -205,7 +203,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     			}
     		}
     	} 
-    	
         switch (v.getId()) {
             case R.id.btnChatAdd: {
                 if (mIsAddPanelOpened)
@@ -238,7 +235,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             } break;
         }
     }
-    //---------------------------------------------------------------------------
+
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v,int actionId,KeyEvent event) {
@@ -298,7 +295,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             return false;
         }
     };
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -412,7 +409,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             mIsAddPanelOpened = false;
         }
     }
-    //---------------------------------------------------------------------------
+
     private void sendUserCurrentLocation() {
     	mLocationDetected = false;    	
     	
@@ -445,7 +442,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     		showDialog(DIALOG_GPS_ENABLE_NO_AGPS_ID);
     	}        
     }
-    //---------------------------------------------------------------------------
+
 	@Override
 	public void onLocationChanged(Location location) {
 //		Debug.log(this, location.getLatitude() + " / " + location.getLongitude());
@@ -513,7 +510,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 	public void onProviderEnabled(String provider) { }
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) { }
-	//---------------------------------------------------------------------------
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		AlertDialog.Builder builder;
@@ -549,5 +546,5 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 		
 		}
 	}
-    //---------------------------------------------------------------------------
+
 }
