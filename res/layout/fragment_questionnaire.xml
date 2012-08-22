@@ -7,11 +7,30 @@
     <TextView 
         android:id="@+id/fragmentTitle"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textColor="#2F2F2F"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="4dp"
+        style="@style/ShadowUserText" />
+    
+    <ImageView
+        android:id="@+id/ivDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/item_divider" />
               
     <ListView
         android:id="@+id/fragmentQuestionnaire"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:fadeScrollbars="true"
+        android:listSelector="@android:color/transparent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:fadingEdge="none" />
     
 </LinearLayout>

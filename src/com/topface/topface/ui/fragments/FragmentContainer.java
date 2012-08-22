@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
 import android.support.v4.app.FragmentManager;
+import android.widget.Toast;
 
 public class FragmentContainer {
     private int mCurrentFragmentId;
@@ -47,7 +48,7 @@ public class FragmentContainer {
         BaseFragment fragment = null;
         switch (fragmentId) {
             case R.id.fragment_profile:
-                fragment = mDatingFragment;
+                fragment = mDatingFragment; 
                 break;
             case R.id.fragment_dating:
                 fragment = mDatingFragment;
@@ -70,6 +71,10 @@ public class FragmentContainer {
             default:
                 break;
         }
+        
+        
+        Toast.makeText(fragment.getActivity(), ""+fragment, Toast.LENGTH_SHORT).show();
+        
         mFragmentManager.beginTransaction().show(fragment).commit();
         mCurrentFragmentId = fragmentId;
     }
