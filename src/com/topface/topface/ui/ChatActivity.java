@@ -59,7 +59,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private LinkedList<History> mHistoryList;
     private EditText mEditBox;
     private TextView mHeaderTitle;
-//    private ProgressBar mProgressBar;
     private LockerView mLoadingLocker;
     
     private MessageRequest messageRequest;
@@ -145,7 +144,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {        
         release();
-        Data.userAvatar = null;
+        Data.friendAvatar = null;
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
@@ -159,7 +158,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         historyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-            	Data.userAvatar = Utils.getRoundedBitmap(Http.bitmapLoader(mUserAvatarUrl), mAvatarWidth, mAvatarWidth);
+            	Data.friendAvatar = Utils.getRoundedBitmap(Http.bitmapLoader(mUserAvatarUrl), mAvatarWidth, mAvatarWidth);
                 LinkedList<History> dataList = History.parse(response);
                 mAdapter.setDataList(dataList);
                 post(new Runnable() {
@@ -195,13 +194,15 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
     	if (v instanceof ImageView) {
-    		if (v.getTag() instanceof History) {
+    		if (v.getTag() instanceof History) {    			
     			History history = (History)v.getTag();
-				Intent intent = new Intent(this, GeoMapActivity.class);
-				intent.putExtra(GeoMapActivity.INTENT_LATITUDE_ID, history.latitude);
-				intent.putExtra(GeoMapActivity.INTENT_LONGITUDE_ID, history.longitude);
-				startActivity(intent);
-				return;
+    			if(history.type == History.MAP) {
+					Intent intent = new Intent(this, GeoMapActivity.class);
+					intent.putExtra(GeoMapActivity.INTENT_LATITUDE_ID, history.latitude);
+					intent.putExtra(GeoMapActivity.INTENT_LONGITUDE_ID, history.longitude);
+					startActivity(intent);
+					return;
+    			}
     		}
     	} 
     	
@@ -264,7 +265,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 	                                History history = new History();
 	                                history.code = 0;
 	                                history.gift = 0;
-	                                history.owner_id = CacheProfile.uid;
+	                                history.uid = CacheProfile.uid;
 	                                history.created = System.currentTimeMillis();
 	                                history.text = text;
 	                                history.type = History.MESSAGE;
@@ -328,7 +329,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 	                        	History history = new History();
 	                            history.code = 0;
 	                            history.gift = id;
-	                            history.owner_id = CacheProfile.uid;
+	                            history.uid = CacheProfile.uid;
 	                            history.created = System.currentTimeMillis();
 	                            history.text = Static.EMPTY;
 	                            history.type = History.GIFT;
@@ -374,7 +375,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                             public void run() {                            	
                             	if (confirm.completed) {
                             		History history = new History();
-        					        history.type = History.LOCATION;
+        					        history.type = History.MAP;
         					        history.currentLocation = false;
                                     history.latitude = latitude;
                                     history.longitude = longitude;
@@ -471,7 +472,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 					        mIsAddPanelOpened = false;
 
 					        History history = new History();
-					        history.type = History.CURRENT_LOCATION;
+					        history.type = History.MAP;
 					        history.currentLocation = true;
                             history.latitude = latitude;
                             history.longitude = longitude;

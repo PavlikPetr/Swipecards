@@ -44,7 +44,11 @@
 	  <string name="chat_gift_in">Вы получили подарок.</string>
 	  <string name="chat_gift_out">Вы отправили подарок.</string>
 	  <string name="chat_rate_in">Вас оценили на</string>
-	  <string name="chat_rate_out">Вы оценили</string>
+	  <string name="chat_rate_out">Вы оценили на</string>
+	  <string name="chat_like_in">Вам отправили лайк</string>
+	  <string name="chat_like_out">Вы отправили лайк</string>
+	  <string name="chat_symphathy_in">Вам отправили сипматию</string>
+	  <string name="chat_symphathy_out">Вы отправили сипматию</string>
 	  <string name="chat_wish_in">Вам отправили Тайное Желание.</string>
 	  <string name="chat_wish_out">Вы отправили Тайное Желание.</string>
 	  <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>

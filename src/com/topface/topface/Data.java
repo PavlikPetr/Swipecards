@@ -22,7 +22,7 @@ import android.support.v4.content.LocalBroadcastManager;
 public class Data {
     // Data
     public static String SSID;
-    public static Bitmap userAvatar;
+    public static Bitmap friendAvatar;
     public static Bitmap ownerAvatar;
     public static Facebook facebook;
     public static LinkedList<City> cityList;

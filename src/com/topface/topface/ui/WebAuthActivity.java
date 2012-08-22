@@ -79,9 +79,9 @@ public class WebAuthActivity extends Activity {
                     return;
             	}
             		
-            	String token_key = queryMap.get("access_token");
-                String user_id = queryMap.get("user_id");
-                String expires_in = queryMap.get("expires_in");
+            	String token_key = queryMap.get(ACCESS_TOKEN);
+                String user_id = queryMap.get(USER_ID);
+                String expires_in = queryMap.get(EXPIRES_IN);
 
                 Intent intent = WebAuthActivity.this.getIntent();
 				intent.putExtra(ACCESS_TOKEN, token_key);

@@ -139,7 +139,7 @@ public class DashboardActivity extends BaseFragmentActivity implements View.OnCl
         if (!Data.isSSID()) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             Data.ownerAvatar = null;
-            Data.userAvatar = null;
+            Data.friendAvatar = null;
             finish();
             return;
         }

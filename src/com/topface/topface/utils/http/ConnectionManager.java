@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.apache.http.HttpEntity;
@@ -41,12 +42,14 @@ public class ConnectionManager {
     private static ConnectionManager mInstanse;
     private AndroidHttpClient mHttpClient;
     private ExecutorService mWorker;
+    private LinkedList<Thread> mDelayedRequestsThreads;
     // Constants
     public static final String TAG = "CM";
     //---------------------------------------------------------------------------
     private ConnectionManager() {
         mHttpClient = AndroidHttpClient.newInstance("Android"); // For Avatar Bitmaps
         mWorker = Executors.newFixedThreadPool(2);
+        mDelayedRequestsThreads = new LinkedList<Thread>();
         //mWorker = Executors.newSingleThreadExecutor();
         //java.lang.System.setProperty("java.net.preferIPv4Stack", "true");
         //java.lang.System.setProperty("java.net.preferIPv6Addresses", "false");
@@ -59,8 +62,7 @@ public class ConnectionManager {
     }
     //---------------------------------------------------------------------------
     public RequestConnection sendRequest(final ApiRequest apiRequest) {
-    	final RequestConnection connection = new RequestConnection();    	
-    	
+    	final RequestConnection connection = new RequestConnection();    	    	
         mWorker.execute(new Runnable() {
             @Override
             public void run() {
@@ -90,15 +92,15 @@ public class ConnectionManager {
                     Debug.log(TAG, "cm_resp::" + rawResponse); // RESPONSE
 
                     if (apiRequest.handler != null) {
-                        ApiResponse apiResponse = new ApiResponse(rawResponse);
+                        ApiResponse apiResponse = new ApiResponse(rawResponse);                        
                         if (apiResponse.code == ApiResponse.SESSION_NOT_FOUND)
                             apiResponse = reAuth(apiRequest.context, httpClient, httpPost, apiRequest);
                         if (apiResponse.code == ApiResponse.INVERIFIED_TOKEN) {
-                        	Intent intent = new Intent();
-                        	intent.setAction(ReAuthReceiver.REAUTH_INTENT);
-                        	apiRequest.context.sendBroadcast(intent);
-                        	LocalBroadcastManager.getInstance(apiRequest.context).sendBroadcast(intent);
+                        	sendBroadcastReauth(apiRequest.context);
+                        	addDelayedRequest(apiRequest);
+                        	apiResponse.code = ApiResponse.ERRORS_PROCCESED;
                         }
+                        
                         apiRequest.handler.response(apiResponse);
                     }
 
@@ -146,8 +148,6 @@ public class ConnectionManager {
     }
     //---------------------------------------------------------------------------
     
-    public static int counter = 0;
-    
     private ApiResponse reAuth(Context context,AndroidHttpClient httpClient,HttpPost httpPost,ApiRequest request) {
         Debug.log(this, "reAuth");
 
@@ -155,7 +155,7 @@ public class ConnectionManager {
         AuthRequest authRequest = new AuthRequest(context);
         authRequest.platform = token.getSocialNet();
         authRequest.sid = token.getUserId();
-       	authRequest.token = token.getTokenKey();
+        authRequest.token = token.getTokenKey();
 
         String rawResponse = Static.EMPTY;
         ApiResponse response = null;
@@ -345,4 +345,38 @@ public class ConnectionManager {
         return mHttpClient;
     }
     //---------------------------------------------------------------------------
+    private void sendBroadcastReauth(Context context) {
+    	Intent intent = new Intent();
+    	intent.setAction(ReAuthReceiver.REAUTH_INTENT);
+    	context.sendBroadcast(intent);
+    	LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    //---------------------------------------------------------------------------
+    private void addDelayedRequest(final ApiRequest apiRequest) {
+    	Thread thread = new Thread() {
+    		
+    		public synchronized void run() {
+    			try {
+					wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+    			
+    			apiRequest.exec();
+    		};
+    	};
+    	thread.start();
+    	
+    	mDelayedRequestsThreads.add(thread);
+    }
+  //---------------------------------------------------------------------------
+    public void notifyDelayedRequests() {    	
+	    	for (int i = 0; i < mDelayedRequestsThreads.size(); i++) {
+	    		synchronized (mDelayedRequestsThreads.get(i)) {		
+	    			mDelayedRequestsThreads.get(i).notify();
+	    		}
+			}
+	    	
+	    	mDelayedRequestsThreads.clear();
+    }
 }

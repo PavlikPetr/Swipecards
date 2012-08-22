@@ -25,8 +25,8 @@ public class NavigationActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_navigation);
-		Debug.log(this, "onCreate");
-
+		Debug.log(this, "onCreate");		
+		
 		AuthorizationManager.getInstance(this).extendAccessToken();
 		
 		// Menu
@@ -44,10 +44,10 @@ public class NavigationActivity extends FragmentActivity {
 		mSwitchController.setFragmentMenu(mFragmentMenu);
 
 		// last opened
-		// mFragmentContainer.showFragment(R.id.fragment_dialogs);
-
+//		mFragmentContainer.showFragment(R.id.fragment_dialogs);
+		
 		mHomeButton = ((Button) findViewById(R.id.btnHeaderHome));
-		mHomeButton.setOnClickListener(mOnHomeClickListener);
+		mHomeButton.setOnClickListener(mOnHomeClickListener);		
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class NavigationActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		Debug.log(this, "onResume");
-		super.onResume();
+		super.onResume();		
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public class NavigationActivity extends FragmentActivity {
 			} else {
 				if (Animation == FragmentSwitchController.COLLAPSE_FULL) {
 					// mFragmentMenu.setVisibility(View.INVISIBLE);
-					mFragmentContainer.update();
+					mFragmentContainer.update();					
 				}
 				if (Animation == FragmentSwitchController.COLLAPSE) {
 					;// mFragmentMenu.setVisibility(View.INVISIBLE);
@@ -152,7 +152,7 @@ public class NavigationActivity extends FragmentActivity {
 		}
 
 		@Override
-		public void onSwitchStart() {
+		public void onSwitchStart() {			
 			mFragmentMenu.setClickable(false);
 			mHomeButton.setClickable(false);
 		};

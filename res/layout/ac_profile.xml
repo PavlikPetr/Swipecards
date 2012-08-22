@@ -1,46 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/im_list_bkgrd" >
-    
-	<LinearLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:orientation="vertical" >
-	    
-	  <!-- header bar 
-	  <include layout="@layout/bar_btn_header" /> -->
 
-	  <!-- form -->	    
-	  
-	    <LinearLayout      
-	         android:layout_width="fill_parent" 
-	         android:layout_height="wrap_content"
-	         android:orientation="vertical">
-	       <include layout="@layout/profile_form_top" />
-	       <include layout="@layout/profile_form_bottom" />
-	    </LinearLayout>
-	  
-	
-	</LinearLayout>
-	
-	<com.topface.topface.ui.views.LockerView
-	    android:id="@+id/llvProfileLoading"
-		android:layout_width="fill_parent"	
-		android:layout_height="fill_parent"
-		style="@style/LoadingLocker"
-		android:visibility="gone"		
-	    />
-	
-	  <!-- ProgressBar
-      android:id="@+id/prsProfileLoading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:visibility="visible"
-      style="@android:style/Widget.ProgressBar.Small" /-->
-	
-</RelativeLayout>
-</merge>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/im_list_bkgrd" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <!-- Button 
+                android:id="@+id/DELETESSID" 
+                android:text="Delete SSID"
+                android:layout_width="200dp"
+                android:layout_height="100dp"/>
+            
+            <Button 
+                android:id="@+id/DELETETOKEN"
+                android:text="Delete Token"
+                android:layout_width="200dp"
+                android:layout_height="100dp"/-->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <include layout="@layout/profile_form_top" />
+
+                <include layout="@layout/profile_form_bottom" />
+            </LinearLayout>            
+        </LinearLayout>
+
+        <com.topface.topface.ui.views.LockerView
+            android:id="@+id/llvProfileLoading"
+            style="@style/LoadingLocker"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="gone" />
+    </RelativeLayout>

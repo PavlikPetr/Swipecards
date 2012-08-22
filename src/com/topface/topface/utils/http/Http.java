@@ -331,7 +331,7 @@ public class Http {
                 if (ava == null)
                     return;
                 ava = Utils.getRoundedBitmap(ava);
-                Data.userAvatar = ava;
+                Data.friendAvatar = ava;
             }
         });
         t.setDaemon(true);

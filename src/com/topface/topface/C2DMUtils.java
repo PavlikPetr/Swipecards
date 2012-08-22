@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import com.google.android.c2dm.C2DMessaging;
 import com.topface.topface.R;
-import com.topface.topface.ui.MainActivity;
+import com.topface.topface.ui.NavigationActivity;
 
 public class C2DMUtils {
     // Data
@@ -47,7 +47,7 @@ public class C2DMUtils {
 
             //HELLO_ID;
             int notificationId = C2DM_NOTIFICATION_ID;
-            Intent i = new Intent(context, MainActivity.class);
+            Intent i = new Intent(context, NavigationActivity.class);
             i.putExtra("C2DM", true);
 
             //Активити, котолрое будет запущено после уведомления
