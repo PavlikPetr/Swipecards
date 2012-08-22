@@ -77,7 +77,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.ac_dating, null);
         
         mRateController = new RateController(getActivity());
-
+        mRateController.setOnRateControllerListener(this);
         // Data
         mUserSearchList = new LinkedList<Search>();
 

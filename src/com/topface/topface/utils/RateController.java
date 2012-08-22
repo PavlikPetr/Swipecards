@@ -101,7 +101,7 @@ public class RateController {
         }).exec();
     }
     
-    public void OnRateControllerListener(OnRateControllerListener onRateControllerListener) {
+    public void setOnRateControllerListener(OnRateControllerListener onRateControllerListener) {
         mOnRateControllerListener = onRateControllerListener;
     }
 }

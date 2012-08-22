@@ -36,9 +36,7 @@ import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,13 +66,12 @@ public class MutualFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.ac_sympathy, null);
 
         mFuBa = view.findViewById(R.id.loFuBa);
-        //mFuBa.setPadding(mFuBa.getPaddingLeft(), -70, mFuBa.getPaddingRight(), mFuBa.getPaddingBottom());
         mToolsBar = view.findViewById(R.id.loToolsBar);
         mBuBa = view.findViewById(R.id.btnBuBa);
         mBuBa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mToolsBar.startAnimation(new ExpandAnimation(mToolsBar, 1000));
+                mToolsBar.startAnimation(new ExpandAnimation(mToolsBar, 300));
             }
         });
         
@@ -84,7 +81,6 @@ public class MutualFragment extends BaseFragment {
             public void onGlobalLayout() {
                 ViewTreeObserver obs = mToolsBar.getViewTreeObserver();
                 obs.removeGlobalOnLayoutListener(this);
-
                 //mFuBa.setPadding(mFuBa.getPaddingLeft(), -mToolsBar.getHeight(), mFuBa.getPaddingRight(), mFuBa.getPaddingBottom());
             }
         });
