@@ -7,6 +7,7 @@ import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.Static;
 import com.topface.topface.data.Confirmation;
+import com.topface.topface.data.Dialog;
 import com.topface.topface.data.History;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiHandler;
@@ -27,7 +28,6 @@ import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.http.Http;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -194,7 +194,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     	if (v instanceof ImageView) {
     		if (v.getTag() instanceof History) {    			
     			History history = (History)v.getTag();
-    			if(history.type == History.MAP) {
+    			if(history.type == Dialog.MAP) {
 					Intent intent = new Intent(this, GeoMapActivity.class);
 					intent.putExtra(GeoMapActivity.INTENT_LATITUDE_ID, history.latitude);
 					intent.putExtra(GeoMapActivity.INTENT_LONGITUDE_ID, history.longitude);
@@ -265,7 +265,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 	                                history.uid = CacheProfile.uid;
 	                                history.created = System.currentTimeMillis();
 	                                history.text = text;
-	                                history.type = History.MESSAGE;
+	                                history.type = Dialog.MESSAGE;
 	                                mAdapter.addSentMessage(history);
 	                                mAdapter.notifyDataSetChanged();
 	                                mEditBox.getText().clear();
@@ -329,7 +329,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 	                            history.uid = CacheProfile.uid;
 	                            history.created = System.currentTimeMillis();
 	                            history.text = Static.EMPTY;
-	                            history.type = History.GIFT;
+	                            history.type = Dialog.GIFT;
 	                            history.link = url;
 	                            mAdapter.addSentMessage(history);
 	                            mAdapter.notifyDataSetChanged();
@@ -372,7 +372,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                             public void run() {                            	
                             	if (confirm.completed) {
                             		History history = new History();
-        					        history.type = History.MAP;
+        					        history.type = Dialog.MAP;
         					        history.currentLocation = false;
                                     history.latitude = latitude;
                                     history.longitude = longitude;
@@ -469,7 +469,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 					        mIsAddPanelOpened = false;
 
 					        History history = new History();
-					        history.type = History.MAP;
+					        history.type = Dialog.MAP;
 					        history.currentLocation = true;
                             history.latitude = latitude;
                             history.longitude = longitude;
@@ -512,7 +512,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 	public void onStatusChanged(String provider, int status, Bundle extras) { }
 
 	@Override
-	protected Dialog onCreateDialog(int id) {
+	protected android.app.Dialog onCreateDialog(int id) {
 		AlertDialog.Builder builder;
 		AlertDialog alert;
 		switch(id) {
