@@ -130,12 +130,16 @@ public class DialogListAdapter extends LoadingListAdapter {
              * } */
 
             // text
-            switch (dialog.type) {
+            switch (dialog.type) {                        
                 case Dialog.DEFAULT:
                     holder.mText.setText(dialog.text);
                     break;
+                case Dialog.PHOTO:
+                	holder.mText.setText(dialog.text);
+                	break;
                 case Dialog.GIFT:
-                    if(dialog.target==Dialog.TARGET_IN)
+                	holder.mText.setText(dialog.text);
+                    if(dialog.target==Dialog.FRIEND_MESSAGE)
                         holder.mText.setText(mContext.getString(R.string.chat_gift_in));
                     else
                         holder.mText.setText(mContext.getString(R.string.chat_gift_out));
@@ -143,12 +147,30 @@ public class DialogListAdapter extends LoadingListAdapter {
                 case Dialog.MESSAGE:
                     holder.mText.setText(dialog.text);
                     break;
-                case Dialog.LIKE:
+                case Dialog.MESSAGE_WISH:
+                	holder.mText.setText(dialog.text);
+                	break;
+                case Dialog.MESSAGE_SEXUALITY:
+                	holder.mText.setText(dialog.text);
+                	break;
+                case Dialog.LIKE:                	
                     holder.mText.setText(dialog.text);
                     break;
-                case Dialog.SYMPATHY:
+                case Dialog.SYMPHATHY:
                     holder.mText.setText(dialog.text);
                     break;
+                case Dialog.MESSAGE_WINK:
+                	holder.mText.setText(dialog.text);
+                	break;
+                case Dialog.RATE:
+                	holder.mText.setText(dialog.text);
+                	break;
+                case Dialog.PROMOTION:
+                	holder.mText.setText(dialog.text);
+                	break;
+                case Dialog.MAP:
+                	holder.mText.setText(dialog.text);
+                	break;                
                 default:
                     holder.mText.setText("");
                     break;

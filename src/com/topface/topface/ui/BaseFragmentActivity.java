@@ -3,11 +3,8 @@ package com.topface.topface.ui;
 import java.util.LinkedList;
 
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.utils.AuthorizationManager;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.IRequestClient;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 

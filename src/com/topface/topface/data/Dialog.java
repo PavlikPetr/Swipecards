@@ -8,39 +8,46 @@ import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
 
 public class Dialog extends AbstractData implements IListLoader{
-    // Data
+    // Data	
+	//public boolean more; // флаг причитанного диалога
+	
     public int type; // идентификатор типа сообщения диалога
-    public String text; // текст сообщения, если type = MESSAGE
-    public int gift; // идентификатор подарка. Поле определяется, если type = GIFT
-    public String link; // ссылка на изображение подарка. Поле определяется, если type = GIFT
     public int id; // идентификатор события в ленте
     public int uid; // идентификатор отправителя
+    public long created; // таймстамп отправления события
+    public int target; // направление события в ленте. Возможные занчения: 0 - для исходящего события, 1 - для входящего события
+    public boolean unread; // флаг причитанного диалога
     public String first_name; // имя отправителя в текущей локали
     public int age; // возраст отправителя
-    
+    public boolean online; // флаг нахождения отправителя онлайн
     public int city_id; // идентификатор города
     public String city_name; // наименование города в локали указанной при авторизации
     public String city_full; // полное наименование города с указанием региона, если он определен. Отдается в локали пользователя, указанной при авторизации
-
-    public boolean online; // флаг нахождения отправителя онлайн
-    public boolean unread; // флаг причитанного диалога
-
+    
+    public String text; // текст сообщения, если type = MESSAGE
+    public int gift; // идентификатор подарка. Поле определяется, если type = GIFT
+    public String link; // ссылка на изображение подарка. Поле определяется, если type = GIFT
+        
     public String avatars_big; // фото большого размера
     public String avatars_small; // фото маленького размера
 
-    public long created; // таймстамп отправления события
-    public int target; // направление события в ленте. Возможные занчения: 0 - для исходящего события, 1 - для входящего события
-
     // Constants
-    public static final int DEFAULT = 0;
-    public static final int GIFT = 2;
-    public static final int MESSAGE = 3;
-    public static final int LIKE = 6;
-    public static final int SYMPATHY = 7;
-    public static final int WINK = 999;  // подмигивание
+    public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
+    public static final int PHOTO = 1; // Рекламное уведомление
+    public static final int GIFT = 2; // Подарок
+    public static final int MESSAGE = 3; // Текстовое сообщение
+    public static final int MESSAGE_WISH = 4; // Тайное желание
+    public static final int MESSAGE_SEXUALITY = 5; // Оценка сексуальности
+    public static final int LIKE = 6; // Событие “понравилось”
+    public static final int SYMPHATHY = 7; // Событие “симпатия”
+    public static final int MESSAGE_WINK = 8; // подмигивание
+    public static final int RATE = 9; // Оценка
+    public static final int PROMOTION = 10; // Рекламное сообщение
+    
+    public static final int MAP = 11; // Текущее местоположение
 
-    public static final int TARGET_OUT = 0;
-    public static final int TARGET_IN  = 1;
+    public static final int USER_MESSAGE = 0;
+    public static final int FRIEND_MESSAGE = 1;
     
     //Loader indicators
     public boolean isListLoader = false;
@@ -109,6 +116,7 @@ public class Dialog extends AbstractData implements IListLoader{
                 dialog.target  = item.optInt("target");
 
                 dialogList.add(dialog);
+                
             }
         } catch(Exception e) {
             Debug.log("Dialog.class", "Wrong response parsing: " + e);
