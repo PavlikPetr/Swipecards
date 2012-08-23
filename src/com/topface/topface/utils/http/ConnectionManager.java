@@ -79,9 +79,10 @@ public class ConnectionManager {
                 } catch (Exception e) {
                     Debug.log(TAG, "cm_req exception::" + e.toString());
                     if (httpPost != null && !httpPost.isAborted()) httpPost.abort();
-                }
-                if (httpClient != null) {
-                    httpClient.close();
+                } finally {
+                    if (httpClient != null) {
+                        httpClient.close();
+                    }
                 }
             }
         });

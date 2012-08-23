@@ -57,7 +57,7 @@ public class ApiResponse {
         code = WRONG_RESPONSE;
     } catch (Exception e) {
       code = WRONG_RESPONSE;
-      Debug.log(this,"json resonse is wrong:" + response);
+      Debug.log(this,"json response is wrong:" + response);
     }
   }
   //---------------------------------------------------------------------------
@@ -79,7 +79,7 @@ public class ApiResponse {
         code = WRONG_RESPONSE;
     } catch (Exception e) {
       code = WRONG_RESPONSE;
-      Debug.log(this,"json resonse is wrong:" + response);
+      Debug.log(this,"json response is wrong:" + response);
     }
   }
   //---------------------------------------------------------------------------

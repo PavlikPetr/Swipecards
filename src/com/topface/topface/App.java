@@ -23,7 +23,7 @@ public class App extends Application {
     //---------------------------------------------------------------------------
     @Override
     public void onCreate() {
-        ACRA.init(this);
+        //ACRA.init(this);
         super.onCreate();
         mContext = getApplicationContext();
         Debug.log("App", "+onCreate");
