@@ -13,6 +13,7 @@ import com.topface.topface.requests.NovicePowerRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.DatingAlbumAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DatingAlbum;
@@ -70,16 +71,26 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private SharedPreferences mPreferences;
     private RateController mRateController;
     private RelativeLayout mDatingLoveBtnLayout;
+    private View mNavigationHeader;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
+        
         View view = inflater.inflate(R.layout.ac_dating, null);
         
-        mRateController = new RateController(getActivity());
-        mRateController.setOnRateControllerListener(this);
         // Data
         mUserSearchList = new LinkedList<Search>();
+        
+        // Header
+        mNavigationHeader = view.findViewById(R.id.loNavigationBar);
+        
+        // Home Button
+        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
+        
+        // Rate Controller
+        mRateController = new RateController(getActivity());
+        mRateController.setOnRateControllerListener(this);
 
         // Position
         mCurrentUserPos = -1;
@@ -183,11 +194,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         return view;
     }
 
-    @Override
-    public void onResume() {    	
-    	super.onResume();
-    }
-    
     private void updateData(final boolean isAddition) {
         if (!isAddition)
         	onUpdateStart(isAddition);
@@ -421,6 +427,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
+        mNavigationHeader.setVisibility(View.VISIBLE);
         mDatingGroup.setVisibility(View.VISIBLE);
         mIsHide = false;
     }
@@ -428,6 +435,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void hideControls() {
         mDatingGroup.setVisibility(View.INVISIBLE);
+        mNavigationHeader.setVisibility(View.INVISIBLE);
         mIsHide = true;
     }
     

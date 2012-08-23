@@ -10,6 +10,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedLikesRequest;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.adapters.LikesListAdapter;
@@ -21,6 +22,7 @@ import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.SwapAnimation;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -29,6 +31,8 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +49,11 @@ public class LikesFragment extends BaseFragment {
 	private LockerView mLoadingLocker;
 	private TextView mBackgroundText;
 	private ImageView mBannerView;
+	
+    private View mToolsBar;
+    private View mShowToolsBarButton;
+    private View mControlsGroup;
+	
 	private boolean mIsUpdating = false;
 	// Constants
 	private static final int LIMIT = 40;
@@ -57,6 +66,33 @@ public class LikesFragment extends BaseFragment {
 		
 		// Data
 		Data.likesList = new LinkedList<FeedLike>();
+		
+        // Home Button
+        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
+		
+        mControlsGroup = view.findViewById(R.id.loControlsGroup);
+        mToolsBar = view.findViewById(R.id.loToolsBar);
+        mShowToolsBarButton = view.findViewById(R.id.btnNavigationToolsBar);
+        mShowToolsBarButton.setVisibility(View.VISIBLE);
+        mShowToolsBarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mControlsGroup.startAnimation(new SwapAnimation(mControlsGroup, R.id.loToolsBar));
+            }
+        });
+        
+        ViewTreeObserver vto = mToolsBar.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int y = -mToolsBar.getMeasuredHeight();
+                mControlsGroup.setPadding(mControlsGroup.getPaddingLeft(), y, mControlsGroup.getPaddingRight(), mControlsGroup.getPaddingBottom());
+                if(y>0 || y<0) {
+                    ViewTreeObserver obs = mControlsGroup.getViewTreeObserver();
+                    obs.removeGlobalOnLayoutListener(this);                    
+                }
+            }
+        });
 
 		// Progress
 		mLoadingLocker = (LockerView) view.findViewById(R.id.llvLikesLoading);

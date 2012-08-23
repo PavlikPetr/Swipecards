@@ -9,17 +9,15 @@ import com.topface.topface.utils.Debug;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.Button;
+//import android.widget.Button;
 
-public class NavigationActivity extends FragmentActivity {
+public class NavigationActivity extends FragmentActivity implements View.OnClickListener {
 	private int mFragmentId;
 	private int mPrevFragmentId;
 	private FragmentMenu mFragmentMenu;
-	private FragmentContainer mFragmentContainer; // занимается переключением
-													// фрагментов
-	private FragmentSwitchController mSwitchController; // занимается анимацией
-														// слоя с фрагментами
-	private Button mHomeButton;
+	private FragmentContainer mFragmentContainer; // занимается переключением фрагментов
+	private FragmentSwitchController mSwitchController; // занимается анимацией слоя с фрагментами
+	//private Button mHomeButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,8 +30,8 @@ public class NavigationActivity extends FragmentActivity {
 		// Menu
 		mFragmentMenu = new FragmentMenu();
 		mFragmentMenu.setOnMenuListener(mOnMenuListener);
-		getSupportFragmentManager().beginTransaction().replace(R.id.fragment_menu, mFragmentMenu)
-				.commit();
+		getSupportFragmentManager().beginTransaction()
+		        .replace(R.id.fragment_menu, mFragmentMenu).commit();
 
 		// Fragments
 		mFragmentContainer = new FragmentContainer(getSupportFragmentManager());
@@ -46,57 +44,21 @@ public class NavigationActivity extends FragmentActivity {
 		// last opened
 //		mFragmentContainer.showFragment(R.id.fragment_dialogs);
 		
-		mHomeButton = ((Button) findViewById(R.id.btnHeaderHome));
-		mHomeButton.setOnClickListener(mOnHomeClickListener);		
+//		mHomeButton = ((Button) findViewById(R.id.btnHeaderHome));
+//		mHomeButton.setOnClickListener(mOnHomeClickListener);		
 	}
-
-	@Override
-	protected void onRestart() {
-		Debug.log(this, "onRestart");
-		super.onRestart();
-	}
-
-	@Override
-	protected void onStart() {
-		Debug.log(this, "onStart");
-		super.onStart();
-	}
-
-	@Override
-	protected void onResume() {
-		Debug.log(this, "onResume");
-		super.onResume();		
-	}
-
-	@Override
-	protected void onPostResume() {
-		Debug.log(this, "onPostResume");
-		super.onPostResume();
-	}
-
-	@Override
-	protected void onPause() {
-		Debug.log(this, "onPause");
-		super.onPause();
-	}
-
-	@Override
-	protected void onResumeFragments() {
-		Debug.log(this, "onResumeFragments");
-		super.onResumeFragments();
-	}
-
-	@Override
-	protected void onStop() {
-		Debug.log(this, "onStop");
-		super.onStop();
-	}
-
-	@Override
-	protected void onDestroy() {
-		Debug.log(this, "onDestroy");
-		super.onDestroy();
-	}
+	
+    @Override
+    public void onClick(View view) {
+        if(view.getId() != R.id.btnNavigationHome)
+            return;
+        if (mSwitchController.getAnimationState() == FragmentSwitchController.EXPAND) {
+            mSwitchController.closeMenu();
+        } else {
+            mFragmentMenu.refreshNotifications();
+            mSwitchController.openMenu();
+        }        
+    }
 
 	@Override
 	public void onBackPressed() {
@@ -109,17 +71,6 @@ public class NavigationActivity extends FragmentActivity {
 			super.onBackPressed();
 		}
 	}
-
-	View.OnClickListener mOnHomeClickListener = new View.OnClickListener() {
-		public void onClick(View view) {
-			if (mSwitchController.getAnimationState() == FragmentSwitchController.EXPAND) {
-				mSwitchController.closeMenu();
-			} else {
-				mFragmentMenu.refreshNotifications();
-				mSwitchController.openMenu();
-			}
-		}
-	};
 
 	FragmentMenu.FragmentMenuListener mOnMenuListener = new FragmentMenu.FragmentMenuListener() {
 		@Override
@@ -154,13 +105,13 @@ public class NavigationActivity extends FragmentActivity {
 		@Override
 		public void onSwitchStart() {			
 			mFragmentMenu.setClickable(false);
-			mHomeButton.setClickable(false);
+			//mHomeButton.setClickable(false);
 		};
 
 		@Override
 		public void onSwitchEnd() {
 			mFragmentMenu.setClickable(true);
-			mHomeButton.setClickable(true);
+			//mHomeButton.setClickable(true);
 		};
 	};
 

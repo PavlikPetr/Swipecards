@@ -4,9 +4,6 @@
               android:layout_height="fill_parent"
               android:orientation="vertical"
               android:background="@drawable/im_list_bkgrd" >
-
-    
-    <include layout="@layout/bar_header" />
     
     <FrameLayout
         android:layout_width="fill_parent"

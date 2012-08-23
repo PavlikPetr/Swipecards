@@ -11,6 +11,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.TopRequest;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.TopsGridAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
@@ -58,8 +59,10 @@ public class TopsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-      View view = inflater.inflate(R.layout.ac_tops, null);
+        View view = inflater.inflate(R.layout.ac_tops, null);
         
+        // Home Button
+        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
 
         // Data
         Data.topsList = new LinkedList<Top>();

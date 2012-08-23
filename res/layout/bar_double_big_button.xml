@@ -5,7 +5,7 @@
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:background="@drawable/im_bar_button"
-      android:visibility="gone" >
+      android:visibility="visible" >
     
 	  <com.topface.topface.ui.views.DoubleBigButton
 	      android:id="@+id/btnDoubleBig"

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
   <RelativeLayout
-      android:id="@+id/tvHeaderBar"
+      android:id="@+id/loNavigationBar"
       android:layout_width="fill_parent" 
       android:layout_height="wrap_content"  
       android:background="@drawable/im_bar_header" >
       
 	<Button  
-		 android:id="@+id/btnHeaderBack"
+		 android:id="@+id/btnNavigationHome"
 		 android:layout_width="wrap_content"
 		 android:layout_height="wrap_content"
 		 android:layout_centerVertical="true"
@@ -17,12 +17,22 @@
 		 android:background="@drawable/navigation_home_selector" />
       
 	  <TextView
-	      android:id="@+id/tvHeaderTitle"
+	      android:id="@+id/tvNavigationTitle"
 	      android:textColor="#FFFFFF"
 	      android:textStyle="bold"
 	      android:layout_width="wrap_content"
 	      android:layout_height="wrap_content"
 	      android:layout_centerInParent="true"  />
+	  
+	  <Button
+	      android:id="@+id/btnNavigationToolsBar" 
+	      android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:layout_alignParentRight="true"
+          android:layout_marginRight="10dp"
+          android:visibility="invisible"
+          android:text="Tools" />
 	  
   </RelativeLayout>
 </merge>

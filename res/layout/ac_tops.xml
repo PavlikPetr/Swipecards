@@ -9,8 +9,8 @@
 	    android:layout_height="fill_parent"
 	    android:orientation="vertical" >
 	    
-	  <!-- header bar 
-	  <include layout="@layout/bar_header" /> -->
+	  <!-- header bar -->
+	  <include layout="@layout/bar_navigation_header" />
 	       
 	  <!-- button bar -->
 	  <include layout="@layout/bar_tops_button" />

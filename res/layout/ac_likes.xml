@@ -3,20 +3,23 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/im_list_bkgrd" >
+    
+    <!-- header bar -->
+    <FrameLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/NavigationBar" >
+            <include layout="@layout/bar_navigation_header" />
+    </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/loControlsGroup"
+        android:layout_below="@id/NavigationBar"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <!--
-      header bar 
-	  <include layout="@layout/bar_header" />
-        -->
-
-
         <!-- button bar -->
-
         <include layout="@layout/bar_double_big_button" />
 
         <RelativeLayout
