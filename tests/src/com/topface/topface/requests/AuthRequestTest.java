@@ -10,6 +10,11 @@ import java.util.concurrent.CountDownLatch;
 
 public class AuthRequestTest extends InstrumentationTestCase {
 
+    /**
+     * Тестируем только API v1
+     */
+    private static final int API_VERSION = 1;
+
     public void testAuthRequest() throws Throwable {
         final CountDownLatch signal = new CountDownLatch(1);
 
@@ -27,9 +32,8 @@ public class AuthRequestTest extends InstrumentationTestCase {
                     public void success(ApiResponse response) throws NullPointerException {
                         Auth auth = Auth.parse(response);
                         assertNotNull("SSID is null", auth.ssid);
+                        assertEquals("Wrong API version", API_VERSION, auth.api_version);
                         Data.SSID = auth.ssid;
-                        //TODO: Check API version
-                        //assertEquals(API_VERSION, auth.api_version);
                         signal.countDown();
                     }
 
