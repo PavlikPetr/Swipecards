@@ -13,6 +13,7 @@ import com.topface.topface.utils.AuthToken;
 import com.topface.topface.utils.AuthorizationManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.Http;
 import android.content.Intent;
 import android.os.Bundle;
@@ -70,9 +71,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
 		if (!Http.isOnline(this))
 			Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
-					.show();		
-
-		Data.SSID= "97687";
+					.show();				
 		
 		if (Data.isSSID()) {
 			hideButtons();
@@ -85,15 +84,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
 	@Override
 	protected void onNewIntent(Intent intent) {		
-		super.onNewIntent(intent);
-		Bundle data = this.getIntent().getExtras();
-		if (data != null) {
-			if (data.get(ReAuthReceiver.REAUTH_FROM_RECEIVER) != null) {
-				mFromAuthorizationReceiver = data.getBoolean(
-						ReAuthReceiver.REAUTH_FROM_RECEIVER, false);
-			}
-		}
-		
+		super.onNewIntent(intent);		
 		if (!(new AuthToken(getApplicationContext())).isEmpty()) {
 			hideButtons();
 			mAuthorizationManager.reAuthorize();
@@ -101,6 +92,12 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 			showButtons();
 		}
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		checkIntentForReauth(getIntent());
+	};
 	
 	@Override
 	protected void onActivityResult(int requestCode,int resultCode,Intent data) {		
@@ -170,7 +167,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 				showButtons();
 				runOnUiThread(new Runnable() {
 					@Override
-					public void run() {
+					public void run() {						
 						Toast.makeText(AuthActivity.this, getString(R.string.general_server_error),
 								Toast.LENGTH_SHORT).show();
 					}
@@ -192,7 +189,9 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 					@Override
 					public void run() {
 						if (!mFromAuthorizationReceiver) {
-							startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
+							startActivity(new Intent(getApplicationContext(), NavigationActivity.class));							
+						} else {
+							ConnectionManager.getInstance().notifyDelayedRequests();
 						}
 						finish();
 					}
@@ -210,5 +209,15 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 				});
 			}
 		}).exec();
+	}
+	
+	private void checkIntentForReauth(Intent intent) {
+		Bundle data = getIntent().getExtras();
+		if (data != null) {
+			if (data.get(ReAuthReceiver.REAUTH_FROM_RECEIVER) != null) {
+				mFromAuthorizationReceiver = data.getBoolean(
+						ReAuthReceiver.REAUTH_FROM_RECEIVER, false);
+			}
+		}
 	}
 }

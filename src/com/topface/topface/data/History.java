@@ -9,7 +9,7 @@ import com.topface.topface.utils.Debug;
 public class History extends AbstractData {
     // Data
     public int id;       // идентификатор сообщения
-    public int owner_id; // идентификатор пользователя, отправившего сообщение
+    public int uid; // идентификатор пользователя, отправившего сообщение
     public int target; // 1 для входящих сообщений, 0 для исходящих
     public int type;     // тип сообщения
     public int gift;     // идентификатор подарка. Если сообщение является подарком
@@ -28,13 +28,15 @@ public class History extends AbstractData {
     public static final int MESSAGE = 3; // Текстовое сообщение
     public static final int MESSAGE_WISH = 4; // Тайное желание
     public static final int MESSAGE_SEXUALITY = 5; // Оценка сексуальности
+    public static final int LIKE = 6; // Событие “понравилось”
+    public static final int SYMPHATHY = 7; // Событие “симпатия”
     public static final int MESSAGE_WINK = 8; // подмигивание
+    public static final int RATE = 9; // Оценка
     
-    public static final int CURRENT_LOCATION = 6; // Текущее местоположение
-    public static final int LOCATION = 7; // Местоположение, указаное через карту
+    public static final int MAP = 11; // Текущее местоположение    
         
-    public static final int OUTPUT_MESSAGE = 0;
-    public static final int INPUT_MESSAGE = 1;
+    public static final int USER_MESSAGE = 0;
+    public static final int FRIEND_MESSAGE = 1;
     //---------------------------------------------------------------------------
     public static LinkedList<History> parse(ApiResponse response) {
         LinkedList<History> historyList = new LinkedList<History>();
@@ -47,7 +49,7 @@ public class History extends AbstractData {
                     History history = new History();
                     history.id = item.optInt("id");
                     history.created = item.optLong("created") * 1000; // время приходит в секундах *1000
-                    history.owner_id = item.optInt("uid");
+                    history.uid = item.optInt("uid");
                     history.type = item.optInt("type");
                     history.target = item.optInt("target");
                     
@@ -88,7 +90,7 @@ public class History extends AbstractData {
     }
     //---------------------------------------------------------------------------
     public int getUid() {
-        return owner_id;
+        return uid;
     };
     //---------------------------------------------------------------------------
 

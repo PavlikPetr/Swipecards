@@ -42,7 +42,7 @@ public class AuthorizationManager {
 	public final static int DIALOG_COMPLETED = 2;
 
 	// Constants
-	private String[] FB_PERMISSIONS = { "user_photos", "publish_stream", "email", "publish_actions" };
+	private String[] FB_PERMISSIONS = { "user_photos", "publish_stream", "email", "publish_actions", "offline_access" };
 
 	// Facebook
 	private AsyncFacebookRunner mAsyncFacebookRunner;
@@ -71,8 +71,8 @@ public class AuthorizationManager {
 		}
 	}
 
-	public void extendAccessToken() {		
-		Data.facebook.extendAccessToken(mParentActivity.getApplicationContext(), null);
+	public void extendAccessToken() {
+		Data.facebook.extendAccessTokenIfNeeded(mParentActivity.getApplicationContext(), null);
 	}
 
 	private void receiveToken(AuthToken authToken) {
@@ -114,8 +114,20 @@ public class AuthorizationManager {
 
 	// facebook methods
 	public void facebookAuth() {
-		mAsyncFacebookRunner = new AsyncFacebookRunner(Data.facebook);
-		Data.facebook.authorize(mParentActivity, FB_PERMISSIONS, mDialogListener);
+//		AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
+//				        
+//        if(authToken.getTokenKey() != null) {
+//            Data.facebook.setAccessToken(authToken.getTokenKey());
+//        }
+//        long expires = Long.parseLong(authToken.getExpires()); 
+//        if(expires != 0) {
+//        	Data.facebook.setAccessExpires(expires);
+//        }
+//        
+//        if(!Data.facebook.isSessionValid()) {
+			mAsyncFacebookRunner = new AsyncFacebookRunner(Data.facebook);		
+			Data.facebook.authorize(mParentActivity, FB_PERMISSIONS, mDialogListener);
+//        }
 	}	
 
 	private DialogListener mDialogListener = new DialogListener() {
@@ -162,7 +174,7 @@ public class AuthorizationManager {
 				String user_id = jsonResult.getString("id");
 				final AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
 				authToken.saveToken(AuthToken.SN_FACEBOOK, user_id, Data.facebook.getAccessToken(),
-						"" + Data.facebook.getAccessExpires());
+						Long.toString(Data.facebook.getAccessExpires()));
 				receiveToken(authToken);
 			} catch (JSONException e) {
 				Debug.log("FB", "mRequestListener::onComplete:error");

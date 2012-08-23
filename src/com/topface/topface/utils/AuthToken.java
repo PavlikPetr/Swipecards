@@ -61,7 +61,7 @@ public class AuthToken {
     //---------------------------------------------------------------------------
     public String getTokenKey() {
         return mTokenKey;
-    }
+    }    
     //---------------------------------------------------------------------------
     public String getExpires() {
         return mExpiresIn;

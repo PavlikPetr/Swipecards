@@ -8,6 +8,7 @@ public class ApiResponse {
     public int code = -1;
     public JSONObject mJSONResult;
     // Constants
+    public static final int ERRORS_PROCCESED = -2;
     public static final int RESULT_OK = -1;
     public static final int SYSTEM = 0;
     public static final int UNKNOWN_SOCIAL_USER = 1;

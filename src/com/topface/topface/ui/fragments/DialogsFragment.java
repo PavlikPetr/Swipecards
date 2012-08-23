@@ -34,7 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DialogsFragment extends BaseFragment {
-	private boolean mNewUpdating;
+	private boolean mHasUnread;
 	// private TextView mFooterView;
 	private PullToRefreshListView mListView;
 	private DialogListAdapter mListAdapter;
@@ -68,14 +68,14 @@ public class DialogsFragment extends BaseFragment {
 		mDoubleButton.setLeftListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mNewUpdating = false;
+				mHasUnread = false;
 				updateData(false);
 			}
 		});
 		mDoubleButton.setRightListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mNewUpdating = true;
+				mHasUnread = true;
 				updateData(false);
 			}
 		});
@@ -153,7 +153,7 @@ public class DialogsFragment extends BaseFragment {
 		mListView.setOnScrollListener(mAvatarManager);
 		mListView.setAdapter(mListAdapter);
 
-		mNewUpdating = CacheProfile.unread_messages > 0 ? true : false;
+		mHasUnread = CacheProfile.unread_messages > 0 ? true : false;
 		CacheProfile.unread_messages = 0;
 
 		return view;
@@ -165,12 +165,16 @@ public class DialogsFragment extends BaseFragment {
 		if (!isPushUpdating)
 			onUpdateStart(isPushUpdating);
 
-		mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON
+		mDoubleButton.setChecked(mHasUnread ? DoubleBigButton.RIGHT_BUTTON
 				: DoubleBigButton.LEFT_BUTTON);
-
+		
 		DialogRequest dialogRequest = new DialogRequest(getActivity());
 		registerRequest(dialogRequest);
 		dialogRequest.limit = LIMIT;
+		if (mHasUnread) 
+			dialogRequest.unread = 1;
+		else
+			dialogRequest.unread = 0;
 		dialogRequest.callback(new ApiHandler() {
 			@Override
 			public void success(ApiResponse response) {
@@ -221,18 +225,25 @@ public class DialogsFragment extends BaseFragment {
 	// ---------------------------------------------------------------------------
 	private void updateDataHistory() {
 		mIsUpdating = true;
-		mNewUpdating = mDoubleButton.isRightButtonChecked();
+		mHasUnread = mDoubleButton.isRightButtonChecked();
 
 		DialogRequest dialogRequest = new DialogRequest(getActivity());
 		registerRequest(dialogRequest);
 		dialogRequest.limit = LIMIT;
-		if (!mNewUpdating) {
+		if (!Data.dialogList.isEmpty()) {
 			if (Data.dialogList.getLast().isLoader() || Data.dialogList.getLast().isLoaderRetry()) {
 				dialogRequest.before = Data.dialogList.get(Data.dialogList.size() - 2).id;
 			} else {
 				dialogRequest.before = Data.dialogList.get(Data.dialogList.size() - 1).id;
 			}
 		}
+		
+		if(mHasUnread)
+			dialogRequest.unread = 1;
+		else
+			dialogRequest.unread = 0;
+		
+		
 		dialogRequest.callback(new ApiHandler() {
 			@Override
 			public void success(ApiResponse response) {
@@ -289,7 +300,7 @@ public class DialogsFragment extends BaseFragment {
 			mAvatarManager.release();
 		mAvatarManager = null;
 
-		Data.userAvatar = null;
+		Data.friendAvatar = null;
 	}
 
 	private void removeLoaderListItem() {

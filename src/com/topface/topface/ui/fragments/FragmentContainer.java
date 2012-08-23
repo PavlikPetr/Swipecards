@@ -8,6 +8,7 @@ public class FragmentContainer {
     private int mCurrentFragmentId;
     private FragmentManager mFragmentManager;
     
+    private BaseFragment mProfileFragment;
     private BaseFragment mDatingFragment;
     private BaseFragment mLikesFragment;
     private BaseFragment mMutualFragment;
@@ -18,8 +19,8 @@ public class FragmentContainer {
     public FragmentContainer(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
         
-        mDatingFragment = new DatingFragment();        
-        fragmentManager.beginTransaction().add(R.id.fragment_profile, mDatingFragment).hide(mDatingFragment).commit();
+        mProfileFragment = new ProfileFragment();        
+        fragmentManager.beginTransaction().add(R.id.fragment_profile, mProfileFragment).hide(mProfileFragment).commit();
         
         mDatingFragment = new DatingFragment();
         fragmentManager.beginTransaction().add(R.id.fragment_dating, mDatingFragment).hide(mDatingFragment).commit();
@@ -48,7 +49,7 @@ public class FragmentContainer {
         BaseFragment fragment = null;
         switch (fragmentId) {
             case R.id.fragment_profile:
-                fragment = mDatingFragment; 
+                fragment = mProfileFragment;
                 break;
             case R.id.fragment_dating:
                 fragment = mDatingFragment;
@@ -79,10 +80,10 @@ public class FragmentContainer {
         mCurrentFragmentId = fragmentId;
     }
     
-    public void update() {
+    public void update() {    	
         BaseFragment fragment = (BaseFragment)mFragmentManager.findFragmentById(mCurrentFragmentId);
         
-        if(!fragment.isFilled) {
+        if(fragment != null && !fragment.isFilled) {
 	        fragment.fillLayout();
 	        fragment.isFilled = true;
         }
