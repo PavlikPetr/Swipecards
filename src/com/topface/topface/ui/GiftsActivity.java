@@ -39,7 +39,9 @@ public class GiftsActivity extends BaseFragmentActivity {
 		this.setContentView(R.layout.ac_gifts);
 
 		((TextView) findViewById(R.id.tvHeaderTitle)).setText(R.string.gifts_title);
-		((Button) findViewById(R.id.btnHeaderBack)).setOnClickListener(new OnClickListener() {
+		Button backButton = ((Button) findViewById(R.id.btnHeaderBack));
+		backButton.setVisibility(View.VISIBLE);
+		backButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				setResult(Activity.RESULT_CANCELED);

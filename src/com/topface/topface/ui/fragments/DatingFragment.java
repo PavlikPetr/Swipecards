@@ -15,7 +15,7 @@ import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.DatingAlbumAdapter;
-import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DatingAlbum;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.utils.CacheProfile;
@@ -270,9 +270,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
                 break;
             case R.id.btnDatingProfile: {
-                Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                intent.putExtra(ProfileActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
-                intent.putExtra(ProfileActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
+                Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+                intent.putExtra(UserProfileActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
+                intent.putExtra(UserProfileActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
                 startActivity(intent);
             }
                 break;

@@ -16,7 +16,7 @@ import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
-import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.utils.AvatarManager;
@@ -143,16 +143,16 @@ public class LikesFragment extends BaseFragment {
 						} else {
 							try {
 								// Open profile activity
-								Intent intent = new Intent(getActivity(),	ProfileActivity.class);
-								intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.likesList.get(position).uid);
+								Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+								intent.putExtra(UserProfileActivity.INTENT_USER_ID, Data.likesList.get(position).uid);
 								intent.putExtra(ChatActivity.INTENT_USER_URL, Data.likesList.get(position).getSmallLink());
-								intent.putExtra(ProfileActivity.INTENT_USER_NAME, Data.likesList.get(position).first_name);
-								intent.putExtra(ProfileActivity.INTENT_MUTUAL_ID, Data.likesList.get(position).id);
+								intent.putExtra(UserProfileActivity.INTENT_USER_NAME, Data.likesList.get(position).first_name);
+								intent.putExtra(UserProfileActivity.INTENT_MUTUAL_ID, Data.likesList.get(position).id);
 								startActivity(intent);
 							} catch (Exception e) {
 								Debug.log(
 										LikesFragment.this,
-										"start ProfileActivity exception:"
+										"start UserProfileActivity exception:"
 												+ e.toString());
 							}
 						}

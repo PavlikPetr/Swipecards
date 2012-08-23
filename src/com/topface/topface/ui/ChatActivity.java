@@ -17,7 +17,7 @@ import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.ui.adapters.ChatListAdapter;
-import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.CacheProfile;
@@ -227,10 +227,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     finish();
                     return;
                 }
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra(ProfileActivity.INTENT_USER_ID, mUserId);
-                intent.putExtra(ProfileActivity.INTENT_CHAT_INVOKE, true);
-                intent.putExtra(ProfileActivity.INTENT_USER_NAME, mHeaderTitle.getText());
+                Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                intent.putExtra(UserProfileActivity.INTENT_USER_ID, mUserId);
+                intent.putExtra(UserProfileActivity.INTENT_CHAT_INVOKE, true);
+                intent.putExtra(UserProfileActivity.INTENT_USER_NAME, mHeaderTitle.getText());
                 startActivity(intent);
             } break;
         }

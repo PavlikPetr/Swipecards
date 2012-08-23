@@ -13,7 +13,7 @@
 		 android:layout_centerVertical="true"
 		 android:layout_alignParentLeft="true"
 		 android:layout_marginLeft="10dp"
-		 android:visibility="visible"
+		 android:visibility="invisible"
 		 android:background="@drawable/navigation_home_selector" />
       
 	  <TextView

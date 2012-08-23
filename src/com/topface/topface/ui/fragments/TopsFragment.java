@@ -13,7 +13,7 @@ import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.TopRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.TopsGridAdapter;
-import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.ThumbView;
@@ -124,11 +124,11 @@ public class TopsFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
                 try {
-                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                    intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.topsList.get(position).uid);
+                    Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+                    intent.putExtra(UserProfileActivity.INTENT_USER_ID, Data.topsList.get(position).uid);
                     startActivityForResult(intent, 0);
                 } catch(Exception e) {
-                    Debug.log(TopsFragment.this, "start ProfileActivity exception:" + e.toString());
+                    Debug.log(TopsFragment.this, "start UserProfileActivity exception:" + e.toString());
                 }
             }
         });

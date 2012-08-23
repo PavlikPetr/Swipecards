@@ -83,7 +83,8 @@ public class UserProfileActivity extends FragmentActivity {
         mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE, false); // пришли из чата
         
         // Header Name
-        String name = getIntent().getStringExtra(INTENT_USER_NAME); // name
+        String userName = getIntent().getStringExtra(INTENT_USER_NAME); // name
+        ((TextView)findViewById(R.id.tvHeaderTitle)).setText(userName);
 
         mRateController = new RateController(this);
         mLockerView = (LockerView)findViewById(R.id.llvProfileLoading);
