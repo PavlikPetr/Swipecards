@@ -13,6 +13,7 @@ import com.topface.topface.requests.NovicePowerRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.FilterActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.DatingAlbumAdapter;
 import com.topface.topface.ui.profile.UserProfileActivity;
@@ -23,6 +24,8 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Newbie;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +34,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
@@ -72,6 +76,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RateController mRateController;
     private RelativeLayout mDatingLoveBtnLayout;
     private View mNavigationHeader;
+    private Button mFilterButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -84,6 +89,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         
         // Header
         mNavigationHeader = view.findViewById(R.id.loNavigationBar);
+        mFilterButton = (Button) mNavigationHeader.findViewById(R.id.btnNavigationFilterBar);
+        mFilterButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity().getApplicationContext(), FilterActivity.class);
+				startActivityForResult(intent,FilterActivity.INTENT_FILTER_ACTIVITY);
+			}
+		});
+        mFilterButton.setVisibility(View.VISIBLE);
         
         // Home Button
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
@@ -510,4 +525,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 		}
 	}
 
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {		
+		super.onActivityResult(requestCode, resultCode, data);		
+	    if (resultCode == Activity.RESULT_OK && requestCode == FilterActivity.INTENT_FILTER_ACTIVITY) {
+	    	hideControls();
+	    	fillLayout();	        
+	    }
+	}
+	
 }
