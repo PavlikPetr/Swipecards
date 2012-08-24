@@ -19,7 +19,7 @@ public class Http {
     // Constants
     public static final int HTTP_GET_REQUEST = 0;
     public static final int HTTP_POST_REQUEST = 1;
-    public static final int HTTP_TIMEOUT = 20 * 1000;
+    public static final int HTTP_TIMEOUT = 45 * 1000;
     public static final int BUFFER_SIZE = 8192; //1024
     private static final String TAG = "Http";
 

@@ -6,6 +6,7 @@ import java.util.HashMap;
  * Фотографии пользователей из нашего стораджа фотографий (не напрямую из социальной сети)
  */
 public class UserPhotos {
+    public static final String SIZE_ORIGINAL = "original";
     /**
      * идентификатор фотографии пользователя
      */

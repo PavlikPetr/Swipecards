@@ -34,6 +34,7 @@ public class Leaders extends AbstractData {
                 JSONObject item = leadersArray.getJSONObject(i);
                 LeaderUser user = new LeaderUser();
 
+                user.user_id = item.getInt("user_id");
                 user.name = item.getString("name");
                 user.status = item.getString("status");
                 user.city = parseCity(item.getJSONObject("city"));
@@ -90,6 +91,10 @@ public class Leaders extends AbstractData {
      * Класс реализующий структуру данных лидера
      */
     public static class LeaderUser {
+        /**
+         * id пользователя
+         */
+        public int user_id;
         /**
          * имя лидера в текущей локали пользователя
          */

@@ -85,9 +85,7 @@ public class ConnectionService extends Service {
         Debug.log(TAG,"cc_resp::" + rawResponse);   // RESPONSE
       }
     } catch(Exception e) {
-      Debug.log(TAG,"cm exception:" + e.getMessage());
-      for(StackTraceElement st : e.getStackTrace())
-        Debug.log(TAG,"cm trace: " + st.toString());
+      Debug.error("ConnectionManager exception", e);
       if(httpPost != null) httpPost.abort();
       if(mHttpClient != null) mHttpClient.close();
       create();

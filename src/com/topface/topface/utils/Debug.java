@@ -24,8 +24,12 @@ public class Debug {
 
     public static void error(String msg, Exception e) {
         if (App.DEBUG) {
-            Log.e(App.TAG, msg + " :: " + e.getMessage());
-            e.printStackTrace();
+            StringBuilder stack = new StringBuilder("\n");
+            for (StackTraceElement st : e.getStackTrace()) {
+                stack.append(st.toString()).append("\n");
+            }
+            msg = msg != null && !msg.equals("") ? msg + " : " : "";
+            Log.e(App.TAG, msg + " :: " + e.getMessage() + stack.toString());
         }
     }
 
@@ -36,9 +40,6 @@ public class Debug {
     }
 
     public static void error(Exception e) {
-        if (App.DEBUG) {
-            Log.e(App.TAG, e.getMessage());
-            e.printStackTrace();
-        }
+        error(null, e);
     }
 }

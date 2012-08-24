@@ -106,9 +106,7 @@ public class ConnectionManager {
                 //httpEntity.consumeContent();
             }
         } catch (Exception e) {
-            Debug.log(TAG, "cm exception:" + e.getMessage());
-            for (StackTraceElement st : e.getStackTrace())
-                Debug.log(TAG, "cm trace: " + st.toString());
+            Debug.error("ConnectionManager exception", e);
             if (httpPost != null && !httpPost.isAborted()) httpPost.abort();
         }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/im_list_bkgrd" >
     
 	<LinearLayout 
@@ -9,12 +9,13 @@
 	    android:layout_height="fill_parent" 
 	    android:orientation="vertical" >
 
+
+        <!-- header bar -->
+        <include layout="@layout/bar_header" />
+
         <include layout="@layout/leaders"/>
 
-	  <!-- header bar -->
-	  <include layout="@layout/bar_header" />
-	  
-	  <!-- button bar -->
+        <!-- button bar -->
 	  <include layout="@layout/bar_double_big_button" />
 	  
 	    <com.topface.topface.ui.p2r.PullToRefreshListView

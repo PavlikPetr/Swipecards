@@ -3,6 +3,7 @@ package com.topface.topface.requests;
 import android.test.InstrumentationTestCase;
 import com.topface.topface.Data;
 import com.topface.topface.data.Leaders;
+import com.topface.topface.data.UserPhotos;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeadersRequest;
@@ -38,12 +39,13 @@ public class LeadersRequestTest extends InstrumentationTestCase {
                         assertTrue("Leaders result is empty", leaders.leaders.size() > 0);
                         for (Leaders.LeaderUser user : leaders.leaders) {
                             assertNotNull("Leader user is null", user);
+                            assertTrue("Leader id is incorrect", user.user_id > 0);
                             assertNotNull("Leader has't city", user.city);
                             assertTrue("Leader city id is incorrect", user.city.id > 0);
                             assertNotNull("Leader photo is null", user.photo);
                             assertNotNull("Leader photos links is null", user.photo.links);
                             assertTrue("Leader has't photo", user.photo.links.size() > 0);
-                            assertTrue("Leader has't original photo", user.photo.links.containsKey("original"));
+                            assertTrue("Leader has't original photo", user.photo.links.containsKey(UserPhotos.SIZE_ORIGINAL));
                             assertTrue("Leader has't name", user.photo.links.size() > 0);
                         }
                         signal.countDown();

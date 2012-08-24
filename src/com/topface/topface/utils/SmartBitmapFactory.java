@@ -49,7 +49,7 @@ public class SmartBitmapFactory {
                 Bitmap bitmap = getBitmapByUrl(url, maxSize);
                 //Обрезаем bitmap под размер imageView
                 if (clip) {
-                    bitmap = clipBitmap(bitmap, width, height);
+                    bitmap = Utils.clipping(bitmap, width, height);
                 }
                 sendHandlerMessage(bitmap, handler);
 
@@ -99,7 +99,7 @@ public class SmartBitmapFactory {
                 Bitmap bitmap = getBitmapByUrl(url, maxSize);
                 //Обрезаем bitmap под размер imageView
                 if (clip) {
-                    bitmap = clipBitmap(bitmap, width, height);
+                    bitmap = Utils.clipping(bitmap, width, height);
                 }
                 Debug.log("Preload image: " + url);
                 sendHandlerMessage(bitmap, handler);
