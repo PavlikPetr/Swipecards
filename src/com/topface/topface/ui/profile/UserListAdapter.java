@@ -81,7 +81,7 @@ public class UserListAdapter extends BaseAdapter {
                     holder.mState  = (ImageView)convertView.findViewById(R.id.ivState);
                     holder.mTitle  = (TextView)convertView.findViewById(R.id.tvTitle);
                     holder.mHeader = (TextView)convertView.findViewById(R.id.tvHeader);
-                    holder.mValue   = (TextView)convertView.findViewById(R.id.tvData);
+                    holder.mValue  = (TextView)convertView.findViewById(R.id.tvData);
                     break;
             }
             
@@ -133,16 +133,24 @@ public class UserListAdapter extends BaseAdapter {
         // header
         mUserQuestionnaire.add(new Pair<String, String>("Интеллектуально-личностные", null));
         mItemLayoutList.add(T_TITLE);
-        
+
         // education
-        mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_education),formInfo.getEducation(user.questionary_education_id)));        
-        mItemLayoutList.add(T_DATA);
+        if(user.questionary_education_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_education),formInfo.getEducation(user.questionary_education_id)));        
+            mItemLayoutList.add(T_DATA);
+        }
+
         // communication
-        mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_commutability),formInfo.getCommunication(user.questionary_communication_id)));       
-        mItemLayoutList.add(T_DATA);
+        if(user.questionary_communication_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_commutability),formInfo.getCommunication(user.questionary_communication_id)));       
+            mItemLayoutList.add(T_DATA);
+        }
+
         // character
-        mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_character),formInfo.getCharacter(user.questionary_character_id)));       
-        mItemLayoutList.add(T_DATA);
+        if(user.questionary_character_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_character),formInfo.getCharacter(user.questionary_character_id)));       
+            mItemLayoutList.add(T_DATA);
+        }
         
         mUserQuestionnaire.add(null);
         mItemLayoutList.add(T_DIVIDER);
@@ -150,31 +158,48 @@ public class UserListAdapter extends BaseAdapter {
         // header
         mUserQuestionnaire.add(new Pair<String, String>("Физические", null));
         mItemLayoutList.add(T_TITLE);
-        
+
         // height
-        mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_height),""+user.questionary_height));       
-        mItemLayoutList.add(T_DATA);
+        if(user.questionary_height > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_height),""+user.questionary_height));       
+            mItemLayoutList.add(T_DATA);
+        }
+
         // weight
-        mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_weight),""+user.questionary_weight));
-        mItemLayoutList.add(T_DATA);
+        if(user.questionary_weight > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_weight),""+user.questionary_weight));
+            mItemLayoutList.add(T_DATA);
+        }
+
         // fitness
-        mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_fitness),formInfo.getFitness(user.questionary_fitness_id)));       
-        mItemLayoutList.add(T_DATA);
+        if(user.questionary_fitness_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_fitness),formInfo.getFitness(user.questionary_fitness_id)));       
+            mItemLayoutList.add(T_DATA);
+        }
+
         // marriage
-        int marriage = user.sex==Static.GIRL ? R.string.profile_marriage_female : R.string.profile_marriage_male ;
-        mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(marriage),formInfo.getMarriage(user.questionary_marriage_id)));       
-        mItemLayoutList.add(T_DATA);
+        if(user.questionary_marriage_id > 0) {
+            int marriage = user.sex==Static.GIRL ? R.string.profile_marriage_female : R.string.profile_marriage_male ;
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(marriage),formInfo.getMarriage(user.questionary_marriage_id)));       
+            mItemLayoutList.add(T_DATA);
+        }
+
         // finances
-        mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_finances),formInfo.getFinances(user.questionary_finances_id)));       
-        mItemLayoutList.add(T_DATA);
+        if(user.questionary_finances_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_finances),formInfo.getFinances(user.questionary_finances_id)));       
+            mItemLayoutList.add(T_DATA);
+        }
+
         // smoking
-        mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_smoking),formInfo.getSmoking(user.questionary_smoking_id)));       
-        mItemLayoutList.add(T_DATA);
+        if(user.questionary_smoking_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_smoking),formInfo.getSmoking(user.questionary_smoking_id)));       
+            mItemLayoutList.add(T_DATA);
+        }
+
         // alcohol
-        mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_alcohol),formInfo.getAlcohol(user.questionary_alcohol_id)));       
-        mItemLayoutList.add(T_DATA);
-        // smoking
-        mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_smoking),formInfo.getSmoking(user.questionary_smoking_id)));       
-        mItemLayoutList.add(T_DATA);
+        if(user.questionary_alcohol_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_alcohol),formInfo.getAlcohol(user.questionary_alcohol_id)));       
+            mItemLayoutList.add(T_DATA);
+        }
     }
 }
