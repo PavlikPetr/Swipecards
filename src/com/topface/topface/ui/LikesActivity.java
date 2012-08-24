@@ -6,11 +6,13 @@ import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.FeedLike;
+import com.topface.topface.data.Leaders;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedLikesRequest;
 import com.topface.topface.ui.adapters.LikesListAdapter;
+import com.topface.topface.ui.blocks.LeadersBlock;
 import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.ProfileActivity;
@@ -145,7 +147,14 @@ public class LikesActivity extends Activity {
     Debug.log(this,"-onDestroy");
     super.onDestroy();
   }
-  //---------------------------------------------------------------------------
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new LeadersBlock(this);
+    }
+
+    //---------------------------------------------------------------------------
   private void update(boolean isPushUpdating) {
     if(!isPushUpdating)
       mProgressBar.setVisibility(View.VISIBLE);
