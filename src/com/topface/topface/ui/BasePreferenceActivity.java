@@ -19,7 +19,9 @@ public class BasePreferenceActivity extends PreferenceActivity implements IReque
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {		
 		super.onActivityResult(requestCode, resultCode, data);
-		mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
+		if(mAuthorizationManager != null) {
+			mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
+		}
 		Debug.log(this, "onActivityResult");
 	}
 	

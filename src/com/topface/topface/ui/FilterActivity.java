@@ -51,6 +51,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
     private LocationManager mLocationManager;
     private FilterRequest filterRequest;
     private boolean mIsChanged;
+    private boolean mIsSending;
     // Constants
     public static final int CITY_NEARBY = 0;
     public static final int CITY_ALL = 1;
@@ -218,6 +219,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         filterRequest.sex = mTemp.sex;
         filterRequest.agebegin = mTemp.age_start;
         filterRequest.ageend = mTemp.age_end;
+        mIsSending = true;
         filterRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -228,14 +230,15 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
 					public void run() {
 						if (!confirm.completed) {
 		            		Toast.makeText(FilterActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
-		            	}
+		            	}						
 					}
 				});
-            	
+            	mIsSending = false;
                 //Toast.makeText(FilterActivity.this,"filter success",Toast.LENGTH_SHORT).show();
             }
             @Override
             public void fail(int codeError,ApiResponse response) {
+            	mIsSending = false;
             }
         }).exec();
         Debug.log(this, "3.city_id:" + mTemp.city_id);
@@ -418,6 +421,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         registerRequest(settingsRequest);
         settingsRequest.lat = location.getLatitude();
         settingsRequest.lng = location.getLongitude();
+        mIsSending = true;
         settingsRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -428,6 +432,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
 						if (!confirm.completed) {
 		            		Toast.makeText(FilterActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
 		            	}
+						mIsSending = false;
 					}
 				});
             	
@@ -436,6 +441,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
             @Override
             public void fail(int codeError,ApiResponse response) {
                 mLocationManager.removeUpdates(FilterActivity.this);
+                mIsSending = false;
             }
         }).exec();
         //Toast.makeText(FilterActivity.this.getApplicationContext(),"lng:"+settings.lng+ "\nlat:"+settings.lat,Toast.LENGTH_SHORT).show();
@@ -456,6 +462,13 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         if (mIsChanged) {
             sendFilter();
             setResult(RESULT_OK, null);
+            while (mIsSending) { 
+            	try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+            }
         }
         super.onBackPressed();
     }

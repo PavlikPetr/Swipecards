@@ -3,8 +3,6 @@ package com.topface.topface.ui.fragments;
 import com.topface.topface.ui.views.DatingAlbum;
 
 import android.content.Context;
-import android.os.Debug;
-import android.support.v4.view.VelocityTrackerCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -13,7 +11,6 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
@@ -29,6 +26,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 	private FragmentMenu mFragmentMenu;
 	
 	private int mMinimumVelocity;
+	private int mVelocitySlop;
 
 	private boolean mAutoScrolling = false;
 
@@ -66,6 +64,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 		final ViewConfiguration configuration = ViewConfiguration.get(context);
 		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
 		mMinimumVelocity = 10*configuration.getScaledMinimumFlingVelocity();
+		mVelocitySlop = configuration.getScaledMinimumFlingVelocity();
 		mTouchSlop = ViewConfiguration.getTouchSlop();
 		int c =0; c++;
 	}
@@ -230,12 +229,9 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 			float dy = y - mLastMotionY;
 			float yDiff = Math.abs(dy);
 			
-//			long a = System.currentTimeMillis();
 			if (canScroll(getChildAt(1), false, (int) dx, (int) x, (int) y)) {
-//				Log.d("TIME", Long.toString(System.currentTimeMillis() - a));
 				return false;				
 			}
-//			Log.d("TIME", Long.toString(System.currentTimeMillis() - a));
 			
 			if(xDiff > mTouchSlop && xDiff > yDiff) {
 				startDragging(x);
@@ -322,7 +318,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 		setScrollingCacheEnabled(false);
 	}	
 	
-	private int mScrollingVelocityThreshold = 2000;
+	private int mScrollingVelocityThreshold = 2000;	
 	private float mScrollingDistanceThreshold;
 	
 	private void completeDragging(int velocity) {
@@ -332,6 +328,9 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 		mAutoScrolling = true;
 		int dx = 0;
 		int duration = 0;		
+		
+		if(Math.abs(velocity) < mVelocitySlop) 
+			velocity = 0;
 		
 		if(velocity > 0) {			
 			// right - expect EXPAND
@@ -370,14 +369,20 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 			
 			mAnimation = COLLAPSE;		
 			mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
-		} else {
-//			if (-getScrollX() > getRightBound()) {
-//				mAnimation = EXPAND;
-//				dx = -getRightBound() - getScrollX();
-//			} else {				
+		} else {			
+			if (-getScrollX() > mScrollingDistanceThreshold) {
+				if (mAnimation == EXPAND) {
+					mAnimation = COLLAPSE;
+					dx = -getScrollX() - getLeftBound();
+				} else {
+					mAnimation = EXPAND;
+					dx = -getRightBound() - getScrollX();
+				}				
+			} else {
 				mAnimation = COLLAPSE;
 				dx = -getScrollX() - getLeftBound();
-//			}
+			}
+						
 			duration = (int) Math.abs(1000*dx/mMinimumVelocity);
 			
 			mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
