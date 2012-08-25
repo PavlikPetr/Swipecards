@@ -11,18 +11,19 @@ public class FeedRatesRequest extends ApiRequest {
     public int limit; // максимальный размер выборки
     public int from; // идентификатор оценки, от которой делать выборку
     public boolean only_new; // осуществлять выборку только по новым оценкам, или по всем
-    //---------------------------------------------------------------------------
+    public boolean leave = false; // не отмечать полученные сообщения прочитанными
+
     public FeedRatesRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
         try {
             root.put("service", service);
             root.put("ssid", ssid);
-            JSONObject data = new JSONObject().put("limit", limit);
+            JSONObject data = new JSONObject().put("limit", limit).put("leave", leave);
             if (from > 0)
                 data.put("from", from);
             if (only_new)
@@ -34,5 +35,4 @@ public class FeedRatesRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

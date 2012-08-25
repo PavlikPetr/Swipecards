@@ -4,6 +4,7 @@ import com.topface.topface.utils.Debug;
 import android.os.Handler;
 
 abstract public class ApiHandler extends Handler {
+    
 	public void response(ApiResponse response) {
 		try {
 			if (response.code == ApiResponse.ERRORS_PROCCESED)

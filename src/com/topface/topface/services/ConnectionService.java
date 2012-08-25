@@ -102,6 +102,7 @@ public class ConnectionService extends Service {
                 for (String line = r.readLine(); line != null; line = r.readLine())
                     sb.append(line);
                 rawResponse = sb.toString();
+                r.close();
                 is.close();
                 httpEntity.consumeContent();
                 Debug.log(TAG, "cc_resp::" + rawResponse); // RESPONSE

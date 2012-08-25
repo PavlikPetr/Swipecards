@@ -10,11 +10,11 @@ public class VerifyRequest extends ApiRequest {
     private String service = "verify";
     public String data; // строка данных заказа от Google Play
     public String signature; // подпись данных заказа
-    //---------------------------------------------------------------------------
+
     public VerifyRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -29,5 +29,4 @@ public class VerifyRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

@@ -10,11 +10,11 @@ public class MessageRequest extends ApiRequest {
     private String service = "message";
     public int userid; // идентификатор пользователя, кому послали сообщение
     public String message; // текст сообщения в UTF-8. min размер текста - 1 символ, max - 1024 
-    //---------------------------------------------------------------------------
+
     public MessageRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -28,5 +28,4 @@ public class MessageRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

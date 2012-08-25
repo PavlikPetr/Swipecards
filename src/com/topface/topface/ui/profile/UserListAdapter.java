@@ -135,20 +135,20 @@ public class UserListAdapter extends BaseAdapter {
         mItemLayoutList.add(T_TITLE);
 
         // education
-        if(user.questionary_education_id > 0) {
-            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_education),formInfo.getEducation(user.questionary_education_id)));        
+        if(user.form_education_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_education),formInfo.getEducation(user.form_education_id)));        
             mItemLayoutList.add(T_DATA);
         }
 
         // communication
-        if(user.questionary_communication_id > 0) {
-            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_commutability),formInfo.getCommunication(user.questionary_communication_id)));       
+        if(user.form_communication_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_commutability),formInfo.getCommunication(user.form_communication_id)));       
             mItemLayoutList.add(T_DATA);
         }
 
         // character
-        if(user.questionary_character_id > 0) {
-            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_character),formInfo.getCharacter(user.questionary_character_id)));       
+        if(user.form_character_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_character),formInfo.getCharacter(user.form_character_id)));       
             mItemLayoutList.add(T_DATA);
         }
         
@@ -160,45 +160,45 @@ public class UserListAdapter extends BaseAdapter {
         mItemLayoutList.add(T_TITLE);
 
         // height
-        if(user.questionary_height > 0) {
-            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_height),""+user.questionary_height));       
+        if(user.form_height > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_height),""+user.form_height));       
             mItemLayoutList.add(T_DATA);
         }
 
         // weight
-        if(user.questionary_weight > 0) {
-            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_weight),""+user.questionary_weight));
+        if(user.form_weight > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_weight),""+user.form_weight));
             mItemLayoutList.add(T_DATA);
         }
 
         // fitness
-        if(user.questionary_fitness_id > 0) {
-            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_fitness),formInfo.getFitness(user.questionary_fitness_id)));       
+        if(user.form_fitness_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_fitness),formInfo.getFitness(user.form_fitness_id)));       
             mItemLayoutList.add(T_DATA);
         }
 
         // marriage
-        if(user.questionary_marriage_id > 0) {
+        if(user.form_marriage_id > 0) {
             int marriage = user.sex==Static.GIRL ? R.string.profile_marriage_female : R.string.profile_marriage_male ;
-            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(marriage),formInfo.getMarriage(user.questionary_marriage_id)));       
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(marriage),formInfo.getMarriage(user.form_marriage_id)));       
             mItemLayoutList.add(T_DATA);
         }
 
         // finances
-        if(user.questionary_finances_id > 0) {
-            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_finances),formInfo.getFinances(user.questionary_finances_id)));       
+        if(user.form_finances_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_finances),formInfo.getFinances(user.form_finances_id)));       
             mItemLayoutList.add(T_DATA);
         }
 
         // smoking
-        if(user.questionary_smoking_id > 0) {
-            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_smoking),formInfo.getSmoking(user.questionary_smoking_id)));       
+        if(user.form_smoking_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_smoking),formInfo.getSmoking(user.form_smoking_id)));       
             mItemLayoutList.add(T_DATA);
         }
 
         // alcohol
-        if(user.questionary_alcohol_id > 0) {
-            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_alcohol),formInfo.getAlcohol(user.questionary_alcohol_id)));       
+        if(user.form_alcohol_id > 0) {
+            mUserQuestionnaire.add(new Pair<String, String>(mContext.getString(R.string.profile_alcohol),formInfo.getAlcohol(user.form_alcohol_id)));       
             mItemLayoutList.add(T_DATA);
         }
     }

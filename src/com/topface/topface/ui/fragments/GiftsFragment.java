@@ -114,6 +114,7 @@ public class GiftsFragment extends BaseFragment {
 							Intent intent = new Intent(getActivity().getApplicationContext(),
 									GiftsActivity.class);
 							startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+
 						}
 					}
 				}

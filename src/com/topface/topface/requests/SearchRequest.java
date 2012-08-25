@@ -10,24 +10,24 @@ public class SearchRequest extends ApiRequest {
     private String service = "search";
     public int limit; // размер получаемой выборки 10 <= limit <= 50
     public boolean geo; // необходимости геопозиционного поиска
+    public boolean ero; // флаг необходимости эротического поиска
     public boolean online; // необходимость выборки только онлайн-пользователей
-    //---------------------------------------------------------------------------
+
     public SearchRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
         try {
             root.put("service", service);
             root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("limit", limit).put("geo", geo).put("online", online));
+            root.put("data", new JSONObject().put("limit", limit).put("geo", geo).put("ero", ero).put("online", online));
         } catch(JSONException e) {
             Debug.log(this, "Wrong request compiling: " + e);
         }
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

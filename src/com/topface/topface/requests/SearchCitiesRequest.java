@@ -9,11 +9,11 @@ public class SearchCitiesRequest extends ApiRequest {
     // Data
     private String service = "searchCities";
     public String prefix; // начальный текст наименования города в UTF-8. Минимальный размер текста - 3 символа
-    //---------------------------------------------------------------------------
+
     public SearchCitiesRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -27,5 +27,5 @@ public class SearchCitiesRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
+
 }

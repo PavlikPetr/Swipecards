@@ -19,11 +19,11 @@ public class ProfileRequest extends ApiRequest {
     public static final int P_ALBUM = 4;
     public static final int P_INFO = 5;
     public static final int P_DASHBOARD = 6;
-    //---------------------------------------------------------------------------
+
     public ProfileRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -62,47 +62,47 @@ public class ProfileRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
+
     private JSONArray getNotification() {
         JSONArray array = new JSONArray();
         array.put("money").put("power").put("average_rate").put("unread_rates").put("unread_likes").put("unread_messages").put("unread_symphaties");
 
         return array;
     }
-    //---------------------------------------------------------------------------
+
     private JSONArray getFilter() {
         JSONArray array = new JSONArray();
         array.put("dating");
 
         return array;
     }
-    //---------------------------------------------------------------------------
+
     private JSONArray getQuestionary() {
         JSONArray array = new JSONArray();
         array.put("questionary");
 
         return array;
     }
-    //---------------------------------------------------------------------------
+
     private JSONArray getAlbum() {
         JSONArray array = new JSONArray();
         array.put("album");
 
         return array;
     }
-    //---------------------------------------------------------------------------
+
     private JSONArray getInfo() {
         JSONArray array = getNotification();
         array.put("uid").put("first_name").put("age").put("sex").put("city").put("avatars").put("status");
 
         return array;
     }
-    //---------------------------------------------------------------------------
+
     private JSONArray getDashboard() {
         JSONArray array = getNotification();
         array.put("city").put("dating").put("avatars").put("flags");
 
         return array;
     }
-    //---------------------------------------------------------------------------
+
 }

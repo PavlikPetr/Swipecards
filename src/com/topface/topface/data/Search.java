@@ -9,12 +9,12 @@ import com.topface.topface.utils.Debug;
 public class Search extends AbstractData {
     // Data
     public int uid; // идентификатор пользователя
+    public String first_name; // имя пользователя
     public int age; // возраст пользователя
+    public String status; // статус пользователя
+    public boolean online; // флаг нахождения пользователя онлайн
     public int sex;
     public int city_id; // идентификатор города пользователя
-    public boolean online; // флаг нахождения пользователя онлайн
-    public String first_name; // имя пользователя
-    public String status; // статус пользователя
     public String city_name; // наименование города пользователя
     public String city_full; // полное наименование города пользователя
     public String[] avatars_big; // большая аватарка пользователя
@@ -24,7 +24,7 @@ public class Search extends AbstractData {
     //public String geo_coord;     // координаты пользователя
     //public String geo_coord_lat; // широта нахождения пользоавтеля
     //public String geo_coord_lng; // долгота нахождения пользователя
-    //---------------------------------------------------------------------------
+
     public static LinkedList<Search> parse(ApiResponse response) {
         LinkedList<Search> userList = new LinkedList<Search>();
 
@@ -35,18 +35,12 @@ public class Search extends AbstractData {
                     Search search = new Search();
                     JSONObject item = array.getJSONObject(i);
                     search.uid = item.optInt("uid");
-                    search.age = item.optInt("age");
-                    search.sex = item.optInt("sex");  
                     search.first_name = item.optString("first_name");
-                    search.online = item.optBoolean("online");
+                    search.age = item.optInt("age");
                     search.status = item.optString("status");
-
-                    // city
-                    JSONObject city = item.getJSONObject("city");
-                    search.city_id = city.optInt("id");
-                    search.city_name = city.optString("name");
-                    search.city_full = city.optString("full");
-
+                    search.online = item.optBoolean("online");
+                    search.sex = item.optInt("sex");
+                    
                     // avatars
                     JSONArray avatars = item.getJSONArray("avatars");
                     int size = avatars.length();
@@ -59,6 +53,13 @@ public class Search extends AbstractData {
                             search.avatars_small[n] = avatar.optString("small");
                         }
                     }
+
+                    // city
+                    JSONObject city = item.getJSONObject("city");
+                    search.city_id = city.optInt("id");
+                    search.city_name = city.optString("name");
+                    search.city_full = city.optString("full");
+
                     userList.add(search);
                 }
         } catch(Exception e) {
@@ -67,19 +68,19 @@ public class Search extends AbstractData {
 
         return userList;
     }
-    //---------------------------------------------------------------------------
+
     public int getUid() {
         return uid;
     };
-    //---------------------------------------------------------------------------
+
     @Override
     public String getBigLink() {
         return avatars_big[0];
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String getSmallLink() {
         return avatars_small[0];
     }
-    //---------------------------------------------------------------------------
+
 }

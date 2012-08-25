@@ -83,12 +83,12 @@ public class CacheProfile {
         updateCity(profile);
         updateDating(profile);
         updateNotifications(profile);
-        isNewbie = profile.isNewbie;
+//        isNewbie = profile.isNewbie;
     }
     //---------------------------------------------------------------------------
     public static void updateAvatars(Profile profile) {
-        avatar_big = profile.avatar_big;
-        avatar_small = profile.avatar_small;
+//        avatar_big = profile.avatar_big;
+//        avatar_small = profile.avatar_small;
     }
     //---------------------------------------------------------------------------
     public static void updateCity(Profile profile) {
@@ -129,8 +129,8 @@ public class CacheProfile {
         profile.unread_messages = unread_messages;
         profile.unread_symphaties = unread_mutual;
         profile.average_rate = average_rate;
-        profile.avatar_big = avatar_big;
-        profile.avatar_small = avatar_small;
+//        profile.avatar_big = avatar_big;
+//        profile.avatar_small = avatar_small;
         profile.city_id = city_id;
         profile.city_name = city_name;
         profile.city_full = city_full;
@@ -140,23 +140,23 @@ public class CacheProfile {
         profile.dating_city_id = dating_city_id;
         profile.dating_city_name = dating_city_name;
         profile.dating_city_full = dating_city_full;
-        profile.questionary_job_id = questionary_job_id;
-        profile.questionary_job = questionary_job;
-        profile.questionary_status_id = questionary_status_id;
-        profile.questionary_status = questionary_status;
-        profile.questionary_education_id = questionary_education_id;
-        profile.questionary_marriage_id = questionary_marriage_id;
-        profile.questionary_finances_id = questionary_finances_id;
-        profile.questionary_character_id = questionary_character_id;
-        profile.questionary_smoking_id = questionary_smoking_id;
-        profile.questionary_alcohol_id = questionary_alcohol_id;
-        profile.questionary_fitness_id = questionary_fitness_id;
-        profile.questionary_communication_id = questionary_communication_id;
-        profile.questionary_weight = questionary_weight;
-        profile.questionary_height = questionary_height;
+        profile.form_job_id = questionary_job_id;
+        profile.form_job = questionary_job;
+        profile.form_status_id = questionary_status_id;
+        profile.form_status = questionary_status;
+        profile.form_education_id = questionary_education_id;
+        profile.form_marriage_id = questionary_marriage_id;
+        profile.form_finances_id = questionary_finances_id;
+        profile.form_character_id = questionary_character_id;
+        profile.form_smoking_id = questionary_smoking_id;
+        profile.form_alcohol_id = questionary_alcohol_id;
+        profile.form_fitness_id = questionary_fitness_id;
+        profile.form_communication_id = questionary_communication_id;
+        profile.form_weight = questionary_weight;
+        profile.form_height = questionary_height;
         profile.albums = albums;
         profile.status = status;
-        profile.isNewbie = isNewbie;
+//        profile.isNewbie = isNewbie;
         return profile;
     }
     //---------------------------------------------------------------------------
@@ -172,8 +172,8 @@ public class CacheProfile {
         unread_messages = profile.unread_messages;
         unread_mutual = profile.unread_symphaties;
         average_rate = profile.average_rate;
-        avatar_big = profile.avatar_big;
-        avatar_small = profile.avatar_small;
+//        avatar_big = profile.avatar_big;
+//        avatar_small = profile.avatar_small;
         city_id = profile.city_id;
         city_name = profile.city_name;
         city_full = profile.city_full;
@@ -183,23 +183,23 @@ public class CacheProfile {
         dating_city_id = profile.dating_city_id;
         dating_city_name = profile.dating_city_name;
         dating_city_full = profile.dating_city_full;
-        questionary_job_id = profile.questionary_job_id;
-        questionary_job = profile.questionary_job;
-        questionary_status_id = profile.questionary_status_id;
-        questionary_status = profile.questionary_status;
-        questionary_education_id = profile.questionary_education_id;
-        questionary_marriage_id = profile.questionary_marriage_id;
-        questionary_finances_id = profile.questionary_finances_id;
-        questionary_character_id = profile.questionary_character_id;
-        questionary_smoking_id = profile.questionary_smoking_id;
-        questionary_alcohol_id = profile.questionary_alcohol_id;
-        questionary_fitness_id = profile.questionary_fitness_id;
-        questionary_communication_id = profile.questionary_communication_id;
-        questionary_weight = profile.questionary_weight;
-        questionary_height = profile.questionary_height;
+        questionary_job_id = profile.form_job_id;
+        questionary_job = profile.form_job;
+        questionary_status_id = profile.form_status_id;
+        questionary_status = profile.form_status;
+        questionary_education_id = profile.form_education_id;
+        questionary_marriage_id = profile.form_marriage_id;
+        questionary_finances_id = profile.form_finances_id;
+        questionary_character_id = profile.form_character_id;
+        questionary_smoking_id = profile.form_smoking_id;
+        questionary_alcohol_id = profile.form_alcohol_id;
+        questionary_fitness_id = profile.form_fitness_id;
+        questionary_communication_id = profile.form_communication_id;
+        questionary_weight = profile.form_weight;
+        questionary_height = profile.form_height;
         albums = profile.albums;
         status = profile.status;
-        isNewbie = profile.isNewbie;
+//        isNewbie = profile.isNewbie;
     }
     //---------------------------------------------------------------------------
 }

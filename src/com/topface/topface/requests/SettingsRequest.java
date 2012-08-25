@@ -9,17 +9,17 @@ public class SettingsRequest extends ApiRequest {
     // Data
     private String service = "settings";
     public String name; // новое имя пользователя в UTF-8
-    public String status; // статус
     public int age = -1; // возраст пользователя. Минимальное значение - 12, максимальное - 99. Если указано меньше минимального или болше максимального значение кропятся по ОДЗ
     public int sex = -1; // новый пол пользователя
     public double lat = -1; // долгота местонахождения пользователя
     public double lng = -1; // широта местонахождения пользователя
     public int cityid = -1; // идентификатор города пользователя
-    //---------------------------------------------------------------------------
+    public String status; // статус
+
     public SettingsRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -48,5 +48,4 @@ public class SettingsRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

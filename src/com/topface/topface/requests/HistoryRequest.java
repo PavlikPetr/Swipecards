@@ -12,11 +12,11 @@ public class HistoryRequest extends ApiRequest {
     //public int offset; // смещение истории сообщений
     public int limit; // количество получаемых элементов истории сообщений
     public int to; // идентификатор сообщения до которого будет осуществляться выборка истории
-    //---------------------------------------------------------------------------
+
     public HistoryRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -30,5 +30,5 @@ public class HistoryRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
+
 }

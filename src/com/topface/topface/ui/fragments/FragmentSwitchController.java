@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments;
 import com.topface.topface.ui.views.DatingAlbum;
 
 import android.content.Context;
+import android.os.Debug;
 import android.support.v4.view.VelocityTrackerCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
@@ -66,6 +67,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
 		mMinimumVelocity = 10*configuration.getScaledMinimumFlingVelocity();
 		mTouchSlop = ViewConfiguration.getTouchSlop();
+		int c =0; c++;
 	}
 
 	@Override

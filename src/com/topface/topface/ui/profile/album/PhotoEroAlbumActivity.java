@@ -89,7 +89,7 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
             public void onClick(View v) {
                 if (++mCurrentPos == mAlbumsList.size())
                     mCurrentPos = 0;
-                showImage();
+//                showImage();
             }
         });
 
@@ -100,7 +100,7 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
             public void onClick(View v) {
                 if (++mCurrentPos == mAlbumsList.size())
                     mCurrentPos = 0;
-                showImage();
+//                showImage();
             }
         });
 
@@ -126,7 +126,7 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
         mMoney.setCompoundDrawablesWithIntrinsicBounds(null, null, drwbl, null);
 
         updateCounter();
-        showImage();
+        //showImage();
     }
     //---------------------------------------------------------------------------  
     @Override
@@ -168,75 +168,75 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
         }).exec();
     }
     //---------------------------------------------------------------------------
-    public void showImage() {
-        //mEroView.setVisibility(View.INVISIBLE);
-
-        final Album album = mAlbumsList.get(mCurrentPos);
-
-        mPhotoCost.setText("" + album.cost); // стоимость фото
-
-        if (album.buy) { // данная фотография уже куплена
-
-            if (mAlbumsList.size() == 1) {
-                controlVisibility(S_HIDE_ALL);
-            } else {
-                int nextPos = mCurrentPos + 1;
-                if (nextPos >= mAlbumsList.size())
-                    nextPos = 0;
-                if (mAlbumsList.get(nextPos).buy)
-                    controlVisibility(S_SHOW_NEXT);
-                else
-                    controlVisibility(S_SHOW_NEXT_BUY);
-            }
-
-            Thread t = new Thread(new LoaderEroPhoto()); // загрузка эро фотографии
-            t.start();
-
-        } else { // запрос на покупку
-            PhotoOpenRequest photoOpenRequest = new PhotoOpenRequest(getApplicationContext());
-            photoOpenRequest.uid = mUserId;
-            photoOpenRequest.photo = album.id;
-            photoOpenRequest.callback(new ApiHandler() {
-                @Override
-                public void success(ApiResponse response) {
-                    PhotoOpen photoOpen = PhotoOpen.parse(response);
-                    if (photoOpen.completed) {
-                        CacheProfile.money = photoOpen.money;
-                        album.buy = true;
-
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                controlVisibility(S_SHOW_LIKE_DISLIKE);
-                            }
-                        });
-
-                        Thread t = new Thread(new LoaderEroPhoto()); // загрузка эро фотографии
-                        t.start();
-
-                    } else
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(PhotoEroAlbumActivity.this.getApplicationContext(), BuyingActivity.class)); // окно на покупку монет
-                            }
-                        });
-                }
-                @Override
-                public void fail(final int codeError,ApiResponse response) {
-                    post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (codeError == ApiResponse.PAYMENT)
-                                startActivity(new Intent(PhotoEroAlbumActivity.this.getApplicationContext(), BuyingActivity.class));
-                            PhotoEroAlbumActivity.this.finish();
-                        }
-                    });
-                }
-            }).exec();
-
-        }
-    }
+//    public void showImage() {
+//        //mEroView.setVisibility(View.INVISIBLE);
+//
+//        final Album album = mAlbumsList.get(mCurrentPos);
+//
+//        mPhotoCost.setText("" + album.cost); // стоимость фото
+//
+//        if (album.buy) { // данная фотография уже куплена
+//
+//            if (mAlbumsList.size() == 1) {
+//                controlVisibility(S_HIDE_ALL);
+//            } else {
+//                int nextPos = mCurrentPos + 1;
+//                if (nextPos >= mAlbumsList.size())
+//                    nextPos = 0;
+//                if (mAlbumsList.get(nextPos).buy)
+//                    controlVisibility(S_SHOW_NEXT);
+//                else
+//                    controlVisibility(S_SHOW_NEXT_BUY);
+//            }
+//
+//            Thread t = new Thread(new LoaderEroPhoto()); // загрузка эро фотографии
+//            t.start();
+//
+//        } else { // запрос на покупку
+//            PhotoOpenRequest photoOpenRequest = new PhotoOpenRequest(getApplicationContext());
+//            photoOpenRequest.uid = mUserId;
+//            photoOpenRequest.photo = album.id;
+//            photoOpenRequest.callback(new ApiHandler() {
+//                @Override
+//                public void success(ApiResponse response) {
+//                    PhotoOpen photoOpen = PhotoOpen.parse(response);
+//                    if (photoOpen.completed) {
+//                        CacheProfile.money = photoOpen.money;
+//                        album.buy = true;
+//
+//                        post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                controlVisibility(S_SHOW_LIKE_DISLIKE);
+//                            }
+//                        });
+//
+//                        Thread t = new Thread(new LoaderEroPhoto()); // загрузка эро фотографии
+//                        t.start();
+//
+//                    } else
+//                        post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                startActivity(new Intent(PhotoEroAlbumActivity.this.getApplicationContext(), BuyingActivity.class)); // окно на покупку монет
+//                            }
+//                        });
+//                }
+//                @Override
+//                public void fail(final int codeError,ApiResponse response) {
+//                    post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (codeError == ApiResponse.PAYMENT)
+//                                startActivity(new Intent(PhotoEroAlbumActivity.this.getApplicationContext(), BuyingActivity.class));
+//                            PhotoEroAlbumActivity.this.finish();
+//                        }
+//                    });
+//                }
+//            }).exec();
+//
+//        }
+//    }
     //---------------------------------------------------------------------------
     // счетчик галереи
     public void updateCounter() {
@@ -265,11 +265,11 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
 
             mPhotoCost.setText("" + mAlbumsList.get(nextPos).cost); // стоимость фото
 
-            if (mAlbumsList.get(nextPos).buy)
-                controlVisibility(S_SHOW_NEXT);
-            else {
-                controlVisibility(S_SHOW_NEXT_BUY);
-            }
+//            if (mAlbumsList.get(nextPos).buy)
+//                controlVisibility(S_SHOW_NEXT);
+//            else {
+//                controlVisibility(S_SHOW_NEXT_BUY);
+//            }
         }
 
     }

@@ -8,7 +8,7 @@ public class Rate extends AbstractData {
     public int money; // количество монет текущего пользователя
     public int power; // текущее значение энергии пользователя
     public int average; // средняя оценка пользователя
-    //---------------------------------------------------------------------------
+
     public static Rate parse(ApiResponse response) {
         Rate doRate = new Rate();
 
@@ -25,5 +25,4 @@ public class Rate extends AbstractData {
 
         return doRate;
     }
-    //---------------------------------------------------------------------------
 }

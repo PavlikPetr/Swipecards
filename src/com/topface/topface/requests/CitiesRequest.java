@@ -9,11 +9,11 @@ public class CitiesRequest extends ApiRequest {
     // Data
     private String service = "cities";
     public String type; // тип выборки перечня городов. Пока поддерживается только “top”
-    //---------------------------------------------------------------------------
+
     public CitiesRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -27,5 +27,5 @@ public class CitiesRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
+
 }

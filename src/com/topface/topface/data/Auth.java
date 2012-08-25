@@ -7,7 +7,7 @@ public class Auth extends AbstractData {
     // Data
     public int api_version;
     public String ssid;
-    //---------------------------------------------------------------------------
+
     public static Auth parse(ApiResponse response) {
         Auth auth = new Auth();
 
@@ -20,5 +20,4 @@ public class Auth extends AbstractData {
 
         return auth;
     }
-    //---------------------------------------------------------------------------
 }

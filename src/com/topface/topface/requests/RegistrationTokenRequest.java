@@ -9,11 +9,11 @@ public class RegistrationTokenRequest extends ApiRequest {
     // Data
     private String service = "registrationToken";
     public String token; //Токен регистрации в C2DM
-    //---------------------------------------------------------------------------
+
     public RegistrationTokenRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     public String toString() {
         JSONObject root = new JSONObject();
 
@@ -27,5 +27,4 @@ public class RegistrationTokenRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

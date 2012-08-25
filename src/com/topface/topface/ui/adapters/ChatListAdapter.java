@@ -32,7 +32,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class ChatListAdapter extends BaseAdapter {
-	// ---------------------------------------------------------------------------
 	// class ViewHolder
 	static class ViewHolder {
 		RoundedImageView mAvatar;
@@ -45,8 +44,6 @@ public class ChatListAdapter extends BaseAdapter {
 		// View mInfoGroup;
 	}
 
-	// ---------------------------------------------------------------------------
-	// Data
 	private Context mContext;
 	private int mFriendId;
 	private int mOwnerId;
@@ -76,7 +73,6 @@ public class ChatListAdapter extends BaseAdapter {
 	private static final int T_FRIEND_MAP_EXT = 12;
 	private static final int T_COUNT = 13;
 
-	// ---------------------------------------------------------------------------
 	public ChatListAdapter(Context context, int friendId, LinkedList<History> dataList) {
 		mContext = context;
 		mFriendId = friendId;
@@ -92,42 +88,35 @@ public class ChatListAdapter extends BaseAdapter {
 		prepare(dataList);
 	}
 
-	// ---------------------------------------------------------------------------
 	public void setOnAvatarListener(View.OnClickListener onAvatarListener) {
 		mOnClickListener = onAvatarListener;
 	}
 
-	// ---------------------------------------------------------------------------
 	@Override
 	public int getCount() {
 		return mDataList.size();
 	}
 
-	// ---------------------------------------------------------------------------
 	@Override
 	public History getItem(int position) {
 		return mDataList.get(position);
 	}
 
-	// ---------------------------------------------------------------------------
 	@Override
 	public long getItemId(int position) {
 		return position;
 	}
 
-	// ---------------------------------------------------------------------------
 	@Override
 	public int getViewTypeCount() {
 		return T_COUNT;
 	}
 
-	// ---------------------------------------------------------------------------
 	@Override
 	public int getItemViewType(int position) {
 		return mItemLayoutList.get(position);
 	}
 
-	// ---------------------------------------------------------------------------
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final ViewHolder holder;
@@ -250,7 +239,7 @@ public class ChatListAdapter extends BaseAdapter {
 			return convertView;
 		} else if (type == T_USER_GIFT_PHOTO || type == T_USER_GIFT_EXT
 				|| type == T_FRIEND_GIFT_PHOTO || type == T_FRIEND_GIFT_EXT) {
-			giftLoading(holder.mGift, history);
+			//giftLoading(holder.mGift, history);
 			return convertView;
 		} else if (type == T_USER_MAP_PHOTO || type == T_USER_MAP_EXT
 				|| type == T_FRIEND_MAP_PHOTO || type == T_FRIEND_MAP_EXT) {
@@ -274,20 +263,20 @@ public class ChatListAdapter extends BaseAdapter {
 			holder.mMessage.setText(history.text);
 			break;
 		case Dialog.PHOTO:
-			if (history.code > 100500) {
-				holder.mMessage.setText(history.text);
-				//holder.mMessage.setText(mContext.getString(R.string.chat_money_in) + ".");
-				break;
-			}
-			
-			switch (history.target) {
-			case Dialog.FRIEND_MESSAGE:
-				holder.mMessage.setText(mContext.getString(R.string.chat_rate_in) + " " + history.code + ".");
-				break;
-			case Dialog.USER_MESSAGE:
-				holder.mMessage.setText(mContext.getString(R.string.chat_rate_out) + " " + history.code + ".");
-				break;
-			}
+//			if (history.code > 100500) {
+//				holder.mMessage.setText(history.text);
+//				//holder.mMessage.setText(mContext.getString(R.string.chat_money_in) + ".");
+//				break;
+//			}
+            holder.mMessage.setText("TARGET IT");
+//			switch (history.target) {
+//			case Dialog.FRIEND_MESSAGE:
+//				holder.mMessage.setText(mContext.getString(R.string.chat_rate_in) + " " + history.code + ".");
+//				break;
+//			case Dialog.USER_MESSAGE:
+//				holder.mMessage.setText(mContext.getString(R.string.chat_rate_out) + " " + history.code + ".");
+//				break;
+//			}
 			break;
 		case Dialog.MESSAGE:
 			holder.mMessage.setText(history.text);			
@@ -343,14 +332,15 @@ public class ChatListAdapter extends BaseAdapter {
 			}
 			break;
 		case Dialog.RATE:
-			switch (history.target) {
-			case Dialog.FRIEND_MESSAGE:
-				holder.mMessage.setText(mContext.getString(R.string.chat_rate_in) + " " + history.code + ".");
-				break;
-			case Dialog.USER_MESSAGE:
-				holder.mMessage.setText(mContext.getString(R.string.chat_rate_out) + " " + history.code + ".");
-				break;
-			}
+            holder.mMessage.setText("RATE IT");
+//			switch (history.target) {
+//			case Dialog.FRIEND_MESSAGE:
+//				holder.mMessage.setText(mContext.getString(R.string.chat_rate_in) + " " + history.code + ".");
+//				break;
+//			case Dialog.USER_MESSAGE:
+//				holder.mMessage.setText(mContext.getString(R.string.chat_rate_out) + " " + history.code + ".");
+//				break;
+//			}
 			break;
 		case Dialog.PROMOTION:
 			holder.mMessage.setText(history.text);
@@ -366,7 +356,6 @@ public class ChatListAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	// ---------------------------------------------------------------------------
 	public void addSentMessage(History msg) {
 		int position = mDataList.size() - 1;
 		History prevHistory = null;
@@ -407,12 +396,10 @@ public class ChatListAdapter extends BaseAdapter {
 		mDataList.add(msg);
 	}
 
-	// ---------------------------------------------------------------------------
 	public void setDataList(LinkedList<History> dataList) {
 		prepare(dataList);
 	}
 
-	// ---------------------------------------------------------------------------
 	private void prepare(LinkedList<History> dataList) {
 
 		SimpleDateFormat dowFormat = new SimpleDateFormat("EEEE");
@@ -532,44 +519,42 @@ public class ChatListAdapter extends BaseAdapter {
 		}
 	}
 
-	// ---------------------------------------------------------------------------
-	private void giftLoading(final ImageView iv, final History history) {
-		Debug.log(this, "#id:" + history.id);
-		Bitmap bitmap = mMemorySyncCache.get(history.gift);
-		if (bitmap != null) {
-			iv.setImageBitmap(bitmap);
-			iv.setVisibility(View.VISIBLE);
-			return;
-		}
+//	private void giftLoading(final ImageView iv, final History history) {
+//		Debug.log(this, "#id:" + history.id);
+//		Bitmap bitmap = mMemorySyncCache.get(history.gift);
+//		if (bitmap != null) {
+//			iv.setImageBitmap(bitmap);
+//			iv.setVisibility(View.VISIBLE);
+//			return;
+//		}
+//
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				Bitmap rawBitmap = mStorageCache.load(history.gift);
+//				if (rawBitmap == null)
+//					rawBitmap = Http.bitmapLoader(history.link);
+//
+//				if (rawBitmap == null)
+//					return;
+//
+//				final Bitmap roundedBitmap = Utils.getScaleAndRoundBitmapOut(rawBitmap,
+//						mGiftFrameWidth, mGiftFrameWidth, 1.5f);
+//
+//				iv.post(new Runnable() {
+//					@Override
+//					public void run() {
+//						if (iv != null) {
+//							iv.setImageBitmap(roundedBitmap);
+//							iv.setVisibility(View.VISIBLE);
+//						}
+//					}
+//				});
+//				mMemorySyncCache.put(history.gift, roundedBitmap);
+//			}
+//		}).start();
+//	}
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Bitmap rawBitmap = mStorageCache.load(history.gift);
-				if (rawBitmap == null)
-					rawBitmap = Http.bitmapLoader(history.link);
-
-				if (rawBitmap == null)
-					return;
-
-				final Bitmap roundedBitmap = Utils.getScaleAndRoundBitmapOut(rawBitmap,
-						mGiftFrameWidth, mGiftFrameWidth, 1.5f);
-
-				iv.post(new Runnable() {
-					@Override
-					public void run() {
-						if (iv != null) {
-							iv.setImageBitmap(roundedBitmap);
-							iv.setVisibility(View.VISIBLE);
-						}
-					}
-				});
-				mMemorySyncCache.put(history.gift, roundedBitmap);
-			}
-		}).start();
-	}
-
-	// ---------------------------------------------------------------------------
 	private void mapAddressDetection(final History history, final TextView tv,
 			final ProgressBar prgsBar) {
 		StringBuilder sb = new StringBuilder();
@@ -600,7 +585,6 @@ public class ChatListAdapter extends BaseAdapter {
 
 	}
 
-	// ---------------------------------------------------------------------------
 	public void release() {
 		if (mDataList != null)
 			mDataList.clear();
@@ -610,5 +594,4 @@ public class ChatListAdapter extends BaseAdapter {
 		mInflater = null;
 		mItemLayoutList = null;
 	}
-	// ---------------------------------------------------------------------------
 }

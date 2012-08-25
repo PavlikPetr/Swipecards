@@ -12,11 +12,11 @@ public class FilterRequest extends ApiRequest {
     public int city; // идентификатор города для поиска пользователей
     public int agebegin; // начальный возраст пользователей в выборке поиска
     public int ageend; // конечный возраст пользователей в выборке поиска
-    //---------------------------------------------------------------------------
+
     public FilterRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -30,5 +30,4 @@ public class FilterRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

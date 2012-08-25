@@ -13,11 +13,11 @@ public class PhotoAddRequest extends ApiRequest {
     public String small; // URL фотографии пользователя из социальной сети в малом разрешении
     public boolean ero; // флаг, является ли фотография эротической
     public int cost; // стоимость просмотра эротической фотографии
-    //---------------------------------------------------------------------------
+
     public PhotoAddRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -31,5 +31,4 @@ public class PhotoAddRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

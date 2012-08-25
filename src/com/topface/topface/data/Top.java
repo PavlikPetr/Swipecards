@@ -10,9 +10,9 @@ import com.topface.topface.utils.Debug;
 public class Top extends AbstractData {
     // Data
     public int uid; // идентификатор красивого пользователя 
-    public int liked; // процент абсолютного значения красоты
     public String photo; // URL аватарки красивого пользователя
-    //---------------------------------------------------------------------------
+    public int liked; // процент абсолютного значения красоты
+
     public static LinkedList<Top> parse(ApiResponse response) {
         LinkedList<Top> userList = new LinkedList<Top>();
 
@@ -33,19 +33,19 @@ public class Top extends AbstractData {
 
         return userList;
     }
-    //---------------------------------------------------------------------------
+
     public int getUid() {
         return uid;
     };
-    //---------------------------------------------------------------------------
+
     @Override
     public String getBigLink() {
         return photo;
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String getSmallLink() {
         return photo;
     }
-    //---------------------------------------------------------------------------
+
 }

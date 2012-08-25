@@ -8,11 +8,11 @@ import android.content.Context;
 public class NovicePowerRequest extends ApiRequest {
     // Data
     private String service = "novicePower";
-    //---------------------------------------------------------------------------
+
     public NovicePowerRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -26,5 +26,4 @@ public class NovicePowerRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

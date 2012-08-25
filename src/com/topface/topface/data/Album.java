@@ -12,11 +12,11 @@ public class Album extends AbstractData {
     public String small; // строка URL маленького изображения пользователя
     public String big; // строка URL большого изображения пользователя
     public boolean ero; // флаг, является ли фотография эротической
-    public boolean buy; // является ли фотографию купленной текущим пользователем
+//    public boolean buy; // является ли фотографию купленной текущим пользователем
     public int cost; // стоимость просмотра фотографии
     public int likes; // количество одобрительных отзывов
     public int dislikes; // количество отрицательных отзывов
-    //---------------------------------------------------------------------------
+
     public static LinkedList<Album> parse(ApiResponse response) {
         LinkedList<Album> albumsList = new LinkedList<Album>();
 
@@ -32,7 +32,7 @@ public class Album extends AbstractData {
 
                     if (!item.isNull("ero")) {
                         album.ero = true;
-                        album.buy = item.optBoolean("buy");
+//                        album.buy = item.optBoolean("buy");
                         album.cost = item.optInt("cost");
                         album.likes = item.optInt("likes");
                         album.dislikes = item.optInt("dislikes");
@@ -46,19 +46,18 @@ public class Album extends AbstractData {
 
         return albumsList;
     }
-    //---------------------------------------------------------------------------
+
     public int getUid() {
         return id;
     };
-    //---------------------------------------------------------------------------
+
     @Override
     public String getBigLink() {
         return big;
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String getSmallLink() {
         return small;
     }
-    //---------------------------------------------------------------------------
 }

@@ -9,11 +9,11 @@ public class MainRequest extends ApiRequest {
     // Data
     private String service = "main";
     public int photoid; // идентификатор фотографии для установки в качестве главной
-    //---------------------------------------------------------------------------
+
     public MainRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -27,5 +27,4 @@ public class MainRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

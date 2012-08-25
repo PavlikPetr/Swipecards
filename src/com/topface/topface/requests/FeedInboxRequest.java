@@ -11,18 +11,19 @@ public class FeedInboxRequest extends ApiRequest {
     public int limit; // максимальный размер выбираемых сообщений
     public int from; // идентификатор сообщения, от которого делать выборку
     public boolean only_new; // осуществлять выборку только по новым сообщения, или по всем
-    //---------------------------------------------------------------------------
+    public boolean leave = false; // не отмечать полученные сообщения прочитанными
+
     public FeedInboxRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
         try {
             root.put("service", service);
             root.put("ssid", ssid);
-            JSONObject data = new JSONObject().put("limit", limit);
+            JSONObject data = new JSONObject().put("limit", limit).put("leave", leave);
             if (from > 0)
                 data.put("from", from);
             if (only_new)
@@ -34,5 +35,4 @@ public class FeedInboxRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

@@ -11,11 +11,11 @@ public class RateRequest extends ApiRequest {
     public int userid; // идентификатор пользователя для оценки
     public int rate; // оценка пользователя. ОДЗ: 1 <= RATE <= 10
     public int mutualid; // идентификатор сообщения из ленты, на который отправляется взаимная симпатия
-    //---------------------------------------------------------------------------
+
     public RateRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -29,5 +29,5 @@ public class RateRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
+
 }

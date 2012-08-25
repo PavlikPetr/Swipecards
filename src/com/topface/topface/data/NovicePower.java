@@ -6,7 +6,7 @@ import com.topface.topface.utils.Debug;
 public class NovicePower extends AbstractData {
     // Data
     public int power; // мгновенное значение энергии пользователя
-    //---------------------------------------------------------------------------
+
     public static NovicePower parse(ApiResponse response) {
         NovicePower novice = new NovicePower();
 
@@ -20,5 +20,4 @@ public class NovicePower extends AbstractData {
 
         return novice;
     }
-    //---------------------------------------------------------------------------
 }

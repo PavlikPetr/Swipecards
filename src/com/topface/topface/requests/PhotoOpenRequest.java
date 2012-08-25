@@ -10,11 +10,11 @@ public class PhotoOpenRequest extends ApiRequest {
     private String service = "photoOpen";
     public int uid; // идентификатор пользователя хозяина фотографии
     public int photo; // идентификатор эротической фотографии
-    //---------------------------------------------------------------------------
+
     public PhotoOpenRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -28,5 +28,5 @@ public class PhotoOpenRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
+
 }

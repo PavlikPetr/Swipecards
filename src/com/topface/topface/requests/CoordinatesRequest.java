@@ -11,11 +11,11 @@ public class CoordinatesRequest extends ApiRequest {
     public int userid; // идентификатор пользователя, кому послали сообщение
     public double longitude; // долгота отправляемого местоположения -180,+180
     public double latitude; // широта отправляемого местоположения -90,+90
-    //---------------------------------------------------------------------------
+
     public CoordinatesRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -29,5 +29,4 @@ public class CoordinatesRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

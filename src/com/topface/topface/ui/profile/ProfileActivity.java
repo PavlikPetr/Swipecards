@@ -496,75 +496,75 @@ public class ProfileActivity extends Activity {
             mMutualButton.setVisibility(View.VISIBLE);
 
         //mHeaderTitle.setText(profile.first_name);  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        mUserAvatarUrl = profile.avatars_small;
+        //mUserAvatarUrl = profile.avatars_small;
         mFramePhoto.mOnlineState = profile.online;
 
         int fieldCounter = 0;
         // основная информация
         mName.setText(profile.first_name);
         mCity.setText(profile.age + ", " + profile.city_name);
-        if (profile.questionary_height > 0) {
-            mHeight.setText("" + profile.questionary_height);
+        if (profile.form_height > 0) {
+            mHeight.setText("" + profile.form_height);
             findViewById(R.id.rowProfileHeight).setVisibility(View.VISIBLE);
             fieldCounter++;
         }
-        if (profile.questionary_weight > 0) {
-            mWeight.setText("" + profile.questionary_weight);
+        if (profile.form_weight > 0) {
+            mWeight.setText("" + profile.form_weight);
             findViewById(R.id.rowProfileWeight).setVisibility(View.VISIBLE);
             fieldCounter++;
         }
         // анкета
         FormInfo formInfo = new FormInfo(ProfileActivity.this.getApplicationContext(), profile.sex);
-        String value = formInfo.getEducation(profile.questionary_education_id);
+        String value = formInfo.getEducation(profile.form_education_id);
         if (value != null) {
             mEducation.setText(value);
             findViewById(R.id.rowProfileEducation).setVisibility(View.VISIBLE);
             fieldCounter++;
         }
 
-        value = formInfo.getCommunication(profile.questionary_communication_id);
+        value = formInfo.getCommunication(profile.form_communication_id);
         if (value != null) {
             mCommunication.setText(value);
             findViewById(R.id.rowProfileCommutability).setVisibility(View.VISIBLE);
             fieldCounter++;
         }
 
-        value = formInfo.getCharacter(profile.questionary_character_id);
+        value = formInfo.getCharacter(profile.form_character_id);
         if (value != null) {
             mCharacter.setText(value);
             findViewById(R.id.rowProfileCharacter).setVisibility(View.VISIBLE);
             fieldCounter++;
         }
 
-        value = formInfo.getAlcohol(profile.questionary_alcohol_id);
+        value = formInfo.getAlcohol(profile.form_alcohol_id);
         if (value != null) {
             mAlcohol.setText(value);
             findViewById(R.id.rowProfileAlcohol).setVisibility(View.VISIBLE);
             fieldCounter++;
         }
 
-        value = formInfo.getFitness(profile.questionary_fitness_id);
+        value = formInfo.getFitness(profile.form_fitness_id);
         if (value != null) {
             mFitness.setText(value);
             findViewById(R.id.rowProfileFitness).setVisibility(View.VISIBLE);
             fieldCounter++;
         }
 
-        value = formInfo.getMarriage(profile.questionary_marriage_id);
+        value = formInfo.getMarriage(profile.form_marriage_id);
         if (value != null) {
             mMarriage.setText(value);
             findViewById(R.id.rowProfileMarriage).setVisibility(View.VISIBLE);
             fieldCounter++;
         }
 
-        value = formInfo.getFinances(profile.questionary_finances_id);
+        value = formInfo.getFinances(profile.form_finances_id);
         if (value != null) {
             mFinances.setText(value);
             findViewById(R.id.rowProfileFinances).setVisibility(View.VISIBLE);
             fieldCounter++;
         }
 
-        value = formInfo.getSmoking(profile.questionary_smoking_id);
+        value = formInfo.getSmoking(profile.form_smoking_id);
         if (value != null) {
             mSmoking.setText(value);
             findViewById(R.id.rowProfileSmoking).setVisibility(View.VISIBLE);

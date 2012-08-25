@@ -13,8 +13,7 @@ import android.util.SparseArray;
 import com.topface.topface.utils.Debug;
 
 public class AbstractDataWithPhotos extends AbstractData {
-	
-	// Data
+
 	public int avatarId;
 	public SparseArray<HashMap<String, String>> photoLinksArray;
 	public LinkedList<String> sizeKeys; 	

@@ -3,7 +3,6 @@ package com.topface.topface.requests;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.http.IRequestClient;
 
 import android.content.Context;
 
@@ -11,11 +10,11 @@ public class AlbumRequest extends ApiRequest {
     // Data
     private String service = "album";
     public int uid; // внутренний идентификатор пользователя
-    //---------------------------------------------------------------------------
+
     public AlbumRequest(Context context) {
         super(context);
     }    
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -29,5 +28,5 @@ public class AlbumRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
+
 }

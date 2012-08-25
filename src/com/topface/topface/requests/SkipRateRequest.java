@@ -9,11 +9,11 @@ public class SkipRateRequest extends ApiRequest {
     // Data
     private String service = "skipRate";
     public int userid; // идентификатор пользователя для оценки
-    //---------------------------------------------------------------------------
+
     public SkipRateRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -27,5 +27,4 @@ public class SkipRateRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

@@ -14,9 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class DialogListAdapter extends LoadingListAdapter {
-    //---------------------------------------------------------------------------
     // class ViewHolder
-    //---------------------------------------------------------------------------
     static class ViewHolder {
         public ImageView mAvatar;
         public TextView mName;
@@ -26,8 +24,7 @@ public class DialogListAdapter extends LoadingListAdapter {
         public ImageView mArrow;
         public ImageView mOnline;
     }
-    //---------------------------------------------------------------------------
-    // Data
+
     private Context mContext;
     private LayoutInflater mInflater;
     private AvatarManager<Dialog> mAvatarManager;
@@ -36,7 +33,7 @@ public class DialogListAdapter extends LoadingListAdapter {
     private static final int T_CITY = 3;
     private static final int T_COUNT = 1;
     //private static final String TIME_TEMPLATE = "dd MMM, kk:mm";
-    //---------------------------------------------------------------------------
+
     public DialogListAdapter(Context context,AvatarManager<Dialog> avatarManager) {
         mContext = context;
         mAvatarManager = avatarManager;
@@ -48,27 +45,27 @@ public class DialogListAdapter extends LoadingListAdapter {
         mLoaderRetrierText = (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
         mLoaderRetrierProgress = (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public int getCount() {
         return mAvatarManager.size();
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public Dialog getItem(int position) {
         return mAvatarManager.get(position);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public long getItemId(int position) {
         return position;
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public int getViewTypeCount() {
         return super.getViewTypeCount() + T_COUNT;
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public int getItemViewType(int position) {
     	int typeOfSuperMethod = super.getItemViewType(position); 
@@ -78,7 +75,7 @@ public class DialogListAdapter extends LoadingListAdapter {
     		return typeOfSuperMethod;
     	}
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public View getView(int position,View convertView,ViewGroup parent) {
         ViewHolder holder;
@@ -186,10 +183,10 @@ public class DialogListAdapter extends LoadingListAdapter {
             return convertView;
         }
     }
-    //---------------------------------------------------------------------------
+
     public void release() {
         mInflater = null;
         mAvatarManager = null;
     }
-    //---------------------------------------------------------------------------
+
 }

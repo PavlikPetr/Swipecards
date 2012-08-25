@@ -14,23 +14,22 @@ public abstract class ApiRequest {
     public boolean canceled = false;
     private RequestConnection connection;
     
-    //---------------------------------------------------------------------------
     public ApiRequest(Context context) {
         ssid = Static.EMPTY;
         this.context = context;
     }    
-    //---------------------------------------------------------------------------
+
     public ApiRequest callback(ApiHandler handler) {
         this.handler = handler;
         return this;
     }
-    //---------------------------------------------------------------------------
+
     public void exec() {
     	connection = ConnectionManager.getInstance().sendRequest(this);
         //ConnectionManager.getInstance().sendRequestNew(this);
         //ConnectionService.sendRequest(mContext,this);
     }
-    //---------------------------------------------------------------------------
+
     public void cancel() {
         handler = null;
         if (connection != null) 
@@ -38,7 +37,6 @@ public abstract class ApiRequest {
         canceled = true;
         //if(mHttpPost!=null) mHttpPost.abort();
     }
-    //---------------------------------------------------------------------------
 }
 
 //private static ExecutorService mThreadsPool = Executors.newFixedThreadPool(2);

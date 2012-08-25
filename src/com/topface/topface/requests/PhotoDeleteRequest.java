@@ -9,11 +9,11 @@ public class PhotoDeleteRequest extends ApiRequest {
     // Data
     private String service = "photoDelete";
     public int photoid; // идентификатор фотографии для установки в качестве главной
-    //---------------------------------------------------------------------------
+
     public PhotoDeleteRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -27,5 +27,4 @@ public class PhotoDeleteRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

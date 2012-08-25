@@ -13,7 +13,7 @@ public class Banner extends AbstractData {
     // Constants
     public static final String ACTION_URL = "URL";
     public static final String ACTION_PAGE = "PAGE";
-    //---------------------------------------------------------------------------
+
     public static Banner parse(ApiResponse response) {
         Banner banner = new Banner();
 
@@ -29,5 +29,5 @@ public class Banner extends AbstractData {
 
         return banner;
     }
-    //---------------------------------------------------------------------------
+
 }

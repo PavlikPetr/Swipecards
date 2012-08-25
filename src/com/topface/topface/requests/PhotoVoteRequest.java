@@ -11,11 +11,11 @@ public class PhotoVoteRequest extends ApiRequest {
     public int uid; // идентификатор пользователя хозяина фотографии
     public int photo; // идентификатор эротической фотографии
     public int vote; // голос за пользователя: если больше нуля - нравится, если меньше нуля - не нравится
-    //---------------------------------------------------------------------------
+
     public PhotoVoteRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -29,5 +29,4 @@ public class PhotoVoteRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

@@ -260,8 +260,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                             public void run() {
                                 if (confirm.completed) {
 	                                History history = new History();
-	                                history.code = 0;
-	                                history.gift = 0;
+//	                                history.code = 0;
+//	                                history.gift = 0;
 	                                history.uid = CacheProfile.uid;
 	                                history.created = System.currentTimeMillis();
 	                                history.text = text;
@@ -324,13 +324,13 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 	                        @Override
 	                        public void run() {              
 	                        	History history = new History();
-	                            history.code = 0;
-	                            history.gift = id;
+//	                            history.code = 0;
+//	                            history.gift = id;
 	                            history.uid = CacheProfile.uid;
 	                            history.created = System.currentTimeMillis();
 	                            history.text = Static.EMPTY;
 	                            history.type = Dialog.GIFT;
-	                            history.link = url;
+//	                            history.link = url;
 	                            mAdapter.addSentMessage(history);
 	                            mAdapter.notifyDataSetChanged();
 	                            mLoadingLocker.setVisibility(View.GONE);

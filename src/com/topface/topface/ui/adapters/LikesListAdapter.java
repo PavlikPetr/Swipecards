@@ -155,10 +155,10 @@ public class LikesListAdapter extends LoadingListAdapter {
 	        holder.mName.setText(likes.first_name);
 	        holder.mCity.setText(likes.age + ", " + likes.city_name);
 	
-	        if (likes.rate == 10)
-	            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart_top);
-	        else
-	            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart);
+//	        if (likes.rate == 10)
+//	            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart_top);
+//	        else
+//	            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart);
 	
 	        if (likes.online)
 	            holder.mOnline.setVisibility(View.VISIBLE);

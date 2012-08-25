@@ -9,7 +9,8 @@ import com.topface.topface.utils.Debug;
 
 public class Dialog extends AbstractData implements IListLoader{
     // Data	
-	//public boolean more; // флаг причитанного диалога
+    public static int unread_count; // общее количество непрочитанных диалогов
+	public static boolean more;     // имеются ли в ленте ещё элементы для пользователя
 	
     public int type; // идентификатор типа сообщения диалога
     public int id; // идентификатор события в ленте
@@ -24,12 +25,12 @@ public class Dialog extends AbstractData implements IListLoader{
     public String city_name; // наименование города в локали указанной при авторизации
     public String city_full; // полное наименование города с указанием региона, если он определен. Отдается в локали пользователя, указанной при авторизации
     
-    public String text; // текст сообщения, если type = MESSAGE
-    public int gift; // идентификатор подарка. Поле определяется, если type = GIFT
-    public String link; // ссылка на изображение подарка. Поле определяется, если type = GIFT
+    public String text = "r"; // текст сообщения, если type = MESSAGE
+//    public int gift; // идентификатор подарка. Поле определяется, если type = GIFT
+//    public String link; // ссылка на изображение подарка. Поле определяется, если type = GIFT
         
-    public String avatars_big; // фото большого размера
-    public String avatars_small; // фото маленького размера
+//    public String avatars_big; // фото большого размера
+//    public String avatars_small; // фото маленького размера
 
     // Constants
     public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
@@ -52,11 +53,11 @@ public class Dialog extends AbstractData implements IListLoader{
     //Loader indicators
     public boolean isListLoader = false;
     public boolean isListLoaderRetry = false;
-    //---------------------------------------------------------------------------
+
     public Dialog() {
     	
     }
-    //---------------------------------------------------------------------------
+
     public Dialog(IListLoader.ItemType type) {
     	switch (type) {
 		case LOADER:
@@ -69,12 +70,15 @@ public class Dialog extends AbstractData implements IListLoader{
 			break;
 		}     	
     }
-    //---------------------------------------------------------------------------
+
     public static LinkedList<Dialog> parse(ApiResponse response) {
         LinkedList<Dialog> dialogList = new LinkedList<Dialog>();
 
         try {
-            JSONArray arr = response.mJSONResult.getJSONArray("items");
+            Dialog.unread_count = response.mJSONResult.getInt("unread");
+            Dialog.more = response.mJSONResult.optBoolean("more");
+            
+            JSONArray arr = response.mJSONResult.getJSONArray("feed");
             if (arr.length() > 0)
                 dialogList = new LinkedList<Dialog>();
             for (int i = 0; i < arr.length(); i++) {
@@ -82,13 +86,13 @@ public class Dialog extends AbstractData implements IListLoader{
                 Dialog dialog = new Dialog();
 
                 dialog.type = item.optInt("type");
-                dialog.text = item.optString("text");
-                dialog.gift = item.optInt("gift");
-                dialog.link = item.optString("link");
                 dialog.id   = item.optInt("id");
                 dialog.uid  = item.optInt("uid");
+                dialog.created = item.optLong("created") * 1000;
+                dialog.target = item.optInt("target");
                 dialog.first_name = item.optString("first_name");
                 dialog.age  = item.optInt("age");
+                dialog.online  = item.optBoolean("online");
 
                 // city  
                 JSONObject city = item.optJSONObject("city");
@@ -101,19 +105,21 @@ public class Dialog extends AbstractData implements IListLoader{
                     dialog.city_name = "";
                     dialog.city_full = "";
                 }
+                
+//              dialog.text = item.optString("text");
+//              dialog.gift = item.optInt("gift");
+//              dialog.link = item.optString("link");
 
                 // avatars
 //                JSONObject avatars = item.getJSONObject("avatar");
-                JSONObject avatars = item.optJSONObject("avatar");
-                if (avatars != null) {
-	                dialog.avatars_big = avatars.optString("big");
-	                dialog.avatars_small = avatars.optString("small");
-                } else {
-                	dialog.avatars_big = "";
-                	dialog.avatars_small = "";
-                }
-                dialog.created = item.optLong("created") * 1000; // время приходит в секундах *1000
-                dialog.target  = item.optInt("target");
+//                JSONObject avatars = item.optJSONObject("avatar");
+//                if (avatars != null) {
+//	                dialog.avatars_big = avatars.optString("big");
+//	                dialog.avatars_small = avatars.optString("small");
+//                } else {
+//                	dialog.avatars_big = "";
+//                	dialog.avatars_small = "";
+//                }
 
                 dialogList.add(dialog);
                 
@@ -124,29 +130,31 @@ public class Dialog extends AbstractData implements IListLoader{
 
         return dialogList;
     }
-    //---------------------------------------------------------------------------
+
     public int getUid() {
         return uid;
     };
-    //---------------------------------------------------------------------------
+
     @Override
     public String getBigLink() {
-        return avatars_big;
+        return null;
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String getSmallLink() {
-        return avatars_small;
+        return null;
     }
-    //---------------------------------------------------------------------------
+
 	@Override
 	public boolean isLoader() {
 		return isListLoader;
 	}
+	
 	@Override
 	public boolean isLoaderRetry() {
 		return isListLoaderRetry;
 	}
+	
 	@Override
 	public void switchToLoader() {
 		isListLoader = false;

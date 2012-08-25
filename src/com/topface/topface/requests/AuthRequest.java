@@ -19,7 +19,7 @@ public class AuthRequest extends ApiRequest {
     public String clientdevice; // тип устройства клиента
     public String clientid; // уникальныц идентификатор клиентского устройства
     public Boolean sandbox; // параметр использования тестовых аккаунтов для уведомлений APNS и C2DM
-    //---------------------------------------------------------------------------
+
     public AuthRequest(Context context) {
         super(context);
         try {
@@ -32,7 +32,7 @@ public class AuthRequest extends ApiRequest {
             Debug.log(this, "Wrong request compiling: " + e);
         }
     }
-    //---------------------------------------------------------------------------
+
     public String toString() {
         JSONObject root = new JSONObject();
 
@@ -46,5 +46,4 @@ public class AuthRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

@@ -9,12 +9,10 @@ public class Verify extends Confirmation {
     public int power; // количество энергии пользователя
     public String order; // идентификатор верифицированного заказа
     
-    //---------------------------------------------------------------------------
     public Verify(ApiResponse response) {
 		super(response);
-		// TODO Auto-generated constructor stub
 	}
-    //---------------------------------------------------------------------------
+
     public static Verify parse(ApiResponse response) {
         Verify verify = new Verify(response);
 
@@ -30,5 +28,4 @@ public class Verify extends Confirmation {
 
         return verify;
     }
-    //---------------------------------------------------------------------------
 }

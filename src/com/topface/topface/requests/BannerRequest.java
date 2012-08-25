@@ -14,11 +14,11 @@ public class BannerRequest extends ApiRequest {
     public static final String LIKE = "LIKE";
     public static final String INBOX = "MESSAGES";
     public static final String SYMPATHY = "MUTUAL";
-    //---------------------------------------------------------------------------
+
     public BannerRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -32,5 +32,4 @@ public class BannerRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

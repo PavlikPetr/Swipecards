@@ -10,11 +10,11 @@ public class TopRequest extends ApiRequest {
     private String service = "top";
     public int sex; // пол самых красивых 
     public int city; // город самых красивых
-    //---------------------------------------------------------------------------
+
     public TopRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -29,5 +29,4 @@ public class TopRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }

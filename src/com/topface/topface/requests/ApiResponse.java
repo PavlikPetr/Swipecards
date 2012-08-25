@@ -34,11 +34,11 @@ public class ApiResponse {
     // local
     public static final int NULL_RESPONSE = 100;
     public static final int WRONG_RESPONSE = 101;
-    //---------------------------------------------------------------------------
+
     public JSONObject getSearch() {
         return mJSONResult;
     }
-    //---------------------------------------------------------------------------
+
     public ApiResponse(String response) {
         try {
             if (response == null) {
@@ -60,7 +60,7 @@ public class ApiResponse {
             Debug.log(this, "json resonse is wrong:" + response);
         }
     }
-    //---------------------------------------------------------------------------
+
     public ApiResponse(JSONObject response) {
         try {
             if (response == null) {

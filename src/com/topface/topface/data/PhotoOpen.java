@@ -7,11 +7,10 @@ public class PhotoOpen extends Confirmation {
     // Data
     public int money; // количество монет текущего пользователя
     
-    //---------------------------------------------------------------------------
     public PhotoOpen(ApiResponse response) {
 		super(response);
 	}
-	//---------------------------------------------------------------------------
+
     public static PhotoOpen parse(ApiResponse response) {    	
         PhotoOpen open = new PhotoOpen(response);
 
@@ -23,5 +22,4 @@ public class PhotoOpen extends Confirmation {
 
         return open;
     }
-    //---------------------------------------------------------------------------
 }

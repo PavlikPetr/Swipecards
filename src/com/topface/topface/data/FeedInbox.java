@@ -9,22 +9,27 @@ import com.topface.topface.utils.Debug;
 public class FeedInbox extends AbstractData {
     // Data
     public static int unread_count; // количество оставшихся непрочитанных
+    public static boolean more; // имеются ли в ленте ещё симпатии для пользователя
+    public int type; // тип сообщения
     public int id; // идентификатор сообщения 
     public int uid; // идентификатор отправителя
-    public int age; // возраст пользователя
-    public int type; // тип сообщения
-    public int gift; // идентификатор подарка
-    public int code; // код входящего уведомления
-    public int city_id; // идентификатор города отправителя сообщения
     public long created; // время отправления оценки
-    public boolean online; // флаг нахождения пользователя в онлайне
+    public int target; // тип элемента ленты симпатий. Для данного запроса всегда 1 - входящее
     public boolean unread; // флаг прочитанного сообщения
+    public String first_name; // имя пользователя    
+    public int age; // возраст пользователя
+    public boolean online; // флаг нахождения пользователя в онлайне
+    public String text; // текст сообщения
+    
+    public int city_id; // идентификатор города отправителя сообщения
     public String city_name; // название города пользователя
     public String city_full; // полное название города пользвоателя
-    public String first_name; // имя пользователя
-    public String avatars_big; // большая аватарка пользователя
-    public String avatars_small; // маленькая аватарка пользователя
-    public String text; // текст сообщения
+    
+//    public int gift; // идентификатор подарка
+//    public int code; // код входящего уведомления
+//    public String avatars_big; // большая аватарка пользователя
+//    public String avatars_small; // маленькая аватарка пользователя
+
     // Constants
     public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
     public static final int PHOTO = 1; // Рекламное уведомление
@@ -32,47 +37,51 @@ public class FeedInbox extends AbstractData {
     public static final int MESSAGE = 3; // Текстовое сообщение
     public static final int MESSAGE_WISH = 4; // Тайное желание
     public static final int MESSAGE_SEXUALITY = 5; // Оценка сексуальности
-    //--------------------------------------------------------------------------- 
+ 
     public static LinkedList<FeedInbox> parse(ApiResponse response) {
         LinkedList<FeedInbox> userList = new LinkedList<FeedInbox>();
 
         try {
+            FeedInbox.unread_count = response.mJSONResult.getInt("unread");
+            FeedInbox.more = response.mJSONResult.optBoolean("more");
+            
             JSONArray arr = response.mJSONResult.getJSONArray("feed");
-            if (arr.length() > 0)
-                userList = new LinkedList<FeedInbox>();
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject item = arr.getJSONObject(i);
-                FeedInbox.unread_count = response.mJSONResult.getInt("unread");
+                
                 FeedInbox msg = new FeedInbox();
-                msg.first_name = item.optString("first_name");
-                msg.online = item.optBoolean("online");
-                msg.unread = item.optBoolean("unread");
-                msg.created = item.optLong("created") * 1000; // время приходит в секундах *1000
+                msg.type = item.optInt("type");
                 msg.id = item.optInt("id");
                 msg.uid = item.optInt("uid");
+                msg.created = item.optLong("created") * 1000; // время приходит в секундах *1000
+                msg.target = item.optInt("target");
+                msg.unread = item.optBoolean("unread");
+                msg.first_name = item.optString("first_name");
                 msg.age = item.optInt("age");
-                msg.type = item.optInt("type");
+                msg.online = item.optBoolean("online");
+                
+                msg.text = item.optString("text");
 
-                switch (msg.type) {
-                    case DEFAULT:
-                        msg.text = item.optString("text");
-                        break;
-                    case PHOTO:
-                        msg.code = item.optInt("code");
-                        break;
-                    case GIFT:
-                        msg.gift = item.optInt("gift");
-                        break;
-                    case MESSAGE:
-                        msg.text = item.optString("text");
-                        break;
-                    case MESSAGE_WISH:
-                        break;
-                    case MESSAGE_SEXUALITY:
-                        break;
-                    default:
-                        break;
-                }
+//                switch (msg.type) {
+//                    case DEFAULT:
+//                        msg.text = item.optString("text");
+//                        break;
+//                    case PHOTO:
+//                        msg.code = item.optInt("code");
+//                        break;
+//                    case GIFT:
+//                        msg.gift = item.optInt("gift");
+//                        break;
+//                    case MESSAGE:
+//                        msg.text = item.optString("text");
+//                        break;
+//                    case MESSAGE_WISH:
+//                        break;
+//                    case MESSAGE_SEXUALITY:
+//                        break;
+//                    default:
+//                        break;
+//                }
 
                 // city  
                 JSONObject city = item.optJSONObject("city");
@@ -87,9 +96,9 @@ public class FeedInbox extends AbstractData {
                 }
 
                 // avatars
-                JSONObject avatars = item.getJSONObject("avatars");
-                msg.avatars_big = avatars.optString("big");
-                msg.avatars_small = avatars.optString("small");
+//                JSONObject avatars = item.getJSONObject("avatars");
+//                msg.avatars_big = avatars.optString("big");
+//                msg.avatars_small = avatars.optString("small");
 
                 userList.add(msg);
             }
@@ -99,19 +108,18 @@ public class FeedInbox extends AbstractData {
 
         return userList;
     }
-    //---------------------------------------------------------------------------
+    
     public int getUid() {
         return uid;
     };
-    //---------------------------------------------------------------------------
+
     @Override
     public String getBigLink() {
-        return avatars_big;
+        return null;
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String getSmallLink() {
-        return avatars_small;
+        return null;
     }
-    //---------------------------------------------------------------------------
 }

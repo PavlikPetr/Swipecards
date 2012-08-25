@@ -13,11 +13,11 @@ public class MapRequest extends ApiRequest {
     private String service = "???";
     public int userid; // идентификатор пользователя, кому послали сообщение
     public String message; // текст сообщения в UTF-8. min размер текста - 1 символ, max - 1024 
-    //---------------------------------------------------------------------------
+
     public MapRequest(Context context) {
         super(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         JSONObject root = new JSONObject();
@@ -31,5 +31,4 @@ public class MapRequest extends ApiRequest {
 
         return root.toString();
     }
-    //---------------------------------------------------------------------------
 }
