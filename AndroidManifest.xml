@@ -42,12 +42,12 @@
         <activity android:name=".ui.CitySearchActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.GeoMapActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ui.FilterActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.profile.UserProfileActivity" android:screenOrientation="portrait" android:launchMode="singleInstance" />
+        <activity android:name=".ui.profile.UserProfileActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.profile.ProfileActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.profile.EditProfileActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.profile.album.PhotoAlbumActivity" />
         <activity android:name=".ui.profile.album.PhotoEroAlbumActivity" />
-        <activity android:name=".ui.ChatActivity" android:launchMode="singleInstance" />
+        <activity android:name=".ui.ChatActivity" />
         <activity android:name=".ui.GiftsActivity"/>
         <activity android:name=".billing.BuyingActivity" android:screenOrientation="portrait" />
 

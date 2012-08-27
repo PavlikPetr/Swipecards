@@ -169,6 +169,8 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.form_valuables = form.optString("valuables");
                 profile.form_aspirations = form.optString("aspirations");
             }
+            
+            initPhotos(resp, profile);
 
             // newbie
 //            if (!resp.isNull("flags")) {
@@ -194,7 +196,7 @@ public class Profile extends AbstractDataWithPhotos {
     };
 
     @Override
-    public String getBigLink() {
+    public String getLargeLink() {
         return null;
     }
 

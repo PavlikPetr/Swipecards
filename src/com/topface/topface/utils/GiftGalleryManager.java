@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 
 import com.topface.topface.R;
 import com.topface.topface.data.AbstractData;
+import com.topface.topface.data.AbstractDataWithPhotos;
 import com.topface.topface.data.Gift;
 import com.topface.topface.utils.MemoryCache;
 import com.topface.topface.utils.StorageCache;
@@ -20,7 +21,7 @@ import android.widget.ImageView;
 /*
  *  РњРµРЅРµРґР¶РµСЂ РёР·РѕР±СЂР°Р¶РµРЅРёР№, Р·Р°РіСЂСѓР·Р°РµС‚ Рё РєРµС€РёСЂСѓРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
  */
-public class GiftGalleryManager<T extends AbstractData> implements OnScrollListener {
+public class GiftGalleryManager<T extends AbstractDataWithPhotos> implements OnScrollListener {
     // Data
     private LinkedList<T> mDataList;
     private ExecutorService mWorker;
@@ -93,7 +94,7 @@ public class GiftGalleryManager<T extends AbstractData> implements OnScrollListe
 //                        return;
 
                     // РєР°С‡Р°РµРј            
-                    Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getBigLink()); // getBigLink() РѕРґРЅРѕ Рё С‚РѕР¶Рµ РІ Tops 
+                    Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getLargeLink()); // getBigLink() РѕРґРЅРѕ Рё С‚РѕР¶Рµ РІ Tops 
 
                     if (rawBitmap == null)
                         return;

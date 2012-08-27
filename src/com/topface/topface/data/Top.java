@@ -5,9 +5,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.PhotoLinksResolver;
 
 /* Класс профиля окна топов */
-public class Top extends AbstractData {
+public class Top extends AbstractDataWithPhotos {
     // Data
     public int uid; // идентификатор красивого пользователя 
     public String photo; // URL аватарки красивого пользователя
@@ -25,6 +26,9 @@ public class Top extends AbstractData {
                     topUser.liked = item.optInt("liked");
                     topUser.photo = item.optString("photo");
                     topUser.uid = item.optInt("uid");
+                    
+                    //initPhotos(item, topUser); // не формат
+                    
                     userList.add(topUser);
                 }
         } catch(Exception e) {
@@ -37,15 +41,20 @@ public class Top extends AbstractData {
     public int getUid() {
         return uid;
     };
-
-    @Override
-    public String getBigLink() {
+    
+    public String getOriginalLink() {
+        return photo;
+    }       
+    
+    public String getLargeLink() {
+        return photo;
+    }
+    
+    public String getNormalLink() {
         return photo;
     }
 
-    @Override
     public String getSmallLink() {
         return photo;
-    }
-
+    } 
 }

@@ -146,7 +146,7 @@ public class UserProfileActivity extends FragmentActivity {
             @Override
             public void success(final ApiResponse response) {
                 mUser = User.parse(mUserId, response);
-                Bitmap rawBitmap = Http.bitmapLoader(mUser.getBigLink());
+                Bitmap rawBitmap = Http.bitmapLoader(mUser.getLargeLink());
                 final Bitmap avatar = Utils.getRoundedCornerBitmapByMask(rawBitmap, mMask);
                 runOnUiThread(new Runnable() {
                     @Override

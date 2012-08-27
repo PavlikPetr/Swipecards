@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class FeedInbox extends AbstractData {
+public class FeedInbox extends AbstractDataWithPhotos {
     // Data
     public static int unread_count; // количество оставшихся непрочитанных
     public static boolean more; // имеются ли в ленте ещё симпатии для пользователя
@@ -95,6 +95,8 @@ public class FeedInbox extends AbstractData {
                     msg.city_full = "";
                 }
 
+                initPhotos(item, msg);
+                
                 // avatars
 //                JSONObject avatars = item.getJSONObject("avatars");
 //                msg.avatars_big = avatars.optString("big");
@@ -112,14 +114,4 @@ public class FeedInbox extends AbstractData {
     public int getUid() {
         return uid;
     };
-
-    @Override
-    public String getBigLink() {
-        return null;
-    }
-
-    @Override
-    public String getSmallLink() {
-        return null;
-    }
 }

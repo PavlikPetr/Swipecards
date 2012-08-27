@@ -10,7 +10,7 @@ import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class Gift extends AbstractData {
+public class Gift extends AbstractDataWithPhotos {
 	
 	public static final int ROMANTIC = 0;
 	public static final int FRIENDS  = 2;
@@ -37,6 +37,9 @@ public class Gift extends AbstractData {
 				gift.type = item.optInt("type");
 				gift.link = item.optString("link");
 				gift.price = item.optInt("price");
+				
+				initPhotos(item, gift);
+				
 				gifts.add(gift);
 			}
 		} catch (JSONException e) {
@@ -73,14 +76,4 @@ public class Gift extends AbstractData {
 		result.type = Gift.SEND_BTN;
 		return result;
 	}
-	
-	@Override
-	public String getSmallLink() {
-		return link;
-	}
-	
-	@Override
-	public String getBigLink() {		
-		return link;
-	}	
 }

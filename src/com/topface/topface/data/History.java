@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class History extends AbstractData {
+public class History extends AbstractDataWithPhotos {
     // Data
     public static boolean more; // имеются ли в ленте ещё симпатии для пользователя
     public int type; // тип сообщения
@@ -64,6 +64,8 @@ public class History extends AbstractData {
                     history.city_id = city.optInt("id");
                     history.city_name = city.optString("name");
                     history.city_full = city.optString("full");
+                    
+                    initPhotos(item, history);
                                        
                     historyList.addFirst(history);                    
                 }

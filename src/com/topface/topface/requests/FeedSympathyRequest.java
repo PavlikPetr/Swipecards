@@ -7,7 +7,7 @@ import android.content.Context;
 
 public class FeedSympathyRequest extends ApiRequest {
     // Data
-    private String service = "feedSymphaty";
+    private String service = "feedSympathy";
     public int limit; // максимальный размер выборки входящих симпатий
     public int from; // начальный идентификатор симпатии для выборки
     public boolean only_new; // осуществлять выборку только по непрочитанным симпатиям

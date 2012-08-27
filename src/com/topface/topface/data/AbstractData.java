@@ -11,12 +11,4 @@ public abstract class AbstractData {
 	public int getUid() {
 		return -1;
 	}
-
-	public String getBigLink() {
-		return null;
-	}
-
-	public String getSmallLink() {
-		return null;
-	}		
 }

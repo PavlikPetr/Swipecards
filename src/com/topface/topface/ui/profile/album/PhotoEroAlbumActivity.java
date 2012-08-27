@@ -315,7 +315,7 @@ public class PhotoEroAlbumActivity extends Activity implements View.OnClickListe
     class LoaderEroPhoto implements Runnable {
         @Override
         public void run() {
-            final Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(mCurrentPos).getBigLink());
+            final Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(mCurrentPos).getLargeLink());
             if (bitmap != null)
                 mEroView.post(new Runnable() {
                     @Override

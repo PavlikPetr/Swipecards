@@ -87,7 +87,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         Thread t = new Thread() {
             @Override
             public void run() {
-                final Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink());
+                final Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getLargeLink());
                 view.post(new Runnable() {
                     @Override
                     public void run() {
@@ -120,7 +120,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         Thread t = new Thread() {
             @Override
             public void run() {
-                Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getBigLink());
+                Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getLargeLink());
                 if (bitmap == null || mCache == null)
                     return;
                 mCache.put(position, bitmap);

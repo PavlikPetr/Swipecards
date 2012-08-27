@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class Search extends AbstractData {
+public class Search extends AbstractDataWithPhotos {
     // Data
     public int uid; // идентификатор пользователя
     public String first_name; // имя пользователя
@@ -59,6 +59,8 @@ public class Search extends AbstractData {
                     search.city_id = city.optInt("id");
                     search.city_name = city.optString("name");
                     search.city_full = city.optString("full");
+                    
+                    initPhotos(item, search);
 
                     userList.add(search);
                 }
@@ -74,7 +76,7 @@ public class Search extends AbstractData {
     };
 
     @Override
-    public String getBigLink() {
+    public String getLargeLink() {
         return avatars_big[0];
     }
 

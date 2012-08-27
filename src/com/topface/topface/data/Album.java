@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class Album extends AbstractData {
+public class Album extends AbstractDataWithPhotos {
     // Data
     public int id; // идентификатор фотографии в альбоме пользвоателя
     public String small; // строка URL маленького изображения пользователя
@@ -50,14 +50,4 @@ public class Album extends AbstractData {
     public int getUid() {
         return id;
     };
-
-    @Override
-    public String getBigLink() {
-        return big;
-    }
-
-    @Override
-    public String getSmallLink() {
-        return small;
-    }
 }

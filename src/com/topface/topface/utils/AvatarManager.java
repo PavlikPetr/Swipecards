@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.data.AbstractData;
+import com.topface.topface.data.AbstractDataWithPhotos;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.Http;
 import android.content.Context;
@@ -16,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.AbsListView.OnScrollListener;
 
 /* Менеджер аватарок, загрузает и кеширует изображения */
-public class AvatarManager<T extends AbstractData> implements AbsListView.OnScrollListener {
+public class AvatarManager<T extends AbstractDataWithPhotos> implements AbsListView.OnScrollListener {
     // Data
     private LinkedList<T> mDataList;
     private HashMap<Integer, Bitmap> mCache;
@@ -81,7 +82,7 @@ public class AvatarManager<T extends AbstractData> implements AbsListView.OnScro
                         return;
 
                     //качаем
-                    rawBitmap = Http.bitmapLoader(mDataList.get(position).getSmallLink()); //.getBigLink()
+                    rawBitmap = Http.bitmapLoader(mDataList.get(position).getNormalLink()); //.getBigLink()
                     if (rawBitmap == null)
                         return;
 

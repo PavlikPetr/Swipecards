@@ -8,7 +8,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
 
-public class FeedLike extends AbstractData implements IListLoader{	
+public class FeedLike extends AbstractDataWithPhotos implements IListLoader{	
     // Data
     public static int unread_count; // количество оставшихся непрочитанных
     public static boolean more; // имеются ли в ленте ещё симпатии для пользователя
@@ -86,6 +86,8 @@ public class FeedLike extends AbstractData implements IListLoader{
 //                    }
                     
 //                    like.rate = item.optInt("rate");
+                    
+                    initPhotos(item, like);
 
                     likesList.add(like);
                 }
@@ -99,16 +101,6 @@ public class FeedLike extends AbstractData implements IListLoader{
     public int getUid() {
         return uid;
     };
-
-    @Override
-    public String getBigLink() {
-        return null;
-    }
-
-    @Override
-    public String getSmallLink() {
-        return null;
-    }
 
 	@Override
 	public boolean isLoader() {		

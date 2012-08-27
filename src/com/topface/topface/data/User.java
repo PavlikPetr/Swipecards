@@ -122,6 +122,9 @@ public class User extends AbstractDataWithPhotos {
             profile.ero = item.optBoolean("ero");
             profile.mutual = item.optBoolean("mutual");
             profile.score = item.optInt("score");
+            
+            initPhotos(item, profile);
+            
         } catch(Exception e) {
             Debug.log("User.class", "Wrong response parsing: " + e);
         }
@@ -134,7 +137,7 @@ public class User extends AbstractDataWithPhotos {
     };
 
     @Override
-    public String getBigLink() {
+    public String getLargeLink() {
         return null;
     }
 

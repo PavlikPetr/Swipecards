@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class FeedRate extends AbstractData {
+public class FeedRate extends AbstractDataWithPhotos {
     // Data
     public static int unread_count; // количество оставшихся непрочитанных
     public static boolean more; // меются ли в ленте ещё сообщения “понравилось”
@@ -69,15 +69,4 @@ public class FeedRate extends AbstractData {
     public int getUid() {
         return uid;
     };
-
-    @Override
-    public String getBigLink() {
-        return avatars_big;
-    }
-
-    @Override
-    public String getSmallLink() {
-        return avatars_small;
-    }
-
 }

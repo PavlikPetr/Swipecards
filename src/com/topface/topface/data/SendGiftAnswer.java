@@ -3,7 +3,7 @@ package com.topface.topface.data;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
-public class SendGiftAnswer extends AbstractData{
+public class SendGiftAnswer extends AbstractData {
 	public int power;
 	public int money;
 	

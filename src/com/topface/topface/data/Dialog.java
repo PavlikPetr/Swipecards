@@ -7,7 +7,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
 
-public class Dialog extends AbstractData implements IListLoader{
+public class Dialog extends AbstractDataWithPhotos implements IListLoader{
     // Data	
     public static int unread_count; // общее количество непрочитанных диалогов
 	public static boolean more;     // имеются ли в ленте ещё элементы для пользователя
@@ -25,7 +25,7 @@ public class Dialog extends AbstractData implements IListLoader{
     public String city_name; // наименование города в локали указанной при авторизации
     public String city_full; // полное наименование города с указанием региона, если он определен. Отдается в локали пользователя, указанной при авторизации
     
-    public String text = "r"; // текст сообщения, если type = MESSAGE
+    public String text;  // текст сообщения, если type = MESSAGE
 //    public int gift; // идентификатор подарка. Поле определяется, если type = GIFT
 //    public String link; // ссылка на изображение подарка. Поле определяется, если type = GIFT
         
@@ -78,7 +78,7 @@ public class Dialog extends AbstractData implements IListLoader{
             Dialog.unread_count = response.mJSONResult.getInt("unread");
             Dialog.more = response.mJSONResult.optBoolean("more");
             
-            JSONArray arr = response.mJSONResult.getJSONArray("feed");
+            JSONArray arr = response.mJSONResult.getJSONArray("items");
             if (arr.length() > 0)
                 dialogList = new LinkedList<Dialog>();
             for (int i = 0; i < arr.length(); i++) {
@@ -106,7 +106,8 @@ public class Dialog extends AbstractData implements IListLoader{
                     dialog.city_full = "";
                 }
                 
-//              dialog.text = item.optString("text");
+                dialog.text = item.optString("text");
+              
 //              dialog.gift = item.optInt("gift");
 //              dialog.link = item.optString("link");
 
@@ -121,6 +122,7 @@ public class Dialog extends AbstractData implements IListLoader{
 //                	dialog.avatars_small = "";
 //                }
 
+                initPhotos(item, dialog);
                 dialogList.add(dialog);
                 
             }
@@ -134,16 +136,6 @@ public class Dialog extends AbstractData implements IListLoader{
     public int getUid() {
         return uid;
     };
-
-    @Override
-    public String getBigLink() {
-        return null;
-    }
-
-    @Override
-    public String getSmallLink() {
-        return null;
-    }
 
 	@Override
 	public boolean isLoader() {

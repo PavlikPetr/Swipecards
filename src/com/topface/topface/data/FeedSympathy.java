@@ -8,7 +8,7 @@ import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
 
 /* Класс профиля окна топов */
-public class FeedSympathy extends AbstractData implements IListLoader{
+public class FeedSympathy extends AbstractDataWithPhotos implements IListLoader{
     // Data
     public static int unread_count; // количество оставшихся непрочитанных
     public static boolean more; // имеются ли в ленте ещё симпатии для пользователя
@@ -77,6 +77,8 @@ public class FeedSympathy extends AbstractData implements IListLoader{
                     symphaty.city_id = city.optInt("id");
                     symphaty.city_name = city.optString("name");
                     symphaty.city_full = city.optString("full");
+                    
+                    initPhotos(item, symphaty);
 
                     // avatars
 //                    JSONObject avatar = item.getJSONObject("avatars");
@@ -95,16 +97,6 @@ public class FeedSympathy extends AbstractData implements IListLoader{
     public int getUid() {
         return uid;
     };
-
-    @Override
-    public String getBigLink() {
-        return null;
-    }
-
-    @Override
-    public String getSmallLink() {
-        return null;
-    }
 
 	@Override
 	public boolean isLoader() {
