@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.util.SparseArray;
 
+import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PhotoLinksResolver;
 
@@ -26,7 +27,9 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
                 JSONObject avatar = item.optJSONObject("photo");
                 if(avatar != null/* && photoLinksArray.length() <= 0*/) {
                     data.mAvatarId = avatar.optInt("id", -1);
-                    data.photoLinks.put(data.mAvatarId, getLinksHash(avatar.optJSONObject("links"),data));              
+                    JSONObject links = avatar.optJSONObject("links");
+                    if(links != null)
+                    	data.mPhotoLinksArray.put(data.mAvatarId, getLinksHash(links,data));              
                 }
             }
             // Album            
@@ -36,7 +39,9 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
                     for (int i = 0; i < photoLinksArray.length(); i++) {
                         JSONObject photo = photoLinksArray.getJSONObject(i);    
                         int id = photo.getInt("id");
-                        data.photoLinks.put(id, getLinksHash(photo.optJSONObject("links"),data));
+                        JSONObject links = photo.optJSONObject("links");
+                        if(links != null)
+                        	data.mPhotoLinksArray.put(id, getLinksHash(links,data));
                     }
                 }
             }
@@ -80,19 +85,46 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
 	}
 	
 	public String getOriginalLink() {
-        return photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_ORIGIN);
+		if (mAvatarId == -1) {
+    		return "";
+    	}
+		String result = mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_ORIGIN);
+		if(result == null) 
+			return Static.EMPTY;
+        return result;
     }       
 	
     public String getLargeLink() {
-        return photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_192);
+    	if (mAvatarId == -1) {
+    		return "";
+    	}
+    	String result = mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_192); 
+    	if(result == null) {
+    		return getOriginalLink();
+    	}
+        return result;
     }
     
     public String getNormalLink() {
-        return photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_128);
+    	if (mAvatarId == -1) {
+    		return "";
+    	}
+    	String result = mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_128); 
+    	if(result == null) {
+    		return getOriginalLink();
+    	}
+    	return result;
     }
 
     public String getSmallLink() {
-        return photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_64);
+    	if (mAvatarId == -1) {
+    		return "";
+    	}
+    	String result = mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_64); 
+    	if(result == null) {
+    		return getOriginalLink();
+    	}
+    	return result;
     }       
     
 //    public HashMap<Integer, String> getAlbumLinks() {

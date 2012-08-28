@@ -38,7 +38,7 @@ public class Gift extends AbstractDataWithPhotos {
 				gift.link = item.optString("link");
 				gift.price = item.optInt("price");
 				
-				initPhotos(item, gift);
+//				initPhotos(item, gift);
 				
 				gifts.add(gift);
 			}
@@ -75,5 +75,25 @@ public class Gift extends AbstractDataWithPhotos {
 		Gift result = new Gift();
 		result.type = Gift.SEND_BTN;
 		return result;
+	}
+	
+	@Override
+	public String getOriginalLink() {
+		return link;
+	}
+	
+	@Override
+	public String getSmallLink() {
+		return link;
+	}
+	
+	@Override
+	public String getNormalLink() {
+		return link;
+	}	
+	
+	@Override
+	public String getLargeLink() {
+		return link;
 	}
 }
