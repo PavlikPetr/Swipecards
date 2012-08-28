@@ -44,5 +44,5 @@ public class ProfileThumbView extends ImageView {
       canvas.drawText(getContext().getString(R.string.profile_btn_add),getWidth()/2,getHeight()-paint.getTextSize(),paint);
     }
   }
-  //---------------------------------------------------------------------------  
+  //---------------------------------------------------------------------------
 }
