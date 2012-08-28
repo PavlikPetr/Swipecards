@@ -20,8 +20,8 @@ public class History extends AbstractDataWithPhotos {
     public boolean online; // флаг показывающий, находится ли отправитель онлайн
     public String text;  // текст сообщения. Если входящее сообщение является текстовым
     
-//    public int gift;     // идентификатор подарка. Если сообщение является подарком
-//    public String link;  // ссылка на изображение подарка. Поле устанавливается, если сообщение является подарком
+    public int gift;     // идентификатор подарка. Если сообщение является подарком
+    public String link;  // ссылка на изображение подарка. Поле устанавливается, если сообщение является подарком
 //    public int code;     // код входящего уведомления. Если сообщение является уведомлением
     
     public int city_id; // идентификатор города отправителя оценки
@@ -56,8 +56,8 @@ public class History extends AbstractDataWithPhotos {
                     history.text = item.optString("text");
                     
 //                    history.code = item.optInt("code");
-//                    history.gift = item.optInt("gift");
-//                    history.link = item.optString("link");
+                    history.gift = item.optInt("gift");
+                    history.link = item.optString("link");
                     
                     // city  
                     JSONObject city = item.getJSONObject("city");

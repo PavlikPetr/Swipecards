@@ -66,21 +66,19 @@ public class GiftsFragment extends BaseFragment {
 		} else if (activity instanceof GiftsActivity) {
 			mTag = GIFTS_ALL_TAG;
 		}
+		
+		mGalleryManager = new GiftGalleryManager<Gift>(activity.getApplicationContext(), mGifts);
+		mGridAdapter = new GiftsAdapter(activity.getApplicationContext(), mGalleryManager);
 		super.onAttach(activity);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_grid, null);
-
-		mGalleryManager = new GiftGalleryManager<Gift>(this.getActivity().getApplicationContext(),
-				mGifts);
-		mGridAdapter = new GiftsAdapter(this.getActivity().getApplicationContext(), mGalleryManager);
+		View view = inflater.inflate(R.layout.fragment_grid, null);		
 
 		mGridView = (GridView) view.findViewById(R.id.fragmentGrid);
 		mGridView.setAnimationCacheEnabled(false);
 		mGridView.setScrollingCacheEnabled(true);		
-		
 
 		int columns = this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? GIFTS_COLUMN_PORTRAIT
 				: GIFTS_COLUMN_LANDSCAPE;
@@ -114,7 +112,6 @@ public class GiftsFragment extends BaseFragment {
 							Intent intent = new Intent(getActivity().getApplicationContext(),
 									GiftsActivity.class);
 							startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
-
 						}
 					}
 				}
@@ -156,8 +153,7 @@ public class GiftsFragment extends BaseFragment {
 										mGifts.add(1, sendedGift);										
 									} else {
 										mGifts.addLast(sendedGift);										
-									}									
-									
+									}
 									update();									
 								}
 							});

@@ -239,7 +239,7 @@ public class ChatListAdapter extends BaseAdapter {
 			return convertView;
 		} else if (type == T_USER_GIFT_PHOTO || type == T_USER_GIFT_EXT
 				|| type == T_FRIEND_GIFT_PHOTO || type == T_FRIEND_GIFT_EXT) {
-			//giftLoading(holder.mGift, history);
+			giftLoading(holder.mGift, history);
 			return convertView;
 		} else if (type == T_USER_MAP_PHOTO || type == T_USER_MAP_EXT
 				|| type == T_FRIEND_MAP_PHOTO || type == T_FRIEND_MAP_EXT) {
@@ -519,41 +519,41 @@ public class ChatListAdapter extends BaseAdapter {
 		}
 	}
 
-//	private void giftLoading(final ImageView iv, final History history) {
-//		Debug.log(this, "#id:" + history.id);
-//		Bitmap bitmap = mMemorySyncCache.get(history.gift);
-//		if (bitmap != null) {
-//			iv.setImageBitmap(bitmap);
-//			iv.setVisibility(View.VISIBLE);
-//			return;
-//		}
-//
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				Bitmap rawBitmap = mStorageCache.load(history.gift);
-//				if (rawBitmap == null)
-//					rawBitmap = Http.bitmapLoader(history.link);
-//
-//				if (rawBitmap == null)
-//					return;
-//
-//				final Bitmap roundedBitmap = Utils.getScaleAndRoundBitmapOut(rawBitmap,
-//						mGiftFrameWidth, mGiftFrameWidth, 1.5f);
-//
-//				iv.post(new Runnable() {
-//					@Override
-//					public void run() {
-//						if (iv != null) {
-//							iv.setImageBitmap(roundedBitmap);
-//							iv.setVisibility(View.VISIBLE);
-//						}
-//					}
-//				});
-//				mMemorySyncCache.put(history.gift, roundedBitmap);
-//			}
-//		}).start();
-//	}
+	private void giftLoading(final ImageView iv, final History history) {
+		Debug.log(this, "#id:" + history.id);
+		Bitmap bitmap = mMemorySyncCache.get(history.gift);
+		if (bitmap != null) {
+			iv.setImageBitmap(bitmap);
+			iv.setVisibility(View.VISIBLE);
+			return;
+		}
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Bitmap rawBitmap = mStorageCache.load(history.gift);
+				if (rawBitmap == null)
+					rawBitmap = Http.bitmapLoader(history.link);
+
+				if (rawBitmap == null)
+					return;
+
+				final Bitmap roundedBitmap = Utils.getScaleAndRoundBitmapOut(rawBitmap,
+						mGiftFrameWidth, mGiftFrameWidth, 1.5f);
+
+				iv.post(new Runnable() {
+					@Override
+					public void run() {
+						if (iv != null) {
+							iv.setImageBitmap(roundedBitmap);
+							iv.setVisibility(View.VISIBLE);
+						}
+					}
+				});
+				mMemorySyncCache.put(history.gift, roundedBitmap);
+			}
+		}).start();
+	}
 
 	private void mapAddressDetection(final History history, final TextView tv,
 			final ProgressBar prgsBar) {

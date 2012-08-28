@@ -38,6 +38,7 @@ public class Album extends AbstractDataWithPhotos {
                         album.dislikes = item.optInt("dislikes");
                     } else
                         album.ero = false;
+                    //initPhotos(item, album);
                     albumsList.add(album);
                 }
         } catch(Exception e) {
@@ -47,6 +48,16 @@ public class Album extends AbstractDataWithPhotos {
         return albumsList;
     }
 
+    @Override
+    public String getSmallLink() {
+    	return small;
+    }
+    
+    @Override
+    public String getLargeLink() {    	
+    	return big;
+    }
+    
     public int getUid() {
         return id;
     };
