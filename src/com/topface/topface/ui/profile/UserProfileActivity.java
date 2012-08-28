@@ -159,7 +159,7 @@ public class UserProfileActivity extends FragmentActivity {
                         mUserCity.setText(mUser.city_name);
                         if(mQuestionnaireFragment != null)
                           mQuestionnaireFragment.setUserData(mUser);
-                        if(mPhotoFragment!= null)
+                        if(mPhotoFragment != null)
                             mPhotoFragment.setUserData(mUser);
                     }
                 });
@@ -275,8 +275,8 @@ public class UserProfileActivity extends FragmentActivity {
                     Bundle bundle = new Bundle();
                     //bundle.putInt(UserProfileActivity.INTENT_USER_ID, mUserId);
                     fragment = mPhotoFragment = new PhotoFragment();
-                    fragment.setArguments(bundle);
-                    //break;
+                    //fragment.setArguments(bundle);
+                    break;
                 case F_QUESTIONNAIRE:
                     fragment = mQuestionnaireFragment = new QuestionnaireFragment();
                     break;

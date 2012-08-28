@@ -72,8 +72,10 @@ public class PhotoFragment extends Fragment {
     public void setUserData(User user) {
         mUser = user;
         mPhotoLinks = user.photoLinks;
-        mUserGridAdapter.setUserData(user.photoLinks);
-        mUserGridAdapter.notifyDataSetChanged();
+        if(mUserGridAdapter != null) {
+          mUserGridAdapter.setUserData(user.photoLinks);
+          mUserGridAdapter.notifyDataSetChanged();
+        }
     }
 }
  

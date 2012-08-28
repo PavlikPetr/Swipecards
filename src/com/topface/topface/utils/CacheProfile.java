@@ -35,20 +35,20 @@ public class CacheProfile {
     public static String dating_city_name; // наименование пользователя в русской локали
     public static String dating_city_full; // полное наименование города
     // questionary
-    public static int questionary_job_id; // идентификатор рабочей партии пользователя
-    public static String questionary_job; // описание оригинальной работы пользователя
-    public static int questionary_status_id; // идентификатор предопределенного статуса пользователя
-    public static String questionary_status; // описание оригинального статуса пользователя
-    public static int questionary_education_id; // идентификатор предопределенного уровня образования пользователя
-    public static int questionary_marriage_id; // идентификатор предопределенного семейного положения пользователя
-    public static int questionary_finances_id; // идентификатор предопределенного финансового положения пользователя
-    public static int questionary_character_id; // идентификатор предопределенной характеристики пользователя
-    public static int questionary_smoking_id; // идентификатор предопределенного отношения к курению пользователя
-    public static int questionary_alcohol_id; // идентификатор предопределенного отношения к алкоголю пользователя
-    public static int questionary_fitness_id; // идентификатор предопределенного отношения к спорту пользователя
-    public static int questionary_communication_id; // идентификатор предопределенного отношения к коммуникациям пользователя
-    public static int questionary_weight; // вес пользователя
-    public static int questionary_height; // рост пользователя
+    public static int form_job_id; // идентификатор рабочей партии пользователя
+    public static String form_job; // описание оригинальной работы пользователя
+    public static int form_status_id; // идентификатор предопределенного статуса пользователя
+    public static String form_status; // описание оригинального статуса пользователя
+    public static int form_education_id; // идентификатор предопределенного уровня образования пользователя
+    public static int form_marriage_id; // идентификатор предопределенного семейного положения пользователя
+    public static int form_finances_id; // идентификатор предопределенного финансового положения пользователя
+    public static int form_character_id; // идентификатор предопределенной характеристики пользователя
+    public static int form_smoking_id; // идентификатор предопределенного отношения к курению пользователя
+    public static int form_alcohol_id; // идентификатор предопределенного отношения к алкоголю пользователя
+    public static int form_fitness_id; // идентификатор предопределенного отношения к спорту пользователя
+    public static int form_communication_id; // идентификатор предопределенного отношения к коммуникациям пользователя
+    public static int form_weight; // вес пользователя
+    public static int form_height; // рост пользователя
 
     public static SparseArray<HashMap<String, String>> photoLinks; // альбом пользователя
     public static String status; // статус пользователя
@@ -140,20 +140,20 @@ public class CacheProfile {
         profile.dating_city_id = dating_city_id;
         profile.dating_city_name = dating_city_name;
         profile.dating_city_full = dating_city_full;
-        profile.form_job_id = questionary_job_id;
-        profile.form_job = questionary_job;
-        profile.form_status_id = questionary_status_id;
-        profile.form_status = questionary_status;
-        profile.form_education_id = questionary_education_id;
-        profile.form_marriage_id = questionary_marriage_id;
-        profile.form_finances_id = questionary_finances_id;
-        profile.form_character_id = questionary_character_id;
-        profile.form_smoking_id = questionary_smoking_id;
-        profile.form_alcohol_id = questionary_alcohol_id;
-        profile.form_fitness_id = questionary_fitness_id;
-        profile.form_communication_id = questionary_communication_id;
-        profile.form_weight = questionary_weight;
-        profile.form_height = questionary_height;
+        profile.form_job_id = form_job_id;
+        profile.form_job = form_job;
+        profile.form_status_id = form_status_id;
+        profile.form_status = form_status;
+        profile.form_education_id = form_education_id;
+        profile.form_marriage_id = form_marriage_id;
+        profile.form_finances_id = form_finances_id;
+        profile.form_character_id = form_character_id;
+        profile.form_smoking_id = form_smoking_id;
+        profile.form_alcohol_id = form_alcohol_id;
+        profile.form_fitness_id = form_fitness_id;
+        profile.form_communication_id = form_communication_id;
+        profile.form_weight = form_weight;
+        profile.form_height = form_height;
         profile.photoLinks = photoLinks;
         profile.status = status;
 //        profile.isNewbie = isNewbie;
@@ -183,20 +183,20 @@ public class CacheProfile {
         dating_city_id = profile.dating_city_id;
         dating_city_name = profile.dating_city_name;
         dating_city_full = profile.dating_city_full;
-        questionary_job_id = profile.form_job_id;
-        questionary_job = profile.form_job;
-        questionary_status_id = profile.form_status_id;
-        questionary_status = profile.form_status;
-        questionary_education_id = profile.form_education_id;
-        questionary_marriage_id = profile.form_marriage_id;
-        questionary_finances_id = profile.form_finances_id;
-        questionary_character_id = profile.form_character_id;
-        questionary_smoking_id = profile.form_smoking_id;
-        questionary_alcohol_id = profile.form_alcohol_id;
-        questionary_fitness_id = profile.form_fitness_id;
-        questionary_communication_id = profile.form_communication_id;
-        questionary_weight = profile.form_weight;
-        questionary_height = profile.form_height;
+        form_job_id = profile.form_job_id;
+        form_job = profile.form_job;
+        form_status_id = profile.form_status_id;
+        form_status = profile.form_status;
+        form_education_id = profile.form_education_id;
+        form_marriage_id = profile.form_marriage_id;
+        form_finances_id = profile.form_finances_id;
+        form_character_id = profile.form_character_id;
+        form_smoking_id = profile.form_smoking_id;
+        form_alcohol_id = profile.form_alcohol_id;
+        form_fitness_id = profile.form_fitness_id;
+        form_communication_id = profile.form_communication_id;
+        form_weight = profile.form_weight;
+        form_height = profile.form_height;
         photoLinks = profile.photoLinks;
         status = profile.status;
 //        isNewbie = profile.isNewbie;
