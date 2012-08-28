@@ -1,6 +1,5 @@
 package com.topface.topface.data;
 
-import java.util.LinkedList;
 import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
@@ -62,10 +61,6 @@ public class Profile extends AbstractDataWithPhotos {
     public String dating_city_full; // полное наименование города
     
     public String status; // статус пользователя
-
-    // Photos
-    public LinkedList<Album> albums; // альбом пользователя
-//    public boolean isNewbie; // поле новичка
 
     public static Profile parse(ApiResponse response) {
         Profile profile = new Profile();

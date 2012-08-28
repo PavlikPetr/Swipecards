@@ -58,6 +58,7 @@ public class UserProfileActivity extends FragmentActivity {
     private ViewPager mViewPager;
     
     private QuestionnaireFragment mQuestionnaireFragment;
+    private PhotoFragment mPhotoFragment;
     private Bitmap mMask;
 
     public User mUser;
@@ -71,6 +72,7 @@ public class UserProfileActivity extends FragmentActivity {
     public static final int F_QUESTIONNAIRE = 1;
     public static final int F_GIFTS = 2;
     public static final int F_ACTIONS = 3;
+    public static final int F_COUNT = F_ACTIONS+1;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,6 +159,8 @@ public class UserProfileActivity extends FragmentActivity {
                         mUserCity.setText(mUser.city_name);
                         if(mQuestionnaireFragment != null)
                           mQuestionnaireFragment.setUserData(mUser);
+                        if(mPhotoFragment!= null)
+                            mPhotoFragment.setUserData(mUser);
                     }
                 });
             }
@@ -260,7 +264,7 @@ public class UserProfileActivity extends FragmentActivity {
 
         @Override
         public int getCount() {
-            return F_ACTIONS+1;
+            return F_COUNT;
         }
 
         @Override
@@ -269,10 +273,10 @@ public class UserProfileActivity extends FragmentActivity {
             switch (position) {
                 case F_PHOTO:
                     Bundle bundle = new Bundle();
-                    bundle.putInt(UserProfileActivity.INTENT_USER_ID, mUserId);
-                    fragment = new PhotoFragment();
+                    //bundle.putInt(UserProfileActivity.INTENT_USER_ID, mUserId);
+                    fragment = mPhotoFragment = new PhotoFragment();
                     fragment.setArguments(bundle);
-                    break;
+                    //break;
                 case F_QUESTIONNAIRE:
                     fragment = mQuestionnaireFragment = new QuestionnaireFragment();
                     break;

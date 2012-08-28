@@ -1,14 +1,11 @@
 package com.topface.topface.ui.fragments;
 
-import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.utils.AuthToken;
 import com.topface.topface.utils.Debug;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 public class ProfileFragment extends BaseFragment {
 

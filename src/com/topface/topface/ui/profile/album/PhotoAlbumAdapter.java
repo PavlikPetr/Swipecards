@@ -1,13 +1,13 @@
 package com.topface.topface.ui.profile.album;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import com.topface.topface.R;
-import com.topface.topface.data.Album;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.MemoryCache;
 import com.topface.topface.utils.http.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,39 +16,37 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 public class PhotoAlbumAdapter extends BaseAdapter {
-    //---------------------------------------------------------------------------
+    // Data
+    private int mPrevPosition;   // предыдущая позиция фото в альбоме
+    private int mPreRunning;     // текущая пред загружаемое фото
+    private MemoryCache mCache;  // кеш фоток
+    private SparseArray<HashMap<String, String>> mPhotoLinks;
+    private LayoutInflater mInflater;
+    
     // class ViewHolder
-    //---------------------------------------------------------------------------
     static class ViewHolder {
         ImageView mImageView;
         ProgressBar mProgressBar;
     };
-    //---------------------------------------------------------------------------
-    // Data
-    private int mPrevPosition; // предыдущая позиция фото в альбоме
-    private int mPreRunning; // текущая пред загружаемое фото
-    private MemoryCache mCache; // кеш фоток
-    private LinkedList<Album> mAlbumsList;
-    private LayoutInflater mInflater;
-    //---------------------------------------------------------------------------
-    public PhotoAlbumAdapter(Context context,LinkedList<Album> albumList) {
-        mAlbumsList = albumList;
+
+    public PhotoAlbumAdapter(Context context, SparseArray<HashMap<String, String>> photoLinks) {
+        mPhotoLinks = photoLinks;
         mInflater = LayoutInflater.from(context);
         mCache = new MemoryCache();
     }
-    //---------------------------------------------------------------------------
+
     public int getCount() {
-        return mAlbumsList.size();
+        return mPhotoLinks.size();
     }
-    //---------------------------------------------------------------------------
+
     public Object getItem(int position) {
-        return mAlbumsList.get(position);
+        return mPhotoLinks.get(position);
     }
-    //---------------------------------------------------------------------------
+
     public long getItemId(int position) {
         return position;
     }
-    //---------------------------------------------------------------------------
+
     public View getView(final int position,View convertView,ViewGroup parent) {
         ViewHolder holder = null;
 
@@ -78,16 +76,13 @@ public class PhotoAlbumAdapter extends BaseAdapter {
 
         return convertView;
     }
-    //---------------------------------------------------------------------------
-    //  int x = -1;
+
     public void loadingImage(final int position,final ImageView view,final ProgressBar progress) {
-        //    if(x == position)
-        //      return;
-        //    x = position;
         Thread t = new Thread() {
             @Override
             public void run() {
-                final Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getLargeLink());
+                HashMap<String, String> photo = mPhotoLinks.get(mPhotoLinks.keyAt(position));
+                final Bitmap bitmap = Http.bitmapLoader((String)photo.values().toArray()[0]);
                 view.post(new Runnable() {
                     @Override
                     public void run() {
@@ -107,7 +102,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         t.setPriority(Thread.MAX_PRIORITY);
         t.start();
     }
-    //---------------------------------------------------------------------------
+
     public void preLoading(final int position) {
         if (position == mPreRunning)
             return;
@@ -120,7 +115,8 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         Thread t = new Thread() {
             @Override
             public void run() {
-                Bitmap bitmap = Http.bitmapLoader(mAlbumsList.get(position).getLargeLink());
+                HashMap<String, String> photo = mPhotoLinks.get(position);
+                Bitmap bitmap = Http.bitmapLoader((String)photo.values().toArray()[0]);
                 if (bitmap == null || mCache == null)
                     return;
                 mCache.put(position, bitmap);
@@ -132,10 +128,9 @@ public class PhotoAlbumAdapter extends BaseAdapter {
 
         mPreRunning = position;
     }
-    //---------------------------------------------------------------------------
+
     public void release() {
         mCache.clear();
         mCache = null;
     }
-    //---------------------------------------------------------------------------
 }

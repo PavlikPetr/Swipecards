@@ -1,9 +1,9 @@
 package com.topface.topface.utils;
 
-import java.util.LinkedList;
-import com.topface.topface.data.Album;
+import java.util.HashMap;
 import com.topface.topface.data.Profile;
 import android.content.Context;
+import android.util.SparseArray;
 
 /* Cache Profile */
 public class CacheProfile {
@@ -50,7 +50,7 @@ public class CacheProfile {
     public static int questionary_weight; // вес пользователя
     public static int questionary_height; // рост пользователя
 
-    public static LinkedList<Album> albums; // альбом пользователя
+    public static SparseArray<HashMap<String, String>> photoLinks; // альбом пользователя
     public static String status; // статус пользователя
     public static boolean isNewbie; // поле новичка
     //---------------------------------------------------------------------------
@@ -154,7 +154,7 @@ public class CacheProfile {
         profile.form_communication_id = questionary_communication_id;
         profile.form_weight = questionary_weight;
         profile.form_height = questionary_height;
-        profile.albums = albums;
+        profile.photoLinks = photoLinks;
         profile.status = status;
 //        profile.isNewbie = isNewbie;
         return profile;
@@ -197,7 +197,7 @@ public class CacheProfile {
         questionary_communication_id = profile.form_communication_id;
         questionary_weight = profile.form_weight;
         questionary_height = profile.form_height;
-        albums = profile.albums;
+        photoLinks = profile.photoLinks;
         status = profile.status;
 //        isNewbie = profile.isNewbie;
     }

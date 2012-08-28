@@ -1,9 +1,9 @@
 package com.topface.topface;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedList;
 import com.facebook.android.Facebook;
-import com.topface.topface.data.Album;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Dialog;
 import com.topface.topface.data.FeedInbox;
@@ -18,6 +18,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.SparseArray;
 
 public class Data {
     // Data
@@ -26,8 +27,8 @@ public class Data {
     public static Bitmap ownerAvatar;
     public static Facebook facebook;
     public static LinkedList<City> cityList;
-    public static LinkedList<Album> photoAlbum;
     public static LinkedList<Gift> giftsList;
+    public static SparseArray<HashMap<String, String>> photoAlbum;
     public static int GRID_COLUMN;
     public static int screen_width;
     public static long midnight;

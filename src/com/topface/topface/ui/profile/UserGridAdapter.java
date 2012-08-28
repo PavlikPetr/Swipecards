@@ -1,10 +1,9 @@
 package com.topface.topface.ui.profile;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.topface.topface.R;
-import com.topface.topface.data.Album;
 import com.topface.topface.utils.CacheManager;
 import com.topface.topface.utils.MemoryCache;
 import com.topface.topface.utils.StorageCache;
@@ -13,6 +12,7 @@ import com.topface.topface.utils.http.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,29 +20,31 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 public class UserGridAdapter extends BaseAdapter {
+    // Data
     private LayoutInflater mInflater;    
-    private LinkedList<Album> mUserAlbum;
     private ExecutorService mWorker;
     private MemoryCache mMemoryCache;
     private StorageCache mStorageCache;
+    private SparseArray<HashMap<String, String>> mPhotoLinks;
     private Bitmap mMask;
 
+    // class ViewHolder
     static class ViewHolder {
         ImageView mPhoto;
     };
 
-    public UserGridAdapter(Context context, LinkedList<Album> userAlbum) {
+    public UserGridAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
-        mUserAlbum = userAlbum;
         mWorker = Executors.newFixedThreadPool(3);
-        mMemoryCache = new MemoryCache();
+        mMemoryCache  = new MemoryCache();
         mStorageCache = new StorageCache(context, CacheManager.EXTERNAL_CACHE);
+        mPhotoLinks   = new SparseArray<HashMap<String,String>>();
         mMask = BitmapFactory.decodeResource(context.getResources(), R.drawable.user_mask_album);
     }
 
     @Override
     public int getCount() {
-        return mUserAlbum.size();
+        return mPhotoLinks.size();
     }
 
     @Override
@@ -83,8 +85,9 @@ public class UserGridAdapter extends BaseAdapter {
             mWorker.execute(new Runnable() {
                 @Override
                 public void run() {
-                    Album album = mUserAlbum.get(position);
-                    final Bitmap bitmap = mStorageCache.load(album.getSmallLink());
+                    //Album album = mUserAlbum.get(position);
+                    HashMap<String, String> photo = mPhotoLinks.get(mPhotoLinks.keyAt(position));
+                    final Bitmap bitmap = mStorageCache.load((String)photo.values().toArray()[0]);
                     if (bitmap != null) {
                         imageView.post(new Runnable() {
                             @Override
@@ -94,7 +97,7 @@ public class UserGridAdapter extends BaseAdapter {
                         });
                         mMemoryCache.put(position, bitmap);
                     } else {
-                        downloading(position, album.getSmallLink(), imageView);
+                        downloading(position, (String)photo.values().toArray()[0], imageView);
                     }
             }});
         }
@@ -114,5 +117,9 @@ public class UserGridAdapter extends BaseAdapter {
         }
         mMemoryCache.put(position, bitmap);
         mStorageCache.save(url, bitmap);
+    }
+    
+    public void setUserData(SparseArray<HashMap<String, String>> photoLinks) {
+        mPhotoLinks = photoLinks;
     }
 }

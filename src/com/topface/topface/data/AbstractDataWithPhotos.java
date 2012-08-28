@@ -17,7 +17,7 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
 
     protected int mAvatarId;
     protected LinkedList<String> mSizeKeys = new LinkedList<String>();
-    protected SparseArray<HashMap<String, String>> mPhotoLinksArray = new SparseArray<HashMap<String,String>>();;
+    public SparseArray<HashMap<String, String>> photoLinks = new SparseArray<HashMap<String,String>>();
 	
     protected static void initPhotos(JSONObject item, AbstractDataWithPhotos data) {
         try {
@@ -26,7 +26,7 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
                 JSONObject avatar = item.optJSONObject("photo");
                 if(avatar != null/* && photoLinksArray.length() <= 0*/) {
                     data.mAvatarId = avatar.optInt("id", -1);
-                    data.mPhotoLinksArray.put(data.mAvatarId, getLinksHash(avatar.optJSONObject("links"),data));              
+                    data.photoLinks.put(data.mAvatarId, getLinksHash(avatar.optJSONObject("links"),data));              
                 }
             }
             // Album            
@@ -36,7 +36,7 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
                     for (int i = 0; i < photoLinksArray.length(); i++) {
                         JSONObject photo = photoLinksArray.getJSONObject(i);    
                         int id = photo.getInt("id");
-                        data.mPhotoLinksArray.put(id, getLinksHash(photo.optJSONObject("links"),data));
+                        data.photoLinks.put(id, getLinksHash(photo.optJSONObject("links"),data));
                     }
                 }
             }
@@ -46,7 +46,7 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
     }
 
 	public String getAvatarLink(String sizeKey) {
-		HashMap<String, String> links = mPhotoLinksArray.get(mAvatarId);
+		HashMap<String, String> links = photoLinks.get(mAvatarId);
 		if (links.containsKey(sizeKey)) {
 			return links.get(sizeKey);
 		}
@@ -55,10 +55,10 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
 
 	public String[] getPhotos(String sizeKey) {
 		LinkedList<String> result = new LinkedList<String>();
-		if (mPhotoLinksArray != null) {
-			for (int i = 0; i < mPhotoLinksArray.size(); i++) {
-				Integer id = mPhotoLinksArray.keyAt(i);
-				result.add(mPhotoLinksArray.get(id).get(sizeKey));
+		if (photoLinks != null) {
+			for (int i = 0; i < photoLinks.size(); i++) {
+				Integer id = photoLinks.keyAt(i);
+				result.add(photoLinks.get(id).get(sizeKey));
 			}
 		}		
 		return (String[])result.toArray();
@@ -80,19 +80,19 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
 	}
 	
 	public String getOriginalLink() {
-        return mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_ORIGIN);
+        return photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_ORIGIN);
     }       
 	
     public String getLargeLink() {
-        return mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_192);
+        return photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_192);
     }
     
     public String getNormalLink() {
-        return mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_128);
+        return photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_128);
     }
 
     public String getSmallLink() {
-        return mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_64);
+        return photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_64);
     }       
     
 //    public HashMap<Integer, String> getAlbumLinks() {

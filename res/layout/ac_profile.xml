@@ -11,27 +11,11 @@
             android:layout_height="fill_parent"
             android:orientation="vertical" >
 
-            <!-- Button 
-                android:id="@+id/DELETESSID" 
-                android:text="Delete SSID"
-                android:layout_width="200dp"
-                android:layout_height="100dp"/>
-            
-            <Button 
-                android:id="@+id/DELETETOKEN"
-                android:text="Delete Token"
-                android:layout_width="200dp"
-                android:layout_height="100dp"/-->
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <include layout="@layout/profile_form_top" />
-
-                <include layout="@layout/profile_form_bottom" />
-            </LinearLayout>            
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:text="Pahsa was here"/>
+          
         </LinearLayout>
 
         <com.topface.topface.ui.views.LockerView

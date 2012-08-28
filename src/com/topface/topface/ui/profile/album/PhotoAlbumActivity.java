@@ -35,7 +35,7 @@ public class PhotoAlbumActivity extends Activity {
     public static final String INTENT_OWNER = "owner";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_ALBUM_POS = "album_position";
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,19 +93,17 @@ public class PhotoAlbumActivity extends Activity {
 
         setCounter(position + 1, Data.photoAlbum.size());
     }
-    //---------------------------------------------------------------------------  
+  
     @Override
     protected void onStart() {
         super.onStart();
-        //App.bind(getBaseContext());
     }
-    //---------------------------------------------------------------------------  
+  
     @Override
     protected void onStop() {
-        //App.unbind();
         super.onStop();
     }
-    //---------------------------------------------------------------------------  
+  
     @Override
     protected void onDestroy() {
         mGallery = null;
@@ -117,15 +115,14 @@ public class PhotoAlbumActivity extends Activity {
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
-    //---------------------------------------------------------------------------
+
     // счетчик галереи
     public void setCounter(int index,int size) {
         mCounter.setText(index + "/" + size);
         mCounter.invalidate();
     }
-    //---------------------------------------------------------------------------
+    
     // Menu
-    //---------------------------------------------------------------------------
     private static final int MENU_MAIN = 0;
     private static final int MENU_DELETE = 1;
     @Override
@@ -136,13 +133,13 @@ public class PhotoAlbumActivity extends Activity {
         }
         return super.onCreatePanelMenu(featureId, menu);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public boolean onMenuItemSelected(int featureId,MenuItem item) {
         switch (item.getItemId()) {
             case MENU_MAIN: {
                 MainRequest request = new MainRequest(getApplicationContext());
-                request.photoid = Data.photoAlbum.get(mGallery.getSelectedItemPosition()).id;
+                //request.photoid = Data.photoAlbum.get(mGallery.getSelectedItemPosition()).id;
                 request.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
@@ -184,10 +181,10 @@ public class PhotoAlbumActivity extends Activity {
         }
         return super.onMenuItemSelected(featureId, item);
     }
-    //---------------------------------------------------------------------------
+
     private void deletePhoto() {
         PhotoDeleteRequest request = new PhotoDeleteRequest(getApplicationContext());
-        request.photoid = Data.photoAlbum.get(mGallery.getSelectedItemPosition()).id;
+        //request.photoid = Data.photoAlbum.get(mGallery.getSelectedItemPosition()).id;
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -211,5 +208,4 @@ public class PhotoAlbumActivity extends Activity {
             }
         }).exec();
     }
-    //---------------------------------------------------------------------------
 }

@@ -15,7 +15,6 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Confirmation;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.ui.ChatActivity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
