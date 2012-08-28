@@ -54,6 +54,7 @@
         <activity android:name=".ui.profile.album.PhotoEroAlbumActivity"/>
         <activity android:name=".billing.BuyingActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ui.InviteActivity"/>
+        <activity android:name=".ui.LeadersActivity"/>
 
         <!-- services -->
         <service android:name=".services.NotificationService"/>

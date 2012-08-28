@@ -17,11 +17,7 @@ import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
-import com.topface.topface.utils.AvatarManager;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Device;
-import com.topface.topface.utils.Http;
+import com.topface.topface.utils.*;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -190,7 +186,7 @@ public class LikesActivity extends Activity {
         post(new Runnable() {
           @Override
           public void run() {
-            Toast.makeText(LikesActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            Utils.showErrorMessage(LikesActivity.this);
             mProgressBar.setVisibility(View.GONE);
             mListView.onRefreshComplete(); 
           }
@@ -233,7 +229,7 @@ public class LikesActivity extends Activity {
                 mFooterView.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.GONE);
             }
-            Toast.makeText(LikesActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            Utils.showErrorMessage(LikesActivity.this);
             if (mListView != null) {
                 mListView.onRefreshComplete();
             }

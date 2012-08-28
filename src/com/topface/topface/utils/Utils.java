@@ -6,6 +6,7 @@ import java.util.Calendar;
 
 import android.graphics.*;
 import android.text.ClipboardManager;
+import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -304,5 +305,13 @@ public class Utils {
             Debug.error("Plural resources error", e);
         }
         return mPluralResources.getQuantityString(id, quantity, formatArgs);
+    }
+
+    public static void showErrorMessage(Context context) {
+        Toast.makeText(
+                context,
+                context.getString(R.string.general_data_error),
+                Toast.LENGTH_SHORT
+        ).show();
     }
 }

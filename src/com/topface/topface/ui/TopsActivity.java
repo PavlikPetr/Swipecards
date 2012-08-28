@@ -17,11 +17,7 @@ import com.topface.topface.ui.adapters.TopsGridAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.ThumbView;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Device;
-import com.topface.topface.utils.GalleryGridManager;
-import com.topface.topface.utils.Http;
+import com.topface.topface.utils.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -200,7 +196,7 @@ public class TopsActivity extends Activity {
         post(new Runnable() {
           @Override
           public void run() {
-            Toast.makeText(TopsActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            Utils.showErrorMessage(TopsActivity.this);
             mProgressBar.setVisibility(View.GONE);
           }
         });
@@ -279,7 +275,7 @@ public class TopsActivity extends Activity {
         post(new Runnable() {
           @Override
           public void run() {
-            Toast.makeText(TopsActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            Utils.showErrorMessage(TopsActivity.this);
             mProgressBar.setVisibility(View.GONE);
           }
         });

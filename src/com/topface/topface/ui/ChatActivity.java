@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import com.topface.topface.utils.Utils;
 
 public class ChatActivity extends Activity implements View.OnClickListener {
     // Data
@@ -114,7 +115,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                         post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(ChatActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                                Utils.showErrorMessage(ChatActivity.this);
                                 mProgressBar.setVisibility(View.GONE);
                             }
                         });
@@ -172,7 +173,7 @@ public class ChatActivity extends Activity implements View.OnClickListener {
                 post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(ChatActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        Utils.showErrorMessage(ChatActivity.this);
                         mProgressBar.setVisibility(View.GONE);
                     }
                 });

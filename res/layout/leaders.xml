@@ -3,22 +3,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/leadersBlock"
               android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="81dp"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
+              android:background="@drawable/bg_leaders"
               android:visibility="gone"
               >
 
-    <com.topface.topface.ui.profile.gallery.HorizontalListView
+    <com.topface.topface.ui.blocks.HorizontalListView
         android:id="@+id/leadersList"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_toRightOf="@+id/leadersDateBtn"
+        android:layout_marginLeft="75dp"
         />
 
     <Button
-            android:id="@id/leadersDateBtn"
+            android:id="@+id/leadersDateBtn"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:background="@drawable/leaders_date_selector"
+            android:background="@drawable/btn_leaders_date_selector"
+            android:text="Хочу на\nсвидание!"
+            android:textSize="12dp"
+            android:textColor="#FFFFFF"
+            android:shadowDy="-1"
+            android:shadowColor="#444444"
+            android:shadowRadius="1"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginLeft="5dp"
             />
 
 </RelativeLayout>

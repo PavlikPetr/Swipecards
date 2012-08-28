@@ -16,11 +16,7 @@ import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
 
-import com.topface.topface.utils.AvatarManager;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Device;
-import com.topface.topface.utils.Http;
+import com.topface.topface.utils.*;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -182,7 +178,7 @@ public class SymphatyActivity extends Activity {
           @Override
           public void run() {
             mProgressBar.setVisibility(View.GONE);
-            Toast.makeText(SymphatyActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            Utils.showErrorMessage(SymphatyActivity.this);
             if (mListView != null) {
                 mListView.onRefreshComplete();
             }
@@ -222,7 +218,7 @@ public class SymphatyActivity extends Activity {
         post(new Runnable() {
           @Override
           public void run() {
-            Toast.makeText(SymphatyActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            Utils.showErrorMessage(SymphatyActivity.this);
             mProgressBar.setVisibility(View.GONE);
             mListView.onRefreshComplete();
           }

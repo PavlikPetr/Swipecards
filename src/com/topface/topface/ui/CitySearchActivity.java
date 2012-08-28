@@ -22,7 +22,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+import com.topface.topface.utils.Utils;
 
 public class CitySearchActivity extends Activity {
   // Data
@@ -130,7 +130,7 @@ public class CitySearchActivity extends Activity {
         post(new Runnable() {
           @Override
           public void run() {
-            Toast.makeText(CitySearchActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            Utils.showErrorMessage(CitySearchActivity.this);
             mProgressBar.setVisibility(View.GONE);
           }
         });

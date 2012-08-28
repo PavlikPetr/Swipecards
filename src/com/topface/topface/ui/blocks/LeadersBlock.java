@@ -10,10 +10,9 @@ import com.topface.topface.data.Leaders;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeadersRequest;
-import com.topface.topface.ui.DashboardActivity;
+import com.topface.topface.ui.LeadersActivity;
 import com.topface.topface.ui.adapters.LeadersAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
-import com.topface.topface.ui.profile.gallery.HorizontalListView;
 import com.topface.topface.utils.Debug;
 
 /**
@@ -53,13 +52,14 @@ public class LeadersBlock {
     }
 
     private void bindButtonEvent() {
+        //При клике на кнопку "Хочу на свидание" открываем экран вставания в лидеры
         mActivity.findViewById(R.id.leadersDateBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mActivity.startActivity(
                             new Intent(
                                     mActivity.getApplicationContext(),
-                                    DashboardActivity.class
+                                    LeadersActivity.class
                             )
                     );
                 }
@@ -69,18 +69,23 @@ public class LeadersBlock {
     private void setAdapter(Leaders leaders) {
         HorizontalListView list = (HorizontalListView) mActivity.findViewById(R.id.leadersList);
         list.setAdapter(new LeadersAdapter(mContext, leaders));
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Leaders.LeaderUser leader = (Leaders.LeaderUser) adapterView.getAdapter().getItem(i);
-                        Intent intent = new Intent(mContext, ProfileActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(ProfileActivity.INTENT_USER_ID, leader.user_id);
-                        intent.putExtra(ProfileActivity.INTENT_USER_NAME, leader.name);
-                        mContext.startActivity(intent);
-            }
-        });
+        //Обработчик нажатия на лидера
+        list.setOnItemClickListener(mItemClickListener);
     }
+
+    //Листенер нажатия на лидера
+    private AdapterView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            //При клике на лидера, открываем его профиль
+            Leaders.LeaderUser leader = (Leaders.LeaderUser) adapterView.getAdapter().getItem(i);
+            Intent intent = new Intent(mContext, ProfileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(ProfileActivity.INTENT_USER_ID, leader.user_id);
+            intent.putExtra(ProfileActivity.INTENT_USER_NAME, leader.name);
+            mContext.startActivity(intent);
+        }
+    };
 
 
 }

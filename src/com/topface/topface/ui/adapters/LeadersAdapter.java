@@ -1,17 +1,19 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.R;
 import com.topface.topface.data.Leaders;
 import com.topface.topface.data.UserPhotos;
-import com.topface.topface.ui.profile.ProfileActivity;
-import com.topface.topface.utils.SmartBitmapFactory;
+import com.topface.topface.imageloader.DefaultImageLoader;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -21,7 +23,7 @@ import java.util.ArrayList;
  * @see com.topface.topface.ui.blocks.LeadersBlock
  */
 public class LeadersAdapter extends BaseAdapter {
-    public static final int LEADER_AVATAR_SIZE = 50;
+    public static final int AVATAR_BORDER_RADIUS = 8;
     private LayoutInflater mInflater;
     private ArrayList<Leaders.LeaderUser> mLeaders;
     private Context mContext;
@@ -62,23 +64,32 @@ public class LeadersAdapter extends BaseAdapter {
             avatar = (ImageView) view.getTag();
         }
 
-        avatar.setImageResource(R.drawable.dashbrd_chat_pressed);
-
-        //setLeaderAvatar(leader.photo, avatar);
+        setLeaderAvatar(leader.photo, avatar);
 
         return view;
     }
 
-    private Leaders.LeaderUser getLeader(int i) {
-        return mLeaders.get(i);
-    }
+    private void setLeaderAvatar(UserPhotos photo, final ImageView avatar) {
+        DefaultImageLoader.getInstance().getImageLoader().displayImage(photo.links.get(UserPhotos.SIZE_ORIGINAL), avatar, new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingComplete(Bitmap loadedImage) {
+                super.onLoadingComplete(loadedImage);
+                //Не хочется, что бы приложение упало при загрузке лидеров
+                try {
+                    avatar.setImageBitmap(
+                            Utils.getRoundedCornerBitmap(
+                                    loadedImage,
+                                    loadedImage.getWidth(),
+                                    loadedImage.getHeight(),
+                                    AVATAR_BORDER_RADIUS
+                            )
+                    );
+                }
+                catch (Exception e) {
+                    Debug.error("Leader set avatar error", e);
+                }
 
-    private void setLeaderAvatar(UserPhotos photo, ImageView avatar) {
-        SmartBitmapFactory.getInstance()
-                .setBitmapByUrl(
-                        photo.links.get(UserPhotos.SIZE_ORIGINAL),
-                        avatar,
-                        LEADER_AVATAR_SIZE, LEADER_AVATAR_SIZE,
-                        true, null, Thread.MIN_PRIORITY);
+            }
+        });
     }
 }

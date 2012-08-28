@@ -10,10 +10,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.profile.ProfileActivity;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Http;
-import com.topface.topface.utils.Newbie;
+import com.topface.topface.utils.*;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -236,7 +233,7 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
                     @Override
                     public void run() {
                         if (!mNotification)
-                            Toast.makeText(DashboardActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                            Utils.showErrorMessage(DashboardActivity.this);
                         mButtonsGroup.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.GONE);
                         mLikesNotify.setVisibility(View.INVISIBLE);

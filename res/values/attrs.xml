@@ -13,9 +13,13 @@
     
     <declare-styleable name="RoundedImageView">
         <attr name="frame" >
-            <flag name="dialog"  value="0x0" />
-            <flag name="chat"    value="0x1" />
+            <flag name="dialog"   value="0x0" />
+            <flag name="chat"     value="0x1" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="UniversalFrameImageView">
+        <attr name="frameSrc" format="reference" />
     </declare-styleable>
 
 </resources>

@@ -1,12 +1,14 @@
 package com.topface.topface.ui.profile;
 
 import java.util.LinkedList;
+
+import android.os.Handler;
+import android.os.Message;
 import com.google.android.c2dm.C2DMessaging;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Album;
-import com.topface.topface.data.PhotoAdd;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.Rate;
 import com.topface.topface.data.User;
@@ -14,7 +16,6 @@ import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.MessageRequest;
-import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.UserRequest;
@@ -29,12 +30,8 @@ import com.topface.topface.utils.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -53,7 +50,6 @@ public class ProfileActivity extends Activity{
   private int mUserId;
   private int mMutualId;
   private boolean mIsOwner;
-  private boolean mAddEroState;
   private boolean mChatInvoke;
   private Button mProfileButton;
   private View mMutualButton;
@@ -107,7 +103,9 @@ public class ProfileActivity extends Activity{
   public static final int GALLARY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
   public static final int ALBUM_ACTIVITY_REQUEST_CODE = 101;
   public static final int EDITOR_ACTIVITY_REQUEST_CODE = 102;
-  //---------------------------------------------------------------------------
+  private AddPhotoHelper mAddPhotoHelper;
+
+    //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -220,6 +218,9 @@ public class ProfileActivity extends Activity{
     mAbout = (TextView)findViewById(R.id.tvProfileAbout);
     
     mMarriageFieldName = (TextView)findViewById(R.id.tvProfileFieldNameMarriage);
+
+    mAddPhotoHelper = new AddPhotoHelper(ProfileActivity.this, this);
+    mAddPhotoHelper.setOnResultHandler(mAddPhotoHandler);
     
     getProfile();
   }
@@ -248,12 +249,8 @@ public class ProfileActivity extends Activity{
     if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE/* && resultCode == RESULT_OK*/)
       if(mIsOwner)
         updateOwnerAlbum();
-    if(requestCode == GALLARY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-      Uri imageUri = data != null ? data.getData() : null;
-      if(imageUri==null)
-        return;
-      new AsyncTaskUploader().execute(imageUri);
-    }
+
+    mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
   }
   //---------------------------------------------------------------------------
   @Override
@@ -291,7 +288,7 @@ public class ProfileActivity extends Activity{
           post(new Runnable() {
             @Override
             public void run() {
-              Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+              Utils.showErrorMessage(ProfileActivity.this);
               mProgressBar.setVisibility(View.GONE);
             }
           });
@@ -317,7 +314,7 @@ public class ProfileActivity extends Activity{
           post(new Runnable() {
             @Override
             public void run() {
-              Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+              Utils.showErrorMessage(ProfileActivity.this);
               mProgressBar.setVisibility(View.GONE);
             }
           });
@@ -467,7 +464,7 @@ public class ProfileActivity extends Activity{
         post(new Runnable() {
           @Override
           public void run() {
-            Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            Utils.showErrorMessage(ProfileActivity.this);
             mProgressBar.setVisibility(View.GONE);
           }
         });
@@ -629,26 +626,15 @@ public class ProfileActivity extends Activity{
         post(new Runnable() {
           @Override
           public void run() {
-            Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+            Utils.showErrorMessage(ProfileActivity.this);
             mProgressBar.setVisibility(View.GONE);
           }
         });
       }
     }).exec();
   }
-  //---------------------------------------------------------------------------
-  private void addPhoto(boolean bEro) {
-    mAddEroState = bEro;
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle(getString(R.string.album_add_photo_title));
-    View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.profile_add_photo,null);
-    view.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mOnAddPhotoClickListener);
-    view.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(mOnAddPhotoClickListener);
-    builder.setView(view);
-    mAddPhotoDialog = builder.create();
-    mAddPhotoDialog.show();   
-  }
-  //---------------------------------------------------------------------------
+
+    //---------------------------------------------------------------------------
   public void release() {
     mName=mCity=mEroTitle=mHeight=mWeight=mEducation=mCommunication=null;
     mCharacter=mAlcohol=mFitness=mMarriage=mFinances=mSmoking=null;
@@ -680,85 +666,8 @@ public class ProfileActivity extends Activity{
     if(Data.photoAlbum!=null) Data.photoAlbum.clear();
     Data.photoAlbum=null;
   }
-  //---------------------------------------------------------------------------
-  // class AsyncTaskUploader
-  //---------------------------------------------------------------------------
-  class AsyncTaskUploader extends AsyncTask<Uri, Void, String[]> {
-    @Override
-    protected void onPreExecute() {
-      super.onPreExecute();
-      mProgressDialog.show();
-    }
-    @Override
-    protected String[] doInBackground(Uri... uri) {
-      Socium soc = new Socium(getApplicationContext());
-      return soc.uploadPhoto(uri[0]);
-    }
-    @Override
-    protected void onPostExecute(final String[] result) {
-      super.onPostExecute(result);
 
-      if(mAddEroState) {
-        // попап с выбором цены эро фотографии
-        final CharSequence[] items = {getString(R.string.profile_coin_1), 
-                                      getString(R.string.profile_coin_2),
-                                      getString(R.string.profile_coin_3)};
-        new AlertDialog.Builder(ProfileActivity.this)
-        .setTitle(getString(R.string.profile_ero_price))
-        .setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-              sendAddRequest(result,item+1);
-            }
-        }).create().show();
-      } else
-        sendAddRequest(result,0);
-    }
-    private void sendAddRequest(final String[] result,final int price) {
-      runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
-          PhotoAddRequest addPhotoRequest = new PhotoAddRequest(ProfileActivity.this.getApplicationContext());
-          addPhotoRequest.big    = result[0];
-          addPhotoRequest.medium = result[1];
-          addPhotoRequest.small  = result[2];
-          addPhotoRequest.ero = mAddEroState;
-          if(mAddEroState)
-            addPhotoRequest.cost=price;
-          addPhotoRequest.callback(new ApiHandler() {
-            @Override
-            public void success(ApiResponse response) {
-              PhotoAdd add = PhotoAdd.parse(response);
-              if(!add.completed)
-                return; 
-              
-              Album album = new Album();
-              album.big   = result[0];
-              album.small = result[2];
-              
-              post(new Runnable() {
-                @Override
-                public void run() {
-                  updateOwnerAlbum();
-                  mProgressDialog.hide();
-                }
-              });
-            }
-            @Override
-            public void fail(int codeError,ApiResponse response) {
-              post(new Runnable() {
-                @Override
-                public void run() {
-                  Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
-                  mProgressDialog.hide();
-                }
-              });
-            }
-          }).exec();
-        }
-      });//runOnUiThread
-    }
-  }
-  //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
   private View.OnClickListener mOnClickListener = new View.OnClickListener() {
     @Override
     public void onClick(View view) {
@@ -831,7 +740,7 @@ public class ProfileActivity extends Activity{
               post(new Runnable() {
                 @Override
                 public void run() {
-                  Toast.makeText(ProfileActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+                  Utils.showErrorMessage(ProfileActivity.this);
                   mProgressBar.setVisibility(View.GONE);
                 }
               });
@@ -866,7 +775,7 @@ public class ProfileActivity extends Activity{
       switch(parent.getId()) {
         case R.id.lvAlbumPreview: {        // ALBUM
           if(position==0 && mIsOwner)  // нажатие на добавление фотки в своем альбоме
-            addPhoto(false);
+            mAddPhotoHelper.addPhoto();
           else {
             Intent intent = new Intent(getApplicationContext(),PhotoAlbumActivity.class);
             if(mIsOwner) {
@@ -886,7 +795,7 @@ public class ProfileActivity extends Activity{
         } break;
         case R.id.lvEroAlbumPreview: {     // ERO ALBUM
           if(position==0 && mIsOwner)  // нажатие на добавление эро фотки в своем альбоме
-            addPhoto(true);
+              mAddPhotoHelper.addEroPhoto();
           else {
             Intent intent;
             if(mIsOwner) {
@@ -910,5 +819,11 @@ public class ProfileActivity extends Activity{
       }
     }    
   };
-  //---------------------------------------------------------------------------
+
+    private Handler mAddPhotoHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                updateOwnerAlbum();
+            }
+      };
 }

@@ -274,7 +274,7 @@ public class DatingActivity extends Activity implements View.OnClickListener, IL
                 post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(DatingActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        Utils.showErrorMessage(DatingActivity.this);
                         mProgressBar.setVisibility(View.GONE);
                     }
                 });
@@ -408,7 +408,7 @@ public class DatingActivity extends Activity implements View.OnClickListener, IL
                 post(new Runnable() {
                     @Override
                     public void run() {
-                        //Toast.makeText(DatingActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+                        //Utils.showErrorMessage(DatingActivity.this);
                     }
                 });
             }
