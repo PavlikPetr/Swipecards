@@ -29,7 +29,7 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
                     data.mAvatarId = avatar.optInt("id", -1);
                     JSONObject links = avatar.optJSONObject("links");
                     if(links != null)
-                    	data.mPhotoLinksArray.put(data.mAvatarId, getLinksHash(links,data));              
+                    	data.photoLinks.put(data.mAvatarId, getLinksHash(links,data));              
                 }
             }
             // Album            
@@ -41,7 +41,7 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
                         int id = photo.getInt("id");
                         JSONObject links = photo.optJSONObject("links");
                         if(links != null)
-                        	data.mPhotoLinksArray.put(id, getLinksHash(links,data));
+                        	data.photoLinks.put(id, getLinksHash(links,data));
                     }
                 }
             }
@@ -88,7 +88,7 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
 		if (mAvatarId == -1) {
     		return "";
     	}
-		String result = mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_ORIGIN);
+		String result = photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_ORIGIN);
 		if(result == null) 
 			return Static.EMPTY;
         return result;
@@ -98,7 +98,7 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
     	if (mAvatarId == -1) {
     		return "";
     	}
-    	String result = mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_192); 
+    	String result = photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_192); 
     	if(result == null) {
     		return getOriginalLink();
     	}
@@ -109,7 +109,7 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
     	if (mAvatarId == -1) {
     		return "";
     	}
-    	String result = mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_128); 
+    	String result = photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_128); 
     	if(result == null) {
     		return getOriginalLink();
     	}
@@ -120,7 +120,7 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
     	if (mAvatarId == -1) {
     		return "";
     	}
-    	String result = mPhotoLinksArray.get(mAvatarId).get(PhotoLinksResolver.SIZE_64); 
+    	String result = photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_64); 
     	if(result == null) {
     		return getOriginalLink();
     	}
