@@ -1,5 +1,7 @@
 package com.topface.topface.ui;
 
+import java.sql.Connection;
+
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Confirmation;
@@ -7,10 +9,14 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FilterRequest;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.http.ConnectionManager;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,6 +58,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
     private FilterRequest filterRequest;
     private boolean mIsChanged;
     private boolean mIsSending;
+    private LockerView mSavingLocker;
     // Constants
     public static final int CITY_NEARBY = 0;
     public static final int CITY_ALL = 1;
@@ -62,10 +69,13 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.layout.ac_filter);
+        setContentView(R.layout.ac_filter_container);
         Debug.log(this, "+onCreate");
 
         SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
 
+        mSavingLocker = (LockerView) findViewById(R.id.llvFilterSaving);
+        
         // подтягивание данных
         mTemp = new TempFilter();
         mTemp.city_name = CacheProfile.dating_city_name;
@@ -460,17 +470,41 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
     public void onBackPressed() {
         Debug.log(this, "onBackPressed");
         if (mIsChanged) {
-            sendFilter();
-            setResult(RESULT_OK, null);
-            while (mIsSending) { 
-            	try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+        	runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					mSavingLocker.setVisibility(View.VISIBLE);
 				}
-            }
+			});
+        	
+            sendFilter();
+            setResult(RESULT_OK, null);             
         }
-        super.onBackPressed();
+        
+        (new Thread(){
+        	@Override
+        	public void run() {
+        		long timeElapsed = 0;
+        		while (mIsSending) {
+                	try {
+                		timeElapsed += 500;
+                		if (timeElapsed > 30000) 
+                			break;
+    					Thread.sleep(500);
+    				} catch (InterruptedException e) {
+    					Debug.log("FilterActivity Thread.sleep() exception onBackPressed()");
+    				}
+                }
+        		
+        		FilterActivity.this.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						FilterActivity.super.onBackPressed();
+					}
+				});
+        	}
+        }).start();
     }
-    //---------------------------------------------------------------------------  
+    //---------------------------------------------------------------------------    
 }

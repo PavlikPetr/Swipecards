@@ -6,6 +6,7 @@
     <!-- General  -->
     <string name="general_internet_off">No Internet connection</string>
     <string name="general_dialog_loading">Loading</string>
+    <string name="general_dialog_saving">Loading</string>
     <string name="general_server_error">Error. Try later</string>
     <string name="general_data_error">Updating error</string>
     <string name="general_footer_previous">Previous messages</string>

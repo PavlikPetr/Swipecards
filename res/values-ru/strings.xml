@@ -6,6 +6,7 @@
     <!-- General  -->
     <string name="general_internet_off">Нет подключения к Интернет</string>
     <string name="general_dialog_loading">Загрузка</string>
+    <string name="general_dialog_saving">Сохранение</string>
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка обновления данных</string>
     <string name="general_footer_previous">Предыдущие сообщения</string>

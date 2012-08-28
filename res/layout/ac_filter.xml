@@ -48,7 +48,6 @@
           android:key="@string/s_dating_select_city"
           android:title="@string/filter_select_city" />
       
-   </PreferenceCategory>
-   
-  
+   </PreferenceCategory>   
+    
 </PreferenceScreen>

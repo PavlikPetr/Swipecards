@@ -33,6 +33,10 @@
         <item name="android:background">#55000000</item>
         <item name="android:drawableLeft">@drawable/loader</item>
     </style>
+    
+    <style name="SavingLocker" parent="LoadingLocker">
+        <item name="android:text">@string/general_dialog_saving</item>
+    </style>
 
     <style name="BackgroundFont" parent="ShadowItemFont">
         <item name="android:textColor">#737373</item>
