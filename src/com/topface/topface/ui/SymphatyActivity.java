@@ -11,6 +11,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedSymphatyRequest;
 import com.topface.topface.ui.adapters.SymphatyListAdapter;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.ProfileActivity;
@@ -30,7 +31,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SymphatyActivity extends Activity {
   // Data
@@ -46,7 +46,9 @@ public class SymphatyActivity extends Activity {
   private ImageView mBannerView;
   // Constants
   private static final int LIMIT = 44;
-  //---------------------------------------------------------------------------
+  private FloatBlock mFloatBlock;
+
+    //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -128,11 +130,18 @@ public class SymphatyActivity extends Activity {
    
    mNewUpdating = CacheProfile.unread_symphaties > 0;
    CacheProfile.unread_symphaties = 0;
-   
-   banner();
+
+   mFloatBlock = new FloatBlock(this);
    update(false);
   }
-  //---------------------------------------------------------------------------
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFloatBlock.update();
+    }
+
+    //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
     if(symphatyRequest!=null) symphatyRequest.cancel();

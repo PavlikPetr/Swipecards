@@ -15,6 +15,7 @@ public class FloatBlock {
     private Map<String, String> mActivityMap = new HashMap<String, String>();
     private Options mOptions;
     private Activity mActivity;
+    private LeadersBlock mLeaders;
 
     public FloatBlock(Activity activity) {
         super();
@@ -32,7 +33,7 @@ public class FloatBlock {
                 new BannerBlock(mActivity);
             }
             else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
-                new LeadersBlock(mActivity);
+                mLeaders = new LeadersBlock(mActivity);
             }
         }
         //Если переданого активити нет в карте, то не инициализируем ни один блок
@@ -43,5 +44,11 @@ public class FloatBlock {
         mActivityMap.put(SymphatyActivity.class.toString(), mOptions.float_type_like);
         mActivityMap.put(TopsActivity.class.toString(), mOptions.float_type_top);
         mActivityMap.put(InboxActivity.class.toString(), mOptions.float_type_dialogs);
+    }
+
+    public void update() {
+        if (mLeaders != null) {
+            mLeaders.loadLeaders();
+        }
     }
 }

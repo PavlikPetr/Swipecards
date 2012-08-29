@@ -79,7 +79,7 @@ public class LeadersAlbumAdapter extends BaseAdapter {
     }
 
     public void loadingImage(final int position, ImageView view) {
-        DefaultImageLoader.getInstance().getImageLoader().displayImage(
+        DefaultImageLoader.getInstance().displayImage(
                 getItem(position).getBigLink(),
                 view
         );

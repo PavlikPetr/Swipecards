@@ -11,6 +11,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedInboxRequest;
 import com.topface.topface.ui.adapters.InboxListAdapter;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.views.DoubleBigButton;
@@ -45,7 +46,9 @@ public class InboxActivity extends Activity {
   private ImageView mBannerView;
   // Constants
   private static final int LIMIT = 40;
-  //---------------------------------------------------------------------------
+  private FloatBlock mFloatBlock;
+
+    //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -131,10 +134,18 @@ public class InboxActivity extends Activity {
     mNewUpdating = CacheProfile.unread_messages > 0;
     CacheProfile.unread_messages = 0;
     
-    banner();
     update(false);
+
+    mFloatBlock = new FloatBlock(this);
   }
-  //---------------------------------------------------------------------------
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFloatBlock.update();
+    }
+
+    //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
     if(inboxRequest!=null) inboxRequest.cancel();

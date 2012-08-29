@@ -60,7 +60,7 @@ public class ConnectionManager {
 
                 try {
                     httpClient = AndroidHttpClient.newInstance("Android");
-                    httpPost = new HttpPost(Static.API_URL + Static.API_VERSION);
+                    httpPost = new HttpPost(Static.API_URL);
                     httpPost.setHeader("Accept-Encoding", "gzip");
                     httpPost.setHeader("Content-Type", "application/json");
                     httpPost.setEntity(new ByteArrayEntity(apiRequest.toString().getBytes("UTF8")));
@@ -127,7 +127,7 @@ public class ConnectionManager {
         HttpPost localHttpPost;
 
         try {
-            localHttpPost = new HttpPost(Static.API_URL + Static.API_VERSION);
+            localHttpPost = new HttpPost(Static.API_URL);
             localHttpPost.setHeader("Accept-Encoding", "gzip");
             localHttpPost.setHeader("Content-Type", "application/json");
             localHttpPost.setEntity(new ByteArrayEntity(authRequest.toString().getBytes("UTF8")));

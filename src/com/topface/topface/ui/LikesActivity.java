@@ -38,7 +38,9 @@ public class LikesActivity extends Activity {
   private FeedLikesRequest likesRequest;
   // Constants
   private static final int LIMIT = 44;
-  //---------------------------------------------------------------------------
+    private FloatBlock mFloatBlock;
+
+    //---------------------------------------------------------------------------
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -120,6 +122,7 @@ public class LikesActivity extends Activity {
    CacheProfile.unread_likes = 0;
    
    update(false);
+   mFloatBlock = new FloatBlock(this);
 
   }
   //---------------------------------------------------------------------------
@@ -135,7 +138,7 @@ public class LikesActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        new FloatBlock(this);
+        mFloatBlock.update();
     }
 
     //---------------------------------------------------------------------------

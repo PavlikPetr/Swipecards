@@ -12,6 +12,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Leaders;
 import com.topface.topface.data.UserPhotos;
 import com.topface.topface.imageloader.DefaultImageLoader;
+import com.topface.topface.imageloader.DefaultImageLoaderListener;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
@@ -70,7 +71,7 @@ public class LeadersAdapter extends BaseAdapter {
     }
 
     private void setLeaderAvatar(UserPhotos photo, final ImageView avatar) {
-        DefaultImageLoader.getInstance().getImageLoader().displayImage(photo.links.get(UserPhotos.SIZE_ORIGINAL), avatar, new SimpleImageLoadingListener() {
+        DefaultImageLoader.getInstance().displayImage(photo.links.get(UserPhotos.SIZE_ORIGINAL), avatar, new DefaultImageLoaderListener(avatar) {
             @Override
             public void onLoadingComplete(Bitmap loadedImage) {
                 super.onLoadingComplete(loadedImage);
@@ -84,11 +85,9 @@ public class LeadersAdapter extends BaseAdapter {
                                     AVATAR_BORDER_RADIUS
                             )
                     );
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     Debug.error("Leader set avatar error", e);
                 }
-
             }
         });
     }

@@ -11,8 +11,10 @@
 	    
 	  <!-- header bar -->
 	  <include layout="@layout/bar_header" />
-	  
-	  <!-- button bar -->
+
+      <include layout="@layout/leaders"/>
+
+        <!-- button bar -->
 	  <include layout="@layout/bar_double_big_button" />
 	  
      <com.topface.topface.ui.p2r.PullToRefreshListView
@@ -22,12 +24,8 @@
 	      android:layout_weight="1"
 	      android:fadeScrollbars="true"
 	      android:background="@android:color/transparent" />
-     
-    <ImageView
-        android:id="@+id/ivBanner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible" />
+
+        <include layout="@layout/banner"/>
 	  
 	</LinearLayout>
 

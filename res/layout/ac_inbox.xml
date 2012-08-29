@@ -11,6 +11,8 @@
     
 	  <!-- header bar -->
 	  <include layout="@layout/bar_header" />
+
+      <include layout="@layout/leaders"/>
 	  
 	  <!-- button bar -->
 	  <include layout="@layout/bar_double_big_button" />
@@ -23,13 +25,9 @@
 	      android:dividerHeight="0dp"
 	      android:fadeScrollbars="true"
 	      android:background="@android:color/transparent" />
-	    
-    <ImageView
-        android:id="@+id/ivBanner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible" />
-  
+
+      <include layout="@layout/banner"/>
+
   </LinearLayout>
   
     <ProgressBar

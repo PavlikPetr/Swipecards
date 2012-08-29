@@ -14,6 +14,7 @@ import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.TopRequest;
 import com.topface.topface.ui.adapters.TopsGridAdapter;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.ThumbView;
@@ -50,7 +51,9 @@ public class TopsActivity extends Activity {
   // Constats
   private static int GIRLS = 0;
   private static int BOYS = 1;
-  //---------------------------------------------------------------------------
+    private FloatBlock mFloatBlock;
+
+    //---------------------------------------------------------------------------
   // class Action Data
   //---------------------------------------------------------------------------
   private class ActionData {
@@ -74,10 +77,7 @@ public class TopsActivity extends Activity {
     
     // Progress
     mProgressBar = (ProgressBar)findViewById(R.id.prsTopsLoading);
-    
-    // Banner
-    mBannerView = (ImageView)findViewById(R.id.ivBanner);
-    
+
     mActionData = new ActionData();
     SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
     mActionData.sex = preferences.getInt(Static.PREFERENCES_TOPS_SEX, GIRLS);
@@ -137,7 +137,7 @@ public class TopsActivity extends Activity {
     mGallery.setAdapter(mGridAdapter);
     mGallery.setOnScrollListener(mGalleryGridManager);
     
-    banner();
+    mFloatBlock = new FloatBlock(this);
     update();
   }
   //---------------------------------------------------------------------------  
@@ -150,7 +150,14 @@ public class TopsActivity extends Activity {
   protected void onStop() {
     super.onStop();
   }
-  //---------------------------------------------------------------------------  
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFloatBlock.update();
+    }
+
+    //---------------------------------------------------------------------------
   @Override
   protected void onDestroy() {
     SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);

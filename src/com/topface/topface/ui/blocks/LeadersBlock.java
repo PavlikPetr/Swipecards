@@ -32,7 +32,7 @@ public class LeadersBlock {
         mActivity.findViewById(R.id.leadersBlock).setVisibility(View.VISIBLE);
     }
 
-    private void loadLeaders() {
+    public void loadLeaders() {
         new LeadersRequest(mActivity.getApplicationContext()).callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) throws NullPointerException {
