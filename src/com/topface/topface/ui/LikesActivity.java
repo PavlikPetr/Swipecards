@@ -1,18 +1,13 @@
 package com.topface.topface.ui;
 
 import java.util.LinkedList;
-import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.Banner;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.data.Leaders;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedLikesRequest;
 import com.topface.topface.ui.adapters.LikesListAdapter;
-import com.topface.topface.ui.blocks.LeadersBlock;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.ProfileActivity;
@@ -22,14 +17,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
@@ -44,7 +36,6 @@ public class LikesActivity extends Activity {
   private DoubleBigButton mDoubleButton;
   private ProgressBar mProgressBar;
   private FeedLikesRequest likesRequest;
-  private ImageView mBannerView;
   // Constants
   private static final int LIMIT = 44;
   //---------------------------------------------------------------------------
@@ -62,9 +53,6 @@ public class LikesActivity extends Activity {
    
    // Progress
    mProgressBar = (ProgressBar)findViewById(R.id.prsLikesLoading);
-   
-   // Banner
-   mBannerView = (ImageView)findViewById(R.id.ivBanner);
 
    // Double Button
    mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
@@ -131,8 +119,8 @@ public class LikesActivity extends Activity {
    mNewUpdating = CacheProfile.unread_likes > 0;
    CacheProfile.unread_likes = 0;
    
-   banner();
    update(false);
+
   }
   //---------------------------------------------------------------------------
   @Override
@@ -147,7 +135,7 @@ public class LikesActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        new LeadersBlock(this);
+        new FloatBlock(this);
     }
 
     //---------------------------------------------------------------------------
@@ -238,42 +226,7 @@ public class LikesActivity extends Activity {
       }
     }).exec();
   }
-  //---------------------------------------------------------------------------
-  private void banner() {
-    if(Data.screen_width<=Device.W_240)
-      return;
-    BannerRequest bannerRequest = new BannerRequest(getApplicationContext());
-    bannerRequest.place = BannerRequest.LIKE;
-    bannerRequest.callback(new ApiHandler() {
-      @Override
-      public void success(ApiResponse response) {
-        final Banner banner = Banner.parse(response);
-        if(mBannerView != null)
-          post(new Runnable() {
-            @Override
-            public void run() {
-              Http.bannerLoader(banner.url,mBannerView);
-              mBannerView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  Intent intent = null;
-                  if(banner.action.equals(Banner.ACTION_PAGE))
-                    intent = new Intent(LikesActivity.this, BuyingActivity.class); // "parameter":"PURCHASE"
-                  else if(banner.action.equals(Banner.ACTION_URL)) {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
-                  }
-                  startActivity(intent);
-                }
-              });
-            }
-          });// post
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-      }
-    }).exec();
-  }
-  //---------------------------------------------------------------------------
+
   private void release() {
     mListView=null;
     

@@ -5,10 +5,9 @@ import com.topface.topface.R;
 import com.topface.topface.C2DMUtils;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.utils.*;
 import android.app.Activity;
@@ -137,9 +136,20 @@ public class DashboardActivity extends Activity implements View.OnClickListener 
         }
 
         updateProfile();
+        updateOptions();
     }
 
-      
+    private void updateOptions() {
+        new OptionsRequest(getApplicationContext()).callback(new BaseApiHandler() {
+            @Override
+            public void success(ApiResponse response) throws NullPointerException {
+                Options options = Options.parse(response);
+                CacheProfile.setOptions(options);
+            }
+        }).exec();
+    }
+
+
     @Override
     protected void onStop() {
         mNewbieView.setVisibility(View.INVISIBLE);

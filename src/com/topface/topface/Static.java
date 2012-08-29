@@ -9,8 +9,8 @@ public class Static {
   public static final int PHOTO_HEIGHT = 960;
   public static final String EMPTY = "";
   public static final String CLIENT_TYPE = "android";
-  public static final String API_URL = "http://api.topface.ru/?v=1";
-  //public static final String API_URL = "http://api.beta.topface.ru/?v=1"; //Beta API URL
+  //public static final String API_URL = "http://api.topface.ru/?v=";
+  public static final String API_URL = "http://api.beta.topface.ru/?v="; //Beta API URL
   public static final String AUTH_VKONTAKTE_ID = "2664589";
   public static final String AUTH_FACEBOOK_ID = "161347997227885";
   public static final String EXTERANAL_CACHE_DIR = "Android/data/com.topface.topface/cache/";

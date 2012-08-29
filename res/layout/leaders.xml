@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:background="@drawable/btn_leaders_date_selector"
-            android:text="Хочу на\nсвидание!"
+            android:text="@string/leaders_date"
             android:textSize="12dp"
             android:textColor="#FFFFFF"
             android:shadowDy="-1"

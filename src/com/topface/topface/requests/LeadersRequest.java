@@ -1,28 +1,21 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LeadersRequest extends ApiRequest {
-    // Data
-    private static final String service = "leaders";
-
+public class LeadersRequest extends AbstractApiRequest {
     public LeadersRequest(Context context) {
         super(context);
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
-        }
+    protected JSONObject getRequestData() throws JSONException {
+        return null;
+    }
 
-        return root.toString();
+    @Override
+    protected String getServiceName() {
+        return "leaders";
     }
 }

@@ -202,4 +202,12 @@
     <string name="invite_error">Не удалось отправить приглашения. Попробуйте еще раз</string>
     <string name="invite_completed">Приглашение отправлено</string>
 
+    <plurals name="leaders_price">
+        <item quantity="one">Встать за %d монету</item>
+        <item quantity="few">Встать за %d монеты</item>
+        <item quantity="other">Встать за %d монет</item>
+    </plurals>
+    <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
+    <string name="leaders_date">Хочу на\nсвидание!</string>
+
 </resources>

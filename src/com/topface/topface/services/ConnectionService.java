@@ -65,7 +65,7 @@ public class ConnectionService extends Service {
     HttpPost httpPost = null;
     try {
       BasicHttpContext httpContext = new BasicHttpContext();
-      httpPost = new HttpPost(Static.API_URL);
+      httpPost = new HttpPost(Static.API_URL + Static.API_VERSION);
       httpPost.addHeader("Connection", "keep-alive");
       httpPost.addHeader("Accept-Encoding", "gzip");
       httpPost.setHeader("Content-Type", "application/json");

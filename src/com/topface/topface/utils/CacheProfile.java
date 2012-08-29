@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import java.util.LinkedList;
 import com.topface.topface.data.Album;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import android.content.Context;
 
@@ -203,5 +204,17 @@ public class CacheProfile {
     status=profile.status;
     isNewbie=profile.isNewbie;
   }
-  //---------------------------------------------------------------------------
+
+  /**
+   * Опции по умолчанию
+   */
+  private static Options options;
+
+  public static Options getOptions() {
+      return options;
+  }
+
+  public static void setOptions(Options newOptions) {
+      options = newOptions;
+  }
 }

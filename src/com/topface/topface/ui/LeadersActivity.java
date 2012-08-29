@@ -18,6 +18,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.adapters.LeadersAlbumAdapter;
 import com.topface.topface.ui.blocks.HorizontalListView;
 import com.topface.topface.ui.profile.AddPhotoHelper;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
@@ -46,6 +47,18 @@ public class LeadersActivity extends Activity {
 
         setListeners();
         getProfile();
+        setPrice();
+    }
+
+    private void setPrice() {
+        int leadersPrice = CacheProfile.getOptions().price_leader;
+        mBuyButton.setText(
+                Utils.getQuantityString(
+                        R.plurals.leaders_price,
+                        leadersPrice,
+                        leadersPrice
+                )
+        );
     }
 
     private void setListeners() {

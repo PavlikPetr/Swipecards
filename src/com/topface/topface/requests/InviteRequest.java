@@ -3,15 +3,12 @@ package com.topface.topface.requests;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.Debug;
 import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class InviteRequest extends ApiRequest {
-    // Data
-    private static final String service = "invite";
+public class InviteRequest extends AbstractApiRequest {
     public static final int MIN_PHONE_LENGTH = 10;
     private ArrayList<Recipient> recipients;       // строка данных заказа от Google Play
 
@@ -21,19 +18,13 @@ public class InviteRequest extends ApiRequest {
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            JSONObject jsondata = new JSONObject();
-            jsondata.put("recipients", getRecipientsJson());
-            root.put("data", jsondata);
-        } catch(JSONException e) {
-            Debug.log(this,"Wrong request compiling: " + e);
-        }
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject().put("recipients", getRecipientsJson());
+    }
 
-        return root.toString();
+    @Override
+    protected String getServiceName() {
+        return "invite";
     }
 
     private JSONArray getRecipientsJson() throws JSONException {

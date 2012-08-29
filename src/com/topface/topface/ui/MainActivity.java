@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import com.topface.topface.R;
 import com.topface.topface.Data;
+import com.topface.topface.requests.OptionsRequest;
 import com.topface.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Intent;

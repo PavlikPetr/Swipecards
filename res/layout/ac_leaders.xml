@@ -25,7 +25,7 @@
                 android:shadowColor="#333333"
                 android:textColor="#999999"
                 android:textSize="16dip"
-                android:text="Выберите эффектную фотографию:"/>
+                android:text="@string/leaders_select_photo"/>
 
         <com.topface.topface.ui.blocks.HorizontalListView
                 android:id="@+id/photoAlbum"
@@ -42,7 +42,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:text="Встать за 100 монет"
                 android:textColor="#FFFFFF"
                 android:textSize="16dp"
                 android:shadowDy="-1"
@@ -58,6 +57,7 @@
             android:id="@+id/loader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
             android:layout_gravity="center"
             android:visibility="visible"
             style="@android:style/Widget.ProgressBar.Small"/>
