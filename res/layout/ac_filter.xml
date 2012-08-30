@@ -19,7 +19,8 @@
       <Preference
           android:key="@string/cache_profile_filter_online"
           android:title="@string/filter_online"
-          android:summary="" />
+          android:summary="" 
+          android:background="@drawable/im_bar_button"/>
     </PreferenceCategory>
   
     <!-- place -->

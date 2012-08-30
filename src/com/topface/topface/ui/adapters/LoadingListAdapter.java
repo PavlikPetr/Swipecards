@@ -17,8 +17,7 @@ import android.widget.TextView;
  */
 public class LoadingListAdapter extends BaseAdapter {
 
-	public static final int T_NONE = -1;
-	public static final int T_ALL = 0;
+	public static final int T_OTHER = 0;	
 	public static final int T_LOADER = 1;
 	public static final int T_RETRIER = 2;
 	public int T_COUNT = 3;
@@ -57,7 +56,7 @@ public class LoadingListAdapter extends BaseAdapter {
 		else if (getItem(position).isLoaderRetry())
 			return T_RETRIER;
 		else
-			return T_NONE;
+			return T_OTHER;
 	}
 
 	/**

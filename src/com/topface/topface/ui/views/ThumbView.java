@@ -35,7 +35,6 @@ public class ThumbView extends ImageView {
             s_PaintLine = new Paint();
             s_PaintLine.setColor(Color.BLACK);
             s_PaintLine.setAlpha(154);
-
         }
 
         if (s_PaintText == null) {

@@ -184,9 +184,10 @@
     <!-- Gifts Activity -->
     <string name="gifts_romantic">Романтические</string>
     <string name="gifts_friends">Дружеские</string>
-    <string name="gifts">Выберите подарок</string>
+    <string name="gifts">Подарки</string>
     <string name="gifts_present">Поздравительные</string>
     <string name="gifts_title">Выберите подарок</string>
+    <string name="gifts_send_btn">Отправить подарок</string>
     
     <!-- Map Activity -->
     <string name="map_search">Поиск</string>

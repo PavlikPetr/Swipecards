@@ -10,6 +10,7 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;

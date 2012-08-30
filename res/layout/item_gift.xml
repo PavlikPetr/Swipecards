@@ -37,9 +37,18 @@
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
             android:layout_gravity="center"
-            android:drawableRight="@drawable/coins"
-            android:drawablePadding="2dp"            
-            android:textSize="12dp"/>
+            android:drawableRight="@drawable/coins"            
+            android:drawablePadding="2dp"          
+            android:textSize="9dp"/>
+        
+        <TextView
+            android:id="@+id/giftText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#B8B8B8"
+            android:layout_gravity="center"            
+            android:textSize="9dp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

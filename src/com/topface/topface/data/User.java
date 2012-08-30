@@ -1,5 +1,8 @@
 package com.topface.topface.data;
 
+import java.util.LinkedList;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
@@ -59,6 +62,8 @@ public class User extends AbstractDataWithPhotos {
     public boolean ero; // флаг наличия эротических фотографий
     public boolean mutual; // флаг наличия симпатии к авторизованному пользователю
     public int score; // средний балл оценок пользователя
+    
+    public LinkedList<Gift> gifts = new LinkedList<Gift>();
 
     public static User parse(int userId, ApiResponse response) { //нужно знать userId
         User profile = new User();
@@ -122,6 +127,18 @@ public class User extends AbstractDataWithPhotos {
             profile.ero = item.optBoolean("ero");
             profile.mutual = item.optBoolean("mutual");
             profile.score = item.optInt("score");
+            
+            //gifts
+            JSONArray arrGifts = item.optJSONArray("gifts");            
+            for (int i = 0; i < arrGifts.length(); i++) {
+            	JSONObject itemGift = arrGifts.getJSONObject(i);
+            	Gift gift = new Gift();
+            	gift.id = itemGift.optInt("gift");
+            	gift.link = itemGift.optString("link");
+            	gift.type = Gift.PROFILE;
+            	gift.feedId = itemGift.optInt("id");
+            	profile.gifts.add(gift);
+			}
             
             initPhotos(item, profile);
             

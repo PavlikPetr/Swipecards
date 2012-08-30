@@ -1,51 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"    
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/im_list_bkgrd" >
-    
+
     <!-- header bar -->
-    <FrameLayout 
+
+    <FrameLayout
+        android:id="@+id/NavigationBar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/NavigationBar" >
-            <include layout="@layout/bar_navigation_header" />
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/bar_navigation_header" />
     </FrameLayout>
 
     <LinearLayout
         android:id="@+id/loControlsGroup"
-        android:layout_below="@id/NavigationBar"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@id/NavigationBar"
         android:orientation="vertical" >
 
         <!-- button bar -->
+
         <include layout="@layout/bar_double_big_button" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="#000000" >
+            android:background="@drawable/im_feeds_bg" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:orientation="vertical">
-                
-            	<ImageView 
-            	    android:layout_width="wrap_content"
-            	    android:layout_height="wrap_content"
-            	    android:layout_gravity="center_horizontal"
-            	    android:src="@drawable/dashbrd_likes_pressed"/>
-            	
-	            <TextView
-	                android:id="@+id/tvBackgroundText"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"	                
-	                android:layout_gravity="center_horizontal"
-	                android:singleLine="true"	
-	                style="@style/BackgroundFont"/>
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/likes_back_icon" />
+
+                <TextView
+                    android:id="@+id/tvBackgroundText"
+                    style="@style/BackgroundFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:singleLine="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -71,22 +74,5 @@
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
-
-    <com.topface.topface.ui.views.LockerView
-        android:id="@+id/llvLikesLoading"
-        style="@style/LoadingLocker"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone" />
-
-    <!--
-      ProgressBar
-      android:id="@+id/prsLikesLoading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" /
-    -->
 
 </RelativeLayout>

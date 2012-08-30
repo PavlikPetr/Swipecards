@@ -14,6 +14,7 @@ import com.topface.topface.utils.http.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
@@ -33,8 +34,10 @@ public class GiftGalleryManager<T extends AbstractDataWithPhotos> implements OnS
     public int mBitmapHeight;
     // СЃРєСЂРѕР»РёРЅРі
     public boolean mBusy = false;
+    private Handler mHandler;
     //---------------------------------------------------------------------------
-    public GiftGalleryManager(Context context,LinkedList<T> dataList) {
+    public GiftGalleryManager(Context context,LinkedList<T> dataList, Handler handler) {
+    	mHandler = handler;
         mDataList = dataList;
         mMemoryCache = new MemoryCache();
         mStorageCache = new StorageCache(context, StorageCache.INTERNAL_FILES);
@@ -72,14 +75,7 @@ public class GiftGalleryManager<T extends AbstractDataWithPhotos> implements OnS
         else {
             imageView.setImageBitmap(null); // С…Р· ??
             if (!mBusy) {
-                bitmap = mStorageCache.load(((Gift)mDataList.get(position)).id);
-                if (bitmap != null) {
-                    bitmap = Utils.getScaleAndRoundBitmapOut(bitmap, mBitmapWidth+5, mBitmapWidth+5, 1.2f);
-                    imageView.setImageBitmap(bitmap);
-                    mMemoryCache.put(position, bitmap);
-                } else {
-                    loadingImages(position, imageView);
-                }
+                loadingImages(position, imageView);
             }
         }
         bitmap = null;
@@ -90,29 +86,30 @@ public class GiftGalleryManager<T extends AbstractDataWithPhotos> implements OnS
             @Override
             public void run() {
                 try {
-//                    if (mBusy)
-//                        return;
-
-                    // РєР°С‡Р°РµРј            
-                    Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getLargeLink()); // getBigLink() РѕРґРЅРѕ Рё С‚РѕР¶Рµ РІ Tops 
-
-                    if (rawBitmap == null)
+                    if (mBusy)
                         return;
-
-                    // РІС‹СЂРµР·Р°РµРј
-                    Bitmap roundBitmap = Utils.getScaleAndRoundBitmapOut(rawBitmap, mBitmapWidth, mBitmapWidth, 1.2f);//Bitmap.createScaledBitmap(rawBitmap, mBitmapWidth, mBitmapWidth, true);
-
-                    // РѕС‚РѕР±СЂР°Р¶Р°РµРј
+                    Bitmap rawBitmap = mStorageCache.load(((Gift)mDataList.get(position)).id);
+                    Bitmap roundBitmap = null;
+                    if (rawBitmap != null) {
+                    	roundBitmap = Utils.getScaleAndRoundBitmapOut(rawBitmap, mBitmapWidth, mBitmapWidth, 1.2f);                    	
+                    } else {
+	                    // РєР°С‡Р°РµРј            
+	                    rawBitmap = Http.bitmapLoader(mDataList.get(position).getLargeLink()); // getBigLink() РѕРґРЅРѕ Рё С‚РѕР¶Рµ РІ Tops 
+	
+	                    if (rawBitmap == null)
+	                        return;
+	
+	                    // РІС‹СЂРµР·Р°РµРј
+	                    roundBitmap = Utils.getScaleAndRoundBitmapOut(rawBitmap, mBitmapWidth, mBitmapWidth, 1.2f);
+	
+	                    // Р·Р°Р»РёРІР°РµРј РІ РєРµС€	                    
+	                    mStorageCache.save(Integer.toString(((Gift)mDataList.get(position)).id), rawBitmap, false);
+		
+                    }
                     imagePost(imageView, roundBitmap);
-
-                    // Р·Р°Р»РёРІР°РµРј РІ РєРµС€
                     mMemoryCache.put(position, roundBitmap);
-                    mStorageCache.save(Integer.toString(((Gift)mDataList.get(position)).id), rawBitmap, false);
-
                     roundBitmap = null;
-                    //rawBitmap.recycle();
                     rawBitmap = null;
-
                 } catch(Exception e) {
                     Debug.log(this, "thread error:" + e);
                 }
@@ -138,10 +135,16 @@ public class GiftGalleryManager<T extends AbstractDataWithPhotos> implements OnS
         if (mDataList != null)
             mDataList.clear();
         mDataList = null;
+        mHandler = null;
     }    
     //---------------------------------------------------------------------------    
     @Override
-    public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    	if (visibleItemCount != 0
+                && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
+    		if (mHandler != null)
+    			mHandler.sendEmptyMessage(0);
+    	}
     }
     //---------------------------------------------------------------------------
     @Override

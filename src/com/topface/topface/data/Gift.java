@@ -8,9 +8,10 @@ import org.json.JSONObject;
 
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
 
-public class Gift extends AbstractDataWithPhotos {
+public class Gift extends AbstractDataWithPhotos implements IListLoader{
 	
 	public static final int ROMANTIC = 0;
 	public static final int FRIENDS  = 2;
@@ -24,6 +25,28 @@ public class Gift extends AbstractDataWithPhotos {
 	public int type;
 	public String link;
 	public int price;
+	public int feedId;
+	
+	//Loader indicators
+    public boolean isListLoader = false;
+    public boolean isListLoaderRetry = false;
+
+    public Gift() {
+    	
+    }
+
+    public Gift(IListLoader.ItemType type) {
+    	switch (type) {
+		case LOADER:
+			isListLoader = true;
+			break;
+		case RETRY:
+			isListLoaderRetry = true;
+			break;
+		default:			
+			break;
+		}     	
+    }
 	
 	public static LinkedList<Gift> parse(ApiResponse response) {
 		LinkedList<Gift> gifts = new LinkedList<Gift>();
@@ -38,8 +61,6 @@ public class Gift extends AbstractDataWithPhotos {
 				gift.link = item.optString("link");
 				gift.price = item.optInt("price");
 				
-//				initPhotos(item, gift);
-				
 				gifts.add(gift);
 			}
 		} catch (JSONException e) {
@@ -52,9 +73,8 @@ public class Gift extends AbstractDataWithPhotos {
 	// Gets User gifts
 	public static LinkedList<Gift> parse(User user) {
 		LinkedList<Gift> gifts = new LinkedList<Gift>();
-		gifts.add(Gift.getSendGiftItem());
-		//TODO waiting for server
-		
+		gifts.add(Gift.getSendedGiftItem());
+		gifts.addAll(user.gifts);		
 		return gifts;
 	}
 	
@@ -71,7 +91,7 @@ public class Gift extends AbstractDataWithPhotos {
         }
 	}
 	
-	public static Gift getSendGiftItem() {
+	public static Gift getSendedGiftItem() {
 		Gift result = new Gift();
 		result.type = Gift.SEND_BTN;
 		return result;
@@ -95,5 +115,21 @@ public class Gift extends AbstractDataWithPhotos {
 	@Override
 	public String getLargeLink() {
 		return link;
+	}
+
+	@Override
+	public boolean isLoader() {
+		return isListLoader;
+	}
+	
+	@Override
+	public boolean isLoaderRetry() {
+		return isListLoaderRetry;
+	}
+	
+	@Override
+	public void switchToLoader() {
+		isListLoader = false;
+		isListLoaderRetry = true;
 	}
 }
