@@ -206,7 +206,7 @@
     <!--Leaders-->
     <string name="leaders_go_date">Идем на свидание</string>
     <string name="leaders_leader_now">Теперь вы лидер!</string>
-    <string name="need_select_photo">Сперва нужно выбрать фотку!</string>
+    <string name="need_select_photo">Сперва нужно выбрать фотографию!</string>
     <string name="photo_add_or">Фотография добавлена</string>
     <string name="photo_add_error">Не удалось добавить фотографию</string>
     <plurals name="leaders_price">
