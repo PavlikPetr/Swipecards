@@ -36,7 +36,7 @@ public class LeadersActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_leaders);
-        ((TextView) findViewById(R.id.tvHeaderTitle)).setText("Идем на свидание");
+        ((TextView) findViewById(R.id.tvHeaderTitle)).setText(R.string.leaders_go_date);
 
         mProgressBar = (ProgressBar) findViewById(R.id.loader);
         mLeadersContent = (ViewGroup) findViewById(R.id.leadersContent);
@@ -73,7 +73,7 @@ public class LeadersActivity extends Activity {
                                     post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(LeadersActivity.this, "Теперь вы лидер!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
                                             finish();
                                         }
                                     });
@@ -84,7 +84,7 @@ public class LeadersActivity extends Activity {
                                     post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(LeadersActivity.this, "Произошла ошибка!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(LeadersActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -92,7 +92,7 @@ public class LeadersActivity extends Activity {
 
                 }
                 else {
-                    Toast.makeText(LeadersActivity.this, "Сперва нужно выбрать фотку!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LeadersActivity.this, R.string.need_select_photo, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -196,10 +196,10 @@ public class LeadersActivity extends Activity {
             super.handleMessage(msg);
             getProfile();
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                Toast.makeText(LeadersActivity.this, "Фотография добавлена", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LeadersActivity.this, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             }
             else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-                Toast.makeText(LeadersActivity.this, "Не удалось добавить фотографию", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LeadersActivity.this, R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
         }
     };

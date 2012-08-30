@@ -188,20 +188,27 @@
     <string name="pull_to_refresh_tap_label">Tap to refresh</string>
 
     <!-- Экран приглашений -->
-    <string name="search_hint">Найти друзей</string>
-    <string name="activity_title_invite">Приглашения</string>
-    <string name="send_invite">Отправить</string>
+    <string name="search_hint">Find friends</string>
+    <string name="activity_title_invite">Invitations</string>
+    <string name="send_invite">Send</string>
     <plurals name="invite_bonus_text">
-        <item quantity="zero">Пригласите друзей и получите за каждого по 20 {{coins}}</item>
+        <item quantity="zero">Invite your friends and get 20 {{coins}} for each one</item>
         <item quantity="one">Вы собираетесь отправить приглашение %2$d другу и получите за это %1$d {{coins}}</item>
         <item quantity="few">Вы собираетесь отправить приглашения %2$d друзьям и получите за это %1$d {{coins}}</item>
         <item quantity="other">Вы собираетесь отправить приглашения %2$d друзьям и получите за это %1$d {{coins}}</item>
     </plurals>
     <string name="invite_is_free">Отправка приглашения бесплатна</string>
-    <string name="invite_need_select">Выберите одного или нескольких друзей для отправки приглашения</string>
-    <string name="invite_error">Не удалось отправить приглашения. Попробуйте еще раз</string>
-    <string name="invite_completed">Приглашение отправлено</string>
+    <string name="invite_need_select">Choose one or several of your friends and send them invitations</string>
+    <string name="invite_error">Could not send the invitation. Please, try again</string>
+    <string name="invite_completed">Invitation sent</string>
 
+
+    <!--Leaders-->
+    <string name="leaders_go_date">Идем на свидание</string>
+    <string name="leaders_leader_now">Теперь вы лидер!</string>
+    <string name="need_select_photo">Сперва нужно выбрать фотку!</string>
+    <string name="photo_add_or">Фотография добавлена</string>
+    <string name="photo_add_error">Не удалось добавить фотографию</string>
     <plurals name="leaders_price">
         <item quantity="one">Встать за %d монету</item>
         <item quantity="few">Встать за %d монеты</item>
