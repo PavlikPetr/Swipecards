@@ -1,6 +1,8 @@
 package com.topface.topface.ui;
 
 import java.util.LinkedList;
+
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.requests.ApiHandler;
@@ -25,7 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-public class LikesActivity extends Activity {
+public class LikesActivity extends TrackedActivity {
   // Data
   private boolean mNewUpdating;
   private TextView mFooterView;

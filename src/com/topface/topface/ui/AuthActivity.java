@@ -3,6 +3,8 @@ package com.topface.topface.ui;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.facebook.android.*;
@@ -24,7 +26,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-public class AuthActivity extends Activity implements View.OnClickListener  {
+public class AuthActivity extends TrackedActivity implements View.OnClickListener  {
   // Data
   private Button mFBButton;
   private Button mVKButton;

@@ -1,5 +1,6 @@
 package com.topface.topface.ui.profile.album;
 
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiHandler;
@@ -22,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class PhotoAlbumActivity extends Activity {
+public class PhotoAlbumActivity extends TrackedActivity {
   // Data
   private boolean mOwner;
   private TextView mCounter;

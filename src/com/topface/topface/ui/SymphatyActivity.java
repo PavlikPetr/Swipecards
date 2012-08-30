@@ -1,6 +1,8 @@
 package com.topface.topface.ui;
 
 import java.util.LinkedList;
+
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
@@ -32,7 +34,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class SymphatyActivity extends Activity {
+public class SymphatyActivity extends TrackedActivity {
   // Data
   private boolean mNewUpdating;
   private TextView mFooterView;

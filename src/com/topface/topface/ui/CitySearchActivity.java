@@ -1,6 +1,8 @@
 package com.topface.topface.ui;
 
 import java.util.LinkedList;
+
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.requests.ApiHandler;
@@ -24,7 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.utils.Utils;
 
-public class CitySearchActivity extends Activity {
+public class CitySearchActivity extends TrackedActivity {
   // Data
   private EditText mCityInputView;
   private ListView mCityListView;

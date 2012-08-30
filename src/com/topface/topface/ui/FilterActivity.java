@@ -27,8 +27,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.topface.topface.utils.TrackedPreferenceActivity;
 
-public class FilterActivity extends PreferenceActivity implements LocationListener {
+public class FilterActivity extends TrackedPreferenceActivity implements LocationListener {
   //---------------------------------------------------------------------------
   // class TempFilter
   //---------------------------------------------------------------------------

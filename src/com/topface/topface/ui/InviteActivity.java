@@ -8,6 +8,7 @@ import android.provider.ContactsContract;
 import android.text.*;
 import android.view.View;
 import android.widget.*;
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
 import com.topface.topface.data.Invite;
 import com.topface.topface.requests.ApiHandler;
@@ -22,7 +23,7 @@ import java.util.Collection;
 /**
  * Активити с приглашением друзей в приложение
  */
-public class InviteActivity extends Activity {
+public class InviteActivity extends TrackedActivity {
     /**
      * Показывать ли только видимых пользователей
      */

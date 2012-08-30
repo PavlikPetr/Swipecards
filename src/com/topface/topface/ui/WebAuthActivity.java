@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import org.apache.http.client.utils.URLEncodedUtils;
 import com.topface.topface.R;
 import com.topface.topface.Data;
@@ -26,7 +28,7 @@ import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class WebAuthActivity extends Activity {
+public class WebAuthActivity extends TrackedActivity {
   // Data
   private WebView mWebView;
   private View mProgressBar;

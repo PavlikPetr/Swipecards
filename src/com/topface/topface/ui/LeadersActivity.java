@@ -8,6 +8,7 @@ import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
 import com.topface.topface.data.Profile;
@@ -24,7 +25,7 @@ import com.topface.topface.utils.Utils;
 
 import java.util.LinkedList;
 
-public class LeadersActivity extends Activity {
+public class LeadersActivity extends TrackedActivity {
     private HorizontalListView mListView;
     private ProgressBar mProgressBar;
     private ViewGroup mLeadersContent;

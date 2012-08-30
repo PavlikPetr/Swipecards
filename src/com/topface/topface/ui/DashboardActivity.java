@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.C2DMUtils;
@@ -30,7 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DashboardActivity extends Activity implements View.OnClickListener {
+public class DashboardActivity extends TrackedActivity implements View.OnClickListener {
     // Data
     private boolean mNotification;
     private TextView mLikesNotify;

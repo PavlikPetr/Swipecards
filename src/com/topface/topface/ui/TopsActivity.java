@@ -1,6 +1,8 @@
 package com.topface.topface.ui;
 
 import java.util.LinkedList;
+
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
@@ -36,7 +38,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TopsActivity extends Activity {
+public class TopsActivity extends TrackedActivity {
   // Data
   private GridView mGallery;
   private TopsGridAdapter mGridAdapter;

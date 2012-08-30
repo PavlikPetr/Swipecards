@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import java.util.LinkedList;
 
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -52,7 +53,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DatingActivity extends Activity implements View.OnClickListener, ILocker {
+public class DatingActivity extends TrackedActivity implements View.OnClickListener, ILocker {
     // Data
     private boolean mIsHide;
     private int mCurrentUserPos;

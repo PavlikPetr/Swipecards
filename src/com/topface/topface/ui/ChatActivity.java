@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import java.util.LinkedList;
 
 import android.widget.*;
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.requests.ApiHandler;
@@ -21,7 +22,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import com.topface.topface.utils.Utils;
 
-public class ChatActivity extends Activity implements View.OnClickListener {
+public class ChatActivity extends TrackedActivity implements View.OnClickListener {
     // Data
     private int mUserId;
     private boolean mProfileInvoke;

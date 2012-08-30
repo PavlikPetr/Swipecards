@@ -2,6 +2,7 @@ package com.topface.topface.ui.profile.album;
 
 import java.util.LinkedList;
 
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
@@ -23,7 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class PhotoEroAlbumActivity extends Activity implements View.OnClickListener {
+public class PhotoEroAlbumActivity extends TrackedActivity implements View.OnClickListener {
     // Data
     private int mCurrentPos;
     private int mUserId;
