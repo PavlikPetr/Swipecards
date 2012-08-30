@@ -27,7 +27,8 @@ import android.widget.ImageView;
 public abstract class BaseFragment extends Fragment implements IRequestClient{
 	
     protected boolean mIsActive;
-    public boolean isFilled = false;
+    public boolean isFilled;
+    public boolean isForcedUpdate;
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
     abstract public void fillLayout();
@@ -101,6 +102,11 @@ public abstract class BaseFragment extends Fragment implements IRequestClient{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Debug.log("onActivityCreated:4");
+//        if(isForcedUpdate) {
+//            fillLayout();
+//            isForcedUpdate = false;
+//            isFilled = true;
+//        }
     }
 
     @Override

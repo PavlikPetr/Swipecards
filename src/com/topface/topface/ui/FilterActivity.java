@@ -1,7 +1,5 @@
 package com.topface.topface.ui;
 
-import java.sql.Connection;
-
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Confirmation;
@@ -12,11 +10,8 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.http.ConnectionManager;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;

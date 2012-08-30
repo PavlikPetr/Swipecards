@@ -42,7 +42,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 		mSwitchController.setFragmentMenu(mFragmentMenu);
 
 		// last opened
-//		mFragmentContainer.showFragment(R.id.fragment_dialogs);
+		//mFragmentContainer.showFragment(R.id.fragment_tops, true);
 		
 //		mHomeButton = ((Button) findViewById(R.id.btnHeaderHome));
 //		mHomeButton.setOnClickListener(mOnHomeClickListener);		

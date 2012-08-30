@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
 import android.support.v4.app.FragmentManager;
-import android.widget.Toast;
 
 public class FragmentContainer {
     private int mCurrentFragmentId;
@@ -39,10 +38,9 @@ public class FragmentContainer {
         
         mSettingsFragment = new SettingsFragment();
         fragmentManager.beginTransaction().add(R.id.fragment_settings, mSettingsFragment).hide(mSettingsFragment).commit();
-
     }
     
-    public void showFragment(int fragmentId) {
+    public void showFragment(int fragmentId, boolean updateFragment) {
         if(mCurrentFragmentId > 0)
             mFragmentManager.beginTransaction().hide(mFragmentManager.findFragmentById(mCurrentFragmentId)).commit();
         
@@ -73,21 +71,29 @@ public class FragmentContainer {
                 break;
         }
         
-        
-        Toast.makeText(fragment.getActivity(), ""+fragment, Toast.LENGTH_SHORT).show();
-        
         mFragmentManager.beginTransaction().show(fragment).commit();
         mCurrentFragmentId = fragmentId;
+        
+        if(updateFragment) {
+            //update(fragment);
+            fragment.isForcedUpdate = true;
+        }
     }
     
-    public void update() {    	
-        BaseFragment fragment = (BaseFragment)mFragmentManager.findFragmentById(mCurrentFragmentId);
-        
+    public void showFragment(int fragmentId) {
+        showFragment(fragmentId, false);
+    }
+    
+    public void update(BaseFragment fragment) {    	
         if(fragment != null && !fragment.isFilled) {
 	        fragment.fillLayout();
 	        fragment.isFilled = true;
         }
     }
     
+    public void update() {
+        BaseFragment fragment = (BaseFragment)mFragmentManager.findFragmentById(mCurrentFragmentId);
+        update(fragment);
+    }
 }
 
