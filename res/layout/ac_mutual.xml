@@ -3,90 +3,75 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/im_list_bkgrd" >
-    
+
     <!-- header bar -->
-    <FrameLayout 
+
+    <FrameLayout
+        android:id="@+id/loNavigationBar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/loNavigationBar" >
-            <include layout="@layout/bar_navigation_header" />
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/bar_navigation_header" />
     </FrameLayout>
-        
+
     <LinearLayout
         android:id="@+id/loControlsGroup"
-        android:layout_below="@id/loNavigationBar"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@id/loNavigationBar"
         android:orientation="vertical" >
 
-      <!-- button bar -->
-      <include layout="@layout/bar_double_big_button" />
+        <!-- button bar -->
 
-      <RelativeLayout
-          android:layout_width="fill_parent"
-          android:layout_height="fill_parent"
-          android:background="#000000" >
+        <include layout="@layout/bar_double_big_button" />
 
-          <LinearLayout
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:layout_centerInParent="true"
-              android:orientation="vertical" >
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/im_feeds_bg" >
 
-              <ImageView
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_gravity="center_horizontal"
-                  android:src="@drawable/dashbrd_mutual_pressed" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical" >
 
-              <TextView
-                  android:id="@+id/tvBackgroundText"
-                  style="@style/BackgroundFont"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_gravity="center_horizontal"
-                  android:singleLine="true" />
-          </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/mutual_back_icon" />
 
-          <LinearLayout
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:orientation="vertical" >
+                <TextView
+                    android:id="@+id/tvBackgroundText"
+                    style="@style/BackgroundFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:singleLine="true" />
+            </LinearLayout>
 
-              <com.topface.topface.ui.p2r.PullToRefreshListView
-                  android:id="@+id/lvSymphatyList"
-                  android:layout_width="wrap_content"
-                  android:layout_height="0dip"
-                  android:layout_weight="1"
-                  android:cacheColorHint="#00000000"
-                  android:fadeScrollbars="true"
-                  android:fadingEdge="none" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
 
-              <ImageView
-                  android:id="@+id/ivBanner"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:visibility="visible" />
-          </LinearLayout>
-      </RelativeLayout>
-      
+                <com.topface.topface.ui.p2r.PullToRefreshListView
+                    android:id="@+id/lvSymphatyList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dip"
+                    android:layout_weight="1"
+                    android:cacheColorHint="#00000000"
+                    android:fadeScrollbars="true"
+                    android:fadingEdge="none" />
+
+                <ImageView
+                    android:id="@+id/ivBanner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible" />
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
-
-    <com.topface.topface.ui.views.LockerView
-        android:id="@+id/llvSympathyLoading"
-        style="@style/LoadingLocker"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone" />
-
-    <!--
-           ProgressBar
-	      android:id="@+id/prsSymphatyLoading"
-	      android:layout_width="wrap_content"
-	      android:layout_height="wrap_content"
-	      android:layout_centerInParent="true"
-	      android:visibility="gone"
-	      style="@android:style/Widget.ProgressBar.Small" /
-    -->
 
 </RelativeLayout>

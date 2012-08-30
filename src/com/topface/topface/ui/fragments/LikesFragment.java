@@ -46,7 +46,6 @@ public class LikesFragment extends BaseFragment {
 	private LikesListAdapter mListAdapter;
 	private AvatarManager<FeedLike> mAvatarManager;
 	private DoubleBigButton mDoubleButton;
-	private LockerView mLoadingLocker;
 	private TextView mBackgroundText;
 	private ImageView mBannerView;
 	
@@ -94,9 +93,6 @@ public class LikesFragment extends BaseFragment {
             }
         });
 
-		// Progress
-		mLoadingLocker = (LockerView) view.findViewById(R.id.llvLikesLoading);
-		
 		// ListView background
 		mBackgroundText = (TextView) view.findViewById(R.id.tvBackgroundText);
 		
@@ -358,7 +354,6 @@ public class LikesFragment extends BaseFragment {
     }
 
     protected void onUpdateStart(boolean isFlyUpdating) {
-//		mLoadingLocker.setVisibility(View.VISIBLE);
     	if (!isFlyUpdating) {
 			mListView.setVisibility(View.INVISIBLE);
 			mBackgroundText.setText(R.string.general_dialog_loading);
@@ -373,7 +368,6 @@ public class LikesFragment extends BaseFragment {
 
 	@Override
 	protected void onUpdateSuccess(boolean isFlyUpdating) {
-//		mLoadingLocker.setVisibility(View.GONE);
 		if (!isFlyUpdating) {
 			mListView.setVisibility(View.VISIBLE);
 			if (Data.likesList.isEmpty()) {
@@ -396,7 +390,6 @@ public class LikesFragment extends BaseFragment {
 
 	@Override
 	protected void onUpdateFail(boolean isFlyUpdating) {
-//		mLoadingLocker.setVisibility(View.GONE);
 		if (!isFlyUpdating) {
 			mListView.setVisibility(View.VISIBLE);
 			mBackgroundText.setText("");		

@@ -47,7 +47,6 @@ public class MutualFragment extends BaseFragment {
     private MutualListAdapter mListAdapter;
     private AvatarManager<FeedSympathy> mAvatarManager;
     private DoubleBigButton mDoubleButton;
-    private LockerView mLoadingLocker;
     private TextView mBackgroundText;
     private ImageView mBannerView;
     
@@ -100,9 +99,6 @@ public class MutualFragment extends BaseFragment {
         // Banner
         mBannerView = (ImageView)view.findViewById(R.id.ivBanner);
         
-        // Progress
-        mLoadingLocker = (LockerView)view.findViewById(R.id.llvSympathyLoading);
-
         // Double Button
         mDoubleButton = (DoubleBigButton)view.findViewById(R.id.btnDoubleBig);
         mDoubleButton.setLeftText(getString(R.string.symphaty_btn_dbl_left));
@@ -345,7 +341,6 @@ public class MutualFragment extends BaseFragment {
     }
 
     protected void onUpdateStart(boolean isFlyUpdating) {
-//		mLoadingLocker.setVisibility(View.VISIBLE);
     	if (!isFlyUpdating) {
 			mListView.setVisibility(View.INVISIBLE);
 			mBackgroundText.setText(R.string.general_dialog_loading);
@@ -360,7 +355,6 @@ public class MutualFragment extends BaseFragment {
 
 	@Override
 	protected void onUpdateSuccess(boolean isFlyUpdating) {
-//		mLoadingLocker.setVisibility(View.GONE);
 		if (!isFlyUpdating) {
 			mListView.setVisibility(View.VISIBLE);
 			if (Data.sympathyList.isEmpty()) {
@@ -383,7 +377,6 @@ public class MutualFragment extends BaseFragment {
 
 	@Override
 	protected void onUpdateFail(boolean isFlyUpdating) {
-//		mLoadingLocker.setVisibility(View.GONE);
 		if (!isFlyUpdating) {
 			mListView.setVisibility(View.VISIBLE);
 			mBackgroundText.setText("");		

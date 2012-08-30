@@ -190,9 +190,10 @@
     <!-- Gifts Activity -->
     <string name="gifts_romantic">Romantic</string>
     <string name="gifts_friends">Friends</string>
-    <string name="gifts">Choose gift</string>
+    <string name="gifts">Gift</string>
     <string name="gifts_present">Present</string>
     <string name="gifts_title">Select a gift</string>
+    <string name="gifts_send_btn">Send a gift</string>
     
     <!-- Map Activity -->
     <string name="map_search">Search</string>

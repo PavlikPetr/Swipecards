@@ -17,7 +17,7 @@
                 android:background="@drawable/navigation_menu_item_selector"
                 android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_profile"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"/>
 
         </RelativeLayout>
 
@@ -30,11 +30,10 @@
                 android:id="@+id/btnFragmentDating"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
                 android:background="@drawable/navigation_menu_item_selector"
-                android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_dating"
-                android:textColor="#FFFFFF" />
+                android:drawableLeft="@drawable/topface_dating"
+                style="@style/LeftMenuButtons"/>
             
         </RelativeLayout>
 
@@ -46,12 +45,11 @@
             <Button
                 android:id="@+id/btnFragmentLikes"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
-                android:background="@drawable/navigation_menu_item_selector"
-                android:paddingLeft="10dp"
-                android:text="@string/dashbrd_btn_likes"
-                android:textColor="#FFFFFF" />
+                android:layout_height="wrap_content"                
+                android:background="@drawable/navigation_menu_item_selector"                
+                android:text="@string/dashbrd_btn_likes"                
+                android:drawableLeft="@drawable/topface_likes"
+                style="@style/LeftMenuButtons"/>
 
             <TextView
                 android:id="@+id/tvNotifyLikes"
@@ -77,11 +75,10 @@
                 android:id="@+id/btnFragmentMutual"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
                 android:background="@drawable/navigation_menu_item_selector"
-                android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_sympathy"
-                android:textColor="#FFFFFF" />
+                android:drawableLeft="@drawable/topface_sympathy"
+				style="@style/LeftMenuButtons"/>
 
             <TextView
                 android:id="@+id/tvNotifyMutual"
@@ -107,11 +104,10 @@
                 android:id="@+id/btnFragmentDialogs"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
                 android:background="@drawable/navigation_menu_item_selector"
-                android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_chat"
-                android:textColor="#FFFFFF" />
+                android:drawableLeft="@drawable/topface_chat"
+                style="@style/LeftMenuButtons"/>
 
             <TextView
                 android:id="@+id/tvNotifyDialogs"
@@ -137,11 +133,10 @@
                 android:id="@+id/btnFragmentTops"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
                 android:background="@drawable/navigation_menu_item_selector"
-                android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_tops"
-                android:textColor="#FFFFFF" />
+                android:drawableLeft="@drawable/topface_tops"
+                style="@style/LeftMenuButtons"/>
             
         </RelativeLayout>
 
@@ -154,11 +149,10 @@
                 android:id="@+id/btnFragmentSettings"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
                 android:background="@drawable/navigation_menu_item_selector"
-                android:paddingLeft="10dp"
                 android:text="@string/dashbrd_btn_settings"
-                android:textColor="#FFFFFF" />
+                android:drawableLeft="@drawable/topface_settings"
+                style="@style/LeftMenuButtons"/>
             
         </RelativeLayout>
         

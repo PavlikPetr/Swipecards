@@ -135,7 +135,6 @@ public class DialogsFragment extends BaseFragment {
 							mListAdapter.notifyDataSetChanged();
 						}
 					});
-
 					updateDataHistory();
 				} else {
 					// ImageView iv =

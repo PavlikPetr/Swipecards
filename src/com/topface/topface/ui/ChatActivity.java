@@ -325,12 +325,12 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 	                        public void run() {              
 	                        	History history = new History();
 //	                            history.code = 0;
-//	                            history.gift = id;
+	                            history.gift = id;
 	                            history.uid = CacheProfile.uid;
 	                            history.created = System.currentTimeMillis();
 	                            history.text = Static.EMPTY;
 	                            history.type = Dialog.GIFT;
-//	                            history.link = url;
+	                            history.link = url;
 	                            mAdapter.addSentMessage(history);
 	                            mAdapter.notifyDataSetChanged();
 	                            mLoadingLocker.setVisibility(View.GONE);

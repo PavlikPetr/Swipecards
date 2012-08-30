@@ -57,6 +57,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Button mLoveBtn;
     private Button mSympathyBtn;
     private Button mSkipBtn;
+    private Button mPrevBtn;
     private Button mProfileBtn;
     private Button mChatBtn;
     private TextView mUserInfoName;
@@ -140,6 +141,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSympathyBtn.setOnClickListener(this);
         mSkipBtn = (Button)view.findViewById(R.id.btnDatingSkip);
         mSkipBtn.setOnClickListener(this);
+        mPrevBtn = (Button)view.findViewById(R.id.btnDatingPrev);
+        mPrevBtn.setOnClickListener(this);
         mProfileBtn = (Button)view.findViewById(R.id.btnDatingProfile);
         mProfileBtn.setOnClickListener(this);
         mChatBtn = (Button)view.findViewById(R.id.btnDatingChat);
@@ -283,6 +286,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.btnDatingSkip: {
                 skipUser();
             }
+        		break;
+            case R.id.btnDatingPrev: {
+            	prevUser();
+            }
+            
                 break;
             case R.id.btnDatingProfile: {
                 Intent intent = new Intent(getActivity(), UserProfileActivity.class);
@@ -298,7 +306,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);                
                 startActivity(intent);
             }
-                break;
+                break;            
             default:
         }
     }
@@ -365,6 +373,35 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }).exec();
         showNextUser();
     }
+    
+    private void prevUser() {
+    	if (mCurrentUserPos > 0) {
+            --mCurrentUserPos;
+            lockControls();
+            mDatingAlbum.setSelection(0);
+            mDatingAlbumAdapter.setUserData(mUserSearchList.get(mCurrentUserPos));
+            mDatingAlbumAdapter.notifyDataSetChanged();
+            // User Info
+            mUserInfoCity.setText("" + mUserSearchList.get(mCurrentUserPos).city_name);
+            mUserInfoStatus.setText("" + mUserSearchList.get(mCurrentUserPos).status);
+            mUserInfoName.setText("" + mUserSearchList.get(mCurrentUserPos).first_name + ", " + mUserSearchList.get(mCurrentUserPos).age);
+            if (mUserSearchList.get(mCurrentUserPos).online)
+                mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.im_online), null);
+            else
+                mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.im_offline), null);            
+            
+            if (mUserSearchList.get(mCurrentUserPos).sex == Static.BOY) {
+            	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
+            			getResources().getDrawable(R.drawable.dating_man_selector), null, null);
+            } else if (mUserSearchList.get(mCurrentUserPos).sex == Static.GIRL) {
+            	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
+            			getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
+            }
+            
+            mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
+        }        
+    	showNewbie(); // NEWBIE
+    }
 
     private void showNewbie() {
         mNewbieView.setVisibility(View.INVISIBLE);
@@ -420,6 +457,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 //        mLoveBtn.setVisibility(View.INVISIBLE);
         mSympathyBtn.setVisibility(View.INVISIBLE);
         mSkipBtn.setVisibility(View.INVISIBLE);
+        mPrevBtn.setVisibility(View.INVISIBLE);
         mProfileBtn.setVisibility(View.INVISIBLE);
         mChatBtn.setVisibility(View.INVISIBLE);
         mDatingLoveBtnLayout.setVisibility(View.INVISIBLE);
@@ -434,6 +472,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 //        mLoveBtn.setVisibility(View.VISIBLE);
         mSympathyBtn.setVisibility(View.VISIBLE);
         mSkipBtn.setVisibility(View.VISIBLE);
+        mPrevBtn.setVisibility(View.VISIBLE);
         mProfileBtn.setVisibility(View.VISIBLE);
         mChatBtn.setVisibility(View.VISIBLE);
         mDatingLoveBtnLayout.setVisibility(View.VISIBLE);

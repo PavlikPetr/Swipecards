@@ -25,7 +25,7 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="#000000" >
+            android:background="@drawable/im_feeds_bg">
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -36,22 +36,22 @@
             	<ImageView 
             	    android:layout_width="wrap_content"
             	    android:layout_height="wrap_content"
-            	    android:src="@drawable/dashbrd_chat_pressed"
+            	    android:src="@drawable/dialogs_back_icon"
             	    android:layout_gravity="center_horizontal"/>
             	
 	            <TextView
 	                android:id="@+id/tvBackgroundText"
 	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"              
+	                android:layout_height="wrap_content"    
 	                android:layout_gravity="center_horizontal"
 	                android:singleLine="true"
 	                style="@style/BackgroundFont"/>
             </LinearLayout>
-
+            
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <com.topface.topface.ui.p2r.PullToRefreshListView
                     android:id="@+id/lvInboxList"
@@ -69,24 +69,8 @@
                     android:layout_height="wrap_content"
                     android:visibility="visible" />
             </LinearLayout>
+            
         </RelativeLayout>
     </LinearLayout>
-
-    <com.topface.topface.ui.views.LockerView
-        android:id="@+id/llvInboxLoading"
-        style="@style/LoadingLocker"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone" />
-
-    <!--
-      ProgressBar
-      android:id="@+id/prsInboxLoading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" /
-    -->
 
 </RelativeLayout>

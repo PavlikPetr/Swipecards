@@ -74,6 +74,8 @@ public class UserProfileActivity extends FragmentActivity {
     public static final int F_ACTIONS = 3;
     public static final int F_COUNT = F_ACTIONS+1;
     
+    public static final int GIFTS_LOAD_COUNT = 30;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

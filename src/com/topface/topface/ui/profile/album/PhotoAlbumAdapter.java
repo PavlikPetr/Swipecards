@@ -115,7 +115,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         Thread t = new Thread() {
             @Override
             public void run() {
-                HashMap<String, String> photo = mPhotoLinks.get(position);
+                HashMap<String, String> photo = mPhotoLinks.get(mPhotoLinks.keyAt(position));
                 Bitmap bitmap = Http.bitmapLoader((String)photo.values().toArray()[0]);
                 if (bitmap == null || mCache == null)
                     return;

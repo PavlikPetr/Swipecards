@@ -69,8 +69,8 @@ public class DialogListAdapter extends LoadingListAdapter {
     @Override
     public int getItemViewType(int position) {
     	int typeOfSuperMethod = super.getItemViewType(position); 
-    	if (typeOfSuperMethod == T_NONE) {
-    		return mAvatarManager.get(position).city_id == mOwnerCityID ? T_CITY : T_ALL;
+    	if (typeOfSuperMethod == T_OTHER) {
+    		return mAvatarManager.get(position).city_id == mOwnerCityID ? T_CITY : T_OTHER;
     	} else {
     		return typeOfSuperMethod;
     	}
@@ -82,7 +82,7 @@ public class DialogListAdapter extends LoadingListAdapter {
 
         int type = getItemViewType(position);
 
-        if (type == T_LOADER) {        	        	        	
+        if (type == T_LOADER) {
         	mLoaderRetrierProgress.setVisibility(View.VISIBLE);
         	mLoaderRetrierText.setVisibility(View.INVISIBLE);
         	return mLoaderRetrier;

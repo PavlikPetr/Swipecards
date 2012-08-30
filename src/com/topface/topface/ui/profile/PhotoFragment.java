@@ -49,13 +49,7 @@ public class PhotoFragment extends Fragment {
     
     @Override
     public void onStart() {
-        super.onStart();
-        if(mPhotoLinks != null && mPhotoLinks.size() >= 0) {
-            mTitle.setText(mPhotoLinks.size() + " фотографий");
-            mTitle.setVisibility(View.VISIBLE);
-        } else {
-            mTitle.setVisibility(View.INVISIBLE);  
-        }
+        super.onStart();        
     }
     
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
@@ -75,6 +69,13 @@ public class PhotoFragment extends Fragment {
         if(mUserGridAdapter != null) {
           mUserGridAdapter.setUserData(user.photoLinks);
           mUserGridAdapter.notifyDataSetChanged();
+        }
+        
+        if(mPhotoLinks != null && mPhotoLinks.size() >= 0) {
+            mTitle.setText(mPhotoLinks.size() + " фотографий");
+            mTitle.setVisibility(View.VISIBLE);
+        } else {
+            mTitle.setVisibility(View.INVISIBLE);  
         }
     }
 }
