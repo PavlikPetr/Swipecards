@@ -2,10 +2,8 @@ package com.topface.topface.ui.fragments;
 
 import java.util.LinkedList;
 
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.Dialog;
 import com.topface.topface.data.FeedGifts;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
@@ -16,7 +14,6 @@ import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.GiftsAdapter;
-import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.profile.UserProfileActivity;
@@ -33,7 +30,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -66,9 +62,10 @@ public class GiftsFragment extends BaseFragment {
 	private LinkedList<Gift> mGifts = new LinkedList<Gift>();
 
 	// TODO Data giftsList remove
-
+	
 	@Override
 	public void onAttach(Activity activity) {
+        super.onAttach(activity);
 		if (activity instanceof UserProfileActivity) {
 			mUser = ((UserProfileActivity) activity).mUser;
 			mTag = GIFTS_PROFILE_TAG;
@@ -85,13 +82,12 @@ public class GiftsFragment extends BaseFragment {
 		} else if (activity instanceof GiftsActivity) {
 			mTag = GIFTS_ALL_TAG;
 			mGalleryManager = new GiftGalleryManager<Gift>(getActivity().getApplicationContext(), mGifts, null);
+		} else {
+		    mGalleryManager = new GiftGalleryManager<Gift>(getActivity().getApplicationContext(), mGifts, null);     
 		}
-				
-		mGridAdapter = new GiftsAdapter(activity.getApplicationContext(), mGalleryManager);		
-		super.onAttach(activity);
 	}
 
-	@Override
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_grid, null);		
 

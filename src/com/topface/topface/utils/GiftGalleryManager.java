@@ -36,9 +36,11 @@ public class GiftGalleryManager<T extends AbstractDataWithPhotos> implements OnS
     public boolean mBusy = false;
     private Handler mHandler;
     //---------------------------------------------------------------------------
-    public GiftGalleryManager(Context context,LinkedList<T> dataList, Handler handler) {
+    public GiftGalleryManager(Context context, LinkedList<T> dataList, Handler handler) {
     	mHandler = handler;
         mDataList = dataList;
+        if(mDataList == null)
+            mDataList = new LinkedList<T>();
         mMemoryCache = new MemoryCache();
         mStorageCache = new StorageCache(context, StorageCache.INTERNAL_FILES);
         mWorker = Executors.newFixedThreadPool(3);
