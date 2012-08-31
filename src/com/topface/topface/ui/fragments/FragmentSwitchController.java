@@ -66,7 +66,6 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 		mMinimumVelocity = 10*configuration.getScaledMinimumFlingVelocity();
 		mVelocitySlop = configuration.getScaledMinimumFlingVelocity();
 		mTouchSlop = ViewConfiguration.getTouchSlop();
-		int c =0; c++;
 	}
 
 	@Override
@@ -84,9 +83,6 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 				getChildAt(0).getMeasuredHeight());
 		getChildAt(1).layout(0, 0, getChildAt(1).getMeasuredWidth(),
 				getChildAt(1).getMeasuredHeight());
-
-		int x = mFragmentMenu.getView().getMeasuredWidth();
-
 		mWidth = getChildAt(1).getWidth();
 		mDX = mWidth - (mWidth / 100 * 20);
 		mFDX = mWidth - mDX;

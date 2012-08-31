@@ -156,9 +156,32 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         mBtnSettings.setClickable(clickable);
     }
     
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void setSelectedMenu(int fragmentId) {
+        switch (fragmentId) {
+            case R.id.fragment_profile:  //btnFragmentProfile
+                mBtnProfile.setSelected(true);
+                break;
+            case R.id.fragment_dating:   //btnFragmentDating
+                mBtnDating.setSelected(true);
+                break;
+            case R.id.fragment_likes:    //btnFragmentLikes
+                mBtnLikes.setSelected(true);
+                break;
+            case R.id.fragment_mutual:   //btnFragmentMutual
+                mBtnMutual.setSelected(true);
+                break;
+            case R.id.fragment_dialogs:  //btnFragmentDialogs
+                mBtnDialogs.setSelected(true);
+                break;
+            case R.id.fragment_tops:     //btnFragmentTops
+                mBtnTops.setSelected(true);
+                break;
+            case R.id.fragment_settings: //btnFragmentSettings
+                mBtnSettings.setSelected(true);
+                break; 
+            default:
+                break;
+        }
     }
 
 }

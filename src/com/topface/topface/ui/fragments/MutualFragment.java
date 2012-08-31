@@ -184,7 +184,7 @@ public class MutualFragment extends BaseFragment {
         mListView.setAdapter(mListAdapter);
         
         mNewUpdating = CacheProfile.unread_mutual > 0 ? true : false;
-        CacheProfile.unread_mutual = 0;
+        //CacheProfile.unread_mutual = 0;
         return view;
     }
 

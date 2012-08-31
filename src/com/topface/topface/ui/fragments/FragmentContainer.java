@@ -18,25 +18,32 @@ public class FragmentContainer {
     public FragmentContainer(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
         
-        mProfileFragment = new ProfileFragment();        
+        mProfileFragment = new ProfileFragment();
+        mProfileFragment.setId(R.id.fragment_profile);
         fragmentManager.beginTransaction().add(R.id.fragment_profile, mProfileFragment).hide(mProfileFragment).commit();
         
         mDatingFragment = new DatingFragment();
+        mDatingFragment.setId(R.id.fragment_dating);
         fragmentManager.beginTransaction().add(R.id.fragment_dating, mDatingFragment).hide(mDatingFragment).commit();
         
         mLikesFragment = new LikesFragment();
+        mLikesFragment.setId(R.id.fragment_likes);
         fragmentManager.beginTransaction().add(R.id.fragment_likes, mLikesFragment).hide(mLikesFragment).commit();
         
         mMutualFragment = new MutualFragment();
+        mMutualFragment.setId(R.id.fragment_mutual);
         fragmentManager.beginTransaction().add(R.id.fragment_mutual, mMutualFragment).hide(mMutualFragment).commit();
         
         mDialogsFragment = new DialogsFragment();
+        mDialogsFragment.setId(R.id.fragment_dialogs);
         fragmentManager.beginTransaction().add(R.id.fragment_dialogs, mDialogsFragment).hide(mDialogsFragment).commit();
         
         mTopsFragment = new TopsFragment();
+        mTopsFragment.setId(R.id.fragment_tops);
         fragmentManager.beginTransaction().add(R.id.fragment_tops, mTopsFragment).hide(mTopsFragment).commit();
         
         mSettingsFragment = new SettingsFragment();
+        mSettingsFragment.setId(R.id.fragment_settings);
         fragmentManager.beginTransaction().add(R.id.fragment_settings, mSettingsFragment).hide(mSettingsFragment).commit();
     }
     
@@ -94,6 +101,10 @@ public class FragmentContainer {
     public void update() {
         BaseFragment fragment = (BaseFragment)mFragmentManager.findFragmentById(mCurrentFragmentId);
         update(fragment);
+    }
+    
+    public int getCurrentFragmentId() {
+        return mCurrentFragmentId;
     }
 }
 

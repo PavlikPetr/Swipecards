@@ -3,33 +3,36 @@ package com.topface.topface.ui.fragments;
 import java.util.LinkedList;
 
 import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Banner;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.http.IRequestClient;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 public abstract class BaseFragment extends Fragment implements IRequestClient{
-	
-    protected boolean mIsActive;
+
     public boolean isFilled;
     public boolean isForcedUpdate;
+    protected boolean mIsActive;
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
+    private int mFragmentId;
 
     abstract public void fillLayout();
     abstract public void clearLayout();
@@ -41,6 +44,10 @@ public abstract class BaseFragment extends Fragment implements IRequestClient{
     protected void updateUI(Runnable action) {
         //if (mIsActive)
             getActivity().runOnUiThread(action);
+    }
+    
+    public void setId(int fragmentId) {
+        mFragmentId = fragmentId;
     }
 
     public void updateBanner(final ImageView bannerView,final String bannerRequestName) {
@@ -83,81 +90,31 @@ public abstract class BaseFragment extends Fragment implements IRequestClient{
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Debug.log("onAttach:1");
+        if(activity instanceof NavigationActivity) {
+            int lastFragmentId = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE)
+                                         .getInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, R.id.fragment_profile);
+            if(mFragmentId == lastFragmentId)
+              ((NavigationActivity)activity).setSelectedMenu(mFragmentId);
+        }
     }
     
-    @Override
-    public void onCreate(Bundle saved) {
-        super.onCreate(saved);
-        Debug.log("onCreate:2");
-    }
-    
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        Debug.log("onCreateView:3");
-        return null;
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Debug.log("onActivityCreated:4");
-//        if(isForcedUpdate) {
-//            fillLayout();
-//            isForcedUpdate = false;
-//            isFilled = true;
-//        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Debug.log("onStart:5");
-    }
-    
-    @Override
-    public void onResume() {
-        super.onResume();
-        Debug.log("onResume:6");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Debug.log("onPause:7");
-    }
-    
-    @Override
-    public void onStop() {
-        super.onStop();
-        Debug.log("onStop:8");
-    }
-
-    @Override
-    public void onDestroyView() {
-         super.onDestroyView();
-         Debug.log("onDestroyView:9");
+        if(isForcedUpdate) {
+            fillLayout();
+            isForcedUpdate = false;
+            isFilled = true;
+        }
     }
 
     @Override
     public void onDestroy() {
-         super.onDestroy();
-         for (ApiRequest request : mRequests) {
-        	 request.cancel();        	 
-         }         
-         mRequests.clear();
-         Debug.log("onDestroyView:10");
-    }
-    
-    @Override
-    public void onDetach() {
-         super.onDetach();
-         Debug.log("onDetach:11");
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle toSave) {
-
+        super.onDestroy();
+        for (ApiRequest request : mRequests) {
+            request.cancel();        	 
+        }         
+        mRequests.clear();
     }
     
     @Override

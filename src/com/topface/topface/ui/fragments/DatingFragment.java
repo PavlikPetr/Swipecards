@@ -208,6 +208,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     hideControls();
             }
         });
+        
+        int z = CacheProfile.unread_likes;
 
         return view;
     }

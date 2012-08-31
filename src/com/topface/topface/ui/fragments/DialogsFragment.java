@@ -189,8 +189,7 @@ public class DialogsFragment extends BaseFragment {
 		mListView.setAdapter(mListAdapter);
 
 		mHasUnread = CacheProfile.unread_messages > 0 ? true : false;
-		CacheProfile.unread_messages = 0;
-
+		//CacheProfile.unread_messages = 0;
 		return view;
 	}
 

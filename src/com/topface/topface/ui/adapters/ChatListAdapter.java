@@ -360,7 +360,7 @@ public class ChatListAdapter extends BaseAdapter {
 		int position = mDataList.size() - 1;
 		History prevHistory = null;
 		if (position >= 0) {
-			prevHistory = mDataList.get(mDataList.size() - 1);
+			prevHistory = mDataList.getLast(); //get(mDataList.size() - 1);
 		}
 
 		if (msg.type == Dialog.MESSAGE) {
@@ -368,18 +368,18 @@ public class ChatListAdapter extends BaseAdapter {
 				mItemLayoutList.add(T_USER_PHOTO);
 			} else {
 				if (prevHistory.target == Dialog.USER_MESSAGE)
-					mItemLayoutList.add(T_USER_PHOTO);
-				else
 					mItemLayoutList.add(T_USER_EXT);
+				else
+					mItemLayoutList.add(T_USER_PHOTO);
 			}
 		} else if (msg.type == Dialog.GIFT) {
 			if (prevHistory == null)
 				mItemLayoutList.add(T_USER_GIFT_PHOTO);
 			else {
 				if (prevHistory.target == Dialog.USER_MESSAGE)
-					mItemLayoutList.add(T_USER_GIFT_PHOTO);
+                    mItemLayoutList.add(T_USER_GIFT_EXT);
 				else
-					mItemLayoutList.add(T_USER_GIFT_EXT);
+                    mItemLayoutList.add(T_USER_GIFT_PHOTO);
 			}
 
 		} else if (msg.type == Dialog.MAP) {
@@ -387,9 +387,10 @@ public class ChatListAdapter extends BaseAdapter {
 				mItemLayoutList.add(T_USER_MAP_PHOTO);
 			else {
 				if (prevHistory.target == Dialog.USER_MESSAGE)
-					mItemLayoutList.add(T_USER_MAP_PHOTO);
+                    mItemLayoutList.add(T_USER_MAP_EXT);
 				else
-					mItemLayoutList.add(T_USER_MAP_EXT);
+                    mItemLayoutList.add(T_USER_MAP_PHOTO);
+
 			}
 		}
 

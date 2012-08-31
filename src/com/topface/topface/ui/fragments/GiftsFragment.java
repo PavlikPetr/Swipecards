@@ -65,26 +65,26 @@ public class GiftsFragment extends BaseFragment {
 	
 	@Override
 	public void onAttach(Activity activity) {
+        if (activity instanceof UserProfileActivity) {
+            mUser = ((UserProfileActivity) activity).mUser;
+            mTag = GIFTS_PROFILE_TAG;
+            setGifts(Gift.parse(mUser));
+            mGalleryManager = new GiftGalleryManager<Gift>(activity.getApplicationContext(), mGifts,
+                    new Handler(){
+                        @Override
+                        public void handleMessage(Message msg) {
+                            if (mGifts.getLast().isLoader()){
+                                onNewFeeds();
+                            };
+                        }
+                    });         
+        } else {
+            mTag = GIFTS_ALL_TAG;
+            mGalleryManager = new GiftGalleryManager<Gift>(getActivity().getApplicationContext(), mGifts, null);
+        }
+                
+        mGridAdapter = new GiftsAdapter(activity.getApplicationContext(), mGalleryManager);     
         super.onAttach(activity);
-		if (activity instanceof UserProfileActivity) {
-			mUser = ((UserProfileActivity) activity).mUser;
-			mTag = GIFTS_PROFILE_TAG;
-			setGifts(Gift.parse(mUser));
-			mGalleryManager = new GiftGalleryManager<Gift>(activity.getApplicationContext(), mGifts,
-					new Handler(){
-				@Override
-				public void handleMessage(Message msg) {
-					if (mGifts.getLast().isLoader()){
-						onNewFeeds();
-					};
-				}
-			});			
-		} else if (activity instanceof GiftsActivity) {
-			mTag = GIFTS_ALL_TAG;
-			mGalleryManager = new GiftGalleryManager<Gift>(getActivity().getApplicationContext(), mGifts, null);
-		} else {
-		    mGalleryManager = new GiftGalleryManager<Gift>(getActivity().getApplicationContext(), mGifts, null);     
-		}
 	}
 
     @Override

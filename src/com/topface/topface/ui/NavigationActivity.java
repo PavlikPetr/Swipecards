@@ -1,13 +1,17 @@
 package com.topface.topface.ui;
 
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.FragmentContainer;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.ui.fragments.FragmentMenu;
 import com.topface.topface.utils.AuthorizationManager;
 import com.topface.topface.utils.Debug;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
 import android.view.View;
 //import android.widget.Button;
 
@@ -17,13 +21,14 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 	private FragmentMenu mFragmentMenu;
 	private FragmentContainer mFragmentContainer; // занимается переключением фрагментов
 	private FragmentSwitchController mSwitchController; // занимается анимацией слоя с фрагментами
+	private SharedPreferences mPreferences;
 	//private Button mHomeButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_navigation);
-		Debug.log(this, "onCreate");		
+		Debug.log(this, "onCreate");
 		
 		AuthorizationManager.getInstance(this).extendAccessToken();
 		
@@ -40,14 +45,26 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 		mSwitchController = (FragmentSwitchController) findViewById(R.id.frameAnimation);
 		mSwitchController.setFragmentSwitchListener(mFragmentSwitchListener);
 		mSwitchController.setFragmentMenu(mFragmentMenu);
+		
+        // Preferences
+        mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        int lastFragmentId = mPreferences.getInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, R.id.fragment_profile);
 
-		// last opened
-		//mFragmentContainer.showFragment(R.id.fragment_tops, true);
+		// last opened fragment
+		mFragmentContainer.showFragment(lastFragmentId, true);
 		
 //		mHomeButton = ((Button) findViewById(R.id.btnHeaderHome));
 //		mHomeButton.setOnClickListener(mOnHomeClickListener);		
 	}
 	
+    @Override
+    protected void onDestroy() {
+        mPreferences.edit()
+            .putInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, mFragmentContainer.getCurrentFragmentId())
+            .commit();
+        super.onDestroy();
+    }
+
     @Override
     public void onClick(View view) {
         if(view.getId() != R.id.btnNavigationHome)
@@ -58,6 +75,10 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
             mFragmentMenu.refreshNotifications();
             mSwitchController.openMenu();
         }        
+    }
+    
+    public void setSelectedMenu(int fragmentId) {
+        mFragmentMenu.setSelectedMenu(fragmentId);
     }
 
 	@Override
@@ -71,6 +92,19 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 			super.onBackPressed();
 		}
 	}
+	
+    @Override
+    public boolean onCreatePanelMenu(int featureId,Menu menu) {
+        if (mSwitchController.getAnimationState() == FragmentSwitchController.CLOSED
+                || mSwitchController.getAnimationState() == FragmentSwitchController.COLLAPSE_FULL
+                || mSwitchController.getAnimationState() == FragmentSwitchController.COLLAPSE) {
+            mFragmentMenu.refreshNotifications();
+            mSwitchController.openMenu();
+        } else if(mSwitchController.getAnimationState() == FragmentSwitchController.EXPAND) {
+            mSwitchController.closeMenu();
+        }
+        return false;
+    }
 
 	FragmentMenu.FragmentMenuListener mOnMenuListener = new FragmentMenu.FragmentMenuListener() {
 		@Override

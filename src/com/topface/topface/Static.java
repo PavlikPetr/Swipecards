@@ -25,6 +25,7 @@ public class Static {
     public static final String PREFERENCES_TOPS_CITY_ID = "tops_city_id";
     public static final String PREFERENCES_TOPS_CITY_NAME = "tops_city_name";
     public static final String PREFERENCES_TOPS_CITY_POS = "tops_city_pos";
+    public static final String PREFERENCES_NAVIGATION_LAST_FRAGMENT = "navigation_last_fragment";
     public static final String PREFERENCES_NEWBIE_DASHBOARD_PROFILE = "newbie_dashboard_profile";
     public static final String PREFERENCES_NEWBIE_DASHBOARD_DATING = "newbie_dashboard_dating";
     public static final String PREFERENCES_NEWBIE_DASHBOARD_LIKES = "newbie_dashboard_likes";

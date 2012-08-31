@@ -83,9 +83,9 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
     public void getImage(final int position,final ImageView imageView) {
         Bitmap bitmap = mMemoryCache.get(position);
 
-        if (bitmap != null)
+        if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
-        else {
+        } else {
             imageView.setImageBitmap(null); // хз ??
             if (!mBusy) {
                 bitmap = mStorageCache.load(mDataList.get(position).getLargeLink());

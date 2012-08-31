@@ -163,7 +163,6 @@ public class GiftGalleryManager<T extends AbstractDataWithPhotos> implements OnS
                 view.invalidateViews(); //  РџР РђР’Р�Р›Р¬РќРћ ???
                 break;
         }
-        mBusy = false;
     }
     //---------------------------------------------------------------------------
 }
