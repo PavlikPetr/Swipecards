@@ -20,15 +20,16 @@
     <string name="auth_btn_fb">Login via Facebook</string>
     
     <!-- Topface (Dashboard) Activity -->
+    <string name="dashbrd_btn_profile">Profile</string>
     <string name="dashbrd_btn_dating">Rating photos</string>
     <string name="dashbrd_btn_likes">Likes you</string>
     <string name="dashbrd_btn_chat">My messages</string>
     <string name="dashbrd_btn_tops">Most popular</string>
-    <string name="dashbrd_btn_profile">Profile</string>
     <string name="dashbrd_btn_settings">Settings</string>
     <string name="dashbrd_btn_sympathy">Sympathy</string>
     <string name="dashbrd_btn_love">Delight</string>
     <string name="dashbrd_btn_skip">Next</string>
+    <string name="dashbrd_btn_prev">Previous</string>
     <string name="dashbrd_popup_rating">Did you like our application? Raise our rating! The higher rating the more people you will meet in Topface"</string>
     <string name="dashbrd_popup_title">RATE ME</string>
     <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
@@ -199,6 +200,10 @@
     <string name="map_search">Search</string>
     <string name="map_location_progress">Locating</string>
     <string name="map_confirm">Send</string>
-    <string name="map_address">Enter address</string>    
+    <string name="map_address">Enter address</string>   
+    
+    <!--  Navigation Header -->
+    <string name="navigation_back_profile">Profile</string>
+    <string name="navigation_back">Back</string>
   
 </resources>

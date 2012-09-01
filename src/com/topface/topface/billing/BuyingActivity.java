@@ -61,7 +61,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         Debug.log(this, "+onCreate");
 
         // Title Header
-        ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.buying_header_title));
+        ((TextView)findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.buying_header_title));
 
         // Resources
         mResourcesPower = (TextView)findViewById(R.id.tvResourcesPower);

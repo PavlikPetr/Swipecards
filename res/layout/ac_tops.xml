@@ -3,56 +3,59 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/im_list_bkgrd" >
-    
-	<LinearLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:orientation="vertical" >
-	    
-	  <!-- header bar -->
-	  <include layout="@layout/bar_navigation_header" />
-	       
-	  <!-- button bar -->
-	  <include layout="@layout/bar_tops_button" />
-	  
-	  <!-- gallary -->
-	  <GridView
-	    android:id="@+id/grdTopsGallary"
-	    android:layout_width="fill_parent"
-	    android:layout_height="0dip"
-	    android:listSelector="@android:color/transparent"
-	    android:layout_weight="1"
-	    android:fadingEdge="none"
-	    android:horizontalSpacing="0px"
-	    android:verticalSpacing="0px"
-	    android:layout_margin="0px"
-	    android:padding="0px"
-	    android:fadeScrollbars="true" 
-	    android:background="@android:color/transparent" >
-	  </GridView>
-	  
+
+    <!-- header bar -->
+    <FrameLayout
+        android:id="@+id/loNavigationBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/bar_navigation_header" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/loNavigationBar"
+        android:orientation="vertical" >
+
+        <!-- button bar -->
+        <include layout="@layout/bar_tops_button" />
+
+        <!-- gallery -->
+        <GridView
+            android:id="@+id/grdTopsGallary"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_margin="0px"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:fadeScrollbars="true"
+            android:fadingEdge="none"
+            android:horizontalSpacing="0px"
+            android:listSelector="@android:color/transparent"
+            android:padding="0px"
+            android:verticalSpacing="0px" >
+        </GridView>
+
+        <ImageView
+            android:id="@+id/ivBanner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <com.topface.topface.ui.views.LockerView
+        android:id="@+id/llvTopsLoading"
+        style="@style/LoadingLocker"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone" />
+
     <ImageView
-        android:id="@+id/ivBanner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible" />
-	  
-	</LinearLayout>
-	
-	<com.topface.topface.ui.views.LockerView
-	    android:id="@+id/llvTopsLoading"
-		android:layout_width="fill_parent"	
-		android:layout_height="fill_parent"
-		style="@style/LoadingLocker"	
-		android:visibility="gone"	
-	    />
-	
-	<!-- ProgressBar
-      android:id="@+id/prsTopsLoading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" /-->
+        android:layout_below="@id/loNavigationBar"
+        android:src="@drawable/im_bar_header_shadow" />
 
 </RelativeLayout>

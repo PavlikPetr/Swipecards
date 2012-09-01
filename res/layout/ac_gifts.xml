@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <include layout="@layout/bar_header" />
+        <include layout="@layout/bar_navigation_header" />
 
         <include layout="@layout/bar_triple_btn" />
     </LinearLayout>

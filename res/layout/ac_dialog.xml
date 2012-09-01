@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/loNavigationBar" >
             <include layout="@layout/bar_navigation_header" />
-    </FrameLayout>
-
+    </FrameLayout>    
+    
     <LinearLayout
         android:id="@+id/loControlsGroup"
         android:layout_below="@id/loNavigationBar"
@@ -71,6 +71,12 @@
             </LinearLayout>
             
         </RelativeLayout>
-    </LinearLayout>
-
+    </LinearLayout>    
+    
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loNavigationBar"
+        android:src="@drawable/im_bar_header_shadow"/>
+    
 </RelativeLayout>

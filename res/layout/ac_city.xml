@@ -11,7 +11,7 @@
 	    android:orientation="vertical" >
 	    
 	  <!-- header bar -->
-	  <include layout="@layout/bar_header" />
+	  <include layout="@layout/bar_navigation_header" />
 	    
 	  <EditText
 	      android:id="@+id/etCityInput"

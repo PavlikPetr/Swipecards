@@ -1,5 +1,7 @@
 package com.topface.topface.utils;
 
+import com.topface.topface.Static;
+
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -21,7 +23,7 @@ public class SwapAnimation extends Animation {
             throw new NullPointerException();
         
         mStartY = mAnimatedView.getPaddingTop();
-        mEndY = (mStartY == 0 ? (0 - mHiddenView.getHeight()) : 0);
+        mEndY = (mStartY == Static.HEADER_SHADOW_SHIFT ? (0 - mHiddenView.getHeight() + Static.HEADER_SHADOW_SHIFT) : Static.HEADER_SHADOW_SHIFT);
     }
 
     @Override

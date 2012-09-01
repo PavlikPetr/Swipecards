@@ -22,7 +22,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-      <include layout="@layout/bar_header" />
+      <include layout="@layout/bar_navigation_header" />
       <TextView
           android:id="@+id/tvEroAlbumMoney"
           android:layout_width="wrap_content"

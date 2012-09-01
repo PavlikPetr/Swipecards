@@ -10,11 +10,16 @@
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent"/>
     
-    <LinearLayout 
+    <LinearLayout        
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent"
         android:orientation="vertical" >
-            <include layout="@layout/bar_navigation_header" />
+	    <FrameLayout 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:id="@+id/loNavigationBar" >
+	            <include layout="@layout/bar_navigation_header" />
+	    </FrameLayout>
             <include layout="@layout/dating_control" /> 
     </LinearLayout>
      
@@ -34,4 +39,10 @@
         android:layout_alignParentTop="true"
         android:visibility="invisible" />
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loNavigationBar"
+        android:src="@drawable/im_bar_header_shadow"/>
+    
 </RelativeLayout>

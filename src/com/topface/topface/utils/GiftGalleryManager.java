@@ -51,8 +51,8 @@ public class GiftGalleryManager<T extends AbstractDataWithPhotos> implements OnS
         
         Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.gift_frame);
         
-        mBitmapWidth = bmp.getWidth()-8;        
-        mBitmapHeight = bmp.getWidth()-8;
+        mBitmapWidth = bmp.getWidth()-2;        
+        mBitmapHeight = bmp.getWidth()-2;
         bmp.recycle();
         bmp = null;
     }

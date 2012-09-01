@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/navigation_menu_item_selector"
                 android:text="@string/dashbrd_btn_settings"
-                android:drawableLeft="@drawable/topface_settings"
+                android:drawableLeft="@drawable/topface_menu_settings"
                 style="@style/LeftMenuButtons"/>
             
         </RelativeLayout>

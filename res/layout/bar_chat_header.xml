@@ -6,24 +6,33 @@
       android:layout_height="wrap_content"  
       android:background="@drawable/im_bar_header" >
       
+      <Button
+            android:id="@+id/btnNavigationBackProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/navigation_back_profile_selector"
+            style="@style/NavigationHeader"
+            android:textStyle="bold"
+            android:textSize="12sp"/>
+      
 	  <TextView
-	      android:id="@+id/tvHeaderTitle"
-	      android:textColor="#FFFFFF"
-	      android:textStyle="bold"
-	      android:layout_width="wrap_content"
-	      android:layout_height="wrap_content"
-	      android:layout_centerInParent="true"  />
+            android:id="@+id/tvNavigationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"            
+            style="@style/NavigationHeader"
+            android:textSize="15sp"/>
 	  
-	  
-	     <Button
-          android:id="@+id/btnHeaderProfile"
-          android:background="@drawable/profile_bar_selector"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:visibility="invisible"
-          android:layout_centerVertical="true"
-          android:layout_alignParentRight="true"
-          android:layout_marginRight="10dp"  />
-
+	  <TextView
+            android:id="@+id/tvNavigationSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tvNavigationTitle"
+            style="@style/NavigationHeader"
+            android:textSize="10sp"/>
   </RelativeLayout>
 </merge>

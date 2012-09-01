@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:drawableTop="@drawable/dating_love_selector"
+                    android:drawableTop="@drawable/dating_delight_selector"
                     android:text="@string/dashbrd_btn_love"
                     />
 
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/dating_sympathy_selector"
+                android:drawableTop="@drawable/dating_mutual_selector"
                 android:text="@string/dashbrd_btn_sympathy" />
 
             <Button
@@ -74,8 +74,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/dating_skip_selector"
-                android:text="@string/dashbrd_btn_skip" />
+                android:drawableTop="@drawable/dating_prev_selector"
+                android:text="@string/dashbrd_btn_prev"/>
             
             <Button
                 android:id="@+id/btnDatingSkip"

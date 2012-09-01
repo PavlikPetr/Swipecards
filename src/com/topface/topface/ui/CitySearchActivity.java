@@ -52,7 +52,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         mNameList = new LinkedList<String>();
 
         // Title Header
-        ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.filter_city));
+        ((TextView)findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.filter_city));
 
         // Progress
         mProgressBar = (ProgressBar)findViewById(R.id.prsCityLoading);

@@ -76,8 +76,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private SharedPreferences mPreferences;
     private RateController mRateController;
     private RelativeLayout mDatingLoveBtnLayout;
-    private View mNavigationHeader;
-    private Button mFilterButton;
+    private View mNavigationHeader;    
+    private Button mSettingsButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -88,10 +88,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Data
         mUserSearchList = new LinkedList<Search>();
         
-        // Header
+        // Navigation Header
+        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
         mNavigationHeader = view.findViewById(R.id.loNavigationBar);
-        mFilterButton = (Button) mNavigationHeader.findViewById(R.id.btnNavigationFilterBar);
-        mFilterButton.setOnClickListener(new OnClickListener() {
+        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_dating));
+        mSettingsButton = (Button) view.findViewById(R.id.btnNavigationSettingsBar);
+        mSettingsButton.setVisibility(View.VISIBLE);
+        mSettingsButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -99,10 +102,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 				startActivityForResult(intent,FilterActivity.INTENT_FILTER_ACTIVITY);
 			}
 		});
-        mFilterButton.setVisibility(View.VISIBLE);
-        
-        // Home Button
-        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
         
         // Rate Controller
         mRateController = new RateController(getActivity());
@@ -152,7 +151,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLoveBtnLayout = (RelativeLayout) view.findViewById(R.id.loDatingLove);
         mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);     
         mDatingLovePrice.measure(0, 0);
-    	int dx = mLoveBtn.getCompoundDrawables()[1].getIntrinsicWidth() - mDatingLovePrice.getMeasuredWidth();
+    	int dx = mLoveBtn.getCompoundDrawables()[1].getIntrinsicWidth() - mDatingLovePrice.getMeasuredWidth()/3;
         int dy = mLoveBtn.getCompoundDrawables()[1].getIntrinsicHeight() - mDatingLovePrice.getMeasuredHeight();
         mDatingLovePrice.setPadding(dx, dy, 0, 0);
         
@@ -305,7 +304,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 Intent intent = new Intent(getActivity(), ChatActivity.class);
                 intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
                 intent.putExtra(ChatActivity.INTENT_USER_URL, mUserSearchList.get(mCurrentUserPos).getSmallLink());                
-                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);                
+                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
+                intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserSearchList.get(mCurrentUserPos).age);
+                intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserSearchList.get(mCurrentUserPos).city_name);
                 startActivity(intent);
             }
                 break;            

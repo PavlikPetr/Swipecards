@@ -7,7 +7,7 @@
     <!-- header bar -->
 
     <FrameLayout
-        android:id="@+id/NavigationBar"
+        android:id="@+id/loNavigationBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
@@ -18,7 +18,7 @@
         android:id="@+id/loControlsGroup"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/NavigationBar"
+        android:layout_below="@id/loNavigationBar"
         android:orientation="vertical" >
 
         <!-- button bar -->
@@ -75,4 +75,10 @@
         </RelativeLayout>
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loNavigationBar"
+        android:src="@drawable/im_bar_header_shadow"/>
+    
 </RelativeLayout>

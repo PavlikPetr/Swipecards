@@ -59,6 +59,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private LinkedList<History> mHistoryList;
     private EditText mEditBox;
     private TextView mHeaderTitle;
+    private TextView mHeaderSubtitle;
     private LockerView mLoadingLocker;
     
     private MessageRequest messageRequest;
@@ -72,6 +73,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_URL = "user_url";
     public static final String INTENT_USER_NAME = "user_name";
+    public static final String INTENT_USER_AGE = "user_age";
+    public static final String INTENT_USER_CITY = "user_city";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
     private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
@@ -90,25 +93,38 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mHistoryList = new LinkedList<History>();
 
         // Swap Control
-        mSwapControl = ((SwapControl)findViewById(R.id.swapFormView));
-
+        mSwapControl = ((SwapControl)findViewById(R.id.swapFormView));        
+        
         // Title Header
-        mHeaderTitle = ((TextView)findViewById(R.id.tvHeaderTitle));
+        mHeaderTitle = ((TextView)findViewById(R.id.tvNavigationTitle));
+        mHeaderSubtitle = ((TextView)findViewById(R.id.tvNavigationSubtitle));
+        mHeaderSubtitle.setVisibility(View.VISIBLE);
 
-        // Progress
+        // Locker
         mLoadingLocker = (LockerView)findViewById(R.id.llvChatLoading);
 
         // Params
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
         mUserAvatarUrl = getIntent().getStringExtra(INTENT_USER_URL);
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
-        mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME));        
+        mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME) + ", " + getIntent().getIntExtra(INTENT_USER_AGE,0));
+        mHeaderSubtitle.setText(getIntent().getStringExtra(INTENT_USER_CITY));
         mAvatarWidth = getResources().getDrawable(R.drawable.chat_avatar_frame).getIntrinsicWidth();
         
-        // Profile Button
-        View btnProfile = findViewById(R.id.btnHeaderProfile);
-        btnProfile.setVisibility(View.VISIBLE);
-        btnProfile.setOnClickListener(this);
+        //NavigationBar
+        (findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        final Button btnBack = (Button)findViewById(R.id.btnNavigationBackProfile);
+        if (mProfileInvoke) {
+        	btnBack.setText(getResources().getString(R.string.navigation_back_profile));
+        } else {
+        	btnBack.setText(getResources().getString(R.string.navigation_back));
+        }
+        btnBack.setVisibility(View.VISIBLE);
+        btnBack.setOnClickListener(this);
+        
+//        View btnProfile = findViewById(R.id.btnHeaderProfile);
+//        btnProfile.setVisibility(View.VISIBLE);
+//        btnProfile.setOnClickListener(this);
 
         // Add Button        
         ((Button)findViewById(R.id.btnChatAdd)).setOnClickListener(this);
@@ -221,6 +237,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             case R.id.btnChatMap: {
             	startActivityForResult(new Intent(this, GeoMapActivity.class), GeoMapActivity.INTENT_REQUEST_GEO);            	
 //                Toast.makeText(ChatActivity.this, "Map", Toast.LENGTH_SHORT).show();
+            } break;
+            case R.id.btnNavigationBackProfile: {
+            	finish();
             } break;
             default: {
                 if (mProfileInvoke) {

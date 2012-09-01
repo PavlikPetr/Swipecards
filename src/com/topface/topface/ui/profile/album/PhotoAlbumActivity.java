@@ -45,10 +45,10 @@ public class PhotoAlbumActivity extends Activity {
         System.gc();
 
         //Header
-        mHeaderBar = (ViewGroup)findViewById(R.id.tvHeaderBar);
+        mHeaderBar = (ViewGroup)findViewById(R.id.loNavigationBar);
 
         // Title Header
-        mCounter = ((TextView)findViewById(R.id.tvHeaderTitle));
+        mCounter = ((TextView)findViewById(R.id.tvNavigationTitle));
 
         // Progress Dialog
         mProgressDialog = new ProgressDialog(this);

@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Recycle;
+import com.topface.topface.Static;
 import com.topface.topface.data.FeedSympathy;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -66,12 +67,12 @@ public class MutualFragment extends BaseFragment {
         // Data
         Data.sympathyList = new LinkedList<FeedSympathy>();
         
-        // Home Button
+        // Navigation Header
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
-
+        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_sympathy));
         mControlsGroup = view.findViewById(R.id.loControlsGroup);
         mToolsBar = view.findViewById(R.id.loToolsBar);
-        mShowToolsBarButton = view.findViewById(R.id.btnNavigationToolsBar);
+        mShowToolsBarButton = view.findViewById(R.id.btnNavigationFilterBar);
         mShowToolsBarButton.setVisibility(View.VISIBLE);
         mShowToolsBarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +85,7 @@ public class MutualFragment extends BaseFragment {
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int y = -mToolsBar.getMeasuredHeight();
+                int y = -mToolsBar.getMeasuredHeight() + Static.HEADER_SHADOW_SHIFT;
                 mControlsGroup.setPadding(mControlsGroup.getPaddingLeft(), y, mControlsGroup.getPaddingRight(), mControlsGroup.getPaddingBottom());
                 if(y>0 || y<0) {
                     ViewTreeObserver obs = mControlsGroup.getViewTreeObserver();

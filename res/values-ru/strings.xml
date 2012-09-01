@@ -28,6 +28,7 @@
     <string name="dashbrd_btn_settings">Настройки</string>
     <string name="dashbrd_btn_love">Восхищение</string>
     <string name="dashbrd_btn_skip">Следующая</string>
+    <string name="dashbrd_btn_prev">Предыдущая</string>
     
     <!-- Likes Activity -->
     <string name="likes_header_title">Я нравлюсь</string>
@@ -195,4 +196,7 @@
     <string name="map_confirm">Отпр.</string>
     <string name="map_address">Введите адрес</string>
     
+    <!--  Navigation Header -->
+    <string name="navigation_back_profile">Профиль</string>
+    <string name="navigation_back">Назад</string>
 </resources>
