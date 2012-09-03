@@ -179,7 +179,7 @@ public class LikesFragment extends BaseFragment {
 		mListView.setAdapter(mListAdapter);
 
 		mNewUpdating = CacheProfile.unread_likes > 0 ? true : false;
-		//CacheProfile.unread_likes = 0;
+
 		return view;
 	}
 
@@ -203,6 +203,7 @@ public class LikesFragment extends BaseFragment {
 				updateUI(new Runnable() {
 					@Override
 					public void run() {
+					    CacheProfile.unread_likes = 0;
 						if (mNewUpdating) {
 							if (FeedLike.unread_count > 0) {
 								Data.likesList.add(new FeedLike(

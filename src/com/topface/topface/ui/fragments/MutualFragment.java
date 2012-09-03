@@ -19,7 +19,6 @@ import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -185,7 +184,7 @@ public class MutualFragment extends BaseFragment {
         mListView.setAdapter(mListAdapter);
         
         mNewUpdating = CacheProfile.unread_mutual > 0 ? true : false;
-        //CacheProfile.unread_mutual = 0;
+
         return view;
     }
 
@@ -209,6 +208,7 @@ public class MutualFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
+                        CacheProfile.unread_mutual = 0;
                     	if (mNewUpdating) {
                      		if (FeedSympathy.unread_count > 0) {
                      			Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.LOADER));

@@ -16,9 +16,8 @@ import android.widget.Scroller;
 
 public class FragmentSwitchController extends ViewGroup implements View.OnClickListener {
 	private int mScrollX;
-	private int mPrevX;
-	private int mDX;
-	private int mFDX;
+	private int mOpenDX;
+	private int mFullOpenDX;
 	private int mWidth;
 	private int mAnimation;
 	private Scroller mScroller;
@@ -27,8 +26,9 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 	
 	private int mMinimumVelocity;
 	private int mVelocitySlop;
-
 	private boolean mAutoScrolling = false;
+	
+	public static final int EXPANDING_PERCENT = 30;
 
 	public void setFragmentMenu(FragmentMenu fragmentMenu) {
 		mFragmentMenu = fragmentMenu;
@@ -83,10 +83,14 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 				getChildAt(0).getMeasuredHeight());
 		getChildAt(1).layout(0, 0, getChildAt(1).getMeasuredWidth(),
 				getChildAt(1).getMeasuredHeight());
+		
 		mWidth = getChildAt(1).getWidth();
-		mDX = mWidth - (mWidth / 100 * 20);
-		mFDX = mWidth - mDX;
-		mScrollingDistanceThreshold = mWidth/6; 
+		mOpenDX = mWidth - (mWidth / 100 * EXPANDING_PERCENT);
+		mFullOpenDX = mWidth - mOpenDX;
+		mScrollingDistanceThreshold = mWidth / 6;
+		
+	    mFragmentMenu.setNotificationMargin(mOpenDX/100*90);
+	    mFragmentMenu.refreshNotifications();
 	}
 
 	private int getLeftBound() {
@@ -94,7 +98,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 	}
 	
 	private int getRightBound() {
-		return mDX;
+		return mOpenDX;
 	}
 	
 	@Override
@@ -123,7 +127,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 			mScroller.startScroll(-getRightBound(), 0, getRightBound(), 0, 300);
 			break;
 		case EXPAND_FULL:
-			mScroller.startScroll(-getRightBound(), 0, -(mFDX), 0, 300);
+			mScroller.startScroll(-getRightBound(), 0, -(mFullOpenDX), 0, 300);
 			break;
 		case COLLAPSE_FULL:
 			mScroller.startScroll(-mWidth, 0, mWidth, 0, 300);
@@ -157,7 +161,6 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 			mScroller.abortAnimation();
 			int oldX = getScrollX();
 			int x = mScroller.getCurrX();
-			mPrevX = x;
 			if (oldX != x) {
 				scrollTo(x, 0);
 			}
@@ -286,7 +289,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 					newXScroll = -getRightBound();
 				}
 				
-				scrollTo((int)newXScroll, getScrollY());			
+				scrollTo((int)newXScroll, getScrollY());
 			}
 			break;
 		case MotionEvent.ACTION_UP:

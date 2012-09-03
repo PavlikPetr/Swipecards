@@ -83,11 +83,6 @@ public class CacheProfile {
         updateCity(profile);
         updateDating(profile);
         updateNotifications(profile);
-        
-        CacheProfile.unread_likes = 1;
-        CacheProfile.unread_mutual = 2;
-        CacheProfile.unread_messages = 3;
-
 //        isNewbie = profile.isNewbie;
     }
     //---------------------------------------------------------------------------

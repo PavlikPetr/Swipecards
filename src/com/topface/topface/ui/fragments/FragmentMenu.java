@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class FragmentMenu extends Fragment implements View.OnClickListener {
@@ -62,8 +64,8 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         //mRootLayout.setVisibility(View.INVISIBLE);
         
         mButtons = new Button[]{mBtnProfile, mBtnDating, mBtnLikes, mBtnMutual, mBtnDialogs, mBtnTops, mBtnSettings};
-        
-        
+
+        // Notifications
         mTvNotifyLikes = (TextView)mRootLayout.findViewById(R.id.tvNotifyLikes);
         mTvNotifyMutual = (TextView)mRootLayout.findViewById(R.id.tvNotifyMutual);
         mTvNotifyDialogs = (TextView)mRootLayout.findViewById(R.id.tvNotifyDialogs);
@@ -183,5 +185,15 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
                 break;
         }
     }
-
+    
+    public void setNotificationMargin(int padding) {
+        LayoutParams lp = mTvNotifyLikes.getLayoutParams();
+        if(lp instanceof RelativeLayout.LayoutParams) {
+            ((RelativeLayout.LayoutParams)lp).leftMargin = padding;
+            mTvNotifyLikes.setLayoutParams(lp);
+            mTvNotifyMutual.setLayoutParams(lp);
+            mTvNotifyDialogs.setLayoutParams(lp);
+            //mTvNotifyLikes.requestLayout();
+        }
+    }
 }

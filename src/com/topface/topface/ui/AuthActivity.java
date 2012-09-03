@@ -103,6 +103,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 	protected void onActivityResult(int requestCode,int resultCode,Intent data) {		
 		super.onActivityResult(requestCode, resultCode, data);
 		mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
+		hideButtons();
 	}
 	
 	@Override

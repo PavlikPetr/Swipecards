@@ -190,7 +190,7 @@ public class DialogsFragment extends BaseFragment {
 		mListView.setAdapter(mListAdapter);
 
 		mHasUnread = CacheProfile.unread_messages > 0 ? true : false;
-		//CacheProfile.unread_messages = 0;
+
 		return view;
 	}
 
@@ -218,6 +218,7 @@ public class DialogsFragment extends BaseFragment {
 				updateUI(new Runnable() {
 					@Override
 					public void run() {
+					    CacheProfile.unread_messages = 0;
 						// if (mNewUpdating)
 						// mFooterView.setVisibility(View.GONE);
 						// else
