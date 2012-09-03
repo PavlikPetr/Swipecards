@@ -88,7 +88,7 @@ public class UserProfileActivity extends FragmentActivity {
         
         // Header Name
         String userName = getIntent().getStringExtra(INTENT_USER_NAME); // name
-        ((TextView)findViewById(R.id.tvNavigationTitle)).setText(userName);
+        ((TextView)findViewById(R.id.tvHeaderTitle)).setText(userName);
 
         mRateController = new RateController(this);
         mLockerView = (LockerView)findViewById(R.id.llvProfileLoading);

@@ -149,8 +149,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 		};
 		
 		public void onOpenStart() {
-			//TODO action on open event
-			Debug.log("openStart()");
+		    mFragmentMenu.refreshNotifications();
 		};
 	};
 

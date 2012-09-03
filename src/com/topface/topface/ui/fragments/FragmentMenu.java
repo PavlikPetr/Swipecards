@@ -122,6 +122,10 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
     }
     
     public void refreshNotifications() {
+//        CacheProfile.unread_likes=6;
+//        CacheProfile.unread_mutual=6;        
+//        CacheProfile.unread_messages=6;
+        
         if (CacheProfile.unread_likes > 0) {
             mTvNotifyLikes.setText(" " + CacheProfile.unread_likes + " ");
             mTvNotifyLikes.setVisibility(View.VISIBLE);

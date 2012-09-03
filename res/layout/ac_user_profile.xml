@@ -9,7 +9,7 @@
 	    android:orientation="vertical" >
 	    
 	    <!-- header bar -->
-	    <include layout="@layout/bar_navigation_header" />
+	    <include layout="@layout/bar_btn_header" />
 	
 	    <!-- static info -->
 	    <RelativeLayout
