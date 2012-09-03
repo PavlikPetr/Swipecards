@@ -147,6 +147,11 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 			mFragmentMenu.setClickable(true);
 			//mHomeButton.setClickable(true);
 		};
+		
+		public void onOpenStart() {
+			//TODO action on open event
+			Debug.log("openStart()");
+		};
 	};
 
 }

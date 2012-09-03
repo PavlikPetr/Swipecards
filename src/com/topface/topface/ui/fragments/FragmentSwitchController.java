@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import com.topface.topface.ui.views.DatingAlbum;
+import com.topface.topface.utils.Debug;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
@@ -46,6 +47,8 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 		public void onSwitchStart();
 
 		public void onSwitchEnd();
+		
+		public void onOpenStart();
 	}
 
 	private static final Interpolator prixingInterpolator = new Interpolator() {
@@ -66,6 +69,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 		mMinimumVelocity = 10*configuration.getScaledMinimumFlingVelocity();
 		mVelocitySlop = configuration.getScaledMinimumFlingVelocity();
 		mTouchSlop = ViewConfiguration.getTouchSlop();
+		mAnimation = COLLAPSE;
 	}
 
 	@Override
@@ -101,8 +105,11 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 		return mOpenDX;
 	}
 	
+	private int counter = 0;
+	
 	@Override
 	public void computeScroll() {
+		Debug.log("computeScroll(): "+ (++counter));
 		mScrollX = mScroller.getCurrX();
 		if (!mScroller.isFinished()) {
 			if (mScroller.computeScrollOffset()) {
@@ -115,12 +122,14 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 	}
 
 	public void snapToScreen(int typeAnimation) {
+		counter = 0;
 		mAnimation = typeAnimation;
 		setScrollingCacheEnabled(true);
 		mAutoScrolling = true;
 		mFragmentSwitchListener.onSwitchStart();
 		switch (typeAnimation) {
 		case EXPAND:
+			mFragmentSwitchListener.onOpenStart();
 			mScroller.startScroll(getLeftBound(), 0, -getRightBound(), 0, 300);
 			break;
 		case COLLAPSE:
@@ -185,7 +194,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 
 	@Override
 	public void scrollTo(int x, int y) {
-		super.scrollTo(x, y);		
+		super.scrollTo(x, y);	
 		invalidate();
 	}
 	
@@ -198,7 +207,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent event) {
-//		Log.d("OLOLO","Inter");
+		Log.d("OLOLO","Inter");
 		
 		if (mAutoScrolling) 
 			return false;
@@ -211,6 +220,9 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 			mVelocityTracker.recycle();
 			mVelocityTracker = null;
 		}		
+				
+		if (!inBezierThreshold(x) && (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL))
+			return false;
 		
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
@@ -218,7 +230,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 			mLastMotionY = y;
 			break;
 		case MotionEvent.ACTION_MOVE:			
-			if (mAnimation == EXPAND) { 
+			if (mAnimation == EXPAND) {
 				startDragging(x);
 				break;
 			}
@@ -234,6 +246,9 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 			
 			if(xDiff > mTouchSlop && xDiff > yDiff) {
 				startDragging(x);
+				if (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL) {
+					mFragmentSwitchListener.onOpenStart();
+				}
 			} else {
 				stopDragging(x);
 			}
@@ -255,7 +270,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-//		Log.d("OLOLO","Touch");		
+		Log.d("OLOLO","Touch");		
 		
 		if (mVelocityTracker == null) {
 			mVelocityTracker = VelocityTracker.obtain();
@@ -438,5 +453,12 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 		}
 		
 		return checkV && result;
+	}
+	
+	protected boolean inBezierThreshold(float x) {
+		if (x < mWidth/5) {
+			return true;
+		}
+		return false;
 	}
 }
