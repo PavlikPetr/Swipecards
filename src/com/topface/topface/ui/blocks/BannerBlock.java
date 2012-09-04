@@ -102,9 +102,13 @@ public class BannerBlock {
     }
 
     private String getBannerName(String bannerUrl) {
+        String name = null;
         Pattern pattern = Pattern.compile(".*\\/(.*)\\..+$");
         Matcher matcher = pattern.matcher(bannerUrl);
-        String name = matcher.group(0);
+        matcher.find();
+        if (matcher.matches()) {
+            name = matcher.group(1);
+        }
         return (name == null || name.length() < 1) ? bannerUrl : name;
     }
 }
