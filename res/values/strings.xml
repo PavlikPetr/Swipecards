@@ -205,7 +205,7 @@
 
     <!--Leaders-->
     <string name="leaders_go_date">Go on a date</string>
-    <string name="leaders_leader_now">Now you're the leader!</string>
+    <string name="leaders_leader_now">Now you\'re the leader!</string>
     <string name="need_select_photo">First you need to select a photo!</string>
     <string name="photo_add_or">Photo added</string>
     <string name="photo_add_error">Photo upload error</string>
