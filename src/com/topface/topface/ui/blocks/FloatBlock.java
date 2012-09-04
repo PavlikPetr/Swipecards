@@ -12,7 +12,7 @@ import java.util.Map;
  * Блок для страниц, где нужно показывать баннеры или лидеров
  */
 public class FloatBlock {
-    private Map<String, String> mActivityMap = new HashMap<String, String>();
+    private Map<String, String> mActivityMap;
     private Options mOptions;
     private Activity mActivity;
     private LeadersBlock mLeaders;
@@ -21,6 +21,7 @@ public class FloatBlock {
         super();
         mOptions = CacheProfile.getOptions();
         mActivity = activity;
+        mActivityMap = new HashMap<String, String>();
         setActivityMap();
         initBlock();
     }

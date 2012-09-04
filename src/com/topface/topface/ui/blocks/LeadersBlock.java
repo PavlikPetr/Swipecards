@@ -91,6 +91,8 @@ public class LeadersBlock {
     };
 
     private void sendStat(String action, String label) {
+        action = action == null ? "" : action;
+        label = label == null ? "" : label;
         EasyTracker.getTracker().trackEvent("Leaders", action, label, 0);
     }
 

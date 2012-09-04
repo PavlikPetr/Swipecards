@@ -731,7 +731,7 @@ public class ProfileActivity extends Activity {
           }).exec();
         } break;
         case R.id.btnProfileBuying: {
-          EasyTracker.getTracker().trackEvent("Purchase", "PageMyProfile", null, 0);
+          EasyTracker.getTracker().trackEvent("Purchase", "PageMyProfile", "", 0);
           startActivity(new Intent(getApplicationContext(),BuyingActivity.class));
         } break;
         case R.id.btnProfileAsk: {

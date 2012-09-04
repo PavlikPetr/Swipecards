@@ -294,7 +294,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
 
             switch (view.getId()) {
                 case R.id.loDatingResources: {
-                    EasyTracker.getTracker().trackEvent("Purchase", "PageDating", null, 0);
+                    EasyTracker.getTracker().trackEvent("Purchase", "PageDating", "", 0);
                     startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
                 }
                 break;
@@ -345,7 +345,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             return;
         }
         if (rate == 10 && CacheProfile.money <= 0) {
-            EasyTracker.getTracker().trackEvent("Purchase", "PageDating", null, 0);
+            EasyTracker.getTracker().trackEvent("Purchase", "PageDating", "", 0);
             startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
             return;
         }

@@ -68,7 +68,7 @@ public class LeadersActivity extends TrackedActivity {
             @Override
             public void onClick(View view) {
                 if (CacheProfile.money < CacheProfile.getOptions().price_leader) {
-                    EasyTracker.getTracker().trackEvent("Purchase", "PageBecomeLeader", null, 0);
+                    EasyTracker.getTracker().trackEvent("Purchase", "PageBecomeLeader", "", 0);
                     startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
                 }
                 else if (mSelectedPhoto.isSelected()) {
@@ -79,7 +79,7 @@ public class LeadersActivity extends TrackedActivity {
                                     post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            EasyTracker.getTracker().trackEvent("BecomeLeader", null, null, 0);
+                                            EasyTracker.getTracker().trackEvent("BecomeLeader", "", "", 0);
                                             Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
                                             finish();
                                         }
@@ -215,10 +215,14 @@ public class LeadersActivity extends TrackedActivity {
     };
 
     private void sendStat(String action, String label, int value) {
+        action = action == null ? "" : action;
+        label = label == null ? "" : label;
         EasyTracker.getTracker().trackEvent("Leaders", action, label, value);
     }
 
     private void sendStat(String action, String label) {
+        action = action == null ? "" : action;
+        label = label == null ? "" : label;
         EasyTracker.getTracker().trackEvent("Leaders", action, label, 0);
     }
 }

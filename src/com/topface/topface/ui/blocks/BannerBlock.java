@@ -76,10 +76,10 @@ public class BannerBlock {
             public void onClick(View v) {
                 Intent intent = null;
                 if (banner.action.equals(Banner.ACTION_PAGE)) {
-                    EasyTracker.getTracker().trackEvent("Purchase", "Banner", null, 0);
+                    EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0);
                     intent = new Intent(mActivity, BuyingActivity.class); // "parameter":"PURCHASE"
                 } else if (banner.action.equals(Banner.INVITE_PAGE)) {
-                    EasyTracker.getTracker().trackEvent("Banner", "Invite", null, 0);
+                    EasyTracker.getTracker().trackEvent("Banner", "Invite", "", 0);
                     intent = new Intent(mActivity, InviteActivity.class);
                 } else if (banner.action.equals(Banner.ACTION_URL)) {
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
@@ -98,6 +98,8 @@ public class BannerBlock {
     }
 
     private void sendStat(String action, String label) {
+        action = action == null ? "" : action;
+        label = label == null ? "" : label;
         EasyTracker.getTracker().trackEvent("Banner", action, label, 0);
     }
 

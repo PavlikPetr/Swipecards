@@ -181,7 +181,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         mPower.setEnabled(true);
       } else {
         //showDialog(2);
-        EasyTracker.getTracker().trackEvent("Purchase", "PlayMarketNotAvailable", null, 0);
+        EasyTracker.getTracker().trackEvent("Purchase", "PlayMarketNotAvailable", "", 0);
         mMoney6.setEnabled(false);
         mMoney40.setEnabled(false);
         mMoney100.setEnabled(false);

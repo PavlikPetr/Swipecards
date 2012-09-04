@@ -179,7 +179,7 @@ public class PhotoEroAlbumActivity extends TrackedActivity implements View.OnCli
 
         } else {  // запрос на покупку
             if (CacheProfile.money < album.cost) {
-                EasyTracker.getTracker().trackEvent("Purchase", "EroPhoto", null, 0);
+                EasyTracker.getTracker().trackEvent("Purchase", "EroPhoto", "", 0);
                 startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
                 return;
             }
