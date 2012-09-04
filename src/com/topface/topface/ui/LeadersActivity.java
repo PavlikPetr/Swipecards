@@ -79,7 +79,7 @@ public class LeadersActivity extends TrackedActivity {
                                     post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            sendStat("NewLeader", "price", CacheProfile.getOptions().price_leader);
+                                            EasyTracker.getTracker().trackEvent("BecomeLeader", null, null, 0);
                                             Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
                                             finish();
                                         }
