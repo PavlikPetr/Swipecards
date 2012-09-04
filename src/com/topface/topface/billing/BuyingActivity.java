@@ -1,5 +1,6 @@
 package com.topface.topface.billing;
 
+import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.billing.BillingService.RequestPurchase;
 import com.topface.topface.billing.BillingService.RestoreTransactions;
@@ -146,15 +147,19 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
   public void onClick(View view) {
     switch(view.getId()) {
       case R.id.btnBuyingMoney6:
+        EasyTracker.getTracker().trackEvent("Purchase", "PurchaseStarted", "com.topface.topface.buy.coins.6", 0);
         mBillingService.requestPurchase("topface.coins.6", null); // topface.coins.6 // android.test.purchased
         break;
       case R.id.btnBuyingMoney40:
+        EasyTracker.getTracker().trackEvent("Purchase", "PurchaseStarted", "com.topface.topface.buy.coins.40", 0);
         mBillingService.requestPurchase("topface.coins.40", null); // topface.coins.40
         break;
       case R.id.btnBuyingMoney100:
+        EasyTracker.getTracker().trackEvent("Purchase", "PurchaseStarted", "com.topface.topface.buy.coins.100", 0);
         mBillingService.requestPurchase("topface.coins.100", null); // topface.coins.100
         break;
       case R.id.btnBuyingPower:
+        EasyTracker.getTracker().trackEvent("Purchase", "PurchaseStarted", "com.topface.topface.buy.energy.10000", 0);
         mBillingService.requestPurchase("topface.energy.10000", null); // topface.energy.10000
         break;
     }
@@ -176,6 +181,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         mPower.setEnabled(true);
       } else {
         //showDialog(2);
+        EasyTracker.getTracker().trackEvent("Purchase", "PlayMarketNotAvailable", null, 0);
         mMoney6.setEnabled(false);
         mMoney40.setEnabled(false);
         mMoney100.setEnabled(false);

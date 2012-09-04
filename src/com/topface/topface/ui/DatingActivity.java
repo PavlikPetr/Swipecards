@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import java.util.LinkedList;
 
+import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.Data;
 import com.topface.topface.R;
@@ -17,8 +18,6 @@ import com.topface.topface.requests.NovicePowerRequest;
 import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SkipRateRequest;
-import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.FilterActivity;
 import com.topface.topface.ui.adapters.DatingAlbumAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DatingAlbum;
@@ -293,6 +292,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
 
         switch (view.getId()) {
             case R.id.loDatingResources: {
+                EasyTracker.getTracker().trackEvent("Purchase", "PageDating", null, 0);
                 startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
             }
             break;
@@ -316,6 +316,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             }
             break;
             case R.id.btnDatingChat: {
+                EasyTracker.getTracker().trackEvent("PageDating", "UserComplited", "OnePhoto", 0);
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
                 intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
@@ -340,6 +341,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             return;
         }
         if (rate == 10 && CacheProfile.money <= 0) {
+            EasyTracker.getTracker().trackEvent("Purchase", "PageDating", null, 0);
             startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
             return;
         }
@@ -422,6 +424,15 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             ++mCurrentUserPos;
             lockControls();
             mDatingAlbum.setSelection(0);
+
+            if (mCurrentUserPos > 0) {
+                if (mDatingAlbumAdapter.showMoreThanOne) {
+                    EasyTracker.getTracker().trackEvent("PageDating", "UserComplited", "MoreThenOnePhoto", 0);
+                }
+                else {
+                    EasyTracker.getTracker().trackEvent("PageDating", "UserComplited", "OnePhoto", 0);
+                }
+            }
             mDatingAlbumAdapter.setUserData(mUserSearchList.get(mCurrentUserPos));
             mDatingAlbumAdapter.notifyDataSetChanged();
             // User Info

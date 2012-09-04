@@ -2,6 +2,7 @@ package com.topface.topface.ui.profile.album;
 
 import java.util.LinkedList;
 
+import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.Data;
 import com.topface.topface.R;
@@ -13,7 +14,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoOpenRequest;
 import com.topface.topface.requests.PhotoVoteRequest;
 import com.topface.topface.utils.*;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -178,6 +178,11 @@ public class PhotoEroAlbumActivity extends TrackedActivity implements View.OnCli
             loadEroPhoto();
 
         } else {  // запрос на покупку
+            if (CacheProfile.money < album.cost) {
+                EasyTracker.getTracker().trackEvent("Purchase", "EroPhoto", null, 0);
+                startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
+                return;
+            }
             PhotoOpenRequest photoOpenRequest = new PhotoOpenRequest(getApplicationContext());
             photoOpenRequest.uid = mUserId;
             photoOpenRequest.photo = album.id;

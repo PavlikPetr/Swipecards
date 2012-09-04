@@ -5,12 +5,9 @@ import java.util.LinkedList;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
 import com.topface.topface.Data;
-import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.Banner;
 import com.topface.topface.data.FeedInbox;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedInboxRequest;
 import com.topface.topface.ui.adapters.InboxListAdapter;
 import com.topface.topface.ui.blocks.FloatBlock;
@@ -18,12 +15,10 @@ import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.utils.*;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -32,7 +27,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class InboxActivity extends TrackedActivity {
   // Data
@@ -45,7 +39,6 @@ public class InboxActivity extends TrackedActivity {
   private DoubleBigButton mDoubleButton;
   private ProgressBar mProgressBar;
   private FeedInboxRequest inboxRequest;
-  private ImageView mBannerView;
   // Constants
   private static final int LIMIT = 40;
   private FloatBlock mFloatBlock;
@@ -65,9 +58,6 @@ public class InboxActivity extends TrackedActivity {
     
     // Progress
     mProgressBar = (ProgressBar)findViewById(R.id.prsInboxLoading);
-    
-    // Banner
-    mBannerView = (ImageView)findViewById(R.id.ivBanner);
     
     // Double Button
     mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
@@ -239,42 +229,8 @@ public class InboxActivity extends TrackedActivity {
       }
     }).exec();
   }
-  //---------------------------------------------------------------------------
-  private void banner() {
-    if(Data.screen_width<=Device.W_240)
-      return;
-    BannerRequest bannerRequest = new BannerRequest(getApplicationContext());
-    bannerRequest.place = BannerRequest.LIKE;
-    bannerRequest.callback(new ApiHandler() {
-      @Override
-      public void success(ApiResponse response) {
-        final Banner banner = Banner.parse(response);
-        if(mBannerView != null)
-          post(new Runnable() {
-            @Override
-            public void run() {
-              Http.bannerLoader(banner.url,mBannerView);
-              mBannerView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  Intent intent = null;
-                  if(banner.action.equals(Banner.ACTION_PAGE))
-                    intent = new Intent(InboxActivity.this, BuyingActivity.class); // "parameter":"PURCHASE"
-                  else if(banner.action.equals(Banner.ACTION_URL)) {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
-                  }
-                  startActivity(intent);
-                }
-              });
-            }
-          });// post
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-      }
-    }).exec();
-  }
-  //---------------------------------------------------------------------------
+
+    //---------------------------------------------------------------------------
   private void release() {
     mListView = null;
     

@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,8 +7,10 @@ import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
+import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Album;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
@@ -66,7 +67,11 @@ public class LeadersActivity extends TrackedActivity {
         mBuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mSelectedPhoto.isSelected()) {
+                if (CacheProfile.money < CacheProfile.getOptions().price_leader) {
+                    EasyTracker.getTracker().trackEvent("Purchase", "PageBecomeLeader", null, 0);
+                    startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
+                }
+                else if (mSelectedPhoto.isSelected()) {
                     new LeaderRequest(mSelectedPhoto.getPhotoId(), LeadersActivity.this)
                             .callback(new ApiHandler() {
                                 @Override
@@ -74,6 +79,7 @@ public class LeadersActivity extends TrackedActivity {
                                     post(new Runnable() {
                                         @Override
                                         public void run() {
+                                            sendStat("NewLeader", "price", CacheProfile.getOptions().price_leader);
                                             Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
                                             finish();
                                         }
@@ -94,6 +100,7 @@ public class LeadersActivity extends TrackedActivity {
                 }
                 else {
                     Toast.makeText(LeadersActivity.this, R.string.need_select_photo, Toast.LENGTH_SHORT).show();
+                    sendStat("NeedSelectPhotoError", null);
                 }
             }
         });
@@ -102,9 +109,11 @@ public class LeadersActivity extends TrackedActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 0) {
+                    sendStat("AddPhoto", null);
                     mAddPhotoHelper.addPhoto();
                 }
                 else {
+                    sendStat("SelectPhoto", null);
                     mSelectedPhoto.select(i, adapterView);
                 }
             }
@@ -204,4 +213,12 @@ public class LeadersActivity extends TrackedActivity {
             }
         }
     };
+
+    private void sendStat(String action, String label, int value) {
+        EasyTracker.getTracker().trackEvent("Leaders", action, label, value);
+    }
+
+    private void sendStat(String action, String label) {
+        EasyTracker.getTracker().trackEvent("Leaders", action, label, 0);
+    }
 }

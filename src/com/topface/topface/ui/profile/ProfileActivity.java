@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import android.os.Handler;
 import android.os.Message;
+import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.google.android.c2dm.C2DMessaging;
 import com.topface.topface.Data;
 import com.topface.topface.R;
@@ -45,7 +46,7 @@ import android.widget.Toast;
 /*
  *      "Профиль"
  */
-public class ProfileActivity extends Activity{
+public class ProfileActivity extends Activity {
   // Data
   private int mUserId;
   private int mMutualId;
@@ -109,6 +110,8 @@ public class ProfileActivity extends Activity{
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    EasyTracker.getTracker().setContext(this);
+
     setContentView(R.layout.ac_profile);
     Debug.log(this,"+onCreate");
 
@@ -232,12 +235,18 @@ public class ProfileActivity extends Activity{
       mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
       mResourcesPower.setText(""+CacheProfile.power+"%");
       mResourcesMoney.setText(""+CacheProfile.money);
+
+      EasyTracker.getTracker().trackPageView("/PageMyProfile");
+    }
+    else {
+      EasyTracker.getTracker().trackPageView("/PageProfile");
     }
   }
   //---------------------------------------------------------------------------  
   @Override
   protected void onStop() {
     super.onStop();
+    EasyTracker.getTracker().trackActivityStop(this);
   }
   //---------------------------------------------------------------------------
   // получение фото из галереи и отправка на сервер
@@ -680,6 +689,7 @@ public class ProfileActivity extends Activity{
             finish();
             return;
           }
+          sendStat("ButtonChatPressed", null);
           Http.avatarUserPreloading(mUserAvatarUrl);
           Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
           intent.putExtra(ChatActivity.INTENT_USER_ID,mUserId);
@@ -688,9 +698,11 @@ public class ProfileActivity extends Activity{
           startActivity(intent);
         } break;
         case R.id.btnProfileEdit: {
+          sendOwnStat("ButtonProfileEditPressed", null);
           startActivityForResult(new Intent(getApplicationContext(),EditProfileActivity.class),EDITOR_ACTIVITY_REQUEST_CODE);
         } break;
         case R.id.btnProfileExit: {
+          sendOwnStat("ButtonLogoutPressed", null);
           Data.removeSSID(getApplicationContext());
           C2DMessaging.unregister(getApplicationContext());
           finish();
@@ -716,6 +728,7 @@ public class ProfileActivity extends Activity{
           }).exec();
         } break;
         case R.id.btnProfileBuying: {
+          EasyTracker.getTracker().trackEvent("Purchase", "PageMyProfile", null, 0);
           startActivity(new Intent(getApplicationContext(),BuyingActivity.class));
         } break;
         case R.id.btnProfileAsk: {
@@ -826,4 +839,12 @@ public class ProfileActivity extends Activity{
                 updateOwnerAlbum();
             }
       };
+
+    private void sendOwnStat(String action, String label) {
+        EasyTracker.getTracker().trackEvent("PageMyProfile", action, label, 0);
+    }
+
+    private void sendStat(String action, String label) {
+        EasyTracker.getTracker().trackEvent("PageProfile", action, label, 0);
+    }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
+import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
@@ -12,15 +13,14 @@ import com.topface.topface.data.Banner;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.BaseApiHandler;
-import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.LikesActivity;
-import com.topface.topface.ui.SymphatyActivity;
-import com.topface.topface.ui.TopsActivity;
+import com.topface.topface.ui.*;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Http;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Показываем баннер на нужных страницах
@@ -70,15 +70,21 @@ public class BannerBlock {
 
     private void showBanner(final Banner banner) {
         Http.bannerLoader(banner.url, mBannerView);
+        sendStat(getBannerName(banner.url), "view");
         mBannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = null;
-                if (banner.action.equals(Banner.ACTION_PAGE))
+                if (banner.action.equals(Banner.ACTION_PAGE)) {
+                    EasyTracker.getTracker().trackEvent("Purchase", "Banner", null, 0);
                     intent = new Intent(mActivity, BuyingActivity.class); // "parameter":"PURCHASE"
-                else if (banner.action.equals(Banner.ACTION_URL)) {
+                } else if (banner.action.equals(Banner.INVITE_PAGE)) {
+                    EasyTracker.getTracker().trackEvent("Banner", "Invite", null, 0);
+                    intent = new Intent(mActivity, InviteActivity.class);
+                } else if (banner.action.equals(Banner.ACTION_URL)) {
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
                 }
+                sendStat(getBannerName(banner.url), "click");
                 mActivity.startActivity(intent);
             }
         });
@@ -91,4 +97,14 @@ public class BannerBlock {
         return Data.screen_width > Device.W_240;
     }
 
+    private void sendStat(String action, String label) {
+        EasyTracker.getTracker().trackEvent("Banner", action, label, 0);
+    }
+
+    private String getBannerName(String bannerUrl) {
+        Pattern pattern = Pattern.compile(".*\\/(.*)\\..+$");
+        Matcher matcher = pattern.matcher(bannerUrl);
+        String name = matcher.group(0);
+        return (name == null || name.length() < 1) ? bannerUrl : name;
+    }
 }

@@ -16,6 +16,11 @@ import android.widget.ProgressBar;
 
 public class DatingAlbumAdapter extends BaseAdapter {
 
+    /**
+     * Параметр для статистики, что бы понять, пользовался ли пользователь галереей, или нет
+     */
+    public boolean showMoreThanOne = false;
+
     // class ViewHolder
     static class ViewHolder {
         ProgressBar mProgressBar;
@@ -42,6 +47,7 @@ public class DatingAlbumAdapter extends BaseAdapter {
 
     public void setUserData(Search user) {
         mUserData = user;
+        showMoreThanOne = false;
         // очистка
         mPreRunning = 0;
         mPrevPosition = 0;
@@ -101,6 +107,9 @@ public class DatingAlbumAdapter extends BaseAdapter {
             preLoading(prePosition);
 
         mPrevPosition = position;
+        if (position > 0) {
+            showMoreThanOne = true;
+        }
 
         return convertView;
     }

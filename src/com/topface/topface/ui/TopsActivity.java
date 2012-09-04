@@ -6,13 +6,10 @@ import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
-import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.Banner;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Top;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.TopRequest;
 import com.topface.topface.ui.adapters.TopsGridAdapter;
@@ -21,22 +18,18 @@ import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.ThumbView;
 import com.topface.topface.utils.*;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class TopsActivity extends TrackedActivity {
   // Data
@@ -49,7 +42,6 @@ public class TopsActivity extends TrackedActivity {
   private ActionData mActionData;
   private TopRequest topRequest;
   private CitiesRequest citiesRequest;
-  private ImageView mBannerView;
   // Constats
   private static int GIRLS = 0;
   private static int BOYS = 1;
@@ -212,42 +204,8 @@ public class TopsActivity extends TrackedActivity {
       }
     }).exec();
   }
-  //---------------------------------------------------------------------------
-  private void banner() {
-    if(Data.screen_width<=Device.W_240)
-      return;
-    BannerRequest bannerRequest = new BannerRequest(getApplicationContext());
-    bannerRequest.place = BannerRequest.LIKE;
-    bannerRequest.callback(new ApiHandler() {
-      @Override
-      public void success(ApiResponse response) {
-        final Banner banner = Banner.parse(response);
-        if(mBannerView != null)
-          post(new Runnable() {
-            @Override
-            public void run() {
-              Http.bannerLoader(banner.url,mBannerView);
-              mBannerView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                  Intent intent = null;
-                  if(banner.action.equals(Banner.ACTION_PAGE))
-                    intent = new Intent(TopsActivity.this, BuyingActivity.class); // "parameter":"PURCHASE"
-                  else if(banner.action.equals(Banner.ACTION_URL)) {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
-                  }
-                  startActivity(intent);
-                }
-              });
-            }
-          });// post
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-      }
-    }).exec();
-  }
-  //---------------------------------------------------------------------------
+
+    //---------------------------------------------------------------------------
   private void release() {
     if(mGalleryGridManager != null) {
       mGalleryGridManager.release();
