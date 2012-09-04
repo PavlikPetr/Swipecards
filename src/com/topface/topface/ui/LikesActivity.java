@@ -169,8 +169,12 @@ public class LikesActivity extends TrackedActivity {
               mFooterView.setVisibility(View.GONE);
             
             mProgressBar.setVisibility(View.GONE);
-            mListView.onRefreshComplete(); 
-            mListAdapter.notifyDataSetChanged();
+            if (mListView != null) {
+                mListView.onRefreshComplete();
+            }
+            if (mListAdapter != null) {
+                mListAdapter.notifyDataSetChanged();
+            }
           }
         });
       }
@@ -181,7 +185,9 @@ public class LikesActivity extends TrackedActivity {
           public void run() {
             Utils.showErrorMessage(LikesActivity.this);
             mProgressBar.setVisibility(View.GONE);
-            mListView.onRefreshComplete(); 
+            if (mListView != null) {
+                mListView.onRefreshComplete();
+            }
           }
         });
       }

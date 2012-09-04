@@ -91,8 +91,8 @@ public class PhotoAlbumActivity extends TrackedActivity {
       @Override
       public void onNothingSelected(AdapterView<?> arg0) {}
     });
-    
-    setCounter(position+1,Data.photoAlbum.size());
+    int photoAlbumSize = Data.photoAlbum != null ? Data.photoAlbum.size() : 0;
+    setCounter(position+1, photoAlbumSize);
   }
   //---------------------------------------------------------------------------  
   @Override

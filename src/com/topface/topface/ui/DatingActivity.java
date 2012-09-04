@@ -185,7 +185,10 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
                     showControls();
                 }
                 mCurrentPhotoPrevPos = position;
-                mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
+
+                if (mUserSearchList.contains(mCurrentUserPos)) {
+                    mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
+                }
             }
 
             @Override
@@ -286,45 +289,46 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         Data.userAvatar = null;
-        if (mUserSearchList.size() > 0 && mCurrentUserPos > 0) {
+        if (mUserSearchList.size() > 0 && mCurrentUserPos > 0 && mUserSearchList.contains(mCurrentUserPos)) {
             Http.avatarUserPreloading(mUserSearchList.get(mCurrentUserPos).getSmallLink());
+
+            switch (view.getId()) {
+                case R.id.loDatingResources: {
+                    EasyTracker.getTracker().trackEvent("Purchase", "PageDating", null, 0);
+                    startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
+                }
+                break;
+                case R.id.btnDatingLove: {
+                    onRate(10);
+                }
+                break;
+                case R.id.btnDatingSympathy: {
+                    onRate(9);
+                }
+                break;
+                case R.id.btnDatingSkip: {
+                    skipUser();
+                }
+                break;
+                case R.id.btnDatingProfile: {
+                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    intent.putExtra(ProfileActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
+                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
+                    startActivity(intent);
+                }
+                break;
+                case R.id.btnDatingChat: {
+                    EasyTracker.getTracker().trackEvent("PageDating", "UserComplited", "OnePhoto", 0);
+                    Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                    intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
+                    intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
+                    startActivity(intent);
+                }
+                break;
+                default:
+            }
         }
 
-        switch (view.getId()) {
-            case R.id.loDatingResources: {
-                EasyTracker.getTracker().trackEvent("Purchase", "PageDating", null, 0);
-                startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
-            }
-            break;
-            case R.id.btnDatingLove: {
-                onRate(10);
-            }
-            break;
-            case R.id.btnDatingSympathy: {
-                onRate(9);
-            }
-            break;
-            case R.id.btnDatingSkip: {
-                skipUser();
-            }
-            break;
-            case R.id.btnDatingProfile: {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra(ProfileActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
-                intent.putExtra(ProfileActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
-                startActivity(intent);
-            }
-            break;
-            case R.id.btnDatingChat: {
-                EasyTracker.getTracker().trackEvent("PageDating", "UserComplited", "OnePhoto", 0);
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
-                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
-                startActivity(intent);
-            }
-            break;
-            default:
-        }
     }
 
     //---------------------------------------------------------------------------

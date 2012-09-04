@@ -483,6 +483,9 @@ public class ProfileActivity extends Activity {
   //---------------------------------------------------------------------------
   // чужой профиль
   private void setUserProfile(User profile) {
+    if (profile == null) {
+        return;
+    }
     SmartBitmapFactory.getInstance().setBitmapByUrl(profile.getBigLink(), mFramePhoto);
 
     setUserAlbum();

@@ -183,8 +183,12 @@ public class InboxActivity extends TrackedActivity {
           @Override
           public void run() {
             Utils.showErrorMessage(InboxActivity.this);
-            mProgressBar.setVisibility(View.GONE);
-            mListView.onRefreshComplete();
+            if (mProgressBar != null) {
+                mProgressBar.setVisibility(View.GONE);
+            }
+            if (mListView != null) {
+                mListView.onRefreshComplete();
+            }
           }
         });
       }
