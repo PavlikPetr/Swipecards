@@ -204,17 +204,16 @@
 
 
     <!--Leaders-->
-    <string name="leaders_go_date">Идем на свидание</string>
-    <string name="leaders_leader_now">Теперь вы лидер!</string>
-    <string name="need_select_photo">Сперва нужно выбрать фотографию!</string>
-    <string name="photo_add_or">Фотография добавлена</string>
-    <string name="photo_add_error">Не удалось добавить фотографию</string>
+    <string name="leaders_go_date">Go on a date</string>
+    <string name="leaders_leader_now">Now you're the leader!</string>
+    <string name="need_select_photo">First you need to select a photo!</string>
+    <string name="photo_add_or">Photo added</string>
+    <string name="photo_add_error">Photo upload error</string>
     <plurals name="leaders_price">
-        <item quantity="one">Встать за %d монету</item>
-        <item quantity="few">Встать за %d монеты</item>
-        <item quantity="other">Встать за %d монет</item>
+        <item quantity="one">Stand for %d coin</item>
+        <item quantity="other">Stand for %d coins</item>
     </plurals>
-    <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
-    <string name="leaders_date">Хочу на\nсвидание!</string>
+    <string name="leaders_select_photo">Select spectacular photo:</string>
+    <string name="leaders_date">I want a date!</string>
 
 </resources>

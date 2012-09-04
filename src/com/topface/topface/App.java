@@ -9,7 +9,7 @@ import android.app.Application;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
-@ReportsCrashes(formKey = "dERGQ3d6dTNjbHhlTGhfdkpfWF9EbVE6MQ")
+@ReportsCrashes(formKey = "dE5WN1RoRXhfRzUwb2toRFhsOTZSLVE6MQ")
 public class App extends Application {
     // Constants
     public static final String TAG = "Topface";
@@ -23,7 +23,7 @@ public class App extends Application {
     //---------------------------------------------------------------------------
     @Override
     public void onCreate() {
-        //ACRA.init(this);
+        ACRA.init(this);
         super.onCreate();
         mContext = getApplicationContext();
         Debug.log("App", "+onCreate");

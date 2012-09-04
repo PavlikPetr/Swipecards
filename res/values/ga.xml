@@ -3,11 +3,11 @@
 <!--suppress AndroidLintMissingTranslation, AndroidLintUnusedResources -->
 <resources>
     <!--suppress AndroidLintTypographyDashes -->
-    <string name="ga_api_key">UA-22657456-6</string>
+    <string name="ga_api_key">UA-22657456-4</string>
 
     <!-- Если значение @bool/debug равно true, то данные на сервер отправляться не будут -->
-    <bool name="ga_debug">true</bool>
-    <bool name="ga_dryRun">true</bool>
+    <bool name="ga_debug">false</bool>
+    <bool name="ga_dryRun">false</bool>
     <bool name="ga_auto_activity_tracking">true</bool>
 
     <!-- Синонимы для Активити, где name каноническое имя Activity, а значение - ключ для отображения в GA -->
