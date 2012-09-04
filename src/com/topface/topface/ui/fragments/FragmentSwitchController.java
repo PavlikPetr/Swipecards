@@ -94,7 +94,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 		mScrollingDistanceThreshold = mWidth / 6;
 		
 	    mFragmentMenu.setNotificationMargin(mOpenDX/100*90);
-	    mFragmentMenu.refreshNotifications();
+	    //mFragmentMenu.refreshNotifications();
 	}
 
 	private int getLeftBound() {

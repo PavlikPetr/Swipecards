@@ -72,7 +72,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         if (mSwitchController.getAnimationState() == FragmentSwitchController.EXPAND) {
             mSwitchController.closeMenu();
         } else {
-            mFragmentMenu.refreshNotifications();
+            //mFragmentMenu.refreshNotifications();
             mSwitchController.openMenu();
         }        
     }

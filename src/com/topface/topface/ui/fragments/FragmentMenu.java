@@ -122,27 +122,27 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
     }
     
     public void refreshNotifications() {
-//        CacheProfile.unread_likes=6;
-//        CacheProfile.unread_mutual=6;        
-//        CacheProfile.unread_messages=6;
+        CacheProfile.unread_likes=7;
+        CacheProfile.unread_mutual=8;        
+        CacheProfile.unread_messages=9;
         
         if (CacheProfile.unread_likes > 0) {
-            mTvNotifyLikes.setText(" " + CacheProfile.unread_likes + " ");
             mTvNotifyLikes.setVisibility(View.VISIBLE);
+            mTvNotifyLikes.setText(" " + CacheProfile.unread_likes + " ");
         } else {
             mTvNotifyLikes.setVisibility(View.INVISIBLE);
         }
 
         if (CacheProfile.unread_mutual > 0) {
-            mTvNotifyMutual.setText(" " + CacheProfile.unread_mutual + " ");
             mTvNotifyMutual.setVisibility(View.VISIBLE);
+            mTvNotifyMutual.setText(" " + CacheProfile.unread_mutual + " ");
         } else {
             mTvNotifyMutual.setVisibility(View.INVISIBLE);
         }
         
         if (CacheProfile.unread_messages > 0) {
-            mTvNotifyDialogs.setText(" " + CacheProfile.unread_messages + " ");
             mTvNotifyDialogs.setVisibility(View.VISIBLE);
+            mTvNotifyDialogs.setText(" " + CacheProfile.unread_messages + " ");
         } else {
             mTvNotifyDialogs.setVisibility(View.INVISIBLE);
         }
@@ -197,7 +197,9 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
             mTvNotifyLikes.setLayoutParams(lp);
             mTvNotifyMutual.setLayoutParams(lp);
             mTvNotifyDialogs.setLayoutParams(lp);
-            //mTvNotifyLikes.requestLayout();
+//            mTvNotifyLikes.requestLayout();
+//            mTvNotifyMutual.requestLayout();
+//            mTvNotifyDialogs.requestLayout();
         }
     }
 }
