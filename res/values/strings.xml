@@ -214,6 +214,6 @@
         <item quantity="other">Stand for %d coins</item>
     </plurals>
     <string name="leaders_select_photo">Select spectacular photo:</string>
-    <string name="leaders_date">I want a date!</string>
+    <string name="leaders_date">Wanna\ndate!</string>
 
 </resources>
