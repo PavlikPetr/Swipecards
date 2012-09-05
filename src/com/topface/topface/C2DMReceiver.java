@@ -52,6 +52,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
     C2DMUtils.showNotification(receiveIntent, context);
     //Сообщаем о том что есть новое уведомление и нужно обновить список игр
     Intent broadcastReceiver = new Intent(C2DMUtils.C2DM_NOTIFICATION);
+    broadcastReceiver.putExtra("id", receiveIntent.getStringExtra("id"));
     context.sendBroadcast(broadcastReceiver);
   }
   //---------------------------------------------------------------------------
