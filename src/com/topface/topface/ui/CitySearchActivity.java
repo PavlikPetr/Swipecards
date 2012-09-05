@@ -2,15 +2,17 @@ package com.topface.topface.ui;
 
 import java.util.LinkedList;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.utils.Debug;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -77,6 +79,12 @@ public class CitySearchActivity extends TrackedActivity {
         Intent intent = CitySearchActivity.this.getIntent();
         intent.putExtra(INTENT_CITY_ID, mDataList.get(position).id);
         intent.putExtra(INTENT_CITY_NAME, mDataList.get(position).name);
+
+        SharedPreferences.Editor editor = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE).edit();
+        editor.putInt(Static.PREFERENCES_TOPS_CITY_ID, mDataList.get(position).id);
+        editor.putString(Static.PREFERENCES_TOPS_CITY_NAME, mDataList.get(position).name);
+        editor.putInt(Static.PREFERENCES_TOPS_CITY_POS, -1);
+        editor.commit();
         
         Debug.log(CitySearchActivity.this,"1.city_id:"+mDataList.get(position).id);
         
