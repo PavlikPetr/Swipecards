@@ -9,7 +9,7 @@ import android.app.Application;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
-@ReportsCrashes(formKey = "dE5WN1RoRXhfRzUwb2toRFhsOTZSLVE6MQ")
+@ReportsCrashes(formKey = "dE85SXowSDhBcXZvMXAtUEtPMTg4X2c6MQ")
 public class App extends Application {
     // Constants
     public static final String TAG = "Topface";
