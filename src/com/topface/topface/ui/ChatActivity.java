@@ -104,6 +104,9 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
                                     history.text = text;
                                     history.type = History.MESSAGE;
 
+                                    mEdBox.getText().clear();
+                                    mProgressBar.setVisibility(View.GONE);
+
                                     mAdapter.addSentMessage(history);
                                     mAdapter.notifyDataSetChanged();
                                 }

@@ -50,7 +50,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DatingActivity extends TrackedActivity implements View.OnClickListener, ILocker {
     // Data
@@ -291,44 +290,43 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
         Data.userAvatar = null;
         if (mUserSearchList.size() > 0 && mCurrentUserPos > 0 && mUserSearchList.contains(mCurrentUserPos)) {
             Http.avatarUserPreloading(mUserSearchList.get(mCurrentUserPos).getSmallLink());
-
-            switch (view.getId()) {
-                case R.id.loDatingResources: {
-                    EasyTracker.getTracker().trackEvent("Purchase", "PageDating", "", 0);
-                    startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
-                }
-                break;
-                case R.id.btnDatingLove: {
-                    onRate(10);
-                }
-                break;
-                case R.id.btnDatingSympathy: {
-                    onRate(9);
-                }
-                break;
-                case R.id.btnDatingSkip: {
-                    skipUser();
-                }
-                break;
-                case R.id.btnDatingProfile: {
-                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                    intent.putExtra(ProfileActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
-                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
-                    startActivity(intent);
-                }
-                break;
-                case R.id.btnDatingChat: {
-                    EasyTracker.getTracker().trackEvent("PageDating", "UserComplited", "OnePhoto", 0);
-                    Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                    intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
-                    intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
-                    startActivity(intent);
-                }
-                break;
-                default:
-            }
         }
 
+        switch (view.getId()) {
+            case R.id.loDatingResources: {
+                EasyTracker.getTracker().trackEvent("Purchase", "PageDating", "", 0);
+                startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
+            }
+            break;
+            case R.id.btnDatingLove: {
+                onRate(10);
+            }
+            break;
+            case R.id.btnDatingSympathy: {
+                onRate(9);
+            }
+            break;
+            case R.id.btnDatingSkip: {
+                skipUser();
+            }
+            break;
+            case R.id.btnDatingProfile: {
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                intent.putExtra(ProfileActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
+                intent.putExtra(ProfileActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
+                startActivity(intent);
+            }
+            break;
+            case R.id.btnDatingChat: {
+                EasyTracker.getTracker().trackEvent("PageDating", "UserComplited", "OnePhoto", 0);
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
+                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
+                startActivity(intent);
+            }
+            break;
+            default:
+        }
     }
 
     //---------------------------------------------------------------------------
