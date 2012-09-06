@@ -16,16 +16,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class UserFormListAdapter extends BaseAdapter {
-    private Context mContext;
+    // Data
     private LayoutInflater mInflater;
     private LinkedList<FormItem> mUserForms;
     
-    private static final int T_TITLE = 0;
+    // Constants
+    private static final int T_HEADER  = 0;
     private static final int T_DIVIDER = 1;
-    private static final int T_DATA   = 2;
-    private static final int T_COUNT  = 3;
+    private static final int T_DATA    = 2;
+    private static final int T_COUNT   = T_DATA + 1;
     
-    static class ViewHolder {
+    // class ViewHolder
+    private static class ViewHolder {
         public ImageView mState;
         public TextView mTitle;
         public TextView mHeader;
@@ -33,10 +35,8 @@ public class UserFormListAdapter extends BaseAdapter {
     }
 
     public UserFormListAdapter(Context context) {
-        mContext = context;
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mUserForms = new LinkedList<FormItem>();
-        mItemLayoutList = new LinkedList<Integer>();
     }
 
     @Override
@@ -45,8 +45,8 @@ public class UserFormListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Triple<String, String, Boolean> getItem(int position) {
-        return mUserForms.get(mFormKeys[position]);
+    public FormItem getItem(int position) {
+        return mUserForms.get(position);
     }
 
     @Override
@@ -61,9 +61,14 @@ public class UserFormListAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if(position==0)
-            return T_TITLE;
-        return mFormKeys[position].equals("") ? T_TITLE : T_DATA;
+        switch (getItem(position).type) {
+            case FormItem.HEADER:
+                return T_HEADER;
+            case FormItem.DATA:
+                return T_DATA;
+            default:
+              return T_HEADER;
+        }
     }
 
     @Override
@@ -77,7 +82,7 @@ public class UserFormListAdapter extends BaseAdapter {
                 case T_DIVIDER:
                     convertView = mInflater.inflate(R.layout.item_divider, null, false);
                     break;
-                case T_TITLE:
+                case T_HEADER:
                 case T_DATA:
                     convertView = mInflater.inflate(R.layout.item_user_list, null, false);
                     holder.mState  = (ImageView)convertView.findViewById(R.id.ivState);
@@ -88,7 +93,7 @@ public class UserFormListAdapter extends BaseAdapter {
             }
             
             switch (type) {
-                case T_TITLE:
+                case T_HEADER:
                     convertView.setBackgroundResource(R.drawable.user_list_title_bg);
                     break;
                 case T_DATA:
@@ -100,17 +105,17 @@ public class UserFormListAdapter extends BaseAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
 
-    	Triple<String, String, Boolean> item = getItem(position);
+    	FormItem item = getItem(position);
     	
     	switch (type) {
-            case T_TITLE:
-                holder.mTitle.setText(item.first);
+            case T_HEADER:
+                holder.mTitle.setText(item.title);
                 holder.mState.setImageResource(R.drawable.user_title);
                 break;
             case T_DATA:
-                holder.mHeader.setText(item.first);
-                holder.mValue.setText(item.second);
-                if(item.third)
+                holder.mHeader.setText(item.title);
+                holder.mValue.setText(item.data);
+                if(item.equal)
                     holder.mState.setImageResource(R.drawable.user_cell);  // GREEN POINT
                 else
                     holder.mState.setImageResource(R.drawable.user_cell);
@@ -126,10 +131,7 @@ public class UserFormListAdapter extends BaseAdapter {
     }
     
     public void setUserData(User user) {
-        prepare(user);
+        mUserForms = user.forms;
     }
-    
-    private void prepare(User user) {
-        FormInfo formInfo = new FormInfo(mContext, user);
-    }
+
 }

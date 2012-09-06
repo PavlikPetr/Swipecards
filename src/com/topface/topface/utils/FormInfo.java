@@ -13,17 +13,17 @@ public class FormInfo {
     private Resources mResources;
     private Profile mProfile;
     private int mSex;    
-    //---------------------------------------------------------------------------
+
     public FormInfo(Context context, Profile profile) {    	
         mResources = context.getResources();
         mProfile = profile;
         mSex = profile.sex;
     }
-    //---------------------------------------------------------------------------
+
     public void setSex(int sex) {
         mSex = sex;
     }
-    //---------------------------------------------------------------------------
+
     public String getEducation(int id) {
         switch (id) {
             case 1:
@@ -44,15 +44,15 @@ public class FormInfo {
                 return null;//mResources.getString(R.string.profile_form_empty);
         }
     }
-    //---------------------------------------------------------------------------
+
     public String[] getEducationEntries() {
         return mResources.getStringArray(mSex == 0 ? R.array.profile_form_education_female : R.array.profile_form_education_male);
     }
-    //---------------------------------------------------------------------------
+
     public String[] getEducationValues() {
         return mResources.getStringArray(R.array.profile_form_education_values);
     }
-    //---------------------------------------------------------------------------
+
     public String getCommunication(int id) {
         switch (id) {
             case 1:
@@ -67,15 +67,15 @@ public class FormInfo {
                 return null;//mResources.getString(R.string.profile_form_empty);
         }
     }
-    //---------------------------------------------------------------------------
+
     public String[] getCommunicationEntries() {
         return mResources.getStringArray(mSex == 0 ? R.array.profile_form_communication_female : R.array.profile_form_communication_male);
     }
-    //---------------------------------------------------------------------------
+
     public String[] getCommunicationValues() {
         return mResources.getStringArray(R.array.profile_form_communication_values);
     }
-    //---------------------------------------------------------------------------
+
     public String getCharacter(int id) {
         switch (id) {
             case 1:
@@ -96,15 +96,15 @@ public class FormInfo {
                 return null;//mResources.getString(R.string.profile_form_empty);
         }
     }
-    //---------------------------------------------------------------------------
+
     public String[] getCharacterEntries() {
         return mResources.getStringArray(mSex == 0 ? R.array.profile_form_character_female : R.array.profile_form_character_male);
     }
-    //---------------------------------------------------------------------------
+
     public String[] getCharacterValues() {
         return mResources.getStringArray(R.array.profile_form_character_values);
     }
-    //---------------------------------------------------------------------------
+
     public String getAlcohol(int id) {
         switch (id) {
             case 1:
@@ -121,15 +121,15 @@ public class FormInfo {
                 return null;//mResources.getString(R.string.profile_form_empty);
         }
     }
-    //---------------------------------------------------------------------------
+
     public String[] getAlcoholEntries() {
         return mResources.getStringArray(mSex == 0 ? R.array.profile_form_alcohol_female : R.array.profile_form_alcohol_male);
     }
-    //---------------------------------------------------------------------------
+
     public String[] getAlcoholValues() {
         return mResources.getStringArray(R.array.profile_form_alcohol_values);
     }
-    //---------------------------------------------------------------------------
+
     public String getFitness(int id) {
         switch (id) {
             case 1:
@@ -148,15 +148,15 @@ public class FormInfo {
                 return null;//mResources.getString(R.string.profile_form_empty);
         }
     }
-    //---------------------------------------------------------------------------
+
     public String[] getFitnessEntries() {
         return mResources.getStringArray(mSex == 0 ? R.array.profile_form_fitness_female : R.array.profile_form_fitness_male);
     }
-    //---------------------------------------------------------------------------
+
     public String[] getFitnessValues() {
         return mResources.getStringArray(R.array.profile_form_fitness_values);
     }
-    //---------------------------------------------------------------------------
+
     public String getJob(int id) {
         switch (id) {
             case 2:
@@ -181,7 +181,7 @@ public class FormInfo {
                 return null;//mResources.getString(R.string.profile_form_empty);
         }
     }
-    //---------------------------------------------------------------------------
+
     public String getMarriage(int id) {
         switch (id) {
             case 1:
@@ -202,15 +202,15 @@ public class FormInfo {
                 return null;//mResources.getString(R.string.profile_form_empty);
         }
     }
-    //---------------------------------------------------------------------------
+
     public String[] getMarriageEntries() {
         return mResources.getStringArray(mSex == 0 ? R.array.profile_form_marriage_female : R.array.profile_form_marriage_male);
     }
-    //---------------------------------------------------------------------------
+
     public String[] getMarriageValues() {
         return mResources.getStringArray(R.array.profile_form_marriage_values);
     }
-    //---------------------------------------------------------------------------
+
     public String getFinances(int id) {
         switch (id) {
             case 1:
@@ -231,15 +231,15 @@ public class FormInfo {
                 return null;//mResources.getString(R.string.profile_form_empty);
         }
     }
-    //---------------------------------------------------------------------------
+
     public String[] getFinancesEntries() {
         return mResources.getStringArray(mSex == 0 ? R.array.profile_form_finances_female : R.array.profile_form_finances_male);
     }
-    //---------------------------------------------------------------------------
+
     public String[] getFinancesValues() {
         return mResources.getStringArray(R.array.profile_form_finances_values);
     }
-    //---------------------------------------------------------------------------
+
     public String getSmoking(int id) {
         switch (id) {
             case 1:
@@ -258,15 +258,15 @@ public class FormInfo {
                 return null;//mResources.getString(R.string.profile_form_empty);
         }
     }
-    //---------------------------------------------------------------------------
+
     public String[] getSmokingEntries() {
         return mResources.getStringArray(mSex == 0 ? R.array.profile_form_smoking_female : R.array.profile_form_smoking_male);
     }
-    //---------------------------------------------------------------------------
+
     public String[] getSmokingValues() {
         return mResources.getStringArray(R.array.profile_form_smoking_values);
     }
-    //---------------------------------------------------------------------------
+
     public String getFormTitle(int resId) {
     	String result = "";
     	String[] variants = mResources.getStringArray(resId);

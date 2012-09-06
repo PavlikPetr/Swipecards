@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import com.topface.topface.data.Profile;
 import android.content.Context;
 import android.util.SparseArray;
@@ -62,7 +63,7 @@ public class CacheProfile {
     public static String dating_city_name; // наименование пользователя в русской локали
     public static String dating_city_full; // полное наименование города
     
-    public static LinkedHashMap<String, Triple<String, String, Boolean>> forms;
+    public static LinkedList<FormItem> forms;
     public static SparseArray<HashMap<String, String>> photoLinks; // альбом пользователя
     public static String status; // статус пользователя
     public static boolean isNewbie; // поле новичка

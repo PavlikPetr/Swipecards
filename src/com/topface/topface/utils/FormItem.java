@@ -8,9 +8,9 @@ public class FormItem {
     public boolean equal;    
 
     // Constants
-    public static int HEADER = 1;
-    public static int TITLE = 2;
-    public static int DATA = 3;
-    public static int DIVIDER = 4;
+    public static final int HEADER = 1;
+    public static final int TITLE = 2;
+    public static final int DATA = 3;
+    public static final int DIVIDER = 4;
 }
 

@@ -1,6 +1,5 @@
 package com.topface.topface.data;
 
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import org.json.JSONObject;
 import android.content.Context;
@@ -11,7 +10,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.Triple;
 
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
@@ -167,122 +165,67 @@ public class Profile extends AbstractDataWithPhotos {
                 
                 // или через конструктор инициализировать ?
 
-                // 1 header
+                // 1 header -= MAIN =-
                 formItem = new FormItem();
                 formItem.type  = FormItem.HEADER;
-                formItem.title = "ОСНОВНЫЕ";
-                formItem.data  = Static.EMPTY;
-                formItem.equal = false;
-                profile.forms.add(formItem);
-
-                // 2 job vs job_id
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "";
-                formItem.data  = formInfo.getJob(form.optInt("job"));
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 3 status vs status_id
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "";
-                formItem.data  = formInfo.getJob(form.optInt("status"));
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                                                
-                // 4 header                
-                formItem = new FormItem();
-                formItem.type  = FormItem.HEADER;
-                formItem.title = "ОСНОВНЫЕ";
+                formItem.title = context.getString(R.string.form_main);
                 formItem.data  = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
-                // 5 education
+                // 2 character
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
-                formItem.title = "";
-                formItem.data  = formInfo.getEducation(form.optInt("education_id"));
-                formItem.equal = false;
-                profile.forms.add(formItem);
-
-                // 6 marriage
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "";
-                formItem.data  = formInfo.getMarriage(form.optInt("marriage_id"));
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 7 finances
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "";
-                formItem.data  = formInfo.getFinances(form.optInt("finances_id"));
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 8 character
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "";
+                formItem.title = formInfo.getFormTitle(R.array.form_main_character);
                 formItem.data  = formInfo.getCharacter(form.optInt("character_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
-                // 9 smoking
+                // 3 communication
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
-                formItem.title = "";
-                formItem.data  = formInfo.getSmoking(form.optInt("smoking_id"));
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 10 alcohol
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "";
-                formItem.data  = formInfo.getSmoking(form.optInt("alcohol_id"));
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 11 fitness
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "";
-                formItem.data  = formInfo.getFitness(form.optInt("fitness_id"));
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 12 communication
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "";
+                formItem.title = formInfo.getFormTitle(R.array.form_main_communication);
                 formItem.data  = formInfo.getCommunication(form.optInt("communication_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 4 height
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = formInfo.getFormTitle(R.array.form_main_height);
+                formItem.data  = "" + form.optInt("height");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
                 // 13 weight
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
-                formItem.title = "";
+                formItem.title = formInfo.getFormTitle(R.array.form_main_weight);
                 formItem.data  = "" + form.optInt("weight");
                 formItem.equal = false;
                 profile.forms.add(formItem);
 
-                // 14 height
+                
+                // 1 header -= PHYSIQUE =-
                 formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "";
-                formItem.data  = "" + form.optInt("height");
+                formItem.type  = FormItem.HEADER;
+                formItem.title = context.getString(R.string.form_physique);
+                formItem.data  = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
+                // 11 fitness
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = formInfo.getFormTitle(R.array.form_physique_fitness);
+                formItem.data  = formInfo.getFitness(form.optInt("fitness_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+
                 // 15 hair
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
-                formItem.title = "";
+                formItem.title = formInfo.getFormTitle(R.array.form_physique_hairs);
                 formItem.data  = "" + form.optInt("hair_id");
                 formItem.equal = false;
                 profile.forms.add(formItem);
@@ -290,39 +233,103 @@ public class Profile extends AbstractDataWithPhotos {
                 // 16 eye
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
-                formItem.title = "";
+                formItem.title = formInfo.getFormTitle(R.array.form_physique_eyes);
                 formItem.data  = "" + form.optInt("eye_id");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
-                // 17 children
+                // 1 header -= SOCIAL =-
                 formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "";
-                formItem.data  = "" + form.optInt("children_id");
+                formItem.type  = FormItem.HEADER;
+                formItem.title = context.getString(R.string.form_social);
+                formItem.data  = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
+                
+                // 6 marriage
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = formInfo.getFormTitle(R.array.form_social_marriage);
+                formItem.data  = formInfo.getMarriage(form.optInt("marriage_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 5 education
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = formInfo.getFormTitle(R.array.form_social_education);
+                formItem.data  = formInfo.getEducation(form.optInt("education_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 7 finances
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = formInfo.getFormTitle(R.array.form_social_finances);
+                formItem.data  = formInfo.getFinances(form.optInt("finances_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);    
                 
                 // 18 residence
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
-                formItem.title = "";
+                formItem.title = formInfo.getFormTitle(R.array.form_social_residence);
                 formItem.data  = "" + form.optInt("residence_id");
                 formItem.equal = false;
                 profile.forms.add(formItem);
-                
+
                 // 19 car vs car_id
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
-                formItem.title = "";
+                formItem.title = formInfo.getFormTitle(R.array.form_social_car);
                 formItem.data  = "" + form.optInt("car_id");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 1 header -= HABITS =-
+                formItem = new FormItem();
+                formItem.type  = FormItem.HEADER;
+                formItem.title = context.getString(R.string.form_habits);
+                formItem.data  = Static.EMPTY;
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 9 smoking
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = formInfo.getFormTitle(R.array.form_habits_smoking);
+                formItem.data  = formInfo.getSmoking(form.optInt("smoking_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 10 alcohol
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = formInfo.getFormTitle(R.array.form_habits_alcohol);
+                formItem.data  = formInfo.getSmoking(form.optInt("alcohol_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 23 restaurants
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = formInfo.getFormTitle(R.array.form_habits_restaurants);
+                formItem.data  = "" + form.optInt("restaurants");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 1 header -= DETAIL =-
+                formItem = new FormItem();
+                formItem.type  = FormItem.HEADER;
+                formItem.title = context.getString(R.string.form_detail);
+                formItem.data  = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
                 // 20 first_dating
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
-                formItem.title = "";
+                formItem.title = formInfo.getFormTitle(R.array.form_detail_about_dating);
                 formItem.data  = "" + form.optInt("first_dating");
                 formItem.equal = false;
                 profile.forms.add(formItem);
@@ -330,26 +337,60 @@ public class Profile extends AbstractDataWithPhotos {
                 // 21 achievements
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
-                formItem.title = "";
+                formItem.title = formInfo.getFormTitle(R.array.form_detail_archievements);
                 formItem.data  = "" + form.optInt("achievements");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                
+                
+                // 1 header -= ????????? =-
+                formItem = new FormItem();
+                formItem.type  = FormItem.HEADER;
+                formItem.title = "?????????";
+                formItem.data  = Static.EMPTY;
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 2 job vs job_id
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "job";
+                formItem.data  = formInfo.getJob(form.optInt("job"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 3 status vs status_id
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "status";
+                formItem.data  = formInfo.getJob(form.optInt("status"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                                                
+                // 16 eye
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "eye";
+                formItem.data  = "" + form.optInt("eye_id");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 17 children
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "children";
+                formItem.data  = "" + form.optInt("children_id");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
                 // 22 form_countries
                 //{Array} form_countries; // массив идентификаторов стран, в которых бывал пользователь
                 
-                // 23 restaurants
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "";
-                formItem.data  = "" + form.optInt("restaurants");
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
                 // 24 valuables
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
-                formItem.title = "";
+                formItem.title = "valuables";
                 formItem.data  = "" + form.optInt("valuables");
                 formItem.equal = false;
                 profile.forms.add(formItem);
@@ -357,7 +398,7 @@ public class Profile extends AbstractDataWithPhotos {
                 // 25 aspirations
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
-                formItem.title = "";
+                formItem.title = "aspirations";
                 formItem.data  = "" + form.optInt("aspirations");
                 formItem.equal = false;
                 profile.forms.add(formItem);
