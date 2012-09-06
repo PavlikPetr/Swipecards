@@ -157,7 +157,7 @@ public class Profile extends AbstractDataWithPhotos {
             if (!resp.isNull("questionary")) {
                 JSONObject form = resp.getJSONObject("form");
                 
-                FormInfo formInfo = new FormInfo(context, profile.sex);
+                FormInfo formInfo = new FormInfo(context, profile);
                 
                 profile.forms.put(context.getString(R.string.s_profile_job_id), 
                         new Triple<String, String, Boolean>(context.getString(R.string.profile_job), 
@@ -310,7 +310,7 @@ public class Profile extends AbstractDataWithPhotos {
     @Override
     public String getSmallLink() {
         return null;
-    }
+    }    
 }
 
 // "ADMIN_MESSAGE","QUESTIONARY_FILLED","CHANGE_PHOTO","STANDALONE_BONUS","STANDALONE",

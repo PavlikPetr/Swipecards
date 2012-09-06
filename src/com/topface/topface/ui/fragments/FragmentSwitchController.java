@@ -69,7 +69,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
 		mMinimumVelocity = 10*configuration.getScaledMinimumFlingVelocity();
 		mVelocitySlop = configuration.getScaledMinimumFlingVelocity();
-		mTouchSlop = ViewConfiguration.getTouchSlop();
+		mTouchSlop = 30;//ViewConfiguration.getTouchSlop();
 		mAnimation = COLLAPSE;
 	}
 

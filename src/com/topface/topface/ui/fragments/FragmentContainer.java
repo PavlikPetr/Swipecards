@@ -76,6 +76,7 @@ public class FragmentContainer {
                 break;
             default:
                 fragment = mProfileFragment;
+                fragmentId = R.id.fragment_profile;
                 break;
         }
         

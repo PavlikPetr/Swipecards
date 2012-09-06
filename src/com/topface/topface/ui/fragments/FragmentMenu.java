@@ -113,6 +113,8 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
                 mBtnSettings.setSelected(true);
                 break; 
             default:
+            	fragmentId = R.id.fragment_profile;
+                mBtnProfile.setSelected(true);
                 break;
         }
         

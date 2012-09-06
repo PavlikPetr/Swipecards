@@ -535,5 +535,5 @@ public class Utils {
     public static void copyTextToClipboard(String text, Context context) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setText(text);
-    }
+    }    
 }

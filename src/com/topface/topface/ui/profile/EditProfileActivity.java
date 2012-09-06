@@ -49,10 +49,11 @@ public class EditProfileActivity extends Activity {
 		mEditItems.add((new EditPhotos()).setType(Type.TOP));
 		mEditItems.add((new EditInterests()).setType(Type.BOTTOM));
 		
-		mEditItems.add((new EditHeader()).setText("Интелектуально-личностные"));
+		mEditItems.add((new EditHeader()).setText("Интелектуально-личностные"));		
 		mEditItems.add((new EditForm()).setTitle(R.string.profile_education).setText("бестолочь").setType(Type.TOP));
 		mEditItems.add((new EditForm()).setTitle(R.string.profile_education).setText("бестолочь").setType(Type.MIDDLE));
 		mEditItems.add((new EditForm()).setTitle(R.string.profile_education).setText("бестолочь").setType(Type.BOTTOM));
+		
 		
 		mEditItems.add((new EditHeader()));
 	}

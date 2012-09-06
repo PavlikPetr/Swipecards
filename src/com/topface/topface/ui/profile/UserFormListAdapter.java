@@ -129,7 +129,7 @@ public class UserFormListAdapter extends BaseAdapter {
     }
     
     private void prepare(User user) {
-        FormInfo formInfo = new FormInfo(mContext, user.sex);
+        FormInfo formInfo = new FormInfo(mContext, user);
 //        for (int i=0;i<10;++i)
 //            mUserQuestionnaire.add(i);
         
