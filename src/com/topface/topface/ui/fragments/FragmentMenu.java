@@ -2,15 +2,12 @@ package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class FragmentMenu extends Fragment implements View.OnClickListener {

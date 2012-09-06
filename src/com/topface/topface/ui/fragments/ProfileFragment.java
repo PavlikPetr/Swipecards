@@ -5,8 +5,6 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.profile.EditProfileActivity;
-import com.topface.topface.ui.profile.PhotoFragment;
-import com.topface.topface.ui.profile.QuestionnaireFragment;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;

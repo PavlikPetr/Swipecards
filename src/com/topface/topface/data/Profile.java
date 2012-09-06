@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import org.json.JSONObject;
 import android.content.Context;
 import com.topface.topface.App;
@@ -9,6 +10,7 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
+import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Triple;
 
 /* Класс профиля владельца устройства */
@@ -39,32 +41,32 @@ public class Profile extends AbstractDataWithPhotos {
     public int average_rate; // средняя оценка текущего пользователя
     
     // Form
-//    public int form_job_id; // идентификатор рабочей партии пользователя
-//    public String form_job; // описание оригинальной работы пользователя
-//    public int form_status_id; // идентификатор предопределенного статуса пользователя
-//    public String form_status; // описание оригинального статуса пользователя
-//    public int form_education_id; // идентификатор предопределенного уровня образования пользователя
-//    public int form_marriage_id; // идентификатор предопределенного семейного положения пользователя
-//    public int form_finances_id; // идентификатор предопределенного финансового положения пользователя
-//    public int form_character_id; // идентификатор предопределенной характеристики пользователя
-//    public int form_smoking_id; // идентификатор предопределенного отношения к курению пользователя
-//    public int form_alcohol_id; // идентификатор предопределенного отношения к алкоголю пользователя
-//    public int form_fitness_id; // идентификатор предопределенного отношения к спорту пользователя
-//    public int form_communication_id; // идентификатор предопределенного отношения к коммуникациям пользователя
-//    public int form_weight; // вес пользователя
-//    public int form_height; // рост пользователя
-//    public int form_hair_id; // идентификатор цвета воло пользователя
-//    public int form_eye_id; // идентификатор цвета глаз пользователя
-//    public int form_children_id; // идентификатор количества детей пользователя
-//    public int form_residence_id; // идентификатор условий проживания пользователя
-//    public int form_car_id; // идентификатор наличия автомобиля у пользователя
-//    public String form_car; // текстовое описание присутствующего автомобиля у пользователя
-//    public String form_first_dating; // текстовое описание свидания пользователя
-//    public String form_achievements; // текстовое описание достижений пользователя
-//    //{Array} form_countries; // массив идентификаторов стран, в которых бывал пользователь
-//    public String form_restaurants; // описание предпочитаемых ресторанов пользователя
-//    public String form_valuables; // описание ценностей пользователя
-//    public String form_aspirations; // описание достижений пользователя
+//1    public int form_job_id; // идентификатор рабочей партии пользователя
+//2    public String form_job; // описание оригинальной работы пользователя
+//3    public int form_status_id; // идентификатор предопределенного статуса пользователя
+//4    public String form_status; // описание оригинального статуса пользователя
+//5    public int form_education_id; // идентификатор предопределенного уровня образования пользователя
+//6    public int form_marriage_id; // идентификатор предопределенного семейного положения пользователя
+//7    public int form_finances_id; // идентификатор предопределенного финансового положения пользователя
+//8    public int form_character_id; // идентификатор предопределенной характеристики пользователя
+//9    public int form_smoking_id; // идентификатор предопределенного отношения к курению пользователя
+//10    public int form_alcohol_id; // идентификатор предопределенного отношения к алкоголю пользователя
+//11    public int form_fitness_id; // идентификатор предопределенного отношения к спорту пользователя
+//12   public int form_communication_id; // идентификатор предопределенного отношения к коммуникациям пользователя
+//13    public int form_weight; // вес пользователя
+//14    public int form_height; // рост пользователя
+//15    public int form_hair_id; // идентификатор цвета воло пользователя
+//16    public int form_eye_id; // идентификатор цвета глаз пользователя
+//17    public int form_children_id; // идентификатор количества детей пользователя
+//18    public int form_residence_id; // идентификатор условий проживания пользователя
+//19    public int form_car_id; // идентификатор наличия автомобиля у пользователя
+//20    public String form_car; // текстовое описание присутствующего автомобиля у пользователя
+//21    public String form_first_dating; // текстовое описание свидания пользователя
+//22    public String form_achievements; // текстовое описание достижений пользователя
+//23    //{Array} form_countries; // массив идентификаторов стран, в которых бывал пользователь
+//24    public String form_restaurants; // описание предпочитаемых ресторанов пользователя
+//25    public String form_valuables; // описание ценностей пользователя
+//26    public String form_aspirations; // описание достижений пользователя
     
     // Dating
     public int dating_sex; // пол пользователей для поиска
@@ -76,7 +78,7 @@ public class Profile extends AbstractDataWithPhotos {
     
     public String status; // статус пользователя
     
-    public LinkedHashMap<String, Triple<String, String, Boolean>> forms = new LinkedHashMap<String, Triple<String, String, Boolean>>();
+    public LinkedList<FormItem> forms = new LinkedList<FormItem>();
     
     public static Profile parse(ApiResponse response) {
         return parse(response.mJSONResult);
@@ -153,128 +155,213 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             Context context = App.getContext();
-            // questionary
+            
+            // form
             if (!resp.isNull("questionary")) {
                 JSONObject form = resp.getJSONObject("form");
                 
                 FormInfo formInfo = new FormInfo(context, profile.sex);
                 
-                profile.forms.put(context.getString(R.string.s_profile_job_id), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_job), 
-                                                            formInfo.getFinances(form.optInt("job_id")), 
-                                                            null));
-                        
-                profile.forms.put(context.getString(R.string.s_profile_job), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_job), 
-                                                            formInfo.getFinances(form.optInt("job")), 
-                                                            null));
 
-                profile.forms.put(context.getString(R.string.s_profile_status_id), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_status), 
-                                                            formInfo.getFinances(form.optInt("status_id")), 
-                                                            null));
+                FormItem formItem = null;
+                
+                // или через конструктор инициализировать ?
+
+                // 1 header
+                formItem = new FormItem();
+                formItem.type  = FormItem.HEADER;
+                formItem.title = "ОСНОВНЫЕ";
+                formItem.data  = Static.EMPTY;
+                formItem.equal = false;
+                profile.forms.add(formItem);
+
+                // 2 job vs job_id
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = formInfo.getJob(form.optInt("job"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 3 status vs status_id
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = formInfo.getJob(form.optInt("status"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
                                                 
-                profile.forms.put(context.getString(R.string.s_profile_status), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_status), 
-                                                            formInfo.getFinances(form.optInt("status")), 
-                                                            null));
+                // 4 header                
+                formItem = new FormItem();
+                formItem.type  = FormItem.HEADER;
+                formItem.title = "ОСНОВНЫЕ";
+                formItem.data  = Static.EMPTY;
+                formItem.equal = false;
+                profile.forms.add(formItem);
                 
-                
-                profile.forms.put(context.getString(R.string.s_profile_education), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_education), 
-                                                            formInfo.getFinances(form.optInt("education_id")), 
-                                                            null));
-                int marriage_id = profile.sex==Static.GIRL ? R.string.profile_marriage_female : R.string.profile_marriage_male ;
-                profile.forms.put(context.getString(R.string.s_profile_marriage), 
-                        new Triple<String, String, Boolean>(context.getString(marriage_id), 
-                                                            formInfo.getFinances(form.optInt("marriage_id")), 
-                                                            null));
+                // 5 education
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = formInfo.getEducation(form.optInt("education_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
 
-                profile.forms.put(context.getString(R.string.s_profile_finances), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_finances), 
-                                                            formInfo.getFinances(form.optInt("finances_id")), 
-                                                            null));
+                // 6 marriage
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = formInfo.getMarriage(form.optInt("marriage_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
                 
-                profile.forms.put(context.getString(R.string.s_profile_character), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_character), 
-                                                            formInfo.getFinances(form.optInt("character_id")), 
-                                                            null));
+                // 7 finances
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = formInfo.getFinances(form.optInt("finances_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 8 character
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = formInfo.getCharacter(form.optInt("character_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 9 smoking
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = formInfo.getSmoking(form.optInt("smoking_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 10 alcohol
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = formInfo.getSmoking(form.optInt("alcohol_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 11 fitness
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = formInfo.getFitness(form.optInt("fitness_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 12 communication
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = formInfo.getCommunication(form.optInt("communication_id"));
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 13 weight
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("weight");
+                formItem.equal = false;
+                profile.forms.add(formItem);
 
-                profile.forms.put(context.getString(R.string.s_profile_smoking), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_smoking), 
-                                                            formInfo.getFinances(form.optInt("smoking_id")), 
-                                                            null));
+                // 14 height
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("height");
+                formItem.equal = false;
+                profile.forms.add(formItem);
                 
-                profile.forms.put(context.getString(R.string.s_profile_alcohol), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_alcohol), 
-                                                            formInfo.getFinances(form.optInt("alcohol_id")), 
-                                                            null));
+                // 15 hair
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("hair_id");
+                formItem.equal = false;
+                profile.forms.add(formItem);
                 
-                profile.forms.put(context.getString(R.string.s_profile_fitness), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_fitness), 
-                                                            formInfo.getFinances(form.optInt("fitness_id")), 
-                                                            null));
+                // 16 eye
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("eye_id");
+                formItem.equal = false;
+                profile.forms.add(formItem);
                 
-                profile.forms.put(context.getString(R.string.s_profile_communication), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_commutability), 
-                                                            formInfo.getFinances(form.optInt("communication_id")), 
-                                                            null));
+                // 17 children
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("children_id");
+                formItem.equal = false;
+                profile.forms.add(formItem);
                 
-                profile.forms.put(context.getString(R.string.s_profile_weight), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_weight), 
-                                                            formInfo.getFinances(form.optInt("weight")), 
-                                                            null));
-                profile.forms.put(context.getString(R.string.s_profile_height), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_height), 
-                                                            formInfo.getFinances(form.optInt("height")), 
-                                                            null));
-                profile.forms.put(context.getString(R.string.s_profile_hair), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_height), 
-                                                            formInfo.getFinances(form.optInt("hair_id")), 
-                                                            null));
-                profile.forms.put(context.getString(R.string.s_profile_eye), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_height), 
-                                                            formInfo.getFinances(form.optInt("eye_id")), 
-                                                            null));
-                profile.forms.put(context.getString(R.string.s_profile_children), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_height), 
-                                                            formInfo.getFinances(form.optInt("children_id")), 
-                                                            null));
-                profile.forms.put(context.getString(R.string.s_profile_residence), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_height), 
-                                                            formInfo.getFinances(form.optInt("residence_id")), 
-                                                            null));
-                profile.forms.put(context.getString(R.string.s_profile_car_id), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_height), 
-                                                            formInfo.getFinances(form.optInt("car_id")), 
-                                                            null));
-                profile.forms.put(context.getString(R.string.s_profile_car), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_height), 
-                                                            formInfo.getFinances(form.optInt("car")), 
-                                                            null));
-                profile.forms.put(context.getString(R.string.s_profile_first_dating), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_height), 
-                                                            formInfo.getFinances(form.optInt("first_dating")), 
-                                                            null));
-                profile.forms.put(context.getString(R.string.s_profile_achievements), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_height), 
-                                                            formInfo.getFinances(form.optInt("achievements")), 
-                                                            null));
-
+                // 18 residence
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("residence_id");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 19 car vs car_id
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("car_id");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 20 first_dating
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("first_dating");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 21 achievements
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("achievements");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 22 form_countries
                 //{Array} form_countries; // массив идентификаторов стран, в которых бывал пользователь
                 
-                profile.forms.put(context.getString(R.string.s_profile_restaurants), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_finances), 
-                                                            formInfo.getFinances(form.optInt("restaurants")), 
-                                                            null));
-                profile.forms.put(context.getString(R.string.s_profile_valuables), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_finances), 
-                                                            formInfo.getFinances(form.optInt("valuables")), 
-                                                            null));
-                profile.forms.put(context.getString(R.string.s_profile_aspirations), 
-                        new Triple<String, String, Boolean>(context.getString(R.string.profile_finances), 
-                                                            formInfo.getFinances(form.optInt("aspirations")), 
-                                                            null));
+                // 23 restaurants
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("restaurants");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 24 valuables
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("valuables");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+ 
+                // 25 aspirations
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = "";
+                formItem.data  = "" + form.optInt("aspirations");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
             }
             
             initPhotos(resp, profile);

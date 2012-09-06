@@ -48,10 +48,10 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 		
         // Preferences
         mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        int lastFragmentId = mPreferences.getInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, R.id.fragment_profile);
+        int lastFragmentId = 0;// mPreferences.getInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, R.id.fragment_profile);
 
 		// last opened fragment
-		mFragmentContainer.showFragment(lastFragmentId, true);
+		mFragmentContainer.showFragment(lastFragmentId/*R.id.fragment_dialogs*/, true);
 		
 //		mHomeButton = ((Button) findViewById(R.id.btnHeaderHome));
 //		mHomeButton.setOnClickListener(mOnHomeClickListener);		

@@ -130,7 +130,7 @@ public class EditProfileActivity extends Activity {
 
 		@Override
 		public String getTitle() {
-			return CacheProfile.form_status;
+			return "типа статус";//CacheProfile.form_status;
 		}
 		
 		@Override
@@ -186,7 +186,7 @@ public class EditProfileActivity extends Activity {
 
 		@Override
 		public String getTitle() {			
-			return CacheProfile.forms_quantity + " " + getResources().getString(R.string.edit_interests);
+			return "что-то там";//CacheProfile.forms_quantity + " " + getResources().getString(R.string.edit_interests);
 		}		
 		
 		@Override

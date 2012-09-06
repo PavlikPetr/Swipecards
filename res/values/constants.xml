@@ -18,6 +18,8 @@
   <string name="s_dating_city">dating_city</string>
   
   <!-- Profile pref name -->
+  <string name="s_profile_header_1">header_1</string>
+  <string name="s_profile_header_2">header_2</string>
   
   <string name="s_profile_name">profile_name</string>
   <string name="s_profile_sex">profile_sex</string>
