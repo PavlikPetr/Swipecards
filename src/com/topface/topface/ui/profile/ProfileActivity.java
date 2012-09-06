@@ -5,11 +5,15 @@ import com.topface.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 /* "Профиль" */
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends Activity{
     // Data
-
+	private Button mEditButton;
+	
     //Constants
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_MUTUAL_ID = "mutual_id";
@@ -25,6 +29,7 @@ public class ProfileActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_profile);
+        
         Debug.log(this, "+onCreate");
     }
   
@@ -141,5 +146,5 @@ public class ProfileActivity extends Activity {
 //            });//runOnUiThread
 //        }
 //    }
-
+    
 }

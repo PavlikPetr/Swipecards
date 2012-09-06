@@ -4,9 +4,14 @@ import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
+import com.topface.topface.ui.profile.EditProfileActivity;
+import com.topface.topface.ui.profile.PhotoFragment;
+import com.topface.topface.ui.profile.QuestionnaireFragment;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,15 +19,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-public class ProfileFragment extends BaseFragment {
+public class ProfileFragment extends BaseFragment implements OnClickListener{
     //Data
     private ImageView mUserAvatar;
     private TextView  mUserName;
@@ -54,6 +61,10 @@ public class ProfileFragment extends BaseFragment {
 		
         // Home Button
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
+        Button editButton = (Button)view.findViewById(R.id.btnNavigationEditBar);
+        editButton.setVisibility(View.VISIBLE);
+        editButton.setText(getResources().getString(R.string.navigation_edit));
+        editButton.setOnClickListener(this);
 		
 		// Avatar, Name, City
         mUserAvatar = (ImageView)view.findViewById(R.id.ivUserAvatar);
@@ -203,5 +214,15 @@ public class ProfileFragment extends BaseFragment {
             }
             return fragment;
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+    	switch (v.getId()) {
+		case R.id.btnNavigationEditBar:			
+			startActivity(new Intent(getActivity().getApplicationContext(),EditProfileActivity.class));
+			break;		
+		}
+    	
     }
 }

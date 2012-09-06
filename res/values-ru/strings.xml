@@ -160,6 +160,12 @@
 	  <string name="profile_msg_ask">Хочу узнать о тебе больше. Заполни, пожалуйста, анкету!</string>
 	  <string name="profile_msg_sent">Отправлено</string>
 	  
+	  <!--  EditProfileActivity -->
+	  <string name="edit_title">Редактирование</string>
+	  <string name="edit_bg_photo">Фоновая фотография</string>
+	  <string name="edit_album_photos">фотографий</string>
+	  <string name="edit_interests">интересов</string>
+	  
 	  <!-- Album, Ero Album Activity -->
 	  <string name="album_header_title">Альбом</string>
 	  <string name="album_add_photo_title">Добавить фото</string>
@@ -199,4 +205,5 @@
     <!--  Navigation Header -->
     <string name="navigation_back_profile">Профиль</string>
     <string name="navigation_back">Назад</string>
+    <string name="navigation_edit">Изм.</string>
 </resources>
