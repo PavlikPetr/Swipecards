@@ -22,50 +22,55 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class EditProfileActivity extends Activity {
-	
+
 	private ListView mEditsList;
 	private LinkedList<EditProfileItem> mEditItems;
-	
+
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_edit_profile);
-        
-        ((TextView)findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-        
-        mEditItems = new LinkedList<EditProfileItem>();
-        initEditItems();
-        
-        mEditsList = (ListView) findViewById(R.id.lvEdits);
-        mEditsList.setAdapter(new EditsAdapter(getApplicationContext(),mEditItems));
-        
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.ac_edit_profile);
+
+		((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
+
+		mEditItems = new LinkedList<EditProfileItem>();
+		initEditItems();
+
+		mEditsList = (ListView) findViewById(R.id.lvEdits);
+		mEditsList.setAdapter(new EditsAdapter(getApplicationContext(), mEditItems));
+
 	}
-	
-	private void initEditItems() {		
+
+	private void initEditItems() {
 		mEditItems.add((new EditStatus()).setType(Type.TOP));
 		mEditItems.add((new EditBackPhoto()).setType(Type.BOTTOM));
-		
+
 		mEditItems.add((new EditHeader()));
 		mEditItems.add((new EditPhotos()).setType(Type.TOP));
 		mEditItems.add((new EditInterests()).setType(Type.BOTTOM));
 		
-		mEditItems.add((new EditHeader()));
 		mEditItems.add((new EditHeader()).setText("Интелектуально-личностные"));
-		mEditItems.add((new EditPhotos()).setType(Type.TOP));
-		mEditItems.add((new EditInterests()).setType(Type.MIDDLE));
-		mEditItems.add((new EditBackPhoto()).setType(Type.BOTTOM));
+		mEditItems.add((new EditForm()).setTitle(R.string.profile_education).setText("бестолочь").setType(Type.TOP));
+		mEditItems.add((new EditForm()).setTitle(R.string.profile_education).setText("бестолочь").setType(Type.MIDDLE));
+		mEditItems.add((new EditForm()).setTitle(R.string.profile_education).setText("бестолочь").setType(Type.BOTTOM));
+		
+		mEditItems.add((new EditHeader()));
 	}
-	
-	class EditsAdapter extends BaseAdapter {		
-		
+
+	class EditsAdapter extends BaseAdapter {
+
 		private LayoutInflater mInflater;
-		private LinkedList<EditProfileItem> mData; 
-		
+		private LinkedList<EditProfileItem> mData;
+
+		private int T_HEADER = 0;
+		private int T_EDIT_ITEM = 1;
+		private int T_COUNT = 2;
+
 		public EditsAdapter(Context context, LinkedList<EditProfileItem> data) {
 			mInflater = LayoutInflater.from(context);
 			mData = data;
 		}
-		
+
 		@Override
 		public int getCount() {
 			return mData.size();
@@ -80,86 +85,126 @@ public class EditProfileActivity extends Activity {
 		public long getItemId(int position) {
 			return position;
 		}
-		
-		//TODO create Types
+
+		@Override
+		public int getItemViewType(int position) {
+			if (getItem(position) instanceof EditHeader) {
+				return T_HEADER;
+			}
+			return T_EDIT_ITEM;
+		}
+
+		@Override
+		public int getViewTypeCount() {			
+			return T_COUNT;
+		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			EditProfileItem item = getItem(position);
-			
-			ViewGroup view = (ViewGroup)mInflater.inflate(item.getLayoutResId(),null,false);
-			
-			// background image
-			ImageView background = (ImageView)view.findViewById(R.id.ivEditBackground);
+
+			ViewHolder holder = null;
+			if(convertView == null) {
+				holder = new ViewHolder();
+				
+				convertView = mInflater.inflate(item.getLayoutResId(), null, false);
+				
+				holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+				holder.mText = (TextView) convertView.findViewById(R.id.tvText);
+				holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
+				
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}			
+
+			// background image			
 			switch (item.getType()) {
 			case TOP:
-				background.setImageDrawable(getResources().getDrawable(R.drawable.edit_big_btn_top_selector));
+				holder.mBackground.setImageDrawable(getResources().getDrawable(
+						R.drawable.edit_big_btn_top_selector));
 				break;
 			case MIDDLE:
-				background.setImageDrawable(getResources().getDrawable(R.drawable.edit_big_btn_middle_selector));
+				holder.mBackground.setImageDrawable(getResources().getDrawable(
+						R.drawable.edit_big_btn_middle_selector));
 				break;
 			case BOTTOM:
-				background.setImageDrawable(getResources().getDrawable(R.drawable.edit_big_btn_bottom_selector));
+				holder.mBackground.setImageDrawable(getResources().getDrawable(
+						R.drawable.edit_big_btn_bottom_selector));
 				break;
 			case NONE:
 				break;
-			}
+			}			
 			
-			// text
-			TextView title = (TextView)view.findViewById(R.id.tvTitle);
-			if (item instanceof EditStatus) {
-				title.setText(item.getTitle());				
-			} else if (item instanceof EditBackPhoto) {
-				title.setText(item.getTitle());
-				title.setCompoundDrawablesWithIntrinsicBounds(item.getIcon(), null, null, null);
-			} else if (item instanceof EditPhotos) {
-				title.setText(item.getTitle());
-				title.setCompoundDrawablesWithIntrinsicBounds(item.getIcon(), null, null, null);
-			} else if (item instanceof EditInterests) {
-				title.setText(item.getTitle());
-			} else if (item instanceof EditHeader) {
-				title.setText(item.getTitle());
-			}
 			
-			return view;
+			//text
+			if (item instanceof EditHeader) {
+				holder.mTitle.setText(item.getTitle());
+			} else {
+				holder.mText.setVisibility(View.GONE);
+				if (item instanceof EditStatus) {
+					holder.mTitle.setText(item.getTitle());
+				} else if (item instanceof EditBackPhoto) {
+					holder.mTitle.setText(item.getTitle());
+					holder.mTitle.setCompoundDrawablesWithIntrinsicBounds(item.getIcon(), null, null, null);
+				} else if (item instanceof EditPhotos) {
+					holder.mTitle.setText(item.getTitle());
+					holder.mTitle.setCompoundDrawablesWithIntrinsicBounds(item.getIcon(), null, null, null);
+				} else if (item instanceof EditInterests) {
+					holder.mTitle.setText(item.getTitle());				
+				} else if (item instanceof EditForm) {
+					holder.mTitle.setText(item.getTitle());				
+					holder.mText.setVisibility(View.VISIBLE);
+					holder.mText.setText(item.getText());
+				}
+			}
+			return convertView;
 		}
 		
+		class ViewHolder {
+			TextView mTitle;
+			TextView mText;
+			ImageView mBackground;
+		}
+
 	}
-	
+
 	class EditStatus extends EditProfileItem {
 
 		@Override
 		public String getTitle() {
-			return CacheProfile.form_status;
+			return CacheProfile.status;
 		}
-		
+
 		@Override
 		void onClick() {
-			//TODO
+			// TODO
 		}
 	}
-	
+
 	class EditBackPhoto extends EditProfileItem {
 
 		@Override
 		public String getTitle() {
 			return getResources().getString(R.string.edit_bg_photo);
 		}
-		
+
 		@Override
 		public Drawable getIcon() {
-			Bitmap original = BitmapFactory.decodeResource(getResources(), R.drawable.user_avatar_bg); 
-			BitmapDrawable resized = new BitmapDrawable(getResources(),Bitmap.createScaledBitmap(original, 46, 35, true));
-			
+			Bitmap original = BitmapFactory.decodeResource(getResources(),
+					R.drawable.user_avatar_bg);
+			BitmapDrawable resized = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
+					original, 46, 35, true));
+
 			return resized;
 		}
-		
+
 		@Override
 		void onClick() {
-			//TODO
+			// TODO
 		}
 	}
-	
+
 	class EditPhotos extends EditProfileItem {
 
 		@Override
@@ -170,55 +215,97 @@ public class EditProfileActivity extends Activity {
 			}
 			return quantity + " " + getResources().getString(R.string.edit_album_photos);
 		}
-		
+
 		@Override
-		public Drawable getIcon() {			
+		public Drawable getIcon() {
 			return getResources().getDrawable(R.drawable.edit_icon_photo);
 		}
-		
+
 		@Override
 		void onClick() {
-			//TODO
+			// TODO
 		}
 	}
-	
+
 	class EditInterests extends EditProfileItem {
 
 		@Override
-		public String getTitle() {			
-			return CacheProfile.forms_quantity + " " + getResources().getString(R.string.edit_interests);
-		}		
-		
+		public String getTitle() {
+			return 0 + " " + getResources().getString(R.string.edit_interests);
+			// TODO interests number
+		}
+
 		@Override
 		void onClick() {
-			//TODO
+			// TODO
 		}
 	}
-	
-	class EditHeader extends EditProfileItem {
 
+	class EditForm extends EditProfileItem {
+
+		private String mTitle = "";
 		private String mText = "";
-		
+
 		@Override
 		public String getTitle() {
-			return mText;
-		}		
-		
+			return mTitle;
+		}
+
 		@Override
-		void onClick() { }		
+		public String getText() {
+			return mText;
+		}
+
+		public EditForm setTitle(String title) {
+			mTitle = title;
+			return this;
+		}
 		
+		public EditForm setTitle(int resId) {
+			mTitle = getResources().getString(resId);
+			return this;
+		}
+
+		public EditForm setText(String text) {
+			mText = text;
+			return this;
+		}
+
+		@Override
+		void onClick() {
+			// TODO
+		}
+	}
+
+	class EditHeader extends EditProfileItem {
+
+		private String mTitle = "";
+
+		@Override
+		public String getTitle() {
+			return mTitle;
+		}
+
+		@Override
+		void onClick() { }
+
 		@Override
 		public int getLayoutResId() {
 			return R.layout.item_edit_profile_header;
 		}
-		
+
 		@Override
 		public Type getType() {
 			return Type.NONE;
 		}
-		
+
 		public EditProfileItem setText(String text) {
-			mText = text;
+			mTitle = text;
+			return this;
+		}
+		
+		public EditProfileItem setText(int resId) {
+			mTitle = getResources().getString(resId);
 			return this;
 		}
 	}
