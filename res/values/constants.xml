@@ -18,21 +18,37 @@
   <string name="s_dating_city">dating_city</string>
   
   <!-- Profile pref name -->
+  
   <string name="s_profile_name">profile_name</string>
   <string name="s_profile_sex">profile_sex</string>
   <string name="s_profile_age">profile_age</string>
   <string name="s_profile_city">profile_city</string>
-  
   <string name="s_profile_about">profile_about</string>
-  <string name="s_profile_height">profile_height</string>
+  
+  <string name="s_profile_job_id">profile_job_id</string>
+  <string name="s_profile_job">profile_job</string>
+  <string name="s_profile_status_id">profile_status_id</string>
+  <string name="s_profile_status">profile_status</string>
+  <string name="s_profile_education">profile_education_id</string>
+  <string name="s_profile_marriage">profile_marriage_id</string>
+  <string name="s_profile_finances">profile_finances_id</string>
+  <string name="s_profile_character">profile_character_id</string>
+  <string name="s_profile_smoking">profile_smoking_id</string>
+  <string name="s_profile_alcohol">profile_alcohol_id</string>
+  <string name="s_profile_fitness">profile_fitness_id</string>
+  <string name="s_profile_communication">profile_communication_id</string>
   <string name="s_profile_weight">profile_weight</string>
-  <string name="s_profile_fitness">profile_fitness</string>
-  <string name="s_profile_marriage">profile_marriage</string>
-  <string name="s_profile_education">profile_education</string>
-  <string name="s_profile_finances">profile_finances</string>
-  <string name="s_profile_smoking">profile_smoking</string>
-  <string name="s_profile_alcohol">profile_alcohol</string>
-  <string name="s_profile_commutability">profile_commutability</string>
-  <string name="s_profile_character">profile_character</string>
-    
+  <string name="s_profile_height">profile_height</string>
+  <string name="s_profile_hair">profile_hair_id</string>
+  <string name="s_profile_eye">profile_eye_id</string>
+  <string name="s_profile_children">profile_children_id</string>
+  <string name="s_profile_residence">profile_residence_id</string>
+  <string name="s_profile_car_id">profile_car_id</string>
+  <string name="s_profile_car">profile_car</string>
+  <string name="s_profile_first_dating">profile_first_dating</string>
+  <string name="s_profile_achievements">profile_achievements</string>
+  <string name="s_profile_restaurants">profile_restaurants</string>
+  <string name="s_profile_valuables">profile_valuables</string>
+  <string name="s_profile_aspirations">profile_aspirations</string>
+
 </resources>

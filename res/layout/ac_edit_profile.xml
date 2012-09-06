@@ -90,7 +90,7 @@
         
         <!-- commutability -->
         <ListPreference
-            android:key="@string/s_profile_commutability"
+            android:key="@string/s_profile_communication"
             android:title="@string/profile_commutability" 
             android:summary="" />
         

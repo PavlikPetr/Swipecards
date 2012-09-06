@@ -4,12 +4,10 @@ import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.User;
-import com.topface.topface.ui.views.TripleButton;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.Triple;
 import android.content.Context;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,26 +137,26 @@ public class UserFormListAdapter extends BaseAdapter {
         mUserQuestionnaire.add(new Triple<String, String, Boolean>("Интеллектуально-личностные", null ,null));
         mItemLayoutList.add(T_TITLE);
 
-        // education
-        if(user.form_education_id > 0) {
-            boolean b = CacheProfile.form_education_id == user.form_education_id; 
-            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_education),formInfo.getEducation(user.form_education_id),b));        
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // communication
-        if(user.form_communication_id > 0) {
-            boolean b = CacheProfile.form_communication_id == user.form_communication_id;
-            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_commutability),formInfo.getCommunication(user.form_communication_id),b));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // character
-        if(user.form_character_id > 0) {
-            boolean b = CacheProfile.form_character_id == user.form_character_id;
-            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_character),formInfo.getCharacter(user.form_character_id),b));       
-            mItemLayoutList.add(T_DATA);
-        }
+//        // education
+//        if(user.form_education_id > 0) {
+//            boolean b = CacheProfile.form_education_id == user.form_education_id; 
+//            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_education),formInfo.getEducation(user.form_education_id),b));        
+//            mItemLayoutList.add(T_DATA);
+//        }
+//
+//        // communication
+//        if(user.form_communication_id > 0) {
+//            boolean b = CacheProfile.form_communication_id == user.form_communication_id;
+//            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_commutability),formInfo.getCommunication(user.form_communication_id),b));       
+//            mItemLayoutList.add(T_DATA);
+//        }
+//
+//        // character
+//        if(user.form_character_id > 0) {
+//            boolean b = CacheProfile.form_character_id == user.form_character_id;
+//            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_character),formInfo.getCharacter(user.form_character_id),b));       
+//            mItemLayoutList.add(T_DATA);
+//        }
         
         mUserQuestionnaire.add(null);
         mItemLayoutList.add(T_DIVIDER);
@@ -167,54 +165,54 @@ public class UserFormListAdapter extends BaseAdapter {
         mUserQuestionnaire.add(new Triple<String, String, Boolean>("Физические", null, null));
         mItemLayoutList.add(T_TITLE);
 
-        // height
-        if(user.form_height > 0) {
-            boolean b = CacheProfile.form_height == user.form_height;
-            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_height),""+user.form_height,b));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // weight
-        if(user.form_weight > 0) {
-            boolean b = CacheProfile.form_weight == user.form_weight;
-            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_weight),""+user.form_weight,b));
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // fitness
-        if(user.form_fitness_id > 0) {
-            boolean b = CacheProfile.form_fitness_id == user.form_fitness_id;
-            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_fitness),formInfo.getFitness(user.form_fitness_id),b));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // marriage
-        if(user.form_marriage_id > 0) {
-            boolean b = CacheProfile.form_marriage_id == user.form_marriage_id;
-            int marriage = user.sex==Static.GIRL ? R.string.profile_marriage_female : R.string.profile_marriage_male ;
-            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(marriage),formInfo.getMarriage(user.form_marriage_id),b));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // finances
-        if(user.form_finances_id > 0) {
-            boolean b = CacheProfile.form_finances_id == user.form_finances_id;
-            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_finances),formInfo.getFinances(user.form_finances_id),b));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // smoking
-        if(user.form_smoking_id > 0) {
-            boolean b = CacheProfile.form_smoking_id == user.form_smoking_id;
-            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_smoking),formInfo.getSmoking(user.form_smoking_id),b));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // alcohol
-        if(user.form_alcohol_id > 0) {
-            boolean b = CacheProfile.form_alcohol_id == user.form_alcohol_id;
-            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_alcohol),formInfo.getAlcohol(user.form_alcohol_id),b));       
-            mItemLayoutList.add(T_DATA);
-        }
+//        // height
+//        if(user.form_height > 0) {
+//            boolean b = CacheProfile.form_height == user.form_height;
+//            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_height),""+user.form_height,b));       
+//            mItemLayoutList.add(T_DATA);
+//        }
+//
+//        // weight
+//        if(user.form_weight > 0) {
+//            boolean b = CacheProfile.form_weight == user.form_weight;
+//            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_weight),""+user.form_weight,b));
+//            mItemLayoutList.add(T_DATA);
+//        }
+//
+//        // fitness
+//        if(user.form_fitness_id > 0) {
+//            boolean b = CacheProfile.form_fitness_id == user.form_fitness_id;
+//            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_fitness),formInfo.getFitness(user.form_fitness_id),b));       
+//            mItemLayoutList.add(T_DATA);
+//        }
+//
+//        // marriage
+//        if(user.form_marriage_id > 0) {
+//            boolean b = CacheProfile.form_marriage_id == user.form_marriage_id;
+//            int marriage = user.sex==Static.GIRL ? R.string.profile_marriage_female : R.string.profile_marriage_male ;
+//            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(marriage),formInfo.getMarriage(user.form_marriage_id),b));       
+//            mItemLayoutList.add(T_DATA);
+//        }
+//
+//        // finances
+//        if(user.form_finances_id > 0) {
+//            boolean b = CacheProfile.form_finances_id == user.form_finances_id;
+//            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_finances),formInfo.getFinances(user.form_finances_id),b));       
+//            mItemLayoutList.add(T_DATA);
+//        }
+//
+//        // smoking
+//        if(user.form_smoking_id > 0) {
+//            boolean b = CacheProfile.form_smoking_id == user.form_smoking_id;
+//            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_smoking),formInfo.getSmoking(user.form_smoking_id),b));       
+//            mItemLayoutList.add(T_DATA);
+//        }
+//
+//        // alcohol
+//        if(user.form_alcohol_id > 0) {
+//            boolean b = CacheProfile.form_alcohol_id == user.form_alcohol_id;
+//            mUserQuestionnaire.add(new Triple<String, String, Boolean>(mContext.getString(R.string.profile_alcohol),formInfo.getAlcohol(user.form_alcohol_id),b));       
+//            mItemLayoutList.add(T_DATA);
+//        }
     }
 }

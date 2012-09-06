@@ -3,7 +3,6 @@ package com.topface.topface.ui.profile;
 import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.User;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import android.content.Context;
@@ -12,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +31,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
         public TextView mTitle;
         public TextView mHeader;
         public TextView mValue;
+        public Button   mFill;
     }
 
     public ProfileFormListAdapter(Context context) {
@@ -85,6 +86,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
                     holder.mTitle  = (TextView)convertView.findViewById(R.id.tvTitle);
                     holder.mHeader = (TextView)convertView.findViewById(R.id.tvHeader);
                     holder.mValue  = (TextView)convertView.findViewById(R.id.tvData);
+                    holder.mFill   = (Button)convertView.findViewById(R.id.btnFill);
                     break;
             }
             
@@ -105,12 +107,20 @@ public class ProfileFormListAdapter extends BaseAdapter {
     	
     	switch (type) {
             case T_TITLE:
-                holder.mTitle.setText(item.first);
                 holder.mState.setImageResource(R.drawable.user_title);
+                holder.mTitle.setText(item.first);
                 break;
             case T_DATA:
+                holder.mState.setImageResource(R.drawable.user_cell);
                 holder.mHeader.setText(item.first);
-                holder.mValue.setText(item.second);
+                if(item.second != null) {
+                    holder.mValue.setText(item.second);
+                    holder.mValue.setVisibility(View.VISIBLE);
+                    holder.mFill.setVisibility(View.INVISIBLE);
+                } else {
+                    holder.mValue.setVisibility(View.INVISIBLE);
+                    holder.mFill.setVisibility(View.VISIBLE);
+                }
                 break;
         }
         
@@ -118,30 +128,23 @@ public class ProfileFormListAdapter extends BaseAdapter {
     }
     
     private void prepare() {
-        FormInfo formInfo = new FormInfo(mContext, CacheProfile.sex);
 
         // header
         mProfileForm.add(new Pair<String, String>("Интеллектуально-личностные", null));
         mItemLayoutList.add(T_TITLE);
 
-        // education
-        if(CacheProfile.form_education_id > 0) {
-            mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_education),formInfo.getEducation(CacheProfile.form_education_id)));        
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // communication
-        if(CacheProfile.form_communication_id > 0) {
-            mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_commutability),formInfo.getCommunication(CacheProfile.form_communication_id)));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // character
-        if(CacheProfile.form_character_id > 0) {
-            mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_character),formInfo.getCharacter(CacheProfile.form_character_id)));       
-            mItemLayoutList.add(T_DATA);
-        }
-        
+//        // education
+//        mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_education), formInfo.getEducation(CacheProfile.form_education_id)));        
+//        mItemLayoutList.add(T_DATA);
+//
+//        // communication
+//        mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_commutability), formInfo.getCommunication(CacheProfile.form_communication_id)));       
+//        mItemLayoutList.add(T_DATA);
+//
+//        // character
+//        mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_character), formInfo.getCharacter(CacheProfile.form_character_id)));       
+//        mItemLayoutList.add(T_DATA);
+//        
         mProfileForm.add(null);
         mItemLayoutList.add(T_DIVIDER);
         
@@ -149,47 +152,33 @@ public class ProfileFormListAdapter extends BaseAdapter {
         mProfileForm.add(new Pair<String, String>("Физические", null));
         mItemLayoutList.add(T_TITLE);
 
-        // height
-        if(CacheProfile.form_height > 0) {
-            mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_height),""+CacheProfile.form_height));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // weight
-        if(CacheProfile.form_weight > 0) {
-            mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_weight),""+CacheProfile.form_weight));
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // fitness
-        if(CacheProfile.form_fitness_id > 0) {
-            mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_fitness),formInfo.getFitness(CacheProfile.form_fitness_id)));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // marriage
-        if(CacheProfile.form_marriage_id > 0) {
-            int marriage = CacheProfile.sex==Static.GIRL ? R.string.profile_marriage_female : R.string.profile_marriage_male ;
-            mProfileForm.add(new Pair<String, String>(mContext.getString(marriage),formInfo.getMarriage(CacheProfile.form_marriage_id)));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // finances
-        if(CacheProfile.form_finances_id > 0) {
-            mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_finances),formInfo.getFinances(CacheProfile.form_finances_id)));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // smoking
-        if(CacheProfile.form_smoking_id > 0) {
-            mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_smoking),formInfo.getSmoking(CacheProfile.form_smoking_id)));       
-            mItemLayoutList.add(T_DATA);
-        }
-
-        // alcohol
-        if(CacheProfile.form_alcohol_id > 0) {
-            mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_alcohol),formInfo.getAlcohol(CacheProfile.form_alcohol_id)));       
-            mItemLayoutList.add(T_DATA);
-        }
+//        // height
+//        mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_height), CacheProfile.form_height>0 ? ""+CacheProfile.form_height : null));       
+//        mItemLayoutList.add(T_DATA);
+//
+//        // weight
+//        mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_weight), CacheProfile.form_weight>0 ? ""+CacheProfile.form_weight : null));
+//        mItemLayoutList.add(T_DATA);
+//
+//        // fitness
+//        mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_fitness), formInfo.getFitness(CacheProfile.form_fitness_id)));       
+//        mItemLayoutList.add(T_DATA);
+//
+//        // marriage
+//        int marriage = CacheProfile.sex==Static.GIRL ? R.string.profile_marriage_female : R.string.profile_marriage_male ;
+//        mProfileForm.add(new Pair<String, String>(mContext.getString(marriage), formInfo.getMarriage(CacheProfile.form_marriage_id)));       
+//        mItemLayoutList.add(T_DATA);
+//
+//        // finances
+//        mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_finances), formInfo.getFinances(CacheProfile.form_finances_id)));       
+//        mItemLayoutList.add(T_DATA);
+//
+//        // smoking
+//        mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_smoking), formInfo.getSmoking(CacheProfile.form_smoking_id)));       
+//        mItemLayoutList.add(T_DATA);
+//
+//        // alcohol
+//        mProfileForm.add(new Pair<String, String>(mContext.getString(R.string.profile_alcohol), formInfo.getAlcohol(CacheProfile.form_alcohol_id)));       
+//        mItemLayoutList.add(T_DATA);
     }
 }
