@@ -7,8 +7,8 @@ import com.topface.topface.utils.Debug;
 
 import android.content.Context;
 
-public class EditProfileRequest extends ApiRequest{
-
+public class EditProfileRequest extends ApiRequest{	
+	
 	private String service = "questionary";
 	
 	public String key;

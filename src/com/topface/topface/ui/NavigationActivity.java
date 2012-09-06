@@ -37,7 +37,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 		mFragmentMenu.setOnMenuListener(mOnMenuListener);
 		getSupportFragmentManager().beginTransaction()
 		        .replace(R.id.fragment_menu, mFragmentMenu).commit();
-
+		
 		// Fragments
 		mFragmentContainer = new FragmentContainer(getSupportFragmentManager());
 
@@ -52,6 +52,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 
 		// last opened fragment
 		mFragmentContainer.showFragment(lastFragmentId/*R.id.fragment_dialogs*/, true);
+		//mFragmentContainer.showFragment(/*lastFragmentId*/R.id.fragment_dialogs, true);
 		
 //		mHomeButton = ((Button) findViewById(R.id.btnHeaderHome));
 //		mHomeButton.setOnClickListener(mOnHomeClickListener);		

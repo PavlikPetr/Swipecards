@@ -130,6 +130,6 @@ public class UserFormListAdapter extends BaseAdapter {
     }
     
     private void prepare(User user) {
-        mUserForms = user.forms;
+        FormInfo formInfo = new FormInfo(mContext, user);
     }
 }

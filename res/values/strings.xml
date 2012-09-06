@@ -212,5 +212,119 @@
     <string name="navigation_back_profile">Profile</string>
     <string name="navigation_back">Back</string>
     <string name="navigation_edit">Edit</string>
+    
+    <!-- Profile / UserProfile Form -->
+    <string name="form_main">Main</string>
+    <string-array name="form_main_character">
+        <item name="male">Character</item>
+        <item name="female">Character</item> 
+        <item name="own_male">Character</item>
+        <item name="own_female">Character</item>
+    </string-array>
+    <string-array name="form_main_communication">
+        <item name="male">Communication</item>
+        <item name="female">Communication</item> 
+        <item name="own_male">Communication</item>
+        <item name="own_female">Communication</item>
+    </string-array>
+    <string-array name="form_main_height">
+        <item name="male">Height</item>
+        <item name="female">Height</item> 
+        <item name="own_male">Height</item>
+        <item name="own_female">Height</item>
+    </string-array>
+    <string-array name="form_main_weight">
+        <item name="male">Weight</item>
+        <item name="female">Weight</item> 
+        <item name="own_male">Weight</item>
+        <item name="own_female">Weight</item>
+    </string-array>
+    
+    <string name="form_physique">Physique</string>
+    <string-array name="form_physique_fitness">
+        <item name="male">Constitution</item>
+        <item name="female">Constitution</item> 
+        <item name="own_male">Constitution</item>
+        <item name="own_female">Constitution</item>
+    </string-array>
+    <string-array name="form_physique_hairs">
+        <item name="male">Hair color</item>
+        <item name="female">Hair color</item> 
+        <item name="own_male">Hair color</item>
+        <item name="own_female">Hair color</item>
+    </string-array>
+    <string-array name="form_physique_eyes">
+        <item name="male">Eyes color</item>
+        <item name="female">Eyes color</item> 
+        <item name="own_male">Eyes color</item>
+        <item name="own_female">Eyes color</item>
+    </string-array>    
+    
+    <string name="form_social">Social</string>
+    <string-array name="form_social_marriage">
+        <item name="male">Is he married?</item>
+        <item name="female">Is she married?</item> 
+        <item name="own_male">Are you married?</item>
+        <item name="own_female">Are you married?</item>
+    </string-array>
+    <string-array name="form_social_education">
+        <item name="male">Education</item>
+        <item name="female">Education</item> 
+        <item name="own_male">Education</item>
+        <item name="own_female">Education</item>
+    </string-array>
+    <string-array name="form_social_finances">
+        <item name="male">Finances</item>
+        <item name="female">Finances</item> 
+        <item name="own_male">Finances</item>
+        <item name="own_female">Finances</item>
+    </string-array>
+    <string-array name="form_social_residence">
+        <item name="male">Residence</item>
+        <item name="female">Residence</item> 
+        <item name="own_male">Residence</item>
+        <item name="own_female">Residence</item>
+    </string-array>
+    <string-array name="form_social_car">
+        <item name="male">Availability of a car</item>
+        <item name="female">Availability of a car</item> 
+        <item name="own_male">Availability of a car</item>
+        <item name="own_female">Availability of a car</item>
+    </string-array>    
+    
+    <string name="form_habits">Habits</string>
+    <string-array name="form_habits_smoking">
+        <item name="male">Cigarettes</item>
+        <item name="female">Cigarettes</item> 
+        <item name="own_male">Cigarettes</item>
+        <item name="own_female">Cigarettes</item>
+    </string-array>
+    <string-array name="form_habits_alcohol">
+        <item name="male">Alcohol</item>
+        <item name="female">Alcohol</item> 
+        <item name="own_male">Alcohol</item>
+        <item name="own_female">Alcohol</item>
+    </string-array>
+    <string-array name="form_habits_restaurants">
+        <item name="male">His favorite restaurants</item>
+        <item name="female">Her favorite restaurants</item> 
+        <item name="own_male">Your favorite restaurants</item>
+        <item name="own_female">Your favorite restaurants</item>
+    </string-array>
+    
+    <string name="form_detail">Detail</string>
+    <string-array name="form_detail_about_dating">
+        <item name="male">About his first date</item>
+        <item name="female">About her first date</item> 
+        <item name="own_male">About your first date</item>
+        <item name="own_female">About your first date</item>
+    </string-array>
+    <string-array name="form_detail_archievements">
+        <item name="male">About achievements he is proud of</item>
+        <item name="female">About achievements she is proud of</item> 
+        <item name="own_male">About achievements you are proud of</item>
+        <item name="own_female">About achievements you are proud of</item>
+    </string-array>
+    
   
 </resources>

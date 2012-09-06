@@ -1,18 +1,23 @@
 package com.topface.topface.utils;
 
 import com.topface.topface.R;
+import com.topface.topface.Static;
+
 import android.content.Context;
 import android.content.res.Resources;
+import com.topface.topface.data.Profile;
 
 /* понять и простить за эту хуйню */
 public class FormInfo {
     // Data
     private Resources mResources;
-    private int mSex;
+    private Profile mProfile;
+    private int mSex;    
     //---------------------------------------------------------------------------
-    public FormInfo(Context context,int sex) {
+    public FormInfo(Context context, Profile profile) {    	
         mResources = context.getResources();
-        mSex = sex;
+        mProfile = profile;
+        mSex = profile.sex;
     }
     //---------------------------------------------------------------------------
     public void setSex(int sex) {
@@ -262,4 +267,30 @@ public class FormInfo {
         return mResources.getStringArray(R.array.profile_form_smoking_values);
     }
     //---------------------------------------------------------------------------
+    public String getFormTitle(int resId) {
+    	String result = "";
+    	String[] variants = mResources.getStringArray(resId);
+    	if (variants == null)
+    		return result;
+    	if (variants.length <= 0) 
+    		return result;
+    	
+    	if (mProfile instanceof Profile) {    		
+    		switch(mSex) {
+    		case Static.BOY:
+    			result = variants[2];
+    		case Static.GIRL:
+    			result = variants[3];
+    		}
+    	} else {
+    		switch(mSex) {
+    		case Static.BOY:
+    			result = variants[0];
+    		case Static.GIRL:
+    			result = variants[1];
+    		}
+    	}
+    	
+    	return result;
+    }
 }

@@ -160,7 +160,7 @@ public class Profile extends AbstractDataWithPhotos {
             if (!resp.isNull("questionary")) {
                 JSONObject form = resp.getJSONObject("form");
                 
-                FormInfo formInfo = new FormInfo(context, profile.sex);
+                FormInfo formInfo = new FormInfo(context, profile);
                 
 
                 FormItem formItem = null;
@@ -397,7 +397,7 @@ public class Profile extends AbstractDataWithPhotos {
     @Override
     public String getSmallLink() {
         return null;
-    }
+    }    
 }
 
 // "ADMIN_MESSAGE","QUESTIONARY_FILLED","CHANGE_PHOTO","STANDALONE_BONUS","STANDALONE",

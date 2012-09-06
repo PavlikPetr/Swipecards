@@ -27,6 +27,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
                 android:textSize="16dp"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:drawablePadding="5dp"
                 android:textStyle="normal" />
 
@@ -37,6 +39,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="#B8B8B8"
                 android:textSize="14dp"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:textStyle="normal"
                 android:visibility="gone" />
         </LinearLayout>
