@@ -1,105 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/chat_list_bg" >
 
-    <!-- Profile -->
-    <PreferenceCategory android:title="@string/profile_header_title" >
-        
-        <!-- Name -->
-        <Preference
-            android:key="@string/s_profile_name"
-            android:title="@string/profile_form_name"
-            android:summary="" />
-        
-        <!-- sex -->
-        <Preference
-            android:key="@string/s_profile_sex"
-            android:title="@string/filter_sex" 
-            android:summary="" />
-        
-        <!-- age -->
-        <Preference
-            android:key="@string/s_profile_age"
-            android:title="@string/filter_age" 
-            android:summary="" />
-        
-        <!-- city -->
-        <Preference
-            android:key="@string/s_profile_city"
-            android:title="@string/filter_city" 
-            android:summary="" />
-        
-      
-    </PreferenceCategory>
+    <!-- header bar -->
 
-    <!-- Profile -->
-    <PreferenceCategory android:title="@string/profile_btn_form" >
-        
-        <!-- about -->
-        <Preference
-            android:key="@string/s_profile_about"
-            android:title="@string/profile_status" 
-            android:summary="" />
-        
-        <!-- height -->
-        <Preference
-            android:key="@string/s_profile_height"
-            android:title="@string/profile_height" 
-            android:summary="" />
-        
-        <!-- weight -->
-        <Preference
-            android:key="@string/s_profile_weight"
-            android:title="@string/profile_weight" 
-            android:summary="" />
-        
-        <!-- fitness -->
-        <ListPreference
-            android:key="@string/s_profile_fitness"
-            android:title="@string/profile_fitness" 
-            android:summary="" />
-        
-        <!-- marriage -->
-        <ListPreference
-            android:key="@string/s_profile_marriage"
-            android:title="@string/profile_marriage_male" 
-            android:summary="" />
-        
-        <!-- education -->
-        <ListPreference
-            android:key="@string/s_profile_education"
-            android:title="@string/profile_education" 
-            android:summary="" />
-        
-        <!-- finances -->
-        <ListPreference
-            android:key="@string/s_profile_finances"
-            android:title="@string/profile_finances" 
-            android:summary="" />
-        
-        <!-- smoking -->
-        <ListPreference
-            android:key="@string/s_profile_smoking"
-            android:title="@string/profile_smoking" 
-            android:summary="" />
-        
-        <!-- alcohol -->
-        <ListPreference
-            android:key="@string/s_profile_alcohol"
-            android:title="@string/profile_alcohol" 
-            android:summary="" />
-        
-        <!-- commutability -->
-        <ListPreference
-            android:key="@string/s_profile_commutability"
-            android:title="@string/profile_commutability" 
-            android:summary="" />
-        
-        <!-- character -->
-        <ListPreference
-            android:key="@string/s_profile_character"
-            android:title="@string/profile_character" 
-            android:summary="" />
-      
-    </PreferenceCategory>
-    
-</PreferenceScreen>
+    <FrameLayout
+        android:id="@+id/loNavigationBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/bar_navigation_header" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/loProfileHead"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loNavigationBar"
+        android:layout_marginTop="10px"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="15dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/edit_profile_avatar_frame" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btnEditName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_btn_top_selector" />
+
+            <Button
+                android:id="@+id/btnEditCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_btn_bottom_selector" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lvEdits"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/loProfileHead"
+        android:cacheColorHint="#00000000"
+        android:divider="@android:color/transparent"
+        android:fadeScrollbars="true"
+        android:fadingEdge="none"
+        android:listSelector="@android:color/transparent" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loNavigationBar"
+        android:src="@drawable/im_bar_header_shadow" />
+
+</RelativeLayout>

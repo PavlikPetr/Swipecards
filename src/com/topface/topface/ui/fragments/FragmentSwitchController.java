@@ -403,7 +403,7 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 			mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
 		}
 		mScroller.computeScrollOffset();
-		invalidate();
+		invalidate();		
 	}
 	
 	/**
@@ -461,5 +461,5 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 			return true;
 		}
 		return false;
-	}
+	}	
 }

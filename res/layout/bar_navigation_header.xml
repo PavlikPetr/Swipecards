@@ -28,14 +28,14 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/btnNavigationBackProfile"
-            style="@style/NavigationHeader"
+            android:id="@+id/btnNavigationBackProfile"            
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:background="@drawable/navigation_back_profile_selector"
+            style="@style/NavigationHeader"
             android:textSize="12sp"
             android:textStyle="bold"
             android:visibility="gone" />
@@ -79,8 +79,21 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="25dp"
+            android:layout_marginRight="5dp"
             android:background="@drawable/navigation_settings_selector"
+            android:visibility="gone" />
+        
+        <Button
+            android:id="@+id/btnNavigationEditBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/navigation_edit_selector"
+            style="@style/NavigationHeader"
+            android:textSize="12sp"
+            android:textStyle="bold"
             android:visibility="gone" />
     </RelativeLayout>
 

@@ -197,7 +197,8 @@ public class GiftsFragment extends BaseFragment {
 									} else {
 										mGifts.addLast(sendedGift);										
 									}
-									update();									
+									update();
+									mGalleryManager.update();
 								}
 							});
 						}
