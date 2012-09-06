@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-public class UserGridAdapter extends BaseAdapter {
+public class UserPhotoGridAdapter extends BaseAdapter {
     // Data
     private LayoutInflater mInflater;    
     private ExecutorService mWorker;
@@ -33,7 +33,7 @@ public class UserGridAdapter extends BaseAdapter {
         ImageView mPhoto;
     };
 
-    public UserGridAdapter(Context context) {
+    public UserPhotoGridAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
         mWorker = Executors.newFixedThreadPool(3);
         mMemoryCache  = new MemoryCache();

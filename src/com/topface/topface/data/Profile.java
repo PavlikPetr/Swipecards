@@ -14,16 +14,16 @@ public class Profile extends AbstractDataWithPhotos {
     public int unread_rates; // количество непрочитанных оценок пользователя
     public int unread_likes; // количество непрочитанных “понравилось” пользователя
     public int unread_messages; // количество непрочитанных сообщений пользователя
-    public int unread_symphaties; // количество непрочитанных симпатий
+    public int unread_mutual; // количество непрочитанных симпатий
 //    public String avatar_big; // аватарка пользователя большого размера
 //    public String avatar_small; // аватарки пользователя маленького размера
+    // City
     public int city_id; // идентификтаор города пользователя
     public String city_name; // название города пользователя
     public String city_full; // полное название города пользвоателя
     public int money; // количество монет у пользователя
     public int power; // количество энергии пользователя
     public int average_rate; // средняя оценка текущего пользователя
-
     // Form
     public int form_job_id; // идентификатор рабочей партии пользователя
     public String form_job; // описание оригинальной работы пользователя
@@ -51,7 +51,6 @@ public class Profile extends AbstractDataWithPhotos {
     public String form_restaurants; // описание предпочитаемых ресторанов пользователя
     public String form_valuables; // описание ценностей пользователя
     public String form_aspirations; // описание достижений пользователя
-    
     // Dating
     public int dating_sex; // пол пользователей для поиска
     public int dating_age_start; // начальный возраст для пользователей
@@ -70,7 +69,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.unread_rates = resp.optInt("unread_rates");
             profile.unread_likes = resp.optInt("unread_likes");
             profile.unread_messages = resp.optInt("unread_messages");
-            profile.unread_symphaties = resp.optInt("unread_symphaties");
+            profile.unread_mutual = resp.optInt("unread_symphaties");
             profile.average_rate = resp.optInt("average_rate");
             profile.money = resp.optInt("money");
 

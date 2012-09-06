@@ -2,8 +2,8 @@ package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.profile.PhotoFragment;
-import com.topface.topface.ui.profile.QuestionnaireFragment;
+import com.topface.topface.ui.profile.ProfileFormFragment;
+import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -36,9 +36,9 @@ public class ProfileFragment extends BaseFragment {
     private IndicatorView mIndicatorView;
     private ViewPager mViewPager;
     
-    private QuestionnaireFragment mFormFragment;
-    private PhotoFragment mPhotoFragment;
-    
+    private ProfilePhotoFragment mPhotoFragment;
+    private ProfileFormFragment mFormFragment;
+   
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
     public static final int F_GIFTS = 2;
@@ -192,10 +192,10 @@ public class ProfileFragment extends BaseFragment {
             Fragment fragment = null; 
             switch (position) {
                 case F_PHOTO:
-                    fragment = mPhotoFragment = new PhotoFragment();
+                    fragment = mPhotoFragment = new ProfilePhotoFragment();
                     break;
                 case F_FORM:
-                    fragment = mFormFragment = new QuestionnaireFragment();
+                    fragment = mFormFragment = new ProfileFormFragment();
                     break;
                 case F_GIFTS:
                     fragment = new GiftsFragment();

@@ -180,11 +180,13 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 	private void getProfile() {
 		ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
 		registerRequest(profileRequest);
-		profileRequest.part = ProfileRequest.P_DASHBOARD;
+		//profileRequest.part = ProfileRequest.P_DASHBOARD;
+		profileRequest.part = ProfileRequest.P_ALL;
 		profileRequest.callback(new ApiHandler() {
 			@Override
 			public void success(final ApiResponse response) {
-				CacheProfile.setData(Profile.parse(response));
+				//CacheProfile.setData(Profile.parse(response));
+			    CacheProfile.setProfile(Profile.parse(response));
 				Http.avatarOwnerPreloading();
 				runOnUiThread(new Runnable() {
 					@Override

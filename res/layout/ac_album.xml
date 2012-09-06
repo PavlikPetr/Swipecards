@@ -13,6 +13,6 @@
       android:spacing="0dp" />
   
   <!-- header bar -->
-  <include layout="@layout/bar_navigation_header" />
+  <include layout="@layout/bar_btn_header" />
   
 </RelativeLayout>

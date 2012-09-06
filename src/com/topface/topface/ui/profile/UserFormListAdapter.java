@@ -17,7 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class UserListAdapter extends BaseAdapter {
+public class UserFormListAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private LinkedList<Triple<String, String, Boolean>> mUserQuestionnaire;
@@ -35,7 +35,7 @@ public class UserListAdapter extends BaseAdapter {
         public TextView mValue;
     }
 
-    public UserListAdapter(Context context) {
+    public UserFormListAdapter(Context context) {
         mContext = context;
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mUserQuestionnaire = new LinkedList<Triple<String, String, Boolean>>();

@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile.album;
+package com.topface.topface.ui.profile;
 
 import java.util.HashMap;
 import com.topface.topface.R;

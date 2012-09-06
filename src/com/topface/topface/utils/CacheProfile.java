@@ -12,29 +12,21 @@ public class CacheProfile {
     public static String first_name; // имя пользователя
     public static int age; // возраст пользователя
     public static int sex; // секс пользователя
-    // notifications
-    public static int money; // количество монет у пользователя
-    public static int power; // количество энергии пользователя
     public static int unread_rates; // количество непрочитанных оценок пользователя
     public static int unread_likes; // количество непрочитанных “понравилось” пользователя
     public static int unread_messages; // количество непрочитанных сообщений пользователя
     public static int unread_mutual; // количество непрочитанных симпатий
-    public static int average_rate; // средняя оценка текущего пользователя
-    // avatars
+    // ???
     public static String avatar_big; // аватарка пользователя большого размера
     public static String avatar_small; // аватарки пользователя маленького размера
-    // city
+    // City
     public static int city_id; // идентификтаор города пользователя
     public static String city_name; // название города пользователя
     public static String city_full; // полное название города пользвоателя
-    // dating
-    public static int dating_sex; // пол пользователей для поиска
-    public static int dating_age_start; // начальный возраст для пользователей
-    public static int dating_age_end; // конечный возраст для пользователей
-    public static int dating_city_id; // идентификатор города для поиска пользователей
-    public static String dating_city_name; // наименование пользователя в русской локали
-    public static String dating_city_full; // полное наименование города
-    // questionary
+    public static int money; // количество монет у пользователя
+    public static int power; // количество энергии пользователя
+    public static int average_rate; // средняя оценка текущего пользователя
+    // Form
     public static int form_job_id; // идентификатор рабочей партии пользователя
     public static String form_job; // описание оригинальной работы пользователя
     public static int form_status_id; // идентификатор предопределенного статуса пользователя
@@ -49,6 +41,25 @@ public class CacheProfile {
     public static int form_communication_id; // идентификатор предопределенного отношения к коммуникациям пользователя
     public static int form_weight; // вес пользователя
     public static int form_height; // рост пользователя
+    public static int form_hair_id; // идентификатор цвета воло пользователя
+    public static int form_eye_id; // идентификатор цвета глаз пользователя
+    public static int form_children_id; // идентификатор количества детей пользователя
+    public static int form_residence_id; // идентификатор условий проживания пользователя
+    public static int form_car_id; // идентификатор наличия автомобиля у пользователя
+    public static String form_car; // текстовое описание присутствующего автомобиля у пользователя
+    public static String form_first_dating; // текстовое описание свидания пользователя
+    public static String form_achievements; // текстовое описание достижений пользователя
+    //{Array} form_countries; // массив идентификаторов стран, в которых бывал пользователь
+    public static String form_restaurants; // описание предпочитаемых ресторанов пользователя
+    public static String form_valuables; // описание ценностей пользователя
+    public static String form_aspirations; // описание достижений пользователя
+    // Dating
+    public static int dating_sex; // пол пользователей для поиска
+    public static int dating_age_start; // начальный возраст для пользователей
+    public static int dating_age_end; // конечный возраст для пользователей
+    public static int dating_city_id; // идентификатор города для поиска пользователей
+    public static String dating_city_name; // наименование пользователя в русской локали
+    public static String dating_city_full; // полное наименование города
 
     public static SparseArray<HashMap<String, String>> photoLinks; // альбом пользователя
     public static String status; // статус пользователя
@@ -112,7 +123,7 @@ public class CacheProfile {
         unread_rates = profile.unread_rates;
         unread_likes = profile.unread_likes;
         unread_messages = profile.unread_messages;
-        unread_mutual = profile.unread_symphaties;
+        unread_mutual = profile.unread_mutual;
         average_rate = profile.average_rate;
     }
     //---------------------------------------------------------------------------
@@ -127,19 +138,23 @@ public class CacheProfile {
         profile.unread_rates = unread_rates;
         profile.unread_likes = unread_likes;
         profile.unread_messages = unread_messages;
-        profile.unread_symphaties = unread_mutual;
+        profile.unread_mutual = unread_mutual;
         profile.average_rate = average_rate;
+        
 //        profile.avatar_big = avatar_big;
 //        profile.avatar_small = avatar_small;
+        
         profile.city_id = city_id;
         profile.city_name = city_name;
         profile.city_full = city_full;
+        
         profile.dating_sex = dating_sex;
         profile.dating_age_start = dating_age_start;
         profile.dating_age_end = dating_age_end;
         profile.dating_city_id = dating_city_id;
         profile.dating_city_name = dating_city_name;
         profile.dating_city_full = dating_city_full;
+        
         profile.form_job_id = form_job_id;
         profile.form_job = form_job;
         profile.form_status_id = form_status_id;
@@ -154,6 +169,20 @@ public class CacheProfile {
         profile.form_communication_id = form_communication_id;
         profile.form_weight = form_weight;
         profile.form_height = form_height;
+        
+        profile.form_hair_id = form_hair_id;
+        profile.form_eye_id = form_eye_id;
+        profile.form_children_id = form_children_id;
+        profile.form_residence_id = form_residence_id;
+        profile.form_car_id = form_car_id;
+        profile.form_car = form_car;
+        profile.form_first_dating = form_first_dating;
+        profile.form_achievements = form_achievements;
+        //{Array} form_countries; 
+        profile.form_restaurants = form_restaurants;
+        profile.form_valuables = form_valuables;
+        profile.form_aspirations = form_aspirations;
+        
         profile.photoLinks = photoLinks;
         profile.status = status;
 //        profile.isNewbie = isNewbie;
@@ -170,19 +199,22 @@ public class CacheProfile {
         unread_rates = profile.unread_rates;
         unread_likes = profile.unread_likes;
         unread_messages = profile.unread_messages;
-        unread_mutual = profile.unread_symphaties;
+        unread_mutual = profile.unread_mutual;
         average_rate = profile.average_rate;
 //        avatar_big = profile.avatar_big;
 //        avatar_small = profile.avatar_small;
+        
         city_id = profile.city_id;
         city_name = profile.city_name;
         city_full = profile.city_full;
+        
         dating_sex = profile.dating_sex;
         dating_age_start = profile.dating_age_start;
         dating_age_end = profile.dating_age_end;
         dating_city_id = profile.dating_city_id;
         dating_city_name = profile.dating_city_name;
         dating_city_full = profile.dating_city_full;
+        
         form_job_id = profile.form_job_id;
         form_job = profile.form_job;
         form_status_id = profile.form_status_id;
@@ -197,6 +229,20 @@ public class CacheProfile {
         form_communication_id = profile.form_communication_id;
         form_weight = profile.form_weight;
         form_height = profile.form_height;
+        
+        form_hair_id = profile.form_hair_id;
+        form_eye_id = profile.form_eye_id;
+        form_children_id = profile.form_children_id;
+        form_residence_id = profile.form_residence_id;
+        form_car_id = profile.form_car_id;
+        form_car = profile.form_car;
+        form_first_dating = profile.form_first_dating;
+        form_achievements = profile.form_achievements;
+        //{Array} form_countries; 
+        form_restaurants = profile.form_restaurants;
+        form_valuables = profile.form_valuables;
+        form_aspirations = profile.form_aspirations;
+        
         photoLinks = profile.photoLinks;
         status = profile.status;
 //        isNewbie = profile.isNewbie;

@@ -18,6 +18,7 @@ import android.widget.Scroller;
 public class FragmentSwitchController extends ViewGroup implements View.OnClickListener {
 	private int mScrollX;
 	private int mOpenDX;
+	private int mClosedDX;
 	private int mFullOpenDX;
 	private int mWidth;
 	private int mAnimation;
@@ -89,12 +90,12 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 				getChildAt(1).getMeasuredHeight());
 		
 		mWidth = getChildAt(1).getWidth();
-		mOpenDX = mWidth - (mWidth / 100 * EXPANDING_PERCENT);
+		mClosedDX = mWidth / 100 * EXPANDING_PERCENT;
+		mOpenDX = mWidth - mClosedDX;
 		mFullOpenDX = mWidth - mOpenDX;
 		mScrollingDistanceThreshold = mWidth / 6;
 		
-	    mFragmentMenu.setNotificationMargin(mOpenDX/100*90);
-	    //mFragmentMenu.refreshNotifications();
+	    mFragmentMenu.setNotificationMargin((int)(mClosedDX));
 	}
 
 	private int getLeftBound() {

@@ -23,7 +23,7 @@
         android:src="@drawable/item_divider" />
               
     <ListView
-        android:id="@+id/fragmentQuestionnaire"
+        android:id="@+id/fragmentFormList"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:cacheColorHint="#00000000"

@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
     private TextView mTvNotifyLikes;
     private TextView mTvNotifyMutual;
     private TextView mTvNotifyDialogs;
+    
+    boolean b;
     
     public interface FragmentMenuListener {
         public void onMenuClick(int fragmentID);
@@ -122,27 +125,23 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
     }
     
     public void refreshNotifications() {
-        CacheProfile.unread_likes=7;
-        CacheProfile.unread_mutual=8;        
-        CacheProfile.unread_messages=9;
-        
         if (CacheProfile.unread_likes > 0) {
-            mTvNotifyLikes.setVisibility(View.VISIBLE);
             mTvNotifyLikes.setText(" " + CacheProfile.unread_likes + " ");
+            mTvNotifyLikes.setVisibility(View.VISIBLE);
         } else {
             mTvNotifyLikes.setVisibility(View.INVISIBLE);
         }
-
+    
         if (CacheProfile.unread_mutual > 0) {
-            mTvNotifyMutual.setVisibility(View.VISIBLE);
             mTvNotifyMutual.setText(" " + CacheProfile.unread_mutual + " ");
+            mTvNotifyMutual.setVisibility(View.VISIBLE);
         } else {
             mTvNotifyMutual.setVisibility(View.INVISIBLE);
         }
         
         if (CacheProfile.unread_messages > 0) {
-            mTvNotifyDialogs.setVisibility(View.VISIBLE);
             mTvNotifyDialogs.setText(" " + CacheProfile.unread_messages + " ");
+            mTvNotifyDialogs.setVisibility(View.VISIBLE);
         } else {
             mTvNotifyDialogs.setVisibility(View.INVISIBLE);
         }
@@ -191,15 +190,20 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
     }
     
     public void setNotificationMargin(int padding) {
-        LayoutParams lp = mTvNotifyLikes.getLayoutParams();
-        if(lp instanceof RelativeLayout.LayoutParams) {
-            ((RelativeLayout.LayoutParams)lp).leftMargin = padding;
-            mTvNotifyLikes.setLayoutParams(lp);
-            mTvNotifyMutual.setLayoutParams(lp);
-            mTvNotifyDialogs.setLayoutParams(lp);
-//            mTvNotifyLikes.requestLayout();
-//            mTvNotifyMutual.requestLayout();
-//            mTvNotifyDialogs.requestLayout();
-        }
+//        if(b) return;
+//            
+//        LayoutParams lp = mTvNotifyLikes.getLayoutParams();
+//        if(lp instanceof RelativeLayout.LayoutParams) {
+//            RelativeLayout.LayoutParams rlp = ((RelativeLayout.LayoutParams)lp);
+//            rlp.setMargins(rlp.rightMargin, rlp.topMargin, padding, rlp.bottomMargin);
+//            mTvNotifyLikes.setLayoutParams(rlp);
+//            mTvNotifyMutual.setLayoutParams(rlp);
+//            mTvNotifyDialogs.setLayoutParams(rlp);
+//            b = true;
+//        }
     }
 }
+
+
+
+

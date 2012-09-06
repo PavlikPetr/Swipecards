@@ -4,7 +4,6 @@ import java.util.HashMap;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.User;
-import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,16 +15,16 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
-public class PhotoFragment extends Fragment {
+public class UserPhotoFragment extends Fragment {
     private User mUser;
-    private UserGridAdapter mUserGridAdapter;
+    private UserPhotoGridAdapter mUserPhotoGridAdapter;
     private TextView mTitle;
     private SparseArray<HashMap<String, String>> mPhotoLinks;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserGridAdapter = new UserGridAdapter(getActivity().getApplicationContext());
+        mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext());
     }
     
     @Override
@@ -34,7 +33,7 @@ public class PhotoFragment extends Fragment {
         
         GridView gridAlbum = (GridView)root.findViewById(R.id.fragmentGrid);
         gridAlbum.setNumColumns(3);
-        gridAlbum.setAdapter(mUserGridAdapter);
+        gridAlbum.setAdapter(mUserPhotoGridAdapter);
         gridAlbum.setOnItemClickListener(mOnItemClickListener);
         
         mTitle = (TextView)root.findViewById(R.id.fragmentTitle);
@@ -66,9 +65,9 @@ public class PhotoFragment extends Fragment {
     public void setUserData(User user) {
         mUser = user;
         mPhotoLinks = user.photoLinks;
-        if(mUserGridAdapter != null) {
-          mUserGridAdapter.setUserData(user.photoLinks);
-          mUserGridAdapter.notifyDataSetChanged();
+        if(mUserPhotoGridAdapter != null) {
+          mUserPhotoGridAdapter.setUserData(user.photoLinks);
+          mUserPhotoGridAdapter.notifyDataSetChanged();
         }
         
         if(mPhotoLinks != null && mPhotoLinks.size() >= 0) {

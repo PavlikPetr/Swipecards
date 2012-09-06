@@ -57,8 +57,8 @@ public class UserProfileActivity extends FragmentActivity {
     private LockerView mLockerView;
     private ViewPager mViewPager;
     
-    private QuestionnaireFragment mFormFragment;
-    private PhotoFragment mPhotoFragment;
+    private UserFormFragment mFormFragment;
+    private UserPhotoFragment mPhotoFragment;
     private Bitmap mMask;
 
     public User mUser;
@@ -193,7 +193,7 @@ public class UserProfileActivity extends FragmentActivity {
                     intent.putExtra(ChatActivity.INTENT_USER_ID,   mUser.uid);
                     intent.putExtra(ChatActivity.INTENT_USER_URL,  mUser.getSmallLink());                
                     intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name); 
-                    intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
+                    intent.putExtra(ChatActivity.INTENT_USER_AGE,  mUser.age);
                     intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
                     intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
                     startActivity(intent);
@@ -279,17 +279,17 @@ public class UserProfileActivity extends FragmentActivity {
                 case F_PHOTO:
                     Bundle bundle = new Bundle();
                     //bundle.putInt(UserProfileActivity.INTENT_USER_ID, mUserId);
-                    fragment = mPhotoFragment = new PhotoFragment();
+                    fragment = mPhotoFragment = new UserPhotoFragment();
                     //fragment.setArguments(bundle);
                     break;
                 case F_FORM:
-                    fragment = mFormFragment = new QuestionnaireFragment();
+                    fragment = mFormFragment = new UserFormFragment();
                     break;
                 case F_GIFTS:
                     fragment = new GiftsFragment();
                     break;
                 case F_ACTIONS:
-                    fragment = new ActionsFragment();
+                    fragment = new UserActionsFragment();
                     break;
             }
             return fragment;

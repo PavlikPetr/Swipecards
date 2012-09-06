@@ -75,6 +75,7 @@ public class FragmentContainer {
                 fragment = mSettingsFragment;
                 break;
             default:
+                fragment = mProfileFragment;
                 break;
         }
         
