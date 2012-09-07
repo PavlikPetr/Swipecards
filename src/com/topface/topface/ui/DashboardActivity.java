@@ -1,35 +1,25 @@
 package com.topface.topface.ui;
 
-import com.google.android.apps.analytics.easytracking.TrackedActivity;
-import com.topface.topface.App;
-import com.topface.topface.R;
-import com.topface.topface.C2DMUtils;
-import com.topface.topface.Data;
-import com.topface.topface.Static;
-import com.topface.topface.data.Options;
-import com.topface.topface.data.Profile;
-import com.topface.topface.requests.*;
-import com.topface.topface.ui.profile.ProfileActivity;
-import com.topface.topface.utils.*;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
+import com.topface.topface.*;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
+import com.topface.topface.requests.*;
+import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Newbie;
+import com.topface.topface.utils.Utils;
 
 public class DashboardActivity extends TrackedActivity implements View.OnClickListener {
     // Data
@@ -59,9 +49,6 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_dashboard);
         Debug.log(this, "+onCreate");
-
-        // C2DM
-        C2DMUtils.init(this);
 
         // Version
         if (App.DEBUG)

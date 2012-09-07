@@ -1,10 +1,16 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
-
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
-import com.topface.topface.R;
 import com.topface.topface.Data;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Top;
@@ -17,19 +23,12 @@ import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.ThumbView;
-import com.topface.topface.utils.*;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.GalleryGridManager;
+import com.topface.topface.utils.Utils;
+
+import java.util.LinkedList;
 
 public class TopsActivity extends TrackedActivity {
     // Data
@@ -47,16 +46,17 @@ public class TopsActivity extends TrackedActivity {
     private static int BOYS = 1;
     private FloatBlock mFloatBlock;
 
-    //---------------------------------------------------------------------------
+
     // class Action Data
-    //---------------------------------------------------------------------------
+
     private class ActionData {
         public int sex;
         public int city_id;
         public int city_popup_pos;
         public String city_name;
     }
-    //---------------------------------------------------------------------------
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,19 +129,16 @@ public class TopsActivity extends TrackedActivity {
         mGalleryGridManager = new GalleryGridManager<Top>(getApplicationContext(), mTopsList);
         mGridAdapter = new TopsGridAdapter(getApplicationContext(), mGalleryGridManager);
         mGallery.setAdapter(mGridAdapter);
-        mGallery.setOnScrollListener(mGalleryGridManager);
 
         mFloatBlock = new FloatBlock(this);
         update();
     }
 
-    //---------------------------------------------------------------------------
     @Override
     protected void onStart() {
         super.onStart();
     }
 
-    //---------------------------------------------------------------------------
     @Override
     protected void onStop() {
         super.onStop();
@@ -153,7 +150,6 @@ public class TopsActivity extends TrackedActivity {
         mFloatBlock.update();
     }
 
-    //---------------------------------------------------------------------------
     @Override
     protected void onDestroy() {
         SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
@@ -173,7 +169,6 @@ public class TopsActivity extends TrackedActivity {
         super.onDestroy();
     }
 
-    //---------------------------------------------------------------------------
     private void update() {
         mProgressBar.setVisibility(View.VISIBLE);
         mGallery.setSelection(0);
@@ -209,7 +204,7 @@ public class TopsActivity extends TrackedActivity {
         }).exec();
     }
 
-    //---------------------------------------------------------------------------
+
     private void release() {
         if (mGalleryGridManager != null) {
             mGalleryGridManager.release();
@@ -221,7 +216,6 @@ public class TopsActivity extends TrackedActivity {
         mTopsList = null;
     }
 
-    //---------------------------------------------------------------------------
     private void choiceCity() {
         if (Data.cityList != null && Data.cityList.size() > 0) {
             showCitiesDialog();
@@ -256,7 +250,7 @@ public class TopsActivity extends TrackedActivity {
         }).exec();
     }
 
-    //---------------------------------------------------------------------------
+
     private void showCitiesDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.filter_select_city));
@@ -291,5 +285,5 @@ public class TopsActivity extends TrackedActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
-    //---------------------------------------------------------------------------
+
 }

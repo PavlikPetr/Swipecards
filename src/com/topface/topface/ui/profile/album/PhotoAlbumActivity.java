@@ -1,15 +1,5 @@
 package com.topface.topface.ui.profile.album;
 
-import com.google.android.apps.analytics.easytracking.TrackedActivity;
-import com.topface.topface.Data;
-import com.topface.topface.R;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.MainRequest;
-import com.topface.topface.requests.PhotoDeleteRequest;
-import com.topface.topface.ui.views.DatingAlbum;
-import com.topface.topface.utils.Debug;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -19,9 +9,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.MainRequest;
+import com.topface.topface.requests.PhotoDeleteRequest;
+import com.topface.topface.ui.views.DatingAlbum;
+import com.topface.topface.utils.Debug;
 
 public class PhotoAlbumActivity extends TrackedActivity {
   // Data
@@ -111,7 +110,6 @@ public class PhotoAlbumActivity extends TrackedActivity {
   protected void onDestroy() {
     mGallery = null;
     if (mGalleryAdapter != null) {
-        mGalleryAdapter.release();
         mGalleryAdapter = null;
     }
 

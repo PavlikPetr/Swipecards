@@ -2,20 +2,23 @@ package com.topface.topface.ui.blocks;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.google.android.apps.analytics.easytracking.EasyTracker;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Banner;
+import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.BaseApiHandler;
 import com.topface.topface.ui.*;
 import com.topface.topface.utils.Device;
-import com.topface.topface.utils.Http;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +72,21 @@ public class BannerBlock {
     }
 
     private void showBanner(final Banner banner) {
-        Http.bannerLoader(banner.url, mBannerView);
+        DefaultImageLoader.getInstance().displayImage(banner.url, mBannerView, new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingComplete(Bitmap loadedImage) {
+                super.onLoadingComplete(loadedImage);
+                float deviceWidth = Device.getDisplayMetrics(mActivity).widthPixels;
+                float imageWidth = loadedImage.getWidth();
+                //Если ширина экрана больше, чем у нашего баннера, то пропорционально увеличиваем высоту imageView
+                if (deviceWidth > imageWidth) {
+                    ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
+                    params.height = (int) ((deviceWidth / imageWidth) * (float) loadedImage.getHeight());
+                    mBannerView.setLayoutParams(params);
+                    mBannerView.invalidate();
+                }
+            }
+        });
         sendStat(getBannerName(banner.url), "view");
         mBannerView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -50,7 +50,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
     @Override
     public void onReceive(Context context, Intent intent) {
       if(intent.getAction().equals(BROADCAST_PURCHASE_ACTION)) {
-        mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+        mResourcesPower.setBackgroundResource(Utils.getBatteryResource());
         mResourcesPower.setText(""+CacheProfile.power+"%");
         mResourcesMoney.setText(""+CacheProfile.money);
       }
@@ -68,7 +68,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
     
     // Resources
     mResourcesPower = (TextView)findViewById(R.id.tvResourcesPower);
-    mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+    mResourcesPower.setBackgroundResource(Utils.getBatteryResource());
     mResourcesPower.setText(""+CacheProfile.power+"%");
     mResourcesMoney = (TextView)findViewById(R.id.tvResourcesMoney);
     mResourcesMoney.setText(""+CacheProfile.money);

@@ -5,12 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.widget.Toast;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
     public boolean mIsConnected = false;
     private ConnectivityManager mConnectivityManager;
-    private int mConnectionType = CONNECTION_OFFLINE;
+    private static int mConnectionType = 0;
     public static final int CONNECTION_OFFLINE = 0;
     public static final int CONNECTION_MOBILE = 1;
     public static final int CONNECTION_WIFI = 2;
@@ -18,15 +17,15 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
     public ConnectionChangeReceiver(Context context) {
         super();
         mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        updateConnectionStatus(context);
+        updateConnectionStatus();
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        updateConnectionStatus(context);
+        updateConnectionStatus();
     }
 
-    private void updateConnectionStatus(Context context) {
+    private void updateConnectionStatus() {
         NetworkInfo activeNetInfo = mConnectivityManager.getActiveNetworkInfo();
         if (activeNetInfo != null) {
             switch (activeNetInfo.getType()) {
@@ -54,7 +53,11 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         return mIsConnected;
     }
 
-    public int getConnectionType() {
+    public static int getConnectionType() {
         return mConnectionType;
+    }
+
+    public static boolean isMobileConnection() {
+        return getConnectionType() == CONNECTION_MOBILE;
     }
 }

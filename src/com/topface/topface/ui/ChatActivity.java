@@ -1,9 +1,15 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
+import com.topface.topface.C2DMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.requests.ApiHandler;
@@ -14,13 +20,9 @@ import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import com.topface.topface.utils.Utils;
+
+import java.util.LinkedList;
 
 public class ChatActivity extends TrackedActivity implements View.OnClickListener {
     // Data
@@ -39,6 +41,7 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
+    private Intent mNewMessageIntent;
 
     //---------------------------------------------------------------------------
     @Override
@@ -137,6 +140,13 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
         update();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mNewMessageIntent = registerReceiver(mNewMessageReceiver, new IntentFilter(C2DMUtils.C2DM_NOTIFICATION));
+    }
+
     //---------------------------------------------------------------------------
     @Override
     protected void onDestroy() {
@@ -146,6 +156,14 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
         release();
         Debug.log(this, "-onDestroy");
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mNewMessageIntent != null) {
+            unregisterReceiver(mNewMessageReceiver);
+        }
     }
 
     //---------------------------------------------------------------------------
@@ -209,6 +227,17 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
         intent.putExtra(ProfileActivity.INTENT_USER_NAME, mHeaderTitle.getText());
         startActivity(intent);
     }
+
+    private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String id = intent.getStringExtra("id");
+            if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
+                update();
+                C2DMUtils.cancelNotification(ChatActivity.this);
+            }
+        }
+    };
 
 
     //---------------------------------------------------------------------------

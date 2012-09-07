@@ -5,5 +5,7 @@
             android:id="@+id/ivBanner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             android:visibility="visible" />
 </merge>

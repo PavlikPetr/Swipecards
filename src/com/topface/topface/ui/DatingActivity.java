@@ -1,32 +1,5 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
-
-import com.google.android.apps.analytics.easytracking.EasyTracker;
-import com.google.android.apps.analytics.easytracking.TrackedActivity;
-import com.topface.topface.Data;
-import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.NovicePower;
-import com.topface.topface.data.Rate;
-import com.topface.topface.data.Search;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.MessageRequest;
-import com.topface.topface.requests.NovicePowerRequest;
-import com.topface.topface.requests.RateRequest;
-import com.topface.topface.requests.SearchRequest;
-import com.topface.topface.requests.SkipRateRequest;
-import com.topface.topface.ui.adapters.DatingAlbumAdapter;
-import com.topface.topface.ui.profile.ProfileActivity;
-import com.topface.topface.ui.views.DatingAlbum;
-import com.topface.topface.ui.views.ILocker;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Http;
-import com.topface.topface.utils.Newbie;
-import com.topface.topface.utils.Utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -42,21 +15,32 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import com.google.android.apps.analytics.easytracking.EasyTracker;
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.data.NovicePower;
+import com.topface.topface.data.Rate;
+import com.topface.topface.data.Search;
+import com.topface.topface.requests.*;
+import com.topface.topface.ui.adapters.DatingAlbumAdapter;
+import com.topface.topface.ui.profile.ProfileActivity;
+import com.topface.topface.ui.views.DatingAlbum;
+import com.topface.topface.ui.views.ILocker;
+import com.topface.topface.utils.*;
+
+import java.util.LinkedList;
 
 public class DatingActivity extends TrackedActivity implements View.OnClickListener, ILocker {
     // Data
     private boolean mIsHide;
     private int mCurrentUserPos;
     private int mCurrentPhotoPrevPos;
-    private View mResourcesControl;
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
     private Button mLoveBtn;
@@ -123,10 +107,9 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
         mAlphaAnimation.setDuration(400L);
 
         // Resources
-        mResourcesControl = findViewById(R.id.loDatingResources);
-        mResourcesControl.setOnClickListener(this);
+        findViewById(R.id.loDatingResources).setOnClickListener(this);
         mResourcesPower = (TextView) findViewById(R.id.tvResourcesPower);
-        mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+        mResourcesPower.setBackgroundResource(Utils.getBatteryResource());
         mResourcesPower.setText("" + CacheProfile.power + "%");
         mResourcesMoney = (TextView) findViewById(R.id.tvResourcesMoney);
         mResourcesMoney.setText("" + CacheProfile.money);
@@ -185,7 +168,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
                 }
                 mCurrentPhotoPrevPos = position;
 
-                if (mUserSearchList.contains(mCurrentUserPos)) {
+                if (mUserSearchList.size() - 1 >= mCurrentUserPos) {
                     mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
                 }
             }
@@ -194,6 +177,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+
         mDatingAlbum.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
@@ -288,7 +272,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         Data.userAvatar = null;
-        if (mUserSearchList.size() > 0 && mCurrentUserPos > 0 && mUserSearchList.contains(mCurrentUserPos)) {
+        if (mUserSearchList.size() > 0 && mCurrentUserPos > 0 && mCurrentUserPos <= mUserSearchList.size() - 1) {
             Http.avatarUserPreloading(mUserSearchList.get(mCurrentUserPos).getSmallLink());
         }
 
@@ -348,7 +332,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             return;
         }
         // кнопка на окне комментария оценки 10 и 9
-        ((Button) mCommentDialog.findViewById(R.id.btnPopupCommentSend)).setOnClickListener(new OnClickListener() {
+        mCommentDialog.findViewById(R.id.btnPopupCommentSend).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 String comment = mCommentText.getText().toString();
@@ -401,7 +385,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
                 post(new Runnable() {
                     @Override
                     public void run() {
-                        mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+                        mResourcesPower.setBackgroundResource(Utils.getBatteryResource());
                         mResourcesPower.setText("" + CacheProfile.power + "%");
                         mResourcesMoney.setText("" + CacheProfile.money);
                     }
@@ -480,7 +464,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
 
         SharedPreferences.Editor editor = mPreferences.edit();
 
-        if (mNewbie.free_energy != true && CacheProfile.isNewbie == true) {
+        if (!mNewbie.free_energy && CacheProfile.isNewbie) {
             mNewbie.free_energy = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_FREE_ENERGY, true);
             //mNewbieView.setImageResource(R.drawable.newbie_free_energy);
@@ -489,7 +473,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             mNewbieView.setVisibility(View.VISIBLE);
             mNewbieView.startAnimation(mAlphaAnimation);
 
-        } else if (mNewbie.rate_it != true) {
+        } else if (!mNewbie.rate_it) {
             mNewbie.rate_it = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_RATE_IT, true);
             //mNewbieView.setImageResource(R.drawable.newbie_rate_it);
@@ -503,7 +487,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
                 }
             });
 
-        } else if (mNewbie.buy_energy != true && CacheProfile.power <= 30) {
+        } else if (!mNewbie.buy_energy && CacheProfile.power <= 30) {
             mNewbie.buy_energy = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_BUY_ENERGY, true);
             //mNewbieView.setImageResource(R.drawable.newbie_buy_energy);

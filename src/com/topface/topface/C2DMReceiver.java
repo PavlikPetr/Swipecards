@@ -49,11 +49,10 @@ public class C2DMReceiver extends C2DMBaseReceiver {
   //---------------------------------------------------------------------------
   @Override
   protected void onMessage(Context context,Intent receiveIntent) {
-    String data = receiveIntent.getStringExtra("text");
-    Debug.log("onMessage", data);
-    C2DMUtils.showNotification(data, context);
+    C2DMUtils.showNotification(receiveIntent, context);
     //Сообщаем о том что есть новое уведомление и нужно обновить список игр
     Intent broadcastReceiver = new Intent(C2DMUtils.C2DM_NOTIFICATION);
+    broadcastReceiver.putExtra("id", receiveIntent.getStringExtra("id"));
     context.sendBroadcast(broadcastReceiver);
   }
   //---------------------------------------------------------------------------

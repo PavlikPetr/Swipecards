@@ -1,19 +1,14 @@
 package com.topface.topface.utils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
+import android.graphics.Bitmap;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
-import android.graphics.Bitmap;
-import android.widget.ImageView;
+import com.topface.topface.imageloader.DefaultImageLoader;
+
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class Http {
     // Constants
@@ -177,63 +172,29 @@ public class Http {
         return response;
     }
 
-    public static void bannerLoader(final String url, final ImageView view) {
-        SmartBitmapFactory.getInstance().loadBitmapByUrl(
-                url,
-                new SmartBitmapFactory.BitmapHandler() {
-                    @Override
-                    public void handleBitmap(Bitmap bitmap) {
-                        if (bitmap == null) return;
-                        float w = bitmap.getWidth();
-                        float ratio = w / Data.screen_width;
-                        int height = (int) (bitmap.getHeight() / ratio);
-                        final Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Data.screen_width, height, true);
-                        if (resizedBitmap != null) {
-                            view.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    view.setImageBitmap(resizedBitmap);
-                                }
-                            });
-                        }
-                    }
-                }
-        );
-    }
-
     //---------------------------------------------------------------------------
     public static void avatarOwnerPreloading() {
         if (Data.ownerAvatar == null) {
-            SmartBitmapFactory.getInstance().loadBitmapByUrl(
-                    CacheProfile.avatar_small,
-                    new SmartBitmapFactory.BitmapHandler() {
-                        @Override
-                        public void handleBitmap(Bitmap bitmap) {
-                            if (bitmap != null) {
-                                Data.ownerAvatar = Utils.getRoundedCornerBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), 12);
-                            }
-                        }
-                    },
-                    Thread.NORM_PRIORITY
-            );
+            DefaultImageLoader.getInstance().preloadImage(CacheProfile.avatar_small, new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(Bitmap bitmap) {
+                    super.onLoadingComplete(bitmap);
+                    Data.ownerAvatar = Utils.getRoundedCornerBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), 12);
+                }
+            });
         }
     }
 
     //---------------------------------------------------------------------------
     public static void avatarUserPreloading(final String url) {
         if (Data.userAvatar == null) {
-            SmartBitmapFactory.getInstance().loadBitmapByUrl(
-                    url,
-                    new SmartBitmapFactory.BitmapHandler() {
-                        @Override
-                        public void handleBitmap(Bitmap bitmap) {
-                            if (bitmap != null) {
-                                Data.userAvatar = Utils.getRoundedCornerBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), 12);
-                            }
-                        }
-                    },
-                    Thread.NORM_PRIORITY
-            );
+            DefaultImageLoader.getInstance().preloadImage(url, new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(Bitmap bitmap) {
+                    super.onLoadingComplete(bitmap);
+                    Data.ownerAvatar = Utils.getRoundedCornerBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), 12);
+                }
+            });
         }
     }
 }

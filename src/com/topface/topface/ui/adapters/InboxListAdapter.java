@@ -1,11 +1,5 @@
 package com.topface.topface.ui.adapters;
 
-import com.topface.topface.R;
-import com.topface.topface.data.FeedInbox;
-import com.topface.topface.ui.views.RoundedImageView;
-import com.topface.topface.utils.AvatarManager;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Utils;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.topface.topface.R;
+import com.topface.topface.data.FeedInbox;
+import com.topface.topface.ui.views.RoundedImageView;
+import com.topface.topface.utils.AvatarManager;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 public class InboxListAdapter extends BaseAdapter {
   //---------------------------------------------------------------------------
@@ -102,7 +102,7 @@ public class InboxListAdapter extends BaseAdapter {
     
     FeedInbox inbox = getItem(position);
     
-    mAvatarManager.getImage(position,holder.mAvatar);
+    mAvatarManager.getImage(position, holder.mAvatar);
     holder.mName.setText(inbox.first_name + ", " + inbox.age + ", " + inbox.city_name);
     
     // text

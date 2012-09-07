@@ -1,21 +1,24 @@
 package com.topface.topface.utils;
 
-import java.io.FileNotFoundException;
-import java.security.MessageDigest;
-import java.util.Calendar;
-
+import android.app.Application;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.*;
+import android.graphics.Bitmap.Config;
+import android.graphics.PorterDuff.Mode;
 import android.text.ClipboardManager;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import android.content.Context;
-import android.graphics.Bitmap.Config;
-import android.graphics.PorterDuff.Mode;
-import android.text.format.DateFormat;
-import android.text.format.DateUtils;
-import android.widget.TextView;
+
+import java.security.MessageDigest;
+import java.util.Calendar;
 
 public class Utils {
 
@@ -92,10 +95,14 @@ public class Utils {
 
     
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int width, int height, int roundPx) {
-        if (width < height)
+        if (width < height) {
+            //noinspection SuspiciousNameCombination
             height = width;
-        else
+        }
+        else {
+            //noinspection SuspiciousNameCombination
             width = height;
+        }
 
         Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
 
@@ -152,10 +159,11 @@ public class Utils {
 
     
     public static String formatMinute(long minutes) {
-        return Utils.getQuantityString(R.plurals.time_hour, (int) minutes, (int) minutes);
+        return Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
     }
 
-    public static int getBatteryResource(int power) {
+    @SuppressWarnings("ConstantConditions")
+    public static int getBatteryResource() {
         int n = 50 * CacheProfile.power / 100;
         switch (n) {
             case 0:
@@ -265,34 +273,6 @@ public class Utils {
         }
     }
 
-    /**
-     * Возвращает делитель, во сколько раз уменьшить размер изображения при создании битмапа
-     *
-     * @param options   InputStrem к изображению, для того, что бы получить его размеры, не загружая его в память
-     * @param size размер до которого нужно уменьшить
-     * @return делитель размера битмапа
-     * @throws java.io.FileNotFoundException
-     */
-    public static int getBitmapScale(BitmapFactory.Options options, int size) throws FileNotFoundException {
-        //1 по умолчанию, значит что битмап нет необходимости уменьшать
-        int scale = 1;
-
-        //Определяем во сколько раз нужно уменьшить изображение для создания битмапа
-        if (/*options.outHeight > size || */options.outWidth > size) {
-            scale = (int) Math.pow(2,
-                    (int) Math.round(
-                            Math.log(
-                                    size /
-                                    (double) Math.max(options.outHeight, options.outWidth)
-                            ) /
-                            Math.log(0.5)
-                    )
-            );
-        }
-
-        return scale;
-    }
-
     public static void copyTextToClipboard(String text, Context context) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setText(text);
@@ -313,5 +293,21 @@ public class Utils {
                 context.getString(R.string.general_data_error),
                 Toast.LENGTH_SHORT
         ).show();
+    }
+
+    public static boolean isDebugMode(Application application){
+        boolean debug = false;
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = application.getPackageManager().getPackageInfo(application.getPackageName(),
+                    PackageManager.GET_CONFIGURATIONS);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageInfo != null) {
+            int flags = packageInfo.applicationInfo.flags;
+            debug = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        }
+        return debug;
     }
 }

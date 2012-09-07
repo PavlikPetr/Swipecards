@@ -1,9 +1,5 @@
 package com.topface.topface.ui.adapters;
 
-import com.topface.topface.R;
-import com.topface.topface.data.Search;
-import com.topface.topface.ui.views.ILocker;
-import com.topface.topface.utils.*;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -13,6 +9,12 @@ import android.view.animation.AlphaAnimation;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import com.topface.topface.R;
+import com.topface.topface.data.Search;
+import com.topface.topface.imageloader.DefaultImageLoaderListener;
+import com.topface.topface.imageloader.FullSizeImageLoader;
+import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.ui.views.ILocker;
 
 public class DatingAlbumAdapter extends BaseAdapter {
 
@@ -20,6 +22,7 @@ public class DatingAlbumAdapter extends BaseAdapter {
      * Параметр для статистики, что бы понять, пользовался ли пользователь галереей, или нет
      */
     public boolean showMoreThanOne = false;
+    private Context mContext;
 
     // class ViewHolder
     static class ViewHolder {
@@ -30,8 +33,6 @@ public class DatingAlbumAdapter extends BaseAdapter {
     // Data
     private int mPrevPosition;         // предыдущая позиция фото в альбоме
     private int mPreRunning;           // текущая пред загружаемое фото
-    private Bitmap mMainBitmap;        // жесткая ссылка на оцениваемую фотографию
-    private MemoryCache mCache;        // кеш фоток
     private Search mUserData;          // данные пользователя
     private ILocker mLocker;
     private LayoutInflater mInflater;
@@ -39,9 +40,9 @@ public class DatingAlbumAdapter extends BaseAdapter {
 
     public DatingAlbumAdapter(Context context, ILocker locker) {
         mInflater = LayoutInflater.from(context);
+        mContext = context;
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
         mAlphaAnimation.setDuration(200L);
-        mCache = new MemoryCache();
         mLocker = locker;
     }
 
@@ -51,10 +52,6 @@ public class DatingAlbumAdapter extends BaseAdapter {
         // очистка
         mPreRunning = 0;
         mPrevPosition = 0;
-        if (mMainBitmap != null)
-            mMainBitmap.recycle();
-        mMainBitmap = null;
-        mCache.clear();
     }
 
     public int getCount() {
@@ -92,15 +89,7 @@ public class DatingAlbumAdapter extends BaseAdapter {
         if (mUserData == null)
             return convertView;
 
-        Bitmap bitmap = mCache.get(position);
-
-        if (bitmap != null && position == 0) {
-            holder.mProgressBar.setVisibility(View.INVISIBLE);
-            holder.mImageView.setImageBitmap(bitmap);
-        } else if (bitmap != null)
-            holder.mImageView.setImageBitmap(bitmap);
-        else
-            loadingImage(position, holder.mImageView, holder.mProgressBar);
+        loadingImage(position, holder.mImageView, holder.mProgressBar);
 
         int prePosition = position >= mPrevPosition ? position + 1 : position - 1;
         if (prePosition > 0 && position < (getCount() - 1))
@@ -115,57 +104,31 @@ public class DatingAlbumAdapter extends BaseAdapter {
     }
 
     public void loadingImage(final int position, final ImageView view, final ProgressBar progressBar) {
-        SmartBitmapFactory.getInstance().loadBitmapByUrl(
-                mUserData.avatars_big[position],
-                new SmartBitmapFactory.BitmapHandler() {
-                    @Override
-                    public void handleBitmap(Bitmap bitmap) {
-                        mLocker.unlockControls();
-                        if (mCache == null) return;
-                        mCache.put(position, bitmap);
+        new FullSizeImageLoader(mContext).displayImage(mUserData.avatars_big[position], view, new DefaultImageLoaderListener(view) {
+            @Override
+            public void onLoadingComplete(Bitmap bitmap) {
+                super.onLoadingComplete(bitmap);
 
-                        if (position == 0) {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            view.setAlpha(255);
-                            view.setImageBitmap(bitmap);
-                            view.startAnimation(mAlphaAnimation);
-                            mMainBitmap = bitmap;
-                        } else {
-                            view.setImageBitmap(bitmap);
-                        }
-                    }
-                },
-                Thread.MAX_PRIORITY
-        );
+                mLocker.unlockControls();
+                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.INVISIBLE);
+                view.setAlpha(255);
+
+                if (position == 0) {
+                    view.startAnimation(mAlphaAnimation);
+                }
+            }
+        });
     }
 
     public void preLoading(final int position) {
-        if (position == mPreRunning)
+        if (position == mPreRunning || ConnectionChangeReceiver.isMobileConnection()) {
             return;
+        }
 
-        if (mCache.containsKey(position))
-            return;
-
-        mPreRunning = position;
-
-        SmartBitmapFactory.getInstance().loadBitmapByUrl(
-                mUserData.avatars_big[position],
-                new SmartBitmapFactory.BitmapHandler() {
-                    @Override
-                    public void handleBitmap(Bitmap bitmap) {
-                        if (bitmap == null || mCache == null) return;
-                        mCache.put(position, bitmap);
-                    }
-                }
+        new FullSizeImageLoader(mContext).preloadImage(
+                mUserData.avatars_big[position]
         );
-    }
-
-    public void release() {
-        if (mMainBitmap != null)
-            mMainBitmap.recycle();
-        mMainBitmap = null;
-        mCache.clear();
-        mCache = null;
     }
 
 }

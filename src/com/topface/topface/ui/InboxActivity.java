@@ -1,20 +1,5 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
-
-import com.google.android.apps.analytics.easytracking.TrackedActivity;
-import com.topface.topface.R;
-import com.topface.topface.Data;
-import com.topface.topface.data.FeedInbox;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.FeedInboxRequest;
-import com.topface.topface.ui.adapters.InboxListAdapter;
-import com.topface.topface.ui.blocks.FloatBlock;
-import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
-import com.topface.topface.ui.p2r.PullToRefreshListView;
-import com.topface.topface.ui.views.DoubleBigButton;
-import com.topface.topface.utils.*;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -27,6 +12,24 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.data.FeedInbox;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.FeedInboxRequest;
+import com.topface.topface.ui.adapters.InboxListAdapter;
+import com.topface.topface.ui.blocks.FloatBlock;
+import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
+import com.topface.topface.ui.p2r.PullToRefreshListView;
+import com.topface.topface.ui.views.DoubleBigButton;
+import com.topface.topface.utils.AvatarManager;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
+
+import java.util.LinkedList;
 
 public class InboxActivity extends TrackedActivity {
   // Data
@@ -120,7 +123,6 @@ public class InboxActivity extends TrackedActivity {
     // Control creating
     mAvatarManager = new AvatarManager<FeedInbox>(mInboxDataList);
     mListAdapter = new InboxListAdapter(getApplicationContext(),mAvatarManager);
-    mListView.setOnScrollListener(mAvatarManager);    
     mListView.setAdapter(mListAdapter);
     
     mNewUpdating = CacheProfile.unread_messages > 0;
@@ -241,9 +243,7 @@ public class InboxActivity extends TrackedActivity {
     if(mListAdapter!=null)
       mListAdapter.release();
     mListAdapter = null;
-    
-    if(mAvatarManager!=null)
-      mAvatarManager.release();
+
     mAvatarManager = null;
     
     if(mInboxDataList!=null)

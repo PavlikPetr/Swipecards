@@ -1,7 +1,15 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
-
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
@@ -14,18 +22,12 @@ import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
-import com.topface.topface.utils.*;
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ProgressBar;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TextView;
+import com.topface.topface.utils.AvatarManager;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
+
+import java.util.LinkedList;
 
 public class LikesActivity extends TrackedActivity {
   // Data
@@ -117,7 +119,6 @@ public class LikesActivity extends TrackedActivity {
    // Control creating
    mAvatarManager = new AvatarManager<FeedLike>(mLikesDataList);
    mListAdapter = new LikesListAdapter(getApplicationContext(),mAvatarManager);
-   mListView.setOnScrollListener(mAvatarManager);
    mListView.setAdapter(mListAdapter);
    
    mNewUpdating = CacheProfile.unread_likes > 0;
@@ -244,9 +245,7 @@ public class LikesActivity extends TrackedActivity {
     if(mListAdapter!=null)
       mListAdapter.release();
     mListAdapter = null;
-    
-    if(mAvatarManager!=null)
-      mAvatarManager.release();
+
     mAvatarManager=null;
     
     if(mLikesDataList!=null)
