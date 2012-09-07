@@ -26,7 +26,7 @@ public class User extends Profile {
             JSONObject item = response.mJSONResult.getJSONObject("profiles");
             item = item.getJSONObject("" + userId);
             
-            parse(item);
+            parse(profile, item);
             
             profile.platform = item.optString("platform");
             profile.last_visit = item.optInt("last_visit");

@@ -79,11 +79,9 @@ public class Profile extends AbstractDataWithPhotos {
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();
     
     public static Profile parse(ApiResponse response) {
-        return parse(response.mJSONResult);
+        return parse(new Profile(), response.mJSONResult);
     }
-    protected static Profile parse(JSONObject resp) {
-        Profile profile = new Profile();
-
+    protected static Profile parse(Profile profile, JSONObject resp) {
         try {
             profile.unread_rates = resp.optInt("unread_rates");
             profile.unread_likes = resp.optInt("unread_likes");

@@ -1,12 +1,9 @@
 package com.topface.topface.ui.profile;
 
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.data.User;
-import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.Triple;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
