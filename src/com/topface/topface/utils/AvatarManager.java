@@ -2,9 +2,9 @@ package com.topface.topface.utils;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.imageloader.DefaultImageLoaderListener;
 
 import java.util.LinkedList;
 
@@ -29,7 +29,7 @@ public class AvatarManager<T extends AbstractData> {
     }
 
     public void getImage(final int position, final ImageView imageView) {
-        DefaultImageLoader.getInstance().displayImage(mDataList.get(position).getSmallLink(), imageView, new DefaultImageLoaderListener(imageView) {
+        DefaultImageLoader.getInstance().displayImage(mDataList.get(position).getSmallLink(), imageView, new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(Bitmap loadedImage) {
                 super.onLoadingComplete(loadedImage);
