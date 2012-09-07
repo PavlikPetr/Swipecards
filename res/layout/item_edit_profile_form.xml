@@ -17,32 +17,30 @@
             android:layout_height="wrap_content"            
             android:layout_centerVertical="true"            
             android:layout_alignLeft="@id/ivEditBackground"
-            android:orientation="vertical" 
-            android:layout_marginLeft="7dp">
+            android:layout_alignRight="@id/ivEditBackground"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvTitle"
-                style="@style/ShadowItemFont"
+                android:id="@+id/tvTitle"                
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textSize="16dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:drawablePadding="5dp"
-                android:textStyle="normal" />
+                android:drawablePadding="5dp"                
+                android:layout_marginLeft="10dp"
+                android:textSize="14sp"              
+                style="@style/ItemTitleText"/>
 
             <TextView
-                android:id="@+id/tvText"
-                style="@style/ShadowItemFont"
+                android:id="@+id/tvText"                
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#B8B8B8"
-                android:textSize="14dp"
+                android:layout_height="wrap_content"                
                 android:ellipsize="end"
-                android:singleLine="true"
-                android:textStyle="normal"
-                android:visibility="gone" />
+                android:singleLine="true"                
+                android:layout_marginLeft="10dp"
+                android:visibility="gone"
+                android:textSize="12sp" 
+                style="@style/ItemtText"/>
         </LinearLayout>
 
         <ImageView

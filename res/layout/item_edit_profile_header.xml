@@ -1,15 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
-	<TextView
-	    android:id="@+id/tvTitle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginTop="10dp"
-	    android:layout_alignParentLeft="true"
-	    android:layout_marginLeft="15dp"
-	    style="@style/BackgroundTitleText"
-	    />
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" 
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="8dp">
+
+        <ImageView
+            android:id="@+id/ivProfilePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_profile_avatar_frame" />
+
+        <TextView
+            android:id="@+id/ivProfilePhotoCover"
+            style="@style/ItemTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/edit_profile_photo"
+            android:textSize="10sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical" 
+        android:layout_marginRight="8dp">
+
+        <Button
+            android:id="@+id/btnEditName"
+            style="@style/ItemTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"	
+            android:background="@drawable/edit_btn_top_selector"
+            android:drawableRight="@drawable/im_item_arrow"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnEditCity"
+            style="@style/ItemTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnEditName"
+            android:background="@drawable/edit_btn_bottom_selector"
+            android:drawableRight="@drawable/im_item_arrow"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
 </RelativeLayout>

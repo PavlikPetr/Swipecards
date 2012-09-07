@@ -28,7 +28,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/btnNavigationBackProfile"            
+            android:id="@+id/btnNavigationBackWithText"            
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -95,6 +95,17 @@
             android:textSize="12sp"
             android:textStyle="bold"
             android:visibility="gone" />
+        
+        <Button
+            android:id="@+id/btnNavigationProfileBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/navigation_male_profile_selector"
+            android:visibility="gone" />
+        
     </RelativeLayout>
 
 </merge>

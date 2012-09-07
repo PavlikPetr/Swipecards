@@ -7,7 +7,7 @@
       android:background="@drawable/im_bar_header" >
       
       <Button
-            android:id="@+id/btnNavigationBackProfile"
+            android:id="@+id/btnNavigationBackWithText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

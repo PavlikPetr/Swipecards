@@ -3,8 +3,10 @@ package com.topface.topface.ui.profile;
 import java.util.LinkedList;
 
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.ui.profile.EditProfileItem.Type;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FormItem;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,15 +17,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class EditProfileActivity extends Activity {
+public class EditProfileActivity extends Activity implements OnClickListener{
 
-	private ListView mEditsList;
+	private ListView mEditsListView;
 	private LinkedList<EditProfileItem> mEditItems;
 
 	@Override
@@ -31,17 +35,37 @@ public class EditProfileActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_edit_profile);
 
+		// Navigation bar
 		((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-
+		((Button) findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+		Button btnBackToProfile = (Button) findViewById(R.id.btnNavigationBackWithText);
+		btnBackToProfile.setText(R.string.navigation_back_profile);
+		btnBackToProfile.setVisibility(View.VISIBLE);
+		btnBackToProfile.setOnClickListener(this);		
+		
+		// ListView
 		mEditItems = new LinkedList<EditProfileItem>();
 		initEditItems();
 
-		mEditsList = (ListView) findViewById(R.id.lvEdits);
-		mEditsList.setAdapter(new EditsAdapter(getApplicationContext(), mEditItems));
+		mEditsListView = (ListView) findViewById(R.id.lvEdits);		
+		
+		// Header 
+		LayoutInflater inflater = getLayoutInflater();
+		ViewGroup header = (ViewGroup)inflater.inflate(R.layout.item_edit_profile_header, mEditsListView, false);
 
+		Button editName = (Button) header.findViewById(R.id.btnEditName);
+		editName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
+		editName.setOnClickListener(this);
+		Button editCity = (Button) header.findViewById(R.id.btnEditCity);
+		editCity.setText(CacheProfile.city_name);
+		editCity.setOnClickListener(this);
+				
+		mEditsListView.addHeaderView(header);
+		mEditsListView.setAdapter(new EditsAdapter(getApplicationContext(), mEditItems));
+		//TODO set avatar image by id ivProfilePhoto
 	}
 
-	private void initEditItems() {
+	private void initEditItems() {		
 		mEditItems.add((new EditStatus()).setType(Type.TOP));
 		mEditItems.add((new EditBackPhoto()).setType(Type.BOTTOM));
 
@@ -49,15 +73,52 @@ public class EditProfileActivity extends Activity {
 		mEditItems.add((new EditPhotos()).setType(Type.TOP));
 		mEditItems.add((new EditInterests()).setType(Type.BOTTOM));
 		
-		mEditItems.add((new EditHeader()).setText("Интелектуально-личностные"));		
-		mEditItems.add((new EditForm()).setTitle(R.string.profile_education).setText("бестолочь").setType(Type.TOP));
-		mEditItems.add((new EditForm()).setTitle(R.string.profile_education).setText("бестолочь").setType(Type.MIDDLE));
-		mEditItems.add((new EditForm()).setTitle(R.string.profile_education).setText("бестолочь").setType(Type.BOTTOM));
-		
-		
-		mEditItems.add((new EditHeader()));
+		// edit form items
+		FormItem prevFormItem = null;
+		for (int i=0;i<CacheProfile.forms.size();i++) {
+			FormItem formItem = CacheProfile.forms.get(i);			 
+			EditProfileItem item = null;
+			
+			// set text info
+			if (formItem.type == FormItem.HEADER) {
+				item = (new EditHeader()).setText(formItem.title);
+			} else if (formItem.type == FormItem.DATA) {
+				item = (new EditForm()).setFormItem(formItem);
+			}
+			
+			// set position type info
+			if (prevFormItem != null && prevFormItem.type == FormItem.HEADER) {
+				item.setType(Type.TOP);
+			} else if(i+1 < CacheProfile.forms.size()) {
+				if(CacheProfile.forms.get(i+1).type == FormItem.HEADER) {
+					item.setType(Type.BOTTOM);
+				}
+			} else if (i == CacheProfile.forms.size()-1){
+				item.setType(Type.BOTTOM);
+			} else {
+				item.setType(Type.MIDDLE);
+			}
+			
+			mEditItems.add(item);
+			prevFormItem = formItem;
+		}			
 	}
 
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btnEditName:
+			//TODO edit name onClick()
+			break;
+		case R.id.btnEditCity:
+			//TODO edit city onClick()
+			break;
+		case R.id.btnNavigationBackWithText:
+			finish();
+			break;
+		}
+	}
+	
 	class EditsAdapter extends BaseAdapter {
 
 		private LayoutInflater mInflater;
@@ -102,8 +163,9 @@ public class EditProfileActivity extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			EditProfileItem item = getItem(position);
+			final EditProfileItem item = getItem(position);
 
+			// get holder
 			ViewHolder holder = null;
 			if(convertView == null) {
 				holder = new ViewHolder();
@@ -119,7 +181,7 @@ public class EditProfileActivity extends Activity {
 				holder = (ViewHolder) convertView.getTag();
 			}			
 
-			// background image			
+			// set background image			
 			switch (item.getType()) {
 			case TOP:
 				holder.mBackground.setImageDrawable(getResources().getDrawable(
@@ -138,10 +200,17 @@ public class EditProfileActivity extends Activity {
 			}			
 			
 			
-			//text
-			if (item instanceof EditHeader) {
-				holder.mTitle.setText(item.getTitle());
+			// set text
+			if (item instanceof EditHeader) {				
+				if(!item.getTitle().equals(Static.EMPTY)) {
+					holder.mTitle.setText(item.getTitle());
+					holder.mTitle.setVisibility(View.VISIBLE);
+				} else {
+					holder.mTitle.setVisibility(View.GONE);
+				}
+				
 			} else {
+				holder.mTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 				holder.mText.setVisibility(View.GONE);
 				if (item instanceof EditStatus) {
 					holder.mTitle.setText(item.getTitle());
@@ -158,7 +227,16 @@ public class EditProfileActivity extends Activity {
 					holder.mText.setVisibility(View.VISIBLE);
 					holder.mText.setText(item.getText());
 				}
+				
+				holder.mBackground.setOnClickListener(new OnClickListener() {					
+					@Override
+					public void onClick(View v) {
+						item.onClick();
+					}
+				});
 			}
+			
+			
 			return convertView;
 		}
 		
@@ -244,31 +322,20 @@ public class EditProfileActivity extends Activity {
 
 	class EditForm extends EditProfileItem {
 
-		private String mTitle = "";
-		private String mText = "";
+		private FormItem mFormItem;
 
 		@Override
 		public String getTitle() {
-			return mTitle;
+			return mFormItem.title;
 		}
 
 		@Override
 		public String getText() {
-			return mText;
-		}
-
-		public EditForm setTitle(String title) {
-			mTitle = title;
-			return this;
+			return mFormItem.data;
 		}
 		
-		public EditForm setTitle(int resId) {
-			mTitle = getResources().getString(resId);
-			return this;
-		}
-
-		public EditForm setText(String text) {
-			mText = text;
+		public EditForm setFormItem(FormItem item) {
+			mFormItem = item;
 			return this;
 		}
 
@@ -292,7 +359,7 @@ public class EditProfileActivity extends Activity {
 
 		@Override
 		public int getLayoutResId() {
-			return R.layout.item_edit_profile_header;
+			return R.layout.item_edit_profile_form_header;
 		}
 
 		@Override

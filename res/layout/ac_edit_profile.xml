@@ -12,51 +12,13 @@
         android:layout_height="wrap_content" >
 
         <include layout="@layout/bar_navigation_header" />
-    </FrameLayout>
-
-    <RelativeLayout
-        android:id="@+id/loProfileHead"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/loNavigationBar"
-        android:layout_marginTop="10px"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="15dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/edit_profile_avatar_frame" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:orientation="vertical" >
-
-            <Button
-                android:id="@+id/btnEditName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_btn_top_selector" />
-
-            <Button
-                android:id="@+id/btnEditCity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_btn_bottom_selector" />
-        </LinearLayout>
-    </RelativeLayout>
+    </FrameLayout>    
 
     <ListView
         android:id="@+id/lvEdits"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/loProfileHead"
+        android:layout_below="@id/loNavigationBar"
         android:cacheColorHint="#00000000"
         android:divider="@android:color/transparent"
         android:fadeScrollbars="true"

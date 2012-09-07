@@ -274,20 +274,27 @@ public class FormInfo {
     		return result;
     	if (variants.length <= 0) 
     		return result;
+    	if (variants.length == 1) {
+    		return variants[0];
+    	}
     	
     	if (mProfile instanceof Profile) {    		
     		switch(mSex) {
     		case Static.BOY:
     			result = variants[2];
+    			break;
     		case Static.GIRL:
     			result = variants[3];
+    			break;
     		}
     	} else {
     		switch(mSex) {
     		case Static.BOY:
     			result = variants[0];
+    			break;
     		case Static.GIRL:
     			result = variants[1];
+    			break;
     		}
     	}
     	
