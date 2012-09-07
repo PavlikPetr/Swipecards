@@ -41,7 +41,7 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
-    private Intent mNewMessageIntent;
+    private boolean mReceiverRegistered;
 
     //---------------------------------------------------------------------------
     @Override
@@ -144,7 +144,10 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
     @Override
     protected void onResume() {
         super.onResume();
-        mNewMessageIntent = registerReceiver(mNewMessageReceiver, new IntentFilter(C2DMUtils.C2DM_NOTIFICATION));
+        if (!mReceiverRegistered) {
+            registerReceiver(mNewMessageReceiver, new IntentFilter(C2DMUtils.C2DM_NOTIFICATION));
+            mReceiverRegistered = true;
+        }
     }
 
     //---------------------------------------------------------------------------
@@ -161,8 +164,9 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
     @Override
     protected void onPause() {
         super.onPause();
-        if (mNewMessageIntent != null) {
+        if (mReceiverRegistered) {
             unregisterReceiver(mNewMessageReceiver);
+            mReceiverRegistered = false;
         }
     }
 

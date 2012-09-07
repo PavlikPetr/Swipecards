@@ -41,6 +41,7 @@ public class FloatBlock {
     }
 
     private void setActivityMap() {
+        mActivityMap = new HashMap<String, String>();
         mActivityMap.put(LikesActivity.class.toString(), mOptions.float_type_like);
         mActivityMap.put(SymphatyActivity.class.toString(), mOptions.float_type_like);
         mActivityMap.put(TopsActivity.class.toString(), mOptions.float_type_top);

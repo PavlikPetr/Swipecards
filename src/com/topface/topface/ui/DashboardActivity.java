@@ -34,13 +34,13 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
     private ProfileRequest profileRequest;
     private SharedPreferences mPreferences;
     private AlphaAnimation mAlphaAnimation;
-
-    // class NotificationReceiver
+    private boolean mIsReceiverRegistered;
     private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(C2DMUtils.C2DM_NOTIFICATION))
-                DashboardActivity.this.refreshNotifications();
+            if (intent.getAction().equals(C2DMUtils.C2DM_NOTIFICATION)) {
+                updateProfile();
+            }
         }
     };
 
@@ -103,7 +103,15 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
             ratingPopup();
     }
 
-      
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mIsReceiverRegistered) {
+            registerReceiver(mNotificationReceiver, new IntentFilter(C2DMUtils.C2DM_NOTIFICATION));
+            mIsReceiverRegistered = true;
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -112,7 +120,6 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
         if (!App.isOnline())
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
 
-        registerReceiver(mNotificationReceiver, new IntentFilter(C2DMUtils.C2DM_NOTIFICATION));
         Data.facebook.extendAccessTokenIfNeeded(this, null);
 
         if (!Data.isSSID()) {
@@ -139,10 +146,13 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
 
 
     @Override
-    protected void onStop() {
+    protected void onPause() {
         mNewbieView.setVisibility(View.INVISIBLE);
-        unregisterReceiver(mNotificationReceiver);
-        super.onStop();
+        if (mIsReceiverRegistered) {
+            unregisterReceiver(mNotificationReceiver);
+            mIsReceiverRegistered = false;
+        }
+        super.onPause();
     }
 
     @Override
