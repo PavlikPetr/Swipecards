@@ -24,7 +24,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -116,7 +115,6 @@ public class SymphatyActivity extends TrackedActivity {
    // Control creating
    mAvatarManager = new AvatarManager<FeedSymphaty>(mSymphatyDataList);
    mListAdapter = new SymphatyListAdapter(getApplicationContext(),mAvatarManager);
-   mListView.setOnScrollListener(mAvatarManager);
    mListView.setAdapter(mListAdapter);
    
    
@@ -235,9 +233,8 @@ public class SymphatyActivity extends TrackedActivity {
     if(mListAdapter!=null)
       mListAdapter.release();
     mListAdapter = null;
-    
+
     if(mAvatarManager!=null) {
-      mAvatarManager.release();
       mAvatarManager=null;
     }
     

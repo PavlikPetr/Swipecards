@@ -3,28 +3,23 @@ package com.topface.topface.ui.profile.gallery;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import android.widget.ListView;
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
-import com.topface.topface.utils.Http;
+import com.topface.topface.imageloader.DefaultImageLoader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView.ScaleType;
-import com.topface.topface.utils.SmartBitmapFactory;
 
-public class PhotoEroGalleryAdapter extends BaseAdapter implements OnScrollListener {
+public class PhotoEroGalleryAdapter extends BaseAdapter {
     // Data
     private boolean mOwner;
     private Context mContext;
     private LinkedList<Album> mAlbumList;
     private HashMap<Integer, Bitmap> mCache;
-    //private ExecutorService mThreadsPool;
-    private boolean mBusy;
 
     public PhotoEroGalleryAdapter(Context context, boolean bOwner) {
         mContext = context;
@@ -60,12 +55,13 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements OnScrollListe
             convertView = new ProfileEroThumbView(mContext);
             ((ProfileEroThumbView) convertView).setScaleType(ScaleType.CENTER_CROP);
             ((ProfileEroThumbView) convertView).mOwner = mOwner;
+            convertView.setLayoutParams(new ListView.LayoutParams(110, 110));
             //((ProfileEroThumbView)convertView).setImageResource(R.drawable.profile_frame_gallery);
         }
 
         if (position == 0 && mOwner) {
+            convertView.setPadding(0, 0, 0, 20);
             ((ProfileEroThumbView) convertView).mIsAddButton = true;
-            ((ProfileEroThumbView) convertView).setPadding(0, 0, 0, 20);
             ((ProfileEroThumbView) convertView).setScaleType(ScaleType.CENTER_INSIDE);
             ((ProfileEroThumbView) convertView).setImageResource(R.drawable.profile_add_photo);
             return convertView;
@@ -84,34 +80,12 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements OnScrollListe
     }
 
     private void loadingImage(final int position, final ProfileEroThumbView view) {
-        if (mBusy) return;
         final Album album = (Album) getItem(position);
         view.cost = album.cost;
         view.likes = album.likes;
         view.dislikes = album.dislikes;
 
-        SmartBitmapFactory.getInstance().setBitmapByUrl(
-                album.getSmallLink(),
-                view,
-                new SmartBitmapFactory.BitmapHandler() {
-                    @Override
-                    public void handleBitmap(Bitmap bitmap) {
-                        if (bitmap != null && mCache != null) {
-                            mCache.put(position, bitmap);
-                        }
-                    }
-                },
-                Thread.NORM_PRIORITY
-        );
-    }
-
-    private void imagePost(final ImageView imageView, final Bitmap bitmap) {
-        imageView.post(new Runnable() {
-            @Override
-            public void run() {
-                imageView.setImageBitmap(bitmap);
-            }
-        });
+        DefaultImageLoader.getInstance().displayImage(album.getSmallLink(), view);
     }
 
     public void release() {
@@ -130,25 +104,5 @@ public class PhotoEroGalleryAdapter extends BaseAdapter implements OnScrollListe
         }
         mCache.clear();
         mCache = null;
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        switch (scrollState) {
-            case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-                mBusy = true;
-                break;
-            case OnScrollListener.SCROLL_STATE_FLING:
-                mBusy = true;
-                break;
-            case OnScrollListener.SCROLL_STATE_IDLE:
-                mBusy = false;
-                view.invalidateViews(); //  ПРАВИЛЬНО ???
-                break;
-        }
     }
 }

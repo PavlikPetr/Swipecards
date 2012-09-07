@@ -13,6 +13,7 @@ import com.topface.topface.data.Album;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.Rate;
 import com.topface.topface.data.User;
+import com.topface.topface.imageloader.FullSizeImageLoader;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -29,8 +30,6 @@ import com.topface.topface.ui.profile.gallery.PhotoGalleryAdapter;
 import com.topface.topface.ui.views.FrameImageView;
 import com.topface.topface.utils.*;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -65,11 +64,9 @@ public class ProfileActivity extends Activity {
   private PhotoEroGalleryAdapter mListEroAdapter;
   private LinkedList<Album> mPhotoList; 
   private LinkedList<Album> mEroList;
-  private AlertDialog mAddPhotoDialog;
-  private ProgressBar mProgressBar;
+    private ProgressBar mProgressBar;
   private ScrollView mProfileGroupView;
-  private ProgressDialog mProgressDialog;
-  // Info
+    // Info
   private TextView mName;
   private TextView mCity;
   private TextView mEroTitle;
@@ -101,7 +98,6 @@ public class ProfileActivity extends Activity {
   public static final String INTENT_MUTUAL_ID = "mutual_id";
   public static final String INTENT_USER_NAME = "user_name";
   public static final String INTENT_CHAT_INVOKE = "chat_invoke";
-  public static final int GALLARY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
   public static final int ALBUM_ACTIVITY_REQUEST_CODE = 101;
   public static final int EDITOR_ACTIVITY_REQUEST_CODE = 102;
   private AddPhotoHelper mAddPhotoHelper;
@@ -138,9 +134,7 @@ public class ProfileActivity extends Activity {
     // Progress
     mProgressBar = (ProgressBar)findViewById(R.id.prsProfileLoading);
     mProfileGroupView = (ScrollView)findViewById(R.id.svProfileForm);
-    mProgressDialog = new ProgressDialog(this);
-    mProgressDialog.setMessage(getString(R.string.general_dialog_loading));
-    
+
     // Arrows
     mGR  = (ImageView)findViewById(R.id.ivProfileArrowGL);
     mGL  = (ImageView)findViewById(R.id.ivProfileArrowGR);
@@ -340,7 +334,7 @@ public class ProfileActivity extends Activity {
     if(CacheProfile.sex == 0)
       mMarriageFieldName.setText(getString(R.string.profile_marriage_female));
 
-    SmartBitmapFactory.getInstance().setBitmapByUrl(CacheProfile.avatar_big, mFramePhoto);
+    FullSizeImageLoader.getInstance().displayImage(CacheProfile.avatar_big, mFramePhoto);
 
     setOwnerAlbum(); 
     
@@ -486,7 +480,7 @@ public class ProfileActivity extends Activity {
     if (profile == null) {
         return;
     }
-    SmartBitmapFactory.getInstance().setBitmapByUrl(profile.getBigLink(), mFramePhoto);
+    FullSizeImageLoader.getInstance().displayImage(profile.getBigLink(), mFramePhoto);
 
     setUserAlbum();
     
@@ -665,9 +659,7 @@ public class ProfileActivity extends Activity {
       mListEroAdapter.release();
     mListEroAdapter=null;
     
-    //mProgressDialog=null;
-    mAddPhotoDialog=null;
-    
+
     if(mPhotoList!=null)
       mPhotoList.clear();
     mPhotoList=null;
@@ -732,7 +724,7 @@ public class ProfileActivity extends Activity {
         } break;
         case R.id.btnProfileBuying: {
           EasyTracker.getTracker().trackEvent("Purchase", "PageMyProfile", "", 0);
-          startActivity(new Intent(getApplicationContext(),BuyingActivity.class));
+          startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
         } break;
         case R.id.btnProfileAsk: {
           findViewById(R.id.btnProfileAsk).setVisibility(View.INVISIBLE);
@@ -766,25 +758,7 @@ public class ProfileActivity extends Activity {
       }
     }
   };
-  //---------------------------------------------------------------------------
-  private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-      switch(view.getId()) {
-        case R.id.btnAddPhotoAlbum: {
-          Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-          startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
-        } break;
-        case R.id.btnAddPhotoCamera: {
-          Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-          startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.profile_add_title)), GALLARY_IMAGE_ACTIVITY_REQUEST_CODE);
-        } break;
-      }
-      if(mAddPhotoDialog!=null && mAddPhotoDialog.isShowing())
-        mAddPhotoDialog.cancel();
-    }
-  };
-  //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
   private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
     @Override
     public void onItemClick(AdapterView<?> parent,View arg1,int position,long arg3) {

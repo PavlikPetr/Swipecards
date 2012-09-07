@@ -29,7 +29,8 @@ public class Debug {
                 stack.append(st.toString()).append("\n");
             }
             msg = msg != null && !msg.equals("") ? msg + " : " : "";
-            Log.e(App.TAG, msg + " :: " + e.getMessage() + stack.toString());
+            String errorText = e.getMessage() == null ? "" : " :: " + e.getMessage();
+            Log.e(App.TAG, msg + errorText + stack.toString());
         }
     }
 

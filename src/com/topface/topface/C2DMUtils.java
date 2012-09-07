@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import com.google.android.c2dm.C2DMessaging;
-import com.topface.topface.R;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.MainActivity;
 
@@ -74,6 +73,12 @@ public class C2DMUtils {
 
             mNotificationManager.notify(notificationId, notification);
         }
+    }
+
+    public static void cancelNotification(Context context) {
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(C2DM_NOTIFICATION_ID);
     }
     //---------------------------------------------------------------------------
 }

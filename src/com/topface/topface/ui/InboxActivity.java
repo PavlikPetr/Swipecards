@@ -120,7 +120,6 @@ public class InboxActivity extends TrackedActivity {
     // Control creating
     mAvatarManager = new AvatarManager<FeedInbox>(mInboxDataList);
     mListAdapter = new InboxListAdapter(getApplicationContext(),mAvatarManager);
-    mListView.setOnScrollListener(mAvatarManager);    
     mListView.setAdapter(mListAdapter);
     
     mNewUpdating = CacheProfile.unread_messages > 0;
@@ -241,9 +240,7 @@ public class InboxActivity extends TrackedActivity {
     if(mListAdapter!=null)
       mListAdapter.release();
     mListAdapter = null;
-    
-    if(mAvatarManager!=null)
-      mAvatarManager.release();
+
     mAvatarManager = null;
     
     if(mInboxDataList!=null)

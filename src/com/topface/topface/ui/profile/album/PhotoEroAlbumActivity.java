@@ -9,6 +9,7 @@ import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Album;
 import com.topface.topface.data.PhotoOpen;
+import com.topface.topface.imageloader.FullSizeImageLoader;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoOpenRequest;
@@ -229,7 +230,7 @@ public class PhotoEroAlbumActivity extends TrackedActivity implements View.OnCli
     }
 
     private void loadEroPhoto() {
-        SmartBitmapFactory.getInstance().setBitmapByUrl(
+        FullSizeImageLoader.getInstance().displayImage(
                 mAlbumsList.get(mCurrentPos).getBigLink(),
                 mEroView
         );

@@ -56,7 +56,6 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
     private boolean mIsHide;
     private int mCurrentUserPos;
     private int mCurrentPhotoPrevPos;
-    private View mResourcesControl;
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
     private Button mLoveBtn;
@@ -123,8 +122,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
         mAlphaAnimation.setDuration(400L);
 
         // Resources
-        mResourcesControl = findViewById(R.id.loDatingResources);
-        mResourcesControl.setOnClickListener(this);
+        findViewById(R.id.loDatingResources).setOnClickListener(this);
         mResourcesPower = (TextView) findViewById(R.id.tvResourcesPower);
         mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
         mResourcesPower.setText("" + CacheProfile.power + "%");
@@ -185,7 +183,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
                 }
                 mCurrentPhotoPrevPos = position;
 
-                if (mUserSearchList.contains(mCurrentUserPos)) {
+                if (mUserSearchList.size() - 1 >= mCurrentUserPos) {
                     mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
                 }
             }
@@ -194,6 +192,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+
         mDatingAlbum.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
@@ -288,7 +287,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         Data.userAvatar = null;
-        if (mUserSearchList.size() > 0 && mCurrentUserPos > 0 && mUserSearchList.contains(mCurrentUserPos)) {
+        if (mUserSearchList.size() > 0 && mCurrentUserPos > 0 && mCurrentUserPos <= mUserSearchList.size() - 1) {
             Http.avatarUserPreloading(mUserSearchList.get(mCurrentUserPos).getSmallLink());
         }
 
@@ -348,7 +347,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             return;
         }
         // кнопка на окне комментария оценки 10 и 9
-        ((Button) mCommentDialog.findViewById(R.id.btnPopupCommentSend)).setOnClickListener(new OnClickListener() {
+        mCommentDialog.findViewById(R.id.btnPopupCommentSend).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 String comment = mCommentText.getText().toString();
@@ -480,7 +479,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
 
         SharedPreferences.Editor editor = mPreferences.edit();
 
-        if (mNewbie.free_energy != true && CacheProfile.isNewbie == true) {
+        if (!mNewbie.free_energy && CacheProfile.isNewbie) {
             mNewbie.free_energy = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_FREE_ENERGY, true);
             //mNewbieView.setImageResource(R.drawable.newbie_free_energy);
@@ -489,7 +488,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             mNewbieView.setVisibility(View.VISIBLE);
             mNewbieView.startAnimation(mAlphaAnimation);
 
-        } else if (mNewbie.rate_it != true) {
+        } else if (!mNewbie.rate_it) {
             mNewbie.rate_it = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_RATE_IT, true);
             //mNewbieView.setImageResource(R.drawable.newbie_rate_it);
@@ -503,7 +502,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
                 }
             });
 
-        } else if (mNewbie.buy_energy != true && CacheProfile.power <= 30) {
+        } else if (!mNewbie.buy_energy && CacheProfile.power <= 30) {
             mNewbie.buy_energy = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_BUY_ENERGY, true);
             //mNewbieView.setImageResource(R.drawable.newbie_buy_energy);

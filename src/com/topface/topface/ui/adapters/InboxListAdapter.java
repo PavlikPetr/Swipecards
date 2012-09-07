@@ -102,7 +102,7 @@ public class InboxListAdapter extends BaseAdapter {
     
     FeedInbox inbox = getItem(position);
     
-    mAvatarManager.getImage(position,holder.mAvatar);
+    mAvatarManager.getImage(position, holder.mAvatar);
     holder.mName.setText(inbox.first_name + ", " + inbox.age + ", " + inbox.city_name);
     
     // text

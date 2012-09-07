@@ -1,39 +1,31 @@
 package com.topface.topface.ui.profile.gallery;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
+import android.widget.ListView;
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView.ScaleType;
-import com.topface.topface.utils.SmartBitmapFactory;
+import com.topface.topface.imageloader.DefaultImageLoader;
 
-public class PhotoGalleryAdapter extends BaseAdapter implements OnScrollListener {
+public class PhotoGalleryAdapter extends BaseAdapter {
     // Data
     private boolean mOwner;
     private Context mContext;
-    private LinkedList<Album> mAlbumList;
-    private HashMap<Integer, Bitmap> mCache;
+    private LinkedList<Album> mAlbumList = new LinkedList<Album>();
     //private ExecutorService mThreadsPool;
-    private boolean mBusy;
 
     public PhotoGalleryAdapter(Context context, boolean bOwner) {
         mContext = context;
         mOwner = bOwner;
-        mCache = new HashMap<Integer, Bitmap>();
-        mAlbumList = new LinkedList<Album>();
     }
 
     public void setDataList(LinkedList<Album> dataList) {
         mAlbumList = dataList;
-        mCache.clear();
     }
 
     @Override
@@ -56,6 +48,8 @@ public class PhotoGalleryAdapter extends BaseAdapter implements OnScrollListener
         if (convertView == null) {
             convertView = new ProfileThumbView(mContext);
             ((ProfileThumbView) convertView).setScaleType(ScaleType.CENTER_CROP);
+            //Нужно, иначе будет ImageLoader будет падать
+            convertView.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
         }
 
         if (position == 0 && mOwner) {
@@ -68,33 +62,14 @@ public class PhotoGalleryAdapter extends BaseAdapter implements OnScrollListener
             ((ProfileThumbView) convertView).mIsAddButton = false;
         }
 
-        Bitmap bitmap = mCache.get(position);
-        if (bitmap != null)
-            ((ProfileThumbView) convertView).setImageBitmap(bitmap);
-        else {
-            ((ProfileThumbView) convertView).setImageBitmap(null);
-            loadingImage(position, ((ProfileThumbView) convertView));
-        }
+        loadingImage(position, ((ProfileThumbView) convertView));
 
         return convertView;
     }
 
     private void loadingImage(final int position, final ProfileThumbView view) {
         final Album album = (Album) getItem(position);
-        if (!mBusy) {
-            SmartBitmapFactory.getInstance().setBitmapByUrl(
-                    album.getSmallLink(),
-                    view,
-                    new SmartBitmapFactory.BitmapHandler() {
-                        @Override
-                        public void handleBitmap(Bitmap bitmap) {
-                            if (bitmap != null && mCache != null) {
-                                mCache.put(position, bitmap);
-                            }
-                        }
-                    }
-            );
-        }
+        DefaultImageLoader.getInstance().displayImage(album.getSmallLink(), view);
     }
 
     public void release() {
@@ -102,37 +77,6 @@ public class PhotoGalleryAdapter extends BaseAdapter implements OnScrollListener
         if (mAlbumList != null)
             mAlbumList.clear();
         mAlbumList = null;
-
-        int size = mCache.size();
-        for (int i = 0; i < size; ++i) {
-            Bitmap bitmap = mCache.get(i);
-            if (bitmap != null) {
-                bitmap.recycle();
-                mCache.put(i, null); // хз
-            }
-        }
-        mCache.clear();
-        mCache = null;
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        switch (scrollState) {
-            case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-                mBusy = true;
-                break;
-            case OnScrollListener.SCROLL_STATE_FLING:
-                mBusy = true;
-                break;
-            case OnScrollListener.SCROLL_STATE_IDLE:
-                mBusy = false;
-                view.invalidateViews(); //  ПРАВИЛЬНО ???
-                break;
-        }
     }
 
 }

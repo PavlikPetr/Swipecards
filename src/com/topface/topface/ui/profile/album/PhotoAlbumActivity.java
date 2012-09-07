@@ -9,7 +9,6 @@ import com.topface.topface.requests.MainRequest;
 import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.ui.views.DatingAlbum;
 import com.topface.topface.utils.Debug;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -111,7 +110,6 @@ public class PhotoAlbumActivity extends TrackedActivity {
   protected void onDestroy() {
     mGallery = null;
     if (mGalleryAdapter != null) {
-        mGalleryAdapter.release();
         mGalleryAdapter = null;
     }
 

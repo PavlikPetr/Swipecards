@@ -228,12 +228,13 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
         startActivity(intent);
     }
 
-    BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String id = intent.getStringExtra("id");
             if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
                 update();
+                C2DMUtils.cancelNotification(ChatActivity.this);
             }
         }
     };

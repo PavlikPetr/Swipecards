@@ -11,7 +11,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.utils.*;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -59,9 +58,6 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_dashboard);
         Debug.log(this, "+onCreate");
-
-        // C2DM
-        C2DMUtils.init(this);
 
         // Version
         if (App.DEBUG)

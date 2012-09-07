@@ -15,7 +15,6 @@ import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.utils.*;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -117,7 +116,6 @@ public class LikesActivity extends TrackedActivity {
    // Control creating
    mAvatarManager = new AvatarManager<FeedLike>(mLikesDataList);
    mListAdapter = new LikesListAdapter(getApplicationContext(),mAvatarManager);
-   mListView.setOnScrollListener(mAvatarManager);
    mListView.setAdapter(mListAdapter);
    
    mNewUpdating = CacheProfile.unread_likes > 0;
@@ -244,9 +242,7 @@ public class LikesActivity extends TrackedActivity {
     if(mListAdapter!=null)
       mListAdapter.release();
     mListAdapter = null;
-    
-    if(mAvatarManager!=null)
-      mAvatarManager.release();
+
     mAvatarManager=null;
     
     if(mLikesDataList!=null)

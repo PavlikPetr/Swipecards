@@ -129,8 +129,7 @@ public class TopsActivity extends TrackedActivity {
     mGalleryGridManager = new GalleryGridManager<Top>(getApplicationContext(),mTopsList);
     mGridAdapter = new TopsGridAdapter(getApplicationContext(),mGalleryGridManager);
     mGallery.setAdapter(mGridAdapter);
-    mGallery.setOnScrollListener(mGalleryGridManager);
-    
+
     mFloatBlock = new FloatBlock(this);
     update();
   }

@@ -4,9 +4,9 @@ import java.util.LinkedList;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
-import com.topface.topface.utils.*;
+import com.topface.topface.imageloader.FullSizeImageLoader;
+import com.topface.topface.receivers.ConnectionChangeReceiver;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +26,6 @@ public class PhotoAlbumAdapter extends BaseAdapter {
     // Data
     private int mPrevPosition;         // предыдущая позиция фото в альбоме
     private int mPreRunning;           // текущая пред загружаемое фото
-    private MemoryCache mCache;        // кеш фоток
     private LinkedList<Album> mAlbumsList;
     private LayoutInflater mInflater;
 
@@ -34,7 +33,6 @@ public class PhotoAlbumAdapter extends BaseAdapter {
     public PhotoAlbumAdapter(Context context, LinkedList<Album> albumList) {
         mAlbumsList = albumList;
         mInflater = LayoutInflater.from(context);
-        mCache = new MemoryCache();
     }
 
     
@@ -64,11 +62,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        Bitmap bitmap = mCache.get(position);
-        if (bitmap != null)
-            holder.mImageView.setImageBitmap(bitmap);
-        else
-            loadingImage(position, holder.mImageView);
+        FullSizeImageLoader.getInstance().displayImage(mAlbumsList.get(position).getBigLink(), holder.mImageView);
 
         int prePosition = position >= mPrevPosition ? position + 1 : position - 1;
         if (prePosition > 0 && position < (getCount() - 1))
@@ -79,49 +73,15 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void loadingImage(final int position, ImageView view) {
-        SmartBitmapFactory.getInstance().setBitmapByUrl(
-                mAlbumsList.get(position).getBigLink(),
-                view,
-                new SmartBitmapFactory.BitmapHandler() {
-                    @Override
-                    public void handleBitmap(Bitmap bitmap) {
-                        if (bitmap != null && mCache != null) {
-                            mCache.put(position, bitmap);
-                        }
-                    }
-                }
-        );
-    }
-
     public void preLoading(final int position) {
-        if (position == mPreRunning)
+        if (position == mPreRunning || ConnectionChangeReceiver.isMobileConnection()) {
             return;
+        }
 
-        if (mCache.containsKey(position))
-            return;
-
-        Debug.log(this, "preloader:" + mPrevPosition + ":" + position);
-
-        SmartBitmapFactory.getInstance().loadBitmapByUrl(
-                mAlbumsList.get(position).getBigLink(),
-                new SmartBitmapFactory.BitmapHandler() {
-                    @Override
-                    public void handleBitmap(Bitmap bitmap) {
-                        if (bitmap != null && mCache != null) {
-                            mCache.put(position, bitmap);
-                        }
-                    }
-                }
-        );
+        FullSizeImageLoader.getInstance().preloadImage(mAlbumsList.get(position).getBigLink());
 
         mPreRunning = position;
     }
 
-    
-    public void release() {
-        mCache.clear();
-        mCache = null;
-    }
-    
+
 }
