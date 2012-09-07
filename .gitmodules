@@ -1,0 +1,3 @@
+[submodule "libs/UniversalImageLoader"]
+	path = libs/UniversalImageLoader
+	url = git@github.com:gildor/Android-Universal-Image-Loader.git
