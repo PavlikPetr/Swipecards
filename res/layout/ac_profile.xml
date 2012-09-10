@@ -75,7 +75,7 @@
                 
                 
                 <Button
-                    android:id="@+id/btnUserDelight" 
+                    android:id="@+id/btnUserEmpty" 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/user_delight_bg"
@@ -89,35 +89,40 @@
                     android:shadowDy="1"
                     android:text="" />
                 
-                <Button
-                    android:id="@+id/btnUserMutual"
+                <RelativeLayout 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/user_mutual_bg"
-                    android:paddingTop="5dp"
-                    android:drawablePadding="-15dp"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp"
-                    android:shadowColor="#666666"
-                    android:shadowRadius="1.2"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:text="" />
+                    android:background="@drawable/user_mutual_bg" >
+	                <TextView
+	                    android:id="@+id/tvUserMoney"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_centerInParent="true"
+	                    android:gravity="center"
+	                    android:textColor="#FFFFFF"
+	                    android:textSize="15sp"
+	                    android:textStyle="bold"
+	                    android:text="0"
+	                    android:drawableRight="@drawable/resources_coins"
+	                    android:drawablePadding="4dp" />
+                </RelativeLayout>
                 
-                <Button
-                    android:id="@+id/btnUserChat"
+                <RelativeLayout 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/user_chat_bg"
-                    android:paddingTop="5dp"
-                    android:drawablePadding="-12dp"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp"
-                    android:shadowColor="#666666"
-                    android:shadowRadius="1.2"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:text="" />
+                    android:background="@drawable/user_chat_bg">
+	                <TextView
+	                    android:id="@+id/tvUserPower"
+			            android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerInParent="true"
+				        android:gravity="center"
+				        android:textColor="#FFFFFF"
+				        android:textSize="12sp"
+				        android:textStyle="bold"
+				        android:text="0"
+                        android:background="@drawable/resources_battery" />
+                </RelativeLayout>
                 <!-- android:drawableTop="@drawable/user_chat_selector"  -->                
             </LinearLayout>
            

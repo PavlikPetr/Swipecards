@@ -8,6 +8,7 @@ import com.topface.topface.ui.profile.EditProfileActivity;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,6 +38,9 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     private RadioButton mUserPhoto;
     private RadioButton mUserForm;
     private RadioButton mUserGifts;
+    
+    private TextView mUserMoney;
+    private TextView mUserPower;
     
     private IndicatorView mIndicatorView;
     private ViewPager mViewPager;
@@ -79,6 +83,13 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         mUserForm.setOnClickListener(mInfoClickListener);
         mUserGifts = (RadioButton)view.findViewById(R.id.btnUserGifts);
         mUserGifts.setOnClickListener(mInfoClickListener);
+        
+        // Resources
+        mUserMoney = (TextView)view.findViewById(R.id.tvUserMoney);
+        mUserMoney.setText("" + CacheProfile.money);
+        mUserPower = (TextView)view.findViewById(R.id.tvUserPower);
+        mUserPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+        mUserPower.setText("" + CacheProfile.power + "%");
         
         // View Pager
         mViewPager = (ViewPager)view.findViewById(R.id.UserViewPager);
