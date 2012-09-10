@@ -28,8 +28,11 @@ import android.widget.TextView;
 
 public class EditProfileActivity extends Activity implements OnClickListener{
 
-	private ListView mEditsListView;
-	private LinkedList<EditProfileItem> mEditItems;
+	public int INTENT_EDIT_CHANGES = 323;
+	
+	private ListView mEditsListView;	
+	private EditsAdapter mAdapter;
+	private LinkedList<EditProfileItem> mEditItems;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +65,8 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 		editCity.setOnClickListener(this);
 				
 		mEditsListView.addHeaderView(header);
-		mEditsListView.setAdapter(new EditsAdapter(getApplicationContext(), mEditItems));
+		mAdapter = new EditsAdapter(getApplicationContext(), mEditItems);
+		mEditsListView.setAdapter(mAdapter);
 		//TODO set avatar image by id ivProfilePhoto
 	}
 
@@ -249,6 +253,16 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == Activity.RESULT_OK) {
+			if (requestCode == INTENT_EDIT_CHANGES) {
+				mAdapter.notifyDataSetChanged();
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
 	class EditStatus extends EditProfileItem {
 
 		@Override
@@ -272,7 +286,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 		@Override
 		public Drawable getIcon() {
 			Bitmap original = BitmapFactory.decodeResource(getResources(),
-					R.drawable.profile_background_1);
+					CacheProfile.background_res_id);
 			BitmapDrawable resized = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
 					original, 46, 35, true));
 
@@ -281,7 +295,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 		@Override
 		void onClick() {
-			startActivity(new Intent(getApplicationContext(), EditBackgroundPhotoActivity.class));
+			startActivityForResult(new Intent(getApplicationContext(), EditBackgroundPhotoActivity.class),INTENT_EDIT_CHANGES);
 		}
 	}
 

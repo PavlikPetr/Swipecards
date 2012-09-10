@@ -16,7 +16,7 @@
             android:id="@+id/ivProfilePhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/edit_profile_avatar_frame" />
+            android:layout_centerInParent="true"/>        
 
         <TextView
             android:id="@+id/ivProfilePhotoCover"
@@ -24,8 +24,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:gravity="center"
             android:text="@string/edit_profile_photo"
-            android:textSize="10sp" />
+            android:textSize="10sp" 
+            android:background="@drawable/edit_profile_avatar_frame"/>
     </RelativeLayout>
 
     <RelativeLayout

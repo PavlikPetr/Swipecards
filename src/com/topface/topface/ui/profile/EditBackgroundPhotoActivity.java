@@ -3,9 +3,13 @@ package com.topface.topface.ui.profile;
 import java.util.LinkedList;
 
 import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.utils.CacheProfile;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -22,13 +26,23 @@ import android.widget.TextView;
 
 public class EditBackgroundPhotoActivity extends Activity {
 	
-	ListView mBackgroundImagesListView;	
+	private SharedPreferences mPreferences;	
+	private int mSelectedResId;
+	private ListView mBackgroundImagesListView;	
+	
+	int[] backgrounds = new int[]{
+			R.drawable.profile_background_1,
+			R.drawable.profile_background_2,
+			R.drawable.profile_background_3
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {	
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_edit_background_photo);
 		
+		mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+		mSelectedResId = CacheProfile.background_res_id;
 		// Navigation bar		
 		((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
 		TextView subTitle = (TextView) findViewById(R.id.tvNavigationSubtitle);
@@ -38,33 +52,42 @@ public class EditBackgroundPhotoActivity extends Activity {
 		((Button)findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);		
 		Button btnBack = (Button)findViewById(R.id.btnNavigationBackWithText);
 		btnBack.setVisibility(View.VISIBLE);
-		btnBack.setText(R.string.navigation_edit);		
+		btnBack.setText(R.string.navigation_edit);
+		btnBack.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				setChanges();
+				finish();				
+			}
+		});
 		
 		mBackgroundImagesListView = (ListView) findViewById(R.id.lvBackgroundImages);
 		
 		mBackgroundImagesListView.setAdapter(new BackgroundImagesAdapter(getApplicationContext(), getBackgroundImagesList()));
 	}
 	
-	private LinkedList<Bitmap> getBackgroundImagesList() {
-		LinkedList<Bitmap> result = new LinkedList<Bitmap>();
-		result.add(BitmapFactory.decodeResource(getResources(), R.drawable.profile_background_1));
+	private LinkedList<BackgroundItem> getBackgroundImagesList() {
+		LinkedList<BackgroundItem> result = new LinkedList<BackgroundItem>();
+				
+		for (int i = 0; i < backgrounds.length; i++) {
+			boolean selected = CacheProfile.background_res_id == backgrounds[i] ? true : false;
+			result.add(new ResourceBackgroundItem(getResources(), backgrounds[i]).setSelected(selected));
+		}
 		
-		result.add(BitmapFactory.decodeResource(getResources(), R.drawable.profile_background_2));
-		
-		result.add(BitmapFactory.decodeResource(getResources(), R.drawable.profile_background_3));
 		return result;
 	}
 	
 	class BackgroundImagesAdapter extends BaseAdapter {
 
-		private LinkedList<Bitmap> mData;
-		private int mSelectedIndex;
+		private LinkedList<BackgroundItem> mData;
 		private LayoutInflater mInflater;
+		private int mSelectedIndex;
 		
-		public BackgroundImagesAdapter(Context context, LinkedList<Bitmap> data) {
+		public BackgroundImagesAdapter(Context context, LinkedList<BackgroundItem> data) {
 			mData = data;
 			mInflater = LayoutInflater.from(context);			
-		}
+		}		
 		
 		@Override
 		public int getCount() {
@@ -72,7 +95,7 @@ public class EditBackgroundPhotoActivity extends Activity {
 		}
 
 		@Override
-		public Bitmap getItem(int position) {
+		public BackgroundItem getItem(int position) {
 			return mData.get(position);
 		}
 
@@ -82,8 +105,9 @@ public class EditBackgroundPhotoActivity extends Activity {
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			ViewHolder holder = null;
+			final BackgroundItem item = getItem(position);
 			
 			if (convertView == null) {
 				holder = new ViewHolder();
@@ -101,20 +125,21 @@ public class EditBackgroundPhotoActivity extends Activity {
 			LayoutParams params = holder.mImageView.getLayoutParams();
 			params.height = holder.mFrameImageView.getDrawable().getIntrinsicHeight() - 2;
 			params.width = holder.mFrameImageView.getDrawable().getIntrinsicWidth() - 2;
-			holder.mImageView.setImageBitmap(getItem(position));
+			holder.mImageView.setImageBitmap(getItem(position).getBitmap());			
 			
-			final int currentPosition = position;
-			
-			if (position == mSelectedIndex) {
+			if (item.isSelected()) {
 				holder.mSelected.setVisibility(View.VISIBLE);
 				convertView.setOnClickListener(null);
+				mSelectedIndex = position;
 			} else {
 				holder.mSelected.setVisibility(View.GONE);
 				convertView.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
-						mSelectedIndex = currentPosition;
+						mData.get(mSelectedIndex).setSelected(false);
+						item.setSelected(true);						
+						setSelectedBackground(item);						
 						notifyDataSetChanged();
 					}
 				});
@@ -128,5 +153,85 @@ public class EditBackgroundPhotoActivity extends Activity {
 			ImageView mFrameImageView;
 			ViewGroup mSelected;
 		}
+	}
+	
+	private void setSelectedBackground(BackgroundItem item) {
+		if(item instanceof ResourceBackgroundItem) {			
+			mSelectedResId = ((ResourceBackgroundItem)item).getResourceId();
+		}
+	}
+	
+	private void setChanges() {
+		if (CacheProfile.background_res_id != mSelectedResId) {						
+			CacheProfile.background_res_id = mSelectedResId;
+			mPreferences.edit().putInt(Static.PREFERENCES_PROFILE_BACKGROUND_RES_ID, mSelectedResId).commit();
+			setResult(Activity.RESULT_OK);
+		} else {
+			setResult(Activity.RESULT_CANCELED);
+		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		setChanges();
+		super.onDestroy();
+	}
+	
+	interface BackgroundItem {
+		public Bitmap getBitmap();
+		public boolean isSelected();
+		public BackgroundItem setSelected(boolean selected);
+	}
+	
+	class ResourceBackgroundItem implements BackgroundItem{
+		
+		private Bitmap mBitmap;
+		private boolean selected;
+		private int mResId;		
+		
+		public ResourceBackgroundItem(Resources resources, int resId) {
+			mBitmap = BitmapFactory.decodeResource(resources, resId);
+			mResId = resId;
+		}		
+		
+		public Bitmap getBitmap() {
+			return mBitmap;
+		}
+
+		public boolean isSelected() {
+			return selected;
+		}
+
+		public BackgroundItem setSelected(boolean selected) {
+			this.selected = selected;
+			return (BackgroundItem) this;
+		}
+		
+		public int getResourceId() {
+			return mResId;
+		}
+	}
+	
+	class BitmapBackgroundItem implements BackgroundItem{
+		
+		private Bitmap mBitmap;
+		private boolean selected;		
+		
+		public BitmapBackgroundItem(Bitmap bitmap) {
+			mBitmap = bitmap;
+		}
+		
+		public Bitmap getBitmap() {
+			return mBitmap;
+		}
+
+		public boolean isSelected() {
+			return selected;
+		}
+
+		public BackgroundItem setSelected(boolean selected) {
+			this.selected = selected;
+			return (BackgroundItem) this;
+		}		
 	}
 }

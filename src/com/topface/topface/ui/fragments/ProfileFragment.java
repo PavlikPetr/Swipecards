@@ -130,6 +130,12 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 	}
 
 	@Override
+	public void onResume() {		
+		super.onResume();
+		mUserProfileHeader.setBackgroundResource(CacheProfile.background_res_id);
+	}
+	
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 	}
