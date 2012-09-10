@@ -172,6 +172,7 @@
 	  <string name="edit_profile_photo">Change photo</string>
 	  <string name="edit_album_photos">photos</string>
 	  <string name="edit_interests">interests</string>
+	  <string name="edit_back_photo_selected">Selected</string>
 	  
 	  <!-- Album, Ero Album Activity -->
 	  <string name="album_header_title">Album</string>
@@ -211,7 +212,7 @@
     
     <!--  Navigation Header -->
     <string name="navigation_back_profile">Profile</string>
-    <string name="navigation_back_dialog">Dialogs</string>
+    <string name="navigation_back_dialog">Dialogs</string>    
     <string name="navigation_edit">Edit</string>
     
     <!-- Profile / UserProfile Form -->

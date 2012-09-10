@@ -46,6 +46,7 @@
         <activity android:name=".ui.profile.UserProfileActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.profile.ProfileActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.profile.EditProfileActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.profile.EditBackgroundPhotoActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.profile.PhotoAlbumActivity" />
         <activity android:name=".ui.profile.old_EditProfileActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.profile.album.PhotoEroAlbumActivity" />

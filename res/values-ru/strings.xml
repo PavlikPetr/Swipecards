@@ -166,6 +166,7 @@
 	  <string name="edit_profile_photo">Поменять фото</string>
 	  <string name="edit_album_photos">фотографий</string>
 	  <string name="edit_interests">интересов</string>
+	  <string name="edit_back_photo_selected">Выбрана</string>
 	  
 	  <!-- Album, Ero Album Activity -->
 	  <string name="album_header_title">Альбом</string>
@@ -206,7 +207,7 @@
     <!--  Navigation Header -->
     <string name="navigation_back_profile">Профиль</string>
     <string name="navigation_back_dialog">Диалоги</string>
-    <string name="navigation_edit">Изм.</string>
+    <string name="navigation_edit">Ред.</string>
     
     <!-- Profile / UserProfile Form -->
     <string name="form_main">Основное</string>
