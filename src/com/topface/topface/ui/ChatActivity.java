@@ -52,7 +52,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private int mUserId;
     private String mUserAvatarUrl;
     private int mAvatarWidth;
-    private boolean mProfileInvoke;
+    private boolean mProfileInvoke;    
     private boolean mIsAddPanelOpened;
     private ListView mListView;
     private ChatListAdapter mAdapter;
@@ -68,12 +68,15 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private static ProgressDialog mProgressDialog;
     private boolean mLocationDetected = false;
     
+    private int mUserSex;
+    
     // Constants
     private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_URL = "user_url";
     public static final String INTENT_USER_NAME = "user_name";
-    public static final String INTENT_USER_AGE = "user_age";
+    public static final String INTENT_USER_SEX = "user_sex";
+    public static final String INTENT_USER_AGE = "user_age";    
     public static final String INTENT_USER_CITY = "user_city";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
@@ -93,12 +96,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mHistoryList = new LinkedList<History>();
 
         // Swap Control
-        mSwapControl = ((SwapControl)findViewById(R.id.swapFormView));        
-        
-        // Title Header
-        mHeaderTitle = ((TextView)findViewById(R.id.tvNavigationTitle));
-        mHeaderSubtitle = ((TextView)findViewById(R.id.tvNavigationSubtitle));
-        mHeaderSubtitle.setVisibility(View.VISIBLE);
+        mSwapControl = ((SwapControl)findViewById(R.id.swapFormView));                
 
         // Locker
         mLoadingLocker = (LockerView)findViewById(R.id.llvChatLoading);
@@ -107,21 +105,38 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
         mUserAvatarUrl = getIntent().getStringExtra(INTENT_USER_URL);
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
-        mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME) + ", " + getIntent().getIntExtra(INTENT_USER_AGE,0));
-        mHeaderSubtitle.setText(getIntent().getStringExtra(INTENT_USER_CITY));
+        mUserSex = getIntent().getIntExtra(INTENT_USER_SEX, Static.BOY);
         mAvatarWidth = getResources().getDrawable(R.drawable.chat_avatar_frame).getIntrinsicWidth();
         
-        //NavigationBar
+        // Navigation bar
+        mHeaderTitle = ((TextView)findViewById(R.id.tvNavigationTitle));
+        mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME) + ", " + getIntent().getIntExtra(INTENT_USER_AGE,0));
+        mHeaderSubtitle = ((TextView)findViewById(R.id.tvNavigationSubtitle));
+        mHeaderSubtitle.setVisibility(View.VISIBLE);
+        mHeaderSubtitle.setText(getIntent().getStringExtra(INTENT_USER_CITY));
+        
         (findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-        final Button btnBack = (Button)findViewById(R.id.btnNavigationBackProfile);
+        final Button btnBack = (Button)findViewById(R.id.btnNavigationBackWithText);
         if (mProfileInvoke) {
         	btnBack.setText(getResources().getString(R.string.navigation_back_profile));
         } else {
-        	btnBack.setText(getResources().getString(R.string.navigation_back));
+        	btnBack.setText(getResources().getString(R.string.navigation_back_dialog));
         }
         btnBack.setVisibility(View.VISIBLE);
         btnBack.setOnClickListener(this);
-        
+                
+        final Button btnProfile = (Button)findViewById(R.id.btnNavigationProfileBar);
+        switch (mUserSex) {
+		case Static.BOY:
+			btnProfile.setBackgroundResource(R.drawable.navigation_male_profile_selector);
+			break;
+		case Static.GIRL:
+			btnProfile.setBackgroundResource(R.drawable.navigation_female_profile_selector);
+			break;
+		}
+		btnProfile.setVisibility(View.VISIBLE);
+		btnProfile.setOnClickListener(this);
+		
 //        View btnProfile = findViewById(R.id.btnHeaderProfile);
 //        btnProfile.setVisibility(View.VISIBLE);
 //        btnProfile.setOnClickListener(this);
@@ -238,7 +253,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             	startActivityForResult(new Intent(this, GeoMapActivity.class), GeoMapActivity.INTENT_REQUEST_GEO);            	
 //                Toast.makeText(ChatActivity.this, "Map", Toast.LENGTH_SHORT).show();
             } break;
-            case R.id.btnNavigationBackProfile: {
+            case R.id.btnNavigationBackWithText: {
             	finish();
             } break;
             default: {

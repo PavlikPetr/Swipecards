@@ -185,23 +185,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem.title = formInfo.getFormTitle(R.array.form_main_communication);
                 formItem.data  = formInfo.getCommunication(form.optInt("communication_id"));
                 formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 4 height
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_main_height);
-                formItem.data  = "" + form.optInt("height");
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 13 weight
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_main_weight);
-                formItem.data  = "" + form.optInt("weight");
-                formItem.equal = false;
-                profile.forms.add(formItem);
+                profile.forms.add(formItem);                
 
                 
                 // 1 header -= PHYSIQUE =-
@@ -220,6 +204,22 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem.equal = false;
                 profile.forms.add(formItem);
 
+                // 4 height
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = formInfo.getFormTitle(R.array.form_main_height);
+                formItem.data  = "" + form.optInt("height");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // 13 weight
+                formItem = new FormItem();
+                formItem.type  = FormItem.DATA;
+                formItem.title = formInfo.getFormTitle(R.array.form_main_weight);
+                formItem.data  = "" + form.optInt("weight");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
                 // 15 hair
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;

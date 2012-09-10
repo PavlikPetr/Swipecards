@@ -148,6 +148,7 @@ public class DialogsFragment extends BaseFragment {
 						intent.putExtra(ChatActivity.INTENT_USER_ID, Data.dialogList.get(position).uid);
 						intent.putExtra(ChatActivity.INTENT_USER_URL, Data.dialogList.get(position).getSmallLink());
 						intent.putExtra(ChatActivity.INTENT_USER_NAME, Data.dialogList.get(position).first_name);
+						intent.putExtra(ChatActivity.INTENT_USER_SEX, Data.dialogList.get(position).sex);
 						intent.putExtra(ChatActivity.INTENT_USER_AGE, Data.dialogList.get(position).age);
 						intent.putExtra(ChatActivity.INTENT_USER_CITY, Data.dialogList.get(position).city_name);
 						startActivity(intent);

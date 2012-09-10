@@ -94,7 +94,7 @@ public abstract class BaseFragment extends Fragment implements IRequestClient{
             int lastFragmentId = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE)
                                          .getInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, R.id.fragment_profile);
             if(mFragmentId == lastFragmentId)
-              ((NavigationActivity)activity).setSelectedMenu(mFragmentId);
+            	((NavigationActivity)activity).setSelectedMenu(mFragmentId);
         }
     }
     

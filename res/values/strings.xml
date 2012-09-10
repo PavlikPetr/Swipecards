@@ -169,6 +169,7 @@
 	  <!--  EditProfileActivity -->
 	  <string name="edit_title">Editing</string>
 	  <string name="edit_bg_photo">Background photo</string>
+	  <string name="edit_profile_photo">Change photo</string>
 	  <string name="edit_album_photos">photos</string>
 	  <string name="edit_interests">interests</string>
 	  
@@ -210,54 +211,33 @@
     
     <!--  Navigation Header -->
     <string name="navigation_back_profile">Profile</string>
-    <string name="navigation_back">Back</string>
+    <string name="navigation_back_dialog">Dialogs</string>
     <string name="navigation_edit">Edit</string>
     
     <!-- Profile / UserProfile Form -->
     <string name="form_main">Main</string>
     <string-array name="form_main_character">
-        <item name="male">Character</item>
-        <item name="female">Character</item> 
-        <item name="own_male">Character</item>
-        <item name="own_female">Character</item>
+        <item name="all">Character</item>        
     </string-array>
     <string-array name="form_main_communication">
-        <item name="male">Communication</item>
-        <item name="female">Communication</item> 
-        <item name="own_male">Communication</item>
-        <item name="own_female">Communication</item>
+        <item name="all">Communication</item>        
     </string-array>
     <string-array name="form_main_height">
-        <item name="male">Height</item>
-        <item name="female">Height</item> 
-        <item name="own_male">Height</item>
-        <item name="own_female">Height</item>
+        <item name="all">Height</item>        
     </string-array>
     <string-array name="form_main_weight">
-        <item name="male">Weight</item>
-        <item name="female">Weight</item> 
-        <item name="own_male">Weight</item>
-        <item name="own_female">Weight</item>
+        <item name="all">Weight</item>        
     </string-array>
     
     <string name="form_physique">Physique</string>
     <string-array name="form_physique_fitness">
-        <item name="male">Constitution</item>
-        <item name="female">Constitution</item> 
-        <item name="own_male">Constitution</item>
-        <item name="own_female">Constitution</item>
+        <item name="all">Constitution</item>        
     </string-array>
     <string-array name="form_physique_hairs">
-        <item name="male">Hair color</item>
-        <item name="female">Hair color</item> 
-        <item name="own_male">Hair color</item>
-        <item name="own_female">Hair color</item>
+        <item name="all">Hair color</item>        
     </string-array>
     <string-array name="form_physique_eyes">
-        <item name="male">Eyes color</item>
-        <item name="female">Eyes color</item> 
-        <item name="own_male">Eyes color</item>
-        <item name="own_female">Eyes color</item>
+        <item name="all">Eyes color</item>        
     </string-array>    
     
     <string name="form_social">Social</string>
@@ -268,42 +248,24 @@
         <item name="own_female">Are you married?</item>
     </string-array>
     <string-array name="form_social_education">
-        <item name="male">Education</item>
-        <item name="female">Education</item> 
-        <item name="own_male">Education</item>
-        <item name="own_female">Education</item>
+        <item name="all">Education</item>        
     </string-array>
     <string-array name="form_social_finances">
-        <item name="male">Finances</item>
-        <item name="female">Finances</item> 
-        <item name="own_male">Finances</item>
-        <item name="own_female">Finances</item>
+        <item name="all">Finances</item>        
     </string-array>
     <string-array name="form_social_residence">
-        <item name="male">Residence</item>
-        <item name="female">Residence</item> 
-        <item name="own_male">Residence</item>
-        <item name="own_female">Residence</item>
+        <item name="all">Residence</item>        
     </string-array>
     <string-array name="form_social_car">
-        <item name="male">Availability of a car</item>
-        <item name="female">Availability of a car</item> 
-        <item name="own_male">Availability of a car</item>
-        <item name="own_female">Availability of a car</item>
+        <item name="all">Availability of a car</item>        
     </string-array>    
     
     <string name="form_habits">Habits</string>
     <string-array name="form_habits_smoking">
-        <item name="male">Cigarettes</item>
-        <item name="female">Cigarettes</item> 
-        <item name="own_male">Cigarettes</item>
-        <item name="own_female">Cigarettes</item>
+        <item name="male">Cigarettes</item>        
     </string-array>
     <string-array name="form_habits_alcohol">
-        <item name="male">Alcohol</item>
-        <item name="female">Alcohol</item> 
-        <item name="own_male">Alcohol</item>
-        <item name="own_female">Alcohol</item>
+        <item name="male">Alcohol</item>        
     </string-array>
     <string-array name="form_habits_restaurants">
         <item name="male">His favorite restaurants</item>

@@ -192,7 +192,8 @@ public class UserProfileActivity extends FragmentActivity {
                     Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
                     intent.putExtra(ChatActivity.INTENT_USER_ID,   mUser.uid);
                     intent.putExtra(ChatActivity.INTENT_USER_URL,  mUser.getSmallLink());                
-                    intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name); 
+                    intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);
+                    intent.putExtra(ChatActivity.INTENT_USER_SEX, mUser.sex); 
                     intent.putExtra(ChatActivity.INTENT_USER_AGE,  mUser.age);
                     intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
                     intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);

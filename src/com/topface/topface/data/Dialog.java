@@ -19,6 +19,7 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader{
     public int target; // направление события в ленте. Возможные занчения: 0 - для исходящего события, 1 - для входящего события
     public boolean unread; // флаг причитанного диалога
     public String first_name; // имя отправителя в текущей локали
+    public int sex; // имя отправителя в текущей локали
     public int age; // возраст отправителя
     public boolean online; // флаг нахождения отправителя онлайн
     public int city_id; // идентификатор города
@@ -91,6 +92,7 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader{
                 dialog.created = item.optLong("created") * 1000;
                 dialog.target = item.optInt("target");
                 dialog.first_name = item.optString("first_name");
+                dialog.sex  = item.optInt("sex");
                 dialog.age  = item.optInt("age");
                 dialog.online  = item.optBoolean("online");
 
