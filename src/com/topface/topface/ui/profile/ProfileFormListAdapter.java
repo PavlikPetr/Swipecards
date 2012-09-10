@@ -60,11 +60,13 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-    	switch (getItem(position).type) {
+        switch (getItem(position).type) {
             case FormItem.HEADER:
                 return T_HEADER;
             case FormItem.DATA:
                 return T_DATA;
+            case FormItem.DIVIDER:
+                return T_DIVIDER;
             default:
               return T_HEADER;
         }

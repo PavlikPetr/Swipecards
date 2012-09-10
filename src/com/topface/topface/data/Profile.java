@@ -1,8 +1,14 @@
 package com.topface.topface.data;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.LinkedList;
 import org.json.JSONObject;
 import android.content.Context;
+import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -12,7 +18,7 @@ import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 
 /* Класс профиля владельца устройства */
-public class Profile extends AbstractDataWithPhotos {
+public class Profile extends AbstractDataWithPhotos implements Serializable {
     // Data
     public int uid; // id пользователя в топфейсе
     public String first_name; // имя пользователя
@@ -77,9 +83,13 @@ public class Profile extends AbstractDataWithPhotos {
     public String status; // статус пользователя
     
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();
+
+    private static final String profileFileName = "profile.out";
+    private static final long serialVersionUID  = 2748391675222256671L;
     
     public static Profile parse(ApiResponse response) {
-        return parse(new Profile(), response.mJSONResult);
+        Profile profile = parse(new Profile(), response.mJSONResult);
+        return profile;
     }
     protected static Profile parse(Profile profile, JSONObject resp) {
         try {
@@ -188,6 +198,14 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.forms.add(formItem);                
 
                 
+                // divider
+                formItem = new FormItem();
+                formItem.type  = FormItem.DIVIDER;
+                formItem.title = Static.EMPTY;
+                formItem.data  = Static.EMPTY;
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
                 // 1 header -= PHYSIQUE =-
                 formItem = new FormItem();
                 formItem.type  = FormItem.HEADER;
@@ -233,6 +251,14 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_physique_eyes);
                 formItem.data  = "" + form.optInt("eye_id");
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
+                // divider
+                formItem = new FormItem();
+                formItem.type  = FormItem.DIVIDER;
+                formItem.title = Static.EMPTY;
+                formItem.data  = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -284,6 +310,14 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
+                // divider
+                formItem = new FormItem();
+                formItem.type  = FormItem.DIVIDER;
+                formItem.title = Static.EMPTY;
+                formItem.data  = Static.EMPTY;
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
                 // 1 header -= HABITS =-
                 formItem = new FormItem();
                 formItem.type  = FormItem.HEADER;
@@ -316,6 +350,14 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
+                // divider
+                formItem = new FormItem();
+                formItem.type  = FormItem.DIVIDER;
+                formItem.title = Static.EMPTY;
+                formItem.data  = Static.EMPTY;
+                formItem.equal = false;
+                profile.forms.add(formItem);
+                
                 // 1 header -= DETAIL =-
                 formItem = new FormItem();
                 formItem.type  = FormItem.HEADER;
@@ -340,7 +382,13 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
-                
+                // divider
+                formItem = new FormItem();
+                formItem.type  = FormItem.DIVIDER;
+                formItem.title = Static.EMPTY;
+                formItem.data  = Static.EMPTY;
+                formItem.equal = false;
+                profile.forms.add(formItem);
                 
                 // 1 header -= ????????? =-
                 formItem = new FormItem();
@@ -436,7 +484,58 @@ public class Profile extends AbstractDataWithPhotos {
     @Override
     public String getSmallLink() {
         return null;
-    }    
+    }
+    
+
+    public static Profile load() {
+        Profile profile = null;
+        ObjectInputStream oin = null;
+        try {
+            oin = new ObjectInputStream(App.getContext().openFileInput(profileFileName));
+            profile = (Profile)oin.readObject();
+        } catch(Exception e) {
+            Toast.makeText(App.getContext(), ">>>>>>>>>>>>>:[", Toast.LENGTH_SHORT).show();
+        } finally {
+            try {
+                if(oin != null)
+                    oin.close();
+            } catch(IOException e) {}
+        }
+        return profile;
+    }
+    
+    public static void save(final Profile profile) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ObjectOutputStream oos = null;
+                try {
+                    oos = new ObjectOutputStream(App.getContext().openFileOutput(profileFileName, Context.MODE_PRIVATE));
+                    oos.writeObject(profile);
+                    oos.flush();
+                } catch(Exception e) {
+                    Toast.makeText(App.getContext(), ">>>>>>>>>>>>>:(", Toast.LENGTH_SHORT).show();
+                } finally {
+                    try {
+                        if(oos != null)
+                          oos.close();
+                    } catch(IOException e) {}            
+                }
+            }
+        }).start();
+    }
+    
+    public static boolean isProfileExist() {
+        File file = new File(App.getContext().getFilesDir(), profileFileName);
+        return file.exists();
+    }
+    
+    public static void deleteProfile() {
+        File file = new File(App.getContext().getFilesDir(), profileFileName);
+        if(file.exists()) {
+          file.delete();
+        }
+    }
 }
 
 // "ADMIN_MESSAGE","QUESTIONARY_FILLED","CHANGE_PHOTO","STANDALONE_BONUS","STANDALONE",

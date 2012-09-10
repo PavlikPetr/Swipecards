@@ -167,7 +167,7 @@
                     android:drawablePadding="-5sp"
                     android:gravity="center"
                     android:textSize="10sp"
-                    android:text="Questionnaire" />
+                    android:text="Form" />
         
                 <!-- Gifts -->
                 <RadioButton

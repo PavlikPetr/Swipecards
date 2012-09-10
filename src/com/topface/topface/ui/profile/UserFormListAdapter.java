@@ -63,6 +63,8 @@ public class UserFormListAdapter extends BaseAdapter {
                 return T_HEADER;
             case FormItem.DATA:
                 return T_DATA;
+            case FormItem.DIVIDER:
+                return T_DIVIDER;
             default:
               return T_HEADER;
         }

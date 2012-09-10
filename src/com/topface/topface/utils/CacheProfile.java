@@ -1,14 +1,13 @@
 package com.topface.topface.utils;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import com.topface.topface.data.Profile;
 import android.content.Context;
 import android.util.SparseArray;
 
 /* Cache Profile */
-public class CacheProfile {
+public class CacheProfile  {
     // Data
     public static int uid; // id пользователя в топфейсе
     public static String first_name; // имя пользователя
@@ -82,14 +81,6 @@ public class CacheProfile {
             return false;
         }
         return true;
-    }
-
-    public static void load(Context context) {
-
-    }
-    
-    public static void save(Context context) {
-
     }
 
     public static void setData(Profile profile) {

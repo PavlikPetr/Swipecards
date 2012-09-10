@@ -1,6 +1,13 @@
 package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
+import com.topface.topface.data.FeedGifts;
+import com.topface.topface.data.Profile;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.FeedGiftsRequest;
+import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
@@ -9,6 +16,8 @@ import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.http.ConnectionManager;
+import com.topface.topface.utils.http.Http;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProfileFragment extends BaseFragment implements OnClickListener{
     //Data
@@ -116,9 +126,41 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         });
         
         mUserPhoto.setChecked(true);
+        
+        //getGifts();
 
 		return view;
 	}
+	
+    private void getGifts() {
+        FeedGiftsRequest feedGiftdRequest = new FeedGiftsRequest(getActivity().getApplicationContext());
+        registerRequest(feedGiftdRequest);
+        feedGiftdRequest.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                //CacheProfile.setData(Profile.parse(response));
+                CacheProfile.setProfile(Profile.parse(response));
+                Http.avatarOwnerPreloading();
+                updateUI(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                updateUI(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).exec();
+    }
 
 	@Override
 	public void onDestroy() {

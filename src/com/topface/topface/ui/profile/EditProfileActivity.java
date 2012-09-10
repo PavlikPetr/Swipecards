@@ -84,13 +84,16 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 				item = (new EditHeader()).setText(formItem.title);
 			} else if (formItem.type == FormItem.DATA) {
 				item = (new EditForm()).setFormItem(formItem);
-			}
+			} else if (formItem.type == FormItem.DIVIDER) {
+                continue;
+            }
 			
 			// set position type info
 			if (prevFormItem != null && prevFormItem.type == FormItem.HEADER) {
 				item.setType(Type.TOP);
 			} else if(i+1 < CacheProfile.forms.size()) {
-				if(CacheProfile.forms.get(i+1).type == FormItem.HEADER) {
+			    int type = CacheProfile.forms.get(i+1).type; 
+				if(type == FormItem.HEADER || type == FormItem.DIVIDER) {
 					item.setType(Type.BOTTOM);
 				}
 			} else if (i == CacheProfile.forms.size()-1){
