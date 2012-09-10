@@ -99,7 +99,7 @@ public class GiftsFragment extends BaseFragment {
 		mGridView.setNumColumns(columns);
 
 		if (mTag == GIFTS_ALL_TAG) {
-			((TextView)view.findViewById(R.id.fragmentTitle)).setVisibility(View.GONE);
+			((TextView)view.findViewById(R.id.fragmentTitle)).setVisibility(View.INVISIBLE);
 			mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -116,10 +116,12 @@ public class GiftsFragment extends BaseFragment {
 					}
 				}
 			});
-			if (mProfile != null && mGifts.size() == 0) {
-	            ((TextView)view.findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
+			if (mProfile != null) {
+				((TextView)view.findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
 			    ((TextView)view.findViewById(R.id.fragmentTitle)).setVisibility(View.VISIBLE);
-			     onNewFeeds();
+				if (mGifts.size() == 0) {
+					onNewFeeds();
+				}
 			}
 		} else if (mTag == GIFTS_PROFILE_TAG) {
 			((TextView)view.findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
@@ -163,8 +165,8 @@ public class GiftsFragment extends BaseFragment {
 		
 		return view;
 	}	
-    
-    @Override
+
+	@Override
     public void onStart() {
         super.onStart();
     }
@@ -302,6 +304,7 @@ public class GiftsFragment extends BaseFragment {
 		mGifts.clear();
 		mGifts.addAll(gifts);
 		if (mTag == GIFTS_PROFILE_TAG) {
+			mGifts.add(0,Gift.getSendedGiftItem());
 			if (mGifts.size() >= UserProfileActivity.GIFTS_LOAD_COUNT)
 				mGifts.add(new Gift(ItemType.LOADER));
 		}
