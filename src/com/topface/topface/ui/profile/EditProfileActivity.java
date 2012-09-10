@@ -10,6 +10,7 @@ import com.topface.topface.utils.FormItem;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -67,11 +68,8 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 	private void initEditItems() {		
 		mEditItems.add((new EditStatus()).setType(Type.TOP));
-		mEditItems.add((new EditBackPhoto()).setType(Type.BOTTOM));
-
-		mEditItems.add((new EditHeader()));
-		mEditItems.add((new EditPhotos()).setType(Type.TOP));
-		mEditItems.add((new EditInterests()).setType(Type.BOTTOM));
+		mEditItems.add((new EditBackPhoto()).setType(Type.MIDDLE));		
+		mEditItems.add((new EditPhotos()).setType(Type.BOTTOM));		
 		
 		// edit form items
 		FormItem prevFormItem = null;
@@ -271,7 +269,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 		@Override
 		public Drawable getIcon() {
 			Bitmap original = BitmapFactory.decodeResource(getResources(),
-					R.drawable.user_avatar_bg);
+					R.drawable.profile_background_1);
 			BitmapDrawable resized = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
 					original, 46, 35, true));
 
@@ -280,7 +278,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 		@Override
 		void onClick() {
-			// TODO
+			startActivity(new Intent(getApplicationContext(), EditBackgroundPhotoActivity.class));
 		}
 	}
 

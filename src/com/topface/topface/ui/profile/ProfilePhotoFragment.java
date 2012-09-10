@@ -39,7 +39,7 @@ public class ProfilePhotoFragment extends Fragment {
         mTitle = (TextView)root.findViewById(R.id.fragmentTitle);
         
         if(mPhotoLinks != null && mPhotoLinks.size() >= 0) {
-            mTitle.setText(mPhotoLinks.size() + " С„РѕС‚РѕРіСЂР°С„РёР№");
+            mTitle.setText(mPhotoLinks.size() + " фотографий");
             mTitle.setVisibility(View.VISIBLE);
         } else {
             mTitle.setVisibility(View.INVISIBLE);  
