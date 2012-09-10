@@ -13,10 +13,6 @@ public class UniversalFrameImageView extends ImageView {
 
     private Bitmap mFrame;
 
-    public UniversalFrameImageView(Context context) {
-        this(context, null);
-    }
-
     public UniversalFrameImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
 

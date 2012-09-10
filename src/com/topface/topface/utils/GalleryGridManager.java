@@ -1,12 +1,11 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.widget.ImageView;
 import com.topface.topface.Data;
 import com.topface.topface.data.AbstractData;
+import com.topface.topface.imageloader.ClipPostProcessor;
 import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.imageloader.DefaultImageLoaderListener;
 
 import java.util.LinkedList;
 
@@ -20,12 +19,15 @@ public class GalleryGridManager<T extends AbstractData> {
     // размеры фотографии в гриде
     public int mBitmapWidth;
     public int mBitmapHeight;
+    private ClipPostProcessor mPostProcessor;
 
     public GalleryGridManager(Context context, LinkedList<T> dataList) {
         mDataList = dataList;
-        int columnNumber = Data.GRID_COLUMN;
-        mBitmapWidth = Device.getDisplay(context).getWidth() / (columnNumber);
-        mBitmapHeight = (int) (mBitmapWidth * 1.25);
+        //Процессор для кропа изображений под нужный размер после загрузки
+        mPostProcessor = new ClipPostProcessor(
+                Device.getDisplay(context).getWidth() / Data.GRID_COLUMN,
+                (int) (mBitmapWidth * 1.25)
+        );
     }
 
     public void update() {
@@ -41,16 +43,7 @@ public class GalleryGridManager<T extends AbstractData> {
 
     public void getImage(final int position, final ImageView imageView) {
         final String smallLink = mDataList.get(position).getSmallLink();
-        DefaultImageLoader.getInstance().displayImage(smallLink, imageView, new DefaultImageLoaderListener(imageView) {
-            @Override
-            public void onLoadingComplete(Bitmap bitmap) {
-                super.onLoadingComplete(bitmap);
-                // вырезаем
-                bitmap = Utils.clipping(bitmap, mBitmapWidth, mBitmapHeight);
-                // отображаем
-                imageView.setImageBitmap(bitmap);
-            }
-        });
+        DefaultImageLoader.getInstance().displayImage(smallLink, imageView, mPostProcessor);
     }
 
     public void release() {

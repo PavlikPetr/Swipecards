@@ -2,7 +2,7 @@
 <resources>
     <!-- ru -->
     <string name="app_name">Topface</string>
-    
+
     <!-- General  -->
     <string name="general_internet_off">Нет подключения к Интернет</string>
     <string name="general_dialog_loading">Загрузка</string>

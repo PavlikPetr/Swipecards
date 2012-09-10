@@ -7,14 +7,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import com.google.android.c2dm.C2DMessaging;
-import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.MainActivity;
+import com.topface.topface.ui.*;
 
 public class C2DMUtils {
     // Data
     public static final int C2DM_NOTIFICATION_ID = 1001;
     public static final String C2DM_REGISTERED = "c2dmRegistered";
     public static final String C2DM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
+
+    public static final int C2DM_TYPE_UNKNOWN  = -1;
+    public static final int C2DM_TYPE_MESSAGE  = 0;
+    public static final int C2DM_TYPE_SYMPATHY = 1;
+    public static final int C2DM_TYPE_LIKE     = 2;
 
     //---------------------------------------------------------------------------
     public static void init(Context context) {
@@ -51,18 +55,31 @@ public class C2DMUtils {
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
             //HELLO_ID;
-
-            int uid = Integer.parseInt(extra.getStringExtra("id"));
             int notificationId = C2DM_NOTIFICATION_ID;
             Intent i;
-            if (uid > 0) {
-                i = new Intent(context, ChatActivity.class);
-                i.putExtra(ChatActivity.INTENT_USER_ID, uid);
-                i.putExtra(ChatActivity.INTENT_USER_NAME, extra.getStringExtra("name"));
+            switch (extra.getIntExtra("type", C2DM_TYPE_UNKNOWN)) {
+                case C2DM_TYPE_MESSAGE:
+                    i = new Intent(context, ChatActivity.class);
+                    i.putExtra(
+                            ChatActivity.INTENT_USER_ID,
+                            Integer.parseInt(extra.getStringExtra("id"))
+                    );
+                    i.putExtra(ChatActivity.INTENT_USER_NAME, extra.getStringExtra("name"));
+                    break;
+
+                case C2DM_TYPE_SYMPATHY:
+                    i = new Intent(context, SymphatyActivity.class);
+                    break;
+
+                case C2DM_TYPE_LIKE:
+                    i = new Intent(context, LikesActivity.class);
+                    break;
+
+                default:
+                    i = new Intent(context, DashboardActivity.class);
+
             }
-            else {
-                i = new Intent(context, MainActivity.class);
-            }
+
             i.putExtra("C2DM", true);
 
             //Активити, котолрое будет запущено после уведомления

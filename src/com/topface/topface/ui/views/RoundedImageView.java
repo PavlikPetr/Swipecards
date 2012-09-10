@@ -55,15 +55,15 @@ public class RoundedImageView extends ImageView {
   protected void onDraw(Canvas canvas) {
     // Frame
     Bitmap frameBitmap = mFrameType==INBOX ? Recycle.s_InboxFrame : Recycle.s_ChatFrame;
-    
+
     // people
     int x = (frameBitmap.getWidth()-Recycle.s_People.getWidth())/2;
     int y = (frameBitmap.getHeight()-Recycle.s_People.getHeight())/2;
     canvas.drawBitmap(Recycle.s_People,x,y,null);
-    
+
     // avatar
     super.onDraw(canvas);
-      
+
     // фрейм с тенюшкой
     canvas.drawBitmap(frameBitmap,0,0,null);
       

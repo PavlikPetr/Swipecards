@@ -1,10 +1,9 @@
 package com.topface.topface.utils;
 
-import android.graphics.Bitmap;
 import android.widget.ImageView;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.imageloader.DefaultImageLoader;
+import com.topface.topface.imageloader.RoundPostProcessor;
 
 import java.util.LinkedList;
 
@@ -15,9 +14,11 @@ public class AvatarManager<T extends AbstractData> {
     // Data
     private LinkedList<T> mDataList;
     public static final int AVATAR_ROUND_RADIUS = 12;  // хард кор !!!!!!!
+    private RoundPostProcessor mPostProcessor;
 
     public AvatarManager(LinkedList<T> dataList) {
         mDataList = dataList;
+        mPostProcessor = new RoundPostProcessor(AVATAR_ROUND_RADIUS);
     }
 
     public T get(int position) {
@@ -29,14 +30,10 @@ public class AvatarManager<T extends AbstractData> {
     }
 
     public void getImage(final int position, final ImageView imageView) {
-        DefaultImageLoader.getInstance().displayImage(mDataList.get(position).getSmallLink(), imageView, new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(Bitmap loadedImage) {
-                super.onLoadingComplete(loadedImage);
-                // округляем
-                loadedImage = Utils.getRoundedCornerBitmap(loadedImage, loadedImage.getWidth(), loadedImage.getHeight(), AVATAR_ROUND_RADIUS);
-                imageView.setImageBitmap(loadedImage);
-            }
-        });
+        DefaultImageLoader.getInstance().displayImage(
+                mDataList.get(position).getSmallLink(),
+                imageView,
+                mPostProcessor
+        );
     }
 }

@@ -56,19 +56,18 @@ public class Leaders extends AbstractData {
      * @throws JSONException
      */
     private static UserPhotos parsePhoto(JSONObject photosItem) throws JSONException {
-        UserPhotos photo = new UserPhotos();
         JSONObject linksItem = photosItem.getJSONObject("links");
         Iterator photoKeys = linksItem.keys();
 
-        photo.id = photosItem.getInt("id");
-        photo.links = new HashMap<String, String>();
+        int id = photosItem.getInt("id");
+        HashMap<String, String> links = new HashMap<String, String>();
 
         while (photoKeys.hasNext()) {
             String key = photoKeys.next().toString();
-            photo.links.put(key, linksItem.getString(key));
+            links.put(key, linksItem.getString(key));
         }
 
-        return photo;
+        return new UserPhotos(id, links);
     }
 
     /**

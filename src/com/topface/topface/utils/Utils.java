@@ -6,8 +6,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.*;
-import android.graphics.Bitmap.Config;
-import android.graphics.PorterDuff.Mode;
 import android.text.ClipboardManager;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
@@ -93,7 +91,6 @@ public class Utils {
         return clippedBitmap;
     }
 
-    
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int width, int height, int roundPx) {
         if (width < height) {
             //noinspection SuspiciousNameCombination
@@ -104,25 +101,22 @@ public class Utils {
             width = height;
         }
 
-        Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+        Bitmap rounder = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap = clipping(bitmap, width, height);
+        Canvas canvas = new Canvas(rounder);
 
-        Bitmap clippedBitmap = clipping(bitmap, width, height);
+        Paint xferPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        xferPaint.setColor(Color.RED);
+        canvas.drawRoundRect(new RectF(0,0,width,height), roundPx, roundPx, xferPaint);
 
-        Canvas canvas = new Canvas(output);
+        xferPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
 
-        final Rect rect = new Rect(0, 0, width, height);
-        final RectF rectF = new RectF(rect);
-        final Paint paint = new Paint();
+        Bitmap result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas resultCanvas = new Canvas(result);
+        resultCanvas.drawBitmap(bitmap, 0, 0, null);
+        resultCanvas.drawBitmap(rounder, 0, 0, xferPaint);
 
-        paint.setAntiAlias(true);
-        paint.setColor(0xff424242);
-        canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-        canvas.drawBitmap(clippedBitmap, rect, rect, paint);
-
-        return output;
+        return result;
     }
 
     

@@ -2,7 +2,7 @@
 <resources>
     <!-- en -->
     <string name="app_name">Topface</string>
-    
+
     <!-- General  -->
     <string name="general_internet_off">No Internet connection</string>
     <string name="general_dialog_loading">Loading</string>
@@ -193,27 +193,26 @@
     <string name="send_invite">Send</string>
     <plurals name="invite_bonus_text">
         <item quantity="zero">Invite your friends and get 20 {{coins}} for each one</item>
-        <item quantity="one">Вы собираетесь отправить приглашение %2$d другу и получите за это %1$d {{coins}}</item>
-        <item quantity="few">Вы собираетесь отправить приглашения %2$d друзьям и получите за это %1$d {{coins}}</item>
-        <item quantity="other">Вы собираетесь отправить приглашения %2$d друзьям и получите за это %1$d {{coins}}</item>
+        <item quantity="one">You are going to send an invitation to %2$d friend and get %1$d {{coins}} for that</item>
+        <item quantity="other">You are going to send invitations to %2$d friends and get %1$d {{coins}} for that</item>
     </plurals>
-    <string name="invite_is_free">Отправка приглашения бесплатна</string>
+    <string name="invite_is_free">Sending the invitations is free</string>
     <string name="invite_need_select">Choose one or several of your friends and send them invitations</string>
     <string name="invite_error">Could not send the invitation. Please, try again</string>
     <string name="invite_completed">Invitation sent</string>
 
 
     <!--Leaders-->
-    <string name="leaders_go_date">Go on a date</string>
-    <string name="leaders_leader_now">Now you\'re the leader!</string>
-    <string name="need_select_photo">First you need to select a photo!</string>
+    <string name="leaders_go_date">Let\'s go for a date</string>
+    <string name="leaders_leader_now">You are a leader now!</string>
+    <string name="need_select_photo">First you a have to choose a photo!</string>
     <string name="photo_add_or">Photo added</string>
-    <string name="photo_add_error">Photo upload error</string>
+    <string name="photo_add_error">Could not add the photo</string>
     <plurals name="leaders_price">
-        <item quantity="one">Stand for %d coin</item>
-        <item quantity="other">Stand for %d coins</item>
+        <item quantity="one">Get here for %d coin</item>
+        <item quantity="other">Get here for %d coins</item>
     </plurals>
-    <string name="leaders_select_photo">Select spectacular photo:</string>
+    <string name="leaders_select_photo">Choose the most attractive photo:</string>
     <string name="leaders_date">Wanna\ndate!</string>
 
 </resources>

@@ -43,10 +43,8 @@ public class LeadersRequestTest extends InstrumentationTestCase {
                             assertNotNull("Leader has't city", user.city);
                             assertTrue("Leader city id is incorrect", user.city.id > 0);
                             assertNotNull("Leader photo is null", user.photo);
-                            assertNotNull("Leader photos links is null", user.photo.links);
-                            assertTrue("Leader has't photo", user.photo.links.size() > 0);
-                            assertTrue("Leader has't original photo", user.photo.links.containsKey(UserPhotos.SIZE_ORIGINAL));
-                            assertTrue("Leader has't name", user.photo.links.size() > 0);
+                            assertTrue("Leader has't original photo", user.photo.getSuitableLink(UserPhotos.SIZE_ORIGINAL) != null);
+                            assertTrue("Leader getSuitableLink error", user.photo.getSuitableLink(UserPhotos.SIZE_128) != null);
                         }
                         signal.countDown();
                     }
