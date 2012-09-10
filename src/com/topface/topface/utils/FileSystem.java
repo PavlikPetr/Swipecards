@@ -71,7 +71,7 @@ public class FileSystem {
         File path = new File(directory);
         if (filter == null)
             return path.list();
-        String[] list = path.list(new FilenameFilter() {
+            String[] list = path.list(new FilenameFilter() {
             private Pattern pattern = Pattern.compile("[\\p{Print}]+" + "." + filter);
             @Override
             public boolean accept(File dir,String name) {

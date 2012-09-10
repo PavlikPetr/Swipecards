@@ -199,13 +199,13 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 		profileRequest.callback(new ApiHandler() {
 			@Override
 			public void success(final ApiResponse response) {
-			    final Profile profile = Profile.parse(response);
-			    CacheProfile.setProfile(profile);
+			    CacheProfile.setProfile(Profile.parse(response));
 				Http.avatarOwnerPreloading();
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-			            Profile.save(profile);
+			            //Profile.save(profile);
+					    Profile.save(response.mJSONResult.toString());
 						openNavigationActivity();
 					}
 				});

@@ -6,6 +6,7 @@ import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.FeedGifts;
 import com.topface.topface.data.Gift;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiHandler;
@@ -13,6 +14,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
@@ -33,19 +35,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
-/**
- * GiftFragment displays gifts on a GridView For displaying all gifts (like
- * GiftActivity do) have to attach GIFTS_ALL_TAG For displaying profile gifts
- * (like UserProfileActiviry do) have to attach GIFTS_PROFILE_TAG: in this case
- * first element will be add_gift button.
- * 
- * @author kirussell
- * 
- */
-
 public class GiftsFragment extends BaseFragment {
-
-	// Constants
+	// Data
 	private String mTag;
 
 	public static final String GIFTS_ALL_TAG = "giftsGridAll";
@@ -58,7 +49,7 @@ public class GiftsFragment extends BaseFragment {
 	private GiftGalleryManager<Gift> mGalleryManager;
 	private GridView mGridView;
 
-	private User mUser;
+	private Profile mProfile;
 	private LinkedList<Gift> mGifts = new LinkedList<Gift>();
 
 	// TODO Data giftsList remove
@@ -66,9 +57,12 @@ public class GiftsFragment extends BaseFragment {
 	@Override
 	public void onAttach(Activity activity) {
         if (activity instanceof UserProfileActivity) {
-            mUser = ((UserProfileActivity) activity).mUser;
+            User userData;
+            mProfile = userData = ((UserProfileActivity) activity).mUser;
             mTag = GIFTS_PROFILE_TAG;
-            setGifts(Gift.parse(mUser));
+//            if(mProfile instanceof User)
+//              setGifts(Gift.parse(((User)mProfile).gifts));
+            setGifts(userData.gifts);
             mGalleryManager = new GiftGalleryManager<Gift>(activity.getApplicationContext(), mGifts,
                     new Handler(){
                         @Override
@@ -78,6 +72,10 @@ public class GiftsFragment extends BaseFragment {
                             };
                         }
                     });         
+        } else if (activity instanceof NavigationActivity) {
+            mProfile = CacheProfile.getProfile();
+            mTag = GIFTS_ALL_TAG;
+            mGalleryManager = new GiftGalleryManager<Gift>(getActivity().getApplicationContext(), mGifts, null);
         } else {
             mTag = GIFTS_ALL_TAG;
             mGalleryManager = new GiftGalleryManager<Gift>(getActivity().getApplicationContext(), mGifts, null);
@@ -118,6 +116,11 @@ public class GiftsFragment extends BaseFragment {
 					}
 				}
 			});
+			if (mProfile != null && mGifts.size() == 0) {
+	            ((TextView)view.findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
+			    ((TextView)view.findViewById(R.id.fragmentTitle)).setVisibility(View.VISIBLE);
+			     onNewFeeds();
+			}
 		} else if (mTag == GIFTS_PROFILE_TAG) {
 			((TextView)view.findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
 			((TextView)view.findViewById(R.id.fragmentTitle)).setVisibility(View.VISIBLE);
@@ -156,7 +159,8 @@ public class GiftsFragment extends BaseFragment {
 		}
 
 		mGridView.setAdapter(mGridAdapter);		
-		mGridView.setOnScrollListener(mGalleryManager);		
+		mGridView.setOnScrollListener(mGalleryManager);
+		
 		return view;
 	}	
     
@@ -173,12 +177,12 @@ public class GiftsFragment extends BaseFragment {
 				final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
 				final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
 
-				if (mUser != null) {
+				if (mProfile != null) {
 					SendGiftRequest sendGift = new SendGiftRequest(getActivity()
 							.getApplicationContext());
 					registerRequest(sendGift);
 					sendGift.giftId = id;
-					sendGift.userId = mUser.uid;
+					sendGift.userId = mProfile.uid;
 					final Gift sendedGift = new Gift();
 					sendedGift.id = sendGift.giftId;
 					sendedGift.link = url;
@@ -232,9 +236,13 @@ public class GiftsFragment extends BaseFragment {
 	}
 
 	private void onNewFeeds() {
+	    onNewFeeds(mProfile.uid);
+	}
+	
+	private void onNewFeeds(int userId) {
 		FeedGiftsRequest request = new FeedGiftsRequest(getActivity().getApplicationContext());		
 		request.limit = UserProfileActivity.GIFTS_LOAD_COUNT;
-		request.uid = mUser.uid;					
+		request.uid = userId;					
 		if (!mGifts.isEmpty()) {
 			if (mGifts.getLast().isLoader() || mGifts.getLast().isLoaderRetry()) {
 				request.from = mGifts.get(mGifts.size() - 2).feedId;
@@ -247,7 +255,7 @@ public class GiftsFragment extends BaseFragment {
 			
 			@Override
 			public void success(ApiResponse response) throws NullPointerException {
-				// TODO Auto-generated method stub							
+			
 				final LinkedList<FeedGifts> feedGifts = FeedGifts.parse(response);														
 				
 				updateUI(new Runnable() {

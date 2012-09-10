@@ -36,7 +36,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ProfileFragment extends BaseFragment implements OnClickListener{
     //Data
@@ -127,40 +126,8 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         
         mUserPhoto.setChecked(true);
         
-        //getGifts();
-
 		return view;
 	}
-	
-    private void getGifts() {
-        FeedGiftsRequest feedGiftdRequest = new FeedGiftsRequest(getActivity().getApplicationContext());
-        registerRequest(feedGiftdRequest);
-        feedGiftdRequest.callback(new ApiHandler() {
-            @Override
-            public void success(final ApiResponse response) {
-                //CacheProfile.setData(Profile.parse(response));
-                CacheProfile.setProfile(Profile.parse(response));
-                Http.avatarOwnerPreloading();
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                });
-            }
-
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), getString(R.string.general_data_error),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }).exec();
-    }
 
 	@Override
 	public void onDestroy() {

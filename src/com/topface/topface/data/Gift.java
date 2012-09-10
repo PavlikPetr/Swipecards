@@ -71,10 +71,10 @@ public class Gift extends AbstractDataWithPhotos implements IListLoader{
 	}
 	
 	// Gets User gifts
-	public static LinkedList<Gift> parse(User user) {
+	public static LinkedList<Gift> parse(LinkedList<Gift> giftsList) {
 		LinkedList<Gift> gifts = new LinkedList<Gift>();
 		gifts.add(Gift.getSendedGiftItem());
-		gifts.addAll(user.gifts);		
+		gifts.addAll(giftsList);		
 		return gifts;
 	}
 	

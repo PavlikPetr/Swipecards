@@ -1,11 +1,13 @@
 package com.topface.topface.data;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.LinkedList;
+import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
 import android.widget.Toast;
@@ -56,7 +58,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
 //9    public int form_smoking_id; // идентификатор предопределенного отношения к курению пользователя
 //10    public int form_alcohol_id; // идентификатор предопределенного отношения к алкоголю пользователя
 //11    public int form_fitness_id; // идентификатор предопределенного отношения к спорту пользователя
-//12   public int form_communication_id; // идентификатор предопределенного отношения к коммуникациям пользователя
+//12    public int form_communication_id; // идентификатор предопределенного отношения к коммуникациям пользователя
 //13    public int form_weight; // вес пользователя
 //14    public int form_height; // рост пользователя
 //15    public int form_hair_id; // идентификатор цвета воло пользователя
@@ -486,39 +488,81 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
         return null;
     }
     
-
+//    public static Profile load() {
+//        Profile profile = null;
+//        ObjectInputStream oin = null;
+//        try {
+//            oin = new ObjectInputStream(App.getContext().openFileInput(profileFileName));
+//            profile = (Profile)oin.readObject();
+//        } catch(Exception e) {
+//            Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
+//        } finally {
+//            try {
+//                if(oin != null) oin.close();
+//            } catch(IOException e) {}
+//        }
+//        return profile;
+//    }
+    
     public static Profile load() {
-        Profile profile = null;
-        ObjectInputStream oin = null;
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+        Profile profile = new Profile();
         try {
-            oin = new ObjectInputStream(App.getContext().openFileInput(profileFileName));
-            profile = (Profile)oin.readObject();
+            br = new BufferedReader(new InputStreamReader(App.getContext().openFileInput(profileFileName)));
+            if (br != null)
+              for (String line = br.readLine(); line != null; line = br.readLine())
+                  sb.append(line);
         } catch(Exception e) {
-            Toast.makeText(App.getContext(), ">>>>>>>>>>>>>:[", Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
         } finally {
             try {
-                if(oin != null)
-                    oin.close();
+                if(br != null) br.close();
             } catch(IOException e) {}
         }
-        return profile;
+        JSONObject json = null;
+        try {
+            json = new JSONObject(sb.toString());
+        } catch(JSONException e) {
+            json = new JSONObject();
+        }
+        return Profile.parse(profile, json);
     }
     
-    public static void save(final Profile profile) {
+//    public static void save(final Profile profile) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ObjectOutputStream oos = null;
+//                try {
+//                    oos = new ObjectOutputStream(App.getContext().openFileOutput(profileFileName, Context.MODE_PRIVATE));
+//                    oos.writeObject(profile);
+//                    oos.flush();
+//                } catch(Exception e) {
+//                    Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
+//                } finally {
+//                    try {
+//                        if(oos != null) oos.close();
+//                    } catch(IOException e) {}            
+//                }
+//            }
+//        }).start();
+//    }
+    
+    public static void save(final String response) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ObjectOutputStream oos = null;
+                BufferedOutputStream bos = null;
                 try {
-                    oos = new ObjectOutputStream(App.getContext().openFileOutput(profileFileName, Context.MODE_PRIVATE));
-                    oos.writeObject(profile);
-                    oos.flush();
+                    bos = new BufferedOutputStream(App.getContext().openFileOutput(profileFileName, Context.MODE_PRIVATE));
+                    bos.write(response.getBytes("UTF8"));
+                    bos.flush();
                 } catch(Exception e) {
-                    Toast.makeText(App.getContext(), ">>>>>>>>>>>>>:(", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
                 } finally {
                     try {
-                        if(oos != null)
-                          oos.close();
+                        if(bos != null) bos.close();
                     } catch(IOException e) {}            
                 }
             }
