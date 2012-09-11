@@ -1,10 +1,10 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.profile.edit;
 
 import java.util.LinkedList;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.profile.EditProfileItem.Type;
+import com.topface.topface.ui.profile.edit.EditProfileItem.Type;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 
@@ -26,9 +26,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class EditProfileActivity extends Activity implements OnClickListener{
-
-	public int INTENT_EDIT_CHANGES = 323;
+public class EditProfileActivity extends Activity implements OnClickListener{	
 	
 	private ListView mEditsListView;	
 	private EditsAdapter mAdapter;
@@ -256,11 +254,21 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_OK) {
-			if (requestCode == INTENT_EDIT_CHANGES) {
+			switch (requestCode) { 
+			case EditContainerActivity.INTENT_EDIT_BACKGROUND:
 				mAdapter.notifyDataSetChanged();
+				break;
+			default:
+				break;
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	@Override
+	public void startActivityForResult(Intent intent, int requestCode) {
+		intent.putExtra(EditContainerActivity.INTENT_REQUEST_KEY, requestCode);
+		super.startActivityForResult(intent, requestCode);
 	}
 	
 	class EditStatus extends EditProfileItem {
@@ -295,7 +303,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 		@Override
 		void onClick() {
-			startActivityForResult(new Intent(getApplicationContext(), EditBackgroundPhotoActivity.class),INTENT_EDIT_CHANGES);
+			startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),EditContainerActivity.INTENT_EDIT_BACKGROUND);
 		}
 	}
 
@@ -356,7 +364,10 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 		@Override
 		void onClick() {
-			// TODO
+			Intent intent = new Intent(getApplicationContext(), EditContainerActivity.class);
+			intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, mFormItem.titleId);
+			intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, mFormItem.dataId);
+			startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_FORM_ITEM);
 		}
 	}
 

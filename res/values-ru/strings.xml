@@ -207,7 +207,7 @@
     <!--  Navigation Header -->
     <string name="navigation_back_profile">Профиль</string>
     <string name="navigation_back_dialog">Диалоги</string>
-    <string name="navigation_edit">Ред.</string>
+    <string name="navigation_edit">Редактировать</string>
     
     <!-- Profile / UserProfile Form -->
     <string name="form_main">Основное</string>

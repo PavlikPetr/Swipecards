@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.profile.edit;
 
 import java.util.LinkedList;
 
@@ -13,6 +13,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class EditBackgroundPhotoActivity extends Activity {
+public class EditBackgroundFragment extends Fragment {
 	
 	private SharedPreferences mPreferences;	
 	private int mSelectedResId;
@@ -37,20 +38,21 @@ public class EditBackgroundPhotoActivity extends Activity {
 	};
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {	
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.ac_edit_background_photo);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+	
+		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container, false);
 		
-		mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+		mPreferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
 		mSelectedResId = CacheProfile.background_res_id;
 		// Navigation bar		
-		((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-		TextView subTitle = (TextView) findViewById(R.id.tvNavigationSubtitle);
+		((TextView) root.findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
+		TextView subTitle = (TextView) root.findViewById(R.id.tvNavigationSubtitle);
 		subTitle.setVisibility(View.VISIBLE);
 		subTitle.setText(R.string.edit_bg_photo);
 		
-		((Button)findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);		
-		Button btnBack = (Button)findViewById(R.id.btnNavigationBackWithText);
+		((Button)root.findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);		
+		Button btnBack = (Button)root.findViewById(R.id.btnNavigationBackWithText);
 		btnBack.setVisibility(View.VISIBLE);
 		btnBack.setText(R.string.navigation_edit);
 		btnBack.setOnClickListener(new OnClickListener() {
@@ -58,14 +60,16 @@ public class EditBackgroundPhotoActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				setChanges();
-				finish();				
+				getActivity().finish();				
 			}
 		});
 		
-		mBackgroundImagesListView = (ListView) findViewById(R.id.lvBackgroundImages);
+		mBackgroundImagesListView = (ListView) root.findViewById(R.id.lvList);
 		
-		mBackgroundImagesListView.setAdapter(new BackgroundImagesAdapter(getApplicationContext(), getBackgroundImagesList()));
-	}
+		mBackgroundImagesListView.setAdapter(new BackgroundImagesAdapter(getActivity().getApplicationContext(), getBackgroundImagesList()));
+		
+		return root;
+	}	
 	
 	private LinkedList<BackgroundItem> getBackgroundImagesList() {
 		LinkedList<BackgroundItem> result = new LinkedList<BackgroundItem>();
@@ -165,14 +169,15 @@ public class EditBackgroundPhotoActivity extends Activity {
 		if (CacheProfile.background_res_id != mSelectedResId) {						
 			CacheProfile.background_res_id = mSelectedResId;
 			mPreferences.edit().putInt(Static.PREFERENCES_PROFILE_BACKGROUND_RES_ID, mSelectedResId).commit();
-			setResult(Activity.RESULT_OK);
+			getActivity().setResult(Activity.RESULT_OK);
 		} else {
-			setResult(Activity.RESULT_CANCELED);
+			getActivity().setResult(Activity.RESULT_CANCELED);
 		}
 	}
 	
+	
 	@Override
-	protected void onDestroy() {
+	public void onDestroy() {
 		setChanges();
 		super.onDestroy();
 	}
@@ -215,7 +220,7 @@ public class EditBackgroundPhotoActivity extends Activity {
 	class BitmapBackgroundItem implements BackgroundItem{
 		
 		private Bitmap mBitmap;
-		private boolean selected;		
+		private boolean selected;
 		
 		public BitmapBackgroundItem(Bitmap bitmap) {
 			mBitmap = bitmap;

@@ -39,6 +39,9 @@
             style="@style/NavigationHeader"
             android:textSize="11sp"
             android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:maxLength="5"
             android:gravity="center"
             android:visibility="gone" />
 
@@ -94,6 +97,9 @@
             android:layout_marginRight="5dp"
             android:background="@drawable/navigation_edit_selector"
             style="@style/NavigationHeader"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:maxLength="5"
             android:textSize="12sp"
             android:textStyle="bold"
             android:visibility="gone" />

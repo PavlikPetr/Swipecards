@@ -173,224 +173,132 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
 
                 FormItem formItem = null;
                 
-                // или через конструктор инициализировать ?
-
+                // или через конструктор инициализировать ?                
+                
                 // 1 header -= MAIN =-
-                formItem = new FormItem();
-                formItem.type  = FormItem.HEADER;
-                formItem.title = context.getString(R.string.form_main);
-                formItem.value = Static.EMPTY;
-                formItem.equal = false;
+                formItem = new FormItem(R.string.form_main,FormItem.HEADER);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 2 character
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_main_character);
-                formItem.value = formInfo.getCharacter(form.optInt("character_id"));
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_main_character,form.optInt("character_id"),FormItem.DATA);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 3 communication
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_main_communication);
-                formItem.value = formInfo.getCommunication(form.optInt("communication_id"));
-                formItem.equal = false;
-                profile.forms.add(formItem);                
-
-                
-                // divider
-                formItem = new FormItem();
-                formItem.type  = FormItem.DIVIDER;
-                formItem.title = Static.EMPTY;
-                formItem.value = Static.EMPTY;
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_main_communication,form.optInt("communication_id"),FormItem.DATA);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
+                // divider
+                profile.forms.add(FormItem.getDivider());
+                
                 // 1 header -= PHYSIQUE =-
-                formItem = new FormItem();
-                formItem.type  = FormItem.HEADER;
-                formItem.title = context.getString(R.string.form_physique);
-                formItem.value = Static.EMPTY;
-                formItem.equal = false;
+                formItem = new FormItem(R.string.form_physique,FormItem.HEADER);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 11 fitness
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_physique_fitness);
-                formItem.value = formInfo.getFitness(form.optInt("fitness_id"));
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_physique_fitness,form.optInt("fitness_id"),FormItem.DATA);                
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
 
                 // 4 height
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_main_height);
-                formItem.value = "" + form.optInt("height");
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_main_height,Integer.toString(form.optInt("height")), FormItem.DATA);                
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 13 weight
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_main_weight);
-                formItem.value = "" + form.optInt("weight");
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_main_weight,Integer.toString(form.optInt("weight")),FormItem.DATA);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 15 hair
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_physique_hairs);
-                formItem.value = formInfo.getHair(form.optInt("hair_id"));
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_physique_hairs,form.optInt("hair_id"),FormItem.DATA);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 16 eye
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_physique_eyes);
-                formItem.value = formInfo.getEyes(form.optInt("eyes_id"));
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_physique_eyes,form.optInt("eyes_id"),FormItem.DATA);                
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // divider
-                formItem = new FormItem();
-                formItem.type  = FormItem.DIVIDER;
-                formItem.title = Static.EMPTY;
-                formItem.value = Static.EMPTY;
-                formItem.equal = false;
-                profile.forms.add(formItem);
+                // divider                
+                profile.forms.add(FormItem.getDivider());
                 
                 // 1 header -= SOCIAL =-
-                formItem = new FormItem();
-                formItem.type  = FormItem.HEADER;
-                formItem.title = context.getString(R.string.form_social);
-                formItem.value = Static.EMPTY;
-                formItem.equal = false;
+                formItem = new FormItem(R.string.form_social,FormItem.HEADER);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 6 marriage
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_social_marriage);
-                formItem.value = formInfo.getMarriage(form.optInt("marriage_id"));
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_social_marriage,form.optInt("marriage_id"),FormItem.DATA);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 5 education
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_social_education);
-                formItem.value = formInfo.getEducation(form.optInt("education_id"));
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_social_education,form.optInt("education_id"),FormItem.DATA);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 7 finances
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_social_finances);
-                formItem.value = formInfo.getFinances(form.optInt("finances_id"));
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_social_finances,form.optInt("finances_id"),FormItem.DATA);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);    
                 
                 // 18 residence
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_social_residence);
-                formItem.value = formInfo.getResidence(form.optInt("residence_id"));
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_social_residence,form.optInt("residence_id"),FormItem.DATA);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
 
                 // 19 car vs car_id
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_social_car);
-                formItem.value = formInfo.getCar(form.optInt("car_id"));
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_social_car,form.optInt("car_id"),FormItem.DATA);                
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // divider
-                formItem = new FormItem();
-                formItem.type  = FormItem.DIVIDER;
-                formItem.title = Static.EMPTY;
-                formItem.value = Static.EMPTY;
-                formItem.equal = false;
-                profile.forms.add(formItem);
+                profile.forms.add(FormItem.getDivider());
                 
                 // 1 header -= HABITS =-
-                formItem = new FormItem();
-                formItem.type  = FormItem.HEADER;
-                formItem.title = context.getString(R.string.form_habits);
-                formItem.value = Static.EMPTY;
-                formItem.equal = false;
+                formItem = new FormItem(R.string.form_habits,FormItem.HEADER);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 9 smoking
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_habits_smoking);
-                formItem.value = formInfo.getSmoking(form.optInt("smoking_id"));
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_habits_smoking,form.optInt("smoking_id"),FormItem.DATA);                
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 10 alcohol
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_habits_alcohol);
-                formItem.value = formInfo.getSmoking(form.optInt("alcohol_id"));
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_habits_alcohol,form.optInt("alcohol_id"),FormItem.DATA);                
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 23 restaurants
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_habits_restaurants);
-                formItem.value = "" + form.optInt("restaurants");
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_habits_restaurants,form.optString("restaurants"),FormItem.DATA);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // divider
-                formItem = new FormItem();
-                formItem.type  = FormItem.DIVIDER;
-                formItem.title = Static.EMPTY;
-                formItem.value = Static.EMPTY;
-                formItem.equal = false;
-                profile.forms.add(formItem);
+                profile.forms.add(FormItem.getDivider());
                 
                 // 1 header -= DETAIL =-
-                formItem = new FormItem();
-                formItem.type  = FormItem.HEADER;
-                formItem.title = context.getString(R.string.form_detail);
-                formItem.value = Static.EMPTY;
-                formItem.equal = false;
+                formItem = new FormItem(R.string.form_detail,FormItem.HEADER);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 20 first_dating
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_detail_about_dating);
-                formItem.value = "" + form.optInt("first_dating");
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_detail_about_dating,form.optString("first_dating"),FormItem.DATA);                
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // 21 achievements
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = formInfo.getFormTitle(R.array.form_detail_archievements);
-                formItem.value = "" + form.optInt("achievements");
-                formItem.equal = false;
+                formItem = new FormItem(R.array.form_detail_archievements,form.optString("achievements"),FormItem.DATA);
+                formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
                 // divider
-                formItem = new FormItem();
-                formItem.type  = FormItem.DIVIDER;
-                formItem.title = Static.EMPTY;
-                formItem.value = Static.EMPTY;
-                formItem.equal = false;
-                profile.forms.add(formItem);
+                profile.forms.add(FormItem.getDivider());
                 
                 // 1 header -= ????????? =-
 //                formItem = new FormItem();
