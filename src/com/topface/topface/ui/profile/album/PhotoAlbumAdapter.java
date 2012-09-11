@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.topface.topface.R;
 import com.topface.topface.data.Album;
 import com.topface.topface.imageloader.FullSizeImageLoader;
-import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.utils.Settings;
 
 import java.util.LinkedList;
 
@@ -74,7 +74,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
     }
 
     public void preLoading(final int position) {
-        if (position == mPreRunning || ConnectionChangeReceiver.isMobileConnection()) {
+        if (position == mPreRunning || !Settings.getInstance().isPreloadPhoto()) {
             return;
         }
 

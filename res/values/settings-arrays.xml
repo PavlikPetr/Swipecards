@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="settings_preloading_entries">
+        <item>@string/settings_wifi</item>
+        <item>@string/settings_on</item>
+        <item>@string/settings_off</item>
+    </string-array>
+    <string-array name="settings_preloading_values">
+        <item>@string/settings_preloading_wifi</item>
+        <item>@string/settings_preloading_on</item>
+        <item>@string/settings_preloading_off</item>
+    </string-array>
+    <!--string-array name="settings_preloading_summary">
+        <item>Предварительно загружать только при подключении по Wi-Fi</item>
+        <item>Предварительная загрузка включена всегда</item>
+        <item>Предварительная загрузка выключена</item>
+    </string-array-->
+
+    <!--string-array name="settings_preloading_type_entries">
+        <item>Следующий пользователь</item>
+        <item>Следующая фотография</item>
+        <item>Все</item>
+    </string-array>
+    <string-array name="settings_preloading_type_values">
+        <item>@string/settings_preloading_type_user</item>
+        <item>@string/settings_preloading_type_photo</item>
+        <item>@string/settings_preloading_type_all</item>
+    </string-array>
+    <string-array name="settings_preloading_type_summary">
+        <item>Предварительно загружать фотографию следующего пользователя в знакомствах</item>
+        <item>Предварительно загружать следующую фотографию текущего пользователя</item>
+        <item>Предварительно загружать фотографии следующего и текущего пользователя. Увеличивает расход трафика</item>
+    </string-array-->
+</resources>

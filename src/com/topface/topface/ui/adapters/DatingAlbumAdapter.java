@@ -13,8 +13,8 @@ import com.topface.topface.R;
 import com.topface.topface.data.Search;
 import com.topface.topface.imageloader.DefaultImageLoaderListener;
 import com.topface.topface.imageloader.FullSizeImageLoader;
-import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.ui.views.ILocker;
+import com.topface.topface.utils.Settings;
 
 public class DatingAlbumAdapter extends BaseAdapter {
 
@@ -122,7 +122,7 @@ public class DatingAlbumAdapter extends BaseAdapter {
     }
 
     public void preLoading(final int position) {
-        if (position == mPreRunning || ConnectionChangeReceiver.isMobileConnection()) {
+        if (position == mPreRunning || !Settings.getInstance().isPreloadPhoto()) {
             return;
         }
 

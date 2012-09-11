@@ -165,7 +165,9 @@
     <string name="profile_btn_ask">Попросить заполнить анкету</string>
     <string name="profile_msg_ask">Хочу узнать о тебе больше. Заполни, пожалуйста, анкету!</string>
     <string name="profile_msg_sent">Отправлено</string>
-    
+    <string name="profile_settings">Настройки</string>
+    <string name="profile_settings_summary">Настройки приложения</string>
+
     <!-- Album, Ero Album Activity -->
     <string name="album_header_title">Альбом</string>
     <string name="album_add_photo_title">Добавить фото</string>
@@ -217,5 +219,17 @@
     </plurals>
     <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
     <string name="leaders_date">Хочу на\nсвидание!</string>
+
+    <!--Settings-->
+    <string name="settings_wifi">Только по Wi-Fi</string>
+    <string name="settings_on">Включена</string>
+    <string name="settings_off">Выключена</string>
+    <string name="notifications">Уведомления</string>
+    <string name="notifications_summary">Уведомления о новых сообщениях и симпатиях</string>
+    <string name="select_ringtone">Выбрать рингтон</string>
+    <string name="vibration">Вибросигнал</string>
+    <string name="photo_preloading">Предзагрузка фотографий</string>
+    <string name="photo_preloading_summary">Предварительная загрузка следующей фотографии в альбоме</string>
+    <string name="preloading">Предзагрузка</string>
 
 </resources>

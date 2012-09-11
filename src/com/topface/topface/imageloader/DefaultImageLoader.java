@@ -64,8 +64,7 @@ public class DefaultImageLoader {
     public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener, ImagePostProcessor postProcessor) {
         try {
             getImageLoader().displayImage(uri, imageView, options, listener, postProcessor);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Debug.error("ImageLoader displayImage error", e);
             listener.onLoadingFailed(FailReason.UNKNOWN);
         }

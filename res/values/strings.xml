@@ -164,7 +164,9 @@
     <string name="profile_btn_ask">Ask to fill questionnaire</string>
     <string name="profile_msg_ask">I want to learn more about you. Please fill in the questionnaire!</string>
     <string name="profile_msg_sent">Sent</string>
-    
+    <string name="profile_settings">Settings</string>
+    <string name="profile_settings_summary">Application settings</string>
+
     <!-- Album, Ero Album Activity -->
     <string name="album_header_title">Album</string>
     <string name="album_add_photo_title">Add photo</string>
@@ -214,5 +216,17 @@
     </plurals>
     <string name="leaders_select_photo">Choose the most attractive photo:</string>
     <string name="leaders_date">Wanna\ndate!</string>
+
+    <!--Settings-->
+    <string name="settings_wifi">Only Wi-Fi</string>
+    <string name="settings_on">On</string>
+    <string name="settings_off">Off</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_summary">New messages and sympathy notifications</string>
+    <string name="select_ringtone">Select ringtone</string>
+    <string name="vibration">Vibrate</string>
+    <string name="photo_preloading">Photo preloading</string>
+    <string name="photo_preloading_summary">Preloading the next photo in the album</string>
+    <string name="preloading">Preloading</string>
 
 </resources>

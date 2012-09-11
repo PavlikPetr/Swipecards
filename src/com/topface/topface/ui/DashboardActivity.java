@@ -7,6 +7,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.*;
@@ -101,6 +104,7 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
         else
             ratingPopup();
+
     }
 
     @Override
@@ -388,14 +392,32 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
         }
         startActivity(intent);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.settings:
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
 }
 
 
 /*
   public void showNewbie() {
-    if(mNewbieState == NEWBIE_COMPLETED) 
+    if(mNewbieState == NEWBIE_COMPLETED)
       return;
-    
+
     int[] coords = {0,0};
     int x = mNewbieView.getMeasuredWidth();
     int y = mNewbieView.getMeasuredHeight();
@@ -431,9 +453,9 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
         mNewbieView.setVisibility(View.INVISIBLE);
       }
     }
-    
+
     Toast.makeText(this,""+mNewbieState+","+x+","+y+","+coords[1],Toast.LENGTH_SHORT).show();
-    
+
     // условие для записи
     mNewbieState++;
     SharedPreferences.Editor editor = mPreferences.edit();

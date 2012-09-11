@@ -5,8 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
 import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.google.android.c2dm.C2DMessaging;
@@ -20,6 +19,7 @@ import com.topface.topface.data.User;
 import com.topface.topface.imageloader.FullSizeImageLoader;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.SettingsActivity;
 import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
 import com.topface.topface.ui.profile.album.PhotoEroAlbumActivity;
 import com.topface.topface.ui.profile.gallery.HorizontalListView;
@@ -369,6 +369,9 @@ public class ProfileActivity extends Activity {
 
     // сортируем эро и не эро
     LinkedList<Album> albumList = CacheProfile.albums;
+    if (albumList == null) {
+        return;
+    }
     for(Album album : albumList)
       if(album.ero)
         mEroList.add(album);
@@ -813,5 +816,23 @@ public class ProfileActivity extends Activity {
 
     private void sendStat(String action, String label) {
         EasyTracker.getTracker().trackEvent("PageProfile", action, label, 0);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.settings:
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 }

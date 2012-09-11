@@ -34,5 +34,14 @@
   <string name="s_profile_alcohol">profile_alcohol</string>
   <string name="s_profile_commutability">profile_commutability</string>
   <string name="s_profile_character">profile_character</string>
-    
+
+  <!-- settings -->
+  <string name="s_settings">profile_settings</string>
+  <string name="settings_preloading_wifi">wifi</string>
+  <string name="settings_preloading_on">on</string>
+  <string name="settings_preloading_off">off</string>
+  <string name="settings_preloading_type_user">user</string>
+  <string name="settings_preloading_type_photo">photo</string>
+  <string name="settings_preloading_type_all">all</string>
+
 </resources>

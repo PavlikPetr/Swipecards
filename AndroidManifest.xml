@@ -55,6 +55,7 @@
         <activity android:name=".billing.BuyingActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ui.InviteActivity"/>
         <activity android:name=".ui.LeadersActivity"/>
+        <activity android:name=".ui.SettingsActivity"/>
 
         <!-- services -->
         <service android:name=".services.NotificationService"/>

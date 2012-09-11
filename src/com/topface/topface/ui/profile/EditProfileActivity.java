@@ -6,6 +6,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.CitySearchActivity;
+import com.topface.topface.ui.SettingsActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
@@ -16,7 +17,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,11 +57,15 @@ public class EditProfileActivity extends TrackedPreferenceActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    addPreferencesFromResource(R.layout.ac_edit_profile);
+    addPreferencesFromResource(R.xml.ac_edit_profile);
     Debug.log(this,"+onCreate");
     
     mFormInfo = new FormInfo(getApplicationContext(),CacheProfile.sex);
-     
+
+    //Settings
+    findPreference(getString(R.string.s_settings))
+            .setOnPreferenceClickListener(mOnSettingsClickListener);
+
     // name
     Preference name = findPreference(getString(R.string.s_profile_name));
     name.setSummary(CacheProfile.first_name);
@@ -580,4 +584,12 @@ public class EditProfileActivity extends TrackedPreferenceActivity {
     }
   };
   //---------------------------------------------------------------------------
+  Preference.OnPreferenceClickListener mOnSettingsClickListener = new Preference.OnPreferenceClickListener() {
+      @Override
+      public boolean onPreferenceClick(Preference preference) {
+          Intent intent = new Intent(EditProfileActivity.this, SettingsActivity.class);
+          startActivity(intent);
+          return false;
+      }
+  };
 }
