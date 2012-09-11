@@ -42,6 +42,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     private ImageView mUserAvatar;
     private TextView  mUserName;
     private TextView  mUserCity;
+    private ViewGroup mUserProfileHeader;
     
     private RadioGroup  mUserRadioGroup;
     private RadioButton mUserPhoto;
@@ -83,6 +84,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         mUserName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
         mUserCity = (TextView)view.findViewById(R.id.ivUserCity);
         mUserCity.setText(CacheProfile.city_name);
+        mUserProfileHeader = (ViewGroup) view.findViewById(R.id.loProfileHeader);
         
         // Actions Button
         mUserRadioGroup = (RadioGroup)view.findViewById(R.id.UserRadioGroup);
@@ -129,6 +131,12 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 		return view;
 	}
 
+	@Override
+	public void onResume() {		
+		super.onResume();
+		mUserProfileHeader.setBackgroundResource(CacheProfile.background_res_id);
+	}
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();

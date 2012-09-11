@@ -66,6 +66,7 @@ public class CacheProfile  {
     public static SparseArray<HashMap<String, String>> photoLinks; // альбом пользователя
     public static String status; // статус пользователя
     public static boolean isNewbie; // поле новичка
+	public static int background_res_id;
 
     public static boolean init(Context context) {
         try {
