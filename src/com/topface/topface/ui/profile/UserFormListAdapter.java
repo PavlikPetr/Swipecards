@@ -109,7 +109,7 @@ public class UserFormListAdapter extends BaseAdapter {
     	switch (type) {
             case T_HEADER:
                 holder.mTitle.setText(item.title);
-                holder.mState.setImageResource(R.drawable.user_title);
+                holder.mState.setImageResource(R.drawable.user_header);
                 break;
             case T_DATA:
                 holder.mHeader.setText(item.title);
