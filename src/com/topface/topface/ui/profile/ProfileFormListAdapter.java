@@ -27,10 +27,10 @@ public class ProfileFormListAdapter extends BaseAdapter {
     // class ViewHolder
     private static class ViewHolder {
         public ImageView mState;
-        public TextView mTitle;
-        public TextView mHeader;
-        public TextView mValue;
-        public Button   mFill;
+        public TextView  mTitle;
+        public TextView  mHeader;
+        public TextView  mValue;
+        public Button    mFill;
     }
 
     public ProfileFormListAdapter(Context context) {
@@ -87,9 +87,9 @@ public class ProfileFormListAdapter extends BaseAdapter {
                 case T_DATA:
                     convertView = mInflater.inflate(R.layout.item_user_list, null, false);
                     holder.mState  = (ImageView)convertView.findViewById(R.id.ivState);
-                    holder.mTitle  = (TextView)convertView.findViewById(R.id.tvTitle);
                     holder.mHeader = (TextView)convertView.findViewById(R.id.tvHeader);
-                    holder.mValue  = (TextView)convertView.findViewById(R.id.tvData);
+                    holder.mTitle  = (TextView)convertView.findViewById(R.id.tvTitle);
+                    holder.mValue  = (TextView)convertView.findViewById(R.id.tvValue);
                     holder.mFill   = (Button)convertView.findViewById(R.id.btnFill);
                     break;
             }
@@ -111,13 +111,13 @@ public class ProfileFormListAdapter extends BaseAdapter {
     	
     	switch (type) {
             case T_HEADER:
-                holder.mTitle.setText(item.title);
+                holder.mHeader.setText(item.title);
                 holder.mState.setImageResource(R.drawable.user_header);
                 break;
             case T_DATA:
-                holder.mHeader.setText(item.title);
-                if(item.data != null) {
-                    holder.mValue.setText(item.data);
+                holder.mTitle.setText(item.title.toUpperCase());
+                if(item.value != null) {
+                    holder.mValue.setText(item.value);
                     holder.mValue.setVisibility(View.VISIBLE);
                     holder.mFill.setVisibility(View.INVISIBLE);
                 } else {

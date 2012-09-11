@@ -31,6 +31,7 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
     // class ViewHolder
     static class ViewHolder {
         ImageView mPhoto;
+        ImageView mFrame;
     };
 
     public ProfilePhotoGridAdapter(Context context, SparseArray<HashMap<String, String>> photoLinks) {
@@ -55,12 +56,19 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
             convertView = (ViewGroup)mInflater.inflate(R.layout.item_user_gallery, null, false);
             holder = new ViewHolder();
             holder.mPhoto = (ImageView)convertView.findViewById(R.id.ivPhoto);
+            holder.mFrame = (ImageView)convertView.findViewById(R.id.ivFrame);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder)convertView.getTag();
         }
         
-        fetchImage(position, holder.mPhoto);
+        if (position == 0) {
+            holder.mPhoto.setBackgroundResource(R.drawable.profile_add_photo_selector);
+            holder.mFrame.setVisibility(View.INVISIBLE);
+        } else {
+            holder.mFrame.setVisibility(View.VISIBLE);
+            fetchImage(position, holder.mPhoto);
+        }
 
         return convertView;
     }
@@ -87,6 +95,8 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
                 public void run() {
                     //Album album = mUserAlbum.get(position);
                     HashMap<String, String> photo = mPhotoLinks.get(mPhotoLinks.keyAt(position));
+                    if (photo == null)
+                        return;
                     final Bitmap bitmap = mStorageCache.load((String)photo.values().toArray()[0]);
                     if (bitmap != null) {
                         imageView.post(new Runnable() {

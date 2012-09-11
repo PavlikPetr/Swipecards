@@ -1,13 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
-import com.topface.topface.data.FeedGifts;
-import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.FeedGiftsRequest;
-import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.ui.AuthActivity;
+import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
@@ -16,8 +10,6 @@ import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.http.ConnectionManager;
-import com.topface.topface.utils.http.Http;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,12 +21,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ProfileFragment extends BaseFragment implements OnClickListener{
@@ -54,6 +48,9 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     
     private IndicatorView mIndicatorView;
     private ViewPager mViewPager;
+    
+    private Button mBuyButton;
+    private View mUserPowerBkgd;
     
     private ProfilePhotoFragment mPhotoFragment;
     private ProfileFormFragment mFormFragment;
@@ -99,6 +96,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         mUserMoney = (TextView)view.findViewById(R.id.tvUserMoney);
         mUserMoney.setText("" + CacheProfile.money);
         mUserPower = (TextView)view.findViewById(R.id.tvUserPower);
+        mUserPower.setOnClickListener(mBuyClickListener);
         mUserPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
         mUserPower.setText("" + CacheProfile.power + "%");
         
@@ -106,6 +104,12 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         mViewPager = (ViewPager)view.findViewById(R.id.UserViewPager);
         mViewPager.setAdapter(new ProfilePageAdapter(getActivity().getSupportFragmentManager()));
         mViewPager.setOnPageChangeListener(mOnPageChangeListener);
+        
+        mUserPowerBkgd = view.findViewById(R.id.loUserPowerBkgd);
+        
+        // Buy Button
+        mBuyButton = (Button)view.findViewById(R.id.btnBuy);
+        mBuyButton.setOnClickListener(mBuyClickListener);
         
         // Indicator
         mIndicatorView = (IndicatorView)view.findViewById(R.id.viewUserIndicator);
@@ -117,8 +121,14 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
                 mIndicatorView.setButtonMeasure(R.id.btnUserPhoto, mUserPhoto.getMeasuredWidth());
                 mIndicatorView.setButtonMeasure(R.id.btnUserQuestionnaire, mUserForm.getMeasuredWidth());
                 mIndicatorView.setButtonMeasure(R.id.btnUserGifts, mUserGifts.getMeasuredWidth());
+                
+//                LayoutParams lp = mBuyButton.getLayoutParams();
+//                RelativeLayout.LayoutParams rlp = ((RelativeLayout.LayoutParams)lp);
+//                rlp.setMargins(rlp.rightMargin, rlp.topMargin + 20, rlp.rightMargin, rlp.bottomMargin);
+//                mBuyButton.setLayoutParams(rlp);
                
                 if(mUserPhoto.getMeasuredWidth() > 0) {
+                    layoutBuyButton();
                     mIndicatorView.reCompute();
                     ViewTreeObserver obs = mIndicatorView.getViewTreeObserver();
                     obs.removeGlobalOnLayoutListener(this);
@@ -144,12 +154,10 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 
 	@Override
 	public void clearLayout() {
-		Debug.log(this, "SettingsActivity::clearLayout");
 	}
 
 	@Override
 	public void fillLayout() {
-		Debug.log(this, "SettingsActivity::fillLayout");
 	}
 
 	@Override
@@ -162,6 +170,21 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 
 	@Override
 	protected void onUpdateFail(boolean isFlyUpdating) {
+	}
+	
+	private void layoutBuyButton() {
+        int[] in  = new int[2];
+        int[] out = new int[2];
+        //mUserPower.getLocationInWindow(in);
+        mBuyButton.getLocationOnScreen(out);
+        mUserPowerBkgd.getLocationOnScreen(in);
+        LayoutParams lp = mBuyButton.getLayoutParams();
+        RelativeLayout.LayoutParams rlp = ((RelativeLayout.LayoutParams)lp);
+        int offsetX = (mUserPowerBkgd.getMeasuredWidth()-mBuyButton.getMeasuredWidth())/2;
+        int offsetY = (mUserPowerBkgd.getMeasuredHeight()-mBuyButton.getMeasuredWidth()/2);
+        rlp.setMargins(rlp.leftMargin+in[0] - out[0] + offsetX, rlp.topMargin + in[1] - out[1] + offsetY, 
+                       rlp.rightMargin, rlp.bottomMargin);
+        mBuyButton.setLayoutParams(rlp);
 	}
 	
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -207,6 +230,13 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
                     mViewPager.setCurrentItem(F_GIFTS);
                     break;
             }
+        }
+    };
+    
+    View.OnClickListener mBuyClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            startActivity(new Intent(getActivity(), BuyingActivity.class));
         }
     };
     

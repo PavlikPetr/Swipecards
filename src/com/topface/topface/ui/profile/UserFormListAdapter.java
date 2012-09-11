@@ -87,7 +87,7 @@ public class UserFormListAdapter extends BaseAdapter {
                     holder.mState  = (ImageView)convertView.findViewById(R.id.ivState);
                     holder.mTitle  = (TextView)convertView.findViewById(R.id.tvTitle);
                     holder.mHeader = (TextView)convertView.findViewById(R.id.tvHeader);
-                    holder.mValue  = (TextView)convertView.findViewById(R.id.tvData);
+                    holder.mValue  = (TextView)convertView.findViewById(R.id.tvValue);
                     break;
             }
             
@@ -108,12 +108,12 @@ public class UserFormListAdapter extends BaseAdapter {
     	
     	switch (type) {
             case T_HEADER:
-                holder.mTitle.setText(item.title);
+                holder.mHeader.setText(item.title);
                 holder.mState.setImageResource(R.drawable.user_header);
                 break;
             case T_DATA:
-                holder.mHeader.setText(item.title);
-                holder.mValue.setText(item.data);
+                holder.mTitle.setText(item.title.toUpperCase());
+                holder.mValue.setText(item.value);
                 if(item.equal)
                     holder.mState.setImageResource(R.drawable.user_cell);  // GREEN POINT
                 else

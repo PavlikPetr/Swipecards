@@ -179,7 +179,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.HEADER;
                 formItem.title = context.getString(R.string.form_main);
-                formItem.data  = Static.EMPTY;
+                formItem.value = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -187,7 +187,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_main_character);
-                formItem.data  = formInfo.getCharacter(form.optInt("character_id"));
+                formItem.value = formInfo.getCharacter(form.optInt("character_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -195,7 +195,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_main_communication);
-                formItem.data  = formInfo.getCommunication(form.optInt("communication_id"));
+                formItem.value = formInfo.getCommunication(form.optInt("communication_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);                
 
@@ -204,7 +204,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DIVIDER;
                 formItem.title = Static.EMPTY;
-                formItem.data  = Static.EMPTY;
+                formItem.value = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -212,7 +212,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.HEADER;
                 formItem.title = context.getString(R.string.form_physique);
-                formItem.data  = Static.EMPTY;
+                formItem.value = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -220,7 +220,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_physique_fitness);
-                formItem.data  = formInfo.getFitness(form.optInt("fitness_id"));
+                formItem.value = formInfo.getFitness(form.optInt("fitness_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
 
@@ -228,7 +228,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_main_height);
-                formItem.data  = "" + form.optInt("height");
+                formItem.value = "" + form.optInt("height");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -236,7 +236,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_main_weight);
-                formItem.data  = "" + form.optInt("weight");
+                formItem.value = "" + form.optInt("weight");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -244,7 +244,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_physique_hairs);
-                formItem.data  = "" + form.optInt("hair_id");
+                formItem.value = "" + form.optInt("hair_id");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -252,7 +252,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_physique_eyes);
-                formItem.data  = "" + form.optInt("eye_id");
+                formItem.value = "" + form.optInt("eye_id");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -260,7 +260,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DIVIDER;
                 formItem.title = Static.EMPTY;
-                formItem.data  = Static.EMPTY;
+                formItem.value = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -268,7 +268,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.HEADER;
                 formItem.title = context.getString(R.string.form_social);
-                formItem.data  = Static.EMPTY;
+                formItem.value = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -276,7 +276,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_social_marriage);
-                formItem.data  = formInfo.getMarriage(form.optInt("marriage_id"));
+                formItem.value = formInfo.getMarriage(form.optInt("marriage_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -284,7 +284,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_social_education);
-                formItem.data  = formInfo.getEducation(form.optInt("education_id"));
+                formItem.value = formInfo.getEducation(form.optInt("education_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -292,7 +292,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_social_finances);
-                formItem.data  = formInfo.getFinances(form.optInt("finances_id"));
+                formItem.value = formInfo.getFinances(form.optInt("finances_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);    
                 
@@ -300,7 +300,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_social_residence);
-                formItem.data  = "" + form.optInt("residence_id");
+                formItem.value = "" + form.optInt("residence_id");
                 formItem.equal = false;
                 profile.forms.add(formItem);
 
@@ -308,7 +308,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_social_car);
-                formItem.data  = "" + form.optInt("car_id");
+                formItem.value = "" + form.optInt("car_id");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -316,7 +316,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DIVIDER;
                 formItem.title = Static.EMPTY;
-                formItem.data  = Static.EMPTY;
+                formItem.value = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -324,7 +324,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.HEADER;
                 formItem.title = context.getString(R.string.form_habits);
-                formItem.data  = Static.EMPTY;
+                formItem.value = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -332,7 +332,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_habits_smoking);
-                formItem.data  = formInfo.getSmoking(form.optInt("smoking_id"));
+                formItem.value = formInfo.getSmoking(form.optInt("smoking_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -340,7 +340,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_habits_alcohol);
-                formItem.data  = formInfo.getSmoking(form.optInt("alcohol_id"));
+                formItem.value = formInfo.getSmoking(form.optInt("alcohol_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -348,7 +348,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_habits_restaurants);
-                formItem.data  = "" + form.optInt("restaurants");
+                formItem.value = "" + form.optInt("restaurants");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -356,7 +356,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DIVIDER;
                 formItem.title = Static.EMPTY;
-                formItem.data  = Static.EMPTY;
+                formItem.value = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -364,7 +364,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.HEADER;
                 formItem.title = context.getString(R.string.form_detail);
-                formItem.data  = Static.EMPTY;
+                formItem.value = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -372,7 +372,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_detail_about_dating);
-                formItem.data  = "" + form.optInt("first_dating");
+                formItem.value = "" + form.optInt("first_dating");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -380,7 +380,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_detail_archievements);
-                formItem.data  = "" + form.optInt("achievements");
+                formItem.value = "" + form.optInt("achievements");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -388,7 +388,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DIVIDER;
                 formItem.title = Static.EMPTY;
-                formItem.data  = Static.EMPTY;
+                formItem.value = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -396,7 +396,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.HEADER;
                 formItem.title = "?????????";
-                formItem.data  = Static.EMPTY;
+                formItem.value = Static.EMPTY;
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -404,7 +404,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = "job";
-                formItem.data  = formInfo.getJob(form.optInt("job"));
+                formItem.value = formInfo.getJob(form.optInt("job"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -412,7 +412,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = "status";
-                formItem.data  = formInfo.getJob(form.optInt("status"));
+                formItem.value = formInfo.getJob(form.optInt("status"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
                                                 
@@ -420,7 +420,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = "eye";
-                formItem.data  = "" + form.optInt("eye_id");
+                formItem.value = "" + form.optInt("eye_id");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -428,7 +428,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = "children";
-                formItem.data  = "" + form.optInt("children_id");
+                formItem.value = "" + form.optInt("children_id");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -439,7 +439,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = "valuables";
-                formItem.data  = "" + form.optInt("valuables");
+                formItem.value = "" + form.optInt("valuables");
                 formItem.equal = false;
                 profile.forms.add(formItem);
  
@@ -447,7 +447,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = "aspirations";
-                formItem.data  = "" + form.optInt("aspirations");
+                formItem.value = "" + form.optInt("aspirations");
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 

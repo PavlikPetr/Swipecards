@@ -346,7 +346,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 		@Override
 		public String getText() {
-			return mFormItem.data;
+			return mFormItem.value;
 		}
 		
 		public EditForm setFormItem(FormItem item) {

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProfilePhotoFragment extends Fragment {
     private TextView mTitle;
@@ -23,7 +24,11 @@ public class ProfilePhotoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPhotoLinks = CacheProfile.photoLinks;
+        mPhotoLinks = new SparseArray<HashMap<String, String>>();
+        mPhotoLinks.append(0, null);
+        for(int i=0; i<CacheProfile.photoLinks.size(); i++) {
+            mPhotoLinks.append(i+1, CacheProfile.photoLinks.get(CacheProfile.photoLinks.keyAt(i)));
+        }
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks);
     }
     
@@ -39,7 +44,7 @@ public class ProfilePhotoFragment extends Fragment {
         mTitle = (TextView)root.findViewById(R.id.fragmentTitle);
         
         if(mPhotoLinks != null && mPhotoLinks.size() >= 0) {
-            mTitle.setText(mPhotoLinks.size() + " photos");
+            mTitle.setText(CacheProfile.photoLinks.size() + " photos"); // mPhotoLinks-1
             mTitle.setVisibility(View.VISIBLE);
         } else {
             mTitle.setVisibility(View.INVISIBLE);  
@@ -60,11 +65,15 @@ public class ProfilePhotoFragment extends Fragment {
     
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if(position == 0) {
+                Toast.makeText(getActivity(), "Click", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Data.photoAlbum = CacheProfile.photoLinks;
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoAlbumActivity.class);
             intent.putExtra(PhotoAlbumActivity.INTENT_USER_ID, CacheProfile.uid);
-            intent.putExtra(PhotoAlbumActivity.INTENT_ALBUM_POS, position);
+            intent.putExtra(PhotoAlbumActivity.INTENT_ALBUM_POS, --position);
             startActivity(intent);
         }
     };

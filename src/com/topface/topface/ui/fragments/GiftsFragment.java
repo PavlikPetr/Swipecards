@@ -45,9 +45,9 @@ public class GiftsFragment extends BaseFragment {
 	public static final int GIFTS_COLUMN_LANDSCAPE = 5;
 
 	// Grid elements
+	private GridView mGridView;
 	private GiftsAdapter mGridAdapter;
 	private GiftGalleryManager<Gift> mGalleryManager;
-	private GridView mGridView;
 
 	private Profile mProfile;
 	private LinkedList<Gift> mGifts = new LinkedList<Gift>();

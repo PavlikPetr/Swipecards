@@ -108,7 +108,8 @@
 	                    android:drawablePadding="4dp" />
                 </RelativeLayout>
                 
-                <RelativeLayout 
+                <RelativeLayout
+                    android:id="@+id/loUserPowerBkgd" 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/user_chat_bg">
@@ -116,7 +117,8 @@
 	                    android:id="@+id/tvUserPower"
 			            android:layout_width="wrap_content"
 				        android:layout_height="wrap_content"
-				        android:layout_centerInParent="true"
+				        android:layout_centerHorizontal="true"
+				        android:layout_marginTop="16dp"
 				        android:gravity="center"
 				        android:textColor="#FFFFFF"
 				        android:textSize="12sp"
@@ -127,13 +129,11 @@
                 <!-- android:drawableTop="@drawable/user_chat_selector"  -->                
             </LinearLayout>
            
-            
             <com.topface.topface.ui.views.IndicatorView
                 android:id="@+id/viewUserIndicator"
                 android:layout_alignBottom="@id/loUserRates"
                 android:layout_width="wrap_content"  
                 android:layout_height="fill_parent" />
-            
 
             <!-- Actions -->
             <RadioGroup
@@ -201,5 +201,11 @@
            android:layout_height="fill_parent"
            style="@style/LoadingLocker"
            android:visibility="gone" />
+    
+        <Button
+            android:id="@+id/btnBuy" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/profile_buy" />
     
 </RelativeLayout>

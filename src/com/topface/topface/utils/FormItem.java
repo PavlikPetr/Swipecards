@@ -6,7 +6,7 @@ public class FormItem implements Serializable {
     // Data
     public int type;
     public String title;
-    public String data;
+    public String value;
     public boolean equal;    
 
     // Constants
