@@ -244,7 +244,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_physique_hairs);
-                formItem.data  = "" + form.optInt("hair_id");
+                formItem.data  = formInfo.getHair(form.optInt("hair_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -252,7 +252,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_physique_eyes);
-                formItem.data  = "" + form.optInt("eye_id");
+                formItem.data  = formInfo.getEyes(form.optInt("eyes_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -300,7 +300,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_social_residence);
-                formItem.data  = "" + form.optInt("residence_id");
+                formItem.data  = formInfo.getResidence(form.optInt("residence_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
 
@@ -308,7 +308,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formItem = new FormItem();
                 formItem.type  = FormItem.DATA;
                 formItem.title = formInfo.getFormTitle(R.array.form_social_car);
-                formItem.data  = "" + form.optInt("car_id");
+                formItem.data  = formInfo.getCar(form.optInt("car_id"));
                 formItem.equal = false;
                 profile.forms.add(formItem);
                 
@@ -393,63 +393,55 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 profile.forms.add(formItem);
                 
                 // 1 header -= ????????? =-
-                formItem = new FormItem();
-                formItem.type  = FormItem.HEADER;
-                formItem.title = "?????????";
-                formItem.data  = Static.EMPTY;
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 2 job vs job_id
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "job";
-                formItem.data  = formInfo.getJob(form.optInt("job"));
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 3 status vs status_id
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "status";
-                formItem.data  = formInfo.getJob(form.optInt("status"));
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                                                
-                // 16 eye
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "eye";
-                formItem.data  = "" + form.optInt("eye_id");
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 17 children
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "children";
-                formItem.data  = "" + form.optInt("children_id");
-                formItem.equal = false;
-                profile.forms.add(formItem);
-                
-                // 22 form_countries
-                //{Array} form_countries; // массив идентификаторов стран, в которых бывал пользователь
-                
-                // 24 valuables
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "valuables";
-                formItem.data  = "" + form.optInt("valuables");
-                formItem.equal = false;
-                profile.forms.add(formItem);
- 
-                // 25 aspirations
-                formItem = new FormItem();
-                formItem.type  = FormItem.DATA;
-                formItem.title = "aspirations";
-                formItem.data  = "" + form.optInt("aspirations");
-                formItem.equal = false;
-                profile.forms.add(formItem);
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.HEADER;
+//                formItem.title = "?????????";
+//                formItem.data  = Static.EMPTY;
+//                formItem.equal = false;
+//                profile.forms.add(formItem);
+//                
+//                // 2 job vs job_id
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.DATA;
+//                formItem.title = "job";
+//                formItem.data  = formInfo.getJob(form.optInt("job"));
+//                formItem.equal = false;
+//                profile.forms.add(formItem);
+//                
+//                // 3 status vs status_id
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.DATA;
+//                formItem.title = "status";
+//                formItem.data  = formInfo.getJob(form.optInt("status"));
+//                formItem.equal = false;
+//                profile.forms.add(formItem);                
+//                
+//                // 17 children
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.DATA;
+//                formItem.title = "children";
+//                formItem.data  = "" + form.optInt("children_id");
+//                formItem.equal = false;
+//                profile.forms.add(formItem);
+//                
+//                // 22 form_countries
+//                //{Array} form_countries; // массив идентификаторов стран, в которых бывал пользователь
+//                
+//                // 24 valuables
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.DATA;
+//                formItem.title = "valuables";
+//                formItem.data  = "" + form.optInt("valuables");
+//                formItem.equal = false;
+//                profile.forms.add(formItem);
+// 
+//                // 25 aspirations
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.DATA;
+//                formItem.title = "aspirations";
+//                formItem.data  = "" + form.optInt("aspirations");
+//                formItem.equal = false;
+//                profile.forms.add(formItem);
                 
             }
             

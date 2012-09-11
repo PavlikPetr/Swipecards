@@ -4,22 +4,6 @@
     <string name="profile_form_empty">–</string>
     
     <!-- Education ******************************************************************************** -->
-    <string name="profile_form_education_male_1">High school</string>
-    <string name="profile_form_education_male_2">Still studying</string>
-    <string name="profile_form_education_male_3">Higher education</string>
-    <string name="profile_form_education_male_4">Several university degrees</string>
-    <string name="profile_form_education_male_5">Higher than average</string>
-    <string name="profile_form_education_male_6">Below average</string>
-    <string name="profile_form_education_male_7">I\'m just very smart</string>
-
-    <string name="profile_form_education_female_1">Average</string>
-    <string name="profile_form_education_female_2">Still studying</string>
-    <string name="profile_form_education_female_3">Bachelor\'s degree</string>
-    <string name="profile_form_education_female_4">Several university degrees</string>
-    <string name="profile_form_education_female_5">Higher than average</string>
-    <string name="profile_form_education_female_6">Below average</string>
-    <string name="profile_form_education_female_7">I\'m just very smart</string>
-    
     <string-array name="profile_form_education_male">
         <item>High school</item>
         <item>Still studying</item>
@@ -40,7 +24,7 @@
         <item>I\'m just very smart</item>
     </string-array>
     
-    <string-array name="profile_form_education_values">
+    <integer-array name="profile_form_education_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -48,19 +32,9 @@
         <item>5</item>
         <item>6</item>
         <item>7</item>
-    </string-array>
+    </integer-array>
     
-    <!-- Communication ******************************************************************************** -->
-    <string name="profile_form_communication_male_1">Very sociable</string>
-    <string name="profile_form_communication_male_2">Open for interesting people</string>
-    <string name="profile_form_communication_male_3">Write me and we will see</string>
-    <string name="profile_form_communication_male_4">Chat only with the best</string>
-
-    <string name="profile_form_communication_female_1">Very sociable</string>
-    <string name="profile_form_communication_female_2">Open for interesting people</string>
-    <string name="profile_form_communication_female_3">Write me and we will see</string>
-    <string name="profile_form_communication_female_4">Chat only with the best</string>
-    
+    <!-- Communication ******************************************************************************** -->   
     <string-array name="profile_form_communication_male">
         <item>Very sociable</item>
         <item>Open for interesting people</item>
@@ -75,30 +49,14 @@
         <item>Chat only with the best</item>
     </string-array>
     
-    <string-array name="profile_form_communication_values">
+    <integer-array name="profile_form_communication_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
-    </string-array>
+    </integer-array>
     
-    <!-- Character ******************************************************************************** -->
-    <string name="profile_form_character_male_1">Easy going</string>
-    <string name="profile_form_character_male_2">Bad tempered</string>
-    <string name="profile_form_character_male_3">Strict</string>
-    <string name="profile_form_character_male_4">Soft</string>
-    <string name="profile_form_character_male_5">Calm</string>
-    <string name="profile_form_character_male_6">Uneasy</string>
-    <string name="profile_form_character_male_7">None complained</string>
-
-    <string name="profile_form_character_female_1">Easy going</string>
-    <string name="profile_form_character_female_2">Bad tempered</string>
-    <string name="profile_form_character_female_3">Strict</string>
-    <string name="profile_form_character_female_4">Soft</string>
-    <string name="profile_form_character_female_5">Calm</string>
-    <string name="profile_form_character_female_6">Uneasy</string>
-    <string name="profile_form_character_female_7">None complained</string>
-    
+    <!-- Character ******************************************************************************** -->    
     <string-array name="profile_form_character_male">
         <item>Easy going</item>
         <item>Bad tempered</item>
@@ -119,7 +77,7 @@
         <item>None complained</item>
     </string-array>
     
-    <string-array name="profile_form_character_values">
+    <integer-array name="profile_form_character_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -127,21 +85,9 @@
         <item>5</item>
         <item>6</item>
         <item>7</item>
-    </string-array>
+    </integer-array>
     
-    <!-- Alcohol ******************************************************************************** -->
-    <string name="profile_form_alcohol_male_1">I have fun without alcohol</string>
-    <string name="profile_form_alcohol_male_2">Gave up drinking</string>
-    <string name="profile_form_alcohol_male_3">Drink sometimes</string>
-    <string name="profile_form_alcohol_male_4">Will give up soon</string>
-    <string name="profile_form_alcohol_male_5">Drank, drink, and will drink</string>
-
-    <string name="profile_form_alcohol_female_1">I have fun without alcohol</string>
-    <string name="profile_form_alcohol_female_2">Gave up drinking</string>
-    <string name="profile_form_alcohol_female_3">Drink sometimes</string>
-    <string name="profile_form_alcohol_female_4">Will give up soon</string>
-    <string name="profile_form_alcohol_female_5">Drank, drink, and will drink</string>
-    
+    <!-- Alcohol ******************************************************************************** -->    
     <string-array name="profile_form_alcohol_male">
         <item>I have fun without alcohol</item>
         <item>Gave up drinking</item>
@@ -158,29 +104,15 @@
         <item>Drank, drink, and will drink</item>
     </string-array>
     
-    <string-array name="profile_form_alcohol_values">
+    <integer-array name="profile_form_alcohol_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
-    </string-array>
+    </integer-array>
      
-    <!-- Fitness ******************************************************************************** -->
-    <string name="profile_form_fitness_male_1">Muscular</string>
-    <string name="profile_form_fitness_male_2">Fit</string>
-    <string name="profile_form_fitness_male_3">Thin</string>
-    <string name="profile_form_fitness_male_4">Normal</string>
-    <string name="profile_form_fitness_male_5">Well padded</string>
-    <string name="profile_form_fitness_male_6">Got lots of other advantages</string>
-
-    <string name="profile_form_fitness_female_1">Sporty</string>
-    <string name="profile_form_fitness_female_2">Slim</string>
-    <string name="profile_form_fitness_female_3">Thin</string>
-    <string name="profile_form_fitness_female_4">Model</string>
-    <string name="profile_form_fitness_female_5">Interesting shapes</string>
-    <string name="profile_form_fitness_female_6">With the sexy body</string>
-    
+    <!-- Fitness ******************************************************************************** -->   
     <string-array name="profile_form_fitness_male">
         <item>Muscular</item>
         <item>Fit</item>
@@ -199,14 +131,14 @@
         <item>With the sexy body</item>
     </string-array>
     
-    <string-array name="profile_form_fitness_values">
+    <integer-array name="profile_form_fitness_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
         <item>6</item>
-    </string-array>
+    </integer-array>
     
     <!-- Job ******************************************************************************** -->
     <string name="profile_form_job_male_2">Студент</string>
@@ -229,23 +161,7 @@
     <string name="profile_form_job_female_9">Домохозяйка</string>
     <string name="profile_form_job_female_10">Бездельница</string>
     
-    <!-- Marriage ******************************************************************************** -->
-    <string name="profile_form_marriage_male_1">Not yet</string>
-    <string name="profile_form_marriage_male_2">No longer</string>
-    <string name="profile_form_marriage_male_3">Still</string>
-    <string name="profile_form_marriage_male_4">Yes</string>
-    <string name="profile_form_marriage_male_5">Yes and forever</string>
-    <string name="profile_form_marriage_male_6">Is it a problem?</string>
-    <string name="profile_form_marriage_male_7">Never</string>
-
-    <string name="profile_form_marriage_female_1">Not yet</string>
-    <string name="profile_form_marriage_female_2">No longer</string>
-    <string name="profile_form_marriage_female_3">Still</string>
-    <string name="profile_form_marriage_female_4">Yes</string>
-    <string name="profile_form_marriage_female_5">Yes and forever</string>
-    <string name="profile_form_marriage_female_6">Is it a problem?</string>
-    <string name="profile_form_marriage_female_7">Never</string>
-    
+    <!-- Marriage ******************************************************************************** -->   
     <string-array name="profile_form_marriage_male">
         <item>Not yet</item>
         <item>No longer</item>
@@ -266,7 +182,7 @@
         <item>Never</item>
     </string-array>
     
-    <string-array name="profile_form_marriage_values">
+    <integer-array name="profile_form_marriage_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -274,25 +190,9 @@
         <item>5</item>
         <item>6</item>
         <item>7</item>
-    </string-array>
+    </integer-array>
     
-    <!-- Finances ******************************************************************************** -->
-    <string name="profile_form_finances_male_1">Very high income</string>
-    <string name="profile_form_finances_male_2">I can share</string>
-    <string name="profile_form_finances_male_3">Earn more than average</string>
-    <string name="profile_form_finances_male_4">Stable income</string>
-    <string name="profile_form_finances_male_5">Money is not important</string>
-    <string name="profile_form_finances_male_6">Modest, but enough</string>
-    <string name="profile_form_finances_male_7">Help me financially</string>
-
-    <string name="profile_form_finances_female_1">Very high income</string>
-    <string name="profile_form_finances_female_2">I can share</string>
-    <string name="profile_form_finances_female_3">Earn more than average</string>
-    <string name="profile_form_finances_female_4">Stable income</string>
-    <string name="profile_form_finances_female_5">Money is not important</string>
-    <string name="profile_form_finances_female_6">Modest, but enough</string>
-    <string name="profile_form_finances_female_7">Help me financially</string>
-    
+    <!-- Finances ******************************************************************************** -->   
     <string-array name="profile_form_finances_male">
         <item>Very high income</item>
         <item>I can share</item>
@@ -313,7 +213,7 @@
         <item>Help me financially</item>
     </string-array>
     
-    <string-array name="profile_form_finances_values">
+    <integer-array name="profile_form_finances_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -321,23 +221,9 @@
         <item>5</item>
         <item>6</item>
         <item>7</item>
-    </string-array>
+    </integer-array>
     
-    <!-- Smoking ******************************************************************************** -->
-    <string name="profile_form_smoking_male_1">Do not smoke</string>
-    <string name="profile_form_smoking_male_2">Gave up smoking</string>
-    <string name="profile_form_smoking_male_3">Giving up smoking</string>
-    <string name="profile_form_smoking_male_4">Only when I drink</string>
-    <string name="profile_form_smoking_male_5">Smoke like a locomotive</string>
-    <string name="profile_form_smoking_male_6">Smoke but not cigarettes</string>
-    
-    <string name="profile_form_smoking_female_1">Do not smoking</string>
-    <string name="profile_form_smoking_female_2">Gave up smoking</string>
-    <string name="profile_form_smoking_female_3">Giving up smoking</string>
-    <string name="profile_form_smoking_female_4">Only when I drink</string>
-    <string name="profile_form_smoking_female_5">Smoke like a locomotive</string>
-    <string name="profile_form_smoking_female_6">Smoke but not cigarettes</string>
-    
+    <!-- Smoking ******************************************************************************** -->    
     <string-array name="profile_form_smoking_male">
         <item>Do not smoke</item>
         <item>Gave up smoking</item>
@@ -356,13 +242,119 @@
         <item>Smoke but not cigarettes</item>
     </string-array>
     
-    <string-array name="profile_form_smoking_values">
+    <integer-array name="profile_form_smoking_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
         <item>6</item>
+    </integer-array>  
+    
+    <!-- Hairs ******************************************************************************** -->    
+    <string-array name="profile_form_hair_male">
+        <item>Brunet</item>
+        <item>Brown-haired</item>
+        <item>Blond</item>
+        <item>Blond</item>
+        <item>Red</item>
+        <item>Bald</item>
+        <item>Extreme</item>
     </string-array>
+    
+    <string-array name="profile_form_hair_female">
+        <item>Brunette</item>
+        <item>Brown-haired</item>
+        <item>Blonde</item>
+        <item>Blond</item>
+        <item>Red</item>
+        <item>Bald</item>
+        <item>Extreme</item>
+    </string-array>
+    
+    <integer-array name="profile_form_hair_ids">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </integer-array> 
+    
+    <!-- Eyes ******************************************************************************** -->    
+    <string-array name="profile_form_eyes_male">
+        <item>Brown</item>
+        <item>Green</item>
+        <item>Grey</item>
+        <item>Blue</item>
+        <item>Black</item>        
+        <item>Depends on my mood</item>
+    </string-array>
+    
+    <string-array name="profile_form_eyes_female">
+        <item>Brown</item>
+        <item>Green</item>
+        <item>Grey</item>
+        <item>Blue</item>
+        <item>Black</item>        
+        <item>Depends on my mood</item>
+    </string-array>
+    
+    <integer-array name="profile_form_eyes_ids">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>        
+    </integer-array> 
+    
+    <!-- Residence ******************************************************************************** -->    
+    <string-array name="profile_form_residence_male">
+        <item>With parents</item>
+        <item>With wife</item>
+        <item>With loved</item>
+        <item>With friends</item>
+        <item>Alone in a rented apartment</item>
+        <item>Alone in apartment</item>
+        <item>Where it is necessary</item>
+    </string-array>
+    
+    <string-array name="profile_form_residence_female">
+        <item>With parents</item>
+        <item>With ​​husband</item>
+        <item>With loved</item>
+        <item>With friends</item>
+        <item>Alone in a rented apartment</item>
+        <item>Alone in apartment</item>
+        <item>Where it is necessary</item>
+    </string-array>
+    
+    <integer-array name="profile_form_residence_ids">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </integer-array> 
+    
+    <!-- Car ******************************************************************************** -->    
+    <string-array name="profile_form_car_male">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    
+    <string-array name="profile_form_car_female">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    
+    <integer-array name="profile_form_car_ids">
+        <item>1</item>
+        <item>2</item>        
+    </integer-array> 
     
 </resources>
