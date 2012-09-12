@@ -33,6 +33,8 @@ public class AvatarManager<T extends AbstractData> {
         DefaultImageLoader.getInstance().displayImage(
                 mDataList.get(position).getSmallLink(),
                 imageView,
+                null,
+                null,
                 mPostProcessor
         );
     }

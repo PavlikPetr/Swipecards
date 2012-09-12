@@ -13,6 +13,7 @@ public class FullSizeImageLoader extends DefaultImageLoader {
     protected DisplayImageOptions.Builder getDisplayImageConfig() {
         DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
         builder.cacheInMemory();
+        builder.cacheOnDisc();
         builder.resetViewBeforeLoading();
         builder.showImageForEmptyUri(R.drawable.im_photo_error);
         return builder;
