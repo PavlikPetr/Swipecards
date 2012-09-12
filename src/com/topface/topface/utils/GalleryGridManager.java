@@ -23,10 +23,12 @@ public class GalleryGridManager<T extends AbstractData> {
 
     public GalleryGridManager(Context context, LinkedList<T> dataList) {
         mDataList = dataList;
+        mBitmapWidth = Device.getDisplay(context).getWidth() / Data.GRID_COLUMN;
+        mBitmapHeight = (int) (mBitmapWidth * 1.25);
         //Процессор для кропа изображений под нужный размер после загрузки
         mPostProcessor = new ClipPostProcessor(
-                Device.getDisplay(context).getWidth() / Data.GRID_COLUMN,
-                (int) (mBitmapWidth * 1.25)
+                mBitmapWidth,
+                mBitmapHeight
         );
     }
 

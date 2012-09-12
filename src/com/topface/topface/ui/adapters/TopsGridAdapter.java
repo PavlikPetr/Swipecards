@@ -48,7 +48,7 @@ public class TopsGridAdapter extends BaseAdapter {
 
     holder.mThumbView.mPercent = ((Top)mGalleryManager.get(position)).liked;
     
-    mGalleryManager.getImage(position,holder.mThumbView);
+    mGalleryManager.getImage(position, holder.mThumbView);
     
     return convertView;
   }
