@@ -34,7 +34,7 @@ public class DefaultImageLoader {
         }
         builder.discCacheSize(DISC_CACHE_SIZE);
         builder.memoryCacheSize(MEMORY_CACHE_SIZE);
-        builder.threadPriority(Thread.NORM_PRIORITY);
+        builder.threadPriority(Thread.NORM_PRIORITY - 1);
         builder.defaultDisplayImageOptions(getDisplayImageConfig().build());
         return builder;
     }
