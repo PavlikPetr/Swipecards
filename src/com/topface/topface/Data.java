@@ -7,13 +7,10 @@ import com.topface.topface.data.City;
 import com.topface.topface.utils.Device;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 
 public class Data {
   // Data
   public static String SSID;
-  public static Bitmap userAvatar;
-  public static Bitmap ownerAvatar;
   public static Facebook facebook;
   public static LinkedList<City> cityList;
   public static LinkedList<Album> photoAlbum;

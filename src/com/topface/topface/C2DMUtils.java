@@ -77,6 +77,7 @@ public class C2DMUtils {
                             Integer.parseInt(extra.getStringExtra("id"))
                     );
                     i.putExtra(ChatActivity.INTENT_USER_NAME, extra.getStringExtra("name"));
+                    i.putExtra(ChatActivity.INTENT_USER_AVATAR, extra.getStringExtra("avatar"));
                     break;
 
                 case C2DM_TYPE_SYMPATHY:

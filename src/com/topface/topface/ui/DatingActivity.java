@@ -271,11 +271,6 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
     //---------------------------------------------------------------------------
     @Override
     public void onClick(View view) {
-        Data.userAvatar = null;
-        if (mUserSearchList.size() > 0 && mCurrentUserPos > 0 && mCurrentUserPos <= mUserSearchList.size() - 1) {
-            Http.avatarUserPreloading(mUserSearchList.get(mCurrentUserPos).getSmallLink());
-        }
-
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().trackEvent("Purchase", "PageDating", "", 0);
@@ -306,6 +301,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
                 intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
+                intent.putExtra(ChatActivity.INTENT_USER_AVATAR, mUserSearchList.get(mCurrentUserPos).avatars_small);
                 startActivity(intent);
             }
             break;

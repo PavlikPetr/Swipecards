@@ -678,10 +678,10 @@ public class ProfileActivity extends Activity {
             return;
           }
           sendStat("ButtonChatPressed", null);
-          Http.avatarUserPreloading(mUserAvatarUrl);
-          Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
-          intent.putExtra(ChatActivity.INTENT_USER_ID,mUserId);
-          intent.putExtra(ChatActivity.INTENT_USER_NAME,mName.getText());
+          Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+          intent.putExtra(ChatActivity.INTENT_USER_ID, mUserId);
+          intent.putExtra(ChatActivity.INTENT_USER_NAME, mName.getText());
+          intent.putExtra(ChatActivity.INTENT_USER_AVATAR, mUserAvatarUrl);
           intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE,true);
           startActivity(intent);
         } break;

@@ -128,8 +128,6 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
 
         if (!Data.isSSID()) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            Data.ownerAvatar = null;
-            Data.userAvatar = null;
             finish();
             return;
         }

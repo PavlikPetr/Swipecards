@@ -40,8 +40,10 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
     private static final int LIMIT = 50;
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
+    public static final String INTENT_USER_AVATAR = "user_avatar";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     private boolean mReceiverRegistered;
+    private String mUserAvatar;
 
     //---------------------------------------------------------------------------
     @Override
@@ -64,6 +66,7 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
 
         // params
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
+        mUserAvatar = getIntent().getStringExtra(INTENT_USER_AVATAR);
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
         mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME));
 
@@ -131,11 +134,9 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
             }
         });
 
-        mAdapter = new ChatListAdapter(this, mUserId, mHistoryList);
+        mAdapter = new ChatListAdapter(this, mUserId, mUserAvatar, mHistoryList);
         mAdapter.setOnAvatarListener(this);
         mListView.setAdapter(mAdapter);
-
-        Http.avatarOwnerPreloading();
 
         update();
     }

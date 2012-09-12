@@ -1,10 +1,6 @@
 package com.topface.topface.utils;
 
-import android.graphics.Bitmap;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import com.topface.topface.Data;
 import com.topface.topface.Static;
-import com.topface.topface.imageloader.DefaultImageLoader;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -172,29 +168,4 @@ public class Http {
         return response;
     }
 
-    //---------------------------------------------------------------------------
-    public static void avatarOwnerPreloading() {
-        if (Data.ownerAvatar == null) {
-            DefaultImageLoader.getInstance().preloadImage(CacheProfile.avatar_small, new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(Bitmap bitmap) {
-                    super.onLoadingComplete(bitmap);
-                    Data.ownerAvatar = Utils.getRoundedCornerBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), 12);
-                }
-            });
-        }
-    }
-
-    //---------------------------------------------------------------------------
-    public static void avatarUserPreloading(final String url) {
-        if (Data.userAvatar == null) {
-            DefaultImageLoader.getInstance().preloadImage(url, new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(Bitmap bitmap) {
-                    super.onLoadingComplete(bitmap);
-                    Data.ownerAvatar = Utils.getRoundedCornerBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), 12);
-                }
-            });
-        }
-    }
 }

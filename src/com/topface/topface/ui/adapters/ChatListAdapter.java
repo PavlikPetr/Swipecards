@@ -3,11 +3,15 @@ package com.topface.topface.ui.adapters;
 import java.util.LinkedList;
 
 import android.text.Html;
+import android.widget.ImageView;
 import android.widget.Toast;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
+import com.topface.topface.imageloader.DefaultImageLoader;
+import com.topface.topface.imageloader.RoundPostProcessor;
 import com.topface.topface.ui.views.RoundedImageView;
+import com.topface.topface.utils.AvatarManager;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,6 +21,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class ChatListAdapter extends BaseAdapter {
+
+    private RoundPostProcessor mPostProcessor;
+    private String mUserAvatar;
+
     //---------------------------------------------------------------------------
     // class ViewHolder
     static class ViewHolder {
@@ -41,11 +49,13 @@ public class ChatListAdapter extends BaseAdapter {
     private static final int T_COUNT = 4;
 
     //---------------------------------------------------------------------------
-    public ChatListAdapter(Context context, int userId, LinkedList<History> dataList) {
+    public ChatListAdapter(Context context, int userId, String avatar, LinkedList<History> dataList) {
         mContext = context;
         mList = dataList;
         mUserId = userId;
+        mUserAvatar = avatar;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mPostProcessor = new RoundPostProcessor(AvatarManager.AVATAR_ROUND_RADIUS);
         prepare(dataList);
     }
 
@@ -113,8 +123,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.mMessage = (TextView) convertView.findViewById(R.id.chat_message);
                     holder.mDate = (TextView) convertView.findViewById(R.id.chat_date);
                     holder.mAvatar.setOnClickListener(mOnAvatarListener);
-                    if (Data.userAvatar != null)
-                        holder.mAvatar.setImageBitmap(Data.userAvatar);
+                    loadAvatar(mUserAvatar, holder.mAvatar);
                 }
                 break;
                 case T_FRIEND_EXT: {
@@ -129,7 +138,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.mAvatar = (RoundedImageView) convertView.findViewById(R.id.left_icon);
                     holder.mMessage = (TextView) convertView.findViewById(R.id.chat_message);
                     holder.mDate = (TextView) convertView.findViewById(R.id.chat_date);
-                    holder.mAvatar.setImageBitmap(Data.ownerAvatar);
+                    loadAvatar(CacheProfile.avatar_small, holder.mAvatar);
                 }
                 break;
                 case T_USER_EXT: {
@@ -277,6 +286,10 @@ public class ChatListAdapter extends BaseAdapter {
         if (mItemLayoutList != null)
             mItemLayoutList.clear();
         mItemLayoutList = null;
+    }
+
+    private void loadAvatar(String url, ImageView view) {
+        DefaultImageLoader.getInstance().displayImage(url, view, mPostProcessor);
     }
     //---------------------------------------------------------------------------
 }
