@@ -18,7 +18,7 @@ public class Banner extends AbstractData {
     public static Banner parse(ApiResponse response) {
         Banner banner = new Banner();
 
-        try {§
+        try {
             JSONObject item = response.mJSONResult;
             banner.name = item.optString("name");
             banner.url = item.optString("url");
