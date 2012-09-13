@@ -4,6 +4,10 @@ import java.util.LinkedList;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.profile.edit.EditProfileItem.Type;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
@@ -25,12 +29,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EditProfileActivity extends Activity implements OnClickListener{	
 	
 	private ListView mEditsListView;	
 	private EditsAdapter mAdapter;
 	private LinkedList<EditProfileItem> mEditItems;	
+	private Button mEditName;
+	private Button mEditCity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +62,12 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 		LayoutInflater inflater = getLayoutInflater();
 		ViewGroup header = (ViewGroup)inflater.inflate(R.layout.item_edit_profile_header, mEditsListView, false);
 
-		Button editName = (Button) header.findViewById(R.id.btnEditName);
-		editName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
-		editName.setOnClickListener(this);
-		Button editCity = (Button) header.findViewById(R.id.btnEditCity);
-		editCity.setText(CacheProfile.city_name);
-		editCity.setOnClickListener(this);
+		mEditName = (Button) header.findViewById(R.id.btnEditName);
+		mEditName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
+		mEditName.setOnClickListener(this);
+		mEditCity = (Button) header.findViewById(R.id.btnEditCity);
+		mEditCity.setText(CacheProfile.city_name);
+		mEditCity.setOnClickListener(this);
 				
 		mEditsListView.addHeaderView(header);
 		mAdapter = new EditsAdapter(getApplicationContext(), mEditItems);
@@ -114,12 +121,68 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 			//TODO edit name onClick()
 			break;
 		case R.id.btnEditCity:
-			//TODO edit city onClick()
+			Intent intent = new Intent(getApplicationContext(), CitySearchActivity.class);
+            startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
 			break;
 		case R.id.btnNavigationBackWithText:
 			finish();
 			break;
 		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == Activity.RESULT_OK) {
+			switch (requestCode) { 
+			case EditContainerActivity.INTENT_EDIT_BACKGROUND:
+				mAdapter.notifyDataSetChanged();
+				break;
+			case EditContainerActivity.INTENT_EDIT_FORM_ITEM:
+				mAdapter.notifyDataSetChanged();
+				break;
+			case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
+				Bundle extras = data.getExtras();
+	            final String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
+	            final String city_full = extras.getString(CitySearchActivity.INTENT_CITY_FULL_NAME);
+	            final int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);    	            
+	            
+	            SettingsRequest request = new SettingsRequest(getApplicationContext());
+	            request.cityid = city_id;
+	            request.callback(new ApiHandler() {
+					
+					@Override
+					public void success(ApiResponse response) throws NullPointerException {
+						CacheProfile.city_id = city_id;
+			            CacheProfile.city_name = city_name;
+			            CacheProfile.city_full = city_full;
+			            runOnUiThread(new Runnable() {
+							
+							@Override
+							public void run() {
+								mEditCity.setText(CacheProfile.city_name);
+								
+							}
+						});
+					}
+					
+					@Override
+					public void fail(int codeError, ApiResponse response) throws NullPointerException {
+						Toast.makeText(EditProfileActivity.this, getString(R.string.general_data_error),
+								Toast.LENGTH_SHORT).show();					
+					}
+				}).exec();
+	            	            
+			default:
+				break;
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	@Override
+	public void startActivityForResult(Intent intent, int requestCode) {
+		intent.putExtra(EditContainerActivity.INTENT_REQUEST_KEY, requestCode);
+		super.startActivityForResult(intent, requestCode);
 	}
 	
 	class EditsAdapter extends BaseAdapter {
@@ -249,27 +312,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 			ImageView mBackground;
 		}
 
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == Activity.RESULT_OK) {
-			switch (requestCode) { 
-			case EditContainerActivity.INTENT_EDIT_BACKGROUND:
-				mAdapter.notifyDataSetChanged();
-				break;
-			default:
-				break;
-			}
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-	
-	@Override
-	public void startActivityForResult(Intent intent, int requestCode) {
-		intent.putExtra(EditContainerActivity.INTENT_REQUEST_KEY, requestCode);
-		super.startActivityForResult(intent, requestCode);
-	}
+	}	
 	
 	class EditStatus extends EditProfileItem {
 
@@ -367,6 +410,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 			Intent intent = new Intent(getApplicationContext(), EditContainerActivity.class);
 			intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, mFormItem.titleId);
 			intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, mFormItem.dataId);
+			intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, mFormItem.data);
 			startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_FORM_ITEM);
 		}
 	}

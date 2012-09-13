@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_alignRight="@id/ivEditBackground"
             android:layout_centerVertical="true"
-            android:src="@drawable/im_item_mutual_heart" 
+            android:src="@drawable/edit_form_select_check" 
             android:layout_marginRight="5dp"
             android:visibility="gone"/>
     </RelativeLayout>

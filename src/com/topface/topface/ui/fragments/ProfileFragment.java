@@ -70,7 +70,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 		
         // Home Button
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
-        Button editButton = (Button)view.findViewById(R.id.btnNavigationEditBar);
+        Button editButton = (Button)view.findViewById(R.id.btnNavigationRightWithText);
         editButton.setVisibility(View.VISIBLE);
         editButton.setText(getResources().getString(R.string.navigation_edit));
         editButton.setOnClickListener(this);
@@ -275,7 +275,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     @Override
     public void onClick(View v) {
     	switch (v.getId()) {
-		case R.id.btnNavigationEditBar:			
+		case R.id.btnNavigationRightWithText:			
 			startActivity(new Intent(getActivity().getApplicationContext(),EditProfileActivity.class));
 			break;		
 		}

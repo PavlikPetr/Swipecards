@@ -13,7 +13,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,9 +22,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class EditBackgroundFragment extends Fragment {
+public class EditBackgroundFragment extends AbstractEditFragment{
 	
 	private SharedPreferences mPreferences;	
 	private int mSelectedResId;
@@ -45,6 +45,7 @@ public class EditBackgroundFragment extends Fragment {
 		
 		mPreferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
 		mSelectedResId = CacheProfile.background_res_id;
+		
 		// Navigation bar		
 		((TextView) root.findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
 		TextView subTitle = (TextView) root.findViewById(R.id.tvNavigationSubtitle);
@@ -56,16 +57,27 @@ public class EditBackgroundFragment extends Fragment {
 		btnBack.setVisibility(View.VISIBLE);
 		btnBack.setText(R.string.navigation_edit);
 		btnBack.setOnClickListener(new OnClickListener() {
-			
 			@Override
-			public void onClick(View v) {
-				setChanges();
+			public void onClick(View v) {				
 				getActivity().finish();				
 			}
 		});
 		
-		mBackgroundImagesListView = (ListView) root.findViewById(R.id.lvList);
+		mSaveButton = (Button) root.findViewById(R.id.btnNavigationRightWithText);
+		mSaveButton.setVisibility(View.VISIBLE);
+		mSaveButton.setText(getResources().getString(R.string.navigation_save));
+		mSaveButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				saveChanges();
+			}
+		});
 		
+		mRightPrsBar = (ProgressBar) root.findViewById(R.id.prsNavigationRight);
+		
+		// List
+		mBackgroundImagesListView = (ListView) root.findViewById(R.id.lvList);		
 		mBackgroundImagesListView.setAdapter(new BackgroundImagesAdapter(getActivity().getApplicationContext(), getBackgroundImagesList()));
 		
 		return root;
@@ -80,6 +92,32 @@ public class EditBackgroundFragment extends Fragment {
 		}
 		
 		return result;
+	}
+	
+	private void setSelectedBackground(BackgroundItem item) {
+		if(item instanceof ResourceBackgroundItem) {			
+			mSelectedResId = ((ResourceBackgroundItem)item).getResourceId();
+		}
+	}
+		
+	@Override
+	protected void saveChanges() {
+		//TODO: make sending to server
+		if (hasChanges()) {						
+			prepareRequestSend();
+			CacheProfile.background_res_id = mSelectedResId;
+			mPreferences.edit().putInt(Static.PREFERENCES_PROFILE_BACKGROUND_RES_ID, mSelectedResId).commit();
+			getActivity().setResult(Activity.RESULT_OK);
+			finishRequestSend();
+		} else {
+			getActivity().setResult(Activity.RESULT_CANCELED);
+			finishRequestSend();
+		}
+	}		
+	
+	@Override
+	boolean hasChanges() {
+		return CacheProfile.background_res_id != mSelectedResId;
 	}
 	
 	class BackgroundImagesAdapter extends BaseAdapter {
@@ -157,30 +195,7 @@ public class EditBackgroundFragment extends Fragment {
 			ImageView mFrameImageView;
 			ViewGroup mSelected;
 		}
-	}
-	
-	private void setSelectedBackground(BackgroundItem item) {
-		if(item instanceof ResourceBackgroundItem) {			
-			mSelectedResId = ((ResourceBackgroundItem)item).getResourceId();
-		}
-	}
-	
-	private void setChanges() {
-		if (CacheProfile.background_res_id != mSelectedResId) {						
-			CacheProfile.background_res_id = mSelectedResId;
-			mPreferences.edit().putInt(Static.PREFERENCES_PROFILE_BACKGROUND_RES_ID, mSelectedResId).commit();
-			getActivity().setResult(Activity.RESULT_OK);
-		} else {
-			getActivity().setResult(Activity.RESULT_CANCELED);
-		}
-	}
-	
-	
-	@Override
-	public void onDestroy() {
-		setChanges();
-		super.onDestroy();
-	}
+	}	
 	
 	interface BackgroundItem {
 		public Bitmap getBitmap();
@@ -189,7 +204,6 @@ public class EditBackgroundFragment extends Fragment {
 	}
 	
 	class ResourceBackgroundItem implements BackgroundItem{
-		
 		private Bitmap mBitmap;
 		private boolean selected;
 		private int mResId;		
@@ -238,5 +252,5 @@ public class EditBackgroundFragment extends Fragment {
 			this.selected = selected;
 			return (BackgroundItem) this;
 		}		
-	}
+	}	
 }
