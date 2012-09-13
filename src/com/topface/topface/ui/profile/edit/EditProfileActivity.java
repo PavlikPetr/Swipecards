@@ -410,7 +410,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 			Intent intent = new Intent(getApplicationContext(), EditContainerActivity.class);
 			intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, mFormItem.titleId);
 			intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, mFormItem.dataId);
-			intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, mFormItem.data);
+			intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, mFormItem.value);
 			startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_FORM_ITEM);
 		}
 	}

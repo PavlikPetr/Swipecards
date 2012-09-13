@@ -8,7 +8,7 @@ public class FormItem implements Serializable {
     // Data
     public int type;
     public String title;    
-    public String data;
+    public String value;
     public boolean equal;
     
     public int titleId = NO_RESOURCE_ID;
@@ -28,7 +28,7 @@ public class FormItem implements Serializable {
     public FormItem(int titleId, int type) {
     	this.titleId = titleId;    	
     	this.type = type;
-    	this.data = Static.EMPTY;
+    	this.value = Static.EMPTY;
     	this.dataId = NO_RESOURCE_ID;
     	this.equal = false;
     }
@@ -42,7 +42,7 @@ public class FormItem implements Serializable {
     
     public FormItem(int titleId, String data, int type) {
     	this.titleId = titleId;
-    	this.data = data;
+    	this.value = data;
     	this.dataId = NO_RESOURCE_ID;
     	this.type = type;
     	this.equal = false;
@@ -50,7 +50,7 @@ public class FormItem implements Serializable {
     
     private FormItem(int type) {
     	this.type = type;
-    	this.data = Static.EMPTY;
+    	this.value = Static.EMPTY;
     	this.dataId = NO_RESOURCE_ID;
     	this.title = Static.EMPTY;
     	this.titleId = NO_RESOURCE_ID;

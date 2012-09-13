@@ -34,7 +34,7 @@ public class FormInfo {
     // =============================== Common methods ===============================
     public void fillFormItem(FormItem formItem) {
     	String title = formItem.title;
-    	String data = formItem.data;
+    	String data = formItem.value;
     	try {
 	    	switch (formItem.type) {
 			case FormItem.DATA:
@@ -50,7 +50,7 @@ public class FormInfo {
     		
     	} finally {
     		formItem.title = title;
-    		formItem.data = data;
+    		formItem.value = data;
     	}
     }
 
@@ -197,7 +197,7 @@ public class FormInfo {
     }
     
     public QuestionaryRequest getFormRequest(FormItem item) {
-    	return getFormRequest(item.titleId, item.dataId, item.data);
+    	return getFormRequest(item.titleId, item.dataId, item.value);
     }
     
     public int getInputType(int titleId) {
