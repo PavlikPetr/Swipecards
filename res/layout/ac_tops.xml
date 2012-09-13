@@ -19,6 +19,8 @@
         android:layout_below="@id/loNavigationBar"
         android:orientation="vertical" >
 
+        <include layout="@layout/leaders"/>
+
         <!-- button bar -->
         <include layout="@layout/bar_tops_button" />
 
@@ -38,11 +40,7 @@
             android:verticalSpacing="0px" >
         </GridView>
 
-        <ImageView
-            android:id="@+id/ivBanner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible" />
+        <include layout="@layout/banner"/>
     </LinearLayout>
 
     <com.topface.topface.ui.views.LockerView

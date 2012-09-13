@@ -1,31 +1,5 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
-
-import com.topface.topface.Data;
-import com.topface.topface.R;
-import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.Static;
-import com.topface.topface.data.Confirmation;
-import com.topface.topface.data.Dialog;
-import com.topface.topface.data.History;
-import com.topface.topface.data.SendGiftAnswer;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.CoordinatesRequest;
-import com.topface.topface.requests.HistoryRequest;
-import com.topface.topface.requests.MessageRequest;
-import com.topface.topface.requests.SendGiftRequest;
-import com.topface.topface.ui.adapters.ChatListAdapter;
-import com.topface.topface.ui.profile.UserProfileActivity;
-import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.ui.views.SwapControl;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.GeoLocationManager;
-import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
-import com.topface.topface.utils.http.Http;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -40,12 +14,28 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.data.Confirmation;
+import com.topface.topface.data.Dialog;
+import com.topface.topface.data.History;
+import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.requests.*;
+import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.profile.UserProfileActivity;
+import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.SwapControl;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.GeoLocationManager;
+import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
+import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.http.Http;
+
+import java.util.LinkedList;
 
 public class ChatActivity extends BaseFragmentActivity implements View.OnClickListener, LocationListener {
     // Data
@@ -75,6 +65,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_URL = "user_url";
     public static final String INTENT_USER_NAME = "user_name";
+    public static final String INTENT_USER_AVATAR = "user_avatar";
     public static final String INTENT_USER_SEX = "user_sex";
     public static final String INTENT_USER_AGE = "user_age";    
     public static final String INTENT_USER_CITY = "user_city";

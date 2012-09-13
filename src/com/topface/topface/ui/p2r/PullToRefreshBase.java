@@ -189,7 +189,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
 	/**
 	 * A mutator to enable/disable Pull-to-Refresh for the current View
 	 * 
-	 * @param enable
+	 * @param enabled
 	 *            Whether Pull-To-Refresh should be used
 	 */
 	public final void setPullToRefreshEnabled(boolean enabled) {

@@ -1,7 +1,11 @@
 package com.topface.topface.ui;
 
 import java.util.LinkedList;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -72,6 +76,12 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 intent.putExtra(INTENT_CITY_ID, mDataList.get(position).id);
                 intent.putExtra(INTENT_CITY_NAME, mDataList.get(position).name);
 
+                SharedPreferences.Editor editor = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE).edit();
+                editor.putInt(Static.PREFERENCES_TOPS_CITY_ID, mDataList.get(position).id);
+                editor.putString(Static.PREFERENCES_TOPS_CITY_NAME, mDataList.get(position).name);
+                editor.putInt(Static.PREFERENCES_TOPS_CITY_POS, -1);
+                editor.commit();
+                
                 Debug.log(CitySearchActivity.this, "1.city_id:" + mDataList.get(position).id);
 
                 CitySearchActivity.this.setResult(RESULT_OK, intent);
@@ -177,7 +187,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
     //---------------------------------------------------------------------------
     @Override
-    protected void onDestroy() {        
+    protected void onDestroy() {
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.topface.topface"
-    android:installLocation="preferExternal"
-    android:versionCode="26"
-    android:versionName="2.0" >    
+          package="com.topface.topface"
+          android:installLocation="auto"
+          android:versionCode="30"
+          android:versionName="1.5.4">
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
 
@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
+    <!--uses-permission android:name="android.permission.READ_CONTACTS" /-->
 
     <application 
         android:name=".App"
@@ -53,7 +54,10 @@
         <activity android:name=".ui.ChatActivity" />
         <activity android:name=".ui.GiftsActivity"/>
         <activity android:name=".billing.BuyingActivity" android:screenOrientation="portrait" />
-
+        <activity android:name=".ui.InviteActivity"/>
+        <activity android:name=".ui.LeadersActivity"/>
+        <activity android:name=".ui.SettingsActivity"/>
+        
         <!-- services -->
         <service android:name=".services.NotificationService"/>
         <service android:name=".services.ConnectionService"/>

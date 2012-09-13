@@ -13,11 +13,12 @@ public class Banner extends AbstractData {
     // Constants
     public static final String ACTION_URL = "URL";
     public static final String ACTION_PAGE = "PAGE";
+    public static final String INVITE_PAGE = "INVITE_PAGE";
 
     public static Banner parse(ApiResponse response) {
         Banner banner = new Banner();
 
-        try {
+        try {§
             JSONObject item = response.mJSONResult;
             banner.name = item.optString("name");
             banner.url = item.optString("url");
@@ -29,5 +30,4 @@ public class Banner extends AbstractData {
 
         return banner;
     }
-
 }

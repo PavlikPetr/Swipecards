@@ -53,4 +53,13 @@
   <string name="s_profile_valuables">profile_valuables</string>
   <string name="s_profile_aspirations">profile_aspirations</string>
 
+  <!-- settings -->
+  <string name="s_settings">profile_settings</string>
+  <string name="settings_preloading_wifi">wifi</string>
+  <string name="settings_preloading_on">on</string>
+  <string name="settings_preloading_off">off</string>
+  <string name="settings_preloading_type_user">user</string>
+  <string name="settings_preloading_type_photo">photo</string>
+  <string name="settings_preloading_type_all">all</string>
+
 </resources>

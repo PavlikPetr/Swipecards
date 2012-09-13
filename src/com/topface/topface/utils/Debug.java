@@ -1,7 +1,7 @@
 package com.topface.topface.utils;
 
-import com.topface.topface.App;
 import android.util.Log;
+import com.topface.topface.App;
 
 public class Debug {
 
@@ -24,8 +24,13 @@ public class Debug {
 
     public static void error(String msg, Exception e) {
         if (App.DEBUG) {
-            Log.e(App.TAG, msg + " :: " + e.getMessage());
-            e.printStackTrace();
+            StringBuilder stack = new StringBuilder("\n");
+            for (StackTraceElement st : e.getStackTrace()) {
+                stack.append(st.toString()).append("\n");
+            }
+            msg = msg != null && !msg.equals("") ? msg + " : " : "";
+            String errorText = e.getMessage() == null ? "" : " :: " + e.getMessage();
+            Log.e(App.TAG, msg + errorText + stack.toString());
         }
     }
 
@@ -36,9 +41,6 @@ public class Debug {
     }
 
     public static void error(Exception e) {
-        if (App.DEBUG) {
-            Log.e(App.TAG, e.getMessage());
-            e.printStackTrace();
-        }
+        error(null, e);
     }
 }

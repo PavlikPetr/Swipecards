@@ -196,6 +196,6 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
             Debug.log("BuyingActivity", "onRestoreTransactionsResponse");
         }
     }// TopfacePurchaseObserver
-     //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
 }// BuyingActivity
 

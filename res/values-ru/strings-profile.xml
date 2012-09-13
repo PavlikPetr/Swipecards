@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="profile_form_empty">–</string>
     
     <!-- Education ******************************************************************************** -->
     <string-array name="profile_form_education_male">

@@ -1,21 +1,30 @@
 package com.topface.topface.utils;
 
-import java.io.FileNotFoundException;
-import java.security.MessageDigest;
-import java.util.Calendar;
-import android.graphics.*;
-import android.text.ClipboardManager;
-import com.topface.topface.Data;
-import com.topface.topface.R;
-import com.topface.topface.Static;
+import android.app.Application;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
+import android.text.ClipboardManager;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.topface.i18n.plurals.PluralResources;
+import com.topface.topface.App;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+
+import java.security.MessageDigest;
+import java.util.Calendar;
 
 public class Utils {
+    private static PluralResources mPluralResources;
+    
     //---------------------------------------------------------------------------
     public static int unixtime() {
         return (int) (System.currentTimeMillis() / 1000L);
@@ -25,7 +34,7 @@ public class Utils {
         if (value == null)
             return null;
         try {
-            StringBuffer hexString = new StringBuffer();
+            StringBuilder hexString = new StringBuilder();
             MessageDigest digester = MessageDigest.getInstance("MD5");
             digester.update(value.getBytes());
             byte[] bytes = digester.digest();
@@ -95,32 +104,7 @@ public class Utils {
 
         return clippedBitmap;
     }
-    //---------------------------------------------------------------------------
-    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int dstWidth, int dstHeight, int roundPx) {
-        if (dstWidth < dstHeight)
-            dstHeight = dstWidth;
-        else
-            dstWidth = dstHeight;
 
-        Bitmap output = Bitmap.createBitmap(dstWidth, dstHeight, Config.ARGB_8888);
-
-        Bitmap clippedBitmap = clipAndScaleBitmap(bitmap, dstWidth, dstHeight);
-
-        Canvas canvas = new Canvas(output);
-
-        final Rect rect = new Rect(0, 0, dstWidth, dstHeight);
-        final RectF rectF = new RectF(rect);
-        final Paint paint = new Paint();
-
-        paint.setAntiAlias(true);
-        paint.setColor(0xff424242);
-        canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-        canvas.drawBitmap(clippedBitmap, rect, rect, paint);
-
-        return output;
-    }
     //---------------------------------------------------------------------------
     public static Bitmap getRoundedCornerBitmapByMask(Bitmap bitmap, Bitmap mask) {
         int width  = mask.getWidth();
@@ -260,51 +244,7 @@ public class Utils {
         
         return text;
     }
-    //---------------------------------------------------------------------------
-    public static void formatTimeOld(TextView tv, long time) {
-        Context context = tv.getContext();
-        String text;
-        long now = System.currentTimeMillis() / 1000; // передумать
-        long full_time = time * 1000;
-        long t = now - time;
-        if ((time > now) || t < 60)
-            text = context.getString(R.string.time_now);
-        else if (t < 3600)
-            text = formatMinute(context, t / 60);
-        else if (t < 6 * 3600)
-            text = formatHour(context, t / 3600);
-        else if (DateUtils.isToday(full_time))
-            text = context.getString(R.string.time_today) + DateFormat.format(" kk:mm", full_time).toString();
-        else {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            if (full_time > (now - (now - cal.getTimeInMillis()) - (24 * 60 * 60 * 1000)))
-                text = context.getString(R.string.time_yesterday) + DateFormat.format(" kk:mm", full_time).toString();
-            else
-                text = DateFormat.format("dd.MM.yyyy kk:mm", full_time).toString();
-        }
-        tv.setText(text);
-    }
-    //---------------------------------------------------------------------------
-    public static String formatHour(Context context, long hours) {
-        byte caseValue = 0;
-        if ((hours < 11) || (hours > 19)) {
-            if (hours % 10 == 1)
-                caseValue = 1;
-            if ((hours % 10 == 2) || (hours % 10 == 3) || (hours % 10 == 4))
-                caseValue = 2;
-        }
-        switch (caseValue) {
-            case 1:
-                return String.format(context.getString(R.string.time_hour_0), hours);
-            case 2:
-                return String.format(context.getString(R.string.time_hour_1), hours);
-            default:
-                return String.format(context.getString(R.string.time_hours), hours);
-        }
-    }
-    //---------------------------------------------------------------------------
+
     public static String formatMinute(Context context, long minutes) {
         byte caseValue = 0;
         if ((minutes < 11) || (minutes > 19)) {
@@ -394,6 +334,43 @@ public class Utils {
         return context.getString(resurseId);
     }
     //---------------------------------------------------------------------------
+    public static void formatTimeOld(TextView tv, long time) {
+        Context context = tv.getContext();
+        String text;
+        long now = unixtime();
+        long full_time = time * 1000;
+        long t = now - time;
+        if ((time > now) || t < 60)
+            text = context.getString(R.string.time_now);
+        else if (t < 3600)
+            text = formatMinute(t / 60);
+        else if (t < 6 * 3600)
+            text = formatHour(t / 3600);
+        else if (DateUtils.isToday(full_time))
+            text = context.getString(R.string.time_today) + DateFormat.format(" kk:mm", full_time).toString();
+        else {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            if (full_time > (now - (now - cal.getTimeInMillis()) - (24 * 60 * 60 * 1000)))
+                text = context.getString(R.string.time_yesterday) + DateFormat.format(" kk:mm", full_time).toString();
+            else
+                text = DateFormat.format("dd.MM.yyyy kk:mm", full_time).toString();
+        }
+        tv.setText(text);
+    }
+
+    
+    public static String formatHour(long hours) {
+        return Utils.getQuantityString(R.plurals.time_hour, (int) hours, (int) hours);
+    }
+
+    
+    public static String formatMinute(long minutes) {
+        return Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
+    }
+
+    @SuppressWarnings("ConstantConditions")
     public static int getBatteryResource(int power) {
         int n = 50 * CacheProfile.power / 100;
         switch (n) {
@@ -503,37 +480,42 @@ public class Utils {
                 return R.drawable.battery_50;
         }
     }
-    //---------------------------------------------------------------------------
-    /**
-     * Возвращает делитель, во сколько раз уменьшить размер изображения при создании битмапа
-     *
-     * @param options   InputStrem к изображению, для того, что бы получить его размеры, не загружая его в память
-     * @param size размер до которого нужно уменьшить
-     * @return делитель размера битмапа
-     * @throws java.io.FileNotFoundException
-     */
-    public static int getBitmapScale(BitmapFactory.Options options, int size) throws FileNotFoundException {
-        //1 по умолчанию, значит что битмап нет необходимости уменьшать
-        int scale = 1;
-
-        //Определяем во сколько раз нужно уменьшить изображение для создания битмапа
-        if (/*options.outHeight > size || */options.outWidth > size) {
-            scale = (int) Math.pow(2,
-                    (int) Math.round(
-                            Math.log(
-                                    size /
-                                    (double) Math.max(options.outHeight, options.outWidth)
-                            ) /
-                            Math.log(0.5)
-                    )
-            );
-        }
-
-        return scale;
-    }
 
     public static void copyTextToClipboard(String text, Context context) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setText(text);
-    }    
+    }
+
+    public static String getQuantityString(int id, int quantity, Object... formatArgs) {
+        try {
+            mPluralResources = new PluralResources(App.getContext().getResources());
+        } catch (Exception e) {
+            Debug.error("Plural resources error", e);
+        }
+        return mPluralResources.getQuantityString(id, quantity, formatArgs);
+    }
+
+    public static void showErrorMessage(Context context) {
+        Toast.makeText(
+                context,
+                context.getString(R.string.general_data_error),
+                Toast.LENGTH_SHORT
+        ).show();
+    }
+
+    public static boolean isDebugMode(Application application){
+        boolean debug = false;
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = application.getPackageManager().getPackageInfo(application.getPackageName(),
+                    PackageManager.GET_CONFIGURATIONS);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageInfo != null) {
+            int flags = packageInfo.applicationInfo.flags;
+            debug = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        }
+        return debug;
+    }
 }

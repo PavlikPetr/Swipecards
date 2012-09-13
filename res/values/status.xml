@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="profile_form_empty">–</string>
-    
     <!-- Education ******************************************************************************** -->
     <string-array name="profile_form_education_male">
         <item>High school</item>
@@ -139,28 +137,7 @@
         <item>5</item>
         <item>6</item>
     </integer-array>
-    
-    <!-- Job ******************************************************************************** -->
-    <string name="profile_form_job_male_2">Студент</string>
-    <string name="profile_form_job_male_3">Школьник</string>
-    <string name="profile_form_job_male_4">Офисный работник</string>
-    <string name="profile_form_job_male_5">Госслужащий</string>
-    <string name="profile_form_job_male_6">Работяга</string>
-    <string name="profile_form_job_male_7">Бизнесмен</string>
-    <string name="profile_form_job_male_8">Военный</string>
-    <string name="profile_form_job_male_9">Ученый</string>
-    <string name="profile_form_job_male_10">Бездельник</string>
-    
-    <string name="profile_form_job_female_2">Студентка</string>
-    <string name="profile_form_job_female_3">Школьница</string>
-    <string name="profile_form_job_female_4">Офисная работница</string>
-    <string name="profile_form_job_female_5">Менеджер</string>
-    <string name="profile_form_job_female_6">Госслужащая</string>
-    <string name="profile_form_job_female_7">Бизнесвумен</string>
-    <string name="profile_form_job_female_8">Ученая</string>
-    <string name="profile_form_job_female_9">Домохозяйка</string>
-    <string name="profile_form_job_female_10">Бездельница</string>
-    
+
     <!-- Marriage ******************************************************************************** -->   
     <string-array name="profile_form_marriage_male">
         <item>Not yet</item>

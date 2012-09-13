@@ -1,10 +1,12 @@
 package com.topface.topface.utils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import com.topface.topface.data.Profile;
 import android.content.Context;
 import android.util.SparseArray;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
+
+import java.util.HashMap;
+import java.util.LinkedList;
 
 /* Cache Profile */
 public class CacheProfile  {
@@ -244,5 +246,19 @@ public class CacheProfile  {
         photoLinks = profile.photoLinks;
         status = profile.status;
 //        isNewbie = profile.isNewbie;
+
+    }
+
+    /**
+     * Опции по умолчанию
+     */
+    private static Options options;
+
+    public static Options getOptions() {
+        return options;
+    }
+
+    public static void setOptions(Options newOptions) {
+        options = newOptions;
     }
 }

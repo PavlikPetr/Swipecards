@@ -8,6 +8,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Settings;
 
 public class C2DMReceiver extends C2DMBaseReceiver {
     // Data
@@ -49,11 +50,12 @@ public class C2DMReceiver extends C2DMBaseReceiver {
     //---------------------------------------------------------------------------
     @Override
     protected void onMessage(Context context,Intent receiveIntent) {
-        String data = receiveIntent.getStringExtra("text");
-        Debug.log("onMessage", data);
-        C2DMUtils.showNotification(data, context);
+    if (Settings.getInstance().isNotificationEnabled()) {
+        C2DMUtils.showNotification(receiveIntent, context);
+    }
         //Сообщаем о том что есть новое уведомление и нужно обновить список игр
         Intent broadcastReceiver = new Intent(C2DMUtils.C2DM_NOTIFICATION);
+    broadcastReceiver.putExtra("id", receiveIntent.getStringExtra("id"));
         context.sendBroadcast(broadcastReceiver);
     }
     //---------------------------------------------------------------------------
