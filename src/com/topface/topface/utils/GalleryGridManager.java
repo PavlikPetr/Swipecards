@@ -45,7 +45,7 @@ public class GalleryGridManager<T extends AbstractData> {
 
     public void getImage(final int position, final ImageView imageView) {
         final String smallLink = mDataList.get(position).getSmallLink();
-        DefaultImageLoader.getInstance().displayImage(smallLink, imageView, mPostProcessor);
+        DefaultImageLoader.getInstance().displayImage(smallLink, imageView, null, null, mPostProcessor);
     }
 
     public void release() {

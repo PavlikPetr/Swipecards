@@ -133,7 +133,9 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
         }
 
         updateProfile();
-        updateOptions();
+        if (!CacheProfile.isOptionsLoaded()) {
+            updateOptions();
+        }
     }
 
     private void updateOptions() {
@@ -141,7 +143,7 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
             @Override
             public void success(ApiResponse response) throws NullPointerException {
                 Options options = Options.parse(response);
-                CacheProfile.setOptions(options);
+                CacheProfile.setOptions(options, response.mJSONResult);
             }
         }).exec();
     }

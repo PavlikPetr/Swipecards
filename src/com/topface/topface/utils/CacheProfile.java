@@ -1,10 +1,17 @@
 package com.topface.topface.utils;
 
-import java.util.LinkedList;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import com.topface.topface.App;
 import com.topface.topface.data.Album;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
-import android.content.Context;
+import com.topface.topface.requests.ApiResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
 
 /*
  *   Cache Profile
@@ -56,7 +63,9 @@ public class CacheProfile {
   public static LinkedList<Album> albums; // альбом пользователя
   public static String status;            // статус пользователя
   public static boolean isNewbie;         // поле новичка
-  //---------------------------------------------------------------------------
+  public static final String OPTIONS_CACHE_KEY = "options_cache";
+
+    //---------------------------------------------------------------------------
   public static boolean init(Context context) {
     try {
       //SharedPreferences preferences = context.getSharedPreferences(Global.PROFILE_PREFERENCES_TAG, Context.MODE_PRIVATE);
@@ -210,11 +219,46 @@ public class CacheProfile {
    */
   private static Options options;
 
+    /**
+     * Данные из сервиса options
+     * @return
+     */
   public static Options getOptions() {
+      if (options == null) {
+          SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+          String optionsCache = preferences.getString(OPTIONS_CACHE_KEY, null);
+          if (optionsCache != null) {
+              //Получаем опции из кэша
+              try {
+                  options = Options.parse(
+                          new ApiResponse(
+                                  new JSONObject(optionsCache)
+                          )
+                  );
+              }
+              catch (JSONException e) {
+                  Debug.error(e);
+              }
+          }
+
+          if (options == null) {
+              //Если по каким то причинам кэша нет и опции нам в данный момент взять негде.
+              //то просто используем их по умолчанию
+              options = new Options();
+          }
+      }
       return options;
   }
 
-  public static void setOptions(Options newOptions) {
+  public static boolean isOptionsLoaded() {
+      return options != null;
+  }
+
+  public static void setOptions(Options newOptions, JSONObject response) {
       options = newOptions;
+      //Каждый раз не забываем кешировать запрос опций
+      SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
+      editor.putString(OPTIONS_CACHE_KEY, response.toString());
+      editor.commit();
   }
 }
