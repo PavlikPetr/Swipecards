@@ -1,6 +1,20 @@
 package com.topface.topface.ui.fragments;
 
-import java.util.LinkedList;
+import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.*;
+import android.widget.AdapterView.OnItemClickListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Recycle;
@@ -15,29 +29,14 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.adapters.LikesListAdapter;
-import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
-import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SwapAnimation;
-import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+
+import java.util.LinkedList;
 
 public class LikesFragment extends BaseFragment {
 	// Data
@@ -155,12 +154,12 @@ public class LikesFragment extends BaseFragment {
 						}
 					}
 				});
-		mListView.setOnRefreshListener(new OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				updateData(true);
-			}
-		});
+		mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase refreshView) {
+                updateData(true);
+            }
+        });
 
 		// Control creating
 		mAvatarManager = new AvatarManager<FeedLike>(getActivity(),
@@ -178,7 +177,7 @@ public class LikesFragment extends BaseFragment {
 		mListView.setOnScrollListener(mAvatarManager);
 		mListView.setAdapter(mListAdapter);
 
-		mNewUpdating = CacheProfile.unread_likes > 0 ? true : false;
+		mNewUpdating = CacheProfile.unread_likes > 0;
 
 		return view;
 	}

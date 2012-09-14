@@ -1,14 +1,5 @@
 package com.topface.topface.data;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.util.LinkedList;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.content.Context;
 import android.widget.Toast;
 import com.topface.topface.App;
@@ -18,6 +9,11 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.*;
+import java.util.LinkedList;
 
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos implements Serializable {
@@ -90,8 +86,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
     private static final long serialVersionUID  = 2748391675222256671L;
     
     public static Profile parse(ApiResponse response) {
-        Profile profile = parse(new Profile(), response.mJSONResult);
-        return profile;
+        return parse(new Profile(), response.mJSONResult);
     }
     protected static Profile parse(Profile profile, JSONObject resp) {
         try {
@@ -171,7 +166,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 FormInfo formInfo = new FormInfo(context, profile);
                 
 
-                FormItem formItem = null;
+                FormItem formItem;
                 
                 // или через конструктор инициализировать ?
 
@@ -468,7 +463,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
 
     public int getUid() {
         return uid;
-    };
+    }
 
     @Override
     public String getLargeLink() {
@@ -512,7 +507,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 if(br != null) br.close();
             } catch(IOException e) {}
         }
-        JSONObject json = null;
+        JSONObject json;
         try {
             json = new JSONObject(sb.toString());
         } catch(JSONException e) {
