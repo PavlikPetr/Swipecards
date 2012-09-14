@@ -17,6 +17,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
     // Data
     private LayoutInflater mInflater;
     private LinkedList<FormItem> mProfileForms;
+    private View.OnClickListener mOnFillListener;
     
     // Constants
     private static final int T_HEADER  = 0;
@@ -123,6 +124,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
                 } else {
                     holder.mValue.setVisibility(View.INVISIBLE);
                     holder.mFill.setVisibility(View.VISIBLE);
+                    holder.mFill.setOnClickListener(mOnFillListener);
                 }
                 holder.mState.setImageResource(R.drawable.user_cell);
                 break;
@@ -130,4 +132,9 @@ public class ProfileFormListAdapter extends BaseAdapter {
         
         return convertView;
     }
+    
+    public void setOnFillListener(View.OnClickListener onFillListener) {
+        mOnFillListener = onFillListener;
+    }
 }
+

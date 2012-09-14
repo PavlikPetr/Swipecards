@@ -5,7 +5,7 @@ import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
-import com.topface.topface.ui.profile.EditProfileActivity;
+import com.topface.topface.ui.profile.edit.EditProfileActivity;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -30,6 +30,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProfileFragment extends BaseFragment implements OnClickListener{
     //Data
@@ -53,7 +54,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     private View mUserPowerBkgd;
     
     private ProfilePhotoFragment mPhotoFragment;
-    private ProfileFormFragment mFormFragment;
+    private ProfileFormFragment  mFormFragment;
    
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
@@ -70,7 +71,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 		
         // Home Button
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
-        Button editButton = (Button)view.findViewById(R.id.btnNavigationEditBar);
+        Button editButton = (Button)view.findViewById(R.id.btnNavigationRightWithText);
         editButton.setVisibility(View.VISIBLE);
         editButton.setText(getResources().getString(R.string.navigation_edit));
         editButton.setOnClickListener(this);
@@ -275,9 +276,9 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     @Override
     public void onClick(View v) {
     	switch (v.getId()) {
-		case R.id.btnNavigationEditBar:			
+		case R.id.btnNavigationRightWithText:			
 			startActivity(new Intent(getActivity().getApplicationContext(),EditProfileActivity.class));
-			break;		
+			break;
 		}
     	
     }

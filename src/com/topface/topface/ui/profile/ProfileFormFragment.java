@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProfileFormFragment extends Fragment {
     private ProfileFormListAdapter mProfilePhotoListAdapter;
@@ -17,6 +18,7 @@ public class ProfileFormFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mProfilePhotoListAdapter = new ProfileFormListAdapter(getActivity().getApplicationContext());
+        mProfilePhotoListAdapter.setOnFillListener(mOnFillClickListener);
     }
     
     @Override
@@ -30,4 +32,11 @@ public class ProfileFormFragment extends Fragment {
         
         return root;
     }
+    
+    View.OnClickListener mOnFillClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getActivity(), "fill me", Toast.LENGTH_SHORT).show();
+        }
+    };
 }

@@ -15,6 +15,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.adapters.LikesListAdapter;
+import com.topface.topface.ui.p2r.PullToRefreshBase;
 import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.UserProfileActivity;
@@ -156,10 +157,10 @@ public class LikesFragment extends BaseFragment {
 					}
 				});
 		mListView.setOnRefreshListener(new OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				updateData(true);
-			}
+            @Override
+            public void onRefresh(PullToRefreshBase refreshView) {
+                updateData(true);
+            }
 		});
 
 		// Control creating
@@ -167,8 +168,9 @@ public class LikesFragment extends BaseFragment {
 				Data.likesList, new Handler() {
 					@Override
 					public void handleMessage(Message msg) {
-						if (Data.likesList.getLast().isLoader() && !mIsUpdating)
-							updateDataHistory();
+					    if (Data.likesList.size() > 0)
+						    if (Data.likesList.getLast().isLoader() && !mIsUpdating)
+							    updateDataHistory();
 
 						super.handleMessage(msg);
 					}
@@ -176,7 +178,7 @@ public class LikesFragment extends BaseFragment {
 		mListAdapter = new LikesListAdapter(getActivity(),
 				mAvatarManager);
 		mListView.setOnScrollListener(mAvatarManager);
-		mListView.setAdapter(mListAdapter);
+		mListView.getRefreshableView().setAdapter(mListAdapter);
 
 		mNewUpdating = CacheProfile.unread_likes > 0 ? true : false;
 

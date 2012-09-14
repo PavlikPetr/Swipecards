@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile;
+package com.topface.topface.ui.profile.edit;
 
 import java.util.LinkedList;
 
@@ -22,9 +22,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class EditBackgroundPhotoActivity extends Activity {
+public class EditBackgroundFragment extends AbstractEditFragment{
 	
 	private SharedPreferences mPreferences;	
 	private int mSelectedResId;
@@ -37,35 +38,50 @@ public class EditBackgroundPhotoActivity extends Activity {
 	};
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {	
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.ac_edit_background_photo);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+	
+		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container, false);
 		
-		mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+		mPreferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
 		mSelectedResId = CacheProfile.background_res_id;
+		
 		// Navigation bar		
-		((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-		TextView subTitle = (TextView) findViewById(R.id.tvNavigationSubtitle);
+		((TextView) root.findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
+		TextView subTitle = (TextView) root.findViewById(R.id.tvNavigationSubtitle);
 		subTitle.setVisibility(View.VISIBLE);
 		subTitle.setText(R.string.edit_bg_photo);
 		
-		((Button)findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);		
-		Button btnBack = (Button)findViewById(R.id.btnNavigationBackWithText);
+		((Button)root.findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);		
+		Button btnBack = (Button)root.findViewById(R.id.btnNavigationBackWithText);
 		btnBack.setVisibility(View.VISIBLE);
 		btnBack.setText(R.string.navigation_edit);
 		btnBack.setOnClickListener(new OnClickListener() {
-			
 			@Override
-			public void onClick(View v) {
-				setChanges();
-				finish();				
+			public void onClick(View v) {				
+				getActivity().finish();				
 			}
 		});
 		
-		mBackgroundImagesListView = (ListView) findViewById(R.id.lvBackgroundImages);
+		mSaveButton = (Button) root.findViewById(R.id.btnNavigationRightWithText);
+		mSaveButton.setVisibility(View.VISIBLE);
+		mSaveButton.setText(getResources().getString(R.string.navigation_save));
+		mSaveButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				saveChanges();
+			}
+		});
 		
-		mBackgroundImagesListView.setAdapter(new BackgroundImagesAdapter(getApplicationContext(), getBackgroundImagesList()));
-	}
+		mRightPrsBar = (ProgressBar) root.findViewById(R.id.prsNavigationRight);
+		
+		// List
+		mBackgroundImagesListView = (ListView) root.findViewById(R.id.lvList);		
+		mBackgroundImagesListView.setAdapter(new BackgroundImagesAdapter(getActivity().getApplicationContext(), getBackgroundImagesList()));
+		
+		return root;
+	}	
 	
 	private LinkedList<BackgroundItem> getBackgroundImagesList() {
 		LinkedList<BackgroundItem> result = new LinkedList<BackgroundItem>();
@@ -76,6 +92,32 @@ public class EditBackgroundPhotoActivity extends Activity {
 		}
 		
 		return result;
+	}
+	
+	private void setSelectedBackground(BackgroundItem item) {
+		if(item instanceof ResourceBackgroundItem) {			
+			mSelectedResId = ((ResourceBackgroundItem)item).getResourceId();
+		}
+	}
+		
+	@Override
+	protected void saveChanges() {
+		//TODO: make sending to server
+		if (hasChanges()) {						
+			prepareRequestSend();
+			CacheProfile.background_res_id = mSelectedResId;
+			mPreferences.edit().putInt(Static.PREFERENCES_PROFILE_BACKGROUND_RES_ID, mSelectedResId).commit();
+			getActivity().setResult(Activity.RESULT_OK);
+			finishRequestSend();
+		} else {
+			getActivity().setResult(Activity.RESULT_CANCELED);
+			finishRequestSend();
+		}
+	}		
+	
+	@Override
+	boolean hasChanges() {
+		return CacheProfile.background_res_id != mSelectedResId;
 	}
 	
 	class BackgroundImagesAdapter extends BaseAdapter {
@@ -153,29 +195,7 @@ public class EditBackgroundPhotoActivity extends Activity {
 			ImageView mFrameImageView;
 			ViewGroup mSelected;
 		}
-	}
-	
-	private void setSelectedBackground(BackgroundItem item) {
-		if(item instanceof ResourceBackgroundItem) {			
-			mSelectedResId = ((ResourceBackgroundItem)item).getResourceId();
-		}
-	}
-	
-	private void setChanges() {
-		if (CacheProfile.background_res_id != mSelectedResId) {						
-			CacheProfile.background_res_id = mSelectedResId;
-			mPreferences.edit().putInt(Static.PREFERENCES_PROFILE_BACKGROUND_RES_ID, mSelectedResId).commit();
-			setResult(Activity.RESULT_OK);
-		} else {
-			setResult(Activity.RESULT_CANCELED);
-		}
-	}
-	
-	@Override
-	protected void onDestroy() {
-		setChanges();
-		super.onDestroy();
-	}
+	}	
 	
 	interface BackgroundItem {
 		public Bitmap getBitmap();
@@ -184,7 +204,6 @@ public class EditBackgroundPhotoActivity extends Activity {
 	}
 	
 	class ResourceBackgroundItem implements BackgroundItem{
-		
 		private Bitmap mBitmap;
 		private boolean selected;
 		private int mResId;		
@@ -215,7 +234,7 @@ public class EditBackgroundPhotoActivity extends Activity {
 	class BitmapBackgroundItem implements BackgroundItem{
 		
 		private Bitmap mBitmap;
-		private boolean selected;		
+		private boolean selected;
 		
 		public BitmapBackgroundItem(Bitmap bitmap) {
 			mBitmap = bitmap;
@@ -233,5 +252,5 @@ public class EditBackgroundPhotoActivity extends Activity {
 			this.selected = selected;
 			return (BackgroundItem) this;
 		}		
-	}
+	}	
 }
