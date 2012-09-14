@@ -163,10 +163,14 @@
 	  <!--  EditProfileActivity -->
 	  <string name="edit_title">Редактирование</string>
 	  <string name="edit_bg_photo">Фоновая фотография</string>
+	  <string name="edit_album">Альбом</string>
 	  <string name="edit_profile_photo">Поменять фото</string>
 	  <string name="edit_album_photos">фотографий</string>
 	  <string name="edit_interests">интересов</string>
 	  <string name="edit_back_photo_selected">Выбрана</string>
+	  <string name="edit_name">Имя</string>
+	  <string name="edit_age">Возраст</string>
+	  <string name="edit_status">Статус</string>
 	  
 	  <!-- Album, Ero Album Activity -->
 	  <string name="album_header_title">Альбом</string>

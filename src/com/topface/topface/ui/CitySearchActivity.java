@@ -14,9 +14,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -47,13 +49,26 @@ public class CitySearchActivity extends BaseFragmentActivity {
         setContentView(R.layout.ac_city);
         Debug.log(this, "+onCreate");
 
+        overridePendingTransition(R.anim.slide_in_from_right,R.anim.slide_out_left);        
+        
         // Data
         mTopCitiesList = new LinkedList<City>();
         mDataList = new LinkedList<City>();
         mNameList = new LinkedList<String>();
 
-        // Title Header
-        ((TextView)findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.filter_city));
+        // Title Header        
+        ((TextView)findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.filter_city));     	
+   		((Button) findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+   		Button btnBack = (Button) findViewById(R.id.btnNavigationBack);
+   		btnBack.setVisibility(View.VISIBLE);   		
+   		btnBack.setOnClickListener(new OnClickListener() {
+  			@Override
+   			public void onClick(View v) {
+   				finish();
+   			}
+   		});
+        
+        
 
         // Progress
         mProgressBar = (ProgressBar)findViewById(R.id.prsCityLoading);
@@ -184,6 +199,11 @@ public class CitySearchActivity extends BaseFragmentActivity {
         super.onDestroy();
     }
     //---------------------------------------------------------------------------
+    @Override
+	public void finish() {		
+		super.finish();
+		overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
+	}
 }
 
 /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,

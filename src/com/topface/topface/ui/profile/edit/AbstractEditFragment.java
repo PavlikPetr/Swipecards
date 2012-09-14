@@ -1,11 +1,12 @@
 package com.topface.topface.ui.profile.edit;
 
-import android.support.v4.app.Fragment;
+import com.topface.topface.ui.fragments.BaseFragment;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-public abstract class AbstractEditFragment extends Fragment {
+public abstract class AbstractEditFragment extends BaseFragment {
 	
 	protected Button mSaveButton;
 	protected ProgressBar mRightPrsBar;	
@@ -29,11 +30,30 @@ public abstract class AbstractEditFragment extends Fragment {
 			public void run() {
 				if (mRightPrsBar != null && mSaveButton != null) {
 					mRightPrsBar.setVisibility(View.GONE);
-					mSaveButton.setVisibility(View.VISIBLE);
+					if (hasChanges()) {
+						mSaveButton.setVisibility(View.VISIBLE);
+					} else {
+						mRightPrsBar.setVisibility(View.INVISIBLE);		
+					}
 				}
 			}
 		});
 	}	
+	
+	protected void refreshSaveState() {
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+					if(mSaveButton != null) {
+						if (hasChanges()) {
+							mSaveButton.setVisibility(View.VISIBLE);
+						} else {
+							mSaveButton.setVisibility(View.INVISIBLE);
+						}
+					}
+			}
+		});
+	}
 	
 	abstract boolean hasChanges();
 	abstract void saveChanges();	

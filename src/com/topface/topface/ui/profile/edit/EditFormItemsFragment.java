@@ -13,7 +13,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,27 +53,26 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 				false);
 
 		// Navigation bar
-		((TextView) root.findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-		TextView subTitle = (TextView) root.findViewById(R.id.tvNavigationSubtitle);
+		((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
+		TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
 		subTitle.setVisibility(View.VISIBLE);
 
 		String formItemTitle = mFormInfo.getFormTitle(mTitleId);
 		subTitle.setText(formItemTitle);
 
-		((Button) root.findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-		Button btnBack = (Button) root.findViewById(R.id.btnNavigationBackWithText);
+		((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+		Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
 		btnBack.setVisibility(View.VISIBLE);
 		btnBack.setText(R.string.navigation_edit);
 		btnBack.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				getActivity().finish();
+				getActivity().finish();				
 			}
 		});
 
-		mSaveButton = (Button) root.findViewById(R.id.btnNavigationRightWithText);
-		mSaveButton.setVisibility(View.VISIBLE);
+		mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);		
 		mSaveButton.setText(getResources().getString(R.string.navigation_save));
 		mSaveButton.setOnClickListener(new OnClickListener() {
 
@@ -84,7 +82,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 			}
 		});
 
-		mRightPrsBar = (ProgressBar) root.findViewById(R.id.prsNavigationRight);
+		mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
 		// List
 		mListView = (ListView) root.findViewById(R.id.lvList);
@@ -102,6 +100,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
 	private void setSelectedId(int id) {
 		mSeletedDataId = id;
+		refreshSaveState();
 	}
 
 	@Override
@@ -120,6 +119,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
 					prepareRequestSend();
 					QuestionaryRequest request = mFormInfo.getFormRequest(newItem);
+					registerRequest(request);
 					request.callback(new ApiHandler() {
 
 						@Override
@@ -127,10 +127,10 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 							item.dataId = mSeletedDataId;
 							item.value = mInputData;
 							mFormInfo.fillFormItem(item);
-							getActivity().setResult(Activity.RESULT_OK);
-							finishRequestSend();
+							getActivity().setResult(Activity.RESULT_OK);							
 							mDataId = mSeletedDataId;
 							mData = mInputData;
+							finishRequestSend();
 						}
 
 						@Override
@@ -288,6 +288,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 						String after = s.toString();
 						if(!before.equals(after)) {
 							mInputData = after;
+							refreshSaveState();
 						}
 					}
 				});
@@ -303,5 +304,13 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 			ImageView mCheck;
 			EditText mTextEdit;
 		}
+	}
+
+	@Override
+	public void fillLayout() { }
+
+	@Override
+	public void clearLayout() { 
+		mListView.setVisibility(View.INVISIBLE);
 	}
 }

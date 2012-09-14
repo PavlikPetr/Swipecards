@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-    <FrameLayout
-	        android:id="@+id/fragment_frame"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent" />
+    android:orientation="vertical" 
+    android:background="@drawable/chat_list_bg" >
 
-</LinearLayout>
+    <FrameLayout
+        android:id="@+id/loNavigationBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/bar_navigation_header" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_frame"
+        android:layout_below="@id/loNavigationBar"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loNavigationBar"
+        android:src="@drawable/im_bar_header_shadow" />
+
+</RelativeLayout>

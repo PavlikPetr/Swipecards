@@ -43,7 +43,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_edit_profile);
-
+		
 		// Navigation bar
 		((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
 		((Button) findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
@@ -118,11 +118,12 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnEditName:
-			//TODO edit name onClick()
+			startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),
+					EditContainerActivity.INTENT_EDIT_NAME_AGE);
 			break;
 		case R.id.btnEditCity:
-			Intent intent = new Intent(getApplicationContext(), CitySearchActivity.class);
-            startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+            startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class), 
+            		CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
 			break;
 		case R.id.btnNavigationBackWithText:
 			finish();
@@ -133,7 +134,13 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_OK) {
-			switch (requestCode) { 
+			switch (requestCode) {			
+			case EditContainerActivity.INTENT_EDIT_NAME_AGE:
+				mEditName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
+				break;
+			case EditContainerActivity.INTENT_EDIT_STATUS:
+				mAdapter.notifyDataSetChanged();
+				break;
 			case EditContainerActivity.INTENT_EDIT_BACKGROUND:
 				mAdapter.notifyDataSetChanged();
 				break;
@@ -323,7 +330,8 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 		@Override
 		void onClick() {
-			// TODO
+			Intent intent = new Intent(getApplicationContext(), EditContainerActivity.class);
+			startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_STATUS);
 		}
 	}
 
@@ -368,7 +376,8 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 		@Override
 		void onClick() {
-			// TODO
+			Intent intent = new Intent(getApplicationContext(), EditContainerActivity.class);
+			startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_ALBUM);
 		}
 	}
 
