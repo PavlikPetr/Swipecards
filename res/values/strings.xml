@@ -207,6 +207,7 @@
     <string name="navigation_back_profile">Profile</string>
     <string name="navigation_back_dialog">Dialogs</string>    
     <string name="navigation_edit">Edit</string>
+    <string name="navigation_save">Save</string>
     
     <!-- Profile / UserProfile Form -->
     <string name="form_main">Main</string>
