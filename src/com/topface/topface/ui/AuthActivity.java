@@ -150,7 +150,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             ConnectionManager.getInstance().notifyDelayedRequests();
         }
         finish();
-<<<<<<< HEAD
     }
 
     private void auth(AuthToken token) {
@@ -234,80 +233,4 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             }
         }
     }
-=======
-	}
-
-	private void auth(AuthToken token) {
-		AuthRequest authRequest = new AuthRequest(getApplicationContext());
-		registerRequest(authRequest);
-		authRequest.platform = token.getSocialNet();
-		authRequest.sid = token.getUserId();
-		authRequest.token = token.getTokenKey();
-		authRequest.callback(new ApiHandler() {
-			@Override
-			public void success(ApiResponse response) {
-				Debug.log(this, "Auth");
-				Auth auth = Auth.parse(response);
-				Data.saveSSID(getApplicationContext(), auth.ssid);
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						getProfile();
-					}
-				});
-			}
-
-			@Override
-			public void fail(int codeError, ApiResponse response) {
-				showButtons();
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {						
-						Toast.makeText(AuthActivity.this, getString(R.string.general_server_error),
-								Toast.LENGTH_SHORT).show();
-					}
-				});
-			}
-		}).exec();
-	}
-
-	private void getProfile() {
-        ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
-        registerRequest(profileRequest);
-		profileRequest.callback(new ApiHandler() {
-			@Override
-			public void success(final ApiResponse response) {
-			    CacheProfile.setProfile(Profile.parse(response));
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-			            Http.avatarOwnerPreloading();
-						openNavigationActivity();
-					}
-				});
-			}
-
-			@Override
-			public void fail(int codeError, ApiResponse response) {
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
-								Toast.LENGTH_SHORT).show();
-					}
-				});
-			}
-		}).exec();
-	}
-	
-	private void checkIntentForReauth(Intent intent) {
-		Bundle data = getIntent().getExtras();
-		if (data != null) {
-			if (data.get(ReAuthReceiver.REAUTH_FROM_RECEIVER) != null) {
-				mFromAuthorizationReceiver = data.getBoolean(
-						ReAuthReceiver.REAUTH_FROM_RECEIVER, false);
-			}
-		}
-	}
->>>>>>> remotes/origin/new_design
 }
