@@ -187,25 +187,16 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 	}
 
 	private void getProfile() {
-	    //Profile.deleteProfile();
-	    if(Profile.isProfileExist()) {
-	      CacheProfile.setProfile(Profile.load());
-	      openNavigationActivity();
-	      return;
-	    }
-		ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
-		registerRequest(profileRequest);
-		profileRequest.part = ProfileRequest.P_ALL;
+        ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
+        registerRequest(profileRequest);
 		profileRequest.callback(new ApiHandler() {
 			@Override
 			public void success(final ApiResponse response) {
 			    CacheProfile.setProfile(Profile.parse(response));
-				Http.avatarOwnerPreloading();
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-			            //Profile.save(profile);
-					    Profile.save(response.mJSONResult.toString());
+			            Http.avatarOwnerPreloading();
 						openNavigationActivity();
 					}
 				});

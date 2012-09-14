@@ -30,6 +30,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProfileFragment extends BaseFragment implements OnClickListener{
     //Data
@@ -53,7 +54,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     private View mUserPowerBkgd;
     
     private ProfilePhotoFragment mPhotoFragment;
-    private ProfileFormFragment mFormFragment;
+    private ProfileFormFragment  mFormFragment;
    
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
@@ -277,7 +278,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     	switch (v.getId()) {
 		case R.id.btnNavigationEditBar:			
 			startActivity(new Intent(getActivity().getApplicationContext(),EditProfileActivity.class));
-			break;		
+			break;
 		}
     	
     }

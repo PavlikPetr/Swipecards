@@ -37,7 +37,7 @@ public class Data {
     public static LinkedList<Dialog> dialogList;
     public static LinkedList<FeedLike> likesList;
     public static LinkedList<FeedInbox> inboxList;
-    public static LinkedList<FeedSympathy> sympathyList;
+    public static LinkedList<FeedSympathy> mutualList;
     //---------------------------------------------------------------------------
     public static void init(Context context) {
         //removeSSID(context); // for test
@@ -59,8 +59,8 @@ public class Data {
         if (likesList == null)
             likesList = new LinkedList<FeedLike>();
 
-        if (sympathyList == null)
-            sympathyList = new LinkedList<FeedSympathy>();
+        if (mutualList == null)
+            mutualList = new LinkedList<FeedSympathy>();
         
         if (giftsList == null)
             giftsList = new LinkedList<Gift>();
@@ -97,8 +97,8 @@ public class Data {
             inboxList.clear();
         if (likesList != null)
             likesList.clear();
-        if (sympathyList != null)
-            sympathyList.clear();
+        if (mutualList != null)
+            mutualList.clear();
     }
     //---------------------------------------------------------------------------
     public static boolean isSSID() {

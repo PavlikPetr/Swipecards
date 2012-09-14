@@ -182,13 +182,6 @@
 	  <string name="ero_album_btn_dislike">Не рекомендую</string>
 	  <string name="ero_album_btn_buy">Следующая</string>
 	  <string name="ero_album_btn_next">Следующая</string>
-    
-    
-    <!-- Pull2Refresh Module -->
-    <string name="pull_to_refresh_pull_label">Тяните</string>
-    <string name="pull_to_refresh_release_label">Отпустите</string>
-    <string name="pull_to_refresh_refreshing_label">Обновление</string>
-    <string name="pull_to_refresh_tap_label">Нажмите</string>
 
     <!-- Gifts Activity -->
     <string name="gifts_romantic">Романтические</string>

@@ -15,6 +15,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
+import com.topface.topface.ui.p2r.PullToRefreshBase;
 import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
 import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.views.DoubleBigButton;
@@ -121,10 +122,10 @@ public class DialogsFragment extends BaseFragment {
 		// ListView
 		mListView = (PullToRefreshListView) view.findViewById(R.id.lvInboxList);
 		mListView.setOnRefreshListener(new OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				updateData(true);
-			}
+            @Override
+            public void onRefresh(PullToRefreshBase refreshView) {
+                updateData(true);
+            }
 		});
 		mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -180,15 +181,16 @@ public class DialogsFragment extends BaseFragment {
 		mAvatarManager = new AvatarManager<Dialog>(getActivity(), Data.dialogList, new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				if (Data.dialogList.getLast().isLoader() && !mIsUpdating)
-					updateDataHistory();
+			    if (Data.dialogList.size() > 0 )
+    				if (Data.dialogList.getLast().isLoader() && !mIsUpdating)
+    					updateDataHistory();
 
 				super.handleMessage(msg);
 			}
 		});
 		mListAdapter = new DialogListAdapter(getActivity(), mAvatarManager);
 		mListView.setOnScrollListener(mAvatarManager);
-		mListView.setAdapter(mListAdapter);
+		mListView.getRefreshableView().setAdapter(mListAdapter);
 
 		mHasUnread = CacheProfile.unread_messages > 0 ? true : false;
 
