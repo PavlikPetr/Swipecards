@@ -45,6 +45,10 @@ public class Options extends AbstractData {
      * Показывать баннеры или лидеров на странице топа
      */
     public String float_type_top = FLOAT_TYPE_BANNER;
+    /**
+     * Показывать баннеры или лидеров на странице гостей
+     */
+    public String float_type_visitors = FLOAT_TYPE_BANNER;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -55,6 +59,7 @@ public class Options extends AbstractData {
             options.float_type_like = setFloatType(response.mJSONResult.optString("float_type_like"));
             options.float_type_dialogs = setFloatType(response.mJSONResult.optString("float_type_dialogs"));
             options.float_type_top = setFloatType(response.mJSONResult.optString("float_type_top"));
+            options.float_type_visitors = setFloatType(response.mJSONResult.optString("float_type_visitors"));
         } catch (Exception e) {
             Debug.log("Message.class", "Wrong response parsing: " + e);
         }
@@ -66,7 +71,7 @@ public class Options extends AbstractData {
         if (floatType.equals(FLOAT_TYPE_LEADERS)) {
             return FLOAT_TYPE_LEADERS;
         }
-        else if (floatType.equals(FLOAT_TYPE_LEADERS)) {
+        else if (floatType.equals(FLOAT_TYPE_BANNER)) {
             return FLOAT_TYPE_BANNER;
         }
         else if (floatType.equals(FLOAT_TYPE_DEFAULT)) {

@@ -378,7 +378,7 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
             }
             break;
             case R.id.btnDshbrdTops: {
-                intent = new Intent(this.getApplicationContext(), TopsActivity.class);
+                intent = new Intent(this.getApplicationContext(), VisitorsActivity.class);
             }
             break;
             case R.id.btnDshbrdProfile: {

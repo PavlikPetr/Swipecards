@@ -1,6 +1,12 @@
 package com.topface.topface.data;
 
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.utils.Debug;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +34,32 @@ public class UserPhotos {
      * Всегда присутствует ключ “original”, представляющий ссылку на исходное загруженное пользователем изображение
      */
     protected HashMap<String, String> links;
+
+    public static UserPhotos parse(ApiResponse response) {
+        return parsePhotos(response.mJSONResult);
+    }
+
+    public static UserPhotos parsePhotos(JSONObject photoItem) {
+        Iterator photoKeys = photoItem.keys();
+        UserPhotos photos = null;
+        try {
+            int id = photoItem.getInt("id");
+            HashMap<String, String> links = new HashMap<String, String>();
+
+            while (photoKeys.hasNext()) {
+                String key = photoKeys.next().toString();
+
+                    links.put(key, photoItem.getString(key));
+            }
+
+            photos = new UserPhotos(id, links);
+        } catch (JSONException e) {
+            Debug.error(e);
+        }
+
+        return photos;
+
+    }
 
     /**
      * Возвращает наиболее подходящий размер фотографии из уже существующих

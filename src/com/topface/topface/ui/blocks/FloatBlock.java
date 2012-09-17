@@ -46,6 +46,7 @@ public class FloatBlock {
         mActivityMap.put(SymphatyActivity.class.toString(), mOptions.float_type_like);
         mActivityMap.put(TopsActivity.class.toString(), mOptions.float_type_top);
         mActivityMap.put(InboxActivity.class.toString(), mOptions.float_type_dialogs);
+        mActivityMap.put(VisitorsActivity.class.toString(), mOptions.float_type_visitors);
     }
 
     public void update() {

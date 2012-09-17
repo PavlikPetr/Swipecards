@@ -222,4 +222,7 @@
     <string name="photo_preloading_summary">Preloading the next photo in the album</string>
     <string name="preloading">Preloading</string>
 
+    <!--Visitors-->
+    <string name="visitors_header_title">Visitors</string>
+
 </resources>

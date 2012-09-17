@@ -56,6 +56,7 @@
         <activity android:name=".ui.InviteActivity"/>
         <activity android:name=".ui.LeadersActivity"/>
         <activity android:name=".ui.SettingsActivity"/>
+        <activity android:name=".ui.VisitorsActivity"/>
 
         <!-- services -->
         <service android:name=".services.NotificationService"/>
