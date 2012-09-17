@@ -1,30 +1,58 @@
 package com.topface.topface.utils;
 
-import com.topface.topface.R;
-import com.topface.topface.Static;
-
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.InputType;
+import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
+import com.topface.topface.requests.QuestionaryRequest;
 
 /* понять и простить за эту хуйню */
-public class FormInfo {
+public class FormInfo {	
+	
     // Data
+	private Context mContext;
     private Resources mResources;
     private Profile mProfile;
-    private int mSex;    
+    private int mSex;
 
     public FormInfo(Context context, Profile profile) {    	
         mResources = context.getResources();
         mProfile = profile;
         mSex = profile.sex;
+        mContext = context;
     }
 
     public void setSex(int sex) {
         mSex = sex;
     }
+    
+    
+    // =============================== Common methods ===============================
+    public void fillFormItem(FormItem formItem) {
+    	String title = formItem.title;
+    	String data = formItem.value;
+    	try {
+	    	switch (formItem.type) {
+			case FormItem.DATA:
+				title = getFormTitle(formItem);
+				data = getEntryById(getEntriesByTitleId(formItem.titleId), getIdsByTitleId(formItem.titleId), formItem.dataId);
+				break;
+			case FormItem.HEADER:
+				title = getFormTitle(formItem);			
+			default:
+				break;
+			}
+    	} catch (Exception e) {
+    		
+    	} finally {
+    		formItem.title = title;
+    		formItem.value = data;
+    	}
+    }
 
-    private String getEndtryById(String[] entries, int[] ids, int targetId) {
+    private String getEntryById(String[] entries, int[] ids, int targetId) {
     	if(entries.length != ids.length) {
     		Debug.error("Form entries' length don't match ids' length");
     		return null;
@@ -38,71 +66,155 @@ public class FormInfo {
     	return null;
     }
     
-    // =============================== Education ===============================
-    public String getEducation(int id) {
-    	return getEndtryById(getEducationEntries(), getEducationIds(), id);
-    }
-
-    public String[] getEducationEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_education_female : R.array.profile_form_education_male);
-    }
-
-    public int[] getEducationIds() {
-        return mResources.getIntArray(R.array.profile_form_education_ids);
-    }
-
-    // =============================== Communication ===============================
-    public String getCommunication(int id) {
-    	return getEndtryById(getCommunicationEntries(), getCommunicationIds(), id);
-    }
-
-    public String[] getCommunicationEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_communication_female : R.array.profile_form_communication_male);
-    }
-
-    public int[] getCommunicationIds() {
-        return mResources.getIntArray(R.array.profile_form_communication_ids);
+    public String[] getEntriesByTitleId(int titleId) {    	
+    	switch (titleId) {
+		case R.array.form_main_character:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_character_female : R.array.profile_form_character_male);
+		case R.array.form_main_communication:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_communication_female : R.array.profile_form_communication_male);
+		case R.array.form_habits_alcohol:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_alcohol_female : R.array.profile_form_alcohol_male);
+		case R.array.form_habits_smoking:
+	        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_smoking_female : R.array.profile_form_smoking_male);
+		case R.array.form_physique_eyes:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_eyes_female : R.array.profile_form_eyes_male);
+		case R.array.form_physique_fitness:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_fitness_female : R.array.profile_form_fitness_male);
+		case R.array.form_physique_hairs:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_hair_female : R.array.profile_form_hair_male);
+		case R.array.form_social_car:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_car_female : R.array.profile_form_car_male);
+		case R.array.form_social_education:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_education_female : R.array.profile_form_education_male);
+		case R.array.form_social_finances:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_finances_female : R.array.profile_form_finances_male);
+		case R.array.form_social_marriage:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_marriage_female : R.array.profile_form_marriage_male);
+		case R.array.form_social_residence:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_residence_female : R.array.profile_form_residence_male);	        
+		default:
+			return null;			
+		}
     }
     
-    // =============================== Character ===============================
-    public String getCharacter(int id) {
-    	return getEndtryById(getCharacterEntries(), getCharacterIds(), id);
+    public String[] getEntriesByTitleId(int titleId, String[] defaultEntries) {
+    	String[] entries = getEntriesByTitleId(titleId);
+    	if(entries == null) return defaultEntries;
+    	else return entries;
     }
-
-    public String[] getCharacterEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_character_female : R.array.profile_form_character_male);
+    
+    public int[] getIdsByTitleId(int titleId) {
+    	switch (titleId) {
+		case R.array.form_main_character:
+			return mResources.getIntArray(R.array.profile_form_character_ids);
+		case R.array.form_main_communication:
+			return mResources.getIntArray(R.array.profile_form_communication_ids);
+		case R.array.form_habits_alcohol:
+			return mResources.getIntArray(R.array.profile_form_alcohol_ids);
+		case R.array.form_habits_smoking:
+			return mResources.getIntArray(R.array.profile_form_smoking_ids);
+		case R.array.form_physique_eyes:
+			return mResources.getIntArray(R.array.profile_form_eyes_ids);
+		case R.array.form_physique_fitness:
+			return mResources.getIntArray(R.array.profile_form_fitness_ids);
+		case R.array.form_physique_hairs:
+			return mResources.getIntArray(R.array.profile_form_hair_ids);
+		case R.array.form_social_car:
+			return mResources.getIntArray(R.array.profile_form_car_ids);
+		case R.array.form_social_education:
+			return mResources.getIntArray(R.array.profile_form_education_ids);
+		case R.array.form_social_finances:
+			return mResources.getIntArray(R.array.profile_form_finances_ids);
+		case R.array.form_social_marriage:
+			return mResources.getIntArray(R.array.profile_form_marriage_ids);
+		case R.array.form_social_residence:
+			return mResources.getIntArray(R.array.profile_form_residence_ids);
+		default:
+			return new int[]{FormItem.NO_RESOURCE_ID};
+		}
     }
-
-    public int[] getCharacterIds() {
-        return mResources.getIntArray(R.array.profile_form_character_ids);
+    
+    public QuestionaryRequest getFormRequest(int titleId, int selectedValueId, String selectedValue) {
+    	QuestionaryRequest result = new QuestionaryRequest(mContext);    	
+    	
+    	switch (titleId) {
+		case R.array.form_main_character:
+			result.characterid = selectedValueId;
+			break;
+		case R.array.form_main_communication:
+			result.communicationid = selectedValueId;
+			break;
+		case R.array.form_habits_alcohol:
+			result.alcoholid = selectedValueId;
+			break;
+		case R.array.form_habits_smoking:
+			result.smokingid = selectedValueId;
+			break;
+		case R.array.form_physique_eyes:
+			result.eyeid = selectedValueId;
+			break;
+		case R.array.form_physique_fitness:
+			result.fitnessid = selectedValueId;
+			break;
+		case R.array.form_physique_hairs:
+			result.hairid = selectedValueId;
+			break;
+		case R.array.form_social_car:
+			result.carid = selectedValueId;
+			break;
+		case R.array.form_social_education:
+			result.educationid = selectedValueId;
+			break;
+		case R.array.form_social_finances:
+			result.financesid = selectedValueId;
+			break;
+		case R.array.form_social_marriage:
+			result.marriageid = selectedValueId;
+			break;
+		case R.array.form_social_residence:
+			result.residenceid = selectedValueId;
+			break;
+		case R.array.form_main_height:
+			result.height = Integer.parseInt(selectedValue);
+			break;
+		case R.array.form_main_weight:
+			result.weight = Integer.parseInt(selectedValue);
+			break;
+		case R.array.form_habits_restaurants:
+			result.restaurants = selectedValue;
+			break;
+		case R.array.form_detail_about_dating:
+			result.firstdating = selectedValue;
+			break;
+		case R.array.form_detail_archievements:
+			result.achievements = selectedValue;
+			break;
+		}
+    	
+    	return result;
     }
-
-    // =============================== Alcohol ===============================
-    public String getAlcohol(int id) {
-    	return getEndtryById(getAlcoholEntries(), getAlcoholIds(), id);
+    
+    public QuestionaryRequest getFormRequest(FormItem item) {
+    	return getFormRequest(item.titleId, item.dataId, item.value);
     }
-
-    public String[] getAlcoholEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_alcohol_female : R.array.profile_form_alcohol_male);
+    
+    public int getInputType(int titleId) {
+    	int result;
+    	switch (titleId) {
+		case R.array.form_main_height:
+			result = InputType.TYPE_CLASS_NUMBER;
+			break;
+		case R.array.form_main_weight:
+			result = InputType.TYPE_CLASS_NUMBER;
+			break;
+		default:
+			result = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE;
+			break;
+		}   
+    	
+    	return result;
     }
-
-    public int[] getAlcoholIds() {
-        return mResources.getIntArray(R.array.profile_form_alcohol_ids);
-    }
-
-    // =============================== Fitness ===============================
-    public String getFitness(int id) {
-    	return getEndtryById(getFitnessEntries(), getFitnessIds(), id);
-    }
-
-    public String[] getFitnessEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_fitness_female : R.array.profile_form_fitness_male);
-    }
-
-    public int[] getFitnessIds() {
-        return mResources.getIntArray(R.array.profile_form_fitness_ids);
-    }
-
+    
     // =============================== Job ===============================
 //    public String getJob(int id) {
 //        switch (id) {
@@ -128,102 +240,17 @@ public class FormInfo {
 //                return null;//mResources.getString(R.string.profile_form_empty);
 //        }
 //    }
-
-    // =============================== Marriage ===============================
-    public String getMarriage(int id) {
-    	return getEndtryById(getMarriageEntries(), getMarriageIds(), id);
-    }
-
-    public String[] getMarriageEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_marriage_female : R.array.profile_form_marriage_male);
-    }
-
-    public int[] getMarriageIds() {
-        return mResources.getIntArray(R.array.profile_form_marriage_ids);
-    }
-
-    // =============================== Finances ===============================
-    public String getFinances(int id) {
-    	return getEndtryById(getFinancesEntries(), getFinancesIds(), id);
-    }
-
-    public String[] getFinancesEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_finances_female : R.array.profile_form_finances_male);
-    }
-
-    public int[] getFinancesIds() {
-        return mResources.getIntArray(R.array.profile_form_finances_ids);
-    }
-
-    // =============================== Smoking ===============================
-    public String getSmoking(int id) {
-    	return getEndtryById(getSmokingEntries(), getSmokingIds(), id);
-    }
-
-    public String[] getSmokingEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_smoking_female : R.array.profile_form_smoking_male);
-    }
-
-    public int[] getSmokingIds() {
-        return mResources.getIntArray(R.array.profile_form_smoking_ids);
-    }
-    
-    // =============================== Hair ===============================
-    public String getHair(int id) {
-    	return getEndtryById(getHairEntries(), getHairIds(), id);
-    }
-
-    public String[] getHairEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_hair_female : R.array.profile_form_hair_male);
-    }
-
-    public int[] getHairIds() {
-        return mResources.getIntArray(R.array.profile_form_hair_ids);
-    }
-    
-    // =============================== Eyes ===============================
-    public String getEyes(int id) {
-    	return getEndtryById(getEyesEntries(), getEyesIds(), id);
-    }
-
-    public String[] getEyesEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_eyes_female : R.array.profile_form_eyes_male);
-    }
-
-    public int[] getEyesIds() {
-        return mResources.getIntArray(R.array.profile_form_eyes_ids);
-    }
-
-    // =============================== Residence ===============================
-    public String getResidence(int id) {
-    	return getEndtryById(getResidenceEntries(), getResidenceIds(), id);
-    }
-
-    public String[] getResidenceEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_residence_female : R.array.profile_form_residence_male);
-    }
-
-    public int[] getResidenceIds() {
-        return mResources.getIntArray(R.array.profile_form_residence_ids);
-    }
-    
-    // =============================== Car ===============================
-    public String getCar(int id) {
-    	return getEndtryById(getCarEntries(), getCarIds(), id);
-    }
-
-    public String[] getCarEntries() {
-        return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_car_female : R.array.profile_form_car_male);
-    }
-
-    public int[] getCarIds() {
-        return mResources.getIntArray(R.array.profile_form_car_ids);
-    }
     
     // =============================== Form Titles ===============================
-    public String getFormTitle(int resId) {
-    	String result = "";
-    	String[] variants = mResources.getStringArray(resId);
+    public String getFormTitle(int arrayResourceId) {
+    	String result = Static.EMPTY;    	
+    	String[] variants = null;
+    	try {
+    		variants = mResources.getStringArray(arrayResourceId);
+    	} catch (Exception ex) {
+    		Debug.log("No resource for ID=" + arrayResourceId);
+    	}
+    	
     	if (variants == null)
     		return result;
     	if (variants.length <= 0) 
@@ -253,5 +280,16 @@ public class FormInfo {
     	}
     	
     	return result;
+    }
+    
+    public String getFormTitle(FormItem formItem) {
+    	switch (formItem.type) {
+    	case FormItem.HEADER:
+    		return mResources.getString(formItem.titleId);    		
+    	case FormItem.DATA:
+    		return getFormTitle(formItem.titleId);
+    	default:
+    		return Static.EMPTY;
+    	}
     }
 }

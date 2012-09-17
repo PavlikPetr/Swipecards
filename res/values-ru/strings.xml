@@ -103,92 +103,85 @@
     <string name="dating_back">К оценкам</string>
 
     <!-- Buying Activity -->
-    <string name="buying_header_title">Покупка</string>
-    <string name="buying_money">Покупка монет</string>
-    <string name="buying_power">Покупка энергии</string>
-    <string name="buying_buy">Купить</string>
-    <string name="buying_recharge">Зарядить на 100%</string>
-    <string name="buying_energy">3 USD</string>
-    <string name="buying_pack_6coins">Пакет из 6 монет</string>
-    <string name="buying_6coins">1 USD</string>
-    <string name="buying_pack_40coins">Пакет из 40 монет</string>
-    <string name="buying_40coins">5 USD</string>
-    <string name="buying_pack_100coins">Пакет из 100 монет</string>
-    <string name="buying_100coins">10 USD</string>
-    <string name="buying_info">Вы можете купить монеты и энергию</string>
-    <string name="buying_economy_25">Экономия 25%</string>
-    <string name="buying_economy_40">Экономия 40%</string>
-
-    <!-- Profile Activity -->
-    <string name="profile_header_title">Мой профиль</string>
-    <string name="profile_btn_chat">Поболтать</string>
-    <string name="profile_btn_edit">Редактировать</string>
-    <string name="profile_btn_form">Анкета</string>
-    <string name="profile_btn_add">Добавить</string>
-    <string name="profile_btn_buy">Купить</string>
-    <string name="profile_btn_exit">Выйти</string>
-    <string name="profile_btn_mutual">Взаимно</string>
-    <string name="profile_sex_boy">Парень</string>
-    <string name="profile_sex_girl">Девушка</string>
-    <string name="profile_form">Анкета</string>
-    <string name="profile_form_name">Имя</string>
-    <string name="profile_form_city">Выбор города</string>
-    <string name="profile_foto">Фотографии</string>
-    <string name="profile_foto_ero">Эрофотографии</string>
-    <string name="profile_height">Рост</string>
-    <string name="profile_weight">Вес</string>
-    <string name="profile_education">Учеба</string>
-    <string name="profile_commutability">Общительность</string>
-    <string name="profile_character">Характер</string>
-    <string name="profile_alcohol">Алкоголь</string>
-    <string name="profile_fitness">Комплекция</string>
-    <string name="profile_job">Статус</string>
-    <string name="profile_marriage_male">Женат</string>
-    <string name="profile_marriage_female">Замужем</string>
-    <string name="profile_finances">Доход</string>
-    <string name="profile_smoking">Курение</string>
-    <string name="profile_status">О себе</string>
-    <string name="profile_edit_title">Редактировать</string>
-    <string name="profile_add_title">Добавить фотографию</string>
-    <string name="profile_add_album">Из фотогалереи</string>
-    <string name="profile_add_camera">Сделать снимок</string>
-    <string name="profile_coin_1">1 монета</string>
-    <string name="profile_coin_2">2 монеты</string>
-    <string name="profile_coin_3">3 монеты</string>
-    <string name="profile_ero_price">Выберите цену</string>
-    <string name="profile_btn_ask">Попросить заполнить анкету</string>
-    <string name="profile_msg_ask">Хочу узнать о тебе больше. Заполни, пожалуйста, анкету!</string>
-    <string name="profile_msg_sent">Отправлено</string>
-
-    <!--  EditProfileActivity -->
-    <string name="edit_title">Редактирование</string>
-    <string name="edit_bg_photo">Фоновая фотография</string>
-    <string name="edit_profile_photo">Поменять фото</string>
-    <string name="edit_album_photos">фотографий</string>
-    <string name="edit_interests">интересов</string>
-    <string name="edit_back_photo_selected">Выбрана</string>
-
-    <!-- Album, Ero Album Activity -->
-    <string name="album_header_title">Альбом</string>
-    <string name="album_add_photo_title">Добавить фото</string>
-    <string name="album_menu_main">Сделать главной</string>
-    <string name="album_menu_did_main">Главная</string>
-    <string name="album_menu_popup_delete">Вы действительно хотите удалить эту фотографию ?</string>
-    <string name="album_menu_popup_yes">Да</string>
-    <string name="album_menu_popup_no">Нет</string>
-    <string name="album_menu_delete">Удалить</string>
-    <string name="album_menu_did_delete">Удалено</string>
-    <string name="ero_album_btn_like">Рекомендую</string>
-    <string name="ero_album_btn_dislike">Не рекомендую</string>
-    <string name="ero_album_btn_buy">Следующая</string>
-    <string name="ero_album_btn_next">Следующая</string>
-
-
-    <!-- Pull2Refresh Module -->
-    <string name="pull_to_refresh_pull_label">Тяните</string>
-    <string name="pull_to_refresh_release_label">Отпустите</string>
-    <string name="pull_to_refresh_refreshing_label">Обновление</string>
-    <string name="pull_to_refresh_tap_label">Нажмите</string>
+	  <string name="buying_header_title">Покупка</string>
+	  <string name="buying_money">Покупка монет</string>
+	  <string name="buying_power">Покупка энергии</string>
+	  <string name="buying_buy">Купить</string>
+	  <string name="buying_recharge">Зарядить на 100%</string>
+	  <string name="buying_energy">3 USD</string>
+	  <string name="buying_pack_6coins">Пакет из 6 монет</string>
+	  <string name="buying_6coins">1 USD</string>
+	  <string name="buying_pack_40coins">Пакет из 40 монет</string>
+	  <string name="buying_40coins">5 USD</string>
+	  <string name="buying_pack_100coins">Пакет из 100 монет</string>
+	  <string name="buying_100coins">10 USD</string>
+	  <string name="buying_info">Вы можете купить монеты и энергию</string>
+	  <string name="buying_economy_25">Экономия 25%</string>
+	  <string name="buying_economy_40">Экономия 40%</string>
+	  
+	  <!-- Profile Activity -->
+	  <string name="profile_header_title">Мой профиль</string>
+	  <string name="profile_btn_chat">Поболтать</string>
+	  <string name="profile_btn_edit">Редактировать</string>
+	  <string name="profile_btn_form">Анкета</string>
+	  <string name="profile_btn_add">Добавить</string>
+	  <string name="profile_btn_buy">Купить</string>
+	  <string name="profile_btn_exit">Выйти</string>
+	  <string name="profile_btn_mutual">Взаимно</string>
+	  <string name="profile_sex_boy">Парень</string>
+	  <string name="profile_sex_girl">Девушка</string>
+	  <string name="profile_form">Анкета</string>
+	  <string name="profile_form_name">Имя</string>
+	  <string name="profile_form_city">Выбор города</string>
+	  <string name="profile_foto">Фотографии</string>
+	  <string name="profile_foto_ero">Эрофотографии</string>
+	  <string name="profile_height">Рост</string>
+	  <string name="profile_weight">Вес</string>
+	  <string name="profile_education">Учеба</string>
+	  <string name="profile_commutability">Общительность</string>
+	  <string name="profile_character">Характер</string>
+	  <string name="profile_alcohol">Алкоголь</string>
+	  <string name="profile_fitness">Комплекция</string>
+	  <string name="profile_job">Статус</string>
+	  <string name="profile_marriage_male">Женат</string>
+	  <string name="profile_marriage_female">Замужем</string>
+	  <string name="profile_finances">Доход</string>
+	  <string name="profile_smoking">Курение</string>
+	  <string name="profile_status">О себе</string>
+	  <string name="profile_edit_title">Редактировать</string>
+	  <string name="profile_add_title">Добавить фотографию</string>
+	  <string name="profile_add_album">Из фотогалереи</string>
+	  <string name="profile_add_camera">Сделать снимок</string>
+	  <string name="profile_coin_1">1 монета</string>
+	  <string name="profile_coin_2">2 монеты</string>
+	  <string name="profile_coin_3">3 монеты</string>
+	  <string name="profile_ero_price">Выберите цену</string>
+	  <string name="profile_btn_ask">Попросить заполнить анкету</string>
+	  <string name="profile_msg_ask">Хочу узнать о тебе больше. Заполни, пожалуйста, анкету!</string>
+	  <string name="profile_msg_sent">Отправлено</string>
+	  
+	  <!--  EditProfileActivity -->
+	  <string name="edit_title">Редактирование</string>
+	  <string name="edit_bg_photo">Фоновая фотография</string>
+	  <string name="edit_profile_photo">Поменять фото</string>
+	  <string name="edit_album_photos">фотографий</string>
+	  <string name="edit_interests">интересов</string>
+	  <string name="edit_back_photo_selected">Выбрана</string>
+	  
+	  <!-- Album, Ero Album Activity -->
+	  <string name="album_header_title">Альбом</string>
+	  <string name="album_add_photo_title">Добавить фото</string>
+	  <string name="album_menu_main">Сделать главной</string>
+	  <string name="album_menu_did_main">Главная</string>
+	  <string name="album_menu_popup_delete">Вы действительно хотите удалить эту фотографию ?</string>
+	  <string name="album_menu_popup_yes">Да</string>
+	  <string name="album_menu_popup_no">Нет</string>
+	  <string name="album_menu_delete">Удалить</string>
+	  <string name="album_menu_did_delete">Удалено</string>
+	  <string name="ero_album_btn_like">Рекомендую</string>
+	  <string name="ero_album_btn_dislike">Не рекомендую</string>
+	  <string name="ero_album_btn_buy">Следующая</string>
+	  <string name="ero_album_btn_next">Следующая</string>
 
     <!-- Gifts Activity -->
     <string name="gifts_romantic">Романтические</string>
@@ -207,7 +200,8 @@
     <!--  Navigation Header -->
     <string name="navigation_back_profile">Профиль</string>
     <string name="navigation_back_dialog">Диалоги</string>
-    <string name="navigation_edit">Ред.</string>
+    <string name="navigation_edit">Редактировать</string>
+    <string name="navigation_save">Сохранить</string>
 
     <!-- Profile / UserProfile Form -->
     <string name="form_main">Основное</string>

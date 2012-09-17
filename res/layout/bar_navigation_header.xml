@@ -26,26 +26,30 @@
             android:layout_marginLeft="5dp"
             android:background="@drawable/navigation_back_selector"
             android:visibility="gone" />
-
+        
         <Button
             android:id="@+id/btnNavigationBackWithText"            
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="60dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"            
             android:layout_marginLeft="5dp"
-            android:paddingLeft="5dp"            
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"            
             android:background="@drawable/navigation_back_profile_selector"
             style="@style/NavigationHeader"
             android:textSize="11sp"
-            android:textStyle="bold"
+            android:textStyle="bold"       
+            android:singleLine="true"     
+            android:ellipsize="end"   
             android:gravity="center"
             android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerInParent="true"            
             android:gravity="center"
             android:orientation="vertical" >
 
@@ -53,7 +57,8 @@
                 android:id="@+id/tvNavigationTitle"
                 style="@style/NavigationHeader"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"                
+                android:layout_height="wrap_content"
+                android:gravity="center"                
                 android:textSize="16sp" />
 
             <TextView
@@ -61,6 +66,8 @@
                 style="@style/NavigationHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxWidth="165dp"
+                android:gravity="center"
                 android:textSize="10sp" 
                 android:visibility="gone"/>
         </LinearLayout>        
@@ -85,18 +92,34 @@
             android:background="@drawable/navigation_settings_selector"
             android:visibility="gone" />
         
-        <Button
-            android:id="@+id/btnNavigationEditBar"
+        <RelativeLayout 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/navigation_edit_selector"
-            style="@style/NavigationHeader"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
+	        android:layout_centerVertical="true"
+	        android:layout_marginRight="5dp">
+        
+	        <Button
+	            android:id="@+id/btnNavigationRightWithText"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:maxWidth="50dp"
+	            android:background="@drawable/navigation_edit_selector"
+	            style="@style/NavigationHeader"
+	            android:singleLine="true"
+	            android:ellipsize="end"         
+	            android:textSize="12sp"
+	            android:textStyle="bold"
+	            android:visibility="gone" />
+	        
+	        <ProgressBar 
+	            android:id="@+id/prsNavigationRight"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerInParent="true"
+	            android:visibility="gone"
+	            style="@android:style/Widget.ProgressBar.Small" />
+        </RelativeLayout>
         
         <Button
             android:id="@+id/btnNavigationProfileBar"

@@ -63,7 +63,7 @@ public class MutualFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.ac_mutual, null);
 
         // Data
-        Data.sympathyList = new LinkedList<FeedSympathy>();
+        Data.mutualList = new LinkedList<FeedSympathy>();
         
         // Navigation Header
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
@@ -123,11 +123,11 @@ public class MutualFragment extends BaseFragment {
         mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
-            	if (!mIsUpdating && Data.sympathyList.get(position).isLoaderRetry()) {
+            	if (!mIsUpdating && Data.mutualList.get(position).isLoaderRetry()) {
             		updateUI(new Runnable() {
 						public void run() {
 							removeLoaderListItem();
-							Data.sympathyList.add(new FeedSympathy(ItemType.LOADER));
+							Data.mutualList.add(new FeedSympathy(ItemType.LOADER));
 							mListAdapter.notifyDataSetChanged();
 						}
 					});
@@ -136,8 +136,8 @@ public class MutualFragment extends BaseFragment {
             	} else {
 	                try {
 	                    Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-	                    intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.sympathyList.get(position).uid);
-	                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, Data.sympathyList.get(position).first_name);
+	                    intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.mutualList.get(position).uid);
+	                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, Data.mutualList.get(position).first_name);
 	                    startActivityForResult(intent, 0);
 	                } catch(Exception e) {
 	                    Debug.log(MutualFragment.this, "start ProfileActivity exception:" + e.toString());
@@ -170,18 +170,19 @@ public class MutualFragment extends BaseFragment {
 //        mListView.getRefreshableView().addFooterView(mFooterView);
 
         // Control creating
-        mAvatarManager = new AvatarManager<FeedSympathy>(getActivity(), Data.sympathyList, new Handler() {
+        mAvatarManager = new AvatarManager<FeedSympathy>(getActivity(), Data.mutualList, new Handler() {
         	@Override
         	public void handleMessage(Message msg) {
-        		if (Data.sympathyList.getLast().isLoader() && !mIsUpdating)
-        			updateDataHistory();
+        	    if (Data.mutualList.size() > 0)
+            		if (Data.mutualList.getLast().isLoader() && !mIsUpdating)
+            			updateDataHistory();
         		
         		super.handleMessage(msg);
         	}
         });
         mListAdapter = new MutualListAdapter(getActivity(), mAvatarManager);
         mListView.setOnScrollListener(mAvatarManager);
-        mListView.setAdapter(mListAdapter);
+        mListView.getRefreshableView().setAdapter(mListAdapter);
         
         mNewUpdating = CacheProfile.unread_mutual > 0;
 
@@ -202,8 +203,8 @@ public class MutualFragment extends BaseFragment {
         symphatyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                Data.sympathyList.clear();
-                Data.sympathyList.addAll(FeedSympathy.parse(response));               
+                Data.mutualList.clear();
+                Data.mutualList.addAll(FeedSympathy.parse(response));               
                 
                 updateUI(new Runnable() {
                     @Override
@@ -211,11 +212,11 @@ public class MutualFragment extends BaseFragment {
                         CacheProfile.unread_mutual = 0;
                     	if (mNewUpdating) {
                      		if (FeedSympathy.unread_count > 0) {
-                     			Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                     			Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
                      		}
                      	} else {
-                     		if (!(Data.sympathyList.size() == 0 || Data.sympathyList.size() < LIMIT / 2)) {
-                     			Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                     		if (!(Data.mutualList.size() == 0 || Data.mutualList.size() < LIMIT / 2)) {
+                     			Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
                      		}
                      	}
 
@@ -252,10 +253,10 @@ public class MutualFragment extends BaseFragment {
         symphatyRequest.limit = LIMIT;
         symphatyRequest.only_new = mNewUpdating;
         if (!mNewUpdating) {
-        	if (Data.sympathyList.getLast().isLoader() || Data.sympathyList.getLast().isLoaderRetry()) {
-        		symphatyRequest.from = Data.sympathyList.get(Data.sympathyList.size() - 2).id;
+        	if (Data.mutualList.getLast().isLoader() || Data.mutualList.getLast().isLoaderRetry()) {
+        		symphatyRequest.from = Data.mutualList.get(Data.mutualList.size() - 2).id;
         	} else {
-        		symphatyRequest.from = Data.sympathyList.get(Data.sympathyList.size() - 1).id;
+        		symphatyRequest.from = Data.mutualList.get(Data.mutualList.size() - 1).id;
         	}        	
         }
         symphatyRequest.callback(new ApiHandler() {
@@ -269,13 +270,13 @@ public class MutualFragment extends BaseFragment {
                     	removeLoaderListItem();
                     	
                     	if (feedSymphatyList.size() > 0) {
-                            Data.sympathyList.addAll(feedSymphatyList);
+                            Data.mutualList.addAll(feedSymphatyList);
                             if (mNewUpdating) {
                         		if (FeedSympathy.unread_count > 0)
-                        			Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                        			Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
                         	} else {
-                        		if (!(Data.sympathyList.size() == 0 || Data.sympathyList.size() < (LIMIT/2)))
-                        			Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                        		if (!(Data.mutualList.size() == 0 || Data.mutualList.size() < (LIMIT/2)))
+                        			Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
                         	}
                         }
                     	
@@ -295,7 +296,7 @@ public class MutualFragment extends BaseFragment {
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mIsUpdating = false;
                     	removeLoaderListItem();
-                        Data.sympathyList.add(new FeedSympathy(IListLoader.ItemType.RETRY));
+                        Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.RETRY));
                         mListView.onRefreshComplete();
                         mListAdapter.notifyDataSetChanged();
                     }
@@ -305,9 +306,9 @@ public class MutualFragment extends BaseFragment {
     }
 
     private void removeLoaderListItem() {
-    	if (Data.sympathyList.size() > 0 ) {
-	    	if (Data.sympathyList.getLast().isLoader() || Data.sympathyList.getLast().isLoaderRetry()) {
-	    		Data.sympathyList.remove(Data.sympathyList.size() - 1);
+    	if (Data.mutualList.size() > 0 ) {
+	    	if (Data.mutualList.getLast().isLoader() || Data.mutualList.getLast().isLoaderRetry()) {
+	    		Data.mutualList.remove(Data.mutualList.size() - 1);
 	    	}
     	}
     }
@@ -358,7 +359,7 @@ public class MutualFragment extends BaseFragment {
 	protected void onUpdateSuccess(boolean isFlyUpdating) {
 		if (!isFlyUpdating) {
 			mListView.setVisibility(View.VISIBLE);
-			if (Data.sympathyList.isEmpty()) {
+			if (Data.mutualList.isEmpty()) {
 				mBackgroundText.setText(R.string.symphaty_background_text);
 			} else {
 				mBackgroundText.setText("");

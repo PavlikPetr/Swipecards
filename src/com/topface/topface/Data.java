@@ -1,24 +1,18 @@
 package com.topface.topface;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.LinkedList;
-import com.facebook.android.Facebook;
-import com.topface.topface.data.City;
-import com.topface.topface.data.Dialog;
-import com.topface.topface.data.FeedInbox;
-import com.topface.topface.data.FeedLike;
-import com.topface.topface.data.FeedSympathy;
-import com.topface.topface.data.Gift;
-import com.topface.topface.data.Top;
-import com.topface.topface.utils.Device;
-
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.SparseArray;
+import com.facebook.android.Facebook;
+import com.topface.topface.data.*;
+import com.topface.topface.utils.Device;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Data {
     // Data
@@ -37,7 +31,7 @@ public class Data {
     public static LinkedList<Dialog> dialogList;
     public static LinkedList<FeedLike> likesList;
     public static LinkedList<FeedInbox> inboxList;
-    public static LinkedList<FeedSympathy> sympathyList;
+    public static LinkedList<FeedSympathy> mutualList;
     //---------------------------------------------------------------------------
     public static void init(Context context) {
         //removeSSID(context); // for test
@@ -59,9 +53,9 @@ public class Data {
         if (likesList == null)
             likesList = new LinkedList<FeedLike>();
 
-        if (sympathyList == null)
-            sympathyList = new LinkedList<FeedSympathy>();
-
+        if (mutualList == null)
+            mutualList = new LinkedList<FeedSympathy>();
+        
         if (giftsList == null)
             giftsList = new LinkedList<Gift>();
 
@@ -79,14 +73,14 @@ public class Data {
                 GRID_COLUMN = 4;
                 break;
         }
-
+        
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
-
+        
         midnight = cal.getTimeInMillis();
-
+        
         LocalBroadcastManager.getInstance(context).registerReceiver(new ReAuthReceiver(), new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
     }
     //---------------------------------------------------------------------------
@@ -97,8 +91,8 @@ public class Data {
             inboxList.clear();
         if (likesList != null)
             likesList.clear();
-        if (sympathyList != null)
-            sympathyList.clear();
+        if (mutualList != null)
+            mutualList.clear();
     }
     //---------------------------------------------------------------------------
     public static boolean isSSID() {

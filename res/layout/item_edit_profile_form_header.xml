@@ -10,8 +10,9 @@
 	    android:layout_height="wrap_content"	    
 	    android:layout_alignParentLeft="true"
 	    android:layout_marginLeft="5dp"
-	    android:layout_marginTop="10dp"
+	    android:layout_marginTop="8dp"
+	    android:layout_marginBottom="7dp"
 	    style="@style/BackgroundTitleText"	    
-	    android:textSize="20sp"
+	    android:textSize="16sp"
 	    android:textStyle="normal"/>
 </RelativeLayout>

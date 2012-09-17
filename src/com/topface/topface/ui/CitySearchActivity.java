@@ -1,9 +1,15 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
-
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.Window;
+import android.widget.*;
+import android.widget.AdapterView.OnItemClickListener;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -12,20 +18,8 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.utils.Debug;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.LinkedList;
 
 public class CitySearchActivity extends BaseFragmentActivity {
     // Data
@@ -42,6 +36,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     public static final int INTENT_CITY_SEARCH_ACTIVITY = 100;
     public static final String INTENT_CITY_ID = "city_id";
     public static final String INTENT_CITY_NAME = "city_name";
+    public static final String INTENT_CITY_FULL_NAME = "city_full";
     //---------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +70,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 Intent intent = CitySearchActivity.this.getIntent();
                 intent.putExtra(INTENT_CITY_ID, mDataList.get(position).id);
                 intent.putExtra(INTENT_CITY_NAME, mDataList.get(position).name);
+                intent.putExtra(INTENT_CITY_FULL_NAME, mDataList.get(position).full);
 
                 SharedPreferences.Editor editor = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE).edit();
                 editor.putInt(Static.PREFERENCES_TOPS_CITY_ID, mDataList.get(position).id);

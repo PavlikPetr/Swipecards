@@ -181,15 +181,16 @@ public class DialogsFragment extends BaseFragment {
 		mAvatarManager = new AvatarManager<Dialog>(getActivity(), Data.dialogList, new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				if (Data.dialogList.getLast().isLoader() && !mIsUpdating)
-					updateDataHistory();
+			    if (Data.dialogList.size() > 0 )
+    				if (Data.dialogList.getLast().isLoader() && !mIsUpdating)
+    					updateDataHistory();
 
 				super.handleMessage(msg);
 			}
 		});
 		mListAdapter = new DialogListAdapter(getActivity(), mAvatarManager);
 		mListView.setOnScrollListener(mAvatarManager);
-		mListView.setAdapter(mListAdapter);
+		mListView.getRefreshableView().setAdapter(mListAdapter);
 
 		mHasUnread = CacheProfile.unread_messages > 0;
 

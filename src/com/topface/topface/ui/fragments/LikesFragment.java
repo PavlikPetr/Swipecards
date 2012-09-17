@@ -166,8 +166,9 @@ public class LikesFragment extends BaseFragment {
 				Data.likesList, new Handler() {
 					@Override
 					public void handleMessage(Message msg) {
-						if (Data.likesList.getLast().isLoader() && !mIsUpdating)
-							updateDataHistory();
+					    if (Data.likesList.size() > 0)
+						    if (Data.likesList.getLast().isLoader() && !mIsUpdating)
+							    updateDataHistory();
 
 						super.handleMessage(msg);
 					}
@@ -175,7 +176,7 @@ public class LikesFragment extends BaseFragment {
 		mListAdapter = new LikesListAdapter(getActivity(),
 				mAvatarManager);
 		mListView.setOnScrollListener(mAvatarManager);
-		mListView.setAdapter(mListAdapter);
+		mListView.getRefreshableView().setAdapter(mListAdapter);
 
 		mNewUpdating = CacheProfile.unread_likes > 0;
 

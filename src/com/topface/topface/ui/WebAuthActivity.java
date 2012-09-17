@@ -1,16 +1,5 @@
 package com.topface.topface.ui;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import org.apache.http.client.utils.URLEncodedUtils;
-import com.topface.topface.R;
-import com.topface.topface.Data;
-import com.topface.topface.Static;
-import com.topface.topface.utils.AuthToken;
-import com.topface.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +11,18 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.utils.AuthToken;
+import com.topface.topface.utils.Debug;
+import org.apache.http.client.utils.URLEncodedUtils;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WebAuthActivity extends Activity {
 	
@@ -72,7 +73,8 @@ public class WebAuthActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == AuthToken.AUTH_COMPLETE) {
-            	HashMap<String, String> queryMap = (HashMap<String, String>) msg.obj;
+            	@SuppressWarnings("unchecked")
+                HashMap<String, String> queryMap = (HashMap<String, String>) msg.obj;
             	if (queryMap == null) {
             		setResult(Activity.RESULT_CANCELED);
             		WebAuthActivity.this.finish();

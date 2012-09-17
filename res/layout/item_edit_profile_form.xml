@@ -44,12 +44,23 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/ivArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignRight="@id/ivEditBackground"
             android:layout_centerVertical="true"
             android:src="@drawable/im_item_arrow" 
             android:layout_marginRight="5dp"/>
+        
+        <ImageView
+            android:id="@+id/ivCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/ivEditBackground"
+            android:layout_centerVertical="true"
+            android:src="@drawable/edit_form_select_check" 
+            android:layout_marginRight="5dp"
+            android:visibility="gone"/>
     </RelativeLayout>
 
 </LinearLayout>
