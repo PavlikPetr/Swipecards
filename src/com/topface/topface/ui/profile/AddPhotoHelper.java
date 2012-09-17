@@ -60,7 +60,7 @@ public class AddPhotoHelper {
      * Добавление фотографии
      */
     public void addPhoto() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle(mContext.getString(R.string.album_add_photo_title));
         View view = LayoutInflater.from(mContext).inflate(R.layout.profile_add_photo, null);
         view.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mOnAddPhotoClickListener);

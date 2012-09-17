@@ -6,6 +6,8 @@ import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ public class ProfilePhotoFragment extends Fragment {
     private TextView mTitle;
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
     private SparseArray<HashMap<String, String>> mPhotoLinks;
+    private AddPhotoHelper mAddPhotoHelper;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,8 @@ public class ProfilePhotoFragment extends Fragment {
             mPhotoLinks.append(i+1, CacheProfile.photoLinks.get(CacheProfile.photoLinks.keyAt(i)));
         }
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks);
+        mAddPhotoHelper = new AddPhotoHelper(getActivity().getApplicationContext(), getActivity());
+        mAddPhotoHelper.setOnResultHandler(mHandler);
     }
     
     @Override
@@ -67,7 +72,7 @@ public class ProfilePhotoFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if(position == 0) {
-                Toast.makeText(getActivity(), "Click", Toast.LENGTH_SHORT).show();
+                mAddPhotoHelper.addPhoto();
                 return;
             }
             Data.photoAlbum = CacheProfile.photoLinks;
@@ -75,6 +80,20 @@ public class ProfilePhotoFragment extends Fragment {
             intent.putExtra(PhotoAlbumActivity.INTENT_USER_ID, CacheProfile.uid);
             intent.putExtra(PhotoAlbumActivity.INTENT_ALBUM_POS, --position);
             startActivity(intent);
+        }
+    };
+    
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            //getProfile();
+            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+                Toast.makeText(getActivity(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+            }
+            else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+                Toast.makeText(getActivity(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+            }
         }
     };
 }

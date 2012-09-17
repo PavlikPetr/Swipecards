@@ -1,6 +1,10 @@
 package com.topface.topface.ui.profile;
 
 import com.topface.topface.R;
+import com.topface.topface.ui.profile.edit.EditContainerActivity;
+import com.topface.topface.utils.FormInfo;
+import com.topface.topface.utils.FormItem;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -33,10 +37,24 @@ public class ProfileFormFragment extends Fragment {
         return root;
     }
     
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        intent.putExtra(EditContainerActivity.INTENT_REQUEST_KEY, requestCode);
+        super.startActivityForResult(intent, requestCode);
+    }
+    
     View.OnClickListener mOnFillClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Toast.makeText(getActivity(), "fill me", Toast.LENGTH_SHORT).show();
+            Object formItem = view.getTag();
+            if(formItem instanceof FormItem) {
+                FormItem item = (FormItem)formItem;
+                Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
+                intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, item.titleId);
+                intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, item.dataId);
+                intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, item.value);
+                startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FORM_ITEM);
+            }
         }
     };
 }

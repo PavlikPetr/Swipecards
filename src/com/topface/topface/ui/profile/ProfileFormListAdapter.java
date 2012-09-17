@@ -125,6 +125,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
                     holder.mValue.setVisibility(View.INVISIBLE);
                     holder.mFill.setVisibility(View.VISIBLE);
                     holder.mFill.setOnClickListener(mOnFillListener);
+                    holder.mFill.setTag(item);
                 }
                 holder.mState.setImageResource(R.drawable.user_cell);
                 break;

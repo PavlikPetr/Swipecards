@@ -190,68 +190,68 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // divider
+                // 4 divider
                 profile.forms.add(FormItem.getDivider());
                 
-                // 1 header -= PHYSIQUE =-
+                // 5 header -= PHYSIQUE =-
                 formItem = new FormItem(R.string.form_physique,FormItem.HEADER);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 11 fitness
+                // 6 fitness
                 formItem = new FormItem(R.array.form_physique_fitness,form.optInt("fitness_id"),FormItem.DATA);                
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
 
-                // 4 height
+                // 7 height
                 formItem = new FormItem(R.array.form_main_height,Integer.toString(form.optInt("height")), FormItem.DATA);                
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 13 weight
+                // 8 weight
                 formItem = new FormItem(R.array.form_main_weight,Integer.toString(form.optInt("weight")),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 15 hair
+                // 9 hair
                 formItem = new FormItem(R.array.form_physique_hairs,form.optInt("hair_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 16 eye
+                // 10 eye
                 formItem = new FormItem(R.array.form_physique_eyes,form.optInt("eyes_id"),FormItem.DATA);                
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // divider                
+                // 11 divider                
                 profile.forms.add(FormItem.getDivider());
                 
-                // 1 header -= SOCIAL =-
+                // 12 header -= SOCIAL =-
                 formItem = new FormItem(R.string.form_social,FormItem.HEADER);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 6 marriage
+                // 13 marriage
                 formItem = new FormItem(R.array.form_social_marriage,form.optInt("marriage_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 5 education
+                // 14 education
                 formItem = new FormItem(R.array.form_social_education,form.optInt("education_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 7 finances
+                // 15 finances
                 formItem = new FormItem(R.array.form_social_finances,form.optInt("finances_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);    
                 
-                // 18 residence
+                // 16 residence
                 formItem = new FormItem(R.array.form_social_residence,form.optInt("residence_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
 
-                // 19 car vs car_id
+                // 17 car vs car_id
                 formItem = new FormItem(R.array.form_social_car,form.optInt("car_id"),FormItem.DATA);                
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
