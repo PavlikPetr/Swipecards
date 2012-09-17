@@ -182,13 +182,6 @@
     <string name="ero_album_btn_buy">Next photo</string>
     <string name="ero_album_btn_next">Next photo</string>
     
-    
-    <!-- Pull2Refresh Module -->
-    <string name="pull_to_refresh_pull_label">Pull to refresh</string>
-    <string name="pull_to_refresh_release_label">Release to refresh</string>
-    <string name="pull_to_refresh_refreshing_label">Loading</string>
-    <string name="pull_to_refresh_tap_label">Tap to refresh</string>
-
     <!-- Экран приглашений -->
     <string name="search_hint">Find friends</string>
     <string name="activity_title_invite">Invitations</string>

@@ -8,9 +8,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedSymphaty;
 import com.topface.topface.requests.ApiHandler;
@@ -18,8 +22,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedSymphatyRequest;
 import com.topface.topface.ui.adapters.SymphatyListAdapter;
 import com.topface.topface.ui.blocks.FloatBlock;
-import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
-import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.utils.AvatarManager;
@@ -91,11 +93,11 @@ public class SymphatyActivity extends TrackedActivity {
        startActivityForResult(intent,0);
      }
    });
-   mListView.setOnRefreshListener(new OnRefreshListener() {
-     @Override
-     public void onRefresh() {
-       update(true);
-     }
+   mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+       @Override
+       public void onRefresh(PullToRefreshBase refreshView) {
+           update(true);
+       }
    });
    
    // Footer

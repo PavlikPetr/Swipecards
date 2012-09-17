@@ -17,16 +17,11 @@
 
         <!-- button bar -->
 	  <include layout="@layout/bar_double_big_button" />
-	  
-	    <com.topface.topface.ui.p2r.PullToRefreshListView
-	      android:id="@+id/lvLikesList"
-	      android:layout_width="wrap_content" 
-	      android:layout_height="0dip"
-	      android:layout_weight="1"
-	      android:dividerHeight="0dp"
-	      android:fadeScrollbars="true"
-	      android:background="@android:color/transparent" />
 
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+                android:id="@+id/lvLikesList"
+                style="@style/PullToRefresh"
+                />
 
         <include layout="@layout/banner"/>
 

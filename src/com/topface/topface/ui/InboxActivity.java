@@ -3,17 +3,18 @@ package com.topface.topface.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
-import com.topface.topface.Data;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedInbox;
 import com.topface.topface.requests.ApiHandler;
@@ -21,8 +22,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedInboxRequest;
 import com.topface.topface.ui.adapters.InboxListAdapter;
 import com.topface.topface.ui.blocks.FloatBlock;
-import com.topface.topface.ui.p2r.PullToRefreshBase.OnRefreshListener;
-import com.topface.topface.ui.p2r.PullToRefreshListView;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
@@ -84,11 +83,11 @@ public class InboxActivity extends TrackedActivity {
    
     // ListView
     mListView = (PullToRefreshListView)findViewById(R.id.lvInboxList);
-    mListView.setOnRefreshListener(new OnRefreshListener() {
-      @Override
-      public void onRefresh() {
-        update(true);
-      }
+    mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+        @Override
+        public void onRefresh(PullToRefreshBase refreshView) {
+            update(true);
+        }
     });
     mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
       @Override

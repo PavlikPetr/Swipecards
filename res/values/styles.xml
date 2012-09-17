@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- TODO: Ну надеюсь тут будут стили :-\ -->
+    <style name="PullToRefresh">
+        <item name="ptrShowIndicator">false</item>
+        <item name="ptrDrawable">@drawable/white_ptr_drawable</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:dividerHeight">0dp</item>
+        <item name="android:fadeScrollbars">true</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 </resources>
