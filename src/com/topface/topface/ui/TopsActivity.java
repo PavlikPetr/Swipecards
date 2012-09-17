@@ -264,8 +264,8 @@ public class TopsActivity extends TrackedActivity {
         int arraySize = Data.cityList.size();
         String[] cities = new String[arraySize + 1];
         cities[0] = ownCity.name;
-        for (int i = 1; i < arraySize; ++i) {
-            cities[i] = Data.cityList.get(i).name;
+        for (int i = 0; i < arraySize; i++) {
+            cities[i + 1] = Data.cityList.get(i).name;
         }
 
         int selectedItem = mActionData.city_popup_pos < 0 ? 0 : mActionData.city_popup_pos;
