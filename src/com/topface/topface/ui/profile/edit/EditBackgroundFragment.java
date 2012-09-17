@@ -1,11 +1,5 @@
 package com.topface.topface.ui.profile.edit;
 
-import java.util.LinkedList;
-
-import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.utils.CacheProfile;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,12 +12,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.utils.CacheProfile;
+
+import java.util.LinkedList;
 
 public class EditBackgroundFragment extends AbstractEditFragment{
 	

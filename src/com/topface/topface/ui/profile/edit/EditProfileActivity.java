@@ -1,17 +1,5 @@
 package com.topface.topface.ui.profile.edit;
 
-import java.util.LinkedList;
-
-import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.SettingsRequest;
-import com.topface.topface.ui.CitySearchActivity;
-import com.topface.topface.ui.profile.edit.EditProfileItem.Type;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.FormItem;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -24,12 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.CitySearchActivity;
+import com.topface.topface.ui.profile.edit.EditProfileItem.Type;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FormItem;
+
+import java.util.LinkedList;
 
 public class EditProfileActivity extends Activity implements OnClickListener{	
 	

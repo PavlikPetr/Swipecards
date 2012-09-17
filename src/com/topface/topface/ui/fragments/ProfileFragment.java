@@ -1,16 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import com.topface.topface.R;
-import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.profile.ProfileFormFragment;
-import com.topface.topface.ui.profile.ProfilePhotoFragment;
-import com.topface.topface.ui.profile.edit.EditProfileActivity;
-import com.topface.topface.ui.views.IndicatorView;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Utils;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,13 +13,16 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import com.topface.topface.R;
+import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.profile.ProfileFormFragment;
+import com.topface.topface.ui.profile.ProfilePhotoFragment;
+import com.topface.topface.ui.profile.edit.EditProfileActivity;
+import com.topface.topface.ui.views.IndicatorView;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 public class ProfileFragment extends BaseFragment implements OnClickListener{
     //Data

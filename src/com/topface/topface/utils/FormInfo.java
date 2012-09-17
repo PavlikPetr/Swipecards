@@ -1,12 +1,10 @@
 package com.topface.topface.utils;
 
-import com.topface.topface.R;
-import com.topface.topface.Static;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.InputType;
-
+import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.QuestionaryRequest;
 

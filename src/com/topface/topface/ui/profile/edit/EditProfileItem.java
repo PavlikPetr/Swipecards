@@ -1,8 +1,7 @@
 package com.topface.topface.ui.profile.edit;
 
-import com.topface.topface.R;
-
 import android.graphics.drawable.Drawable;
+import com.topface.topface.R;
 
 public abstract class EditProfileItem {	
 	public enum Type {TOP, MIDDLE, BOTTOM, NONE};

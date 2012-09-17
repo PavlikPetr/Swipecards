@@ -1,11 +1,10 @@
 package com.topface.topface.ui.profile.edit;
 
-import com.topface.topface.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import com.topface.topface.R;
 
 public class EditContainerActivity extends FragmentActivity {
 

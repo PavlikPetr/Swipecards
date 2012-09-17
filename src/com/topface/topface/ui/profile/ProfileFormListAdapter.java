@@ -1,9 +1,5 @@
 package com.topface.topface.ui.profile;
 
-import java.util.LinkedList;
-import com.topface.topface.R;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.FormItem;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.topface.topface.R;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FormItem;
+
+import java.util.LinkedList;
 
 public class ProfileFormListAdapter extends BaseAdapter {
     // Data

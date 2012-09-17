@@ -1,6 +1,5 @@
 package com.topface.topface.ui.profile;
 
-import com.topface.topface.R;
 import com.topface.topface.ui.profile.edit.EditContainerActivity;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -13,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.topface.topface.R;
 
 public class ProfileFormFragment extends Fragment {
     private ProfileFormListAdapter mProfilePhotoListAdapter;

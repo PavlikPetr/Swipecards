@@ -1,3 +1,9 @@
 [submodule "libs/UniversalImageLoader"]
 	path = libs/UniversalImageLoader
 	url = git@github.com:Topface/Android-Universal-Image-Loader.git
+[submodule "libs/PullToRefresh"]
+	path = libs/PullToRefresh
+	url = git@github.com:Topface/Android-PullToRefresh.git
+[submodule "libs/Facebook"]
+	path = libs/Facebook
+	url = https://github.com/facebook/facebook-android-sdk.git

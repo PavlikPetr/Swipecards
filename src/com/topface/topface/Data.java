@@ -1,24 +1,18 @@
 package com.topface.topface;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.LinkedList;
-import com.facebook.android.Facebook;
-import com.topface.topface.data.City;
-import com.topface.topface.data.Dialog;
-import com.topface.topface.data.FeedInbox;
-import com.topface.topface.data.FeedLike;
-import com.topface.topface.data.FeedSympathy;
-import com.topface.topface.data.Gift;
-import com.topface.topface.data.Top;
-import com.topface.topface.utils.Device;
-
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.SparseArray;
+import com.facebook.android.Facebook;
+import com.topface.topface.data.*;
+import com.topface.topface.utils.Device;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Data {
     // Data

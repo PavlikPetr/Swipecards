@@ -1,8 +1,8 @@
 package com.topface.topface.utils;
 
-import java.io.Serializable;
-
 import com.topface.topface.Static;
+
+import java.io.Serializable;
 
 public class FormItem implements Serializable {
     // Data

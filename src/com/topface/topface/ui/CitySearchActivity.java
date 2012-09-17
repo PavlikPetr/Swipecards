@@ -1,9 +1,15 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
-
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.Window;
+import android.widget.*;
+import android.widget.AdapterView.OnItemClickListener;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -12,20 +18,8 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.utils.Debug;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.LinkedList;
 
 public class CitySearchActivity extends BaseFragmentActivity {
     // Data
