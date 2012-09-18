@@ -1,5 +1,11 @@
 package com.topface.topface.ui.profile.edit;
 
+import java.util.LinkedList;
+
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.utils.CacheProfile;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,12 +18,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.*;
-import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.utils.CacheProfile;
-
-import java.util.LinkedList;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class EditBackgroundFragment extends AbstractEditFragment{
 	
@@ -41,13 +47,13 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 		mSelectedResId = CacheProfile.background_res_id;
 		
 		// Navigation bar		
-		((TextView) root.findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-		TextView subTitle = (TextView) root.findViewById(R.id.tvNavigationSubtitle);
+		((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
+		TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
 		subTitle.setVisibility(View.VISIBLE);
 		subTitle.setText(R.string.edit_bg_photo);
 		
-		((Button)root.findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);		
-		Button btnBack = (Button)root.findViewById(R.id.btnNavigationBackWithText);
+		((Button)getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);		
+		Button btnBack = (Button)getActivity().findViewById(R.id.btnNavigationBackWithText);
 		btnBack.setVisibility(View.VISIBLE);
 		btnBack.setText(R.string.navigation_edit);
 		btnBack.setOnClickListener(new OnClickListener() {
@@ -57,8 +63,7 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 			}
 		});
 		
-		mSaveButton = (Button) root.findViewById(R.id.btnNavigationRightWithText);
-		mSaveButton.setVisibility(View.VISIBLE);
+		mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);		
 		mSaveButton.setText(getResources().getString(R.string.navigation_save));
 		mSaveButton.setOnClickListener(new OnClickListener() {
 
@@ -68,7 +73,7 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 			}
 		});
 		
-		mRightPrsBar = (ProgressBar) root.findViewById(R.id.prsNavigationRight);
+		mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 		
 		// List
 		mBackgroundImagesListView = (ListView) root.findViewById(R.id.lvList);		
@@ -91,6 +96,7 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 	private void setSelectedBackground(BackgroundItem item) {
 		if(item instanceof ResourceBackgroundItem) {			
 			mSelectedResId = ((ResourceBackgroundItem)item).getResourceId();
+			refreshSaveState();
 		}
 	}
 		
@@ -246,5 +252,16 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 			this.selected = selected;
 			return (BackgroundItem) this;
 		}		
+	}
+
+	@Override
+	public void fillLayout() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clearLayout() {
+		mBackgroundImagesListView.setVisibility(View.INVISIBLE);
 	}	
 }

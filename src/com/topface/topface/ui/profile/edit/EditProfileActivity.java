@@ -1,5 +1,17 @@
 package com.topface.topface.ui.profile.edit;
 
+import java.util.LinkedList;
+
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.CitySearchActivity;
+import com.topface.topface.ui.profile.edit.EditProfileItem.Type;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FormItem;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -12,18 +24,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
-import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.SettingsRequest;
-import com.topface.topface.ui.CitySearchActivity;
-import com.topface.topface.ui.profile.edit.EditProfileItem.Type;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.FormItem;
-
-import java.util.LinkedList;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class EditProfileActivity extends Activity implements OnClickListener{	
 	
@@ -37,7 +43,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ac_edit_profile);
-
+		
 		// Navigation bar
 		((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
 		((Button) findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
@@ -112,11 +118,12 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnEditName:
-			//TODO edit name onClick()
+			startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),
+					EditContainerActivity.INTENT_EDIT_NAME_AGE);
 			break;
 		case R.id.btnEditCity:
-			Intent intent = new Intent(getApplicationContext(), CitySearchActivity.class);
-            startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+            startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class), 
+            		CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
 			break;
 		case R.id.btnNavigationBackWithText:
 			finish();
@@ -127,7 +134,13 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_OK) {
-			switch (requestCode) { 
+			switch (requestCode) {			
+			case EditContainerActivity.INTENT_EDIT_NAME_AGE:
+				mEditName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
+				break;
+			case EditContainerActivity.INTENT_EDIT_STATUS:
+				mAdapter.notifyDataSetChanged();
+				break;
 			case EditContainerActivity.INTENT_EDIT_BACKGROUND:
 				mAdapter.notifyDataSetChanged();
 				break;
@@ -317,7 +330,8 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 		@Override
 		void onClick() {
-			// TODO
+			Intent intent = new Intent(getApplicationContext(), EditContainerActivity.class);
+			startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_STATUS);
 		}
 	}
 
@@ -362,7 +376,8 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 		@Override
 		void onClick() {
-			// TODO
+			Intent intent = new Intent(getApplicationContext(), EditContainerActivity.class);
+			startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_ALBUM);
 		}
 	}
 

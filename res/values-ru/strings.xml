@@ -2,7 +2,7 @@
 <resources>
     <!-- ru -->
     <string name="app_name">Topface</string>
-
+    
     <!-- General  -->
     <string name="general_internet_off">Нет подключения к Интернет</string>
     <string name="general_dialog_loading">Загрузка</string>
@@ -13,7 +13,7 @@
     <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
     <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
     <string name="general_popup_rating">Понравилось наше приложение? Подними нам рейтинг! Чем выше рейтинг, тем больше интересных людей ты встретишь в TopFace</string>
-
+    
     <!-- Auth Activity  -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
     <string name="auth_btn_fb">Войти через Facebook</string>
@@ -29,79 +29,79 @@
     <string name="dashbrd_btn_love">Восхищение</string>
     <string name="dashbrd_btn_skip">Следующая</string>
     <string name="dashbrd_btn_prev">Предыдущая</string>
-
+    
     <!-- Likes Activity -->
     <string name="likes_header_title">Я нравлюсь</string>
     <string name="likes_btn_dbl_left">Все</string>
     <string name="likes_btn_dbl_right">Непрочитанные</string>
     <string name="likes_background_text">Нет лайков</string>
-
+    
     <!-- Indox & Chat Activity -->
-    <string name="inbox_header_title">Диалоги</string>
-    <string name="inbox_btn_dbl_left">Все</string>
-    <string name="inbox_btn_dbl_right">Непрочитанные</string>
-    <string name="inbox_background_text">Входящих сообщений нет</string>
-    <string name="chat_btn_send">Отправить</string>
-    <string name="chat_comment">Написать сообщение</string>
-    <string name="chat_gift_in">Вы получили подарок.</string>
-    <string name="chat_gift_out">Вы отправили подарок.</string>
-    <string name="chat_rate_in">Вас оценили на</string>
-    <string name="chat_rate_out">Вы оценили на</string>
-    <string name="chat_like_in">Вам отправили лайк</string>
-    <string name="chat_like_out">Вы отправили лайк</string>
-    <string name="chat_symphathy_in">Вам отправили сипматию</string>
-    <string name="chat_symphathy_out">Вы отправили сипматию</string>
-    <string name="chat_wish_in">Вам отправили Тайное Желание.</string>
-    <string name="chat_wish_out">Вы отправили Тайное Желание.</string>
-    <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>
-    <string name="chat_sexuality_out">Вы оценили сексуальность.</string>
-    <string name="chat_wink_in">Вам подмигнули.</string>
-    <string name="chat_wink_out">Вы подмигнули.</string>
-    <string name="chat_money_in">Вам начислена монета</string>
-    <string name="chat_dialog_gps">GPS выключен! Включить?</string>
-    <string name="chat_dialog_btn_gps_settings">Настройки</string>
-    <string name="chat_dialog_btn_gps_cancel">Отмена</string>
-    <string name="chat_dialog_btn_agps_settings">Настройки</string>
-    <string name="chat_toast_fail_location">Не удалось определить местоположение</string>
-    <string name="chat_message_copied">Сообщение скопировано</string>
-
-    <!-- Symphaty Activity -->
+	  <string name="inbox_header_title">Диалоги</string>
+	  <string name="inbox_btn_dbl_left">Все</string>
+	  <string name="inbox_btn_dbl_right">Непрочитанные</string>
+	  <string name="inbox_background_text">Входящих сообщений нет</string>
+	  <string name="chat_btn_send">Отправить</string>
+	  <string name="chat_comment">Написать сообщение</string>
+	  <string name="chat_gift_in">Вы получили подарок.</string>
+	  <string name="chat_gift_out">Вы отправили подарок.</string>
+	  <string name="chat_rate_in">Вас оценили на</string>
+	  <string name="chat_rate_out">Вы оценили на</string>
+	  <string name="chat_like_in">Вам отправили лайк</string>
+	  <string name="chat_like_out">Вы отправили лайк</string>
+	  <string name="chat_symphathy_in">Вам отправили сипматию</string>
+	  <string name="chat_symphathy_out">Вы отправили сипматию</string>
+	  <string name="chat_wish_in">Вам отправили Тайное Желание.</string>
+	  <string name="chat_wish_out">Вы отправили Тайное Желание.</string>
+	  <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>
+	  <string name="chat_sexuality_out">Вы оценили сексуальность.</string>
+	  <string name="chat_wink_in">Вам подмигнули.</string>
+      <string name="chat_wink_out">Вы подмигнули.</string>
+	  <string name="chat_money_in">Вам начислена монета</string>
+	  <string name="chat_dialog_gps">GPS выключен! Включить?</string>    
+      <string name="chat_dialog_btn_gps_settings">Настройки</string>
+      <string name="chat_dialog_btn_gps_cancel">Отмена</string>
+      <string name="chat_dialog_btn_agps_settings">Настройки</string>
+      <string name="chat_toast_fail_location">Не удалось определить местоположение</string>
+      <string name="chat_message_copied">Сообщение скопировано</string>
+	  
+	  <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Взаимно</string>
     <string name="symphaty_btn_dbl_left">Все</string>
     <string name="symphaty_btn_dbl_right">Непрочитанные</string>
     <string name="symphaty_background_text">Симпатий нет</string>
-
+    
     <!-- Tops Activity -->
     <string name="tops_header_title">Самые красивые</string>
     <string name="tops_btn_boys">Парни</string>
     <string name="tops_btn_girls">Девушки</string>
     <string name="tops_btn_city">Город</string>
-
+    
     <!-- Filter Activity -->
-    <string name="filter_header_title">Я ищу</string>
-    <string name="filter_menu_save">Сохранить</string>
-    <string name="filter_filter">Фильтр</string>
-    <string name="filter_place">Местоположение</string>
-    <string name="filter_city">Город</string>
-    <string name="filter_sex">Пол</string>
-    <string name="filter_age">Возраст</string>
-    <string name="filter_boy">Парня</string>
-    <string name="filter_girl">Девушку</string>
-    <string name="filter_online">Онлайн</string>
-    <string name="filter_all">Все</string>
-    <string name="filter_only_online">Только онлайн</string>
-    <string name="filter_from">С</string>
-    <string name="filter_to">до</string>
-    <string name="filter_nearby">Рядом со мной</string>
-    <string name="filter_cities_all">Всем городам</string>
-    <string name="filter_select_city">Выбор города</string>
-
+	  <string name="filter_header_title">Я ищу</string>
+	  <string name="filter_menu_save">Сохранить</string>
+	  <string name="filter_filter">Фильтр</string>
+	  <string name="filter_place">Местоположение</string>
+	  <string name="filter_city">Город</string>
+	  <string name="filter_sex">Пол</string>
+	  <string name="filter_age">Возраст</string>
+	  <string name="filter_boy">Парня</string>
+	  <string name="filter_girl">Девушку</string>
+	  <string name="filter_online">Онлайн</string>
+	  <string name="filter_all">Все</string>
+	  <string name="filter_only_online">Только онлайн</string>
+	  <string name="filter_from">С</string>
+	  <string name="filter_to">до</string>
+	  <string name="filter_nearby">Рядом со мной</string>
+	  <string name="filter_cities_all">Всем городам</string>
+	  <string name="filter_select_city">Выбор города</string>
+	  
     <!-- Dating Activity -->
     <string name="dating_header_title_him">Оцени его!</string>
     <string name="dating_header_title_her">Оцени её!</string>
     <string name="dating_menu_one">Фильтр</string>
     <string name="dating_back">К оценкам</string>
-
+    
     <!-- Buying Activity -->
 	  <string name="buying_header_title">Покупка</string>
 	  <string name="buying_money">Покупка монет</string>
@@ -163,10 +163,14 @@
 	  <!--  EditProfileActivity -->
 	  <string name="edit_title">Редактирование</string>
 	  <string name="edit_bg_photo">Фоновая фотография</string>
+	  <string name="edit_album">Альбом</string>
 	  <string name="edit_profile_photo">Поменять фото</string>
 	  <string name="edit_album_photos">фотографий</string>
 	  <string name="edit_interests">интересов</string>
 	  <string name="edit_back_photo_selected">Выбрана</string>
+	  <string name="edit_name">Имя</string>
+	  <string name="edit_age">Возраст</string>
+	  <string name="edit_status">Статус</string>
 	  
 	  <!-- Album, Ero Album Activity -->
 	  <string name="album_header_title">Альбом</string>
@@ -190,24 +194,24 @@
     <string name="gifts_present">Поздравительные</string>
     <string name="gifts_title">Выберите подарок</string>
     <string name="gifts_send_btn">Отправить подарок</string>
-
+    
     <!-- Map Activity -->
     <string name="map_search">Поиск</string>
     <string name="map_location_progress">Определяю местоположение</string>
     <string name="map_confirm">Отпр.</string>
     <string name="map_address">Введите адрес</string>
-
+    
     <!--  Navigation Header -->
     <string name="navigation_back_profile">Профиль</string>
     <string name="navigation_back_dialog">Диалоги</string>
     <string name="navigation_edit">Редактировать</string>
     <string name="navigation_save">Сохранить</string>
-
+    
     <!-- Profile / UserProfile Form -->
     <string name="form_main">Основное</string>
     <string-array name="form_main_character">
         <item name="male">Характер</item>
-        <item name="female">Характер</item>
+        <item name="female">Характер</item> 
         <item name="own_male">Ваш характер</item>
         <item name="own_female">Ваш характер</item>
     </string-array>
@@ -226,7 +230,7 @@
         <item name="own_male">Ваш вес</item>
         <item name="own_female">Ваш вес</item>
     </string-array>
-
+    
     <string name="form_physique">Физические данные</string>
     <string-array name="form_physique_fitness">
         <item name="male">Комплекция</item>
@@ -245,128 +249,71 @@
         <item name="female">Цвет глаз</item>
         <item name="own_male">Ваш цвет глаз</item>
         <item name="own_female">Ваш цвет глаз</item>
-    </string-array>
-
+    </string-array>    
+    
     <string name="form_social">Социальное</string>
     <string-array name="form_social_marriage">
         <item name="male">Состоит ли в браке?</item>
-        <item name="female">Состоит ли в браке?</item>
+        <item name="female">Состоит ли в браке?</item> 
         <item name="own_male">Состоите ли вы в браке?</item>
         <item name="own_female">Состоите ли вы в браке?</item>
     </string-array>
     <string-array name="form_social_education">
         <item name="male">Образование</item>
-        <item name="female">Образование</item>
+        <item name="female">Образование</item> 
         <item name="own_male">Ваше образование</item>
         <item name="own_female">Ваше образование</item>
     </string-array>
     <string-array name="form_social_finances">
         <item name="male">Материальное положение</item>
-        <item name="female">Материальное положение</item>
+        <item name="female">Материальное положение</item> 
         <item name="own_male">Ваше материальное положение</item>
         <item name="own_female">Ваше материальное положение</item>
     </string-array>
     <string-array name="form_social_residence">
         <item name="male">Условия проживания</item>
-        <item name="female">Условия проживания</item>
+        <item name="female">Условия проживания</item> 
         <item name="own_male">Ваши условия проживания</item>
         <item name="own_female">Ваши условия проживания</item>
     </string-array>
     <string-array name="form_social_car">
         <item name="male">Наличие машины</item>
-        <item name="female">Наличие машины</item>
+        <item name="female">Наличие машины</item> 
         <item name="own_male">Наличие у вас машины</item>
         <item name="own_female">Наличие у вас машины</item>
-    </string-array>
-
+    </string-array>    
+    
     <string name="form_habits">Привычки</string>
     <string-array name="form_habits_smoking">
         <item name="male">Отношение к курению</item>
-        <item name="female">Отношение к курению</item>
+        <item name="female">Отношение к курению</item> 
         <item name="own_male">Ваше отношение к курению</item>
         <item name="own_female">Ваше отношение к курению</item>
     </string-array>
     <string-array name="form_habits_alcohol">
         <item name="male">Отношение к алкоголю</item>
-        <item name="female">Отношение к алкоголю</item>
+        <item name="female">Отношение к алкоголю</item> 
         <item name="own_male">Ваше отношение к алкоголю</item>
         <item name="own_female">Ваше отношение к алкоголю</item>
     </string-array>
     <string-array name="form_habits_restaurants">
         <item name="male">Любимые рестораны</item>
-        <item name="female">Любимые рестораны</item>
+        <item name="female">Любимые рестораны</item> 
         <item name="own_male">Ваши любимые рестораны</item>
         <item name="own_female">Ваши любимые рестораны</item>
     </string-array>
-
+    
     <string name="form_detail">Подробнее</string>
     <string-array name="form_detail_about_dating">
         <item name="male">О первом свидании с девушкой</item>
-        <item name="female">О идеальном первом свидании</item>
+        <item name="female">О идеальном первом свидании</item> 
         <item name="own_male">Каким будет ваше первое свидание с девушкой?</item>
         <item name="own_female">Опишите идеальное свидание</item>
     </string-array>
     <string-array name="form_detail_archievements">
         <item name="male">Лучшие достижения в жизни</item>
-        <item name="female">Лучшие достижения в жизни</item>
+        <item name="female">Лучшие достижения в жизни</item> 
         <item name="own_male">Ваши лучшие достижения в жизни</item>
         <item name="own_female">Ваши лучшие достижения в жизни</item>
     </string-array>
-
-    <!-- Экран приглашений -->
-    <string name="search_hint">Найти друзей</string>
-    <string name="activity_title_invite">Приглашения</string>
-    <string name="send_invite">Отправить</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Пригласите друзей и получите за каждого по 20 {{coins}}</item>
-        <item quantity="one">Вы собираетесь отправить приглашение %2$d другу и получите за это %1$d {{coins}}</item>
-        <item quantity="few">Вы собираетесь отправить приглашения %2$d друзьям и получите за это %1$d {{coins}}</item>
-        <item quantity="other">Вы собираетесь отправить приглашения %2$d друзьям и получите за это %1$d {{coins}}</item>
-    </plurals>
-    <string name="invite_is_free">Отправка приглашения бесплатна</string>
-    <string name="invite_need_select">Выберите одного или нескольких друзей для отправки приглашения</string>
-    <string name="invite_error">Не удалось отправить приглашения. Попробуйте еще раз</string>
-    <string name="invite_completed">Приглашение отправлено</string>
-
-    <!--Leaders-->
-    <string name="leaders_go_date">Идем на свидание</string>
-    <string name="leaders_leader_now">Теперь вы лидер!</string>
-    <string name="need_select_photo">Сперва нужно выбрать фотографию!</string>
-    <string name="photo_add_or">Фотография добавлена</string>
-    <string name="photo_add_error">Не удалось добавить фотографию</string>
-    <plurals name="leaders_price">
-        <item quantity="one">Встать за %d монету</item>
-        <item quantity="few">Встать за %d монеты</item>
-        <item quantity="other">Встать за %d монет</item>
-    </plurals>
-    <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
-    <string name="leaders_date">Хочу на\nсвидание!</string>
-
-    <!--Settings-->
-    <string name="settings_wifi">Только по Wi-Fi</string>
-    <string name="settings_on">Включена</string>
-    <string name="settings_off">Выключена</string>
-    <string name="notifications">Уведомления</string>
-    <string name="notifications_summary">Уведомления о новых сообщениях и симпатиях</string>
-    <string name="select_ringtone">Выбрать рингтон</string>
-    <string name="vibration">Вибросигнал</string>
-    <string name="photo_preloading">Предзагрузка фотографий</string>
-    <string name="photo_preloading_summary">Предварительная загрузка следующей фотографии в альбоме</string>
-    <string name="preloading">Предзагрузка</string>
-
-    <plurals name="time_hour">
-        <item quantity="one">%d час назад</item>
-        <item quantity="few">%d часа назад</item>
-        <item quantity="other">%d часов назад</item>
-    </plurals>
-
-    <plurals name="time_minute">
-        <item quantity="one">%d минуту назад</item>
-        <item quantity="few">%d минуты назад</item>
-        <item quantity="other">%d минут назад</item>
-    </plurals>
-
-    <string name="profile_settings">Настройки</string>
-    <string name="profile_settings_summary">Настройки приложения</string>
-
 </resources>

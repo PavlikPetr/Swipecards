@@ -8,16 +8,15 @@
         android:id="@+id/edText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"        
-        android:layout_gravity="center"   
+        android:layout_gravity="top|left"   
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:singleLine="false"
-        android:textSize="18sp"   
         android:imeOptions="actionDone"
-        android:inputType="numberSigned"
-        android:textColor="#000000"
-        android:background="@drawable/chat_editbox_selector" />
+        android:textSize="14sp"           
+        style="@style/ItemTitleText"
+        android:background="@drawable/edit_editbox_selector"/>
 
 </LinearLayout>

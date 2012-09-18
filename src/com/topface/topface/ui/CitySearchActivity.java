@@ -1,25 +1,29 @@
 package com.topface.topface.ui;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.view.Window;
-import android.widget.*;
-import android.widget.AdapterView.OnItemClickListener;
+import java.util.LinkedList;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.utils.Debug;
-
-import java.util.LinkedList;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class CitySearchActivity extends BaseFragmentActivity {
     // Data
@@ -45,13 +49,26 @@ public class CitySearchActivity extends BaseFragmentActivity {
         setContentView(R.layout.ac_city);
         Debug.log(this, "+onCreate");
 
+        overridePendingTransition(R.anim.slide_in_from_right,R.anim.slide_out_left);        
+        
         // Data
         mTopCitiesList = new LinkedList<City>();
         mDataList = new LinkedList<City>();
         mNameList = new LinkedList<String>();
 
-        // Title Header
-        ((TextView)findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.filter_city));
+        // Title Header        
+        ((TextView)findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.filter_city));     	
+   		((Button) findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+   		Button btnBack = (Button) findViewById(R.id.btnNavigationBack);
+   		btnBack.setVisibility(View.VISIBLE);   		
+   		btnBack.setOnClickListener(new OnClickListener() {
+  			@Override
+   			public void onClick(View v) {
+   				finish();
+   			}
+   		});
+        
+        
 
         // Progress
         mProgressBar = (ProgressBar)findViewById(R.id.prsCityLoading);
@@ -72,12 +89,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 intent.putExtra(INTENT_CITY_NAME, mDataList.get(position).name);
                 intent.putExtra(INTENT_CITY_FULL_NAME, mDataList.get(position).full);
 
-                SharedPreferences.Editor editor = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE).edit();
-                editor.putInt(Static.PREFERENCES_TOPS_CITY_ID, mDataList.get(position).id);
-                editor.putString(Static.PREFERENCES_TOPS_CITY_NAME, mDataList.get(position).name);
-                editor.putInt(Static.PREFERENCES_TOPS_CITY_POS, -1);
-                editor.commit();
-                
                 Debug.log(CitySearchActivity.this, "1.city_id:" + mDataList.get(position).id);
 
                 CitySearchActivity.this.setResult(RESULT_OK, intent);
@@ -183,11 +194,16 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
     //---------------------------------------------------------------------------
     @Override
-    protected void onDestroy() {
+    protected void onDestroy() {        
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
     //---------------------------------------------------------------------------
+    @Override
+	public void finish() {		
+		super.finish();
+		overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
+	}
 }
 
 /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
