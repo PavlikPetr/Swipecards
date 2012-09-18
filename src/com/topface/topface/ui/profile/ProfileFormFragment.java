@@ -1,8 +1,8 @@
 package com.topface.topface.ui.profile;
 
 import com.topface.topface.ui.profile.edit.EditContainerActivity;
-import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.topface.topface.R;
 
 public class ProfileFormFragment extends Fragment {
@@ -37,6 +36,14 @@ public class ProfileFormFragment extends Fragment {
         return root;
     }
     
+    @Override
+    public void onActivityResult(int requestCode,int resultCode,Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EditContainerActivity.INTENT_EDIT_FORM_ITEM && resultCode == Activity.RESULT_OK) {
+            mProfilePhotoListAdapter.notifyDataSetChanged();
+        }
+    }
+
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         intent.putExtra(EditContainerActivity.INTENT_REQUEST_KEY, requestCode);

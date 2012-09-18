@@ -34,9 +34,8 @@ public class Http {
     public static final int HTTP_TIMEOUT = 20 * 1000;
     public static final int BUFFER_SIZE = 8192; //1024
     private static final String TAG = "Http";
-    //---------------------------------------------------------------------------
+
     // class FlushedInputStream
-    //---------------------------------------------------------------------------
     public static class FlushedInputStream extends FilterInputStream {
         public FlushedInputStream(InputStream inputStream) {
             super(inputStream);
@@ -58,30 +57,30 @@ public class Http {
             return totalBytesSkipped;
         }
     } // FlushedInputStream
-      //---------------------------------------------------------------------------
+
     public static boolean isOnline(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
-    //---------------------------------------------------------------------------
+
     public static String httpGetRequest(String request) {
         return httpRequest(HTTP_GET_REQUEST, request, null, null, null);
     }
-    //---------------------------------------------------------------------------
-    public static String httpPostRequest(String request,String postParams) {
+
+    public static String httpPostRequest(String request, String postParams) {
         return httpRequest(HTTP_POST_REQUEST, request, postParams, null, null);
     }
-    //---------------------------------------------------------------------------
-    public static String httpPostDataRequest(String request,String postParams,byte[] dataParams) {
+
+    public static String httpPostDataRequest(String request, String postParams, byte[] dataParams) {
         return httpRequest(HTTP_POST_REQUEST, request, postParams, dataParams, null);
     }
-    //---------------------------------------------------------------------------
-    public static String httpPostDataRequest(String request,String postParams,InputStream is) {
+
+    public static String httpPostDataRequest(String request, String postParams, InputStream is) {
         return httpRequest(HTTP_POST_REQUEST, request, postParams, null, is);
     }
-    //---------------------------------------------------------------------------
-    public static String httpRequest(int typeRequest,String url,String postParams,byte[] dataParams,InputStream is) {
+
+    public static String httpRequest(int typeRequest, String url, String postParams, byte[] dataParams, InputStream is) {
         String response = Static.EMPTY;
         InputStream in = null;
         OutputStream out = null;
@@ -201,7 +200,7 @@ public class Http {
         }
         return response;
     }
-    //---------------------------------------------------------------------------
+
     public static String httpTPRequest(String url,String params) {
         Debug.log(TAG, "req_next:" + params); // REQUEST
 
@@ -228,7 +227,7 @@ public class Http {
                 for (String line = r.readLine(); line != null; line = r.readLine())
                     sb.append(line);
                 rawResponse = sb.toString();
-                is.close();
+                r.close();
                 entity.consumeContent();
                 Debug.log(TAG, "resp_next::" + rawResponse); // RESPONSE
             }
@@ -244,13 +243,13 @@ public class Http {
 
         return rawResponse;
     }
-    //---------------------------------------------------------------------------
+
     public static Bitmap bitmapLoader(String url) { // Exp
         if (url == null)
             return null;
         return ConnectionManager.getInstance().bitmapLoader(url);
     }
-    //---------------------------------------------------------------------------
+
     public static void bannerLoader(final String url,final ImageView view) {
         Thread t = new Thread() {
             @Override
@@ -287,7 +286,7 @@ public class Http {
         t.setDaemon(true);
         t.start();
     }
-    //---------------------------------------------------------------------------
+
     public static void imageLoader(final String url,final ImageView view) {
         Thread t = new Thread() {
             @Override
@@ -305,7 +304,7 @@ public class Http {
         t.setDaemon(true);
         t.start();
     }
-    //---------------------------------------------------------------------------
+
     public static void avatarOwnerPreloading() {
         Thread t = new Thread(new Runnable() {
             @Override
@@ -322,7 +321,7 @@ public class Http {
         t.setDaemon(true);
         t.start();
     }
-    //---------------------------------------------------------------------------
+
     public static void avatarUserPreloading(final String url) {
         Thread t = new Thread(new Runnable() {
             @Override
@@ -337,7 +336,6 @@ public class Http {
         t.setDaemon(true);
         t.start();
     }
-    //---------------------------------------------------------------------------
 }
 
 /* public static Bitmap bitmapLoaderOld(String url) {

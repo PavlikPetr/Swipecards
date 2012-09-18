@@ -21,7 +21,6 @@ public class App extends Application {
     private static ConnectionChangeReceiver mConnectionReceiver;
 //    private static PluralResources mPluralResources;
 
-    //---------------------------------------------------------------------------
     @Override
     public void onCreate() {
         ACRA.init(this);

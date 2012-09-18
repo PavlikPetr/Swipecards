@@ -154,5 +154,4 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 		    mFragmentMenu.refreshNotifications();
 		};
 	};
-
 }

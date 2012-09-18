@@ -33,7 +33,7 @@ public class ProfilePhotoFragment extends Fragment {
             mPhotoLinks.append(i+1, CacheProfile.photoLinks.get(CacheProfile.photoLinks.keyAt(i)));
         }
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks);
-        mAddPhotoHelper = new AddPhotoHelper(getActivity().getApplicationContext(), getActivity());
+        mAddPhotoHelper = new AddPhotoHelper(this);
         mAddPhotoHelper.setOnResultHandler(mHandler);
     }
     
@@ -68,6 +68,14 @@ public class ProfilePhotoFragment extends Fragment {
         super.onStart();        
     }
     
+    @Override
+    public void onActivityResult(int requestCode,int resultCode,Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
+        
+        mProfilePhotoGridAdapter.notifyDataSetChanged();
+    }
+
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

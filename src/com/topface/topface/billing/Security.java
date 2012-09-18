@@ -4,12 +4,12 @@ package com.topface.topface.billing;
 
 import com.topface.topface.billing.Consts.PurchaseState;
 import com.topface.topface.utils.Base64;
-import com.topface.topface.utils.Base64DecoderException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.text.TextUtils;
 import android.util.Log;
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -142,9 +142,9 @@ public class Security {
         } catch(InvalidKeySpecException e) {
             Log.e(TAG, "Invalid key specification.");
             throw new IllegalArgumentException(e);
-        } catch(Base64DecoderException e) {
-            Log.e(TAG, "Base64 decoding failed.");
-            throw new IllegalArgumentException(e);
+        } catch(IOException e) {
+            Log.e(TAG, "IOException exception.");
+            return null;
         }
     }
     //---------------------------------------------------------------------------
@@ -168,8 +168,8 @@ public class Security {
             Log.e(TAG, "Invalid key specification.");
         } catch(SignatureException e) {
             Log.e(TAG, "Signature exception.");
-        } catch(Base64DecoderException e) {
-            Log.e(TAG, "Base64 decoding failed.");
+        } catch(IOException e) {
+            Log.e(TAG, "IOException exception.");
         }
         return false;
     }

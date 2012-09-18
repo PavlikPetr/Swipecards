@@ -1,5 +1,7 @@
 package com.topface.topface.ui.profile;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -9,15 +11,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.Confirmation;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.utils.Socium;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.http.Http;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -33,18 +38,24 @@ public class AddPhotoHelper {
     private Context mContext;
     private AlertDialog mAddPhotoDialog;
     private Activity mActivity;
-    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private Fragment mFragment;
     private ProgressDialog mProgressDialog;
     private Handler mHandler;
+    private boolean mAddEroState = false;
     public static final int ADD_PHOTO_RESULT_OK = 0;
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
-    private boolean mAddEroState = false;
-    private static final int RESULT_OK = -1;
+    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    
+    
+    public AddPhotoHelper(Fragment fragment) {
+        this(fragment.getActivity());
+        mFragment = fragment;
+    }
 
-    public AddPhotoHelper(Context context, Activity activity) {
-        mContext = context;
+    public AddPhotoHelper(Activity activity) {
         mActivity = activity;
-        mProgressDialog = new ProgressDialog(mContext);
+        mContext = activity.getApplicationContext();
+        mProgressDialog = new ProgressDialog(mActivity);
         mProgressDialog.setMessage(mContext.getString(R.string.general_dialog_loading));
     }
 
@@ -79,24 +90,36 @@ public class AddPhotoHelper {
                             Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                     );
-                    mActivity.startActivityForResult(
-                            Intent.createChooser(
-                                    intent,
-                                    mContext.getResources().getString(R.string.profile_add_title)
-                            ),
-                            GALLERY_IMAGE_ACTIVITY_REQUEST_CODE
-                    );
+                    if (mFragment != null) {
+                        mFragment.startActivityForResult(
+                                Intent.createChooser(
+                                        intent, 
+                                        mContext.getResources().getString(R.string.profile_add_title)),
+                                GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+                    } else {
+                        mActivity.startActivityForResult(
+                                Intent.createChooser(
+                                        intent,
+                                        mContext.getResources().getString(R.string.profile_add_title)),
+                                GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+                    }
                 }
                 break;
                 case R.id.btnAddPhotoCamera: {
                     Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    mActivity.startActivityForResult(
-                            Intent.createChooser(
-                                    intent,
-                                    mContext.getResources().getString(R.string.profile_add_title)
-                            ),
-                            GALLERY_IMAGE_ACTIVITY_REQUEST_CODE
-                    );
+                    if (mFragment != null) {
+                        mFragment.startActivityForResult(
+                                 Intent.createChooser(
+                                         intent,
+                                         mContext.getResources().getString(R.string.profile_add_title)),
+                                 GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+                    } else {
+                        mActivity.startActivityForResult(
+                                Intent.createChooser(
+                                        intent,
+                                        mContext.getResources().getString(R.string.profile_add_title)),
+                                GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+                    }
                 }
                 break;
             }
@@ -117,7 +140,7 @@ public class AddPhotoHelper {
     }
 
     public boolean checkActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             Uri imageUri = data != null ? data.getData() : null;
             if (imageUri != null) {
                 new AsyncTaskUploader().execute(imageUri);
@@ -136,28 +159,22 @@ public class AddPhotoHelper {
 
         @Override
         protected String[] doInBackground(Uri... uri) {
-            Socium soc = new Socium(mContext.getApplicationContext());
-            return soc.uploadPhoto(uri[0]);
+            /*
+             String data = Base64.encodeFromFile(FileManager.getSoundName(((AddRequest)ApiRequest.this).fileName));
+             rawResponse = Http.httpPostDataRequest(Data.API_URL,ApiRequest.this.toString(),data);
+             //new FileInputStream(new File(FileManager.mCacheDir,((AddRequest)ApiRequest.this).fileName)));
+             */
+//            InputStream is = new ByteArrayInputStream(null);
+//            byte[] array = Base64.enco
+//            rawResponse = Http.httpPostDataRequest(Static.API_URL,null/*ApiRequest.this.toString()*/,data);
+            return null;
         }
 
         @Override
         protected void onPostExecute(final String[] result) {
             super.onPostExecute(result);
 
-            if (mAddEroState) {
-                // попап с выбором цены эро фотографии
-                final CharSequence[] items = {mContext.getString(R.string.profile_coin_1),
-                        mContext.getString(R.string.profile_coin_2),
-                        mContext.getString(R.string.profile_coin_3)};
-                new AlertDialog.Builder(mContext)
-                        .setTitle(mContext.getString(R.string.profile_ero_price))
-                        .setItems(items, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int item) {
-                                sendAddRequest(result, item + 1);
-                            }
-                        }).create().show();
-            } else
-                sendAddRequest(result, 0);
+
         }
 
         private void sendAddRequest(final String[] result, final int price) {
