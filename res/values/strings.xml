@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- en -->
     <string name="app_name">Topface</string>
 
-    <!-- General  -->
+    <!-- General -->
     <string name="general_internet_off">No Internet connection</string>
     <string name="general_dialog_loading">Loading</string>
     <string name="general_dialog_saving">Loading</string>
@@ -15,7 +16,7 @@
     <string name="general_popup_rating">Did you like our application? Raise our rating! The higher rating the more people you will meet in \"TopFace\""</string>
     <string name="general_dialog_retry">Retry</string>
 
-    <!-- Auth Activity  -->
+    <!-- Auth Activity -->
     <string name="auth_btn_vk">Login via VKontakte</string>
     <string name="auth_btn_fb">Login via Facebook</string>
 
@@ -70,7 +71,6 @@
     <string name="chat_toast_fail_location">Unable to determine the current location</string>
     <string name="chat_message_copied">Message copied</string>
 
-
     <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Mutual</string>
     <string name="symphaty_btn_dbl_left">All</string>
@@ -116,79 +116,83 @@
     <string name="buying_recharge">Recharge on 100%</string>
     <string name="buying_energy">3 USD</string>
     <string name="buying_pack_6coins">6 coins pack</string>
-	  <string name="buying_6coins">1 USD</string>
-	  <string name="buying_pack_40coins">40 coins pack</string>
-	  <string name="buying_40coins">5 USD</string>
-	  <string name="buying_pack_100coins">100 coins pack</string>
-	  <string name="buying_100coins">10  USD</string>
-	  <string name="buying_info">You can buy coins and energy</string>
-	  <string name="buying_economy_25">Save 25%</string>
-	  <string name="buying_economy_40">Save 40%</string>
-	  
-	  <!-- Profile Activity -->
-	  <string name="profile_header_title">My Profile</string>
-	  <string name="profile_btn_chat">Chat</string>
-	  <string name="profile_btn_edit">Edit profile</string>
-	  <string name="profile_btn_form">Form</string>
-	  <string name="profile_btn_add">Add</string>
-	  <string name="profile_btn_buy">Buy coins/energy</string>
-	  <string name="profile_btn_exit">Logout</string>
-	  <string name="profile_btn_mutual">Mutual</string>
-	  <string name="profile_sex_boy">Male</string>
-	  <string name="profile_sex_girl">Female</string>
-	  <string name="profile_form">Form</string>
-	  <string name="profile_form_name">Name</string>
-	  <string name="profile_form_city">Select city</string>
-	  <string name="profile_foto">Photo</string>
-	  <string name="profile_foto_ero">Erotic photo</string>
-	  <string name="profile_height">Height</string>
-	  <string name="profile_weight">Weight</string>
-	  <string name="profile_education">Education</string>
-	  <string name="profile_commutability">Sociability</string>
-	  <string name="profile_character">Character</string>
-	  <string name="profile_alcohol">Drinking</string>
-	  <string name="profile_fitness">Fitness</string>
-	  <string name="profile_job">Status</string>
-	  <string name="profile_marriage_male">Married</string>
-	  <string name="profile_marriage_female">Married</string>
-	  <string name="profile_finances">Finances</string>
-	  <string name="profile_smoking">Smoking</string>
-	  <string name="profile_status">About</string>
-	  <string name="profile_edit_title">Edit profile</string>
-	  <string name="profile_add_title">Add photo</string>
-	  <string name="profile_add_album">From photo gallery</string>
-	  <string name="profile_add_camera">Take a picture</string>
-	  <string name="profile_coin_1">1 coin</string>
-	  <string name="profile_coin_2">2 coins</string>
-	  <string name="profile_coin_3">3 coins</string>
-	  <string name="profile_ero_price">Choose photo cost</string>
-	  <string name="profile_btn_ask">Ask to fill questionnaire</string>
-	  <string name="profile_msg_ask">I want to learn more about you. Please fill in the questionnaire!</string>
-	  <string name="profile_msg_sent">Sent</string>
-	  
-	  <!--  EditProfileActivity -->
-	  <string name="edit_title">Editing</string>
-	  <string name="edit_bg_photo">Background photo</string>
-	  <string name="edit_profile_photo">Change photo</string>
-	  <string name="edit_album_photos">photos</string>
-	  <string name="edit_interests">interests</string>
-	  <string name="edit_back_photo_selected">Selected</string>
-	  
-	  <!-- Album, Ero Album Activity -->
-	  <string name="album_header_title">Album</string>
-	  <string name="album_add_photo_title">Add photo</string>
-	  <string name="album_menu_main">Make as main photo</string>
-	  <string name="album_menu_did_main">Main</string>
-	  <string name="album_menu_popup_delete">Delete photo. Sure?</string>
-	  <string name="album_menu_popup_yes">Yes</string>
-	  <string name="album_menu_popup_no">No</string>
-	  <string name="album_menu_delete">Delete</string>
-	  <string name="album_menu_did_delete">Deleted</string>
-	  <string name="ero_album_btn_like">Recommend</string>
-	  <string name="ero_album_btn_dislike">NOT recommend</string>
-	  <string name="ero_album_btn_buy">Next photo</string>
-	  <string name="ero_album_btn_next">Next photo</string>
-    
+    <string name="buying_6coins">1 USD</string>
+    <string name="buying_pack_40coins">40 coins pack</string>
+    <string name="buying_40coins">5 USD</string>
+    <string name="buying_pack_100coins">100 coins pack</string>
+    <string name="buying_100coins">10  USD</string>
+    <string name="buying_info">You can buy coins and energy</string>
+    <string name="buying_economy_25">Save 25%</string>
+    <string name="buying_economy_40">Save 40%</string>
+
+    <!-- Profile Activity -->
+    <string name="profile_header_title">My Profile</string>
+    <string name="profile_btn_chat">Chat</string>
+    <string name="profile_btn_edit">Edit profile</string>
+    <string name="profile_btn_form">Form</string>
+    <string name="profile_btn_add">Add</string>
+    <string name="profile_btn_buy">Buy coins/energy</string>
+    <string name="profile_btn_exit">Logout</string>
+    <string name="profile_btn_mutual">Mutual</string>
+    <string name="profile_sex_boy">Male</string>
+    <string name="profile_sex_girl">Female</string>
+    <string name="profile_form">Form</string>
+    <string name="profile_form_name">Name</string>
+    <string name="profile_form_city">Select city</string>
+    <string name="profile_foto">Photo</string>
+    <string name="profile_foto_ero">Erotic photo</string>
+    <string name="profile_height">Height</string>
+    <string name="profile_weight">Weight</string>
+    <string name="profile_education">Education</string>
+    <string name="profile_commutability">Sociability</string>
+    <string name="profile_character">Character</string>
+    <string name="profile_alcohol">Drinking</string>
+    <string name="profile_fitness">Fitness</string>
+    <string name="profile_job">Status</string>
+    <string name="profile_marriage_male">Married</string>
+    <string name="profile_marriage_female">Married</string>
+    <string name="profile_finances">Finances</string>
+    <string name="profile_smoking">Smoking</string>
+    <string name="profile_status">About</string>
+    <string name="profile_edit_title">Edit profile</string>
+    <string name="profile_add_title">Add photo</string>
+    <string name="profile_add_album">From photo gallery</string>
+    <string name="profile_add_camera">Take a picture</string>
+    <string name="profile_coin_1">1 coin</string>
+    <string name="profile_coin_2">2 coins</string>
+    <string name="profile_coin_3">3 coins</string>
+    <string name="profile_ero_price">Choose photo cost</string>
+    <string name="profile_btn_ask">Ask to fill questionnaire</string>
+    <string name="profile_msg_ask">I want to learn more about you. Please fill in the questionnaire!</string>
+    <string name="profile_msg_sent">Sent</string>
+
+    <!-- EditProfileActivity -->
+    <string name="edit_title">Editing</string>
+    <string name="edit_bg_photo">Background photo</string>
+    <string name="edit_album">Album</string>
+    <string name="edit_profile_photo">Change photo</string>
+    <string name="edit_album_photos">photos</string>
+    <string name="edit_interests">interests</string>
+    <string name="edit_back_photo_selected">Selected</string>
+    <string name="edit_name">Name</string>
+    <string name="edit_age">Age</string>
+    <string name="edit_status">Status</string>
+
+    <!-- Album, Ero Album Activity -->
+    <string name="album_header_title">Album</string>
+    <string name="album_add_photo_title">Add photo</string>
+    <string name="album_menu_main">Make as main photo</string>
+    <string name="album_menu_did_main">Main</string>
+    <string name="album_menu_popup_delete">Delete photo. Sure?</string>
+    <string name="album_menu_popup_yes">Yes</string>
+    <string name="album_menu_popup_no">No</string>
+    <string name="album_menu_delete">Delete</string>
+    <string name="album_menu_did_delete">Deleted</string>
+    <string name="ero_album_btn_like">Recommend</string>
+    <string name="ero_album_btn_dislike">NOT recommend</string>
+    <string name="ero_album_btn_buy">Next photo</string>
+    <string name="ero_album_btn_next">Next photo</string>
+
     <!-- Gifts Activity -->
     <string name="gifts_romantic">Romantic</string>
     <string name="gifts_friends">Friends</string>
@@ -203,14 +207,15 @@
     <string name="map_confirm">Send</string>
     <string name="map_address">Enter address</string>
 
-    <!--  Navigation Header -->
+    <!-- Navigation Header -->
     <string name="navigation_back_profile">Profile</string>
     <string name="navigation_back_dialog">Dialogs</string>
     <string name="navigation_edit">Edit</string>
     <string name="navigation_save">Save</string>
-    
+
     <!-- Profile / UserProfile Form -->
     <string name="form_main">Main</string>
+
     <string-array name="form_main_character">
         <item name="all">Character</item>
     </string-array>
@@ -225,6 +230,7 @@
     </string-array>
 
     <string name="form_physique">Physique</string>
+
     <string-array name="form_physique_fitness">
         <item name="all">Constitution</item>
     </string-array>
@@ -236,6 +242,7 @@
     </string-array>
 
     <string name="form_social">Social</string>
+
     <string-array name="form_social_marriage">
         <item name="male">Is he married?</item>
         <item name="female">Is she married?</item>
@@ -256,6 +263,7 @@
     </string-array>
 
     <string name="form_habits">Habits</string>
+
     <string-array name="form_habits_smoking">
         <item name="male">Cigarettes</item>
     </string-array>
@@ -270,6 +278,7 @@
     </string-array>
 
     <string name="form_detail">Detail</string>
+
     <string-array name="form_detail_about_dating">
         <item name="male">About his first date</item>
         <item name="female">About her first date</item>
@@ -282,9 +291,8 @@
         <item name="own_male">About achievements you are proud of</item>
         <item name="own_female">About achievements you are proud of</item>
     </string-array>
-
-
-    <!-- Экран приглашений -->
+    
+     <!-- Экран приглашений -->
     <string name="search_hint">Find friends</string>
     <string name="activity_title_invite">Invitations</string>
     <string name="send_invite">Send</string>
@@ -323,5 +331,4 @@
     <string name="photo_preloading">Photo preloading</string>
     <string name="photo_preloading_summary">Preloading the next photo in the album</string>
     <string name="preloading">Preloading</string>
-
 </resources>

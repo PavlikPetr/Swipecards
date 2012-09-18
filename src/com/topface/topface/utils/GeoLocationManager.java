@@ -166,8 +166,8 @@ public class GeoLocationManager {
 	 * @return specific address correlating with input coordinates
 	 */
 	public String getLocationAddress(double latitude, double longitude) {
-		if (Osm.OSMReverseEnabled) {
-			currentAddress = Osm.getAddress(latitude, longitude);
+		if (OsmManager.OSMReverseEnabled) {
+			currentAddress = OsmManager.getAddress(latitude, longitude);
 			return currentAddress;
 		} else {
 			StringBuilder sBShortLocation = new StringBuilder();		
