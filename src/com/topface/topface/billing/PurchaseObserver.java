@@ -25,13 +25,13 @@ public abstract class PurchaseObserver {
 
     @SuppressWarnings("rawtypes")
     private static final Class[] START_INTENT_SENDER_SIG = new Class[]{IntentSender.class,Intent.class,int.class,int.class,int.class};
-    //---------------------------------------------------------------------------
+
     public PurchaseObserver(Activity activity,Handler handler) {
         mActivity = activity;
         mHandler = handler;
         initCompatibilityLayer();
     }
-    //---------------------------------------------------------------------------
+
     public abstract void onBillingSupported(boolean supported);
     public abstract void onPurchaseStateChange(PurchaseState purchaseState,String data,String signature);
     //public abstract void onPurchaseStateChange(PurchaseState purchaseState,String itemId,int quantity,long purchaseTime,String developerPayload);
@@ -47,7 +47,7 @@ public abstract class PurchaseObserver {
             mStartIntentSender = null;
         }
     }
-    //---------------------------------------------------------------------------
+
     void startBuyPageActivity(PendingIntent pendingIntent,Intent intent) {
         if (mStartIntentSender != null) {
             try {
@@ -68,7 +68,7 @@ public abstract class PurchaseObserver {
             }
         }
     }
-    //---------------------------------------------------------------------------
+
     void postPurchaseStateChange(final PurchaseState purchaseState,final String data,final String signature) {
         mHandler.post(new Runnable() {
             public void run() {
@@ -76,5 +76,4 @@ public abstract class PurchaseObserver {
             }
         });
     }
-    //---------------------------------------------------------------------------
 }

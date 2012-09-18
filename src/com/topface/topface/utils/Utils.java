@@ -25,11 +25,10 @@ import java.util.Calendar;
 public class Utils {
     private static PluralResources mPluralResources;
     
-    //---------------------------------------------------------------------------
     public static int unixtime() {
         return (int) (System.currentTimeMillis() / 1000L);
     }
-    //---------------------------------------------------------------------------
+
     public static String md5(String value) {
         if (value == null)
             return null;
@@ -44,7 +43,7 @@ public class Utils {
             return null;
         }
     }
-    //---------------------------------------------------------------------------    
+    
     public static Bitmap clippingBitmap(Bitmap bitmap) {
         if (bitmap == null || bitmap.getWidth() <= 0 || bitmap.getHeight() <= 0)
             return null;
@@ -370,7 +369,6 @@ public class Utils {
         return Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static int getBatteryResource(int power) {
         int n = 50 * CacheProfile.power / 100;
         switch (n) {

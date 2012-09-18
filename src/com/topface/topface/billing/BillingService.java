@@ -37,9 +37,8 @@ public class BillingService extends Service implements ServiceConnection {
     private static IMarketBillingService mService;
     private static LinkedList<BillingRequest> mPendingRequests = new LinkedList<BillingRequest>();
     private static HashMap<Long, BillingRequest> mSentRequests = new HashMap<Long, BillingRequest>();
-    //---------------------------------------------------------------------------
+
     //class BillingRequest
-    //---------------------------------------------------------------------------
     abstract class BillingRequest {
         private final int mStartId;
         protected long mRequestId;
@@ -95,9 +94,8 @@ public class BillingService extends Service implements ServiceConnection {
          * ));
          * } */
     }
-    //---------------------------------------------------------------------------
+
     // class CheckBillingSupported
-    //---------------------------------------------------------------------------
     class CheckBillingSupported extends BillingRequest {
         public CheckBillingSupported() {
             super(-1);
@@ -112,9 +110,8 @@ public class BillingService extends Service implements ServiceConnection {
             return Consts.BILLING_RESPONSE_INVALID_REQUEST_ID;
         }
     }
-    //---------------------------------------------------------------------------
+
     // class RequestPurchase
-    //---------------------------------------------------------------------------
     class RequestPurchase extends BillingRequest {
         public final String mProductId;
         public final String mDeveloperPayload;
@@ -149,9 +146,8 @@ public class BillingService extends Service implements ServiceConnection {
             ResponseHandler.responseCodeReceived(BillingService.this, this, responseCode);
         }
     }
-    //---------------------------------------------------------------------------
+    
     // class ConfirmNotifications
-    //---------------------------------------------------------------------------
     class ConfirmNotifications extends BillingRequest {
         final String[] mNotifyIds;
 
@@ -169,9 +165,8 @@ public class BillingService extends Service implements ServiceConnection {
             return response.getLong(Consts.BILLING_RESPONSE_REQUEST_ID, Consts.BILLING_RESPONSE_INVALID_REQUEST_ID);
         }
     }
-    //---------------------------------------------------------------------------
+
     // class GetPurchaseInformation
-    //---------------------------------------------------------------------------
     class GetPurchaseInformation extends BillingRequest {
         long mNonce;
         final String[] mNotifyIds;
@@ -199,9 +194,8 @@ public class BillingService extends Service implements ServiceConnection {
             Security.removeNonce(mNonce);
         }
     }
-    //---------------------------------------------------------------------------
+
     // class RestoreTransactions
-    //---------------------------------------------------------------------------
     class RestoreTransactions extends BillingRequest {
         long mNonce;
 
@@ -230,25 +224,25 @@ public class BillingService extends Service implements ServiceConnection {
             ResponseHandler.responseCodeReceived(BillingService.this, this, responseCode);
         }
     }
-    //---------------------------------------------------------------------------
+
     public BillingService() {
         super();
     }
-    //---------------------------------------------------------------------------
+
     public void setContext(Context context) {
         attachBaseContext(context);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public void onStart(Intent intent,int startId) {
         handleCommand(intent, startId);
     }
-    //---------------------------------------------------------------------------
+
     public void handleCommand(Intent intent,int startId) {
         if (intent != null) {
             String action = intent.getAction();
@@ -270,7 +264,7 @@ public class BillingService extends Service implements ServiceConnection {
             }
         }
     }
-    //---------------------------------------------------------------------------
+
     private boolean bindToMarketBillingService() {
         try {
             boolean bindResult = bindService(new Intent(Consts.MARKET_BILLING_SERVICE_ACTION), this, Context.BIND_AUTO_CREATE);
@@ -280,27 +274,27 @@ public class BillingService extends Service implements ServiceConnection {
         }
         return false;
     }
-    //---------------------------------------------------------------------------
+
     public boolean checkBillingSupported() {
         return new CheckBillingSupported().runRequest();
     }
-    //---------------------------------------------------------------------------
+
     public boolean requestPurchase(String productId,String developerPayload) {
         return new RequestPurchase(productId, developerPayload).runRequest();
     }
-    //---------------------------------------------------------------------------
+
     public boolean restoreTransactions() {
         return new RestoreTransactions().runRequest();
     }
-    //---------------------------------------------------------------------------
+
     private boolean confirmNotifications(int startId,String[] notifyIds) {
         return new ConfirmNotifications(startId, notifyIds).runRequest();
     }
-    //---------------------------------------------------------------------------
+
     private boolean getPurchaseInformation(int startId,String[] notifyIds) {
         return new GetPurchaseInformation(startId, notifyIds).runRequest();
     }
-    //---------------------------------------------------------------------------
+
     private void purchaseStateChanged(int startId,String signedData,String signature) {
         ArrayList<Security.VerifiedPurchase> purchases;
         purchases = Security.verifyPurchase(signedData, signature);
@@ -319,7 +313,7 @@ public class BillingService extends Service implements ServiceConnection {
             confirmNotifications(startId, notifyIds);
         }
     }
-    //---------------------------------------------------------------------------
+
     private void checkResponseCode(long requestId,ResponseCode responseCode) {
         BillingRequest request = mSentRequests.get(requestId);
         if (request != null)
@@ -329,7 +323,7 @@ public class BillingService extends Service implements ServiceConnection {
             }
         mSentRequests.remove(requestId);
     }
-    //---------------------------------------------------------------------------
+
     private void runPendingRequests() {
         int maxStartId = -1;
         BillingRequest request;
@@ -346,21 +340,20 @@ public class BillingService extends Service implements ServiceConnection {
         if (maxStartId >= 0)
             stopSelf(maxStartId);
     }
-    //---------------------------------------------------------------------------
+
     public void onServiceConnected(ComponentName name,IBinder service) {
         mService = IMarketBillingService.Stub.asInterface(service);
         runPendingRequests();
     }
-    //---------------------------------------------------------------------------
+
     public void onServiceDisconnected(ComponentName name) {
         mService = null;
     }
-    //---------------------------------------------------------------------------
+
     public void unbind() {
         try {
             unbindService(this);
         } catch(IllegalArgumentException e) {
         }
     }
-    //---------------------------------------------------------------------------
 }//BillingService

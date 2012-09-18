@@ -28,7 +28,6 @@ public class C2DMUtils {
     public static final int C2DM_TYPE_LIKE     = 2;
     public static final int NOTIFICATION_CANCEL_DELAY = 3000;
 
-    //---------------------------------------------------------------------------
     public static void init(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         Boolean registered = preferences.getBoolean(C2DM_REGISTERED, false);
@@ -40,7 +39,6 @@ public class C2DMUtils {
         }
     }
 
-    //---------------------------------------------------------------------------
     public static void setRegisteredFlag(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -48,7 +46,6 @@ public class C2DMUtils {
         editor.commit();
     }
 
-    //---------------------------------------------------------------------------
     public static void showNotification(Intent extra, Context context) {
         String data = extra.getStringExtra("text");
         if (data != null) {
@@ -121,5 +118,4 @@ public class C2DMUtils {
         }, NOTIFICATION_CANCEL_DELAY);
 
     }
-    //---------------------------------------------------------------------------
 }

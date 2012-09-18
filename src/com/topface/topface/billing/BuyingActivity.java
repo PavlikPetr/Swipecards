@@ -40,9 +40,8 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
      * private static final int PRICE_COINS_100 = 100;
      * private static final int PRICE_ENERGY = 10000; */
     public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
-    //---------------------------------------------------------------------------
+
     // class NotificationReceiver
-    //---------------------------------------------------------------------------
     public BroadcastReceiver mPurchaseReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context,Intent intent) {
@@ -53,7 +52,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
             }
         }
     };
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,25 +120,25 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
             Toast.makeText(getApplicationContext(), "Play Market not available", Toast.LENGTH_SHORT).show();
         }
     }
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onStart() {
         super.onStart();
         registerReceiver(mPurchaseReceiver, new IntentFilter(BROADCAST_PURCHASE_ACTION));
     }
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onStop() {
         unregisterReceiver(mPurchaseReceiver);
         super.onStop();
     }
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onDestroy() {
         mBillingService.unbind();
         super.onDestroy();
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -157,9 +156,8 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
                 break;
         }
     }
-    //---------------------------------------------------------------------------
+
     // class TopfacePurchaseObserver
-    //---------------------------------------------------------------------------
     private class TopfacePurchaseObserver extends PurchaseObserver {
         public TopfacePurchaseObserver(Handler handler) {
             super(BuyingActivity.this, handler);
@@ -196,6 +194,6 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
             Debug.log("BuyingActivity", "onRestoreTransactionsResponse");
         }
     }// TopfacePurchaseObserver
-    //---------------------------------------------------------------------------
+
 }// BuyingActivity
 

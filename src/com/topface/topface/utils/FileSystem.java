@@ -4,15 +4,19 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.regex.Pattern;
 import com.topface.topface.Static;
+import android.app.Activity;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 
 /* Класс для работы со стораджем, файлами, путями... */
 public class FileSystem {
-    //---------------------------------------------------------------------------
+
     public static String getFileName(String path) {
         return new File(path).getName();
     }
-    //---------------------------------------------------------------------------
+
     public static String getExtension(String fileName) {
         fileName = getFileName(fileName);
         String[] arr = fileName.split(Pattern.quote("."));
@@ -20,28 +24,28 @@ public class FileSystem {
             return arr[1];
         return null;
     }
-    //---------------------------------------------------------------------------
+
     public static String getPath(String path) {
         int n = path.lastIndexOf(File.separator);
         if (n > 0)
             return path.substring(0, n);
         return null;
     }
-    //---------------------------------------------------------------------------
+
     public static String removeExtension(String fileName) {
         int n = fileName.lastIndexOf(".");
         if (n > 0)
             return fileName.substring(0, n);
         return null;
     }
-    //---------------------------------------------------------------------------
+
     public static long getFileSize(String fileName) {
         File file = new File(fileName);
         if (file.exists())
             return file.length();
         return -1;
     }
-    //---------------------------------------------------------------------------
+
     public static boolean removeFile(String fileName) {
         File file = new File(fileName);
         if (file.exists() && file.isDirectory()) {
@@ -49,7 +53,7 @@ public class FileSystem {
         }
         return false;
     }
-    //---------------------------------------------------------------------------
+
     public static boolean removeDirectory(String path) {
         File dirName = new File(path);
         if (dirName.exists() && dirName.isDirectory()) {
@@ -62,11 +66,11 @@ public class FileSystem {
         }
         return dirName.delete();
     }
-    //---------------------------------------------------------------------------
+
     public static boolean isFileExist(String fileName) {
         return new File(fileName).exists();
     }
-    //---------------------------------------------------------------------------
+
     public static String[] getDirectoryItems(String directory,final String filter) {
         File path = new File(directory);
         if (filter == null)
@@ -80,23 +84,32 @@ public class FileSystem {
         });
         return list;
     }
-    //---------------------------------------------------------------------------
+
     public static File getRootDirectory() {
         return Environment.getRootDirectory();
     }
-    //---------------------------------------------------------------------------
+
     public static File getExternalDirectory() {
         return Environment.getExternalStorageDirectory();
     }
-    //---------------------------------------------------------------------------
+
     public static File getExternalCacheDirectory() {
         return new File(getExternalDirectory(), Static.EXTERANAL_CACHE_DIR);
     }
-    //---------------------------------------------------------------------------
+
     public static boolean isExternalCardAvailable() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
             return true;
         return false;
     }
-    //---------------------------------------------------------------------------
-}// FileSystem
+    
+    public static String getFilePathFromURI(Activity activity,Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = activity.managedQuery(contentUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String filePath = cursor.getString(column_index);
+        cursor.close();
+        return filePath;
+    }
+}

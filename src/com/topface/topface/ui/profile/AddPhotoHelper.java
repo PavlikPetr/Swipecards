@@ -1,12 +1,10 @@
 package com.topface.topface.ui.profile;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,14 +12,12 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Confirmation;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
-import com.topface.topface.utils.Socium;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.Base64;
+import com.topface.topface.utils.FileSystem;
 import com.topface.topface.utils.http.Http;
 
 /**
@@ -159,11 +155,21 @@ public class AddPhotoHelper {
 
         @Override
         protected String[] doInBackground(Uri... uri) {
-            /*
-             String data = Base64.encodeFromFile(FileManager.getSoundName(((AddRequest)ApiRequest.this).fileName));
-             rawResponse = Http.httpPostDataRequest(Data.API_URL,ApiRequest.this.toString(),data);
+            
+            PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
+            add.ssid = Data.SSID;
+            
+            try {
+                //is = App.getContext().getContentResolver().openInputStream(uri[0]);
+                String file = FileSystem.getFilePathFromURI(AddPhotoHelper.this.mActivity, uri[0]);
+                String data = Base64.encodeFromFile(file);
+                String rawResponse = Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), data);
+                data = null;
+           } catch(IOException e) {
+           }
+
              //new FileInputStream(new File(FileManager.mCacheDir,((AddRequest)ApiRequest.this).fileName)));
-             */
+            
 //            InputStream is = new ByteArrayInputStream(null);
 //            byte[] array = Base64.enco
 //            rawResponse = Http.httpPostDataRequest(Static.API_URL,null/*ApiRequest.this.toString()*/,data);
@@ -173,53 +179,52 @@ public class AddPhotoHelper {
         @Override
         protected void onPostExecute(final String[] result) {
             super.onPostExecute(result);
-
-
+            mProgressDialog.cancel();
         }
 
-        private void sendAddRequest(final String[] result, final int price) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    PhotoAddRequest addPhotoRequest = new PhotoAddRequest(mContext);
-                    addPhotoRequest.big = result[0];
-                    addPhotoRequest.medium = result[1];
-                    addPhotoRequest.small = result[2];
-                    addPhotoRequest.ero = mAddEroState;
-                    if (mAddEroState) {
-                        addPhotoRequest.cost = price;
-                    }
-                    addPhotoRequest.callback(new ApiHandler() {
-                        @Override
-                        public void success(ApiResponse response) {
-                            Confirmation add = Confirmation.parse(response);
-                            if (!add.completed)
-                                return;
-
-                            post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_OK);
-                                    mProgressDialog.hide();
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void fail(int codeError, ApiResponse response) {
-                            post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
-                                    Utils.showErrorMessage(mContext);
-                                    mProgressDialog.hide();
-                                }
-                            });
-                        }
-                    }).exec();
-                }
-            });
-        }
+//        private void sendAddRequest(final String[] result, final int price) {
+//            mActivity.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    PhotoAddRequest addPhotoRequest = new PhotoAddRequest(mContext);
+//                    addPhotoRequest.big = result[0];
+//                    addPhotoRequest.medium = result[1];
+//                    addPhotoRequest.small = result[2];
+//                    addPhotoRequest.ero = mAddEroState;
+//                    if (mAddEroState) {
+//                        addPhotoRequest.cost = price;
+//                    }
+//                    addPhotoRequest.callback(new ApiHandler() {
+//                        @Override
+//                        public void success(ApiResponse response) {
+//                            Confirmation add = Confirmation.parse(response);
+//                            if (!add.completed)
+//                                return;
+//
+//                            post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_OK);
+//                                    mProgressDialog.hide();
+//                                }
+//                            });
+//                        }
+//
+//                        @Override
+//                        public void fail(int codeError, ApiResponse response) {
+//                            post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+//                                    Utils.showErrorMessage(mContext);
+//                                    mProgressDialog.hide();
+//                                }
+//                            });
+//                        }
+//                    }).exec();
+//                }
+//            });
+//        }
     }
 }
 

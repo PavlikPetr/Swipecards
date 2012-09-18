@@ -32,7 +32,7 @@ public class Data {
     public static LinkedList<FeedLike> likesList;
     public static LinkedList<FeedInbox> inboxList;
     public static LinkedList<FeedSympathy> mutualList;
-    //---------------------------------------------------------------------------
+
     public static void init(Context context) {
         //removeSSID(context); // for test
         loadSSID(context);
@@ -83,7 +83,7 @@ public class Data {
         
         LocalBroadcastManager.getInstance(context).registerReceiver(new ReAuthReceiver(), new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
     }
-    //---------------------------------------------------------------------------
+
     public static void release() {
         if (topsList != null)
             topsList.clear();
@@ -94,17 +94,17 @@ public class Data {
         if (mutualList != null)
             mutualList.clear();
     }
-    //---------------------------------------------------------------------------
+
     public static boolean isSSID() {
         return SSID != null && SSID.length() > 0;
     }
-    //---------------------------------------------------------------------------
+
     public static String loadSSID(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SSID = preferences.getString(Static.PREFERENCES_SSID, Static.EMPTY);
         return SSID;
     }
-    //---------------------------------------------------------------------------
+
     public static void saveSSID(Context context,String ssid) {
         SSID = (ssid == null || ssid.length() == 0) ? Static.EMPTY : ssid;
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
@@ -112,12 +112,12 @@ public class Data {
         editor.putString(Static.PREFERENCES_SSID, SSID);
         editor.commit();
     }
-    //---------------------------------------------------------------------------
+
     public static void removeSSID(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(Static.PREFERENCES_SSID, SSID = Static.EMPTY);
         editor.commit();
     }
-    //---------------------------------------------------------------------------
+
 }

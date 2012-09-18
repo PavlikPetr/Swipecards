@@ -64,16 +64,9 @@ public class ProfilePhotoFragment extends Fragment {
     }
     
     @Override
-    public void onStart() {
-        super.onStart();        
-    }
-    
-    @Override
     public void onActivityResult(int requestCode,int resultCode,Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
-        
-        mProfilePhotoGridAdapter.notifyDataSetChanged();
     }
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
@@ -95,6 +88,7 @@ public class ProfilePhotoFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            //mProfilePhotoGridAdapter.notifyDataSetChanged(); // <<<<<<<<<<<<<<< !!!!!!!!!!
             //getProfile();
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
                 Toast.makeText(getActivity(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();

@@ -31,7 +31,7 @@ public class Recycle {
     
     // Animations
     public static AnimationDrawable s_Loader; 
-    //---------------------------------------------------------------------------
+
     public static boolean init(Context context) {
         try {
             s_People = BitmapFactory.decodeResource(context.getResources(), R.drawable.im_people);
@@ -62,7 +62,7 @@ public class Recycle {
         }
         return true;
     }
-    //---------------------------------------------------------------------------
+
     public static void release() {
         if (s_People == null)
             return;
@@ -105,5 +105,4 @@ public class Recycle {
          * s_Star10.recycle();
          * s_Star10=null; */
     }
-    //---------------------------------------------------------------------------
 }

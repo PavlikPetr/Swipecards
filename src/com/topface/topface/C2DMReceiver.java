@@ -13,11 +13,11 @@ import com.topface.topface.utils.Settings;
 public class C2DMReceiver extends C2DMBaseReceiver {
     // Data
     public static final String SENDER_ID = "android@topface.com";
-    //---------------------------------------------------------------------------
+
     public C2DMReceiver() {
         super(SENDER_ID);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public void onRegistered(final Context context,final String registrationId) {
         new Thread(new Runnable() {
@@ -42,12 +42,12 @@ public class C2DMReceiver extends C2DMBaseReceiver {
             }
         }).start();
     }
-    //---------------------------------------------------------------------------
+    
     @Override
     public void onUnregistered(Context context) {
         Debug.log("onUnregistered", "");
     }
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onMessage(Context context,Intent receiveIntent) {
     if (Settings.getInstance().isNotificationEnabled()) {
@@ -58,10 +58,9 @@ public class C2DMReceiver extends C2DMBaseReceiver {
     broadcastReceiver.putExtra("id", receiveIntent.getStringExtra("id"));
         context.sendBroadcast(broadcastReceiver);
     }
-    //---------------------------------------------------------------------------
+
     @Override
     public void onError(Context context,String errorId) {
         Debug.log("onError", errorId);
     }
-    //---------------------------------------------------------------------------
 }

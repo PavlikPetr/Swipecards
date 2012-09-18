@@ -97,6 +97,7 @@ public class Http {
             else
                 httpConnection.setRequestMethod("GET");
             httpConnection.setDoInput(true);
+            httpConnection.setDoOutput(true);
 
             Debug.log(TAG, "req:" + postParams); // REQUEST
 
@@ -143,7 +144,6 @@ public class Http {
 
             if (typeRequest == HTTP_POST_REQUEST && postParams != null && dataParams == null) {
                 Debug.log(TAG, "begin:");
-                httpConnection.setDoOutput(true);
                 out = httpConnection.getOutputStream();
                 BufferedOutputStream bos = new BufferedOutputStream(out, BUFFER_SIZE);
                 byte[] buffer = postParams.getBytes("UTF8");
@@ -200,8 +200,121 @@ public class Http {
         }
         return response;
     }
+    
+    public static String httpDataRequest(int typeRequest, String request, String postParams, String data) {
+        String response = null;
+        InputStream in = null;
+        OutputStream out = null;
+        BufferedReader buffReader = null;
+        HttpURLConnection httpConnection = null;
+        
+        try {
+          //System.setProperty("http.keepAlive", "false");
+          Debug.log(TAG,"enter");
+          // запрос
+          httpConnection = (HttpURLConnection)new URL(request).openConnection();
+          //httpConnection.setUseCaches(false);
+          httpConnection.setConnectTimeout(HTTP_TIMEOUT);
+          httpConnection.setReadTimeout(HTTP_TIMEOUT);
+          if(typeRequest==HTTP_POST_REQUEST)
+            httpConnection.setRequestMethod("POST");
+          else
+            httpConnection.setRequestMethod("GET");
+          httpConnection.setDoOutput(true);
+          httpConnection.setDoInput(true);
+          httpConnection.setRequestProperty("Content-Type", "application/json");
+          //httpConnection.setRequestProperty("Content-Length", Integer.toString(postParams.length()));
+          //httpConnection.setRequestProperty("Connection", "close");
+          //httpConnection.setRequestProperty("Connection", "Keep-Alive");
+          //httpConnection.setChunkedStreamingMode(0);
 
-    public static String httpTPRequest(String url,String params) {
+          //httpConnection.connect();
+          
+          
+          Debug.log(TAG,"req:"+postParams);   // REQUEST
+
+          // отправляем post параметры
+          if(typeRequest == HTTP_POST_REQUEST && postParams != null && data == null) {
+            Debug.log(TAG,"begin:");
+            out  = httpConnection.getOutputStream();
+            byte[] buffer = postParams.getBytes("UTF8");
+            out.write(buffer);
+            out.flush();
+            out.close();
+            Debug.log(TAG,"end:");
+          }
+          
+          if(typeRequest == HTTP_POST_REQUEST && postParams != null && data != null) {
+            String lineEnd  = "\n";
+            String twoHH  = "--";
+            String boundary = "--Asrf456BGe4h";
+            httpConnection.setRequestProperty("Content-Type","multipart/mixed; boundary=" + boundary);
+            DataOutputStream dos = new DataOutputStream(out = httpConnection.getOutputStream());
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHH+boundary);
+            dos.writeBytes(lineEnd);
+            dos.writeBytes("Content-Disposition: mixed");
+            dos.writeBytes(lineEnd);
+            dos.writeBytes("Content-Type: application/json");
+            dos.writeBytes(lineEnd+lineEnd);
+            dos.writeBytes(postParams);
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHH+boundary);
+            dos.writeBytes(lineEnd);
+            dos.writeBytes("Content-Disposition: mixed");
+            dos.writeBytes(lineEnd);
+            dos.writeBytes("Content-Type: audio/x-aac");
+            dos.writeBytes(lineEnd+lineEnd);
+            /*
+            BufferedInputStream bis = new BufferedInputStream(is);
+            byte[] buff = new byte[1024];
+            while(bis.read(buff) > 0) {
+              dos.write(buff); 
+            }
+            */
+            dos.writeBytes(data);
+            
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHH+boundary + "--");
+            dos.writeBytes(lineEnd);
+            dos.flush();
+            dos.close();
+            out.close();
+          }
+          
+          in = httpConnection.getInputStream();
+          
+          // проверяет код ответа сервера и считываем данные
+          if(httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            StringBuilder responseBuilder = new StringBuilder();
+            BufferedInputStream bis = new BufferedInputStream(in = httpConnection.getInputStream());
+            byte[] buffer = new byte[1024];
+            int n;
+            while((n=bis.read(buffer)) > 0)
+              responseBuilder.append(new String(buffer,0,n)); 
+            response = responseBuilder.toString();
+            bis.close();
+          }  
+        
+          Debug.log(TAG,"resp:" + response);   // RESPONSE
+          Debug.log(TAG,"exit");
+        } catch(Exception e) {
+          Debug.log(TAG,"http exception:" + e);
+        } finally {
+          try {
+            Debug.log(TAG,"disconnect");
+            if(in!=null) in.close();
+            if(out!=null) out.close();
+            if(buffReader!=null) buffReader.close();
+            if(httpConnection!=null) httpConnection.disconnect();
+          } catch(Exception e) {
+            Debug.log(TAG,"http closing error:" + e);
+          }
+        }
+        return response;
+      }
+
+    public static String _httpTPRequest(String url,String params) { //не используется
         Debug.log(TAG, "req_next:" + params); // REQUEST
 
         HttpPost httpPost = null;
