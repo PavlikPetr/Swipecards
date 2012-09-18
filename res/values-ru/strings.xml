@@ -316,4 +316,60 @@
         <item name="own_male">Ваши лучшие достижения в жизни</item>
         <item name="own_female">Ваши лучшие достижения в жизни</item>
     </string-array>
+    
+    <!-- Экран приглашений -->
+    <string name="search_hint">Найти друзей</string>
+    <string name="activity_title_invite">Приглашения</string>
+    <string name="send_invite">Отправить</string>
+    <plurals name="invite_bonus_text">
+        <item quantity="zero">Пригласите друзей и получите за каждого по 20 {{coins}}</item>
+        <item quantity="one">Вы собираетесь отправить приглашение %2$d другу и получите за это %1$d {{coins}}</item>
+        <item quantity="few">Вы собираетесь отправить приглашения %2$d друзьям и получите за это %1$d {{coins}}</item>
+        <item quantity="other">Вы собираетесь отправить приглашения %2$d друзьям и получите за это %1$d {{coins}}</item>
+    </plurals>
+    <string name="invite_is_free">Отправка приглашения бесплатна</string>
+    <string name="invite_need_select">Выберите одного или нескольких друзей для отправки приглашения</string>
+    <string name="invite_error">Не удалось отправить приглашения. Попробуйте еще раз</string>
+    <string name="invite_completed">Приглашение отправлено</string>
+
+    <!--Leaders-->
+    <string name="leaders_go_date">Идем на свидание</string>
+    <string name="leaders_leader_now">Теперь вы лидер!</string>
+    <string name="need_select_photo">Сперва нужно выбрать фотографию!</string>
+    <string name="photo_add_or">Фотография добавлена</string>
+    <string name="photo_add_error">Не удалось добавить фотографию</string>
+    <plurals name="leaders_price">
+        <item quantity="one">Встать за %d монету</item>
+        <item quantity="few">Встать за %d монеты</item>
+        <item quantity="other">Встать за %d монет</item>
+    </plurals>
+    <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
+    <string name="leaders_date">Хочу на\nсвидание!</string>
+
+    <!--Settings-->
+    <string name="settings_wifi">Только по Wi-Fi</string>
+    <string name="settings_on">Включена</string>
+    <string name="settings_off">Выключена</string>
+    <string name="notifications">Уведомления</string>
+    <string name="notifications_summary">Уведомления о новых сообщениях и симпатиях</string>
+    <string name="select_ringtone">Выбрать рингтон</string>
+    <string name="vibration">Вибросигнал</string>
+    <string name="photo_preloading">Предзагрузка фотографий</string>
+    <string name="photo_preloading_summary">Предварительная загрузка следующей фотографии в альбоме</string>
+    <string name="preloading">Предзагрузка</string>
+
+    <plurals name="time_hour">
+        <item quantity="one">%d час назад</item>
+        <item quantity="few">%d часа назад</item>
+        <item quantity="other">%d часов назад</item>
+    </plurals>
+
+    <plurals name="time_minute">
+        <item quantity="one">%d минуту назад</item>
+        <item quantity="few">%d минуты назад</item>
+        <item quantity="other">%d минут назад</item>
+    </plurals>
+
+    <string name="profile_settings">Настройки</string>
+    <string name="profile_settings_summary">Настройки приложения</string>
 </resources>

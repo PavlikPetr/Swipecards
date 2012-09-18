@@ -291,4 +291,44 @@
         <item name="own_male">About achievements you are proud of</item>
         <item name="own_female">About achievements you are proud of</item>
     </string-array>
+    
+     <!-- Экран приглашений -->
+    <string name="search_hint">Find friends</string>
+    <string name="activity_title_invite">Invitations</string>
+    <string name="send_invite">Send</string>
+    <plurals name="invite_bonus_text">
+        <item quantity="zero">Invite your friends and get 20 {{coins}} for each one</item>
+        <item quantity="one">You are going to send an invitation to %2$d friend and get %1$d {{coins}} for that</item>
+        <item quantity="other">You are going to send invitations to %2$d friends and get %1$d {{coins}} for that</item>
+    </plurals>
+    <string name="invite_is_free">Sending the invitations is free</string>
+    <string name="invite_need_select">Choose one or several of your friends and send them invitations</string>
+    <string name="invite_error">Could not send the invitation. Please, try again</string>
+    <string name="invite_completed">Invitation sent</string>
+
+
+    <!--Leaders-->
+    <string name="leaders_go_date">Let\'s go for a date</string>
+    <string name="leaders_leader_now">You are a leader now!</string>
+    <string name="need_select_photo">First you a have to choose a photo!</string>
+    <string name="photo_add_or">Photo added</string>
+    <string name="photo_add_error">Could not add the photo</string>
+    <plurals name="leaders_price">
+        <item quantity="one">Get here for %d coin</item>
+        <item quantity="other">Get here for %d coins</item>
+    </plurals>
+    <string name="leaders_select_photo">Choose the most attractive photo:</string>
+    <string name="leaders_date">Wanna\ndate!</string>
+
+    <!--Settings-->
+    <string name="settings_wifi">Only Wi-Fi</string>
+    <string name="settings_on">On</string>
+    <string name="settings_off">Off</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_summary">New messages and sympathy notifications</string>
+    <string name="select_ringtone">Select ringtone</string>
+    <string name="vibration">Vibrate</string>
+    <string name="photo_preloading">Photo preloading</string>
+    <string name="photo_preloading_summary">Preloading the next photo in the album</string>
+    <string name="preloading">Preloading</string>
 </resources>

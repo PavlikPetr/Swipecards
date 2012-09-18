@@ -14,7 +14,7 @@ import com.topface.topface.ui.views.RoundedImageView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.MemorySyncCache;
-import com.topface.topface.utils.Osm;
+import com.topface.topface.utils.OsmManager;
 import com.topface.topface.utils.StorageCache;
 import com.topface.topface.utils.MemoryCacheTemplate;
 import com.topface.topface.utils.Utils;
@@ -572,7 +572,7 @@ public class ChatListAdapter extends BaseAdapter {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				final String address = Osm.getAddress(history.latitude, history.longitude);
+				final String address = OsmManager.getAddress(history.latitude, history.longitude);
 				mAddressesCache.put(key, address);
 				tv.post(new Runnable() {
 					@Override

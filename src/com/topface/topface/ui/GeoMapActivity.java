@@ -28,9 +28,9 @@ import com.google.android.maps.MapView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.utils.GeoLocationManager;
-import com.topface.topface.utils.Osm;
+import com.topface.topface.utils.OsmManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
-import com.topface.topface.utils.Osm.OSMAddress;
+import com.topface.topface.utils.OsmManager.OSMAddress;
 
 /**
  * Activity for map displaying 
@@ -238,7 +238,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 		@Override
 		protected FilterResults performFiltering(final CharSequence constraint) {
 			ArrayList<Address> addressList = null;
-			if (!Osm.OSMSearchEnabled) {
+			if (!OsmManager.OSMSearchEnabled) {
 				if (constraint != null) {
 					addressList = mGeoLocationManager.getSuggestionAddresses((String) constraint, 5);
 				}
@@ -257,7 +257,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 				
 				addressList.removeAll(emptyAddresses);
 			} else {
-				addressList = Osm.getSuggestionAddresses((String)constraint, 5);
+				addressList = OsmManager.getSuggestionAddresses((String)constraint, 5);
 				if (addressList == null)
 					addressList = new ArrayList<Address>();
 			}			
