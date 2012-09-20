@@ -218,6 +218,9 @@ public class ProfileActivity extends MenuActivity {
   @Override
   protected void onStart() {
     super.onStart();
+
+    EasyTracker.getTracker().trackActivityStart(this);
+
     if(mIsOwner) {
       mResourcesPower.setBackgroundResource(Utils.getBatteryResource());
       mResourcesPower.setText(""+CacheProfile.power+"%");
