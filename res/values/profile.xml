@@ -3,6 +3,24 @@
     
     <string name="cache_profile_filter_geo">filter_geo</string>
     <string name="cache_profile_filter_online">filter_online</string>
+    <string name="cache_profile_filter_beautiful">filter_beautiful</string>
+	<string name="cache_profile_filter_status">filter_status</string>    
+	<string name="cache_profile_filter_marriage">filter_marriage</string>
+	<string name="cache_profile_filter_character">filter_character</string>
+	<string name="cache_profile_filter_alcohol">filter_alcohol</string>
+	<string name="cache_profile_filter_showoff">filter_showoff</string>
+    
     <string name="cache_profile_name">first_name</string>
     
+    <string-array name="profile_background_images">
+        <item>@drawable/profile_background_1</item>
+        <item>@drawable/profile_background_2</item>
+        <item>@drawable/profile_background_3</item>                
+    </string-array>
+    
+    <integer-array name="profile_background_images_ids">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </integer-array>
 </resources>

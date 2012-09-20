@@ -2,6 +2,7 @@ package com.topface.topface.ui.profile.edit;
 
 import com.topface.topface.ui.fragments.BaseFragment;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -53,6 +54,12 @@ public abstract class AbstractEditFragment extends BaseFragment {
 					}
 			}
 		});
+	}
+	
+	@Override
+	public void startActivityForResult(Intent intent, int requestCode) {
+		intent.putExtra(EditContainerActivity.INTENT_REQUEST_KEY, requestCode);
+		super.startActivityForResult(intent, requestCode);
 	}
 	
 	abstract boolean hasChanges();

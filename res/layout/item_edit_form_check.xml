@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:duplicateParentState="true">
+
+    <ImageView
+        android:id="@+id/ivEditBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:duplicateParentState="true"/>
+
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/ItemTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/ivEditBackground"
+        android:layout_centerVertical="true"
+        android:layout_gravity="left"
+        android:layout_marginLeft="10dp"
+        android:drawablePadding="5dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/ivCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/ivEditBackground"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/edit_form_select_check"
+        android:visibility="gone" />
+
+</RelativeLayout>

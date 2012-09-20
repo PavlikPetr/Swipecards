@@ -8,6 +8,8 @@ import com.topface.topface.ui.fragments.FragmentMenu;
 import com.topface.topface.utils.AuthorizationManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.http.ProfileBackgrounds;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -50,7 +52,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         // Preferences
         mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         int lastFragmentId = mPreferences.getInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, R.id.fragment_profile);
-        CacheProfile.background_res_id = mPreferences.getInt(Static.PREFERENCES_PROFILE_BACKGROUND_RES_ID, R.drawable.profile_background_1);
+        CacheProfile.background_id = mPreferences.getInt(Static.PREFERENCES_PROFILE_BACKGROUND_ID, ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
         
 		// last opened fragment
 		mFragmentContainer.showFragment(lastFragmentId, true);

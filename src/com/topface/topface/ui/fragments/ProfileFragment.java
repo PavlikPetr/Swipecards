@@ -23,6 +23,7 @@ import com.topface.topface.ui.profile.edit.EditProfileActivity;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.http.ProfileBackgrounds;
 
 public class ProfileFragment extends BaseFragment implements OnClickListener{
     //Data
@@ -137,7 +138,12 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 	@Override
 	public void onResume() {		
 		super.onResume();
-		mUserProfileHeader.setBackgroundResource(CacheProfile.background_res_id);
+		mUserProfileHeader.setBackgroundResource(
+				ProfileBackgrounds.getBackgroundResource(
+						getActivity().getApplicationContext(),
+						CacheProfile.background_id
+						)
+				);
 	}
 	
 	@Override

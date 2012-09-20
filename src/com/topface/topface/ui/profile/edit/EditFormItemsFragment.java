@@ -2,6 +2,7 @@ package com.topface.topface.ui.profile.edit;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.QuestionaryRequest;
@@ -34,7 +35,8 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 	private FormInfo mFormInfo;
 	private static int mSeletedDataId;
 	private static String mInputData;
-
+	private static Profile mProfile;	
+	
 	private ListView mListView;
 
 	public EditFormItemsFragment(int titleId, int dataId, String data) {
@@ -43,11 +45,14 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 		mSeletedDataId = mDataId;
 		mData = data;
 		mInputData = mData;
-	}
+		mProfile = CacheProfile.getProfile();
+	}	
+
+	public EditFormItemsFragment() { }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mFormInfo = new FormInfo(getActivity().getApplicationContext(), CacheProfile.getProfile());
+		mFormInfo = new FormInfo(getActivity().getApplicationContext(), mProfile);
 
 		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
 				false);
@@ -71,7 +76,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 				getActivity().finish();				
 			}
 		});
-
+		
 		mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);		
 		mSaveButton.setText(getResources().getString(R.string.navigation_save));
 		mSaveButton.setOnClickListener(new OnClickListener() {
@@ -221,15 +226,14 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 				holder = new ViewHolder();		
 				switch (type) {
 				case T_CHECK:
-					convertView = mInflater.inflate(R.layout.item_edit_profile_form, null, false);
+					convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
 					holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
 					holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
-					holder.mCheck = (ImageView) convertView.findViewById(R.id.ivCheck);
-					convertView.findViewById(R.id.ivArrow).setVisibility(View.GONE);
+					holder.mCheck = (ImageView) convertView.findViewById(R.id.ivCheck);					
 					break;
 				case T_INPUT:
 					convertView = mInflater.inflate(R.layout.item_edit_profile_form_input, null, false);
-					holder.mTextEdit = (EditText)convertView.findViewById(R.id.edText);					
+					holder.mTextEdit = (EditText)convertView.findViewById(R.id.edText);
 					holder.mTextEdit.setInputType(mFormInfo.getInputType(mTitleId));
 					break;
 				default:
@@ -262,7 +266,8 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
 				holder.mTitle.setText(getItem(position));
 
-				holder.mBackground.setOnClickListener(new OnClickListener() {
+				convertView.setDuplicateParentStateEnabled(false);
+				convertView.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						mLastSelected = position;

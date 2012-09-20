@@ -25,7 +25,7 @@ public abstract class EditProfileItem {
 	}
 	
 	public int getLayoutResId() {
-		return R.layout.item_edit_profile_form;
+		return R.layout.item_edit_form_select;
 	}
 	
 	public EditProfileItem setType(Type type) {

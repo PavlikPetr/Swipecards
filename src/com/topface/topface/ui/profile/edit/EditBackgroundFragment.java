@@ -5,13 +5,14 @@ import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.http.ProfileBackgrounds;
+import com.topface.topface.utils.http.ProfileBackgrounds.BackgroundItem;
+import com.topface.topface.utils.http.ProfileBackgrounds.ResourceBackgroundItem;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,14 +29,8 @@ import android.widget.TextView;
 public class EditBackgroundFragment extends AbstractEditFragment{
 	
 	private SharedPreferences mPreferences;	
-	private int mSelectedResId;
-	private ListView mBackgroundImagesListView;	
-	
-	int[] backgrounds = new int[]{
-			R.drawable.profile_background_1,
-			R.drawable.profile_background_2,
-			R.drawable.profile_background_3
-	};
+	private int mSelectedId;
+	private ListView mBackgroundImagesListView;		
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +39,7 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container, false);
 		
 		mPreferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-		mSelectedResId = CacheProfile.background_res_id;
+		mSelectedId = CacheProfile.background_id;
 		
 		// Navigation bar		
 		((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
@@ -83,11 +78,12 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 	}	
 	
 	private LinkedList<BackgroundItem> getBackgroundImagesList() {
-		LinkedList<BackgroundItem> result = new LinkedList<BackgroundItem>();
-				
-		for (int i = 0; i < backgrounds.length; i++) {
-			boolean selected = CacheProfile.background_res_id == backgrounds[i] ? true : false;
-			result.add(new ResourceBackgroundItem(getResources(), backgrounds[i]).setSelected(selected));
+		LinkedList<BackgroundItem> result = new LinkedList<BackgroundItem>();		
+		int[] backgroundsIds = ProfileBackgrounds.getAllBackgroundIds(getActivity().getApplicationContext());
+		
+		for (int i = 0; i < backgroundsIds.length; i++) {
+			boolean selected = CacheProfile.background_id == backgroundsIds[i] ? true : false;
+			result.add(ProfileBackgrounds.getResourceBackgroundItem(getActivity().getApplicationContext(), backgroundsIds[i]).setSelected(selected));
 		}
 		
 		return result;
@@ -95,7 +91,7 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 	
 	private void setSelectedBackground(BackgroundItem item) {
 		if(item instanceof ResourceBackgroundItem) {			
-			mSelectedResId = ((ResourceBackgroundItem)item).getResourceId();
+			mSelectedId = ((ResourceBackgroundItem)item).getId();
 			refreshSaveState();
 		}
 	}
@@ -105,8 +101,8 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 		//TODO: make sending to server
 		if (hasChanges()) {						
 			prepareRequestSend();
-			CacheProfile.background_res_id = mSelectedResId;
-			mPreferences.edit().putInt(Static.PREFERENCES_PROFILE_BACKGROUND_RES_ID, mSelectedResId).commit();
+			CacheProfile.background_id = mSelectedId;
+			mPreferences.edit().putInt(Static.PREFERENCES_PROFILE_BACKGROUND_ID, mSelectedId).commit();
 			getActivity().setResult(Activity.RESULT_OK);
 			finishRequestSend();
 		} else {
@@ -117,7 +113,7 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 	
 	@Override
 	boolean hasChanges() {
-		return CacheProfile.background_res_id != mSelectedResId;
+		return CacheProfile.background_id != mSelectedId;
 	}
 	
 	class BackgroundImagesAdapter extends BaseAdapter {
@@ -196,40 +192,6 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 			ViewGroup mSelected;
 		}
 	}	
-	
-	interface BackgroundItem {
-		public Bitmap getBitmap();
-		public boolean isSelected();
-		public BackgroundItem setSelected(boolean selected);
-	}
-	
-	class ResourceBackgroundItem implements BackgroundItem{
-		private Bitmap mBitmap;
-		private boolean selected;
-		private int mResId;		
-		
-		public ResourceBackgroundItem(Resources resources, int resId) {
-			mBitmap = BitmapFactory.decodeResource(resources, resId);
-			mResId = resId;
-		}		
-		
-		public Bitmap getBitmap() {
-			return mBitmap;
-		}
-
-		public boolean isSelected() {
-			return selected;
-		}
-
-		public BackgroundItem setSelected(boolean selected) {
-			this.selected = selected;
-			return (BackgroundItem) this;
-		}
-		
-		public int getResourceId() {
-			return mResId;
-		}
-	}
 	
 	class BitmapBackgroundItem implements BackgroundItem{
 		

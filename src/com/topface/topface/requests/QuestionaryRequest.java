@@ -25,6 +25,7 @@ public class QuestionaryRequest extends ApiRequest {
     
     public int hairid = -1; // идентификатор цвета воло пользователя
     public int eyeid = -1; // идентификатор цвета глаз пользователя
+    public int breastid = -1; // идентификатор рамера груди пользовательницы
     public int childrenid = -1; // идентификатор количества детей пользователя
     public int residenceid = -1; // идентификатор условий проживания пользователя
     public int carid = -1; // идентификатор наличия автомобиля у пользователя

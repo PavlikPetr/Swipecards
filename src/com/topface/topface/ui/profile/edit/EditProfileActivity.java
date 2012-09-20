@@ -11,6 +11,7 @@ import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.profile.edit.EditProfileItem.Type;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.http.ProfileBackgrounds;
 
 import android.app.Activity;
 import android.content.Context;
@@ -237,6 +238,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			final EditProfileItem item = getItem(position);
+			int type = getItemViewType(position);
 
 			// get holder
 			ViewHolder holder = null;
@@ -274,14 +276,13 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 			
 			
 			// set text
-			if (item instanceof EditHeader) {				
+			if (type == T_HEADER) {				
 				if(!item.getTitle().equals(Static.EMPTY)) {
 					holder.mTitle.setText(item.getTitle());
 					holder.mTitle.setVisibility(View.VISIBLE);
 				} else {
 					holder.mTitle.setVisibility(View.GONE);
 				}
-				
 			} else {
 				holder.mTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 				holder.mText.setVisibility(View.GONE);
@@ -301,7 +302,8 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 					holder.mText.setText(item.getText());
 				}
 				
-				holder.mBackground.setOnClickListener(new OnClickListener() {					
+				convertView.setDuplicateParentStateEnabled(false);
+				convertView.setOnClickListener(new OnClickListener() {					
 					@Override
 					public void onClick(View v) {
 						item.onClick();
@@ -345,7 +347,8 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 		@Override
 		public Drawable getIcon() {
 			Bitmap original = BitmapFactory.decodeResource(getResources(),
-					CacheProfile.background_res_id);
+					ProfileBackgrounds.getBackgroundResource(getApplicationContext(), 
+							CacheProfile.background_id));
 			BitmapDrawable resized = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
 					original, 46, 35, true));
 
@@ -354,7 +357,8 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 
 		@Override
 		void onClick() {
-			startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),EditContainerActivity.INTENT_EDIT_BACKGROUND);
+			startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),
+					EditContainerActivity.INTENT_EDIT_BACKGROUND);
 		}
 	}
 
