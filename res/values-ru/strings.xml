@@ -224,6 +224,9 @@
     <string name="photo_preloading_summary">Предварительная загрузка следующей фотографии в альбоме</string>
     <string name="preloading">Предзагрузка</string>
 
+    <!--Visitors-->
+    <string name="visitors_header_title">Гости</string>
+
     <string name="not_found_dialog_title">Никого не найдено</string>
     <string name="not_found_dialog_message">По вашему запросу никого не найдено, попробуйте изменить настройки поиска</string>
     <string name="not_found_dialog_change_filter">Изменить настройки поиска</string>
