@@ -1,26 +1,20 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.database.DataSetObserver;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import com.google.android.apps.analytics.easytracking.EasyTracker;
-import com.google.android.apps.analytics.easytracking.TrackedActivity;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.billing.BuyingActivity;
@@ -29,14 +23,18 @@ import com.topface.topface.data.Rate;
 import com.topface.topface.data.Search;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.adapters.DatingAlbumAdapter;
+import com.topface.topface.ui.blocks.LeadersBlock;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.views.DatingAlbum;
 import com.topface.topface.ui.views.ILocker;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Newbie;
+import com.topface.topface.utils.Utils;
 
 import java.util.LinkedList;
 
-public class DatingActivity extends TrackedActivity implements View.OnClickListener, ILocker {
+public class DatingActivity extends TrackedMenuActivity implements View.OnClickListener, ILocker {
     // Data
     private boolean mIsHide;
     private int mCurrentUserPos;
@@ -65,6 +63,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
     private ImageView mNewbieView;
     private AlphaAnimation mAlphaAnimation;
     private SharedPreferences mPreferences;
+    private boolean mIsFilterReceiverRegistered;
 
     //---------------------------------------------------------------------------
     @Override
@@ -97,8 +96,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
         tvFilter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), FilterActivity.class);
-                startActivityForResult(intent, FilterActivity.INTENT_FILTER_ACTIVITY);
+                startFilterActivity();
             }
         });
 
@@ -197,6 +195,14 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
         //mCommentDialog.getWindow().setBackgroundDrawableResource(R.drawable.popup_comment);
 
         update(false);
+
+        new LeadersBlock(this);
+
+    }
+
+    private void startFilterActivity() {
+        Intent intent = new Intent(getApplicationContext(), FilterActivity.class);
+        startActivityForResult(intent, FilterActivity.INTENT_FILTER_ACTIVITY);
     }
 
     //---------------------------------------------------------------------------
@@ -209,8 +215,11 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == FilterActivity.INTENT_FILTER_ACTIVITY)
+        //Если вернулись с фильтра и ничего не поменяли, но при этом список пользователей пуст, пытаемся обновить
+        if (resultCode == Activity.RESULT_CANCELED && requestCode == FilterActivity.INTENT_FILTER_ACTIVITY &&
+                (mUserSearchList == null || mUserSearchList.isEmpty())) {
             update(false);
+        }
     }
 
     //---------------------------------------------------------------------------
@@ -236,6 +245,16 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             @Override
             public void success(ApiResponse response) {
                 LinkedList<Search> userList = Search.parse(response);
+                if (userList == null || userList.size() == 0) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideControls();
+                            showNotFoundDialog();
+                        }
+                    });
+                    return;
+                }
                 if (!isAddition) {
                     Debug.log(this, "update set");
                     mUserSearchList.clear();
@@ -322,7 +341,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
             showNextUser();
             return;
         }
-        if (rate == 10 && CacheProfile.money <= 0) {
+        else if (CacheProfile.money <= 0) {
             EasyTracker.getTracker().trackEvent("Purchase", "PageDating", "", 0);
             startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
             return;
@@ -437,17 +456,7 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
     private void skipUser() {
         SkipRateRequest skipRateRequest = new SkipRateRequest(this.getApplicationContext());
         skipRateRequest.userid = 0;
-        skipRateRequest.callback(new ApiHandler() {
-            @Override
-            public void success(ApiResponse response) {
-                //SkipRate skipRate = SkipRate.parse(response);
-            }
-
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-
-            }
-        }).exec();
+        skipRateRequest.exec();
         showNextUser();
     }
 
@@ -598,12 +607,77 @@ public class DatingActivity extends TrackedActivity implements View.OnClickListe
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case MENU_FILTER:
-                Intent intent = new Intent(this.getApplicationContext(), FilterActivity.class);
-                startActivityForResult(intent, FilterActivity.INTENT_FILTER_ACTIVITY);
+                startFilterActivity();
                 break;
         }
         return super.onMenuItemSelected(featureId, item);
     }
+
+    private void showNotFoundDialog() {
+        AlertDialog.Builder notFoundDialog = new AlertDialog.Builder(this);
+        notFoundDialog.setCancelable(true);
+        notFoundDialog.setTitle(getString(R.string.not_found_dialog_title));
+        notFoundDialog.setMessage(getString(R.string.not_found_dialog_message));
+
+        notFoundDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                startActivity(new Intent(DatingActivity.this, DashboardActivity.class));
+            }
+        });
+        notFoundDialog.setPositiveButton(getString(R.string.not_found_dialog_change_filter), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startFilterActivity();
+            }
+        });
+        notFoundDialog.setNegativeButton(getString(R.string.not_found_dialog_try), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                update(false);
+            }
+        });
+        notFoundDialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mIsFilterReceiverRegistered) {
+            registerReceiver(mFilterUpdatedReceiver, new IntentFilter(FilterActivity.ACTION_FILTER_UPDATED));
+            mIsFilterReceiverRegistered = true;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mIsFilterReceiverRegistered) {
+            unregisterReceiver(mFilterUpdatedReceiver);
+            mIsFilterReceiverRegistered = false;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.filter_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        return super.onOptionsItemSelected(menuItem);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    private BroadcastReceiver mFilterUpdatedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            update(false);
+        }
+    };
     //---------------------------------------------------------------------------
 }
 

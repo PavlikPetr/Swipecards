@@ -14,10 +14,17 @@ public class Options extends AbstractData {
      * Показывать баннер
      */
     public final static String FLOAT_TYPE_BANNER = "BANNER";
+
     /**
      * Показывать лидеров
      */
     public final static String FLOAT_TYPE_LEADERS = "LEADERS";
+
+    /**
+     * Не показывать ничего
+     */
+    public final static String FLOAT_TYPE_NONE = "NONE";
+
     /**
      * По умолчанию (в нашем случае баннеры)
      */
@@ -50,6 +57,11 @@ public class Options extends AbstractData {
      */
     public String float_type_visitors = FLOAT_TYPE_BANNER;
 
+    /**
+     * G
+     */
+    public String float_type_dating = FLOAT_TYPE_NONE;
+
     public static Options parse(ApiResponse response) {
         Options options = new Options();
 
@@ -60,6 +72,7 @@ public class Options extends AbstractData {
             options.float_type_dialogs = setFloatType(response.mJSONResult.optString("float_type_dialogs"));
             options.float_type_top = setFloatType(response.mJSONResult.optString("float_type_top"));
             options.float_type_visitors = setFloatType(response.mJSONResult.optString("float_type_visitors"));
+            //options.float_type_dating = setFloatType(response.mJSONResult.optString("float_type_dating"));
         } catch (Exception e) {
             Debug.log("Message.class", "Wrong response parsing: " + e);
         }
@@ -78,7 +91,7 @@ public class Options extends AbstractData {
             return DEFAULT_FLOAT_TYPE;
         }
         else {
-            return DEFAULT_FLOAT_TYPE;
+            return FLOAT_TYPE_NONE;
         }
     }
 

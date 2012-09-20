@@ -1,5 +1,20 @@
 package com.topface.topface.ui;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.*;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.Preference;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
@@ -8,29 +23,12 @@ import com.topface.topface.requests.FilterRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import com.topface.topface.utils.TrackedPreferenceActivity;
 
 public class FilterActivity extends TrackedPreferenceActivity implements LocationListener {
-  //---------------------------------------------------------------------------
+    public static final String ACTION_FILTER_UPDATED = "com.topface.topface.action.FILTER_UPDATED";
+
+    //---------------------------------------------------------------------------
   // class TempFilter
   //---------------------------------------------------------------------------
   class TempFilter {
@@ -220,7 +218,7 @@ public class FilterActivity extends TrackedPreferenceActivity implements Locatio
     filterRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
-        //Toast.makeText(FilterActivity.this,"filter success",Toast.LENGTH_SHORT).show();
+          sendBroadcast(new Intent(ACTION_FILTER_UPDATED));
       }
       @Override
       public void fail(int codeError,ApiResponse response) {

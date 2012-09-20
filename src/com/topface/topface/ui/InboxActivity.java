@@ -93,9 +93,10 @@ public class InboxActivity extends TrackedActivity {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(InboxActivity.this.getApplicationContext(),ChatActivity.class);
-        intent.putExtra(ChatActivity.INTENT_USER_ID, mInboxDataList.get(position).uid);
-        intent.putExtra(ChatActivity.INTENT_USER_NAME, mInboxDataList.get(position).first_name);
-        intent.putExtra(ChatActivity.INTENT_USER_AVATAR, mInboxDataList.get(position).avatars_small);
+        FeedInbox item = (FeedInbox) parent.getItemAtPosition(position);
+        intent.putExtra(ChatActivity.INTENT_USER_ID, item.uid);
+        intent.putExtra(ChatActivity.INTENT_USER_NAME, item.first_name);
+        intent.putExtra(ChatActivity.INTENT_USER_AVATAR, item.avatars_small);
         startActivity(intent);
       }
     });
@@ -156,11 +157,13 @@ public class InboxActivity extends TrackedActivity {
       @Override
       public void success(ApiResponse response) {
         final LinkedList<FeedInbox> feedInboxList = FeedInbox.parse(response);
-        mInboxDataList.clear();
-        mInboxDataList.addAll(feedInboxList);
         post(new Runnable() {
           @Override
           public void run() {
+            //Если это делать не в UI треде, то возникает вероятность падения из-за конфликта с PullToRefresh
+            mInboxDataList.clear();
+            mInboxDataList.addAll(feedInboxList);
+
             if(mNewUpdating)
               mFooterView.setVisibility(View.GONE);
             else
@@ -170,7 +173,7 @@ public class InboxActivity extends TrackedActivity {
               mFooterView.setVisibility(View.GONE);
             
             mProgressBar.setVisibility(View.GONE);
-            mListView.onRefreshComplete(); 
+            mListView.onRefreshComplete();
             mListAdapter.notifyDataSetChanged();
           }
         });
@@ -203,11 +206,11 @@ public class InboxActivity extends TrackedActivity {
       @Override
       public void success(ApiResponse response) {
         final LinkedList<FeedInbox> feedInboxList = FeedInbox.parse(response);
-        if(feedInboxList.size() > 0)
-          mInboxDataList.addAll(feedInboxList);
         post(new Runnable() {
           @Override
           public void run() {
+            if(feedInboxList.size() > 0)
+                mInboxDataList.addAll(feedInboxList);
             if(feedInboxList.size()==0 || feedInboxList.size()<LIMIT/2)
               mFooterView.setVisibility(View.GONE);
             else

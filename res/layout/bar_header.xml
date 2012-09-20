@@ -1,44 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
-  <RelativeLayout
-      android:id="@+id/tvHeaderBar"
-      android:layout_width="fill_parent" 
-      android:layout_height="wrap_content"  
-      android:background="@drawable/im_bar_header" >
-      
-	  <TextView
-	      android:id="@+id/tvHeaderTitle"
-	      android:textColor="#FFFFFF"
-	      android:textStyle="bold"
-	      android:layout_width="wrap_content"
-	      android:layout_height="wrap_content"
-	      android:layout_centerInParent="true"  />
-	  
-	  <Button
-        android:id="@+id/btnChatProfile"
-        android:background="@drawable/profile_bar_selector"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"  />
-	  
-    <TextView
-        android:id="@+id/tvDatingFilter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:drawableLeft="@drawable/im_divider"
-        android:drawablePadding="16dp"
-        android:textColor="#EEEEEE"
-        android:textSize="12sp"
-        android:gravity="center_vertical"
-        android:visibility="invisible"
-        android:text="@string/dating_menu_one"  />
-    
-    <!-- android:background="@drawable/dating_filter_selector"  -->
-	  
-  </RelativeLayout>
-</merge>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/tvHeaderBar"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:background="@drawable/im_bar_header" >
+
+  <TextView
+      android:id="@+id/tvHeaderTitle"
+      android:textColor="#FFFFFF"
+      android:textStyle="bold"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"  />
+
+  <Button
+    android:id="@+id/btnChatProfile"
+    android:background="@drawable/profile_bar_selector"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="invisible"
+    android:layout_centerVertical="true"
+    android:layout_alignParentRight="true"
+    android:layout_marginRight="10dp"  />
+
+<TextView
+    android:id="@+id/tvDatingFilter"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_marginRight="16dp"
+    android:drawableLeft="@drawable/im_divider"
+    android:drawablePadding="16dp"
+    android:textColor="#EEEEEE"
+    android:textSize="12sp"
+    android:gravity="center_vertical"
+    android:visibility="invisible"
+    android:text="@string/dating_menu_one"  />
+
+<!-- android:background="@drawable/dating_filter_selector"  -->
+
+</RelativeLayout>

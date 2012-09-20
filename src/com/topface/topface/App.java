@@ -5,12 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
-@ReportsCrashes(formKey = "dE85SXowSDhBcXZvMXAtUEtPMTg4X2c6MQ")
+@ReportsCrashes(formKey = "dG9YQ1ljaUlqZ2xJWFQ2UlZwNU9zNmc6MQ")
 public class App extends Application {
     // Constants
     public static final String TAG = "Topface";
@@ -33,6 +34,7 @@ public class App extends Application {
         Debug.log("App", "+onCreate");
         Data.init(getApplicationContext());
         Recycle.init(getApplicationContext());
+        CacheProfile.loadProfile();
         //Начинаем слушать подключение к интернету
         if (mConnectionIntent == null) {
             mConnectionReceiver = new ConnectionChangeReceiver(mContext);

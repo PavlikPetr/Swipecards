@@ -1,11 +1,11 @@
 package com.topface.topface.ui.profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.*;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.google.android.c2dm.C2DMessaging;
@@ -19,21 +19,24 @@ import com.topface.topface.data.User;
 import com.topface.topface.imageloader.FullSizeImageLoader;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.SettingsActivity;
+import com.topface.topface.ui.MenuActivity;
 import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
 import com.topface.topface.ui.profile.album.PhotoEroAlbumActivity;
 import com.topface.topface.ui.profile.gallery.HorizontalListView;
 import com.topface.topface.ui.profile.gallery.PhotoEroGalleryAdapter;
 import com.topface.topface.ui.profile.gallery.PhotoGalleryAdapter;
 import com.topface.topface.ui.views.FrameImageView;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.FormInfo;
+import com.topface.topface.utils.Utils;
 
 import java.util.LinkedList;
 
 /*
  *      "Профиль"
  */
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends MenuActivity {
   // Data
   private int mUserId;
   private int mMutualId;
@@ -208,6 +211,8 @@ public class ProfileActivity extends Activity {
     mAddPhotoHelper.setOnResultHandler(mAddPhotoHandler);
     
     getProfile();
+
+    EasyTracker.getTracker().setContext(this);
   }
   //---------------------------------------------------------------------------  
   @Override
@@ -235,7 +240,7 @@ public class ProfileActivity extends Activity {
   @Override
   protected void onActivityResult(int requestCode,int resultCode,Intent data) {
     if(requestCode == EDITOR_ACTIVITY_REQUEST_CODE/* && resultCode == RESULT_OK*/) {
-      setOwnerProfileInfo(CacheProfile.getProfile());
+      setOwnerProfileInfo(CacheProfile.getProfile(), null);
     }
     if(requestCode == ALBUM_ACTIVITY_REQUEST_CODE/* && resultCode == RESULT_OK*/)
       if(mIsOwner)
@@ -267,7 +272,7 @@ public class ProfileActivity extends Activity {
           post(new Runnable() {
             @Override
             public void run() {
-              setOwnerProfileInfo(Profile.parse(response));
+              setOwnerProfileInfo(Profile.parse(response), response);
               updateOwnerAlbum(); // ХАК для обновления всех фотографий
               mProgressBar.setVisibility(View.GONE);
               mProfileGroupView.setVisibility(View.VISIBLE);
@@ -315,8 +320,8 @@ public class ProfileActivity extends Activity {
   }
   //---------------------------------------------------------------------------
   // свой профиль
-  private void setOwnerProfileInfo(Profile profile) {
-    CacheProfile.setProfile(profile);
+  private void setOwnerProfileInfo(Profile profile, ApiResponse response) {
+    CacheProfile.setProfile(profile, response);
     
     mUserId = CacheProfile.uid;
     if(CacheProfile.sex == 0)
@@ -818,21 +823,4 @@ public class ProfileActivity extends Activity {
         EasyTracker.getTracker().trackEvent("PageProfile", action, label, 0);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.settings_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.settings:
-                Intent i = new Intent(this, SettingsActivity.class);
-                startActivity(i);
-        }
-        return super.onOptionsItemSelected(menuItem);
-    }
 }

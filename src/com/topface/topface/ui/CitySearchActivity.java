@@ -1,9 +1,15 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
-
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.Window;
+import android.widget.*;
+import android.widget.AdapterView.OnItemClickListener;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -13,20 +19,9 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.utils.Debug;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import com.topface.topface.utils.Utils;
+
+import java.util.LinkedList;
 
 public class CitySearchActivity extends TrackedActivity {
   // Data
@@ -122,14 +117,14 @@ public class CitySearchActivity extends TrackedActivity {
     citiesRequest.callback(new ApiHandler() {
       @Override
       public void success(ApiResponse response) {
-        LinkedList<City> citiesList = City.parse(response);
+        final LinkedList<City> citiesList = City.parse(response);
         if(citiesList.size() ==0  )
           return;
-        mTopCitiesList.addAll(citiesList);
         fillData(mTopCitiesList);
-        post(new Runnable() {
+          post(new Runnable() {
           @Override
           public void run() {
+            mTopCitiesList.addAll(citiesList);
             mListAdapter.notifyDataSetChanged();
             mProgressBar.setVisibility(View.GONE);
           }

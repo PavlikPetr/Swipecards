@@ -11,11 +11,11 @@
     <string name="general_footer_previous">Previous messages</string>
     <string name="general_purchasing_error">Please write message about purchasing error to support@topface.ru</string>
     <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
-    
+
     <!-- Auth Activity  -->
     <string name="auth_btn_vk">Login via VKontakte</string>
     <string name="auth_btn_fb">Login via Facebook</string>
-    
+
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_dating">Dating</string>
     <string name="dashbrd_btn_likes">Likes you</string>
@@ -32,12 +32,12 @@
     <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
     <string name="dashbrd_popup_rate">Yes, I would rate</string>
     <string name="dashbrd_popup_later">Ask later</string>
-    
+
     <!-- Likes Activity -->
     <string name="likes_header_title">Likes you</string>
     <string name="likes_btn_dbl_left">All</string>
     <string name="likes_btn_dbl_right">Unread</string>
-    
+
     <!-- Indox & Chat Activity -->
     <string name="inbox_header_title">My messages</string>
     <string name="inbox_btn_dbl_left">All</string>
@@ -51,22 +51,22 @@
     <string name="chat_wish_in">Secret wish received.</string>
     <string name="chat_wish_out">Secret wish sent.</string>
     <string name="chat_sexuality_in">Sexuality rated.</string>
-    <string name="chat_sexuality_out">You have your sexuality rated.</string> 
+    <string name="chat_sexuality_out">You have your sexuality rated.</string>
     <string name="chat_money_in">You got a coin</string>
     <string name="chat_message_copied">Message copied</string>
 
-    
+
     <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Mutual</string>
     <string name="symphaty_btn_dbl_left">All</string>
     <string name="symphaty_btn_dbl_right">Unread</string>
-    
+
     <!-- Tops Activity -->
     <string name="tops_header_title">Most popular</string>
     <string name="tops_btn_boys">Guys</string>
     <string name="tops_btn_girls">Girls</string>
     <string name="tops_btn_city">City</string>
-    
+
     <!-- Filter Activity -->
     <string name="filter_header_title">I\'m looking for</string>
     <string name="filter_menu_save">Save</string>
@@ -85,13 +85,13 @@
     <string name="filter_nearby">Near with me</string>
     <string name="filter_cities_all">All cities</string>
     <string name="filter_select_city">Select city</string>
-    
+
     <!-- Dating Activity -->
     <string name="dating_header_title_him">Rate him!</string>
     <string name="dating_header_title_her">Rate her!</string>
     <string name="dating_menu_one">Filter</string>
     <string name="dating_back">To scores</string>
-    
+
     <!-- Buying Activity -->
     <string name="buying_header_title">Purchasing</string>
     <string name="buying_money">Buy coins</string>
@@ -123,7 +123,7 @@
         <item quantity="one">%d minute ago</item>
         <item quantity="other">%d minutes ago</item>
     </plurals>
-    
+
     <!-- Profile Activity -->
     <string name="profile_header_title">My Profile</string>
     <string name="profile_btn_chat">Chat</string>
@@ -181,7 +181,7 @@
     <string name="ero_album_btn_dislike">NOT recommend</string>
     <string name="ero_album_btn_buy">Next photo</string>
     <string name="ero_album_btn_next">Next photo</string>
-    
+
     <!-- Экран приглашений -->
     <string name="search_hint">Find friends</string>
     <string name="activity_title_invite">Invitations</string>
@@ -198,7 +198,7 @@
 
 
     <!--Leaders-->
-    <string name="leaders_go_date">Let\'s go for a date</string>
+    <string name="leaders_go_date">Put me here!</string>
     <string name="leaders_leader_now">You are a leader now!</string>
     <string name="need_select_photo">First you a have to choose a photo!</string>
     <string name="photo_add_or">Photo added</string>
@@ -208,7 +208,7 @@
         <item quantity="other">Get here for %d coins</item>
     </plurals>
     <string name="leaders_select_photo">Choose the most attractive photo:</string>
-    <string name="leaders_date">Wanna\ndate!</string>
+    <string name="leaders_date">Put me\nhere!</string>
 
     <!--Settings-->
     <string name="settings_wifi">Only Wi-Fi</string>
@@ -224,5 +224,11 @@
 
     <!--Visitors-->
     <string name="visitors_header_title">Visitors</string>
+
+    <!--Not Found Dialog-->
+    <string name="not_found_dialog_title">No results found</string>
+    <string name="not_found_dialog_message">No results found, try changing your search </string>
+    <string name="not_found_dialog_change_filter">Change search settings</string>
+    <string name="not_found_dialog_try">Try again</string>
 
 </resources>

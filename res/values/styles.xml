@@ -2,6 +2,7 @@
 <resources>
     <style name="PullToRefresh">
         <item name="ptrShowIndicator">false</item>
+        <item name="ptrOverScroll">false</item>
         <item name="ptrDrawable">@drawable/white_ptr_drawable</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">0dp</item>

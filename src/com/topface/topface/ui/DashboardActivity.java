@@ -7,13 +7,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.*;
-import com.google.android.apps.analytics.easytracking.TrackedActivity;
 import com.topface.topface.*;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -24,7 +20,7 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Newbie;
 import com.topface.topface.utils.Utils;
 
-public class DashboardActivity extends TrackedActivity implements View.OnClickListener {
+public class DashboardActivity extends MenuActivity implements View.OnClickListener {
     // Data
     private boolean mNotification;
     private TextView mLikesNotify;
@@ -219,7 +215,7 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
             @Override
             public void success(final ApiResponse response) {
                 if (!mNotification) {
-                    CacheProfile.setData(Profile.parse(response));
+                    CacheProfile.setData(Profile.parse(response), response);
                     Debug.log("Avatar downloaded!");
                 } else {
                     CacheProfile.updateNotifications(Profile.parse(response));
@@ -393,23 +389,6 @@ public class DashboardActivity extends TrackedActivity implements View.OnClickLi
         startActivity(intent);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.settings_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.settings:
-                Intent i = new Intent(this, SettingsActivity.class);
-                startActivity(i);
-        }
-        return super.onOptionsItemSelected(menuItem);
-    }
 }
 
 

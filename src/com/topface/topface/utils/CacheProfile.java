@@ -17,7 +17,7 @@ import java.util.LinkedList;
  *   Cache Profile
  */
 public class CacheProfile {
-  // Data
+    // Data
   public static int uid;                // id пользователя в топфейсе
   public static String first_name;      // имя пользователя
   public static int age;                // возраст пользователя
@@ -64,6 +64,7 @@ public class CacheProfile {
   public static String status;            // статус пользователя
   public static boolean isNewbie;         // поле новичка
   public static final String OPTIONS_CACHE_KEY = "options_cache";
+  public static final String PROFILE_CACHE_KEY = "profile_cache";
 
     //---------------------------------------------------------------------------
   public static boolean init(Context context) {
@@ -90,13 +91,59 @@ public class CacheProfile {
 
   }
   //---------------------------------------------------------------------------
-  public static void setData(Profile profile) {
+  public static void setData(Profile profile, ApiResponse response) {
     updateAvatars(profile);
     updateCity(profile);
     updateDating(profile);
     updateNotifications(profile);
     isNewbie = profile.isNewbie;
+    setProfileCache(response);
   }
+
+    private static void setProfileCache(ApiResponse response) {
+        if (response != null) {
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
+            editor.putString(PROFILE_CACHE_KEY, response.toString());
+            editor.commit();
+        }
+    }
+
+    public static void setData(Profile profile) {
+        setData(profile, null);
+    }
+
+    /**
+     * Загружает профиль из кэша
+     * @return
+     */
+    public static boolean loadProfile() {
+        boolean result = false;
+        if (uid == 0) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+            String profileCache = preferences.getString(PROFILE_CACHE_KEY, null);
+            Profile profile = null;
+            if (profileCache != null) {
+                //Получаем опции из кэша
+                try {
+                    profile = Profile.parse(
+                            new ApiResponse(
+                                    new JSONObject(profileCache)
+                            )
+                    );
+                    profile.unread_likes = 0;
+                    profile.unread_messages = 0;
+                    profile.unread_rates = 0;
+                    profile.unread_symphaties = 0;
+                    setData(profile);
+                    result = true;
+                }
+                catch (JSONException e) {
+                    Debug.error(e);
+                }
+            }
+        }
+        return result;
+    }
   //---------------------------------------------------------------------------
   public static void updateAvatars(Profile profile) {
     avatar_big = profile.avatar_big;
@@ -172,7 +219,7 @@ public class CacheProfile {
     return profile;
   }
   //---------------------------------------------------------------------------
-  public static void setProfile(Profile profile) {
+  public static void setProfile(Profile profile, ApiResponse response) {
     uid=profile.uid;
     first_name=profile.first_name;
     age=profile.age;       
@@ -212,6 +259,7 @@ public class CacheProfile {
     albums=profile.albums;
     status=profile.status;
     isNewbie=profile.isNewbie;
+    setProfileCache(response);
   }
 
   /**

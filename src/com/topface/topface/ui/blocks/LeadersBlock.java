@@ -81,7 +81,7 @@ public class LeadersBlock {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             //При клике на лидера, открываем его профиль
-            Leaders.LeaderUser leader = (Leaders.LeaderUser) adapterView.getAdapter().getItem(i);
+            Leaders.LeaderUser leader = (Leaders.LeaderUser) adapterView.getItemAtPosition(i);
             Intent intent = new Intent(mContext, ProfileActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(ProfileActivity.INTENT_USER_ID, leader.user_id);

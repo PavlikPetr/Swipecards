@@ -106,13 +106,12 @@ public class VisitorsActivity extends TrackedActivity {
         mVisitorsRequest = new VisitorsRequest(getApplicationContext());
         mVisitorsRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
-                mVisitorsList.clear();
-                mVisitorsList.addAll(Visitors.parse(response).visitors);
-
+            public void success(final ApiResponse response) {
                 post(new Runnable() {
                     @Override
                     public void run() {
+                        mVisitorsList.clear();
+                        mVisitorsList.addAll(Visitors.parse(response).visitors);
                         mProgressBar.setVisibility(View.GONE);
                         mListView.onRefreshComplete();
                         mListAdapter.notifyDataSetChanged();

@@ -88,9 +88,10 @@ public class LikesActivity extends TrackedActivity {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
-       intent.putExtra(ProfileActivity.INTENT_USER_ID,mLikesDataList.get(position).uid);
-       intent.putExtra(ProfileActivity.INTENT_USER_NAME,mLikesDataList.get(position).first_name);
-       intent.putExtra(ProfileActivity.INTENT_MUTUAL_ID,mLikesDataList.get(position).id);
+       FeedLike item = (FeedLike) parent.getItemAtPosition(position);
+       intent.putExtra(ProfileActivity.INTENT_USER_ID, item.uid);
+       intent.putExtra(ProfileActivity.INTENT_USER_NAME, item.first_name);
+       intent.putExtra(ProfileActivity.INTENT_MUTUAL_ID, item.id);
        startActivity(intent);
      }
    });
@@ -158,11 +159,11 @@ public class LikesActivity extends TrackedActivity {
       @Override
       public void success(ApiResponse response) {
         final LinkedList<FeedLike> feedLikesList = FeedLike.parse(response);
-        mLikesDataList.clear();
-        mLikesDataList.addAll(feedLikesList);
         post(new Runnable() {
           @Override
           public void run() {
+            mLikesDataList.clear();
+            mLikesDataList.addAll(feedLikesList);
             if(mNewUpdating)
               mFooterView.setVisibility(View.GONE);
             else

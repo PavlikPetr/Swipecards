@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:orientation="vertical"
               android:background="@drawable/bg_leaders">
 
-    <include android:id="@+id/header" layout="@layout/bar_header"/>
+    <include android:id="@+id/header"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             layout="@layout/bar_header"/>
 
     <LinearLayout
             android:id="@+id/leadersContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:layout_below="@id/header"
             android:orientation="vertical">
 
         <TextView
@@ -57,9 +60,8 @@
             android:id="@+id/loader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
-            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:visibility="visible"
             style="@android:style/Widget.ProgressBar.Small"/>
 
-</LinearLayout>
+</RelativeLayout>

@@ -120,7 +120,8 @@ public class TopsActivity extends TrackedActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(TopsActivity.this.getApplicationContext(), ProfileActivity.class);
-                intent.putExtra(ProfileActivity.INTENT_USER_ID, mTopsList.get(position).uid);
+                Top item = (Top) parent.getItemAtPosition(position);
+                intent.putExtra(ProfileActivity.INTENT_USER_ID, item.uid);
                 startActivityForResult(intent, 0);
             }
         });
@@ -178,12 +179,12 @@ public class TopsActivity extends TrackedActivity {
         topRequest.city = mActionData.city_id;
         topRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
-                mTopsList.clear();
-                mTopsList.addAll(Top.parse(response));
+            public void success(final ApiResponse response) {
                 post(new Runnable() {
                     @Override
                     public void run() {
+                        mTopsList.clear();
+                        mTopsList.addAll(Top.parse(response));
                         mProgressBar.setVisibility(View.GONE);
                         mGridAdapter.notifyDataSetChanged();
                         mGalleryGridManager.update();

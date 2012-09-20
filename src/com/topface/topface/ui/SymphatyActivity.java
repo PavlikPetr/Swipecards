@@ -88,8 +88,9 @@ public class SymphatyActivity extends TrackedActivity {
      @Override
      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
        Intent intent = new Intent(SymphatyActivity.this.getApplicationContext(),ProfileActivity.class);
-       intent.putExtra(ProfileActivity.INTENT_USER_ID,mSymphatyDataList.get(position).uid);
-       intent.putExtra(ProfileActivity.INTENT_USER_NAME,mSymphatyDataList.get(position).first_name);
+       FeedSymphaty item = (FeedSymphaty) parent.getItemAtPosition(position);
+       intent.putExtra(ProfileActivity.INTENT_USER_ID, item.uid);
+       intent.putExtra(ProfileActivity.INTENT_USER_NAME, item.first_name);
        startActivityForResult(intent,0);
      }
    });
@@ -156,11 +157,11 @@ public class SymphatyActivity extends TrackedActivity {
       @Override
       public void success(ApiResponse response) {
         final LinkedList<FeedSymphaty> feedSymphatyList = FeedSymphaty.parse(response);
-        mSymphatyDataList.clear();
-        mSymphatyDataList.addAll(feedSymphatyList);
         post(new Runnable() {
           @Override
           public void run() {
+            mSymphatyDataList.clear();
+            mSymphatyDataList.addAll(feedSymphatyList);
             if(mNewUpdating)
               mFooterView.setVisibility(View.GONE);
             else
@@ -201,19 +202,22 @@ public class SymphatyActivity extends TrackedActivity {
       @Override
       public void success(ApiResponse response) {
         final LinkedList<FeedSymphaty> feedSymphatyList = FeedSymphaty.parse(response);
-        if(feedSymphatyList.size() > 0)
-          mSymphatyDataList.addAll(feedSymphatyList);
+
         post(new Runnable() {
-          @Override
-          public void run() {
-            if(feedSymphatyList.size()==0 || feedSymphatyList.size()<LIMIT/2)
-              mFooterView.setVisibility(View.GONE);
-            else
-              mProgressBar.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.GONE);
-            mListView.onRefreshComplete();
-            mListAdapter.notifyDataSetChanged();
-          }
+            @Override
+            public void run() {
+                if(feedSymphatyList.size() > 0) {
+                    mSymphatyDataList.addAll(feedSymphatyList);
+                }
+
+                if (feedSymphatyList.size() == 0 || feedSymphatyList.size() < LIMIT / 2)
+                    mFooterView.setVisibility(View.GONE);
+                else
+                    mProgressBar.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
+                mListView.onRefreshComplete();
+                mListAdapter.notifyDataSetChanged();
+            }
         });
       }
       @Override
