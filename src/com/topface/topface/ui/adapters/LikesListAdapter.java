@@ -1,27 +1,25 @@
 package com.topface.topface.ui.adapters;
 
 
-import com.topface.topface.R;
-import com.topface.topface.data.FeedLike;
-import com.topface.topface.utils.AvatarManager;
-import com.topface.topface.utils.CacheProfile;
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+import com.topface.topface.R;
+import com.topface.topface.data.FeedLike;
+import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.AvatarManager;
+import com.topface.topface.utils.CacheProfile;
 
 public class LikesListAdapter extends LoadingListAdapter {
     //---------------------------------------------------------------------------
     // class ViewHolder
     //---------------------------------------------------------------------------
     static class ViewHolder {
-        public ImageView mAvatar;
-        public ImageView mAvatarMask;
+        public ImageViewRemote mAvatar;
         public TextView mName;
         public TextView mCity;
         public TextView mTime;
@@ -125,8 +123,7 @@ public class LikesListAdapter extends LoadingListAdapter {
 //					}
 //					
 //				});
-                holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
-                holder.mAvatarMask = (ImageView)convertView.findViewById(R.id.ivAvatarMask);
+                holder.mAvatar = (ImageViewRemote)convertView.findViewById(R.id.ivAvatar);
                 holder.mName = (TextView)convertView.findViewById(R.id.tvName);
                 holder.mCity = (TextView)convertView.findViewById(R.id.tvCity);
                 holder.mTime = (TextView)convertView.findViewById(R.id.tvTime);
@@ -148,10 +145,9 @@ public class LikesListAdapter extends LoadingListAdapter {
                 holder = (ViewHolder)convertView.getTag();
             }
         	
-	        mAvatarManager.getImage(position, holder.mAvatar);
-	
 	        FeedLike likes = getItem(position);
-	
+
+            holder.mAvatar.setRemoteSrc(likes.getNormalLink());
 	        holder.mName.setText(likes.first_name);
 	        holder.mCity.setText(likes.age + ", " + likes.city_name);
 	
@@ -179,9 +175,7 @@ public class LikesListAdapter extends LoadingListAdapter {
     //---------------------------------------------------------------------------
     @Override
     public boolean isEnabled(int position) {
-    	if (getItemViewType(position) == T_LOADER)
-    		return false;
-    	return true;
+        return getItemViewType(position) != T_LOADER;
     }
     //---------------------------------------------------------------------------
     public void release() {

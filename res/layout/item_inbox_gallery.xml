@@ -7,32 +7,15 @@
       android:background="@drawable/item_list_selector" >
       
     <!-- аватар -->
-    <RelativeLayout 
-        android:id="@+id/loAvatarGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="6dp"
-        android:layout_marginLeft="6dp" >
-        
-      <ImageView
-        android:id="@+id/ivAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
-      
-      <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/im_avatar_list_frame" />
-        
-    </RelativeLayout>
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ivAvatar"
+            style="@style/FeedAvatar"
+            />
     
       <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/loAvatarGroup"
+        android:layout_toRightOf="@id/ivAvatar"
         android:layout_marginRight="20dp"
         android:layout_centerVertical="true"
         android:orientation="vertical">

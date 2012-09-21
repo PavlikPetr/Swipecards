@@ -1,36 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
   <RelativeLayout 
       xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"  
-      android:layout_width="fill_parent" 
+      android:layout_width="fill_parent"
       android:layout_height="wrap_content" 
       android:background="@drawable/item_list_selector" >
       
     <!-- аватар -->
       <com.topface.topface.ui.views.ImageViewRemote
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        topface:postProcessor="rounded"
-        android:layout_marginRight="6dp"
-        android:layout_marginLeft="6dp"
         android:id="@+id/ivAvatar"
-        android:layout_width="62dp"
-        android:layout_height="62dp"
-        android:background="@drawable/im_avatar_list_frame"
-        android:paddingTop="1dp"
-        android:paddingLeft="1dp"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:layout_centerInParent="true" />
-        
+        style="@style/FeedAvatar"
+        />
+
     <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_toRightOf="@id/ivAvatar"
-          android:layout_centerVertical="true" 
+          android:layout_centerVertical="true"
           android:orientation="vertical" >
-    
-	  <!-- имя, возраст -->
+
+	 <!-- имя, возраст -->
       <TextView
           android:id="@+id/tvName"
           android:layout_width="wrap_content"
@@ -38,20 +26,20 @@
           android:singleLine="true"
           android:ellipsize="end"
           android:textColor="#FFFFFF"
-          android:textSize="16dp" 
+          android:textSize="16dp"
           android:textStyle="normal"
           style="@style/ShadowItemFont" />
-		    
+
       <!-- возраст, город -->
       <TextView
           android:id="@+id/tvCity"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textColor="#FFFFFF" 
-          android:textSize="14dp" 
+          android:textColor="#FFFFFF"
+          android:textSize="14dp"
           android:textStyle="normal"
-          style="@style/ShadowItemFont" />
-    
+          style="@style/ShadowItemFont" />>
+
     </LinearLayout>
     
     <!-- время -->

@@ -88,6 +88,21 @@
     <style name="BackgroundFont" parent="ShadowItemFont">
         <item name="android:textColor">#737373</item>
         <item name="android:textSize">17sp</item>
-    </style>    
+    </style>
+
+    <style name="FeedAvatar">
+        <item name="postProcessor">rounded</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:layout_width">62dp</item>
+        <item name="android:layout_height">62dp</item>
+        <item name="android:background">@drawable/im_avatar_list_frame</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingLeft">1dp</item>
+        <item name="android:paddingRight">1dp</item>
+        <item name="android:paddingBottom">1.5dp</item>
+    </style>
     
 </resources>
