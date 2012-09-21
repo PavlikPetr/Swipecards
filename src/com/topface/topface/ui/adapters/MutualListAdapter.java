@@ -2,6 +2,7 @@ package com.topface.topface.ui.adapters;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedSympathy;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import android.content.Context;
@@ -17,7 +18,7 @@ public class MutualListAdapter extends LoadingListAdapter {
     // class ViewHolder
     //---------------------------------------------------------------------------
     static class ViewHolder {
-        public ImageView mAvatar;
+        public ImageViewRemote mAvatar;
         public TextView mName;
         public TextView mCity;
         public TextView mTime;
@@ -96,7 +97,7 @@ public class MutualListAdapter extends LoadingListAdapter {
 
                 convertView = mInflater.inflate(R.layout.item_symphaty_gallery, null, false);
 
-                holder.mAvatar = (ImageView)convertView.findViewById(R.id.ivAvatar);
+                holder.mAvatar = (ImageViewRemote)convertView.findViewById(R.id.ivAvatar);
                 holder.mName = (TextView)convertView.findViewById(R.id.tvName);
                 holder.mCity = (TextView)convertView.findViewById(R.id.tvCity);
                 holder.mTime = (TextView)convertView.findViewById(R.id.tvTime);
@@ -117,10 +118,10 @@ public class MutualListAdapter extends LoadingListAdapter {
             } else
                 holder = (ViewHolder)convertView.getTag();
 
-            mAvatarManager.getImage(position, holder.mAvatar);
 
             FeedSympathy symphaty = getItem(position);
 
+            holder.mAvatar.setRemoteSrc(symphaty.getNormalLink());
             holder.mName.setText(symphaty.first_name);
             holder.mCity.setText(symphaty.age + ", " + symphaty.city_name);
 

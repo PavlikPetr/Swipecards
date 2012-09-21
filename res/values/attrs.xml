@@ -35,4 +35,15 @@
         <attr name="messagePaddingBottom" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="ImageViewRemote">
+        <attr name="stubImage" format="reference" />
+        <attr name="imageForEmptyUri" format="reference" />
+        <attr name="remoteSrc" format="string" />
+        <attr name="postProcessor">
+            <enum name="rounded" value="1" />
+            <enum name="roundCorners" value="2" />
+            <enum name="circle" value="3" />
+         </attr>
+    </declare-styleable>
+
 </resources>

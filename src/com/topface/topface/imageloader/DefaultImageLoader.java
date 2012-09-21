@@ -100,7 +100,7 @@ public class DefaultImageLoader {
 
     public void preloadImage(String uri, ImageLoadingListener listener) {
         ImageView fakeImageView = new ImageView(mContext);
-        fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.FILL_PARENT));
+        fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
         displayImage(uri, fakeImageView, listener);
     }
 
