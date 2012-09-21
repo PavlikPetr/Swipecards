@@ -154,7 +154,7 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 	}
 
 	@Override
-	boolean hasChanges() {
+	protected boolean hasChanges() {
 		for (EditType type : hashChangedData.keySet()) {
 			if(!getDataByEditType(type).equals(hashChangedData.get(type)))
 				return true;
@@ -163,7 +163,7 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 	}
 
 	@Override
-	void saveChanges() {
+	protected void saveChanges() {
 		if (hasChanges()) {
 			SettingsRequest request = getSettigsRequest();			
 			

@@ -172,6 +172,9 @@ public class AuthorizationManager {
 				Debug.log("FB", "mRequestListener::onComplete");
 				JSONObject jsonResult = new JSONObject(response);
 				String user_id = jsonResult.getString("id");
+				String user_name = jsonResult.getString("name");
+				Settings.getInstance().setSocialAccountName(user_name);
+				
 				final AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
 				authToken.saveToken(AuthToken.SN_FACEBOOK, user_id, Data.facebook.getAccessToken(),
 						Long.toString(Data.facebook.getAccessExpires()));

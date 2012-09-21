@@ -40,6 +40,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textSize="12sp"
+            android:drawablePadding="3dp"
             android:visibility="gone" />
     </LinearLayout>
 

@@ -187,10 +187,10 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
 	}
 
 	@Override
-	boolean hasChanges() {
+	protected boolean hasChanges() {
 		return false;
 	}
 
 	@Override
-	void saveChanges() { }
+	protected void saveChanges() { }
 }

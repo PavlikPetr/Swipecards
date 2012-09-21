@@ -37,7 +37,7 @@
     <string name="likes_header_title">Я нравлюсь</string>
     <string name="likes_btn_dbl_left">Все</string>
     <string name="likes_btn_dbl_right">Непрочитанные</string>
-    <string name="likes_background_text">Нет лайков</string>
+    <string name="likes_background_text">Нет симпатий</string>
 
     <!-- Indox & Chat Activity -->
     <string name="inbox_header_title">Диалоги</string>
@@ -50,10 +50,10 @@
     <string name="chat_gift_out">Вы отправили подарок.</string>
     <string name="chat_rate_in">Вас оценили на</string>
     <string name="chat_rate_out">Вы оценили на</string>
-    <string name="chat_like_in">Вам отправили лайк</string>
-    <string name="chat_like_out">Вы отправили лайк</string>
-    <string name="chat_symphathy_in">Вам отправили сипматию</string>
-    <string name="chat_symphathy_out">Вы отправили сипматию</string>
+    <string name="chat_like_in">Вам отправили симпатию</string>
+    <string name="chat_like_out">Вы отправили симпатию</string>
+    <string name="chat_symphathy_in">Вам отправили взаимную сипматию</string>
+    <string name="chat_symphathy_out">Вы отправили взаимную сипматию</string>
     <string name="chat_wish_in">Вам отправили Тайное Желание.</string>
     <string name="chat_wish_out">Вы отправили Тайное Желание.</string>
     <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>
@@ -373,6 +373,7 @@
     <string name="leaders_date">Хочу на\nсвидание!</string>
 
     <!-- Settings -->
+    <string name="settings_header_title">Настройки</string>
     <string name="settings_wifi">Только по Wi-Fi</string>
     <string name="settings_on">Включена</string>
     <string name="settings_off">Выключена</string>
@@ -383,6 +384,14 @@
     <string name="photo_preloading">Предзагрузка фотографий</string>
     <string name="photo_preloading_summary">Предварительная загрузка следующей фотографии в альбоме</string>
     <string name="preloading">Предзагрузка</string>
+    <string name="settings_likes">Симпатии</string>
+    <string name="settings_mutual">Взаимные симпатии</string>
+    <string name="settings_messages">Сообщения</string>
+    <string name="settings_guests">Гости</string>
+    <string name="settings_help">Помощь</string>
+    <string name="settings_account">Аккаунт</string>
+    <string name="settings_rate_app">Оставить отзыв</string>
+    <string name="settings_about">О программе</string>
 
     <plurals name="time_hour">
         <item quantity="one">%d час назад</item>

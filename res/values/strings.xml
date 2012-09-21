@@ -3,6 +3,7 @@
 
     <!-- en -->
     <string name="app_name">Topface</string>
+    <string name="app_market_url">market://details?id=com.topface.topface</string>
 
     <!-- General -->
     <string name="general_internet_off">No Internet connection</string>
@@ -335,6 +336,7 @@
     <string name="leaders_date">Wanna\ndate!</string>
 
     <!--Settings-->
+    <string name="settings_header_title">Settings</string>
     <string name="settings_wifi">Only Wi-Fi</string>
     <string name="settings_on">On</string>
     <string name="settings_off">Off</string>
@@ -345,4 +347,12 @@
     <string name="photo_preloading">Photo preloading</string>
     <string name="photo_preloading_summary">Preloading the next photo in the album</string>
     <string name="preloading">Preloading</string>
+    <string name="settings_likes">Likes</string>
+    <string name="settings_mutual">Mutual</string>
+    <string name="settings_messages">Messages</string>
+    <string name="settings_guests">Guests</string>
+    <string name="settings_help">Help</string>
+    <string name="settings_account">Account</string>
+    <string name="settings_rate_app">Feedback</string>
+    <string name="settings_about">About application</string>
 </resources>

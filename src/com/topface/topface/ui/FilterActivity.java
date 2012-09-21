@@ -65,12 +65,12 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.layout.ac_filter);
-        setContentView(R.layout.ac_filter_container);
+//        setContentView(R.layout.ac_filter_container);
         Debug.log(this, "+onCreate");
 
         SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
 
-        mSavingLocker = (LockerView) findViewById(R.id.llvFilterSaving);
+//        mSavingLocker = (LockerView) findViewById(R.id.llvFilterSaving);
         
         // подтягивание данных
         mTemp = new TempFilter();

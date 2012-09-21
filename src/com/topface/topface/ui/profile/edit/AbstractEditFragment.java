@@ -62,6 +62,6 @@ public abstract class AbstractEditFragment extends BaseFragment {
 		super.startActivityForResult(intent, requestCode);
 	}
 	
-	abstract boolean hasChanges();
-	abstract void saveChanges();	
+	protected abstract boolean hasChanges();
+	protected abstract void saveChanges();	
 }

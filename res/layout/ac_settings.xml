@@ -1,4 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" />
+    android:layout_height="fill_parent"
+    android:background="@drawable/chat_list_bg" >
+
+    <FrameLayout
+        android:id="@+id/loNavigationBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <include layout="@layout/bar_navigation_header" />
+    </FrameLayout>
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_below="@id/loNavigationBar"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:id="@+id/loLikes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp" >
+
+                <include layout="@layout/item_edit_form_notifier" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/loMutual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <include layout="@layout/item_edit_form_notifier" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/loChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <include layout="@layout/item_edit_form_notifier" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/loGuests"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" >
+
+                <include layout="@layout/item_edit_form_notifier" />
+            </FrameLayout>
+
+            <include layout="@layout/item_divider" />
+
+            <FrameLayout
+                android:id="@+id/loHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp" >
+
+                <include layout="@layout/item_edit_form_select" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/loAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <include layout="@layout/item_edit_form_select" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/loRateApp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <include layout="@layout/item_edit_form_select" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/loAbout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp" >
+
+                <include layout="@layout/item_edit_form_select" />
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+    
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loNavigationBar"
+        android:src="@drawable/im_bar_header_shadow"/>
+
+</RelativeLayout>

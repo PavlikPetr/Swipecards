@@ -112,7 +112,7 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 	}		
 	
 	@Override
-	boolean hasChanges() {
+	protected boolean hasChanges() {
 		return CacheProfile.background_id != mSelectedId;
 	}
 	

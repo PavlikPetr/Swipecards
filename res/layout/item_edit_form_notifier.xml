@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:duplicateParentState="true" >
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ivEditBackground"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:duplicateParentState="true" />
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:id="@+id/tvTitle"
@@ -25,37 +23,31 @@
         android:singleLine="true"
         android:textSize="14sp" />
 
-    <!-- Switch -->
-
-    <CheckBox
-        android:id="@+id/cbSwitch"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@id/ivEditBackground"
-        android:background="@drawable/edit_switch"
-        android:button="@android:color/transparent"
-        android:clickable="false"/>
+        android:layout_centerVertical="true" 
+        android:layout_marginRight="10dp">
 
-    <TextView
-        android:id="@+id/tvSwitchOn"
-        style="@style/ItemTitleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@id/cbSwitch"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="6dp"
-        android:text="@string/general_switch_on"
-        android:textSize="14sp" />
+        <!-- c2dm notification -->
+        <CheckBox
+            android:id="@+id/cbPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"       
+            android:background="@drawable/settings_phone_selector"
+            android:button="@android:color/transparent"
+            android:layout_marginRight="10dp"
+            />
 
-    <TextView
-        android:id="@+id/tvSwitchOff"
-        style="@style/BackgroundTitleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/cbSwitch"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="6dp"
-        android:text="@string/general_switch_off"
-        android:textSize="14sp" />
+        <!-- e-mail notification -->
+        <CheckBox
+            android:id="@+id/cbMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"            
+            android:background="@drawable/settings_mail_selector"
+            android:button="@android:color/transparent"
+            />
+    </LinearLayout>
 
 </RelativeLayout>

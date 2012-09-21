@@ -26,7 +26,6 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FilterRequest;
 import com.topface.topface.ui.CitySearchActivity;
-import com.topface.topface.ui.FilterActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
@@ -117,7 +116,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 		mPreferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_PROFILE,
 				Context.MODE_PRIVATE);
 
-		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.aaa_filter, container, false);
+		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter, container, false);
 
 		// Navigation bar
 		((TextView) getActivity().findViewById(R.id.tvNavigationTitle))
@@ -447,12 +446,12 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 	}
 	
 	@Override
-	boolean hasChanges() {		
+	protected boolean hasChanges() {		
 		return !mInitFilter.equals(mFilter);
 	}
 
 	@Override
-	void saveChanges() {
+	protected void saveChanges() {
 		prepareRequestSend();
 		
 		//TODO send request
