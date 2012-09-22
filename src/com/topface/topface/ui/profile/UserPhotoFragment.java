@@ -55,9 +55,9 @@ public class UserPhotoFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
             Data.photoAlbum = mUser.photoLinks;
-            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoAlbumActivity.class);
-            intent.putExtra(PhotoAlbumActivity.INTENT_USER_ID, mUser.uid);
-            intent.putExtra(PhotoAlbumActivity.INTENT_ALBUM_POS, position);
+            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
             startActivity(intent);
         }
     };

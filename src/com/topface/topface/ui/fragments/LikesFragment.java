@@ -39,8 +39,7 @@ import com.topface.topface.utils.SwapAnimation;
 import java.util.LinkedList;
 
 public class LikesFragment extends BaseFragment {
-	// Data
-	private boolean mNewUpdating;
+
 	private PullToRefreshListView mListView;
 	private LikesListAdapter mListAdapter;
 	private AvatarManager<FeedLike> mAvatarManager;
@@ -51,9 +50,10 @@ public class LikesFragment extends BaseFragment {
     private View mToolsBar;
     private View mShowToolsBarButton;
     private View mControlsGroup;
-	
-	private boolean mIsUpdating = false;
-	// Constants
+
+    private boolean mNewUpdating;
+    private boolean mIsUpdating;
+    
 	private static final int LIMIT = 40;
 
 	@Override
@@ -84,9 +84,10 @@ public class LikesFragment extends BaseFragment {
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int y = -mToolsBar.getMeasuredHeight() + Static.HEADER_SHADOW_SHIFT;
-                mControlsGroup.setPadding(mControlsGroup.getPaddingLeft(), y, mControlsGroup.getPaddingRight(), mControlsGroup.getPaddingBottom());
-                if(y>0 || y<0) {
+                int y = mToolsBar.getMeasuredHeight();
+                if(y != 0) {
+                    y += Static.HEADER_SHADOW_SHIFT;
+                    mControlsGroup.setPadding(mControlsGroup.getPaddingLeft(), -y, mControlsGroup.getPaddingRight(), mControlsGroup.getPaddingBottom());
                     ViewTreeObserver obs = mControlsGroup.getViewTreeObserver();
                     obs.removeGlobalOnLayoutListener(this);                    
                 }
@@ -124,9 +125,9 @@ public class LikesFragment extends BaseFragment {
 		mListView.getRefreshableView().setOnItemClickListener(
 				new OnItemClickListener() {
 					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
-						if (!mIsUpdating && Data.likesList.get(position).isLoaderRetry()) {
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					    FeedLike theFeedLike = (FeedLike)parent.getItemAtPosition(position);
+						if (!mIsUpdating && theFeedLike.isLoaderRetry()) {
 							updateUI(new Runnable() {
 								public void run() {
 									removeLoaderListItem();
@@ -140,10 +141,10 @@ public class LikesFragment extends BaseFragment {
 							try {
 								// Open profile activity
 								Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-								intent.putExtra(UserProfileActivity.INTENT_USER_ID, Data.likesList.get(position).uid);
-								intent.putExtra(ChatActivity.INTENT_USER_URL, Data.likesList.get(position).getSmallLink());
-								intent.putExtra(UserProfileActivity.INTENT_USER_NAME, Data.likesList.get(position).first_name);
-								intent.putExtra(UserProfileActivity.INTENT_MUTUAL_ID, Data.likesList.get(position).id);
+                                intent.putExtra(ChatActivity.INTENT_USER_URL,         theFeedLike.getSmallLink());
+								intent.putExtra(UserProfileActivity.INTENT_USER_ID,   theFeedLike.uid);
+								intent.putExtra(UserProfileActivity.INTENT_USER_NAME, theFeedLike.first_name);
+								intent.putExtra(UserProfileActivity.INTENT_MUTUAL_ID, theFeedLike.id);
 								startActivity(intent);
 							} catch (Exception e) {
 								Debug.log(
@@ -156,12 +157,12 @@ public class LikesFragment extends BaseFragment {
 				});
 		mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
             @Override
-            public void onRefresh(PullToRefreshBase refreshView) {
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 updateData(true);
             }
         });
 
-		// Control creating
+		// Control creation
 		mAvatarManager = new AvatarManager<FeedLike>(getActivity(),
 				Data.likesList, new Handler() {
 					@Override
@@ -173,8 +174,7 @@ public class LikesFragment extends BaseFragment {
 						super.handleMessage(msg);
 					}
 				});
-		mListAdapter = new LikesListAdapter(getActivity(),
-				mAvatarManager);
+		mListAdapter = new LikesListAdapter(getActivity(), mAvatarManager);
 		mListView.setOnScrollListener(mAvatarManager);
 		mListView.getRefreshableView().setAdapter(mListAdapter);
 
@@ -188,32 +188,30 @@ public class LikesFragment extends BaseFragment {
 		if (!isPushUpdating)
 			onUpdateStart(isPushUpdating);
 
-		mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON
-				: DoubleBigButton.LEFT_BUTTON);
+		mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
 
-		FeedLikesRequest likesRequest = new FeedLikesRequest(getActivity());
+		FeedLikesRequest likesRequest = new FeedLikesRequest(getActivity().getApplicationContext());
 		registerRequest(likesRequest);
 		likesRequest.limit = LIMIT;
 		likesRequest.only_new = mNewUpdating;
 		likesRequest.callback(new ApiHandler() {
 			@Override
 			public void success(ApiResponse response) {
-				Data.likesList.clear();
-				Data.likesList.addAll(FeedLike.parse(response));
+			    final LinkedList<FeedLike> feedLikesList = FeedLike.parse(response);
 				updateUI(new Runnable() {
 					@Override
 					public void run() {
+			            Data.likesList.clear();
+			            Data.likesList.addAll(feedLikesList);
 					    CacheProfile.unread_likes = 0;
 						if (mNewUpdating) {
 							if (FeedLike.unread_count > 0) {
-								Data.likesList.add(new FeedLike(
-										IListLoader.ItemType.LOADER));
+								Data.likesList.add(new FeedLike(IListLoader.ItemType.LOADER));
 							}
 						} else {
 							if (!(Data.likesList.size() == 0 || Data.likesList
 									.size() < LIMIT / 2)) {
-								Data.likesList.add(new FeedLike(
-										IListLoader.ItemType.LOADER));
+								Data.likesList.add(new FeedLike(IListLoader.ItemType.LOADER));
 							}
 						}
 
@@ -248,27 +246,21 @@ public class LikesFragment extends BaseFragment {
 		mIsUpdating = true;
 		mNewUpdating = mDoubleButton.isRightButtonChecked();
 
-		FeedLikesRequest likesRequest = new FeedLikesRequest(
-				getActivity());
+		FeedLikesRequest likesRequest = new FeedLikesRequest(getActivity());
 		registerRequest(likesRequest);
 		likesRequest.limit = LIMIT;
 		likesRequest.only_new = mNewUpdating;
 		if (!mNewUpdating) {
-			if (Data.likesList.getLast().isLoader()
-					|| Data.likesList.getLast().isLoaderRetry()) {
-				likesRequest.from = Data.likesList
-						.get(Data.likesList.size() - 2).id;
+			if (Data.likesList.getLast().isLoader() || Data.likesList.getLast().isLoaderRetry()) {
+				likesRequest.from = Data.likesList.get(Data.likesList.size() - 2).id;
 			} else {
-				likesRequest.from = Data.likesList
-						.get(Data.likesList.size() - 1).id;
+				likesRequest.from = Data.likesList.get(Data.likesList.size() - 1).id;
 			}
 		}
 		likesRequest.callback(new ApiHandler() {
 			@Override
 			public void success(ApiResponse response) {
-				final LinkedList<FeedLike> feedLikesList = FeedLike
-						.parse(response);
-
+				final LinkedList<FeedLike> feedLikesList = FeedLike.parse(response);
 				updateUI(new Runnable() {
 					@Override
 					public void run() {
@@ -302,13 +294,10 @@ public class LikesFragment extends BaseFragment {
 					@Override
 					public void run() {
 						onUpdateFail(true);
-						Toast.makeText(getActivity()  ,
-								getString(R.string.general_data_error),
-								Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
 						mIsUpdating = false;
 						removeLoaderListItem();
-						Data.likesList.add(new FeedLike(
-								IListLoader.ItemType.RETRY));
+						Data.likesList.add(new FeedLike(IListLoader.ItemType.RETRY));
 						mListView.onRefreshComplete();
 						mListAdapter.notifyDataSetChanged();
 					}

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ProfilePhotoFragment extends Fragment {
+    
     private TextView mTitle;
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
     private SparseArray<HashMap<String, String>> mPhotoLinks;
@@ -81,11 +82,6 @@ public class ProfilePhotoFragment extends Fragment {
     }
     
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-    
-    @Override
     public void onActivityResult(int requestCode,int resultCode,Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
@@ -99,9 +95,9 @@ public class ProfilePhotoFragment extends Fragment {
                 return;
             }
             Data.photoAlbum = CacheProfile.photoLinks;
-            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoAlbumActivity.class);
-            intent.putExtra(PhotoAlbumActivity.INTENT_USER_ID, CacheProfile.uid);
-            intent.putExtra(PhotoAlbumActivity.INTENT_ALBUM_POS, --position);
+            Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, --position);
             startActivity(intent);
         }
     };

@@ -4,7 +4,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
 public class Confirmation extends AbstractData {
-    // Data
+
     public boolean completed;
 
     public Confirmation(ApiResponse response) {

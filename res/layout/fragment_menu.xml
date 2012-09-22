@@ -6,24 +6,23 @@
 
         <!-- Profile -->
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
             <Button
                 android:id="@+id/btnFragmentProfile"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
                 android:background="@drawable/navigation_menu_item_selector"
-                android:paddingLeft="10dp"
-                android:text="@string/dashbrd_btn_profile"
-                android:textColor="#FFFFFF"/>
+                android:text="@string/dashbrd_btn_dating"
+                android:drawableLeft="@drawable/topface_dating"
+                style="@style/LeftMenuButtons"/>
 
         </RelativeLayout>
 
         <!-- Dating -->
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
             <Button
@@ -39,7 +38,7 @@
 
         <!-- Likes -->
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
             <Button
@@ -51,11 +50,15 @@
                 android:drawableLeft="@drawable/topface_likes"
                 style="@style/LeftMenuButtons"/>
 
+            <!-- UNREAD LIKES -->
             <TextView
                 android:id="@+id/tvNotifyLikes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_alignBaseline="@+id/btnFragmentLikes"
+                android:layout_alignBottom="@+id/btnFragmentLikes"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="180dp"
                 android:background="@drawable/im_informer"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
@@ -66,7 +69,7 @@
 
         <!-- Mutual - Sympathy -->
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
             <Button
@@ -78,11 +81,15 @@
                 android:drawableLeft="@drawable/topface_sympathy"
 				style="@style/LeftMenuButtons"/>
 
+            <!-- UNREAD MUTUAL -->
             <TextView
                 android:id="@+id/tvNotifyMutual"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_alignBaseline="@+id/btnFragmentMutual"
+                android:layout_alignBottom="@+id/btnFragmentMutual"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="180dp"
                 android:background="@drawable/im_informer"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
@@ -93,7 +100,7 @@
 
         <!-- Dialogs - Messages - Chat -->
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
             <Button
@@ -105,11 +112,15 @@
                 android:drawableLeft="@drawable/topface_chat"
                 style="@style/LeftMenuButtons"/>
 
+            <!-- UNREAD DIALOGS -->
             <TextView
                 android:id="@+id/tvNotifyDialogs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_alignBaseline="@+id/btnFragmentDialogs"
+                android:layout_alignBottom="@+id/btnFragmentDialogs"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="180dp"
                 android:background="@drawable/im_informer"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
@@ -120,7 +131,7 @@
 
         <!-- Tops -->
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
             <Button
@@ -136,7 +147,7 @@
 
         <!-- Settings -->
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
             <Button

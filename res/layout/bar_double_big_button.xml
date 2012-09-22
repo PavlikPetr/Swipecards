@@ -4,14 +4,13 @@
       android:id="@+id/loToolsBar"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:background="@drawable/im_bar_button"
-      android:visibility="visible" >
+      android:background="@drawable/im_bar_button" >
     
 	  <com.topface.topface.ui.views.DoubleBigButton
 	      android:id="@+id/btnDoubleBig"
 	      android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:layout_centerInParent="true"/>
+          android:layout_height="wrap_content" 
+          android:layout_centerInParent="true"/>
 	  
   </RelativeLayout>
 </merge>

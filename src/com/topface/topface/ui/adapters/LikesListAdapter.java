@@ -1,19 +1,16 @@
 package com.topface.topface.ui.adapters;
 
-
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LikesListAdapter extends LoadingListAdapter {
     //---------------------------------------------------------------------------

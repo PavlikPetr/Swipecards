@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.content.res.Resources.*;
 import android.os.Build;
 
-@SuppressWarnings("unused")
 public class PluralResources 
 {
 	private Resources resources;

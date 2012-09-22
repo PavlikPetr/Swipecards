@@ -28,9 +28,6 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
     public int unread_messages; // количество непрочитанных сообщений пользователя
     public int unread_mutual; // количество непрочитанных симпатий
     
-//    public String avatar_big; // аватарка пользователя большого размера
-//    public String avatar_small; // аватарки пользователя маленького размера
-    
     // City
     public int city_id; // идентификтаор города пользователя
     public String city_name; // название города пользователя
@@ -370,16 +367,6 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
 
     public int getUid() {
         return uid;
-    }
-
-    @Override
-    public String getLargeLink() {
-        return null;
-    }
-
-    @Override
-    public String getSmallLink() {
-        return null;
     }
     
 //    public static Profile load() {

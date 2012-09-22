@@ -15,8 +15,11 @@ import android.view.View;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Confirmation;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.utils.Base64;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FileSystem;
 import com.topface.topface.utils.http.Http;
 
@@ -37,7 +40,7 @@ public class AddPhotoHelper {
     private Fragment mFragment;
     private ProgressDialog mProgressDialog;
     private Handler mHandler;
-    private boolean mAddEroState = false;
+    private boolean mAddEroState;
     public static final int ADD_PHOTO_RESULT_OK = 0;
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -82,39 +85,22 @@ public class AddPhotoHelper {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btnAddPhotoAlbum: {
-                    Intent intent = new Intent(
-                            Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                    );
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title)); 
                     if (mFragment != null) {
-                        mFragment.startActivityForResult(
-                                Intent.createChooser(
-                                        intent, 
-                                        mContext.getResources().getString(R.string.profile_add_title)),
-                                GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+                        mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
                     } else {
-                        mActivity.startActivityForResult(
-                                Intent.createChooser(
-                                        intent,
-                                        mContext.getResources().getString(R.string.profile_add_title)),
-                                GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+                        mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
                     }
                 }
                 break;
                 case R.id.btnAddPhotoCamera: {
                     Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
                     if (mFragment != null) {
-                        mFragment.startActivityForResult(
-                                 Intent.createChooser(
-                                         intent,
-                                         mContext.getResources().getString(R.string.profile_add_title)),
-                                 GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+                        mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
                     } else {
-                        mActivity.startActivityForResult(
-                                Intent.createChooser(
-                                        intent,
-                                        mContext.getResources().getString(R.string.profile_add_title)),
-                                GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+                        mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
                     }
                 }
                 break;
@@ -146,7 +132,7 @@ public class AddPhotoHelper {
         return false;
     }
 
-    class AsyncTaskUploader extends AsyncTask<Uri, Void, String[]> {
+    class AsyncTaskUploader extends AsyncTask<Uri, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -154,32 +140,34 @@ public class AddPhotoHelper {
         }
 
         @Override
-        protected String[] doInBackground(Uri... uri) {
+        protected String doInBackground(Uri... uri) {
+            String rawResponse = null;
             
             PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
             add.ssid = Data.SSID;
-            
+
             try {
                 //is = App.getContext().getContentResolver().openInputStream(uri[0]);
                 String file = FileSystem.getFilePathFromURI(AddPhotoHelper.this.mActivity, uri[0]);
                 String data = Base64.encodeFromFile(file);
-                String rawResponse = Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), data);
+                rawResponse = Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), data);
                 data = null;
            } catch(IOException e) {
+               Debug.log("Photo not uploaded");
            }
 
-             //new FileInputStream(new File(FileManager.mCacheDir,((AddRequest)ApiRequest.this).fileName)));
-            
-//            InputStream is = new ByteArrayInputStream(null);
-//            byte[] array = Base64.enco
-//            rawResponse = Http.httpPostDataRequest(Static.API_URL,null/*ApiRequest.this.toString()*/,data);
-            return null;
+           return rawResponse;
         }
 
         @Override
-        protected void onPostExecute(final String[] result) {
+        protected void onPostExecute(String result) {
             super.onPostExecute(result);
             mProgressDialog.cancel();
+            Confirmation c = Confirmation.parse(new ApiResponse(result));
+            if (c.completed)
+              mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_OK);
+            else
+              mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
         }
 
 //        private void sendAddRequest(final String[] result, final int price) {

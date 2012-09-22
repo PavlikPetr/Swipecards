@@ -230,7 +230,6 @@ public class Http {
 
           //httpConnection.connect();
           
-          
           Debug.log(TAG,"req:"+postParams);   // REQUEST
 
           // отправляем post параметры
@@ -263,7 +262,7 @@ public class Http {
             dos.writeBytes(lineEnd);
             dos.writeBytes("Content-Disposition: mixed");
             dos.writeBytes(lineEnd);
-            dos.writeBytes("Content-Type: audio/x-aac");
+            dos.writeBytes("Content-Type: image/jpg");
             dos.writeBytes(lineEnd+lineEnd);
             /*
             BufferedInputStream bis = new BufferedInputStream(is);
@@ -424,7 +423,7 @@ public class Http {
             public void run() {
                 if (Data.ownerAvatar != null)
                     return;
-                Bitmap ava = Http.bitmapLoader(CacheProfile.avatar_small);
+                Bitmap ava = Http.bitmapLoader(CacheProfile.getAvatarLink());
                 if (ava == null)
                     return;
                 ava = Utils.getRoundedBitmap(ava);

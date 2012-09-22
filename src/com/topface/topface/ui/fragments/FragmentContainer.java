@@ -47,6 +47,10 @@ public class FragmentContainer {
         fragmentManager.beginTransaction().add(R.id.fragment_settings, mSettingsFragment).hide(mSettingsFragment).commit();
     }
     
+    public void showFragment(int fragmentId) {
+        showFragment(fragmentId, false);
+    }
+    
     public void showFragment(int fragmentId, boolean updateFragment) {
         if(mCurrentFragmentId > 0)
             mFragmentManager.beginTransaction().hide(mFragmentManager.findFragmentById(mCurrentFragmentId)).commit();
@@ -87,10 +91,6 @@ public class FragmentContainer {
             //update(fragment);
             fragment.isForcedUpdate = true;
         }
-    }
-    
-    public void showFragment(int fragmentId) {
-        showFragment(fragmentId, false);
     }
     
     public void update(BaseFragment fragment) {    	

@@ -15,10 +15,9 @@ import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.FilterActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.adapters.DatingAlbumAdapter;
 import com.topface.topface.ui.profile.UserProfileActivity;
-import com.topface.topface.ui.views.DatingAlbum;
 import com.topface.topface.ui.views.ILocker;
+import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Newbie;
@@ -29,17 +28,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.DataSetObserver;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -48,7 +44,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker, RateController.OnRateControllerListener {
-    private boolean mIsHide;
     private int mCurrentUserPos;
     private int mCurrentPhotoPrevPos;
     private View mResourcesControl;
@@ -66,8 +61,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mCounter;
     private TextView mDatingLovePrice;
     private View mDatingGroup;
-    private DatingAlbum mDatingAlbum;
-    private DatingAlbumAdapter mDatingAlbumAdapter;
+    private ImageSwitcher mImageSwitcher;
     private LinkedList<Search> mUserSearchList;
     private ProgressBar mProgressBar;
     private Newbie mNewbie;
@@ -90,12 +84,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         
         // Navigation Header
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
-        mNavigationHeader = view.findViewById(R.id.loNavigationBar);
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_dating));
+        mNavigationHeader = view.findViewById(R.id.loNavigationBar);
         mSettingsButton = (Button) view.findViewById(R.id.btnNavigationSettingsBar);
         mSettingsButton.setVisibility(View.VISIBLE);
         mSettingsButton.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity().getApplicationContext(), FilterActivity.class);
@@ -166,50 +159,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Progress
         mProgressBar = (ProgressBar)view.findViewById(R.id.prsDatingLoading);
 
-        // Dating Adapter
-        mDatingAlbumAdapter = new DatingAlbumAdapter(getActivity(), this);
-        mDatingAlbumAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
-            }
-            @Override
-            public void onInvalidated() {
-            }
-        });
-
         // Dating Album
-        mDatingAlbum = ((DatingAlbum)view.findViewById(R.id.glrDatingAlbum));
-        mDatingAlbum.setAdapter(mDatingAlbumAdapter);
-        mDatingAlbum.setSpacing(0);
-        mDatingAlbum.setFadingEdgeLength(0);
-        mDatingAlbum.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> arg0,View arg1,int position,long arg3) {
-                if (position == 1 && mCurrentPhotoPrevPos == 0) {
-                    hideControls();
-                } else if (position == 0 && mCurrentPhotoPrevPos > 0) {
-                    showControls();
-                }
-                mCurrentPhotoPrevPos = position;
-                mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
-        mDatingAlbum.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0,View arg1,int position,long arg3) {
-                if (mIsHide)
-                    showControls();
-                else
-                    hideControls();
-            }
-        });
+        mImageSwitcher = ((ImageSwitcher)view.findViewById(R.id.glrDatingAlbum));
+        mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
+        mImageSwitcher.setOnClickListener(mOnClickListener);
         
-        int z = CacheProfile.unread_likes;
-
         return view;
     }
 
@@ -319,9 +273,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUserPos < mUserSearchList.size() - 1) {
             ++mCurrentUserPos;
             lockControls();
-            mDatingAlbum.setSelection(0);
-            mDatingAlbumAdapter.setUserData(mUserSearchList.get(mCurrentUserPos));
-            mDatingAlbumAdapter.notifyDataSetChanged();
+
+            mImageSwitcher.setData(mUserSearchList.get(mCurrentUserPos).photoLinks);
+            mImageSwitcher.setCurrentItem(0);
+
             // User Info
             mUserInfoCity.setText("" + mUserSearchList.get(mCurrentUserPos).city_name);
             mUserInfoStatus.setText("" + mUserSearchList.get(mCurrentUserPos).status);
@@ -339,12 +294,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             			getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
             }
             
-            mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
+            setCounter(mCurrentPhotoPrevPos);
         }
         if (mCurrentUserPos == mUserSearchList.size() - 1 || mUserSearchList.size() - 6 <= mCurrentUserPos)
             updateData(true);
 
-        showNewbie(); // NEWBIE
+        //showNewbie(); // NEWBIE
     }
 
     private void skipUser() {
@@ -382,9 +337,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     	if (mCurrentUserPos > 0) {
             --mCurrentUserPos;
             lockControls();
-            mDatingAlbum.setSelection(0);
-            mDatingAlbumAdapter.setUserData(mUserSearchList.get(mCurrentUserPos));
-            mDatingAlbumAdapter.notifyDataSetChanged();
+            
+            mImageSwitcher.setData(mUserSearchList.get(mCurrentUserPos).photoLinks);
+            mImageSwitcher.setCurrentItem(0);
+
             // User Info
             mUserInfoCity.setText("" + mUserSearchList.get(mCurrentUserPos).city_name);
             mUserInfoStatus.setText("" + mUserSearchList.get(mCurrentUserPos).status);
@@ -402,7 +358,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             			getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
             }
             
-            mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
+            setCounter(mCurrentPhotoPrevPos);
         }        
     	showNewbie(); // NEWBIE
     }
@@ -452,6 +408,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         editor.commit();
     }
+    
+    public void setCounter(int position) {
+        mCounter.setText((position + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
+    }
 
     @Override
     public void lockControls() {
@@ -485,51 +445,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
+        unlockControls(); // remove
         mNavigationHeader.setVisibility(View.VISIBLE);
         mDatingGroup.setVisibility(View.VISIBLE);
-        mIsHide = false;
     }
 
     @Override
     public void hideControls() {
         mDatingGroup.setVisibility(View.INVISIBLE);
         mNavigationHeader.setVisibility(View.INVISIBLE);
-        mIsHide = true;
     }
-    
-    View.OnClickListener mOnNewbieClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            mNewbieView.setVisibility(View.INVISIBLE);
-            mResourcesPower.setBackgroundResource(R.anim.battery);
-            mResourcesPower.setText("");
-            final AnimationDrawable mailAnimation = (AnimationDrawable)mResourcesPower.getBackground();
-            mResourcesPower.post(new Runnable() {
-                public void run() {
-                    if (mailAnimation != null)
-                        mailAnimation.start();
-                }
-            });
-            NovicePowerRequest novicePowerRequest = new NovicePowerRequest(getActivity());
-            registerRequest(novicePowerRequest);
-            novicePowerRequest.callback(new ApiHandler() {
-                @Override
-                public void success(ApiResponse response) {
-                    NovicePower novicePower = NovicePower.parse(response);
-                    CacheProfile.power = (int)(novicePower.power * 0.01);
-                    updateUI(new Runnable() {
-                        @Override
-                        public void run() {
-                            mResourcesPower.setText("+100%");
-                        }
-                    });
-                }
-                @Override
-                public void fail(int codeError,ApiResponse response) {
-                }
-            }).exec();
-        }
-    };
 
     @Override
     public void fillLayout() {
@@ -577,5 +502,72 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 	    	fillLayout();	        
 	    }
 	}
+	
+	private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        private boolean mIsHide;
+        @Override
+        public void onClick(View v) {
+            if (mIsHide) {
+              showControls();
+            } else {
+              hideControls();
+            }
+            mIsHide = !mIsHide;
+        }
+    };
+	
+    private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageSelected(int position) {
+            if (position == 1 && mCurrentPhotoPrevPos == 0) {
+                hideControls();
+            } else if (position == 0 && mCurrentPhotoPrevPos > 0) {
+                showControls();
+            }
+            mCurrentPhotoPrevPos = position;
+            setCounter(mCurrentPhotoPrevPos);
+        }
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+        }
+    };
+    
+    View.OnClickListener mOnNewbieClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mNewbieView.setVisibility(View.INVISIBLE);
+            mResourcesPower.setBackgroundResource(R.anim.battery);
+            mResourcesPower.setText("");
+            final AnimationDrawable mailAnimation = (AnimationDrawable)mResourcesPower.getBackground();
+            mResourcesPower.post(new Runnable() {
+                public void run() {
+                    if (mailAnimation != null)
+                        mailAnimation.start();
+                }
+            });
+            NovicePowerRequest novicePowerRequest = new NovicePowerRequest(getActivity());
+            registerRequest(novicePowerRequest);
+            novicePowerRequest.callback(new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    NovicePower novicePower = NovicePower.parse(response);
+                    CacheProfile.power = (int)(novicePower.power * 0.01);
+                    updateUI(new Runnable() {
+                        @Override
+                        public void run() {
+                            mResourcesPower.setText("+100%");
+                        }
+                    });
+                }
+                @Override
+                public void fail(int codeError,ApiResponse response) {
+                }
+            }).exec();
+        }
+    };
 	
 }

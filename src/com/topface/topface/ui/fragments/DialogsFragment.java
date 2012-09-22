@@ -38,8 +38,7 @@ import com.topface.topface.utils.SwapAnimation;
 import java.util.LinkedList;
 
 public class DialogsFragment extends BaseFragment {
-	private boolean mHasUnread;
-	// private TextView mFooterView;
+
 	private PullToRefreshListView mListView;
 	private DialogListAdapter mListAdapter;
 	private AvatarManager<Dialog> mAvatarManager;
@@ -51,8 +50,8 @@ public class DialogsFragment extends BaseFragment {
     private View mShowToolsBarButton;
     private View mControlsGroup;
     
-	private boolean mIsUpdating = false;
-	// Constants
+    private boolean mHasUnread;    
+	private boolean mIsUpdating;
 	private static final int LIMIT = 40;
 
 	@Override
@@ -82,9 +81,10 @@ public class DialogsFragment extends BaseFragment {
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int y = -mToolsBar.getMeasuredHeight() + Static.HEADER_SHADOW_SHIFT;
-                mControlsGroup.setPadding(mControlsGroup.getPaddingLeft(), y, mControlsGroup.getPaddingRight(), mControlsGroup.getPaddingBottom());
-                if(y>0 || y<0) {
+                int y = mToolsBar.getMeasuredHeight();
+                if(y != 0) {
+                    y += Static.HEADER_SHADOW_SHIFT;
+                    mControlsGroup.setPadding(mControlsGroup.getPaddingLeft(), -y, mControlsGroup.getPaddingRight(), mControlsGroup.getPaddingBottom());
                     ViewTreeObserver obs = mControlsGroup.getViewTreeObserver();
                     obs.removeGlobalOnLayoutListener(this);                    
                 }
@@ -119,10 +119,9 @@ public class DialogsFragment extends BaseFragment {
 
 		// ListView
 		mListView = (PullToRefreshListView) view.findViewById(R.id.lvInboxList);
-
 		mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
             @Override
-            public void onRefresh(PullToRefreshBase refreshView) {
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 updateData(true);
             }
         });
@@ -130,7 +129,8 @@ public class DialogsFragment extends BaseFragment {
 		mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (!mIsUpdating && Data.dialogList.get(position).isLoaderRetry()) {
+			    Dialog theDialog = (Dialog)parent.getItemAtPosition(position);
+				if (!mIsUpdating && theDialog.isLoaderRetry()) {
 					updateUI(new Runnable() {
 						public void run() {
 							removeLoaderListItem();
@@ -140,44 +140,23 @@ public class DialogsFragment extends BaseFragment {
 					});
 					updateDataHistory();
 				} else {
-					// ImageView iv =
-					// (ImageView)view.findViewById(R.id.ivAvatar);
-					// Data.userAvatar =
-					// ((BitmapDrawable)iv.getDrawable()).getBitmap();
 					try {
 						Intent intent = new Intent(getActivity(), ChatActivity.class);
-						intent.putExtra(ChatActivity.INTENT_USER_ID, Data.dialogList.get(position).uid);
-						intent.putExtra(ChatActivity.INTENT_USER_URL, Data.dialogList.get(position).getSmallLink());
-						intent.putExtra(ChatActivity.INTENT_USER_NAME, Data.dialogList.get(position).first_name);
-						intent.putExtra(ChatActivity.INTENT_USER_SEX, Data.dialogList.get(position).sex);
-						intent.putExtra(ChatActivity.INTENT_USER_AGE, Data.dialogList.get(position).age);
-						intent.putExtra(ChatActivity.INTENT_USER_CITY, Data.dialogList.get(position).city_name);
+						intent.putExtra(ChatActivity.INTENT_USER_ID,   theDialog.uid);
+						intent.putExtra(ChatActivity.INTENT_USER_URL,  theDialog.getSmallLink());
+						intent.putExtra(ChatActivity.INTENT_USER_NAME, theDialog.first_name);
+						intent.putExtra(ChatActivity.INTENT_USER_SEX,  theDialog.sex);
+						intent.putExtra(ChatActivity.INTENT_USER_AGE,  theDialog.age);
+						intent.putExtra(ChatActivity.INTENT_USER_CITY, theDialog.city_name);
 						startActivity(intent);
 					} catch (Exception e) {
-						Debug.log(DialogsFragment.this,
-								"start ChatActivity exception:" + e.toString());
+						Debug.log(DialogsFragment.this, "start ChatActivity exception:" + e.toString());
 					}
 				}
 			}
 		});
 
-		// Footer
-		// mFooterView = new TextView(getApplicationContext());
-		// mFooterView.setOnClickListener(new View.OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// updateDataHistory();
-		// }
-		// });
-		// mFooterView.setBackgroundResource(R.drawable.item_list_selector);
-		// mFooterView.setText(getString(R.string.general_footer_previous));
-		// mFooterView.setTextColor(Color.DKGRAY);
-		// mFooterView.setGravity(Gravity.CENTER);
-		// mFooterView.setTypeface(Typeface.DEFAULT_BOLD);
-		// mFooterView.setVisibility(View.GONE);
-		// mListView.getRefreshableView().addFooterView(mFooterView);
-
-		// Control creating
+		// Control creation
 		mAvatarManager = new AvatarManager<Dialog>(getActivity(), Data.dialogList, new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
@@ -261,14 +240,12 @@ public class DialogsFragment extends BaseFragment {
 		}).exec();
 	}
 
-	// ---------------------------------------------------------------------------
 	private void updateDataHistory() {
 		mIsUpdating = true;
 		mHasUnread = mDoubleButton.isRightButtonChecked();
-
+		
 		DialogRequest dialogRequest = new DialogRequest(getActivity());
 		registerRequest(dialogRequest);
-		dialogRequest.limit = LIMIT;
 		if (!Data.dialogList.isEmpty()) {
 			if (Data.dialogList.getLast().isLoader() || Data.dialogList.getLast().isLoaderRetry()) {
 				dialogRequest.before = Data.dialogList.get(Data.dialogList.size() - 2).id;
@@ -276,13 +253,8 @@ public class DialogsFragment extends BaseFragment {
 				dialogRequest.before = Data.dialogList.get(Data.dialogList.size() - 1).id;
 			}
 		}
-		
-		if(mHasUnread)
-			dialogRequest.unread = 1;
-		else
-			dialogRequest.unread = 0;
-		
-		
+	    dialogRequest.limit = LIMIT;
+		dialogRequest.unread = mHasUnread ? 1 : 0; 
 		dialogRequest.callback(new ApiHandler() {
 			@Override
 			public void success(ApiResponse response) {
@@ -366,7 +338,6 @@ public class DialogsFragment extends BaseFragment {
 
 	@Override
 	protected void onUpdateStart(boolean isPushUpdating) {
-		// mLoadingLocker.setVisibility(View.VISIBLE);
 		if (!isPushUpdating) {
 			mListView.setVisibility(View.INVISIBLE);
 			mBackgroundText.setText(R.string.general_dialog_loading);

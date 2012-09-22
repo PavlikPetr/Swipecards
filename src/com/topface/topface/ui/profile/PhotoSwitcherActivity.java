@@ -1,0 +1,89 @@
+package com.topface.topface.ui.profile;
+
+import java.util.HashMap;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+public class PhotoSwitcherActivity extends Activity {
+    
+    private TextView mCounter;
+    private ViewGroup mHeaderBar;
+    private ImageSwitcher mImageSwitcher;
+    private SparseArray<HashMap<String, String>> mPhotoLinks;
+    
+    public static final String INTENT_OWNER = "owner";
+    public static final String INTENT_USER_ID = "user_id";
+    public static final String INTENT_ALBUM_POS = "album_position";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ac_photos);
+        
+        // Extras
+        Intent intent = getIntent();
+        boolean isOwner = intent.getBooleanExtra(INTENT_OWNER, false);
+        int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
+        int uid = intent.getIntExtra(INTENT_USER_ID, -1);
+        
+        if (uid == -1) {
+            Debug.log(this, "Intent param is wrong");
+            finish();
+            return;
+        }
+        
+        //Header
+        mHeaderBar = (ViewGroup)findViewById(R.id.loHeaderBar);
+
+        // Title Header
+        mCounter = ((TextView)findViewById(R.id.tvHeaderTitle));
+        
+        // Gallery
+        mImageSwitcher = ((ImageSwitcher)findViewById(R.id.galleryAlbum));
+        mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
+        mImageSwitcher.setOnClickListener(mOnClickListener);
+
+        mPhotoLinks = isOwner ? CacheProfile.photoLinks : Data.photoAlbum;
+        
+        mImageSwitcher.setData(mPhotoLinks);
+        mImageSwitcher.setCurrentItem(position, false);
+        
+        setCounter(position);
+    }
+    
+    private void setCounter(int position) {
+        mCounter.setText((position + 1) + "/" + mPhotoLinks.size());
+    }
+    
+    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mHeaderBar.setVisibility(mHeaderBar.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+        }
+    };
+
+    ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageSelected(int position) {
+            setCounter(position);
+        }
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+        }
+    };
+}

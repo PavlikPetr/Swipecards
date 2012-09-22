@@ -40,8 +40,6 @@ import java.util.LinkedList;
 
 public class MutualFragment extends BaseFragment {
 
-    private boolean mNewUpdating;
-//    private TextView mFooterView;
     private PullToRefreshListView mListView;
     private MutualListAdapter mListAdapter;
     private AvatarManager<FeedSympathy> mAvatarManager;
@@ -52,9 +50,9 @@ public class MutualFragment extends BaseFragment {
     private View mToolsBar;
     private View mShowToolsBarButton;
     private View mControlsGroup;
-    
-    private boolean mIsUpdating = false;
-    // Constants
+ 
+    private boolean mNewUpdating;
+    private boolean mIsUpdating;
     private static final int LIMIT = 40;
 
     @Override
@@ -83,9 +81,10 @@ public class MutualFragment extends BaseFragment {
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int y = -mToolsBar.getMeasuredHeight() + Static.HEADER_SHADOW_SHIFT;
-                mControlsGroup.setPadding(mControlsGroup.getPaddingLeft(), y, mControlsGroup.getPaddingRight(), mControlsGroup.getPaddingBottom());
-                if(y>0 || y<0) {
+                int y = mToolsBar.getMeasuredHeight();
+                if(y != 0) {
+                    y += Static.HEADER_SHADOW_SHIFT;
+                    mControlsGroup.setPadding(mControlsGroup.getPaddingLeft(), -y, mControlsGroup.getPaddingRight(), mControlsGroup.getPaddingBottom());
                     ViewTreeObserver obs = mControlsGroup.getViewTreeObserver();
                     obs.removeGlobalOnLayoutListener(this);                    
                 }
@@ -123,7 +122,8 @@ public class MutualFragment extends BaseFragment {
         mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
-            	if (!mIsUpdating && Data.mutualList.get(position).isLoaderRetry()) {
+                FeedSympathy theFeedMutual = (FeedSympathy)parent.getItemAtPosition(position);
+            	if (!mIsUpdating && theFeedMutual.isLoaderRetry()) {
             		updateUI(new Runnable() {
 						public void run() {
 							removeLoaderListItem();
@@ -136,8 +136,8 @@ public class MutualFragment extends BaseFragment {
             	} else {
 	                try {
 	                    Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-	                    intent.putExtra(ProfileActivity.INTENT_USER_ID, Data.mutualList.get(position).uid);
-	                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, Data.mutualList.get(position).first_name);
+	                    intent.putExtra(ProfileActivity.INTENT_USER_ID,   theFeedMutual.uid);
+	                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, theFeedMutual.first_name);
 	                    startActivityForResult(intent, 0);
 	                } catch(Exception e) {
 	                    Debug.log(MutualFragment.this, "start ProfileActivity exception:" + e.toString());
@@ -153,23 +153,7 @@ public class MutualFragment extends BaseFragment {
             }
         });
 
-        // Footer
-//        mFooterView = new TextView(getApplicationContext());
-//        mFooterView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                updateDataHistory();
-//            }
-//        });
-//        mFooterView.setBackgroundResource(R.drawable.item_list_selector);
-//        mFooterView.setText(getString(R.string.general_footer_previous));
-//        mFooterView.setTextColor(Color.DKGRAY);
-//        mFooterView.setGravity(Gravity.CENTER);
-//        mFooterView.setTypeface(Typeface.DEFAULT_BOLD);
-//        mFooterView.setVisibility(View.GONE);
-//        mListView.getRefreshableView().addFooterView(mFooterView);
-
-        // Control creating
+        // Control creation
         mAvatarManager = new AvatarManager<FeedSympathy>(getActivity(), Data.mutualList, new Handler() {
         	@Override
         	public void handleMessage(Message msg) {
@@ -203,12 +187,12 @@ public class MutualFragment extends BaseFragment {
         symphatyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                Data.mutualList.clear();
-                Data.mutualList.addAll(FeedSympathy.parse(response));               
-                
+                final LinkedList<FeedSympathy> feedSymphatyList = FeedSympathy.parse(response);
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
+                        Data.mutualList.clear();
+                        Data.mutualList.addAll(feedSymphatyList);
                         CacheProfile.unread_mutual = 0;
                     	if (mNewUpdating) {
                      		if (FeedSympathy.unread_count > 0) {
@@ -263,7 +247,6 @@ public class MutualFragment extends BaseFragment {
             @Override
             public void success(ApiResponse response) {
                 final LinkedList<FeedSympathy> feedSymphatyList = FeedSympathy.parse(response);
-                
                 updateUI(new Runnable() {
                     @Override
                     public void run() {

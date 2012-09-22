@@ -1,13 +1,19 @@
 package com.topface.topface.ui.fragments;
 
+import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class FragmentMenu extends Fragment implements View.OnClickListener {
@@ -42,6 +48,9 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         
         mBtnProfile = (Button)mRootLayout.findViewById(R.id.btnFragmentProfile);
         mBtnProfile.setOnClickListener(this);
+        Bitmap b = Data.ownerAvatar; // for debug
+        Drawable drawable = (Drawable)new BitmapDrawable(Data.ownerAvatar);
+        mBtnProfile.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         
         mBtnDating = (Button)mRootLayout.findViewById(R.id.btnFragmentDating);
         mBtnDating.setOnClickListener(this);
@@ -114,7 +123,7 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
                 mBtnProfile.setSelected(true);
                 break;
         }
-        
+//        
         if(mFragmentMenuListener != null)
           mFragmentMenuListener.onMenuClick(fragmentId);
     }
@@ -194,7 +203,7 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
 //        LayoutParams lp = mTvNotifyLikes.getLayoutParams();
 //        if(lp instanceof RelativeLayout.LayoutParams) {
 //            RelativeLayout.LayoutParams rlp = ((RelativeLayout.LayoutParams)lp);
-//            rlp.setMargins(rlp.rightMargin, rlp.topMargin, padding, rlp.bottomMargin);
+//            rlp.setMargins(rlp.leftMargin  + padding , rlp.topMargin, rlp.rightMargin, rlp.bottomMargin);
 //            mTvNotifyLikes.setLayoutParams(rlp);
 //            mTvNotifyMutual.setLayoutParams(rlp);
 //            mTvNotifyDialogs.setLayoutParams(rlp);

@@ -16,8 +16,8 @@ import com.topface.topface.utils.PhotoLinksResolver;
 
 public abstract class AbstractDataWithPhotos extends AbstractData {
 
-    protected int mAvatarId;
-    protected LinkedList<String> mSizeKeys = new LinkedList<String>();
+    public int mAvatarId;
+    public LinkedList<String> mSizeKeys = new LinkedList<String>();
     public SparseArray<HashMap<String, String>> photoLinks = new SparseArray<HashMap<String,String>>();
 	
     protected static void initPhotos(JSONObject item, AbstractDataWithPhotos data) {

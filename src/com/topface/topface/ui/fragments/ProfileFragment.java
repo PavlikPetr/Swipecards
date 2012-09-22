@@ -46,7 +46,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     private View mUserPowerBkgd;
     
     private ProfilePhotoFragment mPhotoFragment;
-    private ProfileFormFragment  mFormFragment;
+    private ProfileFormFragment mFormFragment;
    
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
@@ -173,10 +173,12 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         mUserPowerBkgd.getLocationOnScreen(in);
         LayoutParams lp = mBuyButton.getLayoutParams();
         RelativeLayout.LayoutParams rlp = ((RelativeLayout.LayoutParams)lp);
-        int offsetX = (mUserPowerBkgd.getMeasuredWidth()-mBuyButton.getMeasuredWidth())/2;
-        int offsetY = (mUserPowerBkgd.getMeasuredHeight()-mBuyButton.getMeasuredWidth()/2);
-        rlp.setMargins(rlp.leftMargin+in[0] - out[0] + offsetX, rlp.topMargin + in[1] - out[1] + offsetY, 
-                       rlp.rightMargin, rlp.bottomMargin);
+        int offsetX = (mUserPowerBkgd.getMeasuredWidth() - mBuyButton.getMeasuredWidth()) / 2;
+        int offsetY = (mUserPowerBkgd.getMeasuredHeight() - mBuyButton.getMeasuredWidth() / 2);
+        rlp.setMargins(rlp.leftMargin + in[0] - out[0] + offsetX,
+                       rlp.topMargin + in[1] - out[1] + offsetY, 
+                       rlp.rightMargin,
+                       rlp.bottomMargin);
         mBuyButton.setLayoutParams(rlp);
 	}
 	
@@ -185,7 +187,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         public void onPageScrollStateChanged(int arg0) {
         }
         @Override
-        public void onPageScrolled(int arg0,float arg1,int arg2) {
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
         }
         @Override
         public void onPageSelected(int arg0) {
@@ -269,7 +271,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     public void onClick(View v) {
     	switch (v.getId()) {
 		case R.id.btnNavigationRightWithText:			
-			startActivity(new Intent(getActivity().getApplicationContext(),EditProfileActivity.class));
+			startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
 			break;
 		}
     	

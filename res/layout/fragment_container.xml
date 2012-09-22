@@ -3,7 +3,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/im_list_bkgrd" >
-    
+        
 	    <FrameLayout
 	        android:id="@+id/fragment_profile"
 	        android:layout_width="fill_parent"
@@ -37,6 +37,6 @@
         <FrameLayout
             android:id="@+id/fragment_settings"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />        
+            android:layout_height="fill_parent" /> 
     
 </RelativeLayout>

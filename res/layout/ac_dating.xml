@@ -5,10 +5,10 @@
     android:background="#080808" >
 
     <!-- Dating Album -->
-    <com.topface.topface.ui.views.DatingAlbum
+    <com.topface.topface.ui.views.ImageSwitcher
         android:id="@+id/glrDatingAlbum"
-        android:layout_width="fill_parent" 
-        android:layout_height="fill_parent"/>
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
     
     <LinearLayout        
         android:layout_width="fill_parent" 
