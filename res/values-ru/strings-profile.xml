@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
+    <!-- Status ******************************************************************************** -->
+    <string-array name="profile_form_status_male">
+        <item>Любви и серьезных отношений</item>
+        <item>Отношений без обязательств</item>
+        <item>Дружбы и общения</item>
+        <item>Хочу много оценок</item>
+        <item>Хочу поболтать</item>        
+    </string-array>
+    
+    <string-array name="profile_form_status_female">
+        <item>Любви и серьезных отношений</item>
+        <item>Отношений без обязательств</item>
+        <item>Дружбы и общения</item>
+        <item>Хочу много оценок</item>
+        <item>Хочу поболтать</item>
+    </string-array>
+    
+    <integer-array name="profile_form_status_ids">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>        
+    </integer-array>
+    
     <!-- Education ******************************************************************************** -->
     <string-array name="profile_form_education_male">
         <item>Среднее</item>
@@ -306,7 +331,24 @@
         <item>4</item>
         <item>5</item>
         <item>6</item>        
-    </integer-array> 
+    </integer-array>
+     
+    <!-- Breast ******************************************************************************** -->    
+    <string-array name="profile_form_breast_female">
+        <item>Честный первый</item>
+        <item>Оптимальный второй</item>
+        <item>Заманчивый третий</item>
+        <item>Трогательный четвертый</item>
+        <item>Весомый пятый</item>                
+    </string-array>
+    
+    <integer-array name="profile_form_breast_ids">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </integer-array>
     
     <!-- Residence ******************************************************************************** -->    
     <string-array name="profile_form_residence_male">

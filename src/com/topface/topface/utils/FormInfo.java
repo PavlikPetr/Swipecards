@@ -6,6 +6,7 @@ import android.text.InputType;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.User;
 import com.topface.topface.requests.QuestionaryRequest;
 
 /* понять и простить за эту хуйню */
@@ -26,8 +27,7 @@ public class FormInfo {
 
     public void setSex(int sex) {
         mSex = sex;
-    }
-    
+    }    
     
     // =============================== Common methods ===============================
     public void fillFormItem(FormItem formItem) {
@@ -50,8 +50,8 @@ public class FormInfo {
     		formItem.title = title;
     		formItem.value = data;
     	}
-    }
-
+    }    
+    
     private String getEntryById(String[] entries, int[] ids, int targetId) {
     	if(entries.length != ids.length) {
     		Debug.error("Form entries' length don't match ids' length");
@@ -66,8 +66,14 @@ public class FormInfo {
     	return null;
     }
     
+    public String getEntry(int titleId, int targetId) {
+    	return getEntryById(getEntriesByTitleId(titleId), getIdsByTitleId(titleId), targetId);
+    }
+    
     public String[] getEntriesByTitleId(int titleId) {    	
     	switch (titleId) {
+    	case R.array.form_main_status:
+			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_status_female : R.array.profile_form_status_male);
 		case R.array.form_main_character:
 			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_character_female : R.array.profile_form_character_male);
 		case R.array.form_main_communication:
@@ -82,6 +88,8 @@ public class FormInfo {
 			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_fitness_female : R.array.profile_form_fitness_male);
 		case R.array.form_physique_hairs:
 			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_hair_female : R.array.profile_form_hair_male);
+		case R.array.form_physique_breast:
+			return mResources.getStringArray(R.array.profile_form_breast_female);
 		case R.array.form_social_car:
 			return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_car_female : R.array.profile_form_car_male);
 		case R.array.form_social_education:
@@ -105,6 +113,8 @@ public class FormInfo {
     
     public int[] getIdsByTitleId(int titleId) {
     	switch (titleId) {
+    	case R.array.form_main_status:
+			return mResources.getIntArray(R.array.profile_form_status_ids);
 		case R.array.form_main_character:
 			return mResources.getIntArray(R.array.profile_form_character_ids);
 		case R.array.form_main_communication:
@@ -119,6 +129,8 @@ public class FormInfo {
 			return mResources.getIntArray(R.array.profile_form_fitness_ids);
 		case R.array.form_physique_hairs:
 			return mResources.getIntArray(R.array.profile_form_hair_ids);
+		case R.array.form_physique_breast:
+			return mResources.getIntArray(R.array.profile_form_breast_ids);
 		case R.array.form_social_car:
 			return mResources.getIntArray(R.array.profile_form_car_ids);
 		case R.array.form_social_education:
@@ -138,6 +150,9 @@ public class FormInfo {
     	QuestionaryRequest result = new QuestionaryRequest(mContext);    	
     	
     	switch (titleId) {
+    	case R.array.form_main_status:
+			result.statusid = selectedValueId;
+			break;
 		case R.array.form_main_character:
 			result.characterid = selectedValueId;
 			break;
@@ -158,6 +173,9 @@ public class FormInfo {
 			break;
 		case R.array.form_physique_hairs:
 			result.hairid = selectedValueId;
+			break;
+		case R.array.form_physique_breast:
+			result.breastid = selectedValueId;
 			break;
 		case R.array.form_social_car:
 			result.carid = selectedValueId;
@@ -259,22 +277,22 @@ public class FormInfo {
     		return variants[0];
     	}
     	
-    	if (mProfile instanceof Profile) {    		
-    		switch(mSex) {
-    		case Static.BOY:
-    			result = variants[2];
-    			break;
-    		case Static.GIRL:
-    			result = variants[3];
-    			break;
-    		}
-    	} else {
+    	if (mProfile instanceof User) {    		
     		switch(mSex) {
     		case Static.BOY:
     			result = variants[0];
     			break;
     		case Static.GIRL:
     			result = variants[1];
+    			break;
+    		}
+    	} else {
+    		switch(mSex) {
+    		case Static.BOY:
+    			result = variants[2];
+    			break;
+    		case Static.GIRL:
+    			result = variants[3];
     			break;
     		}
     	}

@@ -1,54 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <!-- filter -->
-    <PreferenceCategory android:title="@string/filter_filter" >
-      <!-- sex -->
-      <Preference
-          android:key="@string/s_dating_sex"
-          android:title="@string/filter_sex" 
-          android:summary="" />
-      
-      <!-- age -->
-      <Preference
-          android:key="@string/s_dating_age"
-          android:title="@string/filter_age"
-          android:summary="" />
-      
-      <!-- online -->
-      <Preference
-          android:key="@string/cache_profile_filter_online"
-          android:title="@string/filter_online"
-          android:summary="" 
-          android:background="@drawable/im_bar_button"/>
-    </PreferenceCategory>
-  
-    <!-- place -->
-    <PreferenceCategory android:title="@string/filter_place">
-      
-      <!-- nearby
-      <CheckBoxPreference
-          android:key="@string/s_dating_nearby"
-          android:title="@string/filter_nearby"
-          android:defaultValue="false" />
-       -->
-      <!-- all cities -->
-      <CheckBoxPreference
-          android:key="@string/s_dating_cities_all"
-          android:title="@string/filter_cities_all"
-          android:defaultValue="false" />
-      
-      <!-- current city -->
-      <CheckBoxPreference
-          android:key="@string/s_dating_city" 
-          android:title="@string/filter_city"
-          android:defaultValue="false" />
-      
-      <!-- select city -->
-      <Preference
-          android:key="@string/s_dating_select_city"
-          android:title="@string/filter_select_city" />
-      
-   </PreferenceCategory>   
-    
-</PreferenceScreen>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/loGirl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <include layout="@layout/item_edit_form_check" />
+        </FrameLayout>        
+
+        <FrameLayout
+            android:id="@+id/loBoy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <include layout="@layout/item_edit_form_check" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/loAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <include layout="@layout/item_edit_form_select" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/loCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <include layout="@layout/item_edit_form_select" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/loOnline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" >
+
+            <include layout="@layout/item_edit_form_switch" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/loBeautiful"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp" >
+
+            <include layout="@layout/item_edit_form_switch" />
+        </FrameLayout>
+
+        <include layout="@layout/item_divider" />
+
+        <FrameLayout
+            android:id="@+id/loExtraHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <include layout="@layout/item_edit_profile_form_header" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/loDatingStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <include layout="@layout/item_edit_form_select" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/loMarriage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <include layout="@layout/item_edit_form_select" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/loCharacter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <include layout="@layout/item_edit_form_select" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/loAlcohol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <include layout="@layout/item_edit_form_select" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/loShowOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp" >
+
+            <include layout="@layout/item_edit_form_select" />>
+        </FrameLayout>
+    </LinearLayout>
+
+</ScrollView>

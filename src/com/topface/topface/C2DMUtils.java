@@ -11,6 +11,7 @@ import com.google.android.c2dm.C2DMessaging;
 import com.topface.topface.ui.*;
 import com.topface.topface.ui.fragments.LikesFragment;
 import com.topface.topface.ui.fragments.MutualFragment;
+import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.Settings;
 
 import java.util.Timer;
@@ -26,6 +27,7 @@ public class C2DMUtils {
     public static final int C2DM_TYPE_MESSAGE  = 0;
     public static final int C2DM_TYPE_SYMPATHY = 1;
     public static final int C2DM_TYPE_LIKE     = 2;
+    public static final int C2DM_TYPE_GUESTS     = 3;
     public static final int NOTIFICATION_CANCEL_DELAY = 3000;
 
     public static void init(Context context) {
@@ -47,7 +49,7 @@ public class C2DMUtils {
     }
 
     public static void showNotification(Intent extra, Context context) {
-        String data = extra.getStringExtra("text");
+        String data = extra.getStringExtra("text");        
         if (data != null) {
 
             NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -67,7 +69,7 @@ public class C2DMUtils {
             Intent i;
             String typeString = extra.getStringExtra("type");
             int type = typeString != null ? Integer.parseInt(typeString) : C2DM_TYPE_UNKNOWN;
-
+            
             switch (type) {
                 case C2DM_TYPE_MESSAGE:
                     i = new Intent(context, ChatActivity.class);
@@ -88,6 +90,11 @@ public class C2DMUtils {
                     i = new Intent(context, LikesFragment.class);
                     break;
 
+                case C2DM_TYPE_GUESTS:
+                	//TODO GuestsFragment
+                	i = new Intent(context, ProfileFragment.class);
+                    break;              
+                    
                 default:
                     i = new Intent(context, AuthActivity.class);
 

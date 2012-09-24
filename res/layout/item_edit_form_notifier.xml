@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivEditBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/ItemTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/ivEditBackground"
+        android:layout_centerVertical="true"
+        android:layout_gravity="left"
+        android:layout_marginLeft="10dp"
+        android:drawablePadding="5dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/ivEditBackground"
+        android:layout_centerVertical="true" 
+        android:layout_marginRight="10dp">
+
+        <!-- c2dm notification -->
+        <CheckBox
+            android:id="@+id/cbPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"       
+            android:background="@drawable/settings_phone_selector"
+            android:button="@android:color/transparent"
+            android:layout_marginRight="10dp"
+            />
+
+        <!-- e-mail notification -->
+        <CheckBox
+            android:id="@+id/cbMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"            
+            android:background="@drawable/settings_mail_selector"
+            android:button="@android:color/transparent"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

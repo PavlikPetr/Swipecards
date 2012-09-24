@@ -3,6 +3,7 @@
 
     <!-- en -->
     <string name="app_name">Topface</string>
+    <string name="app_market_url">market://details?id=com.topface.topface</string>
 
     <!-- General -->
     <string name="general_internet_off">No Internet connection</string>
@@ -15,6 +16,8 @@
     <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
     <string name="general_popup_rating">Did you like our application? Raise our rating! The higher rating the more people you will meet in \"TopFace\""</string>
     <string name="general_dialog_retry">Retry</string>
+    <string name="general_switch_on">on</string>
+    <string name="general_switch_off">off</string>
 
     <!-- Auth Activity -->
     <string name="auth_btn_vk">Login via VKontakte</string>
@@ -84,23 +87,26 @@
     <string name="tops_btn_city">City</string>
 
     <!-- Filter Activity -->
-    <string name="filter_header_title">I\'m looking for</string>
-    <string name="filter_menu_save">Save</string>
-    <string name="filter_filter">Filter</string>
-    <string name="filter_place">Location</string>
-    <string name="filter_city">City</string>
-    <string name="filter_sex">Sex</string>
-    <string name="filter_age">Age</string>
-    <string name="filter_boy">Male</string>
-    <string name="filter_girl">Female</string>
-    <string name="filter_online">Online</string>
-    <string name="filter_all">All</string>
-    <string name="filter_only_online">Online only</string>
-    <string name="filter_from">From</string>
-    <string name="filter_to">to</string>
-    <string name="filter_nearby">Near with me</string>
-    <string name="filter_cities_all">All cities</string>
-    <string name="filter_select_city">Select city</string>
+	<string name="filter_filter">Filter</string>
+	<string name="filter_girl">Girls</string>
+	<string name="filter_boy">Guys</string>
+	<string name="filter_from">From</string>
+	<string name="filter_to">to</string>
+	<string name="filter_in">In</string>
+	<string name="filter_only_online">Online only</string>
+	<string name="filter_only_beautiful">Beatiful only</string>
+	<string name="filter_extra_parameters">Extra parameters</string>    
+	    <string name="filter_header_title">I\'m looking for</string>
+	    <string name="filter_menu_save">Save</string>
+	    <string name="filter_place">Location</string>
+	    <string name="filter_city">City</string>
+	    <string name="filter_sex">Sex</string>
+	    <string name="filter_age">Age</string>
+	    <string name="filter_online">Online</string>
+	    <string name="filter_all">All</string>        
+	    <string name="filter_nearby">Near with me</string>
+	    <string name="filter_cities_all">All cities</string>
+	    <string name="filter_select_city">Select city</string>
 
     <!-- Dating Activity -->
     <string name="dating_header_title_him">Rate him!</string>
@@ -209,13 +215,19 @@
 
     <!-- Navigation Header -->
     <string name="navigation_back_profile">Profile</string>
-    <string name="navigation_back_dialog">Dialogs</string>
+    <string name="navigation_back_dialog">Dialogs</string> 
+    <string name="navigation_back_dating">Dating</string>   
     <string name="navigation_edit">Edit</string>
     <string name="navigation_save">Save</string>
+    
 
-    <!-- Profile / UserProfile Form -->
+    <!-- Profile / UserProfile Form -->    
     <string name="form_main">Main</string>
 
+    <string-array name="form_main_status">
+        <item name="all">Цель знакомства</item>
+    </string-array>
+    
     <string-array name="form_main_character">
         <item name="all">Character</item>
     </string-array>
@@ -239,6 +251,9 @@
     </string-array>
     <string-array name="form_physique_eyes">
         <item name="all">Eyes color</item>
+    </string-array>
+    <string-array name="form_physique_breast">
+        <item name="all">Breast size</item>
     </string-array>
 
     <string name="form_social">Social</string>
@@ -321,6 +336,7 @@
     <string name="leaders_date">Wanna\ndate!</string>
 
     <!--Settings-->
+    <string name="settings_header_title">Settings</string>
     <string name="settings_wifi">Only Wi-Fi</string>
     <string name="settings_on">On</string>
     <string name="settings_off">Off</string>
@@ -331,4 +347,12 @@
     <string name="photo_preloading">Photo preloading</string>
     <string name="photo_preloading_summary">Preloading the next photo in the album</string>
     <string name="preloading">Preloading</string>
+    <string name="settings_likes">Likes</string>
+    <string name="settings_mutual">Mutual</string>
+    <string name="settings_messages">Messages</string>
+    <string name="settings_guests">Guests</string>
+    <string name="settings_help">Help</string>
+    <string name="settings_account">Account</string>
+    <string name="settings_rate_app">Feedback</string>
+    <string name="settings_about">About application</string>
 </resources>

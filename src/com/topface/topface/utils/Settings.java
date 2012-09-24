@@ -18,12 +18,26 @@ public class Settings {
     public static final String SETTINGS_C2DM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_C2DM = "settings_c2dm";
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
+    
+    public static final String SETTINGS_SOCIAL_ACCOUNT_NAME = "social_account_name";
+    
+    public static final String SETTINGS_C2DM_LIKES_PHONE = "settings_like_phone";
+    public static final String SETTINGS_C2DM_MUTUAL_PHONE = "settings_mutual_phone";
+    public static final String SETTINGS_C2DM_MESSAGES_PHONE = "settings_messages_phone";
+    public static final String SETTINGS_C2DM_GUESTS_PHONE = "settings_guests_phone";
+    public static final String SETTINGS_C2DM_LIKES_EMAIL = "settings_like_email";
+    public static final String SETTINGS_C2DM_MUTUAL_EMAIL = "settings_mutual_email";
+    public static final String SETTINGS_C2DM_MESSAGES_EMAIL = "settings_messages_email";
+    public static final String SETTINGS_C2DM_GUESTS_EMAIL = "settings_guests_email";
+    
     private SharedPreferences mSettings;
+    private SharedPreferences.Editor mEditor;
     private Context mContext;
 
     private Settings() {
         mContext = App.getContext();
         mSettings = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        mEditor = mSettings.edit();
     }
 
     public static Settings getInstance() {
@@ -34,6 +48,24 @@ public class Settings {
         return mInstance;
     }
 
+    public void setSetting(String key, boolean value) {
+    	mEditor.putBoolean(key, value);
+    	mEditor.commit();
+    }
+    
+    public void setSocialAccountName(String name) {
+    	mEditor.putString(SETTINGS_SOCIAL_ACCOUNT_NAME, name);
+    	mEditor.commit();
+    }
+    
+    public boolean getSetting(String key) {
+    	return mSettings.getBoolean(key, false);
+    }    
+        
+    public String getSocialAccountName() {
+    	return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, "");
+    }
+    
     public String getPreloading() {
         return mSettings.getString(SETTINGS_PRELOADING, mContext.getString(R.string.settings_preloading_wifi));
     }

@@ -24,6 +24,9 @@ public class EditContainerActivity extends FragmentActivity {
 	public static final int INTENT_EDIT_FORM_ITEM = 555;
 	public static final int INTENT_EDIT_INPUT_FORM_ITEM = 666;
 	
+	public static final int INTENT_EDIT_FILTER = 777;
+	public static final int INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM = 888;
+	
 	private Fragment mFragment;
 	
 	@Override
@@ -33,6 +36,9 @@ public class EditContainerActivity extends FragmentActivity {
 		
 		overridePendingTransition(R.anim.slide_in_from_right,R.anim.slide_out_left);
 		
+		int titleId;
+		int dataId;
+		String data;
 		Intent intent = getIntent();
 		switch (intent.getIntExtra(INTENT_REQUEST_KEY,0)) {
 		case INTENT_EDIT_NAME_AGE:
@@ -45,14 +51,22 @@ public class EditContainerActivity extends FragmentActivity {
 			mFragment = new EditBackgroundFragment();
 			break;
 		case INTENT_EDIT_FORM_ITEM:
-			int titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);
-			int dataId = intent.getIntExtra(INTENT_FORM_DATA_ID, -1);
-			String data = intent.getStringExtra(INTENT_FORM_DATA);
-			mFragment = new EditFormItemsFragment(titleId, dataId, data);
+			titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);
+			dataId = intent.getIntExtra(INTENT_FORM_DATA_ID, -1);
+			data = intent.getStringExtra(INTENT_FORM_DATA);
+			mFragment = new EditFormItemsFragment(titleId, dataId, data);			
 			break;
 		case INTENT_EDIT_ALBUM:
 			mFragment = new ProfilePhotoFragment();
 			break;
+		case INTENT_EDIT_FILTER:
+			mFragment = new FilterFragment();
+			break;
+		case INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM:
+			titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);
+			dataId = intent.getIntExtra(INTENT_FORM_DATA_ID, -1);
+			data = intent.getStringExtra(INTENT_FORM_DATA);
+			mFragment = new FilterChooseFormItemFragment(titleId, dataId, data, FilterFragment.mTargetUser);
 		default:
 			break;
 		}
@@ -61,8 +75,7 @@ public class EditContainerActivity extends FragmentActivity {
 			getSupportFragmentManager().beginTransaction()
 				.replace(R.id.fragment_frame, mFragment).commit();
 		}
-	}		
-	
+	}	
 	
 	@Override
 	public void finish() {		

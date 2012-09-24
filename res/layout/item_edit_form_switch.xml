@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:duplicateParentState="true" >
+
+    <ImageView
+        android:id="@+id/ivEditBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:duplicateParentState="true" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/ItemTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/ivEditBackground"
+        android:layout_centerVertical="true"
+        android:layout_gravity="left"
+        android:layout_marginLeft="10dp"
+        android:drawablePadding="5dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="14sp" />
+
+    <!-- Switch -->
+
+    <CheckBox
+        android:id="@+id/cbSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@id/ivEditBackground"
+        android:background="@drawable/edit_switch"
+        android:button="@android:color/transparent"
+        android:layout_marginRight="5dp"
+        android:clickable="false"/>
+
+    <TextView
+        android:id="@+id/tvSwitchOn"
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/cbSwitch"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="12dp"
+        android:text="@string/general_switch_on"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvSwitchOff"
+        android:textColor="#2F2F2F"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/cbSwitch"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"
+        android:text="@string/general_switch_off"
+        android:textSize="12sp" />
+
+</RelativeLayout>

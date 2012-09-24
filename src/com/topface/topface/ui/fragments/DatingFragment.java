@@ -13,9 +13,10 @@ import com.topface.topface.requests.NovicePowerRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.FilterActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.UserProfileActivity;
+import com.topface.topface.ui.profile.edit.EditContainerActivity;
+import com.topface.topface.ui.views.DatingAlbum;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
@@ -91,8 +92,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSettingsButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getActivity().getApplicationContext(), FilterActivity.class);
-				startActivityForResult(intent,FilterActivity.INTENT_FILTER_ACTIVITY);
+//				Intent intent = new Intent(getActivity().getApplicationContext(), FilterActivity.class);
+//				startActivityForResult(intent,FilterActivity.INTENT_FILTER_ACTIVITY);
+				
+				Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
+				startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_FILTER);
 			}
 		});
         
@@ -167,6 +171,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         return view;
     }
 
+    @Override
+	public void startActivityForResult(Intent intent, int requestCode) {
+		intent.putExtra(EditContainerActivity.INTENT_REQUEST_KEY, requestCode);
+		super.startActivityForResult(intent, requestCode);
+	}
+    
     private void updateData(final boolean isAddition) {
         if (!isAddition)
         	onUpdateStart(isAddition);
@@ -495,11 +505,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
 	
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {		
-		super.onActivityResult(requestCode, resultCode, data);		
-	    if (resultCode == Activity.RESULT_OK && requestCode == FilterActivity.INTENT_FILTER_ACTIVITY) {
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
 	    	hideControls();
 	    	fillLayout();	        
+	    } else {
+	    	super.onActivityResult(requestCode, resultCode, data);
 	    }
 	}
 	
