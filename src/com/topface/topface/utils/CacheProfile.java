@@ -63,8 +63,10 @@ public class CacheProfile  {
     public static String dating_city_name; // наименование пользователя в русской локали
     public static String dating_city_full; // полное наименование города
     
-    public static LinkedList<FormItem> forms;
+    public static int mAvatarId;  // id главной фотографии пользователя
     public static SparseArray<HashMap<String, String>> photoLinks; // альбом пользователя
+    
+    public static LinkedList<FormItem> forms;
     public static String status; // статус пользователя
     public static boolean isNewbie; // поле новичка
 	public static int background_id;

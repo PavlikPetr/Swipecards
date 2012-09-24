@@ -16,7 +16,6 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.profile.edit.EditContainerActivity;
-import com.topface.topface.ui.views.DatingAlbum;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
