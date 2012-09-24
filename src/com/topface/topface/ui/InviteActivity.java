@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;

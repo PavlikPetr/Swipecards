@@ -26,8 +26,8 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 
-public abstract class BaseFragment extends Fragment implements IRequestClient{
-
+public abstract class BaseFragment extends Fragment implements IRequestClient{	
+	
     public boolean isFilled;
     public boolean isForcedUpdate;
     protected boolean mIsActive;
@@ -128,5 +128,10 @@ public abstract class BaseFragment extends Fragment implements IRequestClient{
     public void removeRequest(ApiRequest request) {    	
     	mRequests.remove(request);
     }
-
+    
+    @Override
+	public void startActivityForResult(Intent intent, int requestCode) {
+		intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+		super.startActivityForResult(intent, requestCode);
+	}
 }

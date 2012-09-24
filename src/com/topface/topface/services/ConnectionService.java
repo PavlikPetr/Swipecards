@@ -17,10 +17,11 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.utils.AuthToken;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.AndroidHttpClient;
 import com.topface.topface.utils.http.Http.FlushedInputStream;
+import com.topface.topface.utils.social.AuthToken;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;

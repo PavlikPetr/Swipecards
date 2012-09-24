@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile.edit;
+package com.topface.topface.ui.edit;
 
 import android.graphics.drawable.Drawable;
 import com.topface.topface.R;

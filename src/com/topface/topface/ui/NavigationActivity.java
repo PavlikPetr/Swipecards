@@ -5,10 +5,10 @@ import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.FragmentContainer;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.ui.fragments.FragmentMenu;
-import com.topface.topface.utils.AuthorizationManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ProfileBackgrounds;
+import com.topface.topface.utils.social.AuthorizationManager;
 
 import android.content.Context;
 import android.content.SharedPreferences;

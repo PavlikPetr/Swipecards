@@ -2,9 +2,11 @@ package com.topface.topface.ui;
 
 import java.util.LinkedList;
 
+import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.http.IRequestClient;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
@@ -38,4 +40,9 @@ public class BaseFragmentActivity extends FragmentActivity implements IRequestCl
 		mRequests.clear();
 	}
 	
+	@Override
+	public void startActivityForResult(Intent intent, int requestCode) {
+		intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+		super.startActivityForResult(intent, requestCode);
+	}
 }

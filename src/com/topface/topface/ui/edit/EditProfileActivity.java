@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile.edit;
+package com.topface.topface.ui.edit;
 
 import java.util.LinkedList;
 
@@ -7,8 +7,9 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
-import com.topface.topface.ui.profile.edit.EditProfileItem.Type;
+import com.topface.topface.ui.edit.EditProfileItem.Type;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -32,7 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class EditProfileActivity extends Activity implements OnClickListener{	
+public class EditProfileActivity extends BaseFragmentActivity implements OnClickListener{	
 	
 	private ListView mEditsListView;	
 	private EditsAdapter mAdapter;
@@ -185,13 +186,7 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
-	}
-	
-	@Override
-	public void startActivityForResult(Intent intent, int requestCode) {
-		intent.putExtra(EditContainerActivity.INTENT_REQUEST_KEY, requestCode);
-		super.startActivityForResult(intent, requestCode);
-	}
+	}	
 	
 	class EditsAdapter extends BaseAdapter {
 
@@ -302,7 +297,6 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 					holder.mText.setText(item.getText());
 				}
 				
-				convertView.setDuplicateParentStateEnabled(false);
 				convertView.setOnClickListener(new OnClickListener() {					
 					@Override
 					public void onClick(View v) {
@@ -422,9 +416,13 @@ public class EditProfileActivity extends Activity implements OnClickListener{
 		void onClick() {
 			Intent intent = new Intent(getApplicationContext(), EditContainerActivity.class);
 			intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, mFormItem.titleId);
-			intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, mFormItem.dataId);
 			intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, mFormItem.value);
-			startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_FORM_ITEM);
+			if (mFormItem.dataId == FormItem.NO_RESOURCE_ID) {
+				startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM);
+			} else {
+				intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, mFormItem.dataId);
+				startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_FORM_ITEM);
+			}
 		}
 	}
 

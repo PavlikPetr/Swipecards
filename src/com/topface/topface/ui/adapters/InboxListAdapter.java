@@ -2,12 +2,9 @@ package com.topface.topface.ui.adapters;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedInbox;
-import com.topface.topface.ui.views.RoundedImageView;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Utils;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

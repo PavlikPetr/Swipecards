@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.social;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,7 +19,8 @@ import com.facebook.android.FacebookError;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.Facebook.DialogListener;
 import com.topface.topface.Data;
-import com.topface.topface.ui.WebAuthActivity;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Settings;
 
 /**
  * AuthorizationManager has to be attached to some Activity (setted on getInstance(...))
@@ -128,8 +129,8 @@ public class AuthorizationManager {
 			mAsyncFacebookRunner = new AsyncFacebookRunner(Data.facebook);		
 			Data.facebook.authorize(mParentActivity, FB_PERMISSIONS, mDialogListener);
 //        }
-	}	
-
+	}
+	
 	private DialogListener mDialogListener = new DialogListener() {
 		@Override
 		public void onComplete(Bundle values) {

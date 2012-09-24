@@ -4,6 +4,7 @@
     <!-- en -->
     <string name="app_name">Topface</string>
     <string name="app_market_url">market://details?id=com.topface.topface</string>
+    <string name="app_help_url">http://topface.com</string>
 
     <!-- General -->
     <string name="general_internet_off">No Internet connection</string>
@@ -347,6 +348,7 @@
     <string name="photo_preloading">Photo preloading</string>
     <string name="photo_preloading_summary">Preloading the next photo in the album</string>
     <string name="preloading">Preloading</string>
+    <string name="settings_notifications_header">Notifications</string>
     <string name="settings_likes">Likes</string>
     <string name="settings_mutual">Mutual</string>
     <string name="settings_messages">Messages</string>

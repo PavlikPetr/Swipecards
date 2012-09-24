@@ -14,8 +14,10 @@ import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.adapters.DatingAlbumAdapter;
+import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.profile.UserProfileActivity;
-import com.topface.topface.ui.profile.edit.EditContainerActivity;
+import com.topface.topface.ui.views.DatingAlbum;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
@@ -168,13 +170,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setOnClickListener(mOnClickListener);
         
         return view;
-    }
-
-    @Override
-	public void startActivityForResult(Intent intent, int requestCode) {
-		intent.putExtra(EditContainerActivity.INTENT_REQUEST_KEY, requestCode);
-		super.startActivityForResult(intent, requestCode);
-	}
+    }    
     
     private void updateData(final boolean isAddition) {
         if (!isAddition)

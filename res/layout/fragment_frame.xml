@@ -14,7 +14,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/fragment_frame"
+        android:id="@+id/loFrame"
         android:layout_below="@id/loNavigationBar"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
