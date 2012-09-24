@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,14 +10,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class FragmentMenu extends Fragment implements View.OnClickListener {
     private View mRootLayout;
-    private FragmentMenuListener mFragmentMenuListener;
     
     private Button mBtnProfile;
     private Button mBtnDating;
@@ -33,10 +29,10 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
     private TextView mTvNotifyMutual;
     private TextView mTvNotifyDialogs;
     
-    boolean b;
+    private FragmentMenuListener mFragmentMenuListener;
     
     public interface FragmentMenuListener {
-        public void onMenuClick(int fragmentID);
+        public void onMenuClick(int buttonId);
     }
     
     @Override
@@ -46,10 +42,11 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         
         mRootLayout = inflater.inflate(R.layout.fragment_menu, null);
         
+        Drawable drawable = (Drawable)new BitmapDrawable(Data.ownerAvatar);
+        
+        // Buttons
         mBtnProfile = (Button)mRootLayout.findViewById(R.id.btnFragmentProfile);
         mBtnProfile.setOnClickListener(this);
-        Bitmap b = Data.ownerAvatar; // for debug
-        Drawable drawable = (Drawable)new BitmapDrawable(Data.ownerAvatar);
         mBtnProfile.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         
         mBtnDating = (Button)mRootLayout.findViewById(R.id.btnFragmentDating);
@@ -70,7 +67,7 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         mBtnSettings = (Button)mRootLayout.findViewById(R.id.btnFragmentSettings);
         mBtnSettings.setOnClickListener(this);
         
-        //mRootLayout.setVisibility(View.INVISIBLE);
+        mRootLayout.setVisibility(View.INVISIBLE);
         
         mButtons = new Button[]{mBtnProfile, mBtnDating, mBtnLikes, mBtnMutual, mBtnDialogs, mBtnTops, mBtnSettings};
 
@@ -84,48 +81,13 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
     
     @Override
     public void onClick(View view) {
-        int fragmentId = 0;
-        
         for (Button btn : mButtons)
             btn.setSelected(false);
         
-        switch (view.getId()) {
-            case R.id.btnFragmentProfile:
-                fragmentId = R.id.fragment_profile;
-                mBtnProfile.setSelected(true);
-                break;
-            case R.id.btnFragmentDating:
-                fragmentId = R.id.fragment_dating;
-                mBtnDating.setSelected(true);
-                break;
-            case R.id.btnFragmentLikes:
-                fragmentId = R.id.fragment_likes;
-                mBtnLikes.setSelected(true);
-                break;
-            case R.id.btnFragmentMutual:
-                fragmentId = R.id.fragment_mutual;
-                mBtnMutual.setSelected(true);
-                break;
-            case R.id.btnFragmentDialogs:
-                fragmentId = R.id.fragment_dialogs;
-                mBtnDialogs.setSelected(true);
-                break;
-            case R.id.btnFragmentTops:
-                fragmentId = R.id.fragment_tops;
-                mBtnTops.setSelected(true);
-                break;
-            case R.id.btnFragmentSettings:
-                fragmentId = R.id.fragment_settings;
-                mBtnSettings.setSelected(true);
-                break; 
-            default:
-            	fragmentId = R.id.fragment_profile;
-                mBtnProfile.setSelected(true);
-                break;
-        }
-//        
+        ((Button)view).setSelected(true);
+        
         if(mFragmentMenuListener != null)
-          mFragmentMenuListener.onMenuClick(fragmentId);
+          mFragmentMenuListener.onMenuClick(view.getId());
     }
     
     public void setOnMenuListener(FragmentMenuListener onFragmentMenuListener) {
@@ -170,31 +132,31 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
     }
     
     public void setSelectedMenu(int fragmentId) {
-        switch (fragmentId) {
-            case R.id.fragment_profile:  //btnFragmentProfile
-                mBtnProfile.setSelected(true);
-                break;
-            case R.id.fragment_dating:   //btnFragmentDating
-                mBtnDating.setSelected(true);
-                break;
-            case R.id.fragment_likes:    //btnFragmentLikes
-                mBtnLikes.setSelected(true);
-                break;
-            case R.id.fragment_mutual:   //btnFragmentMutual
-                mBtnMutual.setSelected(true);
-                break;
-            case R.id.fragment_dialogs:  //btnFragmentDialogs
-                mBtnDialogs.setSelected(true);
-                break;
-            case R.id.fragment_tops:     //btnFragmentTops
-                mBtnTops.setSelected(true);
-                break;
-            case R.id.fragment_settings: //btnFragmentSettings
-                mBtnSettings.setSelected(true);
-                break; 
-            default:
-                break;
-        }
+//        switch (fragmentId) {
+//            case R.id.fragment_profile:  //btnFragmentProfile
+//                mBtnProfile.setSelected(true);
+//                break;
+//            case R.id.fragment_dating:   //btnFragmentDating
+//                mBtnDating.setSelected(true);
+//                break;
+//            case R.id.fragment_likes:    //btnFragmentLikes
+//                mBtnLikes.setSelected(true);
+//                break;
+//            case R.id.fragment_mutual:   //btnFragmentMutual
+//                mBtnMutual.setSelected(true);
+//                break;
+//            case R.id.fragment_dialogs:  //btnFragmentDialogs
+//                mBtnDialogs.setSelected(true);
+//                break;
+//            case R.id.fragment_tops:     //btnFragmentTops
+//                mBtnTops.setSelected(true);
+//                break;
+//            case R.id.fragment_settings: //btnFragmentSettings
+//                mBtnSettings.setSelected(true);
+//                break; 
+//            default:
+//                break;
+//        }
     }
     
     public void setNotificationMargin(int padding) {

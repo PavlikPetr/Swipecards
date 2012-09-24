@@ -167,6 +167,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
         
+        updateData(false);
+        
         return view;
     }
 

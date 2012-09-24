@@ -47,14 +47,12 @@ public class IndicatorView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Debug.log(this, "mCurrentId:"+mCurrentId);
 
         canvas.drawBitmap(mDivider, 0, mDividerY, mPaint);
         if (mCurrentId >= 0 && mPoints.size() > 0) {
             int x = mPoints.get(mCurrentId);
             canvas.drawBitmap(mIndicator, x, 0, mPaint);
         }
-
     }
     
     public void setButtonMeasure(int id, int measure) {
@@ -72,15 +70,6 @@ public class IndicatorView extends View {
                 sum += width;
             }
         }
-        /*
-        if (mMeasures.size() > 0) {
-            for (Entry<Integer, Integer> measure : mMeasures.entrySet()) {
-                int point = (measure.getValue()-mIndicator.getWidth())/2;
-                mPoints.put(measure.getKey(), sum+point);
-                sum += measure.getValue();
-            }
-        }
-        */
     }
     
     public void setIndicator(int id) {

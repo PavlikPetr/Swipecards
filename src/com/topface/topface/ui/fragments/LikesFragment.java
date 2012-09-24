@@ -179,6 +179,8 @@ public class LikesFragment extends BaseFragment {
 		mListView.getRefreshableView().setAdapter(mListAdapter);
 
 		mNewUpdating = CacheProfile.unread_likes > 0;
+		
+		updateData(false);
 
 		return view;
 	}

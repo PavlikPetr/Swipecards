@@ -172,6 +172,8 @@ public class DialogsFragment extends BaseFragment {
 		mListView.getRefreshableView().setAdapter(mListAdapter);
 
 		mHasUnread = CacheProfile.unread_messages > 0;
+		
+		updateData(false);
 
 		return view;
 	}

@@ -90,12 +90,12 @@ public abstract class BaseFragment extends Fragment implements IRequestClient{
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if(activity instanceof NavigationActivity) {
-            int lastFragmentId = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE)
-                                         .getInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, R.id.fragment_profile);
-            if(mFragmentId == lastFragmentId)
-            	((NavigationActivity)activity).setSelectedMenu(mFragmentId);
-        }
+//        if(activity instanceof NavigationActivity) {
+//            int lastFragmentId = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE)
+//                                         .getInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, R.id.fragment_profile);
+//            if(mFragmentId == lastFragmentId)
+//            	((NavigationActivity)activity).setSelectedMenu(mFragmentId);
+//        }
     }
     
     @Override

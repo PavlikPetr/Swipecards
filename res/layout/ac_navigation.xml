@@ -5,17 +5,18 @@
                 android:background="@drawable/im_list_bkgrd" >
 
     <!-- Left Menu -->
-    <FrameLayout
+    <fragment class="com.topface.topface.ui.fragments.FragmentMenu"
         android:id="@+id/fragment_menu"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
     
     <!-- Fragment Container -->
-    <com.topface.topface.ui.fragments.FragmentSwitchController
-        android:id="@+id/frameAnimation"
+    <com.topface.topface.ui.fragments.FragmentSwitcher
+        android:id="@+id/fragment_switcher"
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent" >
         
+        <!-- 0 -->
 	    <RelativeLayout
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent" >
@@ -28,16 +29,13 @@
 		        
         </RelativeLayout>
         
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-		        
-		    <include layout="@layout/fragment_container"
-		        android:id="@+id/fragment_container" />
-	     
-	    </RelativeLayout>
+	    <!-- 1 -->
+	    <FrameLayout
+	        android:id="@+id/fragmentFragment"
+	        android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
         
-    </com.topface.topface.ui.fragments.FragmentSwitchController>
+    </com.topface.topface.ui.fragments.FragmentSwitcher >
 
 </RelativeLayout>
 
