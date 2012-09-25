@@ -342,7 +342,7 @@ public class LikesFragment extends BaseFragment {
     public void fillLayout() {
         Debug.log(this, "LikesActivity::fillLayout");
 
-        updateBanner(mBannerView, BannerRequest.LIKE);
+        //updateBanner(mBannerView, BannerRequest.LIKE);
         updateData(false);
     }
 

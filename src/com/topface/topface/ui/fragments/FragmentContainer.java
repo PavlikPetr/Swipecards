@@ -93,16 +93,16 @@ public class FragmentContainer {
 //        }
     }
     
-    public void update(BaseFragment fragment) {    	
-        if(fragment != null && !fragment.isFilled) {
-	        fragment.fillLayout();
-	        fragment.isFilled = true;
-        }
-    }
+//    public void update(BaseFragment fragment) {    	
+//        if(fragment != null && !fragment.isFilled) {
+//	        fragment.fillLayout();
+//	        fragment.isFilled = true;
+//        }
+//    }
     
     public void update() {
         BaseFragment fragment = (BaseFragment)mFragmentManager.findFragmentById(mCurrentFragmentId);
-        update(fragment);
+        //update(fragment);
     }
     
     public int getCurrentFragmentId() {

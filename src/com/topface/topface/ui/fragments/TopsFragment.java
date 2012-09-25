@@ -272,7 +272,7 @@ public class TopsFragment extends BaseFragment {
     public void fillLayout() {
         Debug.log(this, "TopsActivity::fillLayout");
 
-        updateBanner(mBannerView, BannerRequest.TOP);
+        //updateBanner(mBannerView, BannerRequest.TOP);
         updateData();
     }
 

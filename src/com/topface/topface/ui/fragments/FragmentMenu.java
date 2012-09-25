@@ -67,14 +67,14 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         mBtnSettings = (Button)mRootLayout.findViewById(R.id.btnFragmentSettings);
         mBtnSettings.setOnClickListener(this);
         
-        mRootLayout.setVisibility(View.INVISIBLE);
-        
         mButtons = new Button[]{mBtnProfile, mBtnDating, mBtnLikes, mBtnMutual, mBtnDialogs, mBtnTops, mBtnSettings};
 
         // Notifications
         mTvNotifyLikes = (TextView)mRootLayout.findViewById(R.id.tvNotifyLikes);
         mTvNotifyMutual = (TextView)mRootLayout.findViewById(R.id.tvNotifyMutual);
         mTvNotifyDialogs = (TextView)mRootLayout.findViewById(R.id.tvNotifyDialogs);
+        
+        hide();
 
         return mRootLayout;
     }
@@ -117,8 +117,12 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         }
     }
     
-    public void setVisibility(int visibility) {
-        mRootLayout.setVisibility(visibility);        
+    public void show() {
+        mRootLayout.setVisibility(View.VISIBLE);        
+    }
+    
+    public void hide() {
+        mRootLayout.setVisibility(View.INVISIBLE);        
     }
 
     public void setClickable(boolean clickable) {

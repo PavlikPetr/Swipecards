@@ -1,164 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:layout_height="fill_parent" >
 
         <!-- Profile -->
-        <RelativeLayout
+        <Button
+            android:id="@+id/btnFragmentProfile"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <Button
-                android:id="@+id/btnFragmentProfile"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/navigation_menu_item_selector"
-                android:text="@string/dashbrd_btn_dating"
-                android:drawableLeft="@drawable/topface_dating"
-                style="@style/LeftMenuButtons"/>
-
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:background="@drawable/navigation_menu_item_selector"
+            android:text="@string/dashbrd_btn_profile"
+            style="@style/LeftMenuButtons"/>
 
         <!-- Dating -->
-        <RelativeLayout
+        <Button
+            android:id="@+id/btnFragmentDating"
+            android:layout_below="@id/btnFragmentProfile"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <Button
-                android:id="@+id/btnFragmentDating"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/navigation_menu_item_selector"
-                android:text="@string/dashbrd_btn_dating"
-                android:drawableLeft="@drawable/topface_dating"
-                style="@style/LeftMenuButtons"/>
-            
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:background="@drawable/navigation_menu_item_selector"
+            android:text="@string/dashbrd_btn_dating"
+            android:drawableLeft="@drawable/topface_dating"
+            style="@style/LeftMenuButtons"/>
 
         <!-- Likes -->
-        <RelativeLayout
+        <Button
+            android:id="@+id/btnFragmentLikes"
+            android:layout_below="@id/btnFragmentDating"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"                
+            android:background="@drawable/navigation_menu_item_selector"                
+            android:text="@string/dashbrd_btn_likes"                
+            android:drawableLeft="@drawable/topface_likes"
+            style="@style/LeftMenuButtons"/>
 
-            <Button
-                android:id="@+id/btnFragmentLikes"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"                
-                android:background="@drawable/navigation_menu_item_selector"                
-                android:text="@string/dashbrd_btn_likes"                
-                android:drawableLeft="@drawable/topface_likes"
-                style="@style/LeftMenuButtons"/>
-
-            <!-- UNREAD LIKES -->
-            <TextView
-                android:id="@+id/tvNotifyLikes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/btnFragmentLikes"
-                android:layout_alignBottom="@+id/btnFragmentLikes"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="180dp"
-                android:background="@drawable/im_informer"
-                android:gravity="center"
-                android:textColor="#FFFFFF"
-                android:textSize="12dp"
-                android:visibility="invisible" />
-            
-        </RelativeLayout>
+        <!-- UNREAD LIKES -->
+        <TextView
+            android:id="@+id/tvNotifyLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnFragmentLikes"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="180dp"
+            android:background="@drawable/im_informer"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="12dp"
+            android:text="12"
+            android:visibility="visible" />
 
         <!-- Mutual - Sympathy -->
-        <RelativeLayout
+        <Button
+            android:id="@+id/btnFragmentMutual"
+            android:layout_below="@id/btnFragmentLikes"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@drawable/navigation_menu_item_selector"
+            android:text="@string/dashbrd_btn_sympathy"
+            android:drawableLeft="@drawable/topface_sympathy"
+            style="@style/LeftMenuButtons"/>
 
-            <Button
-                android:id="@+id/btnFragmentMutual"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/navigation_menu_item_selector"
-                android:text="@string/dashbrd_btn_sympathy"
-                android:drawableLeft="@drawable/topface_sympathy"
-				style="@style/LeftMenuButtons"/>
-
-            <!-- UNREAD MUTUAL -->
-            <TextView
-                android:id="@+id/tvNotifyMutual"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/btnFragmentMutual"
-                android:layout_alignBottom="@+id/btnFragmentMutual"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="180dp"
-                android:background="@drawable/im_informer"
-                android:gravity="center"
-                android:textColor="#FFFFFF"
-                android:textSize="12dp"
-                android:visibility="invisible" />
-            
-        </RelativeLayout>
+        <!-- UNREAD MUTUAL -->
+        <TextView
+            android:id="@+id/tvNotifyMutual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnFragmentMutual"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="180dp"
+            android:background="@drawable/im_informer"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="12dp"
+            android:text="12"
+            android:visibility="visible" />
 
         <!-- Dialogs - Messages - Chat -->
-        <RelativeLayout
+        <Button
+            android:id="@+id/btnFragmentDialogs"
+            android:layout_below="@id/btnFragmentMutual"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@drawable/navigation_menu_item_selector"
+            android:text="@string/dashbrd_btn_chat"
+            android:drawableLeft="@drawable/topface_chat"
+            style="@style/LeftMenuButtons"/>
 
-            <Button
-                android:id="@+id/btnFragmentDialogs"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/navigation_menu_item_selector"
-                android:text="@string/dashbrd_btn_chat"
-                android:drawableLeft="@drawable/topface_chat"
-                style="@style/LeftMenuButtons"/>
-
-            <!-- UNREAD DIALOGS -->
-            <TextView
-                android:id="@+id/tvNotifyDialogs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/btnFragmentDialogs"
-                android:layout_alignBottom="@+id/btnFragmentDialogs"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="180dp"
-                android:background="@drawable/im_informer"
-                android:gravity="center"
-                android:textColor="#FFFFFF"
-                android:textSize="12dp"
-                android:visibility="invisible" />
-            
-        </RelativeLayout>
+        <!-- UNREAD DIALOGS -->
+        <TextView
+            android:id="@+id/tvNotifyDialogs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnFragmentDialogs"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="180dp"
+            android:background="@drawable/im_informer"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="12dp"
+            android:text="12"
+            android:visibility="visible" />
 
         <!-- Tops -->
-        <RelativeLayout
+        <Button
+            android:id="@+id/btnFragmentTops"
+            android:layout_below="@id/btnFragmentDialogs"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <Button
-                android:id="@+id/btnFragmentTops"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/navigation_menu_item_selector"
-                android:text="@string/dashbrd_btn_tops"
-                android:drawableLeft="@drawable/topface_tops"
-                style="@style/LeftMenuButtons"/>
-            
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:background="@drawable/navigation_menu_item_selector"
+            android:text="@string/dashbrd_btn_tops"
+            android:drawableLeft="@drawable/topface_tops"
+            style="@style/LeftMenuButtons"/>
 
         <!-- Settings -->
-        <RelativeLayout
+        <Button
+            android:id="@+id/btnFragmentSettings"
+            android:layout_below="@id/btnFragmentTops"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <Button
-                android:id="@+id/btnFragmentSettings"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/navigation_menu_item_selector"
-                android:text="@string/dashbrd_btn_settings"
-                android:drawableLeft="@drawable/topface_menu_settings"
-                style="@style/LeftMenuButtons"/>
-            
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:background="@drawable/navigation_menu_item_selector"
+            android:text="@string/dashbrd_btn_settings"
+            android:drawableLeft="@drawable/topface_menu_settings"
+            style="@style/LeftMenuButtons"/>
         
-</LinearLayout>
+</RelativeLayout>

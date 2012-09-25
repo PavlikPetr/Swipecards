@@ -16,7 +16,7 @@
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent" >
         
-        <!-- 0 -->
+        <!-- 0 shadow -->
 	    <RelativeLayout
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent" >
@@ -29,9 +29,9 @@
 		        
         </RelativeLayout>
         
-	    <!-- 1 -->
+	    <!-- 1 fragment -->
 	    <FrameLayout
-	        android:id="@+id/fragmentFragment"
+	        android:id="@+id/fragment_fragment"
 	        android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
         

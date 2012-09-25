@@ -334,7 +334,6 @@ public class DialogsFragment extends BaseFragment {
 	public void fillLayout() {
 		Debug.log(this, "DialogActivity::fillLayout");
 
-		updateBanner(mBannerView, BannerRequest.INBOX);
 		updateData(false);
 	}
 

@@ -323,7 +323,7 @@ public class MutualFragment extends BaseFragment {
     public void fillLayout() {
         Debug.log(this, "SympathyActivity::fillLayout");
 
-        updateBanner(mBannerView, BannerRequest.SYMPATHY);
+        //updateBanner(mBannerView, BannerRequest.SYMPATHY);
         updateData(false);
     }
 

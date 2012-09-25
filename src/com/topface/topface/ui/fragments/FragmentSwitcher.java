@@ -17,20 +17,20 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
 	private int mFullOpenDX;
 	private int mWidth;
 	private int mAnimation;
+	private int mCurrentFragmentId;
 	private Scroller mScroller;
-	private FragmentMenu mFragmentMenu;
 	private FragmentManager mFragmentManager;
-	//private FragmentSwitchListener mFragmentSwitchListener;
+	private FragmentSwitchListener mFragmentSwitchListener;
 
 	private boolean mAutoScrolling = false;
 	
-	public static final int EXPANDING_PERCENT = 30;
-
-	public static final int CLOSED = 0;
+    public static final int CLOSED = 0;
 	public static final int EXPAND = 1;
 	public static final int EXPAND_FULL = 2;
 	public static final int COLLAPSE = 3;
 	public static final int COLLAPSE_FULL = 4;
+	
+	public static final int EXPANDING_PERCENT = 30;
 
 	private final Interpolator mPrixingInterpolator = new Interpolator() {
 		public float getInterpolation(float t) {			
@@ -47,30 +47,64 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
         public void onSwitchEnd();
         public void onOpenStart();
     }
+    
+    public FragmentSwitcher(Context context) {
+        this(context, null);
+    }
 	
 	public FragmentSwitcher(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		mCurrentFragmentId = BaseFragment.F_PROFILE;
 		mScroller = new Scroller(context, mPrixingInterpolator);
 	}
 	
-    public void setFragmentMenu(FragmentMenu fragmentMenu) {
-        mFragmentMenu = fragmentMenu;
-    }
-    
     public void setFragmentManager(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
     }
-    
+	
     public void showFragment(int fragmentId) {
-        BaseFragment fragment = new ProfileFragment();
-        mFragmentManager.beginTransaction().replace(R.id.fragmentFragment, fragment).commit();        
+        mCurrentFragmentId = fragmentId;
+        BaseFragment fragment;
+        switch (fragmentId) {
+            case BaseFragment.F_PROFILE:
+                fragment = new ProfileFragment();
+                break;
+            case BaseFragment.F_DATING:
+                fragment = new DatingFragment();
+                break;
+            case BaseFragment.F_LIKES:
+                fragment = new LikesFragment();
+                break;
+            case BaseFragment.F_MUTUAL:
+                fragment = new MutualFragment();
+                break;
+            case BaseFragment.F_DIALOGS:
+                fragment = new DialogsFragment();
+                break;
+            case BaseFragment.F_TOPS:
+                fragment = new TopsFragment();
+                break;
+            case BaseFragment.F_SETTINGS:
+                fragment = new SettingsFragment();
+                break; 
+            default:
+                fragment = new ProfileFragment();
+                break;
+        }
+        mFragmentManager.beginTransaction().replace(R.id.fragment_fragment, fragment).commit();        
+    }
+    
+    public int getCurrentFragmentId() {
+        return mCurrentFragmentId;
     }
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		getChildAt(0).measure(getChildAt(0).getMeasuredWidth(), heightMeasureSpec); // shadow
-		getChildAt(1).measure(widthMeasureSpec, heightMeasureSpec); // fragments
+		 // shadow
+		getChildAt(0).measure(getChildAt(0).getMeasuredWidth(), heightMeasureSpec);
+		// fragments
+		getChildAt(1).measure(widthMeasureSpec, heightMeasureSpec); 
 		getChildAt(1).setOnClickListener(this);
 	}
 
@@ -85,15 +119,6 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
 		mFullOpenDX = mWidth - mOpenDX;
 	}
 
-	private int getLeftBound() {
-		return 0;
-	}
-	
-	private int getRightBound() {
-		return mOpenDX;
-	}
-	
-	
 	@Override
 	public void computeScroll() {
 		mScrollX = mScroller.getCurrX();
@@ -116,10 +141,10 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
 		mAnimation = typeAnimation;
 		setScrollingCacheEnabled(true);
 		mAutoScrolling = true;
-		//mFragmentSwitchListener.onSwitchStart();
+		mFragmentSwitchListener.onSwitchStart();
 		switch (typeAnimation) {
     		case EXPAND:
-    			//mFragmentSwitchListener.onOpenStart();
+    			mFragmentSwitchListener.onOpenStart();
     			mScroller.startScroll(getLeftBound(), 0, -getRightBound(), 0, 300);
     			break;
     		case COLLAPSE:
@@ -141,15 +166,21 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
 		getChildAt(0).setDrawingCacheEnabled(enabled);
 		getChildAt(1).setDrawingCacheEnabled(enabled);
 	}
+	
+   private int getLeftBound() {
+        return 0;
+    }
+    
+    private int getRightBound() {
+        return mOpenDX;
+    }
 
 	public void openMenu() {
-	    mFragmentMenu.setVisibility(View.VISIBLE);
 		snapToScreen(EXPAND);
 	}
 
 	public void closeMenu() {
 		snapToScreen(COLLAPSE);
-		mFragmentMenu.setVisibility(View.INVISIBLE);
 	}
 
 	public int getAnimationState() {
@@ -166,17 +197,17 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
 			}
 		
 			mAutoScrolling = false;			
-//			if (mAnimation != EXPAND_FULL) {
-//				mFragmentSwitchListener.onSwitchEnd();
-//			}
-//			if (mFragmentSwitchListener != null)
-//				mFragmentSwitchListener.endAnimation(mAnimation);			
+			if (mAnimation != EXPAND_FULL) {
+				mFragmentSwitchListener.onSwitchEnd();
+			}
+			if (mFragmentSwitchListener != null)
+				mFragmentSwitchListener.endAnimation(mAnimation);			
 		}				
 		setScrollingCacheEnabled(false);
 	}
 
 	public void setFragmentSwitchListener(FragmentSwitchListener fragmentSwitchListener) {
-//		mFragmentSwitchListener = fragmentSwitchListener;
+		mFragmentSwitchListener = fragmentSwitchListener;
 	}
 
 	@Override
