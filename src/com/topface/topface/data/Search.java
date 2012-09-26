@@ -24,6 +24,11 @@ public class Search extends AbstractDataWithPhotos {
     //public String geo_coord;     // координаты пользователя
     //public String geo_coord_lat; // широта нахождения пользоавтеля
     //public String geo_coord_lng; // долгота нахождения пользователя
+    
+    // Flags
+    public boolean skipped = false;
+    public boolean liked = false;
+    public boolean mutualed = false;
 
     public static LinkedList<Search> parse(ApiResponse response) {
         LinkedList<Search> userList = new LinkedList<Search>();

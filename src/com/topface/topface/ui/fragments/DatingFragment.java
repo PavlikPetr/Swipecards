@@ -50,18 +50,22 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View mResourcesControl;
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
-    private Button mLoveBtn;
-    private Button mSympathyBtn;
+    private Button mMutualBtn;
+    private Button mLikeBtn;
     private Button mSkipBtn;
     private Button mPrevBtn;
     private Button mProfileBtn;
     private Button mChatBtn;
+    private Button mSwitchNextBtn;
+    private Button mSwitchPrevBtn;
     private TextView mUserInfoName;
     private TextView mUserInfoCity;
     private TextView mUserInfoStatus;
     private TextView mCounter;
     private TextView mDatingLovePrice;
     private View mDatingGroup;
+    private View mFirstRateButtons;
+    private View mSecondRateButtons;
     private ImageSwitcher mImageSwitcher;
     private LinkedList<Search> mUserSearchList;
     private ProgressBar mProgressBar;
@@ -104,6 +108,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRateController = new RateController(getActivity());
         mRateController.setOnRateControllerListener(this);
 
+        // Rate buttons groups
+        mFirstRateButtons = view.findViewById(R.id.ratingButtonsFirst);
+        mSecondRateButtons = view.findViewById(R.id.ratingButtonsSecond);
+        
         // Position
         mCurrentUserPos = -1;
 
@@ -131,10 +139,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mResourcesMoney.setText("" + CacheProfile.money);
 
         // Control Buttons
-        mLoveBtn = (Button)view.findViewById(R.id.btnDatingLove);
-        mLoveBtn.setOnClickListener(this);        
-        mSympathyBtn = (Button)view.findViewById(R.id.btnDatingSympathy);
-        mSympathyBtn.setOnClickListener(this);
+        mMutualBtn = (Button)view.findViewById(R.id.btnDatingLove);
+        mMutualBtn.setOnClickListener(this);        
+        mLikeBtn = (Button)view.findViewById(R.id.btnDatingSympathy);
+        mLikeBtn.setOnClickListener(this);
         mSkipBtn = (Button)view.findViewById(R.id.btnDatingSkip);
         mSkipBtn.setOnClickListener(this);
         mPrevBtn = (Button)view.findViewById(R.id.btnDatingPrev);
@@ -143,14 +151,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProfileBtn.setOnClickListener(this);
         mChatBtn = (Button)view.findViewById(R.id.btnDatingChat);
         mChatBtn.setOnClickListener(this);
+        mSwitchNextBtn = (Button)view.findViewById(R.id.btnDatingSwitchNext);
+        mSwitchNextBtn.setOnClickListener(this);
+        mSwitchPrevBtn = (Button)view.findViewById(R.id.btnDatingSwitchPrev);
+        mSwitchPrevBtn.setOnClickListener(this);
 
         // Dating Love Price
         mDatingLoveBtnLayout = (RelativeLayout) view.findViewById(R.id.loDatingLove);
         mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);     
-        mDatingLovePrice.measure(0, 0);
-    	int dx = mLoveBtn.getCompoundDrawables()[1].getIntrinsicWidth() - mDatingLovePrice.getMeasuredWidth()/3;
-        int dy = mLoveBtn.getCompoundDrawables()[1].getIntrinsicHeight() - mDatingLovePrice.getMeasuredHeight();
-        mDatingLovePrice.setPadding(dx, dy, 0, 0);
+//        mDatingLovePrice.measure(0, 0);
+//    	  int dx = mMutualBtn.getCompoundDrawables()[1].getIntrinsicWidth() - mDatingLovePrice.getMeasuredWidth()/3;
+//        int dy = mMutualBtn.getCompoundDrawables()[1].getIntrinsicHeight() - mDatingLovePrice.getMeasuredHeight();
+//        mDatingLovePrice.setPadding(dx, dy, 0, 0);
         
         // User Info
         mUserInfoName = ((TextView)view.findViewById(R.id.tvDatingUserName));
@@ -196,15 +208,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     Debug.log(this, "update add");
                     mUserSearchList.addAll(userList);
                 }
-                if (!isAddition)
-                    updateUI(new Runnable() {
-                        @Override
-                        public void run() {
-                            onUpdateSuccess(isAddition);
+                
+                updateUI(new Runnable() {
+                	@Override
+                    public void run() {
+                		if (!isAddition) {
+                			onUpdateSuccess(isAddition);
                             showNextUser();
-                            showControls();
                         }
-                    });
+                		showControls();
+                    }
+                });
+                
             }
             @Override
             public void fail(int codeError,ApiResponse response) {
@@ -227,25 +242,30 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
                 break;
             case R.id.btnDatingLove: {
+            	Search currentSearch = mUserSearchList.get(mCurrentUserPos);
                 if (mCurrentUserPos > mUserSearchList.size() - 1) {
                     updateData(true);
                     return;
                 } else {
-                  mRateController.onRate(mUserSearchList.get(mCurrentUserPos).uid, 10);
+                	mRateController.onRate(currentSearch.uid, 10);                	
                 }
+                currentSearch.liked = true;
             }
                 break;
             case R.id.btnDatingSympathy: {
+            	Search currentSearch = mUserSearchList.get(mCurrentUserPos);
                 if (mCurrentUserPos > mUserSearchList.size() - 1) {
                     updateData(true);
                     return;
                 } else {
-                  mRateController.onRate(mUserSearchList.get(mCurrentUserPos).uid, 9);
+                	mRateController.onRate(currentSearch.uid, 9);                	
                 }
+                currentSearch.mutualed = true;
             }
                 break;
             case R.id.btnDatingSkip: {
-                skipUser();
+                skipUser();                
+                mUserSearchList.get(mCurrentUserPos).skipped = true;
             }
         		break;
             case R.id.btnDatingPrev: {
@@ -269,104 +289,105 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserSearchList.get(mCurrentUserPos).age);
                 intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserSearchList.get(mCurrentUserPos).city_name);
                 startActivity(intent);
+            }            
+                break;
+            case R.id.btnDatingSwitchNext: {
+            	switchRateBtnsGroups();
             }
-                break;            
+            	break;
+            case R.id.btnDatingSwitchPrev: {
+            	switchRateBtnsGroups();
+            }
+            	break;
             default:
         }
     }
     
     private void showNextUser() {
         if (mCurrentUserPos < mUserSearchList.size() - 1) {
-            ++mCurrentUserPos;
-            lockControls();
-
-            mImageSwitcher.setData(mUserSearchList.get(mCurrentUserPos).photoLinks);
-            mImageSwitcher.setCurrentItem(0);
-
-            // User Info
-            mUserInfoCity.setText("" + mUserSearchList.get(mCurrentUserPos).city_name);
-            mUserInfoStatus.setText("" + mUserSearchList.get(mCurrentUserPos).status);
-            mUserInfoName.setText("" + mUserSearchList.get(mCurrentUserPos).first_name + ", " + mUserSearchList.get(mCurrentUserPos).age);
-            if (mUserSearchList.get(mCurrentUserPos).online)
-                mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.im_online), null);
-            else
-                mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.im_offline), null);            
-            
-            if (mUserSearchList.get(mCurrentUserPos).sex == Static.BOY) {
-            	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
-            			getResources().getDrawable(R.drawable.dating_man_selector), null, null);
-            } else if (mUserSearchList.get(mCurrentUserPos).sex == Static.GIRL) {
-            	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
-            			getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
-            }
-            
-            setCounter(mCurrentPhotoPrevPos);
+            ++mCurrentUserPos;                        
+            fillUserInfo(mUserSearchList.get(mCurrentUserPos));
         }
-        if (mCurrentUserPos == mUserSearchList.size() - 1 || mUserSearchList.size() - 6 <= mCurrentUserPos)
-            updateData(true);
+        if (mCurrentUserPos == mUserSearchList.size() - 1 || mUserSearchList.size() - 6 <= mCurrentUserPos) {
+        	lockControls();
+        	updateData(true);
+        }
+            
 
         //showNewbie(); // NEWBIE
     }
 
-    private void skipUser() {
-        SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
-        registerRequest(skipRateRequest);
-        skipRateRequest.userid = 0;
-        skipRateRequest.callback(new ApiHandler() {
-            @Override
-            public void success(ApiResponse response) {
-                SkipRate skipRate = SkipRate.parse(response);
-                if (skipRate.completed) {
-	                CacheProfile.power = skipRate.power;
-	                CacheProfile.money = skipRate.money;
-	                updateUI(new Runnable() {
-	                    @Override
-	                    public void run() {
-	                        mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
-	                        mResourcesPower.setText("" + CacheProfile.power + "%");
-	                        mResourcesMoney.setText("" + CacheProfile.money);
-	                    }
-	                });
-            	} else {
-            		Toast.makeText(getActivity(), getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
-            	}
-            }
-            @Override
-            public void fail(int codeError,ApiResponse response) {
-
-            }
-        }).exec();
-        showNextUser();
-    }
-    
     private void prevUser() {
     	if (mCurrentUserPos > 0) {
-            --mCurrentUserPos;
-            lockControls();
-            
-            mImageSwitcher.setData(mUserSearchList.get(mCurrentUserPos).photoLinks);
-            mImageSwitcher.setCurrentItem(0);
-
-            // User Info
-            mUserInfoCity.setText("" + mUserSearchList.get(mCurrentUserPos).city_name);
-            mUserInfoStatus.setText("" + mUserSearchList.get(mCurrentUserPos).status);
-            mUserInfoName.setText("" + mUserSearchList.get(mCurrentUserPos).first_name + ", " + mUserSearchList.get(mCurrentUserPos).age);
-            if (mUserSearchList.get(mCurrentUserPos).online)
-                mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.im_online), null);
-            else
-                mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.im_offline), null);            
-            
-            if (mUserSearchList.get(mCurrentUserPos).sex == Static.BOY) {
-            	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
-            			getResources().getDrawable(R.drawable.dating_man_selector), null, null);
-            } else if (mUserSearchList.get(mCurrentUserPos).sex == Static.GIRL) {
-            	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
-            			getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
-            }
-            
-            setCounter(mCurrentPhotoPrevPos);
+            --mCurrentUserPos;            
+            fillUserInfo(mUserSearchList.get(mCurrentUserPos));            
         }        
     	showNewbie(); // NEWBIE
+    }
+    
+    private void fillUserInfo(Search currUser) {
+        mImageSwitcher.setData(currUser.photoLinks);
+        mImageSwitcher.setCurrentItem(0, true);
+        mCurrentPhotoPrevPos = 0;
+
+        boolean rateEnabled = !(currUser.liked || currUser.mutualed);
+        mLikeBtn.setEnabled(rateEnabled);            
+        mMutualBtn.setEnabled(rateEnabled);
+        
+        // User Info
+        mUserInfoCity.setText(currUser.city_name);
+        mUserInfoStatus.setText(currUser.status);
+        mUserInfoName.setText(currUser.first_name + ", " + currUser.age);
+        if (currUser.online)
+            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.im_online), null, null, null);
+        else
+            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.im_offline), null, null, null);            
+        
+        if (currUser.sex == Static.BOY) {
+        	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
+        			getResources().getDrawable(R.drawable.dating_man_selector), null, null);
+        } else if (currUser.sex == Static.GIRL) {
+        	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
+        			getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
+        }
+        
+        mPrevBtn.setEnabled(mCurrentUserPos == 0 ? false : true);
+        
+        setCounter(mCurrentPhotoPrevPos);
+    }
+    
+    private void skipUser() {
+    	Search currentSearch = mUserSearchList.get(mCurrentUserPos);
+    	if (!currentSearch.skipped) { 
+	        SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
+	        registerRequest(skipRateRequest);
+	        skipRateRequest.userid = currentSearch.uid;
+	        skipRateRequest.callback(new ApiHandler() {
+	            @Override
+	            public void success(ApiResponse response) {
+	                SkipRate skipRate = SkipRate.parse(response);
+	                if (skipRate.completed) {
+		                CacheProfile.power = skipRate.power;
+		                CacheProfile.money = skipRate.money;
+		                updateUI(new Runnable() {
+		                    @Override
+		                    public void run() {
+		                        mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+		                        mResourcesPower.setText(CacheProfile.power + "%");
+		                        mResourcesMoney.setText("" + CacheProfile.money);
+		                    }
+		                });
+	            	} else {
+	            		Toast.makeText(getActivity(), getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+	            	}
+	            }
+	            @Override
+	            public void fail(int codeError,ApiResponse response) {
+	
+	            }
+	        }).exec();
+    	}
+        showNextUser();
     }
 
     private void showNewbie() {
@@ -419,19 +440,24 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mCounter.setText((position + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
     }
 
+    public void switchRateBtnsGroups() {
+    	mFirstRateButtons.setVisibility(mFirstRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+    	mSecondRateButtons.setVisibility(mSecondRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+    }
+    
     @Override
     public void lockControls() {
         mUserInfoName.setVisibility(View.INVISIBLE);
         mUserInfoCity.setVisibility(View.INVISIBLE);
         mUserInfoStatus.setVisibility(View.INVISIBLE);
 //        mLoveBtn.setVisibility(View.INVISIBLE);
-        mSympathyBtn.setVisibility(View.INVISIBLE);
+        mLikeBtn.setVisibility(View.INVISIBLE);
         mSkipBtn.setVisibility(View.INVISIBLE);
         mPrevBtn.setVisibility(View.INVISIBLE);
         mProfileBtn.setVisibility(View.INVISIBLE);
         mChatBtn.setVisibility(View.INVISIBLE);
         mDatingLoveBtnLayout.setVisibility(View.INVISIBLE);
-        mCounter.setVisibility(View.INVISIBLE);
+//      mCounter.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -440,13 +466,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoCity.setVisibility(View.VISIBLE);
         mUserInfoStatus.setVisibility(View.VISIBLE);
 //        mLoveBtn.setVisibility(View.VISIBLE);
-        mSympathyBtn.setVisibility(View.VISIBLE);
+        mLikeBtn.setVisibility(View.VISIBLE);
         mSkipBtn.setVisibility(View.VISIBLE);
         mPrevBtn.setVisibility(View.VISIBLE);
         mProfileBtn.setVisibility(View.VISIBLE);
         mChatBtn.setVisibility(View.VISIBLE);
         mDatingLoveBtnLayout.setVisibility(View.VISIBLE);
-        mCounter.setVisibility(View.VISIBLE);
+//      mCounter.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -454,12 +480,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         unlockControls(); // remove
         mNavigationHeader.setVisibility(View.VISIBLE);
         mDatingGroup.setVisibility(View.VISIBLE);
+        mIsHide = false;
     }
 
     @Override
     public void hideControls() {
         mDatingGroup.setVisibility(View.INVISIBLE);
         mNavigationHeader.setVisibility(View.INVISIBLE);
+        mIsHide = true;
     }
 
     @Override
@@ -499,16 +527,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 	    }
 	}
 	
-	private View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        private boolean mIsHide;
+	private boolean mIsHide;	
+	private View.OnClickListener mOnClickListener = new View.OnClickListener() {        
         @Override
         public void onClick(View v) {
             if (mIsHide) {
               showControls();
             } else {
               hideControls();
-            }
-            mIsHide = !mIsHide;
+            }            
         }
     };
 	
@@ -519,7 +546,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 hideControls();
             } else if (position == 0 && mCurrentPhotoPrevPos > 0) {
                 showControls();
-            }
+            }            
             mCurrentPhotoPrevPos = position;
             setCounter(mCurrentPhotoPrevPos);
         }

@@ -40,8 +40,8 @@ public class ImageSwitcher extends ViewPager  {
     }
     
     public void setData(SparseArray<HashMap<String, String>> photoLinks) {
-        mPhotoLinks = photoLinks;
-        setAdapter(mImageSwitcherAdapter);
+        mPhotoLinks = photoLinks;        
+        this.setAdapter(mImageSwitcherAdapter);
     }
     
     @Override
@@ -81,6 +81,11 @@ public class ImageSwitcher extends ViewPager  {
      */
     class ImageSwitcherAdapter extends PagerAdapter {
 
+    	@Override
+    	public int getItemPosition(Object object) {    		
+    		return -1;
+    	}
+    	
         @Override
         public int getCount() {
             if (mPhotoLinks == null)
@@ -94,7 +99,7 @@ public class ImageSwitcher extends ViewPager  {
             ImageView imageView = (ImageView)view.findViewById(R.id.ivPreView);
             String url = mPhotoLinks.get(mPhotoLinks.keyAt(position)).get(PhotoLinksResolver.SIZE_ORIGIN);
             Http.imageLoader(url, imageView);
-            ((ViewPager)pager).addView(view, 0);
+            ((ViewPager)pager).addView(view, 0);            
             return view;
         }
         

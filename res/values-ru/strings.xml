@@ -32,6 +32,7 @@
     <string name="dashbrd_btn_love">Восхищение</string>
     <string name="dashbrd_btn_skip">Следующая</string>
     <string name="dashbrd_btn_prev">Предыдущая</string>
+    <string name="dashbrd_btn_switch_button">Еще...</string>
 
     <!-- Likes Activity -->
     <string name="likes_header_title">Я нравлюсь</string>
@@ -131,8 +132,7 @@
     <string name="profile_btn_edit">Редактировать</string>
     <string name="profile_btn_form">Анкета</string>
     <string name="profile_btn_add">Добавить</string>
-    <string name="profile_btn_buy">Купить</string>
-    <string name="profile_btn_exit">Выйти</string>
+    <string name="profile_btn_buy">Купить</string>    
     <string name="profile_btn_mutual">Взаимно</string>
     <string name="profile_sex_boy">Парень</string>
     <string name="profile_sex_girl">Девушка</string>
@@ -211,6 +211,7 @@
     <string name="navigation_back_profile">Профиль</string>
     <string name="navigation_back_dialog">Диалоги</string>
     <string name="navigation_back_dating">Знакомства</string>
+    <string name="navigation_back_settings">Настройки</string>
     <string name="navigation_edit">Редактировать</string>
     <string name="navigation_save">Сохранить</string>
 
@@ -392,7 +393,12 @@
     <string name="settings_help">Помощь</string>
     <string name="settings_account">Аккаунт</string>
     <string name="settings_rate_app">Оставить отзыв</string>
-    <string name="settings_about">О программе</string>
+    <string name="settings_about">О программе</string>    
+   	<string name="settings_version">Версия</string>
+    <string name="settings_copyright">Копирайт 2010-</string>
+	<string name="settings_rights_reserved">Topface все права защищены</string>
+    <string name="settings_extra">Подробную информацию можно найти на</string>
+    <string name="settings_logout">Выйти из аккаунта</string>
 
     <plurals name="time_hour">
         <item quantity="one">%d час назад</item>
