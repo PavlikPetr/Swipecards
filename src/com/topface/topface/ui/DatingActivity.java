@@ -143,7 +143,9 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         mDatingAlbumAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
-                mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
+                if (mCounter != null) {
+                    mCounter.setText((mCurrentPhotoPrevPos + 1) + "/" + mUserSearchList.get(mCurrentUserPos).avatars_big.length);
+                }
             }
 
             @Override
