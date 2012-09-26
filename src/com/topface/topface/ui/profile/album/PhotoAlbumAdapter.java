@@ -50,6 +50,10 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         return position;
     }
 
+    protected boolean hasItem(int position) {
+        return mAlbumsList != null && mAlbumsList.size() <= (position + 1);
+    }
+
     
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -62,7 +66,9 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        FullSizeImageLoader.getInstance().displayImage(mAlbumsList.get(position).getBigLink(), holder.mImageView);
+        if (hasItem(position)) {
+            FullSizeImageLoader.getInstance().displayImage(mAlbumsList.get(position).getBigLink(), holder.mImageView);
+        }
 
         int prePosition = position >= mPrevPosition ? position + 1 : position - 1;
         if (prePosition > 0 && position < (getCount() - 1))
@@ -74,7 +80,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
     }
 
     public void preLoading(final int position) {
-        if (position == mPreRunning || !Settings.getInstance().isPreloadPhoto()) {
+        if (position == mPreRunning || !Settings.getInstance().isPreloadPhoto() || !hasItem(position)) {
             return;
         }
 
