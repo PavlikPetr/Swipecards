@@ -1,23 +1,5 @@
 package com.topface.topface.ui;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-
-import com.google.android.apps.analytics.easytracking.TrackedActivity;
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.facebook.android.*;
-import com.facebook.android.AsyncFacebookRunner.RequestListener;
-import com.facebook.android.Facebook.*;
-import com.topface.topface.R;
-import com.topface.topface.Data;
-import com.topface.topface.data.Auth;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.utils.AuthToken;
-import com.topface.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +7,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.AsyncFacebookRunner.RequestListener;
+import com.facebook.android.DialogError;
+import com.facebook.android.Facebook.DialogListener;
+import com.facebook.android.FacebookError;
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.data.Auth;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.utils.AuthToken;
+import com.topface.topface.utils.Debug;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class AuthActivity extends TrackedActivity implements View.OnClickListener  {
   // Data
@@ -80,11 +82,18 @@ public class AuthActivity extends TrackedActivity implements View.OnClickListene
       Intent intent = new Intent(getApplicationContext(), WebAuthActivity.class);
       startActivityForResult(intent, WebAuthActivity.INTENT_WEB_AUTH);
     } else if(view.getId() == R.id.btnAuthFB) {
-      mAsyncFacebookRunner = new AsyncFacebookRunner(Data.facebook);
       Data.facebook.authorize(this, FB_PERMISSIONS, mDialogListener);
     }
   }
-  //---------------------------------------------------------------------------
+
+    private AsyncFacebookRunner getFacebookRunner() {
+        if (mAsyncFacebookRunner == null) {
+            mAsyncFacebookRunner = new AsyncFacebookRunner(Data.facebook);
+        }
+        return mAsyncFacebookRunner;
+    }
+
+    //---------------------------------------------------------------------------
   private void showButtons() {
     runOnUiThread(new Runnable() {
       @Override
@@ -143,7 +152,7 @@ public class AuthActivity extends TrackedActivity implements View.OnClickListene
     @Override
     public void onComplete(Bundle values) {
       Debug.log("FB","mDialogListener::onComplete");
-      mAsyncFacebookRunner.request("/me", mRequestListener);
+      getFacebookRunner().request("/me", mRequestListener);
       hideButtons();
     }
     @Override
