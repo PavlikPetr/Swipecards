@@ -23,10 +23,11 @@ import com.topface.topface.ui.profile.edit.EditProfileActivity;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
 public class ProfileFragment extends BaseFragment implements OnClickListener{
-    //Data
+
     private ImageView mUserAvatar;
     private TextView  mUserName;
     private TextView  mUserCity;
@@ -45,9 +46,6 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     
     private Button mBuyButton;
     private View mUserPowerBkgd;
-    
-    private ProfilePhotoFragment mPhotoFragment;
-    private ProfileFormFragment  mFormFragment;
    
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
@@ -59,11 +57,12 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 		super.onCreateView(inflater, container, saved);
 		View view = inflater.inflate(R.layout.ac_profile, null);
 		
+        // Home Button
+        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
+		
 		// Title
 		((TextView)view.findViewById(R.id.tvNavigationTitle)).setText("Title");
 		
-        // Home Button
-        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
         Button editButton = (Button)view.findViewById(R.id.btnNavigationRightWithText);
         editButton.setVisibility(View.VISIBLE);
         editButton.setText(getResources().getString(R.string.navigation_edit));
@@ -71,6 +70,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 		
 		// Avatar, Name, City
         mUserAvatar = (ImageView)view.findViewById(R.id.ivUserAvatar);
+        Http.imageLoader(CacheProfile.getAvatarLink(), mUserAvatar);
         mUserName = (TextView)view.findViewById(R.id.ivUserName);
         mUserName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
         mUserCity = (TextView)view.findViewById(R.id.ivUserCity);
@@ -115,11 +115,6 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
                 mIndicatorView.setButtonMeasure(R.id.btnUserPhoto, mUserPhoto.getMeasuredWidth());
                 mIndicatorView.setButtonMeasure(R.id.btnUserQuestionnaire, mUserForm.getMeasuredWidth());
                 mIndicatorView.setButtonMeasure(R.id.btnUserGifts, mUserGifts.getMeasuredWidth());
-                
-//                LayoutParams lp = mBuyButton.getLayoutParams();
-//                RelativeLayout.LayoutParams rlp = ((RelativeLayout.LayoutParams)lp);
-//                rlp.setMargins(rlp.rightMargin, rlp.topMargin + 20, rlp.rightMargin, rlp.bottomMargin);
-//                mBuyButton.setLayoutParams(rlp);
                
                 if(mUserPhoto.getMeasuredWidth() > 0) {
                     layoutBuyButton();
@@ -146,31 +141,6 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 				);
 	}
 	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
-	public void clearLayout() {
-	}
-
-	@Override
-	public void fillLayout() {
-	}
-
-	@Override
-	protected void onUpdateStart(boolean isFlyUpdating) {
-	}
-
-	@Override
-	protected void onUpdateSuccess(boolean isFlyUpdating) {
-	}
-
-	@Override
-	protected void onUpdateFail(boolean isFlyUpdating) {
-	}
-	
 	private void layoutBuyButton() {
         int[] in  = new int[2];
         int[] out = new int[2];
@@ -187,6 +157,16 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
                        rlp.bottomMargin);
         mBuyButton.setLayoutParams(rlp);
 	}
+	
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+        case R.id.btnNavigationRightWithText:           
+            startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
+            break;
+        }
+    }
 	
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -214,7 +194,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         }
     };
     
-    View.OnClickListener mInfoClickListener = new View.OnClickListener() {
+    private View.OnClickListener mInfoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
@@ -234,7 +214,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         }
     };
     
-    View.OnClickListener mBuyClickListener = new View.OnClickListener() {
+    private View.OnClickListener mBuyClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             startActivity(new Intent(getActivity(), BuyingActivity.class));
@@ -260,10 +240,10 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
             Fragment fragment = null; 
             switch (position) {
                 case F_PHOTO:
-                    fragment = mPhotoFragment = new ProfilePhotoFragment();
+                    fragment = new ProfilePhotoFragment();
                     break;
                 case F_FORM:
-                    fragment = mFormFragment = new ProfileFormFragment();
+                    fragment = new ProfileFormFragment();
                     break;
                 case F_GIFTS:
                     fragment = new GiftsFragment();
@@ -271,15 +251,5 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
             }
             return fragment;
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-    	switch (v.getId()) {
-		case R.id.btnNavigationRightWithText:			
-			startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
-			break;
-		}
-    	
     }
 }

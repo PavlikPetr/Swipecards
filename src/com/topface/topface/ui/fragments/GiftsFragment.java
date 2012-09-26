@@ -315,10 +315,4 @@ public class GiftsFragment extends BaseFragment {
 		super.onDestroy();
 		mGridAdapter.release();
 	}
-
-	@Override
-	public void fillLayout() {	}
-
-	@Override
-	public void clearLayout() { }
 }

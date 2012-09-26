@@ -215,15 +215,4 @@ public class EditBackgroundFragment extends AbstractEditFragment{
 			return (BackgroundItem) this;
 		}		
 	}
-
-	@Override
-	public void fillLayout() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void clearLayout() {
-		mBackgroundImagesListView.setVisibility(View.INVISIBLE);
-	}	
 }

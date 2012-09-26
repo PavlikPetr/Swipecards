@@ -8,7 +8,6 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.Top;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.TopRequest;
 import com.topface.topface.ui.NavigationActivity;
@@ -32,20 +31,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 public class TopsFragment extends BaseFragment {
-    // Data
+
     private GridView mGallery;
     private TopsGridAdapter mGridAdapter;
     private GalleryGridManager<Top> mGalleryGridManager;
     private Button mCityButton;
     private LockerView mLoadingLocker;
     private ActionData mActionData;
-    private ImageView mBannerView;
     private DoubleButton mBtnDouble;
-    // Constats
+
     private static int GIRLS = 0;
     private static int BOYS = 1;
 
@@ -69,9 +66,6 @@ public class TopsFragment extends BaseFragment {
 
         // Progress
         mLoadingLocker = (LockerView)view.findViewById(R.id.llvTopsLoading);
-
-        // Banner
-        mBannerView = (ImageView)view.findViewById(R.id.ivBanner);
 
         // Preferences
         SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
@@ -138,6 +132,9 @@ public class TopsFragment extends BaseFragment {
         mGridAdapter = new TopsGridAdapter(getActivity(), mGalleryGridManager);
         mGallery.setAdapter(mGridAdapter);
         mGallery.setOnScrollListener(mGalleryGridManager);
+        
+        updateData();
+        
         return view;
     }
 
@@ -260,20 +257,6 @@ public class TopsFragment extends BaseFragment {
 
         mGallery = null;
         mGridAdapter = null;
-    }
-    
-    @Override
-    public void clearLayout() {
-        Debug.log(this, "TopsActivity::clearLayout");
-        mGallery.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void fillLayout() {
-        Debug.log(this, "TopsActivity::fillLayout");
-
-        //updateBanner(mBannerView, BannerRequest.TOP);
-        updateData();
     }
 
 	@Override

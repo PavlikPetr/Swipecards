@@ -18,8 +18,8 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
     public static final int F_TOPS     = 1006;
     public static final int F_SETTINGS = 1007;
 
-    abstract public void fillLayout();
-    abstract public void clearLayout();
+    //abstract public void fillLayout();
+    //abstract public void clearLayout();
     
     protected void onUpdateStart(boolean isFlyUpdating){ };
     protected void onUpdateSuccess(boolean isFlyUpdating){ };

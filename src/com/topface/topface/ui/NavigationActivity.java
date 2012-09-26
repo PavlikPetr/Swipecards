@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.Menu;
 import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -47,8 +48,12 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         CacheProfile.background_id = mPreferences.getInt(Static.PREFERENCES_PROFILE_BACKGROUND_ID, ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
 	    
 	    mFragmentSwitcher.showFragment(lastFragmentId);
+	    mFragmentMenu.setSelectedMenu(lastFragmentId);
 	}
 
+    /*
+     *  обработчик кнопки открытия меню в заголовке фрагмента 
+     */
     @Override
     public void onClick(View view) {
         if(view.getId() != R.id.btnNavigationHome)
@@ -62,29 +67,38 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     }
     
     @Override
+    public void onBackPressed() {
+        if (mFragmentSwitcher.getAnimationState() == FragmentSwitcher.EXPAND) {
+            super.onBackPressed();
+        } else {
+            mFragmentMenu.refreshNotifications();
+            mFragmentSwitcher.openMenu();
+        }
+    }
+    
+    @Override
+    public boolean onCreatePanelMenu(int featureId, Menu menu) {
+        if (mFragmentSwitcher.getAnimationState() != FragmentSwitcher.EXPAND) {
+            mFragmentMenu.refreshNotifications();
+            mFragmentSwitcher.openMenu();
+        } else {
+            mFragmentSwitcher.closeMenu();
+        }
+        return false;
+    }
+    
+    @Override
     protected void onDestroy() {
         mPreferences.edit()
             .putInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, mFragmentSwitcher.getCurrentFragmentId())
             .commit();
         super.onDestroy();
     }
-    
-    @Override
-    public void onBackPressed() {
-        if (mFragmentSwitcher.getAnimationState() == FragmentSwitcher.CLOSED || 
-            mFragmentSwitcher.getAnimationState() == FragmentSwitcher.COLLAPSE_FULL || 
-            mFragmentSwitcher.getAnimationState() == FragmentSwitcher.COLLAPSE) {
-                mFragmentMenu.refreshNotifications();
-                mFragmentSwitcher.openMenu();
-        } else {
-            super.onBackPressed();
-        }
-    }
 
-    private int fragmentId = 0;
     private FragmentMenuListener mOnFragmentMenuListener = new FragmentMenuListener() {
         @Override
         public void onMenuClick(int buttonId) {
+            int fragmentId;
             switch (buttonId) {
                 case R.id.btnFragmentProfile:
                     fragmentId = BaseFragment.F_PROFILE;
@@ -111,39 +125,21 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
                     fragmentId = BaseFragment.F_PROFILE;
                     break;
             }
-            mFragmentSwitcher.snapToScreen(FragmentSwitcher.EXPAND_FULL);
+            mFragmentSwitcher.showFragmentWithAnimation(fragmentId);
         }
     };
     
     private FragmentSwitchListener mFragmentSwitchListener = new FragmentSwitchListener() {
         @Override
-        public void endAnimation(int Animation) {
-            if (Animation == FragmentSwitcher.EXPAND_FULL) {
-                mFragmentSwitcher.showFragment(fragmentId);
-                mFragmentSwitcher.snapToScreen(FragmentSwitcher.COLLAPSE_FULL);
-            } else {
-                if (Animation == FragmentSwitcher.COLLAPSE_FULL) {
-                    //mFragmentSwitcher.update();                    
-                }
-                if (Animation == FragmentSwitcher.COLLAPSE) {
-
-                }
-            }
-        }
-        
-        @Override
-        public void onSwitchStart() {
-            mFragmentMenu.setClickable(false);
-        }
-
-        @Override
-        public void onSwitchEnd() {
+        public void beforeExpanding() {
             mFragmentMenu.setClickable(true);
+            mFragmentMenu.show();
         }
 
         @Override
-        public void onOpenStart() {
-            mFragmentMenu.show();
+        public void afterClosing() {
+            mFragmentMenu.setClickable(false);
+            mFragmentMenu.hide();
         }
     };
 }

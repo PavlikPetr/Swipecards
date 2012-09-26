@@ -4,12 +4,11 @@ import com.topface.topface.R;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
-public class FragmentSwitcher extends ViewGroup implements View.OnClickListener {
+public class FragmentSwitcher extends ViewGroup {
     
 	private int mScrollX;
 	private int mOpenDX;
@@ -21,16 +20,14 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
 	private Scroller mScroller;
 	private FragmentManager mFragmentManager;
 	private FragmentSwitchListener mFragmentSwitchListener;
-
 	private boolean mAutoScrolling = false;
+    private static final int EXPANDING_PERCENT = 30;
 	
     public static final int CLOSED = 0;
-	public static final int EXPAND = 1;
-	public static final int EXPAND_FULL = 2;
-	public static final int COLLAPSE = 3;
-	public static final int COLLAPSE_FULL = 4;
-	
-	public static final int EXPANDING_PERCENT = 30;
+    public static final int EXPAND = 1;
+    public static final int EXPAND_FULL = 2;
+    public static final int COLLAPSE = 3;
+    public static final int COLLAPSE_FULL = 4;
 
 	private final Interpolator mPrixingInterpolator = new Interpolator() {
 		public float getInterpolation(float t) {			
@@ -42,10 +39,8 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
      *   interface FragmentSwitchListener
      */
     public interface FragmentSwitchListener {
-        public void endAnimation(int Animation);
-        public void onSwitchStart();
-        public void onSwitchEnd();
-        public void onOpenStart();
+        public void afterClosing();
+        public void beforeExpanding();
     }
     
     public FragmentSwitcher(Context context) {
@@ -61,11 +56,32 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
     public void setFragmentManager(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
     }
-	
+    
+    public void setFragmentSwitchListener(FragmentSwitchListener fragmentSwitchListener) {
+        mFragmentSwitchListener = fragmentSwitchListener;
+    }
+    
+    public int getAnimationState() {
+        return mAnimation;
+    }
+    
+    public int getCurrentFragmentId() {
+        return mCurrentFragmentId;
+    }
+    
+    public void showFragmentWithAnimation(int fragmentId) {
+        snapToScreen(EXPAND_FULL);
+        mCurrentFragmentId = fragmentId;
+    }
+    
     public void showFragment(int fragmentId) {
         mCurrentFragmentId = fragmentId;
+        switchFragment();
+    }
+	
+    private void switchFragment() {
         BaseFragment fragment;
-        switch (fragmentId) {
+        switch (mCurrentFragmentId) {
             case BaseFragment.F_PROFILE:
                 fragment = new ProfileFragment();
                 break;
@@ -93,10 +109,6 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
         }
         mFragmentManager.beginTransaction().replace(R.id.fragment_fragment, fragment).commit();        
     }
-    
-    public int getCurrentFragmentId() {
-        return mCurrentFragmentId;
-    }
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -105,7 +117,6 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
 		getChildAt(0).measure(getChildAt(0).getMeasuredWidth(), heightMeasureSpec);
 		// fragments
 		getChildAt(1).measure(widthMeasureSpec, heightMeasureSpec); 
-		getChildAt(1).setOnClickListener(this);
 	}
 
 	@Override
@@ -118,6 +129,30 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
 		mOpenDX = mWidth - mClosedDX;
 		mFullOpenDX = mWidth - mOpenDX;
 	}
+	
+    private void snapToScreen(int typeAnimation) {
+        mAnimation = typeAnimation;
+        setScrollingCacheEnabled(true);
+        mAutoScrolling = true;
+        switch (typeAnimation) {
+            case EXPAND:
+                mFragmentSwitchListener.beforeExpanding();
+                mScroller.startScroll(getLeftBound(), 0, -getRightBound(), 0, 300);
+                break;
+            case COLLAPSE:
+                mScroller.startScroll(-getRightBound(), 0, getRightBound(), 0, 300);
+                break;
+            case EXPAND_FULL:
+                mScroller.startScroll(-getRightBound(), 0, -(mFullOpenDX), 0, 300);
+                break;
+            case COLLAPSE_FULL:
+                mScroller.startScroll(-mWidth, 0, mWidth, 0, 300);
+                break;
+            default:
+                break;
+        }
+        invalidate();
+    }
 
 	@Override
 	public void computeScroll() {
@@ -131,40 +166,40 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
 		endScrollAnimation();
 	}
 	
+    public void endScrollAnimation() {      
+        if (mAutoScrolling) {
+            mScroller.abortAnimation();
+            int oldX = getScrollX();
+            int x = mScroller.getCurrX();
+            if (oldX != x) {
+                scrollTo(x, 0);
+            }
+        
+            mAutoScrolling = false;         
+            if (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL) {
+                mFragmentSwitchListener.afterClosing();
+            }
+            if (mAnimation == EXPAND_FULL) {
+                fullExpanding();
+            }
+        }               
+        setScrollingCacheEnabled(false);
+    }
+	
    @Override
     public void scrollTo(int x, int y) {
         super.scrollTo(x, y);   
         invalidate();
     }
 
-	public void snapToScreen(int typeAnimation) {
-		mAnimation = typeAnimation;
-		setScrollingCacheEnabled(true);
-		mAutoScrolling = true;
-		mFragmentSwitchListener.onSwitchStart();
-		switch (typeAnimation) {
-    		case EXPAND:
-    			mFragmentSwitchListener.onOpenStart();
-    			mScroller.startScroll(getLeftBound(), 0, -getRightBound(), 0, 300);
-    			break;
-    		case COLLAPSE:
-    			mScroller.startScroll(-getRightBound(), 0, getRightBound(), 0, 300);
-    			break;
-    		case EXPAND_FULL:
-    			mScroller.startScroll(-getRightBound(), 0, -(mFullOpenDX), 0, 300);
-    			break;
-    		case COLLAPSE_FULL:
-    			mScroller.startScroll(-mWidth, 0, mWidth, 0, 300);
-    			break;
-    		default:
-    			break;
-		}
-		invalidate();
-	}
-
 	public void setScrollingCacheEnabled(boolean enabled) {
 		getChildAt(0).setDrawingCacheEnabled(enabled);
 		getChildAt(1).setDrawingCacheEnabled(enabled);
+	}
+	
+	private void fullExpanding() {
+	    showFragment(mCurrentFragmentId);
+	    snapToScreen(COLLAPSE_FULL);
 	}
 	
    private int getLeftBound() {
@@ -181,36 +216,5 @@ public class FragmentSwitcher extends ViewGroup implements View.OnClickListener 
 
 	public void closeMenu() {
 		snapToScreen(COLLAPSE);
-	}
-
-	public int getAnimationState() {
-		return mAnimation;
-	}
-
-	public void endScrollAnimation() {		
-		if (mAutoScrolling) {
-			mScroller.abortAnimation();
-			int oldX = getScrollX();
-			int x = mScroller.getCurrX();
-			if (oldX != x) {
-				scrollTo(x, 0);
-			}
-		
-			mAutoScrolling = false;			
-			if (mAnimation != EXPAND_FULL) {
-				mFragmentSwitchListener.onSwitchEnd();
-			}
-			if (mFragmentSwitchListener != null)
-				mFragmentSwitchListener.endAnimation(mAnimation);			
-		}				
-		setScrollingCacheEnabled(false);
-	}
-
-	public void setFragmentSwitchListener(FragmentSwitchListener fragmentSwitchListener) {
-		mFragmentSwitchListener = fragmentSwitchListener;
-	}
-
-	@Override
-	public void onClick(View v) {
 	}
 }

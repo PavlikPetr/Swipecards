@@ -485,12 +485,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 	}
 
 	@Override
-	public void fillLayout() { }
-
-	@Override
-	public void clearLayout() { }
-
-	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.loGirl:

@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker, RateController.OnRateControllerListener {
+    
     private int mCurrentUserPos;
     private int mCurrentPhotoPrevPos;
     private View mResourcesControl;
@@ -468,17 +469,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void fillLayout() {
-        updateData(false);
-        Debug.log(this, "DatingActivity::fillLayout");
-    }
-    
-    @Override
-    public void clearLayout() {
-        Debug.log(this, "DatingActivity::clearLayout");
-    }
-
-    @Override
     public void successRate() {
         showNextUser();
     }
@@ -509,7 +499,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
 	    	hideControls();
-	    	fillLayout();	        
+	    	updateData(false);
 	    } else {
 	    	super.onActivityResult(requestCode, resultCode, data);
 	    }
@@ -548,7 +538,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
     
-    View.OnClickListener mOnNewbieClickListener = new View.OnClickListener() {
+    private View.OnClickListener mOnNewbieClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             mNewbieView.setVisibility(View.INVISIBLE);

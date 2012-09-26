@@ -179,14 +179,6 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
 	}
 
 	@Override
-	public void fillLayout() { }
-
-	@Override
-	public void clearLayout() { 
-		mListView.setVisibility(View.INVISIBLE);
-	}
-
-	@Override
 	protected boolean hasChanges() {
 		return false;
 	}

@@ -310,12 +310,4 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 			EditText mTextEdit;
 		}
 	}
-
-	@Override
-	public void fillLayout() { }
-
-	@Override
-	public void clearLayout() { 
-		mListView.setVisibility(View.INVISIBLE);
-	}
 }

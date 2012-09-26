@@ -330,21 +330,6 @@ public class LikesFragment extends BaseFragment {
 			mAvatarManager.release();
 		mAvatarManager = null;
 	}
-	
-    @Override
-    public void clearLayout() {
-        Debug.log(this, "LikesActivity::clearLayout");
-        mListView.setVisibility(View.INVISIBLE);
-    }
-
-
-    @Override
-    public void fillLayout() {
-        Debug.log(this, "LikesActivity::fillLayout");
-
-        //updateBanner(mBannerView, BannerRequest.LIKE);
-        updateData(false);
-    }
 
     protected void onUpdateStart(boolean isFlyUpdating) {
     	if (!isFlyUpdating) {

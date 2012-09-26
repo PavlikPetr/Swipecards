@@ -189,14 +189,6 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 			}).exec();			
 		}
 	}
-
-	@Override
-	public void fillLayout() {
-	}
-
-	@Override
-	public void clearLayout() {
-	}
 	
 	private String getDataByEditType(EditType type) {		
 		switch(type) {

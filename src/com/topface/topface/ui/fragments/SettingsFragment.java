@@ -136,16 +136,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 		ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
 		background.setImageResource(resId);
 	}
-    
-	@Override
-	public void fillLayout() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void clearLayout() {
-		// TODO Auto-generated method stub
-	}
 
 	@Override
 	public void onClick(View v) {

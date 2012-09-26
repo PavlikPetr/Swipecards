@@ -136,31 +136,32 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
     }
     
     public void setSelectedMenu(int fragmentId) {
-//        switch (fragmentId) {
-//            case R.id.fragment_profile:  //btnFragmentProfile
-//                mBtnProfile.setSelected(true);
-//                break;
-//            case R.id.fragment_dating:   //btnFragmentDating
-//                mBtnDating.setSelected(true);
-//                break;
-//            case R.id.fragment_likes:    //btnFragmentLikes
-//                mBtnLikes.setSelected(true);
-//                break;
-//            case R.id.fragment_mutual:   //btnFragmentMutual
-//                mBtnMutual.setSelected(true);
-//                break;
-//            case R.id.fragment_dialogs:  //btnFragmentDialogs
-//                mBtnDialogs.setSelected(true);
-//                break;
-//            case R.id.fragment_tops:     //btnFragmentTops
-//                mBtnTops.setSelected(true);
-//                break;
-//            case R.id.fragment_settings: //btnFragmentSettings
-//                mBtnSettings.setSelected(true);
-//                break; 
-//            default:
-//                break;
-//        }
+        switch (fragmentId) {
+            case BaseFragment.F_PROFILE:
+                mBtnProfile.setSelected(true);
+                break;
+            case BaseFragment.F_DATING:
+                mBtnDating.setSelected(true);
+                break;
+            case BaseFragment.F_LIKES:
+                mBtnLikes.setSelected(true);
+                break;
+            case BaseFragment.F_MUTUAL:
+                mBtnMutual.setSelected(true);
+                break;
+            case BaseFragment.F_DIALOGS:
+                mBtnDialogs.setSelected(true);
+                break;
+            case BaseFragment.F_TOPS:
+                mBtnTops.setSelected(true);
+                break;
+            case BaseFragment.F_SETTINGS:
+                mBtnSettings.setSelected(true);
+                break; 
+            default:
+                mBtnProfile.setSelected(true);
+                break;
+        }
     }
     
     public void setNotificationMargin(int padding) {

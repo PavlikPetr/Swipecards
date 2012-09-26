@@ -313,20 +313,6 @@ public class MutualFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void clearLayout() {
-        Debug.log(this, "SympathyActivity::clearLayout");
-        mListView.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void fillLayout() {
-        Debug.log(this, "SympathyActivity::fillLayout");
-
-        //updateBanner(mBannerView, BannerRequest.SYMPATHY);
-        updateData(false);
-    }
-
     protected void onUpdateStart(boolean isFlyUpdating) {
     	if (!isFlyUpdating) {
 			mListView.setVisibility(View.INVISIBLE);

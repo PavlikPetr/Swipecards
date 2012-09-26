@@ -44,7 +44,6 @@ public class DialogsFragment extends BaseFragment {
 	private AvatarManager<Dialog> mAvatarManager;
 	private DoubleBigButton mDoubleButton;	
 	private TextView mBackgroundText;
-	private ImageView mBannerView;
     
     private View mToolsBar;
     private View mShowToolsBarButton;
@@ -93,9 +92,6 @@ public class DialogsFragment extends BaseFragment {
 
 		// ListView background
 		mBackgroundText = (TextView) view.findViewById(R.id.tvBackgroundText);
-
-		// Banner
-		mBannerView = (ImageView) view.findViewById(R.id.ivBanner);
 
 		// Double Button
 		mDoubleButton = (DoubleBigButton) view.findViewById(R.id.btnDoubleBig);
@@ -178,7 +174,6 @@ public class DialogsFragment extends BaseFragment {
 		return view;
 	}
 
-	// ---------------------------------------------------------------------------
 	private void updateData(final boolean isPushUpdating) {
 		mIsUpdating = true;
 		if (!isPushUpdating)
@@ -322,19 +317,6 @@ public class DialogsFragment extends BaseFragment {
 				Data.dialogList.remove(Data.dialogList.size() - 1);
 			}
 		}
-	}
-
-	@Override
-	public void clearLayout() {
-		Debug.log(this, "DialogActivity::clearLayout");
-		mListView.setVisibility(View.INVISIBLE);
-	}
-
-	@Override
-	public void fillLayout() {
-		Debug.log(this, "DialogActivity::fillLayout");
-
-		updateData(false);
 	}
 
 	@Override
