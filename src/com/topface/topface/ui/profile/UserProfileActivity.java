@@ -278,9 +278,9 @@ public class UserProfileActivity extends FragmentActivity {
             Fragment fragment = null; 
             switch (position) {
                 case F_PHOTO:
-                    Bundle bundle = new Bundle();
-                    //bundle.putInt(UserProfileActivity.INTENT_USER_ID, mUserId);
                     fragment = mPhotoFragment = new UserPhotoFragment();
+                    //Bundle bundle = new Bundle();
+                    //bundle.putInt(UserProfileActivity.INTENT_USER_ID, mUserId);
                     //fragment.setArguments(bundle);
                     break;
                 case F_FORM:

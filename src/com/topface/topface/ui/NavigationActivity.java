@@ -11,13 +11,9 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.FragmentMenu;
-<<<<<<< HEAD
 import com.topface.topface.ui.fragments.FragmentMenu.FragmentMenuListener;
-import com.topface.topface.ui.fragments.FragmentSwitcher;
-import com.topface.topface.ui.fragments.FragmentSwitcher.FragmentSwitchListener;
-import com.topface.topface.utils.AuthorizationManager;
-=======
->>>>>>> topface-v1-merge
+import com.topface.topface.ui.fragments.FragmentSwitchController;
+import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -27,7 +23,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 
     private FragmentManager mFragmentManager;
     private FragmentMenu mFragmentMenu;
-    private FragmentSwitcher mFragmentSwitcher;
+    private FragmentSwitchController mFragmentSwitcher;
     private SharedPreferences mPreferences;
 
 	@Override
@@ -43,7 +39,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 		mFragmentMenu = (FragmentMenu)mFragmentManager.findFragmentById(R.id.fragment_menu);
 		mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
 
-	    mFragmentSwitcher = (FragmentSwitcher)findViewById(R.id.fragment_switcher);
+	    mFragmentSwitcher = (FragmentSwitchController)findViewById(R.id.fragment_switcher);
 	    mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
 	    mFragmentSwitcher.setFragmentManager(mFragmentManager);
 
@@ -62,7 +58,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     public void onClick(View view) {
         if(view.getId() != R.id.btnNavigationHome)
             return;
-        if (mFragmentSwitcher.getAnimationState() == FragmentSwitcher.EXPAND) {
+        if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
             mFragmentSwitcher.closeMenu();
         } else {
             mFragmentMenu.refreshNotifications();
@@ -72,7 +68,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     
     @Override
     public void onBackPressed() {
-        if (mFragmentSwitcher.getAnimationState() == FragmentSwitcher.EXPAND) {
+        if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
             super.onBackPressed();
         } else {
             mFragmentMenu.refreshNotifications();
@@ -82,7 +78,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        if (mFragmentSwitcher.getAnimationState() != FragmentSwitcher.EXPAND) {
+        if (mFragmentSwitcher.getAnimationState() != FragmentSwitchController.EXPAND) {
             mFragmentMenu.refreshNotifications();
             mFragmentSwitcher.openMenu();
         } else {

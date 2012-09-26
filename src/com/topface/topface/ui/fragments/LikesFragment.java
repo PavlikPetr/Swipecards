@@ -22,7 +22,6 @@ import com.topface.topface.Static;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedLikesRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -45,7 +44,6 @@ public class LikesFragment extends BaseFragment {
 	private AvatarManager<FeedLike> mAvatarManager;
 	private DoubleBigButton mDoubleButton;
 	private TextView mBackgroundText;
-	private ImageView mBannerView;
 	
     private View mToolsBar;
     private View mShowToolsBarButton;
@@ -96,9 +94,6 @@ public class LikesFragment extends BaseFragment {
 
 		// ListView background
 		mBackgroundText = (TextView) view.findViewById(R.id.tvBackgroundText);
-		
-		// Banner
-		mBannerView = (ImageView) view.findViewById(R.id.ivBanner);
 
 		// Double Button
 		mDoubleButton = (DoubleBigButton) view.findViewById(R.id.btnDoubleBig);

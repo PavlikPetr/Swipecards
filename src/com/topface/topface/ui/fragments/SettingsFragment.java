@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
@@ -136,15 +135,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 		ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
 		background.setImageResource(resId);
 	}
-<<<<<<< HEAD
-=======
-    
-	@Override
-	public void fillLayout() { }
-
-	@Override
-	public void clearLayout() { }
->>>>>>> topface-v1-merge
 
 	@Override
 	public void onClick(View v) {

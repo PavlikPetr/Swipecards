@@ -148,11 +148,4 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 		}
 
 	}
-
-	@Override
-	public void fillLayout() { }
-
-	@Override
-	public void clearLayout() { }
-
 }

@@ -1,20 +1,14 @@
 package com.topface.topface.ui.fragments;
 
 import java.util.LinkedList;
+import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.http.IRequestClient;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-<<<<<<< HEAD
 public abstract class BaseFragment extends Fragment implements IRequestClient {
 
-=======
-public abstract class BaseFragment extends Fragment implements IRequestClient{	
-	
-    public boolean isFilled;
-    public boolean isForcedUpdate;
-    protected boolean mIsActive;
->>>>>>> topface-v1-merge
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     
     public static final int F_BASE     = 1000;
@@ -26,9 +20,6 @@ public abstract class BaseFragment extends Fragment implements IRequestClient{
     public static final int F_TOPS     = 1006;
     public static final int F_SETTINGS = 1007;
 
-    //abstract public void fillLayout();
-    //abstract public void clearLayout();
-    
     protected void onUpdateStart(boolean isFlyUpdating){ };
     protected void onUpdateSuccess(boolean isFlyUpdating){ };
     protected void onUpdateFail(boolean isFlyUpdating){ };

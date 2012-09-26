@@ -22,13 +22,11 @@ import com.topface.topface.Static;
 import com.topface.topface.data.FeedSympathy;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.FeedSympathyRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.adapters.MutualListAdapter;
-import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.utils.AvatarManager;
@@ -45,7 +43,6 @@ public class MutualFragment extends BaseFragment {
     private AvatarManager<FeedSympathy> mAvatarManager;
     private DoubleBigButton mDoubleButton;
     private TextView mBackgroundText;
-    private ImageView mBannerView;
     
     private View mToolsBar;
     private View mShowToolsBarButton;
@@ -94,9 +91,6 @@ public class MutualFragment extends BaseFragment {
         // ListView background
      	mBackgroundText = (TextView)view.findViewById(R.id.tvBackgroundText);
         
-        // Banner
-        mBannerView = (ImageView)view.findViewById(R.id.ivBanner);
-        
         // Double Button
         mDoubleButton = (DoubleBigButton)view.findViewById(R.id.btnDoubleBig);
         mDoubleButton.setLeftText(getString(R.string.symphaty_btn_dbl_left));
@@ -136,8 +130,8 @@ public class MutualFragment extends BaseFragment {
             	} else {
 	                try {
 	                    Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-	                    intent.putExtra(ProfileActivity.INTENT_USER_ID,   theFeedMutual.uid);
-	                    intent.putExtra(ProfileActivity.INTENT_USER_NAME, theFeedMutual.first_name);
+	                    intent.putExtra(UserProfileActivity.INTENT_USER_ID,   theFeedMutual.uid);
+	                    intent.putExtra(UserProfileActivity.INTENT_USER_NAME, theFeedMutual.first_name);
 	                    startActivityForResult(intent, 0);
 	                } catch(Exception e) {
 	                    Debug.log(MutualFragment.this, "start ProfileActivity exception:" + e.toString());

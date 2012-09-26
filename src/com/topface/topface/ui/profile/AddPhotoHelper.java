@@ -40,7 +40,6 @@ public class AddPhotoHelper {
     private Fragment mFragment;
     private ProgressDialog mProgressDialog;
     private Handler mHandler;
-    private boolean mAddEroState;
     public static final int ADD_PHOTO_RESULT_OK = 0;
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -56,14 +55,6 @@ public class AddPhotoHelper {
         mContext = activity.getApplicationContext();
         mProgressDialog = new ProgressDialog(mActivity);
         mProgressDialog.setMessage(mContext.getString(R.string.general_dialog_loading));
-    }
-
-    /**
-     * Добавление эрофотографии
-     */
-    public void addEroPhoto() {
-        mAddEroState = true;
-        addPhoto();
     }
 
     /**
@@ -162,12 +153,12 @@ public class AddPhotoHelper {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            mProgressDialog.cancel();
             Confirmation c = Confirmation.parse(new ApiResponse(result));
             if (c.completed)
               mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_OK);
             else
               mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+            mProgressDialog.cancel();
         }
 
 //        private void sendAddRequest(final String[] result, final int price) {

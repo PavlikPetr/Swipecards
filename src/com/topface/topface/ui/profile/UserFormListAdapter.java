@@ -121,11 +121,6 @@ public class UserFormListAdapter extends BaseAdapter {
                 break;
         }
 
-//        if (likes.online)
-//            holder.mOnline.setVisibility(View.VISIBLE);
-//        else
-//            holder.mOnline.setVisibility(View.INVISIBLE);
-        
         return convertView;
     }
     

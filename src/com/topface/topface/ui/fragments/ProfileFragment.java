@@ -252,18 +252,4 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
             return fragment;
         }
     }
-<<<<<<< HEAD
 }
-=======
-
-    @Override
-    public void onClick(View v) {
-    	switch (v.getId()) {
-		case R.id.btnNavigationRightWithText:			
-			startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
-			break;
-		}
-    	
-    }
-}
->>>>>>> topface-v1-merge

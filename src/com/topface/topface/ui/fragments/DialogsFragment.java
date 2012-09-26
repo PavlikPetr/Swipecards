@@ -22,7 +22,6 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Dialog;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DialogRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;

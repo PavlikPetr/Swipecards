@@ -41,7 +41,7 @@ public class ImageSwitcher extends ViewPager  {
     
     public void setData(SparseArray<HashMap<String, String>> photoLinks) {
         mPhotoLinks = photoLinks;
-        mImageSwitcherAdapter.notifyDataSetChanged();
+        setAdapter(mImageSwitcherAdapter);
     }
     
     @Override

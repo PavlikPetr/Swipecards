@@ -13,7 +13,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeadersRequest;
 import com.topface.topface.ui.LeadersActivity;
 import com.topface.topface.ui.adapters.LeadersAdapter;
-import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.utils.Debug;
 
 /**
@@ -81,12 +80,12 @@ public class LeadersBlock {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             //При клике на лидера, открываем его профиль
-            Leaders.LeaderUser leader = (Leaders.LeaderUser) adapterView.getAdapter().getItem(i);
-            Intent intent = new Intent(mContext, ProfileActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(ProfileActivity.INTENT_USER_ID, leader.user_id);
-            intent.putExtra(ProfileActivity.INTENT_USER_NAME, leader.name);
-            mContext.startActivity(intent);
+//            Leaders.LeaderUser leader = (Leaders.LeaderUser) adapterView.getAdapter().getItem(i);
+//            Intent intent = new Intent(mContext, ProfileActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra(ProfileActivity.INTENT_USER_ID, leader.user_id);
+//            intent.putExtra(ProfileActivity.INTENT_USER_NAME, leader.name);
+//            mContext.startActivity(intent);
         }
     };
 

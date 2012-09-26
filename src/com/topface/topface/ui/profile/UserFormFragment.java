@@ -18,10 +18,7 @@ public class UserFormFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mUser = ((UserProfileActivity)getActivity()).mDataUser;
         mUserPhotoListAdapter = new UserFormListAdapter(getActivity().getApplicationContext());
-        //mUserListAdapter.setUserData(user);
-        //mUserListAdapter.setUserData(mDataUser);
     }
     
     @Override
