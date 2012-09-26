@@ -7,59 +7,47 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical" >
 
-        <FrameLayout
+        <include
             android:id="@+id/loGirl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            layout="@layout/item_edit_form_check" />
 
-            <include layout="@layout/item_edit_form_check" />
-        </FrameLayout>        
-
-        <FrameLayout
+        <include
             android:id="@+id/loBoy"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_check" />
 
-            <include layout="@layout/item_edit_form_check" />
-        </FrameLayout>
-
-        <FrameLayout
+        <include
             android:id="@+id/loAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            layout="@layout/item_edit_form_select" />
 
-            <include layout="@layout/item_edit_form_select" />
-        </FrameLayout>
-
-        <FrameLayout
+        <include
             android:id="@+id/loCity"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
-            <include layout="@layout/item_edit_form_select" />
-        </FrameLayout>
-
-        <FrameLayout
+        <include
             android:id="@+id/loOnline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" >
+            android:layout_marginTop="20dp"
+            layout="@layout/item_edit_form_switch" />
 
-            <include layout="@layout/item_edit_form_switch" />
-        </FrameLayout>
-
-        <FrameLayout
+        <include
             android:id="@+id/loBeautiful"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp" >
-
-            <include layout="@layout/item_edit_form_switch" />
-        </FrameLayout>
+            android:layout_marginBottom="20dp"
+            layout="@layout/item_edit_form_switch" />
 
         <include layout="@layout/item_divider" />
 
@@ -71,46 +59,36 @@
             <include layout="@layout/item_edit_profile_form_header" />
         </FrameLayout>
 
-        <FrameLayout
+        <include
             android:id="@+id/loDatingStatus"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
-            <include layout="@layout/item_edit_form_select" />
-        </FrameLayout>
-
-        <FrameLayout
+        <include
             android:id="@+id/loMarriage"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
-            <include layout="@layout/item_edit_form_select" />
-        </FrameLayout>
-
-        <FrameLayout
+        <include
             android:id="@+id/loCharacter"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
-            <include layout="@layout/item_edit_form_select" />
-        </FrameLayout>
-
-        <FrameLayout
+        <include
             android:id="@+id/loAlcohol"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
-            <include layout="@layout/item_edit_form_select" />
-        </FrameLayout>
-
-        <FrameLayout
+        <include
             android:id="@+id/loShowOff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp" >
-
-            <include layout="@layout/item_edit_form_select" />>
-        </FrameLayout>
+            android:layout_marginBottom="20dp"
+            layout="@layout/item_edit_form_select" />
     </LinearLayout>
 
 </ScrollView>

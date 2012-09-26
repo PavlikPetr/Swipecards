@@ -17,9 +17,9 @@ import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
-import com.topface.topface.ui.profile.edit.EditProfileActivity;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -252,4 +252,18 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
             return fragment;
         }
     }
+<<<<<<< HEAD
 }
+=======
+
+    @Override
+    public void onClick(View v) {
+    	switch (v.getId()) {
+		case R.id.btnNavigationRightWithText:			
+			startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
+			break;
+		}
+    	
+    }
+}
+>>>>>>> topface-v1-merge

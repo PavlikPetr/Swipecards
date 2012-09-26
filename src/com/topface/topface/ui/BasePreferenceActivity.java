@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.preference.PreferenceActivity;
 
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.utils.AuthorizationManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.IRequestClient;
+import com.topface.topface.utils.social.AuthorizationManager;
 
 public class BasePreferenceActivity extends PreferenceActivity implements IRequestClient{
 

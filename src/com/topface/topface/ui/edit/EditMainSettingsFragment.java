@@ -1,4 +1,4 @@
-package com.topface.topface.ui.profile.edit;
+package com.topface.topface.ui.edit;
 
 import java.util.HashMap;
 
@@ -35,15 +35,14 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_edittext, null, false);
+		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_main_form_items, null, false);
 
 		// Navigation bar
 		((TextView) getActivity().findViewById(R.id.tvNavigationTitle))
 				.setText(R.string.edit_title);
 		TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
-		subTitle.setVisibility(View.VISIBLE);
-		subTitle.setText(R.string.edit_bg_photo);
-
+		subTitle.setVisibility(View.VISIBLE);		
+		
 		((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
 		Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
 		btnBack.setVisibility(View.VISIBLE);
@@ -67,13 +66,20 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 
 		mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
+		ViewGroup loName = (ViewGroup) root.findViewById(R.id.loName);
+		loName.setVisibility(View.GONE);
+		ViewGroup loAge = (ViewGroup) root.findViewById(R.id.loAge);
+		loAge.setVisibility(View.GONE);
+		ViewGroup loStatus = (ViewGroup) root.findViewById(R.id.loStatus);
+		loStatus.setVisibility(View.GONE);
+		
 		for (final EditType type : mTypes) {
 			String data = getDataByEditType(type);			
 			switch (type) {
 			case NAME:
-				ViewGroup loName = (ViewGroup) root.findViewById(R.id.loName);
 				loName.setVisibility(View.VISIBLE);
-				EditText edName = (EditText) loName.findViewById(R.id.edNameText);
+				((TextView)loName.findViewById(R.id.tvTitle)).setText(R.string.edit_name);
+				EditText edName = (EditText) loName.findViewById(R.id.edText);
 				edName.setText(data);
 				edName.addTextChangedListener(new TextWatcher() {
 					String before = Static.EMPTY;
@@ -96,10 +102,10 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 				});
 				
 				break;
-			case AGE:
-				ViewGroup loAge = (ViewGroup) root.findViewById(R.id.loAge);
+			case AGE:				
 				loAge.setVisibility(View.VISIBLE);
-				EditText edAge = (EditText) loAge.findViewById(R.id.edAgeText);
+				((TextView)loAge.findViewById(R.id.tvTitle)).setText(R.string.edit_age);
+				EditText edAge = (EditText) loAge.findViewById(R.id.edText);
 				edAge.setText(data);
 				edAge.addTextChangedListener(new TextWatcher() {
 					String before = Static.EMPTY;
@@ -122,9 +128,9 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 				});
 				break;
 			case STATUS:
-				ViewGroup loStatus = (ViewGroup) root.findViewById(R.id.loStatus);			
 				loStatus.setVisibility(View.VISIBLE);
-				EditText edStatus = (EditText) loStatus.findViewById(R.id.edStatusText);
+				((TextView)loStatus.findViewById(R.id.tvTitle)).setText(R.string.edit_status);
+				EditText edStatus = (EditText) loStatus.findViewById(R.id.edText);
 				edStatus.setText(data);			
 				edStatus.addTextChangedListener(new TextWatcher() {
 					String before = Static.EMPTY;

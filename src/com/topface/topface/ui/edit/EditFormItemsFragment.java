@@ -1,7 +1,6 @@
-package com.topface.topface.ui.profile.edit;
+package com.topface.topface.ui.edit;
 
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -13,15 +12,12 @@ import com.topface.topface.utils.FormItem;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -31,10 +27,9 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
 	private static int mTitleId;
 	private static int mDataId;
-	private static String mData;
+	private String mData;
 	private FormInfo mFormInfo;
 	private static int mSeletedDataId;
-	private static String mInputData;
 	private static Profile mProfile;	
 	
 	private ListView mListView;
@@ -43,8 +38,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 		mTitleId = titleId;
 		mDataId = dataId;
 		mSeletedDataId = mDataId;
-		mData = data;
-		mInputData = mData;
+		mData = data;		
 		mProfile = CacheProfile.getProfile();
 	}	
 
@@ -115,11 +109,8 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 				if (CacheProfile.forms.get(i).titleId == mTitleId) {
 					final FormItem item = CacheProfile.forms.get(i);
 					FormItem newItem;
-					if (mSeletedDataId != FormItem.NO_RESOURCE_ID) {
-						newItem = new FormItem(item.titleId, mSeletedDataId, FormItem.DATA);						
-					} else {
-						newItem = new FormItem(item.titleId, mInputData, FormItem.DATA);					
-					}
+					newItem = new FormItem(item.titleId, mSeletedDataId, FormItem.DATA);						
+					
 					mFormInfo.fillFormItem(newItem);
 
 					prepareRequestSend();
@@ -129,12 +120,10 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
 						@Override
 						public void success(ApiResponse response) throws NullPointerException {
-							item.dataId = mSeletedDataId;
-							item.value = mInputData;
+							item.dataId = mSeletedDataId;							
 							mFormInfo.fillFormItem(item);
 							getActivity().setResult(Activity.RESULT_OK);							
-							mDataId = mSeletedDataId;
-							mData = mInputData;
+							mDataId = mSeletedDataId;							
 							finishRequestSend();
 						}
 
@@ -153,12 +142,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
 	@Override
 	public boolean hasChanges() {
-		if (mDataId != FormItem.NO_RESOURCE_ID) {
-			return mDataId != mSeletedDataId;
-		} else {
-			return !mData.equals(mInputData);
-		}
-		
+		return mDataId != mSeletedDataId;
 	}
 
 	private class FormCheckingDataAdapter extends BaseAdapter {
@@ -166,11 +150,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 		private LayoutInflater mInflater;
 		private String[] mListData;
 		private int[] mIds;
-		private int mLastSelected;
-
-		private static final int T_CHECK = 0;
-		private static final int T_INPUT = 1;
-		private static final int T_COUNT = T_INPUT + 1;
+		private int mLastSelected;		
 
 		public FormCheckingDataAdapter(Context context, String[] data, int[] ids, int selectedId) {
 			mInflater = LayoutInflater.from(context);
@@ -202,103 +182,54 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 		public long getItemId(int position) {
 			return mIds[position];
 		}
-
-		@Override
-		public int getItemViewType(int position) {
-			if (getItemId(position) != FormItem.NO_RESOURCE_ID) {
-				return T_CHECK;
-			} else {
-				return T_INPUT;
-			}
-		}
-
-		@Override
-		public int getViewTypeCount() {
-			return T_COUNT;
-		}
+		
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			ViewHolder holder = null;
-			int type = getItemViewType(position);
 			
 			if (convertView == null) {
 				holder = new ViewHolder();		
-				switch (type) {
-				case T_CHECK:
-					convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
-					holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-					holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
-					holder.mCheck = (ImageView) convertView.findViewById(R.id.ivCheck);					
-					break;
-				case T_INPUT:
-					convertView = mInflater.inflate(R.layout.item_edit_profile_form_input, null, false);
-					holder.mTextEdit = (EditText)convertView.findViewById(R.id.edText);
-					holder.mTextEdit.setInputType(mFormInfo.getInputType(mTitleId));
-					break;
-				default:
-					break;
-				}
+				
+				convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
+				holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+				holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
+				holder.mCheck = (ImageView) convertView.findViewById(R.id.ivCheck);					
+				
 				
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			switch (type) {
-			case T_CHECK:
-				if (position == 0) {
-					holder.mBackground.setImageDrawable(getResources().getDrawable(
-							R.drawable.edit_big_btn_top_selector));
-				} else if (position == getCount() - 1) {
-					holder.mBackground.setImageDrawable(getResources().getDrawable(
-							R.drawable.edit_big_btn_bottom_selector));
-				} else {
-					holder.mBackground.setImageDrawable(getResources().getDrawable(
-							R.drawable.edit_big_btn_middle_selector));
-				}
-
-				if (mLastSelected == position) {
-					holder.mCheck.setVisibility(View.VISIBLE);
-				} else {
-					holder.mCheck.setVisibility(View.INVISIBLE);
-				}
-
-				holder.mTitle.setText(getItem(position));
-
-				convertView.setDuplicateParentStateEnabled(false);
-				convertView.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						mLastSelected = position;
-						setSelectedId((int) getItemId(position));
-						notifyDataSetChanged();
-					}
-				});
-				break;
-			case T_INPUT:
-				holder.mTextEdit.setText(getItem(position));
-				holder.mTextEdit.addTextChangedListener(new TextWatcher() {
-					String before = Static.EMPTY;
-					@Override
-					public void onTextChanged(CharSequence s, int start, int before, int count) { }
-					
-					@Override
-					public void beforeTextChanged(CharSequence s, int start, int count, int after) { 
-						before = s.toString();
-					}
-					
-					@Override
-					public void afterTextChanged(Editable s) {
-						String after = s.toString();
-						if(!before.equals(after)) {
-							mInputData = after;
-							refreshSaveState();
-						}
-					}
-				});
-				break;
+		
+			if (position == 0) {
+				holder.mBackground.setImageDrawable(getResources().getDrawable(
+						R.drawable.edit_big_btn_top_selector));
+			} else if (position == getCount() - 1) {
+				holder.mBackground.setImageDrawable(getResources().getDrawable(
+						R.drawable.edit_big_btn_bottom_selector));
+			} else {
+				holder.mBackground.setImageDrawable(getResources().getDrawable(
+						R.drawable.edit_big_btn_middle_selector));
 			}
+
+			if (mLastSelected == position) {
+				holder.mCheck.setVisibility(View.VISIBLE);
+			} else {
+				holder.mCheck.setVisibility(View.INVISIBLE);
+			}
+
+			holder.mTitle.setText(getItem(position));
+				
+			convertView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mLastSelected = position;
+					setSelectedId((int) getItemId(position));
+					notifyDataSetChanged();
+				}
+			});
 			
 			return convertView;
 		}
@@ -307,7 +238,6 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 			TextView mTitle;	
 			ImageView mBackground;
 			ImageView mCheck;
-			EditText mTextEdit;
 		}
 	}
 }

@@ -9,12 +9,13 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.utils.AuthToken;
-import com.topface.topface.utils.AuthorizationManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.Http;
+import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;

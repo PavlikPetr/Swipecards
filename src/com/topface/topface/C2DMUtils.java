@@ -49,7 +49,7 @@ public class C2DMUtils {
     }
 
     public static void showNotification(Intent extra, Context context) {
-        String data = extra.getStringExtra("text");        
+        String data = extra.getStringExtra("text");            
         if (data != null) {
 
             NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -66,49 +66,59 @@ public class C2DMUtils {
 
             //HELLO_ID;
             int notificationId = C2DM_NOTIFICATION_ID;
-            Intent i;
+            Intent i = null;
             String typeString = extra.getStringExtra("type");
             int type = typeString != null ? Integer.parseInt(typeString) : C2DM_TYPE_UNKNOWN;
             
             switch (type) {
                 case C2DM_TYPE_MESSAGE:
-                    i = new Intent(context, ChatActivity.class);
-                    i.putExtra(
-                            ChatActivity.INTENT_USER_ID,
-                            Integer.parseInt(extra.getStringExtra("id"))
-                    );
-                    i.putExtra(ChatActivity.INTENT_USER_NAME, extra.getStringExtra("name"));
-                    i.putExtra(ChatActivity.INTENT_USER_AVATAR, extra.getStringExtra("photo"));
+                	if(Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_MESSAGES_PHONE)) {
+	                    i = new Intent(context, ChatActivity.class);
+	                    i.putExtra(
+	                            ChatActivity.INTENT_USER_ID,
+	                            Integer.parseInt(extra.getStringExtra("id"))
+	                    );
+	                    i.putExtra(ChatActivity.INTENT_USER_NAME, extra.getStringExtra("name"));
+	                    i.putExtra(ChatActivity.INTENT_USER_AVATAR, extra.getStringExtra("photo"));
+                	}
                     break;
+                	
 
                 case C2DM_TYPE_SYMPATHY:
-                    //TODO: Переделать вызов фрагментов
-                    i = new Intent(context, MutualFragment.class);
+                	if(Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_MUTUAL_PHONE)) {
+	                    //TODO: Переделать вызов фрагментов
+	                    i = new Intent(context, MutualFragment.class);
+                	}
                     break;
 
                 case C2DM_TYPE_LIKE:
-                    i = new Intent(context, LikesFragment.class);
+                	if(Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_LIKES_PHONE)) {
+                		i = new Intent(context, LikesFragment.class);
+                	}
                     break;
 
                 case C2DM_TYPE_GUESTS:
-                	//TODO GuestsFragment
-                	i = new Intent(context, ProfileFragment.class);
-                    break;              
-                    
+                	if(Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_GUESTS_PHONE)) {
+	                	//TODO GuestsFragment
+	                	i = new Intent(context, ProfileFragment.class);
+                	}
+                    break;
                 default:
                     i = new Intent(context, AuthActivity.class);
 
             }
 
-            i.putExtra("C2DM", true);
-
-            //Активити, котолрое будет запущено после уведомления
-            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i, Intent.FLAG_ACTIVITY_NEW_TASK & Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-            //Обновляем (или устанавливаем) то, что показывается в панели уведомлений
-            notification.setLatestEventInfo(context, context.getString(R.string.app_name), data, contentIntent);
-
-            mNotificationManager.notify(notificationId, notification);
+            if (i != null) {
+	            i.putExtra("C2DM", true);
+	
+	            //Активити, котолрое будет запущено после уведомления
+	            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i, Intent.FLAG_ACTIVITY_NEW_TASK & Intent.FLAG_ACTIVITY_SINGLE_TOP);
+	
+	            //Обновляем (или устанавливаем) то, что показывается в панели уведомлений
+	            notification.setLatestEventInfo(context, context.getString(R.string.app_name), data, contentIntent);
+	
+	            mNotificationManager.notify(notificationId, notification);
+            }
         }
     }
 

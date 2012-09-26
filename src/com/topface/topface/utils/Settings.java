@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 
 /**
@@ -59,11 +60,11 @@ public class Settings {
     }
     
     public boolean getSetting(String key) {
-    	return mSettings.getBoolean(key, false);
+    	return mSettings.getBoolean(key, true);
     }    
         
     public String getSocialAccountName() {
-    	return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, "");
+    	return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
     }
     
     public String getPreloading() {

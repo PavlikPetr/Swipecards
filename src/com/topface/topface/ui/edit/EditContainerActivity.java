@@ -1,17 +1,16 @@
-package com.topface.topface.ui.profile.edit;
+package com.topface.topface.ui.edit;
 
 import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.edit.EditMainSettingsFragment.EditType;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
-import com.topface.topface.ui.profile.edit.EditMainSettingsFragment.EditType;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 
-public class EditContainerActivity extends FragmentActivity {
-
-	public static final String INTENT_REQUEST_KEY = "requestCode";
+public class EditContainerActivity extends BaseFragmentActivity {	
 	
 	public static final String INTENT_FORM_TITLE_ID = "title_id";
 	public static final String INTENT_FORM_DATA_ID = "data_id";
@@ -40,7 +39,7 @@ public class EditContainerActivity extends FragmentActivity {
 		int dataId;
 		String data;
 		Intent intent = getIntent();
-		switch (intent.getIntExtra(INTENT_REQUEST_KEY,0)) {
+		switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY,0)) {
 		case INTENT_EDIT_NAME_AGE:
 			mFragment = new EditMainSettingsFragment(new EditType[]{EditType.NAME,EditType.AGE});
 			break;
@@ -56,6 +55,11 @@ public class EditContainerActivity extends FragmentActivity {
 			data = intent.getStringExtra(INTENT_FORM_DATA);
 			mFragment = new EditFormItemsFragment(titleId, dataId, data);			
 			break;
+		case INTENT_EDIT_INPUT_FORM_ITEM:
+			titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);			
+			data = intent.getStringExtra(INTENT_FORM_DATA);
+			mFragment = new EditFormItemInputFragment(titleId, data);
+			break;
 		case INTENT_EDIT_ALBUM:
 			mFragment = new ProfilePhotoFragment();
 			break;
@@ -66,14 +70,14 @@ public class EditContainerActivity extends FragmentActivity {
 			titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);
 			dataId = intent.getIntExtra(INTENT_FORM_DATA_ID, -1);
 			data = intent.getStringExtra(INTENT_FORM_DATA);
-			mFragment = new FilterChooseFormItemFragment(titleId, dataId, data, FilterFragment.mTargetUser);
+			mFragment = new FilterChooseFormItemFragment(titleId, dataId, data, FilterFragment.mTargetUser);		
 		default:
 			break;
 		}
 		
 		if(mFragment != null) {
 			getSupportFragmentManager().beginTransaction()
-				.replace(R.id.fragment_frame, mFragment).commit();
+				.replace(R.id.loFrame, mFragment).commit();
 		}
 	}	
 	

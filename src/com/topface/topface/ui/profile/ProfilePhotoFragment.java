@@ -3,7 +3,7 @@ package com.topface.topface.ui.profile;
 import java.util.HashMap;
 import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.ui.profile.edit.EditContainerActivity;
+import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import android.content.Intent;
 import android.os.Bundle;

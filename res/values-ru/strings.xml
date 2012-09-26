@@ -384,6 +384,7 @@
     <string name="photo_preloading">Предзагрузка фотографий</string>
     <string name="photo_preloading_summary">Предварительная загрузка следующей фотографии в альбоме</string>
     <string name="preloading">Предзагрузка</string>
+    <string name="settings_notifications_header">Оповещения</string>
     <string name="settings_likes">Симпатии</string>
     <string name="settings_mutual">Взаимные симпатии</string>
     <string name="settings_messages">Сообщения</string>

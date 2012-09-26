@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.social;
 
 import com.topface.topface.Static;
 import android.content.Context;

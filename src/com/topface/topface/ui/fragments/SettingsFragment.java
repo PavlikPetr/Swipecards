@@ -2,11 +2,10 @@ package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.profile.edit.AbstractEditFragment;
-import com.topface.topface.utils.AuthToken;
-import com.topface.topface.utils.AuthorizationManager;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.ui.edit.EditContainerActivity;
+import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.Settings;
+import com.topface.topface.utils.social.AuthToken;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -15,10 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ProgressBar;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -46,6 +43,10 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     private void initViews(View root) {
     	ViewGroup frame;
+    	
+    	// Notifications header
+    	frame = (ViewGroup) root.findViewById(R.id.loNotificationsHeader);
+    	setText(R.string.settings_notifications_header, frame);
     	
     	// Likes
     	frame = (ViewGroup) root.findViewById(R.id.loLikes);
@@ -83,8 +84,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     	
     	// Account
     	frame = (ViewGroup) root.findViewById(R.id.loAccount);
-    	setBackground(R.drawable.edit_big_btn_middle_selector, frame);
-    	//TODO get name from social nets
+    	setBackground(R.drawable.edit_big_btn_middle_selector, frame);    	
     	AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
 		if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
 			setText(R.string.settings_account, mSettings.getSocialAccountName(), R.drawable.ic_fb, frame);
@@ -96,7 +96,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     	frame.setOnClickListener(this);
     	
     	// Rate app
-    	frame = (ViewGroup) root.findViewById(R.id.loRateApp);
+    	frame = (ViewGroup) root.findViewById(R.id.loFeedback);
     	setBackground(R.drawable.edit_big_btn_middle_selector, frame);
     	setText(R.string.settings_rate_app, frame);
     	frame.setOnClickListener(this);
@@ -136,23 +136,36 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 		ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
 		background.setImageResource(resId);
 	}
+<<<<<<< HEAD
+=======
+    
+	@Override
+	public void fillLayout() { }
+
+	@Override
+	public void clearLayout() { }
+>>>>>>> topface-v1-merge
 
 	@Override
 	public void onClick(View v) {
+		Intent intent;
 		switch (v.getId()) {
 		case R.id.loHelp:
-			//TODO
-			break;
-		case R.id.loAccount:
-			//TODO
-			break;
-		case R.id.loRateApp:
-			Intent intent = new Intent(Intent.ACTION_VIEW); 
-			intent.setData(Uri.parse(getResources().getString(R.string.app_market_url))); 
+			intent = new Intent(Intent.ACTION_VIEW); 
+			intent.setData(Uri.parse(getResources().getString(R.string.app_help_url))); 
 			startActivity(intent);
 			break;
+		case R.id.loAccount:
+			intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);			
+			startActivityForResult(intent,SettingsContainerActivity.INTENT_ACCOUNT);
+			break;
+		case R.id.loFeedback:
+			intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);			
+			startActivityForResult(intent,SettingsContainerActivity.INTENT_FEEDBACK);
+			break;
 		case R.id.loAbout:
-			//TODO
+			intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);			
+			startActivityForResult(intent,SettingsContainerActivity.INTENT_ABOUT);
 			break;
 		default:
 			break;

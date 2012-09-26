@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.utils.http.Http;
+import com.topface.topface.utils.social.AuthToken;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;

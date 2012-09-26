@@ -11,13 +11,17 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.FragmentMenu;
+<<<<<<< HEAD
 import com.topface.topface.ui.fragments.FragmentMenu.FragmentMenuListener;
 import com.topface.topface.ui.fragments.FragmentSwitcher;
 import com.topface.topface.ui.fragments.FragmentSwitcher.FragmentSwitchListener;
 import com.topface.topface.utils.AuthorizationManager;
+=======
+>>>>>>> topface-v1-merge
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ProfileBackgrounds;
+import com.topface.topface.utils.social.AuthorizationManager;
 
 public class NavigationActivity extends FragmentActivity implements View.OnClickListener {
 

@@ -14,9 +14,9 @@
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_below="@id/loNavigationBar"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:layout_below="@id/loNavigationBar" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -25,81 +25,72 @@
             android:orientation="vertical" >
 
             <FrameLayout
+                android:id="@+id/loNotificationsHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <include layout="@layout/item_edit_profile_form_header" />
+            </FrameLayout>
+
+            <include
                 android:id="@+id/loLikes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp" >
+                layout="@layout/item_edit_form_notifier" />
 
-                <include layout="@layout/item_edit_form_notifier" />
-            </FrameLayout>
-
-            <FrameLayout
+            <include
                 android:id="@+id/loMutual"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                layout="@layout/item_edit_form_notifier" />
 
-                <include layout="@layout/item_edit_form_notifier" />
-            </FrameLayout>
-
-            <FrameLayout
+            <include
                 android:id="@+id/loChat"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                layout="@layout/item_edit_form_notifier" />
 
-                <include layout="@layout/item_edit_form_notifier" />
-            </FrameLayout>
-
-            <FrameLayout
+            <include
                 android:id="@+id/loGuests"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp" >
-
-                <include layout="@layout/item_edit_form_notifier" />
-            </FrameLayout>
+                android:layout_marginBottom="20dp"
+                layout="@layout/item_edit_form_notifier" />
 
             <include layout="@layout/item_divider" />
 
-            <FrameLayout
+            <include
                 android:id="@+id/loHelp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp" >
+                android:layout_marginTop="20dp"
+                layout="@layout/item_edit_form_select" />
 
-                <include layout="@layout/item_edit_form_select" />
-            </FrameLayout>
-
-            <FrameLayout
+            <include
                 android:id="@+id/loAccount"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                layout="@layout/item_edit_form_select" />
 
-                <include layout="@layout/item_edit_form_select" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/loRateApp"
+            <include
+                android:id="@+id/loFeedback"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                layout="@layout/item_edit_form_select" />
 
-                <include layout="@layout/item_edit_form_select" />
-            </FrameLayout>
-
-            <FrameLayout
+            <include
                 android:id="@+id/loAbout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp" >
-
-                <include layout="@layout/item_edit_form_select" />
-            </FrameLayout>
+                android:layout_marginBottom="20dp"
+                layout="@layout/item_edit_form_select" />
         </LinearLayout>
     </ScrollView>
-    
+
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/loNavigationBar"
-        android:src="@drawable/im_bar_header_shadow"/>
+        android:src="@drawable/im_bar_header_shadow" />
 
 </RelativeLayout>

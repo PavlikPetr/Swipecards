@@ -1,4 +1,4 @@
-package com.topface.topface.ui;
+package com.topface.topface.utils.social;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +14,6 @@ import android.webkit.WebViewClient;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.utils.AuthToken;
 import com.topface.topface.utils.Debug;
 import org.apache.http.client.utils.URLEncodedUtils;
 
