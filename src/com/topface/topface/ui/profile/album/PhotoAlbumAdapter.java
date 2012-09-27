@@ -51,7 +51,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
     }
 
     protected boolean hasItem(int position) {
-        return mAlbumsList != null && mAlbumsList.size() <= (position + 1);
+        return mAlbumsList != null && mAlbumsList.size() > position;
     }
 
     
