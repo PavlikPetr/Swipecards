@@ -157,6 +157,9 @@ public class SymphatyActivity extends TrackedActivity {
       @Override
       public void success(ApiResponse response) {
         final LinkedList<FeedSymphaty> feedSymphatyList = FeedSymphaty.parse(response);
+        if (mSymphatyDataList == null) {
+            return;
+        }
         post(new Runnable() {
           @Override
           public void run() {

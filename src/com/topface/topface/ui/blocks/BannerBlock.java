@@ -51,6 +51,7 @@ public class BannerBlock {
         mBannersMap.put(SymphatyActivity.class.toString(), BannerRequest.LIKE);
         mBannersMap.put(ChatActivity.class.toString(), BannerRequest.MESSAGES);
         mBannersMap.put(TopsActivity.class.toString(), BannerRequest.TOP);
+        mBannersMap.put(VisitorsActivity.class.toString(), BannerRequest.VISITORS);
     }
 
     private void loadBanner() {
@@ -76,28 +77,41 @@ public class BannerBlock {
             @Override
             public void onLoadingComplete(Bitmap loadedImage) {
                 super.onLoadingComplete(loadedImage);
-                float deviceWidth = Device.getDisplayMetrics(mActivity).widthPixels;
-                float imageWidth = loadedImage.getWidth();
-                //Если ширина экрана больше, чем у нашего баннера, то пропорционально увеличиваем высоту imageView
-                if (deviceWidth > imageWidth) {
-                    ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
-                    params.height = (int) ((deviceWidth / imageWidth) * (float) loadedImage.getHeight());
-                    mBannerView.setLayoutParams(params);
-                    mBannerView.invalidate();
-                }
+                //Подгоняем imageView под размер баннера
+                fitImageView(loadedImage);
             }
         });
+
+        setOnClickListener(banner);
+
         sendStat(getBannerName(banner.url), "view");
+    }
+
+    private void fitImageView(Bitmap loadedImage) {
+        float deviceWidth = Device.getDisplayMetrics(mActivity).widthPixels;
+        float imageWidth = loadedImage.getWidth();
+        //Если ширина экрана больше, чем у нашего баннера, то пропорционально увеличиваем высоту imageView
+        if (deviceWidth > imageWidth) {
+            ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
+            params.height = (int) ((deviceWidth / imageWidth) * (float) loadedImage.getHeight());
+            mBannerView.setLayoutParams(params);
+            mBannerView.invalidate();
+        }
+    }
+
+    private void setOnClickListener(final Banner banner) {
         mBannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = null;
                 if (banner.action.equals(Banner.ACTION_PAGE)) {
-                    EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0);
-                    intent = new Intent(mActivity, BuyingActivity.class); // "parameter":"PURCHASE"
-                } else if (banner.action.equals(Banner.INVITE_PAGE)) {
-                    EasyTracker.getTracker().trackEvent("Banner", "Invite", "", 0);
-                    intent = new Intent(mActivity, InviteActivity.class);
+                    if (banner.parameter.equals(Banner.INVITE_ACTION)) {
+                        intent = new Intent(mActivity, InviteActivity.class);
+                    }
+                    else {
+                        intent = new Intent(mActivity, BuyingActivity.class); // "parameter":"PURCHASE"
+                    }
+                    EasyTracker.getTracker().trackEvent("Purchase", "Banner", banner.parameter, 0);
                 } else if (banner.action.equals(Banner.ACTION_URL)) {
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
                 }

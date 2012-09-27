@@ -19,7 +19,6 @@ import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.profile.ProfileActivity;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Http;
 import com.topface.topface.utils.Utils;
 
 import java.util.LinkedList;
@@ -180,11 +179,11 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
         historyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                LinkedList<History> dataList = History.parse(response);
-                mAdapter.setDataList(dataList);
+                final LinkedList<History> dataList = History.parse(response);
                 post(new Runnable() {
                     @Override
                     public void run() {
+                        mAdapter.setDataList(dataList);
                         if (mProgressBar != null) {
                             mProgressBar.setVisibility(View.GONE);
                         }

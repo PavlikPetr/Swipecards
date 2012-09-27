@@ -1,8 +1,8 @@
 package com.topface.topface.data;
 
-import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
+import org.json.JSONObject;
 
 public class Banner extends AbstractData {
   // Data
@@ -12,7 +12,7 @@ public class Banner extends AbstractData {
   // Constants
   public static final String ACTION_URL = "URL";
   public static final String ACTION_PAGE = "PAGE";
-  public static final String INVITE_PAGE = "INVITE";
+  public static final String INVITE_ACTION = "INVITE";
   //---------------------------------------------------------------------------
   public static Banner parse(ApiResponse response) {
     Banner banner = new Banner();

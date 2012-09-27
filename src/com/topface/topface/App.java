@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.widget.Toast;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -57,6 +58,10 @@ public class App extends Application {
 
     public static boolean isOnline() {
         return mConnectionReceiver.isConnected();
+    }
+
+    public static void showConnectionError() {
+        Toast.makeText(getContext(), getContext().getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
     }
 
 

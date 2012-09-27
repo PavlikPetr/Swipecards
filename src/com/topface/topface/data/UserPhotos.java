@@ -18,10 +18,12 @@ public class UserPhotos {
     public static final String SIZE_128 = "128x128";
     @SuppressWarnings("UnusedDeclaration")
     public static final String SIZE_256 = "256x256";
+    public static final String PHOTO_KEY_SIZE_PATTERN = "(\\d+)x(\\d+)";
     /**
      * идентификатор фотографии пользователя
      */
     protected int id;
+    private Pattern mPattern;
 
     public UserPhotos(int id, HashMap<String, String> links) {
         this.id = id;
@@ -93,10 +95,12 @@ public class UserPhotos {
 
     protected int getSizeFromKey(String key) {
         int size = 0;
-        Pattern pattern = Pattern.compile("(\\d+)x(\\d+)");
-        Matcher matcher = pattern.matcher(key);
-        matcher.find();
-        if (matcher.matches()) {
+        if (mPattern == null) {
+            mPattern = Pattern.compile(PHOTO_KEY_SIZE_PATTERN);
+        }
+
+        Matcher matcher = mPattern.matcher(key);
+        if (matcher.find()) {
             size = Math.max(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
         }
 

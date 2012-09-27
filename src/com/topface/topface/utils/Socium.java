@@ -1,12 +1,5 @@
 package com.topface.topface.utils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URLEncoder;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import com.topface.topface.R;
-import com.topface.topface.Static;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -15,9 +8,20 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.widget.Toast;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URLEncoder;
 
 public class Socium {
-  // Data
+    public static final int UPLOAD_IMAGE_JPEG_QUALITY = 75;
+    public static final String VK_API_URL = "https://api.vk.com";
+    // Data
   private Context mContext;
   private AuthToken mToken;
   //---------------------------------------------------------------------------
@@ -27,18 +31,33 @@ public class Socium {
   }
   //---------------------------------------------------------------------------
   public String[] uploadPhoto(Uri uri) {
-    if(mToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE))
-      return uploadPhotoVK(uri);
-    if(mToken.getSocialNet().equals(AuthToken.SN_FACEBOOK))
-      return uploadPhotoFB(uri);
-    else
-      return null;
+    try {
+        if(mToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            return uploadPhotoVK(uri);
+        }
+        else if(mToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+            return uploadPhotoFB(uri);
+        }
+    }
+    catch (OutOfMemoryError e) {
+        Toast.makeText(mContext,
+                mContext.getString(R.string.photo_upload_error)
+                        + " " + mContext.getString(R.string.photo_upload_oom),
+                Toast.LENGTH_LONG
+        );
+        Debug.error("Upload photo out of memory " + e.getMessage());
+    }
+    catch (Exception e) {
+        Toast.makeText(mContext, mContext.getString(R.string.photo_upload_error), Toast.LENGTH_LONG);
+        Debug.error("Upload photo error", e);
+    }
+    return null;
   }
   //---------------------------------------------------------------------------
   public String[] uploadPhotoVK(Uri uri) {
     String[] result = new String[3];
     try {
-      StringBuilder request = new StringBuilder("https://api.vk.com/method/photos.getAlbums?");
+      StringBuilder request = new StringBuilder(VK_API_URL + "/method/photos.getAlbums?");
       request.append("uid=" + mToken.getUserId());
       request.append("&access_token=" + mToken.getTokenKey());
       
@@ -46,7 +65,7 @@ public class Socium {
       String albumName = mContext.getString(R.string.general_vk_album_name);      
       // запрос альбомов
       String response = Http.httpPostRequest(request.toString(),null);
-      JSONObject jsonResult = null;
+      JSONObject jsonResult;
       jsonResult = new JSONObject(response);
       // получили список альбомов
       JSONArray albumsList = jsonResult.getJSONArray("response");
@@ -62,7 +81,7 @@ public class Socium {
       
       // создаем новый
       if(albumId == 0) {
-        request = new StringBuilder("https://api.vk.com/method/photos.createAlbum?");
+        request = new StringBuilder(VK_API_URL + "/method/photos.createAlbum?");
         request.append("title=" + URLEncoder.encode(albumName));
         request.append("&access_token=" + mToken.getTokenKey());
         response = Http.httpPostRequest(request.toString(),null);
@@ -72,7 +91,7 @@ public class Socium {
       }
       
       // uploading
-      request = new StringBuilder("https://api.vk.com/method/photos.getUploadServer?");
+      request = new StringBuilder(VK_API_URL + "/method/photos.getUploadServer?");
       request.append("aid=" + albumId);
       request.append("&access_token=" + mToken.getTokenKey());
       response = Http.httpPostRequest(request.toString(),null);
@@ -113,7 +132,7 @@ public class Socium {
       }
       
       ByteArrayOutputStream bos = new ByteArrayOutputStream();
-      bitmap.compress(CompressFormat.JPEG,100,bos);
+      bitmap.compress(CompressFormat.JPEG, UPLOAD_IMAGE_JPEG_QUALITY, bos);
       byte[] data = bos.toByteArray();
       
       // загрузка фото
@@ -126,7 +145,7 @@ public class Socium {
       String hash       = jsonResult.getString("hash");
       String server     = jsonResult.getString("server");
       
-      request = new StringBuilder("https://api.vk.com/method/photos.save?");
+      request = new StringBuilder(VK_API_URL + "/method/photos.save?");
       request.append("aid=" + albumId);
       request.append("&server=" + server);
       request.append("&photos_list=" + photosList);
@@ -185,7 +204,7 @@ public class Socium {
       }
 
       ByteArrayOutputStream bos = new ByteArrayOutputStream();
-      bitmap.compress(CompressFormat.JPEG,100,bos);
+      bitmap.compress(CompressFormat.JPEG, UPLOAD_IMAGE_JPEG_QUALITY, bos);
       byte[] data = bos.toByteArray();
       
       // загрузка фото

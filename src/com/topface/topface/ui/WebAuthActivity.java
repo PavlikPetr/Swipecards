@@ -1,22 +1,5 @@
 package com.topface.topface.ui;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.google.android.apps.analytics.easytracking.TrackedActivity;
-import org.apache.http.client.utils.URLEncodedUtils;
-import com.topface.topface.R;
-import com.topface.topface.Data;
-import com.topface.topface.Static;
-import com.topface.topface.data.Auth;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.utils.AuthToken;
-import com.topface.topface.utils.Debug;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,11 +10,31 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import com.google.android.apps.analytics.easytracking.TrackedActivity;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.data.Auth;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.utils.AuthToken;
+import com.topface.topface.utils.Debug;
+import org.apache.http.client.utils.URLEncodedUtils;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WebAuthActivity extends TrackedActivity {
   // Data
   private WebView mWebView;
   private View mProgressBar;
+  public static final String VK_OAUTH_URL = "http://oauth.vk.com";
+  public static final String VK_OAUTH_AUTH_URL = VK_OAUTH_URL + "/authorize";
+  public static final String VK_OAUTH_REDIRECT_URL = VK_OAUTH_URL + "/blank.html";
   private String VK_PERMISSIONS = "notify,photos,offline";
   // RegExp
   private Pattern mRegExpToken  = Pattern.compile("blank.html#(.*access_token=.+)$");
@@ -123,9 +126,9 @@ public class WebAuthActivity extends TrackedActivity {
   // VkAuthClient
   //---------------------------------------------------------------------------
   public class VkAuthClient extends WebViewClient {
-    // Data
+      // Data
     private Handler mHandler;
-    private String mUrl = "http://api.vkontakte.ru/oauth/authorize?client_id=" + Static.AUTH_VKONTAKTE_ID + "&scope=" + VK_PERMISSIONS + "&redirect_uri=http://api.vkontakte.ru/blank.html&display=touch&response_type=token";
+    private String mUrl = VK_OAUTH_AUTH_URL + "?client_id=" + Static.AUTH_VKONTAKTE_ID + "&scope=" + VK_PERMISSIONS + "&redirect_uri=" + VK_OAUTH_REDIRECT_URL + "&display=touch&response_type=token";
     //---------------------------------------------------------------------------
     public VkAuthClient(Context context, WebView webView, View progressIndicator, Handler handler) {
       super();

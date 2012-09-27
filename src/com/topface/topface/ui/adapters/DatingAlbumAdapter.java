@@ -55,7 +55,7 @@ public class DatingAlbumAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        if (mUserData == null)
+        if (mUserData == null || mUserData.avatars_big == null)
             return 0;
         return mUserData.avatars_big.length;
     }

@@ -9,7 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.topface.topface.*;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -96,10 +99,12 @@ public class DashboardActivity extends MenuActivity implements View.OnClickListe
             findViewById(R.id.btnDshbrdChat).setOnClickListener(this);
         }
 
-        if (!App.isOnline())
-            Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
-        else
+        if (App.isOnline()) {
             ratingPopup();
+        }
+        else {
+            App.showConnectionError();
+        }
 
     }
 
@@ -118,7 +123,7 @@ public class DashboardActivity extends MenuActivity implements View.OnClickListe
         System.gc();
 
         if (!App.isOnline())
-            Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
+            App.showConnectionError();
 
         Data.facebook.extendAccessTokenIfNeeded(this, null);
 
@@ -340,7 +345,7 @@ public class DashboardActivity extends MenuActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (!App.isOnline()) {
-            Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
+            App.showConnectionError();
             return;
         }
 

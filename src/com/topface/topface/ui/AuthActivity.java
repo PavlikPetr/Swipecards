@@ -13,6 +13,7 @@ import com.facebook.android.DialogError;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
+import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Auth;
@@ -59,7 +60,9 @@ public class AuthActivity extends TrackedActivity implements View.OnClickListene
   protected void onDestroy() {
     Debug.log(this,"-onDestroy");
     mAsyncFacebookRunner = null;
-    if(authRequest!=null) authRequest.cancel();
+    if (authRequest != null) {
+        authRequest.cancel();
+    }
     super.onDestroy();
   }
   //---------------------------------------------------------------------------
@@ -78,11 +81,16 @@ public class AuthActivity extends TrackedActivity implements View.OnClickListene
   //---------------------------------------------------------------------------
   @Override
   public void onClick(View view) {
-    if(view.getId() == R.id.btnAuthVK) {
-      Intent intent = new Intent(getApplicationContext(), WebAuthActivity.class);
-      startActivityForResult(intent, WebAuthActivity.INTENT_WEB_AUTH);
-    } else if(view.getId() == R.id.btnAuthFB) {
-      Data.facebook.authorize(this, FB_PERMISSIONS, mDialogListener);
+    if (App.isOnline()) {
+        if(view.getId() == R.id.btnAuthVK) {
+            Intent intent = new Intent(getApplicationContext(), WebAuthActivity.class);
+            startActivityForResult(intent, WebAuthActivity.INTENT_WEB_AUTH);
+        } else if(view.getId() == R.id.btnAuthFB) {
+            Data.facebook.authorize(this, FB_PERMISSIONS, mDialogListener);
+        }
+    }
+    else {
+        App.showConnectionError();
     }
   }
 

@@ -10,7 +10,7 @@
     <string name="general_data_error">Updating error</string>
     <string name="general_footer_previous">Previous messages</string>
     <string name="general_purchasing_error">Please write message about purchasing error to support@topface.ru</string>
-    <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
+    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
 
     <!-- Auth Activity  -->
     <string name="auth_btn_vk">Login via VKontakte</string>
@@ -230,5 +230,7 @@
     <string name="not_found_dialog_message">No results found, try changing your search </string>
     <string name="not_found_dialog_change_filter">Change search settings</string>
     <string name="not_found_dialog_try">Try again</string>
+    <string name="photo_upload_error">Error uploading photo.</string>
+    <string name="photo_upload_oom">Try to upload a photo of a smaller size</string>
 
 </resources>

@@ -157,6 +157,9 @@ public class InboxActivity extends TrackedActivity {
       @Override
       public void success(ApiResponse response) {
         final LinkedList<FeedInbox> feedInboxList = FeedInbox.parse(response);
+        if (mInboxDataList == null) {
+            return;
+        }
         post(new Runnable() {
           @Override
           public void run() {

@@ -4,13 +4,13 @@
     <string name="app_name">Topface</string>
 
     <!-- General  -->
-    <string name="general_internet_off">Нет подключения к Интернет</string>
+    <string name="general_internet_off">Нет подключения к Интернету</string>
     <string name="general_dialog_loading">Загрузка</string>
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка обновления данных</string>
     <string name="general_footer_previous">Предыдущие сообщения</string>
     <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
-    <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
+    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     
     <!-- Auth Activity  -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
@@ -231,5 +231,8 @@
     <string name="not_found_dialog_message">По вашему запросу никого не найдено, попробуйте изменить настройки поиска</string>
     <string name="not_found_dialog_change_filter">Изменить настройки поиска</string>
     <string name="not_found_dialog_try">Попробовать еще раз</string>
+
+    <string name="photo_upload_error">Произошла ошибка при загрузке фотографии.</string>
+    <string name="photo_upload_oom">Попробуйте грузить фотографию меньшего размера</string>
 
 </resources>
