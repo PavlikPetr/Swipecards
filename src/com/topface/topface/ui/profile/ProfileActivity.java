@@ -411,6 +411,11 @@ public class ProfileActivity extends MenuActivity {
   }
   //---------------------------------------------------------------------------
   private void updateOwnerAlbum() {
+    if (CacheProfile.uid == 0) {
+        //Если профиль пользователя не загрузился, то смысла отправлять запрос нет
+        return;
+    }
+
     albumRequest = new AlbumRequest(getApplicationContext());
     albumRequest.uid  = CacheProfile.uid;
     albumRequest.callback(new ApiHandler() {
