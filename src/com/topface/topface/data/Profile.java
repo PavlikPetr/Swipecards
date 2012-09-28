@@ -411,7 +411,7 @@ public class Profile extends AbstractDataWithPhotos {
     }
     
     private static void compareFormItemData(FormItem item, int position, Profile profile) {
-        if (item.dataId != FormItem.NO_RESOURCE_ID) {
+        if (item.dataId > 0) {
           if (item.dataId == CacheProfile.forms.get(position).dataId) 
               item.equal = true;
           profile.forms.add(item);
