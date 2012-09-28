@@ -1,10 +1,12 @@
 package com.topface.topface.ui.fragments;
 
+import java.util.LinkedList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +48,8 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     
     private Button mBuyButton;
     private View mUserPowerBkgd;
+    
+    private LinkedList<Fragment> mFragments;
    
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
@@ -56,6 +60,8 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
 		super.onCreateView(inflater, container, saved);
 		View view = inflater.inflate(R.layout.ac_profile, null);
+		
+		mFragments = new LinkedList<Fragment>();
 		
         // Home Button
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
@@ -167,7 +173,18 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
             break;
         }
     }
-	
+    
+    @Override
+    public void onDestroy() {
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        for (Fragment f : mFragments) {
+            ft.detach(f);
+        }
+        ft.commitAllowingStateLoss();
+        getActivity().getSupportFragmentManager().executePendingTransactions();
+        super.onDestroy();
+    }
+
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrollStateChanged(int arg0) {
@@ -228,28 +245,21 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 
         public ProfilePageAdapter(FragmentManager fm) {
             super(fm);
+            mFragments.add(new ProfilePhotoFragment());
+            mFragments.add(new ProfileFormFragment());
+            mFragments.add(new GiftsFragment());
         }
 
         @Override
         public int getCount() {
-            return F_COUNT;
+            return mFragments.size();
         }
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = null; 
-            switch (position) {
-                case F_PHOTO:
-                    fragment = new ProfilePhotoFragment();
-                    break;
-                case F_FORM:
-                    fragment = new ProfileFormFragment();
-                    break;
-                case F_GIFTS:
-                    fragment = new GiftsFragment();
-                    break;
-            }
-            return fragment;
+            return mFragments.get(position);
         }
+        
+        
     }
 }

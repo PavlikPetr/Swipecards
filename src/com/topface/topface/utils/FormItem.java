@@ -2,9 +2,7 @@ package com.topface.topface.utils;
 
 import com.topface.topface.Static;
 
-import java.io.Serializable;
-
-public class FormItem implements Serializable {
+public class FormItem {
     // Data
     public int type;
     public String title;    
@@ -23,7 +21,7 @@ public class FormItem implements Serializable {
     
     private static FormItem divider = null;
     
-    private static final long serialVersionUID = 1883262786634798671L;    
+    //private static final long serialVersionUID = 1883262786634798671L;    
     
     public FormItem(int titleId, int type) {
     	this.titleId = titleId;    	

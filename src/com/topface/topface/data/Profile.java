@@ -1,22 +1,20 @@
 package com.topface.topface.data;
 
 import android.content.Context;
-import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
 import java.util.LinkedList;
 
 /* Класс профиля владельца устройства */
-public class Profile extends AbstractDataWithPhotos implements Serializable {
-    // Data
+public class Profile extends AbstractDataWithPhotos {
+
     public int uid; // id пользователя в топфейсе
     public String first_name; // имя пользователя
     public int age; // возраст пользователя
@@ -78,8 +76,10 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
     
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();
 
-    private static final String profileFileName = "profile.out";
-    private static final long serialVersionUID  = 2748391675222256671L;
+    private static boolean mIsUserProfile;
+    
+    //private static final String profileFileName = "profile.out";
+    //private static final long serialVersionUID  = 2748391675222256671L;
     
     public static Profile parse(ApiResponse response) {
         return parse(new Profile(), response.mJSONResult);
@@ -111,36 +111,6 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 profile.city_full = city.optString("full");
             }
 
-            // avatars
-//            if (!resp.isNull("avatars")) {
-//                JSONObject avatars = resp.getJSONObject("avatars");
-//                profile.avatar_big = avatars.optString("big");
-//                profile.avatar_small = avatars.optString("small");
-//            }
-
-            // albums
-//              if (!resp.isNull("album")) {
-//                JSONArray albums = resp.getJSONArray("album");
-//                profile.albums = new LinkedList<Album>();
-//                if (albums.length() > 0)
-//                    for (int i = 0; i < albums.length(); i++) {
-//                        JSONObject item = albums.getJSONObject(i);
-//                        Album album = new Album();
-//                        album.id = item.optInt("id");
-//                        album.small = item.optString("small");
-//                        album.big = item.optString("big");
-//                        if (!item.isNull("ero")) {
-//                            album.ero = true;
-//                            album.buy = item.optBoolean("buy");
-//                            album.cost = item.optInt("cost");
-//                            album.likes = item.optInt("likes");
-//                            album.dislikes = item.optInt("dislikes");
-//                        } else
-//                            album.ero = false;
-//                        profile.albums.add(album);
-//                    }
-//            }
-
             // dating filter
             if (!resp.isNull("dating")) {
                 JSONObject dating = resp.getJSONObject("dating");
@@ -161,137 +131,208 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
                 
                 FormInfo formInfo = new FormInfo(context, profile);
                 
-
                 FormItem formItem;
                 
-                // или через конструктор инициализировать ?                
+                if (profile instanceof User)
+                    mIsUserProfile = true;
                 
-                // 1 header -= MAIN =-
+                //1 HEADER -= MAIN =-
                 formItem = new FormItem(R.string.form_main,FormItem.HEADER);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
-                
-                // 2 character
+
+                //2 character  position 0
+                int position = 0;
                 formItem = new FormItem(R.array.form_main_character,form.optInt("character_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
                 
-                // 3 communication
+                //3 communication position 1
                 formItem = new FormItem(R.array.form_main_communication,form.optInt("communication_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
                 
-                // 4 divider
+                //4 DIVIDER
                 profile.forms.add(FormItem.getDivider());
                 
-                // 5 header -= PHYSIQUE =-
+                //5 HEADER -= PHYSIQUE =-
                 formItem = new FormItem(R.string.form_physique,FormItem.HEADER);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 6 fitness
+                //6 fitness  position 2
                 formItem = new FormItem(R.array.form_physique_fitness,form.optInt("fitness_id"),FormItem.DATA);                
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
 
-                // 7 height
+                //7 height  position 3
                 formItem = new FormItem(R.array.form_main_height,Integer.toString(form.optInt("height")), FormItem.DATA);                
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
                 
-                // 8 weight
+                //8 weight  position 4
                 formItem = new FormItem(R.array.form_main_weight,Integer.toString(form.optInt("weight")),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
                 
-                // 9 hair
+                //9 hair  position 5
                 formItem = new FormItem(R.array.form_physique_hairs,form.optInt("hair_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
                 
-                // 10 eye
+                //10 eye  position 6
                 formItem = new FormItem(R.array.form_physique_eyes,form.optInt("eyes_id"),FormItem.DATA);                
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
                 
-                // 11 divider                
+                //11 DIVIDER                
                 profile.forms.add(FormItem.getDivider());
                 
-                // 12 header -= SOCIAL =-
+                //12 HEADER -= SOCIAL =-
                 formItem = new FormItem(R.string.form_social,FormItem.HEADER);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 13 marriage
+                //13 marriage position 7
                 formItem = new FormItem(R.array.form_social_marriage,form.optInt("marriage_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
                 
-                // 14 education
+                //14 education  position 8
                 formItem = new FormItem(R.array.form_social_education,form.optInt("education_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
                 
-                // 15 finances
+                //15 finances  position 9
                 formItem = new FormItem(R.array.form_social_finances,form.optInt("finances_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);    
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }   
                 
-                // 16 residence
+                //16 residence  position 10
                 formItem = new FormItem(R.array.form_social_residence,form.optInt("residence_id"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
 
-                // 17 car vs car_id
+                //17 car vs car_id  position 11
                 formItem = new FormItem(R.array.form_social_car,form.optInt("car_id"),FormItem.DATA);                
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
                 
-                // divider
+                //18 DIVIDER
                 profile.forms.add(FormItem.getDivider());
                 
-                // 1 header -= HABITS =-
+                //19 HEADER -= HABITS =-
                 formItem = new FormItem(R.string.form_habits,FormItem.HEADER);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 9 smoking
+                //20 smoking  position 12
                 formItem = new FormItem(R.array.form_habits_smoking,form.optInt("smoking_id"),FormItem.DATA);                
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
                 
-                // 10 alcohol
+                //21 alcohol  position 13
                 formItem = new FormItem(R.array.form_habits_alcohol,form.optInt("alcohol_id"),FormItem.DATA);                
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                    position++;
+                    compareFormItemData(formItem, position, profile);
+                } else {
+                    profile.forms.add(formItem);
+                }
                 
-                // 23 restaurants
+                //22 restaurants  position 14
                 formItem = new FormItem(R.array.form_habits_restaurants,form.optString("restaurants"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // divider
+                //23 DIVIDER
                 profile.forms.add(FormItem.getDivider());
                 
-                // 1 header -= DETAIL =-
+                //24 HEADER -= DETAIL =-
                 formItem = new FormItem(R.string.form_detail,FormItem.HEADER);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 20 first_dating
+                //25 first_dating  position 15
                 formItem = new FormItem(R.array.form_detail_about_dating,form.optString("first_dating"),FormItem.DATA);                
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // 21 achievements
+                //26 achievements  position 16
                 formItem = new FormItem(R.array.form_detail_archievements,form.optString("achievements"),FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 profile.forms.add(formItem);
                 
-                // divider
+                //27 DIVIDER
                 profile.forms.add(FormItem.getDivider());
                 
-                // 1 header -= ????????? =-
+                //  header -= ????????? =-
 //                formItem = new FormItem();
 //                formItem.type  = FormItem.HEADER;
 //                formItem.title = "?????????";
@@ -299,7 +340,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
 //                formItem.equal = false;
 //                profile.forms.add(formItem);
 //                
-//                // 2 job vs job_id
+//                //  job vs job_id
 //                formItem = new FormItem();
 //                formItem.type  = FormItem.DATA;
 //                formItem.title = "job";
@@ -307,7 +348,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
 //                formItem.equal = false;
 //                profile.forms.add(formItem);
 //                
-//                // 3 status vs status_id
+//                //  status vs status_id
 //                formItem = new FormItem();
 //                formItem.type  = FormItem.DATA;
 //                formItem.title = "status";
@@ -315,7 +356,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
 //                formItem.equal = false;
 //                profile.forms.add(formItem);                
 //                
-//                // 17 children
+//                //  children
 //                formItem = new FormItem();
 //                formItem.type  = FormItem.DATA;
 //                formItem.title = "children";
@@ -323,10 +364,10 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
 //                formItem.equal = false;
 //                profile.forms.add(formItem);
 //                
-//                // 22 form_countries
+//                //  form_countries
 //                //{Array} form_countries; // массив идентификаторов стран, в которых бывал пользователь
 //                
-//                // 24 valuables
+//                //  valuables
 //                formItem = new FormItem();
 //                formItem.type  = FormItem.DATA;
 //                formItem.title = "valuables";
@@ -334,7 +375,7 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
 //                formItem.equal = false;
 //                profile.forms.add(formItem);
 // 
-//                // 25 aspirations
+//                //  aspirations
 //                formItem = new FormItem();
 //                formItem.type  = FormItem.DATA;
 //                formItem.title = "aspirations";
@@ -369,6 +410,14 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
         return uid;
     }
     
+    private static void compareFormItemData(FormItem item, int position, Profile profile) {
+        if (item.dataId != FormItem.NO_RESOURCE_ID) {
+          if (item.dataId == CacheProfile.forms.get(position).dataId) 
+              item.equal = true;
+          profile.forms.add(item);
+        }
+    }
+    
 //    public static Profile load() {
 //        Profile profile = null;
 //        ObjectInputStream oin = null;
@@ -385,32 +434,32 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
 //        return profile;
 //    }
     
-    public static Profile load() {
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-        Profile profile = new Profile();
-        try {
-            br = new BufferedReader(new InputStreamReader(App.getContext().openFileInput(profileFileName)));
-            if (br != null)
-              for (String line = br.readLine(); line != null; line = br.readLine())
-                  sb.append(line);
-        } catch(Exception e) {
-            Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
-        } finally {
-            try {
-                if(br != null) br.close();
-            } catch(IOException e) {
-                Debug.error(e);
-            }
-        }
-        JSONObject json;
-        try {
-            json = new JSONObject(sb.toString());
-        } catch(JSONException e) {
-            json = new JSONObject();
-        }
-        return Profile.parse(profile, json);
-    }
+//    public static Profile load() {
+//        BufferedReader br = null;
+//        StringBuilder sb = new StringBuilder();
+//        Profile profile = new Profile();
+//        try {
+//            br = new BufferedReader(new InputStreamReader(App.getContext().openFileInput(profileFileName)));
+//            if (br != null)
+//              for (String line = br.readLine(); line != null; line = br.readLine())
+//                  sb.append(line);
+//        } catch(Exception e) {
+//            Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
+//        } finally {
+//            try {
+//                if(br != null) br.close();
+//            } catch(IOException e) {
+//                Debug.error(e);
+//            }
+//        }
+//        JSONObject json;
+//        try {
+//            json = new JSONObject(sb.toString());
+//        } catch(JSONException e) {
+//            json = new JSONObject();
+//        }
+//        return Profile.parse(profile, json);
+//    }
     
 //    public static void save(final Profile profile) {
 //        new Thread(new Runnable() {
@@ -432,39 +481,39 @@ public class Profile extends AbstractDataWithPhotos implements Serializable {
 //        }).start();
 //    }
     
-    public static void save(final String response) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                BufferedOutputStream bos = null;
-                try {
-                    bos = new BufferedOutputStream(App.getContext().openFileOutput(profileFileName, Context.MODE_PRIVATE));
-                    bos.write(response.getBytes("UTF8"));
-                    bos.flush();
-                } catch(Exception e) {
-                    Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
-                } finally {
-                    try {
-                        if(bos != null) bos.close();
-                    } catch(IOException e) {
-                        Debug.error(e);
-                    }
-                }
-            }
-        }).start();
-    }
+//    public static void save(final String response) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                BufferedOutputStream bos = null;
+//                try {
+//                    bos = new BufferedOutputStream(App.getContext().openFileOutput(profileFileName, Context.MODE_PRIVATE));
+//                    bos.write(response.getBytes("UTF8"));
+//                    bos.flush();
+//                } catch(Exception e) {
+//                    Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
+//                } finally {
+//                    try {
+//                        if(bos != null) bos.close();
+//                    } catch(IOException e) {
+//                        Debug.error(e);
+//                    }
+//                }
+//            }
+//        }).start();
+//    }
     
-    public static boolean isProfileExist() {
-        File file = new File(App.getContext().getFilesDir(), profileFileName);
-        return file.exists();
-    }
-    
-    public static void deleteProfile() {
-        File file = new File(App.getContext().getFilesDir(), profileFileName);
-        if(file.exists()) {
-          file.delete();
-        }
-    }
+//    public static boolean isProfileExist() {
+//        File file = new File(App.getContext().getFilesDir(), profileFileName);
+//        return file.exists();
+//    }
+//    
+//    public static void deleteProfile() {
+//        File file = new File(App.getContext().getFilesDir(), profileFileName);
+//        if(file.exists()) {
+//          file.delete();
+//        }
+//    }
 }
 
 // "ADMIN_MESSAGE","QUESTIONARY_FILLED","CHANGE_PHOTO","STANDALONE_BONUS","STANDALONE",

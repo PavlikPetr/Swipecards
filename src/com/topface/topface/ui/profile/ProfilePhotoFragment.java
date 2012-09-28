@@ -5,6 +5,7 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -81,6 +82,32 @@ public class ProfilePhotoFragment extends Fragment {
         return root;
     }
     
+    
+    
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        // TODO Auto-generated method stub
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        // TODO Auto-generated method stub
+        super.onStop();
+    }
+
     @Override
     public void onActivityResult(int requestCode,int resultCode,Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

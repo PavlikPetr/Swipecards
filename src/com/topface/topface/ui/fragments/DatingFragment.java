@@ -39,7 +39,6 @@ import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +61,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mUserInfoCity;
     private TextView mUserInfoStatus;
     private TextView mCounter;
-    private TextView mDatingLovePrice;
     private View mDatingGroup;
     private View mFirstRateButtons;
     private View mSecondRateButtons;
@@ -74,7 +72,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private AlphaAnimation mAlphaAnimation;
     private SharedPreferences mPreferences;
     private RateController mRateController;
-    private RelativeLayout mDatingLoveBtnLayout;
     private View mNavigationHeader;    
     private Button mSettingsButton;
 
@@ -155,14 +152,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSwitchNextBtn.setOnClickListener(this);
         mSwitchPrevBtn = (Button)view.findViewById(R.id.btnDatingSwitchPrev);
         mSwitchPrevBtn.setOnClickListener(this);
-
-        // Dating Love Price
-        mDatingLoveBtnLayout = (RelativeLayout) view.findViewById(R.id.loDatingLove);
-        mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);     
-//        mDatingLovePrice.measure(0, 0);
-//    	  int dx = mMutualBtn.getCompoundDrawables()[1].getIntrinsicWidth() - mDatingLovePrice.getMeasuredWidth()/3;
-//        int dy = mMutualBtn.getCompoundDrawables()[1].getIntrinsicHeight() - mDatingLovePrice.getMeasuredHeight();
-//        mDatingLovePrice.setPadding(dx, dy, 0, 0);
         
         // User Info
         mUserInfoName = ((TextView)view.findViewById(R.id.tvDatingUserName));
@@ -201,11 +190,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             public void success(ApiResponse response) {
                 LinkedList<Search> userList = Search.parse(response);
                 if (!isAddition) {
-                    Debug.log(this, "update set");
                     mUserSearchList.clear();
                     mUserSearchList.addAll(userList);
                 } else {
-                    Debug.log(this, "update add");
                     mUserSearchList.addAll(userList);
                 }
                 
@@ -450,14 +437,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoName.setVisibility(View.INVISIBLE);
         mUserInfoCity.setVisibility(View.INVISIBLE);
         mUserInfoStatus.setVisibility(View.INVISIBLE);
-//        mLoveBtn.setVisibility(View.INVISIBLE);
         mLikeBtn.setVisibility(View.INVISIBLE);
         mSkipBtn.setVisibility(View.INVISIBLE);
         mPrevBtn.setVisibility(View.INVISIBLE);
         mProfileBtn.setVisibility(View.INVISIBLE);
         mChatBtn.setVisibility(View.INVISIBLE);
-        mDatingLoveBtnLayout.setVisibility(View.INVISIBLE);
-//      mCounter.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -465,14 +449,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoName.setVisibility(View.VISIBLE);
         mUserInfoCity.setVisibility(View.VISIBLE);
         mUserInfoStatus.setVisibility(View.VISIBLE);
-//        mLoveBtn.setVisibility(View.VISIBLE);
         mLikeBtn.setVisibility(View.VISIBLE);
         mSkipBtn.setVisibility(View.VISIBLE);
         mPrevBtn.setVisibility(View.VISIBLE);
         mProfileBtn.setVisibility(View.VISIBLE);
         mChatBtn.setVisibility(View.VISIBLE);
-        mDatingLoveBtnLayout.setVisibility(View.VISIBLE);
-//      mCounter.setVisibility(View.VISIBLE);
     }
 
     @Override

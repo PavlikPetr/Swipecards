@@ -15,17 +15,21 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class BuyingActivity extends Activity implements View.OnClickListener {
-    // Data
+
     private Handler mHandler;
     private ViewGroup mMoney6;
     private ViewGroup mMoney40;
@@ -36,14 +40,14 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
     private BillingService mBillingService;
     private TopfacePurchaseObserver mTopfacePurchaseObserver;
     private ProgressDialog mProgressDialog;
-    // Constants
-    /*private static final int PRICE_COINS_6 = 6;
-     * private static final int PRICE_COINS_40 = 40;
-     * private static final int PRICE_COINS_100 = 100;
-     * private static final int PRICE_ENERGY = 10000; */
-    public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
+    
+    public static final String INTENT_USER_COINS = "user_coins";
 
-    // class NotificationReceiver
+    public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
+    
+    /*
+     * class NotificationReceiver
+     */
     public BroadcastReceiver mPurchaseReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context,Intent intent) {
@@ -75,50 +79,45 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         });
 
         // Resources
-        mResourcesPower = (TextView)findViewById(R.id.tvResourcesPower);
-        //mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
-        mResourcesPower.setText("" + CacheProfile.power + "%");
         mResourcesMoney = (TextView)findViewById(R.id.tvResourcesMoney);
-        mResourcesMoney.setText("" + CacheProfile.money);
+        mResourcesMoney.setText(getString(R.string.buying_you_have) + " " + CacheProfile.money);
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(0.9f, 0.9f);
+        
+        //Drawable battery = getResources().getDrawable(Utils.getBatteryResource(CacheProfile.power));
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), Utils.getBatteryResource(CacheProfile.power));
+        Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        BitmapDrawable battery = new BitmapDrawable(scaledBitmap);
+        
+        mResourcesPower = (TextView)findViewById(R.id.tvResourcesPower);
+        mResourcesPower.setCompoundDrawablesWithIntrinsicBounds(null, null, battery, null);
+        mResourcesPower.setText("" + CacheProfile.power + "%");
+
+        int coins = getIntent().getIntExtra(INTENT_USER_COINS, 0);
+        
+        // Info 
+        TextView mResourcesInfo = (TextView)findViewById(R.id.tvResourcesInfo);
+        if (coins > 0)
+            mResourcesInfo.setText(mResourcesInfo.getText() + " " + coins);
+        else
+            mResourcesInfo.setText(mResourcesInfo.getText());
 
         // Progress Bar
-        mProgressDialog = new ProgressDialog(this); // getApplicationContext() падает
+        mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage(getString(R.string.general_dialog_loading));
+        
+        mPower = (ViewGroup)findViewById(R.id.btnBuyingPower);
+        mPower.setOnClickListener(this);
 
-        //Drawable drwbl_energy = getResources().getDrawable(R.drawable.dating_power);
-        //Drawable drwbl_coins = getResources().getDrawable(R.drawable.dating_money);
-        {
-            mMoney6 = (ViewGroup)findViewById(R.id.btnBuyingMoney6);
-            mMoney6.setOnClickListener(this);
-            //TextView tvTitle = (TextView)findViewById(R.id.tvBuyingTitle6);
-            //tvTitle.setText(getString(R.string.buying_buy) + " " + PRICE_COINS_6);
-            //tvTitle.setCompoundDrawablePadding(5);
-            //tvTitle.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl_coins,null);
-        }
-        {
-            mMoney40 = (ViewGroup)findViewById(R.id.btnBuyingMoney40);
-            mMoney40.setOnClickListener(this);
-            //TextView tvTitle = (TextView)findViewById(R.id.tvBuyingTitle40);
-            //tvTitle.setText(getString(R.string.buying_buy) + " " + PRICE_COINS_40);
-            //tvTitle.setCompoundDrawablePadding(5);
-            //tvTitle.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl_coins,null);
-        }
-        {
-            mMoney100 = (ViewGroup)findViewById(R.id.btnBuyingMoney100);
-            mMoney100.setOnClickListener(this);
-            //TextView tvTitle = (TextView)findViewById(R.id.tvBuyingTitle100);
-            //tvTitle.setText(getString(R.string.buying_buy) + " " + PRICE_COINS_100);
-            //tvTitle.setCompoundDrawablePadding(5);
-            //tvTitle.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl_coins,null);
-        }
-        {
-            mPower = (ViewGroup)findViewById(R.id.btnBuyingPower);
-            mPower.setOnClickListener(this);
-            //TextView tvTitle = (TextView)findViewById(R.id.tvBuyingTitlePower);
-            //tvTitle.setText(getString(R.string.buying_buy) + " " + PRICE_ENERGY);
-            //tvTitle.setCompoundDrawablePadding(5);
-            //tvTitle.setCompoundDrawablesWithIntrinsicBounds(null,null,drwbl_energy,null);
-        }
+        mMoney6 = (ViewGroup)findViewById(R.id.btnBuyingMoney6);
+        mMoney6.setOnClickListener(this);
+        
+        mMoney40 = (ViewGroup)findViewById(R.id.btnBuyingMoney40);
+        mMoney40.setOnClickListener(this);
+
+        mMoney100 = (ViewGroup)findViewById(R.id.btnBuyingMoney100);
+        mMoney100.setOnClickListener(this);
 
         mHandler = new Handler();
         mTopfacePurchaseObserver = new TopfacePurchaseObserver(mHandler);
@@ -169,7 +168,9 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    // class TopfacePurchaseObserver
+    /*
+     *  class TopfacePurchaseObserver
+     */
     private class TopfacePurchaseObserver extends PurchaseObserver {
         public TopfacePurchaseObserver(Handler handler) {
             super(BuyingActivity.this, handler);
@@ -205,7 +206,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         public void onRestoreTransactionsResponse(RestoreTransactions request,ResponseCode responseCode) {
             Debug.log("BuyingActivity", "onRestoreTransactionsResponse");
         }
-    }// TopfacePurchaseObserver
+    }
 
 }// BuyingActivity
 

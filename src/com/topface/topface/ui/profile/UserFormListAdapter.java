@@ -13,11 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class UserFormListAdapter extends BaseAdapter {
-    // Data
+
     private LayoutInflater mInflater;
     private LinkedList<FormItem> mUserForms;
     
-    // Constants
     private static final int T_HEADER  = 0;
     private static final int T_DIVIDER = 1;
     private static final int T_DATA    = 2;
@@ -115,9 +114,9 @@ public class UserFormListAdapter extends BaseAdapter {
                 holder.mTitle.setText(item.title.toUpperCase());
                 holder.mValue.setText(item.value);
                 if(item.equal)
-                    holder.mState.setImageResource(R.drawable.user_cell);  // GREEN POINT
+                    holder.mState.setImageResource(R.drawable.user_cell_on);  // GREEN POINT
                 else
-                    holder.mState.setImageResource(R.drawable.user_cell);
+                    holder.mState.setImageResource(R.drawable.user_cell_off);
                 break;
         }
 

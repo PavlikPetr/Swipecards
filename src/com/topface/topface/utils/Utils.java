@@ -11,6 +11,7 @@ import android.graphics.PorterDuff.Mode;
 import android.text.ClipboardManager;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import android.util.DisplayMetrics;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
@@ -63,7 +64,7 @@ public class Utils {
 
         return clippedBitmap;
     }
-    //---------------------------------------------------------------------------    
+
     public static Bitmap clipAndScaleBitmap(Bitmap rawBitmap, int dstWidth, int dstHeight) {
         if (rawBitmap == null || rawBitmap.getWidth()<= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
             return null;
@@ -104,7 +105,6 @@ public class Utils {
         return clippedBitmap;
     }
 
-    //---------------------------------------------------------------------------
     public static Bitmap getRoundedCornerBitmapByMask(Bitmap bitmap, Bitmap mask) {
         int width  = mask.getWidth();
         int height = mask.getHeight();
@@ -125,11 +125,11 @@ public class Utils {
 
         return output;
     }
-    //---------------------------------------------------------------------------
+
     public static Bitmap getRoundedBitmap(Bitmap bitmap) { 
         return getRoundedBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight());
     }
-    //---------------------------------------------------------------------------
+
     public static Bitmap getRoundedBitmap(Bitmap bitmap, int dstWidth, int dstHeight) {
         if(bitmap == null)
             return null;
@@ -170,17 +170,17 @@ public class Utils {
 
           return output;
     }
-    //---------------------------------------------------------------------------
+
     public static final int RADIUS_OUT = 0 ;
     public static final int RADIUS_IN  = 1 ;
 	public static Bitmap getScaleAndRoundBitmapOut(Bitmap bitmap, final int width, final int height, float radiusMult) {
         return getScaleAndRoundBitmap(RADIUS_OUT, bitmap, width, height, radiusMult);
     }
-    //---------------------------------------------------------------------------
+
 	public static Bitmap getScaleAndRoundBitmapIn(Bitmap bitmap, final int width, final int height, float radiusMult) {
 	    return getScaleAndRoundBitmap(RADIUS_IN, bitmap, width, height, radiusMult);
 	}
-    //---------------------------------------------------------------------------
+
     private static Bitmap getScaleAndRoundBitmap(int type, Bitmap bitmap, final int width, final int height, float radiusMult) {
         final int bitmapWidth  = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
@@ -225,7 +225,7 @@ public class Utils {
         
         return scaledBitmap;
     }
-    //---------------------------------------------------------------------------
+
     public static String formatTime(Context context, long time) {
         String text = Static.EMPTY;
         
@@ -261,7 +261,7 @@ public class Utils {
                 return String.format(context.getString(R.string.time_minutes), minutes);
         }
     }
-    //---------------------------------------------------------------------------
+
     public static String formatDayOfWeek(Context context, int dayOfWeek) {
         int resurseId = 0;
         switch (dayOfWeek) {
@@ -289,7 +289,7 @@ public class Utils {
         }
         return context.getString(resurseId);
     }
-    //---------------------------------------------------------------------------
+
     public static String formatMonth(Context context, int month) {
         int resurseId = 0;
         switch (month) {
@@ -332,7 +332,7 @@ public class Utils {
         }
         return context.getString(resurseId);
     }
-    //---------------------------------------------------------------------------
+
     public static void formatTimeOld(TextView tv, long time) {
         Context context = tv.getContext();
         String text;
@@ -370,7 +370,7 @@ public class Utils {
     }
 
     public static int getBatteryResource(int power) {
-        int n = 50 * CacheProfile.power / 100;
+        int n = 50 * power / 100;
         switch (n) {
             case 0:
                 return R.drawable.battery_00;
@@ -515,5 +515,26 @@ public class Utils {
             debug = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         }
         return debug;
+    }
+    
+    public float dpFromPx(int px) {
+        return px * App.getContext().getResources().getDisplayMetrics().density;
+    }
+    
+    public float pxFromDp(int dx) {
+        return dx / App.getContext().getResources().getDisplayMetrics().density;
+    }
+    
+    public static float dpToPx(Context context, float dp){
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        float px = dp * (metrics.densityDpi/160f);
+        return px;
+    }
+
+    public static float pxToDp(Context context, float px){
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return dp;
+
     }
 }

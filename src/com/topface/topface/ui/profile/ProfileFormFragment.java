@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.topface.topface.R;
 
 public class ProfileFormFragment extends BaseFragment {
+    
     private ProfileFormListAdapter mProfilePhotoListAdapter;
     private TextView mTitle;
     
@@ -31,7 +32,7 @@ public class ProfileFormFragment extends BaseFragment {
         formListView.setAdapter(mProfilePhotoListAdapter);
         
         mTitle = (TextView)root.findViewById(R.id.fragmentTitle);
-        mTitle.setText("You have 15 something");
+        mTitle.setText("You have 15 something"); // <<<<<<<<<<<<<<<<<<<<<<<<<<
         
         return root;
     }

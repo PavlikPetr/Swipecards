@@ -111,6 +111,9 @@
 
     <!-- Buying Activity -->
     <string name="buying_header_title">Покупка</string>
+    <string name="buying_you_have">У вас</string>
+    <string name="buying_you_have_no">Вам не хватает</string>
+    <string name="buying_for_purchasing">для покупки подарка</string>
     <string name="buying_money">Покупка монет</string>
     <string name="buying_power">Покупка энергии</string>
     <string name="buying_buy">Купить</string>
