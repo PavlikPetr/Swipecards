@@ -5,6 +5,7 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +82,7 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 				((TextView)loName.findViewById(R.id.tvTitle)).setText(R.string.edit_name);
 				EditText edName = (EditText) loName.findViewById(R.id.edText);
 				edName.setText(data);
+				edName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 				edName.addTextChangedListener(new TextWatcher() {
 					String before = Static.EMPTY;
 					@Override
@@ -107,6 +109,7 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 				((TextView)loAge.findViewById(R.id.tvTitle)).setText(R.string.edit_age);
 				EditText edAge = (EditText) loAge.findViewById(R.id.edText);
 				edAge.setText(data);
+				edAge.setInputType(InputType.TYPE_CLASS_NUMBER);
 				edAge.addTextChangedListener(new TextWatcher() {
 					String before = Static.EMPTY;
 					@Override
@@ -131,7 +134,8 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 				loStatus.setVisibility(View.VISIBLE);
 				((TextView)loStatus.findViewById(R.id.tvTitle)).setText(R.string.edit_status);
 				EditText edStatus = (EditText) loStatus.findViewById(R.id.edText);
-				edStatus.setText(data);			
+				edStatus.setText(data);		
+				edStatus.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 				edStatus.addTextChangedListener(new TextWatcher() {
 					String before = Static.EMPTY;
 					@Override

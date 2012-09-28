@@ -1,8 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/auth_bg"
+    android:gravity="center_horizontal"
     android:orientation="vertical" >
-    
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/loText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ivLogo"
+        android:layout_alignRight="@+id/ivLogo"
+        android:layout_centerVertical="true"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tvVersion"
+            style="@style/ItemtText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"            
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tvCopyright"
+            style="@style/ItemtText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvVersion"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tvExtra"
+            style="@style/ItemtText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvCopyright"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:gravity="center" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/loText"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/auth_logo" />
+
+</RelativeLayout>

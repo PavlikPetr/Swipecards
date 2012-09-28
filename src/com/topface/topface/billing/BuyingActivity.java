@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,10 +63,20 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
 
         // Title Header
         ((TextView)findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.buying_header_title));
+        (findViewById(R.id.btnNavigationHome)).setVisibility(View.INVISIBLE);
+        Button backButton = ((Button) findViewById(R.id.btnNavigationBack));
+        backButton.setVisibility(View.VISIBLE);
+        backButton.setOnClickListener(new OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            setResult(Activity.RESULT_CANCELED);
+            finish();
+          }
+        });
 
         // Resources
         mResourcesPower = (TextView)findViewById(R.id.tvResourcesPower);
-        mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+        //mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
         mResourcesPower.setText("" + CacheProfile.power + "%");
         mResourcesMoney = (TextView)findViewById(R.id.tvResourcesMoney);
         mResourcesMoney.setText("" + CacheProfile.money);

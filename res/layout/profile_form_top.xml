@@ -112,7 +112,7 @@
 			          android:gravity="center_vertical"
 			          android:textColor="#303030"
 			          android:textSize="12sp"
-			          android:text="@string/profile_btn_exit"
+			          android:text="@string/settings_logout"
 			          android:textStyle="bold"
 			          android:drawableLeft="@drawable/profile_logout"
 			          android:drawablePadding="4dp" />
