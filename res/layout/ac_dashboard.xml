@@ -182,7 +182,7 @@
               android:gravity="bottom|center_horizontal"
               android:text="@string/visitors_header_title"
               android:textSize="12sp"
-              android:background="@drawable/dashbrd_tops_selector" />
+              android:background="@drawable/dashbrd_visitors_selector" />
 
       </RelativeLayout>
       
