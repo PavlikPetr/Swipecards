@@ -6,8 +6,10 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -114,16 +116,15 @@ public class AddPhotoHelper {
 
     public boolean checkActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Uri imageUri = data != null ? data.getData() : null;
-            if (imageUri != null) {
-                new AsyncTaskUploader().execute(imageUri);
+            if (data != null) {
+                new AsyncTaskUploader().execute(data);
                 return true;
             }
         }
         return false;
     }
 
-    class AsyncTaskUploader extends AsyncTask<Uri, Void, String> {
+    class AsyncTaskUploader extends AsyncTask<Intent, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -131,16 +132,29 @@ public class AddPhotoHelper {
         }
 
         @Override
-        protected String doInBackground(Uri... uri) {
+        protected String doInBackground(Intent... intentList) {
             String rawResponse = null;
             
             PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
             add.ssid = Data.SSID;
+            
+            Intent intent = intentList[0];
+            if (intent == null)
+                return rawResponse;
+            
+            Uri imageUri = intent.getData();
 
             try {
+                
+                // Android 4
+                //Bundle extras = intent.getExtras();
+                //Bitmap thePic = extras.getParcelable("data");
+                 
+                
                 //is = App.getContext().getContentResolver().openInputStream(uri[0]);
-                String file = FileSystem.getFilePathFromURI(AddPhotoHelper.this.mActivity, uri[0]);
+                String file = FileSystem.getFilePathFromURI(AddPhotoHelper.this.mActivity, imageUri);
                 String data = Base64.encodeFromFile(file);
+                //String data2 = Base64.encodeBytes(thePic.getNinePatchChunk());
                 rawResponse = Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), data);
                 data = null;
            } catch(IOException e) {
@@ -153,11 +167,15 @@ public class AddPhotoHelper {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Confirmation c = Confirmation.parse(new ApiResponse(result));
-            if (c.completed)
-              mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_OK);
-            else
-              mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+            if (result != null) {
+                Confirmation c = Confirmation.parse(new ApiResponse(result));
+                if (c.completed)
+                  mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_OK);
+                else
+                  mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+            } else {
+                mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+            }
             mProgressDialog.cancel();
         }
 
