@@ -3,21 +3,10 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:paddingTop="8dp">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        style="@style/BackgroundTitleText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_gravity="left"
-        android:layout_marginBottom="7dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/edit_status"
-        android:textSize="16sp"
-        android:textStyle="normal" />
+   	<TextView style="@style/BackgroundFormTitleText"/>
 
     <EditText
         android:id="@+id/edText"

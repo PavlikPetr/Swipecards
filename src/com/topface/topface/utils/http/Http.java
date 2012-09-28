@@ -25,6 +25,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.widget.ImageView;
 
 public class Http {
@@ -411,6 +412,33 @@ public class Http {
                             view.setImageBitmap(bitmap);
                         }
                     });
+            }
+        };
+        t.setDaemon(true);
+        t.start();
+    }
+    
+    public static void imageLoader(final String url,final ImageView view, final Handler handler) {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                final Bitmap bitmap = bitmapLoader(url);
+                if (bitmap != null) {
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.setImageBitmap(bitmap);
+                            handler.sendEmptyMessage(0);
+                        }
+                    });
+                } else {
+                	view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                        	handler.sendEmptyMessage(0);
+                        }
+                	});
+                }
             }
         };
         t.setDaemon(true);

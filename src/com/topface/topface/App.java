@@ -8,7 +8,6 @@ import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import org.acra.ACRA;
-import org.acra.annotation.ReportsCrashes;
 
 //@ReportsCrashes(formKey = "dE85SXowSDhBcXZvMXAtUEtPMTg4X2c6MQ")
 public class App extends Application {

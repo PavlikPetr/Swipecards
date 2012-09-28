@@ -31,6 +31,8 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 	private Profile mProfile;
 	private FormInfo mFormInfo;
 	
+	private EditText mEditText;
+	
 	public EditFormItemInputFragment() { }
 	
 	public EditFormItemInputFragment(int titleId, String data) {
@@ -77,10 +79,10 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
 		// TextEdit
 		((TextView) root.findViewById(R.id.tvTitle)).setText(mFormInfo.getFormTitle(mTitleId));
-		EditText edText = (EditText) root.findViewById(R.id.edText);  
-		edText.setText(mData);
-		edText.setInputType(mFormInfo.getInputType(mTitleId));
-		edText.addTextChangedListener(new TextWatcher() {
+		mEditText = (EditText) root.findViewById(R.id.edText);  
+		mEditText.setText(mData);
+		mEditText.setInputType(mFormInfo.getInputType(mTitleId));
+		mEditText.addTextChangedListener(new TextWatcher() {
 			
 			String before = Static.EMPTY;
 			@Override
@@ -116,7 +118,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 				if (CacheProfile.forms.get(i).titleId == mTitleId) {
 					final FormItem item = CacheProfile.forms.get(i);
 					FormItem newItem;
-				
+					mInputData = mEditText.getText().toString();
 					newItem = new FormItem(item.titleId, mInputData, FormItem.DATA);					
 				
 					mFormInfo.fillFormItem(newItem);

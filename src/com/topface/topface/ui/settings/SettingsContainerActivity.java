@@ -15,6 +15,7 @@ public class SettingsContainerActivity extends BaseFragmentActivity{
 	public static final int INTENT_ACCOUNT = 201;
 	public static final int INTENT_FEEDBACK = 202;
 	public static final int INTENT_ABOUT = 203;
+	public static final int INTENT_SEND_FEEDBACK = 204;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -35,6 +36,8 @@ public class SettingsContainerActivity extends BaseFragmentActivity{
 		case INTENT_ABOUT:
 			mFragment = new SettingsAboutFragment();
 			break;
+		case INTENT_SEND_FEEDBACK:
+			mFragment = new SettingsFeedbackMessageFragment();
 		default:
 			break;
 		}

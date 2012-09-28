@@ -217,6 +217,7 @@
     <string name="navigation_back_settings">Настройки</string>
     <string name="navigation_edit">Редактировать</string>
     <string name="navigation_save">Сохранить</string>
+    <string name="navigation_send">Отправить</string>
 
     <!-- Profile / UserProfile Form -->   	
     <string name="form_main">Основное</string>
@@ -395,13 +396,18 @@
     <string name="settings_guests">Гости</string>
     <string name="settings_help">Помощь</string>
     <string name="settings_account">Аккаунт</string>
-    <string name="settings_rate_app">Оставить отзыв</string>
+    <string name="settings_feedback">Оставить отзыв</string>
     <string name="settings_about">О программе</string>    
    	<string name="settings_version">Версия</string>
     <string name="settings_copyright">Копирайт 2010-</string>
 	<string name="settings_rights_reserved">Topface все права защищены</string>
     <string name="settings_extra">Подробную информацию можно найти на</string>
-    <string name="settings_logout">Выйти из аккаунта</string>
+    <string name="settings_logout">Выйти из аккаунта</string>    
+    <string name="settings_error_message">Сообщение об ошибке</string>
+    <string name="settings_ask_developer">Вопрос разработчикам</string>
+    <string name="settings_payment_problems">Проблемы с оплатой</string>
+    <string name="settings_cooperation">Сотрудничество</string>
+    <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>
 
     <plurals name="time_hour">
         <item quantity="one">%d час назад</item>

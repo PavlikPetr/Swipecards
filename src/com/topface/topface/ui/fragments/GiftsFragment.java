@@ -99,7 +99,7 @@ public class GiftsFragment extends BaseFragment {
 		mGridView.setNumColumns(columns);
 
 		if (mTag == GIFTS_ALL_TAG) {
-			((TextView)view.findViewById(R.id.fragmentTitle)).setVisibility(View.INVISIBLE);
+			((TextView)view.findViewById(R.id.fragmentTitle)).setVisibility(View.GONE);
 			mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

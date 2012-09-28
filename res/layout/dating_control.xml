@@ -4,8 +4,7 @@
     <RelativeLayout
         android:id="@+id/loDatingGroup"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="invisible" >
+        android:layout_height="fill_parent" >
 
         <!-- Resources -->
 
@@ -23,11 +22,13 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" >
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" >
 
             <LinearLayout
                 android:id="@+id/ratingButtonsFirst"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:orientation="horizontal" >
@@ -36,6 +37,7 @@
                     android:id="@+id/loDatingLove"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
                     android:background="@android:color/transparent"
                     android:gravity="center" >
 
@@ -45,7 +47,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:drawableTop="@drawable/dating_delight_selector"                        
+                        android:drawableTop="@drawable/dating_delight_selector"
                         android:text="@string/dashbrd_btn_love" />
 
                     <TextView
@@ -58,8 +60,8 @@
                         android:layout_marginBottom="9sp"
                         android:background="@android:color/transparent"
                         android:drawableRight="@drawable/coins"
-                        android:text="@integer/love_dating_button" 
-                        android:textStyle="bold"/>
+                        android:text="@integer/love_dating_button"
+                        android:textStyle="bold" />
                 </RelativeLayout>
 
                 <Button
@@ -67,8 +69,9 @@
                     style="@style/DatingButtonsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
                     android:background="@android:color/transparent"
-                    android:drawableTop="@drawable/dating_like_selector"                    
+                    android:drawableTop="@drawable/dating_mutual_selector"
                     android:text="@string/dashbrd_btn_sympathy" />
 
                 <Button
@@ -76,6 +79,7 @@
                     style="@style/DatingButtonsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
                     android:background="@android:color/transparent"
                     android:drawableTop="@drawable/dating_skip_selector"
                     android:text="@string/dashbrd_btn_skip" />
@@ -85,6 +89,7 @@
                     style="@style/DatingButtonsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
                     android:background="@android:color/transparent"
                     android:drawableTop="@drawable/dating_switch_next_selector"
                     android:text="@string/dashbrd_btn_switch_button" />
@@ -92,7 +97,7 @@
 
             <LinearLayout
                 android:id="@+id/ratingButtonsSecond"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:orientation="horizontal"
@@ -123,7 +128,7 @@
                     style="@style/DatingButtonsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
+                    android:layout_weight="1.0"                    
                     android:background="@android:color/transparent"
                     android:drawableTop="@drawable/dating_prev_selector"
                     android:text="@string/dashbrd_btn_prev" />
@@ -133,7 +138,7 @@
                     style="@style/DatingButtonsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
+                    android:layout_weight="1.0"                    
                     android:background="@android:color/transparent"
                     android:drawableTop="@drawable/dating_switch_prev_selector"
                     android:text="@string/dashbrd_btn_switch_button" />
@@ -197,10 +202,11 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:drawableRight="@drawable/user_photo_small_right"
             android:drawableLeft="@drawable/user_photo_small_left"
+            android:drawablePadding="4dp"
+            android:drawableRight="@drawable/user_photo_small_right"
             android:gravity="center_vertical"
-            android:textSize="14sp" />
+            android:textSize="10sp" />
     </RelativeLayout>
 
 </merge>

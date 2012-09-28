@@ -27,7 +27,7 @@ public class SettingsAboutFragment extends Fragment {
 		getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
 		Button btnBack = (Button)getActivity().findViewById(R.id.btnNavigationBackWithText);
 		btnBack.setVisibility(View.VISIBLE);
-		btnBack.setText(R.string.navigation_back_settings);
+		btnBack.setText(R.string.settings_header_title);
 		btnBack.setOnClickListener(new OnClickListener() {
 			
 			@Override

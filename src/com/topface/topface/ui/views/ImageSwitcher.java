@@ -5,6 +5,7 @@ import com.topface.topface.R;
 import com.topface.topface.utils.PhotoLinksResolver;
 import com.topface.topface.utils.http.Http;
 import android.content.Context;
+import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -22,6 +23,8 @@ public class ImageSwitcher extends ViewPager  {
     private SparseArray<HashMap<String, String>> mPhotoLinks;
     private OnClickListener mOnClickListener;
     
+    private Handler mUpdatedHandler;
+    
     public ImageSwitcher(Context context) {
         this(context, null);
     }
@@ -29,11 +32,11 @@ public class ImageSwitcher extends ViewPager  {
     public ImageSwitcher(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
-    }
+    }    
     
     private void init() {
         mGestureDetector = new GestureDetector(mOnGestureListener);
-        mImageSwitcherAdapter = new ImageSwitcherAdapter();
+        mImageSwitcherAdapter = new ImageSwitcherAdapter();        
         setAdapter(mImageSwitcherAdapter);
         setOnTouchListener(mOnTouchListener);
         setPageMargin(20);
@@ -41,12 +44,16 @@ public class ImageSwitcher extends ViewPager  {
     
     public void setData(SparseArray<HashMap<String, String>> photoLinks) {
         mPhotoLinks = photoLinks;        
-        this.setAdapter(mImageSwitcherAdapter);
+        this.setAdapter(mImageSwitcherAdapter);        
     }
     
     @Override
     public void setOnClickListener(OnClickListener onClickListener) {
         mOnClickListener = onClickListener;
+    }
+    
+    public void setUpdateHandler(Handler handler) {
+    	mUpdatedHandler = handler;
     }
     
     public boolean canScrollHorizontally(int direction) {
@@ -79,12 +86,7 @@ public class ImageSwitcher extends ViewPager  {
     /*
      *  class ImageSwitcherAdapter
      */
-    class ImageSwitcherAdapter extends PagerAdapter {
-
-    	@Override
-    	public int getItemPosition(Object object) {    		
-    		return -1;
-    	}
+    class ImageSwitcherAdapter extends PagerAdapter {    	
     	
         @Override
         public int getCount() {
@@ -98,8 +100,12 @@ public class ImageSwitcher extends ViewPager  {
             View view = inflater.inflate(R.layout.item_album_gallery, null);
             ImageView imageView = (ImageView)view.findViewById(R.id.ivPreView);
             String url = mPhotoLinks.get(mPhotoLinks.keyAt(position)).get(PhotoLinksResolver.SIZE_ORIGIN);
-            Http.imageLoader(url, imageView);
-            ((ViewPager)pager).addView(view, 0);            
+            if (mUpdatedHandler != null) {
+            	Http.imageLoader(url, imageView, mUpdatedHandler);
+            } else {
+            	Http.imageLoader(url, imageView);
+            }
+            ((ViewPager)pager).addView(view);   
             return view;
         }
         

@@ -29,7 +29,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,8 +51,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View mResourcesControl;
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
+    private Button mDelightBtn;
     private Button mMutualBtn;
-    private Button mLikeBtn;
     private Button mSkipBtn;
     private Button mPrevBtn;
     private Button mProfileBtn;
@@ -75,11 +77,22 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View mNavigationHeader;    
     private Button mSettingsButton;
 
+    private Drawable singleMutual;
+    private Drawable singleDelight;
+    private Drawable doubleMutual;
+    private Drawable doubleDelight;
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         
         View view = inflater.inflate(R.layout.ac_dating, null);
+        
+        singleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
+        singleDelight = getResources().getDrawable(R.drawable.dating_delight_selector);
+        
+        doubleMutual = getResources().getDrawable(R.drawable.dating_dbl_mutual_selector);
+        doubleDelight = getResources().getDrawable(R.drawable.dating_dbl_delight_selector);
         
         // Data
         mUserSearchList = new LinkedList<Search>();
@@ -93,9 +106,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSettingsButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				Intent intent = new Intent(getActivity().getApplicationContext(), FilterActivity.class);
-//				startActivityForResult(intent,FilterActivity.INTENT_FILTER_ACTIVITY);
-				
 				Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
 				startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_FILTER);
 			}
@@ -136,10 +146,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mResourcesMoney.setText("" + CacheProfile.money);
 
         // Control Buttons
-        mMutualBtn = (Button)view.findViewById(R.id.btnDatingLove);
-        mMutualBtn.setOnClickListener(this);        
-        mLikeBtn = (Button)view.findViewById(R.id.btnDatingSympathy);
-        mLikeBtn.setOnClickListener(this);
+        mDelightBtn = (Button)view.findViewById(R.id.btnDatingLove);
+        mDelightBtn.setOnClickListener(this);        
+        mMutualBtn = (Button)view.findViewById(R.id.btnDatingSympathy);
+        mMutualBtn.setOnClickListener(this);
         mSkipBtn = (Button)view.findViewById(R.id.btnDatingSkip);
         mSkipBtn.setOnClickListener(this);
         mPrevBtn = (Button)view.findViewById(R.id.btnDatingPrev);
@@ -152,6 +162,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSwitchNextBtn.setOnClickListener(this);
         mSwitchPrevBtn = (Button)view.findViewById(R.id.btnDatingSwitchPrev);
         mSwitchPrevBtn.setOnClickListener(this);
+        // Dating Love Price
+        mDatingLoveBtnLayout = (RelativeLayout) view.findViewById(R.id.loDatingLove);
         
         // User Info
         mUserInfoName = ((TextView)view.findViewById(R.id.tvDatingUserName));
@@ -168,16 +180,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher = ((ImageSwitcher)view.findViewById(R.id.glrDatingAlbum));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
+        mImageSwitcher.setUpdateHandler(mUnlockHandler);
         
         updateData(false);
         
         return view;
     }    
     
-    private void updateData(final boolean isAddition) {
+    private void updateData(final boolean isAddition) { 
+    	lockControls();
         if (!isAddition)
-        	onUpdateStart(isAddition);
-            
+        	onUpdateStart(isAddition);        
         Debug.log(this, "update");
         SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         SearchRequest searchRequest = new SearchRequest(getActivity());
@@ -203,9 +216,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 			onUpdateSuccess(isAddition);
                             showNextUser();
                         }
-                		showControls();
+                		unlockControls();
                     }
-                });
+                });     
                 
             }
             @Override
@@ -215,8 +228,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     public void run() {
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         onUpdateFail(isAddition);
+                        unlockControls();
                     }
-                });
+                });    
+                
             }
         }).exec();
     }
@@ -236,7 +251,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 } else {
                 	mRateController.onRate(currentSearch.uid, 10);                	
                 }
-                currentSearch.liked = true;
+                currentSearch.rated = true;
             }
                 break;
             case R.id.btnDatingSympathy: {
@@ -247,7 +262,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 } else {
                 	mRateController.onRate(currentSearch.uid, 9);                	
                 }
-                currentSearch.mutualed = true;
+                currentSearch.rated = true;
             }
                 break;
             case R.id.btnDatingSkip: {
@@ -290,16 +305,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
     
-    private void showNextUser() {
+    private void showNextUser() {        	
         if (mCurrentUserPos < mUserSearchList.size() - 1) {
             ++mCurrentUserPos;                        
             fillUserInfo(mUserSearchList.get(mCurrentUserPos));
         }
-        if (mCurrentUserPos == mUserSearchList.size() - 1 || mUserSearchList.size() - 6 <= mCurrentUserPos) {
-        	lockControls();
+        if (mCurrentUserPos == mUserSearchList.size() - 1 || mUserSearchList.size() - 6 <= mCurrentUserPos) {        	
         	updateData(true);
         }
-            
 
         //showNewbie(); // NEWBIE
     }
@@ -312,16 +325,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     	showNewbie(); // NEWBIE
     }
     
-    private void fillUserInfo(Search currUser) {
-        mImageSwitcher.setData(currUser.photoLinks);
-        mImageSwitcher.setCurrentItem(0, true);
-        mCurrentPhotoPrevPos = 0;
-
-        boolean rateEnabled = !(currUser.liked || currUser.mutualed);
-        mLikeBtn.setEnabled(rateEnabled);            
-        mMutualBtn.setEnabled(rateEnabled);
-        
+    private void fillUserInfo(Search currUser) {    	
         // User Info
+    	lockControls();
         mUserInfoCity.setText(currUser.city_name);
         mUserInfoStatus.setText(currUser.status);
         mUserInfoName.setText(currUser.first_name + ", " + currUser.age);
@@ -336,11 +342,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         } else if (currUser.sex == Static.GIRL) {
         	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
         			getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
-        }
+        }        
+                
+        // buttons drawables
+        mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual : singleMutual, null, null);
+        mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleDelight : singleDelight, null, null);        
         
-        mPrevBtn.setEnabled(mCurrentUserPos == 0 ? false : true);
-        
-        setCounter(mCurrentPhotoPrevPos);
+        //photos
+        mImageSwitcher.setData(currUser.photoLinks);
+        mImageSwitcher.setCurrentItem(0, true);
+        mCurrentPhotoPrevPos = 0;
+        setCounter(mCurrentPhotoPrevPos);        
     }
     
     private void skipUser() {
@@ -434,31 +446,45 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     
     @Override
     public void lockControls() {
+    	mProgressBar.setVisibility(View.VISIBLE);
         mUserInfoName.setVisibility(View.INVISIBLE);
         mUserInfoCity.setVisibility(View.INVISIBLE);
         mUserInfoStatus.setVisibility(View.INVISIBLE);
-        mLikeBtn.setVisibility(View.INVISIBLE);
-        mSkipBtn.setVisibility(View.INVISIBLE);
-        mPrevBtn.setVisibility(View.INVISIBLE);
-        mProfileBtn.setVisibility(View.INVISIBLE);
-        mChatBtn.setVisibility(View.INVISIBLE);
+        mMutualBtn.setEnabled(false);
+        mDelightBtn.setEnabled(false);
+        mSkipBtn.setEnabled(false);
+        mPrevBtn.setEnabled(false);
+        mProfileBtn.setEnabled(false);
+        mChatBtn.setEnabled(false);
+        mDatingLoveBtnLayout.setEnabled(false);
+        mSwitchNextBtn.setEnabled(false);
+        mSwitchPrevBtn.setEnabled(false);
     }
 
     @Override
     public void unlockControls() {
+    	mProgressBar.setVisibility(View.GONE);
         mUserInfoName.setVisibility(View.VISIBLE);
         mUserInfoCity.setVisibility(View.VISIBLE);
         mUserInfoStatus.setVisibility(View.VISIBLE);
-        mLikeBtn.setVisibility(View.VISIBLE);
-        mSkipBtn.setVisibility(View.VISIBLE);
-        mPrevBtn.setVisibility(View.VISIBLE);
-        mProfileBtn.setVisibility(View.VISIBLE);
-        mChatBtn.setVisibility(View.VISIBLE);
+        
+        boolean enabled = false;
+        if (!mUserSearchList.isEmpty() && mCurrentUserPos<mUserSearchList.size())
+        	enabled = !mUserSearchList.get(mCurrentUserPos).rated;
+        mMutualBtn.setEnabled(enabled);        
+        mDelightBtn.setEnabled(enabled);
+        
+        mSkipBtn.setEnabled(true);
+        mPrevBtn.setEnabled(mCurrentUserPos == 0 ? false : true);
+        mProfileBtn.setEnabled(true);
+        mChatBtn.setEnabled(true);
+        mDatingLoveBtnLayout.setEnabled(true);
+        mSwitchNextBtn.setEnabled(true);
+        mSwitchPrevBtn.setEnabled(true);
     }
 
     @Override
-    public void showControls() {
-        unlockControls(); // remove
+    public void showControls() {        
         mNavigationHeader.setVisibility(View.VISIBLE);
         mDatingGroup.setVisibility(View.VISIBLE);
         mIsHide = false;
@@ -501,7 +527,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
-	    	hideControls();
+	    	lockControls();
 	    	updateData(false);
 	    } else {
 	    	super.onActivityResult(requestCode, resultCode, data);
@@ -520,6 +546,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 	
+    private Handler mUnlockHandler = new Handler() {
+    	@Override
+    	public void handleMessage(android.os.Message msg) {
+    		unlockControls();
+    	};
+    };
+    
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
@@ -529,7 +562,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 showControls();
             }            
             mCurrentPhotoPrevPos = position;
-            setCounter(mCurrentPhotoPrevPos);
+            setCounter(mCurrentPhotoPrevPos);            
         }
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {

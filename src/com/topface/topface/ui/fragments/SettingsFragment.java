@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
@@ -97,7 +98,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     	// Rate app
     	frame = (ViewGroup) root.findViewById(R.id.loFeedback);
     	setBackground(R.drawable.edit_big_btn_middle_selector, frame);
-    	setText(R.string.settings_rate_app, frame);
+    	setText(R.string.settings_feedback, frame);
     	frame.setOnClickListener(this);
     	
     	// About
@@ -166,5 +167,14 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		String key = (String) buttonView.getTag();
 		mSettings.setSetting(key, isChecked);
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == SettingsAccountFragment.RESULT_LOGOUT && 
+				requestCode == SettingsContainerActivity.INTENT_ACCOUNT) {
+			getActivity().finish();
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }

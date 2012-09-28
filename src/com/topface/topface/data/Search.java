@@ -17,6 +17,7 @@ public class Search extends AbstractDataWithPhotos {
     public int city_id; // идентификатор города пользователя
     public String city_name; // наименование города пользователя
     public String city_full; // полное наименование города пользователя
+    public boolean mutual; // идентификатор пользователя, который послал симпатию, иначе 0
     public String[] avatars_big; // большая аватарка пользователя
     public String[] avatars_small; // маленькая аватарка пользователя
 
@@ -26,9 +27,8 @@ public class Search extends AbstractDataWithPhotos {
     //public String geo_coord_lng; // долгота нахождения пользователя
     
     // Flags
-    public boolean skipped = false;
-    public boolean liked = false;
-    public boolean mutualed = false;
+    public boolean skipped = false;    
+    public boolean rated = false;
 
     public static LinkedList<Search> parse(ApiResponse response) {
         LinkedList<Search> userList = new LinkedList<Search>();
@@ -45,6 +45,7 @@ public class Search extends AbstractDataWithPhotos {
                     search.status = item.optString("status");
                     search.online = item.optBoolean("online");
                     search.sex = item.optInt("sex");
+                    search.mutual = item.optBoolean("mutual");                       
                     
                     // avatars
                     JSONArray avatars = item.getJSONArray("avatars");
