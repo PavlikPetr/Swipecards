@@ -180,8 +180,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         for (Fragment f : mFragments) {
             ft.detach(f);
         }
-        ft.commitAllowingStateLoss();
-        getActivity().getSupportFragmentManager().executePendingTransactions();
+        ft.commitAllowingStateLoss();        
         super.onDestroy();
     }
 
