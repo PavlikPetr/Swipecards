@@ -41,6 +41,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +77,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RateController mRateController;
     private View mNavigationHeader;    
     private Button mSettingsButton;
+    private RelativeLayout mDatingLoveBtnLayout;
 
     private Drawable singleMutual;
     private Drawable singleDelight;
