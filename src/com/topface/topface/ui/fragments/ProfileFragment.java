@@ -1,11 +1,12 @@
 package com.topface.topface.ui.fragments;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -44,12 +45,12 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     private TextView mUserPower;
     
     private IndicatorView mIndicatorView;
-    private ViewPager mViewPager;
+    private ViewPager mViewPager;      
     
     private Button mBuyButton;
     private View mUserPowerBkgd;
     
-    private LinkedList<Fragment> mFragments;
+//    private HashMap<Integer,Fragment> mFragmentsHash;
    
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
@@ -61,13 +62,11 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
 		super.onCreateView(inflater, container, saved);
 		View view = inflater.inflate(R.layout.ac_profile, null);
 		
-		mFragments = new LinkedList<Fragment>();
-		
-        // Home Button
+//		mFragmentsHash = new HashMap<Integer, Fragment>();
+				
+        // Navigation bar
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
-		
-		// Title
-		((TextView)view.findViewById(R.id.tvNavigationTitle)).setText("Title");
+        ((TextView)view.findViewById(R.id.tvNavigationTitle)).setText(R.string.profile_header_title);
 		
         Button editButton = (Button)view.findViewById(R.id.btnNavigationRightWithText);
         editButton.setVisibility(View.VISIBLE);
@@ -100,10 +99,10 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
         mUserPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
         mUserPower.setText("" + CacheProfile.power + "%");
         
-        // View Pager
+        // View Pager        
         mViewPager = (ViewPager)view.findViewById(R.id.UserViewPager);
         mViewPager.setAdapter(new ProfilePageAdapter(getActivity().getSupportFragmentManager()));
-        mViewPager.setOnPageChangeListener(mOnPageChangeListener);
+        mViewPager.setOnPageChangeListener(mOnPageChangeListener);        
         
         mUserPowerBkgd = view.findViewById(R.id.loUserPowerBkgd);
         
@@ -175,12 +174,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     }
     
     @Override
-    public void onDestroy() {
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        for (Fragment f : mFragments) {
-            ft.detach(f);
-        }
-        ft.commitAllowingStateLoss();        
+    public void onDestroy() {     	
         super.onDestroy();
     }
 
@@ -240,25 +234,39 @@ public class ProfileFragment extends BaseFragment implements OnClickListener{
     /*
      *     ProfilePageAdapter
      */
-    public class ProfilePageAdapter extends FragmentPagerAdapter {
-
+    public class ProfilePageAdapter extends FragmentStatePagerAdapter {    	
+    	
         public ProfilePageAdapter(FragmentManager fm) {
-            super(fm);
-            mFragments.add(new ProfilePhotoFragment());
-            mFragments.add(new ProfileFormFragment());
-            mFragments.add(new GiftsFragment());
-        }
-
+            super(fm);            
+        }        
+        
         @Override
         public int getCount() {
-            return mFragments.size();
+            return F_COUNT;
         }
-
+        
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+        	
+        	return super.instantiateItem(container, position);
+        }
+        
         @Override
         public Fragment getItem(int position) {
-            return mFragments.get(position);
+        	Fragment fragment = null;
+            switch (position) {
+			case F_PHOTO:
+				fragment = new ProfilePhotoFragment();
+				break;
+	        case F_FORM:
+	        	fragment = new ProfileFormFragment();
+	        	break;
+			case F_GIFTS:
+				fragment = new GiftsFragment();
+				break;
+			}            
+            
+            return fragment;
         }
-        
-        
     }
 }

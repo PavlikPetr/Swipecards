@@ -1,9 +1,17 @@
 package com.topface.topface.ui.fragments;
 
 import com.topface.topface.R;
+import com.topface.topface.ui.views.ImageSwitcher;
+
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.VelocityTracker;
+import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
@@ -51,6 +59,12 @@ public class FragmentSwitchController extends ViewGroup {
 		super(context, attrs);
 		mCurrentFragmentId = BaseFragment.F_PROFILE;
 		mScroller = new Scroller(context, mPrixingInterpolator);
+		final ViewConfiguration configuration = ViewConfiguration.get(context);
+		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
+		mMinimumVelocity = 10 * configuration.getScaledMinimumFlingVelocity();
+		mVelocitySlop = configuration.getScaledMinimumFlingVelocity();
+		mTouchSlop = ViewConfiguration.getTouchSlop();
+		mAnimation = COLLAPSE;
 	}
 	
     public void setFragmentManager(FragmentManager fragmentManager) {
@@ -212,9 +226,263 @@ public class FragmentSwitchController extends ViewGroup {
 
 	public void openMenu() {
 		snapToScreen(EXPAND);
+		mFragmentSwitchListener.beforeExpanding();
 	}
 
 	public void closeMenu() {
 		snapToScreen(COLLAPSE);
+	}	
+	
+	// sliding part
+	float mLastMotionX;
+	float mLastMotionY;
+	float mTouchSlop;
+	boolean mIsDragging = false;
+	private VelocityTracker mVelocityTracker;
+	private float mMaximumVelocity;
+	private int mMinimumVelocity;
+	private float mVelocitySlop;
+	
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent event) {
+		if (mAutoScrolling) {
+			return false;
+		}
+		
+		final int action = event.getAction();
+		final float x = event.getX();
+		final float y = event.getY();		
+
+		if (mVelocityTracker != null) {
+			mVelocityTracker.recycle();
+			mVelocityTracker = null;
+		}		
+				
+		if (!inBezierThreshold(x) && (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL)) {
+			return false;			
+		}
+		
+		switch (action) {
+		case MotionEvent.ACTION_DOWN:
+			mLastMotionX = x;
+			mLastMotionY = y;
+			break;
+		case MotionEvent.ACTION_MOVE:			
+			if (mAnimation == EXPAND) {				
+				startDragging(x);
+				break;
+			}
+			
+			float dx = x - mLastMotionX;
+			float xDiff = Math.abs(dx);
+			float dy = y - mLastMotionY;
+			float yDiff = Math.abs(dy);
+			
+			if (canScroll(getChildAt(1), false, (int) dx, (int) x, (int) y)) {
+				return false;				
+			}
+			
+			if(xDiff > mTouchSlop && xDiff > yDiff) {
+				Log.d("OLOLO","SLOP");				
+				startDragging(x);
+				if (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL) {
+					mFragmentSwitchListener.beforeExpanding();
+				}
+			} else {
+				stopDragging(x);
+			}
+			break;
+		case MotionEvent.ACTION_CANCEL:
+			stopDragging(x);
+			break;
+		case MotionEvent.ACTION_UP:
+			if (mAnimation == EXPAND) { 
+				completeDragging(0);
+				return true;
+			}
+			stopDragging(x);
+			break;
+		}
+		
+		Log.d("OLOLO",mIsDragging ? "DR true":"DR false");
+		return mIsDragging;
 	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		
+		if (mVelocityTracker == null) {
+			mVelocityTracker = VelocityTracker.obtain();
+		}
+		
+		if (!mIsDragging) {
+			return false;
+		} else {
+			mVelocityTracker.addMovement(event);
+		}
+		
+		int action = event.getAction();
+		float x = event.getX();
+		
+		switch (action) {
+		case MotionEvent.ACTION_DOWN:
+			mLastMotionX = x;
+			mVelocityTracker.addMovement(event);
+			break;
+		case MotionEvent.ACTION_MOVE:
+			if (mIsDragging) {		
+				float dx = mLastMotionX - x;
+				mLastMotionX = x;
+				
+				final float oldXScroll = getScrollX();
+				float newXScroll = oldXScroll + dx;
+				
+				if (-newXScroll < getLeftBound()) {
+					newXScroll = -getLeftBound();
+				} else if(-newXScroll > getRightBound()) {
+					newXScroll = -getRightBound();
+				}				
+				
+				scrollTo((int)newXScroll, getScrollY());
+			}
+			break;
+		case MotionEvent.ACTION_UP:
+			final VelocityTracker velocityTracker = mVelocityTracker; 
+			velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);			
+			int initialVelocity = (int) velocityTracker.getXVelocity();			
+			completeDragging(initialVelocity);
+			break;
+		case MotionEvent.ACTION_CANCEL:
+			stopDragging(x);
+			break;		
+		}
+
+		return true;
+	}
+	
+	private void startDragging(float x) {
+		mIsDragging = true;		
+		mLastMotionX = x;
+		setScrollingCacheEnabled(true);
+	}
+
+	private void stopDragging(float x) {
+		mIsDragging = false;
+		setScrollingCacheEnabled(false);
+	}	
+
+	private int mScrollingVelocityThreshold = 2000;	
+	private float mScrollingDistanceThreshold;
+
+	
+	private void completeDragging(int velocity) {
+		mIsDragging = false;
+		mAutoScrolling = true;
+		int dx = 0;
+		int duration = 0;		
+		
+		if(Math.abs(velocity) < mVelocitySlop) 
+			velocity = 0;
+		
+		if(velocity > 0) {			
+			// right - expect EXPAND
+			dx = -getRightBound() - getScrollX();
+			
+			if (velocity >= mScrollingVelocityThreshold) {
+				//EXPAND because user slides insanely
+				mAnimation = EXPAND;
+				duration = (int) Math.abs(1000 * dx / mScrollingVelocityThreshold);
+			} else {
+				if (velocity < mMinimumVelocity) {
+					velocity = mMinimumVelocity;
+				}
+				//EXPAND with normal velocity, but check "distance threshold"
+				if (-getScrollX() - getLeftBound() > mScrollingDistanceThreshold) {
+					mAnimation = EXPAND;
+				} else {
+					mAnimation = COLLAPSE;
+					dx = -getScrollX() - getLeftBound();
+				}
+				duration = (int) Math.abs(1000*dx/velocity);
+			}
+			mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
+		} else if (velocity < 0){
+			// left - expect COLLAPSE
+			dx = -getScrollX() - getLeftBound();
+			
+			if (-velocity >= mScrollingVelocityThreshold) {
+				duration = (int) Math.abs(1000*dx/mScrollingVelocityThreshold);
+			} else {
+				if (-velocity < mMinimumVelocity) {
+					velocity = mMinimumVelocity;
+				}
+				duration = (int) Math.abs(1000*dx/velocity);
+			}
+			
+			mAnimation = COLLAPSE;		
+			mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
+		} else {			
+			if (-getScrollX() > mScrollingDistanceThreshold) {
+				if (mAnimation == EXPAND) {
+					mAnimation = COLLAPSE;
+					dx = -getScrollX() - getLeftBound();
+				} else {
+					mAnimation = EXPAND;
+					dx = -getRightBound() - getScrollX();
+				}				
+			} else {
+				mAnimation = COLLAPSE;
+				dx = -getScrollX() - getLeftBound();
+			}
+						
+			duration = (int) Math.abs(1000*dx/mMinimumVelocity);
+			
+			mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
+		}
+		mScroller.computeScrollOffset();
+		invalidate();		
+	}
+
+	protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {				
+		if (v instanceof ViewGroup) {
+			final ViewGroup group = (ViewGroup) v;
+			if (group.isShown()) {
+				final int scrollX = v.getScrollX();
+				final int scrollY = v.getScrollY();
+				final int count = group.getChildCount();
+				for (int i = count - 1; i >= 0; i--) {
+					final View child = group.getChildAt(i);
+					if (x + scrollX >= child.getLeft()
+							&& x + scrollX < child.getRight()
+							&& y + scrollY >= child.getTop()
+							&& y + scrollY < child.getBottom()
+							&& canScroll(child, true, dx, x + scrollX - child.getLeft(), y + scrollY
+									- child.getTop())) {
+						return true;
+					}
+				}
+			}
+		}
+
+		boolean result = false;		
+		
+		//for API versions < 14
+		if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
+			result = ((ImageSwitcher)v).canScrollHorizontally(-dx);
+		//for API versions >= 14 (ICS)
+		} else {
+			result = ViewCompat.canScrollHorizontally(v, -dx);
+		}
+		
+		return checkV && result;
+	}
+
+	protected boolean inBezierThreshold(float x) {
+		if (x < mWidth/5) {
+			return true;
+		}
+		return false;
+	}	
+
+
 }

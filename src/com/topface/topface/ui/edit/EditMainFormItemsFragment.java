@@ -23,14 +23,14 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.utils.CacheProfile;
 
-public class EditMainSettingsFragment extends AbstractEditFragment {
+public class EditMainFormItemsFragment extends AbstractEditFragment {
 
 	public enum EditType {NAME, AGE, STATUS}; 
 	
 	private EditType[] mTypes;
-	private HashMap<EditType, String> hashChangedData = new HashMap<EditMainSettingsFragment.EditType, String>();
+	private HashMap<EditType, String> hashChangedData = new HashMap<EditMainFormItemsFragment.EditType, String>();
 	
-	public EditMainSettingsFragment(EditType[] type) {
+	public EditMainFormItemsFragment(EditType[] type) {
 		mTypes = type;
 	}
 	
@@ -102,7 +102,7 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 						}
 					}
 				});
-				
+				subTitle.setText(R.string.edit_name);
 				break;
 			case AGE:				
 				loAge.setVisibility(View.VISIBLE);
@@ -128,7 +128,7 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 							refreshSaveState();
 						}
 					}
-				});
+				});				
 				break;
 			case STATUS:
 				loStatus.setVisibility(View.VISIBLE);
@@ -155,6 +155,7 @@ public class EditMainSettingsFragment extends AbstractEditFragment {
 						}
 					}
 				});
+				subTitle.setText(R.string.edit_status);				
 				break;
 			}
 			

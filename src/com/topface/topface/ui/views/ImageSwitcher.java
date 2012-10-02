@@ -63,7 +63,7 @@ public class ImageSwitcher extends ViewPager  {
         if (direction < 0) {
             return offset > 0;
         } else {
-            return offset < range - 0;
+            return offset < range - 1;
         }
     }
     
