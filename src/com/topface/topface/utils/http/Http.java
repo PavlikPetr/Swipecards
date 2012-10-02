@@ -1,32 +1,25 @@
 package com.topface.topface.utils.http;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.protocol.BasicHttpContext;
-import com.topface.topface.Data;
-import com.topface.topface.Static;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.widget.ImageView;
+import com.topface.topface.Data;
+import com.topface.topface.Static;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.protocol.BasicHttpContext;
+
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class Http {
     // Constants
@@ -77,6 +70,7 @@ public class Http {
         return httpRequest(HTTP_POST_REQUEST, request, postParams, dataParams, null);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public static String httpPostDataRequest(String request, String postParams, InputStream is) {
         return httpRequest(HTTP_POST_REQUEST, request, postParams, null, is);
     }
@@ -112,7 +106,7 @@ public class Http {
                 DataOutputStream dos = new DataOutputStream(out);
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
                 dos.writeBytes("Content-Disposition: form-data; name=\"photo\";filename=\"photo.jpg\"" + lineEnd);
-                dos.writeBytes("Content-Type: image/jpg" + lineEnd + lineEnd);
+                dos.writeBytes("Content-Type: image/jpeg" + lineEnd + lineEnd);
                 dos.write(dataParams);
                 dos.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
                 dos.flush();
@@ -130,7 +124,7 @@ public class Http {
                 DataOutputStream dos = new DataOutputStream(out);
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
                 dos.writeBytes("Content-Disposition: form-data; name=\"photo\";filename=\"photo.jpg\"" + lineEnd);
-                dos.writeBytes("Content-Type: image/jpg" + lineEnd + lineEnd);
+                dos.writeBytes("Content-Type: image/jpeg" + lineEnd + lineEnd);
                 BufferedInputStream bis = new BufferedInputStream(is);
                 byte[] buffer = new byte[1024];
                 while(bis.read(buffer) > 0)
@@ -201,14 +195,14 @@ public class Http {
         }
         return response;
     }
-    
+
     public static String httpDataRequest(int typeRequest, String request, String postParams, String data) {
         String response = null;
         InputStream in = null;
         OutputStream out = null;
         BufferedReader buffReader = null;
         HttpURLConnection httpConnection = null;
-        
+
         try {
           //System.setProperty("http.keepAlive", "false");
           Debug.log(TAG,"enter");
@@ -230,7 +224,7 @@ public class Http {
           //httpConnection.setChunkedStreamingMode(0);
 
           //httpConnection.connect();
-          
+
           Debug.log(TAG,"req:"+postParams);   // REQUEST
 
           // отправляем post параметры
@@ -243,15 +237,15 @@ public class Http {
             out.close();
             Debug.log(TAG,"end:");
           }
-          
+
           if(typeRequest == HTTP_POST_REQUEST && postParams != null && data != null) {
-            String lineEnd  = "\n";
+            String lineEnd  = "\r\n";
             String twoHH  = "--";
-            String boundary = "--Asrf456BGe4h";
+            String boundary = "FAfsadkfn23412034aHJSAdnk";
             httpConnection.setRequestProperty("Content-Type","multipart/mixed; boundary=" + boundary);
             DataOutputStream dos = new DataOutputStream(out = httpConnection.getOutputStream());
             dos.writeBytes(lineEnd);
-            dos.writeBytes(twoHH+boundary);
+            dos.writeBytes(twoHH + boundary);
             dos.writeBytes(lineEnd);
             dos.writeBytes("Content-Disposition: mixed");
             dos.writeBytes(lineEnd);
@@ -259,23 +253,16 @@ public class Http {
             dos.writeBytes(lineEnd+lineEnd);
             dos.writeBytes(postParams);
             dos.writeBytes(lineEnd);
-            dos.writeBytes(twoHH+boundary);
+            dos.writeBytes(twoHH + boundary);
             dos.writeBytes(lineEnd);
             dos.writeBytes("Content-Disposition: mixed");
             dos.writeBytes(lineEnd);
-            dos.writeBytes("Content-Type: image/jpg");
+            dos.writeBytes("Content-Type: image/jpeg");
             dos.writeBytes(lineEnd+lineEnd);
-            /*
-            BufferedInputStream bis = new BufferedInputStream(is);
-            byte[] buff = new byte[1024];
-            while(bis.read(buff) > 0) {
-              dos.write(buff); 
-            }
-            */
             dos.writeBytes(data);
             
             dos.writeBytes(lineEnd);
-            dos.writeBytes(twoHH+boundary + "--");
+            dos.writeBytes(twoHH + boundary + twoHH);
             dos.writeBytes(lineEnd);
             dos.flush();
             dos.close();
