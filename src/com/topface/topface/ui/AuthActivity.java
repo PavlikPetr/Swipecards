@@ -174,11 +174,11 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
-                showButtons();
+            public void fail(int codeError, ApiResponse response) {                
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                    	showButtons();
                         Toast.makeText(AuthActivity.this, getString(R.string.general_server_error),
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -217,6 +217,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                    	showButtons();
                         Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
                                 Toast.LENGTH_SHORT).show();
                     }

@@ -3,7 +3,7 @@ package com.topface.topface.ui.edit;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.edit.EditMainSettingsFragment.EditType;
+import com.topface.topface.ui.edit.EditMainFormItemsFragment.EditType;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
 
 import android.content.Intent;
@@ -41,10 +41,10 @@ public class EditContainerActivity extends BaseFragmentActivity {
 		Intent intent = getIntent();
 		switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY,0)) {
 		case INTENT_EDIT_NAME_AGE:
-			mFragment = new EditMainSettingsFragment(new EditType[]{EditType.NAME,EditType.AGE});
+			mFragment = new EditMainFormItemsFragment(new EditType[]{EditType.NAME,EditType.AGE});
 			break;
 		case INTENT_EDIT_STATUS:
-			mFragment = new EditMainSettingsFragment(new EditType[]{EditType.STATUS});
+			mFragment = new EditMainFormItemsFragment(new EditType[]{EditType.STATUS});
 			break;
 		case INTENT_EDIT_BACKGROUND:
 			mFragment = new EditBackgroundFragment();

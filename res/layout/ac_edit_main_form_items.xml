@@ -11,8 +11,18 @@
 
     <include
         android:id="@+id/loAge"
-        layout="@layout/item_edit_form_input" />
-
+        layout="@layout/item_edit_form_input" />    
+    
+    <ListView 
+        android:id="@+id/lvList"        
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="#00000000"
+        android:divider="@android:color/transparent"
+        android:fadeScrollbars="true"
+        android:fadingEdge="none"
+        android:listSelector="@android:color/transparent"/>
+    
     <include
         android:id="@+id/loStatus"
         layout="@layout/item_edit_form_input" />
