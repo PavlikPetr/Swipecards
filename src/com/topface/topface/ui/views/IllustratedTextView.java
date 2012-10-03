@@ -41,7 +41,7 @@ public class IllustratedTextView extends TextView {
     }
 
     protected SpannableString replaceTemplates(CharSequence text, String template, int icon) {
-        SpannableString spannableString = null;
+        SpannableString spannableString;
         //Ставим иконку монетки
 
         ArrayList<Integer> indexes = getAllIndexesOfSubstring(text.toString(), template);
@@ -58,6 +58,9 @@ public class IllustratedTextView extends TextView {
                 );
             }
 
+        }
+        else {
+            spannableString = (SpannableString) text;
         }
 
         return spannableString;
