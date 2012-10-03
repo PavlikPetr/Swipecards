@@ -44,7 +44,7 @@ public class DefaultImageLoader {
         builder.cacheInMemory();
         builder.cacheOnDisc();
         builder.resetViewBeforeLoading();
-        builder.showStubImage(R.drawable.loader);
+        //builder.showStubImage(R.drawable.loader);
         builder.showImageForEmptyUri(R.drawable.im_photo_error);
         return builder;
     }

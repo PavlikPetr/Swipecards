@@ -1,7 +1,12 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
-
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
@@ -12,13 +17,7 @@ import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.TripleButton;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import java.util.LinkedList;
 
 public class GiftsActivity extends BaseFragmentActivity {	
 	
@@ -122,16 +121,15 @@ public class GiftsActivity extends BaseFragmentActivity {
 			registerRequest(giftRequest);	
 			giftRequest.callback(new ApiHandler() {
 				@Override
-				public void success(ApiResponse response) {
-					Data.giftsList.addAll(Gift.parse(response));
+				public void success(final ApiResponse response) {
 					mGiftsCollection.add(Data.giftsList);
 
 					mGiftFragment.setGifts(mGiftsCollection.getGifts());
 
 					runOnUiThread(new Runnable() {
-
 						@Override
 						public void run() {
+                            Data.giftsList.addAll(Gift.parse(response));
 							mLoadingLocker.setVisibility(View.GONE);
 						}
 					});

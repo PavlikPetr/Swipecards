@@ -3,8 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.topface.topface.Data;
-import com.topface.topface.R;
-import com.topface.topface.Recycle;
-import com.topface.topface.Static;
+import com.topface.topface.*;
 import com.topface.topface.data.Dialog;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -27,10 +22,10 @@ import com.topface.topface.requests.DialogRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
+import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.ui.views.DoubleBigButton;
-import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SwapAnimation;
@@ -42,13 +37,11 @@ public class DialogsFragment extends BaseFragment {
 	// private TextView mFooterView;
 	private PullToRefreshListView mListView;
 	private DialogListAdapter mListAdapter;
-	private AvatarManager<Dialog> mAvatarManager;
-	private DoubleBigButton mDoubleButton;	
+	private DoubleBigButton mDoubleButton;
 	private TextView mBackgroundText;
 	private ImageView mBannerView;
     
     private View mToolsBar;
-    private View mShowToolsBarButton;
     private View mControlsGroup;
     
 	private boolean mIsUpdating = false;
@@ -69,9 +62,9 @@ public class DialogsFragment extends BaseFragment {
 
         mControlsGroup = view.findViewById(R.id.loControlsGroup);
         mToolsBar = view.findViewById(R.id.loToolsBar);
-        mShowToolsBarButton = view.findViewById(R.id.btnNavigationFilterBar);
-        mShowToolsBarButton.setVisibility(View.VISIBLE);
-        mShowToolsBarButton.setOnClickListener(new View.OnClickListener() {
+        View showToolsBarButton = view.findViewById(R.id.btnNavigationFilterBar);
+        showToolsBarButton.setVisibility(View.VISIBLE);
+        showToolsBarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mControlsGroup.startAnimation(new SwapAnimation(mControlsGroup, R.id.loToolsBar));
@@ -86,7 +79,7 @@ public class DialogsFragment extends BaseFragment {
                 mControlsGroup.setPadding(mControlsGroup.getPaddingLeft(), y, mControlsGroup.getPaddingRight(), mControlsGroup.getPaddingBottom());
                 if(y>0 || y<0) {
                     ViewTreeObserver obs = mControlsGroup.getViewTreeObserver();
-                    obs.removeGlobalOnLayoutListener(this);                    
+                    obs.removeGlobalOnLayoutListener(this);
                 }
             }
         });
@@ -130,7 +123,8 @@ public class DialogsFragment extends BaseFragment {
 		mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (!mIsUpdating && Data.dialogList.get(position).isLoaderRetry()) {
+                Dialog item = ((Dialog)parent.getItemAtPosition(position));
+				if (!mIsUpdating && item.isLoaderRetry()) {
 					updateUI(new Runnable() {
 						public void run() {
 							removeLoaderListItem();
@@ -140,13 +134,8 @@ public class DialogsFragment extends BaseFragment {
 					});
 					updateDataHistory();
 				} else {
-					// ImageView iv =
-					// (ImageView)view.findViewById(R.id.ivAvatar);
-					// Data.userAvatar =
-					// ((BitmapDrawable)iv.getDrawable()).getBitmap();
 					try {
-						Dialog item = ((Dialog)parent.getItemAtPosition(position));
-						Intent intent = new Intent(getActivity(), ChatActivity.class);						
+						Intent intent = new Intent(getActivity(), ChatActivity.class);
 						intent.putExtra(ChatActivity.INTENT_USER_ID, item.uid);
 						intent.putExtra(ChatActivity.INTENT_USER_URL, item.getSmallLink());
 						intent.putExtra(ChatActivity.INTENT_USER_NAME, item.first_name);
@@ -179,18 +168,15 @@ public class DialogsFragment extends BaseFragment {
 		// mListView.getRefreshableView().addFooterView(mFooterView);
 
 		// Control creating
-		mAvatarManager = new AvatarManager<Dialog>(getActivity(), Data.dialogList, new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-			    if (Data.dialogList.size() > 0 )
-    				if (Data.dialogList.getLast().isLoader() && !mIsUpdating)
-    					updateDataHistory();
-
-				super.handleMessage(msg);
-			}
-		});
-		mListAdapter = new DialogListAdapter(getActivity(), mAvatarManager);
-		mListView.setOnScrollListener(mAvatarManager);
+		mListAdapter = new DialogListAdapter(getActivity().getApplicationContext(), Data.dialogList, new FeedAdapter.Updater() {
+            @Override
+            public void onFeedUpdate() {
+                if (!mIsUpdating) {
+                    updateDataHistory();
+                }
+            }
+        });
+		mListView.setOnScrollListener(mListAdapter);
 		mListView.getRefreshableView().setAdapter(mListAdapter);
 
 		mHasUnread = CacheProfile.unread_messages > 0;
@@ -204,24 +190,23 @@ public class DialogsFragment extends BaseFragment {
 		if (!isPushUpdating)
 			onUpdateStart(isPushUpdating);
 
-		mDoubleButton.setChecked(mHasUnread ? DoubleBigButton.RIGHT_BUTTON
-				: DoubleBigButton.LEFT_BUTTON);
+		mDoubleButton.setChecked(mHasUnread ?
+                DoubleBigButton.RIGHT_BUTTON :
+                DoubleBigButton.LEFT_BUTTON
+        );
 		
 		DialogRequest dialogRequest = new DialogRequest(getActivity());
 		registerRequest(dialogRequest);
 		dialogRequest.limit = LIMIT;
-		if (mHasUnread) 
-			dialogRequest.unread = 1;
-		else
-			dialogRequest.unread = 0;
+        dialogRequest.unread = mHasUnread ? 1 : 0;
 		dialogRequest.callback(new ApiHandler() {
 			@Override
-			public void success(ApiResponse response) {
-				Data.dialogList.clear();
-				Data.dialogList.addAll(Dialog.parse(response));
+			public void success(final ApiResponse response) {
 				updateUI(new Runnable() {
 					@Override
 					public void run() {
+                        Data.dialogList.clear();
+                        Data.dialogList.addAll(Dialog.parse(response));
 					    CacheProfile.unread_messages = 0;
 						// if (mNewUpdating)
 						// mFooterView.setVisibility(View.GONE);
@@ -278,11 +263,8 @@ public class DialogsFragment extends BaseFragment {
 			}
 		}
 		
-		if(mHasUnread)
-			dialogRequest.unread = 1;
-		else
-			dialogRequest.unread = 0;
-		
+        dialogRequest.unread = mHasUnread ? 1 : 0;
+
 		
 		dialogRequest.callback(new ApiHandler() {
 			@Override
@@ -332,13 +314,7 @@ public class DialogsFragment extends BaseFragment {
 
 		mListView = null;
 
-		if (mListAdapter != null)
-			mListAdapter.release();
 		mListAdapter = null;
-
-		if (mAvatarManager != null)
-			mAvatarManager.release();
-		mAvatarManager = null;
 
 		Data.friendAvatar = null;
 	}
@@ -389,7 +365,7 @@ public class DialogsFragment extends BaseFragment {
 			} else {
 				mBackgroundText.setText("");
 			}
-			
+
 			if (mBackgroundText.getCompoundDrawables()[0] != null) {
 				((AnimationDrawable)mBackgroundText.getCompoundDrawables()[0]).stop();
 			}

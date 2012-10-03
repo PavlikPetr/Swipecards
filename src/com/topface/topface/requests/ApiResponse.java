@@ -1,5 +1,6 @@
 package com.topface.topface.requests;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import com.topface.topface.utils.Debug;
 
@@ -35,33 +36,26 @@ public class ApiResponse {
     public static final int NULL_RESPONSE = 100;
     public static final int WRONG_RESPONSE = 101;
 
-    public JSONObject getSearch() {
-        return mJSONResult;
-    }
-
     public ApiResponse(String response) {
-        try {
-            if (response == null) {
-                Debug.log(this, "json response is null");
-                code = NULL_RESPONSE;
-                return;
-            }
+        JSONObject json = null;
 
-            mJSONResult = new JSONObject(response);
-            if (!mJSONResult.isNull("error")) {
-                mJSONResult = mJSONResult.getJSONObject("error");
-                code = mJSONResult.getInt("code");
-            } else if (!mJSONResult.isNull("result"))
-                mJSONResult = mJSONResult.getJSONObject("result");
-            else
+        if (response != null && response.length() > 0) {
+            try {
+                json = new JSONObject(response);
+            } catch (JSONException e) {
                 code = WRONG_RESPONSE;
-        } catch(Exception e) {
-            code = WRONG_RESPONSE;
-            Debug.log(this, "json resonse is wrong:" + response);
+                Debug.log(this, "json resonse is wrong: " + response);
+            }
         }
+
+        parseJson(json);
     }
 
     public ApiResponse(JSONObject response) {
+        parseJson(response);
+    }
+
+    public void parseJson(JSONObject response) {
         try {
             if (response == null) {
                 Debug.log(this, "json response is null");

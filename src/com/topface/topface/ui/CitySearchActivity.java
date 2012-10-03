@@ -1,6 +1,14 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.*;
+import android.widget.AdapterView.OnItemClickListener;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.requests.ApiHandler;
@@ -8,22 +16,8 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.utils.Debug;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.view.Window;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.LinkedList;
 
 public class CitySearchActivity extends BaseFragmentActivity {
     // Data
@@ -128,14 +122,15 @@ public class CitySearchActivity extends BaseFragmentActivity {
         citiesRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                LinkedList<City> citiesList = City.parse(response);
-                if (citiesList.size() == 0)
+                final LinkedList<City> citiesList = City.parse(response);
+                if (citiesList.size() == 0 || mTopCitiesList == null) {
                     return;
-                mTopCitiesList.addAll(citiesList);
-                fillData(mTopCitiesList);
+                }
                 post(new Runnable() {
                     @Override
                     public void run() {
+                        mTopCitiesList.addAll(citiesList);
+                        fillData(mTopCitiesList);
                         mListAdapter.notifyDataSetChanged();
                         mProgressBar.setVisibility(View.GONE);
                     }

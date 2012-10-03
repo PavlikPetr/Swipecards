@@ -1,32 +1,12 @@
 package com.topface.topface.utils.http;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.protocol.BasicHttpContext;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.content.LocalBroadcastManager;
-
-import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.Data;
+import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.Static;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiRequest;
@@ -35,6 +15,20 @@ import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.utils.AuthToken;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.Http.FlushedInputStream;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.protocol.BasicHttpContext;
+
+import java.io.*;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ConnectionManager {	
 	

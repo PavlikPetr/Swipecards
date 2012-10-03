@@ -1,113 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-  <RelativeLayout 
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface" 
-      android:layout_width="fill_parent" 
-      android:layout_height="wrap_content"
-      android:background="@drawable/item_list_selector" >
-      
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_list_selector">
+
     <!-- аватар -->
     <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivAvatar"
-            style="@style/FeedAvatar"
-            />
-    
-      <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/ivAvatar"
-        android:layout_marginRight="20dp"
-        android:layout_centerVertical="true"
-        android:orientation="vertical">
-        
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-    
-				   <!-- имя, возраст -->
-			      <TextView
-			            android:id="@+id/tvName"
-			            android:layout_width="wrap_content"
-			            android:layout_height="wrap_content"
-			            android:textColor="#FFFFFF"
-			            android:textSize="16dp" 
-			            android:textStyle="normal"
-			            style="@style/ShadowItemFont" />
-					    
-				  <!-- город -->
-		          <TextView
-		              android:id="@+id/tvCity"
-		              android:layout_width="wrap_content"
-		              android:layout_height="wrap_content"
-		              android:singleLine="true"
-		              android:ellipsize="end"
-		              android:textColor="#FFFFFF"
-		              android:textSize="16dp" 
-		              android:textStyle="normal"
-		              style="@style/ShadowItemFont" />
-          
-        </LinearLayout>
-        
-        <LinearLayout
+            style="@style/FeedAvatar"/>
+
+    <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-		          
-					<!-- текст -->
-					<TextView
-						android:id="@+id/tvText"
-				        android:layout_width="wrap_content"
-				        android:layout_height="wrap_content"
-				        android:layout_weight="1"
-				        android:layout_gravity="left|bottom"
-				        android:layout_marginRight="4dp"
-	                    android:singleLine="true"
-	                    android:ellipsize="end"
-				        android:textColor="#B8B8B8" 
-				        android:textSize="14dp" 
-				        android:textStyle="normal"
-			            style="@style/ShadowItemFont" />
-					
-		    <!-- время -->
-		    <TextView
-		        android:id="@+id/tvTime"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_gravity="right|bottom"
-		        android:shadowColor="#222222"
-                android:shadowRadius="1"
-                android:shadowDx="0"
-                android:shadowDy="-1"
-		        android:textColor="#737373"
-                android:textSize="12dp" 
-                android:textStyle="normal"
-		        style="@style/ShadowItemFont" />
-    
-     </LinearLayout>
-			    
-     </LinearLayout>
-       
+            android:layout_toRightOf="@id/ivAvatar"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp">
+
+        <!-- имя, возраст -->
+        <TextView
+                android:id="@+id/tvName"
+                style="@style/ListName"/>
+
+        <!-- город -->
+        <TextView
+                android:id="@+id/tvCity"
+                android:layout_toRightOf="@id/tvName"
+                android:layout_alignBaseline="@id/tvName"
+                style="@style/ListCity"/>
+
+        <!-- текст -->
+        <TextView
+                android:id="@+id/tvText"
+                android:layout_below="@id/tvName"
+                android:layout_toLeftOf="@+id/tvTime"
+                style="@style/ListMessageText"/>
+
+        <!-- время -->
+        <TextView
+                android:id="@+id/tvTime"
+                android:layout_alignBaseline="@id/tvText"
+                style="@style/ListTime"/>
+
+
+    </RelativeLayout>
+
     <!-- стрелка -->
     <ImageView
-        android:id="@+id/ivArrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="6dp"
-        android:src="@drawable/im_item_arrow" />
-    
+            android:id="@+id/ivArrow"
+            style="@style/ListArrow"/>
+
     <!-- online -->
     <ImageView
-        android:id="@+id/ivOnline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="0px"
-        android:layout_marginRight="6dp"
-        android:src="@drawable/list_online_selector"
-        android:visibility="invisible" />
-    
-  </RelativeLayout>
+            android:id="@+id/ivOnline"
+            style="@style/OnlineIndicator"/>
+
+</RelativeLayout>

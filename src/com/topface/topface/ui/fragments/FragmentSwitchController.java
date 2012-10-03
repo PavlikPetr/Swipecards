@@ -1,19 +1,13 @@
 package com.topface.topface.ui.fragments;
 
-import com.topface.topface.ui.views.DatingAlbum;
-import com.topface.topface.utils.Debug;
-
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.VelocityTracker;
-import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
+import com.topface.topface.ui.views.DatingAlbum;
 
 public class FragmentSwitchController extends ViewGroup implements View.OnClickListener {
 	private int mScrollX;
@@ -110,7 +104,6 @@ public class FragmentSwitchController extends ViewGroup implements View.OnClickL
 	
 	@Override
 	public void computeScroll() {
-		Debug.log("computeScroll(): "+ (++counter));
 		mScrollX = mScroller.getCurrX();
 		if (!mScroller.isFinished()) {
 			if (mScroller.computeScrollOffset()) {

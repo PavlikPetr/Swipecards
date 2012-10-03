@@ -1,25 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import java.util.LinkedList;
-import com.topface.topface.R;
-import com.topface.topface.Data;
-import com.topface.topface.Static;
-import com.topface.topface.data.City;
-import com.topface.topface.data.Top;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
-import com.topface.topface.requests.CitiesRequest;
-import com.topface.topface.requests.TopRequest;
-import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.adapters.TopsGridAdapter;
-import com.topface.topface.ui.profile.UserProfileActivity;
-import com.topface.topface.ui.views.DoubleButton;
-import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.ui.views.ThumbView;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.GalleryGridManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,11 +9,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.*;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.data.City;
+import com.topface.topface.data.Top;
+import com.topface.topface.requests.*;
+import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.adapters.TopsGridAdapter;
+import com.topface.topface.ui.profile.UserProfileActivity;
+import com.topface.topface.ui.views.DoubleButton;
+import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.ThumbView;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.GalleryGridManager;
+
+import java.util.LinkedList;
 
 public class TopsFragment extends BaseFragment {
     // Data
@@ -166,12 +159,12 @@ public class TopsFragment extends BaseFragment {
         topRequest.city = mActionData.city_id;
         topRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
-                Data.topsList.clear();
-                Data.topsList.addAll(Top.parse(response));
+            public void success(final ApiResponse response) {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
+                        Data.topsList.clear();
+                        Data.topsList.addAll(Top.parse(response));
                         onUpdateSuccess(false);
                         mGridAdapter.notifyDataSetChanged();                        
                         mGalleryGridManager.update();

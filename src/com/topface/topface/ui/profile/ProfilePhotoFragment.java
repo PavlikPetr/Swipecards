@@ -1,10 +1,5 @@
 package com.topface.topface.ui.profile;
 
-import java.util.HashMap;
-import com.topface.topface.Data;
-import com.topface.topface.R;
-import com.topface.topface.ui.profile.edit.EditContainerActivity;
-import com.topface.topface.utils.CacheProfile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,13 +8,15 @@ import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.ViewGroup;
+import android.widget.*;
+import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.ui.profile.edit.EditContainerActivity;
+import com.topface.topface.utils.CacheProfile;
+
+import java.util.HashMap;
 
 public class ProfilePhotoFragment extends Fragment {
     private TextView mTitle;
@@ -32,7 +29,7 @@ public class ProfilePhotoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mPhotoLinks = new SparseArray<HashMap<String, String>>();
         mPhotoLinks.append(0, null);
-        for(int i=0; i<CacheProfile.photoLinks.size(); i++) {
+        for(int i=0; i < CacheProfile.photoLinks.size(); i++) {
             mPhotoLinks.append(i+1, CacheProfile.photoLinks.get(CacheProfile.photoLinks.keyAt(i)));
         }
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks);
@@ -51,7 +48,7 @@ public class ProfilePhotoFragment extends Fragment {
 			subTitle.setVisibility(View.VISIBLE);
 			subTitle.setText(R.string.edit_album);
 			
-			((Button)getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);		
+			getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
 			Button btnBack = (Button)getActivity().findViewById(R.id.btnNavigationBackWithText);
 			btnBack.setVisibility(View.VISIBLE);
 			btnBack.setText(R.string.navigation_edit);
