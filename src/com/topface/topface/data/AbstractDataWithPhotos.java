@@ -1,18 +1,16 @@
 package com.topface.topface.data;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-
+import android.util.SparseArray;
+import com.topface.topface.Static;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.PhotoLinksResolver;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.SparseArray;
-
-import com.topface.topface.Static;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.PhotoLinksResolver;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public abstract class AbstractDataWithPhotos extends AbstractData {
 
@@ -74,7 +72,7 @@ public abstract class AbstractDataWithPhotos extends AbstractData {
 		try {
 			Iterator<String> iterKey = links.keys();
 			while (iterKey.hasNext()) {
-				String sizeKey = (String) iterKey.next();
+				String sizeKey = iterKey.next();
 				result.put(sizeKey, links.getString(sizeKey));
 				data.mSizeKeys.add(sizeKey);
 			}

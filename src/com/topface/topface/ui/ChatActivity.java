@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -44,22 +46,17 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private int mAvatarWidth;
     private boolean mProfileInvoke;    
     private boolean mIsAddPanelOpened;
-    private ListView mListView;
+    private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private LinkedList<History> mHistoryList;
     private EditText mEditBox;
     private TextView mHeaderTitle;
-    private TextView mHeaderSubtitle;
     private LockerView mLoadingLocker;
-    
-    private MessageRequest messageRequest;
-    private HistoryRequest historyRequest;
+
     private SwapControl mSwapControl;
     private static ProgressDialog mProgressDialog;
     private boolean mLocationDetected = false;
-    
-    private int mUserSex;
-    
+
     // Constants
     private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public static final String INTENT_USER_ID = "user_id";
@@ -72,7 +69,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
     private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
-    private static long LOCATION_PROVIDER_TIMEOUT = 10000;
+    private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
     
     //Managers
     private GeoLocationManager mGeoManager = null;
@@ -96,15 +93,15 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
         mUserAvatarUrl = getIntent().getStringExtra(INTENT_USER_URL);
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
-        mUserSex = getIntent().getIntExtra(INTENT_USER_SEX, Static.BOY);
+        int userSex = getIntent().getIntExtra(INTENT_USER_SEX, Static.BOY);
         mAvatarWidth = getResources().getDrawable(R.drawable.chat_avatar_frame).getIntrinsicWidth();
         
         // Navigation bar
         mHeaderTitle = ((TextView)findViewById(R.id.tvNavigationTitle));
         mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME) + ", " + getIntent().getIntExtra(INTENT_USER_AGE,0));
-        mHeaderSubtitle = ((TextView)findViewById(R.id.tvNavigationSubtitle));
-        mHeaderSubtitle.setVisibility(View.VISIBLE);
-        mHeaderSubtitle.setText(getIntent().getStringExtra(INTENT_USER_CITY));
+        TextView headerSubtitle = ((TextView) findViewById(R.id.tvNavigationSubtitle));
+        headerSubtitle.setVisibility(View.VISIBLE);
+        headerSubtitle.setText(getIntent().getStringExtra(INTENT_USER_CITY));
         
         (findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
         final Button btnBack = (Button)findViewById(R.id.btnNavigationBackWithText);
@@ -117,7 +114,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         btnBack.setOnClickListener(this);
                 
         final Button btnProfile = (Button)findViewById(R.id.btnNavigationProfileBar);
-        switch (mUserSex) {
+        switch (userSex) {
 		case Static.BOY:
 			btnProfile.setBackgroundResource(R.drawable.navigation_male_profile_selector);
 			break;
@@ -133,32 +130,38 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 //        btnProfile.setOnClickListener(this);
 
         // Add Button        
-        ((Button)findViewById(R.id.btnChatAdd)).setOnClickListener(this);
+        findViewById(R.id.btnChatAdd).setOnClickListener(this);
 
         // Gift Button
-        ((Button)findViewById(R.id.btnChatGift)).setOnClickListener(this);
+        findViewById(R.id.btnChatGift).setOnClickListener(this);
 
         // Place Button
-        ((Button)findViewById(R.id.btnChatPlace)).setOnClickListener(this);
+        findViewById(R.id.btnChatPlace).setOnClickListener(this);
 
         // Map Button
-        ((Button)findViewById(R.id.btnChatMap)).setOnClickListener(this);
+        findViewById(R.id.btnChatMap).setOnClickListener(this);
 
         // Edit Box
         mEditBox = (EditText)findViewById(R.id.edChatBox);
         mEditBox.setOnEditorActionListener(mEditorActionListener);
 
         // ListView
-        mListView = (ListView)findViewById(R.id.lvChatList);
+        mListView = (PullToRefreshListView) findViewById(R.id.lvChatList);
 
         // Adapter
         mAdapter = new ChatListAdapter(getApplicationContext(), mUserId, mHistoryList);
         mAdapter.setOnAvatarListener(this);
+        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                update(true);
+            }
+        });
         mListView.setAdapter(mAdapter);
 
         Http.avatarOwnerPreloading();
 
-        update();
+        update(false);
     }
 
     @Override
@@ -169,28 +172,35 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         super.onDestroy();
     }
 
-    private void update() {
-        mLoadingLocker.setVisibility(View.VISIBLE);
-        historyRequest = new HistoryRequest(getApplicationContext());
+    private void update(final boolean pullToRefresh) {
+        if (!pullToRefresh) {
+            mLoadingLocker.setVisibility(View.VISIBLE);
+        }
+        HistoryRequest historyRequest = new HistoryRequest(getApplicationContext());
         registerRequest(historyRequest);
         historyRequest.userid = mUserId;
         historyRequest.limit = LIMIT;
         historyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-            	Data.friendAvatar = Utils.getRoundedBitmap(Http.bitmapLoader(mUserAvatarUrl), mAvatarWidth, mAvatarWidth);
-                LinkedList<History> dataList = History.parse(response);
-                mAdapter.setDataList(dataList);
+                //noinspection SuspiciousNameCombination
+                Data.friendAvatar = Utils.getRoundedBitmap(Http.bitmapLoader(mUserAvatarUrl), mAvatarWidth, mAvatarWidth);
+                final LinkedList<History> dataList = History.parse(response);
                 post(new Runnable() {
                     @Override
                     public void run() {
+                        mAdapter.setDataList(dataList);
+                        if (pullToRefresh) {
+                            mListView.onRefreshComplete();
+                        }
                         mLoadingLocker.setVisibility(View.GONE);
                         mAdapter.notifyDataSetChanged();
                     }
                 });
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
+            public void fail(int codeError, ApiResponse response) {
                 post(new Runnable() {
                     @Override
                     public void run() {
@@ -272,40 +282,41 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
                 mLoadingLocker.setVisibility(View.VISIBLE);
 
-                messageRequest = new MessageRequest(ChatActivity.this.getApplicationContext());
+                MessageRequest messageRequest = new MessageRequest(ChatActivity.this.getApplicationContext());
                 registerRequest(messageRequest);
                 messageRequest.message = mEditBox.getText().toString();
                 messageRequest.userid = mUserId;
                 messageRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                    	final Confirmation confirm = Confirmation.parse(response);
-                        runOnUiThread(new Runnable() {                        	
+                        final Confirmation confirm = Confirmation.parse(response);
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 if (confirm.completed) {
-	                                History history = new History();
+                                    History history = new History();
 //	                                history.code = 0;
 //	                                history.gift = 0;
-	                                history.uid = CacheProfile.uid;
-	                                history.created = System.currentTimeMillis();
-	                                history.text = text;
-	                                history.type = Dialog.MESSAGE;
-	                                mAdapter.addSentMessage(history);
-	                                mAdapter.notifyDataSetChanged();
-	                                mEditBox.getText().clear();
-	                                mLoadingLocker.setVisibility(View.GONE);
-	                                
-	                                InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-	                                imm.hideSoftInputFromWindow(mEditBox.getWindowToken(), 0);
+                                    history.uid = CacheProfile.uid;
+                                    history.created = System.currentTimeMillis();
+                                    history.text = text;
+                                    history.type = Dialog.MESSAGE;
+                                    mAdapter.addSentMessage(history);
+                                    mAdapter.notifyDataSetChanged();
+                                    mEditBox.getText().clear();
+                                    mLoadingLocker.setVisibility(View.GONE);
+
+                                    InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(mEditBox.getWindowToken(), 0);
                                 } else {
-                                	Toast.makeText(ChatActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
-                                }	
+                                    Toast.makeText(ChatActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
                     }
+
                     @Override
-                    public void fail(int codeError,ApiResponse response) {
+                    public void fail(int codeError, ApiResponse response) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -438,9 +449,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private void sendUserCurrentLocation() {
     	mLocationDetected = false;    	
     	
-    	if (mGeoManager == null)
-    		mGeoManager = new GeoLocationManager(getApplicationContext());
-    	
+    	if (mGeoManager == null) {
+            mGeoManager = new GeoLocationManager(getApplicationContext());
+        }
+
     	if(mGeoManager.availableLocationProvider(LocationProviderType.AGPS)) {
     		mGeoManager.setLocationListener(LocationProviderType.AGPS, this);
     		showDialog(DIALOG_LOCATION_PROGRESS_ID);
@@ -453,7 +465,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     			
     			@Override
     			public void onFinish() {
-    				synchronized (mGeoManager) {
+                    //noinspection SynchronizeOnNonFinalField
+                    synchronized (mGeoManager) {
     					if (!mLocationDetected) {						
     						mGeoManager.removeLocationListener(ChatActivity.this);
     						mProgressDialog.dismiss();    

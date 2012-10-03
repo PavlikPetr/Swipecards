@@ -7,33 +7,16 @@
 
     <!-- аватар -->
 
-    <RelativeLayout
-        android:id="@+id/loAvatarGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp" >
-
-        <ImageView
+    <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivAvatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
-
-        <ImageView
-            android:id="@+id/ivAvatarMask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/im_avatar_list_frame" />
-    </RelativeLayout>
+            style="@style/FeedAvatar"
+            />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/loAvatarGroup"
+        android:layout_toRightOf="@id/ivAvatar"
         android:orientation="vertical" >
 
         <!-- имя -->

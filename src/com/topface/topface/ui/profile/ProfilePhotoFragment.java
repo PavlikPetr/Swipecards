@@ -13,17 +13,12 @@ import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.ViewGroup;
+import android.widget.*;
 
 public class ProfilePhotoFragment extends Fragment {
-    
-    private TextView mTitle;
+
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
     private SparseArray<HashMap<String, String>> mPhotoLinks;
     private AddPhotoHelper mAddPhotoHelper;
@@ -33,7 +28,7 @@ public class ProfilePhotoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mPhotoLinks = new SparseArray<HashMap<String, String>>();
         mPhotoLinks.append(0, null);
-        for(int i=0; i<CacheProfile.photoLinks.size(); i++) {
+        for(int i=0; i < CacheProfile.photoLinks.size(); i++) {
             mPhotoLinks.append(i+1, CacheProfile.photoLinks.get(CacheProfile.photoLinks.keyAt(i)));
         }
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks);
@@ -52,7 +47,7 @@ public class ProfilePhotoFragment extends Fragment {
 			subTitle.setVisibility(View.VISIBLE);
 			subTitle.setText(R.string.edit_album);
 			
-			((Button)getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);		
+			getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
 			Button btnBack = (Button)getActivity().findViewById(R.id.btnNavigationBackWithText);
 			btnBack.setVisibility(View.VISIBLE);
 			btnBack.setText(R.string.navigation_edit);
@@ -68,14 +63,14 @@ public class ProfilePhotoFragment extends Fragment {
         gridAlbum.setNumColumns(3);
         gridAlbum.setAdapter(mProfilePhotoGridAdapter);
         gridAlbum.setOnItemClickListener(mOnItemClickListener);
-        
-        mTitle = (TextView)root.findViewById(R.id.fragmentTitle);
+
+        TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
         
         if(mPhotoLinks != null && mPhotoLinks.size() >= 0) {
-            mTitle.setText(CacheProfile.photoLinks.size() + " photos"); // mPhotoLinks-1
-            mTitle.setVisibility(View.VISIBLE);
+            title.setText(CacheProfile.photoLinks.size() + " photos"); // mPhotoLinks-1
+            title.setVisibility(View.VISIBLE);
         } else {
-            mTitle.setVisibility(View.INVISIBLE);  
+            title.setVisibility(View.INVISIBLE);
         }
 
         return root;

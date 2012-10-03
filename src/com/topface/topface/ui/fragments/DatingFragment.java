@@ -45,6 +45,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.LinkedList;
+
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker, RateController.OnRateControllerListener {
     
     private int mCurrentUserPos;
@@ -203,25 +205,23 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         searchRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                LinkedList<Search> userList = Search.parse(response);
-                if (!isAddition) {
-                    mUserSearchList.clear();
-                    mUserSearchList.addAll(userList);
-                } else {
-                    mUserSearchList.addAll(userList);
-                }
-                
+                final LinkedList<Search> userList = Search.parse(response);
                 updateUI(new Runnable() {
-                	@Override
+                    @Override
                     public void run() {
-                		if (!isAddition) {
-                			onUpdateSuccess(isAddition);
+                        if (isAddition) {
+                            mUserSearchList.addAll(userList);
+                        } else {
+                            mUserSearchList.clear();
+                            mUserSearchList.addAll(userList);
+                            onUpdateSuccess(isAddition);
                             showNextUser();
                         }
-                		unlockControls();
+
+                        unlockControls();
                     }
-                });     
-                
+                });
+
             }
             @Override
             public void fail(int codeError,ApiResponse response) {

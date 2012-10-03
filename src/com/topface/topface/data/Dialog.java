@@ -1,14 +1,15 @@
 package com.topface.topface.data;
 
-import java.util.LinkedList;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-public class Dialog extends AbstractDataWithPhotos implements IListLoader{
-    // Data	
+import java.util.LinkedList;
+
+public class Dialog extends AbstractDataWithPhotos implements IListLoader {
+    // Data
     public static int unread_count; // общее количество непрочитанных диалогов
 	public static boolean more;     // имеются ли в ленте ещё элементы для пользователя
 	

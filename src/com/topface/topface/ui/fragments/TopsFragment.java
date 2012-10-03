@@ -1,8 +1,17 @@
 package com.topface.topface.ui.fragments;
 
-import java.util.LinkedList;
-import com.topface.topface.R;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.*;
 import com.topface.topface.Data;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Top;
@@ -32,6 +41,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
+
+import java.util.LinkedList;
 
 public class TopsFragment extends BaseFragment {
 
@@ -163,12 +174,12 @@ public class TopsFragment extends BaseFragment {
         topRequest.city = mActionData.city_id;
         topRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
-                Data.topsList.clear();
-                Data.topsList.addAll(Top.parse(response));
+            public void success(final ApiResponse response) {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
+                        Data.topsList.clear();
+                        Data.topsList.addAll(Top.parse(response));
                         onUpdateSuccess(false);
                         mGridAdapter.notifyDataSetChanged();                        
                         mGalleryGridManager.update();

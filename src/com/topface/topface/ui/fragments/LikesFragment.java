@@ -193,13 +193,12 @@ public class LikesFragment extends BaseFragment {
 		likesRequest.only_new = mNewUpdating;
 		likesRequest.callback(new ApiHandler() {
 			@Override
-			public void success(ApiResponse response) {
-			    final LinkedList<FeedLike> feedLikesList = FeedLike.parse(response);
+			public void success(final ApiResponse response) {
 				updateUI(new Runnable() {
 					@Override
 					public void run() {
-			            Data.likesList.clear();
-			            Data.likesList.addAll(feedLikesList);
+                        Data.likesList.clear();
+                        Data.likesList.addAll(FeedLike.parse(response));
 					    CacheProfile.unread_likes = 0;
 						if (mNewUpdating) {
 							if (FeedLike.unread_count > 0) {

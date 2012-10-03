@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+
 import java.util.LinkedList;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
@@ -27,6 +28,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.LinkedList;
 
 public class CitySearchActivity extends BaseFragmentActivity {
     // Data
@@ -176,14 +179,15 @@ public class CitySearchActivity extends BaseFragmentActivity {
         citiesRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                LinkedList<City> citiesList = City.parse(response);
-                if (citiesList.size() == 0)
+                final LinkedList<City> citiesList = City.parse(response);
+                if (citiesList.size() == 0 || mTopCitiesList == null) {
                     return;
-                mTopCitiesList.addAll(citiesList);
-                fillData(mTopCitiesList);
+                }
                 post(new Runnable() {
                     @Override
                     public void run() {
+                        mTopCitiesList.addAll(citiesList);
+                        fillData(mTopCitiesList);
                         mListAdapter.notifyDataSetChanged();
                         mProgressBar.setVisibility(View.GONE);
                     }

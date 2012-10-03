@@ -27,34 +27,6 @@ public class CacheProfile  {
     public static int money;        // количество монет у пользователя
     public static int power;        // количество энергии пользователя
     public static int average_rate; // средняя оценка текущего пользователя
-    
-    // Form
-//    public static int form_job_id; // идентификатор рабочей партии пользователя
-//    public static String form_job; // описание оригинальной работы пользователя
-//    public static int form_status_id; // идентификатор предопределенного статуса пользователя
-//    public static String form_status; // описание оригинального статуса пользователя
-//    public static int form_education_id; // идентификатор предопределенного уровня образования пользователя
-//    public static int form_marriage_id; // идентификатор предопределенного семейного положения пользователя
-//    public static int form_finances_id; // идентификатор предопределенного финансового положения пользователя
-//    public static int form_character_id; // идентификатор предопределенной характеристики пользователя
-//    public static int form_smoking_id; // идентификатор предопределенного отношения к курению пользователя
-//    public static int form_alcohol_id; // идентификатор предопределенного отношения к алкоголю пользователя
-//    public static int form_fitness_id; // идентификатор предопределенного отношения к спорту пользователя
-//    public static int form_communication_id; // идентификатор предопределенного отношения к коммуникациям пользователя
-//    public static int form_weight; // вес пользователя
-//    public static int form_height; // рост пользователя
-//    public static int form_hair_id; // идентификатор цвета воло пользователя
-//    public static int form_eye_id; // идентификатор цвета глаз пользователя
-//    public static int form_children_id; // идентификатор количества детей пользователя
-//    public static int form_residence_id; // идентификатор условий проживания пользователя
-//    public static int form_car_id; // идентификатор наличия автомобиля у пользователя
-//    public static String form_car; // текстовое описание присутствующего автомобиля у пользователя
-//    public static String form_first_dating; // текстовое описание свидания пользователя
-//    public static String form_achievements; // текстовое описание достижений пользователя
-//    //{Array} form_countries; // массив идентификаторов стран, в которых бывал пользователь
-//    public static String form_restaurants; // описание предпочитаемых ресторанов пользователя
-//    public static String form_valuables; // описание ценностей пользователя
-//    public static String form_aspirations; // описание достижений пользователя
     // Dating
     public static int dating_sex; // пол пользователей для поиска
     public static int dating_age_start; // начальный возраст для пользователей

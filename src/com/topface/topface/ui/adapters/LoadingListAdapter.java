@@ -25,14 +25,14 @@ public class LoadingListAdapter extends BaseAdapter {
 	protected View mLoaderRetrier;
 	protected TextView mLoaderRetrierText;
 	protected ProgressBar mLoaderRetrierProgress;
-	
+
 	@Override
 	public int getCount() {
 		return 0;
 	}
 
 	@Override
-	public IListLoader getItem(int position) {		
+	public IListLoader getItem(int position) {
 		return null;
 	}
 

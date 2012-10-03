@@ -182,13 +182,13 @@ public class MutualFragment extends BaseFragment {
         symphatyRequest.only_new = mNewUpdating;
         symphatyRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
-                final LinkedList<FeedSympathy> feedSymphatyList = FeedSympathy.parse(response);
+            public void success(final ApiResponse response) {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
                         Data.mutualList.clear();
-                        Data.mutualList.addAll(feedSymphatyList);
+                        Data.mutualList.addAll(FeedSympathy.parse(response));
+
                         CacheProfile.unread_mutual = 0;
                     	if (mNewUpdating) {
                      		if (FeedSympathy.unread_count > 0) {
