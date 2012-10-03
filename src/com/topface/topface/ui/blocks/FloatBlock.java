@@ -35,8 +35,7 @@ public class FloatBlock {
             String floatType = mActivityMap.get(currentActivity);
             if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
                 new BannerBlock(mActivity);
-            }
-            else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
+            } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
                 mLeaders = new LeadersBlock(mActivity);
             }
         }

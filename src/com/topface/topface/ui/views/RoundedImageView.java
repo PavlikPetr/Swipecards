@@ -1,13 +1,13 @@
 package com.topface.topface.ui.views;
 
-import com.topface.topface.R;
-import com.topface.topface.Recycle;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import com.topface.topface.R;
+import com.topface.topface.Recycle;
 
 public class RoundedImageView extends ImageView {
     // Data
@@ -15,19 +15,23 @@ public class RoundedImageView extends ImageView {
     // Frames Type
     private static final int INBOX = 0;
     private static final int CHAT = 1;
+
     //---------------------------------------------------------------------------
     public RoundedImageView(Context context) {
         this(context, null);
     }
+
     //---------------------------------------------------------------------------
-    public RoundedImageView(Context context,AttributeSet attrs) {
+    public RoundedImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
     //---------------------------------------------------------------------------
-    public RoundedImageView(Context context,AttributeSet attrs,int defStyle) {
+    public RoundedImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setAttrs(attrs);
     }
+
     //---------------------------------------------------------------------------
     private void setAttrs(AttributeSet attrs) {
         if (attrs == null)
@@ -37,9 +41,10 @@ public class RoundedImageView extends ImageView {
         mFrameType = a.getInteger(R.styleable.RoundedImageView_frame, 0);
         a.recycle();
     }
+
     //---------------------------------------------------------------------------
     @Override
-    protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         if (mFrameType == INBOX)
             setMeasuredDimension(Recycle.s_InboxFrame.getWidth(), Recycle.s_InboxFrame.getHeight());
@@ -50,6 +55,7 @@ public class RoundedImageView extends ImageView {
 
         //super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
+
     //---------------------------------------------------------------------------
     @Override
     protected void onDraw(Canvas canvas) {

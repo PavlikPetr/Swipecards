@@ -55,7 +55,7 @@ public class Data {
 
         if (mutualList == null)
             mutualList = new LinkedList<FeedSympathy>();
-        
+
         if (giftsList == null)
             giftsList = new LinkedList<Gift>();
 
@@ -73,14 +73,14 @@ public class Data {
                 GRID_COLUMN = 4;
                 break;
         }
-        
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
-        
+
         midnight = cal.getTimeInMillis();
-        
+
         LocalBroadcastManager.getInstance(context).registerReceiver(new ReAuthReceiver(), new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
     }
 
@@ -105,7 +105,7 @@ public class Data {
         return SSID;
     }
 
-    public static void saveSSID(Context context,String ssid) {
+    public static void saveSSID(Context context, String ssid) {
         SSID = (ssid == null || ssid.length() == 0) ? Static.EMPTY : ssid;
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();

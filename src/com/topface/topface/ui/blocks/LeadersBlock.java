@@ -55,16 +55,16 @@ public class LeadersBlock {
     private void bindButtonEvent() {
         //При клике на кнопку "Хочу на свидание" открываем экран вставания в лидеры
         mActivity.findViewById(R.id.leadersDateBtn).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    sendStat("WantDateButtonClick", null);
-                    mActivity.startActivity(
-                            new Intent(
-                                    mActivity.getApplicationContext(),
-                                    LeadersActivity.class
-                            )
-                    );
-                }
+            @Override
+            public void onClick(View view) {
+                sendStat("WantDateButtonClick", null);
+                mActivity.startActivity(
+                        new Intent(
+                                mActivity.getApplicationContext(),
+                                LeadersActivity.class
+                        )
+                );
+            }
         });
     }
 

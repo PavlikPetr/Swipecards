@@ -1,14 +1,15 @@
 package com.topface.topface.data;
 
-import java.util.LinkedList;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
 
 /* Класс профиля окна топов */
-public class FeedSympathy extends AbstractDataWithPhotos implements IListLoader{
+public class FeedSympathy extends AbstractDataWithPhotos implements IListLoader {
     // Data
     public static int unread_count; // количество оставшихся непрочитанных
     public static boolean more; // имеются ли в ленте ещё симпатии для пользователя
@@ -21,32 +22,32 @@ public class FeedSympathy extends AbstractDataWithPhotos implements IListLoader{
     public String first_name; // имя отправителя в текущей локали
     public int age; // возраст отправителя
     public boolean online; // флаг нахождения отправителя онлайн
-    
+
     public int city_id; // идентификатор города
     public String city_name; // наименование города в локали указанной при авторизации
     public String city_full; // полное наименование города с указанием региона, если он определен. Отдается в локали пользователя, указанной при авторизации
 
 //    public String avatars_big; // фото большого размера
 //    public String avatars_small; // фото маленького размера
-    
+
     public boolean isListLoader = false;
     public boolean isListLoaderRetry = false;
 
     public FeedSympathy() {
 
-	}    
+    }
 
     public FeedSympathy(IListLoader.ItemType type) {
-    	switch (type) {
-		case LOADER:
-			isListLoader = true;
-			break;
-		case RETRY:
-			isListLoaderRetry = true;
-			break;
-		default:			
-			break;
-		}     	
+        switch (type) {
+            case LOADER:
+                isListLoader = true;
+                break;
+            case RETRY:
+                isListLoaderRetry = true;
+                break;
+            default:
+                break;
+        }
     }
 
     public static LinkedList<FeedSympathy> parse(ApiResponse response) {
@@ -55,7 +56,7 @@ public class FeedSympathy extends AbstractDataWithPhotos implements IListLoader{
         try {
             FeedSympathy.unread_count = response.mJSONResult.optInt("unread");
             FeedSympathy.more = response.mJSONResult.optBoolean("more");
-            
+
             JSONArray arr = response.mJSONResult.getJSONArray("feed");
             if (arr.length() > 0)
                 for (int i = 0; i < arr.length(); i++) {
@@ -77,7 +78,7 @@ public class FeedSympathy extends AbstractDataWithPhotos implements IListLoader{
                     symphaty.city_id = city.optInt("id");
                     symphaty.city_name = city.optString("name");
                     symphaty.city_full = city.optString("full");
-                    
+
                     initPhotos(item, symphaty);
 
                     // avatars
@@ -87,7 +88,7 @@ public class FeedSympathy extends AbstractDataWithPhotos implements IListLoader{
 
                     symphatyList.add(symphaty);
                 }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("FeedSymphaty.class", "Wrong response parsing: " + e);
         }
 
@@ -96,21 +97,23 @@ public class FeedSympathy extends AbstractDataWithPhotos implements IListLoader{
 
     public int getUid() {
         return uid;
-    };
+    }
 
-	@Override
-	public boolean isLoader() {
-		return isListLoader;
-	}
-	
-	@Override
-	public boolean isLoaderRetry() {
-		return isListLoaderRetry;
-	}
-	
-	@Override
-	public void switchToLoader() {
-		isListLoader = false;
-		isListLoaderRetry = true;
-	}
+    ;
+
+    @Override
+    public boolean isLoader() {
+        return isListLoader;
+    }
+
+    @Override
+    public boolean isLoaderRetry() {
+        return isListLoaderRetry;
+    }
+
+    @Override
+    public void switchToLoader() {
+        isListLoader = false;
+        isListLoaderRetry = true;
+    }
 }

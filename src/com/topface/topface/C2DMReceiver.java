@@ -19,7 +19,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
     }
 
     @Override
-    public void onRegistered(final Context context,final String registrationId) {
+    public void onRegistered(final Context context, final String registrationId) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -34,25 +34,26 @@ public class C2DMReceiver extends C2DMBaseReceiver {
                     public void success(ApiResponse response) {
                         C2DMUtils.setRegisteredFlag(context);
                     }
+
                     @Override
-                    public void fail(int codeError,ApiResponse response) {
+                    public void fail(int codeError, ApiResponse response) {
                     }
                 }).exec();
                 Looper.loop();
             }
         }).start();
     }
-    
+
     @Override
     public void onUnregistered(Context context) {
         Debug.log("onUnregistered", "");
     }
 
     @Override
-    protected void onMessage(Context context,Intent receiveIntent) {
-	    if (Settings.getInstance().isNotificationEnabled()) {
-	        C2DMUtils.showNotification(receiveIntent, context);
-	    }
+    protected void onMessage(Context context, Intent receiveIntent) {
+        if (Settings.getInstance().isNotificationEnabled()) {
+            C2DMUtils.showNotification(receiveIntent, context);
+        }
         //Сообщаем о том что есть новое уведомление и нужно обновить список
         Intent broadcastReceiver = new Intent(C2DMUtils.C2DM_NOTIFICATION);
         broadcastReceiver.putExtra("id", receiveIntent.getStringExtra("id"));
@@ -60,7 +61,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
     }
 
     @Override
-    public void onError(Context context,String errorId) {
+    public void onError(Context context, String errorId) {
         Debug.log("onError", errorId);
     }
 }

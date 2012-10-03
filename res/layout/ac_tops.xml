@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/im_list_bkgrd" >
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/im_list_bkgrd">
 
     <!-- header bar -->
     <FrameLayout
-        android:id="@+id/loNavigationBar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+            android:id="@+id/loNavigationBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-        <include layout="@layout/bar_navigation_header" />
+        <include layout="@layout/bar_navigation_header"/>
     </FrameLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/loNavigationBar"
-        android:orientation="vertical" >
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/loNavigationBar"
+            android:orientation="vertical">
 
         <include layout="@layout/leaders"/>
 
         <!-- button bar -->
-        <include layout="@layout/bar_tops_button" />
+        <include layout="@layout/bar_tops_button"/>
 
         <!-- gallery -->
         <GridView
-            android:id="@+id/grdTopsGallary"
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_margin="0px"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:fadeScrollbars="true"
-            android:fadingEdge="none"
-            android:horizontalSpacing="0px"
-            android:listSelector="@android:color/transparent"
-            android:padding="0px"
-            android:verticalSpacing="0px" >
+                android:id="@+id/grdTopsGallary"
+                android:layout_width="fill_parent"
+                android:layout_height="0dip"
+                android:layout_margin="0px"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:fadeScrollbars="true"
+                android:fadingEdge="none"
+                android:horizontalSpacing="0px"
+                android:listSelector="@android:color/transparent"
+                android:padding="0px"
+                android:verticalSpacing="0px">
         </GridView>
 
         <include layout="@layout/banner"/>
     </LinearLayout>
 
     <com.topface.topface.ui.views.LockerView
-        android:id="@+id/llvTopsLoading"
-        style="@style/LoadingLocker"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone" />
+            android:id="@+id/llvTopsLoading"
+            style="@style/LoadingLocker"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="gone"/>
 
     <ImageView
             style="@style/HeaderShadow"/>

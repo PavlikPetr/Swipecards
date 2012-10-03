@@ -1,11 +1,11 @@
 package com.topface.topface.data;
 
-import java.util.LinkedList;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
 
 /* Класс чужого профиля */
 public class User extends Profile {
@@ -25,9 +25,9 @@ public class User extends Profile {
         try {
             JSONObject item = response.mJSONResult.getJSONObject("profiles");
             item = item.getJSONObject("" + userId);
-            
+
             parse(profile, item);
-            
+
             profile.platform = item.optString("platform");
             profile.last_visit = item.optInt("last_visit");
             profile.status = item.optString("status");
@@ -35,22 +35,22 @@ public class User extends Profile {
             profile.ero = item.optBoolean("ero");
             profile.mutual = item.optBoolean("mutual");
             profile.score = item.optInt("score");
-            
+
             //gifts
-            JSONArray arrGifts = item.optJSONArray("gifts");            
+            JSONArray arrGifts = item.optJSONArray("gifts");
             for (int i = 0; i < arrGifts.length(); i++) {
-            	JSONObject itemGift = arrGifts.getJSONObject(i);
-            	Gift gift = new Gift();
-            	gift.id = itemGift.optInt("gift");
-            	gift.link = itemGift.optString("link");
-            	gift.type = Gift.PROFILE;
-            	gift.feedId = itemGift.optInt("id");
-            	profile.gifts.add(gift);
-			}
-            
+                JSONObject itemGift = arrGifts.getJSONObject(i);
+                Gift gift = new Gift();
+                gift.id = itemGift.optInt("gift");
+                gift.link = itemGift.optString("link");
+                gift.type = Gift.PROFILE;
+                gift.feedId = itemGift.optInt("id");
+                profile.gifts.add(gift);
+            }
+
             initPhotos(item, profile);
-            
-        } catch(Exception e) {
+
+        } catch (Exception e) {
             Debug.log("User.class", "Wrong response parsing: " + e);
         }
 
@@ -59,7 +59,9 @@ public class User extends Profile {
 
     public int getUid() {
         return uid;
-    };
+    }
+
+    ;
 
     @Override
     public String getLargeLink() {

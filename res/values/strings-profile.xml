@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <!-- Status ******************************************************************************** -->
     <string-array name="profile_form_status_male">
         <item>Love and serious relationship</item>
         <item>Find frient with benefits</item>
         <item>Communication</item>
         <item>More points</item>
-        <item>To have a chat</item>        
+        <item>To have a chat</item>
     </string-array>
-    
+
     <string-array name="profile_form_status_female">
         <item>Love and serious relationship</item>
         <item>Find frient with benefits</item>
@@ -17,15 +17,15 @@
         <item>More points</item>
         <item>To have a chat</item>
     </string-array>
-    
+
     <integer-array name="profile_form_status_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
-        <item>5</item>        
+        <item>5</item>
     </integer-array>
-    
+
     <!-- Education ******************************************************************************** -->
     <string-array name="profile_form_education_male">
         <item>High school</item>
@@ -36,7 +36,7 @@
         <item>Below average</item>
         <item>I\'m just very smart</item>
     </string-array>
-    
+
     <string-array name="profile_form_education_female">
         <item>Average</item>
         <item>Still studying</item>
@@ -46,7 +46,7 @@
         <item>Below average</item>
         <item>I\'m just very smart</item>
     </string-array>
-    
+
     <integer-array name="profile_form_education_ids">
         <item>1</item>
         <item>2</item>
@@ -56,30 +56,30 @@
         <item>6</item>
         <item>7</item>
     </integer-array>
-    
-    <!-- Communication ******************************************************************************** -->   
+
+    <!-- Communication ******************************************************************************** -->
     <string-array name="profile_form_communication_male">
         <item>Very sociable</item>
         <item>Open for interesting people</item>
         <item>Write me and we will see</item>
         <item>Chat only with the best</item>
     </string-array>
-    
+
     <string-array name="profile_form_communication_female">
         <item>Very sociable</item>
         <item>Open for interesting people</item>
         <item>Write me and we will see</item>
         <item>Chat only with the best</item>
     </string-array>
-    
+
     <integer-array name="profile_form_communication_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
     </integer-array>
-    
-    <!-- Character ******************************************************************************** -->    
+
+    <!-- Character ******************************************************************************** -->
     <string-array name="profile_form_character_male">
         <item>Easy going</item>
         <item>Bad tempered</item>
@@ -89,7 +89,7 @@
         <item>Uneasy</item>
         <item>None complained</item>
     </string-array>
-    
+
     <string-array name="profile_form_character_female">
         <item>Easy going</item>
         <item>Bad tempered</item>
@@ -99,7 +99,7 @@
         <item>Uneasy</item>
         <item>None complained</item>
     </string-array>
-    
+
     <integer-array name="profile_form_character_ids">
         <item>1</item>
         <item>2</item>
@@ -109,8 +109,8 @@
         <item>6</item>
         <item>7</item>
     </integer-array>
-    
-    <!-- Alcohol ******************************************************************************** -->    
+
+    <!-- Alcohol ******************************************************************************** -->
     <string-array name="profile_form_alcohol_male">
         <item>I have fun without alcohol</item>
         <item>Gave up drinking</item>
@@ -118,7 +118,7 @@
         <item>Will give up soon</item>
         <item>Drank, drink, and will drink</item>
     </string-array>
-    
+
     <string-array name="profile_form_alcohol_female">
         <item>I have fun without alcohol</item>
         <item>Gave up drinking</item>
@@ -126,7 +126,7 @@
         <item>Will give up soon</item>
         <item>Drank, drink, and will drink</item>
     </string-array>
-    
+
     <integer-array name="profile_form_alcohol_ids">
         <item>1</item>
         <item>2</item>
@@ -134,8 +134,8 @@
         <item>4</item>
         <item>5</item>
     </integer-array>
-     
-    <!-- Fitness ******************************************************************************** -->   
+
+    <!-- Fitness ******************************************************************************** -->
     <string-array name="profile_form_fitness_male">
         <item>Muscular</item>
         <item>Fit</item>
@@ -144,7 +144,7 @@
         <item>Well padded</item>
         <item>Got lots of other advantages</item>
     </string-array>
-    
+
     <string-array name="profile_form_fitness_female">
         <item>Sporty</item>
         <item>Slim</item>
@@ -153,7 +153,7 @@
         <item>Interesting shapes</item>
         <item>With the sexy body</item>
     </string-array>
-    
+
     <integer-array name="profile_form_fitness_ids">
         <item>1</item>
         <item>2</item>
@@ -163,7 +163,7 @@
         <item>6</item>
     </integer-array>
 
-    <!-- Marriage ******************************************************************************** -->   
+    <!-- Marriage ******************************************************************************** -->
     <string-array name="profile_form_marriage_male">
         <item>Not yet</item>
         <item>No longer</item>
@@ -173,7 +173,7 @@
         <item>Is it a problem?</item>
         <item>Never</item>
     </string-array>
-    
+
     <string-array name="profile_form_marriage_female">
         <item>Not yet</item>
         <item>No longer</item>
@@ -183,7 +183,7 @@
         <item>Is it a problem?</item>
         <item>Never</item>
     </string-array>
-    
+
     <integer-array name="profile_form_marriage_ids">
         <item>1</item>
         <item>2</item>
@@ -193,8 +193,8 @@
         <item>6</item>
         <item>7</item>
     </integer-array>
-    
-    <!-- Finances ******************************************************************************** -->   
+
+    <!-- Finances ******************************************************************************** -->
     <string-array name="profile_form_finances_male">
         <item>Very high income</item>
         <item>I can share</item>
@@ -204,7 +204,7 @@
         <item>Modest, but enough</item>
         <item>Help me financially</item>
     </string-array>
-    
+
     <string-array name="profile_form_finances_female">
         <item>Very high income</item>
         <item>I can share</item>
@@ -214,7 +214,7 @@
         <item>Modest, but enough</item>
         <item>Help me financially</item>
     </string-array>
-    
+
     <integer-array name="profile_form_finances_ids">
         <item>1</item>
         <item>2</item>
@@ -224,8 +224,8 @@
         <item>6</item>
         <item>7</item>
     </integer-array>
-    
-    <!-- Smoking ******************************************************************************** -->    
+
+    <!-- Smoking ******************************************************************************** -->
     <string-array name="profile_form_smoking_male">
         <item>Do not smoke</item>
         <item>Gave up smoking</item>
@@ -234,7 +234,7 @@
         <item>Smoke like a locomotive</item>
         <item>Smoke but not cigarettes</item>
     </string-array>
-    
+
     <string-array name="profile_form_smoking_female">
         <item>Do not smoking</item>
         <item>Gave up smoking</item>
@@ -243,7 +243,7 @@
         <item>Smoke like a locomotive</item>
         <item>Smoke but not cigarettes</item>
     </string-array>
-    
+
     <integer-array name="profile_form_smoking_ids">
         <item>1</item>
         <item>2</item>
@@ -251,9 +251,9 @@
         <item>4</item>
         <item>5</item>
         <item>6</item>
-    </integer-array>  
-    
-    <!-- Hairs ******************************************************************************** -->    
+    </integer-array>
+
+    <!-- Hairs ******************************************************************************** -->
     <string-array name="profile_form_hair_male">
         <item>Brunet</item>
         <item>Brown-haired</item>
@@ -263,7 +263,7 @@
         <item>Bald</item>
         <item>Extreme</item>
     </string-array>
-    
+
     <string-array name="profile_form_hair_female">
         <item>Brunette</item>
         <item>Brown-haired</item>
@@ -273,7 +273,7 @@
         <item>Bald</item>
         <item>Extreme</item>
     </string-array>
-    
+
     <integer-array name="profile_form_hair_ids">
         <item>1</item>
         <item>2</item>
@@ -282,54 +282,54 @@
         <item>5</item>
         <item>6</item>
         <item>7</item>
-    </integer-array> 
-    
-    <!-- Eyes ******************************************************************************** -->    
+    </integer-array>
+
+    <!-- Eyes ******************************************************************************** -->
     <string-array name="profile_form_eyes_male">
         <item>Brown</item>
         <item>Green</item>
         <item>Grey</item>
         <item>Blue</item>
-        <item>Black</item>        
+        <item>Black</item>
         <item>Depends on my mood</item>
     </string-array>
-    
+
     <string-array name="profile_form_eyes_female">
         <item>Brown</item>
         <item>Green</item>
         <item>Grey</item>
         <item>Blue</item>
-        <item>Black</item>        
+        <item>Black</item>
         <item>Depends on my mood</item>
     </string-array>
-    
+
     <integer-array name="profile_form_eyes_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
-        <item>6</item>        
-    </integer-array> 
-    
-    <!-- Breast ******************************************************************************** -->    
+        <item>6</item>
+    </integer-array>
+
+    <!-- Breast ******************************************************************************** -->
     <string-array name="profile_form_breast_female">
         <item>Honest A</item>
         <item>Optimal B</item>
         <item>Tempting C</item>
         <item>Touching D</item>
-        <item>Weighty DD</item>                
+        <item>Weighty DD</item>
     </string-array>
-    
+
     <integer-array name="profile_form_breast_ids">
         <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
-        <item>5</item>        
-    </integer-array> 
-    
-    <!-- Residence ******************************************************************************** -->    
+        <item>5</item>
+    </integer-array>
+
+    <!-- Residence ******************************************************************************** -->
     <string-array name="profile_form_residence_male">
         <item>With parents</item>
         <item>With wife</item>
@@ -339,7 +339,7 @@
         <item>Alone in apartment</item>
         <item>Where it is necessary</item>
     </string-array>
-    
+
     <string-array name="profile_form_residence_female">
         <item>With parents</item>
         <item>With ​​husband</item>
@@ -349,7 +349,7 @@
         <item>Alone in apartment</item>
         <item>Where it is necessary</item>
     </string-array>
-    
+
     <integer-array name="profile_form_residence_ids">
         <item>1</item>
         <item>2</item>
@@ -358,22 +358,22 @@
         <item>5</item>
         <item>6</item>
         <item>7</item>
-    </integer-array> 
-    
-    <!-- Car ******************************************************************************** -->    
+    </integer-array>
+
+    <!-- Car ******************************************************************************** -->
     <string-array name="profile_form_car_male">
         <item>Yes</item>
         <item>No</item>
     </string-array>
-    
+
     <string-array name="profile_form_car_female">
         <item>Yes</item>
         <item>No</item>
     </string-array>
-    
+
     <integer-array name="profile_form_car_ids">
         <item>1</item>
-        <item>2</item>        
-    </integer-array> 
-    
+        <item>2</item>
+    </integer-array>
+
 </resources>

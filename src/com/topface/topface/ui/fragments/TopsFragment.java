@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.Toast;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -28,19 +31,6 @@ import com.topface.topface.ui.views.ThumbView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GalleryGridManager;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.Toast;
 
 import java.util.LinkedList;
 
@@ -68,15 +58,15 @@ public class TopsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.ac_tops, null);
-        
+
         // Home Button
-        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
+        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
 
         // Data
         Data.topsList = new LinkedList<Top>();
 
         // Progress
-        mLoadingLocker = (LockerView)view.findViewById(R.id.llvTopsLoading);
+        mLoadingLocker = (LockerView) view.findViewById(R.id.llvTopsLoading);
 
         // Preferences
         SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
@@ -89,7 +79,7 @@ public class TopsFragment extends BaseFragment {
         mActionData.city_popup_pos = preferences.getInt(Static.PREFERENCES_TOPS_CITY_POS, -1);
 
         // Double Button
-        mBtnDouble = (DoubleButton)view.findViewById(R.id.btnDoubleTops);
+        mBtnDouble = (DoubleButton) view.findViewById(R.id.btnDoubleTops);
         mBtnDouble.setLeftText(getString(R.string.tops_btn_boys));
         mBtnDouble.setRightText(getString(R.string.tops_btn_girls));
         mBtnDouble.setChecked(mActionData.sex == 0 ? DoubleButton.RIGHT_BUTTON : DoubleButton.LEFT_BUTTON);
@@ -111,7 +101,7 @@ public class TopsFragment extends BaseFragment {
         });
 
         // City Button
-        mCityButton = (Button)view.findViewById(R.id.btnTopsBarCity);
+        mCityButton = (Button) view.findViewById(R.id.btnTopsBarCity);
         mCityButton.setText(mActionData.city_name);
         mCityButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,18 +111,18 @@ public class TopsFragment extends BaseFragment {
         });
 
         // Gallery
-        mGallery = (GridView)view.findViewById(R.id.grdTopsGallary);
+        mGallery = (GridView) view.findViewById(R.id.grdTopsGallary);
         mGallery.setAnimationCacheEnabled(false);
         mGallery.setScrollingCacheEnabled(false);
         mGallery.setNumColumns(Data.GRID_COLUMN);
         mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     Intent intent = new Intent(getActivity(), UserProfileActivity.class);
                     intent.putExtra(UserProfileActivity.INTENT_USER_ID, Data.topsList.get(position).uid);
                     startActivityForResult(intent, 0);
-                } catch(Exception e) {
+                } catch (Exception e) {
                     Debug.log(TopsFragment.this, "start UserProfileActivity exception:" + e.toString());
                 }
             }
@@ -143,9 +133,9 @@ public class TopsFragment extends BaseFragment {
         mGridAdapter = new TopsGridAdapter(getActivity(), mGalleryGridManager);
         mGallery.setAdapter(mGridAdapter);
         mGallery.setOnScrollListener(mGalleryGridManager);
-        
+
         updateData();
-        
+
         return view;
     }
 
@@ -181,14 +171,15 @@ public class TopsFragment extends BaseFragment {
                         Data.topsList.clear();
                         Data.topsList.addAll(Top.parse(response));
                         onUpdateSuccess(false);
-                        mGridAdapter.notifyDataSetChanged();                        
+                        mGridAdapter.notifyDataSetChanged();
                         mGalleryGridManager.update();
                         mGallery.setVisibility(View.VISIBLE);
                     }
                 });
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
+            public void fail(int codeError, ApiResponse response) {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
@@ -205,7 +196,7 @@ public class TopsFragment extends BaseFragment {
             showCitiesDialog();
             return;
         }
-        onUpdateStart(false);        
+        onUpdateStart(false);
         CitiesRequest citiesRequest = new CitiesRequest(getActivity());
         registerRequest(citiesRequest);
         citiesRequest.type = "top";
@@ -216,17 +207,18 @@ public class TopsFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                    	onUpdateSuccess(false);
+                        onUpdateSuccess(false);
                         showCitiesDialog();
                     }
                 });
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
+            public void fail(int codeError, ApiResponse response) {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                    	onUpdateFail(false);
+                        onUpdateFail(false);
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -242,7 +234,7 @@ public class TopsFragment extends BaseFragment {
         for (int i = 0; i < arraySize; ++i)
             cities[i] = Data.cityList.get(i).name;
         builder.setSingleChoiceItems(cities, mActionData.city_popup_pos, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int position) {
+            public void onClick(DialogInterface dialog, int position) {
                 City city = Data.cityList.get(position);
                 if (mActionData.city_id != city.id) {
                     mActionData.city_id = city.id;
@@ -270,27 +262,27 @@ public class TopsFragment extends BaseFragment {
         mGridAdapter = null;
     }
 
-	@Override
-	protected void onUpdateStart(boolean isPushUpdating) {
-		if(!isPushUpdating) {
-			mLoadingLocker.setVisibility(View.VISIBLE);
-			mBtnDouble.setClickable(false);
-		}
-	}
+    @Override
+    protected void onUpdateStart(boolean isPushUpdating) {
+        if (!isPushUpdating) {
+            mLoadingLocker.setVisibility(View.VISIBLE);
+            mBtnDouble.setClickable(false);
+        }
+    }
 
-	@Override
-	protected void onUpdateSuccess(boolean isPushUpdating) {
-		if(!isPushUpdating) {
-			mLoadingLocker.setVisibility(View.GONE);
-			mBtnDouble.setClickable(true);
-		}
-	}
+    @Override
+    protected void onUpdateSuccess(boolean isPushUpdating) {
+        if (!isPushUpdating) {
+            mLoadingLocker.setVisibility(View.GONE);
+            mBtnDouble.setClickable(true);
+        }
+    }
 
-	@Override
-	protected void onUpdateFail(boolean isPushUpdating) {
-		if(!isPushUpdating) {
-			mLoadingLocker.setVisibility(View.GONE);
-			mBtnDouble.setClickable(true);
-		}
-	}
+    @Override
+    protected void onUpdateFail(boolean isPushUpdating) {
+        if (!isPushUpdating) {
+            mLoadingLocker.setVisibility(View.GONE);
+            mBtnDouble.setClickable(true);
+        }
+    }
 }

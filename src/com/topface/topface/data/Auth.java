@@ -14,7 +14,7 @@ public class Auth extends AbstractData {
         try {
             auth.ssid = response.mJSONResult.getString("ssid");
             auth.api_version = response.mJSONResult.optInt("version");
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("Auth.class", "Wrong response parsing: " + e);
         }
 

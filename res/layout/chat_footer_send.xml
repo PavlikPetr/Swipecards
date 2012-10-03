@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:paddingLeft="6dp"
-      android:paddingRight="6dp"
-      android:orientation="horizontal"
-      android:background="@drawable/chat_footer_send">
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="6dp"
+              android:paddingRight="6dp"
+              android:orientation="horizontal"
+              android:background="@drawable/chat_footer_send">
 
     <Button
             android:id="@+id/btnChatAdd"

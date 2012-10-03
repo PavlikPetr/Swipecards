@@ -12,7 +12,6 @@ import com.topface.topface.R;
 import java.util.LinkedList;
 
 /**
- *
  * @param <T>
  */
 public class FeedAdapter<T extends IListLoader> extends LoadingListAdapter implements AbsListView.OnScrollListener {
@@ -22,7 +21,7 @@ public class FeedAdapter<T extends IListLoader> extends LoadingListAdapter imple
     private LayoutInflater mInflater;
     private Updater mUpdateCallback;
 
-    public FeedAdapter (Context context, LinkedList<T> data, Updater updateCallback) {
+    public FeedAdapter(Context context, LinkedList<T> data, Updater updateCallback) {
         mContext = context;
         mData = data;
         mInflater = LayoutInflater.from(context);
@@ -32,7 +31,7 @@ public class FeedAdapter<T extends IListLoader> extends LoadingListAdapter imple
         mUpdateCallback = updateCallback;
     }
 
-    public FeedAdapter (Context context, LinkedList<T> data) {
+    public FeedAdapter(Context context, LinkedList<T> data) {
         this(context, data, null);
     }
 
@@ -108,7 +107,8 @@ public class FeedAdapter<T extends IListLoader> extends LoadingListAdapter imple
     }
 
     @Override
-    public void onScrollStateChanged(AbsListView absListView, int i) {}
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+    }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {

@@ -1,7 +1,7 @@
 package com.topface.topface.utils;
 
-import com.topface.topface.Static;
 import android.content.SharedPreferences;
+import com.topface.topface.Static;
 
 public class Newbie {
     // Data
@@ -12,6 +12,7 @@ public class Newbie {
     public boolean free_energy;
     public boolean buy_energy;
     public boolean rate_it;
+
     //---------------------------------------------------------------------------
     public Newbie(SharedPreferences preferences) {
         // dashboard
@@ -33,10 +34,12 @@ public class Newbie {
          * buy_energy = false;
          * rate_it = false; */
     }
+
     //---------------------------------------------------------------------------
     public boolean isDashboardCompleted() {
         return profile & dating & likes & tops;
     }
+
     //---------------------------------------------------------------------------
     public boolean isDatingCompleted() {
         return free_energy & buy_energy & rate_it;

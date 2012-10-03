@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <color name="color_item_all">#FFFFFF</color>
     <color name="color_item_city">#FFCF72</color>
-    
+
 </resources>

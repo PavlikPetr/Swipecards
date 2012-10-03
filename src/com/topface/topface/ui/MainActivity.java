@@ -1,7 +1,10 @@
 package com.topface.topface.ui;
 
-import com.topface.topface.R;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Toast;
 import com.topface.topface.Data;
+import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -9,9 +12,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.Http;
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Toast;
 
 public class MainActivity extends BaseFragmentActivity {
     // Data
@@ -21,7 +21,7 @@ public class MainActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         Debug.log(this, "+onCreate");
         setContentView(R.layout.ac_main);
-        
+
         if (!Http.isOnline(this))
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT).show();
 
@@ -32,6 +32,7 @@ public class MainActivity extends BaseFragmentActivity {
             getProfile();
         }
     }
+
     //---------------------------------------------------------------------------
     private void getProfile() {
         ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
@@ -50,8 +51,9 @@ public class MainActivity extends BaseFragmentActivity {
                     }
                 });
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
+            public void fail(int codeError, ApiResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -61,6 +63,7 @@ public class MainActivity extends BaseFragmentActivity {
             }
         }).exec();
     }
+
     //---------------------------------------------------------------------------
     @Override
     protected void onDestroy() {

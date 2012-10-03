@@ -1,5 +1,10 @@
 package com.topface.topface.services;
 
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.os.IBinder;
+import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Verify;
@@ -8,11 +13,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.VerifyRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.os.IBinder;
-import android.widget.Toast;
 
 public class NotificationService extends Service {
     // Data
@@ -23,14 +23,16 @@ public class NotificationService extends Service {
     public static final String PURCHASE_SIGNATURE = "signature";
     // Actions
     private static final String ACTION_PURCHASE = "com.topface.topface.PURCHASE";
+
     //---------------------------------------------------------------------------
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
     //---------------------------------------------------------------------------
     @Override
-    public int onStartCommand(Intent intent,int flags,int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         Debug.log("NotifyService", "onStartCommand");
         if (intent == null)
             return START_STICKY;
@@ -47,22 +49,25 @@ public class NotificationService extends Service {
 
         return START_STICKY;
     }
+
     //---------------------------------------------------------------------------
     @Override
     public void onDestroy() {
         Debug.log("notifyService", "onDestroy");
         super.onDestroy();
     }
+
     //---------------------------------------------------------------------------
-    public static void purchase(Context context,String data,String signature) {
+    public static void purchase(Context context, String data, String signature) {
         Intent intent = new Intent(context, NotificationService.class);
         intent.setAction(ACTION_PURCHASE);
         intent.putExtra(PURCHASE_DATA, data);
         intent.putExtra(PURCHASE_SIGNATURE, signature);
         context.startService(intent);
     }
+
     //---------------------------------------------------------------------------
-    private void verifyPurchase(final String data,final String signature) {
+    private void verifyPurchase(final String data, final String signature) {
         // сохранить ордер
         final VerifyRequest verifyRequest = new VerifyRequest(getApplicationContext());
         verifyRequest.data = data;
@@ -81,8 +86,9 @@ public class NotificationService extends Service {
                     }
                 });
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
+            public void fail(int codeError, ApiResponse response) {
                 post(new Runnable() {
                     @Override
                     public void run() {

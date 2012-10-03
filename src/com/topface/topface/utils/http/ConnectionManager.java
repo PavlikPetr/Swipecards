@@ -30,8 +30,8 @@ import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ConnectionManager {	
-	
+public class ConnectionManager {
+
     // Data
     private static ConnectionManager mInstanse;
     private AndroidHttpClient mHttpClient;
@@ -39,6 +39,7 @@ public class ConnectionManager {
     private LinkedList<Thread> mDelayedRequestsThreads;
     // Constants
     public static final String TAG = "CM";
+
     //---------------------------------------------------------------------------
     private ConnectionManager() {
         mHttpClient = AndroidHttpClient.newInstance("Android"); // For Avatar Bitmaps
@@ -48,27 +49,29 @@ public class ConnectionManager {
         //java.lang.System.setProperty("java.net.preferIPv4Stack", "true");
         //java.lang.System.setProperty("java.net.preferIPv6Addresses", "false");
     }
+
     //---------------------------------------------------------------------------
     public static ConnectionManager getInstance() {
         if (mInstanse == null)
             mInstanse = new ConnectionManager();
         return mInstanse;
     }
+
     //---------------------------------------------------------------------------
     public RequestConnection sendRequest(final ApiRequest apiRequest) {
-    	final RequestConnection connection = new RequestConnection();    	    	
+        final RequestConnection connection = new RequestConnection();
         mWorker.execute(new Runnable() {
             @Override
             public void run() {
                 String rawResponse;
                 AndroidHttpClient httpClient = null;
                 HttpPost httpPost = null;
-                
+
                 if (apiRequest.canceled)
-                	return;
+                    return;
                 if (apiRequest.handler == null)
                     return;
-                
+
                 connection.setHttpClient(httpClient);
                 connection.setHttpPost(httpPost);
 
@@ -86,32 +89,33 @@ public class ConnectionManager {
                     Debug.log(TAG, "cm_resp::" + rawResponse); // RESPONSE
 
                     if (apiRequest.handler != null) {
-                        ApiResponse apiResponse = new ApiResponse(rawResponse);                        
+                        ApiResponse apiResponse = new ApiResponse(rawResponse);
                         if (apiResponse.code == ApiResponse.SESSION_NOT_FOUND)
                             apiResponse = reAuth(apiRequest.context, httpClient, httpPost, apiRequest);
                         if (apiResponse.code == ApiResponse.INVERIFIED_TOKEN) {
-                        	sendBroadcastReauth(apiRequest.context);
-                        	addDelayedRequest(apiRequest);
-                        	apiResponse.code = ApiResponse.ERRORS_PROCCESED;
+                            sendBroadcastReauth(apiRequest.context);
+                            addDelayedRequest(apiRequest);
+                            apiResponse.code = ApiResponse.ERRORS_PROCCESED;
                         }
-                        
+
                         apiRequest.handler.response(apiResponse);
                     }
 
-                } catch(Exception e) {
+                } catch (Exception e) {
                     Debug.log(TAG, "cm_req exception::" + e.toString());
                     if (httpPost != null && !httpPost.isAborted())
                         httpPost.abort();
                 }
                 if (httpClient != null) {
-                	httpClient.close();
+                    httpClient.close();
                 }
             }
         });
         return connection;
     }
+
     //---------------------------------------------------------------------------
-    private String request(AndroidHttpClient httpClient,HttpPost httpPost) {
+    private String request(AndroidHttpClient httpClient, HttpPost httpPost) {
         String rawResponse = Static.EMPTY;
 
         try {
@@ -130,7 +134,7 @@ public class ConnectionManager {
                 //httpEntity.consumeContent();
                 r.close();
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log(TAG, "cm exception:" + e.getMessage());
             for (StackTraceElement st : e.getStackTrace())
                 Debug.log(TAG, "cm trace: " + st.toString());
@@ -141,8 +145,8 @@ public class ConnectionManager {
         return rawResponse;
     }
     //---------------------------------------------------------------------------
-    
-    private ApiResponse reAuth(Context context,AndroidHttpClient httpClient,HttpPost httpPost,ApiRequest request) {
+
+    private ApiResponse reAuth(Context context, AndroidHttpClient httpClient, HttpPost httpPost, ApiRequest request) {
         Debug.log(this, "reAuth");
 
         AuthToken token = new AuthToken(context);
@@ -178,12 +182,13 @@ public class ConnectionManager {
             } else {
                 Data.removeSSID(context);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log(TAG, "cm_reauth exception:" + e.toString());
         }
 
         return response;
     }
+
     //---------------------------------------------------------------------------
     public void sendRequestNew(final ApiRequest apiRequest) {
         mWorker.execute(new Runnable() {
@@ -227,7 +232,7 @@ public class ConnectionManager {
 
                     Debug.log(TAG, "s_resp::" + rawResponse); // RESPONSE
 
-                } catch(Exception e) {
+                } catch (Exception e) {
                     rawResponse = e.toString();
 
                     Debug.log(TAG, "s_exception:" + e.getMessage());
@@ -239,7 +244,7 @@ public class ConnectionManager {
                         socket.shutdownInput();
                         socket.shutdownOutput();
                         socket.close();
-                    } catch(IOException e1) {
+                    } catch (IOException e1) {
                         Debug.log(TAG, "s_exception CLOSE:" + e1.getMessage());
                     }
 
@@ -252,15 +257,16 @@ public class ConnectionManager {
                     try {
                         if (socket != null && !socket.isClosed())
                             socket.close();
-                    } catch(IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
         });
     }
+
     //---------------------------------------------------------------------------
-    private ApiResponse reAuthNew(Context context,ApiRequest request) {
+    private ApiResponse reAuthNew(Context context, ApiRequest request) {
         Debug.log(this, "reAuth");
         AndroidHttpClient httpClient = AndroidHttpClient.newInstance("Android");
         HttpPost httpPost = new HttpPost(Static.API_URL);
@@ -272,7 +278,7 @@ public class ConnectionManager {
         authRequest.platform = token.getSocialNet();
         authRequest.sid = token.getUserId();
         authRequest.token = token.getTokenKey();
-        
+
         String rawResponse = Static.EMPTY;
         ApiResponse response = null;
 
@@ -282,9 +288,9 @@ public class ConnectionManager {
             localHttpPost.setHeader("Content-Type", "application/json");
             try {
                 localHttpPost.setEntity(new ByteArrayEntity(authRequest.toString().getBytes("UTF8")));
-            } catch(Exception e) {
+            } catch (Exception e) {
             }
-    
+
             rawResponse = request(httpClient, localHttpPost);
             response = new ApiResponse(rawResponse);
             if (response.code == ApiResponse.RESULT_OK) {
@@ -301,6 +307,7 @@ public class ConnectionManager {
         Debug.log(TAG, "cm_reauth::" + rawResponse); // RESPONSE
         return response;
     }
+
     //---------------------------------------------------------------------------
     public Bitmap bitmapLoader(String url) {
         if (url == null)
@@ -321,12 +328,13 @@ public class ConnectionManager {
                 //entity.consumeContent();
             }
             entity = null;
-        } catch(Exception e) {
+        } catch (Exception e) {
             if (httpGet != null && !httpGet.isAborted())
                 httpGet.abort();
         }
         return bitmap;
     }
+
     //---------------------------------------------------------------------------
     @Override
     protected void finalize() throws Throwable {
@@ -338,39 +346,44 @@ public class ConnectionManager {
     public AndroidHttpClient getHttpClient() {
         return mHttpClient;
     }
+
     //---------------------------------------------------------------------------
     private void sendBroadcastReauth(Context context) {
-    	Intent intent = new Intent();
-    	intent.setAction(ReAuthReceiver.REAUTH_INTENT);
-    	context.sendBroadcast(intent);
-    	LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        Intent intent = new Intent();
+        intent.setAction(ReAuthReceiver.REAUTH_INTENT);
+        context.sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
+
     //---------------------------------------------------------------------------
     private void addDelayedRequest(final ApiRequest apiRequest) {
-    	Thread thread = new Thread() {
-    		
-    		public synchronized void run() {
-    			try {
-					wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-    			
-    			apiRequest.exec();
-    		};
-    	};
-    	thread.start();
-    	
-    	mDelayedRequestsThreads.add(thread);
+        Thread thread = new Thread() {
+
+            public synchronized void run() {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                apiRequest.exec();
+            }
+
+            ;
+        };
+        thread.start();
+
+        mDelayedRequestsThreads.add(thread);
     }
-  //---------------------------------------------------------------------------
-    public void notifyDelayedRequests() {    	
-	    	for (int i = 0; i < mDelayedRequestsThreads.size(); i++) {
-	    		synchronized (mDelayedRequestsThreads.get(i)) {		
-	    			mDelayedRequestsThreads.get(i).notify();
-	    		}
-			}
-	    	
-	    	mDelayedRequestsThreads.clear();
+
+    //---------------------------------------------------------------------------
+    public void notifyDelayedRequests() {
+        for (int i = 0; i < mDelayedRequestsThreads.size(); i++) {
+            synchronized (mDelayedRequestsThreads.get(i)) {
+                mDelayedRequestsThreads.get(i).notify();
+            }
+        }
+
+        mDelayedRequestsThreads.clear();
     }
 }

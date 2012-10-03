@@ -11,7 +11,6 @@ import com.topface.topface.data.Leaders;
 import com.topface.topface.data.UserPhotos;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.imageloader.RoundPostProcessor;
-import com.topface.topface.utils.AvatarManager;
 
 import java.util.ArrayList;
 
@@ -28,7 +27,7 @@ public class LeadersAdapter extends BaseAdapter {
     public LeadersAdapter(Context context, Leaders leaders) {
         super();
         mInflater = LayoutInflater.from(context);
-        mLeaders  = leaders.leaders;
+        mLeaders = leaders.leaders;
         mPostProcessor = new RoundPostProcessor();
     }
 
@@ -56,8 +55,7 @@ public class LeadersAdapter extends BaseAdapter {
             view = mInflater.inflate(R.layout.leaders_item, null);
             avatar = (ImageView) view.findViewById(R.id.leaderAvatar);
             view.setTag(avatar);
-        }
-        else {
+        } else {
             avatar = (ImageView) view.getTag();
         }
 

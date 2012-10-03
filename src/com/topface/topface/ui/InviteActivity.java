@@ -4,7 +4,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.text.*;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.*;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
@@ -100,8 +101,7 @@ public class InviteActivity extends TrackedActivity {
                             public void success(ApiResponse response) throws NullPointerException {
                                 if (Invite.parse(response).completed) {
                                     Toast.makeText(InviteActivity.this, R.string.invite_completed, Toast.LENGTH_LONG);
-                                }
-                                else {
+                                } else {
                                     onInviteError();
                                 }
                             }
@@ -150,7 +150,7 @@ public class InviteActivity extends TrackedActivity {
     private Cursor getContacts(String filter) {
         // Run query
         Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        String[] projection = new String[] {
+        String[] projection = new String[]{
                 ContactsContract.CommonDataKinds.Phone._ID,
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
                 ContactsContract.CommonDataKinds.Phone.NUMBER,
@@ -165,7 +165,7 @@ public class InviteActivity extends TrackedActivity {
         selection += " AND " + ContactsContract.CommonDataKinds.Phone.TYPE + " = " + ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
         //Если пользователь вводит запрос на поиск, то вносим его в запрос
         if (filter != null && !filter.equals("")) {
-            selection += " AND " +  getCaseFixLike(filter.trim());
+            selection += " AND " + getCaseFixLike(filter.trim());
         }
         String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
@@ -215,10 +215,12 @@ public class InviteActivity extends TrackedActivity {
         }
 
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
 
         @Override
-        public void afterTextChanged(Editable editable) {}
+        public void afterTextChanged(Editable editable) {
+        }
     };
 
     /**
@@ -239,6 +241,7 @@ public class InviteActivity extends TrackedActivity {
 
     /**
      * В зависимости от количества выделенных контактов, меняем текст сообщения
+     *
      * @param friendsCnt количество выделенных контактов в списке
      */
     private void setBonusText(int friendsCnt) {

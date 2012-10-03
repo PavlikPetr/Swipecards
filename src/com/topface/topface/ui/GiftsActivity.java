@@ -19,194 +19,194 @@ import com.topface.topface.ui.views.TripleButton;
 
 import java.util.LinkedList;
 
-public class GiftsActivity extends BaseFragmentActivity {	
-	
-	public static final int INTENT_REQUEST_GIFT = 111;
-	public static final String INTENT_GIFT_ID = "gift_id";
-	public static final String INTENT_GIFT_URL = "gift_url";
-	public static final String INTENT_GIFT_PRICE = "gift_price";
+public class GiftsActivity extends BaseFragmentActivity {
 
-	public GiftsCollection mGiftsCollection;
+    public static final int INTENT_REQUEST_GIFT = 111;
+    public static final String INTENT_GIFT_ID = "gift_id";
+    public static final String INTENT_GIFT_URL = "gift_url";
+    public static final String INTENT_GIFT_PRICE = "gift_price";
 
-	private LockerView mLoadingLocker;
-	private TripleButton mTripleButton;
+    public GiftsCollection mGiftsCollection;
 
-	private GiftsFragment mGiftFragment;
+    private LockerView mLoadingLocker;
+    private TripleButton mTripleButton;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.ac_gifts);
+    private GiftsFragment mGiftFragment;
 
-		((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.gifts_title);
-		(findViewById(R.id.btnNavigationHome)).setVisibility(View.INVISIBLE);
-		Button backButton = ((Button) findViewById(R.id.btnNavigationBack));
-		backButton.setVisibility(View.VISIBLE);
-		backButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				setResult(Activity.RESULT_CANCELED);
-				finish();
-			}
-		});
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.ac_gifts);
 
-		mLoadingLocker = (LockerView) this.findViewById(R.id.llvGiftsLoading);
+        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.gifts_title);
+        (findViewById(R.id.btnNavigationHome)).setVisibility(View.INVISIBLE);
+        Button backButton = ((Button) findViewById(R.id.btnNavigationBack));
+        backButton.setVisibility(View.VISIBLE);
+        backButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(Activity.RESULT_CANCELED);
+                finish();
+            }
+        });
 
-		mGiftFragment = new GiftsFragment();
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.giftGrid, mGiftFragment, GiftsFragment.GIFTS_ALL_TAG).commit();
+        mLoadingLocker = (LockerView) this.findViewById(R.id.llvGiftsLoading);
 
-		mGiftsCollection = new GiftsCollection();
+        mGiftFragment = new GiftsFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.giftGrid, mGiftFragment, GiftsFragment.GIFTS_ALL_TAG).commit();
 
-		// init triple button
-		mTripleButton = (TripleButton) findViewById(R.id.btnTriple);
-		mTripleButton.setLeftText(Gift.getTypeNameResId(Gift.ROMANTIC));
-		mTripleButton.setMiddleText(Gift.getTypeNameResId(Gift.FRIENDS));
-		mTripleButton.setRightText(Gift.getTypeNameResId(Gift.PRESENT));				
-		
-		mTripleButton.setLeftListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				v.post(new Runnable() {
-					@Override
-					public void run() {
-						mGiftsCollection.setCurrentType(Gift.ROMANTIC);
-						mGiftFragment.setGifts(mGiftsCollection.getGifts());
-						mGiftFragment.update();
-					}
-				});
-			}
-		});
+        mGiftsCollection = new GiftsCollection();
 
-		mTripleButton.setMiddleListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				v.post(new Runnable() {
-					@Override
-					public void run() {
-						mGiftsCollection.setCurrentType(Gift.FRIENDS);
-						mGiftFragment.setGifts(mGiftsCollection.getGifts());
-						mGiftFragment.update();
-					}
-				});
+        // init triple button
+        mTripleButton = (TripleButton) findViewById(R.id.btnTriple);
+        mTripleButton.setLeftText(Gift.getTypeNameResId(Gift.ROMANTIC));
+        mTripleButton.setMiddleText(Gift.getTypeNameResId(Gift.FRIENDS));
+        mTripleButton.setRightText(Gift.getTypeNameResId(Gift.PRESENT));
 
-			}
-		});
+        mTripleButton.setLeftListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mGiftsCollection.setCurrentType(Gift.ROMANTIC);
+                        mGiftFragment.setGifts(mGiftsCollection.getGifts());
+                        mGiftFragment.update();
+                    }
+                });
+            }
+        });
 
-		mTripleButton.setRightListener(new OnClickListener() {
+        mTripleButton.setMiddleListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mGiftsCollection.setCurrentType(Gift.FRIENDS);
+                        mGiftFragment.setGifts(mGiftsCollection.getGifts());
+                        mGiftFragment.update();
+                    }
+                });
 
-			@Override
-			public void onClick(View v) {
-				v.post(new Runnable() {
-					@Override
-					public void run() {
-						mGiftsCollection.setCurrentType(Gift.PRESENT);
-						mGiftFragment.setGifts(mGiftsCollection.getGifts());
-						mGiftFragment.update();
-					}
-				});
-			}
-		});
+            }
+        });
 
-		update();
-	}	
-	
-	/**
-	 * Loading array of gifts from server
-	 */
-	private void update() {
-		if (Data.giftsList.isEmpty()) {
-			mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
-			mLoadingLocker.setVisibility(View.VISIBLE);
-			GiftsRequest giftRequest = new GiftsRequest(getApplicationContext());
-			registerRequest(giftRequest);	
-			giftRequest.callback(new ApiHandler() {
-				@Override
-				public void success(final ApiResponse response) {
-					mGiftsCollection.add(Data.giftsList);
+        mTripleButton.setRightListener(new OnClickListener() {
 
-					mGiftFragment.setGifts(mGiftsCollection.getGifts());
+            @Override
+            public void onClick(View v) {
+                v.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mGiftsCollection.setCurrentType(Gift.PRESENT);
+                        mGiftFragment.setGifts(mGiftsCollection.getGifts());
+                        mGiftFragment.update();
+                    }
+                });
+            }
+        });
 
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
+        update();
+    }
+
+    /**
+     * Loading array of gifts from server
+     */
+    private void update() {
+        if (Data.giftsList.isEmpty()) {
+            mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
+            mLoadingLocker.setVisibility(View.VISIBLE);
+            GiftsRequest giftRequest = new GiftsRequest(getApplicationContext());
+            registerRequest(giftRequest);
+            giftRequest.callback(new ApiHandler() {
+                @Override
+                public void success(final ApiResponse response) {
+                    mGiftsCollection.add(Data.giftsList);
+
+                    mGiftFragment.setGifts(mGiftsCollection.getGifts());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
                             Data.giftsList.addAll(Gift.parse(response));
-							mLoadingLocker.setVisibility(View.GONE);
-						}
-					});
-				}
+                            mLoadingLocker.setVisibility(View.GONE);
+                        }
+                    });
+                }
 
-				@Override
-				public void fail(int codeError, ApiResponse response) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							Toast.makeText(getApplicationContext(),
-									GiftsActivity.this.getString(R.string.general_data_error),
-									Toast.LENGTH_SHORT).show();
-							mLoadingLocker.setVisibility(View.GONE);
-						}
-					});
-				}
-			}).exec();
-		} else {	
-			mGiftsCollection.add(Data.giftsList);			
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					mGiftFragment.setGifts(mGiftsCollection.getGifts());					
-				}
-			});
-		}
-	}
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    GiftsActivity.this.getString(R.string.general_data_error),
+                                    Toast.LENGTH_SHORT).show();
+                            mLoadingLocker.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            }).exec();
+        } else {
+            mGiftsCollection.add(Data.giftsList);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mGiftFragment.setGifts(mGiftsCollection.getGifts());
+                }
+            });
+        }
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
-		switch (GiftsCollection.currentType) {
-		case Gift.ROMANTIC:
-			mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
-			break;
-		case Gift.FRIENDS:
-			mTripleButton.setChecked(TripleButton.MIDDLE_BUTTON);
-			break;
-		case Gift.PRESENT:
-			mTripleButton.setChecked(TripleButton.RIGHT_BUTTON);
-			break;
-		default:
-			break;
-		}
-	}
-	
-	/**
-	 * Works with array of gifts, categorizes by type
-	 */
-	public static class GiftsCollection {
-		public static int currentType = Gift.ROMANTIC;
-		private LinkedList<Gift> mAllGifts = new LinkedList<Gift>();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-		public void add(LinkedList<Gift> gifts) {
-			mAllGifts.addAll(gifts);
-		}
+        switch (GiftsCollection.currentType) {
+            case Gift.ROMANTIC:
+                mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
+                break;
+            case Gift.FRIENDS:
+                mTripleButton.setChecked(TripleButton.MIDDLE_BUTTON);
+                break;
+            case Gift.PRESENT:
+                mTripleButton.setChecked(TripleButton.RIGHT_BUTTON);
+                break;
+            default:
+                break;
+        }
+    }
 
-		public LinkedList<Gift> getGifts(int type) {
-			LinkedList<Gift> result = new LinkedList<Gift>();
-			for (Gift gift : mAllGifts) {
-				if (gift.type == type) {
-					result.add(gift);
-				}
-			}
+    /**
+     * Works with array of gifts, categorizes by type
+     */
+    public static class GiftsCollection {
+        public static int currentType = Gift.ROMANTIC;
+        private LinkedList<Gift> mAllGifts = new LinkedList<Gift>();
 
-			return result;
-		}
+        public void add(LinkedList<Gift> gifts) {
+            mAllGifts.addAll(gifts);
+        }
 
-		public LinkedList<Gift> getGifts() {
-			return getGifts(GiftsCollection.currentType);
-		}
+        public LinkedList<Gift> getGifts(int type) {
+            LinkedList<Gift> result = new LinkedList<Gift>();
+            for (Gift gift : mAllGifts) {
+                if (gift.type == type) {
+                    result.add(gift);
+                }
+            }
 
-		public void setCurrentType(int type) {
-			GiftsCollection.currentType = type;
-		}
-	}
+            return result;
+        }
+
+        public LinkedList<Gift> getGifts() {
+            return getGifts(GiftsCollection.currentType);
+        }
+
+        public void setCurrentType(int type) {
+            GiftsCollection.currentType = type;
+        }
+    }
 }

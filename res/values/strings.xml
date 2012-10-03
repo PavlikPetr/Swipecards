@@ -16,7 +16,9 @@
     <string name="general_footer_previous">Previous messages</string>
     <string name="general_purchasing_error">Please write message about purchasing error to support@topface.ru</string>
     <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
-    <string name="general_popup_rating">Did you like our application? Raise our rating! The higher rating the more people you will meet in \"TopFace\""</string>
+    <string name="general_popup_rating">Did you like our application? Raise our rating! The higher rating the more
+        people you will meet in \"TopFace\""
+    </string>
     <string name="general_dialog_retry">Retry</string>
     <string name="general_switch_on">on</string>
     <string name="general_switch_off">off</string>
@@ -37,7 +39,9 @@
     <string name="dashbrd_btn_skip">Next</string>
     <string name="dashbrd_btn_prev">Previous</string>
     <string name="dashbrd_btn_switch_button">More...</string>
-    <string name="dashbrd_popup_rating">Did you like our application? Raise our rating! The higher rating the more people you will meet in Topface"</string>
+    <string name="dashbrd_popup_rating">Did you like our application? Raise our rating! The higher rating the more
+        people you will meet in Topface"
+    </string>
     <string name="dashbrd_popup_title">RATE ME</string>
     <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
     <string name="dashbrd_popup_rate">Yes, I would rate</string>
@@ -90,26 +94,26 @@
     <string name="tops_btn_city">City</string>
 
     <!-- Filter Activity -->
-	<string name="filter_filter">Filter</string>
-	<string name="filter_girl">Girls</string>
-	<string name="filter_boy">Guys</string>
-	<string name="filter_from">From</string>
-	<string name="filter_to">to</string>
-	<string name="filter_in">In</string>
-	<string name="filter_only_online">Online only</string>
-	<string name="filter_only_beautiful">Beatiful only</string>
-	<string name="filter_extra_parameters">Extra parameters</string>    
-	    <string name="filter_header_title">I\'m looking for</string>
-	    <string name="filter_menu_save">Save</string>
-	    <string name="filter_place">Location</string>
-	    <string name="filter_city">City</string>
-	    <string name="filter_sex">Sex</string>
-	    <string name="filter_age">Age</string>
-	    <string name="filter_online">Online</string>
-	    <string name="filter_all">All</string>        
-	    <string name="filter_nearby">Near with me</string>
-	    <string name="filter_cities_all">All cities</string>
-	    <string name="filter_select_city">Select city</string>
+    <string name="filter_filter">Filter</string>
+    <string name="filter_girl">Girls</string>
+    <string name="filter_boy">Guys</string>
+    <string name="filter_from">From</string>
+    <string name="filter_to">to</string>
+    <string name="filter_in">In</string>
+    <string name="filter_only_online">Online only</string>
+    <string name="filter_only_beautiful">Beatiful only</string>
+    <string name="filter_extra_parameters">Extra parameters</string>
+    <string name="filter_header_title">I\'m looking for</string>
+    <string name="filter_menu_save">Save</string>
+    <string name="filter_place">Location</string>
+    <string name="filter_city">City</string>
+    <string name="filter_sex">Sex</string>
+    <string name="filter_age">Age</string>
+    <string name="filter_online">Online</string>
+    <string name="filter_all">All</string>
+    <string name="filter_nearby">Near with me</string>
+    <string name="filter_cities_all">All cities</string>
+    <string name="filter_select_city">Select city</string>
 
     <!-- Dating Activity -->
     <string name="dating_header_title_him">Rate him!</string>
@@ -120,7 +124,7 @@
     <!-- Buying Activity -->
     <string name="buying_header_title">Purchasing</string>
     <string name="buying_you_have">You have</string>
-    <string name="buying_you_have_no_coins_for_gift">You are missing %d {{coins}} for present purchasing</string>    
+    <string name="buying_you_have_no_coins_for_gift">You are missing %d {{coins}} for present purchasing</string>
     <string name="buying_default_message">You can buy gifts, send delights for coins</string>
     <string name="buying_money">Buy coins</string>
     <string name="buying_power">Buy energy</string>
@@ -132,7 +136,7 @@
     <string name="buying_pack_40coins">40 coins pack</string>
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">100 coins pack</string>
-    <string name="buying_100coins">10  USD</string>
+    <string name="buying_100coins">10 USD</string>
     <string name="buying_info">You can buy coins and energy</string>
     <string name="buying_economy_25">Save 25%</string>
     <string name="buying_economy_40">Save 40%</string>
@@ -143,7 +147,7 @@
     <string name="profile_btn_edit">Edit profile</string>
     <string name="profile_btn_form">Form</string>
     <string name="profile_btn_add">Add</string>
-    <string name="profile_btn_buy">Buy coins/energy</string>    
+    <string name="profile_btn_buy">Buy coins/energy</string>
     <string name="profile_btn_mutual">Mutual</string>
     <string name="profile_sex_boy">Male</string>
     <string name="profile_sex_girl">Female</string>
@@ -220,20 +224,20 @@
 
     <!-- Navigation Header -->
     <string name="navigation_back_profile">Profile</string>
-    <string name="navigation_back_dialog">Dialogs</string> 
-    <string name="navigation_back_dating">Dating</string>   
-    <string name="navigation_back_settings">Settings</string>    
+    <string name="navigation_back_dialog">Dialogs</string>
+    <string name="navigation_back_dating">Dating</string>
+    <string name="navigation_back_settings">Settings</string>
     <string name="navigation_edit">Edit</string>
     <string name="navigation_save">Save</string>
     <string name="navigation_send">Send</string>
 
-    <!-- Profile / UserProfile Form -->    
+    <!-- Profile / UserProfile Form -->
     <string name="form_main">Main</string>
 
     <string-array name="form_main_status">
         <item name="all">Цель знакомства</item>
     </string-array>
-    
+
     <string-array name="form_main_character">
         <item name="all">Character</item>
     </string-array>
@@ -312,8 +316,8 @@
         <item name="own_male">About achievements you are proud of</item>
         <item name="own_female">About achievements you are proud of</item>
     </string-array>
-    
-     <!-- Экран приглашений -->
+
+    <!-- Экран приглашений -->
     <string name="search_hint">Find friends</string>
     <string name="activity_title_invite">Invitations</string>
     <string name="send_invite">Send</string>
@@ -362,15 +366,15 @@
     <string name="settings_account">Account</string>
     <string name="settings_feedback">Feedback</string>
     <string name="settings_about">About application</string>
-    <string name="settings_version">Version</string>    
+    <string name="settings_version">Version</string>
     <string name="settings_copyright">Copyright 2010-</string>
-	<string name="settings_rights_reserved">Topface all rights reserved</string>
-    <string name="settings_extra">You can find more infonformation on </string>
+    <string name="settings_rights_reserved">Topface all rights reserved</string>
+    <string name="settings_extra">You can find more infonformation on</string>
     <string name="settings_logout">Logout</string>
     <string name="settings_error_message">Error message</string>
     <string name="settings_ask_developer">Question for developers</string>
     <string name="settings_payment_problems">Problems with payment</string>
     <string name="settings_cooperation">Cooperation</string>
     <string name="settings_feedback_success_msg">Thank you, message was sent succesfully</string>
-    
+
 </resources>

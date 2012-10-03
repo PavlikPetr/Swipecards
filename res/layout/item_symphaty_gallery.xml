@@ -1,74 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-  <RelativeLayout 
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content" 
-      android:background="@drawable/item_list_selector" >
-      
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_list_selector">
+
     <!-- аватар -->
-      <com.topface.topface.ui.views.ImageViewRemote
-        android:id="@+id/ivAvatar"
-        style="@style/FeedAvatar"
-        />
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ivAvatar"
+            style="@style/FeedAvatar"
+            />
 
     <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_toRightOf="@id/ivAvatar"
-          android:layout_centerVertical="true"
-          android:orientation="vertical" >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/ivAvatar"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
 
-	 <!-- имя, возраст -->
-      <TextView
-          android:id="@+id/tvName"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:singleLine="true"
-          android:ellipsize="end"
-          android:textColor="#FFFFFF"
-          android:textSize="16dp"
-          android:textStyle="normal"
-          style="@style/ShadowItemFont" />
+        <!-- имя, возраст -->
+        <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp"
+                android:textStyle="normal"
+                style="@style/ShadowItemFont"/>
 
-      <!-- возраст, город -->
-      <TextView
-          android:id="@+id/tvCity"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="#FFFFFF"
-          android:textSize="14dp"
-          android:textStyle="normal"
-          style="@style/ShadowItemFont" />>
+        <!-- возраст, город -->
+        <TextView
+                android:id="@+id/tvCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="14dp"
+                android:textStyle="normal"
+                style="@style/ShadowItemFont"/>>
 
     </LinearLayout>
-    
+
     <!-- время -->
     <TextView
-        android:id="@+id/tvTime"
-        android:textColor="#707070"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
-    
+            android:id="@+id/tvTime"
+            android:textColor="#707070"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
     <!-- стрелка -->
     <ImageView
-        android:id="@+id/ivArrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:paddingRight="4dp"
-        android:src="@drawable/im_item_arrow" />
-    
+            android:id="@+id/ivArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:paddingRight="4dp"
+            android:src="@drawable/im_item_arrow"/>
+
     <!-- online -->
     <ImageView
-        android:id="@+id/ivOnline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="4dp"
-        android:src="@drawable/list_online_selector"
-        android:visibility="invisible" />
-    
-  </RelativeLayout>
+            android:id="@+id/ivOnline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="4dp"
+            android:src="@drawable/list_online_selector"
+            android:visibility="invisible"/>
+
+</RelativeLayout>

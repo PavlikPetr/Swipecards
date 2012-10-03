@@ -1,9 +1,9 @@
 package com.topface.i18n.plurals;
 /**
  * Plural rules for the following locales and languages:
- * 
+ *
  * Locales: az bm fa ig hu ja kde kea ko my ses sg to tr vi wo yo zh bo dz id jv ka km kn ms th
- * 
+ *
  * Languages:
  *  Azerbaijani (az)
  *  Bambara (bm)
@@ -41,20 +41,18 @@ package com.topface.i18n.plurals;
  * @see http://unicode.org/repos/cldr/trunk/common/supplemental/plurals.xml
  * @see plurals.xml (local copy)
  *
- * @package    I18n_Plural
- * @category   Plural Rules
- * @author     Korney Czukowski
- * @copyright  (c) 2011 Korney Czukowski
- * @license    MIT License
+ * @package I18n_Plural
+ * @category Plural Rules
+ * @author Korney Czukowski
+ * @copyright (c) 2011 Korney Czukowski
+ * @license MIT License
  */
 
 /**
- * Converted to Java by Sam Marshak, 2012 
+ * Converted to Java by Sam Marshak, 2012
  */
-public class PluralRules_None extends PluralRules
-{
-	public int quantityForNumber(int count)
-	{
-		return QUANTITY_OTHER;
-	}
+public class PluralRules_None extends PluralRules {
+    public int quantityForNumber(int count) {
+        return QUANTITY_OTHER;
+    }
 }

@@ -22,6 +22,7 @@ public class Leaders extends AbstractData {
 
     /**
      * Парсит ответ от сервера
+     *
      * @param response ответ сервера
      * @return объект типа Leaders, реализующий ответ от сервиса leaders
      */
@@ -42,7 +43,7 @@ public class Leaders extends AbstractData {
 
                 leadersResponse.leaders.add(user);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.error("Leaders wrong response parsing", e);
         }
 
@@ -51,6 +52,7 @@ public class Leaders extends AbstractData {
 
     /**
      * Парсит массив с фотографиями лидера
+     *
      * @param photosItem объект JSON который нужно распарсить
      * @return объект UserPhotos с фотографиями пользователя
      * @throws JSONException
@@ -71,7 +73,6 @@ public class Leaders extends AbstractData {
     }
 
     /**
-     *
      * @param cityItem объект JSON, который будем парсить
      * @return объект города лидера LeaderUser.LeaderCity
      * @throws JSONException

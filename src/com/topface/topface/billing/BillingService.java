@@ -14,9 +14,6 @@
 
 package com.topface.topface.billing;
 
-import com.android.vending.billing.IMarketBillingService;
-import com.topface.topface.billing.Consts.ResponseCode;
-import com.topface.topface.billing.Security.VerifiedPurchase;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -27,6 +24,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
+import com.android.vending.billing.IMarketBillingService;
+import com.topface.topface.billing.Consts.ResponseCode;
+import com.topface.topface.billing.Security.VerifiedPurchase;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -42,12 +43,15 @@ public class BillingService extends Service implements ServiceConnection {
     abstract class BillingRequest {
         private final int mStartId;
         protected long mRequestId;
+
         public BillingRequest(int startId) {
             mStartId = startId;
         }
+
         public int getStartId() {
             return mStartId;
         }
+
         public boolean runRequest() {
             if (runIfConnected())
                 return true;
@@ -65,12 +69,13 @@ public class BillingService extends Service implements ServiceConnection {
                     if (mRequestId >= 0)
                         mSentRequests.put(mRequestId, this);
                     return true;
-                } catch(RemoteException e) {
+                } catch (RemoteException e) {
                     onRemoteException(e);
                 }
             }
             return false;
         }
+
         protected void onRemoteException(RemoteException e) {
             mService = null;
         }
@@ -100,6 +105,7 @@ public class BillingService extends Service implements ServiceConnection {
         public CheckBillingSupported() {
             super(-1);
         }
+
         @Override
         protected long run() throws RemoteException {
             Bundle request = makeRequestBundle("CHECK_BILLING_SUPPORTED");
@@ -115,11 +121,12 @@ public class BillingService extends Service implements ServiceConnection {
     class RequestPurchase extends BillingRequest {
         public final String mProductId;
         public final String mDeveloperPayload;
+
         public RequestPurchase(String itemId) {
             this(itemId, null);
         }
 
-        public RequestPurchase(String itemId,String developerPayload) {
+        public RequestPurchase(String itemId, String developerPayload) {
             super(-1);
             mProductId = itemId;
             mDeveloperPayload = developerPayload;
@@ -146,12 +153,12 @@ public class BillingService extends Service implements ServiceConnection {
             ResponseHandler.responseCodeReceived(BillingService.this, this, responseCode);
         }
     }
-    
+
     // class ConfirmNotifications
     class ConfirmNotifications extends BillingRequest {
         final String[] mNotifyIds;
 
-        public ConfirmNotifications(int startId,String[] notifyIds) {
+        public ConfirmNotifications(int startId, String[] notifyIds) {
             super(startId);
             mNotifyIds = notifyIds;
         }
@@ -171,7 +178,7 @@ public class BillingService extends Service implements ServiceConnection {
         long mNonce;
         final String[] mNotifyIds;
 
-        public GetPurchaseInformation(int startId,String[] notifyIds) {
+        public GetPurchaseInformation(int startId, String[] notifyIds) {
             super(startId);
             mNotifyIds = notifyIds;
         }
@@ -239,11 +246,11 @@ public class BillingService extends Service implements ServiceConnection {
     }
 
     @Override
-    public void onStart(Intent intent,int startId) {
+    public void onStart(Intent intent, int startId) {
         handleCommand(intent, startId);
     }
 
-    public void handleCommand(Intent intent,int startId) {
+    public void handleCommand(Intent intent, int startId) {
         if (intent != null) {
             String action = intent.getAction();
             if (Consts.ACTION_CONFIRM_NOTIFICATION.equals(action)) {
@@ -270,7 +277,7 @@ public class BillingService extends Service implements ServiceConnection {
             boolean bindResult = bindService(new Intent(Consts.MARKET_BILLING_SERVICE_ACTION), this, Context.BIND_AUTO_CREATE);
             if (bindResult)
                 return true;
-        } catch(SecurityException e) {
+        } catch (SecurityException e) {
         }
         return false;
     }
@@ -279,7 +286,7 @@ public class BillingService extends Service implements ServiceConnection {
         return new CheckBillingSupported().runRequest();
     }
 
-    public boolean requestPurchase(String productId,String developerPayload) {
+    public boolean requestPurchase(String productId, String developerPayload) {
         return new RequestPurchase(productId, developerPayload).runRequest();
     }
 
@@ -287,15 +294,15 @@ public class BillingService extends Service implements ServiceConnection {
         return new RestoreTransactions().runRequest();
     }
 
-    private boolean confirmNotifications(int startId,String[] notifyIds) {
+    private boolean confirmNotifications(int startId, String[] notifyIds) {
         return new ConfirmNotifications(startId, notifyIds).runRequest();
     }
 
-    private boolean getPurchaseInformation(int startId,String[] notifyIds) {
+    private boolean getPurchaseInformation(int startId, String[] notifyIds) {
         return new GetPurchaseInformation(startId, notifyIds).runRequest();
     }
 
-    private void purchaseStateChanged(int startId,String signedData,String signature) {
+    private void purchaseStateChanged(int startId, String signedData, String signature) {
         ArrayList<Security.VerifiedPurchase> purchases;
         purchases = Security.verifyPurchase(signedData, signature);
         if (purchases == null)
@@ -314,7 +321,7 @@ public class BillingService extends Service implements ServiceConnection {
         }
     }
 
-    private void checkResponseCode(long requestId,ResponseCode responseCode) {
+    private void checkResponseCode(long requestId, ResponseCode responseCode) {
         BillingRequest request = mSentRequests.get(requestId);
         if (request != null)
             if (Consts.DEBUG) {
@@ -327,7 +334,7 @@ public class BillingService extends Service implements ServiceConnection {
     private void runPendingRequests() {
         int maxStartId = -1;
         BillingRequest request;
-        while((request = mPendingRequests.peek()) != null) {
+        while ((request = mPendingRequests.peek()) != null) {
             if (request.runIfConnected()) {
                 mPendingRequests.remove();
                 if (maxStartId < request.getStartId())
@@ -341,7 +348,7 @@ public class BillingService extends Service implements ServiceConnection {
             stopSelf(maxStartId);
     }
 
-    public void onServiceConnected(ComponentName name,IBinder service) {
+    public void onServiceConnected(ComponentName name, IBinder service) {
         mService = IMarketBillingService.Stub.asInterface(service);
         runPendingRequests();
     }
@@ -353,7 +360,7 @@ public class BillingService extends Service implements ServiceConnection {
     public void unbind() {
         try {
             unbindService(this);
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
         }
     }
 }//BillingService

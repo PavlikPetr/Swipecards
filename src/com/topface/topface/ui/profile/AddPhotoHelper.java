@@ -1,15 +1,12 @@
 package com.topface.topface.ui.profile;
 
-import java.io.IOException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,6 +21,8 @@ import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FileSystem;
 import com.topface.topface.utils.http.Http;
+
+import java.io.IOException;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -45,8 +44,8 @@ public class AddPhotoHelper {
     public static final int ADD_PHOTO_RESULT_OK = 0;
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-    
-    
+
+
     public AddPhotoHelper(Fragment fragment) {
         this(fragment.getActivity());
         mFragment = fragment;
@@ -79,7 +78,7 @@ public class AddPhotoHelper {
             switch (view.getId()) {
                 case R.id.btnAddPhotoAlbum: {
                     Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title)); 
+                    intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
                     if (mFragment != null) {
                         mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
                     } else {
@@ -134,34 +133,34 @@ public class AddPhotoHelper {
         @Override
         protected String doInBackground(Intent... intentList) {
             String rawResponse = null;
-            
+
             PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
             add.ssid = Data.SSID;
-            
+
             Intent intent = intentList[0];
             if (intent == null)
                 return rawResponse;
-            
+
             Uri imageUri = intent.getData();
 
             try {
-                
+
                 // Android 4
                 //Bundle extras = intent.getExtras();
                 //Bitmap thePic = extras.getParcelable("data");
-                 
-                
+
+
                 //is = App.getContext().getContentResolver().openInputStream(uri[0]);
                 String file = FileSystem.getFilePathFromURI(AddPhotoHelper.this.mActivity, imageUri);
                 String data = Base64.encodeFromFile(file);
                 //String data2 = Base64.encodeBytes(thePic.getNinePatchChunk());
                 rawResponse = Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), data);
                 data = null;
-           } catch(IOException e) {
-               Debug.log("Photo not uploaded");
-           }
+            } catch (IOException e) {
+                Debug.log("Photo not uploaded");
+            }
 
-           return rawResponse;
+            return rawResponse;
         }
 
         @Override
@@ -170,9 +169,9 @@ public class AddPhotoHelper {
             if (result != null) {
                 Confirmation c = Confirmation.parse(new ApiResponse(result));
                 if (c.completed)
-                  mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_OK);
+                    mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_OK);
                 else
-                  mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+                    mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
             } else {
                 mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
             }

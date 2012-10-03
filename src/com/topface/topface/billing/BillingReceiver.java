@@ -14,15 +14,15 @@
 
 package com.topface.topface.billing;
 
-import com.topface.topface.billing.Consts.ResponseCode;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import com.topface.topface.billing.Consts.ResponseCode;
 
 public class BillingReceiver extends BroadcastReceiver {
 
     @Override
-    public void onReceive(Context context,Intent intent) {
+    public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (Consts.ACTION_PURCHASE_STATE_CHANGED.equals(action)) {
             String signedData = intent.getStringExtra(Consts.INAPP_SIGNED_DATA);
@@ -38,7 +38,7 @@ public class BillingReceiver extends BroadcastReceiver {
         }
     }
 
-    private void purchaseStateChanged(Context context,String signedData,String signature) {
+    private void purchaseStateChanged(Context context, String signedData, String signature) {
         Intent intent = new Intent(Consts.ACTION_PURCHASE_STATE_CHANGED);
         intent.setClass(context, BillingService.class);
         intent.putExtra(Consts.INAPP_SIGNED_DATA, signedData);
@@ -46,14 +46,14 @@ public class BillingReceiver extends BroadcastReceiver {
         context.startService(intent);
     }
 
-    private void notify(Context context,String notifyId) {
+    private void notify(Context context, String notifyId) {
         Intent intent = new Intent(Consts.ACTION_GET_PURCHASE_INFORMATION);
         intent.setClass(context, BillingService.class);
         intent.putExtra(Consts.NOTIFICATION_ID, notifyId);
         context.startService(intent);
     }
 
-    private void checkResponseCode(Context context,long requestId,int responseCodeIndex) {
+    private void checkResponseCode(Context context, long requestId, int responseCodeIndex) {
         Intent intent = new Intent(Consts.ACTION_RESPONSE_CODE);
         intent.setClass(context, BillingService.class);
         intent.putExtra(Consts.INAPP_REQUEST_ID, requestId);

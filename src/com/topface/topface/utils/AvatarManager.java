@@ -21,19 +21,23 @@ public class AvatarManager<T extends AbstractDataWithPhotos> implements AbsListV
         mCache = new HashMap<Integer, Bitmap>();
         mHandler = handler;
     }
+
     //---------------------------------------------------------------------------
     public void setDataList(LinkedList<T> dataList) {
         clear();
         mDataList = dataList;
     }
+
     //---------------------------------------------------------------------------
     public T get(int position) {
         return mDataList.get(position);
     }
+
     //---------------------------------------------------------------------------
     public int size() {
         return mDataList.size();
     }
+
     //---------------------------------------------------------------------------
     private void clear() {
         int size = mCache.size();
@@ -56,11 +60,11 @@ public class AvatarManager<T extends AbstractDataWithPhotos> implements AbsListV
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-    	if (visibleItemCount != 0
+        if (visibleItemCount != 0
                 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
-    		if (mHandler != null)
-    			mHandler.sendEmptyMessage(0);
-    	}
+            if (mHandler != null)
+                mHandler.sendEmptyMessage(0);
+        }
     }
 
     @Override
@@ -74,7 +78,7 @@ public class AvatarManager<T extends AbstractDataWithPhotos> implements AbsListV
                 view.invalidateViews(); //  ПРАВИЛЬНО ???
                 break;
             }
-                
+
         }
     }
 }

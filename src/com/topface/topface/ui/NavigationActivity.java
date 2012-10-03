@@ -26,45 +26,45 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     private FragmentSwitchController mFragmentSwitcher;
     private SharedPreferences mPreferences;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.ac_navigation);
-		Debug.log(this, "onCreate");
-		
-		AuthorizationManager.getInstance(this).extendAccessToken();
-		
-		mFragmentManager = getSupportFragmentManager();
-		
-		mFragmentMenu = (FragmentMenu)mFragmentManager.findFragmentById(R.id.fragment_menu);
-		mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ac_navigation);
+        Debug.log(this, "onCreate");
 
-	    mFragmentSwitcher = (FragmentSwitchController)findViewById(R.id.fragment_switcher);
-	    mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
-	    mFragmentSwitcher.setFragmentManager(mFragmentManager);
+        AuthorizationManager.getInstance(this).extendAccessToken();
 
-	    mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        mFragmentManager = getSupportFragmentManager();
+
+        mFragmentMenu = (FragmentMenu) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
+
+        mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
+        mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
+        mFragmentSwitcher.setFragmentManager(mFragmentManager);
+
+        mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         int lastFragmentId = mPreferences.getInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, BaseFragment.F_PROFILE);
         CacheProfile.background_id = mPreferences.getInt(Static.PREFERENCES_PROFILE_BACKGROUND_ID, ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
-	    
-	    mFragmentSwitcher.showFragment(lastFragmentId);
-	    mFragmentMenu.setSelectedMenu(lastFragmentId);
-	}
+
+        mFragmentSwitcher.showFragment(lastFragmentId);
+        mFragmentMenu.setSelectedMenu(lastFragmentId);
+    }
 
     /*
      *  обработчик кнопки открытия меню в заголовке фрагмента 
      */
     @Override
     public void onClick(View view) {
-        if(view.getId() != R.id.btnNavigationHome)
+        if (view.getId() != R.id.btnNavigationHome)
             return;
         if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
             mFragmentSwitcher.closeMenu();
-        } else {            
+        } else {
             mFragmentSwitcher.openMenu();
-        } 
+        }
     }
-    
+
     @Override
     public void onBackPressed() {
         if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
@@ -74,7 +74,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
             mFragmentSwitcher.openMenu();
         }
     }
-    
+
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
         if (mFragmentSwitcher.getAnimationState() != FragmentSwitchController.EXPAND) {
@@ -85,12 +85,12 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         }
         return false;
     }
-    
+
     @Override
     protected void onDestroy() {
         mPreferences.edit()
-            .putInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, mFragmentSwitcher.getCurrentFragmentId())
-            .commit();
+                .putInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, mFragmentSwitcher.getCurrentFragmentId())
+                .commit();
         super.onDestroy();
     }
 
@@ -119,7 +119,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
                     break;
                 case R.id.btnFragmentSettings:
                     fragmentId = BaseFragment.F_SETTINGS;
-                    break; 
+                    break;
                 default:
                     fragmentId = BaseFragment.F_PROFILE;
                     break;
@@ -127,7 +127,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
             mFragmentSwitcher.showFragmentWithAnimation(fragmentId);
         }
     };
-    
+
     private FragmentSwitchListener mFragmentSwitchListener = new FragmentSwitchListener() {
         @Override
         public void beforeExpanding() {

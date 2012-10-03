@@ -34,7 +34,7 @@ public class Device {
                 Debug.log("Device", "init error");
                 return false;
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("Device", "init exception:" + e);
             return false;
         }
@@ -43,14 +43,13 @@ public class Device {
     }
 
     public static Display getDisplay(Context context) {
-        return ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        return ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
     }
 
     public static int getOrientation(Context context) {
         if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             return PORTRAIT;
-        }
-        else if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        } else if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             return LANDSCAPE;
         }
 
@@ -67,6 +66,7 @@ public class Device {
 
     /**
      * Возвращает максимальную сторону дисплея, т.е. ширину, если альбомная ориентация и высоту, если портретная
+     *
      * @param context контекст выполнения
      * @return размер дисплея по максимальной стороне
      */

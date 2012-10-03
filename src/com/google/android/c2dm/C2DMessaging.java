@@ -22,7 +22,7 @@ import android.content.SharedPreferences.Editor;
 
 /**
  * Utilities for device registration.
- * 
+ * <p/>
  * Will keep track of the registration token in a private preference.
  */
 public class C2DMessaging {
@@ -42,7 +42,7 @@ public class C2DMessaging {
     /**
      * Initiate c2d messaging registration for the current application
      */
-    public static void register(Context context,String senderId) {
+    public static void register(Context context, String senderId) {
         Intent registrationIntent = new Intent(REQUEST_REGISTRATION_INTENT);
         registrationIntent.setPackage(GSF_PACKAGE);
         registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, PendingIntent.getBroadcast(context, 0, new Intent(), 0));
@@ -63,9 +63,9 @@ public class C2DMessaging {
 
     /**
      * Return the current registration id.
-     * 
+     * <p/>
      * If result is empty, the registration has failed.
-     * 
+     *
      * @return registration id, or empty string if the registration is not
      *         complete.
      */
@@ -85,7 +85,7 @@ public class C2DMessaging {
         return prefs.getLong(BACKOFF, DEFAULT_BACKOFF);
     }
 
-    static void setBackoff(Context context,long backoff) {
+    static void setBackoff(Context context, long backoff) {
         final SharedPreferences prefs = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
         Editor editor = prefs.edit();
         editor.putLong(BACKOFF, backoff);
@@ -104,7 +104,7 @@ public class C2DMessaging {
     }
 
     // package
-    static void setRegistrationId(Context context,String registrationId) {
+    static void setRegistrationId(Context context, String registrationId) {
         final SharedPreferences prefs = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
         Editor editor = prefs.edit();
         editor.putString("dm_registration", registrationId);

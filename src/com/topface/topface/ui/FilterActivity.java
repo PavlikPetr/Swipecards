@@ -1,16 +1,5 @@
 package com.topface.topface.ui;
 
-import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.data.Confirmation;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.FilterRequest;
-import com.topface.topface.requests.SettingsRequest;
-import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,6 +19,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.data.Confirmation;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.FilterRequest;
+import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 
 public class FilterActivity extends BasePreferenceActivity implements LocationListener {
     //---------------------------------------------------------------------------
@@ -44,6 +43,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         boolean online; // в сети или нет
         boolean geo; // искать по координатам
     }
+
     //---------------------------------------------------------------------------
     // Data
     private TempFilter mTemp;
@@ -60,6 +60,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
     public static final int CITY_ALL = 1;
     public static final int CITY_SELECTED = 2;
     public static final int INTENT_FILTER_ACTIVITY = 110;
+
     //---------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
 
 //        mSavingLocker = (LockerView) findViewById(R.id.llvFilterSaving);
-        
+
         // подтягивание данных
         mTemp = new TempFilter();
         mTemp.city_name = CacheProfile.dating_city_name;
@@ -107,10 +108,10 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         //mNearby = (CheckBoxPreference)findPreference(getString(R.string.s_dating_nearby));
         //mNearby.setChecked(false);
 
-        mAllCities = (CheckBoxPreference)findPreference(getString(R.string.s_dating_cities_all));
+        mAllCities = (CheckBoxPreference) findPreference(getString(R.string.s_dating_cities_all));
         mAllCities.setChecked(false);
 
-        mCity = (CheckBoxPreference)findPreference(getString(R.string.s_dating_city));
+        mCity = (CheckBoxPreference) findPreference(getString(R.string.s_dating_city));
         mCity.setChecked(false);
 
         if (mTemp.city_id == 0) {
@@ -124,21 +125,22 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         // cities listener
         Preference.OnPreferenceChangeListener citiesChangeListener = new Preference.OnPreferenceChangeListener() {
             @Override
-            public boolean onPreferenceChange(Preference preference,Object newValue) {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
                 /* if(preference == mNearby && (Boolean)newValue == true) {
                  * mAllCities.setChecked(false);
                  * mCity.setChecked(false);
                  * mTemp.geo = true;
                  * getCoords();
                  * 
-                 * } else */if (preference == mAllCities && (Boolean)newValue == true) {
+                 * } else */
+                if (preference == mAllCities && (Boolean) newValue == true) {
                     //mNearby.setChecked(false);
                     mCity.setChecked(false);
                     mTemp.geo = false;
                     mTemp.city_id = 0;
                     mIsChanged = true;
 
-                } else if (preference == mCity && (Boolean)newValue == true) {
+                } else if (preference == mCity && (Boolean) newValue == true) {
                     //mNearby.setChecked(false);
                     mAllCities.setChecked(false);
                     if (mTemp.city_id == 0) {
@@ -162,26 +164,30 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         selectCity.setOnPreferenceClickListener(mOnSelectCityListener);
 
         // сервис определения координар
-        mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
-    //---------------------------------------------------------------------------  
+
+    //---------------------------------------------------------------------------
     @Override
     protected void onStart() {
         super.onStart();
         //App.bind(getBaseContext());
     }
-    //---------------------------------------------------------------------------  
+
+    //---------------------------------------------------------------------------
     @Override
     protected void onStop() {
         //App.unbind();
         super.onStop();
     }
+
     //---------------------------------------------------------------------------
     @Override
     protected void onDestroy() {
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
+
     //---------------------------------------------------------------------------
     public void getCoords() {
         boolean gpsEnabled = false;
@@ -192,7 +198,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
             networkEnabled = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             if (networkEnabled)
                 mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
         }
 
         // gps
@@ -201,9 +207,10 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
                 gpsEnabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 if (gpsEnabled)
                     mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            } catch(Exception ex) {
+            } catch (Exception ex) {
             }
     }
+
     //---------------------------------------------------------------------------
     public void sendFilter() {
         // сохранение данных
@@ -219,7 +226,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         editor.putBoolean(getString(R.string.cache_profile_filter_online), mTemp.online);
         editor.commit();
 
-        filterRequest = new FilterRequest(this.getApplicationContext());  
+        filterRequest = new FilterRequest(this.getApplicationContext());
         registerRequest(filterRequest);
         filterRequest.city = mTemp.city_id; // ЧТО СТАВИМ ПРИ ЗАПРОСЕ С КООРДИНАТАМИ
         filterRequest.sex = mTemp.sex;
@@ -229,29 +236,31 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         filterRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-            	final Confirmation confirm = Confirmation.parse(response); 
-            	runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						if (!confirm.completed) {
-		            		Toast.makeText(FilterActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
-		            	}						
-					}
-				});
-            	mIsSending = false;
+                final Confirmation confirm = Confirmation.parse(response);
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (!confirm.completed) {
+                            Toast.makeText(FilterActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                mIsSending = false;
                 //Toast.makeText(FilterActivity.this,"filter success",Toast.LENGTH_SHORT).show();
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
-            	mIsSending = false;
+            public void fail(int codeError, ApiResponse response) {
+                mIsSending = false;
             }
         }).exec();
         Debug.log(this, "3.city_id:" + mTemp.city_id);
     }
+
     //---------------------------------------------------------------------------
     @Override
-    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
             Bundle extras = data.getExtras();
@@ -266,18 +275,21 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
             mIsChanged = true;
         }
     }
+
     //---------------------------------------------------------------------------
     // Menu
     //---------------------------------------------------------------------------
     private static final int MENU_SAVE = 0;
+
     @Override
-    public boolean onCreatePanelMenu(int featureId,Menu menu) {
+    public boolean onCreatePanelMenu(int featureId, Menu menu) {
         //menu.add(0,MENU_SAVE,0,getString(R.string.filter_menu_save));
         return super.onCreatePanelMenu(featureId, menu);
     }
+
     //---------------------------------------------------------------------------
     @Override
-    public boolean onMenuItemSelected(int featureId,MenuItem item) {
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case MENU_SAVE:
                 // if(mTemp.online)
@@ -288,17 +300,18 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         }
         return super.onMenuItemSelected(featureId, item);
     }
+
     //---------------------------------------------------------------------------
     // Listeners
     //---------------------------------------------------------------------------
     // sex
     Preference.OnPreferenceClickListener mOnSexListener = new Preference.OnPreferenceClickListener() {
         public boolean onPreferenceClick(final Preference preference) {
-            final CharSequence[] items = {getString(R.string.filter_girl),getString(R.string.filter_boy)};
+            final CharSequence[] items = {getString(R.string.filter_girl), getString(R.string.filter_boy)};
 
             AlertDialog.Builder builder = new AlertDialog.Builder(FilterActivity.this);
             builder.setItems(items, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,int item) {
+                public void onClick(DialogInterface dialog, int item) {
                     preference.setSummary(items[item]);
                     mTemp.sex = item;
                     mIsChanged = true;
@@ -317,7 +330,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
     Preference.OnPreferenceClickListener mOnAgeListener = new Preference.OnPreferenceClickListener() {
         public boolean onPreferenceClick(final Preference preference) {
             // 0  1  2  3  4  5  total 6
-            final int[] ages = {16,20,24,28,32,99};
+            final int[] ages = {16, 20, 24, 28, 32, 99};
             for (int i = 0; i < ages.length - 1; i++) {
                 if (mTemp.age_start >= ages[i])
                     leftPosition = i;
@@ -325,12 +338,12 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
                     rightPosition = i;
             }
             View view = LayoutInflater.from(FilterActivity.this.getApplicationContext()).inflate(R.layout.pref_age_picker, null);
-            final TextView tvFrom = (TextView)view.findViewById(R.id.tvFilterFrom);
+            final TextView tvFrom = (TextView) view.findViewById(R.id.tvFilterFrom);
             tvFrom.setText("" + mTemp.age_start);
-            final TextView tvTo = (TextView)view.findViewById(R.id.tvFilterTo);
+            final TextView tvTo = (TextView) view.findViewById(R.id.tvFilterTo);
             tvTo.setText("" + mTemp.age_end);
 
-            Button fromUp = (Button)view.findViewById(R.id.btnFilterFromUp);
+            Button fromUp = (Button) view.findViewById(R.id.btnFilterFromUp);
             fromUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -339,7 +352,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
                         tvFrom.setText("" + (ages[++leftPosition]));
                 }
             });
-            Button fromDown = (Button)view.findViewById(R.id.btnFilterFromDown);
+            Button fromDown = (Button) view.findViewById(R.id.btnFilterFromDown);
             fromDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -348,7 +361,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
                         tvFrom.setText("" + (ages[--leftPosition]));
                 }
             });
-            Button toUp = (Button)view.findViewById(R.id.btnFilterToUp);
+            Button toUp = (Button) view.findViewById(R.id.btnFilterToUp);
             toUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -357,7 +370,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
                         tvTo.setText("" + (ages[++rightPosition]));
                 }
             });
-            Button toDown = (Button)view.findViewById(R.id.btnFilterToDown);
+            Button toDown = (Button) view.findViewById(R.id.btnFilterToDown);
             toDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -371,7 +384,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
             builder.setTitle(getString(R.string.filter_age));
             builder.setView(view);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface arg0,int arg1) {
+                public void onClick(DialogInterface arg0, int arg1) {
                     mTemp.age_start = Integer.parseInt(tvFrom.getText().toString());
                     mTemp.age_end = Integer.parseInt(tvTo.getText().toString());
                     if (mTemp.age_start > mTemp.age_end) {
@@ -393,11 +406,11 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
     // online
     Preference.OnPreferenceClickListener mOnOnlineListener = new Preference.OnPreferenceClickListener() {
         public boolean onPreferenceClick(final Preference preference) {
-            final CharSequence[] items = {getString(R.string.filter_all),getString(R.string.filter_only_online)};
+            final CharSequence[] items = {getString(R.string.filter_all), getString(R.string.filter_only_online)};
             AlertDialog.Builder builder = new AlertDialog.Builder(FilterActivity.this);
             //builder.setTitle(getString(R.string.filter_online));
             builder.setItems(items, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,int item) {
+                public void onClick(DialogInterface dialog, int item) {
                     preference.setSummary(items[item]);
                     mTemp.online = (item == 0 ? false : true);
                     mIsChanged = true;
@@ -418,6 +431,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
             return true;
         }
     };
+
     //---------------------------------------------------------------------------
     // User Location
     //---------------------------------------------------------------------------  
@@ -431,75 +445,80 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         settingsRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-            	final Confirmation confirm = Confirmation.parse(response);
-            	runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						if (!confirm.completed) {
-		            		Toast.makeText(FilterActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
-		            	}
-						mIsSending = false;
-					}
-				});
-            	
+                final Confirmation confirm = Confirmation.parse(response);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!confirm.completed) {
+                            Toast.makeText(FilterActivity.this, getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+                        }
+                        mIsSending = false;
+                    }
+                });
+
                 mLocationManager.removeUpdates(FilterActivity.this);
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
+            public void fail(int codeError, ApiResponse response) {
                 mLocationManager.removeUpdates(FilterActivity.this);
                 mIsSending = false;
             }
         }).exec();
         //Toast.makeText(FilterActivity.this.getApplicationContext(),"lng:"+settings.lng+ "\nlat:"+settings.lat,Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void onProviderDisabled(String provider) {
     }
+
     @Override
     public void onProviderEnabled(String provider) {
     }
+
     @Override
-    public void onStatusChanged(String provider,int status,Bundle extras) {
+    public void onStatusChanged(String provider, int status, Bundle extras) {
     }
+
     //---------------------------------------------------------------------------
     @Override
     public void onBackPressed() {
         Debug.log(this, "onBackPressed");
         if (mIsChanged) {
-        	runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					mSavingLocker.setVisibility(View.VISIBLE);
-				}
-			});
-        	
-            sendFilter();
-            setResult(RESULT_OK, null);             
-        }
-        
-        (new Thread(){
-        	@Override
-        	public void run() {
-        		long timeElapsed = 0;
-        		while (mIsSending) {
-                	try {
-                		timeElapsed += 500;
-                		if (timeElapsed > 30000) 
-                			break;
-    					Thread.sleep(500);
-    				} catch (InterruptedException e) {
-    					Debug.log("FilterActivity Thread.sleep() exception onBackPressed()");
-    				}
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSavingLocker.setVisibility(View.VISIBLE);
                 }
-        		
-        		FilterActivity.this.runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						FilterActivity.super.onBackPressed();
-					}
-				});
-        	}
+            });
+
+            sendFilter();
+            setResult(RESULT_OK, null);
+        }
+
+        (new Thread() {
+            @Override
+            public void run() {
+                long timeElapsed = 0;
+                while (mIsSending) {
+                    try {
+                        timeElapsed += 500;
+                        if (timeElapsed > 30000)
+                            break;
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        Debug.log("FilterActivity Thread.sleep() exception onBackPressed()");
+                    }
+                }
+
+                FilterActivity.this.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        FilterActivity.super.onBackPressed();
+                    }
+                });
+            }
         }).start();
     }
     //---------------------------------------------------------------------------    

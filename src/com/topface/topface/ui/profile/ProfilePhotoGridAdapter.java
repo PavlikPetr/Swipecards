@@ -1,14 +1,5 @@
 package com.topface.topface.ui.profile;
 
-import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import com.topface.topface.R;
-import com.topface.topface.utils.CacheManager;
-import com.topface.topface.utils.MemoryCache;
-import com.topface.topface.utils.StorageCache;
-import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.http.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,10 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import com.topface.topface.R;
+import com.topface.topface.utils.CacheManager;
+import com.topface.topface.utils.MemoryCache;
+import com.topface.topface.utils.StorageCache;
+import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.http.Http;
+
+import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ProfilePhotoGridAdapter extends BaseAdapter {
     // Data
-    private LayoutInflater mInflater;    
+    private LayoutInflater mInflater;
     private ExecutorService mWorker;
     private MemoryCache mMemoryCache;
     private StorageCache mStorageCache;
@@ -32,13 +33,15 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
     static class ViewHolder {
         ImageView mPhoto;
         ImageView mFrame;
-    };
+    }
+
+    ;
 
     public ProfilePhotoGridAdapter(Context context, SparseArray<HashMap<String, String>> photoLinks) {
         mInflater = LayoutInflater.from(context);
         mWorker = Executors.newFixedThreadPool(3);
-        mPhotoLinks   = photoLinks;
-        mMemoryCache  = new MemoryCache();
+        mPhotoLinks = photoLinks;
+        mMemoryCache = new MemoryCache();
         mStorageCache = new StorageCache(context, CacheManager.EXTERNAL_CACHE);
         mMask = BitmapFactory.decodeResource(context.getResources(), R.drawable.user_mask_album);
     }
@@ -53,15 +56,15 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
         ViewHolder holder = null;
 
         if (convertView == null) {
-            convertView = (ViewGroup)mInflater.inflate(R.layout.item_user_gallery, null, false);
+            convertView = (ViewGroup) mInflater.inflate(R.layout.item_user_gallery, null, false);
             holder = new ViewHolder();
-            holder.mPhoto = (ImageView)convertView.findViewById(R.id.ivPhoto);
-            holder.mFrame = (ImageView)convertView.findViewById(R.id.ivFrame);
+            holder.mPhoto = (ImageView) convertView.findViewById(R.id.ivPhoto);
+            holder.mFrame = (ImageView) convertView.findViewById(R.id.ivFrame);
             convertView.setTag(holder);
         } else {
-            holder = (ViewHolder)convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
-        
+
         if (position == 0) {
             holder.mPhoto.setBackgroundResource(R.drawable.profile_add_photo_selector);
             holder.mFrame.setVisibility(View.INVISIBLE);
@@ -97,7 +100,7 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
                     HashMap<String, String> photo = mPhotoLinks.get(mPhotoLinks.keyAt(position));
                     if (photo == null)
                         return;
-                    final Bitmap bitmap = mStorageCache.load((String)photo.values().toArray()[0]);
+                    final Bitmap bitmap = mStorageCache.load((String) photo.values().toArray()[0]);
                     if (bitmap != null) {
                         imageView.post(new Runnable() {
                             @Override
@@ -107,23 +110,24 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
                         });
                         mMemoryCache.put(position, bitmap);
                     } else {
-                        downloading(position, (String)photo.values().toArray()[0], imageView);
+                        downloading(position, (String) photo.values().toArray()[0], imageView);
                     }
-            }});
+                }
+            });
         }
         bitmap = null;
     }
-    
+
     private void downloading(final int position, final String url, final ImageView iv) {
         Bitmap rawBitmap = Http.bitmapLoader(url);
         final Bitmap bitmap = Utils.getRoundedCornerBitmapByMask(rawBitmap, mMask);
         if (bitmap != null) {
-          iv.post(new Runnable() {
-              @Override
-              public void run() {
-                  iv.setImageBitmap(bitmap);
-              }
-          });
+            iv.post(new Runnable() {
+                @Override
+                public void run() {
+                    iv.setImageBitmap(bitmap);
+                }
+            });
         }
         mMemoryCache.put(position, bitmap);
         mStorageCache.save(url, bitmap);

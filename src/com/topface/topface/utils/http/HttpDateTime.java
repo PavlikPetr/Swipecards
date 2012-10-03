@@ -56,11 +56,11 @@ public final class HttpDateTime {
      */
     private static final String HTTP_DATE_RFC_REGEXP =
             "([0-9]{1,2})[- ]([A-Za-z]{3,9})[- ]([0-9]{2,4})[ ]"
-            + "([0-9]{1,2}:[0-9][0-9]:[0-9][0-9])";
+                    + "([0-9]{1,2}:[0-9][0-9]:[0-9][0-9])";
 
     private static final String HTTP_DATE_ANSIC_REGEXP =
             "[ ]([A-Za-z]{3,9})[ ]+([0-9]{1,2})[ ]"
-            + "([0-9]{1,2}:[0-9][0-9]:[0-9][0-9])[ ]([0-9]{2,4})";
+                    + "([0-9]{1,2}:[0-9][0-9]:[0-9][0-9])[ ]([0-9]{2,4})";
 
     /**
      * The compiled version of the HTTP-date regular expressions.
@@ -76,7 +76,7 @@ public final class HttpDateTime {
             this.minute = m;
             this.second = s;
         }
-        
+
         int hour;
         int minute;
         int second;
@@ -194,12 +194,12 @@ public final class HttpDateTime {
                     + (yearString.charAt(2) - '0');
             return year + 1900;
         } else if (yearString.length() == 4) {
-             return (yearString.charAt(0) - '0') * 1000
+            return (yearString.charAt(0) - '0') * 1000
                     + (yearString.charAt(1) - '0') * 100
                     + (yearString.charAt(2) - '0') * 10
                     + (yearString.charAt(3) - '0');
         } else {
-             return 1970;
+            return 1970;
         }
     }
 
@@ -211,15 +211,15 @@ public final class HttpDateTime {
             hour = hour * 10 + (timeString.charAt(i++) - '0');
         // Skip ':'
         i++;
-        
+
         int minute = (timeString.charAt(i++) - '0') * 10
-                    + (timeString.charAt(i++) - '0');
+                + (timeString.charAt(i++) - '0');
         // Skip ':'
         i++;
-        
-        int second = (timeString.charAt(i++) - '0') * 10
-                  + (timeString.charAt(i++) - '0');
 
-        return new TimeOfDay(hour, minute, second);        
+        int second = (timeString.charAt(i++) - '0') * 10
+                + (timeString.charAt(i++) - '0');
+
+        return new TimeOfDay(hour, minute, second);
     }
 }

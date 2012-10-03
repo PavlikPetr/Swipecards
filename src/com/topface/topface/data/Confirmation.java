@@ -8,7 +8,7 @@ public class Confirmation extends AbstractData {
     public boolean completed;
 
     public Confirmation(ApiResponse response) {
-    	Confirmation.parse(response,this);
+        Confirmation.parse(response, this);
     }
 
     public static Confirmation parse(ApiResponse response) {
@@ -19,7 +19,7 @@ public class Confirmation extends AbstractData {
     private static Confirmation parse(ApiResponse response, Confirmation confirm) {
         try {
             confirm.completed = response.mJSONResult.optBoolean("completed");
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("Completed.class", "Wrong response parsing: " + e);
         }
 

@@ -1,9 +1,9 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
+import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.Debug;
-import android.content.Context;
 
 public class QuestionaryRequest extends ApiRequest {
     // Data
@@ -22,7 +22,7 @@ public class QuestionaryRequest extends ApiRequest {
     public int communicationid = -1; // идентификатор предопределенного отношения к коммуникациям пользователя    
     public int weight = -1; // вес пользователя
     public int height = -1; // рост пользователя
-    
+
     public int hairid = -1; // идентификатор цвета воло пользователя
     public int eyeid = -1; // идентификатор цвета глаз пользователя
     public int breastid = -1; // идентификатор рамера груди пользовательницы
@@ -71,37 +71,37 @@ public class QuestionaryRequest extends ApiRequest {
                 data.put("fitnessid", fitnessid);
             if (communicationid != -1)
                 data.put("communicationid", communicationid);
-            
-            if(hairid != -1)
+
+            if (hairid != -1)
                 data.put("hairid", hairid);
-            if(eyeid != -1)
+            if (eyeid != -1)
                 data.put("eyeid", eyeid);
-            if(childrenid != -1)
+            if (childrenid != -1)
                 data.put("childrenid", childrenid);
-            if(residenceid != -1)
-                data.put("residenceid" , residenceid);
-            if(carid != -1)
-                data.put("carid" ,carid);
-            if(car != null)
-                data.put("car" ,car);
-            if(firstdating != null)
-                data.put("firstdating" ,firstdating);
-            if(achievements != null)
-                data.put("achievements" ,achievements);
+            if (residenceid != -1)
+                data.put("residenceid", residenceid);
+            if (carid != -1)
+                data.put("carid", carid);
+            if (car != null)
+                data.put("car", car);
+            if (firstdating != null)
+                data.put("firstdating", firstdating);
+            if (achievements != null)
+                data.put("achievements", achievements);
 //            if(countries  != null)
 //                data.put("countries " ,countries );
-            if(restaurants != null)
-                data.put("restaurants " ,restaurants );
-            if(valuables != null)
-                data.put("valuables" ,valuables);
-            if(aspirations != null)
-                data.put("aspirations" ,aspirations);
-            
-            
+            if (restaurants != null)
+                data.put("restaurants ", restaurants);
+            if (valuables != null)
+                data.put("valuables", valuables);
+            if (aspirations != null)
+                data.put("aspirations", aspirations);
+
+
             /*if(name!=null)
-             * data.put("name",name); */
+          * data.put("name",name); */
             root.put("data", data);
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             Debug.log(this, "Wrong request compiling: " + e);
         }
 

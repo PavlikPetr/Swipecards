@@ -9,11 +9,12 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Handler;
 import android.util.Log;
-import java.lang.reflect.Method;
 import com.topface.topface.billing.BillingService.RequestPurchase;
 import com.topface.topface.billing.BillingService.RestoreTransactions;
 import com.topface.topface.billing.Consts.PurchaseState;
 import com.topface.topface.billing.Consts.ResponseCode;
+
+import java.lang.reflect.Method;
 
 public abstract class PurchaseObserver {
     // Data
@@ -24,31 +25,34 @@ public abstract class PurchaseObserver {
     private Object[] mStartIntentSenderArgs = new Object[5];
 
     @SuppressWarnings("rawtypes")
-    private static final Class[] START_INTENT_SENDER_SIG = new Class[]{IntentSender.class,Intent.class,int.class,int.class,int.class};
+    private static final Class[] START_INTENT_SENDER_SIG = new Class[]{IntentSender.class, Intent.class, int.class, int.class, int.class};
 
-    public PurchaseObserver(Activity activity,Handler handler) {
+    public PurchaseObserver(Activity activity, Handler handler) {
         mActivity = activity;
         mHandler = handler;
         initCompatibilityLayer();
     }
 
     public abstract void onBillingSupported(boolean supported);
-    public abstract void onPurchaseStateChange(PurchaseState purchaseState,String data,String signature);
+
+    public abstract void onPurchaseStateChange(PurchaseState purchaseState, String data, String signature);
+
     //public abstract void onPurchaseStateChange(PurchaseState purchaseState,String itemId,int quantity,long purchaseTime,String developerPayload);
-    public abstract void onRequestPurchaseResponse(RequestPurchase request,ResponseCode responseCode);
-    public abstract void onRestoreTransactionsResponse(RestoreTransactions request,ResponseCode responseCode);
+    public abstract void onRequestPurchaseResponse(RequestPurchase request, ResponseCode responseCode);
+
+    public abstract void onRestoreTransactionsResponse(RestoreTransactions request, ResponseCode responseCode);
 
     private void initCompatibilityLayer() {
         try {
             mStartIntentSender = mActivity.getClass().getMethod("startIntentSender", START_INTENT_SENDER_SIG);
-        } catch(SecurityException e) {
+        } catch (SecurityException e) {
             mStartIntentSender = null;
-        } catch(NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             mStartIntentSender = null;
         }
     }
 
-    void startBuyPageActivity(PendingIntent pendingIntent,Intent intent) {
+    void startBuyPageActivity(PendingIntent pendingIntent, Intent intent) {
         if (mStartIntentSender != null) {
             try {
                 mStartIntentSenderArgs[0] = pendingIntent.getIntentSender();
@@ -57,19 +61,19 @@ public abstract class PurchaseObserver {
                 mStartIntentSenderArgs[3] = Integer.valueOf(0);
                 mStartIntentSenderArgs[4] = Integer.valueOf(0);
                 mStartIntentSender.invoke(mActivity, mStartIntentSenderArgs);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.e(TAG, "error starting activity", e);
             }
         } else {
             try {
                 pendingIntent.send(mActivity, 0 /* code */, intent);
-            } catch(CanceledException e) {
+            } catch (CanceledException e) {
                 Log.e(TAG, "error starting activity", e);
             }
         }
     }
 
-    void postPurchaseStateChange(final PurchaseState purchaseState,final String data,final String signature) {
+    void postPurchaseStateChange(final PurchaseState purchaseState, final String data, final String signature) {
         mHandler.post(new Runnable() {
             public void run() {
                 onPurchaseStateChange(purchaseState, data, signature);

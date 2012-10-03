@@ -1,8 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import com.topface.topface.R;
-import com.topface.topface.ui.views.ImageSwitcher;
-
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
@@ -11,84 +8,87 @@ import android.util.Log;
 import android.view.*;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
+import com.topface.topface.R;
+import com.topface.topface.ui.views.ImageSwitcher;
 
 public class FragmentSwitchController extends ViewGroup {
-    
-	private int mScrollX;
-	private int mOpenDX;
-	private int mClosedDX;
-	private int mFullOpenDX;
-	private int mWidth;
-	private int mAnimation;
-	private int mCurrentFragmentId;
-	private Scroller mScroller;
-	private FragmentManager mFragmentManager;
-	private FragmentSwitchListener mFragmentSwitchListener;
-	private boolean mAutoScrolling = false;
+
+    private int mScrollX;
+    private int mOpenDX;
+    private int mClosedDX;
+    private int mFullOpenDX;
+    private int mWidth;
+    private int mAnimation;
+    private int mCurrentFragmentId;
+    private Scroller mScroller;
+    private FragmentManager mFragmentManager;
+    private FragmentSwitchListener mFragmentSwitchListener;
+    private boolean mAutoScrolling = false;
     private static final int EXPANDING_PERCENT = 30;
-	
+
     public static final int CLOSED = 0;
     public static final int EXPAND = 1;
     public static final int EXPAND_FULL = 2;
     public static final int COLLAPSE = 3;
     public static final int COLLAPSE_FULL = 4;
 
-	private final Interpolator mPrixingInterpolator = new Interpolator() {
-		public float getInterpolation(float t) {			
-			return (t-1)*(t-1)*(t-1)*(t-1)*(t-1) + 1.0f;
-		}
-	};
-	
-	/*
-     *   interface FragmentSwitchListener
-     */
+    private final Interpolator mPrixingInterpolator = new Interpolator() {
+        public float getInterpolation(float t) {
+            return (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) + 1.0f;
+        }
+    };
+
+    /*
+    *   interface FragmentSwitchListener
+    */
     public interface FragmentSwitchListener {
         public void afterClosing();
+
         public void beforeExpanding();
     }
-    
+
     public FragmentSwitchController(Context context) {
         this(context, null);
     }
-	
-	public FragmentSwitchController(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		mCurrentFragmentId = BaseFragment.F_PROFILE;
-		mScroller = new Scroller(context, mPrixingInterpolator);
-		final ViewConfiguration configuration = ViewConfiguration.get(context);
-		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
-		mMinimumVelocity = 10 * configuration.getScaledMinimumFlingVelocity();
-		mVelocitySlop = configuration.getScaledMinimumFlingVelocity();
-		mTouchSlop = ViewConfiguration.getTouchSlop();
-		mAnimation = COLLAPSE;
-	}
-	
+
+    public FragmentSwitchController(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        mCurrentFragmentId = BaseFragment.F_PROFILE;
+        mScroller = new Scroller(context, mPrixingInterpolator);
+        final ViewConfiguration configuration = ViewConfiguration.get(context);
+        mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
+        mMinimumVelocity = 10 * configuration.getScaledMinimumFlingVelocity();
+        mVelocitySlop = configuration.getScaledMinimumFlingVelocity();
+        mTouchSlop = ViewConfiguration.getTouchSlop();
+        mAnimation = COLLAPSE;
+    }
+
     public void setFragmentManager(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
     }
-    
+
     public void setFragmentSwitchListener(FragmentSwitchListener fragmentSwitchListener) {
         mFragmentSwitchListener = fragmentSwitchListener;
     }
-    
+
     public int getAnimationState() {
         return mAnimation;
     }
-    
+
     public int getCurrentFragmentId() {
         return mCurrentFragmentId;
     }
-    
+
     public void showFragmentWithAnimation(int fragmentId) {
         mCurrentFragmentId = fragmentId;
         snapToScreen(EXPAND_FULL);
     }
-    
+
     public void showFragment(int fragmentId) {
         mCurrentFragmentId = fragmentId;
         switchFragment();
     }
-	
+
     private void switchFragment() {
         BaseFragment fragment;
         switch (mCurrentFragmentId) {
@@ -112,34 +112,34 @@ public class FragmentSwitchController extends ViewGroup {
                 break;
             case BaseFragment.F_SETTINGS:
                 fragment = new SettingsFragment();
-                break; 
+                break;
             default:
                 fragment = new ProfileFragment();
                 break;
         }
-        mFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();        
+        mFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		 // shadow
-		getChildAt(0).measure(getChildAt(0).getMeasuredWidth(), heightMeasureSpec);
-		// fragments
-		getChildAt(1).measure(widthMeasureSpec, heightMeasureSpec); 
-	}
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        // shadow
+        getChildAt(0).measure(getChildAt(0).getMeasuredWidth(), heightMeasureSpec);
+        // fragments
+        getChildAt(1).measure(widthMeasureSpec, heightMeasureSpec);
+    }
 
-	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		getChildAt(0).layout(-getChildAt(0).getMeasuredWidth(), 0, 0, getChildAt(0).getMeasuredHeight());
-		getChildAt(1).layout(0, 0, getChildAt(1).getMeasuredWidth(), getChildAt(1).getMeasuredHeight());
-		
-		mWidth = getChildAt(1).getWidth();
-		mClosedDX = mWidth / 100 * EXPANDING_PERCENT;
-		mOpenDX = mWidth - mClosedDX;
-		mFullOpenDX = mWidth - mOpenDX;
-	}
-	
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        getChildAt(0).layout(-getChildAt(0).getMeasuredWidth(), 0, 0, getChildAt(0).getMeasuredHeight());
+        getChildAt(1).layout(0, 0, getChildAt(1).getMeasuredWidth(), getChildAt(1).getMeasuredHeight());
+
+        mWidth = getChildAt(1).getWidth();
+        mClosedDX = mWidth / 100 * EXPANDING_PERCENT;
+        mOpenDX = mWidth - mClosedDX;
+        mFullOpenDX = mWidth - mOpenDX;
+    }
+
     private void snapToScreen(int typeAnimation) {
         mAnimation = typeAnimation;
         setScrollingCacheEnabled(true);
@@ -164,19 +164,19 @@ public class FragmentSwitchController extends ViewGroup {
         invalidate();
     }
 
-	@Override
-	public void computeScroll() {
-		mScrollX = mScroller.getCurrX();
-		if (!mScroller.isFinished()) {
-			if (mScroller.computeScrollOffset()) {
-				scrollTo(mScrollX, getScrollY());				
-				return;
-			}
-		}
-		endScrollAnimation();
-	}
-	
-    public void endScrollAnimation() {      
+    @Override
+    public void computeScroll() {
+        mScrollX = mScroller.getCurrX();
+        if (!mScroller.isFinished()) {
+            if (mScroller.computeScrollOffset()) {
+                scrollTo(mScrollX, getScrollY());
+                return;
+            }
+        }
+        endScrollAnimation();
+    }
+
+    public void endScrollAnimation() {
         if (mAutoScrolling) {
             mScroller.abortAnimation();
             int oldX = getScrollX();
@@ -184,301 +184,301 @@ public class FragmentSwitchController extends ViewGroup {
             if (oldX != x) {
                 scrollTo(x, 0);
             }
-        
-            mAutoScrolling = false;         
+
+            mAutoScrolling = false;
             if (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL) {
                 mFragmentSwitchListener.afterClosing();
             }
             if (mAnimation == EXPAND_FULL) {
                 fullExpanding();
             }
-        }               
+        }
         setScrollingCacheEnabled(false);
     }
-	
-   @Override
+
+    @Override
     public void scrollTo(int x, int y) {
-        super.scrollTo(x, y);   
+        super.scrollTo(x, y);
         invalidate();
     }
 
-	public void setScrollingCacheEnabled(boolean enabled) {
-		getChildAt(0).setDrawingCacheEnabled(enabled);
-		getChildAt(1).setDrawingCacheEnabled(enabled);
-	}
-	
-	private void fullExpanding() {
-	    switchFragment();
-	    snapToScreen(COLLAPSE_FULL);
-	}
-	
-   private int getLeftBound() {
+    public void setScrollingCacheEnabled(boolean enabled) {
+        getChildAt(0).setDrawingCacheEnabled(enabled);
+        getChildAt(1).setDrawingCacheEnabled(enabled);
+    }
+
+    private void fullExpanding() {
+        switchFragment();
+        snapToScreen(COLLAPSE_FULL);
+    }
+
+    private int getLeftBound() {
         return 0;
     }
-    
+
     private int getRightBound() {
         return mOpenDX;
     }
 
-	public void openMenu() {
-		snapToScreen(EXPAND);
-		mFragmentSwitchListener.beforeExpanding();
-	}
+    public void openMenu() {
+        snapToScreen(EXPAND);
+        mFragmentSwitchListener.beforeExpanding();
+    }
 
-	public void closeMenu() {
-		snapToScreen(COLLAPSE);
-	}	
-	
-	// sliding part
-	float mLastMotionX;
-	float mLastMotionY;
-	float mTouchSlop;
-	boolean mIsDragging = false;
-	private VelocityTracker mVelocityTracker;
-	private float mMaximumVelocity;
-	private int mMinimumVelocity;
-	private float mVelocitySlop;
-	
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent event) {
-		if (mAutoScrolling) {
-			return false;
-		}
-		
-		final int action = event.getAction();
-		final float x = event.getX();
-		final float y = event.getY();		
+    public void closeMenu() {
+        snapToScreen(COLLAPSE);
+    }
 
-		if (mVelocityTracker != null) {
-			mVelocityTracker.recycle();
-			mVelocityTracker = null;
-		}		
-				
-		if (!inBezierThreshold(x) && (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL)) {
-			return false;			
-		}
-		
-		switch (action) {
-		case MotionEvent.ACTION_DOWN:
-			mLastMotionX = x;
-			mLastMotionY = y;
-			break;
-		case MotionEvent.ACTION_MOVE:			
-			if (mAnimation == EXPAND) {				
-				startDragging(x);
-				break;
-			}
-			
-			float dx = x - mLastMotionX;
-			float xDiff = Math.abs(dx);
-			float dy = y - mLastMotionY;
-			float yDiff = Math.abs(dy);
-			
-			if (canScroll(getChildAt(1), false, (int) dx, (int) x, (int) y)) {
-				return false;				
-			}
-			
-			if(xDiff > mTouchSlop && xDiff > yDiff) {
-				Log.d("OLOLO","SLOP");				
-				startDragging(x);
-				if (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL) {
-					mFragmentSwitchListener.beforeExpanding();
-				}
-			} else {
-				stopDragging(x);
-			}
-			break;
-		case MotionEvent.ACTION_CANCEL:
-			stopDragging(x);
-			break;
-		case MotionEvent.ACTION_UP:
-			if (mAnimation == EXPAND) { 
-				completeDragging(0);
-				return true;
-			}
-			stopDragging(x);
-			break;
-		}
-		
-		Log.d("OLOLO",mIsDragging ? "DR true":"DR false");
-		return mIsDragging;
-	}
+    // sliding part
+    float mLastMotionX;
+    float mLastMotionY;
+    float mTouchSlop;
+    boolean mIsDragging = false;
+    private VelocityTracker mVelocityTracker;
+    private float mMaximumVelocity;
+    private int mMinimumVelocity;
+    private float mVelocitySlop;
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		
-		if (mVelocityTracker == null) {
-			mVelocityTracker = VelocityTracker.obtain();
-		}
-		
-		if (!mIsDragging) {
-			return false;
-		} else {
-			mVelocityTracker.addMovement(event);
-		}
-		
-		int action = event.getAction();
-		float x = event.getX();
-		
-		switch (action) {
-		case MotionEvent.ACTION_DOWN:
-			mLastMotionX = x;
-			mVelocityTracker.addMovement(event);
-			break;
-		case MotionEvent.ACTION_MOVE:
-			if (mIsDragging) {		
-				float dx = mLastMotionX - x;
-				mLastMotionX = x;
-				
-				final float oldXScroll = getScrollX();
-				float newXScroll = oldXScroll + dx;
-				
-				if (-newXScroll < getLeftBound()) {
-					newXScroll = -getLeftBound();
-				} else if(-newXScroll > getRightBound()) {
-					newXScroll = -getRightBound();
-				}				
-				
-				scrollTo((int)newXScroll, getScrollY());
-			}
-			break;
-		case MotionEvent.ACTION_UP:
-			final VelocityTracker velocityTracker = mVelocityTracker; 
-			velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);			
-			int initialVelocity = (int) velocityTracker.getXVelocity();			
-			completeDragging(initialVelocity);
-			break;
-		case MotionEvent.ACTION_CANCEL:
-			stopDragging(x);
-			break;		
-		}
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (mAutoScrolling) {
+            return false;
+        }
 
-		return true;
-	}
-	
-	private void startDragging(float x) {
-		mIsDragging = true;		
-		mLastMotionX = x;
-		setScrollingCacheEnabled(true);
-	}
+        final int action = event.getAction();
+        final float x = event.getX();
+        final float y = event.getY();
 
-	private void stopDragging(float x) {
-		mIsDragging = false;
-		setScrollingCacheEnabled(false);
-	}	
+        if (mVelocityTracker != null) {
+            mVelocityTracker.recycle();
+            mVelocityTracker = null;
+        }
 
-	private int mScrollingVelocityThreshold = 2000;	
-	private float mScrollingDistanceThreshold;
+        if (!inBezierThreshold(x) && (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL)) {
+            return false;
+        }
 
-	
-	private void completeDragging(int velocity) {
-		mIsDragging = false;
-		mAutoScrolling = true;
-		int dx = 0;
-		int duration = 0;		
-		
-		if(Math.abs(velocity) < mVelocitySlop) 
-			velocity = 0;
-		
-		if(velocity > 0) {			
-			// right - expect EXPAND
-			dx = -getRightBound() - getScrollX();
-			
-			if (velocity >= mScrollingVelocityThreshold) {
-				//EXPAND because user slides insanely
-				mAnimation = EXPAND;
-				duration = (int) Math.abs(1000 * dx / mScrollingVelocityThreshold);
-			} else {
-				if (velocity < mMinimumVelocity) {
-					velocity = mMinimumVelocity;
-				}
-				//EXPAND with normal velocity, but check "distance threshold"
-				if (-getScrollX() - getLeftBound() > mScrollingDistanceThreshold) {
-					mAnimation = EXPAND;
-				} else {
-					mAnimation = COLLAPSE;
-					dx = -getScrollX() - getLeftBound();
-				}
-				duration = (int) Math.abs(1000*dx/velocity);
-			}
-			mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
-		} else if (velocity < 0){
-			// left - expect COLLAPSE
-			dx = -getScrollX() - getLeftBound();
-			
-			if (-velocity >= mScrollingVelocityThreshold) {
-				duration = (int) Math.abs(1000*dx/mScrollingVelocityThreshold);
-			} else {
-				if (-velocity < mMinimumVelocity) {
-					velocity = mMinimumVelocity;
-				}
-				duration = (int) Math.abs(1000*dx/velocity);
-			}
-			
-			mAnimation = COLLAPSE;		
-			mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
-		} else {			
-			if (-getScrollX() > mScrollingDistanceThreshold) {
-				if (mAnimation == EXPAND) {
-					mAnimation = COLLAPSE;
-					dx = -getScrollX() - getLeftBound();
-				} else {
-					mAnimation = EXPAND;
-					dx = -getRightBound() - getScrollX();
-				}				
-			} else {
-				mAnimation = COLLAPSE;
-				dx = -getScrollX() - getLeftBound();
-			}
-						
-			duration = (int) Math.abs(1000*dx/mMinimumVelocity);
-			
-			mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
-		}
-		mScroller.computeScrollOffset();
-		invalidate();		
-	}
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                mLastMotionX = x;
+                mLastMotionY = y;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (mAnimation == EXPAND) {
+                    startDragging(x);
+                    break;
+                }
 
-	protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {				
-		if (v instanceof ViewGroup) {
-			final ViewGroup group = (ViewGroup) v;
-			if (group.isShown()) {
-				final int scrollX = v.getScrollX();
-				final int scrollY = v.getScrollY();
-				final int count = group.getChildCount();
-				for (int i = count - 1; i >= 0; i--) {
-					final View child = group.getChildAt(i);
-					if (x + scrollX >= child.getLeft()
-							&& x + scrollX < child.getRight()
-							&& y + scrollY >= child.getTop()
-							&& y + scrollY < child.getBottom()
-							&& canScroll(child, true, dx, x + scrollX - child.getLeft(), y + scrollY
-									- child.getTop())) {
-						return true;
-					}
-				}
-			}
-		}
+                float dx = x - mLastMotionX;
+                float xDiff = Math.abs(dx);
+                float dy = y - mLastMotionY;
+                float yDiff = Math.abs(dy);
 
-		boolean result = false;		
-		
-		//for API versions < 14
-		if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
-			result = ((ImageSwitcher)v).canScrollHorizontally(-dx);
-		//for API versions >= 14 (ICS)
-		} else {
-			result = ViewCompat.canScrollHorizontally(v, -dx);
-		}
-		
-		return checkV && result;
-	}
+                if (canScroll(getChildAt(1), false, (int) dx, (int) x, (int) y)) {
+                    return false;
+                }
 
-	protected boolean inBezierThreshold(float x) {
-		if (x < mWidth/5) {
-			return true;
-		}
-		return false;
-	}	
+                if (xDiff > mTouchSlop && xDiff > yDiff) {
+                    Log.d("OLOLO", "SLOP");
+                    startDragging(x);
+                    if (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL) {
+                        mFragmentSwitchListener.beforeExpanding();
+                    }
+                } else {
+                    stopDragging(x);
+                }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                stopDragging(x);
+                break;
+            case MotionEvent.ACTION_UP:
+                if (mAnimation == EXPAND) {
+                    completeDragging(0);
+                    return true;
+                }
+                stopDragging(x);
+                break;
+        }
+
+        Log.d("OLOLO", mIsDragging ? "DR true" : "DR false");
+        return mIsDragging;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        if (mVelocityTracker == null) {
+            mVelocityTracker = VelocityTracker.obtain();
+        }
+
+        if (!mIsDragging) {
+            return false;
+        } else {
+            mVelocityTracker.addMovement(event);
+        }
+
+        int action = event.getAction();
+        float x = event.getX();
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                mLastMotionX = x;
+                mVelocityTracker.addMovement(event);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (mIsDragging) {
+                    float dx = mLastMotionX - x;
+                    mLastMotionX = x;
+
+                    final float oldXScroll = getScrollX();
+                    float newXScroll = oldXScroll + dx;
+
+                    if (-newXScroll < getLeftBound()) {
+                        newXScroll = -getLeftBound();
+                    } else if (-newXScroll > getRightBound()) {
+                        newXScroll = -getRightBound();
+                    }
+
+                    scrollTo((int) newXScroll, getScrollY());
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                final VelocityTracker velocityTracker = mVelocityTracker;
+                velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
+                int initialVelocity = (int) velocityTracker.getXVelocity();
+                completeDragging(initialVelocity);
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                stopDragging(x);
+                break;
+        }
+
+        return true;
+    }
+
+    private void startDragging(float x) {
+        mIsDragging = true;
+        mLastMotionX = x;
+        setScrollingCacheEnabled(true);
+    }
+
+    private void stopDragging(float x) {
+        mIsDragging = false;
+        setScrollingCacheEnabled(false);
+    }
+
+    private int mScrollingVelocityThreshold = 2000;
+    private float mScrollingDistanceThreshold;
+
+
+    private void completeDragging(int velocity) {
+        mIsDragging = false;
+        mAutoScrolling = true;
+        int dx = 0;
+        int duration = 0;
+
+        if (Math.abs(velocity) < mVelocitySlop)
+            velocity = 0;
+
+        if (velocity > 0) {
+            // right - expect EXPAND
+            dx = -getRightBound() - getScrollX();
+
+            if (velocity >= mScrollingVelocityThreshold) {
+                //EXPAND because user slides insanely
+                mAnimation = EXPAND;
+                duration = (int) Math.abs(1000 * dx / mScrollingVelocityThreshold);
+            } else {
+                if (velocity < mMinimumVelocity) {
+                    velocity = mMinimumVelocity;
+                }
+                //EXPAND with normal velocity, but check "distance threshold"
+                if (-getScrollX() - getLeftBound() > mScrollingDistanceThreshold) {
+                    mAnimation = EXPAND;
+                } else {
+                    mAnimation = COLLAPSE;
+                    dx = -getScrollX() - getLeftBound();
+                }
+                duration = (int) Math.abs(1000 * dx / velocity);
+            }
+            mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
+        } else if (velocity < 0) {
+            // left - expect COLLAPSE
+            dx = -getScrollX() - getLeftBound();
+
+            if (-velocity >= mScrollingVelocityThreshold) {
+                duration = (int) Math.abs(1000 * dx / mScrollingVelocityThreshold);
+            } else {
+                if (-velocity < mMinimumVelocity) {
+                    velocity = mMinimumVelocity;
+                }
+                duration = (int) Math.abs(1000 * dx / velocity);
+            }
+
+            mAnimation = COLLAPSE;
+            mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
+        } else {
+            if (-getScrollX() > mScrollingDistanceThreshold) {
+                if (mAnimation == EXPAND) {
+                    mAnimation = COLLAPSE;
+                    dx = -getScrollX() - getLeftBound();
+                } else {
+                    mAnimation = EXPAND;
+                    dx = -getRightBound() - getScrollX();
+                }
+            } else {
+                mAnimation = COLLAPSE;
+                dx = -getScrollX() - getLeftBound();
+            }
+
+            duration = (int) Math.abs(1000 * dx / mMinimumVelocity);
+
+            mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
+        }
+        mScroller.computeScrollOffset();
+        invalidate();
+    }
+
+    protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
+        if (v instanceof ViewGroup) {
+            final ViewGroup group = (ViewGroup) v;
+            if (group.isShown()) {
+                final int scrollX = v.getScrollX();
+                final int scrollY = v.getScrollY();
+                final int count = group.getChildCount();
+                for (int i = count - 1; i >= 0; i--) {
+                    final View child = group.getChildAt(i);
+                    if (x + scrollX >= child.getLeft()
+                            && x + scrollX < child.getRight()
+                            && y + scrollY >= child.getTop()
+                            && y + scrollY < child.getBottom()
+                            && canScroll(child, true, dx, x + scrollX - child.getLeft(), y + scrollY
+                            - child.getTop())) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        boolean result = false;
+
+        //for API versions < 14
+        if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
+            result = ((ImageSwitcher) v).canScrollHorizontally(-dx);
+            //for API versions >= 14 (ICS)
+        } else {
+            result = ViewCompat.canScrollHorizontally(v, -dx);
+        }
+
+        return checkV && result;
+    }
+
+    protected boolean inBezierThreshold(float x) {
+        if (x < mWidth / 5) {
+            return true;
+        }
+        return false;
+    }
 
 
 }

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 /* Cache Profile */
-public class CacheProfile  {
+public class CacheProfile {
     // Data
     public static int uid;             // id пользователя в топфейсе
     public static String first_name;   // имя пользователя
@@ -34,14 +34,14 @@ public class CacheProfile  {
     public static int dating_city_id; // идентификатор города для поиска пользователей
     public static String dating_city_name; // наименование пользователя в русской локали
     public static String dating_city_full; // полное наименование города
-    
+
     public static int mAvatarId;  // id главной фотографии пользователя
     public static SparseArray<HashMap<String, String>> photoLinks; // альбом пользователя
-    
+
     public static LinkedList<FormItem> forms;
     public static String status; // статус пользователя
     public static boolean isNewbie; // поле новичка
-	public static int background_id;
+    public static int background_id;
 
     public static boolean init(Context context) {
         try {
@@ -52,23 +52,23 @@ public class CacheProfile  {
             //request.geo    = CacheProfile.filter_geo;
             //request.online = CacheProfile.filter_online;
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("CacheProfile", "init exception:" + e);
             return false;
         }
         return true;
     }
-    
+
     public static String getAvatarLink() {
         if (mAvatarId == -1) {
             return "";
         }
-        String result = photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_64); 
-        if(result == null) {
+        String result = photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_64);
+        if (result == null) {
             return photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_ORIGIN);
         }
         return result;
-    }  
+    }
 
     public static void setData(Profile profile) {
         updateAvatars(profile);
@@ -114,29 +114,29 @@ public class CacheProfile  {
         profile.first_name = first_name;
         profile.age = age;
         profile.sex = sex;
-        
+
         profile.money = money;
         profile.power = power;
-        
+
         profile.unread_rates = unread_rates;
         profile.unread_likes = unread_likes;
         profile.unread_messages = unread_messages;
         profile.unread_mutual = unread_mutual;
         profile.average_rate = average_rate;
-        
+
         profile.city_id = city_id;
         profile.city_name = city_name;
         profile.city_full = city_full;
-        
+
         profile.dating_sex = dating_sex;
         profile.dating_age_start = dating_age_start;
         profile.dating_age_end = dating_age_end;
         profile.dating_city_id = dating_city_id;
         profile.dating_city_name = dating_city_name;
         profile.dating_city_full = dating_city_full;
-        
+
         profile.forms = forms;
-        
+
         profile.photoLinks = photoLinks;
         profile.status = status;
         profile.mAvatarId = mAvatarId;
@@ -149,29 +149,29 @@ public class CacheProfile  {
         first_name = profile.first_name;
         age = profile.age;
         sex = profile.sex;
-        
+
         money = profile.money;
         power = profile.power;
-        
+
         unread_rates = profile.unread_rates;
         unread_likes = profile.unread_likes;
         unread_messages = profile.unread_messages;
         unread_mutual = profile.unread_mutual;
         average_rate = profile.average_rate;
-        
+
         city_id = profile.city_id;
         city_name = profile.city_name;
         city_full = profile.city_full;
-        
+
         dating_sex = profile.dating_sex;
         dating_age_start = profile.dating_age_start;
         dating_age_end = profile.dating_age_end;
         dating_city_id = profile.dating_city_id;
         dating_city_name = profile.dating_city_name;
         dating_city_full = profile.dating_city_full;
-        
+
         forms = profile.forms;
-        
+
         photoLinks = profile.photoLinks;
         status = profile.status;
 //        isNewbie = profile.isNewbie;

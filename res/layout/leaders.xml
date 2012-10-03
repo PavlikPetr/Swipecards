@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/leadersBlock"
-              android:layout_width="fill_parent"
-              android:layout_height="81dp"
-              android:paddingTop="8dp"
-              android:paddingBottom="8dp"
-              android:background="@drawable/bg_leaders"
-              android:visibility="gone"
-              >
+                android:id="@+id/leadersBlock"
+                android:layout_width="fill_parent"
+                android:layout_height="81dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:background="@drawable/bg_leaders"
+                android:visibility="gone"
+        >
 
     <com.topface.topface.ui.blocks.HorizontalListView
-        android:id="@+id/leadersList"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_marginLeft="75dp"
-        />
+            android:id="@+id/leadersList"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_marginLeft="75dp"
+            />
 
     <Button
             android:id="@+id/leadersDateBtn"

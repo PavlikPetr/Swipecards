@@ -11,7 +11,7 @@
         android:paddingRight="12dp">
 
     <!-- аватар -->
-   <com.topface.topface.ui.views.RoundedImageView
+    <com.topface.topface.ui.views.RoundedImageView
             android:id="@+id/contactAvatar"
             topface:frame="dialog"
             android:layout_width="wrap_content"

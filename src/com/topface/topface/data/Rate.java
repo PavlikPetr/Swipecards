@@ -16,10 +16,10 @@ public class Rate extends AbstractData {
             int power = response.mJSONResult.optInt("power");
             Debug.log("POWER", "power: " + power);
             //if(power > 10000) power = 10000;
-            doRate.power = (int)(power * 0.01);
+            doRate.power = (int) (power * 0.01);
             doRate.money = response.mJSONResult.optInt("money");
             doRate.average = response.mJSONResult.optInt("average");
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("DoRate.class", "Wrong response parsing: " + e);
         }
 

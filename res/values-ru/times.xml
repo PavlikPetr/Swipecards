@@ -7,10 +7,10 @@
     <string name="time_minute_0">%d минуту назад</string>
     <string name="time_minute_1">%d минуты назад</string>
     <string name="time_minutes">%d минут назад</string>
-    
+
     <string name="time_yesterday">Вчера</string>
     <string name="time_today">Сегодня</string>
-    
+
     <string name="time_monday">Пнд</string>
     <string name="time_monday_full">Понедельник</string>
     <string name="time_tuesday">Втр</string>
@@ -25,7 +25,7 @@
     <string name="time_saturday_full">Суббота</string>
     <string name="time_sunday">Вск</string>
     <string name="time_sunday_full">Воскресенье</string>
-    
+
     <string name="time_january">Янв</string>
     <string name="time_january_full">Январь</string>
     <string name="time_february">Фев</string>
@@ -36,7 +36,7 @@
     <string name="time_april_full">Апрель</string>
     <string name="time_may">Май</string>
     <string name="time_may_full">Май</string>
-    <string name="time_june">Июн </string>
+    <string name="time_june">Июн</string>
     <string name="time_june_full">Июнь</string>
     <string name="time_july">Июл</string>
     <string name="time_july_full">Июль</string>

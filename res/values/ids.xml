@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <item type="id" name="p2rGridView"/>
-  <item type="id" name="cntlStarsView"/>
-  <item type="id" name="btnDatingProfile"/>
-  <item type="id" name="btnDatingChat"/>
+    <item type="id" name="p2rGridView"/>
+    <item type="id" name="cntlStarsView"/>
+    <item type="id" name="btnDatingProfile"/>
+    <item type="id" name="btnDatingChat"/>
 </resources>

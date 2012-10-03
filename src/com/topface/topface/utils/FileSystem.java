@@ -1,14 +1,15 @@
 package com.topface.topface.utils;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.regex.Pattern;
-import com.topface.topface.Static;
 import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import com.topface.topface.Static;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.regex.Pattern;
 
 /* Класс для работы со стораджем, файлами, путями... */
 public class FileSystem {
@@ -71,14 +72,15 @@ public class FileSystem {
         return new File(fileName).exists();
     }
 
-    public static String[] getDirectoryItems(String directory,final String filter) {
+    public static String[] getDirectoryItems(String directory, final String filter) {
         File path = new File(directory);
         if (filter == null)
             return path.list();
-            String[] list = path.list(new FilenameFilter() {
+        String[] list = path.list(new FilenameFilter() {
             private Pattern pattern = Pattern.compile("[\\p{Print}]+" + "." + filter);
+
             @Override
-            public boolean accept(File dir,String name) {
+            public boolean accept(File dir, String name) {
                 return pattern.matcher(name).matches();
             }
         });
@@ -102,9 +104,9 @@ public class FileSystem {
             return true;
         return false;
     }
-    
-    public static String getFilePathFromURI(Activity activity,Uri contentUri) {
-        String[] proj = { MediaStore.Images.Media.DATA };
+
+    public static String getFilePathFromURI(Activity activity, Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = activity.managedQuery(contentUri, proj, null, null, null);
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();

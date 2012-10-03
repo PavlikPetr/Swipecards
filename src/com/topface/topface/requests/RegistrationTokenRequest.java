@@ -1,9 +1,9 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
+import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.Debug;
-import android.content.Context;
 
 public class RegistrationTokenRequest extends ApiRequest {
     // Data
@@ -21,7 +21,7 @@ public class RegistrationTokenRequest extends ApiRequest {
             root.put("service", service);
             root.put("ssid", ssid);
             root.put("data", new JSONObject().put("token", token));
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             Debug.log(this, "Wrong request compiling: " + e);
         }
 

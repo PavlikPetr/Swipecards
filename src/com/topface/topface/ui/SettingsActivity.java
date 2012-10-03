@@ -8,8 +8,8 @@ import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.TrackedPreferenceActivity;
 
 /**
- *  Базовая версия экрана настроек. Настройка уведомлений и возможность выключить предзагрузку.
- *  Есть возможность поменять тип предзагрузки, но она пока не поддерживается приложением, поэтому закоментирована
+ * Базовая версия экрана настроек. Настройка уведомлений и возможность выключить предзагрузку.
+ * Есть возможность поменять тип предзагрузки, но она пока не поддерживается приложением, поэтому закоментирована
  */
 public class SettingsActivity extends TrackedPreferenceActivity {
 
@@ -65,8 +65,7 @@ public class SettingsActivity extends TrackedPreferenceActivity {
         if (isEnabled) {
             mRingtone.setEnabled(true);
             mVibration.setEnabled(true);
-        }
-        else {
+        } else {
             mRingtone.setEnabled(false);
             mVibration.setEnabled(false);
         }

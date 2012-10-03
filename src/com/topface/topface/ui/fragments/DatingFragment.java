@@ -1,29 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import java.util.LinkedList;
-import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.NovicePower;
-import com.topface.topface.data.Search;
-import com.topface.topface.data.SkipRate;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.NovicePowerRequest;
-import com.topface.topface.requests.SearchRequest;
-import com.topface.topface.requests.SkipRateRequest;
-import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.edit.EditContainerActivity;
-import com.topface.topface.ui.profile.UserProfileActivity;
-import com.topface.topface.ui.views.ILocker;
-import com.topface.topface.ui.views.ImageSwitcher;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Newbie;
-import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.Utils;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -38,17 +14,26 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.data.NovicePower;
+import com.topface.topface.data.Search;
+import com.topface.topface.data.SkipRate;
+import com.topface.topface.requests.*;
+import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.edit.EditContainerActivity;
+import com.topface.topface.ui.profile.UserProfileActivity;
+import com.topface.topface.ui.views.ILocker;
+import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.utils.*;
 
 import java.util.LinkedList;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker, RateController.OnRateControllerListener {
-    
+
     private int mCurrentUserPos;
     private int mCurrentPhotoPrevPos;
     private View mResourcesControl;
@@ -77,7 +62,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private AlphaAnimation mAlphaAnimation;
     private SharedPreferences mPreferences;
     private RateController mRateController;
-    private View mNavigationHeader;    
+    private View mNavigationHeader;
     private Button mSettingsButton;
     private RelativeLayout mDatingLoveBtnLayout;
 
@@ -85,36 +70,36 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Drawable singleDelight;
     private Drawable doubleMutual;
     private Drawable doubleDelight;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-        
+
         View view = inflater.inflate(R.layout.ac_dating, null);
-        
+
         singleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
         singleDelight = getResources().getDrawable(R.drawable.dating_delight_selector);
-        
+
         doubleMutual = getResources().getDrawable(R.drawable.dating_dbl_mutual_selector);
         doubleDelight = getResources().getDrawable(R.drawable.dating_dbl_delight_selector);
-        
+
         // Data
         mUserSearchList = new LinkedList<Search>();
-        
+
         // Navigation Header
-        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
+        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_dating));
         mNavigationHeader = view.findViewById(R.id.loNavigationBar);
         mSettingsButton = (Button) view.findViewById(R.id.btnNavigationSettingsBar);
         mSettingsButton.setVisibility(View.VISIBLE);
         mSettingsButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
-				startActivityForResult(intent,EditContainerActivity.INTENT_EDIT_FILTER);
-			}
-		});
-        
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
+                startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
+            }
+        });
+
         // Rate Controller
         mRateController = new RateController(getActivity());
         mRateController.setOnRateControllerListener(this);
@@ -122,7 +107,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Rate buttons groups
         mFirstRateButtons = view.findViewById(R.id.ratingButtonsFirst);
         mSecondRateButtons = view.findViewById(R.id.ratingButtonsSecond);
-        
+
         // Position
         mCurrentUserPos = -1;
 
@@ -134,7 +119,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         // Newbie
         mNewbie = new Newbie(mPreferences);
-        mNewbieView = (ImageView)view.findViewById(R.id.ivNewbie);
+        mNewbieView = (ImageView) view.findViewById(R.id.ivNewbie);
 
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
@@ -143,58 +128,58 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Resources
         mResourcesControl = view.findViewById(R.id.loDatingResources);
         mResourcesControl.setOnClickListener(this);
-        mResourcesPower = (TextView)view.findViewById(R.id.tvResourcesPower);
+        mResourcesPower = (TextView) view.findViewById(R.id.tvResourcesPower);
         mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
         mResourcesPower.setText("" + CacheProfile.power + "%");
-        mResourcesMoney = (TextView)view.findViewById(R.id.tvResourcesMoney);
+        mResourcesMoney = (TextView) view.findViewById(R.id.tvResourcesMoney);
         mResourcesMoney.setText("" + CacheProfile.money);
 
         // Control Buttons
-        mDelightBtn = (Button)view.findViewById(R.id.btnDatingLove);
-        mDelightBtn.setOnClickListener(this);        
-        mMutualBtn = (Button)view.findViewById(R.id.btnDatingSympathy);
+        mDelightBtn = (Button) view.findViewById(R.id.btnDatingLove);
+        mDelightBtn.setOnClickListener(this);
+        mMutualBtn = (Button) view.findViewById(R.id.btnDatingSympathy);
         mMutualBtn.setOnClickListener(this);
-        mSkipBtn = (Button)view.findViewById(R.id.btnDatingSkip);
+        mSkipBtn = (Button) view.findViewById(R.id.btnDatingSkip);
         mSkipBtn.setOnClickListener(this);
-        mPrevBtn = (Button)view.findViewById(R.id.btnDatingPrev);
+        mPrevBtn = (Button) view.findViewById(R.id.btnDatingPrev);
         mPrevBtn.setOnClickListener(this);
-        mProfileBtn = (Button)view.findViewById(R.id.btnDatingProfile);
+        mProfileBtn = (Button) view.findViewById(R.id.btnDatingProfile);
         mProfileBtn.setOnClickListener(this);
-        mChatBtn = (Button)view.findViewById(R.id.btnDatingChat);
+        mChatBtn = (Button) view.findViewById(R.id.btnDatingChat);
         mChatBtn.setOnClickListener(this);
-        mSwitchNextBtn = (Button)view.findViewById(R.id.btnDatingSwitchNext);
+        mSwitchNextBtn = (Button) view.findViewById(R.id.btnDatingSwitchNext);
         mSwitchNextBtn.setOnClickListener(this);
-        mSwitchPrevBtn = (Button)view.findViewById(R.id.btnDatingSwitchPrev);
+        mSwitchPrevBtn = (Button) view.findViewById(R.id.btnDatingSwitchPrev);
         mSwitchPrevBtn.setOnClickListener(this);
         // Dating Love Price
         mDatingLoveBtnLayout = (RelativeLayout) view.findViewById(R.id.loDatingLove);
-        
+
         // User Info
-        mUserInfoName = ((TextView)view.findViewById(R.id.tvDatingUserName));
-        mUserInfoCity = ((TextView)view.findViewById(R.id.tvDatingUserCity));
-        mUserInfoStatus = ((TextView)view.findViewById(R.id.tvDatingUserStatus));
+        mUserInfoName = ((TextView) view.findViewById(R.id.tvDatingUserName));
+        mUserInfoCity = ((TextView) view.findViewById(R.id.tvDatingUserCity));
+        mUserInfoStatus = ((TextView) view.findViewById(R.id.tvDatingUserStatus));
 
         // Counter
-        mCounter = ((TextView)view.findViewById(R.id.tvDatingCounter));
+        mCounter = ((TextView) view.findViewById(R.id.tvDatingCounter));
 
         // Progress
-        mProgressBar = (ProgressBar)view.findViewById(R.id.prsDatingLoading);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.prsDatingLoading);
 
         // Dating Album
-        mImageSwitcher = ((ImageSwitcher)view.findViewById(R.id.glrDatingAlbum));
+        mImageSwitcher = ((ImageSwitcher) view.findViewById(R.id.glrDatingAlbum));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
-        
+
         updateData(false);
-        
+
         return view;
-    }    
-    
-    private void updateData(final boolean isAddition) { 
-    	lockControls();
+    }
+
+    private void updateData(final boolean isAddition) {
+        lockControls();
         if (!isAddition)
-        	onUpdateStart(isAddition);        
+            onUpdateStart(isAddition);
         Debug.log(this, "update");
         SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         SearchRequest searchRequest = new SearchRequest(getActivity());
@@ -223,8 +208,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 });
 
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
+            public void fail(int codeError, ApiResponse response) {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
@@ -232,116 +218,116 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         onUpdateFail(isAddition);
                         unlockControls();
                     }
-                });    
-                
+                });
+
             }
         }).exec();
     }
 
     @Override
-    public void onClick(View view) {        
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 startActivity(new Intent(getActivity(), BuyingActivity.class));
             }
-                break;
+            break;
             case R.id.btnDatingLove: {
-            	Search currentSearch = getCurrentUser(); 
-	            	if (currentSearch != null) {
-	                if (mCurrentUserPos > mUserSearchList.size() - 1) {
-	                    updateData(true);
-	                    return;
-	                } else {
-	                	mRateController.onRate(currentSearch.uid, 10);                	
-	                }
-	                currentSearch.rated = true;
-            	}
+                Search currentSearch = getCurrentUser();
+                if (currentSearch != null) {
+                    if (mCurrentUserPos > mUserSearchList.size() - 1) {
+                        updateData(true);
+                        return;
+                    } else {
+                        mRateController.onRate(currentSearch.uid, 10);
+                    }
+                    currentSearch.rated = true;
+                }
             }
-                break;
+            break;
             case R.id.btnDatingSympathy: {
-            	Search currentSearch = getCurrentUser();
-            	if (currentSearch != null) {
-	                if (mCurrentUserPos > mUserSearchList.size() - 1) {
-	                    updateData(true);
-	                    return;
-	                } else {
-	                	mRateController.onRate(currentSearch.uid, 9);                	
-	                }
-	                currentSearch.rated = true;
-            	}
+                Search currentSearch = getCurrentUser();
+                if (currentSearch != null) {
+                    if (mCurrentUserPos > mUserSearchList.size() - 1) {
+                        updateData(true);
+                        return;
+                    } else {
+                        mRateController.onRate(currentSearch.uid, 9);
+                    }
+                    currentSearch.rated = true;
+                }
             }
-                break;
+            break;
             case R.id.btnDatingSkip: {
                 skipUser();
                 Search currentSearch = getCurrentUser();
-                if(currentSearch != null) {
-                	currentSearch.skipped = true;
+                if (currentSearch != null) {
+                    currentSearch.skipped = true;
                 }
-                
+
             }
-        		break;
+            break;
             case R.id.btnDatingPrev: {
-            	prevUser();
+                prevUser();
             }
-            
-                break;
+
+            break;
             case R.id.btnDatingProfile: {
                 Intent intent = new Intent(getActivity(), UserProfileActivity.class);
                 intent.putExtra(UserProfileActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
                 intent.putExtra(UserProfileActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
                 startActivity(intent);
             }
-                break;
+            break;
             case R.id.btnDatingChat: {
                 Intent intent = new Intent(getActivity(), ChatActivity.class);
                 intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
-                intent.putExtra(ChatActivity.INTENT_USER_URL, mUserSearchList.get(mCurrentUserPos).getSmallLink());                
+                intent.putExtra(ChatActivity.INTENT_USER_URL, mUserSearchList.get(mCurrentUserPos).getSmallLink());
                 intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
                 intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserSearchList.get(mCurrentUserPos).sex);
                 intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserSearchList.get(mCurrentUserPos).age);
                 intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserSearchList.get(mCurrentUserPos).city_name);
                 startActivity(intent);
-            }            
-                break;
+            }
+            break;
             case R.id.btnDatingSwitchNext: {
-            	switchRateBtnsGroups();
+                switchRateBtnsGroups();
             }
-            	break;
+            break;
             case R.id.btnDatingSwitchPrev: {
-            	switchRateBtnsGroups();
+                switchRateBtnsGroups();
             }
-            	break;
+            break;
             default:
         }
     }
-    
-    private void showNextUser() {        	
+
+    private void showNextUser() {
         if (mCurrentUserPos < mUserSearchList.size() - 1) {
-            ++mCurrentUserPos;                        
+            ++mCurrentUserPos;
             fillUserInfo(getCurrentUser());
         }
         if (mCurrentUserPos == mUserSearchList.size() - 1 || mUserSearchList.size() - 6 <= mCurrentUserPos) {
-        	if(mCurrentUserPos < 0) {
-        		updateData(false);
-        	} else {
-        		updateData(true);
-        	}
+            if (mCurrentUserPos < 0) {
+                updateData(false);
+            } else {
+                updateData(true);
+            }
         }
 
         //showNewbie(); // NEWBIE
     }
 
     private void prevUser() {
-    	if (mCurrentUserPos > 0) {
-            --mCurrentUserPos;            
-            fillUserInfo(mUserSearchList.get(mCurrentUserPos));            
-        }        
-    	showNewbie(); // NEWBIE
+        if (mCurrentUserPos > 0) {
+            --mCurrentUserPos;
+            fillUserInfo(mUserSearchList.get(mCurrentUserPos));
+        }
+        showNewbie(); // NEWBIE
     }
-    
-    private void fillUserInfo(Search currUser) {    	
+
+    private void fillUserInfo(Search currUser) {
         // User Info
-    	lockControls();
+        lockControls();
         mUserInfoCity.setText(currUser.city_name);
         mUserInfoStatus.setText(currUser.status);
         mUserInfoName.setText(currUser.first_name + ", " + currUser.age);
@@ -349,59 +335,60 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.im_online), null, null, null);
         else
             mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.im_offline), null, null, null);
-        
+
         if (currUser.sex == Static.BOY) {
-        	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
-        			getResources().getDrawable(R.drawable.dating_man_selector), null, null);
+            mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    getResources().getDrawable(R.drawable.dating_man_selector), null, null);
         } else if (currUser.sex == Static.GIRL) {
-        	mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, 
-        			getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
+            mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
         }
-                
+
         // buttons drawables
         mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual : singleMutual, null, null);
-        mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleDelight : singleDelight, null, null);        
-        
+        mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleDelight : singleDelight, null, null);
+
         //photos
         mImageSwitcher.setData(currUser.photoLinks);
         mImageSwitcher.setCurrentItem(0, true);
         mCurrentPhotoPrevPos = 0;
-        setCounter(mCurrentPhotoPrevPos);        
+        setCounter(mCurrentPhotoPrevPos);
     }
-    
-    private void skipUser() {        	    	
-    	
-    	Search currentSearch = getCurrentUser();    	
-    	
-    	if (currentSearch != null && !currentSearch.skipped) { 
-	        SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
-	        registerRequest(skipRateRequest);
-	        skipRateRequest.userid = currentSearch.uid;
-	        skipRateRequest.callback(new ApiHandler() {
-	            @Override
-	            public void success(ApiResponse response) {
-	                SkipRate skipRate = SkipRate.parse(response);
-	                if (skipRate.completed) {
-		                CacheProfile.power = skipRate.power;
-		                CacheProfile.money = skipRate.money;
-		                updateUI(new Runnable() {
-		                    @Override
-		                    public void run() {
-		                        mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
-		                        mResourcesPower.setText(CacheProfile.power + "%");
-		                        mResourcesMoney.setText("" + CacheProfile.money);
-		                    }
-		                });
-	            	} else {
-	            		Toast.makeText(getActivity(), getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
-	            	}
-	            }
-	            @Override
-	            public void fail(int codeError,ApiResponse response) {
-	
-	            }
-	        }).exec();
-    	}    	
+
+    private void skipUser() {
+
+        Search currentSearch = getCurrentUser();
+
+        if (currentSearch != null && !currentSearch.skipped) {
+            SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
+            registerRequest(skipRateRequest);
+            skipRateRequest.userid = currentSearch.uid;
+            skipRateRequest.callback(new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    SkipRate skipRate = SkipRate.parse(response);
+                    if (skipRate.completed) {
+                        CacheProfile.power = skipRate.power;
+                        CacheProfile.money = skipRate.money;
+                        updateUI(new Runnable() {
+                            @Override
+                            public void run() {
+                                mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+                                mResourcesPower.setText(CacheProfile.power + "%");
+                                mResourcesMoney.setText("" + CacheProfile.money);
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getActivity(), getString(R.string.general_server_error), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+
+                }
+            }).exec();
+        }
         showNextUser();
     }
 
@@ -450,33 +437,33 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         editor.commit();
     }
-    
+
     public void setCounter(int position) {
-    	Search currentSearch = getCurrentUser();
-    	if (currentSearch != null) {
-    		mCounter.setText((position + 1) + "/" + currentSearch.avatars_big.length);
-    	} else {
-    		mCounter.setText("-/-");
-    	}
+        Search currentSearch = getCurrentUser();
+        if (currentSearch != null) {
+            mCounter.setText((position + 1) + "/" + currentSearch.avatars_big.length);
+        } else {
+            mCounter.setText("-/-");
+        }
     }
 
     public void switchRateBtnsGroups() {
-    	mFirstRateButtons.setVisibility(mFirstRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-    	mSecondRateButtons.setVisibility(mSecondRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+        mFirstRateButtons.setVisibility(mFirstRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+        mSecondRateButtons.setVisibility(mSecondRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
     }
-    
+
     private Search getCurrentUser() {
-    	try {
-    		return mUserSearchList.get(mCurrentUserPos);
-		} catch (Exception e) {
-			Debug.log(e.toString());
-			return null;
-		}
+        try {
+            return mUserSearchList.get(mCurrentUserPos);
+        } catch (Exception e) {
+            Debug.log(e.toString());
+            return null;
+        }
     }
-    
+
     @Override
     public void lockControls() {
-    	mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
         mUserInfoName.setVisibility(View.INVISIBLE);
         mUserInfoCity.setVisibility(View.INVISIBLE);
         mUserInfoStatus.setVisibility(View.INVISIBLE);
@@ -493,33 +480,33 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void unlockControls() {
-    	Search currentUser = getCurrentUser();
-    	
-    	mProgressBar.setVisibility(View.GONE);    	
+        Search currentUser = getCurrentUser();
+
+        mProgressBar.setVisibility(View.GONE);
         mUserInfoName.setVisibility(currentUser != null ? View.VISIBLE : View.INVISIBLE);
         mUserInfoCity.setVisibility(currentUser != null ? View.VISIBLE : View.INVISIBLE);
         mUserInfoStatus.setVisibility(View.VISIBLE);
-        
+
         boolean enabled = false;
-        if (!mUserSearchList.isEmpty() && mCurrentUserPos<mUserSearchList.size())
-        	enabled = !currentUser.rated;
-        mMutualBtn.setEnabled(enabled);        
+        if (!mUserSearchList.isEmpty() && mCurrentUserPos < mUserSearchList.size())
+            enabled = !currentUser.rated;
+        mMutualBtn.setEnabled(enabled);
         mDelightBtn.setEnabled(enabled);
-        
+
         mSkipBtn.setEnabled(true);
         mPrevBtn.setEnabled(mCurrentUserPos <= 0 ? false : true);
-        
-        enabled = (currentUser != null);         
+
+        enabled = (currentUser != null);
         mProfileBtn.setEnabled(enabled);
         mChatBtn.setEnabled(enabled);
-        
+
         mDatingLoveBtnLayout.setEnabled(true);
         mSwitchNextBtn.setEnabled(true);
         mSwitchPrevBtn.setEnabled(true);
     }
 
     @Override
-    public void showControls() {        
+    public void showControls() {
         mNavigationHeader.setVisibility(View.VISIBLE);
         mDatingGroup.setVisibility(View.VISIBLE);
         mIsHide = false;
@@ -537,57 +524,59 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         showNextUser();
     }
 
-	@Override
-	protected void onUpdateStart(boolean isPushUpdating) {
-		if (!isPushUpdating) {
-			mProgressBar.setVisibility(View.VISIBLE);
-		}
-	}
+    @Override
+    protected void onUpdateStart(boolean isPushUpdating) {
+        if (!isPushUpdating) {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
 
-	@Override
-	protected void onUpdateSuccess(boolean isPushUpdating) {
-		if (!isPushUpdating) {
-			mProgressBar.setVisibility(View.GONE);
-		}
-	}
+    @Override
+    protected void onUpdateSuccess(boolean isPushUpdating) {
+        if (!isPushUpdating) {
+            mProgressBar.setVisibility(View.GONE);
+        }
+    }
 
-	@Override
-	protected void onUpdateFail(boolean isPushUpdating) {
-		if (!isPushUpdating) {
-			mProgressBar.setVisibility(View.GONE);
-		}
-	}
+    @Override
+    protected void onUpdateFail(boolean isPushUpdating) {
+        if (!isPushUpdating) {
+            mProgressBar.setVisibility(View.GONE);
+        }
+    }
 
-	
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
-	    	lockControls();
-	    	updateData(false);
-	    } else {
-	    	super.onActivityResult(requestCode, resultCode, data);
-	    }
-	}
-	
-	private boolean mIsHide;	
-	private View.OnClickListener mOnClickListener = new View.OnClickListener() {        
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
+            lockControls();
+            updateData(false);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private boolean mIsHide;
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (mIsHide) {
-              showControls();
+                showControls();
             } else {
-              hideControls();
-            }            
+                hideControls();
+            }
         }
     };
-	
+
     private Handler mUnlockHandler = new Handler() {
-    	@Override
-    	public void handleMessage(android.os.Message msg) {
-    		unlockControls();
-    	};
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            unlockControls();
+        }
+
+        ;
     };
-    
+
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
@@ -595,26 +584,28 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 hideControls();
             } else if (position == 0 && mCurrentPhotoPrevPos > 0) {
                 showControls();
-            }            
+            }
             mCurrentPhotoPrevPos = position;
-            setCounter(mCurrentPhotoPrevPos);            
+            setCounter(mCurrentPhotoPrevPos);
         }
+
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
 
         }
+
         @Override
         public void onPageScrollStateChanged(int arg0) {
         }
     };
-    
+
     private View.OnClickListener mOnNewbieClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             mNewbieView.setVisibility(View.INVISIBLE);
             mResourcesPower.setBackgroundResource(R.anim.battery);
             mResourcesPower.setText("");
-            final AnimationDrawable mailAnimation = (AnimationDrawable)mResourcesPower.getBackground();
+            final AnimationDrawable mailAnimation = (AnimationDrawable) mResourcesPower.getBackground();
             mResourcesPower.post(new Runnable() {
                 public void run() {
                     if (mailAnimation != null)
@@ -627,7 +618,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 @Override
                 public void success(ApiResponse response) {
                     NovicePower novicePower = NovicePower.parse(response);
-                    CacheProfile.power = (int)(novicePower.power * 0.01);
+                    CacheProfile.power = (int) (novicePower.power * 0.01);
                     updateUI(new Runnable() {
                         @Override
                         public void run() {
@@ -635,11 +626,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         }
                     });
                 }
+
                 @Override
-                public void fail(int codeError,ApiResponse response) {
+                public void fail(int codeError, ApiResponse response) {
                 }
             }).exec();
         }
     };
-	
+
 }

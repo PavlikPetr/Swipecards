@@ -1,11 +1,11 @@
 package com.topface.topface.requests;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.topface.topface.Static;
-import com.topface.topface.utils.Debug;
 import android.content.Context;
 import android.os.Build;
+import com.topface.topface.Static;
+import com.topface.topface.utils.Debug;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class AuthRequest extends ApiRequest {
     // Data
@@ -28,7 +28,7 @@ public class AuthRequest extends ApiRequest {
             clientversion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
             clientdevice = Build.BRAND + " " + Build.MANUFACTURER;
             clientid = Build.ID;
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log(this, "Wrong request compiling: " + e);
         }
     }
@@ -40,7 +40,7 @@ public class AuthRequest extends ApiRequest {
             root.put("service", service);
             root.put("ssid", ssid);
             root.put("data", new JSONObject().put("sid", sid).put("token", token).put("platform", platform).put("locale", locale).put("clienttype", clienttype).put("clientversion", clientversion).put("clientdevice", clientdevice).put("clientid", clientid).put("sandbox", sandbox));
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             Debug.log(this, "Wrong request compiling: " + e);
         }
 

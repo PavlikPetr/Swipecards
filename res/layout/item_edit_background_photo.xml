@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:paddingBottom="15dp"
-    android:paddingTop="15dp" >
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
 
     <ImageView
-        android:id="@+id/ivBackgroundImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:scaleType="fitXY" />
-
-    <ImageView
-        android:id="@+id/ivBackgroundImageFrame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/edit_background_photo_frame" />
-
-    <RelativeLayout
-        android:id="@+id/loSelected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" >
-
-        <ImageView
-            android:id="@+id/ivCoverBackgroundImage"
+            android:id="@+id/ivBackgroundImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/edit_background_photo_cover" />
+            android:scaleType="fitXY"/>
 
-        <TextView
-            style="@style/NavigationHeader"
+    <ImageView
+            android:id="@+id/ivBackgroundImageFrame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"            
-            android:drawableLeft="@drawable/edit_background_photo_selected_icon"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"            
-            android:text="@string/edit_back_photo_selected"
-            android:textSize="12sp" 
-            android:gravity="center"
-            android:background="@drawable/edit_background_photo_button_selected"/>
+            android:layout_centerInParent="true"
+            android:src="@drawable/edit_background_photo_frame"/>
+
+    <RelativeLayout
+            android:id="@+id/loSelected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone">
+
+        <ImageView
+                android:id="@+id/ivCoverBackgroundImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/edit_background_photo_cover"/>
+
+        <TextView
+                style="@style/NavigationHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:drawableLeft="@drawable/edit_background_photo_selected_icon"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/edit_back_photo_selected"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:background="@drawable/edit_background_photo_button_selected"/>
     </RelativeLayout>
 
 </RelativeLayout>

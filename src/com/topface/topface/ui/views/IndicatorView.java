@@ -1,8 +1,5 @@
 package com.topface.topface.ui.views;
 
-import java.util.LinkedHashMap;
-import com.topface.topface.R;
-import com.topface.topface.utils.Debug;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +7,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
+import com.topface.topface.R;
+
+import java.util.LinkedHashMap;
 
 public class IndicatorView extends View {
     private int mCurrentId;
@@ -18,15 +18,15 @@ public class IndicatorView extends View {
     private Bitmap mIndicator;
     private Bitmap mDivider;
     private Paint mPaint;
-    
+
     private int mDividerY;
-    
+
     private static final int DEFAULT = -1;
-    
-    public IndicatorView(Context context ,AttributeSet attrs) {
-       this(context, attrs, 0);
+
+    public IndicatorView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
     }
-    
+
     public IndicatorView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
@@ -40,7 +40,7 @@ public class IndicatorView extends View {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), mIndicator.getHeight());
     }
 
@@ -54,7 +54,7 @@ public class IndicatorView extends View {
             canvas.drawBitmap(mIndicator, x, 0, mPaint);
         }
     }
-    
+
     public void setButtonMeasure(int id, int measure) {
         mMeasures.put(id, measure);
     }
@@ -65,13 +65,13 @@ public class IndicatorView extends View {
         int counter = 0;
         if (mMeasures.size() > 0) {
             for (Integer width : mMeasures.values()) {
-                int point = (width-mIndicator.getWidth())/2;
-                mPoints.put(counter++, sum+point);
+                int point = (width - mIndicator.getWidth()) / 2;
+                mPoints.put(counter++, sum + point);
                 sum += width;
             }
         }
     }
-    
+
     public void setIndicator(int id) {
         mCurrentId = id;
         invalidate();

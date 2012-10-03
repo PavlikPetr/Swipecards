@@ -25,7 +25,7 @@ import java.util.Calendar;
 
 public class Utils {
     private static PluralResources mPluralResources;
-    
+
     public static int unixtime() {
         return (int) (System.currentTimeMillis() / 1000L);
     }
@@ -44,15 +44,15 @@ public class Utils {
             return null;
         }
     }
-    
+
     public static Bitmap clippingBitmap(Bitmap bitmap) {
         if (bitmap == null || bitmap.getWidth() <= 0 || bitmap.getHeight() <= 0)
             return null;
 
         // Исходный размер загруженного изображения
-        int width  = bitmap.getWidth();
+        int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        
+
         // длинная фото или высокая
         Bitmap clippedBitmap = null;
         if (width >= height) {  // горизонтальная, вырезаем по центру
@@ -66,11 +66,11 @@ public class Utils {
     }
 
     public static Bitmap clipAndScaleBitmap(Bitmap rawBitmap, int dstWidth, int dstHeight) {
-        if (rawBitmap == null || rawBitmap.getWidth()<= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
+        if (rawBitmap == null || rawBitmap.getWidth() <= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
             return null;
 
         // Исходный размер загруженного изображения
-        int srcWidth  = rawBitmap.getWidth();
+        int srcWidth = rawBitmap.getWidth();
         int srcHeight = rawBitmap.getHeight();
 
         // буль, длинная фото или высокая
@@ -106,17 +106,17 @@ public class Utils {
     }
 
     public static Bitmap getRoundedCornerBitmapByMask(Bitmap bitmap, Bitmap mask) {
-        int width  = mask.getWidth();
+        int width = mask.getWidth();
         int height = mask.getHeight();
 
         Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
         Bitmap clippedBitmap = clipAndScaleBitmap(bitmap, width, height);
-        
-        if(clippedBitmap == null)
+
+        if (clippedBitmap == null)
             return null;
-        
+
         Canvas canvas = new Canvas(output);
-        
+
         Paint paint = new Paint();
         canvas.drawARGB(0, 0, 0, 0);
         canvas.drawBitmap(mask, 0, 0, paint);
@@ -126,121 +126,122 @@ public class Utils {
         return output;
     }
 
-    public static Bitmap getRoundedBitmap(Bitmap bitmap) { 
+    public static Bitmap getRoundedBitmap(Bitmap bitmap) {
         return getRoundedBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight());
     }
 
     public static Bitmap getRoundedBitmap(Bitmap bitmap, int dstWidth, int dstHeight) {
-        if(bitmap == null)
+        if (bitmap == null)
             return null;
-        
-        int width  = bitmap.getWidth();
+
+        int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        
-        if(dstWidth < dstHeight)
+
+        if (dstWidth < dstHeight)
             dstHeight = dstWidth;
         else
             dstWidth = dstHeight;
-          
-          Bitmap output = Bitmap.createBitmap(dstWidth, dstHeight, Config.ARGB_8888);
-          
-          Bitmap clippedBitmap = null;
-          if (width == dstWidth && height == dstHeight)
-              clippedBitmap = clippingBitmap(bitmap);
-          else
-              clippedBitmap = clipAndScaleBitmap(bitmap, dstWidth, dstWidth);
-              
-          
-          Canvas canvas = new Canvas(output);
 
-          Rect  rect  = new Rect(0, 0, dstWidth, dstWidth);
-          Paint paint = new Paint();
+        Bitmap output = Bitmap.createBitmap(dstWidth, dstHeight, Config.ARGB_8888);
+
+        Bitmap clippedBitmap = null;
+        if (width == dstWidth && height == dstHeight)
+            clippedBitmap = clippingBitmap(bitmap);
+        else
+            clippedBitmap = clipAndScaleBitmap(bitmap, dstWidth, dstWidth);
 
 
-          paint.setAntiAlias(true);
-          paint.setColor(0xff424242);
-          canvas.drawARGB(0, 0, 0, 0);
-          
-          canvas.drawCircle(dstWidth/2, dstWidth/2, dstWidth/2, paint);
+        Canvas canvas = new Canvas(output);
 
-          paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-          canvas.drawBitmap(clippedBitmap, rect, rect, paint);
-          
-          bitmap = null;
+        Rect rect = new Rect(0, 0, dstWidth, dstWidth);
+        Paint paint = new Paint();
 
-          return output;
+
+        paint.setAntiAlias(true);
+        paint.setColor(0xff424242);
+        canvas.drawARGB(0, 0, 0, 0);
+
+        canvas.drawCircle(dstWidth / 2, dstWidth / 2, dstWidth / 2, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+        canvas.drawBitmap(clippedBitmap, rect, rect, paint);
+
+        bitmap = null;
+
+        return output;
     }
 
-    public static final int RADIUS_OUT = 0 ;
-    public static final int RADIUS_IN  = 1 ;
-	public static Bitmap getScaleAndRoundBitmapOut(Bitmap bitmap, final int width, final int height, float radiusMult) {
+    public static final int RADIUS_OUT = 0;
+    public static final int RADIUS_IN = 1;
+
+    public static Bitmap getScaleAndRoundBitmapOut(Bitmap bitmap, final int width, final int height, float radiusMult) {
         return getScaleAndRoundBitmap(RADIUS_OUT, bitmap, width, height, radiusMult);
     }
 
-	public static Bitmap getScaleAndRoundBitmapIn(Bitmap bitmap, final int width, final int height, float radiusMult) {
-	    return getScaleAndRoundBitmap(RADIUS_IN, bitmap, width, height, radiusMult);
-	}
+    public static Bitmap getScaleAndRoundBitmapIn(Bitmap bitmap, final int width, final int height, float radiusMult) {
+        return getScaleAndRoundBitmap(RADIUS_IN, bitmap, width, height, radiusMult);
+    }
 
     private static Bitmap getScaleAndRoundBitmap(int type, Bitmap bitmap, final int width, final int height, float radiusMult) {
-        final int bitmapWidth  = bitmap.getWidth();
+        final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
-       
+
         int multWidth = 0;
-        if(type == RADIUS_OUT)
+        if (type == RADIUS_OUT)
             multWidth = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
         else
             multWidth = (int) (((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
-        
-        
+
+
         Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Config.ARGB_8888);
 
         Canvas canvas = new Canvas(output);
 
         final Rect src = new Rect(0, 0, bitmapWidth, bitmapHeight);
-        final Rect dst = new Rect((multWidth - bitmapWidth)/2, (multWidth - bitmapHeight)/2, (multWidth + bitmapWidth)/2, (multWidth - bitmapHeight)/2 + bitmapHeight);        
-        
+        final Rect dst = new Rect((multWidth - bitmapWidth) / 2, (multWidth - bitmapHeight) / 2, (multWidth + bitmapWidth) / 2, (multWidth - bitmapHeight) / 2 + bitmapHeight);
+
         Paint circlePaint = new Paint();
         circlePaint.setAntiAlias(true);
         circlePaint.setColor(Color.WHITE);
-        
+
         Paint canvasPaint = new Paint();
         canvasPaint.setAntiAlias(true);
         canvasPaint.setColor(0xff424242);
-        
+
         canvas.drawARGB(0, 0, 0, 0);
-        
+
         canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint);
         canvasPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(bitmap, src, dst, canvasPaint);
 
         Bitmap scaledBitmap = null;
-        
-        if(multWidth != width)
+
+        if (multWidth != width)
             scaledBitmap = Bitmap.createScaledBitmap(output, width, height, true);
         else
             scaledBitmap = output;
 
         bitmap = null;
         output = null;
-        
+
         return scaledBitmap;
     }
 
     public static String formatTime(Context context, long time) {
         String text = Static.EMPTY;
-        
-        long day  = 1000*60*60*24;
-        
+
+        long day = 1000 * 60 * 60 * 24;
+
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(time);
-                 
+
         if (time > Data.midnight)
             text = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
-        else if(time > Data.midnight - day * 5)
+        else if (time > Data.midnight - day * 5)
             text = formatDayOfWeek(context, cal.get(Calendar.DAY_OF_WEEK));
         else
             text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH));
-        
+
         return text;
     }
 
@@ -359,12 +360,12 @@ public class Utils {
         tv.setText(text);
     }
 
-    
+
     public static String formatHour(long hours) {
         return Utils.getQuantityString(R.plurals.time_hour, (int) hours, (int) hours);
     }
 
-    
+
     public static String formatMinute(long minutes) {
         return Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
     }
@@ -501,7 +502,7 @@ public class Utils {
         ).show();
     }
 
-    public static boolean isDebugMode(Application application){
+    public static boolean isDebugMode(Application application) {
         boolean debug = false;
         PackageInfo packageInfo = null;
         try {
@@ -516,22 +517,22 @@ public class Utils {
         }
         return debug;
     }
-    
+
     public float dpFromPx(int px) {
         return px * App.getContext().getResources().getDisplayMetrics().density;
     }
-    
+
     public float pxFromDp(int dx) {
         return dx / App.getContext().getResources().getDisplayMetrics().density;
     }
-    
-    public static float dpToPx(Context context, float dp){
+
+    public static float dpToPx(Context context, float dp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float px = dp * (metrics.densityDpi/160f);
+        float px = dp * (metrics.densityDpi / 160f);
         return px;
     }
 
-    public static float pxToDp(Context context, float px){
+    public static float pxToDp(Context context, float px) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         float dp = px / (metrics.densityDpi / 160f);
         return dp;

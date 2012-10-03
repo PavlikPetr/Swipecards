@@ -12,6 +12,7 @@ public class DefaultImageLoaderListener extends SimpleImageLoadingListener {
     public DefaultImageLoaderListener(ImageView imageView) {
         mImageView = imageView;
     }
+
     @Override
     public void onLoadingFailed(FailReason failReason) {
         super.onLoadingFailed(failReason);

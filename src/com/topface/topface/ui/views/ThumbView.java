@@ -1,6 +1,5 @@
 package com.topface.topface.ui.views;
 
-import com.topface.topface.Recycle;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import com.topface.topface.Recycle;
 
 public class ThumbView extends ImageView {
     // Data
@@ -20,8 +20,9 @@ public class ThumbView extends ImageView {
     public static Paint s_PaintState;
     public static Paint s_PaintLine;
     public static Paint s_PaintText;
+
     //---------------------------------------------------------------------------
-    public ThumbView(Context context,AttributeSet attrs) {
+    public ThumbView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         setBackgroundColor(Color.TRANSPARENT);
@@ -44,6 +45,7 @@ public class ThumbView extends ImageView {
             s_PaintText.setTextSize(16);
         }
     }
+
     //---------------------------------------------------------------------------
     @Override
     protected void onDraw(Canvas canvas) {
@@ -56,7 +58,7 @@ public class ThumbView extends ImageView {
 
         try {
             super.onDraw(canvas);
-        } catch(Exception e) {
+        } catch (Exception e) {
         }
 
         Rect lineRect = new Rect(0, height - 32, width, height);
@@ -70,15 +72,15 @@ public class ThumbView extends ImageView {
             // heart
             canvas.drawBitmap(Recycle.s_Heart, x, lineRect.top + y, s_PaintState);
             x = x * 2 + Recycle.s_Heart.getWidth();
-            canvas.drawText(mPercent + " %", x, (float)(lineRect.bottom - s_PaintText.getTextSize() / 1.5), s_PaintText);
+            canvas.drawText(mPercent + " %", x, (float) (lineRect.bottom - s_PaintText.getTextSize() / 1.5), s_PaintText);
 
             // likes
         } else {
-            float x = (float)(lineRect.right - Recycle.s_Online.getWidth() * 1.25);
+            float x = (float) (lineRect.right - Recycle.s_Online.getWidth() * 1.25);
             float y = (lineRect.height() - Recycle.s_Online.getHeight()) / 2;
 
             // name
-            canvas.drawText(mName + ", " + mAge, lineRect.left + Recycle.s_Heart.getWidth() / 2, (float)(lineRect.bottom - s_PaintText.getTextSize() / 1.5), s_PaintText);
+            canvas.drawText(mName + ", " + mAge, lineRect.left + Recycle.s_Heart.getWidth() / 2, (float) (lineRect.bottom - s_PaintText.getTextSize() / 1.5), s_PaintText);
 
             // is online
             if (mOnline)
@@ -87,6 +89,7 @@ public class ThumbView extends ImageView {
                 canvas.drawBitmap(Recycle.s_Offline, x, lineRect.top + y, s_PaintState);
         }
     }
+
     //---------------------------------------------------------------------------
     public static void release() {
         s_PaintState = null;

@@ -1,11 +1,11 @@
 package com.topface.topface.data;
 
-import java.util.LinkedList;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.PhotoLinksResolver;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
 
 /* Класс профиля окна топов */
 public class Top extends AbstractDataWithPhotos {
@@ -26,12 +26,12 @@ public class Top extends AbstractDataWithPhotos {
                     topUser.liked = item.optInt("liked");
                     topUser.photo = item.optString("photo");
                     topUser.uid = item.optInt("uid");
-                    
+
                     //initPhotos(item, topUser); // не формат
-                    
+
                     userList.add(topUser);
                 }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("TopUser.class", "Wrong response parsing: " + e);
         }
 
@@ -40,21 +40,23 @@ public class Top extends AbstractDataWithPhotos {
 
     public int getUid() {
         return uid;
-    };
-    
+    }
+
+    ;
+
     public String getOriginalLink() {
         return photo;
-    }       
-    
+    }
+
     public String getLargeLink() {
         return photo;
     }
-    
+
     public String getNormalLink() {
         return photo;
     }
 
     public String getSmallLink() {
         return photo;
-    } 
+    }
 }

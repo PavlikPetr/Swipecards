@@ -10,21 +10,24 @@ public class SwapControl extends ViewGroup {
     // Data
     private int mScrollY;
     private Scroller mScroller;
+
     //-------------------------------------------------------------------------
-    public SwapControl(Context context,AttributeSet attrs) {
+    public SwapControl(Context context, AttributeSet attrs) {
         super(context, attrs);
         mScroller = new Scroller(context);
     }
+
     //-------------------------------------------------------------------------
     @Override
-    protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         getChildAt(0).measure(widthMeasureSpec, heightMeasureSpec);
         getChildAt(1).measure(widthMeasureSpec, getChildAt(1).getMeasuredHeight());
     }
+
     //-------------------------------------------------------------------------
     @Override
-    protected void onLayout(boolean changed,int l,int t,int r,int b) {
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int count = getChildCount();
         int childTop = 0;
         for (int i = 0; i < count; i++) {
@@ -34,6 +37,7 @@ public class SwapControl extends ViewGroup {
             childTop += childHeight;
         }
     }
+
     //-------------------------------------------------------------------------
     @Override
     public void computeScroll() {
@@ -43,6 +47,7 @@ public class SwapControl extends ViewGroup {
             postInvalidate();
         }
     }
+
     //-------------------------------------------------------------------------
     public void snapToScreen(int screenPosition) {
         int h = getChildAt(1).getHeight();
@@ -50,7 +55,7 @@ public class SwapControl extends ViewGroup {
             mScroller.startScroll(0, 0, 0, h, Math.abs(h) * 2);
         else
             mScroller.startScroll(0, h, 0, -h, Math.abs(h) * 2);
-        
+
         invalidate();
     }
     //-------------------------------------------------------------------------

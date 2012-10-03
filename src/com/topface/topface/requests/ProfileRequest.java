@@ -1,10 +1,10 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
+import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.Debug;
-import android.content.Context;
 
 public class ProfileRequest extends ApiRequest {
     // Data
@@ -56,7 +56,7 @@ public class ProfileRequest extends ApiRequest {
                     break;
             }
             root.put("data", new JSONObject().put("fields", fields));
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             Debug.log(this, "Wrong request compiling: " + e);
         }
 

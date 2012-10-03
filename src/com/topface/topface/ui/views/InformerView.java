@@ -1,8 +1,5 @@
 package com.topface.topface.ui.views;
 
-import com.topface.topface.R;
-import com.topface.topface.Recycle;
-import com.topface.topface.utils.CacheProfile;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,6 +7,9 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.view.ViewGroup;
 import android.widget.Button;
+import com.topface.topface.R;
+import com.topface.topface.Recycle;
+import com.topface.topface.utils.CacheProfile;
 
 public class InformerView extends ViewGroup {
     //---------------------------------------------------------------------------
@@ -24,12 +24,14 @@ public class InformerView extends ViewGroup {
         public int _index; // цифра рейтинга
         public int _bottom; // нижняя граница предка 
         public boolean _visible; // рисовать или нет
+
         // Ctor
-        public Informer(int widht,int height) {
+        public Informer(int widht, int height) {
             _widht = widht;
             _height = height;
             _temp = height / 2;
         }
+
         public void draw(Canvas canvas) {
             if (!_visible)
                 return;
@@ -58,13 +60,13 @@ public class InformerView extends ViewGroup {
 
             // rating
             if (_index > CacheProfile.average_rate)
-                canvas.drawText("" + _index, (float)(_x + Recycle.s_RateHigh.getWidth() / 2) + z * 2, (float)(_y + z + Recycle.s_RateHigh.getHeight() / 1.6), informerTitlePaintHight);
+                canvas.drawText("" + _index, (float) (_x + Recycle.s_RateHigh.getWidth() / 2) + z * 2, (float) (_y + z + Recycle.s_RateHigh.getHeight() / 1.6), informerTitlePaintHight);
             else
-                canvas.drawText("" + _index, (float)(_x + Recycle.s_RateHigh.getWidth() / 2) + z * 2, (float)(_y + z + Recycle.s_RateHigh.getHeight() / 1.6), informerTitlePaintLow);
+                canvas.drawText("" + _index, (float) (_x + Recycle.s_RateHigh.getWidth() / 2) + z * 2, (float) (_y + z + Recycle.s_RateHigh.getHeight() / 1.6), informerTitlePaintLow);
 
             // coins
             if (_index == 10) {
-                canvas.drawText("1", (float)(_x + Recycle.s_DatingInformer.getWidth() / 1.8), (float)(_y + z + Recycle.s_RateHigh.getHeight() / 1.6), informerTitlePaintHight);
+                canvas.drawText("1", (float) (_x + Recycle.s_DatingInformer.getWidth() / 1.8), (float) (_y + z + Recycle.s_RateHigh.getHeight() / 1.6), informerTitlePaintHight);
                 // иметь просчитанным !!!
                 int n = Recycle.s_DatingInformer.getWidth() - Recycle.s_Money.getWidth() - z * 2;
                 z = (Recycle.s_DatingInformer.getHeight() - Recycle.s_Money.getHeight()) / 2;
@@ -75,6 +77,7 @@ public class InformerView extends ViewGroup {
             }
         }
     }
+
     //---------------------------------------------------------------------------
     // Data
     private Button mProfileBtn; // кнопка на профиль
@@ -84,6 +87,7 @@ public class InformerView extends ViewGroup {
     private Paint informerTitlePaintHight = new Paint();
     private Paint informerTitlePaintLow = new Paint();
     private Paint informerPaint = new Paint();
+
     //---------------------------------------------------------------------------
     public InformerView(Context context) {
         super(context);
@@ -117,16 +121,18 @@ public class InformerView extends ViewGroup {
         // Informer popup
         mInformer = new Informer(Recycle.s_DatingInformer.getWidth(), Recycle.s_DatingInformer.getHeight());
     }
+
     //---------------------------------------------------------------------------
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         mInformer.draw(canvas);
     }
+
     //-------------------------------------------------------------------------
     @Override
-    protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
-        int width = (int)(Recycle.s_DatingInformer.getWidth() * 1.1); // вычисление своей ширины
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = (int) (Recycle.s_DatingInformer.getWidth() * 1.1); // вычисление своей ширины
         int height = MeasureSpec.getSize(heightMeasureSpec); // вычисляем предоставленную нам высоту для отрисовки
 
         // передаем свои размеры предкам
@@ -135,9 +141,10 @@ public class InformerView extends ViewGroup {
 
         setMeasuredDimension(width, height);
     }
+
     //---------------------------------------------------------------------------
     @Override
-    protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 
         float offset_from_stars = 1.3f;
 
@@ -146,27 +153,31 @@ public class InformerView extends ViewGroup {
 
         mInformer._bottom = height;
 
-        int x = (int)(width - mProfileBtn.getMeasuredWidth() * offset_from_stars);
-        int y = (int)(height - mProfileBtn.getMeasuredHeight() * 2.5);
+        int x = (int) (width - mProfileBtn.getMeasuredWidth() * offset_from_stars);
+        int y = (int) (height - mProfileBtn.getMeasuredHeight() * 2.5);
         mChatBtn.layout(x, y, x + mChatBtn.getMeasuredWidth(), y + mChatBtn.getMeasuredHeight());
 
-        y = (int)(y + mChatBtn.getMeasuredHeight() * offset_from_stars);
+        y = (int) (y + mChatBtn.getMeasuredHeight() * offset_from_stars);
         mProfileBtn.layout(x, y, x + mProfileBtn.getMeasuredWidth(), y + mProfileBtn.getMeasuredHeight());
     }
+
     //---------------------------------------------------------------------------
     public void setVisible(boolean visible) {
         mInformer._visible = visible;
     }
+
     //---------------------------------------------------------------------------
-    public void setData(float y,int index) {
+    public void setData(float y, int index) {
         mInformer._y = y;
         mInformer._index = index;
     }
+
     //---------------------------------------------------------------------------
     public void setBlock(boolean block) {
         mChatBtn.setEnabled(block);
         mProfileBtn.setEnabled(block);
     }
+
     //---------------------------------------------------------------------------
     public void release() {
         mProfileBtn = null;

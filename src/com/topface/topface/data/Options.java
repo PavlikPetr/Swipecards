@@ -6,7 +6,7 @@ import com.topface.topface.utils.Debug;
 
 /**
  * Опции приложения
- *
+ * <p/>
  * NOTICE: В данном типе данных используем значения по умолчанию
  */
 public class Options extends AbstractData {
@@ -65,14 +65,11 @@ public class Options extends AbstractData {
     private static String setFloatType(String floatType) {
         if (floatType.equals(FLOAT_TYPE_LEADERS)) {
             return FLOAT_TYPE_LEADERS;
-        }
-        else if (floatType.equals(FLOAT_TYPE_LEADERS)) {
+        } else if (floatType.equals(FLOAT_TYPE_LEADERS)) {
             return FLOAT_TYPE_BANNER;
-        }
-        else if (floatType.equals(FLOAT_TYPE_DEFAULT)) {
+        } else if (floatType.equals(FLOAT_TYPE_DEFAULT)) {
             return DEFAULT_FLOAT_TYPE;
-        }
-        else {
+        } else {
             return DEFAULT_FLOAT_TYPE;
         }
     }

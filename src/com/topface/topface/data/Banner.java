@@ -1,8 +1,8 @@
 package com.topface.topface.data;
 
-import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
+import org.json.JSONObject;
 
 public class Banner extends AbstractData {
     // Data
@@ -24,7 +24,7 @@ public class Banner extends AbstractData {
             banner.url = item.optString("url");
             banner.action = item.optString("action");
             banner.parameter = item.optString("parameter");
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("Banner.class", "Wrong response parsing: " + e);
         }
 

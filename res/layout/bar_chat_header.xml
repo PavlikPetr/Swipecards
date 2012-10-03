@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-  <RelativeLayout
-      android:id="@+id/tvHeaderBar"
-      android:layout_width="fill_parent" 
-      android:layout_height="wrap_content"  
-      android:background="@drawable/im_bar_header" >
-      
-      <Button
-            android:id="@+id/btnNavigationBackWithText"
-            android:layout_width="wrap_content"
+    <RelativeLayout
+            android:id="@+id/tvHeaderBar"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/navigation_back_profile_selector"
-            style="@style/NavigationHeader"
-            android:textStyle="bold"
-            android:textSize="12sp"/>
-      
-	  <TextView
-            android:id="@+id/tvNavigationTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"            
-            style="@style/NavigationHeader"
-            android:textSize="15sp"/>
-	  
-	  <TextView
-            android:id="@+id/tvNavigationSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/tvNavigationTitle"
-            style="@style/NavigationHeader"
-            android:textSize="10sp"/>
-  </RelativeLayout>
+            android:background="@drawable/im_bar_header">
+
+        <Button
+                android:id="@+id/btnNavigationBackWithText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/navigation_back_profile_selector"
+                style="@style/NavigationHeader"
+                android:textStyle="bold"
+                android:textSize="12sp"/>
+
+        <TextView
+                android:id="@+id/tvNavigationTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                style="@style/NavigationHeader"
+                android:textSize="15sp"/>
+
+        <TextView
+                android:id="@+id/tvNavigationSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/tvNavigationTitle"
+                style="@style/NavigationHeader"
+                android:textSize="10sp"/>
+    </RelativeLayout>
 </merge>

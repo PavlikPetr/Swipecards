@@ -74,13 +74,11 @@ public class ImageViewRemote extends ImageView {
             setImageBitmap(null);
             if (processor != null) {
                 getImageLoader().displayImage(remoteSrc, this, null, null, processor);
-            }
-            else {
+            } else {
                 getImageLoader().displayImage(remoteSrc, this, null, null);
             }
 
-        }
-        else {
+        } else {
             isCorrectSrc = false;
         }
 

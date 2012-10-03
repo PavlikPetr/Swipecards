@@ -11,9 +11,12 @@
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка обновления данных</string>
     <string name="general_footer_previous">Предыдущие сообщения</string>
-    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
+    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
+    </string>
     <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
-    <string name="general_popup_rating">Понравилось наше приложение? Подними нам рейтинг! Чем выше рейтинг, тем больше интересных людей ты встретишь в TopFace</string>
+    <string name="general_popup_rating">Понравилось наше приложение? Подними нам рейтинг! Чем выше рейтинг, тем больше
+        интересных людей ты встретишь в TopFace
+    </string>
     <string name="general_switch_on">вкл.</string>
     <string name="general_switch_off">выкл.</string>
 
@@ -113,7 +116,7 @@
     <string name="buying_header_title">Покупка</string>
     <string name="buying_you_have">У вас</string>
     <string name="buying_you_have_no_coins_for_gift">Вам не хватает %d {{coins}} для покупки подарка</string>
-    <string name="buying_default_message">Вы можете покупать подарки, слать восхищения за монеты</string>    
+    <string name="buying_default_message">Вы можете покупать подарки, слать восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>
     <string name="buying_power">Покупка энергии</string>
     <string name="buying_buy">Купить</string>
@@ -135,7 +138,7 @@
     <string name="profile_btn_edit">Редактировать</string>
     <string name="profile_btn_form">Анкета</string>
     <string name="profile_btn_add">Добавить</string>
-    <string name="profile_btn_buy">Купить</string>    
+    <string name="profile_btn_buy">Купить</string>
     <string name="profile_btn_mutual">Взаимно</string>
     <string name="profile_sex_boy">Парень</string>
     <string name="profile_sex_girl">Девушка</string>
@@ -219,13 +222,13 @@
     <string name="navigation_save">Сохранить</string>
     <string name="navigation_send">Отправить</string>
 
-    <!-- Profile / UserProfile Form -->   	
+    <!-- Profile / UserProfile Form -->
     <string name="form_main">Основное</string>
 
     <string-array name="form_main_status">
         <item name="all">Цель знакомства</item>
     </string-array>
-    
+
     <string-array name="form_main_character">
         <item name="male">Характер</item>
         <item name="female">Характер</item>
@@ -397,12 +400,12 @@
     <string name="settings_help">Помощь</string>
     <string name="settings_account">Аккаунт</string>
     <string name="settings_feedback">Оставить отзыв</string>
-    <string name="settings_about">О программе</string>    
-   	<string name="settings_version">Версия</string>
+    <string name="settings_about">О программе</string>
+    <string name="settings_version">Версия</string>
     <string name="settings_copyright">Копирайт 2010-</string>
-	<string name="settings_rights_reserved">Topface все права защищены</string>
+    <string name="settings_rights_reserved">Topface все права защищены</string>
     <string name="settings_extra">Подробную информацию можно найти на</string>
-    <string name="settings_logout">Выйти из аккаунта</string>    
+    <string name="settings_logout">Выйти из аккаунта</string>
     <string name="settings_error_message">Сообщение об ошибке</string>
     <string name="settings_ask_developer">Вопрос разработчикам</string>
     <string name="settings_payment_problems">Проблемы с оплатой</string>

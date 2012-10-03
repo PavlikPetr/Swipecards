@@ -1,12 +1,11 @@
 package com.topface.topface.data;
 
-import java.util.LinkedList;
-
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.utils.Debug;
+import java.util.LinkedList;
 
 public class FeedGifts extends AbstractDataWithPhotos {
     // Data    
@@ -20,23 +19,23 @@ public class FeedGifts extends AbstractDataWithPhotos {
     public String first_name; // имя пользователя    
     public int age; // возраст пользователя
     public boolean online; // флаг нахождения пользователя в онлайне
-    
+
     public int city_id; // идентификатор города отправителя сообщения
     public String city_name; // название города пользователя
     public String city_full; // полное название города пользвоателя
-    
+
     public Gift gift;
-    
+
     public static LinkedList<FeedGifts> parse(ApiResponse response) {
         LinkedList<FeedGifts> feedsList = new LinkedList<FeedGifts>();
 
-        try {            
+        try {
             FeedGifts.more = response.mJSONResult.optBoolean("more");
-            
+
             JSONArray arr = response.mJSONResult.getJSONArray("feed");
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject item = arr.getJSONObject(i);
-                
+
                 FeedGifts feed = new FeedGifts();
                 feed.type = item.optInt("type");
                 feed.id = item.optInt("id");
@@ -47,7 +46,7 @@ public class FeedGifts extends AbstractDataWithPhotos {
                 feed.first_name = item.optString("first_name");
                 feed.age = item.optInt("age");
                 feed.online = item.optBoolean("online");
-                
+
                 // city  
                 JSONObject city = item.optJSONObject("city");
                 if (city != null) {
@@ -58,26 +57,28 @@ public class FeedGifts extends AbstractDataWithPhotos {
                     feed.city_id = 0;
                     feed.city_name = "";
                     feed.city_full = "";
-                }                
-                
+                }
+
                 // gift
                 feed.gift = new Gift();
                 feed.gift.id = item.optInt("gift");
                 feed.gift.link = item.optString("link");
                 feed.gift.type = Gift.PROFILE;
-                
+
                 initPhotos(item, feed);
                 feedsList.add(feed);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("FeedGifts.class", "Wrong response parsing: " + e);
         }
 
         return feedsList;
     }
-    
+
     public int getUid() {
         return uid;
-    };
+    }
+
+    ;
 }
 

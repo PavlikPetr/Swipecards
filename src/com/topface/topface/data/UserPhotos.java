@@ -31,6 +31,7 @@ public class UserPhotos {
 
     /**
      * Возвращает наиболее подходящий размер фотографии из уже существующих
+     *
      * @param size необходимый размер фотографии
      * @return url на выбранную фотографию
      */
@@ -38,8 +39,7 @@ public class UserPhotos {
         String url = null;
         if (links.containsKey(size)) {
             url = links.get(size);
-        }
-        else {
+        } else {
             int needSize = getSizeFromKey(size);
             int minDifference = needSize;
             for (HashMap.Entry<String, String> entry : links.entrySet()) {

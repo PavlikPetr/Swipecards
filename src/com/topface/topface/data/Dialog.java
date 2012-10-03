@@ -11,8 +11,8 @@ import java.util.LinkedList;
 public class Dialog extends AbstractDataWithPhotos implements IListLoader {
     // Data
     public static int unread_count; // общее количество непрочитанных диалогов
-	public static boolean more;     // имеются ли в ленте ещё элементы для пользователя
-	
+    public static boolean more;     // имеются ли в ленте ещё элементы для пользователя
+
     public int type; // идентификатор типа сообщения диалога
     public int id; // идентификатор события в ленте
     public int uid; // идентификатор отправителя
@@ -26,11 +26,11 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
     public int city_id; // идентификатор города
     public String city_name; // наименование города в локали указанной при авторизации
     public String city_full; // полное наименование города с указанием региона, если он определен. Отдается в локали пользователя, указанной при авторизации
-    
+
     public String text;  // текст сообщения, если type = MESSAGE
 //    public int gift; // идентификатор подарка. Поле определяется, если type = GIFT
 //    public String link; // ссылка на изображение подарка. Поле определяется, если type = GIFT
-        
+
 //    public String avatars_big; // фото большого размера
 //    public String avatars_small; // фото маленького размера
 
@@ -46,31 +46,31 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
     public static final int MESSAGE_WINK = 8; // подмигивание
     public static final int RATE = 9; // Оценка
     public static final int PROMOTION = 10; // Рекламное сообщение
-    
+
     public static final int MAP = 11; // Текущее местоположение
 
     public static final int USER_MESSAGE = 0;
     public static final int FRIEND_MESSAGE = 1;
-    
+
     //Loader indicators
     public boolean isListLoader = false;
     public boolean isListLoaderRetry = false;
 
     public Dialog() {
-    	
+
     }
 
     public Dialog(IListLoader.ItemType type) {
-    	switch (type) {
-		case LOADER:
-			isListLoader = true;
-			break;
-		case RETRY:
-			isListLoaderRetry = true;
-			break;
-		default:			
-			break;
-		}     	
+        switch (type) {
+            case LOADER:
+                isListLoader = true;
+                break;
+            case RETRY:
+                isListLoaderRetry = true;
+                break;
+            default:
+                break;
+        }
     }
 
     public static LinkedList<Dialog> parse(ApiResponse response) {
@@ -79,7 +79,7 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
         try {
             Dialog.unread_count = response.mJSONResult.getInt("unread");
             Dialog.more = response.mJSONResult.optBoolean("more");
-            
+
             JSONArray arr = response.mJSONResult.getJSONArray("items");
             if (arr.length() > 0)
                 dialogList = new LinkedList<Dialog>();
@@ -88,14 +88,14 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
                 Dialog dialog = new Dialog();
 
                 dialog.type = item.optInt("type");
-                dialog.id   = item.optInt("id");
-                dialog.uid  = item.optInt("uid");
+                dialog.id = item.optInt("id");
+                dialog.uid = item.optInt("uid");
                 dialog.created = item.optLong("created") * 1000;
                 dialog.target = item.optInt("target");
                 dialog.first_name = item.optString("first_name");
-                dialog.sex  = item.optInt("sex");
-                dialog.age  = item.optInt("age");
-                dialog.online  = item.optBoolean("online");
+                dialog.sex = item.optInt("sex");
+                dialog.age = item.optInt("age");
+                dialog.online = item.optBoolean("online");
 
                 // city  
                 JSONObject city = item.optJSONObject("city");
@@ -108,9 +108,9 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
                     dialog.city_name = "";
                     dialog.city_full = "";
                 }
-                
+
                 dialog.text = item.optString("text");
-              
+
 //              dialog.gift = item.optInt("gift");
 //              dialog.link = item.optString("link");
 
@@ -127,9 +127,9 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
 
                 initPhotos(item, dialog);
                 dialogList.add(dialog);
-                
+
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("Dialog.class", "Wrong response parsing: " + e);
         }
 
@@ -138,21 +138,23 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
 
     public int getUid() {
         return uid;
-    };
+    }
 
-	@Override
-	public boolean isLoader() {
-		return isListLoader;
-	}
-	
-	@Override
-	public boolean isLoaderRetry() {
-		return isListLoaderRetry;
-	}
-	
-	@Override
-	public void switchToLoader() {
-		isListLoader = false;
-		isListLoaderRetry = true;
-	}
+    ;
+
+    @Override
+    public boolean isLoader() {
+        return isListLoader;
+    }
+
+    @Override
+    public boolean isLoaderRetry() {
+        return isListLoaderRetry;
+    }
+
+    @Override
+    public void switchToLoader() {
+        isListLoader = false;
+        isListLoaderRetry = true;
+    }
 }

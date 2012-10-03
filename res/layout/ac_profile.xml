@@ -2,210 +2,210 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/chat_list_bg" >
-                
+                android:background="@drawable/chat_list_bg">
+
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
-        
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
         <!-- header bar -->
-        <include layout="@layout/bar_navigation_header" />
-    
+        <include layout="@layout/bar_navigation_header"/>
+
         <!-- static info -->
         <RelativeLayout
-            	android:id="@+id/loProfileHeader"
+                android:id="@+id/loProfileHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/profile_background_1" >
-    
+                android:background="@drawable/profile_background_1">
+
             <!-- Avatar -->
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" >
-                
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
                 <RelativeLayout
                         android:id="@+id/loUserAvatarGroup"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"  
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginRight="6dp" >
-                        
+                        android:layout_marginRight="6dp">
+
                     <ImageView
-                        android:id="@+id/ivUserAvatar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/avatar_frame" />
-                        
+                            android:id="@+id/ivUserAvatar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/avatar_frame"/>
+
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/avatar_frame" />
-                    
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/avatar_frame"/>
+
                 </RelativeLayout>
-                
+
                 <TextView
-                    android:id="@+id/ivUserName"
-                    android:layout_toRightOf="@id/loUserAvatarGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="#FFFFFF"
-                    android:text="" /> 
-                
+                        android:id="@+id/ivUserName"
+                        android:layout_toRightOf="@id/loUserAvatarGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#FFFFFF"
+                        android:text=""/>
+
                 <TextView
-                    android:id="@+id/ivUserCity"
-                    android:layout_below="@id/ivUserName"
-                    android:layout_toRightOf="@id/loUserAvatarGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#FFFFFF"
-                    android:text="" />
-                
+                        android:id="@+id/ivUserCity"
+                        android:layout_below="@id/ivUserName"
+                        android:layout_toRightOf="@id/loUserAvatarGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFFFFF"
+                        android:text=""/>
+
             </RelativeLayout>
-            
+
             <!-- Resources -->
             <LinearLayout
-                android:id="@+id/loUserRates" 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:orientation="vertical" >
-                
-                
+                    android:id="@+id/loUserRates"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:orientation="vertical">
+
+
                 <Button
-                    android:id="@+id/btnUserEmpty" 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/user_delight_bg"
-                    android:paddingTop="0dp"
-                    android:drawablePadding="-10dp"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp"
-                    android:shadowColor="#666666"
-                    android:shadowRadius="1.2"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:text="" />
-                
-                <RelativeLayout 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/user_mutual_bg" >
-	                <TextView
-	                    android:id="@+id/tvUserMoney"
-	                    android:layout_width="wrap_content"
-	                    android:layout_height="wrap_content"
-	                    android:layout_centerInParent="true"
-	                    android:gravity="center"
-	                    android:textColor="#FFFFFF"
-	                    android:textSize="15sp"
-	                    android:textStyle="bold"
-	                    android:text="0"
-	                    android:drawableRight="@drawable/resources_coins"
-	                    android:drawablePadding="4dp" />
-                </RelativeLayout>
-                
+                        android:id="@+id/btnUserEmpty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/user_delight_bg"
+                        android:paddingTop="0dp"
+                        android:drawablePadding="-10dp"
+                        android:textColor="#FFFFFF"
+                        android:textSize="10sp"
+                        android:shadowColor="#666666"
+                        android:shadowRadius="1.2"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:text=""/>
+
                 <RelativeLayout
-                    android:id="@+id/loUserPowerBkgd" 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/user_chat_bg">
-	                <TextView
-	                    android:id="@+id/tvUserPower"
-			            android:layout_width="wrap_content"
-				        android:layout_height="wrap_content"
-				        android:layout_centerHorizontal="true"
-				        android:layout_marginTop="16dp"
-				        android:gravity="center"
-				        android:textColor="#FFFFFF"
-				        android:textSize="12sp"
-				        android:textStyle="bold"
-				        android:text="0"
-                        android:background="@drawable/resources_battery" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/user_mutual_bg">
+                    <TextView
+                            android:id="@+id/tvUserMoney"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:text="0"
+                            android:drawableRight="@drawable/resources_coins"
+                            android:drawablePadding="4dp"/>
                 </RelativeLayout>
-                <!-- android:drawableTop="@drawable/user_chat_selector"  -->                
+
+                <RelativeLayout
+                        android:id="@+id/loUserPowerBkgd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/user_chat_bg">
+                    <TextView
+                            android:id="@+id/tvUserPower"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:text="0"
+                            android:background="@drawable/resources_battery"/>
+                </RelativeLayout>
+                <!-- android:drawableTop="@drawable/user_chat_selector"  -->
             </LinearLayout>
-           
+
             <com.topface.topface.ui.views.IndicatorView
-                android:id="@+id/viewUserIndicator"
-                android:layout_alignBottom="@id/loUserRates"
-                android:layout_width="wrap_content"  
-                android:layout_height="fill_parent" />
+                    android:id="@+id/viewUserIndicator"
+                    android:layout_alignBottom="@id/loUserRates"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"/>
 
             <!-- Actions -->
             <RadioGroup
-                android:id="@+id/UserRadioGroup"
-                android:layout_above="@id/viewUserIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-                
+                    android:id="@+id/UserRadioGroup"
+                    android:layout_above="@id/viewUserIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
                 <!-- Photo -->
                 <RadioButton
-                    android:id="@+id/btnUserPhoto"
-                    style="@style/ShadowItemFont"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/user_photo_selector"
-                    android:button="@android:color/transparent"
-                    android:background="@android:color/transparent"
-                    android:drawablePadding="-5sp"
-                    android:gravity="center"
-                    android:textSize="10sp"
-                    android:text="Photo" />
-        
+                        android:id="@+id/btnUserPhoto"
+                        style="@style/ShadowItemFont"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/user_photo_selector"
+                        android:button="@android:color/transparent"
+                        android:background="@android:color/transparent"
+                        android:drawablePadding="-5sp"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:text="Photo"/>
+
                 <!-- Form -->
                 <RadioButton
-                    android:id="@+id/btnUserQuestionnaire"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/user_questionnaire_selector"
-                    android:button="@android:color/transparent"
-                    android:background="@android:color/transparent"
-                    android:drawablePadding="-5sp"
-                    android:gravity="center"
-                    android:textSize="10sp"
-                    android:text="Form" />
-        
+                        android:id="@+id/btnUserQuestionnaire"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/user_questionnaire_selector"
+                        android:button="@android:color/transparent"
+                        android:background="@android:color/transparent"
+                        android:drawablePadding="-5sp"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:text="Form"/>
+
                 <!-- Gifts -->
                 <RadioButton
-                    android:id="@+id/btnUserGifts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/user_gifts_selector"
-                    android:button="@android:color/transparent"
-                    android:background="@android:color/transparent"
-                    android:drawablePadding="-5sp"
-                    android:gravity="center"
-                    android:textSize="10sp"
-                    android:text="Gifts" />
-                
-          </RadioGroup>
-            
+                        android:id="@+id/btnUserGifts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/user_gifts_selector"
+                        android:button="@android:color/transparent"
+                        android:background="@android:color/transparent"
+                        android:drawablePadding="-5sp"
+                        android:gravity="center"
+                        android:textSize="10sp"
+                        android:text="Gifts"/>
+
+            </RadioGroup>
+
         </RelativeLayout>
-        
+
         <android.support.v4.view.ViewPager
-            android:id="@+id/UserViewPager"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-        
+                android:id="@+id/UserViewPager"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
     </LinearLayout>
-    
+
     <com.topface.topface.ui.views.LockerView
-           android:id="@+id/llvProfileLoading"
-           android:layout_width="fill_parent"  
-           android:layout_height="fill_parent"
-           style="@style/LoadingLocker"
-           android:visibility="gone" />
-    
-        <Button
-            android:id="@+id/btnBuy" 
+            android:id="@+id/llvProfileLoading"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            style="@style/LoadingLocker"
+            android:visibility="gone"/>
+
+    <Button
+            android:id="@+id/btnBuy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/profile_buy" />
-    
+            android:background="@drawable/profile_buy"/>
+
 </RelativeLayout>

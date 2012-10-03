@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:test="http://schemas.android.com/apk/res/com.topface.topface.ui.views.LockerView">
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+        >
 
     <style name="ShadowItemFont">
         <item name="android:shadowColor">#222222</item>
@@ -114,7 +115,7 @@
         <item name="android:paddingRight">1dp</item>
         <item name="android:paddingBottom">1.5dp</item>
     </style>
-    
+
     <style name="HeaderShadow">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>

@@ -1,9 +1,9 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
+import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.Debug;
-import android.content.Context;
 
 public class FeedGiftsRequest extends ApiRequest {
     // Data
@@ -24,9 +24,9 @@ public class FeedGiftsRequest extends ApiRequest {
             root.put("ssid", ssid);
             JSONObject data = new JSONObject().put("limit", limit).put("uid", uid);
             if (from > 0)
-                data.put("from", from);            
+                data.put("from", from);
             root.put("data", data);
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             Debug.log(this, "Wrong request compiling: " + e);
         }
 

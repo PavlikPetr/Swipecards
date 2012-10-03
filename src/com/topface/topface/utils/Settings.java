@@ -19,9 +19,9 @@ public class Settings {
     public static final String SETTINGS_C2DM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_C2DM = "settings_c2dm";
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
-    
+
     public static final String SETTINGS_SOCIAL_ACCOUNT_NAME = "social_account_name";
-    
+
     public static final String SETTINGS_C2DM_LIKES_PHONE = "settings_like_phone";
     public static final String SETTINGS_C2DM_MUTUAL_PHONE = "settings_mutual_phone";
     public static final String SETTINGS_C2DM_MESSAGES_PHONE = "settings_messages_phone";
@@ -30,7 +30,7 @@ public class Settings {
     public static final String SETTINGS_C2DM_MUTUAL_EMAIL = "settings_mutual_email";
     public static final String SETTINGS_C2DM_MESSAGES_EMAIL = "settings_messages_email";
     public static final String SETTINGS_C2DM_GUESTS_EMAIL = "settings_guests_email";
-    
+
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mEditor;
     private Context mContext;
@@ -50,23 +50,23 @@ public class Settings {
     }
 
     public void setSetting(String key, boolean value) {
-    	mEditor.putBoolean(key, value);
-    	mEditor.commit();
+        mEditor.putBoolean(key, value);
+        mEditor.commit();
     }
-    
+
     public void setSocialAccountName(String name) {
-    	mEditor.putString(SETTINGS_SOCIAL_ACCOUNT_NAME, name);
-    	mEditor.commit();
+        mEditor.putString(SETTINGS_SOCIAL_ACCOUNT_NAME, name);
+        mEditor.commit();
     }
-    
+
     public boolean getSetting(String key) {
-    	return mSettings.getBoolean(key, true);
-    }    
-        
-    public String getSocialAccountName() {
-    	return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
+        return mSettings.getBoolean(key, true);
     }
-    
+
+    public String getSocialAccountName() {
+        return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
+    }
+
     public String getPreloading() {
         return mSettings.getString(SETTINGS_PRELOADING, mContext.getString(R.string.settings_preloading_wifi));
     }
@@ -95,6 +95,7 @@ public class Settings {
 
     /**
      * Нужно ли в данный момент запускать предзагрузку следующей фотографии альбома
+     *
      * @return начинать ли предзагрузку
      */
     public boolean isPreloadPhoto() {
@@ -103,6 +104,7 @@ public class Settings {
 
     /**
      * Нужно ли в данный момент запускать предзагрузку фотографии следующего пользователя
+     *
      * @return начинать ли предзагрузку
      */
     @SuppressWarnings("UnusedDeclaration")
@@ -114,14 +116,13 @@ public class Settings {
         String preloadingValue = getPreloading();
         String preloadingType = getPreloadingType();
         //Проверяем тип предзагрузки
-        if (    preloadingType.equals(mContext.getString(R.string.settings_preloading_type_all)) ||
+        if (preloadingType.equals(mContext.getString(R.string.settings_preloading_type_all)) ||
                 preloadingType.equals(type)) {
 
             //Если верный, то смотрим, включена ли она
             if (preloadingValue.equals(mContext.getString(R.string.settings_preloading_on))) {
                 return true;
-            }
-            else if (preloadingValue.equals(mContext.getString(R.string.settings_preloading_wifi))) {
+            } else if (preloadingValue.equals(mContext.getString(R.string.settings_preloading_wifi))) {
                 //Если включена только по wifi, то проверяем состояние соединения
                 return !ConnectionChangeReceiver.isMobileConnection();
             }

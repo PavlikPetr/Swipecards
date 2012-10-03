@@ -1,8 +1,8 @@
 package com.topface.topface.requests;
 
+import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.Debug;
 
 public class ApiResponse {
     // Data
@@ -71,11 +71,12 @@ public class ApiResponse {
                 mJSONResult = mJSONResult.getJSONObject("result");
             else
                 code = WRONG_RESPONSE;
-        } catch(Exception e) {
+        } catch (Exception e) {
             code = WRONG_RESPONSE;
             Debug.log(this, "json resonse is wrong:" + response);
         }
     }
+
     //---------------------------------------------------------------------------
     @Override
     public String toString() {

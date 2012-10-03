@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 public class LeadersAlbumAdapter extends BaseAdapter {
-   /* private LeadersActivity.PhotoSelector mPhotoSelector;
+    /* private LeadersActivity.PhotoSelector mPhotoSelector;
     // class ViewHolder
 
     static class ViewHolder {

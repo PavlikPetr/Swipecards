@@ -1,22 +1,19 @@
 package com.topface.topface.utils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import com.topface.topface.Data;
-import com.topface.topface.data.AbstractData;
-import com.topface.topface.data.AbstractDataWithPhotos;
-import com.topface.topface.utils.CacheManager;
-import com.topface.topface.utils.Device;
-import com.topface.topface.utils.MemoryCache;
-import com.topface.topface.utils.StorageCache;
-import com.topface.topface.utils.http.Http;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
+import com.topface.topface.Data;
+import com.topface.topface.data.AbstractData;
+import com.topface.topface.data.AbstractDataWithPhotos;
+import com.topface.topface.utils.http.Http;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /* Менеджер изображений, загрузает и кеширует изображения */
 public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnScrollListener {
@@ -24,13 +21,16 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
     class Queue { // не используется
         // Data
         private HashMap<Integer, Bitmap> mQueue = new HashMap<Integer, Bitmap>(20);
+
         // Methods
         public Bitmap get(int key) {
             return mQueue.get(key);
         }
-        public void put(int key,Bitmap value) {
+
+        public void put(int key, Bitmap value) {
             mQueue.put(key, value);
         }
+
         public void clear() {
             Debug.log(this, "memory cache clearing");
             int size = mQueue.size();
@@ -44,6 +44,7 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
             mQueue.clear();
         }
     }
+
     //---------------------------------------------------------------------------
     // Data
     private LinkedList<T> mDataList;
@@ -56,8 +57,9 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
     public int mBitmapHeight;
     // скролинг
     public boolean mBusy;
+
     //---------------------------------------------------------------------------
-    public GalleryGridManager(Context context,LinkedList<T> dataList) {
+    public GalleryGridManager(Context context, LinkedList<T> dataList) {
         mDataList = dataList;
         mMemoryCache = new MemoryCache();
         mStorageCache = new StorageCache(context, CacheManager.EXTERNAL_CACHE);
@@ -65,22 +67,26 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
 
         int columnNumber = Data.GRID_COLUMN;
         mBitmapWidth = Device.getDisplay(context).getWidth() / (columnNumber);
-        mBitmapHeight = (int)(mBitmapWidth * 1.25);
+        mBitmapHeight = (int) (mBitmapWidth * 1.25);
     }
+
     //---------------------------------------------------------------------------
     public void update() {
         mMemoryCache.clear();
     }
+
     //---------------------------------------------------------------------------
     public AbstractData get(int position) {
         return mDataList.get(position);
     }
+
     //---------------------------------------------------------------------------
     public int size() {
         return mDataList.size();
     }
+
     //---------------------------------------------------------------------------
-    public void getImage(final int position,final ImageView imageView) {
+    public void getImage(final int position, final ImageView imageView) {
         Bitmap bitmap = mMemoryCache.get(position);
 
         if (bitmap != null) {
@@ -98,8 +104,9 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
         }
         bitmap = null;
     }
+
     //---------------------------------------------------------------------------
-    private void loadingImages(final int position,final ImageView imageView) {
+    private void loadingImages(final int position, final ImageView imageView) {
         mWorker.execute(new Runnable() {
             @Override
             public void run() {
@@ -128,14 +135,15 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
 
                     clippedBitmap = null;
 
-                } catch(Exception e) {
+                } catch (Exception e) {
                     Debug.log(this, "thread error:" + e);
                 }
             }
         });
     }
+
     //---------------------------------------------------------------------------
-    private void imagePost(final ImageView imageView,final Bitmap bitmap) {
+    private void imagePost(final ImageView imageView, final Bitmap bitmap) {
         imageView.post(new Runnable() {
             @Override
             public void run() {
@@ -143,6 +151,7 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
             }
         });
     }
+
     //---------------------------------------------------------------------------
     public void release() {
         mWorker.shutdown();
@@ -154,13 +163,15 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
             mDataList.clear();
         mDataList = null;
     }
+
     //---------------------------------------------------------------------------
     @Override
-    public void onScroll(AbsListView view,int firstVisibleItem,int visibleItemCount,int totalItemCount) {
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     }
+
     //---------------------------------------------------------------------------
     @Override
-    public void onScrollStateChanged(AbsListView view,int scrollState) {
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
         switch (scrollState) {
             case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
                 mBusy = true;

@@ -1,10 +1,11 @@
 package com.topface.topface.data;
 
-import java.util.LinkedList;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
 
 public class FeedInbox extends AbstractDataWithPhotos {
     // Data
@@ -20,11 +21,11 @@ public class FeedInbox extends AbstractDataWithPhotos {
     public int age; // возраст пользователя
     public boolean online; // флаг нахождения пользователя в онлайне
     public String text; // текст сообщения
-    
+
     public int city_id; // идентификатор города отправителя сообщения
     public String city_name; // название города пользователя
     public String city_full; // полное название города пользвоателя
-    
+
 //    public int gift; // идентификатор подарка
 //    public int code; // код входящего уведомления
 //    public String avatars_big; // большая аватарка пользователя
@@ -37,18 +38,18 @@ public class FeedInbox extends AbstractDataWithPhotos {
     public static final int MESSAGE = 3; // Текстовое сообщение
     public static final int MESSAGE_WISH = 4; // Тайное желание
     public static final int MESSAGE_SEXUALITY = 5; // Оценка сексуальности
- 
+
     public static LinkedList<FeedInbox> parse(ApiResponse response) {
         LinkedList<FeedInbox> userList = new LinkedList<FeedInbox>();
 
         try {
             FeedInbox.unread_count = response.mJSONResult.getInt("unread");
             FeedInbox.more = response.mJSONResult.optBoolean("more");
-            
+
             JSONArray arr = response.mJSONResult.getJSONArray("feed");
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject item = arr.getJSONObject(i);
-                
+
                 FeedInbox msg = new FeedInbox();
                 msg.type = item.optInt("type");
                 msg.id = item.optInt("id");
@@ -59,7 +60,7 @@ public class FeedInbox extends AbstractDataWithPhotos {
                 msg.first_name = item.optString("first_name");
                 msg.age = item.optInt("age");
                 msg.online = item.optBoolean("online");
-                
+
                 msg.text = item.optString("text");
 
 //                switch (msg.type) {
@@ -96,7 +97,7 @@ public class FeedInbox extends AbstractDataWithPhotos {
                 }
 
                 initPhotos(item, msg);
-                
+
                 // avatars
 //                JSONObject avatars = item.getJSONObject("avatars");
 //                msg.avatars_big = avatars.optString("big");
@@ -104,14 +105,16 @@ public class FeedInbox extends AbstractDataWithPhotos {
 
                 userList.add(msg);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("FeedInbox.class", "Wrong response parsing: " + e);
         }
 
         return userList;
     }
-    
+
     public int getUid() {
         return uid;
-    };
+    }
+
+    ;
 }

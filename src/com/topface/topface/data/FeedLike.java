@@ -1,14 +1,14 @@
 package com.topface.topface.data;
 
-import java.util.LinkedList;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-public class FeedLike extends AbstractDataWithPhotos implements IListLoader{	
+import java.util.LinkedList;
+
+public class FeedLike extends AbstractDataWithPhotos implements IListLoader {
     // Data
     public static int unread_count; // количество оставшихся непрочитанных
     public static boolean more; // имеются ли в ленте ещё симпатии для пользователя
@@ -28,25 +28,25 @@ public class FeedLike extends AbstractDataWithPhotos implements IListLoader{
 //    public String avatars_big; // большая аватарка пользователя
 //    public String avatars_small; // маленькая аватарка пользователя
 //    public int rate; // значение “понравилось”
-    
+
     public boolean isListLoader = false;
     public boolean isListLoaderRetry = false;
 
     public FeedLike() {
-    	
+
     }
 
     public FeedLike(IListLoader.ItemType type) {
-    	switch (type) {
-		case LOADER:
-			isListLoader = true;
-			break;
-		case RETRY:
-			isListLoaderRetry = true;
-			break;
-		default:			
-			break;
-		}     	
+        switch (type) {
+            case LOADER:
+                isListLoader = true;
+                break;
+            case RETRY:
+                isListLoaderRetry = true;
+                break;
+            default:
+                break;
+        }
     }
 
     public static LinkedList<FeedLike> parse(ApiResponse response) {
@@ -55,12 +55,12 @@ public class FeedLike extends AbstractDataWithPhotos implements IListLoader{
         try {
             FeedLike.unread_count = response.mJSONResult.getInt("unread");
             FeedLike.more = response.mJSONResult.optBoolean("more");
-            
+
             JSONArray arr = response.mJSONResult.getJSONArray("feed");
             if (arr.length() > 0)
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject item = arr.getJSONObject(i);
-                    
+
                     FeedLike like = new FeedLike();
                     like.type = item.optInt("type");
                     like.id = item.optInt("id");
@@ -84,14 +84,14 @@ public class FeedLike extends AbstractDataWithPhotos implements IListLoader{
 //	                    like.avatars_big = avatar.optString("big");
 //	                    like.avatars_small = avatar.optString("small");
 //                    }
-                    
+
 //                    like.rate = item.optInt("rate");
-                    
+
                     initPhotos(item, like);
 
                     likesList.add(like);
                 }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("FeedLike.class", "Wrong response parsing: " + e);
         }
 
@@ -100,21 +100,23 @@ public class FeedLike extends AbstractDataWithPhotos implements IListLoader{
 
     public int getUid() {
         return uid;
-    };
+    }
 
-	@Override
-	public boolean isLoader() {		
-		return isListLoader;
-	}
-	
-	@Override
-	public boolean isLoaderRetry() {
-		return isListLoaderRetry;
-	}
-	
-	@Override
-	public void switchToLoader() {
-		isListLoader = false;
-		isListLoaderRetry = true;
-	}
+    ;
+
+    @Override
+    public boolean isLoader() {
+        return isListLoader;
+    }
+
+    @Override
+    public boolean isLoaderRetry() {
+        return isListLoaderRetry;
+    }
+
+    @Override
+    public void switchToLoader() {
+        isListLoader = false;
+        isListLoaderRetry = true;
+    }
 }

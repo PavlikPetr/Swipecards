@@ -2,40 +2,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/im_list_bkgrd" >
+                android:background="@drawable/im_list_bkgrd">
 
     <!-- Left Menu -->
     <fragment class="com.topface.topface.ui.fragments.FragmentMenu"
-        android:id="@+id/fragment_menu"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
-    
+              android:id="@+id/fragment_menu"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"/>
+
     <!-- Fragment Container -->
     <com.topface.topface.ui.fragments.FragmentSwitchController
-        android:id="@+id/fragment_switcher"
-        android:layout_width="fill_parent" 
-        android:layout_height="fill_parent" >
-        
+            android:id="@+id/fragment_switcher"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
         <!-- 0 shadow -->
-	    <RelativeLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent" >
-             
-		    <ImageView
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_alignParentRight="true" 
-		        android:src="@drawable/topface_shadow" />
-		        
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/topface_shadow"/>
+
         </RelativeLayout>
-        
-	    <!-- 1 fragment -->
-	    <FrameLayout
-	        android:id="@+id/fragment_container"
-	        android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
-        
-    </com.topface.topface.ui.fragments.FragmentSwitchController >
+
+        <!-- 1 fragment -->
+        <FrameLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"/>
+
+    </com.topface.topface.ui.fragments.FragmentSwitchController>
 
 </RelativeLayout>
 

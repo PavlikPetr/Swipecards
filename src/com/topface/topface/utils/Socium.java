@@ -1,15 +1,5 @@
 package com.topface.topface.utils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URLEncoder;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.utils.http.Http;
-import com.topface.topface.utils.social.AuthToken;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,16 +8,28 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.utils.http.Http;
+import com.topface.topface.utils.social.AuthToken;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URLEncoder;
 
 public class Socium {
     // Data
     private Context mContext;
     private AuthToken mToken;
+
     //---------------------------------------------------------------------------
     public Socium(Context context) {
         mContext = context;
         mToken = new AuthToken(mContext);
     }
+
     //---------------------------------------------------------------------------
     public String[] uploadPhoto(Uri uri) {
         if (mToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE))
@@ -37,6 +39,7 @@ public class Socium {
         else
             return null;
     }
+
     //---------------------------------------------------------------------------
     public String[] uploadPhotoVK(Uri uri) {
         String[] result = new String[3];
@@ -93,7 +96,7 @@ public class Socium {
             int width = options.outWidth, height = options.outHeight;
             int scale = 1;
             if (width > Static.PHOTO_WIDTH && height > Static.PHOTO_HEIGHT) // определили степень уменьшения
-                while(true) {
+                while (true) {
                     if ((width / 2) < Static.PHOTO_WIDTH && (height / 2) < Static.PHOTO_HEIGHT)
                         break;
                     width /= 2;
@@ -145,11 +148,12 @@ public class Socium {
             result[1] = link.getString("src");
             result[2] = link.getString("src_small");
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
+
     //---------------------------------------------------------------------------
     public String[] uploadPhotoFB(Uri uri) {
         String[] result = new String[3];
@@ -165,7 +169,7 @@ public class Socium {
             int width = options.outWidth, height = options.outHeight;
             int scale = 1;
             if (width > Static.PHOTO_WIDTH && height > Static.PHOTO_HEIGHT) // определили степень уменьшения
-                while(true) {
+                while (true) {
                     if ((width / 2) < Static.PHOTO_WIDTH && (height / 2) < Static.PHOTO_HEIGHT)
                         break;
                     width /= 2;
@@ -215,13 +219,14 @@ public class Socium {
             result[1] = images.getJSONObject(4).getString("source"); // medium
             result[2] = images.getJSONObject(1).getString("source"); // small
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
+
     //---------------------------------------------------------------------------
-    public static int getImageOrientation(Context context,Uri photoUri) {
+    public static int getImageOrientation(Context context, Uri photoUri) {
         Cursor cursor = context.getContentResolver().query(photoUri, new String[]{MediaStore.Images.ImageColumns.ORIENTATION}, null, null, null);
         if (cursor.getCount() != 1)
             return -1;

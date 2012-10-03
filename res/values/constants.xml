@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <!-- Resources name -->  
-  <string name="s_ssid">ssid</string>
-  <string name="s_tops_sex">tops_sex</string>
-  <string name="s_tops_city_id">tops_city_id</string>
-  <string name="s_tops_city_position">tops_city_position</string>
-  <string name="s_tops_city_name">tops_city_name</string>
-  <string name="s_likes_city_id">likes_city_id</string>
-  
-  <!-- Filter pref name -->
-  <string name="s_dating_sex">dating_sex</string>
-  <string name="s_dating_age">dating_age</string>
-  <string name="s_dating_nearby">dating_nearby</string>
-  <string name="s_dating_cities_all">dating_cities_all</string>
-  <string name="s_dating_select_city">dating_select_city</string>
-  <string name="s_dating_city">dating_city</string>
-  
-  <!-- Profile pref name -->
-  <string name="s_profile_header_1">header_1</string>
-  <string name="s_profile_header_2">header_2</string>
-  
-  <string name="s_profile_name">profile_name</string>
-  <string name="s_profile_sex">profile_sex</string>
-  <string name="s_profile_age">profile_age</string>
-  <string name="s_profile_city">profile_city</string>
-  <string name="s_profile_about">profile_about</string>
-  
-  <string name="s_profile_job_id">profile_job_id</string>
-  <string name="s_profile_job">profile_job</string>
-  <string name="s_profile_status_id">profile_status_id</string>
-  <string name="s_profile_status">profile_status</string>
-  <string name="s_profile_education">profile_education_id</string>
-  <string name="s_profile_marriage">profile_marriage_id</string>
-  <string name="s_profile_finances">profile_finances_id</string>
-  <string name="s_profile_character">profile_character_id</string>
-  <string name="s_profile_smoking">profile_smoking_id</string>
-  <string name="s_profile_alcohol">profile_alcohol_id</string>
-  <string name="s_profile_fitness">profile_fitness_id</string>
-  <string name="s_profile_communication">profile_communication_id</string>
-  <string name="s_profile_weight">profile_weight</string>
-  <string name="s_profile_height">profile_height</string>
-  <string name="s_profile_hair">profile_hair_id</string>
-  <string name="s_profile_eye">profile_eye_id</string>
-  <string name="s_profile_children">profile_children_id</string>
-  <string name="s_profile_residence">profile_residence_id</string>
-  <string name="s_profile_car_id">profile_car_id</string>
-  <string name="s_profile_car">profile_car</string>
-  <string name="s_profile_first_dating">profile_first_dating</string>
-  <string name="s_profile_achievements">profile_achievements</string>
-  <string name="s_profile_restaurants">profile_restaurants</string>
-  <string name="s_profile_valuables">profile_valuables</string>
-  <string name="s_profile_aspirations">profile_aspirations</string>
+    <!-- Resources name -->
+    <string name="s_ssid">ssid</string>
+    <string name="s_tops_sex">tops_sex</string>
+    <string name="s_tops_city_id">tops_city_id</string>
+    <string name="s_tops_city_position">tops_city_position</string>
+    <string name="s_tops_city_name">tops_city_name</string>
+    <string name="s_likes_city_id">likes_city_id</string>
 
-  <!-- settings -->
-  <string name="s_settings">profile_settings</string>
-  <string name="settings_preloading_wifi">wifi</string>
-  <string name="settings_preloading_on">on</string>
-  <string name="settings_preloading_off">off</string>
-  <string name="settings_preloading_type_user">user</string>
-  <string name="settings_preloading_type_photo">photo</string>
-  <string name="settings_preloading_type_all">all</string>
+    <!-- Filter pref name -->
+    <string name="s_dating_sex">dating_sex</string>
+    <string name="s_dating_age">dating_age</string>
+    <string name="s_dating_nearby">dating_nearby</string>
+    <string name="s_dating_cities_all">dating_cities_all</string>
+    <string name="s_dating_select_city">dating_select_city</string>
+    <string name="s_dating_city">dating_city</string>
+
+    <!-- Profile pref name -->
+    <string name="s_profile_header_1">header_1</string>
+    <string name="s_profile_header_2">header_2</string>
+
+    <string name="s_profile_name">profile_name</string>
+    <string name="s_profile_sex">profile_sex</string>
+    <string name="s_profile_age">profile_age</string>
+    <string name="s_profile_city">profile_city</string>
+    <string name="s_profile_about">profile_about</string>
+
+    <string name="s_profile_job_id">profile_job_id</string>
+    <string name="s_profile_job">profile_job</string>
+    <string name="s_profile_status_id">profile_status_id</string>
+    <string name="s_profile_status">profile_status</string>
+    <string name="s_profile_education">profile_education_id</string>
+    <string name="s_profile_marriage">profile_marriage_id</string>
+    <string name="s_profile_finances">profile_finances_id</string>
+    <string name="s_profile_character">profile_character_id</string>
+    <string name="s_profile_smoking">profile_smoking_id</string>
+    <string name="s_profile_alcohol">profile_alcohol_id</string>
+    <string name="s_profile_fitness">profile_fitness_id</string>
+    <string name="s_profile_communication">profile_communication_id</string>
+    <string name="s_profile_weight">profile_weight</string>
+    <string name="s_profile_height">profile_height</string>
+    <string name="s_profile_hair">profile_hair_id</string>
+    <string name="s_profile_eye">profile_eye_id</string>
+    <string name="s_profile_children">profile_children_id</string>
+    <string name="s_profile_residence">profile_residence_id</string>
+    <string name="s_profile_car_id">profile_car_id</string>
+    <string name="s_profile_car">profile_car</string>
+    <string name="s_profile_first_dating">profile_first_dating</string>
+    <string name="s_profile_achievements">profile_achievements</string>
+    <string name="s_profile_restaurants">profile_restaurants</string>
+    <string name="s_profile_valuables">profile_valuables</string>
+    <string name="s_profile_aspirations">profile_aspirations</string>
+
+    <!-- settings -->
+    <string name="s_settings">profile_settings</string>
+    <string name="settings_preloading_wifi">wifi</string>
+    <string name="settings_preloading_on">on</string>
+    <string name="settings_preloading_off">off</string>
+    <string name="settings_preloading_type_user">user</string>
+    <string name="settings_preloading_type_photo">photo</string>
+    <string name="settings_preloading_type_all">all</string>
 
 </resources>

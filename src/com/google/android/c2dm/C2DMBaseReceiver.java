@@ -71,20 +71,20 @@ public abstract class C2DMBaseReceiver extends IntentService {
     /**
      * Called when a cloud message has been received.
      */
-    protected abstract void onMessage(Context context,Intent intent);
+    protected abstract void onMessage(Context context, Intent intent);
 
     /**
      * Called on registration error. Override to provide better
      * error messages.
-     * 
+     * <p/>
      * This is called in the context of a Service - no dialog or UI.
      */
-    public abstract void onError(Context context,String errorId);
+    public abstract void onError(Context context, String errorId);
 
     /**
      * Called when a registration token has been received.
      */
-    public void onRegistered(Context context,String registrationId) throws IOException {
+    public void onRegistered(Context context, String registrationId) throws IOException {
         // registrationId will also be saved
     }
 
@@ -123,10 +123,10 @@ public abstract class C2DMBaseReceiver extends IntentService {
      * in background threads, with a wake lock, while keeping the service
      * alive.
      */
-    static void runIntentInService(Context context,Intent intent) {
+    static void runIntentInService(Context context, Intent intent) {
         if (mWakeLock == null) {
             // This is called from BroadcastReceiver, there is no init.
-            PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_KEY);
         }
         mWakeLock.acquire();
@@ -140,7 +140,7 @@ public abstract class C2DMBaseReceiver extends IntentService {
 
     }
 
-    private void handleRegistration(final Context context,Intent intent) {
+    private void handleRegistration(final Context context, Intent intent) {
         final String registrationId = intent.getStringExtra(EXTRA_REGISTRATION_ID);
         String error = intent.getStringExtra(EXTRA_ERROR);
         String removed = intent.getStringExtra(EXTRA_UNREGISTERED);
@@ -167,7 +167,7 @@ public abstract class C2DMBaseReceiver extends IntentService {
                 Intent retryIntent = new Intent(C2DM_RETRY);
                 PendingIntent retryPIntent = PendingIntent.getBroadcast(context, 0 /* requestCode */, retryIntent, 0 /* flags */);
 
-                AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+                AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 am.set(AlarmManager.ELAPSED_REALTIME, backoffTimeMs, retryPIntent);
 
                 // Next retry should wait longer.
@@ -178,7 +178,7 @@ public abstract class C2DMBaseReceiver extends IntentService {
             try {
                 onRegistered(context, registrationId);
                 C2DMessaging.setRegistrationId(context, registrationId);
-            } catch(IOException ex) {
+            } catch (IOException ex) {
                 Log.e(TAG, "Registration error " + ex.getMessage());
             }
         }

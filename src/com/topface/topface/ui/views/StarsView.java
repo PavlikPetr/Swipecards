@@ -1,16 +1,12 @@
 package com.topface.topface.ui.views;
 
+import android.content.Context;
+import android.graphics.*;
+import android.view.MotionEvent;
+import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.Recycle;
 import com.topface.topface.utils.CacheProfile;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.Typeface;
-import android.view.MotionEvent;
-import android.view.View;
 
 public class StarsView extends View implements View.OnTouchListener {
     //---------------------------------------------------------------------------
@@ -19,6 +15,7 @@ public class StarsView extends View implements View.OnTouchListener {
     public interface OnRateListener {
         public void onRate(int rate);
     }
+
     //---------------------------------------------------------------------------
     // calss Star
     //---------------------------------------------------------------------------
@@ -31,8 +28,9 @@ public class StarsView extends View implements View.OnTouchListener {
         private int _height;
         public Rect _rect;
         public boolean pressed; // состояние
+
         // Ctor
-        public Star(int x,int y,int width,int height,int index) {
+        public Star(int x, int y, int width, int height, int index) {
             _x = x;
             _y = y;
             _bmp_y = y + ((height - Recycle.s_RateAverage.getHeight()) / 2); // центрирование по вертикале
@@ -41,6 +39,7 @@ public class StarsView extends View implements View.OnTouchListener {
             _index = index;
             _rect = new Rect(_x, _y, _x + _widht, _y + _height);
         }
+
         public void draw(Canvas canvas) {
             if (_index == CacheProfile.average_rate) { // средняя оценка
                 if (!pressed)
@@ -48,7 +47,7 @@ public class StarsView extends View implements View.OnTouchListener {
                 else
                     canvas.drawBitmap(Recycle.s_RateAveragePressed, _x, _bmp_y, paintStar);
                 // Star Index         вынести расчеты !!!!!!!!
-                canvas.drawText("" + _index, (float)(_x + Recycle.s_RateAverage.getWidth() / 2), (float)(_bmp_y + Recycle.s_RateAverage.getHeight() / 1.5), paintStarNumber);
+                canvas.drawText("" + _index, (float) (_x + Recycle.s_RateAverage.getWidth() / 2), (float) (_bmp_y + Recycle.s_RateAverage.getHeight() / 1.5), paintStarNumber);
             }
 
             if (_index > CacheProfile.average_rate && _index < 10) { // high
@@ -57,7 +56,7 @@ public class StarsView extends View implements View.OnTouchListener {
                 else
                     canvas.drawBitmap(Recycle.s_RateHighPressed, _x, _bmp_y, paintStar);
                 // Star Index         вынести расчеты !!!!!!!!
-                canvas.drawText("" + _index, (float)(_x + Recycle.s_RateHigh.getWidth() / 2), (float)(_bmp_y + Recycle.s_RateHigh.getHeight() / 1.5), paintHeartNumber);
+                canvas.drawText("" + _index, (float) (_x + Recycle.s_RateHigh.getWidth() / 2), (float) (_bmp_y + Recycle.s_RateHigh.getHeight() / 1.5), paintHeartNumber);
             }
 
             if (_index < CacheProfile.average_rate) { // low
@@ -66,7 +65,7 @@ public class StarsView extends View implements View.OnTouchListener {
                 else
                     canvas.drawBitmap(Recycle.s_RateLowPressed, _x, _bmp_y, paintStar);
                 // Star Index         вынести расчеты !!!!!!!!
-                canvas.drawText("" + _index, (float)(_x + Recycle.s_RateLow.getWidth() / 2), (float)(_bmp_y + Recycle.s_RateLow.getHeight() / 1.5), paintStarNumber);
+                canvas.drawText("" + _index, (float) (_x + Recycle.s_RateLow.getWidth() / 2), (float) (_bmp_y + Recycle.s_RateLow.getHeight() / 1.5), paintStarNumber);
             }
 
             if (_index == 10) { // 10 top
@@ -75,11 +74,12 @@ public class StarsView extends View implements View.OnTouchListener {
                 else
                     canvas.drawBitmap(Recycle.s_RateTopPressed, _x, _bmp_y, paintStar);
                 // Star Index         вынести расчеты !!!!!!!!
-                canvas.drawText("" + _index, (float)(_x + Recycle.s_RateTop.getWidth() / 2), (float)(_bmp_y + Recycle.s_RateTop.getHeight() / 1.5), paintHeartNumber);
+                canvas.drawText("" + _index, (float) (_x + Recycle.s_RateTop.getWidth() / 2), (float) (_bmp_y + Recycle.s_RateTop.getHeight() / 1.5), paintHeartNumber);
             }
 
         }
     }
+
     //---------------------------------------------------------------------------
     // Data
     //public int mAverageRate;   // средняя выставляемвя оценка
@@ -94,8 +94,9 @@ public class StarsView extends View implements View.OnTouchListener {
     // Constants
     private static final int EVENT_COUNT = 3; // число последних запоминаемых координат пальца
     private static final int STARS_COUNT = 10; // кол-во звезд на фрейме
+
     //---------------------------------------------------------------------------
-    public StarsView(Context context,InformerView informer) {
+    public StarsView(Context context, InformerView informer) {
         super(context);
         mStars = new Star[STARS_COUNT];
         mLastYs = new float[EVENT_COUNT];
@@ -119,15 +120,17 @@ public class StarsView extends View implements View.OnTouchListener {
         paintHeartNumber.setAntiAlias(true);
         paintHeartNumber.setTextAlign(Paint.Align.CENTER);
     }
+
     //---------------------------------------------------------------------------
     // index 
     int prev_star_index = 0;
     int curr_star_index = 0;
+
     @Override
-    public boolean onTouch(View v,MotionEvent event) {
+    public boolean onTouch(View v, MotionEvent event) {
         // текущие координаты пальца
-        int x = (int)event.getX();
-        int y = (int)event.getY();
+        int x = (int) event.getX();
+        int y = (int) event.getY();
 
         // находится ли палец в пределах контрола звезд
         boolean isStar = false;
@@ -195,6 +198,7 @@ public class StarsView extends View implements View.OnTouchListener {
 
         return true;
     }
+
     //---------------------------------------------------------------------------
     @Override
     protected void onDraw(Canvas canvas) {
@@ -202,17 +206,19 @@ public class StarsView extends View implements View.OnTouchListener {
         for (Star item : mStars)
             item.draw(canvas);
     }
+
     //---------------------------------------------------------------------------
     @Override
-    protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int height = MeasureSpec.getSize(heightMeasureSpec); // вычисляем предоставленную нам высоту для отрисовки
-        int width = (int)(Recycle.s_RateAverage.getWidth() * 1.1); // говорим, что нам нужно больше
+        int width = (int) (Recycle.s_RateAverage.getWidth() * 1.1); // говорим, что нам нужно больше
 
         setMeasuredDimension(width, height);
     }
+
     //---------------------------------------------------------------------------
     @Override
-    protected void onLayout(boolean changed,int left,int top,int right,int bottom) {
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         // размеры одной звезды
         int star_w = getMeasuredWidth();
         int star_h = getMeasuredHeight() / STARS_COUNT; // все доступное расстояние делим между звездами
@@ -241,15 +247,18 @@ public class StarsView extends View implements View.OnTouchListener {
         y += star_h;
         mStars[9] = new Star(x, y, star_w, star_h, 1);
     }
+
     //---------------------------------------------------------------------------
     public void setOnRateListener(OnRateListener listener) {
         mRateListener = listener;
     }
+
     //---------------------------------------------------------------------------
     public void setBlock(boolean block) {
         //mAverageRate = CacheProfile.average_rate;    // Костыль по обновлению средней оценки
         this.setEnabled(block);
     }
+
     //---------------------------------------------------------------------------
     public void release() {
         mStars = null;

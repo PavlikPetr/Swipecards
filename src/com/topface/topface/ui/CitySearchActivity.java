@@ -1,7 +1,17 @@
 package com.topface.topface.ui;
 
 
-import java.util.LinkedList;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.*;
+import android.widget.AdapterView.OnItemClickListener;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.requests.ApiHandler;
@@ -9,25 +19,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.utils.Debug;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.LinkedList;
 
@@ -47,6 +38,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     public static final String INTENT_CITY_ID = "city_id";
     public static final String INTENT_CITY_NAME = "city_name";
     public static final String INTENT_CITY_FULL_NAME = "city_full";
+
     //---------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,86 +47,86 @@ public class CitySearchActivity extends BaseFragmentActivity {
         setContentView(R.layout.ac_city);
         Debug.log(this, "+onCreate");
 
-        overridePendingTransition(R.anim.slide_in_from_right,R.anim.slide_out_left);        
-        
+        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
+
         // Data
         mTopCitiesList = new LinkedList<City>();
         mDataList = new LinkedList<City>();
         mNameList = new LinkedList<String>();
 
         // Title Header        
-        ((TextView)findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.filter_city));     	
-   		((Button) findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-   		Button btnBack = (Button) findViewById(R.id.btnNavigationBack);
-   		btnBack.setVisibility(View.VISIBLE);   		
-   		btnBack.setOnClickListener(new OnClickListener() {
-  			@Override
-   			public void onClick(View v) {
-   				finish();
-   			}
-   		});
-        
+        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.filter_city));
+        ((Button) findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        Button btnBack = (Button) findViewById(R.id.btnNavigationBack);
+        btnBack.setVisibility(View.VISIBLE);
+        btnBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         // Progress
-        mProgressBar = (ProgressBar)findViewById(R.id.prsCityLoading);
-        
+        mProgressBar = (ProgressBar) findViewById(R.id.prsCityLoading);
+
         // ListAdapter
         final LayoutInflater mInflater = LayoutInflater.from(getApplicationContext());
         mListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, mNameList) {
-        	class ViewHolder {
-        		TextView mTitle;
-        		ImageView mBackground;
-        	}        	
-        	
-        	@Override
-        	public View getView(int position, View convertView, ViewGroup parent) {
-        		ViewHolder holder = null;
-    			
-    			if (convertView == null) {
-    				holder = new ViewHolder();		
-    				
-    				convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
-    				holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-    				holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
-    					
-    				convertView.setTag(holder);
-    			} else {
-    				holder = (ViewHolder) convertView.getTag();
-    			}
+            class ViewHolder {
+                TextView mTitle;
+                ImageView mBackground;
+            }
 
-    		
-    			if (position == 0) {
-    				if(getCount() == 1) {
-    					holder.mBackground.setImageDrawable(getResources().getDrawable(
-        						R.drawable.edit_big_btn_selector));    					
-    				} else {
-    					holder.mBackground.setImageDrawable(getResources().getDrawable(
-        						R.drawable.edit_big_btn_top_selector));
-    				}
-    				convertView.setPadding(0, 10, 0, 0);
-    			} else if (position == getCount() - 1) {
-    				holder.mBackground.setImageDrawable(getResources().getDrawable(
-    						R.drawable.edit_big_btn_bottom_selector));
-    				convertView.setPadding(0, 0, 0, 10);
-    			} else {
-    				holder.mBackground.setImageDrawable(getResources().getDrawable(
-    						R.drawable.edit_big_btn_middle_selector));
-    				convertView.setPadding(0, 0, 0, 0);
-    			}    			
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                ViewHolder holder = null;
 
-    			holder.mTitle.setText(getItem(position));    			
-    			
-    			return convertView;
-        	}
+                if (convertView == null) {
+                    holder = new ViewHolder();
+
+                    convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
+                    holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+                    holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
+
+                    convertView.setTag(holder);
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
+                }
+
+
+                if (position == 0) {
+                    if (getCount() == 1) {
+                        holder.mBackground.setImageDrawable(getResources().getDrawable(
+                                R.drawable.edit_big_btn_selector));
+                    } else {
+                        holder.mBackground.setImageDrawable(getResources().getDrawable(
+                                R.drawable.edit_big_btn_top_selector));
+                    }
+                    convertView.setPadding(0, 10, 0, 0);
+                } else if (position == getCount() - 1) {
+                    holder.mBackground.setImageDrawable(getResources().getDrawable(
+                            R.drawable.edit_big_btn_bottom_selector));
+                    convertView.setPadding(0, 0, 0, 10);
+                } else {
+                    holder.mBackground.setImageDrawable(getResources().getDrawable(
+                            R.drawable.edit_big_btn_middle_selector));
+                    convertView.setPadding(0, 0, 0, 0);
+                }
+
+                holder.mTitle.setText(getItem(position));
+
+                return convertView;
+            }
         };
 
         // ListView
-        mCityListView = (ListView)findViewById(R.id.lvCityList);
+        mCityListView = (ListView) findViewById(R.id.lvCityList);
         mCityListView.setAdapter(mListAdapter);
 
         // возврат значения и выход
         mCityListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0,View arg1,int position,long arg3) {
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 Intent intent = CitySearchActivity.this.getIntent();
                 intent.putExtra(INTENT_CITY_ID, mDataList.get(position).id);
                 intent.putExtra(INTENT_CITY_NAME, mDataList.get(position).name);
@@ -148,16 +140,18 @@ public class CitySearchActivity extends BaseFragmentActivity {
         });
 
         // EditText
-        mCityInputView = (EditText)findViewById(R.id.etCityInput);
+        mCityInputView = (EditText) findViewById(R.id.etCityInput);
         mCityInputView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s,int start,int count,int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
+
             @Override
-            public void onTextChanged(CharSequence s,int start,int before,int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 2)
                     city(s.toString());
                 else {
@@ -169,6 +163,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
         update();
     }
+
     //---------------------------------------------------------------------------
     private void update() {
         mProgressBar.setVisibility(View.VISIBLE);
@@ -193,8 +188,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
                     }
                 });
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
+            public void fail(int codeError, ApiResponse response) {
                 post(new Runnable() {
                     @Override
                     public void run() {
@@ -205,6 +201,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
             }
         }).exec();
     }
+
     //---------------------------------------------------------------------------
     private void city(String prefix) {
         searchCitiesRequest = new SearchCitiesRequest(this);
@@ -224,8 +221,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
                     }
                 });
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
+            public void fail(int codeError, ApiResponse response) {
                 fillData(mTopCitiesList);
                 post(new Runnable() {
                     @Override
@@ -236,6 +234,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
             }
         }).exec();
     }
+
     //---------------------------------------------------------------------------
     private void fillData(LinkedList<City> citiesList) {
         mDataList.clear();
@@ -244,18 +243,20 @@ public class CitySearchActivity extends BaseFragmentActivity {
         for (City city : mDataList)
             mNameList.add(city.full);
     }
+
     //---------------------------------------------------------------------------
     @Override
-    protected void onDestroy() {        
+    protected void onDestroy() {
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
+
     //---------------------------------------------------------------------------
     @Override
-	public void finish() {		
-		super.finish();
-		overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
-	}
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
+    }
 }
 
 /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,

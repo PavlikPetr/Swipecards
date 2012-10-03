@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-    
-   	<ImageView
-	    android:id="@+id/ivDivider"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:src="@drawable/item_divider" />
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+    <ImageView
+            android:id="@+id/ivDivider"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/item_divider"/>
 
 </RelativeLayout>

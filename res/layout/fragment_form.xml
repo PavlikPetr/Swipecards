@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent" 
-              android:orientation="vertical" >
-              
-    <TextView 
-        android:id="@+id/fragmentTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"        
-        android:layout_marginLeft="6dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="4dp"        
-        style="@style/BackgroundTitleText" />
-    
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
+
+    <TextView
+            android:id="@+id/fragmentTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="4dp"
+            style="@style/BackgroundTitleText"/>
+
     <ImageView
-        android:id="@+id/ivDivider"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/item_divider" />
-              
+            android:id="@+id/ivDivider"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/item_divider"/>
+
     <ListView
-        android:id="@+id/fragmentFormList"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:cacheColorHint="#00000000"
-        android:fadeScrollbars="true"
-        android:listSelector="@android:color/transparent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:fadingEdge="none" />
-    
+            android:id="@+id/fragmentFormList"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:cacheColorHint="#00000000"
+            android:fadeScrollbars="true"
+            android:listSelector="@android:color/transparent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:fadingEdge="none"/>
+
 </LinearLayout>

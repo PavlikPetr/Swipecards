@@ -22,6 +22,7 @@ public class Consts {
         RESULT_ITEM_UNAVAILABLE,
         RESULT_DEVELOPER_ERROR,
         RESULT_ERROR;
+
         public static ResponseCode valueOf(int index) {
             ResponseCode[] values = ResponseCode.values();
             if (index < 0 || index >= values.length)
@@ -34,6 +35,7 @@ public class Consts {
         PURCHASED,
         CANCELED,
         REFUNDED;
+
         public static PurchaseState valueOf(int index) {
             PurchaseState[] values = PurchaseState.values();
             if (index < 0 || index >= values.length)

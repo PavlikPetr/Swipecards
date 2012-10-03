@@ -1,8 +1,16 @@
 package com.topface.topface.ui;
 
-import com.topface.topface.ReAuthReceiver;
-import com.topface.topface.R;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import com.topface.topface.Data;
+import com.topface.topface.R;
+import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.data.Auth;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
@@ -15,15 +23,6 @@ import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class AuthActivity extends BaseFragmentActivity implements View.OnClickListener {
     private Button mFBButton;
@@ -98,10 +97,12 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     protected void onResume() {
         super.onResume();
         checkIntentForReauth(getIntent());
-    };
+    }
+
+    ;
 
     @Override
-    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
         hideButtons();
@@ -174,11 +175,11 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {                
+            public void fail(int codeError, ApiResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    	showButtons();
+                        showButtons();
                         Toast.makeText(AuthActivity.this, getString(R.string.general_server_error),
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -217,7 +218,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    	showButtons();
+                        showButtons();
                         Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
                                 Toast.LENGTH_SHORT).show();
                     }

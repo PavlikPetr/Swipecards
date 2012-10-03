@@ -1,9 +1,5 @@
 package com.topface.topface.ui.adapters;
 
-import com.topface.topface.R;
-import com.topface.topface.data.FeedLike;
-import com.topface.topface.utils.AvatarManager;
-import com.topface.topface.utils.CacheProfile;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,76 +28,83 @@ public class LikesListAdapter extends LoadingListAdapter {
 //        public ProgressBar mProgressBar;
 //        public TextView mRetryText;
     }
+
     //---------------------------------------------------------------------------
     // Data
     private LayoutInflater mInflater;
     private AvatarManager<FeedLike> mAvatarManager;
-    private int mOwnerCityID;    
+    private int mOwnerCityID;
     Context mContext;
-    
+
     // Constants    
     private static final int T_CITY = 3;
     private static final int T_COUNT = 1;
-    
+
     //---------------------------------------------------------------------------
-    public LikesListAdapter(Context context,AvatarManager<FeedLike> avatarManager) {
-    	mContext = context;
+    public LikesListAdapter(Context context, AvatarManager<FeedLike> avatarManager) {
+        mContext = context;
         mAvatarManager = avatarManager;
-        mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mOwnerCityID = CacheProfile.city_id;
-        
-        mLoaderRetrier = mInflater.inflate(R.layout.item_list_loader_retrier, null, false);   
+
+        mLoaderRetrier = mInflater.inflate(R.layout.item_list_loader_retrier, null, false);
         mLoaderRetrierText = (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
         mLoaderRetrierProgress = (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
     }
+
     //---------------------------------------------------------------------------
     @Override
     public int getCount() {
         return mAvatarManager.size();
     }
+
     //---------------------------------------------------------------------------
     @Override
     public FeedLike getItem(int position) {
         return mAvatarManager.get(position);
     }
+
     //---------------------------------------------------------------------------
     @Override
     public long getItemId(int position) {
         return position;
     }
+
     //---------------------------------------------------------------------------
     @Override
     public int getViewTypeCount() {
-    	return super.getViewTypeCount() + T_COUNT;
+        return super.getViewTypeCount() + T_COUNT;
     }
+
     //---------------------------------------------------------------------------
     @Override
     public int getItemViewType(int position) {
-    	int typeOfSuperMethod = super.getItemViewType(position); 
-    	if (typeOfSuperMethod == T_OTHER) {
-    		return mAvatarManager.get(position).city_id == mOwnerCityID ? T_CITY : T_OTHER;
-    	} else {
-    		return typeOfSuperMethod;
-    	}
+        int typeOfSuperMethod = super.getItemViewType(position);
+        if (typeOfSuperMethod == T_OTHER) {
+            return mAvatarManager.get(position).city_id == mOwnerCityID ? T_CITY : T_OTHER;
+        } else {
+            return typeOfSuperMethod;
+        }
     }
+
     //---------------------------------------------------------------------------
     @Override
-    public View getView(final int position,View convertView,ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 //    	long startTime = System.currentTimeMillis();
         ViewHolder holder;
 
-        int type = getItemViewType(position);        
-        
-        if (type == T_LOADER) {        	        	        	
-        	mLoaderRetrierProgress.setVisibility(View.VISIBLE);
-        	mLoaderRetrierText.setVisibility(View.INVISIBLE);
-        	return mLoaderRetrier;
+        int type = getItemViewType(position);
+
+        if (type == T_LOADER) {
+            mLoaderRetrierProgress.setVisibility(View.VISIBLE);
+            mLoaderRetrierText.setVisibility(View.INVISIBLE);
+            return mLoaderRetrier;
         } else if (type == T_RETRIER) {
-        	mLoaderRetrierProgress.setVisibility(View.INVISIBLE);
-        	mLoaderRetrierText.setVisibility(View.VISIBLE);
-        	return mLoaderRetrier;
-        } else {        	
-        	if (convertView == null) {
+            mLoaderRetrierProgress.setVisibility(View.INVISIBLE);
+            mLoaderRetrierText.setVisibility(View.VISIBLE);
+            return mLoaderRetrier;
+        } else {
+            if (convertView == null) {
                 holder = new ViewHolder();
 
                 convertView = mInflater.inflate(R.layout.item_likes_gallery, null, false);
@@ -126,13 +129,13 @@ public class LikesListAdapter extends LoadingListAdapter {
 //					}
 //					
 //				});
-                holder.mAvatar = (ImageViewRemote)convertView.findViewById(R.id.ivAvatar);
-                holder.mName = (TextView)convertView.findViewById(R.id.tvName);
-                holder.mCity = (TextView)convertView.findViewById(R.id.tvCity);
-                holder.mTime = (TextView)convertView.findViewById(R.id.tvTime);
-                holder.mHeart = (ImageView)convertView.findViewById(R.id.ivHeart);
-                holder.mArrow = (ImageView)convertView.findViewById(R.id.ivArrow);
-                holder.mOnline = (ImageView)convertView.findViewById(R.id.ivOnline);
+                holder.mAvatar = (ImageViewRemote) convertView.findViewById(R.id.ivAvatar);
+                holder.mName = (TextView) convertView.findViewById(R.id.tvName);
+                holder.mCity = (TextView) convertView.findViewById(R.id.tvCity);
+                holder.mTime = (TextView) convertView.findViewById(R.id.tvTime);
+                holder.mHeart = (ImageView) convertView.findViewById(R.id.ivHeart);
+                holder.mArrow = (ImageView) convertView.findViewById(R.id.ivArrow);
+                holder.mOnline = (ImageView) convertView.findViewById(R.id.ivOnline);
 
                 /*switch(type) {
                  * case T_ALL:
@@ -141,45 +144,47 @@ public class LikesListAdapter extends LoadingListAdapter {
                  * case T_CITY:
                  * convertView.setBackgroundResource(R.drawable.item_city_selector);
                  * break;
-                 * } */            
+                 * } */
 
                 convertView.setTag(holder);
             } else {
-                holder = (ViewHolder)convertView.getTag();
+                holder = (ViewHolder) convertView.getTag();
             }
-        	
-	        FeedLike likes = getItem(position);
+
+            FeedLike likes = getItem(position);
 
             holder.mAvatar.setRemoteSrc(likes.getNormalLink());
-	        holder.mName.setText(likes.first_name);
-	        holder.mCity.setText(likes.age + ", " + likes.city_name);
-	
+            holder.mName.setText(likes.first_name);
+            holder.mCity.setText(likes.age + ", " + likes.city_name);
+
 //	        if (likes.rate == 10)
 //	            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart_top);
 //	        else
 //	            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart);
-	
-	        if (likes.online)
-	            holder.mOnline.setVisibility(View.VISIBLE);
-	        else
-	            holder.mOnline.setVisibility(View.INVISIBLE);
+
+            if (likes.online)
+                holder.mOnline.setVisibility(View.VISIBLE);
+            else
+                holder.mOnline.setVisibility(View.INVISIBLE);
         }
         //Utils.formatTime(holder.mTime,likes.created);
         //holder.mArrow.setImageResource(R.drawable.im_item_arrow); // ??? зачем
-        
+
 //        if ((System.currentTimeMillis() - startTime) > 20) {
 //        	Log.e("OLOLO", Long.toString((System.currentTimeMillis() - startTime)) + "   " + type);
 //        } else {
 //        	Log.d("OLOLO", Long.toString((System.currentTimeMillis() - startTime))+ "   " + type);
 //        }
-        
+
         return convertView;
     }
+
     //---------------------------------------------------------------------------
     @Override
     public boolean isEnabled(int position) {
         return getItemViewType(position) != T_LOADER;
     }
+
     //---------------------------------------------------------------------------
     public void release() {
         mInflater = null;

@@ -9,7 +9,7 @@
         -->
     </string-array>
 
-    <array name="itv_icons" >
+    <array name="itv_icons">
         <item>@drawable/resources_coins</item>
         <!--
             тут соответсвующие шаблонам из itv_templates изображения

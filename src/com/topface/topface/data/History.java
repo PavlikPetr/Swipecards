@@ -1,10 +1,11 @@
 package com.topface.topface.data;
 
-import java.util.LinkedList;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
 
 public class History extends AbstractDataWithPhotos {
     // Data
@@ -19,11 +20,11 @@ public class History extends AbstractDataWithPhotos {
     public int age;  // возраст отправителя
     public boolean online; // флаг показывающий, находится ли отправитель онлайн
     public String text;  // текст сообщения. Если входящее сообщение является текстовым
-    
+
     public int gift;     // идентификатор подарка. Если сообщение является подарком
     public String link;  // ссылка на изображение подарка. Поле устанавливается, если сообщение является подарком
 //    public int code;     // код входящего уведомления. Если сообщение является уведомлением
-    
+
     public int city_id; // идентификатор города отправителя оценки
     public String city_name; // название города пользователя
     public String city_full; // полное название города пользвоателя
@@ -35,14 +36,14 @@ public class History extends AbstractDataWithPhotos {
     public static LinkedList<History> parse(ApiResponse response) {
         LinkedList<History> historyList = new LinkedList<History>();
 
-        try {        	
+        try {
             History.more = response.mJSONResult.optBoolean("more");
-            
+
             JSONArray array = response.mJSONResult.getJSONArray("feed");
             if (array.length() > 0)
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
-                    
+
                     History history = new History();
                     history.id = item.optInt("id");
                     history.created = item.optLong("created") * 1000; // время приходит в секундах *1000
@@ -52,24 +53,24 @@ public class History extends AbstractDataWithPhotos {
                     history.unread = item.optBoolean("unread");
                     history.first_name = item.optString("first_name");
                     history.age = item.optInt("age");
-                    history.online  = item.optBoolean("online ");
+                    history.online = item.optBoolean("online ");
                     history.text = item.optString("text");
-                    
+
 //                    history.code = item.optInt("code");
                     history.gift = item.optInt("gift");
                     history.link = item.optString("link");
-                    
+
                     // city  
                     JSONObject city = item.getJSONObject("city");
                     history.city_id = city.optInt("id");
                     history.city_name = city.optString("name");
                     history.city_full = city.optString("full");
-                    
+
                     initPhotos(item, history);
-                                       
-                    historyList.addFirst(history);                    
+
+                    historyList.addFirst(history);
                 }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("History.class", "Wrong response parsing: " + e);
         }
 
@@ -78,5 +79,7 @@ public class History extends AbstractDataWithPhotos {
 
     public int getUid() {
         return uid;
-    };
+    }
+
+    ;
 }

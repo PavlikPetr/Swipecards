@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="RoundedImageView">
-        <attr name="frame" >
-            <flag name="dialog"   value="0x0" />
-            <flag name="chat"     value="0x1" />
+        <attr name="frame">
+            <flag name="dialog" value="0x0"/>
+            <flag name="chat" value="0x1"/>
         </attr>
     </declare-styleable>
 
     <declare-styleable name="UniversalFrameImageView">
-        <attr name="frameSrc" format="reference" />
+        <attr name="frameSrc" format="reference"/>
     </declare-styleable>
-    
+
     <declare-styleable name="LockView">
-        <attr name="android:gravity"/>        
+        <attr name="android:gravity"/>
         <attr name="android:text"/>
         <attr name="android:textColor"/>
-        <attr name="android:textSize"/>        
+        <attr name="android:textSize"/>
         <attr name="android:shadowColor"/>
         <attr name="android:shadowRadius"/>
         <attr name="android:shadowDx"/>
-        <attr name="android:shadowDy"/>        
+        <attr name="android:shadowDy"/>
         <attr name="android:drawableLeft"/>
         <attr name="android:drawableTop"/>
         <attr name="android:drawableRight"/>
         <attr name="android:drawableBottom"/>
         <attr name="android:drawablePadding"/>
-        <attr name="android:indeterminateDrawable"/>        
+        <attr name="android:indeterminateDrawable"/>
         <attr name="messageGravity" format="integer"/>
-        <attr name="messageBackground" format="reference|color"/>   
+        <attr name="messageBackground" format="reference|color"/>
         <attr name="messagePadding" format="dimension"/>
         <attr name="messagePaddingLeft" format="dimension"/>
         <attr name="messagePaddingTop" format="dimension"/>
@@ -38,13 +38,13 @@
     <declare-styleable name="ImageViewRemote">
         <!--attr name="stubImage" format="reference" />
         <attr name="imageForEmptyUri" format="reference" /-->
-        <attr name="remoteSrc" format="string" />
-        <attr name="cornersRadius" format="integer" />
+        <attr name="remoteSrc" format="string"/>
+        <attr name="cornersRadius" format="integer"/>
         <attr name="postProcessor">
-            <enum name="none" value="0" />
-            <enum name="rounded" value="1" />
-            <enum name="roundCorners" value="2" />
-         </attr>
+            <enum name="none" value="0"/>
+            <enum name="rounded" value="1"/>
+            <enum name="roundCorners" value="2"/>
+        </attr>
     </declare-styleable>
 
 </resources>

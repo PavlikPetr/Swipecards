@@ -1,16 +1,11 @@
 package com.topface.topface.services;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.protocol.BasicHttpContext;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.IBinder;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
 import com.topface.topface.data.Auth;
@@ -21,13 +16,18 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.AndroidHttpClient;
 import com.topface.topface.utils.http.Http.FlushedInputStream;
 import com.topface.topface.utils.social.AuthToken;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.protocol.BasicHttpContext;
 
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.IBinder;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class ConnectionService extends Service {
     // Data
@@ -35,22 +35,26 @@ public class ConnectionService extends Service {
     private static AndroidHttpClient mHttpClient;
     // Constants
     public static final String TAG = "CC";
+
     //---------------------------------------------------------------------------
-    public static void sendRequest(Context context,ApiRequest request) {
+    public static void sendRequest(Context context, ApiRequest request) {
         if (mService == null)
             context.startService(new Intent(context, ConnectionService.class));
         else
             mService.send(request);
     }
+
     //---------------------------------------------------------------------------
     public static Bitmap bitmapRequest0(String url) {
         return mService.bitmapLoader(url);
     }
+
     //---------------------------------------------------------------------------
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
     //---------------------------------------------------------------------------
     @Override
     public void onCreate() {
@@ -60,12 +64,14 @@ public class ConnectionService extends Service {
         mService = ConnectionService.this;
         create();
     }
+
     //---------------------------------------------------------------------------
     @Override
-    public int onStartCommand(Intent intent,int flags,int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         Debug.log(this, "+onStartCommand");
         return START_STICKY;
     }
+
     //---------------------------------------------------------------------------
     @Override
     public void onDestroy() {
@@ -77,10 +83,12 @@ public class ConnectionService extends Service {
         Debug.log(this, "+onDestroy");
         super.onDestroy();
     }
+
     //---------------------------------------------------------------------------
     private void create() {
         mHttpClient = AndroidHttpClient.newInstance("Android");
     }
+
     //---------------------------------------------------------------------------
     public String request(final ApiRequest request) {
         Debug.log(TAG, "cc_req::" + request.toString()); // REQUEST
@@ -108,7 +116,7 @@ public class ConnectionService extends Service {
                 httpEntity.consumeContent();
                 Debug.log(TAG, "cc_resp::" + rawResponse); // RESPONSE
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log(TAG, "cm exception:" + e.getMessage());
             for (StackTraceElement st : e.getStackTrace())
                 Debug.log(TAG, "cm trace: " + st.toString());
@@ -120,6 +128,7 @@ public class ConnectionService extends Service {
         }
         return rawResponse;
     }
+
     //---------------------------------------------------------------------------
     public void send(final ApiRequest request) {
         new Thread(new Runnable() {
@@ -143,6 +152,7 @@ public class ConnectionService extends Service {
             }
         }).start();
     }
+
     //---------------------------------------------------------------------------
     private ApiResponse reAuth(ApiRequest request) {
         Debug.log(this, "reAuth");
@@ -164,6 +174,7 @@ public class ConnectionService extends Service {
         Debug.log(TAG, "cc_reauth::" + rawResponse); // RESPONSE
         return response;
     }
+
     //---------------------------------------------------------------------------
     public Bitmap bitmapLoader(String url) {
         if (url == null)
@@ -183,7 +194,7 @@ public class ConnectionService extends Service {
                 is.close();
                 entity.consumeContent();
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             if (httpGet != null)
                 httpGet.abort();
             if (mHttpClient != null)

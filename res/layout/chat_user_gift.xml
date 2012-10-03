@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface" 
-                android:layout_width="wrap_content" 
-                android:layout_height="wrap_content" >
-      
+                xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
     <RelativeLayout
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/left_icon" >
-      
-	    <ImageView
-	        android:id="@+id/ivChatGift"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerHorizontal="true"  />
-	      
-	    <ImageView
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:src="@drawable/chat_gift_frame"  />
-    
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/left_icon">
+
+        <ImageView
+                android:id="@+id/ivChatGift"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/chat_gift_frame"/>
+
     </RelativeLayout>
-    
+
     <!-- avatar -->
     <com.topface.topface.ui.views.RoundedImageView
             topface:frame="chat"
@@ -31,7 +31,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="3dp"
-            android:visibility="visible" />
-       
+            android:visibility="visible"/>
+
 </RelativeLayout>
 

@@ -1,47 +1,47 @@
 package com.topface.topface.utils.http;
 
+import com.topface.topface.utils.Debug;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 
-import com.topface.topface.utils.Debug;
-
 public class RequestConnection {
-	HttpPost mHttpPost;
-	HttpClient mHttpClient;
+    HttpPost mHttpPost;
+    HttpClient mHttpClient;
 
-	public RequestConnection() { }
-	
-	public RequestConnection(HttpPost httpPost, HttpClient httpClient) {
-		mHttpPost = httpPost;
-		mHttpClient = httpClient;
-	}
+    public RequestConnection() {
+    }
 
-	public HttpPost getHttpPost() {
-		return mHttpPost;
-	}
+    public RequestConnection(HttpPost httpPost, HttpClient httpClient) {
+        mHttpPost = httpPost;
+        mHttpClient = httpClient;
+    }
 
-	public void setHttpPost(HttpPost httpPost) {
-		this.mHttpPost = httpPost;
-	}
+    public HttpPost getHttpPost() {
+        return mHttpPost;
+    }
 
-	public HttpClient getHttpClient() {
-		return mHttpClient;
-	}
+    public void setHttpPost(HttpPost httpPost) {
+        this.mHttpPost = httpPost;
+    }
 
-	public void setHttpClient(HttpClient httpClient) {
-		this.mHttpClient = httpClient;
-	}
+    public HttpClient getHttpClient() {
+        return mHttpClient;
+    }
 
-	public void abort() {
-		try {
-			if (mHttpPost != null) {
-				mHttpPost.abort();
-			}			
-			if (mHttpClient != null) {
-				mHttpClient.getConnectionManager().closeExpiredConnections();
-			}
-		} catch (Exception localException) {
-			Debug.log(this,localException.toString());
-		}
-	}
+    public void setHttpClient(HttpClient httpClient) {
+        this.mHttpClient = httpClient;
+    }
+
+    public void abort() {
+        try {
+            if (mHttpPost != null) {
+                mHttpPost.abort();
+            }
+            if (mHttpClient != null) {
+                mHttpClient.getConnectionManager().closeExpiredConnections();
+            }
+        } catch (Exception localException) {
+            Debug.log(this, localException.toString());
+        }
+    }
 }

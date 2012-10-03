@@ -1,7 +1,7 @@
 package com.topface.i18n.plurals;
 /**
  * Plural rules for Lithuanian language
- * 
+ *
  * Locales: lt
  *
  * Languages:
@@ -17,34 +17,27 @@ package com.topface.i18n.plurals;
  * @see http://unicode.org/repos/cldr/trunk/common/supplemental/plurals.xml
  * @see plurals.xml (local copy)
  *
- * @package    I18n_Plural
- * @category   Plural Rules
- * @author     Korney Czukowski
- * @copyright  (c) 2011 Korney Czukowski
- * @license    MIT License
+ * @package I18n_Plural
+ * @category Plural Rules
+ * @author Korney Czukowski
+ * @copyright (c) 2011 Korney Czukowski
+ * @license MIT License
  */
 
 /**
- * Converted to Java by Sam Marshak, 2012 
+ * Converted to Java by Sam Marshak, 2012
  */
-public class PluralRules_Lithuanian extends PluralRules
-{
-	public int quantityForNumber(int count)
-	{
+public class PluralRules_Lithuanian extends PluralRules {
+    public int quantityForNumber(int count) {
         int rem100 = count % 100;
         int rem10 = count % 10;
-	    
-		if (rem10 == 1 && !(rem100 >= 11 && rem100 <= 19))
-		{
-			return QUANTITY_ONE;
-		}
-		else if (rem10 >= 2 && rem10 <= 9 && !(rem100 >= 11 && rem100 <= 19))
-		{
-			return QUANTITY_FEW;
-		}
-		else
-		{
-			return QUANTITY_OTHER;
-		}
-	}
+
+        if (rem10 == 1 && !(rem100 >= 11 && rem100 <= 19)) {
+            return QUANTITY_ONE;
+        } else if (rem10 >= 2 && rem10 <= 9 && !(rem100 >= 11 && rem100 <= 19)) {
+            return QUANTITY_FEW;
+        } else {
+            return QUANTITY_OTHER;
+        }
+    }
 }

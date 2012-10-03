@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -43,11 +46,11 @@ public class MutualFragment extends BaseFragment {
     private AvatarManager<FeedSympathy> mAvatarManager;
     private DoubleBigButton mDoubleButton;
     private TextView mBackgroundText;
-    
+
     private View mToolsBar;
     private View mShowToolsBarButton;
     private View mControlsGroup;
- 
+
     private boolean mNewUpdating;
     private boolean mIsUpdating;
     private static final int LIMIT = 40;
@@ -59,9 +62,9 @@ public class MutualFragment extends BaseFragment {
 
         // Data
         Data.mutualList = new LinkedList<FeedSympathy>();
-        
+
         // Navigation Header
-        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity)getActivity());
+        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_sympathy));
         mControlsGroup = view.findViewById(R.id.loControlsGroup);
         mToolsBar = view.findViewById(R.id.loToolsBar);
@@ -73,26 +76,26 @@ public class MutualFragment extends BaseFragment {
                 mControlsGroup.startAnimation(new SwapAnimation(mControlsGroup, R.id.loToolsBar));
             }
         });
-        
+
         ViewTreeObserver vto = mToolsBar.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 int y = mToolsBar.getMeasuredHeight();
-                if(y != 0) {
+                if (y != 0) {
                     y += Static.HEADER_SHADOW_SHIFT;
                     mControlsGroup.setPadding(mControlsGroup.getPaddingLeft(), -y, mControlsGroup.getPaddingRight(), mControlsGroup.getPaddingBottom());
                     ViewTreeObserver obs = mControlsGroup.getViewTreeObserver();
-                    obs.removeGlobalOnLayoutListener(this);                    
+                    obs.removeGlobalOnLayoutListener(this);
                 }
             }
         });
 
         // ListView background
-     	mBackgroundText = (TextView)view.findViewById(R.id.tvBackgroundText);
-        
+        mBackgroundText = (TextView) view.findViewById(R.id.tvBackgroundText);
+
         // Double Button
-        mDoubleButton = (DoubleBigButton)view.findViewById(R.id.btnDoubleBig);
+        mDoubleButton = (DoubleBigButton) view.findViewById(R.id.btnDoubleBig);
         mDoubleButton.setLeftText(getString(R.string.symphaty_btn_dbl_left));
         mDoubleButton.setRightText(getString(R.string.symphaty_btn_dbl_right));
         mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
@@ -112,31 +115,31 @@ public class MutualFragment extends BaseFragment {
         });
 
         // ListView
-        mListView = (PullToRefreshListView)view.findViewById(R.id.lvSymphatyList);
+        mListView = (PullToRefreshListView) view.findViewById(R.id.lvSymphatyList);
         mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent,View view,int position,long id) {
-                FeedSympathy theFeedMutual = (FeedSympathy)parent.getItemAtPosition(position);
-            	if (!mIsUpdating && theFeedMutual.isLoaderRetry()) {
-            		updateUI(new Runnable() {
-						public void run() {
-							removeLoaderListItem();
-							Data.mutualList.add(new FeedSympathy(ItemType.LOADER));
-							mListAdapter.notifyDataSetChanged();
-						}
-					});
-            		
-            		updateDataHistory();
-            	} else {
-	                try {
-	                    Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-	                    intent.putExtra(UserProfileActivity.INTENT_USER_ID,   theFeedMutual.uid);
-	                    intent.putExtra(UserProfileActivity.INTENT_USER_NAME, theFeedMutual.first_name);
-	                    startActivityForResult(intent, 0);
-	                } catch(Exception e) {
-	                    Debug.log(MutualFragment.this, "start ProfileActivity exception:" + e.toString());
-	                }
-            	}
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FeedSympathy theFeedMutual = (FeedSympathy) parent.getItemAtPosition(position);
+                if (!mIsUpdating && theFeedMutual.isLoaderRetry()) {
+                    updateUI(new Runnable() {
+                        public void run() {
+                            removeLoaderListItem();
+                            Data.mutualList.add(new FeedSympathy(ItemType.LOADER));
+                            mListAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+                    updateDataHistory();
+                } else {
+                    try {
+                        Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+                        intent.putExtra(UserProfileActivity.INTENT_USER_ID, theFeedMutual.uid);
+                        intent.putExtra(UserProfileActivity.INTENT_USER_NAME, theFeedMutual.first_name);
+                        startActivityForResult(intent, 0);
+                    } catch (Exception e) {
+                        Debug.log(MutualFragment.this, "start ProfileActivity exception:" + e.toString());
+                    }
+                }
             }
         });
 
@@ -149,28 +152,28 @@ public class MutualFragment extends BaseFragment {
 
         // Control creation
         mAvatarManager = new AvatarManager<FeedSympathy>(getActivity(), Data.mutualList, new Handler() {
-        	@Override
-        	public void handleMessage(Message msg) {
-        	    if (Data.mutualList.size() > 0)
-            		if (Data.mutualList.getLast().isLoader() && !mIsUpdating)
-            			updateDataHistory();
-        		
-        		super.handleMessage(msg);
-        	}
+            @Override
+            public void handleMessage(Message msg) {
+                if (Data.mutualList.size() > 0)
+                    if (Data.mutualList.getLast().isLoader() && !mIsUpdating)
+                        updateDataHistory();
+
+                super.handleMessage(msg);
+            }
         });
         mListAdapter = new MutualListAdapter(getActivity(), mAvatarManager);
         mListView.setOnScrollListener(mAvatarManager);
         mListView.getRefreshableView().setAdapter(mListAdapter);
-        
+
         mNewUpdating = CacheProfile.unread_mutual > 0;
-        
+
         updateData(false);
 
         return view;
     }
 
     private void updateData(final boolean isPushUpdating) {
-    	mIsUpdating = true;
+        mIsUpdating = true;
         if (!isPushUpdating)
             onUpdateStart(isPushUpdating);
 
@@ -190,15 +193,15 @@ public class MutualFragment extends BaseFragment {
                         Data.mutualList.addAll(FeedSympathy.parse(response));
 
                         CacheProfile.unread_mutual = 0;
-                    	if (mNewUpdating) {
-                     		if (FeedSympathy.unread_count > 0) {
-                     			Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
-                     		}
-                     	} else {
-                     		if (!(Data.mutualList.size() == 0 || Data.mutualList.size() < LIMIT / 2)) {
-                     			Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
-                     		}
-                     	}
+                        if (mNewUpdating) {
+                            if (FeedSympathy.unread_count > 0) {
+                                Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                            }
+                        } else {
+                            if (!(Data.mutualList.size() == 0 || Data.mutualList.size() < LIMIT / 2)) {
+                                Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                            }
+                        }
 
                         onUpdateSuccess(isPushUpdating);
                         mListView.onRefreshComplete();
@@ -208,13 +211,14 @@ public class MutualFragment extends BaseFragment {
                     }
                 });
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
+            public void fail(int codeError, ApiResponse response) {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                    	Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                    	onUpdateFail(isPushUpdating);
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        onUpdateFail(isPushUpdating);
                         mListView.onRefreshComplete();
                         mListView.setVisibility(View.VISIBLE);
                         mIsUpdating = false;
@@ -225,19 +229,19 @@ public class MutualFragment extends BaseFragment {
     }
 
     private void updateDataHistory() {
-    	mIsUpdating = true;
-    	mNewUpdating = mDoubleButton.isRightButtonChecked();
+        mIsUpdating = true;
+        mNewUpdating = mDoubleButton.isRightButtonChecked();
 
         FeedSympathyRequest symphatyRequest = new FeedSympathyRequest(getActivity());
         registerRequest(symphatyRequest);
         symphatyRequest.limit = LIMIT;
         symphatyRequest.only_new = mNewUpdating;
         if (!mNewUpdating) {
-        	if (Data.mutualList.getLast().isLoader() || Data.mutualList.getLast().isLoaderRetry()) {
-        		symphatyRequest.from = Data.mutualList.get(Data.mutualList.size() - 2).id;
-        	} else {
-        		symphatyRequest.from = Data.mutualList.get(Data.mutualList.size() - 1).id;
-        	}        	
+            if (Data.mutualList.getLast().isLoader() || Data.mutualList.getLast().isLoaderRetry()) {
+                symphatyRequest.from = Data.mutualList.get(Data.mutualList.size() - 2).id;
+            } else {
+                symphatyRequest.from = Data.mutualList.get(Data.mutualList.size() - 1).id;
+            }
         }
         symphatyRequest.callback(new ApiHandler() {
             @Override
@@ -246,35 +250,36 @@ public class MutualFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                    	removeLoaderListItem();
-                    	
-                    	if (feedSymphatyList.size() > 0) {
+                        removeLoaderListItem();
+
+                        if (feedSymphatyList.size() > 0) {
                             Data.mutualList.addAll(feedSymphatyList);
                             if (mNewUpdating) {
-                        		if (FeedSympathy.unread_count > 0)
-                        			Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
-                        	} else {
-                        		if (!(Data.mutualList.size() == 0 || Data.mutualList.size() < (LIMIT/2)))
-                        			Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
-                        	}
+                                if (FeedSympathy.unread_count > 0)
+                                    Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                            } else {
+                                if (!(Data.mutualList.size() == 0 || Data.mutualList.size() < (LIMIT / 2)))
+                                    Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.LOADER));
+                            }
                         }
-                    	
+
                         onUpdateSuccess(true);
                         mListView.onRefreshComplete();
                         mListAdapter.notifyDataSetChanged();
-                        mIsUpdating = false;                    
+                        mIsUpdating = false;
                     }
                 });
             }
+
             @Override
-            public void fail(int codeError,ApiResponse response) {
+            public void fail(int codeError, ApiResponse response) {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                    	onUpdateFail(true);
+                        onUpdateFail(true);
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mIsUpdating = false;
-                    	removeLoaderListItem();
+                        removeLoaderListItem();
                         Data.mutualList.add(new FeedSympathy(IListLoader.ItemType.RETRY));
                         mListView.onRefreshComplete();
                         mListAdapter.notifyDataSetChanged();
@@ -285,13 +290,13 @@ public class MutualFragment extends BaseFragment {
     }
 
     private void removeLoaderListItem() {
-    	if (Data.mutualList.size() > 0 ) {
-	    	if (Data.mutualList.getLast().isLoader() || Data.mutualList.getLast().isLoaderRetry()) {
-	    		Data.mutualList.remove(Data.mutualList.size() - 1);
-	    	}
-    	}
+        if (Data.mutualList.size() > 0) {
+            if (Data.mutualList.getLast().isLoader() || Data.mutualList.getLast().isLoaderRetry()) {
+                Data.mutualList.remove(Data.mutualList.size() - 1);
+            }
+        }
     }
-    
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -308,55 +313,55 @@ public class MutualFragment extends BaseFragment {
     }
 
     protected void onUpdateStart(boolean isFlyUpdating) {
-    	if (!isFlyUpdating) {
-			mListView.setVisibility(View.INVISIBLE);
-			mBackgroundText.setText(R.string.general_dialog_loading);
-			mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(Recycle.s_Loader,
-					mBackgroundText.getCompoundDrawables()[1],
-					mBackgroundText.getCompoundDrawables()[2],
-					mBackgroundText.getCompoundDrawables()[3]);
-			((AnimationDrawable)mBackgroundText.getCompoundDrawables()[0]).start();
-			mDoubleButton.setClickable(false);
-    	}
-	}
+        if (!isFlyUpdating) {
+            mListView.setVisibility(View.INVISIBLE);
+            mBackgroundText.setText(R.string.general_dialog_loading);
+            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(Recycle.s_Loader,
+                    mBackgroundText.getCompoundDrawables()[1],
+                    mBackgroundText.getCompoundDrawables()[2],
+                    mBackgroundText.getCompoundDrawables()[3]);
+            ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).start();
+            mDoubleButton.setClickable(false);
+        }
+    }
 
-	@Override
-	protected void onUpdateSuccess(boolean isFlyUpdating) {
-		if (!isFlyUpdating) {
-			mListView.setVisibility(View.VISIBLE);
-			if (Data.mutualList.isEmpty()) {
-				mBackgroundText.setText(R.string.symphaty_background_text);
-			} else {
-				mBackgroundText.setText("");
-			}		
-			
-			if (mBackgroundText.getCompoundDrawables()[0] != null) {
-				((AnimationDrawable)mBackgroundText.getCompoundDrawables()[0]).stop();
-			}
-			
-			mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(null, 
-					mBackgroundText.getCompoundDrawables()[1],
-					mBackgroundText.getCompoundDrawables()[2],
-					mBackgroundText.getCompoundDrawables()[3]);
-			mDoubleButton.setClickable(true);
-		}
-	}
+    @Override
+    protected void onUpdateSuccess(boolean isFlyUpdating) {
+        if (!isFlyUpdating) {
+            mListView.setVisibility(View.VISIBLE);
+            if (Data.mutualList.isEmpty()) {
+                mBackgroundText.setText(R.string.symphaty_background_text);
+            } else {
+                mBackgroundText.setText("");
+            }
 
-	@Override
-	protected void onUpdateFail(boolean isFlyUpdating) {
-		if (!isFlyUpdating) {
-			mListView.setVisibility(View.VISIBLE);
-			mBackgroundText.setText("");		
-			
-			if (mBackgroundText.getCompoundDrawables()[0] != null) {
-				((AnimationDrawable)mBackgroundText.getCompoundDrawables()[0]).stop();
-			}
-			
-			mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(null, 
-					mBackgroundText.getCompoundDrawables()[1],
-					mBackgroundText.getCompoundDrawables()[2],
-					mBackgroundText.getCompoundDrawables()[3]);
-			mDoubleButton.setClickable(true);
-		}
-	}
+            if (mBackgroundText.getCompoundDrawables()[0] != null) {
+                ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).stop();
+            }
+
+            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(null,
+                    mBackgroundText.getCompoundDrawables()[1],
+                    mBackgroundText.getCompoundDrawables()[2],
+                    mBackgroundText.getCompoundDrawables()[3]);
+            mDoubleButton.setClickable(true);
+        }
+    }
+
+    @Override
+    protected void onUpdateFail(boolean isFlyUpdating) {
+        if (!isFlyUpdating) {
+            mListView.setVisibility(View.VISIBLE);
+            mBackgroundText.setText("");
+
+            if (mBackgroundText.getCompoundDrawables()[0] != null) {
+                ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).stop();
+            }
+
+            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(null,
+                    mBackgroundText.getCompoundDrawables()[1],
+                    mBackgroundText.getCompoundDrawables()[2],
+                    mBackgroundText.getCompoundDrawables()[3]);
+            mDoubleButton.setClickable(true);
+        }
+    }
 }

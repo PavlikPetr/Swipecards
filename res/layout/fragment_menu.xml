@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
-        <!-- Profile -->
-        <Button
+    <!-- Profile -->
+    <Button
             android:id="@+id/btnFragmentProfile"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -12,8 +12,8 @@
             android:text="@string/dashbrd_btn_profile"
             style="@style/LeftMenuButtons"/>
 
-        <!-- Dating -->
-        <Button
+    <!-- Dating -->
+    <Button
             android:id="@+id/btnFragmentDating"
             android:layout_below="@id/btnFragmentProfile"
             android:layout_width="fill_parent"
@@ -23,19 +23,19 @@
             android:drawableLeft="@drawable/topface_dating"
             style="@style/LeftMenuButtons"/>
 
-        <!-- Likes -->
-        <Button
+    <!-- Likes -->
+    <Button
             android:id="@+id/btnFragmentLikes"
             android:layout_below="@id/btnFragmentDating"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"                
-            android:background="@drawable/navigation_menu_item_selector"                
-            android:text="@string/dashbrd_btn_likes"                
+            android:layout_height="wrap_content"
+            android:background="@drawable/navigation_menu_item_selector"
+            android:text="@string/dashbrd_btn_likes"
             android:drawableLeft="@drawable/topface_likes"
             style="@style/LeftMenuButtons"/>
 
-        <!-- UNREAD LIKES -->
-        <TextView
+    <!-- UNREAD LIKES -->
+    <TextView
             android:id="@+id/tvNotifyLikes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,10 +47,10 @@
             android:textColor="#FFFFFF"
             android:textSize="12dp"
             android:text="12"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
-        <!-- Mutual - Sympathy -->
-        <Button
+    <!-- Mutual - Sympathy -->
+    <Button
             android:id="@+id/btnFragmentMutual"
             android:layout_below="@id/btnFragmentLikes"
             android:layout_width="fill_parent"
@@ -60,8 +60,8 @@
             android:drawableLeft="@drawable/topface_sympathy"
             style="@style/LeftMenuButtons"/>
 
-        <!-- UNREAD MUTUAL -->
-        <TextView
+    <!-- UNREAD MUTUAL -->
+    <TextView
             android:id="@+id/tvNotifyMutual"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,10 +73,10 @@
             android:textColor="#FFFFFF"
             android:textSize="12dp"
             android:text="12"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
-        <!-- Dialogs - Messages - Chat -->
-        <Button
+    <!-- Dialogs - Messages - Chat -->
+    <Button
             android:id="@+id/btnFragmentDialogs"
             android:layout_below="@id/btnFragmentMutual"
             android:layout_width="fill_parent"
@@ -86,8 +86,8 @@
             android:drawableLeft="@drawable/topface_chat"
             style="@style/LeftMenuButtons"/>
 
-        <!-- UNREAD DIALOGS -->
-        <TextView
+    <!-- UNREAD DIALOGS -->
+    <TextView
             android:id="@+id/tvNotifyDialogs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -99,10 +99,10 @@
             android:textColor="#FFFFFF"
             android:textSize="12dp"
             android:text="12"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
-        <!-- Tops -->
-        <Button
+    <!-- Tops -->
+    <Button
             android:id="@+id/btnFragmentTops"
             android:layout_below="@id/btnFragmentDialogs"
             android:layout_width="fill_parent"
@@ -112,8 +112,8 @@
             android:drawableLeft="@drawable/topface_tops"
             style="@style/LeftMenuButtons"/>
 
-        <!-- Settings -->
-        <Button
+    <!-- Settings -->
+    <Button
             android:id="@+id/btnFragmentSettings"
             android:layout_below="@id/btnFragmentTops"
             android:layout_width="fill_parent"
@@ -122,5 +122,5 @@
             android:text="@string/dashbrd_btn_settings"
             android:drawableLeft="@drawable/topface_menu_settings"
             style="@style/LeftMenuButtons"/>
-        
+
 </RelativeLayout>

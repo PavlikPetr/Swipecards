@@ -2,21 +2,16 @@
 
 package com.topface.topface.billing;
 
+import android.text.TextUtils;
+import android.util.Log;
 import com.topface.topface.billing.Consts.PurchaseState;
 import com.topface.topface.utils.Base64;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.text.TextUtils;
-import android.util.Log;
+
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.Signature;
-import java.security.SignatureException;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
@@ -38,7 +33,7 @@ public class Security {
         public long purchaseTime;
         public String developerPayload;
 
-        public VerifiedPurchase(PurchaseState purchaseState,String notificationId,String productId,String orderId,long purchaseTime,String developerPayload) {
+        public VerifiedPurchase(PurchaseState purchaseState, String notificationId, String productId, String orderId, long purchaseTime, String developerPayload) {
             this.purchaseState = purchaseState;
             this.notificationId = notificationId;
             this.productId = productId;
@@ -62,7 +57,7 @@ public class Security {
         return sKnownNonces.contains(nonce);
     }
 
-    public static ArrayList<VerifiedPurchase> verifyPurchase(String signedData,String signature) {
+    public static ArrayList<VerifiedPurchase> verifyPurchase(String signedData, String signature) {
         if (signedData == null) {
             Log.e(TAG, "data is null");
             return null;
@@ -93,7 +88,7 @@ public class Security {
             if (jTransactionsArray != null) {
                 numTransactions = jTransactionsArray.length();
             }
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             return null;
         }
 
@@ -123,7 +118,7 @@ public class Security {
                 }
                 purchases.add(new VerifiedPurchase(purchaseState, notifyId, productId, orderId, purchaseTime, developerPayload));
             }
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             Log.e(TAG, "JSON exception: ", e);
             return null;
         }
@@ -136,18 +131,18 @@ public class Security {
             byte[] decodedKey = Base64.decode(encodedPublicKey);
             KeyFactory keyFactory = KeyFactory.getInstance(KEY_FACTORY_ALGORITHM);
             return keyFactory.generatePublic(new X509EncodedKeySpec(decodedKey));
-        } catch(NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
-        } catch(InvalidKeySpecException e) {
+        } catch (InvalidKeySpecException e) {
             Log.e(TAG, "Invalid key specification.");
             throw new IllegalArgumentException(e);
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, "IOException exception.");
             return null;
         }
     }
 
-    public static boolean verify(PublicKey publicKey,String signedData,String signature) {
+    public static boolean verify(PublicKey publicKey, String signedData, String signature) {
         if (Consts.DEBUG) {
             Log.i(TAG, "signature: " + signature);
         }
@@ -161,13 +156,13 @@ public class Security {
                 return false;
             }
             return true;
-        } catch(NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             Log.e(TAG, "NoSuchAlgorithmException.");
-        } catch(InvalidKeyException e) {
+        } catch (InvalidKeyException e) {
             Log.e(TAG, "Invalid key specification.");
-        } catch(SignatureException e) {
+        } catch (SignatureException e) {
             Log.e(TAG, "Signature exception.");
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, "IOException exception.");
         }
         return false;

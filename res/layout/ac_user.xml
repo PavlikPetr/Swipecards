@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/im_list_bkgrd" >
-    
-	<LinearLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:orientation="vertical" >
-	    
-	  <!-- header bar 
-	  <include layout="@layout/bar_btn_header" /> -->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/im_list_bkgrd">
 
-	  <!-- form -->	    
-	  
-	    <LinearLayout      
-	         android:layout_width="fill_parent" 
-	         android:layout_height="wrap_content"
-	         android:orientation="vertical">
-	       <include layout="@layout/profile_form_top" />
-	       <include layout="@layout/profile_form_bottom" />
-	    </LinearLayout>
-	  
-	
-	</LinearLayout>
-	
-	  <ProgressBar
-      android:id="@+id/prsProfileLoading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:visibility="visible"
-      style="@android:style/Widget.ProgressBar.Small" />
-	
-</RelativeLayout>
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
+
+            <!-- header bar
+         <include layout="@layout/bar_btn_header" /> -->
+
+            <!-- form -->
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                <include layout="@layout/profile_form_top"/>
+                <include layout="@layout/profile_form_bottom"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <ProgressBar
+                android:id="@+id/prsProfileLoading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="visible"
+                style="@android:style/Widget.ProgressBar.Small"/>
+
+    </RelativeLayout>
 </merge>

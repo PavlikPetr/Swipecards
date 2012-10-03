@@ -44,7 +44,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private int mUserId;
     private String mUserAvatarUrl;
     private int mAvatarWidth;
-    private boolean mProfileInvoke;    
+    private boolean mProfileInvoke;
     private boolean mIsAddPanelOpened;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
@@ -64,16 +64,16 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_USER_AVATAR = "user_avatar";
     public static final String INTENT_USER_SEX = "user_sex";
-    public static final String INTENT_USER_AGE = "user_age";    
+    public static final String INTENT_USER_AGE = "user_age";
     public static final String INTENT_USER_CITY = "user_city";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
     private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
     private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
-    
+
     //Managers
     private GeoLocationManager mGeoManager = null;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,10 +84,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mHistoryList = new LinkedList<History>();
 
         // Swap Control
-        mSwapControl = ((SwapControl)findViewById(R.id.swapFormView));                
+        mSwapControl = ((SwapControl) findViewById(R.id.swapFormView));
 
         // Locker
-        mLoadingLocker = (LockerView)findViewById(R.id.llvChatLoading);
+        mLoadingLocker = (LockerView) findViewById(R.id.llvChatLoading);
 
         // Params
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
@@ -95,36 +95,36 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
         int userSex = getIntent().getIntExtra(INTENT_USER_SEX, Static.BOY);
         mAvatarWidth = getResources().getDrawable(R.drawable.chat_avatar_frame).getIntrinsicWidth();
-        
+
         // Navigation bar
-        mHeaderTitle = ((TextView)findViewById(R.id.tvNavigationTitle));
-        mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME) + ", " + getIntent().getIntExtra(INTENT_USER_AGE,0));
+        mHeaderTitle = ((TextView) findViewById(R.id.tvNavigationTitle));
+        mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME) + ", " + getIntent().getIntExtra(INTENT_USER_AGE, 0));
         TextView headerSubtitle = ((TextView) findViewById(R.id.tvNavigationSubtitle));
         headerSubtitle.setVisibility(View.VISIBLE);
         headerSubtitle.setText(getIntent().getStringExtra(INTENT_USER_CITY));
-        
+
         (findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-        final Button btnBack = (Button)findViewById(R.id.btnNavigationBackWithText);
+        final Button btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
         if (mProfileInvoke) {
-        	btnBack.setText(getResources().getString(R.string.navigation_back_profile));
+            btnBack.setText(getResources().getString(R.string.navigation_back_profile));
         } else {
-        	btnBack.setText(getResources().getString(R.string.navigation_back_dialog));
+            btnBack.setText(getResources().getString(R.string.navigation_back_dialog));
         }
         btnBack.setVisibility(View.VISIBLE);
         btnBack.setOnClickListener(this);
-                
-        final Button btnProfile = (Button)findViewById(R.id.btnNavigationProfileBar);
+
+        final Button btnProfile = (Button) findViewById(R.id.btnNavigationProfileBar);
         switch (userSex) {
-		case Static.BOY:
-			btnProfile.setBackgroundResource(R.drawable.navigation_male_profile_selector);
-			break;
-		case Static.GIRL:
-			btnProfile.setBackgroundResource(R.drawable.navigation_female_profile_selector);
-			break;
-		}
-		btnProfile.setVisibility(View.VISIBLE);
-		btnProfile.setOnClickListener(this);
-		
+            case Static.BOY:
+                btnProfile.setBackgroundResource(R.drawable.navigation_male_profile_selector);
+                break;
+            case Static.GIRL:
+                btnProfile.setBackgroundResource(R.drawable.navigation_female_profile_selector);
+                break;
+        }
+        btnProfile.setVisibility(View.VISIBLE);
+        btnProfile.setOnClickListener(this);
+
 //        View btnProfile = findViewById(R.id.btnHeaderProfile);
 //        btnProfile.setVisibility(View.VISIBLE);
 //        btnProfile.setOnClickListener(this);
@@ -142,7 +142,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         findViewById(R.id.btnChatMap).setOnClickListener(this);
 
         // Edit Box
-        mEditBox = (EditText)findViewById(R.id.edChatBox);
+        mEditBox = (EditText) findViewById(R.id.edChatBox);
         mEditBox.setOnEditorActionListener(mEditorActionListener);
 
         // ListView
@@ -165,7 +165,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     @Override
-    protected void onDestroy() {        
+    protected void onDestroy() {
         release();
         Data.friendAvatar = null;
         Debug.log(this, "-onDestroy");
@@ -223,18 +223,18 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-    	if (v instanceof ImageView) {
-    		if (v.getTag() instanceof History) {    			
-    			History history = (History)v.getTag();
-    			if(history.type == Dialog.MAP) {
-					Intent intent = new Intent(this, GeoMapActivity.class);
-					intent.putExtra(GeoMapActivity.INTENT_LATITUDE_ID, history.latitude);
-					intent.putExtra(GeoMapActivity.INTENT_LONGITUDE_ID, history.longitude);
-					startActivity(intent);
-					return;
-    			}
-    		}
-    	} 
+        if (v instanceof ImageView) {
+            if (v.getTag() instanceof History) {
+                History history = (History) v.getTag();
+                if (history.type == Dialog.MAP) {
+                    Intent intent = new Intent(this, GeoMapActivity.class);
+                    intent.putExtra(GeoMapActivity.INTENT_LATITUDE_ID, history.latitude);
+                    intent.putExtra(GeoMapActivity.INTENT_LONGITUDE_ID, history.longitude);
+                    startActivity(intent);
+                    return;
+                }
+            }
+        }
         switch (v.getId()) {
             case R.id.btnChatAdd: {
                 if (mIsAddPanelOpened)
@@ -242,21 +242,26 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 else
                     mSwapControl.snapToScreen(1);
                 mIsAddPanelOpened = !mIsAddPanelOpened;
-            } break;
+            }
+            break;
             case R.id.btnChatGift: {
                 startActivityForResult(new Intent(this, GiftsActivity.class), GiftsActivity.INTENT_REQUEST_GIFT);
-            } break;
-            case R.id.btnChatPlace: {            	
-            	sendUserCurrentLocation();
+            }
+            break;
+            case R.id.btnChatPlace: {
+                sendUserCurrentLocation();
 //                Toast.makeText(ChatActivity.this, "Place", Toast.LENGTH_SHORT).show();
-            } break;
+            }
+            break;
             case R.id.btnChatMap: {
-            	startActivityForResult(new Intent(this, GeoMapActivity.class), GeoMapActivity.INTENT_REQUEST_GEO);            	
+                startActivityForResult(new Intent(this, GeoMapActivity.class), GeoMapActivity.INTENT_REQUEST_GEO);
 //                Toast.makeText(ChatActivity.this, "Map", Toast.LENGTH_SHORT).show();
-            } break;
+            }
+            break;
             case R.id.btnNavigationBackWithText: {
-            	finish();
-            } break;
+                finish();
+            }
+            break;
             default: {
                 if (mProfileInvoke) {
                     finish();
@@ -267,13 +272,14 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 intent.putExtra(UserProfileActivity.INTENT_CHAT_INVOKE, true);
                 intent.putExtra(UserProfileActivity.INTENT_USER_NAME, mHeaderTitle.getText());
                 startActivity(intent);
-            } break;
+            }
+            break;
         }
     }
 
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
-        public boolean onEditorAction(TextView v,int actionId,KeyEvent event) {
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 final String text = v.getText().toString();
 
@@ -333,256 +339,263 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     };
 
     @Override
-    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-        	if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-	            mLoadingLocker.setVisibility(View.VISIBLE);
-	            Bundle extras = data.getExtras();
-	            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);            
-	            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
-	            Debug.log(this, "id:" + id + " url:" + url);
-	            SendGiftRequest sendGift = new SendGiftRequest(getApplicationContext());
-	            registerRequest(sendGift);
-	            sendGift.giftId = id;
-	            sendGift.userId = mUserId;
-	            if (mIsAddPanelOpened)
-                    mSwapControl.snapToScreen(0);                
+            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+                mLoadingLocker.setVisibility(View.VISIBLE);
+                Bundle extras = data.getExtras();
+                final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+                final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+                Debug.log(this, "id:" + id + " url:" + url);
+                SendGiftRequest sendGift = new SendGiftRequest(getApplicationContext());
+                registerRequest(sendGift);
+                sendGift.giftId = id;
+                sendGift.userId = mUserId;
+                if (mIsAddPanelOpened)
+                    mSwapControl.snapToScreen(0);
                 mIsAddPanelOpened = false;
-	            sendGift.callback(new ApiHandler() {
-	                @Override
-	                public void success(ApiResponse response) throws NullPointerException {
-	                    SendGiftAnswer answer = SendGiftAnswer.parse(response);
-	                    CacheProfile.power = answer.power;
-	                    CacheProfile.money = answer.money;
-	                    Debug.log(ChatActivity.this, "power:" + answer.power + " money:" + answer.money);
-	                    runOnUiThread(new Runnable() {
-	                        @Override
-	                        public void run() {              
-	                        	History history = new History();
-//	                            history.code = 0;
-	                            history.gift = id;
-	                            history.uid = CacheProfile.uid;
-	                            history.created = System.currentTimeMillis();
-	                            history.text = Static.EMPTY;
-	                            history.type = Dialog.GIFT;
-	                            history.link = url;
-	                            mAdapter.addSentMessage(history);
-	                            mAdapter.notifyDataSetChanged();
-	                            mLoadingLocker.setVisibility(View.GONE);
-	                        }
-	                    });
-	                }
-	                
-	                @Override
-	                public void fail(int codeError,final ApiResponse response) throws NullPointerException {
-	                	runOnUiThread(new Runnable() {
-	                        @Override
-	                        public void run() {
-	                            if(response.code==ApiResponse.PAYMENT)
-	                                startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
-	                            mLoadingLocker.setVisibility(View.GONE);
-	                        }
-	                    });
-	                }
-	            }).exec();
-        	} else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
-        		Bundle extras = data.getExtras();
-        		final double latitude = extras.getDouble(GeoMapActivity.INTENT_LATITUDE_ID);
-        		final double longitude = extras.getDouble(GeoMapActivity.INTENT_LONGITUDE_ID);
-//        		final String address = extras.getString(GeoMapActivity.INTENT_ADDRESS_ID);        		
-        		
-        		CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
-        		registerRequest(coordRequest);
-        		coordRequest.userid = mUserId;
-        		coordRequest.latitude = latitude;
-        		coordRequest.longitude = longitude;
-        		mLoadingLocker.setVisibility(View.VISIBLE);
-        		coordRequest.callback(new ApiHandler() {
-        			
-        			@Override
-        			public void success(ApiResponse response) throws NullPointerException {
-        				final Confirmation confirm = Confirmation.parse(response);
-        				runOnUiThread(new Runnable() {                        	
+                sendGift.callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) throws NullPointerException {
+                        SendGiftAnswer answer = SendGiftAnswer.parse(response);
+                        CacheProfile.power = answer.power;
+                        CacheProfile.money = answer.money;
+                        Debug.log(ChatActivity.this, "power:" + answer.power + " money:" + answer.money);
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void run() {                            	
-                            	if (confirm.completed) {
-                            		History history = new History();
-        					        history.type = Dialog.MAP;
-        					        history.currentLocation = false;
+                            public void run() {
+                                History history = new History();
+//	                            history.code = 0;
+                                history.gift = id;
+                                history.uid = CacheProfile.uid;
+                                history.created = System.currentTimeMillis();
+                                history.text = Static.EMPTY;
+                                history.type = Dialog.GIFT;
+                                history.link = url;
+                                mAdapter.addSentMessage(history);
+                                mAdapter.notifyDataSetChanged();
+                                mLoadingLocker.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void fail(int codeError, final ApiResponse response) throws NullPointerException {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (response.code == ApiResponse.PAYMENT)
+                                    startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
+                                mLoadingLocker.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }).exec();
+            } else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
+                Bundle extras = data.getExtras();
+                final double latitude = extras.getDouble(GeoMapActivity.INTENT_LATITUDE_ID);
+                final double longitude = extras.getDouble(GeoMapActivity.INTENT_LONGITUDE_ID);
+//        		final String address = extras.getString(GeoMapActivity.INTENT_ADDRESS_ID);        		
+
+                CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+                registerRequest(coordRequest);
+                coordRequest.userid = mUserId;
+                coordRequest.latitude = latitude;
+                coordRequest.longitude = longitude;
+                mLoadingLocker.setVisibility(View.VISIBLE);
+                coordRequest.callback(new ApiHandler() {
+
+                    @Override
+                    public void success(ApiResponse response) throws NullPointerException {
+                        final Confirmation confirm = Confirmation.parse(response);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (confirm.completed) {
+                                    History history = new History();
+                                    history.type = Dialog.MAP;
+                                    history.currentLocation = false;
                                     history.latitude = latitude;
                                     history.longitude = longitude;
                                     mAdapter.addSentMessage(history);
                                     mAdapter.notifyDataSetChanged();
-                				} else {
-                					Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                				}
-                            	mLoadingLocker.setVisibility(View.GONE);
+                                } else {
+                                    Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                }
+                                mLoadingLocker.setVisibility(View.GONE);
                             }
-        				});
-        			}
-        			
-        			@Override
-        			public void fail(int codeError, ApiResponse response)
-        					throws NullPointerException {
-        				runOnUiThread(new Runnable() {                        	
+                        });
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response)
+                            throws NullPointerException {
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                            	Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                            	mLoadingLocker.setVisibility(View.GONE);
+                                Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                mLoadingLocker.setVisibility(View.GONE);
                             }
-        				});
-        			}
-        		}).exec();
-        		
-        		if (mIsAddPanelOpened)
-                    mSwapControl.snapToScreen(0);                
+                        });
+                    }
+                }).exec();
+
+                if (mIsAddPanelOpened)
+                    mSwapControl.snapToScreen(0);
                 mIsAddPanelOpened = false;
-        	}
+            }
         } else {
-        	if (mIsAddPanelOpened)
-                mSwapControl.snapToScreen(0);                
+            if (mIsAddPanelOpened)
+                mSwapControl.snapToScreen(0);
             mIsAddPanelOpened = false;
         }
     }
 
     private void sendUserCurrentLocation() {
-    	mLocationDetected = false;    	
-    	
-    	if (mGeoManager == null) {
+        mLocationDetected = false;
+
+        if (mGeoManager == null) {
             mGeoManager = new GeoLocationManager(getApplicationContext());
         }
 
-    	if(mGeoManager.availableLocationProvider(LocationProviderType.AGPS)) {
-    		mGeoManager.setLocationListener(LocationProviderType.AGPS, this);
-    		showDialog(DIALOG_LOCATION_PROGRESS_ID);
-    	} else if (mGeoManager.availableLocationProvider(LocationProviderType.GPS)){
-    		mGeoManager.setLocationListener(LocationProviderType.GPS, this);
-    		(new CountDownTimer(LOCATION_PROVIDER_TIMEOUT,LOCATION_PROVIDER_TIMEOUT) {
-    			
-    			@Override
-    			public void onTick(long millisUntilFinished) { }
-    			
-    			@Override
-    			public void onFinish() {
+        if (mGeoManager.availableLocationProvider(LocationProviderType.AGPS)) {
+            mGeoManager.setLocationListener(LocationProviderType.AGPS, this);
+            showDialog(DIALOG_LOCATION_PROGRESS_ID);
+        } else if (mGeoManager.availableLocationProvider(LocationProviderType.GPS)) {
+            mGeoManager.setLocationListener(LocationProviderType.GPS, this);
+            (new CountDownTimer(LOCATION_PROVIDER_TIMEOUT, LOCATION_PROVIDER_TIMEOUT) {
+
+                @Override
+                public void onTick(long millisUntilFinished) {
+                }
+
+                @Override
+                public void onFinish() {
                     //noinspection SynchronizeOnNonFinalField
                     synchronized (mGeoManager) {
-    					if (!mLocationDetected) {						
-    						mGeoManager.removeLocationListener(ChatActivity.this);
-    						mProgressDialog.dismiss();    
-    						Toast.makeText(ChatActivity.this, R.string.chat_toast_fail_location, Toast.LENGTH_SHORT).show();
-    					}
-    				}
-    			}
-    		}).start();	
-    		showDialog(DIALOG_LOCATION_PROGRESS_ID);
-    	} else {
-    		showDialog(DIALOG_GPS_ENABLE_NO_AGPS_ID);
-    	}        
+                        if (!mLocationDetected) {
+                            mGeoManager.removeLocationListener(ChatActivity.this);
+                            mProgressDialog.dismiss();
+                            Toast.makeText(ChatActivity.this, R.string.chat_toast_fail_location, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }).start();
+            showDialog(DIALOG_LOCATION_PROGRESS_ID);
+        } else {
+            showDialog(DIALOG_GPS_ENABLE_NO_AGPS_ID);
+        }
     }
 
-	@Override
-	public void onLocationChanged(Location location) {
+    @Override
+    public void onLocationChanged(Location location) {
 //		Debug.log(this, location.getLatitude() + " / " + location.getLongitude());
-		final double latitude = location.getLatitude();
-		final double longitude = location.getLongitude();
-		CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
-		registerRequest(coordRequest);
-		coordRequest.userid = mUserId;
-		coordRequest.latitude = latitude;
-		coordRequest.longitude = longitude;
-		coordRequest.callback(new ApiHandler() {
-			
-			@Override
-			public void success(ApiResponse response) throws NullPointerException {
-				final Confirmation confirm = Confirmation.parse(response);
-//				final String address = mGeoManager.getLocationAddress(latitude, longitude);
-				runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {						
-						if (confirm.completed) {				
-							if (mIsAddPanelOpened)
-					            mSwapControl.snapToScreen(0);                
-					        mIsAddPanelOpened = false;
+        final double latitude = location.getLatitude();
+        final double longitude = location.getLongitude();
+        CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+        registerRequest(coordRequest);
+        coordRequest.userid = mUserId;
+        coordRequest.latitude = latitude;
+        coordRequest.longitude = longitude;
+        coordRequest.callback(new ApiHandler() {
 
-					        History history = new History();
-					        history.type = Dialog.MAP;
-					        history.currentLocation = true;
+            @Override
+            public void success(ApiResponse response) throws NullPointerException {
+                final Confirmation confirm = Confirmation.parse(response);
+//				final String address = mGeoManager.getLocationAddress(latitude, longitude);
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (confirm.completed) {
+                            if (mIsAddPanelOpened)
+                                mSwapControl.snapToScreen(0);
+                            mIsAddPanelOpened = false;
+
+                            History history = new History();
+                            history.type = Dialog.MAP;
+                            history.currentLocation = true;
                             history.latitude = latitude;
                             history.longitude = longitude;
                             mAdapter.addSentMessage(history);
                             mAdapter.notifyDataSetChanged();
-                            
-//					        Toast.makeText(ChatActivity.this, history.latitude + " " + history.longitude, Toast.LENGTH_SHORT).show();
-						} else {
-							Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
-						}				
-						mProgressDialog.dismiss();
-					}
-				});
-				
-			}
-			
-			@Override
-			public void fail(int codeError, ApiResponse response)
-					throws NullPointerException {
-				runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						mProgressDialog.dismiss();
-						Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
-					}
-				});
-				
-			}
-		}).exec();
-				
-        mGeoManager.removeLocationListener(this);
-        mLocationDetected = true;        
-	}
-	@Override
-	public void onProviderDisabled(String provider) { }
-	@Override
-	public void onProviderEnabled(String provider) { }
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) { }
 
-	@Override
-	protected android.app.Dialog onCreateDialog(int id) {
-		AlertDialog.Builder builder;
-		AlertDialog alert;
-		switch(id) {
-		case DIALOG_GPS_ENABLE_NO_AGPS_ID:
-			builder = new AlertDialog.Builder(this);  
-			builder.setMessage(this.getText(R.string.chat_dialog_gps))  
-			     .setCancelable(false)  
-			     .setPositiveButton(this.getText(R.string.chat_dialog_btn_gps_settings),  
-			          new DialogInterface.OnClickListener(){  
-			          public void onClick(DialogInterface dialog, int id){  
-			        	  Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);  
-			              startActivity(gpsOptionsIntent);  
-			          }  
-			     });  
-			     builder.setNegativeButton(this.getText(R.string.chat_dialog_btn_gps_cancel),
-			          new DialogInterface.OnClickListener(){  
-			          public void onClick(DialogInterface dialog, int id){  
-			               dialog.cancel();
-			          }  
-			     });  
-			alert = builder.create();  
-			return alert;			
-		case DIALOG_LOCATION_PROGRESS_ID:
-			mProgressDialog = new ProgressDialog(this);
-			mProgressDialog.setCancelable(false);
-			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			mProgressDialog.setMessage(this.getText(R.string.map_location_progress));
-			return mProgressDialog;
-		default:
-			return super.onCreateDialog(id);
-		
-		}
-	}
+//					        Toast.makeText(ChatActivity.this, history.latitude + " " + history.longitude, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                        }
+                        mProgressDialog.dismiss();
+                    }
+                });
+
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response)
+                    throws NullPointerException {
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mProgressDialog.dismiss();
+                        Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        }).exec();
+
+        mGeoManager.removeLocationListener(this);
+        mLocationDetected = true;
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    @Override
+    protected android.app.Dialog onCreateDialog(int id) {
+        AlertDialog.Builder builder;
+        AlertDialog alert;
+        switch (id) {
+            case DIALOG_GPS_ENABLE_NO_AGPS_ID:
+                builder = new AlertDialog.Builder(this);
+                builder.setMessage(this.getText(R.string.chat_dialog_gps))
+                        .setCancelable(false)
+                        .setPositiveButton(this.getText(R.string.chat_dialog_btn_gps_settings),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                        startActivity(gpsOptionsIntent);
+                                    }
+                                });
+                builder.setNegativeButton(this.getText(R.string.chat_dialog_btn_gps_cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                alert = builder.create();
+                return alert;
+            case DIALOG_LOCATION_PROGRESS_ID:
+                mProgressDialog = new ProgressDialog(this);
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mProgressDialog.setMessage(this.getText(R.string.map_location_progress));
+                return mProgressDialog;
+            default:
+                return super.onCreateDialog(id);
+
+        }
+    }
 
 }

@@ -1,15 +1,13 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
+import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-
-import com.topface.topface.utils.Debug;
-
 public class MapRequest extends ApiRequest {
-	// Data
-	//TODO Server API NEEEDED
+    // Data
+    //TODO Server API NEEEDED
     private String service = "???";
     public int userid; // идентификатор пользователя, кому послали сообщение
     public String message; // текст сообщения в UTF-8. min размер текста - 1 символ, max - 1024 
@@ -25,7 +23,7 @@ public class MapRequest extends ApiRequest {
             root.put("service", service);
             root.put("ssid", ssid);
             root.put("data", new JSONObject().put("userid", userid).put("message", message));
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             Debug.log(this, "Wrong request compiling: " + e);
         }
 

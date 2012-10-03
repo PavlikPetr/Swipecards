@@ -1,9 +1,9 @@
 package com.topface.topface.requests;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.content.Context;
 import com.topface.topface.utils.Debug;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class BannerRequest extends ApiRequest {
     // Data
@@ -26,7 +26,7 @@ public class BannerRequest extends ApiRequest {
             root.put("service", service);
             root.put("ssid", ssid);
             root.put("data", new JSONObject().put("place", place));
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             Debug.log(this, "Wrong request compiling: " + e);
         }
 

@@ -1,9 +1,5 @@
 package com.topface.topface.ui.profile;
 
-import java.util.LinkedList;
-import com.topface.topface.R;
-import com.topface.topface.data.User;
-import com.topface.topface.utils.FormItem;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,17 +7,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.topface.topface.R;
+import com.topface.topface.data.User;
+import com.topface.topface.utils.FormItem;
+
+import java.util.LinkedList;
 
 public class UserFormListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private LinkedList<FormItem> mUserForms;
-    
-    private static final int T_HEADER  = 0;
+
+    private static final int T_HEADER = 0;
     private static final int T_DIVIDER = 1;
-    private static final int T_DATA    = 2;
-    private static final int T_COUNT   = T_DATA + 1;
-    
+    private static final int T_DATA = 2;
+    private static final int T_COUNT = T_DATA + 1;
+
     // class ViewHolder
     private static class ViewHolder {
         public ImageView mState;
@@ -31,7 +32,7 @@ public class UserFormListAdapter extends BaseAdapter {
     }
 
     public UserFormListAdapter(Context context) {
-        mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mUserForms = new LinkedList<FormItem>();
     }
 
@@ -52,7 +53,7 @@ public class UserFormListAdapter extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-    	return T_COUNT;
+        return T_COUNT;
     }
 
     @Override
@@ -65,15 +66,15 @@ public class UserFormListAdapter extends BaseAdapter {
             case FormItem.DIVIDER:
                 return T_DIVIDER;
             default:
-              return T_HEADER;
+                return T_HEADER;
         }
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        int type = getItemViewType(position);        
-    	if (convertView == null) {
+        int type = getItemViewType(position);
+        if (convertView == null) {
             holder = new ViewHolder();
 
             switch (type) {
@@ -83,13 +84,13 @@ public class UserFormListAdapter extends BaseAdapter {
                 case T_HEADER:
                 case T_DATA:
                     convertView = mInflater.inflate(R.layout.item_user_list, null, false);
-                    holder.mState  = (ImageView)convertView.findViewById(R.id.ivState);
-                    holder.mTitle  = (TextView)convertView.findViewById(R.id.tvTitle);
-                    holder.mHeader = (TextView)convertView.findViewById(R.id.tvHeader);
-                    holder.mValue  = (TextView)convertView.findViewById(R.id.tvValue);
+                    holder.mState = (ImageView) convertView.findViewById(R.id.ivState);
+                    holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+                    holder.mHeader = (TextView) convertView.findViewById(R.id.tvHeader);
+                    holder.mValue = (TextView) convertView.findViewById(R.id.tvValue);
                     break;
             }
-            
+
             switch (type) {
                 case T_HEADER:
                     convertView.setBackgroundResource(R.drawable.user_list_title_bg);
@@ -100,12 +101,12 @@ public class UserFormListAdapter extends BaseAdapter {
             }
             convertView.setTag(holder);
         } else {
-            holder = (ViewHolder)convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
-    	FormItem item = getItem(position);
-    	
-    	switch (type) {
+        FormItem item = getItem(position);
+
+        switch (type) {
             case T_HEADER:
                 holder.mHeader.setText(item.title);
                 holder.mState.setImageResource(R.drawable.user_header);
@@ -113,7 +114,7 @@ public class UserFormListAdapter extends BaseAdapter {
             case T_DATA:
                 holder.mTitle.setText(item.title.toUpperCase());
                 holder.mValue.setText(item.value);
-                if(item.equal)
+                if (item.equal)
                     holder.mState.setImageResource(R.drawable.user_cell_on);  // GREEN POINT
                 else
                     holder.mState.setImageResource(R.drawable.user_cell_off);
@@ -122,7 +123,7 @@ public class UserFormListAdapter extends BaseAdapter {
 
         return convertView;
     }
-    
+
     public void setUserData(User user) {
         mUserForms = user.forms;
     }

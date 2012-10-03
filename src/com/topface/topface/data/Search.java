@@ -1,10 +1,11 @@
 package com.topface.topface.data;
 
-import java.util.LinkedList;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
 
 public class Search extends AbstractDataWithPhotos {
     // Data
@@ -25,9 +26,9 @@ public class Search extends AbstractDataWithPhotos {
     //public String geo_coord;     // координаты пользователя
     //public String geo_coord_lat; // широта нахождения пользоавтеля
     //public String geo_coord_lng; // долгота нахождения пользователя
-    
+
     // Flags
-    public boolean skipped = false;    
+    public boolean skipped = false;
     public boolean rated = false;
 
     public static LinkedList<Search> parse(ApiResponse response) {
@@ -45,8 +46,8 @@ public class Search extends AbstractDataWithPhotos {
                     search.status = item.optString("status");
                     search.online = item.optBoolean("online");
                     search.sex = item.optInt("sex");
-                    search.mutual = item.optBoolean("mutual");                       
-                    
+                    search.mutual = item.optBoolean("mutual");
+
                     // avatars
                     JSONArray avatars = item.getJSONArray("avatars");
                     int size = avatars.length();
@@ -65,12 +66,12 @@ public class Search extends AbstractDataWithPhotos {
                     search.city_id = city.optInt("id");
                     search.city_name = city.optString("name");
                     search.city_full = city.optString("full");
-                    
+
                     initPhotos(item, search);
 
                     userList.add(search);
                 }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("SearchUser.class", "Wrong response parsing: " + e);
         }
 
@@ -79,7 +80,9 @@ public class Search extends AbstractDataWithPhotos {
 
     public int getUid() {
         return uid;
-    };
+    }
+
+    ;
 
     @Override
     public String getLargeLink() {

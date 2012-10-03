@@ -6,9 +6,9 @@ public class Triple<F, S, T> {
     public final T third;
 
     public Triple(F first, S second, T third) {
-        this.first  = first;
+        this.first = first;
         this.second = second;
-        this.third  = third;
+        this.third = third;
     }
 
     public boolean equals(Object o) {
@@ -16,7 +16,7 @@ public class Triple<F, S, T> {
         if (!(o instanceof Triple)) return false;
         final Triple<F, S, T> other;
         try {
-            other = (Triple<F, S, T>)o;
+            other = (Triple<F, S, T>) o;
         } catch (ClassCastException e) {
             return false;
         }
@@ -31,7 +31,7 @@ public class Triple<F, S, T> {
         return result;
     }
 
-    public static <A, B, C> Triple <A, B, C> create(A a, B b, C c) {
+    public static <A, B, C> Triple<A, B, C> create(A a, B b, C c) {
         return new Triple<A, B, C>(a, b, c);
     }
 }

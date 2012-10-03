@@ -34,10 +34,11 @@ public class Http {
         public FlushedInputStream(InputStream inputStream) {
             super(inputStream);
         }
+
         @Override
         public long skip(long n) throws IOException {
             long totalBytesSkipped = 0L;
-            while(totalBytesSkipped < n) {
+            while (totalBytesSkipped < n) {
                 long bytesSkipped = in.skip(n - totalBytesSkipped);
                 if (bytesSkipped == 0L) {
                     int b = read();
@@ -53,7 +54,7 @@ public class Http {
     } // FlushedInputStream
 
     public static boolean isOnline(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
@@ -84,7 +85,7 @@ public class Http {
         try {
             Debug.log(TAG, "enter");
 
-            httpConnection = (HttpURLConnection)new URL(url).openConnection();
+            httpConnection = (HttpURLConnection) new URL(url).openConnection();
             httpConnection.setConnectTimeout(HTTP_TIMEOUT);
             httpConnection.setReadTimeout(HTTP_TIMEOUT);
             if (typeRequest == HTTP_POST_REQUEST)
@@ -127,7 +128,7 @@ public class Http {
                 dos.writeBytes("Content-Type: image/jpeg" + lineEnd + lineEnd);
                 BufferedInputStream bis = new BufferedInputStream(is);
                 byte[] buffer = new byte[1024];
-                while(bis.read(buffer) > 0)
+                while (bis.read(buffer) > 0)
                     dos.write(buffer);
                 dos.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
                 dos.flush();
@@ -157,7 +158,7 @@ public class Http {
                 BufferedInputStream bis = new BufferedInputStream(in, BUFFER_SIZE);
                 byte[] buffer = new byte[1024];
                 int n;
-                while((n = bis.read(buffer)) > 0)
+                while ((n = bis.read(buffer)) > 0)
                     responseBuilder.append(new String(buffer, 0, n));
                 response = responseBuilder.toString();
                 bis.close();
@@ -165,18 +166,18 @@ public class Http {
 
             Debug.log(TAG, "resp:" + response); // RESPONSE
             Debug.log(TAG, "exit");
-        } catch(Exception e) {
+        } catch (Exception e) {
             String errorResponse = null;
             try {
                 StringBuilder responseBuilder = new StringBuilder();
                 BufferedInputStream biStream = new BufferedInputStream(in = httpConnection.getErrorStream(), BUFFER_SIZE);
                 byte[] buffer = new byte[1024];
                 int n;
-                while((n = biStream.read(buffer)) > 0)
+                while ((n = biStream.read(buffer)) > 0)
                     responseBuilder.append(new String(buffer, 0, n));
                 errorResponse = responseBuilder.toString();
                 biStream.close();
-            } catch(Exception e1) {
+            } catch (Exception e1) {
                 Debug.log(TAG, "http error:" + e1);
             }
             Debug.log(TAG, "http exception:" + e + "" + errorResponse);
@@ -189,7 +190,7 @@ public class Http {
                     out.close();
                 if (httpConnection != null)
                     httpConnection.disconnect();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Debug.log(TAG, "http error:" + e);
             }
         }
@@ -204,104 +205,104 @@ public class Http {
         HttpURLConnection httpConnection = null;
 
         try {
-          //System.setProperty("http.keepAlive", "false");
-          Debug.log(TAG,"enter");
-          // запрос
-          httpConnection = (HttpURLConnection)new URL(request).openConnection();
-          //httpConnection.setUseCaches(false);
-          httpConnection.setConnectTimeout(HTTP_TIMEOUT);
-          httpConnection.setReadTimeout(HTTP_TIMEOUT);
-          if(typeRequest==HTTP_POST_REQUEST)
-            httpConnection.setRequestMethod("POST");
-          else
-            httpConnection.setRequestMethod("GET");
-          httpConnection.setDoOutput(true);
-          httpConnection.setDoInput(true);
-          httpConnection.setRequestProperty("Content-Type", "application/json");
-          //httpConnection.setRequestProperty("Content-Length", Integer.toString(postParams.length()));
-          //httpConnection.setRequestProperty("Connection", "close");
-          //httpConnection.setRequestProperty("Connection", "Keep-Alive");
-          //httpConnection.setChunkedStreamingMode(0);
+            //System.setProperty("http.keepAlive", "false");
+            Debug.log(TAG, "enter");
+            // запрос
+            httpConnection = (HttpURLConnection) new URL(request).openConnection();
+            //httpConnection.setUseCaches(false);
+            httpConnection.setConnectTimeout(HTTP_TIMEOUT);
+            httpConnection.setReadTimeout(HTTP_TIMEOUT);
+            if (typeRequest == HTTP_POST_REQUEST)
+                httpConnection.setRequestMethod("POST");
+            else
+                httpConnection.setRequestMethod("GET");
+            httpConnection.setDoOutput(true);
+            httpConnection.setDoInput(true);
+            httpConnection.setRequestProperty("Content-Type", "application/json");
+            //httpConnection.setRequestProperty("Content-Length", Integer.toString(postParams.length()));
+            //httpConnection.setRequestProperty("Connection", "close");
+            //httpConnection.setRequestProperty("Connection", "Keep-Alive");
+            //httpConnection.setChunkedStreamingMode(0);
 
-          //httpConnection.connect();
+            //httpConnection.connect();
 
-          Debug.log(TAG,"req:"+postParams);   // REQUEST
+            Debug.log(TAG, "req:" + postParams);   // REQUEST
 
-          // отправляем post параметры
-          if(typeRequest == HTTP_POST_REQUEST && postParams != null && data == null) {
-            Debug.log(TAG,"begin:");
-            out  = httpConnection.getOutputStream();
-            byte[] buffer = postParams.getBytes("UTF8");
-            out.write(buffer);
-            out.flush();
-            out.close();
-            Debug.log(TAG,"end:");
-          }
+            // отправляем post параметры
+            if (typeRequest == HTTP_POST_REQUEST && postParams != null && data == null) {
+                Debug.log(TAG, "begin:");
+                out = httpConnection.getOutputStream();
+                byte[] buffer = postParams.getBytes("UTF8");
+                out.write(buffer);
+                out.flush();
+                out.close();
+                Debug.log(TAG, "end:");
+            }
 
-          if(typeRequest == HTTP_POST_REQUEST && postParams != null && data != null) {
-            String lineEnd  = "\r\n";
-            String twoHH  = "--";
-            String boundary = "FAfsadkfn23412034aHJSAdnk";
-            httpConnection.setRequestProperty("Content-Type","multipart/mixed; boundary=" + boundary);
-            DataOutputStream dos = new DataOutputStream(out = httpConnection.getOutputStream());
-            dos.writeBytes(lineEnd);
-            dos.writeBytes(twoHH + boundary);
-            dos.writeBytes(lineEnd);
-            dos.writeBytes("Content-Disposition: mixed");
-            dos.writeBytes(lineEnd);
-            dos.writeBytes("Content-Type: application/json");
-            dos.writeBytes(lineEnd+lineEnd);
-            dos.writeBytes(postParams);
-            dos.writeBytes(lineEnd);
-            dos.writeBytes(twoHH + boundary);
-            dos.writeBytes(lineEnd);
-            dos.writeBytes("Content-Disposition: mixed");
-            dos.writeBytes(lineEnd);
-            dos.writeBytes("Content-Type: image/jpeg");
-            dos.writeBytes(lineEnd+lineEnd);
-            dos.writeBytes(data);
-            
-            dos.writeBytes(lineEnd);
-            dos.writeBytes(twoHH + boundary + twoHH);
-            dos.writeBytes(lineEnd);
-            dos.flush();
-            dos.close();
-            out.close();
-          }
-          
-          in = httpConnection.getInputStream();
-          
-          // проверяет код ответа сервера и считываем данные
-          if(httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            StringBuilder responseBuilder = new StringBuilder();
-            BufferedInputStream bis = new BufferedInputStream(in = httpConnection.getInputStream());
-            byte[] buffer = new byte[1024];
-            int n;
-            while((n=bis.read(buffer)) > 0)
-              responseBuilder.append(new String(buffer,0,n)); 
-            response = responseBuilder.toString();
-            bis.close();
-          }  
-        
-          Debug.log(TAG,"resp:" + response);   // RESPONSE
-          Debug.log(TAG,"exit");
-        } catch(Exception e) {
-          Debug.log(TAG,"http exception:" + e);
+            if (typeRequest == HTTP_POST_REQUEST && postParams != null && data != null) {
+                String lineEnd = "\r\n";
+                String twoHH = "--";
+                String boundary = "FAfsadkfn23412034aHJSAdnk";
+                httpConnection.setRequestProperty("Content-Type", "multipart/mixed; boundary=" + boundary);
+                DataOutputStream dos = new DataOutputStream(out = httpConnection.getOutputStream());
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHH + boundary);
+                dos.writeBytes(lineEnd);
+                dos.writeBytes("Content-Disposition: mixed");
+                dos.writeBytes(lineEnd);
+                dos.writeBytes("Content-Type: application/json");
+                dos.writeBytes(lineEnd + lineEnd);
+                dos.writeBytes(postParams);
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHH + boundary);
+                dos.writeBytes(lineEnd);
+                dos.writeBytes("Content-Disposition: mixed");
+                dos.writeBytes(lineEnd);
+                dos.writeBytes("Content-Type: image/jpeg");
+                dos.writeBytes(lineEnd + lineEnd);
+                dos.writeBytes(data);
+
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHH + boundary + twoHH);
+                dos.writeBytes(lineEnd);
+                dos.flush();
+                dos.close();
+                out.close();
+            }
+
+            in = httpConnection.getInputStream();
+
+            // проверяет код ответа сервера и считываем данные
+            if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                StringBuilder responseBuilder = new StringBuilder();
+                BufferedInputStream bis = new BufferedInputStream(in = httpConnection.getInputStream());
+                byte[] buffer = new byte[1024];
+                int n;
+                while ((n = bis.read(buffer)) > 0)
+                    responseBuilder.append(new String(buffer, 0, n));
+                response = responseBuilder.toString();
+                bis.close();
+            }
+
+            Debug.log(TAG, "resp:" + response);   // RESPONSE
+            Debug.log(TAG, "exit");
+        } catch (Exception e) {
+            Debug.log(TAG, "http exception:" + e);
         } finally {
-          try {
-            Debug.log(TAG,"disconnect");
-            if(in!=null) in.close();
-            if(out!=null) out.close();
-            if(buffReader!=null) buffReader.close();
-            if(httpConnection!=null) httpConnection.disconnect();
-          } catch(Exception e) {
-            Debug.log(TAG,"http closing error:" + e);
-          }
+            try {
+                Debug.log(TAG, "disconnect");
+                if (in != null) in.close();
+                if (out != null) out.close();
+                if (buffReader != null) buffReader.close();
+                if (httpConnection != null) httpConnection.disconnect();
+            } catch (Exception e) {
+                Debug.log(TAG, "http closing error:" + e);
+            }
         }
         return response;
-      }
+    }
 
-    public static String _httpTPRequest(String url,String params) { //не используется
+    public static String _httpTPRequest(String url, String params) { //не используется
         Debug.log(TAG, "req_next:" + params); // REQUEST
 
         HttpPost httpPost = null;
@@ -332,7 +333,7 @@ public class Http {
                 Debug.log(TAG, "resp_next::" + rawResponse); // RESPONSE
             }
             //if(httpClient!=null) httpClient.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log(TAG, "server request:" + e.getMessage());
             for (StackTraceElement st : e.getStackTrace())
                 Debug.log(TAG, "http trace: " + st.toString());
@@ -350,44 +351,45 @@ public class Http {
         return ConnectionManager.getInstance().bitmapLoader(url);
     }
 
-    public static void bannerLoader(final String url,final ImageView view) {
+    public static void bannerLoader(final String url, final ImageView view) {
         Thread t = new Thread() {
             @Override
             public void run() {
-              Bitmap bitmap = bitmapLoader(url);
-              if(bitmap==null) 
-                  return;
-              float w = bitmap.getWidth(); 
-              float ratio = w/Data.screen_width;
-              int height = (int)(bitmap.getHeight()/ratio);
-              final Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Data.screen_width, height, true);
-              if(resizedBitmap != null)
-                  view.post(new Runnable() {
-                      @Override
-                      public void run() {
-                          Bitmap bitmap = bitmapLoader(url);
-                          if (bitmap == null)
-                              return;
-                          float w = bitmap.getWidth();
-                          float ratio = w / Data.screen_width;
-                          int height = (int)(bitmap.getHeight() / ratio);
-                          final Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Data.screen_width, height, true);
-                          if (resizedBitmap != null)
-                              view.post(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      view.setImageBitmap(resizedBitmap);
-                                  }
-                              });
-                      }});
+                Bitmap bitmap = bitmapLoader(url);
+                if (bitmap == null)
+                    return;
+                float w = bitmap.getWidth();
+                float ratio = w / Data.screen_width;
+                int height = (int) (bitmap.getHeight() / ratio);
+                final Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Data.screen_width, height, true);
+                if (resizedBitmap != null)
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Bitmap bitmap = bitmapLoader(url);
+                            if (bitmap == null)
+                                return;
+                            float w = bitmap.getWidth();
+                            float ratio = w / Data.screen_width;
+                            int height = (int) (bitmap.getHeight() / ratio);
+                            final Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, Data.screen_width, height, true);
+                            if (resizedBitmap != null)
+                                view.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        view.setImageBitmap(resizedBitmap);
+                                    }
+                                });
+                        }
+                    });
             }
         };
-        
+
         t.setDaemon(true);
         t.start();
     }
 
-    public static void imageLoader(final String url,final ImageView view) {
+    public static void imageLoader(final String url, final ImageView view) {
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -404,8 +406,8 @@ public class Http {
         t.setDaemon(true);
         t.start();
     }
-    
-    public static void imageLoader(final String url,final ImageView view, final Handler handler) {
+
+    public static void imageLoader(final String url, final ImageView view, final Handler handler) {
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -419,12 +421,12 @@ public class Http {
                         }
                     });
                 } else {
-                	view.post(new Runnable() {
+                    view.post(new Runnable() {
                         @Override
                         public void run() {
-                        	handler.sendEmptyMessage(0);
+                            handler.sendEmptyMessage(0);
                         }
-                	});
+                    });
                 }
             }
         };
@@ -564,7 +566,7 @@ public class Http {
  * final int statusCode = response.getStatusLine().getStatusCode();
  * if(statusCode != HttpStatus.SC_OK)
  * return null;
- * 
+ *
  * HttpEntity entity = response.getEntity();
  * if(entity != null) {
  * //final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);

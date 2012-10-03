@@ -1,10 +1,11 @@
 package com.topface.topface.data;
 
-import java.util.LinkedList;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
 
 public class FeedRate extends AbstractDataWithPhotos {
     // Data
@@ -30,18 +31,18 @@ public class FeedRate extends AbstractDataWithPhotos {
         try {
             FeedRate.unread_count = response.mJSONResult.optInt("unread");
             FeedRate.more = response.mJSONResult.optBoolean("more");
-            
+
             JSONArray arr = response.mJSONResult.getJSONArray("feed");
             if (arr.length() > 0)
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject item = arr.getJSONObject(i);
-                    
-                    FeedRate rate = new FeedRate();   
+
+                    FeedRate rate = new FeedRate();
                     rate.id = item.optInt("id");
                     rate.uid = item.optInt("uid");
                     rate.first_name = item.optString("first_name");
                     rate.age = item.optInt("age");
-                    
+
                     // city  
                     JSONObject city = item.getJSONObject("city");
                     rate.city_id = city.optInt("id");
@@ -59,7 +60,7 @@ public class FeedRate extends AbstractDataWithPhotos {
                     rate.avatars_big = avatar.optString("big");
                     ratesList.add(rate);
                 }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Debug.log("FeedRate.class", "Wrong response parsing: " + e);
         }
 
@@ -68,5 +69,7 @@ public class FeedRate extends AbstractDataWithPhotos {
 
     public int getUid() {
         return uid;
-    };
+    }
+
+    ;
 }

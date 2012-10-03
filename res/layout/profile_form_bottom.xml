@@ -1,353 +1,353 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent" 
-      android:background="@android:color/transparent" >
-      
-  <ScrollView
-      android:background="@android:color/transparent"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:fadeScrollbars="true" >
-    
-		  <TableLayout
-		      android:id="@+id/tblBoard"
-		      android:layout_width="fill_parent"
-		      android:layout_height="wrap_content"
-		      android:padding="12dp"
-		      android:stretchColumns="0,1"
-		      android:background="@android:color/transparent" >
-		      
-		    <!-- Anketa -->
-		    <TableRow>  
-				  <TextView
-				      android:layout_width="wrap_content"
-				      android:layout_height="wrap_content"
-				      android:layout_column="0"
-				      android:text="@string/profile_form"
-				      android:textColor="#FFFFFF"
-				      android:textSize="20sp" />
-			  </TableRow>
-		      
-		    <!-- row HEIGHT -->
-		    <TableRow
-		        android:id="@+id/rowProfileHeight"
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_height"
-		            android:textColor="#535353"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileHeight"            
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row WEIGHT -->
-		    <TableRow
-		        android:id="@+id/rowProfileWeight"
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_weight"
-		            android:textColor="#535353"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileWeight"  
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row EDUCATION -->
-		    <TableRow
-		        android:id="@+id/rowProfileEducation"
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_education"
-		            android:textColor="#535353"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileEducation"
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row COMMUTABILITY -->
-		    <TableRow
-		        android:id="@+id/rowProfileCommutability"
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_commutability"
-		            android:textColor="#535353"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileCommutability"
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row CHARACTER-->
-		    <TableRow
-		        android:id="@+id/rowProfileCharacter"
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_character"
-		            android:textColor="#535353"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileCharacter"
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row ALCOHOL -->
-		    <TableRow
-		        android:id="@+id/rowProfileAlcohol"
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_alcohol"
-		            android:textColor="#535353"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileAlcohol"
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row FITNESS -->
-		    <TableRow
-		        android:id="@+id/rowProfileFitness"
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_fitness"
-		            android:textColor="#535353"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileFitness"
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row JOB -->
-		    <TableRow
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_job"
-		            android:textColor="#535353"
-		            android:visibility="gone"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileJob"
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:visibility="gone"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row MARRIAGE -->
-		    <TableRow
-		        android:id="@+id/rowProfileMarriage"
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_marriage_male"
-		            android:textColor="#535353"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileMarriage"
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row FINANCES -->
-		    <TableRow
-		        android:id="@+id/rowProfileFinances"
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_finances"
-		            android:textColor="#535353"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileFinances"
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row SMOKING -->
-		    <TableRow
-		        android:id="@+id/rowProfileSmoking"
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_smoking"
-		            android:textColor="#535353"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileSmoking"
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row STATUS -->
-		    <TableRow
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_status"
-		            android:textColor="#535353"
-		            android:visibility="gone"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileStatus"
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:visibility="gone"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    <!-- row ABOUT SHORT -->
-		    <TableRow
-		        android:id="@+id/rowProfileAbout"
-		        android:visibility="gone" >
-		        <TextView
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="0"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:text="@string/profile_status"
-		            android:textColor="#535353"
-		            android:textSize="15sp" />
-		        <TextView
-		            android:id="@+id/tvProfileAbout"
-		            android:layout_width="0dp"
-		            android:layout_height="wrap_content"
-		            android:layout_column="1"
-		            android:layout_marginTop="8dp"
-		            android:layout_weight="1"
-		            android:textColor="#2D2D2D"
-		            android:textSize="15sp" />
-		    </TableRow>
-		    
-		    <TableRow
-		          android:paddingTop="8dp">
-            <Button 
-                android:id="@+id/btnProfileAsk"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@android:color/transparent">
+
+    <ScrollView
+            android:background="@android:color/transparent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fadeScrollbars="true">
+
+        <TableLayout
+                android:id="@+id/tblBoard"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:textColor="#2D2D2D"
-                android:visibility="gone"
-                android:layout_span="2"
-                android:background="@drawable/buying_purchase_selector"
-                android:text="@string/profile_btn_ask" />
-        </TableRow> 
-        
-		  </TableLayout>
-  
-  </ScrollView>
-  
+                android:padding="12dp"
+                android:stretchColumns="0,1"
+                android:background="@android:color/transparent">
+
+            <!-- Anketa -->
+            <TableRow>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:text="@string/profile_form"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp"/>
+            </TableRow>
+
+            <!-- row HEIGHT -->
+            <TableRow
+                    android:id="@+id/rowProfileHeight"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_height"
+                        android:textColor="#535353"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileHeight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row WEIGHT -->
+            <TableRow
+                    android:id="@+id/rowProfileWeight"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_weight"
+                        android:textColor="#535353"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileWeight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row EDUCATION -->
+            <TableRow
+                    android:id="@+id/rowProfileEducation"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_education"
+                        android:textColor="#535353"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileEducation"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row COMMUTABILITY -->
+            <TableRow
+                    android:id="@+id/rowProfileCommutability"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_commutability"
+                        android:textColor="#535353"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileCommutability"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row CHARACTER-->
+            <TableRow
+                    android:id="@+id/rowProfileCharacter"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_character"
+                        android:textColor="#535353"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileCharacter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row ALCOHOL -->
+            <TableRow
+                    android:id="@+id/rowProfileAlcohol"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_alcohol"
+                        android:textColor="#535353"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileAlcohol"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row FITNESS -->
+            <TableRow
+                    android:id="@+id/rowProfileFitness"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_fitness"
+                        android:textColor="#535353"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileFitness"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row JOB -->
+            <TableRow
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_job"
+                        android:textColor="#535353"
+                        android:visibility="gone"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileJob"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:visibility="gone"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row MARRIAGE -->
+            <TableRow
+                    android:id="@+id/rowProfileMarriage"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_marriage_male"
+                        android:textColor="#535353"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileMarriage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row FINANCES -->
+            <TableRow
+                    android:id="@+id/rowProfileFinances"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_finances"
+                        android:textColor="#535353"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileFinances"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row SMOKING -->
+            <TableRow
+                    android:id="@+id/rowProfileSmoking"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_smoking"
+                        android:textColor="#535353"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileSmoking"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row STATUS -->
+            <TableRow
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_status"
+                        android:textColor="#535353"
+                        android:visibility="gone"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:visibility="gone"
+                        android:textSize="15sp"/>
+            </TableRow>
+            <!-- row ABOUT SHORT -->
+            <TableRow
+                    android:id="@+id/rowProfileAbout"
+                    android:visibility="gone">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_status"
+                        android:textColor="#535353"
+                        android:textSize="15sp"/>
+                <TextView
+                        android:id="@+id/tvProfileAbout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#2D2D2D"
+                        android:textSize="15sp"/>
+            </TableRow>
+
+            <TableRow
+                    android:paddingTop="8dp">
+                <Button
+                        android:id="@+id/btnProfileAsk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="#2D2D2D"
+                        android:visibility="gone"
+                        android:layout_span="2"
+                        android:background="@drawable/buying_purchase_selector"
+                        android:text="@string/profile_btn_ask"/>
+            </TableRow>
+
+        </TableLayout>
+
+    </ScrollView>
+
 </RelativeLayout>

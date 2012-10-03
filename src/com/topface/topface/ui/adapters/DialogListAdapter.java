@@ -40,14 +40,14 @@ public class DialogListAdapter extends FeedAdapter<Dialog> {
 
     @Override
     public int getItemViewType(int position) {
-    	int typeOfSuperMethod = super.getItemViewType(position);
-    	if (typeOfSuperMethod == T_OTHER) {
-    		return getItem(position).city_id == CacheProfile.city_id ?
+        int typeOfSuperMethod = super.getItemViewType(position);
+        if (typeOfSuperMethod == T_OTHER) {
+            return getItem(position).city_id == CacheProfile.city_id ?
                     T_CITY :
                     T_OTHER;
-    	} else {
-    		return typeOfSuperMethod;
-    	}
+        } else {
+            return typeOfSuperMethod;
+        }
     }
 
     @Override
@@ -59,7 +59,7 @@ public class DialogListAdapter extends FeedAdapter<Dialog> {
             holder = getEmptyHolder(convertView);
             convertView.setTag(holder);
         } else {
-            holder = (ViewHolder)convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
         Dialog dialog = getItem(position);
