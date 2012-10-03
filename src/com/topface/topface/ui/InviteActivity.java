@@ -1,11 +1,11 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.text.*;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.*;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
@@ -124,6 +124,14 @@ public class InviteActivity extends TrackedActivity {
      */
     private void onInviteError() {
         Toast.makeText(this, R.string.invite_error, Toast.LENGTH_LONG);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mAdapter.getCursor().isClosed()) {
+            setContactsAdapater();
+        }
     }
 
     /**
