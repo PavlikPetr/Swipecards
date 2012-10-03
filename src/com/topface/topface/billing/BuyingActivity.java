@@ -101,13 +101,13 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         int coins = getIntent().getIntExtra(INTENT_USER_COINS, 0);
 
         // Info
-        TextView resourcesInfo = (TextView) findViewById(R.id.tvResourcesInfo);
+        TextView mResourcesInfo = (TextView) findViewById(R.id.tvResourcesInfo);
         if (coins > 0) {
-            resourcesInfo.setText(String.format(
+            mResourcesInfo.setText(String.format(
                     getResources().getString(R.string.buying_you_have_no_coins_for_gift), coins));
 
         } else {
-            resourcesInfo.setText(getResources().getString(R.string.buying_default_message));
+            mResourcesInfo.setText(getResources().getString(R.string.buying_default_message));
         }
 
         // Progress Bar
