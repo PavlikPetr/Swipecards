@@ -11,14 +11,12 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-import java.util.LinkedList;
-
 public class DialogListAdapter extends FeedAdapter<Dialog> {
 
     public static final String MESSAGE_OF_UNKNOWN_TYPE = "";
 
-    public DialogListAdapter(Context context, LinkedList<Dialog> data, Updater updateCallback) {
-        super(context, data, updateCallback);
+    public DialogListAdapter(Context context, Updater updateCallback) {
+        super(context, updateCallback);
     }
 
     static class ViewHolder {
@@ -73,6 +71,16 @@ public class DialogListAdapter extends FeedAdapter<Dialog> {
         holder.mTime.setText(Utils.formatTime(getContext(), dialog.created));
 
         return convertView;
+    }
+
+    @Override
+    protected Dialog getLoaderItem() {
+        return new Dialog(IListLoader.ItemType.LOADER);
+    }
+
+    @Override
+    protected Dialog getRetryItem() {
+        return new Dialog(IListLoader.ItemType.RETRY);
     }
 
     private ViewHolder getEmptyHolder(View convertView) {

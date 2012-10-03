@@ -9,21 +9,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
 
-import java.util.LinkedList;
 
 /**
  * @param <T>
  */
-public class FeedAdapter<T extends IListLoader> extends LoadingListAdapter implements AbsListView.OnScrollListener {
+public abstract class FeedAdapter<T extends IListLoader> extends LoadingListAdapter implements AbsListView.OnScrollListener {
 
     private Context mContext;
-    private LinkedList<T> mData;
+    private FeedList<T> mData;
     private LayoutInflater mInflater;
     private Updater mUpdateCallback;
+    public static final int LIMIT = 40;
 
-    public FeedAdapter(Context context, LinkedList<T> data, Updater updateCallback) {
+    public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context;
-        mData = data;
+        mData = data == null ? new FeedList<T>() : data;
         mInflater = LayoutInflater.from(context);
         mLoaderRetrier = getLoaderRetrier();
         mLoaderRetrierText = getLoaderRetrierText();
@@ -31,8 +31,8 @@ public class FeedAdapter<T extends IListLoader> extends LoadingListAdapter imple
         mUpdateCallback = updateCallback;
     }
 
-    public FeedAdapter(Context context, LinkedList<T> data) {
-        this(context, data, null);
+    public FeedAdapter(Context context, Updater updateCallback) {
+        this(context, null, updateCallback);
     }
 
     private ProgressBar getLoaderRetrierProgress() {
@@ -54,7 +54,7 @@ public class FeedAdapter<T extends IListLoader> extends LoadingListAdapter imple
 
     @Override
     public T getItem(int i) {
-        return mData.get(i);
+        return mData.hasItem(i) ? mData.get(i) : null;
     }
 
     @Override
@@ -113,7 +113,7 @@ public class FeedAdapter<T extends IListLoader> extends LoadingListAdapter imple
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
-            if (mUpdateCallback != null && mData.size() > 0 && mData.getLast().isLoader()) {
+            if (mUpdateCallback != null && !mData.isEmpty() && mData.getLast().isLoader()) {
                 mUpdateCallback.onFeedUpdate();
             }
         }
@@ -122,5 +122,83 @@ public class FeedAdapter<T extends IListLoader> extends LoadingListAdapter imple
     public static interface Updater {
         void onFeedUpdate();
     }
+
+    public void setData(FeedList<T> data) {
+        removeLoaderItem();
+        FeedList<T> currentData = getData();
+        currentData.clear();
+        currentData.addAll(data);
+
+        addLoaderItem();
+
+        notifyDataSetChanged();
+
+    }
+
+    private void addLoaderItem() {
+        FeedList<T> currentData = getData();
+        if (!currentData.isEmpty() && currentData.size() > LIMIT / 2) {
+            currentData.add(getLoaderItem());
+        }
+    }
+
+    public void addData(FeedList<T> data) {
+        removeLoaderItem();
+        if (data != null && !data.isEmpty()) {
+            getData().addAll(data);
+            addLoaderItem();
+        }
+        notifyDataSetChanged();
+    }
+
+    public FeedList<T> getData() {
+        if (mData == null) {
+            mData = new FeedList<T>();
+        }
+        return mData;
+    }
+
+    public void showLoaderItem() {
+        removeLoaderItem();
+        getData().add(getLoaderItem());
+        notifyDataSetChanged();
+    }
+
+    public void showRetryItem() {
+        removeLoaderItem();
+        getData().add(getRetryItem());
+        notifyDataSetChanged();
+    }
+
+    private void removeLoaderItem() {
+        FeedList<T> data = getData();
+        if (!data.isEmpty()) {
+            T lastItem = data.getLast();
+            if (lastItem.isLoader() || lastItem.isLoaderRetry()) {
+                data.remove(data.size() - 1);
+            }
+        }
+    }
+
+    public T getLastFeedItem() {
+        T item = null;
+        if (!isEmpty()) {
+            FeedList<T> data = getData();
+            int dataSize = data.size();
+
+            int feedIndex = data.getLast().isLoader() || data.getLast().isLoaderRetry() ?
+                    dataSize - 2 :
+                    dataSize - 1;
+            if (data.hasItem(feedIndex)) {
+                item = data.get(feedIndex);
+            }
+    }
+
+        return item;
+    }
+
+    abstract protected T getLoaderItem();
+
+    abstract protected T getRetryItem();
 
 }

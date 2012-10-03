@@ -28,14 +28,11 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
-import com.topface.topface.ui.adapters.IListLoader;
-import com.topface.topface.ui.adapters.IListLoader.ItemType;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SwapAnimation;
-
-import java.util.LinkedList;
 
 public class DialogsFragment extends BaseFragment {
 
@@ -55,9 +52,6 @@ public class DialogsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.ac_dialog, null);
-
-        // Data
-        Data.dialogList = new LinkedList<Dialog>();
 
         // Home Button
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
@@ -83,6 +77,7 @@ public class DialogsFragment extends BaseFragment {
                     y += Static.HEADER_SHADOW_SHIFT;
                     mControlsGroup.setPadding(mControlsGroup.getPaddingLeft(), -y, mControlsGroup.getPaddingRight(), mControlsGroup.getPaddingBottom());
                     ViewTreeObserver obs = mControlsGroup.getViewTreeObserver();
+                    //noinspection deprecation
                     obs.removeGlobalOnLayoutListener(this);
                 }
             }
@@ -127,9 +122,7 @@ public class DialogsFragment extends BaseFragment {
                 if (!mIsUpdating && theDialog.isLoaderRetry()) {
                     updateUI(new Runnable() {
                         public void run() {
-                            removeLoaderListItem();
-                            Data.dialogList.add(new Dialog(ItemType.LOADER));
-                            mListAdapter.notifyDataSetChanged();
+                            mListAdapter.showLoaderItem();
                         }
                     });
                     updateDataHistory();
@@ -151,7 +144,7 @@ public class DialogsFragment extends BaseFragment {
         });
 
         // Control creating
-        mListAdapter = new DialogListAdapter(getActivity().getApplicationContext(), Data.dialogList, new FeedAdapter.Updater() {
+        mListAdapter = new DialogListAdapter(getActivity().getApplicationContext(), new FeedAdapter.Updater() {
             @Override
             public void onFeedUpdate() {
                 if (!mIsUpdating) {
@@ -189,25 +182,12 @@ public class DialogsFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        Data.dialogList.clear();
-                        Data.dialogList.addAll(Dialog.parse(response));
                         CacheProfile.unread_messages = 0;
-                        // if (mNewUpdating)
-                        // mFooterView.setVisibility(View.GONE);
-                        // else
-                        // mFooterView.setVisibility(View.VISIBLE);
-                        //
-                        // if (Data.dialogList.size() == 0 ||
-                        // Data.dialogList.size() < LIMIT / 2)
-                        // mFooterView.setVisibility(View.GONE);
 
-                        if (!(Data.dialogList.size() == 0 || Data.dialogList.size() < LIMIT / 2)) {
-                            Data.dialogList.add(new Dialog(IListLoader.ItemType.LOADER));
-                        }
+                        mListAdapter.setData(Dialog.parse(response));
 
                         onUpdateSuccess(isPushUpdating);
                         mListView.onRefreshComplete();
-                        mListAdapter.notifyDataSetChanged();
                         mListView.setVisibility(View.VISIBLE);
                         mIsUpdating = false;
                     }
@@ -237,33 +217,25 @@ public class DialogsFragment extends BaseFragment {
 
         DialogRequest dialogRequest = new DialogRequest(getActivity());
         registerRequest(dialogRequest);
-        if (!Data.dialogList.isEmpty()) {
-            if (Data.dialogList.getLast().isLoader() || Data.dialogList.getLast().isLoaderRetry()) {
-                dialogRequest.before = Data.dialogList.get(Data.dialogList.size() - 2).id;
-            } else {
-                dialogRequest.before = Data.dialogList.get(Data.dialogList.size() - 1).id;
-            }
+
+        Dialog lastItem = mListAdapter.getLastFeedItem();
+        if (lastItem != null) {
+            dialogRequest.before = lastItem.id;
         }
-        dialogRequest.limit = LIMIT;
+
+        dialogRequest.limit = FeedAdapter.LIMIT;
         dialogRequest.unread = mHasUnread ? 1 : 0;
         dialogRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                final LinkedList<Dialog> dialogList = Dialog.parse(response);
+                final FeedList<Dialog> dialogList = Dialog.parse(response);
 
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        removeLoaderListItem();
-                        if (dialogList.size() > 0) {
-                            Data.dialogList.addAll(dialogList);
-                            if (!(Data.dialogList.size() == 0 || Data.dialogList.size() < (LIMIT / 2)))
-                                Data.dialogList.add(new Dialog(IListLoader.ItemType.LOADER));
-                        }
-
+                        mListAdapter.addData(dialogList);
                         onUpdateSuccess(true);
                         mListView.onRefreshComplete();
-                        mListAdapter.notifyDataSetChanged();
                         mIsUpdating = false;
                     }
                 });
@@ -278,10 +250,8 @@ public class DialogsFragment extends BaseFragment {
                         Toast.makeText(getActivity(), getString(R.string.general_data_error),
                                 Toast.LENGTH_SHORT).show();
                         mIsUpdating = false;
-                        removeLoaderListItem();
-                        Data.dialogList.add(new Dialog(IListLoader.ItemType.RETRY));
+                        mListAdapter.showRetryItem();
                         mListView.onRefreshComplete();
-                        mListAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -297,14 +267,6 @@ public class DialogsFragment extends BaseFragment {
         mListAdapter = null;
 
         Data.friendAvatar = null;
-    }
-
-    private void removeLoaderListItem() {
-        if (Data.dialogList.size() > 0) {
-            if (Data.dialogList.getLast().isLoader() || Data.dialogList.getLast().isLoaderRetry()) {
-                Data.dialogList.remove(Data.dialogList.size() - 1);
-            }
-        }
     }
 
     @Override
@@ -325,7 +287,8 @@ public class DialogsFragment extends BaseFragment {
     protected void onUpdateSuccess(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
-            if (Data.dialogList.isEmpty()) {
+
+            if (mListAdapter.isEmpty()) {
                 mBackgroundText.setText(R.string.inbox_background_text);
             } else {
                 mBackgroundText.setText("");

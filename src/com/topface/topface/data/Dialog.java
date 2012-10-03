@@ -1,12 +1,11 @@
 package com.topface.topface.data;
 
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.LinkedList;
 
 public class Dialog extends AbstractDataWithPhotos implements IListLoader {
     // Data
@@ -73,8 +72,8 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
         }
     }
 
-    public static LinkedList<Dialog> parse(ApiResponse response) {
-        LinkedList<Dialog> dialogList = new LinkedList<Dialog>();
+    public static FeedList<Dialog> parse(ApiResponse response) {
+        FeedList<Dialog> dialogList = new FeedList<Dialog>();
 
         try {
             Dialog.unread_count = response.mJSONResult.getInt("unread");
@@ -82,7 +81,7 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
 
             JSONArray arr = response.mJSONResult.getJSONArray("items");
             if (arr.length() > 0)
-                dialogList = new LinkedList<Dialog>();
+                dialogList = new FeedList<Dialog>();
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject item = arr.getJSONObject(i);
                 Dialog dialog = new Dialog();
@@ -139,8 +138,6 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
     public int getUid() {
         return uid;
     }
-
-    ;
 
     @Override
     public boolean isLoader() {
