@@ -25,6 +25,7 @@ public class GiftsActivity extends BaseFragmentActivity {
 	public static final int INTENT_REQUEST_GIFT = 111;
 	public static final String INTENT_GIFT_ID = "gift_id";
 	public static final String INTENT_GIFT_URL = "gift_url";
+	public static final String INTENT_GIFT_PRICE = "gift_price";
 
 	public GiftsCollection mGiftsCollection;
 

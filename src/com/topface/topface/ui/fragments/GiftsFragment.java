@@ -109,6 +109,7 @@ public class GiftsFragment extends BaseFragment {
 						if (holder.mGift.type != Gift.PROFILE && holder.mGift.type != Gift.SEND_BTN) {
 							intent.putExtra(GiftsActivity.INTENT_GIFT_ID, holder.mGift.id);
 							intent.putExtra(GiftsActivity.INTENT_GIFT_URL, holder.mGift.link);
+							intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, holder.mGift.price);
 
 							getActivity().setResult(Activity.RESULT_OK, intent);
 							getActivity().finish();
@@ -178,9 +179,10 @@ public class GiftsFragment extends BaseFragment {
 				Bundle extras = data.getExtras();
 				final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
 				final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+				final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
 
 				if (mProfile != null) {
-					SendGiftRequest sendGift = new SendGiftRequest(getActivity()
+					final SendGiftRequest sendGift = new SendGiftRequest(getActivity()
 							.getApplicationContext());
 					registerRequest(sendGift);
 					sendGift.giftId = id;
@@ -215,9 +217,11 @@ public class GiftsFragment extends BaseFragment {
 							getActivity().runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
-									if (response.code == ApiResponse.PAYMENT)
-										startActivity(new Intent(getActivity()
-												.getApplicationContext(), BuyingActivity.class));
+									if (response.code == ApiResponse.PAYMENT) {
+										Intent intent = new Intent(getActivity().getApplicationContext(), BuyingActivity.class);
+										intent.putExtra(BuyingActivity.INTENT_USER_COINS, price - CacheProfile.money);
+										startActivity(intent);
+									}
 								}
 							});
 						}

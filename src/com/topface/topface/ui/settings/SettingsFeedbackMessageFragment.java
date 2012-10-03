@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,7 +42,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
 		super.onCreateView(inflater, container, saved);
-		View root = inflater.inflate(R.layout.fragment_edit_form_item_text, null);
+		View root = inflater.inflate(R.layout.item_edit_form_input, null);
 
 		// Navigation bar
 		getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
@@ -123,7 +124,9 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-
+		
+		getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+		
 		return root;
 	}
 

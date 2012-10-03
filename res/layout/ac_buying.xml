@@ -1,84 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/chat_list_bg">
+    android:background="@drawable/chat_list_bg" >
 
     <!-- header bar -->
+
     <FrameLayout
         android:id="@+id/loNavigationBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
         <include layout="@layout/bar_navigation_header" />
-    </FrameLayout>  
-    
+    </FrameLayout>
+
     <ScrollView
-        android:layout_below="@id/loNavigationBar" 
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loNavigationBar"
         android:layout_gravity="center_horizontal"
-        android:fadingEdge="none"
-	    android:fadeScrollbars="true"  >
-	    
-	    <LinearLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical" >
-	        
-        <!-- Resources -->
+        android:fadeScrollbars="true"
+        android:fadingEdge="none" >
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="10dp"
-            android:orientation="horizontal">
-              
-           <TextView
-               android:id="@+id/tvResourcesMoney" 
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_gravity="center"
-               android:gravity="center"
-               android:textColor="#B5B5B5"
-               android:textSize="14sp"
-               android:textStyle="normal"
-               android:drawableRight="@drawable/resources_coins"
-               android:drawablePadding="4dp" />
-              
-	       <TextView
-	           android:id="@+id/tvResourcesPower" 
-	           android:layout_width="wrap_content"
-	           android:layout_height="wrap_content"
-	           android:layout_marginLeft="10dp"
-	           android:layout_gravity="center"
-	           android:adjustViewBounds="true"
-               android:scaleType="fitCenter"
-	           android:gravity="center"
-	           android:textColor="#B5B5B5"
-	           android:textSize="14sp"
-	           android:textStyle="normal"
-               android:drawablePadding="5dp" />
-			     
-          </LinearLayout>
-          
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/item_divider"/>
-        
-        <!-- Info -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center"
-            android:background="@drawable/buying_info"
-            android:orientation="horizontal" >
-	       
-	      <TextView
+            android:orientation="vertical" >
+
+            <!-- Resources -->
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="12dp" >
+
+                <TextView
+                    android:id="@+id/tvResourcesMoney"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawablePadding="4dp"
+                    android:drawableRight="@drawable/resources_coins"
+                    android:gravity="center"
+                    android:textColor="#B5B5B5"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/tvResourcesPower"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:adjustViewBounds="true"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:scaleType="fitCenter"
+                    android:textColor="#B5B5B5"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/item_divider" />
+
+            <!-- Info -->
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/buying_info"
+                android:orientation="horizontal" >
+
+                <com.topface.topface.ui.views.IllustratedTextView
+                    android:id="@+id/tvResourcesInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="normal" />
+                <!--
+          TextView
               android:id="@+id/tvResourcesInfo" 
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -100,179 +113,189 @@
               android:textColor="#FFFFFF"
               android:textSize="12sp"
               android:textStyle="normal"
-              android:text="@string/buying_for_purchasing" />
-	       
-	    </LinearLayout>        
-        
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_gravity="center"
-            android:orientation="vertical" >
-		     
-            <!-- Power -->
-            <TextView
+              android:text="@string/buying_for_purchasing" /
+                -->
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:text="@string/buying_power"
-                android:textStyle="bold"
-                android:textColor="#2D2D2D" />
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical" >
 
-               <!-- 10 000 power btn -->
-	           <LinearLayout
-	                android:id="@+id/btnBuyingPower" 
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:background="@drawable/buying_purchase_selector"
-	                android:orientation="horizontal">
-	                <TextView
-	                    style="@style/ItemTitleText"
-	                    android:id="@+id/tvBuyingTitlePower" 
-	                    android:layout_width="wrap_content"
-	                    android:layout_height="fill_parent"
-	                    android:layout_weight="0.5"
-	                    android:layout_marginLeft="12dp"
-	                    android:gravity="left|center_vertical"
-	                    android:textStyle="bold"
-	                    android:textColor="#B5B5B5"
-	                    android:text="@string/buying_recharge" />
-	                <TextView
-	                    style="@style/ItemTitleText"
-	                    android:layout_width="wrap_content"
-	                    android:layout_height="fill_parent"
-	                    android:layout_weight="0.5"
-	                    android:layout_marginRight="12dp"
-	                    android:gravity="right|center_vertical"
-	                    android:textStyle="bold"
-	                    android:textColor="#B5B5B5"
-	                    android:text="@string/buying_energy" />
-	            </LinearLayout>
-            
+                <!-- Power -->
+
+                <TextView
+                    style="@style/BackgroundFormTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:textStyle="bold"
+                    android:text="@string/buying_power" />
+
+                <!-- 10 000 power btn -->
+
+                <LinearLayout
+                    android:id="@+id/btnBuyingPower"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/buying_purchase_selector"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/tvBuyingTitlePower"
+                        style="@style/ItemTitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="12dp"
+                        android:layout_weight="0.5"
+                        android:gravity="left|center_vertical"
+                        android:text="@string/buying_recharge"
+                        android:textColor="#B5B5B5"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        style="@style/ItemTitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_marginRight="12dp"
+                        android:layout_weight="0.5"
+                        android:gravity="right|center_vertical"
+                        android:text="@string/buying_energy"
+                        android:textColor="#B5B5B5"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical" >
+
+                <!-- Money -->
+
+                <TextView
+                    style="@style/BackgroundFormTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:textStyle="bold"
+                    android:text="@string/buying_money" />
+
+                <!-- 6 money btn -->
+
+                <LinearLayout
+                    android:id="@+id/btnBuyingMoney6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/buying_purchase_selector"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/tvBuyingTitle6"
+                        style="@style/ItemTitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="12dp"
+                        android:layout_weight="0.5"
+                        android:gravity="left|center_vertical"
+                        android:text="@string/buying_pack_6coins"
+                        android:textColor="#B5B5B5"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        style="@style/ItemTitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_marginRight="12dp"
+                        android:layout_weight="0.5"
+                        android:gravity="right|center_vertical"
+                        android:text="@string/buying_6coins"
+                        android:textColor="#B5B5B5"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 40 money btn -->
+
+            <LinearLayout
+                android:id="@+id/btnBuyingMoney40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/buying_purchase_selector"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/tvBuyingTitle40"
+                    style="@style/ItemTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_weight="0.5"
+                    android:gravity="left|center_vertical"
+                    android:text="@string/buying_pack_40coins"
+                    android:textColor="#B5B5B5"
+                    android:textStyle="bold" />
+
+                <TextView
+                    style="@style/ItemTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginRight="12dp"
+                    android:layout_weight="0.5"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/buying_40coins"
+                    android:textColor="#B5B5B5"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- 100 money btn -->
+
+            <LinearLayout
+                android:id="@+id/btnBuyingMoney100"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/buying_purchase_selector"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/tvBuyingTitle100"
+                    style="@style/ItemTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="12dp"
+                    android:layout_weight="0.5"
+                    android:gravity="left|center_vertical"
+                    android:text="@string/buying_pack_100coins"
+                    android:textColor="#9FCCF3"
+                    android:textStyle="bold" />
+
+                <TextView
+                    style="@style/ItemTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginRight="12dp"
+                    android:layout_weight="0.5"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/buying_100coins"
+                    android:textColor="#9FCCF3"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
-            
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_gravity="center"
-            android:orientation="vertical" >
-            
-            <!-- Money -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:textStyle="bold"
-                android:text="@string/buying_money"
-                android:textColor="#2D2D2D" />
-                
-		        <!-- 6 money btn -->
-		        <LinearLayout
-		            android:id="@+id/btnBuyingMoney6"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:background="@drawable/buying_purchase_selector"
-		            android:orientation="horizontal" >
+    </ScrollView>
 
-		          <TextView
-                      style="@style/ItemTitleText"
-		              android:id="@+id/tvBuyingTitle6" 
-                      android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
-                      android:layout_weight="0.5"
-                      android:layout_marginLeft="12dp"
-                      android:gravity="left|center_vertical"
-		              android:textStyle="bold"
-		              android:textColor="#B5B5B5"
-		              android:text="@string/buying_pack_6coins" />
-		          <TextView
-                      style="@style/ItemTitleText"
-                      android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
-                      android:layout_weight="0.5"
-                      android:layout_marginRight="12dp"
-                      android:gravity="right|center_vertical"
-		              android:textStyle="bold"
-		              android:textColor="#B5B5B5"
-		              android:text="@string/buying_6coins" />
-		        </LinearLayout>
-		        
-		    </LinearLayout>
-		        
-		         
-	            <!-- 40 money btn -->
-		        <LinearLayout
-		            android:id="@+id/btnBuyingMoney40" 
-                    android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:layout_marginTop="12dp"
-		            android:layout_gravity="center"
-		            android:background="@drawable/buying_purchase_selector"
-		            android:orientation="horizontal">
-	              <TextView
-                      style="@style/ItemTitleText"
-	                  android:id="@+id/tvBuyingTitle40" 
-                      android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
-                      android:layout_weight="0.5"
-                      android:layout_marginLeft="12dp"
-                      android:gravity="left|center_vertical"
-	                  android:textStyle="bold"
-	                  android:textColor="#B5B5B5"
-	                  android:text="@string/buying_pack_40coins" />
-	            <TextView
-                      style="@style/ItemTitleText"
-                      android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
-                      android:layout_weight="0.5"
-                      android:layout_marginRight="12dp"
-                      android:gravity="right|center_vertical"
-	                  android:textStyle="bold"
-	                  android:textColor="#B5B5B5"
-	                  android:text="@string/buying_40coins" />
-		        </LinearLayout>
-	        
-	            <!-- 100 money btn -->
-		        <LinearLayout
-		            android:id="@+id/btnBuyingMoney100" 
-                    android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:layout_marginTop="12dp"
-		            android:layout_gravity="center"
-		            android:background="@drawable/buying_purchase_selector"
-		            android:orientation="horizontal" >
-		          <TextView
-                      style="@style/ItemTitleText"
-		              android:id="@+id/tvBuyingTitle100" 
-                      android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
-                      android:layout_weight="0.5"
-                      android:layout_marginLeft="12dp"
-                      android:gravity="left|center_vertical"
-		              android:textStyle="bold"
-		              android:textColor="#9FCCF3"
-		              android:text="@string/buying_pack_100coins" />
-		          <TextView
-                      style="@style/ItemTitleText"
-                      android:layout_width="wrap_content"
-                      android:layout_height="fill_parent"
-                      android:layout_weight="0.5"
-                      android:layout_marginRight="12dp"
-                      android:gravity="right|center_vertical"
-		              android:textStyle="bold"
-		              android:textColor="#9FCCF3"
-		              android:text="@string/buying_100coins" />
-		        </LinearLayout>
-		        
-		  </LinearLayout>
-	  </ScrollView>
-	  
-      <ImageView
-          android:layout_below="@id/loNavigationBar"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:src="@drawable/im_bar_header_shadow" />
-      
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loNavigationBar"
+        android:src="@drawable/im_bar_header_shadow" />
+
 </RelativeLayout>

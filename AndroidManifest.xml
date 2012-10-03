@@ -46,8 +46,8 @@
         <activity android:name=".ui.FilterActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.profile.UserProfileActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.profile.ProfileActivity" android:screenOrientation="portrait" />        
-		    <activity android:name=".ui.edit.EditProfileActivity" android:screenOrientation="portrait" />
-		    <activity android:name=".ui.edit.EditContainerActivity" android:screenOrientation="portrait" />
+		<activity android:name=".ui.edit.EditProfileActivity" android:screenOrientation="portrait" />
+		<activity android:name=".ui.edit.EditContainerActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.settings.SettingsContainerActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.profile.PhotoSwitcherActivity" />        
         <activity android:name=".ui.ChatActivity" />

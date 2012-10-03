@@ -12,7 +12,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -20,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -68,13 +71,58 @@ public class CitySearchActivity extends BaseFragmentActivity {
    			}
    		});
         
-        
-
         // Progress
         mProgressBar = (ProgressBar)findViewById(R.id.prsCityLoading);
-
+        
         // ListAdapter
-        mListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, mNameList);
+        final LayoutInflater mInflater = LayoutInflater.from(getApplicationContext());
+        mListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, mNameList) {
+        	class ViewHolder {
+        		TextView mTitle;
+        		ImageView mBackground;
+        	}        	
+        	
+        	@Override
+        	public View getView(int position, View convertView, ViewGroup parent) {
+        		ViewHolder holder = null;
+    			
+    			if (convertView == null) {
+    				holder = new ViewHolder();		
+    				
+    				convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
+    				holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+    				holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
+    					
+    				convertView.setTag(holder);
+    			} else {
+    				holder = (ViewHolder) convertView.getTag();
+    			}
+
+    		
+    			if (position == 0) {
+    				if(getCount() == 1) {
+    					holder.mBackground.setImageDrawable(getResources().getDrawable(
+        						R.drawable.edit_big_btn_selector));    					
+    				} else {
+    					holder.mBackground.setImageDrawable(getResources().getDrawable(
+        						R.drawable.edit_big_btn_top_selector));
+    				}
+    				convertView.setPadding(0, 10, 0, 0);
+    			} else if (position == getCount() - 1) {
+    				holder.mBackground.setImageDrawable(getResources().getDrawable(
+    						R.drawable.edit_big_btn_bottom_selector));
+    				convertView.setPadding(0, 0, 0, 10);
+    			} else {
+    				holder.mBackground.setImageDrawable(getResources().getDrawable(
+    						R.drawable.edit_big_btn_middle_selector));
+    				convertView.setPadding(0, 0, 0, 0);
+    			}    			
+
+    			holder.mTitle.setText(getItem(position));    			
+    			
+    			return convertView;
+        	}
+        };
 
         // ListView
         mCityListView = (ListView)findViewById(R.id.lvCityList);

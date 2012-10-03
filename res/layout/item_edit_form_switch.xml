@@ -19,6 +19,7 @@
         android:layout_centerVertical="true"
         android:layout_gravity="left"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:drawablePadding="5dp"
         android:ellipsize="end"
         android:singleLine="true"

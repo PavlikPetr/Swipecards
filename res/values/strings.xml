@@ -120,8 +120,8 @@
     <!-- Buying Activity -->
     <string name="buying_header_title">Purchasing</string>
     <string name="buying_you_have">You have</string>
-    <string name="buying_you_have_no">Вам не хватает</string>
-    <string name="buying_for_purchasing">for present purchasing</string>
+    <string name="buying_you_have_no_coins_for_gift">You are missing %d {{coins}} for present purchasing</string>    
+    <string name="buying_default_message">You can buy gifts, send delights for coins</string>
     <string name="buying_money">Buy coins</string>
     <string name="buying_power">Buy energy</string>
     <string name="buying_buy">Buy</string>

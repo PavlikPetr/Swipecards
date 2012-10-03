@@ -1,13 +1,16 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -45,7 +48,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mFormInfo = new FormInfo(getActivity().getApplicationContext(), mProfile);
 		
-		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_edit_form_item_text, null, false);
+		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.item_edit_form_input, null, false);
 
 		// Navigation bar
 		((TextView) getActivity().findViewById(R.id.tvNavigationTitle))
@@ -103,6 +106,8 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 			}
 		});
 		
+		getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+		
 		return root;
 	}
 	
@@ -113,6 +118,9 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
 	@Override
 	protected void saveChanges() {
+		InputMethodManager imm = (InputMethodManager)getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
+		
 		if (hasChanges()) {
 			for (int i = 0; i < CacheProfile.forms.size(); i++) {
 				if (CacheProfile.forms.get(i).titleId == mTitleId) {

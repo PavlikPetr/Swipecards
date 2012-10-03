@@ -3,6 +3,7 @@ package com.topface.topface.ui.edit;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -29,6 +32,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
 	
 	private EditType[] mTypes;
 	private HashMap<EditType, String> hashChangedData = new HashMap<EditMainFormItemsFragment.EditType, String>();
+	
+	private EditText mEdName;
+	private EditText mEdAge;
+	private EditText mEdStatus;
 	
 	public EditMainFormItemsFragment(EditType[] type) {
 		mTypes = type;
@@ -80,10 +87,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
 			case NAME:
 				loName.setVisibility(View.VISIBLE);
 				((TextView)loName.findViewById(R.id.tvTitle)).setText(R.string.edit_name);
-				EditText edName = (EditText) loName.findViewById(R.id.edText);
-				edName.setText(data);
-				edName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-				edName.addTextChangedListener(new TextWatcher() {
+				mEdName = (EditText) loName.findViewById(R.id.edText);
+				mEdName.setText(data);
+				mEdName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+				mEdName.addTextChangedListener(new TextWatcher() {
 					String before = Static.EMPTY;
 					@Override
 					public void onTextChanged(CharSequence s, int start, int before, int count) { }
@@ -107,10 +114,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
 			case AGE:				
 				loAge.setVisibility(View.VISIBLE);
 				((TextView)loAge.findViewById(R.id.tvTitle)).setText(R.string.edit_age);
-				EditText edAge = (EditText) loAge.findViewById(R.id.edText);
-				edAge.setText(data);
-				edAge.setInputType(InputType.TYPE_CLASS_NUMBER);
-				edAge.addTextChangedListener(new TextWatcher() {
+				mEdAge = (EditText) loAge.findViewById(R.id.edText);
+				mEdAge.setText(data);
+				mEdAge.setInputType(InputType.TYPE_CLASS_NUMBER);
+				mEdAge.addTextChangedListener(new TextWatcher() {
 					String before = Static.EMPTY;
 					@Override
 					public void onTextChanged(CharSequence s, int start, int before, int count) { }
@@ -133,10 +140,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
 			case STATUS:
 				loStatus.setVisibility(View.VISIBLE);
 				((TextView)loStatus.findViewById(R.id.tvTitle)).setText(R.string.edit_status);
-				EditText edStatus = (EditText) loStatus.findViewById(R.id.edText);
-				edStatus.setText(data);		
-				edStatus.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-				edStatus.addTextChangedListener(new TextWatcher() {
+				mEdStatus = (EditText) loStatus.findViewById(R.id.edText);
+				mEdStatus.setText(data);		
+				mEdStatus.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+				mEdStatus.addTextChangedListener(new TextWatcher() {
 					String before = Static.EMPTY;
 					@Override
 					public void onTextChanged(CharSequence s, int start, int before, int count) { }
@@ -174,7 +181,12 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
 	}
 
 	@Override
-	protected void saveChanges() {
+	protected void saveChanges() {	
+		InputMethodManager imm = (InputMethodManager)getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+		if(mEdName != null) imm.hideSoftInputFromWindow(mEdName.getWindowToken(), 0);
+		if(mEdAge != null) imm.hideSoftInputFromWindow(mEdAge.getWindowToken(), 0);
+		if(mEdStatus != null) imm.hideSoftInputFromWindow(mEdStatus.getWindowToken(), 0);
+		
 		if (hasChanges()) {
 			SettingsRequest request = getSettigsRequest();			
 			

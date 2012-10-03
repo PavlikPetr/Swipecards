@@ -305,6 +305,12 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 				});
 			}
 			
+			if (position == getCount() - 1) {				
+				convertView.setPadding(0,0,0,10);
+			} else {
+				convertView.setPadding(0,0,0,0);
+			}
+			
 			
 			return convertView;
 		}
