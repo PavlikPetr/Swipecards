@@ -72,9 +72,9 @@
         <item name="android:textScaleX">0.9</item>
     </style>
 
-    <style name="NavigationHeader" parent="ShadowUserText">
+    <style name="ButtonsText" parent="ShadowUserText">
         <item name="android:textColor">#FFFFFF</item>
-    </style>
+    </style>    
 
     <style name="LeftMenuButtons">
         <item name="android:textColor">#FFFFFF</item>

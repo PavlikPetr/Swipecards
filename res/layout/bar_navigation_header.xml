@@ -33,7 +33,7 @@
 
         <Button
                 android:id="@+id/btnNavigationBackWithText"
-                style="@style/NavigationHeader"
+                style="@style/ButtonsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -112,7 +112,7 @@
 
             <Button
                     android:id="@+id/btnNavigationRightWithText"
-                    style="@style/NavigationHeader"
+                    style="@style/ButtonsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/navigation_edit_selector"

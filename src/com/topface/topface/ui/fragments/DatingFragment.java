@@ -238,6 +238,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         updateData(true);
                         return;
                     } else {
+                    	lockControls();
                         mRateController.onRate(currentSearch.uid, 10);
                     }
                     currentSearch.rated = true;
@@ -251,6 +252,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         updateData(true);
                         return;
                     } else {
+                    	lockControls();
                         mRateController.onRate(currentSearch.uid, 9);
                     }
                     currentSearch.rated = true;
@@ -573,8 +575,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void handleMessage(android.os.Message msg) {
             unlockControls();
         }
-
-        ;
     };
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
