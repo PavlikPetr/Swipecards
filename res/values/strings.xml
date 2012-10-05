@@ -235,86 +235,86 @@
     <string name="form_main">Main</string>
 
     <string-array name="form_main_status">
-        <item name="all">Цель знакомства</item>
+        <item>Цель знакомства</item> <!-- all -->
     </string-array>
 
     <string-array name="form_main_character">
-        <item name="all">Character</item>
+        <item>Character</item> <!-- all -->
     </string-array>
     <string-array name="form_main_communication">
-        <item name="all">Communication</item>
+        <item>Communication</item> <!-- all -->
     </string-array>
     <string-array name="form_main_height">
-        <item name="all">Height</item>
+        <item>Height</item> <!-- all -->
     </string-array>
     <string-array name="form_main_weight">
-        <item name="all">Weight</item>
+        <item>Weight</item> <!-- all -->
     </string-array>
 
     <string name="form_physique">Physique</string>
 
     <string-array name="form_physique_fitness">
-        <item name="all">Constitution</item>
+        <item>Constitution</item> <!-- all -->
     </string-array>
     <string-array name="form_physique_hairs">
-        <item name="all">Hair color</item>
+        <item>Hair color</item> <!-- all -->
     </string-array>
     <string-array name="form_physique_eyes">
-        <item name="all">Eyes color</item>
+        <item>Eyes color</item> <!-- all -->
     </string-array>
     <string-array name="form_physique_breast">
-        <item name="all">Breast size</item>
+        <item>Breast size</item> <!-- all -->
     </string-array>
 
     <string name="form_social">Social</string>
 
     <string-array name="form_social_marriage">
-        <item name="male">Is he married?</item>
-        <item name="female">Is she married?</item>
-        <item name="own_male">Are you married?</item>
-        <item name="own_female">Are you married?</item>
+        <item>Is he married?</item> <!-- male -->
+        <item>Is she married?</item> <!-- female -->
+        <item>Are you married?</item> <!-- own_male -->
+        <item>Are you married?</item> <!-- own_female -->
     </string-array>
     <string-array name="form_social_education">
-        <item name="all">Education</item>
+        <item>Education</item> <!-- all -->
     </string-array>
     <string-array name="form_social_finances">
-        <item name="all">Finances</item>
+        <item>Finances</item> <!-- all -->
     </string-array>
     <string-array name="form_social_residence">
-        <item name="all">Residence</item>
+        <item>Residence</item> <!-- all -->
     </string-array>
     <string-array name="form_social_car">
-        <item name="all">Availability of a car</item>
+        <item>Availability of a car</item> <!-- all -->
     </string-array>
 
     <string name="form_habits">Habits</string>
 
     <string-array name="form_habits_smoking">
-        <item name="male">Cigarettes</item>
+        <item>Cigarettes</item> <!-- male -->
     </string-array>
     <string-array name="form_habits_alcohol">
-        <item name="male">Alcohol</item>
+        <item>Alcohol</item> <!-- male -->
     </string-array>
     <string-array name="form_habits_restaurants">
-        <item name="male">His favorite restaurants</item>
-        <item name="female">Her favorite restaurants</item>
-        <item name="own_male">Your favorite restaurants</item>
-        <item name="own_female">Your favorite restaurants</item>
+        <item>His favorite restaurants</item> <!-- male -->
+        <item>Her favorite restaurants</item> <!-- female -->
+        <item>Your favorite restaurants</item> <!-- own_male -->
+        <item>Your favorite restaurants</item> <!-- own_female -->
     </string-array>
 
     <string name="form_detail">Detail</string>
 
     <string-array name="form_detail_about_dating">
-        <item name="male">About his first date</item>
-        <item name="female">About her first date</item>
-        <item name="own_male">About your first date</item>
-        <item name="own_female">About your first date</item>
+        <item>About his first date</item> <!-- male -->
+        <item>About her first date</item> <!-- female -->
+        <item>About your first date</item> <!-- own_male -->
+        <item>About your first date</item> <!-- own_female -->
     </string-array>
     <string-array name="form_detail_archievements">
-        <item name="male">About achievements he is proud of</item>
-        <item name="female">About achievements she is proud of</item>
-        <item name="own_male">About achievements you are proud of</item>
-        <item name="own_female">About achievements you are proud of</item>
+        <item>About achievements he is proud of</item> <!-- male -->
+        <item>About achievements she is proud of</item> <!-- female -->
+        <item>About achievements you are proud of</item> <!-- own_male -->
+        <item>About achievements you are proud of</item> <!-- own_female -->
     </string-array>
 
     <!-- Экран приглашений -->

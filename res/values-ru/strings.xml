@@ -35,7 +35,7 @@
     <string name="dashbrd_btn_love">Восхищение</string>
     <string name="dashbrd_btn_skip">Следующая</string>
     <string name="dashbrd_btn_prev">Предыдущая</string>
-    <string name="dashbrd_btn_switch_button">Еще...</string>
+    <string name="dashbrd_btn_switch_button">Еще…</string>
 
     <!-- Likes Activity -->
     <string name="likes_header_title">Я нравлюсь</string>
@@ -226,125 +226,125 @@
     <string name="form_main">Основное</string>
 
     <string-array name="form_main_status">
-        <item name="all">Цель знакомства</item>
+        <item>Цель знакомства</item> <!-- all -->
     </string-array>
 
     <string-array name="form_main_character">
-        <item name="male">Характер</item>
-        <item name="female">Характер</item>
-        <item name="own_male">Ваш характер</item>
-        <item name="own_female">Ваш характер</item>
+        <item>Характер</item> <!-- male -->
+        <item>Характер</item> <!-- female -->
+        <item>Ваш характер</item> <!-- own_male -->
+        <item>Ваш характер</item> <!-- own_female -->
     </string-array>
     <string-array name="form_main_communication">
-        <item name="all">Общительность</item>
+        <item>Общительность</item> <!-- all -->
     </string-array>
     <string-array name="form_main_height">
-        <item name="male">Рост</item>
-        <item name="female">Рост</item>
-        <item name="own_male">Ваш рост</item>
-        <item name="own_female">Ваш рост</item>
+        <item>Рост</item> <!-- male -->
+        <item>Рост</item> <!-- female -->
+        <item>Ваш рост</item> <!-- own_male -->
+        <item>Ваш рост</item> <!-- own_female -->
     </string-array>
     <string-array name="form_main_weight">
-        <item name="male">Вес</item>
-        <item name="female">Вес</item>
-        <item name="own_male">Ваш вес</item>
-        <item name="own_female">Ваш вес</item>
+        <item>Вес</item> <!-- male -->
+        <item>Вес</item> <!-- female -->
+        <item>Ваш вес</item> <!-- own_male -->
+        <item>Ваш вес</item> <!-- own_female -->
     </string-array>
 
     <string name="form_physique">Физические данные</string>
 
     <string-array name="form_physique_fitness">
-        <item name="male">Комплекция</item>
-        <item name="female">Комплекция</item>
-        <item name="own_male">Ваша комплекция</item>
-        <item name="own_female">Ваша комплекция</item>
+        <item>Комплекция</item> <!-- male -->
+        <item>Комплекция</item> <!-- female -->
+        <item>Ваша комплекция</item> <!-- own_male -->
+        <item>Ваша комплекция</item> <!-- own_female -->
     </string-array>
     <string-array name="form_physique_hairs">
-        <item name="male">Цвет волос</item>
-        <item name="female">Цвет волос</item>
-        <item name="own_male">Ваш цвет волос</item>
-        <item name="own_female">Ваш цвет волос</item>
+        <item>Цвет волос</item> <!-- male -->
+        <item>Цвет волос</item> <!-- female -->
+        <item>Ваш цвет волос</item> <!-- own_male -->
+        <item>Ваш цвет волос</item> <!-- own_female -->
     </string-array>
     <string-array name="form_physique_eyes">
-        <item name="male">Цвет глаз</item>
-        <item name="female">Цвет глаз</item>
-        <item name="own_male">Ваш цвет глаз</item>
-        <item name="own_female">Ваш цвет глаз</item>
+        <item>Цвет глаз</item> <!-- male -->
+        <item>Цвет глаз</item> <!-- female -->
+        <item>Ваш цвет глаз</item> <!-- own_male -->
+        <item>Ваш цвет глаз</item> <!-- own_female -->
     </string-array>
     <string-array name="form_physique_breast">
-        <item name="male">Рамер груди</item>
-        <item name="female">Рамер груди</item>
-        <item name="own_male">Ваш рамер груди</item>
-        <item name="own_female">Ваш рамер груди</item>
+        <item>Рамер груди</item> <!-- male -->
+        <item>Рамер груди</item> <!-- female -->
+        <item>Ваш рамер груди</item> <!-- own_male -->
+        <item>Ваш рамер груди</item> <!-- own_female -->
     </string-array>
 
     <string name="form_social">Социальное</string>
 
     <string-array name="form_social_marriage">
-        <item name="male">Состоит ли в браке?</item>
-        <item name="female">Состоит ли в браке?</item>
-        <item name="own_male">Состоите ли вы в браке?</item>
-        <item name="own_female">Состоите ли вы в браке?</item>
+        <item>Состоит ли в браке?</item> <!-- male -->
+        <item>Состоит ли в браке?</item> <!-- female -->
+        <item>Состоите ли вы в браке?</item> <!-- own_male -->
+        <item>Состоите ли вы в браке?</item> <!-- own_female -->
     </string-array>
     <string-array name="form_social_education">
-        <item name="male">Образование</item>
-        <item name="female">Образование</item>
-        <item name="own_male">Ваше образование</item>
-        <item name="own_female">Ваше образование</item>
+        <item>Образование</item> <!-- male -->
+        <item>Образование</item> <!-- female -->
+        <item>Ваше образование</item> <!-- own_male -->
+        <item>Ваше образование</item> <!-- own_female -->
     </string-array>
     <string-array name="form_social_finances">
-        <item name="male">Материальное положение</item>
-        <item name="female">Материальное положение</item>
-        <item name="own_male">Ваше материальное положение</item>
-        <item name="own_female">Ваше материальное положение</item>
+        <item>Материальное положение</item> <!-- male -->
+        <item>Материальное положение</item> <!-- female -->
+        <item>Ваше материальное положение</item> <!-- own_male -->
+        <item>Ваше материальное положение</item> <!-- own_female -->
     </string-array>
     <string-array name="form_social_residence">
-        <item name="male">Условия проживания</item>
-        <item name="female">Условия проживания</item>
-        <item name="own_male">Ваши условия проживания</item>
-        <item name="own_female">Ваши условия проживания</item>
+        <item>Условия проживания</item> <!-- male -->
+        <item>Условия проживания</item> <!-- female -->
+        <item>Ваши условия проживания</item> <!-- own_male -->
+        <item>Ваши условия проживания</item> <!-- own_female -->
     </string-array>
     <string-array name="form_social_car">
-        <item name="male">Наличие машины</item>
-        <item name="female">Наличие машины</item>
-        <item name="own_male">Наличие у вас машины</item>
-        <item name="own_female">Наличие у вас машины</item>
+        <item>Наличие машины</item> <!-- male -->
+        <item>Наличие машины</item> <!-- female -->
+        <item>Наличие у вас машины</item> <!-- own_male -->
+        <item>Наличие у вас машины</item> <!-- own_female -->
     </string-array>
 
     <string name="form_habits">Привычки</string>
 
     <string-array name="form_habits_smoking">
-        <item name="male">Отношение к курению</item>
-        <item name="female">Отношение к курению</item>
-        <item name="own_male">Ваше отношение к курению</item>
-        <item name="own_female">Ваше отношение к курению</item>
+        <item>Отношение к курению</item> <!-- male -->
+        <item>Отношение к курению</item> <!-- female -->
+        <item>Ваше отношение к курению</item> <!-- own_male -->
+        <item>Ваше отношение к курению</item> <!-- own_female -->
     </string-array>
     <string-array name="form_habits_alcohol">
-        <item name="male">Отношение к алкоголю</item>
-        <item name="female">Отношение к алкоголю</item>
-        <item name="own_male">Ваше отношение к алкоголю</item>
-        <item name="own_female">Ваше отношение к алкоголю</item>
+        <item>Отношение к алкоголю</item> <!-- male -->
+        <item>Отношение к алкоголю</item> <!-- female -->
+        <item>Ваше отношение к алкоголю</item> <!-- own_male -->
+        <item>Ваше отношение к алкоголю</item> <!-- own_female -->
     </string-array>
     <string-array name="form_habits_restaurants">
-        <item name="male">Любимые рестораны</item>
-        <item name="female">Любимые рестораны</item>
-        <item name="own_male">Ваши любимые рестораны</item>
-        <item name="own_female">Ваши любимые рестораны</item>
+        <item>Любимые рестораны</item> <!-- male -->
+        <item>Любимые рестораны</item> <!-- female -->
+        <item>Ваши любимые рестораны</item> <!-- own_male -->
+        <item>Ваши любимые рестораны</item> <!-- own_female -->
     </string-array>
 
     <string name="form_detail">Подробнее</string>
 
     <string-array name="form_detail_about_dating">
-        <item name="male">О первом свидании с девушкой</item>
-        <item name="female">О идеальном первом свидании</item>
-        <item name="own_male">Каким будет ваше первое свидание с девушкой?</item>
-        <item name="own_female">Опишите идеальное свидание</item>
+        <item>О первом свидании с девушкой</item> <!-- male -->
+        <item>О идеальном первом свидании</item> <!-- female -->
+        <item>Каким будет ваше первое свидание с девушкой?</item> <!-- own_male -->
+        <item>Опишите идеальное свидание</item> <!-- own_female -->
     </string-array>
     <string-array name="form_detail_archievements">
-        <item name="male">Лучшие достижения в жизни</item>
-        <item name="female">Лучшие достижения в жизни</item>
-        <item name="own_male">Ваши лучшие достижения в жизни</item>
-        <item name="own_female">Ваши лучшие достижения в жизни</item>
+        <item>Лучшие достижения в жизни</item> <!-- male -->
+        <item>Лучшие достижения в жизни</item> <!-- female -->
+        <item>Ваши лучшие достижения в жизни</item> <!-- own_male -->
+        <item>Ваши лучшие достижения в жизни</item> <!-- own_female -->
     </string-array>
 
     <!-- Экран приглашений -->
