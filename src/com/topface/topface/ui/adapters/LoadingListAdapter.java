@@ -20,7 +20,7 @@ public class LoadingListAdapter extends BaseAdapter {
     public static final int T_OTHER = 0;
     public static final int T_LOADER = 1;
     public static final int T_RETRIER = 2;
-    public int T_COUNT = 3;
+    public static final int T_CITY = 3;
 
     protected View mLoaderRetrier;
     protected TextView mLoaderRetrierText;
@@ -59,12 +59,9 @@ public class LoadingListAdapter extends BaseAdapter {
             return T_OTHER;
     }
 
-    /**
-     * returns number of basic types (T_COUNT = 3)
-     */
     @Override
-    public int getViewTypeCount() {
-        return T_COUNT;
+    public boolean isEnabled(int position) {
+        return getItemViewType(position) != T_LOADER;
     }
 
 }

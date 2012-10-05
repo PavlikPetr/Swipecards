@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import com.topface.topface.utils.Debug;
 
 public class Recycle {
@@ -30,6 +31,7 @@ public class Recycle {
 
     // Animations
     public static AnimationDrawable s_Loader;
+    public static Drawable s_Loader_0;
 
     public static boolean init(Context context) {
         try {
@@ -45,6 +47,7 @@ public class Recycle {
             s_ProfileEroInfo = BitmapFactory.decodeResource(context.getResources(), R.drawable.profile_ero_info);
 
             s_Loader = (AnimationDrawable) context.getResources().getDrawable(R.drawable.loader);
+            s_Loader_0 = context.getResources().getDrawable(R.drawable.loader0);
 
             //      s_DatingInformer = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_informer);
             //      s_RateHighPressed = BitmapFactory.decodeResource(context.getResources(),R.drawable.dating_rate_high_pressed);

@@ -1,194 +1,45 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.AvatarManager;
-import com.topface.topface.utils.CacheProfile;
 
-public class LikesListAdapter extends LoadingListAdapter {
-    //---------------------------------------------------------------------------
-    // class ViewHolder
-    //---------------------------------------------------------------------------
-    static class ViewHolder {
-        public ImageViewRemote mAvatar;
-        public TextView mName;
-        public TextView mCity;
-        public TextView mTime;
-        public ImageView mHeart;
-        public ImageView mArrow;
-        public ImageView mOnline;
-//        public ProgressBar mProgressBar;
-//        public TextView mRetryText;
+public class LikesListAdapter extends FeedAdapter<FeedLike> {
+    public LikesListAdapter(Context context, Updater updateCallback) {
+        super(context, updateCallback);
     }
 
-    //---------------------------------------------------------------------------
-    // Data
-    private LayoutInflater mInflater;
-    private AvatarManager<FeedLike> mAvatarManager;
-    private int mOwnerCityID;
-    Context mContext;
-
-    // Constants    
-    private static final int T_CITY = 3;
-    private static final int T_COUNT = 1;
-
-    //---------------------------------------------------------------------------
-    public LikesListAdapter(Context context, AvatarManager<FeedLike> avatarManager) {
-        mContext = context;
-        mAvatarManager = avatarManager;
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mOwnerCityID = CacheProfile.city_id;
-
-        mLoaderRetrier = mInflater.inflate(R.layout.item_list_loader_retrier, null, false);
-        mLoaderRetrierText = (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
-        mLoaderRetrierProgress = (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
-    }
-
-    //---------------------------------------------------------------------------
     @Override
-    public int getCount() {
-        return mAvatarManager.size();
-    }
+    protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
+        convertView = super.getContentView(position, convertView, viewGroup);
+        FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
+        FeedLike like = getItem(position);
 
-    //---------------------------------------------------------------------------
-    @Override
-    public FeedLike getItem(int position) {
-        return mAvatarManager.get(position);
-    }
-
-    //---------------------------------------------------------------------------
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    //---------------------------------------------------------------------------
-    @Override
-    public int getViewTypeCount() {
-        return super.getViewTypeCount() + T_COUNT;
-    }
-
-    //---------------------------------------------------------------------------
-    @Override
-    public int getItemViewType(int position) {
-        int typeOfSuperMethod = super.getItemViewType(position);
-        if (typeOfSuperMethod == T_OTHER) {
-            return mAvatarManager.get(position).city_id == mOwnerCityID ? T_CITY : T_OTHER;
-        } else {
-            return typeOfSuperMethod;
-        }
-    }
-
-    //---------------------------------------------------------------------------
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-//    	long startTime = System.currentTimeMillis();
-        ViewHolder holder;
-
-        int type = getItemViewType(position);
-
-        if (type == T_LOADER) {
-            mLoaderRetrierProgress.setVisibility(View.VISIBLE);
-            mLoaderRetrierText.setVisibility(View.INVISIBLE);
-            return mLoaderRetrier;
-        } else if (type == T_RETRIER) {
-            mLoaderRetrierProgress.setVisibility(View.INVISIBLE);
-            mLoaderRetrierText.setVisibility(View.VISIBLE);
-            return mLoaderRetrier;
-        } else {
-            if (convertView == null) {
-                holder = new ViewHolder();
-
-                convertView = mInflater.inflate(R.layout.item_likes_gallery, null, false);
-//                convertView.setOnTouchListener(new View.OnTouchListener() {
-//					float x;
-//					@Override
-//					public boolean onTouch(View v, MotionEvent event) {
-//						switch (event.getAction()) {
-//						case MotionEvent.ACTION_DOWN:
-//							x = event.getX();
-//							break;
-//						case MotionEvent.ACTION_MOVE:
-//							float x1 = event.getX();
-//							if(x-x1>100)
-//								Toast.makeText(mContext, "asd", Toast.LENGTH_LONG).show();
-//							break;
-//						case MotionEvent.ACTION_UP:
-//							break;
-//						
-//						}
-//						return true;
-//					}
-//					
-//				});
-                holder.mAvatar = (ImageViewRemote) convertView.findViewById(R.id.ivAvatar);
-                holder.mName = (TextView) convertView.findViewById(R.id.tvName);
-                holder.mCity = (TextView) convertView.findViewById(R.id.tvCity);
-                holder.mTime = (TextView) convertView.findViewById(R.id.tvTime);
-                holder.mHeart = (ImageView) convertView.findViewById(R.id.ivHeart);
-                holder.mArrow = (ImageView) convertView.findViewById(R.id.ivArrow);
-                holder.mOnline = (ImageView) convertView.findViewById(R.id.ivOnline);
-
-                /*switch(type) {
-                 * case T_ALL:
-                 * convertView.setBackgroundResource(R.drawable.item_all_selector);
-                 * break;
-                 * case T_CITY:
-                 * convertView.setBackgroundResource(R.drawable.item_city_selector);
-                 * break;
-                 * } */
-
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            FeedLike likes = getItem(position);
-
-            holder.mAvatar.setRemoteSrc(likes.getNormalLink());
-            holder.mName.setText(likes.first_name);
-            holder.mCity.setText(likes.age + ", " + likes.city_name);
-
-//	        if (likes.rate == 10)
-//	            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart_top);
-//	        else
-//	            holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart);
-
-            if (likes.online)
-                holder.mOnline.setVisibility(View.VISIBLE);
-            else
-                holder.mOnline.setVisibility(View.INVISIBLE);
-        }
-        //Utils.formatTime(holder.mTime,likes.created);
-        //holder.mArrow.setImageResource(R.drawable.im_item_arrow); // ??? зачем
-
-//        if ((System.currentTimeMillis() - startTime) > 20) {
-//        	Log.e("OLOLO", Long.toString((System.currentTimeMillis() - startTime)) + "   " + type);
-//        } else {
-//        	Log.d("OLOLO", Long.toString((System.currentTimeMillis() - startTime))+ "   " + type);
-//        }
+        holder.heart.setImageResource(like.highrate ?
+                R.drawable.im_item_mutual_heart_top :
+                R.drawable.im_item_mutual_heart
+        );
 
         return convertView;
     }
 
-    //---------------------------------------------------------------------------
     @Override
-    public boolean isEnabled(int position) {
-        return getItemViewType(position) != T_LOADER;
+    protected FeedViewHolder getEmptyHolder(View convertView) {
+        FeedViewHolder holder = super.getEmptyHolder(convertView);
+        holder.heart = (ImageView) convertView.findViewById(R.id.ivHeart);
+        return holder;
     }
 
-    //---------------------------------------------------------------------------
-    public void release() {
-        mInflater = null;
-        mAvatarManager = null;
+    @Override
+    protected FeedLike getNewItem(IListLoader.ItemType type) {
+        return new FeedLike(type);
     }
-    //---------------------------------------------------------------------------
+
+    @Override
+    protected int getItemLayout() {
+        return R.layout.item_likes_gallery;
+    }
 }

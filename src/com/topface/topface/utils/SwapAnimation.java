@@ -7,7 +7,6 @@ import com.topface.topface.Static;
 
 public class SwapAnimation extends Animation {
     private View mAnimatedView;
-    private View mHiddenView;
     private int mStartY, mEndY;
     private boolean mWasEndedAlready = false;
     private static final int DURATION = 200;
@@ -16,10 +15,11 @@ public class SwapAnimation extends Animation {
         setDuration(DURATION);
 
         mAnimatedView = view;
-        mHiddenView = view.findViewById(hiddenView);
+        View mHiddenView = view.findViewById(hiddenView);
 
-        if (mAnimatedView == null || mHiddenView == null)
+        if (mHiddenView == null){
             throw new NullPointerException();
+        }
 
         mStartY = mAnimatedView.getPaddingTop();
         mEndY = (mStartY == Static.HEADER_SHADOW_SHIFT ? (0 - mHiddenView.getHeight() + Static.HEADER_SHADOW_SHIFT) : Static.HEADER_SHADOW_SHIFT);

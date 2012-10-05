@@ -10,7 +10,7 @@ public class DialogRequest extends ApiRequest {
     private String service = "dialogs";
     public int limit;   // максимальное количество запрашиваемых диалогов. ОДЗ: 0 < limit <= 50
     public int before;  // идентификатор последнего диалога для отображения. В случае отсутствия параметра диалоги возвращаются от последнего
-    public int unread;  // параметр получения только тех диалогов, в которых есть непрочитанные сообщения
+    public boolean unread;  // параметр получения только тех диалогов, в которых есть непрочитанные сообщения
 
     public DialogRequest(Context context) {
         super(context);

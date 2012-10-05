@@ -24,17 +24,11 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
     protected void onUpdateStart(boolean isFlyUpdating) {
     }
 
-    ;
-
     protected void onUpdateSuccess(boolean isFlyUpdating) {
     }
 
-    ;
-
     protected void onUpdateFail(boolean isFlyUpdating) {
     }
-
-    ;
 
     protected void updateUI(Runnable action) {
         getActivity().runOnUiThread(action);

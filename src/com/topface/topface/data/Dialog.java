@@ -2,37 +2,11 @@ package com.topface.topface.data;
 
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class Dialog extends AbstractDataWithPhotos implements IListLoader {
-    // Data
-    public static int unread_count; // общее количество непрочитанных диалогов
-    public static boolean more;     // имеются ли в ленте ещё элементы для пользователя
-
-    public int type; // идентификатор типа сообщения диалога
-    public int id; // идентификатор события в ленте
-    public int uid; // идентификатор отправителя
-    public long created; // таймстамп отправления события
-    public int target; // направление события в ленте. Возможные занчения: 0 - для исходящего события, 1 - для входящего события
-    public boolean unread; // флаг причитанного диалога
-    public String first_name; // имя отправителя в текущей локали
-    public int sex; // имя отправителя в текущей локали
-    public int age; // возраст отправителя
-    public boolean online; // флаг нахождения отправителя онлайн
-    public int city_id; // идентификатор города
-    public String city_name; // наименование города в локали указанной при авторизации
-    public String city_full; // полное наименование города с указанием региона, если он определен. Отдается в локали пользователя, указанной при авторизации
-
-    public String text;  // текст сообщения, если type = MESSAGE
-//    public int gift; // идентификатор подарка. Поле определяется, если type = GIFT
-//    public String link; // ссылка на изображение подарка. Поле определяется, если type = GIFT
-
-//    public String avatars_big; // фото большого размера
-//    public String avatars_small; // фото маленького размера
-
+public class Dialog extends AbstractFeedItem {
     // Constants
     public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
     public static final int PHOTO = 1; // Рекламное уведомление
@@ -51,25 +25,12 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
     public static final int USER_MESSAGE = 0;
     public static final int FRIEND_MESSAGE = 1;
 
-    //Loader indicators
-    public boolean isListLoader = false;
-    public boolean isListLoaderRetry = false;
-
-    public Dialog() {
-
+    public Dialog(ItemType retry) {
+        super(retry);
     }
 
-    public Dialog(IListLoader.ItemType type) {
-        switch (type) {
-            case LOADER:
-                isListLoader = true;
-                break;
-            case RETRY:
-                isListLoaderRetry = true;
-                break;
-            default:
-                break;
-        }
+    public Dialog() {
+        super();
     }
 
     public static FeedList<Dialog> parse(ApiResponse response) {
@@ -110,20 +71,6 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
 
                 dialog.text = item.optString("text");
 
-//              dialog.gift = item.optInt("gift");
-//              dialog.link = item.optString("link");
-
-                // avatars
-//                JSONObject avatars = item.getJSONObject("avatar");
-//                JSONObject avatars = item.optJSONObject("avatar");
-//                if (avatars != null) {
-//	                dialog.avatars_big = avatars.optString("big");
-//	                dialog.avatars_small = avatars.optString("small");
-//                } else {
-//                	dialog.avatars_big = "";
-//                	dialog.avatars_small = "";
-//                }
-
                 initPhotos(item, dialog);
                 dialogList.add(dialog);
 
@@ -133,25 +80,5 @@ public class Dialog extends AbstractDataWithPhotos implements IListLoader {
         }
 
         return dialogList;
-    }
-
-    public int getUid() {
-        return uid;
-    }
-
-    @Override
-    public boolean isLoader() {
-        return isListLoader;
-    }
-
-    @Override
-    public boolean isLoaderRetry() {
-        return isListLoaderRetry;
-    }
-
-    @Override
-    public void switchToLoader() {
-        isListLoader = false;
-        isListLoaderRetry = true;
     }
 }

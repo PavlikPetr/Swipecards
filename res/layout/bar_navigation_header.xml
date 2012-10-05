@@ -3,10 +3,10 @@
               android:id="@+id/loNavigationBar"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
+              android:baselineAligned="false"
               android:background="@drawable/im_bar_header">
 
     <RelativeLayout
-            android:id="@+id/loLeftButtons"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -81,7 +81,6 @@
     </LinearLayout>
 
     <RelativeLayout
-            android:id="@+id/loLeftButtons"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

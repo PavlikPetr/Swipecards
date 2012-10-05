@@ -5,21 +5,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
+import com.topface.topface.data.AbstractFeedItem;
+import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 
 /**
  * @param <T>
  */
-public abstract class FeedAdapter<T extends IListLoader> extends LoadingListAdapter implements AbsListView.OnScrollListener {
+public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingListAdapter implements AbsListView.OnScrollListener {
 
     private Context mContext;
     private FeedList<T> mData;
     private LayoutInflater mInflater;
     private Updater mUpdateCallback;
+    private long mLastUpdate = 0;
     public static final int LIMIT = 40;
+    private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context;
@@ -29,6 +36,16 @@ public abstract class FeedAdapter<T extends IListLoader> extends LoadingListAdap
         mLoaderRetrierText = getLoaderRetrierText();
         mLoaderRetrierProgress = getLoaderRetrierProgress();
         mUpdateCallback = updateCallback;
+    }
+
+    static class FeedViewHolder {
+        public ImageViewRemote avatar;
+        public TextView name;
+        public TextView city;
+        public TextView time;
+        public ImageView online;
+        public TextView text;
+        public ImageView heart;
     }
 
     public FeedAdapter(Context context, Updater updateCallback) {
@@ -94,8 +111,35 @@ public abstract class FeedAdapter<T extends IListLoader> extends LoadingListAdap
         return mLoaderRetrier;
     }
 
-    protected View getContentView(int position, View view, ViewGroup viewGroup) {
-        return null;
+    protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
+        FeedViewHolder holder = null;
+
+        if (convertView != null) {
+            holder = (FeedViewHolder) convertView.getTag();
+        }
+
+        //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
+        if (holder == null) {
+            convertView = getInflater().inflate(getItemLayout(), null, false);
+            holder = getEmptyHolder(convertView);
+        }
+
+        T item = getItem(position);
+        if (item != null) {
+            holder.avatar.setRemoteSrc(item.getNormalLink());
+            holder.name.setText(getName(item));
+            holder.city.setText(item.city_name);
+            holder.online.setVisibility(item.online ? View.VISIBLE : View.INVISIBLE);
+            holder.time.setText(Utils.formatTime(getContext(), item.created));
+        }
+
+        convertView.setTag(holder);
+
+        return convertView;
+    }
+
+    private String getName(T item) {
+        return item.first_name + ", " + item.age;
     }
 
     protected Context getContext() {
@@ -132,7 +176,12 @@ public abstract class FeedAdapter<T extends IListLoader> extends LoadingListAdap
         addLoaderItem();
 
         notifyDataSetChanged();
+        setLastUpdate();
 
+    }
+
+    private void setLastUpdate() {
+        mLastUpdate = System.currentTimeMillis();
     }
 
     private void addLoaderItem() {
@@ -149,6 +198,7 @@ public abstract class FeedAdapter<T extends IListLoader> extends LoadingListAdap
             addLoaderItem();
         }
         notifyDataSetChanged();
+        setLastUpdate();
     }
 
     public FeedList<T> getData() {
@@ -175,7 +225,7 @@ public abstract class FeedAdapter<T extends IListLoader> extends LoadingListAdap
         if (!data.isEmpty()) {
             T lastItem = data.getLast();
             if (lastItem.isLoader() || lastItem.isLoaderRetry()) {
-                data.remove(data.size() - 1);
+                data.removeLast();
             }
         }
     }
@@ -192,13 +242,50 @@ public abstract class FeedAdapter<T extends IListLoader> extends LoadingListAdap
             if (data.hasItem(feedIndex)) {
                 item = data.get(feedIndex);
             }
-    }
+        }
 
         return item;
     }
 
-    abstract protected T getLoaderItem();
+    protected FeedViewHolder getEmptyHolder(View convertView) {
+        FeedViewHolder holder = new FeedViewHolder();
 
-    abstract protected T getRetryItem();
+        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.ivAvatar);
+        holder.name = (TextView) convertView.findViewById(R.id.tvName);
+        holder.city = (TextView) convertView.findViewById(R.id.tvCity);
+        holder.time = (TextView) convertView.findViewById(R.id.tvTime);
+        holder.online = (ImageView) convertView.findViewById(R.id.ivOnline);
+
+        return holder;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        int type = super.getItemViewType(position);
+
+        if (type == T_OTHER) {
+            type = getItem(position).city_id == CacheProfile.city_id ?
+                    T_CITY :
+                    T_OTHER;
+        }
+
+        return type;
+    }
+
+    abstract protected T getNewItem(IListLoader.ItemType type);
+
+    protected T getRetryItem() {
+        return getNewItem(IListLoader.ItemType.RETRY);
+    }
+
+    protected T getLoaderItem() {
+        return getNewItem(IListLoader.ItemType.LOADER);
+    }
+
+    abstract protected int getItemLayout();
+
+    public boolean isNeedUpdate() {
+        return isEmpty() || (System.currentTimeMillis() > mLastUpdate + CACHE_TIMEOUT);
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
@@ -8,49 +9,19 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class FeedLike extends AbstractDataWithPhotos implements IListLoader {
-    // Data
-    public static int unread_count; // количество оставшихся непрочитанных
-    public static boolean more; // имеются ли в ленте ещё симпатии для пользователя
-    public int type; // тип сообщения
-    public int id; // идентификатор сообщения 
-    public int uid; // идентификатор отправителя
-    public long created; // таймштамп отправления “понравилось”
-    public int target; // тип элемента ленты симпатий. Для данного запроса всегда 1 - входящее
-    public boolean unread; // флаг прочитанного лайка
-    public String first_name; // имя пользователя
-    public int age; // возраст пользователя
-    public boolean online; // флаг нахождения пользователя в онлайне
-    public int city_id; // идентификатор города отправителя оценки
-    public String city_name; // название города пользователя
-    public String city_full; // полное название города пользвоателя
-
-//    public String avatars_big; // большая аватарка пользователя
-//    public String avatars_small; // маленькая аватарка пользователя
-//    public int rate; // значение “понравилось”
-
-    public boolean isListLoader = false;
-    public boolean isListLoaderRetry = false;
+public class FeedLike extends AbstractFeedItem {
+    public boolean highrate;
 
     public FeedLike() {
-
+        super();
     }
 
     public FeedLike(IListLoader.ItemType type) {
-        switch (type) {
-            case LOADER:
-                isListLoader = true;
-                break;
-            case RETRY:
-                isListLoaderRetry = true;
-                break;
-            default:
-                break;
-        }
+        super(type);
     }
 
-    public static LinkedList<FeedLike> parse(ApiResponse response) {
-        LinkedList<FeedLike> likesList = new LinkedList<FeedLike>();
+    public static FeedList<FeedLike> parse(ApiResponse response) {
+        FeedList<FeedLike> likesList = new FeedList<FeedLike>();
 
         try {
             FeedLike.unread_count = response.mJSONResult.getInt("unread");
@@ -71,21 +42,13 @@ public class FeedLike extends AbstractDataWithPhotos implements IListLoader {
                     like.first_name = item.optString("first_name");
                     like.age = item.optInt("age");
                     like.online = item.optBoolean("online");
+                    like.highrate = item.optBoolean("highrate");
 
                     // city  
                     JSONObject city = item.getJSONObject("city");
                     like.city_id = city.optInt("id");
                     like.city_name = city.optString("name");
                     like.city_full = city.optString("full");
-
-                    // avatars
-//                    JSONObject avatar = item.optJSONObject("avatars");
-//                    if (avatar != null) {
-//	                    like.avatars_big = avatar.optString("big");
-//	                    like.avatars_small = avatar.optString("small");
-//                    }
-
-//                    like.rate = item.optInt("rate");
 
                     initPhotos(item, like);
 
@@ -98,25 +61,4 @@ public class FeedLike extends AbstractDataWithPhotos implements IListLoader {
         return likesList;
     }
 
-    public int getUid() {
-        return uid;
-    }
-
-    ;
-
-    @Override
-    public boolean isLoader() {
-        return isListLoader;
-    }
-
-    @Override
-    public boolean isLoaderRetry() {
-        return isListLoaderRetry;
-    }
-
-    @Override
-    public void switchToLoader() {
-        isListLoader = false;
-        isListLoaderRetry = true;
-    }
 }

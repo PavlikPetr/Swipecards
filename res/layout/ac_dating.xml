@@ -20,7 +20,7 @@
                 android:id="@+id/loNavigationBar">
             <include layout="@layout/bar_navigation_header"/>
         </FrameLayout>
-        <include layout="@layout/dating_control"/>
+        <include layout="@layout/feed_control"/>
     </LinearLayout>
 
 
