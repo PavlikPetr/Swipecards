@@ -48,7 +48,7 @@ public class LikesFragment extends FeedFragment<LikesListAdapter> {
         registerRequest(likesRequest);
         likesRequest.limit = FeedAdapter.LIMIT;
         likesRequest.unread = mDoubleButton.isRightButtonChecked();
-        FeedLike lastLike = mListAdapter.getLastFeedItxem();
+        FeedLike lastLike = mListAdapter.getLastFeedItem();
         if (isHistoryLoad && lastLike != null) {
             likesRequest.from = lastLike.id;
         }
