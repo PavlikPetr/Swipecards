@@ -33,7 +33,7 @@
 
         <Button
                 android:id="@+id/btnNavigationBackWithText"
-                style="@style/NavigationHeader"
+                style="@style/ButtonsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -111,7 +111,7 @@
 
             <Button
                     android:id="@+id/btnNavigationRightWithText"
-                    style="@style/NavigationHeader"
+                    style="@style/ButtonsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/navigation_edit_selector"
@@ -120,8 +120,8 @@
                     android:maxLines="1"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:visibility="gone"/>

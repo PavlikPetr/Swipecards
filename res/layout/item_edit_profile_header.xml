@@ -4,6 +4,7 @@
                 android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:id="@+id/loProfilePhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -12,11 +13,11 @@
             android:layout_marginBottom="40dp"
             android:layout_marginLeft="8dp">
 
-        <ImageView
+        <com.topface.topface.ui.views.ImageViewRemote
                 android:id="@+id/ivProfilePhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
+                style="@style/EditAvatar"/>
 
         <TextView
                 android:id="@+id/ivProfilePhotoCover"
@@ -33,15 +34,17 @@
     <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/loProfilePhoto"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:orientation="vertical"
-            android:layout_marginRight="8dp">
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp">
 
         <Button
                 android:id="@+id/btnEditName"
                 style="@style/ItemTitleText"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:background="@drawable/edit_btn_top_selector"
@@ -56,7 +59,7 @@
         <Button
                 android:id="@+id/btnEditCity"
                 style="@style/ItemTitleText"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/btnEditName"
                 android:background="@drawable/edit_btn_bottom_selector"

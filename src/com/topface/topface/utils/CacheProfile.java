@@ -63,7 +63,7 @@ public class CacheProfile {
         if (mAvatarId == -1) {
             return "";
         }
-        String result = photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_64);
+        String result = photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_192);
         if (result == null) {
             return photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_ORIGIN);
         }

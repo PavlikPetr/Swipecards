@@ -347,6 +347,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 Bundle extras = data.getExtras();
                 final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
                 final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+                final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
                 Debug.log(this, "id:" + id + " url:" + url);
                 SendGiftRequest sendGift = new SendGiftRequest(getApplicationContext());
                 registerRequest(sendGift);
@@ -385,8 +386,11 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (response.code == ApiResponse.PAYMENT)
-                                    startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
+                                if (response.code == ApiResponse.PAYMENT) {
+                                	Intent intent = new Intent(getApplicationContext(), BuyingActivity.class);
+                                    intent.putExtra(BuyingActivity.INTENT_USER_COINS, price - CacheProfile.money);
+                                    startActivity(intent);                                    
+                                }
                                 mLoadingLocker.setVisibility(View.GONE);
                             }
                         });

@@ -3,6 +3,7 @@ package com.topface.topface.ui.edit;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +28,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
     private static Profile mProfile;
 
     private ListView mListView;
+    private FormCheckingDataAdapter mAdapter;
 
     public EditFormItemsFragment(int titleId, int dataId, String data) {
         mTitleId = titleId;
@@ -55,10 +57,10 @@ public class EditFormItemsFragment extends AbstractEditFragment {
         subTitle.setText(formItemTitle);
 
         ((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-        Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.navigation_edit);
-        btnBack.setOnClickListener(new OnClickListener() {
+        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
+        mBackButton.setVisibility(View.VISIBLE);
+        mBackButton.setText(R.string.navigation_edit);
+        mBackButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -66,15 +68,15 @@ public class EditFormItemsFragment extends AbstractEditFragment {
             }
         });
 
-        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setText(getResources().getString(R.string.navigation_save));
-        mSaveButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                saveChanges();
-            }
-        });
+//        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
+//        mSaveButton.setText(getResources().getString(R.string.navigation_save));
+//        mSaveButton.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                saveChanges();
+//            }
+//        });
 
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
@@ -85,10 +87,11 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                 mListView, false);
         ((TextView) header.findViewById(R.id.tvTitle)).setText(formItemTitle);
         mListView.addHeaderView(header);
-
-        mListView.setAdapter(new FormCheckingDataAdapter(getActivity().getApplicationContext(),
+        
+        mAdapter = new FormCheckingDataAdapter(getActivity().getApplicationContext(),
                 mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData}),
-                mFormInfo.getIdsByTitleId(mTitleId), mSeletedDataId));
+                mFormInfo.getIdsByTitleId(mTitleId), mSeletedDataId);
+        mListView.setAdapter(mAdapter);
         return root;
     }
 
@@ -98,7 +101,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected void saveChanges() {
+    protected void saveChanges(final Handler handler) {
         if (hasChanges()) {
             for (int i = 0; i < CacheProfile.forms.size(); i++) {
                 if (CacheProfile.forms.get(i).titleId == mTitleId) {
@@ -120,6 +123,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                             getActivity().setResult(Activity.RESULT_OK);
                             mDataId = mSeletedDataId;
                             finishRequestSend();
+                            handler.sendEmptyMessage(0);
                         }
 
                         @Override
@@ -127,11 +131,14 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                                 throws NullPointerException {
                             getActivity().setResult(Activity.RESULT_CANCELED);
                             finishRequestSend();
+                            handler.sendEmptyMessage(0);
                         }
                     }).exec();
                     break;
                 }
             }
+        } else {
+        	handler.sendEmptyMessage(0);
         }
     }
 
@@ -226,13 +233,25 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                 }
             });
 
+            convertView.setEnabled(mListView.isEnabled());
             return convertView;
-        }
-
-        class ViewHolder {
+        }        
+        
+		class ViewHolder {
             TextView mTitle;
             ImageView mBackground;
             ImageView mCheck;
         }
     }
+
+	@Override
+	protected void lockUi() {
+		mListView.setEnabled(false);
+		mAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	protected void unlockUi() {
+		mListView.setEnabled(true);		
+	}
 }

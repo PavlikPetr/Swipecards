@@ -2,6 +2,8 @@ package com.topface.topface.ui.edit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -15,15 +17,16 @@ public class EditContainerActivity extends BaseFragmentActivity {
     public static final String INTENT_FORM_DATA_ID = "data_id";
     public static final String INTENT_FORM_DATA = "data";
 
-    public static final int INTENT_EDIT_NAME_AGE = 111;
-    public static final int INTENT_EDIT_STATUS = 222;
-    public static final int INTENT_EDIT_BACKGROUND = 333;
-    public static final int INTENT_EDIT_ALBUM = 444;
-    public static final int INTENT_EDIT_FORM_ITEM = 555;
-    public static final int INTENT_EDIT_INPUT_FORM_ITEM = 666;
+    public static final int INTENT_EDIT_NAME_AGE = 101;
+    public static final int INTENT_EDIT_STATUS = 102;
+    public static final int INTENT_EDIT_BACKGROUND = 103;
+    public static final int INTENT_EDIT_ALBUM = 104;
+    public static final int INTENT_EDIT_FORM_ITEM = 105;
+    public static final int INTENT_EDIT_INPUT_FORM_ITEM = 106;
+    public static final int INTENT_EDIT_PROFILE_PHOTO = 107;
 
-    public static final int INTENT_EDIT_FILTER = 777;
-    public static final int INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM = 888;
+    public static final int INTENT_EDIT_FILTER = 201;
+    public static final int INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM =202;
 
     private Fragment mFragment;
 
@@ -70,6 +73,10 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 dataId = intent.getIntExtra(INTENT_FORM_DATA_ID, -1);
                 data = intent.getStringExtra(INTENT_FORM_DATA);
                 mFragment = new FilterChooseFormItemFragment(titleId, dataId, data, FilterFragment.mTargetUser);
+                break;
+            case INTENT_EDIT_PROFILE_PHOTO:
+            	mFragment = new EditProfilePhotoFragment();
+            	break;
             default:
                 break;
         }
@@ -82,7 +89,23 @@ public class EditContainerActivity extends BaseFragmentActivity {
 
     @Override
     public void finish() {
-        super.finish();
+    	if (mFragment instanceof AbstractEditFragment) {
+    		AbstractEditFragment editFragment = (AbstractEditFragment) mFragment;
+    		if(editFragment.mSaveButton == null) {
+    			editFragment.saveChanges(mFinishHandler);
+    		} else {
+    			super.finish();
+    		}
+    	} else {
+    		super.finish();
+    	}
+    	
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
     }
+    
+    Handler mFinishHandler = new Handler() {
+    	public void handleMessage(Message msg) {
+    		EditContainerActivity.super.finish();
+    	};
+    };
 }

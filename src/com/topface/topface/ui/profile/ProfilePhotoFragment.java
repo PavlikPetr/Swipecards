@@ -15,6 +15,7 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 import java.util.HashMap;
 
@@ -67,8 +68,8 @@ public class ProfilePhotoFragment extends Fragment {
 
         TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
 
-        if (mPhotoLinks != null && mPhotoLinks.size() >= 0) {
-            title.setText(CacheProfile.photoLinks.size() + " photos"); // mPhotoLinks-1
+        if (mPhotoLinks != null && mPhotoLinks.size() >= 0) {        	
+            title.setText(Utils.formatPhotoQuantity(CacheProfile.photoLinks.size())); // mPhotoLinks-1
             title.setVisibility(View.VISIBLE);
         } else {
             title.setVisibility(View.INVISIBLE);

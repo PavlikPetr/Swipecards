@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -46,10 +47,10 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         // Navigation bar
         getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
 
-        Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.settings_feedback);
-        btnBack.setOnClickListener(new OnClickListener() {
+        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
+        mBackButton.setVisibility(View.VISIBLE);
+        mBackButton.setText(R.string.settings_feedback);
+        mBackButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -63,7 +64,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
             @Override
             public void onClick(View v) {
-                saveChanges();
+                saveChanges(null);
             }
         });
 
@@ -135,7 +136,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected void saveChanges() {
+    protected void saveChanges(Handler handler) {
         InputMethodManager imm = (InputMethodManager) getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
@@ -209,4 +210,10 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             return strBuilder.toString();
         }
     }
+
+	@Override
+	protected void lockUi() { }
+
+	@Override
+	protected void unlockUi() { }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +26,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
     private SharedPreferences mPreferences;
     private int mSelectedId;
     private ListView mBackgroundImagesListView;
+    private BackgroundImagesAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,21 +54,22 @@ public class EditBackgroundFragment extends AbstractEditFragment {
             }
         });
 
-        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setText(getResources().getString(R.string.navigation_save));
-        mSaveButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                saveChanges();
-            }
-        });
+//        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
+//        mSaveButton.setText(getResources().getString(R.string.navigation_save));
+//        mSaveButton.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                saveChanges();
+//            }
+//        });
 
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
         // List
         mBackgroundImagesListView = (ListView) root.findViewById(R.id.lvList);
-        mBackgroundImagesListView.setAdapter(new BackgroundImagesAdapter(getActivity().getApplicationContext(), getBackgroundImagesList()));
+        mAdapter = new BackgroundImagesAdapter(getActivity().getApplicationContext(), getBackgroundImagesList());
+        mBackgroundImagesListView.setAdapter(mAdapter);
 
         return root;
     }
@@ -91,18 +94,21 @@ public class EditBackgroundFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected void saveChanges() {
-        //TODO: make sending to server
+    protected void saveChanges(Handler handler) {        
         if (hasChanges()) {
             prepareRequestSend();
-            CacheProfile.background_id = mSelectedId;
+            CacheProfile.background_id = mSelectedId;          
             mPreferences.edit().putInt(Static.PREFERENCES_PROFILE_BACKGROUND_ID, mSelectedId).commit();
-            getActivity().setResult(Activity.RESULT_OK);
+          //TODO: make sending to server
+            getActivity().setResult(Activity.RESULT_OK);            
             finishRequestSend();
+            handler.sendEmptyMessage(0);
         } else {
             getActivity().setResult(Activity.RESULT_CANCELED);
             finishRequestSend();
+            handler.sendEmptyMessage(0);
         }
+        
     }
 
     @Override
@@ -177,6 +183,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                 });
             }
 
+            convertView.setEnabled(mBackgroundImagesListView.isEnabled());
             return convertView;
         }
 
@@ -209,4 +216,15 @@ public class EditBackgroundFragment extends AbstractEditFragment {
             return (BackgroundItem) this;
         }
     }
+
+	@Override
+	protected void lockUi() {		
+		mBackgroundImagesListView.setEnabled(false);	
+		mAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	protected void unlockUi() {		
+		mBackgroundImagesListView.setEnabled(true);		
+	}
 }

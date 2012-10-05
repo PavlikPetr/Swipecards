@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 
 public class ProfilePhotoGridAdapter extends BaseAdapter {
     // Data
-    private LayoutInflater mInflater;
+    protected LayoutInflater mInflater;
     private ExecutorService mWorker;
     private MemoryCache mMemoryCache;
     private StorageCache mStorageCache;
@@ -34,8 +34,6 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
         ImageView mPhoto;
         ImageView mFrame;
     }
-
-    ;
 
     public ProfilePhotoGridAdapter(Context context, SparseArray<HashMap<String, String>> photoLinks) {
         mInflater = LayoutInflater.from(context);
@@ -87,7 +85,7 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
     }
 
     // что с потоковой безопасностью ?
-    private void fetchImage(final int position, final ImageView imageView) {
+    protected void fetchImage(final int position, final ImageView imageView) {
         Bitmap bitmap = mMemoryCache.get(position);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);

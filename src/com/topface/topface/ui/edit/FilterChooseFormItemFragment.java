@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -54,10 +55,10 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         subTitle.setText(formItemTitle);
 
         ((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-        Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.navigation_edit);
-        btnBack.setOnClickListener(new OnClickListener() {
+        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
+        mBackButton.setVisibility(View.VISIBLE);
+        mBackButton.setText(R.string.navigation_edit);
+        mBackButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -180,6 +181,17 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected void saveChanges() {
+    protected void saveChanges(Handler handler) {
+    	handler.sendEmptyMessage(0);
     }
+
+	@Override
+	protected void lockUi() {
+		mListView.setEnabled(false);
+	}
+
+	@Override
+	protected void unlockUi() {
+		mListView.setEnabled(true);
+	}
 }
