@@ -3,6 +3,7 @@ package com.topface.topface.ui.edit;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -33,7 +34,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     private Profile mProfile;
     private FormInfo mFormInfo;
 
-    private EditText mEditText;
+    private EditText mEditText;    
 
     public EditFormItemInputFragment() {
     }
@@ -58,10 +59,10 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         subTitle.setText(R.string.edit_bg_photo);
 
         ((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-        Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.navigation_edit);
-        btnBack.setOnClickListener(new OnClickListener() {
+        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
+        mBackButton.setVisibility(View.VISIBLE);
+        mBackButton.setText(R.string.navigation_edit);
+        mBackButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
@@ -74,7 +75,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
             @Override
             public void onClick(View v) {
-                saveChanges();
+                saveChanges(null);
             }
         });
 
@@ -119,7 +120,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected void saveChanges() {
+    protected void saveChanges(Handler handler) {
         InputMethodManager imm = (InputMethodManager) getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
@@ -158,6 +159,15 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                 }
             }
         }
-
     }
+
+	@Override
+	protected void lockUi() {
+		mEditText.setEnabled(false);		
+	}
+
+	@Override
+	protected void unlockUi() {
+		mEditText.setEnabled(true);
+	}
 }

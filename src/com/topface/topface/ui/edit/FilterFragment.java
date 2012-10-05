@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -122,10 +123,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 .setText(R.string.filter_filter);
 
         ((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-        Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.navigation_back_dating);
-        btnBack.setOnClickListener(new OnClickListener() {
+        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
+        mBackButton.setVisibility(View.VISIBLE);
+        mBackButton.setText(R.string.navigation_back_dating);
+        mBackButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -139,7 +140,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
             @Override
             public void onClick(View v) {
-                saveChanges();
+                saveChanges(null);
             }
         });
 
@@ -451,7 +452,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     @Override
-    protected void saveChanges() {
+    protected void saveChanges(Handler handler) {
         prepareRequestSend();
 
         //TODO send request
@@ -576,4 +577,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+	@Override
+	protected void lockUi() { }
+
+	@Override
+	protected void unlockUi() {	}
 }

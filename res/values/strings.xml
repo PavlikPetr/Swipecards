@@ -184,7 +184,7 @@
     <!-- EditProfileActivity -->
     <string name="edit_title">Editing</string>
     <string name="edit_bg_photo">Background photo</string>
-    <string name="edit_album">Album</string>
+    <string name="edit_album">Album</string>    
     <string name="edit_profile_photo">Change photo</string>
     <string name="edit_album_photos">photos</string>
     <string name="edit_interests">interests</string>

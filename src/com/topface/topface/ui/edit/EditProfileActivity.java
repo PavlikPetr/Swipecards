@@ -21,6 +21,7 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.edit.EditProfileItem.Type;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -34,6 +35,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     private LinkedList<EditProfileItem> mEditItems;
     private Button mEditName;
     private Button mEditCity;
+    private ImageViewRemote mProfilePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         mEditsListView.addHeaderView(header);
         mAdapter = new EditsAdapter(getApplicationContext(), mEditItems);
         mEditsListView.setAdapter(mAdapter);
-        //TODO set avatar image by id ivProfilePhoto
+
+        mProfilePhoto = (ImageViewRemote) header.findViewById(R.id.ivProfilePhoto);
+        mProfilePhoto.setOnClickListener(this);
+        mProfilePhoto.setRemoteSrc(CacheProfile.getAvatarLink());
     }
 
     private void initEditItems() {
@@ -124,6 +129,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             case R.id.btnNavigationBackWithText:
                 finish();
                 break;
+            case R.id.ivProfilePhoto:
+            	startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),
+            			EditContainerActivity.INTENT_EDIT_PROFILE_PHOTO);
+            	break;
         }
     }
 
@@ -142,6 +151,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     break;
                 case EditContainerActivity.INTENT_EDIT_FORM_ITEM:
                     mAdapter.notifyDataSetChanged();
+                    break;
+                case EditContainerActivity.INTENT_EDIT_PROFILE_PHOTO:
+                    mProfilePhoto.setRemoteSrc(CacheProfile.getAvatarLink());
                     break;
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
                     Bundle extras = data.getExtras();
@@ -173,8 +185,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                             Toast.makeText(EditProfileActivity.this, getString(R.string.general_data_error),
                                     Toast.LENGTH_SHORT).show();
                         }
-                    }).exec();
-
+                    }).exec();                
                 default:
                     break;
             }
@@ -343,8 +354,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             Bitmap original = BitmapFactory.decodeResource(getResources(),
                     ProfileBackgrounds.getBackgroundResource(getApplicationContext(),
                             CacheProfile.background_id));
+            int w = getResources().getDrawable(R.drawable.edit_icon_photo).getIntrinsicWidth();
+            int h = getResources().getDrawable(R.drawable.edit_icon_photo).getIntrinsicHeight();;
             BitmapDrawable resized = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
-                    original, 46, 35, true));
+                    original, w, h, true));
 
             return resized;
         }

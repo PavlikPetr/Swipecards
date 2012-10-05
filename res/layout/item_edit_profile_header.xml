@@ -12,11 +12,11 @@
             android:layout_marginBottom="40dp"
             android:layout_marginLeft="8dp">
 
-        <ImageView
+        <com.topface.topface.ui.views.ImageViewRemote
                 android:id="@+id/ivProfilePhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
+                style="@style/EditAvatar"/>
 
         <TextView
                 android:id="@+id/ivProfilePhotoCover"

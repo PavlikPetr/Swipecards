@@ -3,6 +3,7 @@ package com.topface.topface.ui.edit;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -26,9 +27,7 @@ import java.util.HashMap;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment {
 
-    public enum EditType {NAME, AGE, STATUS}
-
-    ;
+    public enum EditType {NAME, AGE, STATUS};
 
     private EditType[] mTypes;
     private HashMap<EditType, String> hashChangedData = new HashMap<EditMainFormItemsFragment.EditType, String>();
@@ -52,10 +51,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
         subTitle.setVisibility(View.VISIBLE);
 
         ((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-        Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.navigation_edit);
-        btnBack.setOnClickListener(new OnClickListener() {
+        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
+        mBackButton.setVisibility(View.VISIBLE);
+        mBackButton.setText(R.string.navigation_edit);
+        mBackButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
@@ -68,7 +67,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
 
             @Override
             public void onClick(View v) {
-                saveChanges();
+                saveChanges(null);
             }
         });
 
@@ -187,7 +186,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected void saveChanges() {
+    protected void saveChanges(Handler handler) {
         InputMethodManager imm = (InputMethodManager) getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (mEdName != null) imm.hideSoftInputFromWindow(mEdName.getWindowToken(), 0);
         if (mEdAge != null) imm.hideSoftInputFromWindow(mEdAge.getWindowToken(), 0);
@@ -265,4 +264,24 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
         }
         return request;
     }
+
+	@Override
+	protected void lockUi() {
+		if (mEdName != null) 
+			mEdName.setEnabled(false);
+		if (mEdAge != null)
+			mEdAge.setEnabled(false);
+	    if (mEdStatus != null) 
+	    	mEdStatus.setEnabled(false);
+	}
+
+	@Override
+	protected void unlockUi() {
+		if (mEdName != null) 
+			mEdName.setEnabled(true);
+		if (mEdAge != null)
+			mEdAge.setEnabled(true);
+	    if (mEdStatus != null) 
+	    	mEdStatus.setEnabled(true);
+	}
 }

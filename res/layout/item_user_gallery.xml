@@ -15,5 +15,13 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:src="@drawable/user_frame_album"/>
+    
+    <ImageView
+            android:id="@+id/ivSelector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/edit_form_select_check"
+            android:visibility="gone"/>
 
 </RelativeLayout>
