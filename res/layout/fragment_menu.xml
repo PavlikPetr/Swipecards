@@ -8,6 +8,7 @@
             android:id="@+id/btnFragmentProfile"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
             android:background="@drawable/navigation_menu_item_selector"
             android:text="@string/dashbrd_btn_profile"
             style="@style/LeftMenuButtons"/>
@@ -46,7 +47,6 @@
             android:gravity="center"
             android:textColor="#FFFFFF"
             android:textSize="12dp"
-            android:text="12"
             android:visibility="visible"/>
 
     <!-- Mutual - Sympathy -->
@@ -72,7 +72,6 @@
             android:gravity="center"
             android:textColor="#FFFFFF"
             android:textSize="12dp"
-            android:text="12"
             android:visibility="visible"/>
 
     <!-- Dialogs - Messages - Chat -->
@@ -98,7 +97,6 @@
             android:gravity="center"
             android:textColor="#FFFFFF"
             android:textSize="12dp"
-            android:text="12"
             android:visibility="visible"/>
 
     <!-- Tops -->

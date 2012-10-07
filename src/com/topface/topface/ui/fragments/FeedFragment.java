@@ -11,23 +11,29 @@ import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.R;
 import com.topface.topface.Recycle;
 import com.topface.topface.Static;
 import com.topface.topface.data.AbstractFeedItem;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SwapAnimation;
 
-public abstract class FeedFragment<T extends FeedAdapter> extends BaseFragment {
+public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragment {
     protected PullToRefreshListView mListView;
-    protected T mListAdapter;
+    protected FeedAdapter<T> mListAdapter;
     protected boolean mHasUnread;
     private TextView mBackgroundText;
     protected DoubleBigButton mDoubleButton;
@@ -93,7 +99,7 @@ public abstract class FeedFragment<T extends FeedAdapter> extends BaseFragment {
         mListView.getRefreshableView().setAdapter(mListAdapter);
     }
 
-    abstract protected T getAdapter();
+    abstract protected FeedAdapter<T> getAdapter();
 
     protected FeedAdapter.Updater getUpdaterCallback() {
         return new FeedAdapter.Updater() {
@@ -139,7 +145,66 @@ public abstract class FeedFragment<T extends FeedAdapter> extends BaseFragment {
         startActivity(intent);
     }
 
-    abstract protected void updateData(boolean isPushUpdating, final boolean isHistoryLoad);
+    protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad) {
+        mIsUpdating = true;
+        onUpdateStart(isPushUpdating || isHistoryLoad);
+
+        FeedRequest request = getRequest();
+        registerRequest(request);
+
+        AbstractFeedItem lastItem = mListAdapter.getLastFeedItem();
+        if (isHistoryLoad && lastItem != null) {
+            request.before = lastItem.id;
+        }
+        request.limit = FeedAdapter.LIMIT;
+        request.unread = mDoubleButton.isRightButtonChecked();
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                final FeedList<T> dialogList = parseResponse(response);
+                updateUI(new Runnable() {
+                    @Override
+                    public void run() {
+                        CacheProfile.unread_messages = 0;
+                        if (isHistoryLoad) {
+                            mListAdapter.addData(dialogList);
+                        } else {
+                            mListAdapter.setData(dialogList);
+                        }
+                        onUpdateSuccess(isPushUpdating || isHistoryLoad);
+                        mListView.onRefreshComplete();
+                        mListView.setVisibility(View.VISIBLE);
+                        mIsUpdating = false;
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                updateUI(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isHistoryLoad) {
+                            mListAdapter.showRetryItem();
+                        }
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        onUpdateFail(isPushUpdating || isHistoryLoad);
+                        mListView.onRefreshComplete();
+                        mListView.setVisibility(View.VISIBLE);
+                        mIsUpdating = false;
+                    }
+                });
+            }
+        }).exec();
+    }
+
+    private FeedRequest getRequest() {
+        return new FeedRequest(getFeedService(), getActivity());
+    }
+
+    protected abstract FeedRequest.FeedService getFeedService();
+
+    abstract protected FeedList<T> parseResponse(ApiResponse response);
 
     protected void updateData(boolean isPushUpdating) {
         updateData(isPushUpdating, false);

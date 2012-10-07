@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Dialog;
+import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
 import com.topface.topface.ui.views.RoundedImageView;
 import com.topface.topface.utils.*;
@@ -253,10 +253,10 @@ public class ChatListAdapter extends BaseAdapter {
 
         // setting textual information
         switch (history.type) {
-            case Dialog.DEFAULT:
+            case FeedDialog.DEFAULT:
                 holder.mMessage.setText(history.text);
                 break;
-            case Dialog.PHOTO:
+            case FeedDialog.PHOTO:
 //			if (history.code > 100500) {
 //				holder.mMessage.setText(history.text);
 //				//holder.mMessage.setText(mContext.getString(R.string.chat_money_in) + ".");
@@ -264,79 +264,79 @@ public class ChatListAdapter extends BaseAdapter {
 //			}
                 holder.mMessage.setText("TARGET IT");
 //			switch (history.target) {
-//			case Dialog.FRIEND_MESSAGE:
+//			case FeedDialog.FRIEND_MESSAGE:
 //				holder.mMessage.setText(mContext.getString(R.string.chat_rate_in) + " " + history.code + ".");
 //				break;
-//			case Dialog.USER_MESSAGE:
+//			case FeedDialog.USER_MESSAGE:
 //				holder.mMessage.setText(mContext.getString(R.string.chat_rate_out) + " " + history.code + ".");
 //				break;
 //			}
                 break;
-            case Dialog.MESSAGE:
+            case FeedDialog.MESSAGE:
                 holder.mMessage.setText(history.text);
                 break;
-            case Dialog.MESSAGE_WISH:
+            case FeedDialog.MESSAGE_WISH:
                 switch (history.target) {
-                    case Dialog.FRIEND_MESSAGE:
+                    case FeedDialog.FRIEND_MESSAGE:
                         holder.mMessage.setText(mContext.getString(R.string.chat_wish_in));
                         break;
-                    case Dialog.USER_MESSAGE:
+                    case FeedDialog.USER_MESSAGE:
                         holder.mMessage.setText(mContext.getString(R.string.chat_wish_out));
                         break;
                 }
                 break;
-            case Dialog.MESSAGE_SEXUALITY:
+            case FeedDialog.MESSAGE_SEXUALITY:
                 switch (history.target) {
-                    case Dialog.FRIEND_MESSAGE:
+                    case FeedDialog.FRIEND_MESSAGE:
                         holder.mMessage.setText(mContext.getString(R.string.chat_sexuality_in));
                         break;
-                    case Dialog.USER_MESSAGE:
+                    case FeedDialog.USER_MESSAGE:
                         holder.mMessage.setText(mContext.getString(R.string.chat_sexuality_out));
                         break;
                 }
                 break;
-            case Dialog.LIKE:
+            case FeedDialog.LIKE:
                 switch (history.target) {
-                    case Dialog.FRIEND_MESSAGE:
+                    case FeedDialog.FRIEND_MESSAGE:
                         holder.mMessage.setText(mContext.getString(R.string.chat_like_in));
                         break;
-                    case Dialog.USER_MESSAGE:
+                    case FeedDialog.USER_MESSAGE:
                         holder.mMessage.setText(mContext.getString(R.string.chat_like_out));
                         break;
                 }
                 break;
-            case Dialog.SYMPHATHY:
+            case FeedDialog.SYMPHATHY:
                 switch (history.target) {
-                    case Dialog.FRIEND_MESSAGE:
+                    case FeedDialog.FRIEND_MESSAGE:
                         holder.mMessage.setText(mContext.getString(R.string.chat_symphathy_in));
                         break;
-                    case Dialog.USER_MESSAGE:
+                    case FeedDialog.USER_MESSAGE:
                         holder.mMessage.setText(mContext.getString(R.string.chat_symphathy_out));
                         break;
                 }
                 break;
-            case Dialog.MESSAGE_WINK:
+            case FeedDialog.MESSAGE_WINK:
                 switch (history.target) {
-                    case Dialog.FRIEND_MESSAGE:
+                    case FeedDialog.FRIEND_MESSAGE:
                         holder.mMessage.setText(mContext.getString(R.string.chat_wink_in));
                         break;
-                    case Dialog.USER_MESSAGE:
+                    case FeedDialog.USER_MESSAGE:
                         holder.mMessage.setText(mContext.getString(R.string.chat_wink_out));
                         break;
                 }
                 break;
-            case Dialog.RATE:
+            case FeedDialog.RATE:
                 holder.mMessage.setText("RATE IT");
 //			switch (history.target) {
-//			case Dialog.FRIEND_MESSAGE:
+//			case FeedDialog.FRIEND_MESSAGE:
 //				holder.mMessage.setText(mContext.getString(R.string.chat_rate_in) + " " + history.code + ".");
 //				break;
-//			case Dialog.USER_MESSAGE:
+//			case FeedDialog.USER_MESSAGE:
 //				holder.mMessage.setText(mContext.getString(R.string.chat_rate_out) + " " + history.code + ".");
 //				break;
 //			}
                 break;
-            case Dialog.PROMOTION:
+            case FeedDialog.PROMOTION:
                 holder.mMessage.setText(history.text);
                 break;
             default:
@@ -357,30 +357,30 @@ public class ChatListAdapter extends BaseAdapter {
             prevHistory = mDataList.getLast(); //get(mDataList.size() - 1);
         }
 
-        if (msg.type == Dialog.MESSAGE) {
+        if (msg.type == FeedDialog.MESSAGE) {
             if (prevHistory == null) {
                 mItemLayoutList.add(T_USER_PHOTO);
             } else {
-                if (prevHistory.target == Dialog.USER_MESSAGE)
+                if (prevHistory.target == FeedDialog.USER_MESSAGE)
                     mItemLayoutList.add(T_USER_EXT);
                 else
                     mItemLayoutList.add(T_USER_PHOTO);
             }
-        } else if (msg.type == Dialog.GIFT) {
+        } else if (msg.type == FeedDialog.GIFT) {
             if (prevHistory == null)
                 mItemLayoutList.add(T_USER_GIFT_PHOTO);
             else {
-                if (prevHistory.target == Dialog.USER_MESSAGE)
+                if (prevHistory.target == FeedDialog.USER_MESSAGE)
                     mItemLayoutList.add(T_USER_GIFT_EXT);
                 else
                     mItemLayoutList.add(T_USER_GIFT_PHOTO);
             }
 
-        } else if (msg.type == Dialog.MAP) {
+        } else if (msg.type == FeedDialog.MAP) {
             if (prevHistory == null)
                 mItemLayoutList.add(T_USER_MAP_PHOTO);
             else {
-                if (prevHistory.target == Dialog.USER_MESSAGE)
+                if (prevHistory.target == FeedDialog.USER_MESSAGE)
                     mItemLayoutList.add(T_USER_MAP_EXT);
                 else
                     mItemLayoutList.add(T_USER_MAP_PHOTO);
@@ -462,15 +462,15 @@ public class ChatListAdapter extends BaseAdapter {
 
             // Type
             int item_type = 0;
-            if (history.target == Dialog.FRIEND_MESSAGE) {
+            if (history.target == FeedDialog.FRIEND_MESSAGE) {
                 switch (history.type) {
-                    case Dialog.GIFT:
+                    case FeedDialog.GIFT:
                         if (history.target == prev_target)
                             item_type = T_FRIEND_GIFT_EXT;
                         else
                             item_type = T_FRIEND_GIFT_PHOTO;
                         break;
-                    case Dialog.MAP:
+                    case FeedDialog.MAP:
                         if (history.target == prev_target)
                             item_type = T_FRIEND_MAP_EXT;
                         else
@@ -485,13 +485,13 @@ public class ChatListAdapter extends BaseAdapter {
                 }
             } else {
                 switch (history.type) {
-                    case Dialog.GIFT:
+                    case FeedDialog.GIFT:
                         if (history.target == prev_target)
                             item_type = T_USER_GIFT_EXT;
                         else
                             item_type = T_USER_GIFT_PHOTO;
                         break;
-                    case Dialog.MAP:
+                    case FeedDialog.MAP:
                         if (history.target == prev_target) {
                             item_type = T_USER_MAP_EXT;
                         } else {

@@ -28,10 +28,10 @@ public class Data {
     public static long midnight;
     // Data cache
     public static LinkedList<Top> topsList;
-    public static LinkedList<Dialog> dialogList;
+    public static LinkedList<FeedDialog> dialogList;
     public static LinkedList<FeedLike> likesList;
     public static LinkedList<FeedInbox> inboxList;
-    public static LinkedList<FeedSympathy> mutualList;
+    public static LinkedList<FeedMutual> mutualList;
 
     public static void init(Context context) {
         //removeSSID(context); // for test
@@ -45,7 +45,7 @@ public class Data {
             topsList = new LinkedList<Top>();
 
         if (dialogList == null)
-            dialogList = new LinkedList<Dialog>();
+            dialogList = new LinkedList<FeedDialog>();
 
         if (inboxList == null)
             inboxList = new LinkedList<FeedInbox>();
@@ -54,7 +54,7 @@ public class Data {
             likesList = new LinkedList<FeedLike>();
 
         if (mutualList == null)
-            mutualList = new LinkedList<FeedSympathy>();
+            mutualList = new LinkedList<FeedMutual>();
 
         if (giftsList == null)
             giftsList = new LinkedList<Gift>();

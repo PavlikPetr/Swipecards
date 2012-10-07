@@ -17,14 +17,14 @@ import android.widget.TextView;
  */
 public class LoadingListAdapter extends BaseAdapter {
 
-    public static final int T_OTHER = 0;
-    public static final int T_LOADER = 1;
-    public static final int T_RETRIER = 2;
-    public static final int T_CITY = 3;
+    public static final int T_OTHER = 1;
+    public static final int T_LOADER = 2;
+    public static final int T_RETRIER = 3;
 
     protected View mLoaderRetrier;
     protected TextView mLoaderRetrierText;
     protected ProgressBar mLoaderRetrierProgress;
+    private static final int TYPE_COUNT = 3;
 
     @Override
     public int getCount() {
@@ -64,4 +64,8 @@ public class LoadingListAdapter extends BaseAdapter {
         return getItemViewType(position) != T_LOADER;
     }
 
+    @Override
+    public int getViewTypeCount() {
+        return TYPE_COUNT;
+    }
 }

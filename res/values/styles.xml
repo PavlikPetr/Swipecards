@@ -74,7 +74,7 @@
 
     <style name="ButtonsText" parent="ShadowUserText">
         <item name="android:textColor">#FFFFFF</item>
-    </style>    
+    </style>
 
     <style name="LeftMenuButtons">
         <item name="android:textColor">#FFFFFF</item>
@@ -99,11 +99,11 @@
     <style name="BackgroundFont" parent="ShadowItemFont">
         <item name="android:textColor">#737373</item>
         <item name="android:textSize">17sp</item>
-    </style>    
-    
+    </style>
+
     <style name="EditAvatar">
         <item name="postProcessor">rounded</item>
-        <item name="android:layout_centerInParent">true</item>        
+        <item name="android:layout_centerInParent">true</item>
         <item name="android:layout_width">100dp</item>
         <item name="android:layout_height">100dp</item>
         <item name="android:background">@drawable/avatar_frame</item>
@@ -112,7 +112,7 @@
         <item name="android:paddingRight">5dp</item>
         <item name="android:paddingBottom">5dp</item>
     </style>
-    
+
     <style name="FeedAvatar">
         <item name="postProcessor">rounded</item>
         <item name="android:layout_alignParentLeft">true</item>
@@ -192,15 +192,31 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="ListAgeAndCity" parent="ListCity">
+        <item name="android:textSize">14dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
+    </style>
+
     <style name="ListName" parent="ShadowItemFont">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">16dp</item>
         <item name="android:textStyle">normal</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="NavigationHeader" parent="ShadowUserText">
         <item name="android:textColor">#FFFFFF</item>
     </style>
+
+    <style name="FeedHeart">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_toLeftOf">@+id/ivArrow</item>
+    </style>
+
 </resources>

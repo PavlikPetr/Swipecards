@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.AbstractFeedItem;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Utils;
 
 
 /**
@@ -130,7 +128,6 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
             holder.name.setText(getName(item));
             holder.city.setText(item.city_name);
             holder.online.setVisibility(item.online ? View.VISIBLE : View.INVISIBLE);
-            holder.time.setText(Utils.formatTime(getContext(), item.created));
         }
 
         convertView.setTag(holder);
@@ -253,23 +250,9 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
         holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.ivAvatar);
         holder.name = (TextView) convertView.findViewById(R.id.tvName);
         holder.city = (TextView) convertView.findViewById(R.id.tvCity);
-        holder.time = (TextView) convertView.findViewById(R.id.tvTime);
         holder.online = (ImageView) convertView.findViewById(R.id.ivOnline);
 
         return holder;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        int type = super.getItemViewType(position);
-
-        if (type == T_OTHER) {
-            type = getItem(position).city_id == CacheProfile.city_id ?
-                    T_CITY :
-                    T_OTHER;
-        }
-
-        return type;
     }
 
     abstract protected T getNewItem(IListLoader.ItemType type);
@@ -287,5 +270,4 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
     public boolean isNeedUpdate() {
         return isEmpty() || (System.currentTimeMillis() > mLastUpdate + CACHE_TIMEOUT);
     }
-
 }

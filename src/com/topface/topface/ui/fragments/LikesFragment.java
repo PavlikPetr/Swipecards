@@ -1,19 +1,15 @@
 package com.topface.topface.ui.fragments;
 
 import android.graphics.drawable.Drawable;
-import android.view.View;
-import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.FeedLikesRequest;
-import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.utils.CacheProfile;
 
-public class LikesFragment extends FeedFragment<LikesListAdapter> {
+public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected boolean isHasUnread() {
         return CacheProfile.unread_likes > 0;
@@ -40,56 +36,13 @@ public class LikesFragment extends FeedFragment<LikesListAdapter> {
     }
 
     @Override
-    protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad) {
-        mIsUpdating = true;
-        onUpdateStart(isPushUpdating || isHistoryLoad);
+    protected FeedRequest.FeedService getFeedService() {
+        return FeedRequest.FeedService.LIKES;
+    }
 
-        FeedLikesRequest likesRequest = new FeedLikesRequest(getActivity().getApplicationContext());
-        registerRequest(likesRequest);
-        likesRequest.limit = FeedAdapter.LIMIT;
-        likesRequest.unread = mDoubleButton.isRightButtonChecked();
-        FeedLike lastLike = mListAdapter.getLastFeedItem();
-        if (isHistoryLoad && lastLike != null) {
-            likesRequest.from = lastLike.id;
-        }
-        likesRequest.callback(new ApiHandler() {
-            @Override
-            public void success(final ApiResponse response) {
-                final FeedList<FeedLike> likes = FeedLike.parse(response);
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (isHistoryLoad) {
-                            mListAdapter.addData(likes);
-                        }
-                        else {
-                            mListAdapter.setData(likes);
-                        }
-                        onUpdateSuccess(isPushUpdating || isHistoryLoad);
-                        mListView.onRefreshComplete();
-                        mListView.setVisibility(View.VISIBLE);
-                        mIsUpdating = false;
-                    }
-                });
-            }
-
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        onUpdateFail(isPushUpdating || isHistoryLoad);
-                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        mListView.onRefreshComplete();
-                        mListView.setVisibility(View.VISIBLE);
-                        mIsUpdating = false;
-                        if (isHistoryLoad) {
-                            mListAdapter.showRetryItem();
-                        }
-                    }
-                });
-            }
-        }).exec();
+    @Override
+    protected FeedList<FeedLike> parseResponse(ApiResponse response) {
+        return FeedLike.parse(response);
     }
 
 }

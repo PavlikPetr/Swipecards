@@ -5,11 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.topface.topface.R;
-import com.topface.topface.data.Dialog;
+import com.topface.topface.data.FeedDialog;
+import com.topface.topface.utils.Utils;
 
-public class DialogListAdapter extends FeedAdapter<Dialog> {
+public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
-    public static final int ITEM_LAYOUT = R.layout.item_inbox_gallery;
+    public static final int ITEM_LAYOUT = R.layout.item_feed_dialog;
 
     public static final String MESSAGE_OF_UNKNOWN_TYPE = "";
 
@@ -22,31 +23,32 @@ public class DialogListAdapter extends FeedAdapter<Dialog> {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
 
-        Dialog dialog = getItem(position);
+        FeedDialog dialog = getItem(position);
         holder.text.setText(getDialogText(dialog));
+        holder.time.setText(Utils.formatTime(getContext(), dialog.created));
 
         return convertView;
     }
 
-    private String getDialogText(Dialog dialog) {
+    private String getDialogText(FeedDialog dialog) {
         String text;
         switch (dialog.type) {
-            case Dialog.DEFAULT:
-            case Dialog.MESSAGE:
-            case Dialog.MESSAGE_WISH:
-            case Dialog.MESSAGE_SEXUALITY:
-            case Dialog.LIKE:
-            case Dialog.SYMPHATHY:
-            case Dialog.MESSAGE_WINK:
-            case Dialog.RATE:
-            case Dialog.PROMOTION:
-            case Dialog.PHOTO:
-            case Dialog.MAP:
+            case FeedDialog.DEFAULT:
+            case FeedDialog.MESSAGE:
+            case FeedDialog.MESSAGE_WISH:
+            case FeedDialog.MESSAGE_SEXUALITY:
+            case FeedDialog.LIKE:
+            case FeedDialog.SYMPHATHY:
+            case FeedDialog.MESSAGE_WINK:
+            case FeedDialog.RATE:
+            case FeedDialog.PROMOTION:
+            case FeedDialog.PHOTO:
+            case FeedDialog.MAP:
                 text = dialog.text;
                 break;
 
-            case Dialog.GIFT:
-                text = (dialog.target == Dialog.FRIEND_MESSAGE) ?
+            case FeedDialog.GIFT:
+                text = (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
                         getContext().getString(R.string.chat_gift_in) :
                         getContext().getString(R.string.chat_gift_out);
                 break;
@@ -61,12 +63,13 @@ public class DialogListAdapter extends FeedAdapter<Dialog> {
     protected FeedViewHolder getEmptyHolder(View convertView) {
         FeedViewHolder holder = super.getEmptyHolder(convertView);
         holder.text = (TextView) convertView.findViewById(R.id.tvText);
+        holder.time = (TextView) convertView.findViewById(R.id.tvTime);
         return holder;
     }
 
     @Override
-    protected Dialog getNewItem(IListLoader.ItemType type) {
-        return new Dialog(type);
+    protected FeedDialog getNewItem(IListLoader.ItemType type) {
+        return new FeedDialog(type);
     }
 
     @Override

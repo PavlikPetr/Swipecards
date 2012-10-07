@@ -22,7 +22,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Confirmation;
-import com.topface.topface.data.Dialog;
+import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.*;
@@ -226,7 +226,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         if (v instanceof ImageView) {
             if (v.getTag() instanceof History) {
                 History history = (History) v.getTag();
-                if (history.type == Dialog.MAP) {
+                if (history.type == FeedDialog.MAP) {
                     Intent intent = new Intent(this, GeoMapActivity.class);
                     intent.putExtra(GeoMapActivity.INTENT_LATITUDE_ID, history.latitude);
                     intent.putExtra(GeoMapActivity.INTENT_LONGITUDE_ID, history.longitude);
@@ -306,7 +306,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                     history.uid = CacheProfile.uid;
                                     history.created = System.currentTimeMillis();
                                     history.text = text;
-                                    history.type = Dialog.MESSAGE;
+                                    history.type = FeedDialog.MESSAGE;
                                     mAdapter.addSentMessage(history);
                                     mAdapter.notifyDataSetChanged();
                                     mEditBox.getText().clear();
@@ -372,7 +372,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                 history.uid = CacheProfile.uid;
                                 history.created = System.currentTimeMillis();
                                 history.text = Static.EMPTY;
-                                history.type = Dialog.GIFT;
+                                history.type = FeedDialog.GIFT;
                                 history.link = url;
                                 mAdapter.addSentMessage(history);
                                 mAdapter.notifyDataSetChanged();
@@ -387,9 +387,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                             @Override
                             public void run() {
                                 if (response.code == ApiResponse.PAYMENT) {
-                                	Intent intent = new Intent(getApplicationContext(), BuyingActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), BuyingActivity.class);
                                     intent.putExtra(BuyingActivity.INTENT_USER_COINS, price - CacheProfile.money);
-                                    startActivity(intent);                                    
+                                    startActivity(intent);
                                 }
                                 mLoadingLocker.setVisibility(View.GONE);
                             }
@@ -418,7 +418,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                             public void run() {
                                 if (confirm.completed) {
                                     History history = new History();
-                                    history.type = Dialog.MAP;
+                                    history.type = FeedDialog.MAP;
                                     history.currentLocation = false;
                                     history.latitude = latitude;
                                     history.longitude = longitude;
@@ -518,7 +518,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                             mIsAddPanelOpened = false;
 
                             History history = new History();
-                            history.type = Dialog.MAP;
+                            history.type = FeedDialog.MAP;
                             history.currentLocation = true;
                             history.latitude = latitude;
                             history.longitude = longitude;

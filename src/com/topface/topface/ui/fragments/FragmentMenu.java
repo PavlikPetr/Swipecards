@@ -1,7 +1,7 @@
 package com.topface.topface.ui.fragments;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -42,12 +42,13 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
 
         mRootLayout = inflater.inflate(R.layout.fragment_menu, null);
 
-        Drawable drawable = (Drawable) new BitmapDrawable(Data.ownerAvatar);
+        int size = (int) (50 * getResources().getDisplayMetrics().density);
+        Bitmap bitmap = Bitmap.createScaledBitmap(Data.ownerAvatar, size, size, false);
 
         // Buttons
         mBtnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
         mBtnProfile.setOnClickListener(this);
-        mBtnProfile.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        mBtnProfile.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(getResources(), bitmap), null, null, null);
 
         mBtnDating = (Button) mRootLayout.findViewById(R.id.btnFragmentDating);
         mBtnDating.setOnClickListener(this);
@@ -84,7 +85,7 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         for (Button btn : mButtons)
             btn.setSelected(false);
 
-        ((Button) view).setSelected(true);
+        view.setSelected(true);
 
         if (mFragmentMenuListener != null)
             mFragmentMenuListener.onMenuClick(view.getId());
@@ -164,19 +165,6 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void setNotificationMargin(int padding) {
-//        if(b) return;
-//            
-//        LayoutParams lp = mTvNotifyLikes.getLayoutParams();
-//        if(lp instanceof RelativeLayout.LayoutParams) {
-//            RelativeLayout.LayoutParams rlp = ((RelativeLayout.LayoutParams)lp);
-//            rlp.setMargins(rlp.leftMargin  + padding , rlp.topMargin, rlp.rightMargin, rlp.bottomMargin);
-//            mTvNotifyLikes.setLayoutParams(rlp);
-//            mTvNotifyMutual.setLayoutParams(rlp);
-//            mTvNotifyDialogs.setLayoutParams(rlp);
-//            b = true;
-//        }
-    }
 }
 
 

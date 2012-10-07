@@ -40,6 +40,6 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
     @Override
     protected int getItemLayout() {
-        return R.layout.item_likes_gallery;
+        return R.layout.item_feed_like;
     }
 }

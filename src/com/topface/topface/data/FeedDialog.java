@@ -6,7 +6,7 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class Dialog extends AbstractFeedItem {
+public class FeedDialog extends AbstractFeedItem {
     // Constants
     public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
     public static final int PHOTO = 1; // Рекламное уведомление
@@ -25,27 +25,27 @@ public class Dialog extends AbstractFeedItem {
     public static final int USER_MESSAGE = 0;
     public static final int FRIEND_MESSAGE = 1;
 
-    public Dialog(ItemType retry) {
+    public FeedDialog(ItemType retry) {
         super(retry);
     }
 
-    public Dialog() {
+    public FeedDialog() {
         super();
     }
 
-    public static FeedList<Dialog> parse(ApiResponse response) {
-        FeedList<Dialog> dialogList = new FeedList<Dialog>();
+    public static FeedList<FeedDialog> parse(ApiResponse response) {
+        FeedList<FeedDialog> dialogList = new FeedList<FeedDialog>();
 
         try {
-            Dialog.unread_count = response.mJSONResult.getInt("unread");
-            Dialog.more = response.mJSONResult.optBoolean("more");
+            FeedDialog.unread_count = response.mJSONResult.getInt("unread");
+            FeedDialog.more = response.mJSONResult.optBoolean("more");
 
             JSONArray arr = response.mJSONResult.getJSONArray("items");
             if (arr.length() > 0)
-                dialogList = new FeedList<Dialog>();
+                dialogList = new FeedList<FeedDialog>();
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject item = arr.getJSONObject(i);
-                Dialog dialog = new Dialog();
+                FeedDialog dialog = new FeedDialog();
 
                 dialog.type = item.optInt("type");
                 dialog.id = item.optInt("id");
@@ -76,7 +76,7 @@ public class Dialog extends AbstractFeedItem {
 
             }
         } catch (Exception e) {
-            Debug.log("Dialog.class", "Wrong response parsing: " + e);
+            Debug.log("FeedDialog.class", "Wrong response parsing: " + e);
         }
 
         return dialogList;
