@@ -127,6 +127,8 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 	                handler.sendEmptyMessage(0);
 	            }
 	        }).exec();
+    	} else {
+    		handler.sendEmptyMessage(0);
     	}
     }
 
