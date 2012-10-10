@@ -38,7 +38,7 @@ public class TopsFragment extends BaseFragment {
 
     private GridView mGallery;
     private TopsGridAdapter mGridAdapter;
-    private GalleryGridManager<Top> mGalleryGridManager;
+    private GalleryGridManager mGalleryGridManager;
     private Button mCityButton;
     private LockerView mLoadingLocker;
     private ActionData mActionData;
@@ -129,10 +129,9 @@ public class TopsFragment extends BaseFragment {
         });
 
         // Control creating
-        mGalleryGridManager = new GalleryGridManager<Top>(getActivity(), Data.topsList);
+        mGalleryGridManager = new GalleryGridManager(getActivity(), Data.topsList);
         mGridAdapter = new TopsGridAdapter(getActivity(), mGalleryGridManager);
         mGallery.setAdapter(mGridAdapter);
-        mGallery.setOnScrollListener(mGalleryGridManager);
 
         updateData();
 
@@ -172,7 +171,6 @@ public class TopsFragment extends BaseFragment {
                         Data.topsList.addAll(Top.parse(response));
                         onUpdateSuccess(false);
                         mGridAdapter.notifyDataSetChanged();
-                        mGalleryGridManager.update();
                         mGallery.setVisibility(View.VISIBLE);
                     }
                 });
@@ -254,7 +252,6 @@ public class TopsFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         if (mGalleryGridManager != null) {
-            mGalleryGridManager.release();
             mGalleryGridManager = null;
         }
 

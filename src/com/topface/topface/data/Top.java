@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 
 /* Класс профиля окна топов */
-public class Top extends AbstractDataWithPhotos {
+public class Top {
     // Data
     public int uid; // идентификатор красивого пользователя 
     public String photo; // URL аватарки красивого пользователя
@@ -36,16 +36,6 @@ public class Top extends AbstractDataWithPhotos {
         }
 
         return userList;
-    }
-
-    public int getUid() {
-        return uid;
-    }
-
-    ;
-
-    public String getLargeLink() {
-        return photo;
     }
 
 }

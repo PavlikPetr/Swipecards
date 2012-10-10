@@ -6,16 +6,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 import com.topface.topface.Recycle;
+import com.topface.topface.utils.Debug;
 
-public class ThumbView extends ImageView {
+public class ThumbView extends ImageViewRemote {
     // Data
-    public int mPercent;
-    public int mAge;
-    public int mCity;
-    public String mName;
-    public boolean mOnline;
+    public int percent;
+    public int age;
+    public String name;
+    public boolean online;
     // Constants
     public static Paint s_PaintState;
     public static Paint s_PaintLine;
@@ -59,20 +58,21 @@ public class ThumbView extends ImageView {
         try {
             super.onDraw(canvas);
         } catch (Exception e) {
+            Debug.error(e);
         }
 
         Rect lineRect = new Rect(0, height - 32, width, height);
         canvas.drawRect(lineRect, s_PaintLine);
 
         // tops
-        if (mPercent != 0) {
+        if (percent != 0) {
             float x = lineRect.left + Recycle.s_Heart.getWidth() / 2;
             float y = (lineRect.height() - Recycle.s_Heart.getHeight()) / 2;
 
             // heart
             canvas.drawBitmap(Recycle.s_Heart, x, lineRect.top + y, s_PaintState);
             x = x * 2 + Recycle.s_Heart.getWidth();
-            canvas.drawText(mPercent + " %", x, (float) (lineRect.bottom - s_PaintText.getTextSize() / 1.5), s_PaintText);
+            canvas.drawText(percent + " %", x, (float) (lineRect.bottom - s_PaintText.getTextSize() / 1.5), s_PaintText);
 
             // likes
         } else {
@@ -80,10 +80,10 @@ public class ThumbView extends ImageView {
             float y = (lineRect.height() - Recycle.s_Online.getHeight()) / 2;
 
             // name
-            canvas.drawText(mName + ", " + mAge, lineRect.left + Recycle.s_Heart.getWidth() / 2, (float) (lineRect.bottom - s_PaintText.getTextSize() / 1.5), s_PaintText);
+            canvas.drawText(name + ", " + age, lineRect.left + Recycle.s_Heart.getWidth() / 2, (float) (lineRect.bottom - s_PaintText.getTextSize() / 1.5), s_PaintText);
 
             // is online
-            if (mOnline)
+            if (online)
                 canvas.drawBitmap(Recycle.s_Online, x, lineRect.top + y, s_PaintState);
             else
                 canvas.drawBitmap(Recycle.s_Offline, x, lineRect.top + y, s_PaintState);

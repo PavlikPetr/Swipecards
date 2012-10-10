@@ -1,192 +1,48 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import com.topface.topface.Data;
-import com.topface.topface.data.AbstractData;
-import com.topface.topface.data.AbstractDataWithPhotos;
-import com.topface.topface.data.Photo;
-import com.topface.topface.utils.http.Http;
+import com.topface.topface.data.Top;
+import com.topface.topface.ui.views.ImageViewRemote;
 
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /* Менеджер изображений, загрузает и кеширует изображения */
-//TODO: Убрать бесполезный GridManger, или просто оставить на нем функции по управлению сеткой и убрать по загрузке фоток
-@Deprecated
-public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnScrollListener {
-    //---------------------------------------------------------------------------
-    class Queue { // не используется
-        // Data
-        private HashMap<Integer, Bitmap> mQueue = new HashMap<Integer, Bitmap>(20);
+public class GalleryGridManager {
 
-        // Methods
-        public Bitmap get(int key) {
-            return mQueue.get(key);
-        }
-
-        public void put(int key, Bitmap value) {
-            mQueue.put(key, value);
-        }
-
-        public void clear() {
-            Debug.log(this, "memory cache clearing");
-            int size = mQueue.size();
-            for (int i = 0; i < size; i++) {
-                Bitmap bitmap = mQueue.get(i);
-                if (bitmap != null) {
-                    bitmap.recycle();
-                    mQueue.put(i, null); // хз
-                }
-            }
-            mQueue.clear();
-        }
-    }
-
-    //---------------------------------------------------------------------------
     // Data
-    private LinkedList<T> mDataList;
-    private ExecutorService mWorker;
-    // кэш
-    private MemoryCache mMemoryCache;
-    private StorageCache mStorageCache;
+    private LinkedList<Top> mDataList;
+
     // размеры фотографии в гриде
     public int mBitmapWidth;
     public int mBitmapHeight;
-    // скролинг
-    public boolean mBusy;
 
-    //---------------------------------------------------------------------------
-    public GalleryGridManager(Context context, LinkedList<T> dataList) {
+    public GalleryGridManager(Context context, LinkedList<Top> dataList) {
         mDataList = dataList;
-        mMemoryCache = new MemoryCache();
-        mStorageCache = new StorageCache(context, CacheManager.EXTERNAL_CACHE);
-        mWorker = Executors.newFixedThreadPool(3);
-
         int columnNumber = Data.GRID_COLUMN;
         mBitmapWidth = Device.getDisplay(context).getWidth() / (columnNumber);
         mBitmapHeight = (int) (mBitmapWidth * 1.25);
     }
 
-    //---------------------------------------------------------------------------
-    public void update() {
-        mMemoryCache.clear();
-    }
-
-    //---------------------------------------------------------------------------
-    public AbstractData get(int position) {
+    public Top get(int position) {
         return mDataList.get(position);
     }
 
-    //---------------------------------------------------------------------------
     public int size() {
         return mDataList.size();
     }
 
-    //---------------------------------------------------------------------------
-    public void getImage(final int position, final ImageView imageView) {
-        Bitmap bitmap = mMemoryCache.get(position);
-
-        if (bitmap != null) {
-            imageView.setImageBitmap(bitmap);
-        } else {
-            imageView.setImageBitmap(null); // хз ??
-            if (!mBusy) {
-                bitmap = mStorageCache.load(mDataList.get(position).photo.getSuitableLink(Photo.SIZE_960));
-                if (bitmap != null) {
-                    imageView.setImageBitmap(bitmap);
-                    mMemoryCache.put(position, bitmap);
-                } else
-                    loadingImages(position, imageView);
-            }
-        }
-        bitmap = null;
+    public void getImage(final int position, final ImageViewRemote imageView) {
+        setImageViewSize(imageView);
+        imageView.setRemoteSrc(mDataList.get(position).photo);
     }
 
-    //---------------------------------------------------------------------------
-    private void loadingImages(final int position, final ImageView imageView) {
-        mWorker.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (mBusy)
-                        return;
-
-                    // качаем            
-                    Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).photo.getSuitableLink(Photo.SIZE_960)); // getBigLink() одно и тоже в Tops
-
-                    if (rawBitmap == null)
-                        return;
-
-                    // вырезаем
-                    Bitmap clippedBitmap = Utils.clipAndScaleBitmap(rawBitmap, mBitmapWidth, mBitmapHeight);
-
-                    //rawBitmap.recycle();
-                    rawBitmap = null;
-
-                    // отображаем
-                    imagePost(imageView, clippedBitmap);
-
-                    // заливаем в кеш
-                    mMemoryCache.put(position, clippedBitmap);
-                    mStorageCache.save(mDataList.get(position).photo.getSuitableLink(Photo.SIZE_960), clippedBitmap);
-
-                    clippedBitmap = null;
-
-                } catch (Exception e) {
-                    Debug.log(this, "thread error:" + e);
-                }
-            }
-        });
-    }
-
-    //---------------------------------------------------------------------------
-    private void imagePost(final ImageView imageView, final Bitmap bitmap) {
-        imageView.post(new Runnable() {
-            @Override
-            public void run() {
-                imageView.setImageBitmap(bitmap);
-            }
-        });
-    }
-
-    //---------------------------------------------------------------------------
-    public void release() {
-        mWorker.shutdown();
-        mWorker = null;
-        mMemoryCache.clear();
-        mMemoryCache = null;
-        mStorageCache = null;
-        if (mDataList != null)
-            mDataList.clear();
-        mDataList = null;
-    }
-
-    //---------------------------------------------------------------------------
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-    }
-
-    //---------------------------------------------------------------------------
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        switch (scrollState) {
-            case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-                mBusy = true;
-                break;
-            case OnScrollListener.SCROLL_STATE_FLING:
-                mBusy = true;
-                break;
-            case OnScrollListener.SCROLL_STATE_IDLE:
-                mBusy = false;
-                view.invalidateViews(); //  ПРАВИЛЬНО ???
-                break;
+    protected void setImageViewSize(ImageView imageView) {
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imageView.getLayoutParams();
+        if (params.height != mBitmapHeight || params.width != mBitmapWidth) {
+            imageView.setLayoutParams(new RelativeLayout.LayoutParams(mBitmapWidth, mBitmapHeight));
         }
     }
-    //---------------------------------------------------------------------------
 }

@@ -32,10 +32,9 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SwapAnimation;
 
-public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragment {
+public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
-    protected boolean mHasUnread;
     private TextView mBackgroundText;
     protected DoubleBigButton mDoubleButton;
     protected boolean mIsUpdating;
@@ -49,8 +48,6 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         // Set title
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getTitle());
-
-        mHasUnread = isHasUnread();
 
         initBackground(view);
         initFilter(view);
@@ -76,8 +73,6 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
 
     protected abstract Drawable getBackIcon();
 
-    abstract protected boolean isHasUnread();
-
     abstract protected int getTitle();
 
     protected int getLayout() {
@@ -96,6 +91,7 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
 
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
         mListAdapter = getAdapter();
+        mListAdapter.setOnAvatarClickListener(this);
         mListView.setOnScrollListener(mListAdapter);
         mListView.getRefreshableView().setAdapter(mListAdapter);
     }
@@ -137,6 +133,18 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
     }
 
     protected void onFeedItemClick(AbstractFeedItem item) {
+        //Open chat activity
+        Intent intent = new Intent(getActivity(), ChatActivity.class);
+        intent.putExtra(ChatActivity.INTENT_USER_ID, item.uid);
+        intent.putExtra(ChatActivity.INTENT_USER_URL, item.photo.getSuitableLink(Photo.SIZE_64));
+        intent.putExtra(ChatActivity.INTENT_USER_NAME, item.first_name);
+        intent.putExtra(ChatActivity.INTENT_USER_SEX, item.sex);
+        intent.putExtra(ChatActivity.INTENT_USER_AGE, item.age);
+        intent.putExtra(ChatActivity.INTENT_USER_CITY, item.city_name);
+        startActivity(intent);
+    }
+
+    public void onAvatarClick(T item, View view) {
         // Open profile activity
         Intent intent = new Intent(getActivity(), UserProfileActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_URL, item.photo.getSuitableLink(Photo.SIZE_64));
@@ -214,7 +222,7 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
     @SuppressWarnings("deprecation")
     private void initFilter(View view) {
         final View controlGroup = view.findViewById(R.id.loControlsGroup);
-        View showToolsBarButton = view.findViewById(R.id.btnNavigationFilterBar);
+        View showToolsBarButton = view.findViewById(R.id.btnNavigationSettingsBar);
         showToolsBarButton.setVisibility(View.VISIBLE);
         showToolsBarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,14 +255,12 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
         mDoubleButton.setLeftListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHasUnread = false;
                 updateData(false);
             }
         });
         mDoubleButton.setRightListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHasUnread = true;
                 updateData(false);
             }
         });
@@ -316,4 +322,5 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
             mDoubleButton.setClickable(false);
         }
     }
+
 }

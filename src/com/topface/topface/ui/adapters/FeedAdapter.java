@@ -25,6 +25,7 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
     private long mLastUpdate = 0;
     public static final int LIMIT = 40;
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
+    private OnAvatarClickListener<T> mOnAvatarClickListener;
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context;
@@ -116,13 +117,14 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
             holder = (FeedViewHolder) convertView.getTag();
         }
 
+        T item = getItem(position);
+
         //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
         if (holder == null) {
             convertView = getInflater().inflate(getItemLayout(), null, false);
-            holder = getEmptyHolder(convertView);
+            holder = getEmptyHolder(convertView, item);
         }
 
-        T item = getItem(position);
         if (item != null) {
             holder.avatar.setPhoto(item.photo);
             holder.name.setText(getName(item));
@@ -244,10 +246,19 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
         return item;
     }
 
-    protected FeedViewHolder getEmptyHolder(View convertView) {
+    protected FeedViewHolder getEmptyHolder(View convertView, final T item) {
         FeedViewHolder holder = new FeedViewHolder();
 
         holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.ivAvatar);
+        //Слушаем событие клика на автарку
+        if (mOnAvatarClickListener != null) {
+            holder.avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnAvatarClickListener.onAvatarClick(item, v);
+                }
+            });
+        }
         holder.name = (TextView) convertView.findViewById(R.id.tvName);
         holder.city = (TextView) convertView.findViewById(R.id.tvCity);
         holder.online = (ImageView) convertView.findViewById(R.id.ivOnline);
@@ -269,5 +280,13 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
 
     public boolean isNeedUpdate() {
         return isEmpty() || (System.currentTimeMillis() > mLastUpdate + CACHE_TIMEOUT);
+    }
+
+    public void setOnAvatarClickListener(OnAvatarClickListener<T> listener) {
+        mOnAvatarClickListener = listener;
+    }
+
+    public static interface OnAvatarClickListener<T> {
+        public void onAvatarClick(T item, View view);
     }
 }

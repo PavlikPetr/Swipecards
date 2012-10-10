@@ -7,17 +7,11 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.MutualListAdapter;
-import com.topface.topface.utils.CacheProfile;
 
 public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected Drawable getBackIcon() {
         return getResources().getDrawable(R.drawable.mutual_back_icon);
-    }
-
-    @Override
-    protected boolean isHasUnread() {
-        return CacheProfile.unread_mutual > 0;
     }
 
     @Override

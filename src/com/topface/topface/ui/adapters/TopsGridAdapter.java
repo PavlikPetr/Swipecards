@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import com.topface.topface.R;
-import com.topface.topface.data.Top;
 import com.topface.topface.ui.views.ThumbView;
 import com.topface.topface.utils.GalleryGridManager;
 
@@ -15,17 +14,16 @@ public class TopsGridAdapter extends BaseAdapter {
     // class ViewHolder
     //---------------------------------------------------------------------------
     static class ViewHolder {
-        ThumbView mThumbView;
+        ThumbView thumbView;
     }
 
-    ;
     //---------------------------------------------------------------------------
     // Data
     private LayoutInflater mInflater;
-    private GalleryGridManager<Top> mGalleryManager;
+    private GalleryGridManager mGalleryManager;
 
     //---------------------------------------------------------------------------
-    public TopsGridAdapter(Context context, GalleryGridManager<Top> galleryManager) {
+    public TopsGridAdapter(Context context, GalleryGridManager galleryManager) {
         mInflater = LayoutInflater.from(context);
         mGalleryManager = galleryManager;
     }
@@ -39,21 +37,21 @@ public class TopsGridAdapter extends BaseAdapter {
     //---------------------------------------------------------------------------
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
 
         if (convertView == null) {
-            convertView = (ViewGroup) mInflater.inflate(R.layout.item_grid_gallery, null, false);
+            convertView = mInflater.inflate(R.layout.item_grid_gallery, null, false);
             holder = new ViewHolder();
-            holder.mThumbView = (ThumbView) convertView.findViewById(R.id.ivTG);
-            holder.mThumbView.setMinimumWidth(mGalleryManager.mBitmapWidth);
-            holder.mThumbView.setMinimumHeight(mGalleryManager.mBitmapHeight);
+            holder.thumbView = (ThumbView) convertView.findViewById(R.id.ivTG);
+            holder.thumbView.setMinimumWidth(mGalleryManager.mBitmapWidth);
+            holder.thumbView.setMinimumHeight(mGalleryManager.mBitmapHeight);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        holder.mThumbView.mPercent = ((Top) mGalleryManager.get(position)).liked;
+        holder.thumbView.percent = mGalleryManager.get(position).liked;
 
-        mGalleryManager.getImage(position, holder.mThumbView);
+        mGalleryManager.getImage(position, holder.thumbView);
 
         return convertView;
     }

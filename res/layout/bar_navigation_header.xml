@@ -89,14 +89,6 @@
             android:visibility="visible">
 
         <Button
-                android:id="@+id/btnNavigationFilterBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/navigation_filter_selector"
-                android:visibility="gone"/>
-
-        <Button
                 android:id="@+id/btnNavigationSettingsBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.*;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
@@ -279,7 +278,6 @@ public class FragmentSwitchController extends ViewGroup {
                 }
 
                 if (xDiff > mTouchSlop && xDiff > yDiff) {
-                    Log.d("OLOLO", "SLOP");
                     startDragging(x);
                     if (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL) {
                         mFragmentSwitchListener.beforeExpanding();
@@ -300,7 +298,6 @@ public class FragmentSwitchController extends ViewGroup {
                 break;
         }
 
-        Log.d("OLOLO", mIsDragging ? "DR true" : "DR false");
         return mIsDragging;
     }
 

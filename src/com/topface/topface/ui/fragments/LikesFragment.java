@@ -7,13 +7,8 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LikesListAdapter;
-import com.topface.topface.utils.CacheProfile;
 
 public class LikesFragment extends FeedFragment<FeedLike> {
-    @Override
-    protected boolean isHasUnread() {
-        return CacheProfile.unread_likes > 0;
-    }
 
     @Override
     protected int getTitle() {

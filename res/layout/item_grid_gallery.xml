@@ -12,6 +12,7 @@
     -->
 
     <com.topface.topface.ui.views.ThumbView
+            android:scaleType="centerCrop"
             android:id="@+id/ivTG"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>

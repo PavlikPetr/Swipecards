@@ -60,8 +60,8 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     }
 
     @Override
-    protected FeedViewHolder getEmptyHolder(View convertView) {
-        FeedViewHolder holder = super.getEmptyHolder(convertView);
+    protected FeedViewHolder getEmptyHolder(View convertView, FeedDialog item) {
+        FeedViewHolder holder = super.getEmptyHolder(convertView, item);
         holder.text = (TextView) convertView.findViewById(R.id.tvText);
         holder.time = (TextView) convertView.findViewById(R.id.tvTime);
         return holder;
