@@ -185,6 +185,7 @@
     <string name="edit_status">Статус</string>
     <string name="edit_set_as_main">Сделать главной</string>
     <string name="edit_delete">Удалить</string>
+    <string name="edit_restore">Восстановить</string>
 
     <!-- Album, Ero Album Activity -->
     <string name="album_header_title">Альбом</string>

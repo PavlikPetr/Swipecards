@@ -47,5 +47,18 @@
         android:background="@drawable/edit_btn_delete_photo_selector"        
         android:text="@string/edit_delete"
         />
+    
+    <Button
+        android:id="@+id/btnRestorePhoto"
+        style="@style/ButtonsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/edit_btn_set_as_main_selector"        
+        android:text="@string/edit_restore"
+        android:visibility="invisible"
+        />
 
 </RelativeLayout>

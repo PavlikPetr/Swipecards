@@ -156,6 +156,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     mProfilePhoto.setPhoto(CacheProfile.photo);
                     mAdapter.notifyDataSetChanged();
                     break;
+                case EditContainerActivity.INTENT_EDIT_ALBUM:
+                	mProfilePhoto.setPhoto(CacheProfile.photo);
+                    mAdapter.notifyDataSetChanged();
+                    break;
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
                     Bundle extras = data.getExtras();
                     final String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
