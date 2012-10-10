@@ -192,6 +192,8 @@
     <string name="edit_name">Name</string>
     <string name="edit_age">Age</string>
     <string name="edit_status">Status</string>
+    <string name="edit_set_as_main">Set as main</string>
+    <string name="edit_delete">Delete</string>
 
     <!-- Album, Ero Album Activity -->
     <string name="album_header_title">Album</string>
