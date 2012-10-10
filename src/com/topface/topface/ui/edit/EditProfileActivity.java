@@ -185,7 +185,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                             Toast.makeText(EditProfileActivity.this, getString(R.string.general_data_error),
                                     Toast.LENGTH_SHORT).show();
                         }
-                    }).exec();
+                    }).exec();                
                 default:
                     break;
             }
