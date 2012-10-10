@@ -45,10 +45,10 @@ public class Photos extends LinkedList<Photo> {
         return size() >= index + 1;
     }
 
-    protected Photo getByPhotoId(int photoId) {
+    public Photo getByPhotoId(int photoId) {
         Photo result = null;
         for (Photo photo : this) {
-            if (photoId == photo.getId()) {
+            if (photo != null && photoId == photo.getId()) {
                 result = photo;
                 break;
             }

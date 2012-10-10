@@ -71,8 +71,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         editButton.setOnClickListener(this);
 
         // Avatar, Name, City
-        mUserAvatar = (ImageViewRemote) view.findViewById(R.id.ivUserAvatar);
-        mUserAvatar.setPhoto(CacheProfile.photo);
+        mUserAvatar = (ImageViewRemote) view.findViewById(R.id.ivUserAvatar);        
         mUserName = (TextView) view.findViewById(R.id.ivUserName);
         mUserName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
         mUserCity = (TextView) view.findViewById(R.id.ivUserCity);
@@ -141,6 +140,8 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
                         CacheProfile.background_id
                 )
         );
+        
+        mUserAvatar.setPhoto(CacheProfile.photo);
     }
 
     private void layoutBuyButton() {

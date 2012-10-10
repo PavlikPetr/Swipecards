@@ -2,38 +2,55 @@ package com.topface.topface.ui.edit;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.MainRequest;
+import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 
-public class EditProfilePhotoFragment extends AbstractEditFragment implements OnItemClickListener {
+public class EditProfilePhotoFragment extends AbstractEditFragment {
 
     private ProfilePhotoGridAdapter mPhotoGridAdapter;
     private int mLastSelectedId;
     private int mSelectedId;
 
     private GridView mPhotoGridView;
+    private Photos mPhotoLinks;
+    
+    private AddPhotoHelper mAddPhotoHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSelectedId = CacheProfile.photo.getId();
         mLastSelectedId = mSelectedId;
-        mPhotoGridAdapter = new EditProfileDrigAdapter(
+        
+        mPhotoLinks = new Photos();
+        mPhotoLinks.add(null);
+        if (CacheProfile.photos != null) {
+            mPhotoLinks.addAll(CacheProfile.photos);
+        }
+        mPhotoGridAdapter = new EditProfileGrigAdapter(
                 getActivity().getApplicationContext(), CacheProfile.photos);
+        
+        mAddPhotoHelper = new AddPhotoHelper(this);
+        mAddPhotoHelper.setOnResultHandler(mHandler);
     }
 
     @Override
@@ -46,15 +63,15 @@ public class EditProfilePhotoFragment extends AbstractEditFragment implements On
         subTitle.setVisibility(View.VISIBLE);
         subTitle.setText(R.string.edit_profile_photo);
 
-        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setText(getResources().getString(R.string.navigation_save));
-        mSaveButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                saveChanges(null);
-            }
-        });
+//        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
+//        mSaveButton.setText(getResources().getString(R.string.navigation_save));
+//        mSaveButton.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                saveChanges(null);
+//            }
+//        });
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
         getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
@@ -71,10 +88,11 @@ public class EditProfilePhotoFragment extends AbstractEditFragment implements On
         mPhotoGridView = (GridView) root.findViewById(R.id.fragmentGrid);
         mPhotoGridView.setNumColumns(3);
         mPhotoGridView.setAdapter(mPhotoGridAdapter);
-        mPhotoGridView.setOnItemClickListener(this);
+        mPhotoGridView.setOnItemClickListener(mOnItemClickListener);
 
         TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
         title.setVisibility(View.INVISIBLE);
+        
 
         return root;
     }
@@ -85,55 +103,77 @@ public class EditProfilePhotoFragment extends AbstractEditFragment implements On
     }
 
     @Override
-    protected void saveChanges(Handler handler) {
-        prepareRequestSend();
-        MainRequest request = new MainRequest(getActivity().getApplicationContext());
-        registerRequest(request);
-        request.photoid = mSelectedId;
-        request.callback(new ApiHandler() {
-
-            @Override
-            public void success(ApiResponse response) throws NullPointerException {
-                //TODO: Обновлять текущую автарку пользователя
-                getActivity().setResult(Activity.RESULT_OK);
-                mSelectedId = mLastSelectedId;
-                finishRequestSend();
-            }
-
-            @Override
-            public void fail(int codeError, ApiResponse response) throws NullPointerException {
-                getActivity().setResult(Activity.RESULT_CANCELED);
-                finishRequestSend();
-            }
-        }).exec();
+    protected void saveChanges(final Handler handler) {
+    	if (hasChanges()) {
+	        prepareRequestSend();
+	        MainRequest request = new MainRequest(getActivity().getApplicationContext());
+	        registerRequest(request);
+	        request.photoid = mSelectedId;
+	        request.callback(new ApiHandler() {
+	
+	            @Override
+	            public void success(ApiResponse response) throws NullPointerException {
+	                CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedId);
+	                getActivity().setResult(Activity.RESULT_OK);
+	                mSelectedId = mLastSelectedId;                
+	                finishRequestSend();
+	                handler.sendEmptyMessage(0);
+	            }
+	
+	            @Override
+	            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+	                getActivity().setResult(Activity.RESULT_CANCELED);
+	                finishRequestSend();
+	                handler.sendEmptyMessage(0);
+	            }
+	        }).exec();
+    	} else {
+    		handler.sendEmptyMessage(0);
+    	}
     }
 
-    class EditProfileDrigAdapter extends ProfilePhotoGridAdapter {
+    class EditProfileGrigAdapter extends ProfilePhotoGridAdapter {
 
-        public EditProfileDrigAdapter(Context context,
+        public EditProfileGrigAdapter(Context context,
                                       Photos photoLinks) {
             super(context, photoLinks);
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
+            Photo item = getItem(position);            
 
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_user_gallery, null, false);
+                convertView = mInflater.inflate(R.layout.item_edit_user_gallery, null, false);
                 holder = new ViewHolder();
                 holder.photo = (ImageViewRemote) convertView.findViewById(R.id.ivPhoto);
-                holder.selector = (ImageView) convertView.findViewById(R.id.ivSelector);
+                holder.mBtnSetAsMain = (Button) convertView.findViewById(R.id.btnSetAsMain);
+                holder.mBtnDelete = (Button) convertView.findViewById(R.id.btnDeletePhoto);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-
-            holder.photo.setPhoto(getItem(position));
-            if (mLastSelectedId == position) {
-                holder.selector.setVisibility(View.VISIBLE);
+            
+            if (position == 0) {
+                holder.photo.setBackgroundResource(R.drawable.profile_add_photo_selector);
+                holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
+                holder.mBtnDelete.setVisibility(View.INVISIBLE);
             } else {
-                holder.selector.setVisibility(View.INVISIBLE);
+            	final int itemId = item.getId();
+                holder.photo.setPhoto(item);
+                if (mLastSelectedId == item.getId()) {
+                	holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
+                } else {
+                	holder.mBtnSetAsMain.setVisibility(View.VISIBLE);
+                	holder.mBtnSetAsMain.setOnClickListener(new OnClickListener() {						
+						@Override
+						public void onClick(View v) {
+							mLastSelectedId = itemId;
+							notifyDataSetChanged();
+						}
+					});
+                }
             }
 
             return convertView;
@@ -141,16 +181,10 @@ public class EditProfilePhotoFragment extends AbstractEditFragment implements On
 
         class ViewHolder {
             ImageViewRemote photo;
-            ImageView selector;
+            Button mBtnDelete;
+            Button mBtnSetAsMain;
         }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-        mLastSelectedId = position;
-        mPhotoGridAdapter.notifyDataSetChanged();
-        refreshSaveState();
-    }
+    }   
 
     @Override
     protected void lockUi() {
@@ -162,5 +196,33 @@ public class EditProfilePhotoFragment extends AbstractEditFragment implements On
         mPhotoGridView.setEnabled(true);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
+    }
+
+    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (position == 0) {
+                mAddPhotoHelper.addPhoto();
+                return;
+            }
+            Data.photos = CacheProfile.photos;            
+        }
+    };
+    
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+                Toast.makeText(getActivity(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+                Toast.makeText(getActivity(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
 }
