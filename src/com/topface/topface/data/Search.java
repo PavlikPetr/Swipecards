@@ -47,6 +47,7 @@ public class Search extends AbstractDataWithPhotos {
                     search.online = item.optBoolean("online");
                     search.sex = item.optInt("sex");
                     search.mutual = item.optBoolean("mutual");
+                    search.photos = Photos.parse(item.getJSONArray("photos"));
 
                     // avatars
                     JSONArray avatars = item.getJSONArray("avatars");
@@ -82,15 +83,8 @@ public class Search extends AbstractDataWithPhotos {
         return uid;
     }
 
-    ;
-
-    @Override
-    public String getLargeLink() {
-        return avatars_big[0];
-    }
-
-    @Override
     public String getSmallLink() {
+        //TODO: Переписать на нормальные Photo объекты
         return avatars_small[0];
     }
 

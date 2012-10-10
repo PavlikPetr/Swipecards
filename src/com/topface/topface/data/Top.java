@@ -44,19 +44,8 @@ public class Top extends AbstractDataWithPhotos {
 
     ;
 
-    public String getOriginalLink() {
-        return photo;
-    }
-
     public String getLargeLink() {
         return photo;
     }
 
-    public String getNormalLink() {
-        return photo;
-    }
-
-    public String getSmallLink() {
-        return photo;
-    }
 }

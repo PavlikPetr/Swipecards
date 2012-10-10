@@ -4,24 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.data.Photos;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-
-import java.util.HashMap;
 
 public class PhotoSwitcherActivity extends Activity {
 
     private TextView mCounter;
     private ViewGroup mHeaderBar;
     private ImageSwitcher mImageSwitcher;
-    private SparseArray<HashMap<String, String>> mPhotoLinks;
+    private Photos mPhotoLinks;
 
     public static final String INTENT_OWNER = "owner";
     public static final String INTENT_USER_ID = "user_id";
@@ -55,7 +53,7 @@ public class PhotoSwitcherActivity extends Activity {
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
 
-        mPhotoLinks = isOwner ? CacheProfile.photoLinks : Data.photoAlbum;
+        mPhotoLinks = isOwner ? CacheProfile.photos : Data.photos;
 
         mImageSwitcher.setData(mPhotoLinks);
         mImageSwitcher.setCurrentItem(position, false);

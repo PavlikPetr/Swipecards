@@ -96,22 +96,6 @@ public class Gift extends AbstractDataWithPhotos implements IListLoader {
         return result;
     }
 
-    @Override
-    public String getOriginalLink() {
-        return link;
-    }
-
-    @Override
-    public String getSmallLink() {
-        return link;
-    }
-
-    @Override
-    public String getNormalLink() {
-        return link;
-    }
-
-    @Override
     public String getLargeLink() {
         return link;
     }

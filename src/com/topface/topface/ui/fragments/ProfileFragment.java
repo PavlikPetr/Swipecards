@@ -20,15 +20,15 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
 public class ProfileFragment extends BaseFragment implements OnClickListener {
 
-    private ImageView mUserAvatar;
+    private ImageViewRemote mUserAvatar;
     private TextView mUserName;
     private TextView mUserCity;
     private ViewGroup mUserProfileHeader;
@@ -71,8 +71,8 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         editButton.setOnClickListener(this);
 
         // Avatar, Name, City
-        mUserAvatar = (ImageView) view.findViewById(R.id.ivUserAvatar);
-        Http.imageLoader(CacheProfile.getAvatarLink(), mUserAvatar);
+        mUserAvatar = (ImageViewRemote) view.findViewById(R.id.ivUserAvatar);
+        mUserAvatar.setPhoto(CacheProfile.photo);
         mUserName = (TextView) view.findViewById(R.id.ivUserName);
         mUserName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
         mUserCity = (TextView) view.findViewById(R.id.ivUserCity);

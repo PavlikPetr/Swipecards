@@ -44,7 +44,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         // Navigation bar
         ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-        ((Button) findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         Button btnBackToProfile = (Button) findViewById(R.id.btnNavigationBackWithText);
         btnBackToProfile.setText(R.string.navigation_back_profile);
         btnBackToProfile.setVisibility(View.VISIBLE);
@@ -73,7 +73,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         mProfilePhoto = (ImageViewRemote) header.findViewById(R.id.ivProfilePhoto);
         mProfilePhoto.setOnClickListener(this);
-        mProfilePhoto.setRemoteSrc(CacheProfile.getAvatarLink());
+        mProfilePhoto.setPhoto(CacheProfile.photo);
     }
 
     private void initEditItems() {
@@ -130,9 +130,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 finish();
                 break;
             case R.id.ivProfilePhoto:
-            	startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),
-            			EditContainerActivity.INTENT_EDIT_PROFILE_PHOTO);
-            	break;
+                startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),
+                        EditContainerActivity.INTENT_EDIT_PROFILE_PHOTO);
+                break;
         }
     }
 
@@ -153,7 +153,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     mAdapter.notifyDataSetChanged();
                     break;
                 case EditContainerActivity.INTENT_EDIT_PROFILE_PHOTO:
-                    mProfilePhoto.setRemoteSrc(CacheProfile.getAvatarLink());
+                    mProfilePhoto.setPhoto(CacheProfile.photo);
                     break;
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
                     Bundle extras = data.getExtras();
@@ -185,7 +185,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                             Toast.makeText(EditProfileActivity.this, getString(R.string.general_data_error),
                                     Toast.LENGTH_SHORT).show();
                         }
-                    }).exec();                
+                    }).exec();
                 default:
                     break;
             }
@@ -355,7 +355,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     ProfileBackgrounds.getBackgroundResource(getApplicationContext(),
                             CacheProfile.background_id));
             int w = getResources().getDrawable(R.drawable.edit_icon_photo).getIntrinsicWidth();
-            int h = getResources().getDrawable(R.drawable.edit_icon_photo).getIntrinsicHeight();;
+            int h = getResources().getDrawable(R.drawable.edit_icon_photo).getIntrinsicHeight();
+            ;
             BitmapDrawable resized = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
                     original, w, h, true));
 
@@ -374,8 +375,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         @Override
         public String getTitle() {
             int quantity = 0;
-            if (CacheProfile.photoLinks != null) {
-                quantity = CacheProfile.photoLinks.size();
+            if (CacheProfile.photos != null) {
+                quantity = CacheProfile.photos.size();
             }
             return quantity + " " + getResources().getString(R.string.edit_album_photos);
         }

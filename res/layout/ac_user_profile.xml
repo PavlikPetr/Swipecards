@@ -21,46 +21,56 @@
             <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="60dp">
+
+                <com.topface.topface.ui.views.ImageViewRemote
+                        xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+                        android:id="@+id/ivUserAvatar"
+                        ivr:postProcessor="rounded"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="6dp"
+                        android:layout_width="106dp"
+                        android:layout_height="108dp"
+                        android:paddingTop="5.5dp"
+                        android:paddingLeft="4.5dp"
+                        android:paddingRight="4.5dp"
+                        android:paddingBottom="5.5dp"
+                        android:background="@drawable/avatar_frame_center"/>
 
                 <RelativeLayout
-                        android:id="@+id/loUserAvatarGroup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="6dp">
-
-                    <ImageView
-                            android:id="@+id/ivUserAvatar"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/ivUserAvatar">
+                    <TextView
+                            android:id="@+id/ivUserName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:background="@drawable/avatar_frame"/>
+                            android:textSize="25sp"
+                            android:textColor="#FFFFFF"
+                            android:maxLines="2"
+                            android:shadowColor="#222222"
+                            android:shadowRadius="1"
+                            android:shadowDx="0"
+                            android:shadowDy="1"
+                            android:ellipsize="end"/>
 
-                    <ImageView
+                    <TextView
+                            android:id="@+id/ivUserCity"
+                            android:layout_below="@id/ivUserName"
+                            android:textSize="12sp"
+                            android:shadowColor="#222222"
+                            android:shadowRadius="1"
+                            android:shadowDx="0"
+                            android:shadowDy="1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/avatar_frame"/>
-
+                            android:textColor="#FFFFFF"
+                            />
                 </RelativeLayout>
-
-                <TextView
-                        android:id="@+id/ivUserName"
-                        android:layout_toRightOf="@id/loUserAvatarGroup"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textColor="#FFFFFF"
-                        android:text=""/>
-
-                <TextView
-                        android:id="@+id/ivUserCity"
-                        android:layout_below="@id/ivUserName"
-                        android:layout_toRightOf="@id/loUserAvatarGroup"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#FFFFFF"
-                        android:text=""/>
 
             </RelativeLayout>
 

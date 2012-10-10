@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import com.topface.topface.R;
 import com.topface.topface.data.Leaders;
-import com.topface.topface.data.UserPhotos;
+import com.topface.topface.data.Photo;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.imageloader.RoundPostProcessor;
 
@@ -64,9 +64,9 @@ public class LeadersAdapter extends BaseAdapter {
         return view;
     }
 
-    private void setLeaderAvatar(UserPhotos photo, final ImageView avatar) {
+    private void setLeaderAvatar(Photo photo, final ImageView avatar) {
         DefaultImageLoader.getInstance().displayImage(
-                photo.getSuitableLink(UserPhotos.SIZE_128),
+                photo.getSuitableLink(Photo.SIZE_128),
                 avatar,
                 mPostProcessor
         );

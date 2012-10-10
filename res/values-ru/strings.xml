@@ -25,7 +25,7 @@
     <string name="auth_btn_fb">Войти через Facebook</string>
 
     <!-- Topface (Dashboard) Activity -->
-    <string name="dashbrd_btn_dating">Оценка фото</string>
+    <string name="dashbrd_btn_dating">Знакомства</string>
     <string name="dashbrd_btn_likes">Я нравлюсь</string>
     <string name="dashbrd_btn_sympathy">Симпатия</string>
     <string name="dashbrd_btn_chat">Диалоги</string>
@@ -500,5 +500,6 @@
 
     <string name="profile_settings">Настройки</string>
     <string name="profile_settings_summary">Настройки приложения</string>
+    <string name="fill_button">Заполнить</string>
 
 </resources>

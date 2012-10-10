@@ -10,10 +10,10 @@ import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.FragmentMenu;
-import com.topface.topface.ui.fragments.FragmentMenu.FragmentMenuListener;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
+import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -22,7 +22,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 public class NavigationActivity extends FragmentActivity implements View.OnClickListener {
 
     private FragmentManager mFragmentManager;
-    private FragmentMenu mFragmentMenu;
+    private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
     private SharedPreferences mPreferences;
 
@@ -36,7 +36,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 
         mFragmentManager = getSupportFragmentManager();
 
-        mFragmentMenu = (FragmentMenu) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
 
         mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);

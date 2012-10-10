@@ -5,23 +5,15 @@ import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.SparseArray;
-import android.view.GestureDetector;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ImageView;
+import android.view.*;
 import com.topface.topface.R;
-import com.topface.topface.utils.PhotoLinksResolver;
-import com.topface.topface.utils.http.Http;
-
-import java.util.HashMap;
+import com.topface.topface.data.Photos;
 
 public class ImageSwitcher extends ViewPager {
 
     private GestureDetector mGestureDetector;
     private ImageSwitcherAdapter mImageSwitcherAdapter;
-    private SparseArray<HashMap<String, String>> mPhotoLinks;
+    private Photos mPhotoLinks;
     private OnClickListener mOnClickListener;
 
     private Handler mUpdatedHandler;
@@ -36,14 +28,14 @@ public class ImageSwitcher extends ViewPager {
     }
 
     private void init() {
-        mGestureDetector = new GestureDetector(mOnGestureListener);
+        mGestureDetector = new GestureDetector(getContext(), mOnGestureListener);
         mImageSwitcherAdapter = new ImageSwitcherAdapter();
         setAdapter(mImageSwitcherAdapter);
         setOnTouchListener(mOnTouchListener);
-        setPageMargin(20);
+        setPageMargin(40);
     }
 
-    public void setData(SparseArray<HashMap<String, String>> photoLinks) {
+    public void setData(Photos photoLinks) {
         mPhotoLinks = photoLinks;
         this.setAdapter(mImageSwitcherAdapter);
     }
@@ -91,33 +83,26 @@ public class ImageSwitcher extends ViewPager {
 
         @Override
         public int getCount() {
-            if (mPhotoLinks == null)
-                return 0;
-            return mPhotoLinks.size();
+            return mPhotoLinks == null ? 0 : mPhotoLinks.size();
         }
 
-        public Object instantiateItem(View pager, int position) {
+        public Object instantiateItem(ViewGroup pager, int position) {
             LayoutInflater inflater = (LayoutInflater) pager.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_album_gallery, null);
-            ImageView imageView = (ImageView) view.findViewById(R.id.ivPreView);
-            String url = mPhotoLinks.get(mPhotoLinks.keyAt(position)).get(PhotoLinksResolver.SIZE_ORIGIN);
-            if (mUpdatedHandler != null) {
-                Http.imageLoader(url, imageView, mUpdatedHandler);
-            } else {
-                Http.imageLoader(url, imageView);
-            }
-            ((ViewPager) pager).addView(view);
+            ImageViewRemote imageView = (ImageViewRemote) view.findViewById(R.id.ivPreView);
+            imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler);
+            pager.addView(view);
             return view;
         }
 
         @Override
-        public void destroyItem(View view, int position, Object object) {
-            ((ViewPager) view).removeView((View) object);
+        public void destroyItem(ViewGroup view, int position, Object object) {
+            view.removeView((View) object);
         }
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == (View) object;
+            return view == object;
         }
     }
 }

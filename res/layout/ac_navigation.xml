@@ -5,7 +5,7 @@
                 android:background="@drawable/im_list_bkgrd">
 
     <!-- Left Menu -->
-    <fragment class="com.topface.topface.ui.fragments.FragmentMenu"
+    <fragment class="com.topface.topface.ui.fragments.MenuFragment"
               android:id="@+id/fragment_menu"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"/>

@@ -29,7 +29,7 @@
 
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_profile">Profile</string>
-    <string name="dashbrd_btn_dating">Rating photos</string>
+    <string name="dashbrd_btn_dating">Dating</string>
     <string name="dashbrd_btn_likes">Likes you</string>
     <string name="dashbrd_btn_chat">My messages</string>
     <string name="dashbrd_btn_tops">Most popular</string>
@@ -407,5 +407,6 @@
     <string name="settings_payment_problems">Problems with payment</string>
     <string name="settings_cooperation">Cooperation</string>
     <string name="settings_feedback_success_msg">Thank you, message was sent succesfully</string>
+    <string name="fill_button">Fill</string>
 
 </resources>

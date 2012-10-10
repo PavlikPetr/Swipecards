@@ -23,7 +23,11 @@ public class HistoryRequest extends ApiRequest {
         try {
             root.put("service", service);
             root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("userid", userid).put("limit", limit).put("to", to));
+            JSONObject data = new JSONObject().put("userid", userid).put("limit", limit);
+            if (to > 0) {
+                data.put("to", to);
+            }
+            root.put("data", data);
         } catch (JSONException e) {
             Debug.log(this, "Wrong request compiling: " + e);
         }

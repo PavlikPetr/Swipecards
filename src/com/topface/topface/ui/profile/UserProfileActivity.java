@@ -14,18 +14,18 @@ import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.*;
 import com.topface.topface.R;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.fragments.GiftsFragment;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.http.Http;
 
 public class UserProfileActivity extends FragmentActivity {
 
@@ -33,7 +33,7 @@ public class UserProfileActivity extends FragmentActivity {
     private int mMutualId;
     private boolean mChatInvoke;
 
-    private ImageView mUserAvatar;
+    private ImageViewRemote mUserAvatar;
     private TextView mUserName;
     private TextView mUserCity;
 
@@ -88,7 +88,7 @@ public class UserProfileActivity extends FragmentActivity {
         mRateController = new RateController(this);
         mLockerView = (LockerView) findViewById(R.id.llvProfileLoading);
 
-        mUserAvatar = (ImageView) findViewById(R.id.ivUserAvatar);
+        mUserAvatar = (ImageViewRemote) findViewById(R.id.ivUserAvatar);
         mUserName = (TextView) findViewById(R.id.ivUserName);
         mUserCity = (TextView) findViewById(R.id.ivUserCity);
 
@@ -139,19 +139,16 @@ public class UserProfileActivity extends FragmentActivity {
 
     private void getUserProfile() {
         mLockerView.setVisibility(View.VISIBLE);
-        UserRequest userRequest = new UserRequest(getApplicationContext());
-        userRequest.uids.add(mUserId);
+        UserRequest userRequest = new UserRequest(mUserId, getApplicationContext());
         userRequest.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
                 mUser = User.parse(mUserId, response);
-                Bitmap rawBitmap = Http.bitmapLoader(mUser.getLargeLink());
-                final Bitmap avatar = Utils.getRoundedCornerBitmapByMask(rawBitmap, mMask);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mLockerView.setVisibility(View.INVISIBLE);
-                        mUserAvatar.setImageBitmap(avatar);
+                        mUserAvatar.setPhoto(mUser.photo);
                         mUserName.setText(mUser.first_name + ", " + mUser.age);
                         mUserCity.setText(mUser.city_name);
                         if (mFormFragment != null)
@@ -187,7 +184,7 @@ public class UserProfileActivity extends FragmentActivity {
                 case R.id.btnUserChat:
                     Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
                     intent.putExtra(ChatActivity.INTENT_USER_ID, mUser.uid);
-                    intent.putExtra(ChatActivity.INTENT_USER_URL, mUser.getSmallLink());
+                    intent.putExtra(ChatActivity.INTENT_USER_URL, mUser.photo.getSuitableLink(Photo.SIZE_64));
                     intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);
                     intent.putExtra(ChatActivity.INTENT_USER_SEX, mUser.sex);
                     intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);

@@ -238,7 +238,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         updateData(true);
                         return;
                     } else {
-                    	lockControls();
+                        lockControls();
                         mRateController.onRate(currentSearch.uid, 10);
                     }
                     currentSearch.rated = true;
@@ -252,7 +252,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         updateData(true);
                         return;
                     } else {
-                    	lockControls();
+                        lockControls();
                         mRateController.onRate(currentSearch.uid, 9);
                     }
                     currentSearch.rated = true;
@@ -351,7 +351,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleDelight : singleDelight, null, null);
 
         //photos
-        mImageSwitcher.setData(currUser.photoLinks);
+        mImageSwitcher.setData(currUser.photos);
         mImageSwitcher.setCurrentItem(0, true);
         mCurrentPhotoPrevPos = 0;
         setCounter(mCurrentPhotoPrevPos);
@@ -402,7 +402,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         SharedPreferences.Editor editor = mPreferences.edit();
 
-        if (mNewbie.free_energy != true && CacheProfile.isNewbie == true) {
+        if (!mNewbie.free_energy && CacheProfile.isNewbie) {
             mNewbie.free_energy = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_FREE_ENERGY, true);
             mNewbieView.setBackgroundResource(R.drawable.newbie_free_energy);
@@ -410,7 +410,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mNewbieView.setVisibility(View.VISIBLE);
             mNewbieView.startAnimation(mAlphaAnimation);
 
-        } else if (mNewbie.rate_it != true) {
+        } else if (!mNewbie.rate_it) {
             mNewbie.rate_it = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_RATE_IT, true);
             mNewbieView.setBackgroundResource(R.drawable.newbie_rate_it);
@@ -423,7 +423,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
             });
 
-        } else if (mNewbie.buy_energy != true && CacheProfile.power <= 30) {
+        } else if (!mNewbie.buy_energy && CacheProfile.power <= 30) {
             mNewbie.buy_energy = true;
             editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_BUY_ENERGY, true);
             mNewbieView.setBackgroundResource(R.drawable.newbie_buy_energy);
@@ -444,8 +444,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         Search currentSearch = getCurrentUser();
         if (currentSearch != null) {
             mCounter.setText((position + 1) + "/" + currentSearch.avatars_big.length);
+            mCounter.setVisibility(View.VISIBLE);
         } else {
             mCounter.setText("-/-");
+            mCounter.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -496,7 +498,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDelightBtn.setEnabled(enabled);
 
         mSkipBtn.setEnabled(true);
-        mPrevBtn.setEnabled(mCurrentUserPos <= 0 ? false : true);
+        mPrevBtn.setEnabled(mCurrentUserPos > 0);
 
         enabled = (currentUser != null);
         mProfileBtn.setEnabled(enabled);
@@ -505,6 +507,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLoveBtnLayout.setEnabled(true);
         mSwitchNextBtn.setEnabled(true);
         mSwitchPrevBtn.setEnabled(true);
+        mCounter.setVisibility(View.VISIBLE);
     }
 
     @Override

@@ -54,10 +54,10 @@ public class Leaders extends AbstractData {
      * Парсит массив с фотографиями лидера
      *
      * @param photosItem объект JSON который нужно распарсить
-     * @return объект UserPhotos с фотографиями пользователя
+     * @return объект Photo с фотографиями пользователя
      * @throws JSONException
      */
-    private static UserPhotos parsePhoto(JSONObject photosItem) throws JSONException {
+    private static Photo parsePhoto(JSONObject photosItem) throws JSONException {
         JSONObject linksItem = photosItem.getJSONObject("links");
         Iterator photoKeys = linksItem.keys();
 
@@ -69,7 +69,7 @@ public class Leaders extends AbstractData {
             links.put(key, linksItem.getString(key));
         }
 
-        return new UserPhotos(id, links);
+        return new Photo(id, links);
     }
 
     /**
@@ -108,7 +108,7 @@ public class Leaders extends AbstractData {
         /**
          * экземпляр фотографии пользователя, с которой он встал в лидеры
          */
-        public UserPhotos photo;
+        public Photo photo;
 
         /**
          * статус пользователя

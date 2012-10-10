@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,25 +12,24 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.data.Photos;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-import java.util.HashMap;
-
 public class ProfilePhotoFragment extends Fragment {
 
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
-    private SparseArray<HashMap<String, String>> mPhotoLinks;
+    private Photos mPhotoLinks;
     private AddPhotoHelper mAddPhotoHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPhotoLinks = new SparseArray<HashMap<String, String>>();
-        mPhotoLinks.append(0, null);
-        for (int i = 0; i < CacheProfile.photoLinks.size(); i++) {
-            mPhotoLinks.append(i + 1, CacheProfile.photoLinks.get(CacheProfile.photoLinks.keyAt(i)));
+        mPhotoLinks = new Photos();
+        mPhotoLinks.add(null);
+        if (CacheProfile.photos != null) {
+            mPhotoLinks.addAll(CacheProfile.photos);
         }
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks);
         mAddPhotoHelper = new AddPhotoHelper(this);
@@ -68,8 +66,8 @@ public class ProfilePhotoFragment extends Fragment {
 
         TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
 
-        if (mPhotoLinks != null && mPhotoLinks.size() >= 0) {        	
-            title.setText(Utils.formatPhotoQuantity(CacheProfile.photoLinks.size())); // mPhotoLinks-1
+        if (mPhotoLinks != null && mPhotoLinks.size() >= 0) {
+            title.setText(Utils.formatPhotoQuantity(CacheProfile.photos.size())); // mPhotoLinks-1
             title.setVisibility(View.VISIBLE);
         } else {
             title.setVisibility(View.INVISIBLE);
@@ -91,7 +89,7 @@ public class ProfilePhotoFragment extends Fragment {
                 mAddPhotoHelper.addPhoto();
                 return;
             }
-            Data.photoAlbum = CacheProfile.photoLinks;
+            Data.photos = CacheProfile.photos;
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, --position);

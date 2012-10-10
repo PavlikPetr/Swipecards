@@ -18,6 +18,7 @@ import com.topface.topface.R;
 import com.topface.topface.Recycle;
 import com.topface.topface.Static;
 import com.topface.topface.data.AbstractFeedItem;
+import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedRequest;
@@ -135,10 +136,10 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
         };
     }
 
-    private void onFeedItemClick(AbstractFeedItem item) {
+    protected void onFeedItemClick(AbstractFeedItem item) {
         // Open profile activity
         Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-        intent.putExtra(ChatActivity.INTENT_USER_URL, item.getSmallLink());
+        intent.putExtra(ChatActivity.INTENT_USER_URL, item.photo.getSuitableLink(Photo.SIZE_64));
         intent.putExtra(UserProfileActivity.INTENT_USER_ID, item.uid);
         intent.putExtra(UserProfileActivity.INTENT_USER_NAME, item.first_name);
         intent.putExtra(UserProfileActivity.INTENT_MUTUAL_ID, item.id);

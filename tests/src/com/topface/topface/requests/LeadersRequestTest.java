@@ -1,12 +1,8 @@
 package com.topface.topface.requests;
 
 import android.test.InstrumentationTestCase;
-import com.topface.topface.Data;
 import com.topface.topface.data.Leaders;
-import com.topface.topface.data.UserPhotos;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.LeadersRequest;
+import com.topface.topface.data.Photo;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -43,8 +39,8 @@ public class LeadersRequestTest extends InstrumentationTestCase {
                             assertNotNull("Leader has't city", user.city);
                             assertTrue("Leader city id is incorrect", user.city.id > 0);
                             assertNotNull("Leader photo is null", user.photo);
-                            assertTrue("Leader has't original photo", user.photo.getSuitableLink(UserPhotos.SIZE_ORIGINAL) != null);
-                            assertTrue("Leader getSuitableLink error", user.photo.getSuitableLink(UserPhotos.SIZE_128) != null);
+                            assertTrue("Leader has't original photo", user.photo.getSuitableLink(Photo.SIZE_ORIGINAL) != null);
+                            assertTrue("Leader getSuitableLink error", user.photo.getSuitableLink(Photo.SIZE_128) != null);
                         }
                         signal.countDown();
                     }

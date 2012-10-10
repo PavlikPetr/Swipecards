@@ -10,14 +10,15 @@ import com.topface.topface.utils.Utils;
 public class RoundCornersPostProcessor extends ImagePostProcessor {
     public static final String CACHE_KEY = "roundCorners";
     private String mCacheKey;
-    private int mRadius;
-    public static final int DEFAULT_RADIUS = 5;
+    private float mRadius;
+    public static final float DEFAULT_RADIUS = 3;
 
-    public RoundCornersPostProcessor(int radius) {
+    public RoundCornersPostProcessor(float radius) {
         mCacheKey = CACHE_KEY + radius;
         mRadius = radius;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public RoundCornersPostProcessor() {
         this(DEFAULT_RADIUS);
     }

@@ -4,7 +4,7 @@
                 android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:id="@+id/loProfilePhoto"
+            android:id="@+id/loProfilePhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -15,8 +15,6 @@
 
         <com.topface.topface.ui.views.ImageViewRemote
                 android:id="@+id/ivProfilePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 style="@style/EditAvatar"/>
 
         <TextView

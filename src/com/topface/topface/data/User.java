@@ -18,6 +18,8 @@ public class User extends Profile {
     public boolean mutual;  // флаг наличия симпатии к авторизованному пользователю
     public int score;       // средний балл оценок пользователя
     public LinkedList<Gift> gifts = new LinkedList<Gift>();
+    public Photos photos;
+    public Photo photo;
 
     public static User parse(int userId, ApiResponse response) { //нужно знать userId
         User profile = new User();
@@ -35,6 +37,8 @@ public class User extends Profile {
             profile.ero = item.optBoolean("ero");
             profile.mutual = item.optBoolean("mutual");
             profile.score = item.optInt("score");
+            profile.photo = Photo.parse(item.getJSONObject("photo"));
+            profile.photos = Photos.parse(item.getJSONArray("photos"));
 
             //gifts
             JSONArray arrGifts = item.optJSONArray("gifts");
@@ -51,7 +55,7 @@ public class User extends Profile {
             initPhotos(item, profile);
 
         } catch (Exception e) {
-            Debug.log("User.class", "Wrong response parsing: " + e);
+            Debug.error("Wrong response parsing", e);
         }
 
         return profile;
@@ -59,17 +63,5 @@ public class User extends Profile {
 
     public int getUid() {
         return uid;
-    }
-
-    ;
-
-    @Override
-    public String getLargeLink() {
-        return null;
-    }
-
-    @Override
-    public String getSmallLink() {
-        return null;
     }
 }

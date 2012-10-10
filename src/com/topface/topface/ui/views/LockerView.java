@@ -20,25 +20,25 @@ import com.topface.topface.R;
  * Attribute gravity used for positioning internal TextView
  *
  * @author kirussell
- * @attr ref android.R.styleable#LockView_android_gravity
+ * @attr ref android.R.styleable#LockerView_android_gravity
  * <p/>
  * Attributes for internal TextView
- * @attr ref android.R.styleable#LockView_android_text
- * @attr ref android.R.styleable#LockView_android_textColor
- * @attr ref android.R.styleable#LockView_android_textSize
- * @attr ref android.R.styleable#LockView_android_shadowColor
- * @attr ref android.R.styleable#LockView_android_shadowDx
- * @attr ref android.R.styleable#LockView_android_shadowDy
- * @attr ref android.R.styleable#LockView_android_drawableLeft
- * @attr ref android.R.styleable#LockView_android_drawableTop
- * @attr ref android.R.styleable#LockView_android_drawableRight
- * @attr ref android.R.styleable#LockView_android_drawableBottom
- * @attr ref android.R.styleable#LockView_messageBackground
- * @attr ref android.R.styleable#LockView_messagePadding
- * @attr ref android.R.styleable#LockView_messagePaddingLeft
- * @attr ref android.R.styleable#LockView_messagePaddingTop
- * @attr ref android.R.styleable#LockView_messagePaddingRight
- * @attr ref android.R.styleable#LockView_messagePaddingBottom
+ * @attr ref android.R.styleable#LockerView_android_text
+ * @attr ref android.R.styleable#LockerView_android_textColor
+ * @attr ref android.R.styleable#LockerView_android_textSize
+ * @attr ref android.R.styleable#LockerView_android_shadowColor
+ * @attr ref android.R.styleable#LockerView_android_shadowDx
+ * @attr ref android.R.styleable#LockerView_android_shadowDy
+ * @attr ref android.R.styleable#LockerView_android_drawableLeft
+ * @attr ref android.R.styleable#LockerView_android_drawableTop
+ * @attr ref android.R.styleable#LockerView_android_drawableRight
+ * @attr ref android.R.styleable#LockerView_android_drawableBottom
+ * @attr ref android.R.styleable#LockerView_messageBackground
+ * @attr ref android.R.styleable#LockerView_messagePadding
+ * @attr ref android.R.styleable#LockerView_messagePaddingLeft
+ * @attr ref android.R.styleable#LockerView_messagePaddingTop
+ * @attr ref android.R.styleable#LockerView_messagePaddingRight
+ * @attr ref android.R.styleable#LockerView_messagePaddingBottom
  */
 
 public class LockerView extends RelativeLayout {
@@ -65,42 +65,42 @@ public class LockerView extends RelativeLayout {
     }
 
     private void setAttrs(AttributeSet attrs) {
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.LockView);
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.LockerView);
 
-        this.setGravity(a.getInteger(R.styleable.LockView_android_gravity, Gravity.CENTER));
+        this.setGravity(a.getInteger(R.styleable.LockerView_android_gravity, Gravity.CENTER));
 
         // setting TextView attributes
-        mTextView.setText(a.getString(R.styleable.LockView_android_text));
-        mTextView.setTextColor(a.getColor(R.styleable.LockView_android_textColor, Color.BLACK));
-        mTextView.setTextSize(a.getDimensionPixelSize(R.styleable.LockView_android_textSize, 10));
-        mTextView.setShadowLayer(a.getFloat(R.styleable.LockView_android_shadowRadius, 0.0f),
-                a.getFloat(R.styleable.LockView_android_shadowDx, 0.0f),
-                a.getFloat(R.styleable.LockView_android_shadowDy, 0.0f),
-                a.getColor(R.styleable.LockView_android_shadowColor, Color.TRANSPARENT));
+        mTextView.setText(a.getString(R.styleable.LockerView_android_text));
+        mTextView.setTextColor(a.getColor(R.styleable.LockerView_android_textColor, Color.BLACK));
+        mTextView.setTextSize(a.getDimensionPixelSize(R.styleable.LockerView_android_textSize, 10));
+        mTextView.setShadowLayer(a.getFloat(R.styleable.LockerView_android_shadowRadius, 0.0f),
+                a.getFloat(R.styleable.LockerView_android_shadowDx, 0.0f),
+                a.getFloat(R.styleable.LockerView_android_shadowDy, 0.0f),
+                a.getColor(R.styleable.LockerView_android_shadowColor, Color.TRANSPARENT));
 
         mTextView.setCompoundDrawablesWithIntrinsicBounds(
-                a.getDrawable(R.styleable.LockView_android_drawableLeft),
-                a.getDrawable(R.styleable.LockView_android_drawableTop),
-                a.getDrawable(R.styleable.LockView_android_drawableRight),
-                a.getDrawable(R.styleable.LockView_android_drawableBottom));
+                a.getDrawable(R.styleable.LockerView_android_drawableLeft),
+                a.getDrawable(R.styleable.LockerView_android_drawableTop),
+                a.getDrawable(R.styleable.LockerView_android_drawableRight),
+                a.getDrawable(R.styleable.LockerView_android_drawableBottom));
 
         mTextView.setCompoundDrawablePadding(a.getDimensionPixelSize(
-                R.styleable.LockView_android_drawablePadding, 0));
+                R.styleable.LockerView_android_drawablePadding, 0));
 
-        mTextView.setBackgroundDrawable(a.getDrawable(R.styleable.LockView_messageBackground));
+        mTextView.setBackgroundDrawable(a.getDrawable(R.styleable.LockerView_messageBackground));
 
-        int padding = a.getDimensionPixelSize(R.styleable.LockView_messagePadding, 0);
-        if (a.hasValue(R.styleable.LockView_messagePadding)) {
+        int padding = a.getDimensionPixelSize(R.styleable.LockerView_messagePadding, 0);
+        if (a.hasValue(R.styleable.LockerView_messagePadding)) {
             mTextView.setPadding(padding, padding, padding, padding);
         } else {
             mTextView.setPadding(
-                    a.getDimensionPixelSize(R.styleable.LockView_messagePaddingLeft, 0),
-                    a.getDimensionPixelSize(R.styleable.LockView_messagePaddingTop, 0),
-                    a.getDimensionPixelSize(R.styleable.LockView_messagePaddingRight, 0),
-                    a.getDimensionPixelSize(R.styleable.LockView_messagePaddingBottom, 0));
+                    a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingLeft, 0),
+                    a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingTop, 0),
+                    a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingRight, 0),
+                    a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingBottom, 0));
         }
 
-        mTextView.setGravity(a.getInt(R.styleable.LockView_messageGravity, Gravity.CENTER));
+        mTextView.setGravity(a.getInt(R.styleable.LockerView_messageGravity, Gravity.CENTER));
 
         mTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));

@@ -1,35 +1,55 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class UserRequest extends ApiRequest {
-    // Data
-    private String service = "profiles";
-    public ArrayList<Integer> uids = new ArrayList<Integer>(); // массив id пользователя в топфейсе
-    public ArrayList<String> fields = new ArrayList<String>(); // массив интересующих полей профиля
-    public Boolean visitor; // флаг определения текущего пользователя посетителем профилей запрошенных пользователей
+public class UserRequest extends AbstractApiRequest {
+    private ArrayList<Integer> uids; // массив id пользователя в топфейсе
+    private ArrayList<String> fields; // массив интересующих полей профиля
+    public Boolean visitor = true; // флаг определения текущего пользователя посетителем профилей запрошенных пользователей
 
-    public UserRequest(Context context) {
+    public UserRequest(ArrayList<Integer> uids, ArrayList<String> fields, Context context) {
         super(context);
+        if (uids == null || uids.size() < 1) {
+            throw new NullPointerException();
+        }
+        this.uids = uids;
+
+        if (fields != null && fields.size() > 0) {
+            this.fields = fields;
+        }
+    }
+
+    public UserRequest(ArrayList<Integer> uids, Context context) {
+        this(uids, null, context);
+    }
+
+    public UserRequest(int uid, Context context) {
+        super(context);
+        ArrayList<Integer> data = new ArrayList<Integer>();
+        data.add(uid);
+        this.uids = data;
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("uids", new JSONArray(uids)).put("visitor", visitor));
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
+    protected JSONObject getRequestData() throws JSONException {
+        JSONObject data = new JSONObject()
+                .put("uids", new JSONArray(uids))
+                .put("visitor", visitor);
+
+        if (fields != null) {
+            data.put("fields", fields);
         }
 
-        return root.toString();
+        return data;
+    }
+
+    @Override
+    protected String getServiceName() {
+        return "profiles";
     }
 }

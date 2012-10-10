@@ -3,8 +3,8 @@ package com.topface.topface.requests;
 import android.test.InstrumentationTestCase;
 import com.topface.topface.Data;
 import com.topface.topface.data.Auth;
-import com.topface.topface.utils.AuthToken;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.social.AuthToken;
 
 import java.util.concurrent.CountDownLatch;
 

@@ -32,6 +32,7 @@ public class ProfileFormFragment extends BaseFragment {
         formListView.setAdapter(mProfilePhotoListAdapter);
 
         mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
+        //TODO: поправить эту хуйню
         mTitle.setText("You have 15 something"); // <<<<<<<<<<<<<<<<<<<<<<<<<<
 
         return root;

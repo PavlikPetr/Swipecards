@@ -124,7 +124,7 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
 
         T item = getItem(position);
         if (item != null) {
-            holder.avatar.setRemoteSrc(item.getNormalLink());
+            holder.avatar.setPhoto(item.photo);
             holder.name.setText(getName(item));
             holder.city.setText(item.city_name);
             holder.online.setVisibility(item.online ? View.VISIBLE : View.INVISIBLE);

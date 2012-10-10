@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.widget.ImageView;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
+import com.topface.topface.data.Photo;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
@@ -440,7 +441,7 @@ public class Http {
             public void run() {
                 if (Data.ownerAvatar != null)
                     return;
-                Bitmap ava = Http.bitmapLoader(CacheProfile.getAvatarLink());
+                Bitmap ava = Http.bitmapLoader(CacheProfile.photo.getSuitableLink(Photo.SIZE_192));
                 if (ava == null)
                     return;
                 ava = Utils.getRoundedBitmap(ava);

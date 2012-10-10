@@ -3,7 +3,6 @@ package com.topface.topface.ui.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +11,14 @@ import android.widget.GridView;
 import android.widget.TextView;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
-
-import java.util.HashMap;
 
 public class UserPhotoFragment extends Fragment {
     private User mUser;
     private UserPhotoGridAdapter mUserPhotoGridAdapter;
     private TextView mTitle;
-    private SparseArray<HashMap<String, String>> mPhotoLinks;
+    private Photos mPhotoLinks;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +53,7 @@ public class UserPhotoFragment extends Fragment {
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-            Data.photoAlbum = mUser.photoLinks;
+            Data.photos = mUser.photos;
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
@@ -65,10 +63,9 @@ public class UserPhotoFragment extends Fragment {
 
     public void setUserData(User user) {
         mUser = user;
-        mPhotoLinks = user.photoLinks;
+        mPhotoLinks = user.photos;
         if (mUserPhotoGridAdapter != null) {
-            mUserPhotoGridAdapter.setUserData(user.photoLinks);
-            mUserPhotoGridAdapter.notifyDataSetChanged();
+            mUserPhotoGridAdapter.setUserData(user.photos);
         }
 
         if (mPhotoLinks != null && mPhotoLinks.size() >= 0) {

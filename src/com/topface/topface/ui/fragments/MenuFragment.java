@@ -1,7 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,11 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 
-public class FragmentMenu extends Fragment implements View.OnClickListener {
+public class MenuFragment extends Fragment implements View.OnClickListener {
     private View mRootLayout;
 
     private Button mBtnProfile;
@@ -42,13 +40,12 @@ public class FragmentMenu extends Fragment implements View.OnClickListener {
 
         mRootLayout = inflater.inflate(R.layout.fragment_menu, null);
 
-        int size = (int) (50 * getResources().getDisplayMetrics().density);
-        Bitmap bitmap = Bitmap.createScaledBitmap(Data.ownerAvatar, size, size, false);
 
         // Buttons
         mBtnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
         mBtnProfile.setOnClickListener(this);
-        mBtnProfile.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(getResources(), bitmap), null, null, null);
+        ImageViewRemote menuAvatar = (ImageViewRemote) mRootLayout.findViewById(R.id.ivMenuAvatar);
+        menuAvatar.setPhoto(CacheProfile.photo);
 
         mBtnDating = (Button) mRootLayout.findViewById(R.id.btnFragmentDating);
         mBtnDating.setOnClickListener(this);

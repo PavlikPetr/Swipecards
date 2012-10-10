@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.topface.topface.Data;
 import com.topface.topface.data.AbstractData;
 import com.topface.topface.data.AbstractDataWithPhotos;
+import com.topface.topface.data.Photo;
 import com.topface.topface.utils.http.Http;
 
 import java.util.HashMap;
@@ -16,6 +17,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /* Менеджер изображений, загрузает и кеширует изображения */
+//TODO: Убрать бесполезный GridManger, или просто оставить на нем функции по управлению сеткой и убрать по загрузке фоток
+@Deprecated
 public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnScrollListener {
     //---------------------------------------------------------------------------
     class Queue { // не используется
@@ -94,7 +97,7 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
         } else {
             imageView.setImageBitmap(null); // хз ??
             if (!mBusy) {
-                bitmap = mStorageCache.load(mDataList.get(position).getLargeLink());
+                bitmap = mStorageCache.load(mDataList.get(position).photo.getSuitableLink(Photo.SIZE_960));
                 if (bitmap != null) {
                     imageView.setImageBitmap(bitmap);
                     mMemoryCache.put(position, bitmap);
@@ -115,7 +118,7 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
                         return;
 
                     // качаем            
-                    Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).getLargeLink()); // getBigLink() одно и тоже в Tops 
+                    Bitmap rawBitmap = Http.bitmapLoader(mDataList.get(position).photo.getSuitableLink(Photo.SIZE_960)); // getBigLink() одно и тоже в Tops
 
                     if (rawBitmap == null)
                         return;
@@ -131,7 +134,7 @@ public class GalleryGridManager<T extends AbstractDataWithPhotos> implements OnS
 
                     // заливаем в кеш
                     mMemoryCache.put(position, clippedBitmap);
-                    mStorageCache.save(mDataList.get(position).getLargeLink(), clippedBitmap);
+                    mStorageCache.save(mDataList.get(position).photo.getSuitableLink(Photo.SIZE_960), clippedBitmap);
 
                     clippedBitmap = null;
 

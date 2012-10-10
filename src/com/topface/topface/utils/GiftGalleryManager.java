@@ -9,7 +9,6 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
 import com.topface.topface.R;
 import com.topface.topface.data.AbstractData;
-import com.topface.topface.data.AbstractDataWithPhotos;
 import com.topface.topface.data.Gift;
 import com.topface.topface.utils.http.Http;
 
@@ -18,9 +17,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /*
+ * //TODO: АААА! ОНО В БИТОЙ КОДИРОВКИ! ЗБС! Удалить это РњРµРЅРµРґР
  *  РњРµРЅРµРґР¶РµСЂ РёР·РѕР±СЂР°Р¶РµРЅРёР№, Р·Р°РіСЂСѓР·Р°РµС‚ Рё РєРµС€РёСЂСѓРµС‚ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
  */
-public class GiftGalleryManager<T extends AbstractDataWithPhotos> implements OnScrollListener {
+public class GiftGalleryManager<T extends Gift> implements OnScrollListener {
     // Data
     private LinkedList<T> mDataList;
     private ExecutorService mWorker;

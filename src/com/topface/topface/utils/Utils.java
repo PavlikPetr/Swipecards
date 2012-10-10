@@ -369,9 +369,9 @@ public class Utils {
     public static String formatMinute(long minutes) {
         return Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
     }
-    
+
     public static String formatPhotoQuantity(int quantity) {
-        return Utils.getQuantityString(R.plurals.quantity_photos, (int) quantity, (int) quantity);
+        return Utils.getQuantityString(R.plurals.time_minute, (int) quantity, (int) quantity);
     }
 
     public static int getBatteryResource(int power) {

@@ -1,11 +1,11 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
-import android.util.SparseArray;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 /* Cache Profile */
@@ -36,12 +36,13 @@ public class CacheProfile {
     public static String dating_city_full; // полное наименование города
 
     public static int mAvatarId;  // id главной фотографии пользователя
-    public static SparseArray<HashMap<String, String>> photoLinks; // альбом пользователя
 
     public static LinkedList<FormItem> forms;
     public static String status; // статус пользователя
     public static boolean isNewbie; // поле новичка
     public static int background_id;
+    public static Photos photos;
+    public static Photo photo;
 
     public static boolean init(Context context) {
         try {
@@ -57,17 +58,6 @@ public class CacheProfile {
             return false;
         }
         return true;
-    }
-
-    public static String getAvatarLink() {
-        if (mAvatarId == -1) {
-            return "";
-        }
-        String result = photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_192);
-        if (result == null) {
-            return photoLinks.get(mAvatarId).get(PhotoLinksResolver.SIZE_ORIGIN);
-        }
-        return result;
     }
 
     public static void setData(Profile profile) {
@@ -137,9 +127,9 @@ public class CacheProfile {
 
         profile.forms = forms;
 
-        profile.photoLinks = photoLinks;
+        profile.photos = photos;
         profile.status = status;
-        profile.mAvatarId = mAvatarId;
+        profile.photo = photo;
 //        profile.isNewbie = isNewbie;
         return profile;
     }
@@ -172,10 +162,10 @@ public class CacheProfile {
 
         forms = profile.forms;
 
-        photoLinks = profile.photoLinks;
+        photos = profile.photos;
+        photo = profile.photo;
         status = profile.status;
 //        isNewbie = profile.isNewbie;
-        mAvatarId = profile.mAvatarId;
     }
 
     /**
