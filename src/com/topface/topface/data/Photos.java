@@ -54,5 +54,5 @@ public class Photos extends LinkedList<Photo> {
             }
         }
         return result;
-    }
+    }    
 }

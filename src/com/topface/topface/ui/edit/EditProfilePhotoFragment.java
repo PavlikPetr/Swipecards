@@ -47,7 +47,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             mPhotoLinks.addAll(CacheProfile.photos);
         }
         mPhotoGridAdapter = new EditProfileGrigAdapter(
-                getActivity().getApplicationContext(), CacheProfile.photos);
+                getActivity().getApplicationContext(), mPhotoLinks);
         
         mAddPhotoHelper = new AddPhotoHelper(this);
         mAddPhotoHelper.setOnResultHandler(mHandler);
@@ -218,6 +218,12 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+            	Photo photo = (Photo) msg.obj;
+            	
+            	CacheProfile.photos.addFirst(photo);            	
+            	mPhotoLinks.add(1,photo);
+            	            	
+            	mPhotoGridAdapter.notifyDataSetChanged();
                 Toast.makeText(getActivity(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 Toast.makeText(getActivity(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();

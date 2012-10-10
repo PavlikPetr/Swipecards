@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
@@ -26,16 +27,21 @@ public class ProfilePhotoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPhotoLinks = new Photos();
-        mPhotoLinks.add(null);
-        if (CacheProfile.photos != null) {
-            mPhotoLinks.addAll(CacheProfile.photos);
-        }
+        initPhotoLinks();
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks);
         mAddPhotoHelper = new AddPhotoHelper(this);
         mAddPhotoHelper.setOnResultHandler(mHandler);
     }
 
+    private void initPhotoLinks() {
+    	if (mPhotoLinks == null) mPhotoLinks = new Photos();
+    	mPhotoLinks.clear();
+        mPhotoLinks.add(null);
+        if (CacheProfile.photos != null) {
+            mPhotoLinks.addAll(CacheProfile.photos);
+        }
+    }
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
@@ -67,7 +73,7 @@ public class ProfilePhotoFragment extends Fragment {
         TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
 
         if (mPhotoLinks != null && mPhotoLinks.size() >= 0) {
-            title.setText(Utils.formatPhotoQuantity(CacheProfile.photos.size())); // mPhotoLinks-1
+            title.setText(Utils.formatPhotoQuantity(CacheProfile.photos.size()));
             title.setVisibility(View.VISIBLE);
         } else {
             title.setVisibility(View.INVISIBLE);
@@ -76,6 +82,13 @@ public class ProfilePhotoFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onResume() {
+    	initPhotoLinks();
+    	mProfilePhotoGridAdapter.notifyDataSetChanged();
+    	super.onResume();
+    }
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -101,9 +114,13 @@ public class ProfilePhotoFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            //mProfilePhotoGridAdapter.notifyDataSetChanged(); // <<<<<<<<<<<<<<< !!!!!!!!!!
-            //getProfile();
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+            	Photo photo = (Photo) msg.obj;
+            	
+            	CacheProfile.photos.addFirst(photo);            	
+            	mPhotoLinks.add(1,photo);
+            	            	
+            	mProfilePhotoGridAdapter.notifyDataSetChanged();
                 Toast.makeText(getActivity(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 Toast.makeText(getActivity(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
