@@ -1,5 +1,7 @@
 package com.topface.topface.ui.edit;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +28,8 @@ import com.topface.topface.utils.CacheProfile;
 
 public class EditProfilePhotoFragment extends AbstractEditFragment {
 
+	private ArrayList<Photo> mDeleted = new ArrayList<Photo>();
+	
     private ProfilePhotoGridAdapter mPhotoGridAdapter;
     private int mLastSelectedId;
     private int mSelectedId;
@@ -47,7 +51,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             mPhotoLinks.addAll(CacheProfile.photos);
         }
         mPhotoGridAdapter = new EditProfileGrigAdapter(
-                getActivity().getApplicationContext(), CacheProfile.photos);
+                getActivity().getApplicationContext(), mPhotoLinks);
         
         mAddPhotoHelper = new AddPhotoHelper(this);
         mAddPhotoHelper.setOnResultHandler(mHandler);
@@ -61,7 +65,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
         TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
         subTitle.setVisibility(View.VISIBLE);
-        subTitle.setText(R.string.edit_profile_photo);
+        subTitle.setText(R.string.edit_album);
 
 //        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
 //        mSaveButton.setText(getResources().getString(R.string.navigation_save));
@@ -142,7 +146,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
-            Photo item = getItem(position);            
+            final Photo item = getItem(position);            
 
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.item_edit_user_gallery, null, false);
@@ -150,6 +154,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 holder.photo = (ImageViewRemote) convertView.findViewById(R.id.ivPhoto);
                 holder.mBtnSetAsMain = (Button) convertView.findViewById(R.id.btnSetAsMain);
                 holder.mBtnDelete = (Button) convertView.findViewById(R.id.btnDeletePhoto);
+                holder.mBtnRestore = (Button) convertView.findViewById(R.id.btnRestorePhoto);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -162,17 +167,45 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             } else {
             	final int itemId = item.getId();
                 holder.photo.setPhoto(item);
-                if (mLastSelectedId == item.getId()) {
+                if (mDeleted.contains(item)) {
+                	holder.mBtnDelete.setVisibility(View.INVISIBLE);
                 	holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
-                } else {
-                	holder.mBtnSetAsMain.setVisibility(View.VISIBLE);
-                	holder.mBtnSetAsMain.setOnClickListener(new OnClickListener() {						
+                	holder.mBtnRestore.setVisibility(View.VISIBLE);
+                	holder.mBtnRestore.setOnClickListener(new OnClickListener() {
+						
 						@Override
 						public void onClick(View v) {
-							mLastSelectedId = itemId;
+							mDeleted.remove(item);
 							notifyDataSetChanged();
 						}
 					});
+                } else {
+                	holder.mBtnRestore.setVisibility(View.INVISIBLE);	                
+	                
+	                holder.mBtnDelete.setVisibility(View.VISIBLE);
+                	holder.mBtnDelete.setOnClickListener(new OnClickListener() {						
+						@Override
+						public void onClick(View v) {
+							if(itemId == mLastSelectedId) {
+								mLastSelectedId = mSelectedId; 
+							}
+							mDeleted.add(item);
+							notifyDataSetChanged();
+						}
+					});
+                	
+                	if (mLastSelectedId == itemId) {
+	                	holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
+	                } else {
+	                	holder.mBtnSetAsMain.setVisibility(View.VISIBLE);
+	                	holder.mBtnSetAsMain.setOnClickListener(new OnClickListener() {						
+							@Override
+							public void onClick(View v) {
+								mLastSelectedId = itemId;
+								notifyDataSetChanged();
+							}
+						});
+	                }
                 }
             }
 
@@ -183,6 +216,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             ImageViewRemote photo;
             Button mBtnDelete;
             Button mBtnSetAsMain;
+            Button mBtnRestore;
         }
     }   
 
@@ -218,6 +252,12 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+            	Photo photo = (Photo) msg.obj;
+            	
+            	CacheProfile.photos.addFirst(photo);            	
+            	mPhotoLinks.add(1,photo);
+            	            	
+            	mPhotoGridAdapter.notifyDataSetChanged();
                 Toast.makeText(getActivity(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 Toast.makeText(getActivity(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();

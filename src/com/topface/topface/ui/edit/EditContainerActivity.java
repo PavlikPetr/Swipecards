@@ -63,7 +63,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 mFragment = new EditFormItemInputFragment(titleId, data);
                 break;
             case INTENT_EDIT_ALBUM:
-                mFragment = new ProfilePhotoFragment();
+                mFragment = new EditProfilePhotoFragment();
                 break;
             case INTENT_EDIT_FILTER:
                 mFragment = new FilterFragment();

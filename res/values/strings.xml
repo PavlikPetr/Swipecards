@@ -185,7 +185,7 @@
     <string name="edit_title">Editing</string>
     <string name="edit_bg_photo">Background photo</string>
     <string name="edit_album">Album</string>
-    <string name="edit_profile_photo">Change photo</string>
+    <string name="edit_profile_photo">Change photo</string>    
     <string name="edit_album_photos">photos</string>
     <string name="edit_interests">interests</string>
     <string name="edit_back_photo_selected">Selected</string>
@@ -194,6 +194,7 @@
     <string name="edit_status">Status</string>
     <string name="edit_set_as_main">Set as main</string>
     <string name="edit_delete">Delete</string>
+    <string name="edit_restore">Restore</string>
 
     <!-- Album, Ero Album Activity -->
     <string name="album_header_title">Album</string>

@@ -154,6 +154,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     break;
                 case EditContainerActivity.INTENT_EDIT_PROFILE_PHOTO:
                     mProfilePhoto.setPhoto(CacheProfile.photo);
+                    mAdapter.notifyDataSetChanged();
+                    break;
+                case EditContainerActivity.INTENT_EDIT_ALBUM:
+                	mProfilePhoto.setPhoto(CacheProfile.photo);
+                    mAdapter.notifyDataSetChanged();
                     break;
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
                     Bundle extras = data.getExtras();

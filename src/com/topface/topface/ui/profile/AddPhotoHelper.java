@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Confirmation;
+import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.utils.Base64;
@@ -23,6 +25,9 @@ import com.topface.topface.utils.FileSystem;
 import com.topface.topface.utils.http.Http;
 
 import java.io.IOException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -168,10 +173,18 @@ public class AddPhotoHelper {
             super.onPostExecute(result);
             if (result != null) {
                 Confirmation c = Confirmation.parse(new ApiResponse(result));
-                if (c.completed)
-                    mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_OK);
-                else
+                if (c.completed) {                    
+                    Message msg = new Message();
+                    msg.what = ADD_PHOTO_RESULT_OK;                    
+                    try {
+						msg.obj = Photo.parse((new JSONObject(result)).optJSONObject("result").optJSONObject("photo"));
+					} catch (JSONException e) {
+						Debug.log(e.toString());
+					}
+                    mHandler.sendMessage(msg);
+                } else {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+                }
             } else {
                 mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
             }
