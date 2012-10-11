@@ -42,7 +42,6 @@ public class MainActivity extends BaseFragmentActivity {
             @Override
             public void success(final ApiResponse response) {
                 CacheProfile.setData(Profile.parse(response));
-                Http.avatarOwnerPreloading();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

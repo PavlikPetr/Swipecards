@@ -34,8 +34,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
-import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.http.Http;
 
 import java.util.LinkedList;
 
@@ -149,7 +147,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mListView = (PullToRefreshListView) findViewById(R.id.lvChatList);
 
         // Adapter
-        mAdapter = new ChatListAdapter(getApplicationContext(), mUserId, mHistoryList);
+        mAdapter = new ChatListAdapter(getApplicationContext(), mHistoryList);
         mAdapter.setOnAvatarListener(this);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
@@ -159,9 +157,16 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         });
         mListView.setAdapter(mAdapter);
 
-        Http.avatarOwnerPreloading();
-
-        update(false);
+        //Сперва пробуем восстановить данные, если это просто поворот устройства
+        Object data = getLastCustomNonConfigurationInstance();
+        if (data != null) {
+            mAdapter.setDataList((LinkedList<History>) data);
+            mLoadingLocker.setVisibility(View.GONE);
+            return;
+        } else {
+            //Если это не получилось, грузим с сервера
+            update(false);
+        }
     }
 
     @Override
@@ -183,8 +188,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         historyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                //noinspection SuspiciousNameCombination
-                Data.friendAvatar = Utils.getRoundedBitmap(Http.bitmapLoader(mUserAvatarUrl), mAvatarWidth, mAvatarWidth);
                 final LinkedList<History> dataList = History.parse(response);
                 post(new Runnable() {
                     @Override
@@ -602,4 +605,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         }
     }
 
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return mAdapter.getDataCopy();
+    }
 }

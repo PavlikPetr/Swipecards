@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/bar_search"
@@ -11,9 +10,8 @@
         android:paddingRight="12dp">
 
     <!-- аватар -->
-    <com.topface.topface.ui.views.RoundedImageView
+    <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/contactAvatar"
-            topface:frame="dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

@@ -202,7 +202,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             @Override
             public void success(final ApiResponse response) {
                 CacheProfile.setProfile(Profile.parse(response));
-                Http.avatarOwnerPreloading();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

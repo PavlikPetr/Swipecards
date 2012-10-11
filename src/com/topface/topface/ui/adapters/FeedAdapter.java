@@ -117,7 +117,7 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
             holder = (FeedViewHolder) convertView.getTag();
         }
 
-        T item = getItem(position);
+        final T item = getItem(position);
 
         //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
         if (holder == null) {
@@ -127,6 +127,8 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
 
         if (item != null) {
             holder.avatar.setPhoto(item.photo);
+            setListenerOnAvatar(holder.avatar, item);
+
             holder.name.setText(getName(item));
             holder.city.setText(item.city_name);
             holder.online.setVisibility(item.online ? View.VISIBLE : View.INVISIBLE);
@@ -135,6 +137,18 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
         convertView.setTag(holder);
 
         return convertView;
+    }
+
+    private void setListenerOnAvatar(ImageViewRemote avatar, final T item) {
+        //Слушаем событие клика на автарку
+        if (mOnAvatarClickListener != null) {
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnAvatarClickListener.onAvatarClick(item, v);
+                }
+            });
+        }
     }
 
     private String getName(T item) {
@@ -250,15 +264,6 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
         FeedViewHolder holder = new FeedViewHolder();
 
         holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.ivAvatar);
-        //Слушаем событие клика на автарку
-        if (mOnAvatarClickListener != null) {
-            holder.avatar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnAvatarClickListener.onAvatarClick(item, v);
-                }
-            });
-        }
         holder.name = (TextView) convertView.findViewById(R.id.tvName);
         holder.city = (TextView) convertView.findViewById(R.id.tvCity);
         holder.online = (ImageView) convertView.findViewById(R.id.ivOnline);

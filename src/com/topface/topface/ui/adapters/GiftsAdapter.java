@@ -1,16 +1,15 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Gift;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.GiftGalleryManager;
 
 public class GiftsAdapter extends LoadingListAdapter {
@@ -19,8 +18,6 @@ public class GiftsAdapter extends LoadingListAdapter {
 
     private GiftGalleryManager<Gift> mGalleryManager;
 
-    private Drawable mCoins;
-
     public GiftsAdapter(Context context, GiftGalleryManager<Gift> galleryManager) {
         mInflater = LayoutInflater.from(context);
         mGalleryManager = galleryManager;
@@ -28,8 +25,6 @@ public class GiftsAdapter extends LoadingListAdapter {
         mLoaderRetrier = mInflater.inflate(R.layout.item_grid_loader_retrier, null, false);
         mLoaderRetrierText = (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
         mLoaderRetrierProgress = (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
-
-        mCoins = context.getResources().getDrawable(R.drawable.coins);
     }
 
     @Override
@@ -44,7 +39,7 @@ public class GiftsAdapter extends LoadingListAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
 
         int type = getItemViewType(position);
 
@@ -58,39 +53,35 @@ public class GiftsAdapter extends LoadingListAdapter {
             return mLoaderRetrier;
         } else {
             if (convertView == null) {
-                convertView = (ViewGroup) mInflater.inflate(R.layout.item_gift, null, false);
+                convertView = mInflater.inflate(R.layout.item_gift, null, false);
 
                 holder = new ViewHolder();
-                holder.mGiftImage = (ImageView) convertView.findViewById(R.id.giftImage);
-                holder.mGiftMask = (ImageView) convertView.findViewById(R.id.giftMask);
-                holder.mPriceText = (TextView) convertView.findViewById(R.id.giftPrice);
-                holder.mGiftText = (TextView) convertView.findViewById(R.id.giftText);
+                holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
+                holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
+                holder.giftText = (TextView) convertView.findViewById(R.id.giftText);
 
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            holder.mGift = (getItem(position));
-            type = holder.mGift.type;
+            holder.gift = (getItem(position));
+            type = holder.gift.type;
 
             if (type == Gift.PROFILE || type == Gift.PROFILE_NEW) {
-                mGalleryManager.getImage(position, (ImageView) holder.mGiftImage);
-                holder.mGiftMask.setVisibility(View.VISIBLE);
-                holder.mGiftText.setText(Static.EMPTY);
-                holder.mGiftText.setVisibility(View.VISIBLE);
-                holder.mPriceText.setVisibility(View.GONE);
+                mGalleryManager.getImage(position, holder.giftImage);
+                holder.giftText.setText(Static.EMPTY);
+                holder.giftText.setVisibility(View.VISIBLE);
+                holder.priceText.setVisibility(View.GONE);
             } else if (type == Gift.SEND_BTN) {
-                holder.mGiftImage.setImageResource(R.drawable.chat_gift_selector);
-                holder.mGiftMask.setVisibility(View.GONE);
-                holder.mGiftText.setText(R.string.gifts_send_btn);
-                holder.mGiftText.setVisibility(View.VISIBLE);
-                holder.mPriceText.setVisibility(View.GONE);
+                holder.giftImage.setImageResource(R.drawable.chat_gift_selector);
+                holder.giftText.setText(R.string.gifts_send_btn);
+                holder.giftText.setVisibility(View.VISIBLE);
+                holder.priceText.setVisibility(View.GONE);
             } else {
-                mGalleryManager.getImage(position, (ImageView) holder.mGiftImage);
-                holder.mGiftMask.setVisibility(View.VISIBLE);
-                holder.mPriceText.setVisibility(View.VISIBLE);
-                holder.mPriceText.setText(Integer.toString(holder.mGift.price));
-                holder.mGiftText.setVisibility(View.GONE);
+                mGalleryManager.getImage(position, holder.giftImage);
+                holder.priceText.setVisibility(View.VISIBLE);
+                holder.priceText.setText(Integer.toString(holder.gift.price));
+                holder.giftText.setVisibility(View.GONE);
             }
 
             return convertView;
@@ -99,7 +90,7 @@ public class GiftsAdapter extends LoadingListAdapter {
 
     @Override
     public Gift getItem(int position) {
-        return (Gift) mGalleryManager.get(position);
+        return mGalleryManager.get(position);
     }
 
     @Override
@@ -108,15 +99,10 @@ public class GiftsAdapter extends LoadingListAdapter {
     }
 
     public class ViewHolder {
-        ImageView mGiftImage;
-        ImageView mGiftMask;
-        TextView mPriceText;
-        TextView mGiftText;
-        public Gift mGift;
+        ImageViewRemote giftImage;
+        TextView priceText;
+        TextView giftText;
+        public Gift gift;
     }
 
-    public void release() {
-        mInflater = null;
-        mGalleryManager.release();
-    }
 }

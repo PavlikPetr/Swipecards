@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.requests.InviteRequest;
-import com.topface.topface.ui.views.RoundedImageView;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.TriggersList;
 import com.topface.topface.utils.Utils;
 
@@ -27,7 +27,7 @@ public class InviteAdapter extends CursorAdapter {
     private TriggersList<Long, InviteRequest.Recipient> mTriggersList;
 
     public static class ViewHolder {
-        RoundedImageView avatar;
+        ImageViewRemote avatar;
         TextView name;
         TextView phone;
         ImageView checkbox;
@@ -56,7 +56,7 @@ public class InviteAdapter extends CursorAdapter {
             holder = new ViewHolder();
             holder.name = (TextView) view.findViewById(R.id.contactName);
             holder.phone = (TextView) view.findViewById(R.id.contactPhone);
-            holder.avatar = (RoundedImageView) view.findViewById(R.id.contactAvatar);
+            holder.avatar = (ImageViewRemote) view.findViewById(R.id.contactAvatar);
             holder.checkbox = (ImageView) view.findViewById(R.id.contactCheckbox);
         }
 

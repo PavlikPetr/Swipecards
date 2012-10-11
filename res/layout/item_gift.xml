@@ -6,24 +6,9 @@
               android:paddingTop="4dp"
               android:paddingBottom="4dp">
 
-    <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
-
-        <ImageView
-                android:id="@+id/giftImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
-        <ImageView
-                android:id="@+id/giftMask"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/gift_frame"
-                android:layout_centerInParent="true"/>
-
-    </RelativeLayout>
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/giftImage"
+            style="@style/Gift"/>
 
     <LinearLayout
             android:layout_width="fill_parent"

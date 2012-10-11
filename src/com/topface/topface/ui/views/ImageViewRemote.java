@@ -97,6 +97,7 @@ public class ImageViewRemote extends ImageView {
 
         } else {
             isCorrectSrc = false;
+            setImageBitmap(null);
         }
 
         return isCorrectSrc;
@@ -151,6 +152,8 @@ public class ImageViewRemote extends ImageView {
             } else {
                 result = setRemoteSrc(photo.getSuitableLink(Photo.SIZE_960), handler);
             }
+        } else {
+            result = setRemoteSrc(null);
         }
 
         return result;

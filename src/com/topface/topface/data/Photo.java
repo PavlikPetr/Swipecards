@@ -42,25 +42,27 @@ public class Photo {
     protected HashMap<String, String> links;
 
     public static Photo parse(JSONObject photoItem) {
-        Photo photos = null;
+        Photo photo = null;
         try {
-            int mId = photoItem.getInt("id");
-            JSONObject linksJson = photoItem.getJSONObject("links");
-            Iterator photoKeys = linksJson.keys();
-            HashMap<String, String> links = new HashMap<String, String>();
+            if (photoItem.has("id")) {
+                int mId = photoItem.getInt("id");
+                JSONObject linksJson = photoItem.getJSONObject("links");
+                Iterator photoKeys = linksJson.keys();
+                HashMap<String, String> links = new HashMap<String, String>();
 
-            while (photoKeys.hasNext()) {
-                String key = photoKeys.next().toString();
+                while (photoKeys.hasNext()) {
+                    String key = photoKeys.next().toString();
 
-                links.put(key, linksJson.getString(key));
+                    links.put(key, linksJson.getString(key));
+                }
+                photo = new Photo(mId, links);
             }
 
-            photos = new Photo(mId, links);
         } catch (JSONException e) {
             Debug.error(e);
         }
 
-        return photos;
+        return photo;
     }
 
     /**

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -8,15 +7,9 @@
                 android:id="@+id/layout">
 
     <!-- avatar -->
-    <com.topface.topface.ui.views.RoundedImageView
-            topface:frame="chat"
+    <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/left_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="3dp"
-            android:visibility="visible"/>
+            style="@style/ChatFriendAvatar"/>
 
     <LinearLayout android:id="@+id/user_info"
                   android:layout_width="wrap_content"

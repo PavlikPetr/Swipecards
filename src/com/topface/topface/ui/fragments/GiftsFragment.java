@@ -39,8 +39,6 @@ public class GiftsFragment extends BaseFragment {
     public static final int GIFTS_COLUMN_PORTRAIT = 3;
     public static final int GIFTS_COLUMN_LANDSCAPE = 5;
 
-    // Grid elements
-    private GridView mGridView;
     private GiftsAdapter mGridAdapter;
     private GiftGalleryManager<Gift> mGalleryManager;
 
@@ -58,23 +56,22 @@ public class GiftsFragment extends BaseFragment {
 //            if(mProfile instanceof User)
 //              setGifts(Gift.parse(((User)mProfile).gifts));
             setGifts(userData.gifts);
-            mGalleryManager = new GiftGalleryManager<Gift>(activity.getApplicationContext(), mGifts,
+            mGalleryManager = new GiftGalleryManager<Gift>(mGifts,
                     new Handler() {
                         @Override
                         public void handleMessage(Message msg) {
                             if (mGifts.getLast().isLoader()) {
                                 onNewFeeds();
                             }
-                            ;
                         }
                     });
         } else if (activity instanceof NavigationActivity) {
             mProfile = CacheProfile.getProfile();
             mTag = GIFTS_ALL_TAG;
-            mGalleryManager = new GiftGalleryManager<Gift>(getActivity().getApplicationContext(), mGifts, null);
+            mGalleryManager = new GiftGalleryManager<Gift>(mGifts, null);
         } else {
             mTag = GIFTS_ALL_TAG;
-            mGalleryManager = new GiftGalleryManager<Gift>(getActivity().getApplicationContext(), mGifts, null);
+            mGalleryManager = new GiftGalleryManager<Gift>(mGifts, null);
         }
 
         mGridAdapter = new GiftsAdapter(activity.getApplicationContext(), mGalleryManager);
@@ -85,27 +82,27 @@ public class GiftsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_grid, null);
 
-        mGridView = (GridView) view.findViewById(R.id.fragmentGrid);
-        mGridView.setAnimationCacheEnabled(false);
-        mGridView.setScrollingCacheEnabled(true);
+        GridView gridView = (GridView) view.findViewById(R.id.fragmentGrid);
+        gridView.setAnimationCacheEnabled(false);
+        gridView.setScrollingCacheEnabled(true);
 
         int columns = this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? GIFTS_COLUMN_PORTRAIT
                 : GIFTS_COLUMN_LANDSCAPE;
 
-        mGridView.setNumColumns(columns);
+        gridView.setNumColumns(columns);
 
-        if (mTag == GIFTS_ALL_TAG) {
-            ((TextView) view.findViewById(R.id.fragmentTitle)).setVisibility(View.GONE);
-            mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        if (mTag.equals(GIFTS_ALL_TAG)) {
+            view.findViewById(R.id.fragmentTitle).setVisibility(View.GONE);
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = getActivity().getIntent();
                     if (view.getTag() instanceof ViewHolder) {
                         ViewHolder holder = ((ViewHolder) view.getTag());
-                        if (holder.mGift.type != Gift.PROFILE && holder.mGift.type != Gift.SEND_BTN) {
-                            intent.putExtra(GiftsActivity.INTENT_GIFT_ID, holder.mGift.id);
-                            intent.putExtra(GiftsActivity.INTENT_GIFT_URL, holder.mGift.link);
-                            intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, holder.mGift.price);
+                        if (holder.gift.type != Gift.PROFILE && holder.gift.type != Gift.SEND_BTN) {
+                            intent.putExtra(GiftsActivity.INTENT_GIFT_ID, holder.gift.id);
+                            intent.putExtra(GiftsActivity.INTENT_GIFT_URL, holder.gift.link);
+                            intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, holder.gift.price);
 
                             getActivity().setResult(Activity.RESULT_OK, intent);
                             getActivity().finish();
@@ -115,21 +112,21 @@ public class GiftsFragment extends BaseFragment {
             });
             if (mProfile != null) {
                 ((TextView) view.findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
-                ((TextView) view.findViewById(R.id.fragmentTitle)).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.fragmentTitle).setVisibility(View.VISIBLE);
                 if (mGifts.size() == 0) {
                     onNewFeeds();
                 }
             }
-        } else if (mTag == GIFTS_PROFILE_TAG) {
+        } else if (mTag.equals(GIFTS_PROFILE_TAG)) {
             ((TextView) view.findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
-            ((TextView) view.findViewById(R.id.fragmentTitle)).setVisibility(View.VISIBLE);
-            mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            view.findViewById(R.id.fragmentTitle).setVisibility(View.VISIBLE);
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (view.getTag() instanceof ViewHolder) {
                         ViewHolder holder = ((ViewHolder) view.getTag());
-                        if (holder.mGift != null) {
-                            if (holder.mGift.type == Gift.SEND_BTN) {
+                        if (holder.gift != null) {
+                            if (holder.gift.type == Gift.SEND_BTN) {
                                 Intent intent = new Intent(getActivity().getApplicationContext(),
                                         GiftsActivity.class);
                                 startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
@@ -157,8 +154,8 @@ public class GiftsFragment extends BaseFragment {
             });
         }
 
-        mGridView.setAdapter(mGridAdapter);
-        mGridView.setOnScrollListener(mGalleryManager);
+        gridView.setAdapter(mGridAdapter);
+        gridView.setOnScrollListener(mGalleryManager);
 
         return view;
     }
@@ -202,7 +199,6 @@ public class GiftsFragment extends BaseFragment {
                                         mGifts.addLast(sendedGift);
                                     }
                                     update();
-                                    mGalleryManager.update();
                                 }
                             });
                         }
@@ -296,14 +292,12 @@ public class GiftsFragment extends BaseFragment {
      */
     public void update() {
         mGridAdapter.notifyDataSetChanged();
-        if (mTag == GIFTS_ALL_TAG)
-            mGalleryManager.update();
     }
 
     public void setGifts(LinkedList<Gift> gifts) {
         mGifts.clear();
         mGifts.addAll(gifts);
-        if (mTag == GIFTS_PROFILE_TAG) {
+        if (mTag.equals(GIFTS_PROFILE_TAG)) {
             mGifts.add(0, Gift.getSendedGiftItem());
             if (mGifts.size() >= UserProfileActivity.GIFTS_LOAD_COUNT)
                 mGifts.add(new Gift(ItemType.LOADER));
@@ -313,6 +307,5 @@ public class GiftsFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mGridAdapter.release();
     }
 }
