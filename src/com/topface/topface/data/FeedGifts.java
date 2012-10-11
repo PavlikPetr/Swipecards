@@ -64,6 +64,7 @@ public class FeedGifts extends AbstractDataWithPhotos {
                 feed.gift.id = item.optInt("gift");
                 feed.gift.link = item.optString("link");
                 feed.gift.type = Gift.PROFILE;
+                feed.gift.feedId = item.optInt("id");
 
                 initPhotos(item, feed);
                 feedsList.add(feed);

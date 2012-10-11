@@ -8,6 +8,8 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
@@ -79,8 +81,8 @@ public class Profile extends AbstractDataWithPhotos {
     private static boolean mIsUserProfile;
 
     //private static final String profileFileName = "profile.out";
-    //private static final long serialVersionUID  = 2748391675222256671L;
-
+    //private static final long serialVersionUID  = 2748391675222256671L;    
+    
     public static Profile parse(ApiResponse response) {
         return parse(new Profile(), response.mJSONResult);
     }
@@ -124,8 +126,8 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.dating_city_full = datingCity.optString("full");
             }
 
-            Context context = App.getContext();
-
+            Context context = App.getContext();            
+            
             // form
             if (!resp.isNull("questionary")) {
                 JSONObject form = resp.getJSONObject("form");

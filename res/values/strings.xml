@@ -412,4 +412,20 @@
     <string name="settings_feedback_success_msg">Thank you, message was sent succesfully</string>
     <string name="fill_button">Fill</string>
 
+    <plurals name="time_hour">
+        <item quantity="one">%d hour ago</item>
+        <item quantity="few">%d hours ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <plurals name="time_minute">
+        <item quantity="one">%d minute ago</item>
+        <item quantity="few">%d minutes ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+    <plurals name="quantity_photos">
+        <item quantity="one">%d photo</item>
+        <item quantity="few">%d photos</item>
+        <item quantity="other">%d photos</item>
+    </plurals>
+    
 </resources>
