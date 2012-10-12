@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidLintMissingTranslation -->
 <resources>
     <!-- Данный конфиг используется для IllustratedTextView -->
     <string-array name="itv_templates">
