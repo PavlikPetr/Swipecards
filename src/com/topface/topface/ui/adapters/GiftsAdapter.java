@@ -76,14 +76,14 @@ public class GiftsAdapter extends LoadingListAdapter {
 				holder = (ViewHolder) convertView.getTag();
 			}
 
+			holder.gift = (getItem(position));
 			if (type == T_SEND_BTN) {
 				holder.giftImage.setImageBitmap(null);
 				holder.giftImage.setBackgroundResource(R.drawable.chat_gift_selector);
 				holder.giftText.setText(R.string.gifts_send_btn);
 				holder.giftText.setVisibility(View.VISIBLE);
-				holder.priceText.setVisibility(View.GONE);
-			} else {				
-				holder.gift = (getItem(position));
+				holder.priceText.setVisibility(View.GONE);				
+			} else {
 				type = holder.gift.type;
 
 				if (type == Gift.PROFILE || type == Gift.PROFILE_NEW) {

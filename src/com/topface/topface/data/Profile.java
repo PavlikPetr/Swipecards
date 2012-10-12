@@ -9,7 +9,6 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
@@ -129,7 +128,7 @@ public class Profile extends AbstractDataWithPhotos {
             Context context = App.getContext();            
             
             // form
-            if (!resp.isNull("questionary")) {
+            if (!resp.isNull("form")) {
                 JSONObject form = resp.getJSONObject("form");
 
                 FormInfo formInfo = new FormInfo(context, profile);
