@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.google.android.c2dm.C2DMessaging;
@@ -21,9 +20,7 @@ import com.topface.topface.requests.*;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.MenuActivity;
 import com.topface.topface.ui.profile.album.PhotoAlbumActivity;
-import com.topface.topface.ui.profile.album.PhotoEroAlbumActivity;
 import com.topface.topface.ui.profile.gallery.HorizontalListView;
-import com.topface.topface.ui.profile.gallery.PhotoEroGalleryAdapter;
 import com.topface.topface.ui.profile.gallery.PhotoGalleryAdapter;
 import com.topface.topface.ui.views.FrameImageView;
 import com.topface.topface.utils.CacheProfile;
@@ -47,20 +44,15 @@ public class ProfileActivity extends MenuActivity {
   private TextView mResourcesPower;
   private TextView mResourcesMoney;
   private TextView mHeaderTitle;
-  private ViewGroup mEroViewGroup;
   private FrameImageView mFramePhoto;
   private HorizontalListView mListView;
-  private HorizontalListView mListEroView;
   private PhotoGalleryAdapter mListAdapter;
-  private PhotoEroGalleryAdapter mListEroAdapter;
-  private LinkedList<Album> mPhotoList; 
-  private LinkedList<Album> mEroList;
+  private LinkedList<Album> mPhotoList;
     private ProgressBar mProgressBar;
   private ScrollView mProfileGroupView;
     // Info
   private TextView mName;
   private TextView mCity;
-  private TextView mEroTitle;
   private TextView mHeight;
   private TextView mWeight;
   private TextView mEducation;
@@ -82,8 +74,6 @@ public class ProfileActivity extends MenuActivity {
   // Arrows
   private ImageView mGR;
   private ImageView mGL;
-  private ImageView mEGL;
-  private ImageView mEGR;
   //Constants
   public static final String INTENT_USER_ID = "user_id";
   public static final String INTENT_MUTUAL_ID = "mutual_id";
@@ -106,8 +96,7 @@ public class ProfileActivity extends MenuActivity {
     
     // Albums
     mPhotoList = new LinkedList<Album>();
-    mEroList   = new LinkedList<Album>();
-    
+
     mHeaderTitle = (TextView)findViewById(R.id.tvHeaderTitle);
     mFramePhoto = (FrameImageView)findViewById(R.id.ivProfileFramePhoto);
     
@@ -129,9 +118,7 @@ public class ProfileActivity extends MenuActivity {
     // Arrows
     mGR  = (ImageView)findViewById(R.id.ivProfileArrowGL);
     mGL  = (ImageView)findViewById(R.id.ivProfileArrowGR);
-    mEGR = (ImageView)findViewById(R.id.ivProfileArrowEGR);
-    mEGL = (ImageView)findViewById(R.id.ivProfileArrowEGL);
-    
+
     { // Params
       mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE,false); // пришли из чата    
       mUserId     = getIntent().getIntExtra(INTENT_USER_ID,-1); // свой - чужой профиль
@@ -180,13 +167,6 @@ public class ProfileActivity extends MenuActivity {
     mListView = (HorizontalListView)findViewById(R.id.lvAlbumPreview);
     mListView.setAdapter(mListAdapter);
     mListView.setOnItemClickListener(mOnItemClickListener);
-    // Ero Gallary and Adapter
-    mEroTitle = (TextView)findViewById(R.id.tvEroTitle);
-    mEroViewGroup = (ViewGroup)findViewById(R.id.loEroAlbum);
-    mListEroAdapter = new PhotoEroGalleryAdapter(getApplicationContext(),mIsOwner);
-    mListEroView = (HorizontalListView)findViewById(R.id.lvEroAlbumPreview);
-    mListEroView.setAdapter(mListEroAdapter);
-    mListEroView.setOnItemClickListener(mOnItemClickListener);
 
     // Info
     mName = (TextView)findViewById(R.id.tvProfileName);
@@ -371,19 +351,14 @@ public class ProfileActivity extends MenuActivity {
   //---------------------------------------------------------------------------
   private void setOwnerAlbum() {
     mPhotoList.clear();
-    mEroList.clear();
     mPhotoList.add(new Album()); // добавление элемента кнопки загрузки
-    mEroList.add(new Album());   // новых сообщений
-
     // сортируем эро и не эро
     LinkedList<Album> albumList = CacheProfile.albums;
     if (albumList == null) {
         return;
     }
     for(Album album : albumList)
-      if(album.ero)
-        mEroList.add(album);
-      else
+      if(!album.ero)
         mPhotoList.add(album);
     
     // обновляем галереи
@@ -392,21 +367,9 @@ public class ProfileActivity extends MenuActivity {
     }
     mListAdapter.notifyDataSetChanged();
 
-    if(mEroList.size()>0) {
-      mListEroAdapter.setDataList(mEroList);
-      mEroTitle.setVisibility(View.VISIBLE);
-      mEroViewGroup.setVisibility(View.VISIBLE);
-    }
-    mListEroAdapter.notifyDataSetChanged();
-    
     if(mPhotoList.size() > Data.GRID_COLUMN+1) {
       mGR.setVisibility(View.VISIBLE);
       mGL.setVisibility(View.VISIBLE);
-    }
-
-    if(mEroList.size() > Data.GRID_COLUMN+1) {
-      mEGR.setVisibility(View.VISIBLE);
-      mEGL.setVisibility(View.VISIBLE);
     }
   }
   //---------------------------------------------------------------------------
@@ -422,47 +385,28 @@ public class ProfileActivity extends MenuActivity {
       @Override
       public void success(ApiResponse response) {
         mPhotoList.clear();
-        mEroList.clear();
         mPhotoList.add(new Album()); // добавление элемента кнопки загрузки
-        mEroList.add(new Album());   // новых сообщений
-        
+
         // сортируем эро и не эро
         LinkedList<Album> albumList = Album.parse(response);
         CacheProfile.albums.clear();
         CacheProfile.albums = albumList;
         for(Album album : albumList)
-          if(album.ero)
-            mEroList.add(album);
-          else
+          if(!album.ero)
             mPhotoList.add(album);
         
         // обновляем галереи
         if(mPhotoList.size()>0)
           mListAdapter.setDataList(mPhotoList);
-        if(mEroList.size()>0)
-          mListEroAdapter.setDataList(mEroList);
-
 
         post(new Runnable() {
           @Override
           public void run() {
-            //noinspection ConstantConditions
-            if(mEroList != null && mEroList.size()>0) {
-              mEroTitle.setVisibility(View.VISIBLE);
-              mEroViewGroup.setVisibility(View.VISIBLE);
-            }
-            
             mListAdapter.notifyDataSetChanged();
-            mListEroAdapter.notifyDataSetChanged();
-            
+
             if(mPhotoList != null && mPhotoList.size() > Data.GRID_COLUMN+1) {
               mGR.setVisibility(View.VISIBLE);
               mGL.setVisibility(View.VISIBLE);
-            }
-
-            if(mEroList != null && mEroList.size() > Data.GRID_COLUMN+1) {
-              mEGR.setVisibility(View.VISIBLE);
-              mEGL.setVisibility(View.VISIBLE);
             }
           }
         });
@@ -598,37 +542,21 @@ public class ProfileActivity extends MenuActivity {
         // сортируем эро и не эро
         LinkedList<Album> albumList = Album.parse(response);        
         for(Album album : albumList)
-          if(album.ero)
-            mEroList.add(album);
-          else
+          if(!album.ero)
             mPhotoList.add(album);
         
         // обнавляем галереи
         if(mPhotoList.size()>0)
           mListAdapter.setDataList(mPhotoList);
-        if(mEroList.size()>0)
-          mListEroAdapter.setDataList(mEroList);
 
         post(new Runnable() {
           @Override
           public void run() {
-            //noinspection ConstantConditions
-            if(mEroList != null && mEroList.size()>0) {
-              mEroTitle.setVisibility(View.VISIBLE);
-              mEroViewGroup.setVisibility(View.VISIBLE);
-            }
-            
             mListAdapter.notifyDataSetChanged();
-            mListEroAdapter.notifyDataSetChanged();
-            
+
             if(mPhotoList != null && mPhotoList.size() > Data.GRID_COLUMN+1) {
               mGR.setVisibility(View.VISIBLE);
               mGL.setVisibility(View.VISIBLE);
-            }
-
-            if(mEroList != null && mEroList.size() > Data.GRID_COLUMN+1) {
-              mEGR.setVisibility(View.VISIBLE);
-              mEGL.setVisibility(View.VISIBLE);
             }
           }
         });
@@ -648,31 +576,22 @@ public class ProfileActivity extends MenuActivity {
 
     //---------------------------------------------------------------------------
   public void release() {
-    mName=mCity=mEroTitle=mHeight=mWeight=mEducation=mCommunication=null;
+    mName=mCity=mHeight=mWeight=mEducation=mCommunication=null;
     mCharacter=mAlcohol=mFitness=mMarriage=mFinances=mSmoking=null;
 
     mProfileButton=null;
-    mEroViewGroup=null;
-    
+
     mListView=null;
-    mListEroView=null;
 
     if(mListAdapter!=null)
       mListAdapter.release();
     mListAdapter=null;
-    
-    if(mListEroAdapter!=null)
-      mListEroAdapter.release();
-    mListEroAdapter=null;
-    
+
 
     if(mPhotoList!=null)
       mPhotoList.clear();
     mPhotoList=null;
-    
-    if(mEroList!=null) mEroList.clear();
-    mEroList=null;
-    
+
     if(Data.photoAlbum!=null) Data.photoAlbum.clear();
     Data.photoAlbum=null;
   }
@@ -788,29 +707,6 @@ public class ProfileActivity extends MenuActivity {
 
             startActivityForResult(intent,ALBUM_ACTIVITY_REQUEST_CODE);
           }
-        } break;
-        case R.id.lvEroAlbumPreview: {     // ERO ALBUM
-          if(position==0 && mIsOwner)  // нажатие на добавление эро фотки в своем альбоме
-              mAddPhotoHelper.addEroPhoto();
-          else {
-            Intent intent;
-            if(mIsOwner) {
-              --position;
-              Data.photoAlbum = new LinkedList<Album>();  // ммм, передумать реализацию проброса массива линков
-              Data.photoAlbum.addAll(mEroList);
-              Data.photoAlbum.removeFirst();
-              intent = new Intent(getApplicationContext(),PhotoAlbumActivity.class);
-              intent.putExtra(PhotoAlbumActivity.INTENT_OWNER,true);
-            } else {
-              Data.photoAlbum = mEroList;
-              intent = new Intent(getApplicationContext(),PhotoEroAlbumActivity.class);
-            }
-
-            intent.putExtra(PhotoEroAlbumActivity.INTENT_USER_ID,mUserId);
-            intent.putExtra(PhotoEroAlbumActivity.INTENT_ALBUM_POS,position);
-
-            startActivityForResult(intent,ALBUM_ACTIVITY_REQUEST_CODE);
-          }        
         } break;
       }
     }    

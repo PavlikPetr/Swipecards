@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -24,7 +23,7 @@ import com.topface.topface.utils.Utils;
  * Хелпер для загрузки фотографий в любой активити
  * <p/>
  * Как использовать:
- * 1) Вызвать метод addPhoto или addEroPhoto, для показа диалога
+ * 1) Вызвать метод addPhoto для показа диалога
  * 1а) Вы можете добавить коллбэк на окончание загрузки фото через метод setOnResultHandler
  * 2) В методе onActivityResult вашей активити вызвать метод checkActivityResult
  * (если это результат с загрузкой фото, то фотография начнет загружаться на сервер)
@@ -39,7 +38,6 @@ public class AddPhotoHelper {
     private Handler mHandler;
     public static final int ADD_PHOTO_RESULT_OK = 0;
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
-    private boolean mAddEroState = false;
     private static final int RESULT_OK = -1;
 
     public AddPhotoHelper(Context context, Activity activity) {
@@ -47,14 +45,6 @@ public class AddPhotoHelper {
         mActivity = activity;
         mProgressDialog = new ProgressDialog(mContext);
         mProgressDialog.setMessage(mContext.getString(R.string.general_dialog_loading));
-    }
-
-    /**
-     * Добавление эрофотографии
-     */
-    public void addEroPhoto() {
-        mAddEroState = true;
-        addPhoto();
     }
 
     /**
@@ -144,24 +134,10 @@ public class AddPhotoHelper {
         @Override
         protected void onPostExecute(final String[] result) {
             super.onPostExecute(result);
-
-            if (mAddEroState) {
-                // попап с выбором цены эро фотографии
-                final CharSequence[] items = {mContext.getString(R.string.profile_coin_1),
-                        mContext.getString(R.string.profile_coin_2),
-                        mContext.getString(R.string.profile_coin_3)};
-                new AlertDialog.Builder(mContext)
-                        .setTitle(mContext.getString(R.string.profile_ero_price))
-                        .setItems(items, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int item) {
-                                sendAddRequest(result, item + 1);
-                            }
-                        }).create().show();
-            } else
-                sendAddRequest(result, 0);
+            sendAddRequest(result);
         }
 
-        private void sendAddRequest(final String[] result, final int price) {
+        private void sendAddRequest(final String[] result) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -169,10 +145,6 @@ public class AddPhotoHelper {
                     addPhotoRequest.big = result[0];
                     addPhotoRequest.medium = result[1];
                     addPhotoRequest.small = result[2];
-                    addPhotoRequest.ero = mAddEroState;
-                    if (mAddEroState) {
-                        addPhotoRequest.cost = price;
-                    }
                     addPhotoRequest.callback(new ApiHandler() {
                         @Override
                         public void success(ApiResponse response) {

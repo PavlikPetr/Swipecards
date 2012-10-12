@@ -40,7 +40,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         return mAlbumsList.size();
     }
 
-    
+
     public Object getItem(int position) {
         return mAlbumsList.get(position);
     }

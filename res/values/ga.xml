@@ -24,7 +24,6 @@
     <string name="com.topface.topface.ui.LikesActivity">/PageLikes</string>
     <string name="com.topface.topface.ui.MainActivity">/TopfaceStarted</string>
     <string name="com.topface.topface.ui.profile.album.PhotoAlbumActivity">/PhotoAlbumActivity</string>
-    <string name="com.topface.topface.ui.profile.album.PhotoEroAlbumActivity">/PhotoEroAlbumActivity</string>
     <string name="com.topface.topface.ui.profile.EditProfileActivity">/EditProfileActivity</string>
     <string name="com.topface.topface.ui.profile.ProfileActivity">/PageProfile</string>
     <string name="com.topface.topface.ui.SymphatyActivity">/PageMutual</string>

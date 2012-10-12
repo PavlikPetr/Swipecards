@@ -40,8 +40,8 @@ public class DatingAlbum extends Gallery implements View.OnTouchListener {
     return true;
   }
   //---------------------------------------------------------------------------
-  private boolean isScrollingLeft(MotionEvent e1, MotionEvent e2){ 
-    return e2.getX() > e1.getX(); 
+  private boolean isScrollingLeft(MotionEvent e1, MotionEvent e2){
+    return e2.getX() > e1.getX();
   }
   //---------------------------------------------------------------------------
   @Override

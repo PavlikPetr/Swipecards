@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!--<uses-permission android:name="android.permission.READ_CONTACTS" />-->
 
 
     <application
@@ -51,7 +51,6 @@
         <activity android:name=".ui.profile.ProfileActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ui.profile.EditProfileActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ui.profile.album.PhotoAlbumActivity"/>
-        <activity android:name=".ui.profile.album.PhotoEroAlbumActivity"/>
         <activity android:name=".billing.BuyingActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ui.InviteActivity"/>
         <activity android:name=".ui.LeadersActivity"/>
