@@ -13,7 +13,7 @@ import com.topface.topface.utils.Settings;
 public class C2DMReceiver extends C2DMBaseReceiver {
     // Data
     public static final String SENDER_ID = "android@topface.com";
-    >
+
     public C2DMReceiver() {
         super(SENDER_ID);
     }
