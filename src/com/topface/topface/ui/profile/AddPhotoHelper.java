@@ -132,7 +132,7 @@ public class AddPhotoHelper {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            mProgressDialog.show();
+            mProgressDialog.show();
         }
 
         @Override

@@ -35,7 +35,7 @@ public class GiftsFragment extends BaseFragment {
 	private String mTag;
 
 	public static final String GIFTS_ALL_TAG = "giftsGridAll";
-	public static final String GIFTS_PROFILE_TAG = "giftsGridProfile";
+	public static final String GIFTS_USER_PROFILE_TAG = "giftsGridProfile";
 	public static final int GIFTS_COLUMN_PORTRAIT = 3;
 	public static final int GIFTS_COLUMN_LANDSCAPE = 5;
 
@@ -51,12 +51,9 @@ public class GiftsFragment extends BaseFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		if (activity instanceof UserProfileActivity) {
-			User userData;
-			mProfile = userData = ((UserProfileActivity) activity).mUser;
-			mTag = GIFTS_PROFILE_TAG;
-			// if(mProfile instanceof User)
-			// setGifts(Gift.parse(((User)mProfile).gifts));
-			setGifts(userData.gifts);
+			mProfile = ((UserProfileActivity) activity).mUser;
+			mTag = GIFTS_USER_PROFILE_TAG;
+			setGifts(mProfile.gifts);
 			mGalleryManager = new GiftGalleryManager<Gift>(mGifts, new Handler() {
 				@Override
 				public void handleMessage(Message msg) {
@@ -67,7 +64,8 @@ public class GiftsFragment extends BaseFragment {
 			});
 		} else if (activity instanceof NavigationActivity) {
 			mProfile = CacheProfile.getProfile();
-			mTag = GIFTS_ALL_TAG;			
+			mTag = GIFTS_ALL_TAG;
+			setGifts(mProfile.gifts);
 			mGalleryManager = new GiftGalleryManager<Gift>(mGifts, new Handler() {
 				@Override
 				public void handleMessage(Message msg) {
@@ -124,7 +122,7 @@ public class GiftsFragment extends BaseFragment {
 					onNewFeeds();
 				}
 			}
-		} else if (mTag.equals(GIFTS_PROFILE_TAG)) {
+		} else if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
 			((TextView) view.findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
 			view.findViewById(R.id.fragmentTitle).setVisibility(View.VISIBLE);
 			gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -309,7 +307,7 @@ public class GiftsFragment extends BaseFragment {
 	public void setGifts(LinkedList<Gift> gifts) {
 		mGifts.clear();
 		mGifts.addAll(gifts);
-		if (mTag.equals(GIFTS_PROFILE_TAG)) {
+		if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
 			mGifts.add(0, Gift.getSendedGiftItem());
 			if (mGifts.size() >= UserProfileActivity.GIFTS_LOAD_COUNT)
 				mGifts.add(new Gift(ItemType.LOADER));

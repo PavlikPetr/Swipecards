@@ -31,7 +31,7 @@
         android:layout_alignTop="@id/ivPhoto"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
-        android:background="@drawable/edit_photo_btn_set_as_main_selected"
+        android:background="@drawable/edit_photo_btn_set_as_main_pressed"
         android:drawableLeft="@drawable/edit_background_photo_selected_icon"
         android:text="@string/edit_selected"
         android:clickable="false"

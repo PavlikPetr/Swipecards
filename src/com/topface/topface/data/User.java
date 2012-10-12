@@ -18,9 +18,7 @@ public class User extends Profile {
     public boolean mutual;  // флаг наличия симпатии к авторизованному пользователю
     public int score;       // средний балл оценок пользователя    
     public Photos photos;
-    public Photo photo;
-
-    public LinkedList<Gift> gifts = new LinkedList<Gift>();
+    public Photo photo;    
     
     public static User parse(int userId, ApiResponse response) { //нужно знать userId
         User profile = new User();
@@ -39,19 +37,7 @@ public class User extends Profile {
             profile.mutual = item.optBoolean("mutual");
             profile.score = item.optInt("score");
             profile.photo = Photo.parse(item.getJSONObject("photo"));
-            profile.photos = Photos.parse(item.getJSONArray("photos"));            
-
-            //gifts
-            JSONArray arrGifts = item.optJSONArray("gifts");
-            for (int i = 0; i < arrGifts.length(); i++) {
-                JSONObject itemGift = arrGifts.getJSONObject(i);
-                Gift gift = new Gift();
-                gift.id = itemGift.optInt("gift");
-                gift.link = itemGift.optString("link");
-                gift.type = Gift.PROFILE;
-                gift.feedId = itemGift.optInt("id");
-                profile.gifts.add(gift);
-            }
+            profile.photos = Photos.parse(item.getJSONArray("photos"));                        
             
             initPhotos(item, profile);
 

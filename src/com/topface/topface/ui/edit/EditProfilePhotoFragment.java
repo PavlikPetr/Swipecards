@@ -98,7 +98,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         return (mSelectedId != mLastSelectedId) || !mDeleted.isEmpty();
     }
 
-    private boolean mOperationsFinished = false;
+    private boolean mOperationsFinished = true;
     private boolean mCanceled = false;
     @Override
     protected void saveChanges(final Handler handler) {
@@ -106,6 +106,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 	        prepareRequestSend();
 	        
 	        if (!mDeleted.isEmpty()) {	
+	        	mOperationsFinished = false;
 				PhotoDeleteRequest deleteRequest = new PhotoDeleteRequest(getActivity().getApplicationContext());
 		        registerRequest(deleteRequest);
 		        
@@ -119,6 +120,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 					
 					@Override
 					public void success(ApiResponse response) throws NullPointerException {
+						mDeleted.clear();
 						CacheProfile.photos.removeAll(mDeleted);
 						finishOperations(handler);
 					}
