@@ -4,19 +4,19 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
 public class Settings extends AbstractData {
-  // Data
-  public boolean completed;
-  //---------------------------------------------------------------------------
-  public static Settings parse(ApiResponse response) {
-    Settings settings = new Settings();
-    
-    try {
-      settings.completed = response.mJSONResult.optBoolean("completed");
-    } catch(Exception e) {
-      Debug.log("Settings.class","Wrong response parsing: " + e);
+    // Data
+    public boolean completed;
+
+    public static Settings parse(ApiResponse response) {
+        Settings settings = new Settings();
+
+        try {
+            settings.completed = response.mJSONResult.optBoolean("completed");
+        } catch (Exception e) {
+            Debug.log("Settings.class", "Wrong response parsing: " + e);
+        }
+
+        return settings;
     }
-    
-    return settings;
-  }
-  //---------------------------------------------------------------------------
+
 }

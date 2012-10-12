@@ -1,41 +1,41 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
 import com.topface.topface.Static;
 import com.topface.topface.utils.http.ConnectionManager;
-import android.content.Context;
 
 public abstract class ApiRequest {
-  // Data
-  public String ssid;
-  public ApiHandler handler;
-  public Context context;
-  //---------------------------------------------------------------------------
-  public ApiRequest(Context context) {
-    ssid = Static.EMPTY;
-    this.context = context;
-  }
-  //---------------------------------------------------------------------------
-  public ApiRequest callback(ApiHandler handler) {
-    this.handler = handler;
-    return this;
-  }
-  //---------------------------------------------------------------------------
-  public void exec() {
-    ConnectionManager.getInstance().sendRequest(this);
-    //ConnectionManager.getInstance().sendRequestNew(this);
-    //ConnectionService.sendRequest(mContext,this);
-  }
-  //---------------------------------------------------------------------------
-  public void cancel() {
-    handler = null;
-    //if(mHttpPost!=null) mHttpPost.abort();
-  }
-  //---------------------------------------------------------------------------
+    // Data
+    public String ssid;
+    public ApiHandler handler;
+    public Context context;
+
+    public ApiRequest(Context context) {
+        ssid = Static.EMPTY;
+        this.context = context;
+    }
+
+    public ApiRequest callback(ApiHandler handler) {
+        this.handler = handler;
+        return this;
+    }
+
+    public void exec() {
+        ConnectionManager.getInstance().sendRequest(this);
+        //ConnectionManager.getInstance().sendRequestNew(this);
+        //ConnectionService.sendRequest(mContext,this);
+    }
+
+    public void cancel() {
+        handler = null;
+        //if(mHttpPost!=null) mHttpPost.abort();
+    }
+
 }
 
 //private static ExecutorService mThreadsPool = Executors.newFixedThreadPool(2);
 /*
-  //---------------------------------------------------------------------------
+
   public void execOld() {
     if(mHandler == null) {
       mHandler.response(new ApiResponse(""));
@@ -84,7 +84,7 @@ public abstract class ApiRequest {
   }
  */
 /*
-//---------------------------------------------------------------------------
+
 public void execJ() {
   if(mHandler==null) {
     mHandler.response(new ApiResponse(""));
@@ -148,7 +148,7 @@ public void execJ() {
 }
 */
 /*
-//---------------------------------------------------------------------------
+
 public void exec() {
   if(mHandler==null) {
     mHandler.response(new ApiResponse(Static.EMPTY));

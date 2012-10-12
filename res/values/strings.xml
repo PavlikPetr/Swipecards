@@ -27,7 +27,9 @@
     <string name="dashbrd_btn_sympathy">Sympathy</string>
     <string name="dashbrd_btn_love">Delight</string>
     <string name="dashbrd_btn_skip">Next</string>
-    <string name="dashbrd_popup_rating">Did you like our application? Raise our rating! The higher rating the more people you will meet in Topface"</string>
+    <string name="dashbrd_popup_rating">Did you like our application? Raise our rating! The higher rating the more
+        people you will meet in Topface"
+    </string>
     <string name="dashbrd_popup_title">RATE ME</string>
     <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
     <string name="dashbrd_popup_rate">Yes, I would rate</string>
@@ -104,7 +106,7 @@
     <string name="buying_pack_40coins">40 coins pack</string>
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">100 coins pack</string>
-    <string name="buying_100coins">10  USD</string>
+    <string name="buying_100coins">10 USD</string>
     <string name="buying_info">You can buy coins and energy</string>
     <string name="buying_economy_25">Save 25%</string>
     <string name="buying_economy_40">Save 40%</string>
@@ -227,7 +229,7 @@
 
     <!--Not Found Dialog-->
     <string name="not_found_dialog_title">No results found</string>
-    <string name="not_found_dialog_message">No results found, try changing your search </string>
+    <string name="not_found_dialog_message">No results found, try changing your search</string>
     <string name="not_found_dialog_change_filter">Change search settings</string>
     <string name="not_found_dialog_try">Try again</string>
     <string name="photo_upload_error">Error uploading photo.</string>

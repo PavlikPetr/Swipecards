@@ -103,7 +103,7 @@ public class InviteAdapter extends CursorAdapter {
         //Состояние чекбокса пункта
         holder.checkbox.setImageResource(
                 mTriggersList.isOn(holder.contactId) ?
-                        R.drawable.invite_checkbox_on:
+                        R.drawable.invite_checkbox_on :
                         R.drawable.invite_checkbox_off
         );
 
@@ -116,7 +116,7 @@ public class InviteAdapter extends CursorAdapter {
      * @param id контакта
      * @return Bitmap c фото контакта
      */
-    public static Bitmap loadContactPhoto(ContentResolver cr, long  id) {
+    public static Bitmap loadContactPhoto(ContentResolver cr, long id) {
         Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id);
         InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(cr, uri);
         if (input == null) {

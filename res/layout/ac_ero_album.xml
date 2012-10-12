@@ -1,116 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
     <ProgressBar
-        android:id="@+id/pgrsEroAlbum"
-        style="@android:style/Widget.ProgressBar.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+            android:id="@+id/pgrsEroAlbum"
+            style="@android:style/Widget.ProgressBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
 
     <!-- gallery -->
 
     <ImageView
-        android:id="@+id/ivEroPhoto"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+            android:id="@+id/ivEroPhoto"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
 
     <!-- header bar -->
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-      <include layout="@layout/bar_header" />
-      <TextView
-          android:id="@+id/tvEroAlbumMoney"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="#ffffff"
-          android:textStyle="bold"
-          android:layout_marginLeft="5dp"
-          android:layout_marginTop="5dp"
-          />
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <include layout="@layout/bar_header"/>
+        <TextView
+                android:id="@+id/tvEroAlbumMoney"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                />
     </LinearLayout>
 
     <!-- buttons -->
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/im_bar_header" >
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/im_bar_header">
 
         <Button
-            android:id="@+id/btnEroAlbumLike"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="18dp"
-            android:text="@string/ero_album_btn_like"
-            android:textColor="@drawable/clr_text_selector"
-            android:background="@drawable/album_ero_like_selector"
-            android:visibility="invisible" />
-
-        
-        <!-- Buy Button -->
-          <LinearLayout 
-                android:id="@+id/btnEroAlbumBuy"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:layout_centerInParent="true"
-		            android:layout_centerVertical="true"
-		            android:layout_marginLeft="4dp"
-		            android:layout_marginRight="4dp"
-		            android:gravity="center"
-		            android:text="@string/ero_album_btn_buy"
-		            android:textColor="@drawable/clr_text_selector"
-		            android:background="@drawable/album_ero_next_selector"
-		            android:visibility="invisible"
-		            android:orientation="horizontal" >
-            <TextView
-                android:id="@+id/tvEroPhotoCost" 
+                android:id="@+id/btnEroAlbumLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="18dp"
+                android:text="@string/ero_album_btn_like"
+                android:textColor="@drawable/clr_text_selector"
+                android:background="@drawable/album_ero_like_selector"
+                android:visibility="invisible"/>
+
+
+        <!-- Buy Button -->
+        <LinearLayout
+                android:id="@+id/btnEroAlbumBuy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:gravity="center"
-                android:textColor="#303030"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:drawableRight="@drawable/dating_money"
-                android:drawablePadding="4dp" />
+                android:text="@string/ero_album_btn_buy"
+                android:textColor="@drawable/clr_text_selector"
+                android:background="@drawable/album_ero_next_selector"
+                android:visibility="invisible"
+                android:orientation="horizontal">
             <TextView
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:gravity="center"
-		            android:text="@string/ero_album_btn_next"
-	            android:textColor="@drawable/clr_text_selector" />
-          </LinearLayout>
+                    android:id="@+id/tvEroPhotoCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:gravity="center"
+                    android:textColor="#303030"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:drawableRight="@drawable/dating_money"
+                    android:drawablePadding="4dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/ero_album_btn_next"
+                    android:textColor="@drawable/clr_text_selector"/>
+        </LinearLayout>
 
         <Button
-            android:id="@+id/btnEroAlbumNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            android:text="@string/ero_album_btn_next"
-            android:textColor="@drawable/clr_text_selector"
-            android:background="@drawable/album_ero_next_selector"
-            android:visibility="invisible" />
+                android:id="@+id/btnEroAlbumNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:text="@string/ero_album_btn_next"
+                android:textColor="@drawable/clr_text_selector"
+                android:background="@drawable/album_ero_next_selector"
+                android:visibility="invisible"/>
 
         <Button
-            android:id="@+id/btnEroAlbumDislike"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="18dp"
-            android:text="@string/ero_album_btn_dislike"
-            android:textColor="@drawable/clr_text_selector"
-            android:background="@drawable/album_ero_like_selector"
-            android:visibility="invisible" />
+                android:id="@+id/btnEroAlbumDislike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="18dp"
+                android:text="@string/ero_album_btn_dislike"
+                android:textColor="@drawable/clr_text_selector"
+                android:background="@drawable/album_ero_like_selector"
+                android:visibility="invisible"/>
     </RelativeLayout>
 
 </RelativeLayout>

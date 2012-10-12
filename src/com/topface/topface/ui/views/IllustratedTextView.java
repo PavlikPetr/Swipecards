@@ -8,6 +8,7 @@ import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.widget.TextView;
 import com.topface.topface.R;
+
 import java.util.ArrayList;
 
 
@@ -33,8 +34,7 @@ public class IllustratedTextView extends TextView {
         if (!mIsTextChanged) {
             mIsTextChanged = true;
             setText(illustrateText(text));
-        }
-        else {
+        } else {
             mIsTextChanged = false;
         }
         super.onTextChanged(text, start, before, after);
@@ -49,7 +49,7 @@ public class IllustratedTextView extends TextView {
             spannableString = new SpannableString(text);
             int templateLength = template.length();
             Context ctx = getContext();
-            for (int spanStart:indexes) {
+            for (int spanStart : indexes) {
                 spannableString.setSpan(
                         new ImageSpan(ctx, icon, ICON_ALIGN),
                         spanStart,

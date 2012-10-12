@@ -44,7 +44,6 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
     private boolean mReceiverRegistered;
     private String mUserAvatar;
 
-    //---------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,7 +149,6 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
         }
     }
 
-    //---------------------------------------------------------------------------
     @Override
     protected void onDestroy() {
         if (messageRequest != null) messageRequest.cancel();
@@ -170,7 +168,6 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
         }
     }
 
-    //---------------------------------------------------------------------------
     private void update() {
         mProgressBar.setVisibility(View.VISIBLE);
         historyRequest = new HistoryRequest(getApplicationContext());
@@ -207,7 +204,6 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
         }).exec();
     }
 
-    //---------------------------------------------------------------------------
     private void release() {
         mEdBox = null;
         mListView = null;
@@ -217,7 +213,6 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
         mHistoryList = null;
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public void onClick(View v) {
         //Обработка клика на автарку
@@ -243,6 +238,4 @@ public class ChatActivity extends TrackedActivity implements View.OnClickListene
         }
     };
 
-
-    //---------------------------------------------------------------------------
 }

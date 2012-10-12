@@ -28,7 +28,7 @@ public class LeadersAdapter extends BaseAdapter {
     public LeadersAdapter(Context context, Leaders leaders) {
         super();
         mInflater = LayoutInflater.from(context);
-        mLeaders  = leaders.leaders;
+        mLeaders = leaders.leaders;
         mPostProcessor = new RoundPostProcessor(AvatarManager.AVATAR_ROUND_RADIUS);
     }
 
@@ -56,8 +56,7 @@ public class LeadersAdapter extends BaseAdapter {
             view = mInflater.inflate(R.layout.leaders_item, null);
             avatar = (ImageView) view.findViewById(R.id.leaderAvatar);
             view.setTag(avatar);
-        }
-        else {
+        } else {
             avatar = (ImageView) view.getTag();
         }
 

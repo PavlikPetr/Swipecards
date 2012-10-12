@@ -1,9 +1,13 @@
 package com.topface.topface.ui.adapters;
 
-import java.util.LinkedList;
-
+import android.content.Context;
 import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
@@ -13,19 +17,14 @@ import com.topface.topface.ui.views.RoundedImageView;
 import com.topface.topface.utils.AvatarManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
+
+import java.util.LinkedList;
 
 public class ChatListAdapter extends BaseAdapter {
 
     private RoundPostProcessor mPostProcessor;
     private String mUserAvatar;
 
-    //---------------------------------------------------------------------------
     // class ViewHolder
     static class ViewHolder {
         RoundedImageView mAvatar;
@@ -33,7 +32,6 @@ public class ChatListAdapter extends BaseAdapter {
         TextView mDate;
     }
 
-    //---------------------------------------------------------------------------
     // Data
     private Context mContext;
     private int mUserId;
@@ -48,7 +46,6 @@ public class ChatListAdapter extends BaseAdapter {
     private static final int T_FRIEND_EXT = 3;
     private static final int T_COUNT = 4;
 
-    //---------------------------------------------------------------------------
     public ChatListAdapter(Context context, int userId, String avatar, LinkedList<History> dataList) {
         mContext = context;
         mList = dataList;
@@ -59,7 +56,6 @@ public class ChatListAdapter extends BaseAdapter {
         prepare(dataList);
     }
 
-    //---------------------------------------------------------------------------
     public void setOnAvatarListener(View.OnClickListener onAvatarListener) {
         mOnAvatarListener = onAvatarListener;
     }
@@ -84,31 +80,26 @@ public class ChatListAdapter extends BaseAdapter {
         return mList.size();
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public History getItem(int position) {
         return mList.get(position);
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public int getViewTypeCount() {
         return T_COUNT;
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public int getItemViewType(int position) {
         return mItemLayoutList.get(position);
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -238,7 +229,6 @@ public class ChatListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    //---------------------------------------------------------------------------
     public void addSentMessage(History msg) {
         int position = mList.size() - 1;
         if (position < 0)
@@ -254,13 +244,11 @@ public class ChatListAdapter extends BaseAdapter {
         mList.add(msg);
     }
 
-    //---------------------------------------------------------------------------
     public void setDataList(LinkedList<History> dataList) {
         prepare(dataList);
         mList.addAll(dataList);
     }
 
-    //---------------------------------------------------------------------------
     public void prepare(LinkedList<History> dataList) {
         int prev_id = 0;
         for (History history : dataList) {
@@ -277,7 +265,6 @@ public class ChatListAdapter extends BaseAdapter {
         }
     }
 
-    //---------------------------------------------------------------------------
     public void release() {
         if (mList != null)
             mList.clear();
@@ -291,5 +278,5 @@ public class ChatListAdapter extends BaseAdapter {
     private void loadAvatar(String url, ImageView view) {
         DefaultImageLoader.getInstance().displayImage(url, view, mPostProcessor);
     }
-    //---------------------------------------------------------------------------
+
 }

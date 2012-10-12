@@ -3,7 +3,7 @@ package com.topface.i18n.plurals;
  * Plural rules for the following locales and languages:
  *
  * Locales: ga se sma smi smj smn sms
- * 
+ *
  * Languages:
  *  Irish (ga)
  *  Northern Sami (se)
@@ -23,31 +23,24 @@ package com.topface.i18n.plurals;
  * @see http://unicode.org/repos/cldr/trunk/common/supplemental/plurals.xml
  * @see plurals.xml (local copy)
  *
- * @package    I18n_Plural
- * @category   Plural Rules
- * @author     Korney Czukowski
- * @copyright  (c) 2011 Korney Czukowski
- * @license    MIT License
+ * @package I18n_Plural
+ * @category Plural Rules
+ * @author Korney Czukowski
+ * @copyright (c) 2011 Korney Czukowski
+ * @license MIT License
  */
 
 /**
- * Converted to Java by Sam Marshak, 2012 
+ * Converted to Java by Sam Marshak, 2012
  */
-public class PluralRules_Two extends PluralRules
-{
-	public int quantityForNumber(int count)
-	{
-		if (count == 1)
-		{
-			return QUANTITY_ONE;
-		}
-		else if (count == 2)
-		{
-			return QUANTITY_TWO;
-		}
-		else
-		{
-			return QUANTITY_OTHER;
-		}
-	}
+public class PluralRules_Two extends PluralRules {
+    public int quantityForNumber(int count) {
+        if (count == 1) {
+            return QUANTITY_ONE;
+        } else if (count == 2) {
+            return QUANTITY_TWO;
+        } else {
+            return QUANTITY_OTHER;
+        }
+    }
 }

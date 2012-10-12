@@ -36,7 +36,6 @@ public class VisitorsActivity extends TrackedActivity {
     private VisitorsRequest mVisitorsRequest;
     private FloatBlock mFloatBlock;
 
-    //---------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +87,6 @@ public class VisitorsActivity extends TrackedActivity {
         mFloatBlock.update();
     }
 
-    //---------------------------------------------------------------------------
     @Override
     protected void onDestroy() {
         if (mVisitorsRequest != null) mVisitorsRequest.cancel();
@@ -98,7 +96,6 @@ public class VisitorsActivity extends TrackedActivity {
         super.onDestroy();
     }
 
-    //---------------------------------------------------------------------------
     private void update(boolean isPushUpdating) {
         if (!isPushUpdating)
             mProgressBar.setVisibility(View.VISIBLE);

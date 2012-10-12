@@ -18,9 +18,9 @@ public class VisitorsAdapter extends BaseAdapter {
 
     static class ViewHolder {
         public RoundedImageView mAvatar;
-        public TextView  mName;
-        public TextView  mText;
-        public TextView  mTime;
+        public TextView mName;
+        public TextView mText;
+        public TextView mTime;
         public ImageView mArrow;
     }
 
@@ -28,8 +28,8 @@ public class VisitorsAdapter extends BaseAdapter {
     private AvatarManager<Visitor> mAvatarManager;
     private int mOwnerCityID;
     // Constants
-    private static final int T_ALL   = 0;
-    private static final int T_CITY  = 1;
+    private static final int T_ALL = 0;
+    private static final int T_CITY = 1;
     private static final int T_COUNT = 2;
 
     public VisitorsAdapter(Context context, AvatarManager<Visitor> avatarManager) {
@@ -69,18 +69,18 @@ public class VisitorsAdapter extends BaseAdapter {
 
         int type = getItemViewType(position);
 
-        if(convertView==null) {
+        if (convertView == null) {
             holder = new ViewHolder();
 
             convertView = mInflater.inflate(R.layout.item_visitor, null, false);
 
-            holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.ivAvatar);
-            holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
-            holder.mText   = (TextView)convertView.findViewById(R.id.tvText);
-            holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);
-            holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
+            holder.mAvatar = (RoundedImageView) convertView.findViewById(R.id.ivAvatar);
+            holder.mName = (TextView) convertView.findViewById(R.id.tvName);
+            holder.mText = (TextView) convertView.findViewById(R.id.tvText);
+            holder.mTime = (TextView) convertView.findViewById(R.id.tvTime);
+            holder.mArrow = (ImageView) convertView.findViewById(R.id.ivArrow);
 
-            switch(type) {
+            switch (type) {
                 case T_ALL:
                     convertView.setBackgroundResource(R.drawable.item_all_selector);
                     break;
@@ -91,7 +91,7 @@ public class VisitorsAdapter extends BaseAdapter {
 
             convertView.setTag(holder);
         } else
-            holder = (ViewHolder)convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
 
         Visitor visitor = getItem(position);
 
@@ -104,7 +104,7 @@ public class VisitorsAdapter extends BaseAdapter {
     }
 
     public void release() {
-        mInflater=null;
-        mAvatarManager=null;
+        mInflater = null;
+        mAvatarManager = null;
     }
 }

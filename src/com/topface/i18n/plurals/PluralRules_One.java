@@ -1,11 +1,11 @@
 package com.topface.i18n.plurals;
 /**
  * Plural rules for the following locales and languages:
- * 
+ *
  * Locales: bem brx da de el en eo es et fi fo gl he iw it nb nl nn no pt_PT sv af bg bn ca eu fur fy gu ha is ku lb ml
  *          mr nah ne om or pa pap ps so sq sw ta te tk ur zu mn gsw chr rm pt
  * (in original order)
- * 
+ *
  * Languages:
  *  Afrikaans (af)
  *  Bemba (bem)
@@ -71,21 +71,19 @@ package com.topface.i18n.plurals;
  * @see http://unicode.org/repos/cldr/trunk/common/supplemental/plurals.xml
  * @see plurals.xml (local copy)
  *
- * @package    I18n_Plural
- * @category   Plural Rules
- * @author     Korney Czukowski
- * @copyright  (c) 2011 Korney Czukowski
- * @license    MIT License
+ * @package I18n_Plural
+ * @category Plural Rules
+ * @author Korney Czukowski
+ * @copyright (c) 2011 Korney Czukowski
+ * @license MIT License
  *
  */
 
 /**
- * Converted to Java by Sam Marshak, 2012 
+ * Converted to Java by Sam Marshak, 2012
  */
-public class PluralRules_One extends PluralRules
-{
-	public int quantityForNumber(int count)
-	{
-		return count == 1 ? QUANTITY_ONE : QUANTITY_OTHER;
-	}
+public class PluralRules_One extends PluralRules {
+    public int quantityForNumber(int count) {
+        return count == 1 ? QUANTITY_ONE : QUANTITY_OTHER;
+    }
 }

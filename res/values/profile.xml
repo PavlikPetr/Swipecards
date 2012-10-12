@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string name="cache_profile_filter_geo">filter_geo</string>
     <string name="cache_profile_filter_online">filter_online</string>
     <string name="cache_profile_name">first_name</string>
-    
+
 </resources>

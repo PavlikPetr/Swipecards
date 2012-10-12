@@ -13,17 +13,16 @@ public class DefaultImageLoaderListener extends SimpleImageLoadingListener {
     public DefaultImageLoaderListener(ImageView imageView) {
         mImageView = imageView;
     }
+
     @Override
     public void onLoadingFailed(FailReason failReason) {
         super.onLoadingFailed(failReason);
         try {
             mImageView.setImageResource(R.drawable.im_photo_error);
-        }
-        catch (OutOfMemoryError e) {
+        } catch (OutOfMemoryError e) {
             mImageView.setImageBitmap(null);
             Debug.error("Out of memory");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             mImageView.setImageBitmap(null);
             Debug.error(e);
         }

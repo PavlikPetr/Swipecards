@@ -17,25 +17,25 @@ public class PhotoAlbumAdapter extends BaseAdapter {
 
 
     // class ViewHolder
-    
+
     static class ViewHolder {
         ImageView mImageView;
     }
 
-    
+
     // Data
     private int mPrevPosition;         // предыдущая позиция фото в альбоме
     private int mPreRunning;           // текущая пред загружаемое фото
     private LinkedList<Album> mAlbumsList;
     private LayoutInflater mInflater;
 
-    
+
     public PhotoAlbumAdapter(Context context, LinkedList<Album> albumList) {
         mAlbumsList = albumList;
         mInflater = LayoutInflater.from(context);
     }
 
-    
+
     public int getCount() {
         return mAlbumsList.size();
     }
@@ -45,7 +45,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         return mAlbumsList.get(position);
     }
 
-    
+
     public long getItemId(int position) {
         return position;
     }
@@ -54,7 +54,7 @@ public class PhotoAlbumAdapter extends BaseAdapter {
         return mAlbumsList != null && mAlbumsList.size() > position;
     }
 
-    
+
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 

@@ -1,17 +1,5 @@
 package com.topface.topface.utils.http;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import com.topface.topface.utils.Http;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
 import android.content.Context;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
@@ -21,7 +9,19 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.utils.AuthToken;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Http;
 import com.topface.topface.utils.Http.FlushedInputStream;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ConnectionManager {
     // Data

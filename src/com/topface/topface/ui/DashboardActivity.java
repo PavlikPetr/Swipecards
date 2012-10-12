@@ -101,8 +101,7 @@ public class DashboardActivity extends MenuActivity implements View.OnClickListe
 
         if (App.isOnline()) {
             ratingPopup();
-        }
-        else {
+        } else {
             App.showConnectionError();
         }
 

@@ -1,20 +1,20 @@
 package com.topface.topface.utils.http;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
-
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.scheme.HostNameResolver;
 import org.apache.http.conn.scheme.SocketFactory;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+
 /**
  * The default class for creating sockets.
- * 
+ *
  * @author <a href="mailto:rolandw at apache.org">Roland Weber</a>
  * @author Michael Becke
  */
@@ -24,12 +24,13 @@ public final class PlainSocketFactory2 implements SocketFactory {
      * The factory singleton.
      */
     private static final
-        PlainSocketFactory2 DEFAULT_FACTORY = new PlainSocketFactory2();
+    PlainSocketFactory2 DEFAULT_FACTORY = new PlainSocketFactory2();
 
     private final HostNameResolver nameResolver;
-    
+
     /**
      * Gets the singleton instance of this class.
+     *
      * @return the one and only plain socket factory
      */
     public static PlainSocketFactory2 getSocketFactory() {
@@ -52,10 +53,10 @@ public final class PlainSocketFactory2 implements SocketFactory {
     }
 
     // non-javadoc, see interface org.apache.http.conn.SocketFactory
-    public Socket connectSocket(Socket sock, String host, int port, 
+    public Socket connectSocket(Socket sock, String host, int port,
                                 InetAddress localAddress, int localPort,
                                 HttpParams params)
-        throws IOException {
+            throws IOException {
 
         if (host == null) {
             throw new IllegalArgumentException("Target host may not be null.");
@@ -74,7 +75,7 @@ public final class PlainSocketFactory2 implements SocketFactory {
                 localPort = 0; // indicates "any"
 
             InetSocketAddress isa =
-                new InetSocketAddress(localAddress, localPort);
+                    new InetSocketAddress(localAddress, localPort);
             sock.bind(isa);
         }
 
@@ -82,9 +83,9 @@ public final class PlainSocketFactory2 implements SocketFactory {
 
         InetSocketAddress remoteAddress;
         if (this.nameResolver != null) {
-            remoteAddress = new InetSocketAddress(this.nameResolver.resolve(host), port); 
+            remoteAddress = new InetSocketAddress(this.nameResolver.resolve(host), port);
         } else {
-            remoteAddress = new InetSocketAddress(host, port);            
+            remoteAddress = new InetSocketAddress(host, port);
         }
         try {
             sock.connect(remoteAddress, timeout);
@@ -101,14 +102,12 @@ public final class PlainSocketFactory2 implements SocketFactory {
      * This factory creates plain socket connections
      * which are not considered secure.
      *
-     * @param sock      the connected socket
-     *
-     * @return  <code>false</code>
-     *
+     * @param sock the connected socket
+     * @return <code>false</code>
      * @throws IllegalArgumentException if the argument is invalid
      */
     public final boolean isSecure(Socket sock)
-        throws IllegalArgumentException {
+            throws IllegalArgumentException {
 
         if (sock == null) {
             throw new IllegalArgumentException("Socket may not be null.");
@@ -118,7 +117,7 @@ public final class PlainSocketFactory2 implements SocketFactory {
         // an assumption about the socket class here.
         if (sock.getClass() != Socket.class) {
             throw new IllegalArgumentException
-                ("Socket not created by this factory.");
+                    ("Socket not created by this factory.");
         }
         // This check is performed last since it calls a method implemented
         // by the argument object. getClass() is final in java.lang.Object.
@@ -135,9 +134,8 @@ public final class PlainSocketFactory2 implements SocketFactory {
      * Compares this factory with an object.
      * There is only one instance of this class.
      *
-     * @param obj       the object to compare with
-     *
-     * @return  iff the argument is this object
+     * @param obj the object to compare with
+     * @return iff the argument is this object
      */
     @Override
     public boolean equals(Object obj) {

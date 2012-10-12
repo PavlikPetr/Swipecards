@@ -41,8 +41,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
             }
 
             mIsConnected = activeNetInfo.isConnected();
-        }
-        else {
+        } else {
             //Toast.makeText(context, "Интернет выключен", Toast.LENGTH_SHORT).show();
             mIsConnected = false;
             mConnectionType = CONNECTION_OFFLINE;

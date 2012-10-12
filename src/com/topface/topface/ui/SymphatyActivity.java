@@ -32,103 +32,102 @@ import com.topface.topface.utils.Utils;
 import java.util.LinkedList;
 
 public class SymphatyActivity extends TrackedActivity {
-  // Data
-  private boolean mNewUpdating;
-  private TextView mFooterView;
-  private PullToRefreshListView mListView;
-  private SymphatyListAdapter mListAdapter;
-  private LinkedList<FeedSymphaty> mSymphatyDataList;
-  private AvatarManager<FeedSymphaty> mAvatarManager;
-  private DoubleBigButton mDoubleButton;
-  private ProgressBar mProgressBar;
-  private FeedSymphatyRequest symphatyRequest;
-  // Constants
-  private static final int LIMIT = 44;
-  private FloatBlock mFloatBlock;
-
-    //---------------------------------------------------------------------------
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.ac_symphaty);
-    Debug.log(this,"+onCreate");
-
     // Data
-    mSymphatyDataList = new LinkedList<FeedSymphaty>();
-    
-    // Title Header
-   ((TextView)findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.symphaty_header_title));
-   
-   // Progress
-   mProgressBar = (ProgressBar)findViewById(R.id.prsSymphatyLoading);
-   
-   // Double Button
-   mDoubleButton = (DoubleBigButton)findViewById(R.id.btnDoubleBig);
-   mDoubleButton.setLeftText(getString(R.string.symphaty_btn_dbl_left));
-   mDoubleButton.setRightText(getString(R.string.symphaty_btn_dbl_right));
-   mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
-   mDoubleButton.setLeftListener(new View.OnClickListener() {
-     @Override
-     public void onClick(View v) {
-       mNewUpdating = false;
-       update(false);
-     }
-   });
-   mDoubleButton.setRightListener(new View.OnClickListener() {
-     @Override
-     public void onClick(View v) {
-       mNewUpdating = true;
-       update(false);
-     }
-   });
+    private boolean mNewUpdating;
+    private TextView mFooterView;
+    private PullToRefreshListView mListView;
+    private SymphatyListAdapter mListAdapter;
+    private LinkedList<FeedSymphaty> mSymphatyDataList;
+    private AvatarManager<FeedSymphaty> mAvatarManager;
+    private DoubleBigButton mDoubleButton;
+    private ProgressBar mProgressBar;
+    private FeedSymphatyRequest symphatyRequest;
+    // Constants
+    private static final int LIMIT = 44;
+    private FloatBlock mFloatBlock;
 
-   // ListView
-   mListView = (PullToRefreshListView)findViewById(R.id.lvSymphatyList);
-   mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener(){
-     @Override
-     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       Intent intent = new Intent(SymphatyActivity.this.getApplicationContext(),ProfileActivity.class);
-       FeedSymphaty item = (FeedSymphaty) parent.getItemAtPosition(position);
-       intent.putExtra(ProfileActivity.INTENT_USER_ID, item.uid);
-       intent.putExtra(ProfileActivity.INTENT_USER_NAME, item.first_name);
-       startActivityForResult(intent,0);
-     }
-   });
-   mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
-       @Override
-       public void onRefresh(PullToRefreshBase refreshView) {
-           update(true);
-       }
-   });
-   
-   // Footer
-   mFooterView = new TextView(getApplicationContext());
-   mFooterView.setOnClickListener(new View.OnClickListener() {
-     @Override
-     public void onClick(View v) {
-       history();
-     }
-   });
-   mFooterView.setBackgroundResource(R.drawable.item_all_selector);
-   mFooterView.setText(getString(R.string.general_footer_previous));
-   mFooterView.setTextColor(Color.DKGRAY);
-   mFooterView.setGravity(Gravity.CENTER);
-   mFooterView.setTypeface(Typeface.DEFAULT_BOLD);
-   mFooterView.setVisibility(View.GONE);
-   mListView.getRefreshableView().addFooterView(mFooterView);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ac_symphaty);
+        Debug.log(this, "+onCreate");
 
-   // Control creating
-   mAvatarManager = new AvatarManager<FeedSymphaty>(mSymphatyDataList);
-   mListAdapter = new SymphatyListAdapter(getApplicationContext(),mAvatarManager);
-   mListView.setAdapter(mListAdapter);
-   
-   
-   mNewUpdating = CacheProfile.unread_symphaties > 0;
-   CacheProfile.unread_symphaties = 0;
+        // Data
+        mSymphatyDataList = new LinkedList<FeedSymphaty>();
 
-   mFloatBlock = new FloatBlock(this);
-   update(false);
-  }
+        // Title Header
+        ((TextView) findViewById(R.id.tvHeaderTitle)).setText(getString(R.string.symphaty_header_title));
+
+        // Progress
+        mProgressBar = (ProgressBar) findViewById(R.id.prsSymphatyLoading);
+
+        // Double Button
+        mDoubleButton = (DoubleBigButton) findViewById(R.id.btnDoubleBig);
+        mDoubleButton.setLeftText(getString(R.string.symphaty_btn_dbl_left));
+        mDoubleButton.setRightText(getString(R.string.symphaty_btn_dbl_right));
+        mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
+        mDoubleButton.setLeftListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNewUpdating = false;
+                update(false);
+            }
+        });
+        mDoubleButton.setRightListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNewUpdating = true;
+                update(false);
+            }
+        });
+
+        // ListView
+        mListView = (PullToRefreshListView) findViewById(R.id.lvSymphatyList);
+        mListView.getRefreshableView().setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(SymphatyActivity.this.getApplicationContext(), ProfileActivity.class);
+                FeedSymphaty item = (FeedSymphaty) parent.getItemAtPosition(position);
+                intent.putExtra(ProfileActivity.INTENT_USER_ID, item.uid);
+                intent.putExtra(ProfileActivity.INTENT_USER_NAME, item.first_name);
+                startActivityForResult(intent, 0);
+            }
+        });
+        mListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase refreshView) {
+                update(true);
+            }
+        });
+
+        // Footer
+        mFooterView = new TextView(getApplicationContext());
+        mFooterView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                history();
+            }
+        });
+        mFooterView.setBackgroundResource(R.drawable.item_all_selector);
+        mFooterView.setText(getString(R.string.general_footer_previous));
+        mFooterView.setTextColor(Color.DKGRAY);
+        mFooterView.setGravity(Gravity.CENTER);
+        mFooterView.setTypeface(Typeface.DEFAULT_BOLD);
+        mFooterView.setVisibility(View.GONE);
+        mListView.getRefreshableView().addFooterView(mFooterView);
+
+        // Control creating
+        mAvatarManager = new AvatarManager<FeedSymphaty>(mSymphatyDataList);
+        mListAdapter = new SymphatyListAdapter(getApplicationContext(), mAvatarManager);
+        mListView.setAdapter(mListAdapter);
+
+
+        mNewUpdating = CacheProfile.unread_symphaties > 0;
+        CacheProfile.unread_symphaties = 0;
+
+        mFloatBlock = new FloatBlock(this);
+        update(false);
+    }
 
     @Override
     protected void onResume() {
@@ -136,122 +135,122 @@ public class SymphatyActivity extends TrackedActivity {
         mFloatBlock.update();
     }
 
-    //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    if(symphatyRequest!=null) symphatyRequest.cancel();
-    
-    release();
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
-  }
-  //---------------------------------------------------------------------------
-  private void update(boolean isPushUpdating) {
-    if(!isPushUpdating)
-      mProgressBar.setVisibility(View.VISIBLE);
-    mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
-    symphatyRequest = new FeedSymphatyRequest(getApplicationContext());
-    symphatyRequest.limit = LIMIT;
-    symphatyRequest.only_new = mNewUpdating;
-    symphatyRequest.callback(new ApiHandler(){
-      @Override
-      public void success(ApiResponse response) {
-        final LinkedList<FeedSymphaty> feedSymphatyList = FeedSymphaty.parse(response);
-        if (mSymphatyDataList == null) {
-            return;
-        }
-        post(new Runnable() {
-          @Override
-          public void run() {
-            mSymphatyDataList.clear();
-            mSymphatyDataList.addAll(feedSymphatyList);
-            if(mNewUpdating)
-              mFooterView.setVisibility(View.GONE);
-            else
-              mFooterView.setVisibility(View.VISIBLE);
-            
-            if(feedSymphatyList.size()==0 || feedSymphatyList.size()<LIMIT/2)
-              mFooterView.setVisibility(View.GONE);
-            
-            mProgressBar.setVisibility(View.GONE);
-            mListView.onRefreshComplete(); 
-            mListAdapter.notifyDataSetChanged();
-          }
-        });
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-        post(new Runnable() {
-          @Override
-          public void run() {
-            mProgressBar.setVisibility(View.GONE);
-            Utils.showErrorMessage(SymphatyActivity.this);
-            if (mListView != null) {
-                mListView.onRefreshComplete();
-            }
-          }
-        });
-      }
-    }).exec();
-  }
-  //---------------------------------------------------------------------------
-  private void history() {
-    mProgressBar.setVisibility(View.VISIBLE);
-    symphatyRequest = new FeedSymphatyRequest(getApplicationContext());
-    symphatyRequest.limit = LIMIT;
-    symphatyRequest.only_new = false;
-    symphatyRequest.from = mSymphatyDataList.get(mSymphatyDataList.size()-1).id;
-    symphatyRequest.callback(new ApiHandler() {
-      @Override
-      public void success(ApiResponse response) {
-        final LinkedList<FeedSymphaty> feedSymphatyList = FeedSymphaty.parse(response);
+    @Override
+    protected void onDestroy() {
+        if (symphatyRequest != null) symphatyRequest.cancel();
 
-        post(new Runnable() {
-            @Override
-            public void run() {
-                if(feedSymphatyList.size() > 0) {
-                    mSymphatyDataList.addAll(feedSymphatyList);
-                }
-
-                if (feedSymphatyList.size() == 0 || feedSymphatyList.size() < LIMIT / 2)
-                    mFooterView.setVisibility(View.GONE);
-                else
-                    mProgressBar.setVisibility(View.VISIBLE);
-                mProgressBar.setVisibility(View.GONE);
-                mListView.onRefreshComplete();
-                mListAdapter.notifyDataSetChanged();
-            }
-        });
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-        post(new Runnable() {
-          @Override
-          public void run() {
-            Utils.showErrorMessage(SymphatyActivity.this);
-            mProgressBar.setVisibility(View.GONE);
-            mListView.onRefreshComplete();
-          }
-        });
-      }
-    }).exec();
-  }
-
-    //---------------------------------------------------------------------------
-  private void release() {
-    mListView=null;
-    
-    if(mListAdapter!=null)
-      mListAdapter.release();
-    mListAdapter = null;
-
-    if(mAvatarManager!=null) {
-      mAvatarManager=null;
+        release();
+        Debug.log(this, "-onDestroy");
+        super.onDestroy();
     }
-    
-    if(mSymphatyDataList!=null)
-      mSymphatyDataList.clear();
-    mSymphatyDataList=null;
-  }
-  //---------------------------------------------------------------------------
+
+    private void update(boolean isPushUpdating) {
+        if (!isPushUpdating)
+            mProgressBar.setVisibility(View.VISIBLE);
+        mDoubleButton.setChecked(mNewUpdating ? DoubleBigButton.RIGHT_BUTTON : DoubleBigButton.LEFT_BUTTON);
+        symphatyRequest = new FeedSymphatyRequest(getApplicationContext());
+        symphatyRequest.limit = LIMIT;
+        symphatyRequest.only_new = mNewUpdating;
+        symphatyRequest.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                final LinkedList<FeedSymphaty> feedSymphatyList = FeedSymphaty.parse(response);
+                if (mSymphatyDataList == null) {
+                    return;
+                }
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSymphatyDataList.clear();
+                        mSymphatyDataList.addAll(feedSymphatyList);
+                        if (mNewUpdating)
+                            mFooterView.setVisibility(View.GONE);
+                        else
+                            mFooterView.setVisibility(View.VISIBLE);
+
+                        if (feedSymphatyList.size() == 0 || feedSymphatyList.size() < LIMIT / 2)
+                            mFooterView.setVisibility(View.GONE);
+
+                        mProgressBar.setVisibility(View.GONE);
+                        mListView.onRefreshComplete();
+                        mListAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mProgressBar.setVisibility(View.GONE);
+                        Utils.showErrorMessage(SymphatyActivity.this);
+                        if (mListView != null) {
+                            mListView.onRefreshComplete();
+                        }
+                    }
+                });
+            }
+        }).exec();
+    }
+
+    private void history() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        symphatyRequest = new FeedSymphatyRequest(getApplicationContext());
+        symphatyRequest.limit = LIMIT;
+        symphatyRequest.only_new = false;
+        symphatyRequest.from = mSymphatyDataList.get(mSymphatyDataList.size() - 1).id;
+        symphatyRequest.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                final LinkedList<FeedSymphaty> feedSymphatyList = FeedSymphaty.parse(response);
+
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (feedSymphatyList.size() > 0) {
+                            mSymphatyDataList.addAll(feedSymphatyList);
+                        }
+
+                        if (feedSymphatyList.size() == 0 || feedSymphatyList.size() < LIMIT / 2)
+                            mFooterView.setVisibility(View.GONE);
+                        else
+                            mProgressBar.setVisibility(View.VISIBLE);
+                        mProgressBar.setVisibility(View.GONE);
+                        mListView.onRefreshComplete();
+                        mListAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utils.showErrorMessage(SymphatyActivity.this);
+                        mProgressBar.setVisibility(View.GONE);
+                        mListView.onRefreshComplete();
+                    }
+                });
+            }
+        }).exec();
+    }
+
+    private void release() {
+        mListView = null;
+
+        if (mListAdapter != null)
+            mListAdapter.release();
+        mListAdapter = null;
+
+        if (mAvatarManager != null) {
+            mAvatarManager = null;
+        }
+
+        if (mSymphatyDataList != null)
+            mSymphatyDataList.clear();
+        mSymphatyDataList = null;
+    }
+
 }

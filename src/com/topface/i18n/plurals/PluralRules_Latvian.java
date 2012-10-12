@@ -1,7 +1,7 @@
 package com.topface.i18n.plurals;
 /**
  * Plural rules for Latvian language:
- * 
+ *
  * Locales: lv
  *
  * Languages:
@@ -17,31 +17,24 @@ package com.topface.i18n.plurals;
  * @see http://unicode.org/repos/cldr/trunk/common/supplemental/plurals.xml
  * @see plurals.xml (local copy)
  *
- * @package    I18n_Plural
- * @category   Plural Rules
- * @author     Korney Czukowski
- * @copyright  (c) 2011 Korney Czukowski
- * @license    MIT License
+ * @package I18n_Plural
+ * @category Plural Rules
+ * @author Korney Czukowski
+ * @copyright (c) 2011 Korney Czukowski
+ * @license MIT License
  */
 
 /**
- * Converted to Java by Sam Marshak, 2012 
+ * Converted to Java by Sam Marshak, 2012
  */
-public class PluralRules_Latvian extends PluralRules
-{
-	public int quantityForNumber(int count)
-	{
-		if (count == 0)
-		{
-			return QUANTITY_ZERO;
-		}
-		else if (count % 10 == 1 && count % 100 != 11)
-		{
-			return QUANTITY_ONE;
-		}
-		else
-		{
-			return QUANTITY_OTHER;
-		}
-	}
+public class PluralRules_Latvian extends PluralRules {
+    public int quantityForNumber(int count) {
+        if (count == 0) {
+            return QUANTITY_ZERO;
+        } else if (count % 10 == 1 && count % 100 != 11) {
+            return QUANTITY_ONE;
+        } else {
+            return QUANTITY_OTHER;
+        }
+    }
 }

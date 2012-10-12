@@ -8,45 +8,45 @@ import android.view.View;
 import android.widget.Gallery;
 
 public class DatingAlbum extends Gallery implements View.OnTouchListener {
-  // Data
-  //---------------------------------------------------------------------------
-  public DatingAlbum(Context context, AttributeSet attrs) {
-    super(context, attrs);
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-    float velMax = 2500f;
-    float velMin = 1000f;
-    float velX = Math.abs(velocityX);
-    if (velX > velMax) {
-      velX = velMax;
-    } else if (velX < velMin) {
-      velX = velMin;
+    // Data
+
+    public DatingAlbum(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
-    velX -= 600;
-    int k = 500000;
-    int speed = (int) Math.floor(1f / velX * k);
-    setAnimationDuration(speed);
 
-    int kEvent;
-    if (isScrollingLeft(e1, e2))
-      kEvent = KeyEvent.KEYCODE_DPAD_LEFT;       // Check if scrolling left
-    else
-      kEvent = KeyEvent.KEYCODE_DPAD_RIGHT;      // Otherwise scrolling right
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        float velMax = 2500f;
+        float velMin = 1000f;
+        float velX = Math.abs(velocityX);
+        if (velX > velMax) {
+            velX = velMax;
+        } else if (velX < velMin) {
+            velX = velMin;
+        }
+        velX -= 600;
+        int k = 500000;
+        int speed = (int) Math.floor(1f / velX * k);
+        setAnimationDuration(speed);
 
-    onKeyDown(kEvent, null);
+        int kEvent;
+        if (isScrollingLeft(e1, e2))
+            kEvent = KeyEvent.KEYCODE_DPAD_LEFT;       // Check if scrolling left
+        else
+            kEvent = KeyEvent.KEYCODE_DPAD_RIGHT;      // Otherwise scrolling right
 
-    return true;
-  }
-  //---------------------------------------------------------------------------
-  private boolean isScrollingLeft(MotionEvent e1, MotionEvent e2){
-    return e2.getX() > e1.getX();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public boolean onTouch(View v,MotionEvent event) {
-    return false;
-  }
-  //---------------------------------------------------------------------------
+        onKeyDown(kEvent, null);
+
+        return true;
+    }
+
+    private boolean isScrollingLeft(MotionEvent e1, MotionEvent e2) {
+        return e2.getX() > e1.getX();
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return false;
+    }
+
 }

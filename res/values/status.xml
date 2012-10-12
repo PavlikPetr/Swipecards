@@ -11,7 +11,7 @@
         <item>@string/profile_form_education_male_6</item>
         <item>@string/profile_form_education_male_7</item>
     </string-array>
-    
+
     <string-array name="profile_form_education_female">
         <item>@string/profile_form_education_female_1</item>
         <item>@string/profile_form_education_female_2</item>
@@ -21,7 +21,7 @@
         <item>@string/profile_form_education_female_6</item>
         <item>@string/profile_form_education_female_7</item>
     </string-array>
-    
+
     <string-array name="profile_form_education_values">
         <item>1</item>
         <item>2</item>
@@ -40,14 +40,14 @@
         <item>@string/profile_form_communication_male_3</item>
         <item>@string/profile_form_communication_male_4</item>
     </string-array>
-    
+
     <string-array name="profile_form_communication_female">
         <item>@string/profile_form_communication_female_1</item>
         <item>@string/profile_form_communication_female_2</item>
         <item>@string/profile_form_communication_female_3</item>
         <item>@string/profile_form_communication_female_4</item>
     </string-array>
-    
+
     <string-array name="profile_form_communication_values">
         <item>1</item>
         <item>2</item>
@@ -65,7 +65,7 @@
         <item>@string/profile_form_character_male_6</item>
         <item>@string/profile_form_character_male_7</item>
     </string-array>
-    
+
     <string-array name="profile_form_character_female">
         <item>@string/profile_form_character_female_1</item>
         <item>@string/profile_form_character_female_2</item>
@@ -75,7 +75,7 @@
         <item>@string/profile_form_character_female_6</item>
         <item>@string/profile_form_character_female_7</item>
     </string-array>
-    
+
     <string-array name="profile_form_character_values">
         <item>1</item>
         <item>2</item>
@@ -85,7 +85,7 @@
         <item>6</item>
         <item>7</item>
     </string-array>
-    
+
     <!-- Alcohol -->
     <string-array name="profile_form_alcohol_male">
         <item>@string/profile_form_alcohol_male_1</item>
@@ -94,7 +94,7 @@
         <item>@string/profile_form_alcohol_male_4</item>
         <item>@string/profile_form_alcohol_male_5</item>
     </string-array>
-    
+
     <string-array name="profile_form_alcohol_female">
         <item>@string/profile_form_alcohol_female_1</item>
         <item>@string/profile_form_alcohol_female_2</item>
@@ -102,7 +102,7 @@
         <item>@string/profile_form_alcohol_female_4</item>
         <item>@string/profile_form_alcohol_female_5</item>
     </string-array>
-    
+
     <string-array name="profile_form_alcohol_values">
         <item>1</item>
         <item>2</item>
@@ -110,7 +110,7 @@
         <item>4</item>
         <item>5</item>
     </string-array>
-     
+
     <!-- Fitness -->
     <string-array name="profile_form_fitness_male">
         <item>@string/profile_form_fitness_male_1</item>
@@ -120,7 +120,7 @@
         <item>@string/profile_form_fitness_male_5</item>
         <item>@string/profile_form_fitness_male_6</item>
     </string-array>
-    
+
     <string-array name="profile_form_fitness_female">
         <item>@string/profile_form_fitness_female_1</item>
         <item>@string/profile_form_fitness_female_2</item>
@@ -129,7 +129,7 @@
         <item>@string/profile_form_fitness_female_5</item>
         <item>@string/profile_form_fitness_female_6</item>
     </string-array>
-    
+
     <string-array name="profile_form_fitness_values">
         <item>1</item>
         <item>2</item>
@@ -138,7 +138,7 @@
         <item>5</item>
         <item>6</item>
     </string-array>
-    
+
     <!-- Marriage -->
     <string-array name="profile_form_marriage_male">
         <item>@string/profile_form_marriage_male_1</item>
@@ -149,7 +149,7 @@
         <item>@string/profile_form_marriage_male_6</item>
         <item>@string/profile_form_marriage_male_7</item>
     </string-array>
-    
+
     <string-array name="profile_form_marriage_female">
         <item>@string/profile_form_marriage_female_1</item>
         <item>@string/profile_form_marriage_female_2</item>
@@ -159,7 +159,7 @@
         <item>@string/profile_form_marriage_female_6</item>
         <item>@string/profile_form_marriage_female_7</item>
     </string-array>
-    
+
     <string-array name="profile_form_marriage_values">
         <item>1</item>
         <item>2</item>
@@ -169,7 +169,7 @@
         <item>6</item>
         <item>7</item>
     </string-array>
-    
+
     <!-- Finances -->
     <string-array name="profile_form_finances_male">
         <item>@string/profile_form_finances_male_1</item>
@@ -180,7 +180,7 @@
         <item>@string/profile_form_finances_male_6</item>
         <item>@string/profile_form_finances_male_7</item>
     </string-array>
-    
+
     <string-array name="profile_form_finances_female">
         <item>@string/profile_form_finances_female_1</item>
         <item>@string/profile_form_finances_female_2</item>
@@ -190,7 +190,7 @@
         <item>@string/profile_form_finances_female_6</item>
         <item>@string/profile_form_finances_female_7</item>
     </string-array>
-    
+
     <string-array name="profile_form_finances_values">
         <item>1</item>
         <item>2</item>
@@ -200,7 +200,7 @@
         <item>6</item>
         <item>7</item>
     </string-array>
-    
+
     <!-- Smoking -->
     <string-array name="profile_form_smoking_male">
         <item>@string/profile_form_smoking_male_1</item>
@@ -210,7 +210,7 @@
         <item>@string/profile_form_smoking_male_5</item>
         <item>@string/profile_form_smoking_male_6</item>
     </string-array>
-    
+
     <string-array name="profile_form_smoking_female">
         <item>@string/profile_form_smoking_female_1</item>
         <item>@string/profile_form_smoking_female_2</item>
@@ -219,7 +219,7 @@
         <item>@string/profile_form_smoking_female_5</item>
         <item>@string/profile_form_smoking_female_6</item>
     </string-array>
-    
+
     <string-array name="profile_form_smoking_values">
         <item>1</item>
         <item>2</item>
@@ -228,5 +228,5 @@
         <item>5</item>
         <item>6</item>
     </string-array>
-    
+
 </resources>

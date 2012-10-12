@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/im_list_bkgrd" >
-    
-  <LinearLayout
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:orientation="vertical" >
-    
-	  <!-- header bar -->
-	  <include layout="@layout/bar_header" />
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/im_list_bkgrd">
 
-      <include layout="@layout/leaders"/>
-	  
-	  <!-- button bar -->
-	  <include layout="@layout/bar_double_big_button" />
-	  
-	    <com.handmark.pulltorefresh.library.PullToRefreshListView
-            android:id="@+id/lvInboxList"
-            style="@style/PullToRefresh"
-            />
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
-      <include layout="@layout/banner"/>
+        <!-- header bar -->
+        <include layout="@layout/bar_header"/>
 
-  </LinearLayout>
-  
+        <include layout="@layout/leaders"/>
+
+        <!-- button bar -->
+        <include layout="@layout/bar_double_big_button"/>
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+                android:id="@+id/lvInboxList"
+                style="@style/PullToRefresh"
+                />
+
+        <include layout="@layout/banner"/>
+
+    </LinearLayout>
+
     <ProgressBar
-      android:id="@+id/prsInboxLoading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" />
-  
+            android:id="@+id/prsInboxLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            style="@android:style/Widget.ProgressBar.Small"/>
+
 </RelativeLayout> 

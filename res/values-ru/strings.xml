@@ -9,9 +9,10 @@
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка обновления данных</string>
     <string name="general_footer_previous">Предыдущие сообщения</string>
-    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
+    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
+    </string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
-    
+
     <!-- Auth Activity  -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
     <string name="auth_btn_fb">Войти через Facebook</string>
@@ -27,7 +28,9 @@
     <string name="dashbrd_btn_sympathy">Симпатия</string>
     <string name="dashbrd_btn_love">Восхищение</string>
     <string name="dashbrd_btn_skip">Следующий</string>
-    <string name="dashbrd_popup_rating">Понравилось наше приложение? Подними нам рейтинг! Чем выше рейтинг, тем больше интересных людей ты встретишь в Topface</string>
+    <string name="dashbrd_popup_rating">Понравилось наше приложение? Подними нам рейтинг! Чем выше рейтинг, тем больше
+        интересных людей ты встретишь в Topface
+    </string>
     <string name="dashbrd_popup_title">РЕЙТИНГ</string>
     <string name="dashbrd_popup_cancel">Больше не спрашивать</string>
     <string name="dashbrd_popup_rate">Выставить рейтинг</string>
@@ -37,7 +40,7 @@
     <string name="likes_header_title">Я нравлюсь</string>
     <string name="likes_btn_dbl_left">Все</string>
     <string name="likes_btn_dbl_right">Непрочитанные</string>
-    
+
     <!-- Indox & Chat Activity -->
     <string name="inbox_header_title">Диалоги</string>
     <string name="inbox_btn_dbl_left">Все</string>
@@ -54,18 +57,18 @@
     <string name="chat_sexuality_out">Вы оценили сексуальность.</string>
     <string name="chat_money_in">Вам начислена монета</string>
     <string name="chat_message_copied">Сообщение скопировано</string>
-    
+
     <!-- Symphaty Activity -->
     <string name="symphaty_header_title">Взаимно</string>
     <string name="symphaty_btn_dbl_left">Все</string>
     <string name="symphaty_btn_dbl_right">Непрочитанные</string>
-    
+
     <!-- Tops Activity -->
     <string name="tops_header_title">Самые красивые</string>
     <string name="tops_btn_boys">Парни</string>
     <string name="tops_btn_girls">Девушки</string>
     <string name="tops_btn_city">Город</string>
-    
+
     <!-- Filter Activity -->
     <string name="filter_header_title">Я ищу</string>
     <string name="filter_menu_save">Сохранить</string>
@@ -84,7 +87,7 @@
     <string name="filter_nearby">Рядом со мной</string>
     <string name="filter_cities_all">Всем городам</string>
     <string name="filter_select_city">Выбор города</string>
-    
+
     <!-- Dating Activity -->
     <string name="dating_header_title_him">Оцени его!</string>
     <string name="dating_header_title_her">Оцени её!</string>
@@ -124,7 +127,7 @@
     <string name="buying_info">Вы можете купить монеты и энергию</string>
     <string name="buying_economy_25">Экономия 25%</string>
     <string name="buying_economy_40">Экономия 40%</string>
-    
+
     <!-- Profile Activity -->
     <string name="profile_header_title">Мой профиль</string>
     <string name="profile_btn_chat">Поболтать</string>
@@ -228,7 +231,8 @@
     <string name="visitors_header_title">Гости</string>
 
     <string name="not_found_dialog_title">Никого не найдено</string>
-    <string name="not_found_dialog_message">По вашему запросу никого не найдено, попробуйте изменить настройки поиска</string>
+    <string name="not_found_dialog_message">По вашему запросу никого не найдено, попробуйте изменить настройки поиска
+    </string>
     <string name="not_found_dialog_change_filter">Изменить настройки поиска</string>
     <string name="not_found_dialog_try">Попробовать еще раз</string>
 

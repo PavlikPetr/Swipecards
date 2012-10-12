@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/im_list_bkgrd" >
-    
-	<LinearLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:orientation="vertical" >
-	    
-	  <!-- header bar -->
-	  <include layout="@layout/bar_header" />
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/im_list_bkgrd">
 
-      <include layout="@layout/leaders"/>
-	      
-	  <!-- button bar -->
-	  <include layout="@layout/bar_tops_button" />
-	  
-	  <!-- gallary -->
-	  <GridView
-	    android:id="@+id/grdTopsGallary"
-	    android:layout_width="fill_parent"
-	    android:layout_height="0dip"
-	    android:listSelector="@android:color/transparent"
-	    android:layout_weight="1"
-	    android:fadingEdge="none"
-	    android:horizontalSpacing="0px"
-	    android:verticalSpacing="0px"
-	    android:layout_margin="0px"
-	    android:padding="0px"
-	    android:fadeScrollbars="true" 
-	    android:background="@android:color/transparent" >
-	  </GridView>
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+        <!-- header bar -->
+        <include layout="@layout/bar_header"/>
+
+        <include layout="@layout/leaders"/>
+
+        <!-- button bar -->
+        <include layout="@layout/bar_tops_button"/>
+
+        <!-- gallary -->
+        <GridView
+                android:id="@+id/grdTopsGallary"
+                android:layout_width="fill_parent"
+                android:layout_height="0dip"
+                android:listSelector="@android:color/transparent"
+                android:layout_weight="1"
+                android:fadingEdge="none"
+                android:horizontalSpacing="0px"
+                android:verticalSpacing="0px"
+                android:layout_margin="0px"
+                android:padding="0px"
+                android:fadeScrollbars="true"
+                android:background="@android:color/transparent">
+        </GridView>
 
 
-      <include layout="@layout/banner"/>
-	  
-	</LinearLayout>
-	
-	<ProgressBar
-      android:id="@+id/prsTopsLoading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" />
+        <include layout="@layout/banner"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+            android:id="@+id/prsTopsLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            style="@android:style/Widget.ProgressBar.Small"/>
 
 </RelativeLayout>

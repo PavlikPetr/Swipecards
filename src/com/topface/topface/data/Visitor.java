@@ -5,12 +5,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
-* Created with IntelliJ IDEA.
-* User: gildor
-* Date: 17.09.12
-* Time: 14:09
-* To change this template use File | Settings | File Templates.
-*/
+ * Created with IntelliJ IDEA.
+ * User: gildor
+ * Date: 17.09.12
+ * Time: 14:09
+ * To change this template use File | Settings | File Templates.
+ */
 public class Visitor extends AbstractData {
     public int id;
     public String name;

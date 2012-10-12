@@ -9,7 +9,6 @@ public class PhotoAddRequest extends AbstractApiRequest {
     public String medium;  // URL фотографии пользователя из социальной сети в среднем разрешении
     public String small;   // URL фотографии пользователя из социальной сети в малом разрешении
 
-    //---------------------------------------------------------------------------
     public PhotoAddRequest(Context context) {
         super(context);
     }

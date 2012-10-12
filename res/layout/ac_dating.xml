@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#080808" >
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#080808">
 
     <include android:id="@+id/leadersBlock"
              android:layout_alignParentTop="true"
              layout="@layout/leaders"/>
 
-       <!-- Dating Album -->
-       <com.topface.topface.ui.views.DatingAlbum
-           android:layout_below="@id/leadersBlock"
-           android:id="@+id/glrDatingAlbum"
-           android:layout_width="fill_parent" 
-           android:layout_height="fill_parent" />
+    <!-- Dating Album -->
+    <com.topface.topface.ui.views.DatingAlbum
+            android:layout_below="@id/leadersBlock"
+            android:id="@+id/glrDatingAlbum"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
 
     <include
             android:layout_below="@id/leadersBlock"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            layout="@layout/dating_control" />
-    
-     <TextView
-         android:id="@+id/tvDatingCounter"
-         android:layout_width="wrap_content" 
-         android:layout_height="wrap_content"
-         android:layout_alignParentBottom="true"
-         android:layout_centerHorizontal="true" />
-    
-  <ProgressBar
-      android:id="@+id/prsDatingLoading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" />
-  
-          <ImageView
-              android:id="@+id/ivNewbie"
-              android:layout_width="fill_parent" 
-              android:layout_height="wrap_content" 
-              android:layout_alignParentTop="true"
-              android:visibility="invisible" />
+            layout="@layout/dating_control"/>
+
+    <TextView
+            android:id="@+id/tvDatingCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
+
+    <ProgressBar
+            android:id="@+id/prsDatingLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            style="@android:style/Widget.ProgressBar.Small"/>
+
+    <ImageView
+            android:id="@+id/ivNewbie"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:visibility="invisible"/>
 
 </RelativeLayout>

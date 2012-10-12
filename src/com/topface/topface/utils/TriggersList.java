@@ -1,6 +1,5 @@
 package com.topface.topface.utils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -19,8 +18,7 @@ public class TriggersList<K, V> {
         if (isOn(item)) {
             setOff(item);
             return false;
-        }
-        else {
+        } else {
             setOn(item, value);
             return true;
         }

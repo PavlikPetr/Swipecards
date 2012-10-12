@@ -24,7 +24,7 @@ import android.content.SharedPreferences.Editor;
 
 /**
  * Utilities for device registration.
- *
+ * <p/>
  * Will keep track of the registration token in a private preference.
  */
 public class C2DMessaging {
@@ -39,17 +39,17 @@ public class C2DMessaging {
 
     // package
     static final String PREFERENCE = "com.google.android.c2dm";
-    
+
     private static final long DEFAULT_BACKOFF = 30000;
 
     /**
      * Initiate c2d messaging registration for the current application
      */
     public static void register(Context context,
-            String senderId) {
+                                String senderId) {
         Intent registrationIntent = new Intent(REQUEST_REGISTRATION_INTENT);
         registrationIntent.setPackage(GSF_PACKAGE);
-        registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT,PendingIntent.getBroadcast(context, 0, new Intent(), 0));
+        registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, PendingIntent.getBroadcast(context, 0, new Intent(), 0));
         registrationIntent.putExtra(EXTRA_SENDER, senderId);
         context.startService(registrationIntent);
         // TODO: if intent not found, notification on need to have GSF
@@ -61,13 +61,13 @@ public class C2DMessaging {
     public static void unregister(Context context) {
         Intent regIntent = new Intent(REQUEST_UNREGISTRATION_INTENT);
         regIntent.setPackage(GSF_PACKAGE);
-        regIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, PendingIntent.getBroadcast(context,0, new Intent(), 0));
+        regIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, PendingIntent.getBroadcast(context, 0, new Intent(), 0));
         context.startService(regIntent);
     }
 
     /**
      * Return the current registration id.
-     *
+     * <p/>
      * If result is empty, the registration has failed.
      *
      * @return registration id, or empty string if the registration is not complete.
@@ -86,14 +86,14 @@ public class C2DMessaging {
                 Context.MODE_PRIVATE);
         return prefs.getLong(LAST_REGISTRATION_CHANGE, 0);
     }
-    
+
     static long getBackoff(Context context) {
         final SharedPreferences prefs = context.getSharedPreferences(
                 PREFERENCE,
                 Context.MODE_PRIVATE);
         return prefs.getLong(BACKOFF, DEFAULT_BACKOFF);
     }
-    
+
     static void setBackoff(Context context, long backoff) {
         final SharedPreferences prefs = context.getSharedPreferences(
                 PREFERENCE,

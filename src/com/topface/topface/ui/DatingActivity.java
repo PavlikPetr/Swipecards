@@ -65,7 +65,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
     private SharedPreferences mPreferences;
     private boolean mIsFilterReceiverRegistered;
 
-    //---------------------------------------------------------------------------
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,13 +206,11 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         startActivityForResult(intent, FilterActivity.INTENT_FILTER_ACTIVITY);
     }
 
-    //---------------------------------------------------------------------------
     @Override
     protected void onStart() {
         super.onStart();
     }
 
-    //---------------------------------------------------------------------------
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -224,7 +221,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         }
     }
 
-    //---------------------------------------------------------------------------
     @Override
     protected void onDestroy() {
         if (searchRequest != null) searchRequest.cancel();
@@ -233,7 +229,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         super.onDestroy();
     }
 
-    //---------------------------------------------------------------------------
     private void update(final boolean isAddition) {
         if (!isAddition)
             mProgressBar.setVisibility(View.VISIBLE);
@@ -289,7 +284,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         }).exec();
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -330,7 +324,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         }
     }
 
-    //---------------------------------------------------------------------------
     // HEARTS
     public void onRate(final int rate) {
         Debug.log(this, "rate:" + rate);
@@ -342,8 +335,7 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
             sendRate(mUserSearchList.get(mCurrentUserPos).uid, rate);
             showNextUser();
             return;
-        }
-        else if (CacheProfile.money <= 0) {
+        } else if (CacheProfile.money <= 0) {
             EasyTracker.getTracker().trackEvent("Purchase", "PageDating", "", 0);
             startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
             return;
@@ -386,7 +378,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         mCommentDialog.show(); // окно сообщения
     }
 
-    //---------------------------------------------------------------------------
     private void sendRate(final int userid, final int rate) {
         Debug.log(this, "rate");
         RateRequest doRate = new RateRequest(this.getApplicationContext());
@@ -421,7 +412,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         }).exec();
     }
 
-    //---------------------------------------------------------------------------
     private void showNextUser() {
         if (mCurrentUserPos < mUserSearchList.size() - 1) {
             ++mCurrentUserPos;
@@ -431,8 +421,7 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
             if (mCurrentUserPos > 0) {
                 if (mDatingAlbumAdapter.showMoreThanOne) {
                     EasyTracker.getTracker().trackEvent("PageDating", "UserComplited", "MoreThenOnePhoto", 0);
-                }
-                else {
+                } else {
                     EasyTracker.getTracker().trackEvent("PageDating", "UserComplited", "OnePhoto", 0);
                 }
             }
@@ -454,7 +443,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         showNewbie(); // NEWBIE
     }
 
-    //---------------------------------------------------------------------------
     private void skipUser() {
         SkipRateRequest skipRateRequest = new SkipRateRequest(this.getApplicationContext());
         skipRateRequest.userid = 0;
@@ -462,7 +450,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         showNextUser();
     }
 
-    //---------------------------------------------------------------------------
     private void showNewbie() {
         mNewbieView.setVisibility(View.INVISIBLE);
 
@@ -512,7 +499,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         editor.commit();
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public void lockControls() {
         mUserInfoName.setVisibility(View.INVISIBLE);
@@ -529,7 +515,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         //mDatingGroup.setClickable(false);
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public void unlockControls() {
         mUserInfoName.setVisibility(View.VISIBLE);
@@ -546,21 +531,18 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         //mDatingGroup.setClickable(true);
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public void showControls() {
         mDatingGroup.setVisibility(View.VISIBLE);
         mIsHide = false;
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public void hideControls() {
         mDatingGroup.setVisibility(View.INVISIBLE);
         mIsHide = true;
     }
 
-    //---------------------------------------------------------------------------
     View.OnClickListener mOnNewbieClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -593,9 +575,9 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
             }).exec();
         }
     };
-    //---------------------------------------------------------------------------
+
     // Menu
-    //---------------------------------------------------------------------------
+
     private static final int MENU_FILTER = 0;
 
     @Override
@@ -604,7 +586,6 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
         return super.onCreatePanelMenu(featureId, menu);
     }
 
-    //---------------------------------------------------------------------------
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
@@ -661,8 +642,7 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.filter_menu, menu);
@@ -680,7 +660,7 @@ public class DatingActivity extends TrackedMenuActivity implements View.OnClickL
             update(false);
         }
     };
-    //---------------------------------------------------------------------------
+
 }
 
 

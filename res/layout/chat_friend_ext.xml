@@ -5,7 +5,7 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:background="@android:color/transparent"
-                android:id="@+id/layout" >
+                android:id="@+id/layout">
 
     <!-- avatar -->
     <com.topface.topface.ui.views.RoundedImageView
@@ -16,7 +16,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="3dp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@+id/user_info"
@@ -26,7 +26,7 @@
                   android:layout_marginRight="10dip"
                   android:layout_marginLeft="6dp"
                   android:background="@drawable/bg_message_user_ext"
-                  android:orientation="vertical" >
+                  android:orientation="vertical">
 
         <!-- message -->
         <TextView
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:autoLink="all"
-                android:textColor="#4D4D4D" />
+                android:textColor="#4D4D4D"/>
 
         <!-- date -->
         <TextView
@@ -43,7 +43,7 @@
                 android:textColor="#999999"
                 android:textSize="12sp"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </RelativeLayout>    

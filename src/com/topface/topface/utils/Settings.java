@@ -62,6 +62,7 @@ public class Settings {
 
     /**
      * Нужно ли в данный момент запускать предзагрузку следующей фотографии альбома
+     *
      * @return начинать ли предзагрузку
      */
     public boolean isPreloadPhoto() {
@@ -70,6 +71,7 @@ public class Settings {
 
     /**
      * Нужно ли в данный момент запускать предзагрузку фотографии следующего пользователя
+     *
      * @return начинать ли предзагрузку
      */
     @SuppressWarnings("UnusedDeclaration")
@@ -81,14 +83,13 @@ public class Settings {
         String preloadingValue = getPreloading();
         String preloadingType = getPreloadingType();
         //Проверяем тип предзагрузки
-        if (    preloadingType.equals(mContext.getString(R.string.settings_preloading_type_all)) ||
+        if (preloadingType.equals(mContext.getString(R.string.settings_preloading_type_all)) ||
                 preloadingType.equals(type)) {
 
             //Если верный, то смотрим, включена ли она
             if (preloadingValue.equals(mContext.getString(R.string.settings_preloading_on))) {
                 return true;
-            }
-            else if (preloadingValue.equals(mContext.getString(R.string.settings_preloading_wifi))) {
+            } else if (preloadingValue.equals(mContext.getString(R.string.settings_preloading_wifi))) {
                 //Если включена только по wifi, то проверяем состояние соединения
                 return !ConnectionChangeReceiver.isMobileConnection();
             }

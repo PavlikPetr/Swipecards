@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-    
-    <Button
-        android:id="@+id/btnAddPhotoAlbum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/buying_purchase_selector"
-        android:text="@string/profile_add_album" />
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
 
     <Button
-        android:id="@+id/btnAddPhotoCamera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/buying_purchase_selector"
-        android:text="@string/profile_add_camera" />
-    
+            android:id="@+id/btnAddPhotoAlbum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/buying_purchase_selector"
+            android:text="@string/profile_add_album"/>
+
+    <Button
+            android:id="@+id/btnAddPhotoCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/buying_purchase_selector"
+            android:text="@string/profile_add_camera"/>
+
 </LinearLayout>

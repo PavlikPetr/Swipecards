@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/im_list_bkgrd" >
-    
-	<LinearLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" 
-	    android:orientation="vertical" >
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/im_list_bkgrd">
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
 
         <!-- header bar -->
-        <include layout="@layout/bar_header" />
+        <include layout="@layout/bar_header"/>
 
         <include layout="@layout/leaders"/>
 
         <!-- button bar -->
-	  <include layout="@layout/bar_double_big_button" />
+        <include layout="@layout/bar_double_big_button"/>
 
         <com.handmark.pulltorefresh.library.PullToRefreshListView
                 android:id="@+id/lvLikesList"
@@ -25,14 +25,14 @@
 
         <include layout="@layout/banner"/>
 
-	</LinearLayout>
-	
-	  <ProgressBar
-      android:id="@+id/prsLikesLoading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" />
-	
+    </LinearLayout>
+
+    <ProgressBar
+            android:id="@+id/prsLikesLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            style="@android:style/Widget.ProgressBar.Small"/>
+
 </RelativeLayout>

@@ -49,8 +49,7 @@ public class Device {
     public static int getOrientation(Context context) {
         if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             return PORTRAIT;
-        }
-        else if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        } else if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             return LANDSCAPE;
         }
 
@@ -67,6 +66,7 @@ public class Device {
 
     /**
      * Возвращает максимальную сторону дисплея, т.е. ширину, если альбомная ориентация и высоту, если портретная
+     *
      * @param context контекст выполнения
      * @return размер дисплея по максимальной стороне
      */

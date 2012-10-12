@@ -107,8 +107,7 @@ public class BannerBlock {
                 if (banner.action.equals(Banner.ACTION_PAGE)) {
                     if (banner.parameter.equals(Banner.INVITE_ACTION)) {
                         intent = new Intent(mActivity, InviteActivity.class);
-                    }
-                    else {
+                    } else {
                         intent = new Intent(mActivity, BuyingActivity.class); // "parameter":"PURCHASE"
                     }
                     EasyTracker.getTracker().trackEvent("Purchase", "Banner", banner.parameter, 0);

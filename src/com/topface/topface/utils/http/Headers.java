@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  * Manages received headers
- *
+ * <p/>
  * {@hide}
  */
 public final class Headers {
@@ -118,25 +118,25 @@ public final class Headers {
 
     private String[] mHeaders = new String[HEADER_COUNT];
     private final static String[] sHeaderNames = {
-        TRANSFER_ENCODING,
-        CONTENT_LEN,
-        CONTENT_TYPE,
-        CONTENT_ENCODING,
-        CONN_DIRECTIVE,
-        LOCATION,
-        PROXY_CONNECTION,
-        WWW_AUTHENTICATE,
-        PROXY_AUTHENTICATE,
-        CONTENT_DISPOSITION,
-        ACCEPT_RANGES,
-        EXPIRES,
-        CACHE_CONTROL,
-        LAST_MODIFIED,
-        ETAG,
-        SET_COOKIE,
-        PRAGMA,
-        REFRESH,
-        X_PERMITTED_CROSS_DOMAIN_POLICIES
+            TRANSFER_ENCODING,
+            CONTENT_LEN,
+            CONTENT_TYPE,
+            CONTENT_ENCODING,
+            CONN_DIRECTIVE,
+            LOCATION,
+            PROXY_CONNECTION,
+            WWW_AUTHENTICATE,
+            PROXY_AUTHENTICATE,
+            CONTENT_DISPOSITION,
+            ACCEPT_RANGES,
+            EXPIRES,
+            CACHE_CONTROL,
+            LAST_MODIFIED,
+            ETAG,
+            SET_COOKIE,
+            PRAGMA,
+            REFRESH,
+            X_PERMITTED_CROSS_DOMAIN_POLICIES
     };
 
     // Catch-all for headers not explicitly handled

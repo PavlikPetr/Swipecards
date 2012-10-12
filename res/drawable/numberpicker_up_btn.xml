@@ -19,10 +19,10 @@
     <item android:state_pressed="false"
           android:state_enabled="true"
           android:state_focused="false"
-          android:drawable="@drawable/numberpicker_up_normal" />
+          android:drawable="@drawable/numberpicker_up_normal"/>
 
     <item android:state_pressed="true"
           android:state_enabled="true"
-          android:drawable="@drawable/numberpicker_up_pressed" />
+          android:drawable="@drawable/numberpicker_up_pressed"/>
 
 </selector>

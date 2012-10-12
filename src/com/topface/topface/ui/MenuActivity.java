@@ -9,8 +9,7 @@ import com.topface.topface.R;
 
 public class MenuActivity extends Activity {
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.settings_menu, menu);
         return true;

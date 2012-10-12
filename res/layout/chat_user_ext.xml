@@ -5,7 +5,7 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:background="@android:color/transparent"
-                android:id="@+id/layout" >
+                android:id="@+id/layout">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@+id/user_info"
@@ -19,13 +19,13 @@
 
         <!-- message -->
         <TextView
-        android:id="@+id/chat_message"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:autoLink="all"
-        android:textColor="#4D4D4D"
-        />
+                android:id="@+id/chat_message"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:autoLink="all"
+                android:textColor="#4D4D4D"
+                />
 
         <!-- date -->
         <TextView
@@ -46,6 +46,6 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="3dp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
 </RelativeLayout>    

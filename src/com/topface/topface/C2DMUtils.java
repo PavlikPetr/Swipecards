@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import com.google.android.c2dm.C2DMessaging;
-import com.topface.topface.ui.*;
+import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.DashboardActivity;
+import com.topface.topface.ui.LikesActivity;
+import com.topface.topface.ui.SymphatyActivity;
 import com.topface.topface.utils.Settings;
 
 import java.util.Timer;
@@ -20,13 +23,12 @@ public class C2DMUtils {
     public static final String C2DM_REGISTERED = "c2dmRegistered";
     public static final String C2DM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
 
-    public static final int C2DM_TYPE_UNKNOWN  = -1;
-    public static final int C2DM_TYPE_MESSAGE  = 0;
+    public static final int C2DM_TYPE_UNKNOWN = -1;
+    public static final int C2DM_TYPE_MESSAGE = 0;
     public static final int C2DM_TYPE_SYMPATHY = 1;
-    public static final int C2DM_TYPE_LIKE     = 2;
+    public static final int C2DM_TYPE_LIKE = 2;
     public static final int NOTIFICATION_CANCEL_DELAY = 3000;
 
-    //---------------------------------------------------------------------------
     public static void init(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         Boolean registered = preferences.getBoolean(C2DM_REGISTERED, false);
@@ -38,7 +40,6 @@ public class C2DMUtils {
         }
     }
 
-    //---------------------------------------------------------------------------
     public static void setRegisteredFlag(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -46,7 +47,6 @@ public class C2DMUtils {
         editor.commit();
     }
 
-    //---------------------------------------------------------------------------
     public static void showNotification(Intent extra, Context context) {
         String data = extra.getStringExtra("text");
         if (data != null) {
@@ -118,5 +118,5 @@ public class C2DMUtils {
         }, NOTIFICATION_CANCEL_DELAY);
 
     }
-    //---------------------------------------------------------------------------
+
 }

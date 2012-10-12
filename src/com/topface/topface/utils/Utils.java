@@ -26,7 +26,7 @@ public class Utils {
         return (int) (System.currentTimeMillis() / 1000L);
     }
 
-    
+
     public static String md5(String value) {
         if (value == null)
             return null;
@@ -42,7 +42,7 @@ public class Utils {
         }
     }
 
-    
+
     public static Bitmap clipping(Bitmap rawBitmap, int bitmapWidth, int bitmapHeight) {
         if (rawBitmap == null || bitmapWidth <= 0 || bitmapHeight <= 0)
             return null;
@@ -81,8 +81,7 @@ public class Utils {
                 // у вертикальной режим с верху
                 clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, bitmapWidth, bitmapHeight, null, false);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Debug.error("Bitmap clip error", e);
             clippedBitmap = null;
         }
@@ -95,8 +94,7 @@ public class Utils {
         if (width < height) {
             //noinspection SuspiciousNameCombination
             height = width;
-        }
-        else {
+        } else {
             //noinspection SuspiciousNameCombination
             width = height;
         }
@@ -107,7 +105,7 @@ public class Utils {
 
         Paint xferPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         xferPaint.setColor(Color.RED);
-        canvas.drawRoundRect(new RectF(0,0,width,height), roundPx, roundPx, xferPaint);
+        canvas.drawRoundRect(new RectF(0, 0, width, height), roundPx, roundPx, xferPaint);
 
         xferPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
 
@@ -119,7 +117,7 @@ public class Utils {
         return result;
     }
 
-    
+
     public static void formatTime(TextView tv, long time) {
         Context context = tv.getContext();
         String text;
@@ -146,12 +144,12 @@ public class Utils {
         tv.setText(text);
     }
 
-    
+
     public static String formatHour(long hours) {
         return Utils.getQuantityString(R.plurals.time_hour, (int) hours, (int) hours);
     }
 
-    
+
     public static String formatMinute(long minutes) {
         return Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
     }
@@ -289,7 +287,7 @@ public class Utils {
         ).show();
     }
 
-    public static boolean isDebugMode(Application application){
+    public static boolean isDebugMode(Application application) {
         boolean debug = false;
         PackageInfo packageInfo = null;
         try {

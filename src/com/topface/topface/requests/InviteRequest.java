@@ -1,9 +1,9 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +37,7 @@ public class InviteRequest extends AbstractApiRequest {
 
     public boolean addRecipient(String name, String phone) {
         return isValidPhone(phone) &&
-               recipients.add(new Recipient(name, phone));
+                recipients.add(new Recipient(name, phone));
 
     }
 
@@ -58,7 +58,7 @@ public class InviteRequest extends AbstractApiRequest {
     private boolean isValidPhone(String phone) {
         return phone != null && phone.length() >= MIN_PHONE_LENGTH;
     }
-    
+
     private JSONObject getJSONFromRecepient(Recipient recipient) throws JSONException {
         JSONObject json = new JSONObject();
         json.put("name", recipient.name);
@@ -72,7 +72,8 @@ public class InviteRequest extends AbstractApiRequest {
             this.name = name;
             this.phone = phone;
         }
-        public  String name;
+
+        public String name;
         public String phone;
     }
 

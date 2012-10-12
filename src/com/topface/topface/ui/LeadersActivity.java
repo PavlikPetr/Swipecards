@@ -70,8 +70,7 @@ public class LeadersActivity extends TrackedActivity {
                 if (CacheProfile.money < CacheProfile.getOptions().price_leader) {
                     EasyTracker.getTracker().trackEvent("Purchase", "PageBecomeLeader", "", 0);
                     startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
-                }
-                else if (mSelectedPhoto.isSelected()) {
+                } else if (mSelectedPhoto.isSelected()) {
                     new LeaderRequest(mSelectedPhoto.getPhotoId(), LeadersActivity.this)
                             .callback(new ApiHandler() {
                                 @Override
@@ -97,8 +96,7 @@ public class LeadersActivity extends TrackedActivity {
                                 }
                             }).exec();
 
-                }
-                else {
+                } else {
                     Toast.makeText(LeadersActivity.this, R.string.need_select_photo, Toast.LENGTH_SHORT).show();
                     sendStat("NeedSelectPhotoError", null);
                 }
@@ -111,8 +109,7 @@ public class LeadersActivity extends TrackedActivity {
                 if (i == 0) {
                     sendStat("AddPhoto", null);
                     mAddPhotoHelper.addPhoto();
-                }
-                else {
+                } else {
                     sendStat("SelectPhoto", null);
                     mSelectedPhoto.select(i, adapterView);
                 }
@@ -131,7 +128,7 @@ public class LeadersActivity extends TrackedActivity {
 
         LeadersAlbumAdapter leadersAdapter = new LeadersAlbumAdapter(getApplicationContext(), photoList, mSelectedPhoto);
         mListView.setAdapter(leadersAdapter);
-      }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -140,31 +137,32 @@ public class LeadersActivity extends TrackedActivity {
     }
 
     private void getProfile() {
-      ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
-      profileRequest.part = ProfileRequest.P_ALL;
-      profileRequest.callback(new ApiHandler() {
-        @Override
-        public void success(final ApiResponse response) {
-          post(new Runnable() {
+        ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
+        profileRequest.part = ProfileRequest.P_ALL;
+        profileRequest.callback(new ApiHandler() {
             @Override
-            public void run() {
-              updateProfileInfo(Profile.parse(response));
-              mProgressBar.setVisibility(View.GONE);
-              mLeadersContent.setVisibility(View.VISIBLE);
+            public void success(final ApiResponse response) {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateProfileInfo(Profile.parse(response));
+                        mProgressBar.setVisibility(View.GONE);
+                        mLeadersContent.setVisibility(View.VISIBLE);
+                    }
+                });
             }
-          });
-        }
-        @Override
-        public void fail(int codeError,ApiResponse response) {
-          post(new Runnable() {
+
             @Override
-            public void run() {
-              Utils.showErrorMessage(LeadersActivity.this);
-              mProgressBar.setVisibility(View.GONE);
+            public void fail(int codeError, ApiResponse response) {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utils.showErrorMessage(LeadersActivity.this);
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                });
             }
-          });
-        }
-      }).exec();
+        }).exec();
     }
 
     public static class PhotoSelector {
@@ -177,8 +175,7 @@ public class LeadersActivity extends TrackedActivity {
                 if (item == mItem) {
                     mItem = 0;
                     mPhotoId = 0;
-                }
-                else {
+                } else {
                     Album album = (Album) adapterView.getItemAtPosition(item);
                     mItem = item;
                     mPhotoId = album.id;
@@ -207,8 +204,7 @@ public class LeadersActivity extends TrackedActivity {
             getProfile();
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
                 Toast.makeText(LeadersActivity.this, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
-            }
-            else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 Toast.makeText(LeadersActivity.this, R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
         }
