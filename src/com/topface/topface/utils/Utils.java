@@ -11,16 +11,13 @@ import android.graphics.PorterDuff.Mode;
 import android.text.ClipboardManager;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
-import android.util.DisplayMetrics;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 
-import java.security.MessageDigest;
 import java.util.Calendar;
 
 public class Utils {
@@ -28,21 +25,6 @@ public class Utils {
 
     public static int unixtime() {
         return (int) (System.currentTimeMillis() / 1000L);
-    }
-
-    public static String md5(String value) {
-        if (value == null)
-            return null;
-        try {
-            StringBuilder hexString = new StringBuilder();
-            MessageDigest digester = MessageDigest.getInstance("MD5");
-            digester.update(value.getBytes());
-            byte[] bytes = digester.digest();
-            for (byte aByte : bytes) hexString.append(Integer.toHexString(0xFF & aByte));
-            return hexString.toString();
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     public static Bitmap clippingBitmap(Bitmap bitmap) {
@@ -228,7 +210,7 @@ public class Utils {
     }
 
     public static String formatTime(Context context, long time) {
-        String text = Static.EMPTY;
+        String text;
 
         long day = 1000 * 60 * 60 * 24;
 
@@ -522,24 +504,4 @@ public class Utils {
         return debug;
     }
 
-    public float dpFromPx(int px) {
-        return px * App.getContext().getResources().getDisplayMetrics().density;
-    }
-
-    public float pxFromDp(int dx) {
-        return dx / App.getContext().getResources().getDisplayMetrics().density;
-    }
-
-    public static float dpToPx(Context context, float dp) {
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float px = dp * (metrics.densityDpi / 160f);
-        return px;
-    }
-
-    public static float pxToDp(Context context, float px) {
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float dp = px / (metrics.densityDpi / 160f);
-        return dp;
-
-    }
 }

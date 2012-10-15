@@ -144,7 +144,7 @@ public class ImageViewRemote extends ImageView {
     }
 
     public boolean setPhoto(Photo photo, Handler handler) {
-        boolean result = false;
+        boolean result;
         if (photo != null) {
             int size = Math.max(getLayoutParams().height, getLayoutParams().width);
             if (size > 0) {

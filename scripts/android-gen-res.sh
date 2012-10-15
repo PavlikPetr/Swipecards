@@ -49,9 +49,11 @@ case "$DPI" in
 	"hdpi" | "HDPI" )
 	mkdir res
 	mkdir res/drawable-xhdpi
+	mkdir res/drawable-hdpi
 	mkdir res/drawable-mdpi
 	mkdir res/drawable-ldpi
 	cp "$SOURCE"/*png res/drawable-xhdpi
+	cp "$SOURCE"/*png res/drawable-hdpi
 	cp "$SOURCE"/*png res/drawable-mdpi
 	cp "$SOURCE"/*png res/drawable-ldpi
 	mogrify -resize 133.333% -format png res/drawable-xhdpi/*
@@ -61,9 +63,11 @@ case "$DPI" in
 
 	"xhdpi" | "XHDPI" )
 	mkdir res
+	mkdir res/drawable-xhdpi
 	mkdir res/drawable-hdpi
 	mkdir res/drawable-mdpi
 	mkdir res/drawable-ldpi
+	cp "$SOURCE"/*png res/drawable-xhdpi
 	cp "$SOURCE"/*png res/drawable-hdpi
 	cp "$SOURCE"/*png res/drawable-mdpi
 	cp "$SOURCE"/*png res/drawable-ldpi

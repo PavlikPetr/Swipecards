@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.feed;
 
 import android.graphics.drawable.Drawable;
 import com.topface.topface.R;

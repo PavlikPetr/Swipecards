@@ -21,14 +21,14 @@
     <uses-permission android:name="com.android.vending.BILLING"/>
     <!--uses-permission android:name="android.permission.READ_CONTACTS" /-->
 
-    <application 
-        android:name=".App"
-        android:hardwareAccelerated="true"
-        android:label="@string/app_name"
-        android:icon="@drawable/ic_launcher"
-        android:theme="@android:style/Theme.NoTitleBar">
-        <uses-library android:name="com.google.android.maps" />
-        
+    <application
+            android:name=".App"
+            android:hardwareAccelerated="true"
+            android:label="@string/app_name"
+            android:icon="@drawable/ic_launcher"
+            android:theme="@android:style/Theme.NoTitleBar">
+        <uses-library android:name="com.google.android.maps"/>
+
         <!-- main Activity -->
         <activity android:name=".ui.AuthActivity">
             <intent-filter>
@@ -38,25 +38,24 @@
         </activity>
 
         <!-- activity -->
-        <activity android:name=".ui.MainActivity" android:screenOrientation="portrait" />
-        <activity android:name=".utils.social.WebAuthActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.NavigationActivity" android:screenOrientation="portrait" />        
-        <activity android:name=".ui.CitySearchActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.GeoMapActivity" android:screenOrientation="portrait" android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".ui.FilterActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.profile.UserProfileActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.profile.ProfileActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ui.MainActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".utils.social.WebAuthActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.NavigationActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.CitySearchActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.GeoMapActivity" android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.FilterActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.profile.UserProfileActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ui.profile.PhotoSwitcherActivity"/>
-        <activity android:name=".ui.edit.EditProfileActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.edit.EditContainerActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.ChatActivity" />
+        <activity android:name=".ui.edit.EditProfileActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.edit.EditContainerActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.ChatActivity"/>
         <activity android:name=".ui.GiftsActivity"/>
         <activity android:name=".ui.InviteActivity"/>
         <activity android:name=".ui.LeadersActivity"/>
-        <activity android:name=".ui.settings.SettingsActivity"/>
         <activity android:name=".ui.settings.SettingsContainerActivity"/>
-        <activity android:name=".billing.BuyingActivity" android:screenOrientation="portrait" />
-        
+        <activity android:name=".billing.BuyingActivity" android:screenOrientation="portrait"/>
+
         <!-- services -->
         <service android:name=".services.NotificationService"/>
         <service android:name=".services.ConnectionService"/>

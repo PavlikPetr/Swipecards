@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.feed;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
@@ -26,6 +26,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.utils.CacheProfile;
@@ -249,8 +250,8 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
 
         // Double Button
         mDoubleButton = (DoubleBigButton) view.findViewById(R.id.btnDoubleBig);
-        mDoubleButton.setLeftText(getString(R.string.inbox_btn_dbl_left));
-        mDoubleButton.setRightText(getString(R.string.inbox_btn_dbl_right));
+        mDoubleButton.setLeftText(getString(R.string.btn_dbl_left));
+        mDoubleButton.setRightText(getString(R.string.btn_dbl_right));
         mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
         mDoubleButton.setLeftListener(new View.OnClickListener() {
             @Override

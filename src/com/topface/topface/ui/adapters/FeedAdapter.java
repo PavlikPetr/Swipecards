@@ -37,7 +37,7 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
         mUpdateCallback = updateCallback;
     }
 
-    static class FeedViewHolder {
+    protected static class FeedViewHolder {
         public ImageViewRemote avatar;
         public TextView name;
         public TextView city;

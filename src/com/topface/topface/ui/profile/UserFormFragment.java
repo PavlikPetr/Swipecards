@@ -28,7 +28,6 @@ public class UserFormFragment extends Fragment {
         listQuestionnaire.setAdapter(mUserPhotoListAdapter);
 
         mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
-        mTitle.setText("You have 15 something");
 
         return root;
     }

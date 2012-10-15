@@ -33,6 +33,7 @@
     <string name="dashbrd_btn_likes">Likes you</string>
     <string name="dashbrd_btn_chat">My messages</string>
     <string name="dashbrd_btn_tops">Most popular</string>
+    <string name="dashbrd_btn_visitors">Visitors</string>
     <string name="dashbrd_btn_settings">Settings</string>
     <string name="dashbrd_btn_sympathy">Sympathy</string>
     <string name="dashbrd_btn_love">Delight</string>
@@ -49,14 +50,15 @@
 
     <!-- Likes Activity -->
     <string name="likes_header_title">Likes you</string>
-    <string name="likes_btn_dbl_left">All</string>
-    <string name="likes_btn_dbl_right">Unread</string>
     <string name="likes_background_text">No likes</string>
+
+    <!-- Visitors -->
+    <string name="visitors_background_text">No visitors</string>
 
     <!-- Indox & Chat Activity -->
     <string name="inbox_header_title">My messages</string>
-    <string name="inbox_btn_dbl_left">All</string>
-    <string name="inbox_btn_dbl_right">Unread</string>
+    <string name="btn_dbl_left">All</string>
+    <string name="btn_dbl_right">Unread</string>
     <string name="inbox_background_text">No inbox messages</string>
     <string name="chat_btn_send">Send</string>
     <string name="chat_comment">Send a message</string>
@@ -83,8 +85,6 @@
 
     <!-- Symphaty Activity -->
     <string name="mutual_header_title">Mutual</string>
-    <string name="symphaty_btn_dbl_left">All</string>
-    <string name="symphaty_btn_dbl_right">Unread</string>
     <string name="mutual_background_text">No symphaties</string>
 
     <!-- Tops Activity -->
@@ -185,7 +185,7 @@
     <string name="edit_title">Editing</string>
     <string name="edit_bg_photo">Background photo</string>
     <string name="edit_album">Album</string>
-    <string name="edit_profile_photo">Change photo</string>    
+    <string name="edit_profile_photo">Change photo</string>
     <string name="edit_album_photos">photos</string>
     <string name="edit_interests">interests</string>
     <string name="edit_back_photo_selected">Selected</string>
@@ -411,5 +411,6 @@
     <string name="settings_cooperation">Cooperation</string>
     <string name="settings_feedback_success_msg">Thank you, message was sent succesfully</string>
     <string name="fill_button">Fill</string>
+
 
 </resources>
