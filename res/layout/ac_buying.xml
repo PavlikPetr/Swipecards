@@ -111,26 +111,22 @@
 
                     <TextView
                         android:id="@+id/tvBuyingTitlePower"
-                        style="@style/ItemTitleText"
+                        style="@style/ButtonGrayText"
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
                         android:layout_marginLeft="12dp"
                         android:layout_weight="0.5"
                         android:gravity="left|center_vertical"
-                        android:text="@string/buying_recharge"
-                        android:textColor="#B5B5B5"
-                        android:textStyle="bold" />
+                        android:text="@string/buying_recharge"/>
 
                     <TextView
-                        style="@style/ItemTitleText"
+                        style="@style/ButtonGrayText"
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
                         android:layout_marginRight="12dp"
                         android:layout_weight="0.5"
                         android:gravity="right|center_vertical"
-                        android:text="@string/buying_energy"
-                        android:textColor="#B5B5B5"
-                        android:textStyle="bold" />
+                        android:text="@string/buying_energy"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -164,26 +160,22 @@
 
                     <TextView
                         android:id="@+id/tvBuyingTitle6"
-                        style="@style/ItemTitleText"
+                        style="@style/ButtonGrayText"
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
                         android:layout_marginLeft="12dp"
                         android:layout_weight="0.5"
                         android:gravity="left|center_vertical"
-                        android:text="@string/buying_pack_6coins"
-                        android:textColor="#B5B5B5"
-                        android:textStyle="bold" />
+                        android:text="@string/buying_pack_6coins"/>
 
                     <TextView
-                        style="@style/ItemTitleText"
+                        style="@style/ButtonGrayText"
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
                         android:layout_marginRight="12dp"
                         android:layout_weight="0.5"
                         android:gravity="right|center_vertical"
-                        android:text="@string/buying_6coins"
-                        android:textColor="#B5B5B5"
-                        android:textStyle="bold" />
+                        android:text="@string/buying_6coins"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -202,26 +194,22 @@
 
                 <TextView
                     android:id="@+id/tvBuyingTitle40"
-                    style="@style/ItemTitleText"
+                    style="@style/ButtonGrayText"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:layout_marginLeft="12dp"
                     android:layout_weight="0.5"
                     android:gravity="left|center_vertical"
-                    android:text="@string/buying_pack_40coins"
-                    android:textColor="#B5B5B5"
-                    android:textStyle="bold" />
+                    android:text="@string/buying_pack_40coins"/>
 
                 <TextView
-                    style="@style/ItemTitleText"
+                    style="@style/ButtonGrayText"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:layout_marginRight="12dp"
                     android:layout_weight="0.5"
                     android:gravity="right|center_vertical"
-                    android:text="@string/buying_40coins"
-                    android:textColor="#B5B5B5"
-                    android:textStyle="bold" />
+                    android:text="@string/buying_40coins"/>
             </LinearLayout>
 
             <!-- 100 money btn -->
@@ -239,7 +227,7 @@
 
                 <TextView
                     android:id="@+id/tvBuyingTitle100"
-                    style="@style/ItemTitleText"
+                    style="@style/ButtonGrayText"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:layout_marginLeft="12dp"
@@ -250,15 +238,13 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    style="@style/ItemTitleText"
+                    style="@style/ButtonBlueText"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:layout_marginRight="12dp"
                     android:layout_weight="0.5"
                     android:gravity="right|center_vertical"
-                    android:text="@string/buying_100coins"
-                    android:textColor="#9FCCF3"
-                    android:textStyle="bold" />
+                    android:text="@string/buying_100coins"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

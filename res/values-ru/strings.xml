@@ -5,6 +5,7 @@
     <string name="app_name">Topface</string>
 
     <!-- General -->
+    <string name="general_cancel">Отмена</string>
     <string name="general_internet_off">Нет подключения к Интернет</string>
     <string name="general_dialog_loading">Загрузка</string>
     <string name="general_dialog_saving">Сохранение</string>
@@ -92,7 +93,7 @@
     <string name="filter_boy">Парни</string>
     <string name="filter_from">От</string>
     <string name="filter_to">до</string>
-    <string name="filter_in">В</string>
+    <string name="filter_in">В городе</string>
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_only_beautiful">Только красивые</string>
     <string name="filter_extra_parameters">Дополнительные параметры</string>
@@ -162,7 +163,7 @@
     <string name="profile_status">О себе</string>
     <string name="profile_edit_title">Редактировать</string>
     <string name="profile_add_title">Добавить фотографию</string>
-    <string name="profile_add_album">Из фотогалереи</string>
+    <string name="profile_add_album">Выбрать из имеющихся</string>
     <string name="profile_add_camera">Сделать снимок</string>
     <string name="profile_coin_1">1 монета</string>
     <string name="profile_coin_2">2 монеты</string>

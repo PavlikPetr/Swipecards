@@ -64,7 +64,7 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
         if (getItemViewType(position) == T_ADD_BTN) {
             holder.photo.setBackgroundResource(R.drawable.profile_add_photo_selector);
         } else {
-            holder.photo.setPhoto(getItem(position));
+            holder.photo.setPhoto(getItem(position));            
         }
 
         return convertView;

@@ -8,6 +8,7 @@
     <string name="app_topface_url">http://topface.com</string>
 
     <!-- General -->
+    <string name="general_cancel">Cancel</string>
     <string name="general_internet_off">No Internet connection</string>
     <string name="general_dialog_loading">Loading</string>
     <string name="general_dialog_saving">Loading</string>

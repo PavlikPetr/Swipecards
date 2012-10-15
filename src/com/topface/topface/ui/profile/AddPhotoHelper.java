@@ -2,16 +2,25 @@ package com.topface.topface.ui.profile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -19,6 +28,7 @@ import com.topface.topface.data.Confirmation;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
+import com.topface.topface.ui.fragments.ProgressDialogFragment;
 import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FileSystem;
@@ -44,12 +54,10 @@ public class AddPhotoHelper {
     private AlertDialog mAddPhotoDialog;
     private Activity mActivity;
     private Fragment mFragment;
-    private ProgressDialog mProgressDialog;
     private Handler mHandler;
     public static final int ADD_PHOTO_RESULT_OK = 0;
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-
 
     public AddPhotoHelper(Fragment fragment) {
         this(fragment.getActivity());
@@ -59,10 +67,34 @@ public class AddPhotoHelper {
     public AddPhotoHelper(Activity activity) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
-        mProgressDialog = new ProgressDialog(mActivity);
-        mProgressDialog.setMessage(mContext.getString(R.string.general_dialog_loading));
-    }
+    }    
+    
+    public void showProgressDialog() {
+    	FragmentManager fm = ((FragmentActivity)mActivity).getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
 
+        Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
+        if(prev!=null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);        
+
+        DialogFragment newFragment = ProgressDialogFragment.newInstance();
+        ft.add(newFragment, ProgressDialogFragment.PROGRESS_DIALOG_TAG);
+        ft.commitAllowingStateLoss();        
+    }
+    
+    public void hideProgressDialog() {
+    	FragmentManager fm = ((FragmentActivity)mActivity).getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
+        if(prev!=null) {
+            ft.remove(prev);
+        }
+        ft.commitAllowingStateLoss();
+    }
+    
     /**
      * Добавление фотографии
      */
@@ -77,6 +109,10 @@ public class AddPhotoHelper {
         mAddPhotoDialog.show();
     }
 
+    public OnClickListener getAddPhotoClickListener() {
+    	return mOnAddPhotoClickListener;
+    }
+    
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -132,7 +168,7 @@ public class AddPhotoHelper {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressDialog.show();
+            showProgressDialog();
         }
 
         @Override
@@ -142,21 +178,27 @@ public class AddPhotoHelper {
             PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
             add.ssid = Data.SSID;
 
-            Intent intent = intentList[0];
+            Intent intent = intentList[0];            
             if (intent == null)
                 return rawResponse;
 
-            Uri imageUri = intent.getData();
+            Uri imageUri = intent.getData();            
 
             try {
 
                 // Android 4
                 //Bundle extras = intent.getExtras();
                 //Bitmap thePic = extras.getParcelable("data");
+            	//User had pick an image.
+                Cursor cursor = mActivity.getContentResolver().query(imageUri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+                cursor.moveToFirst();
 
+                //Link to the image
+                final String file = cursor.getString(0);
+                cursor.close();
 
                 //is = App.getContext().getContentResolver().openInputStream(uri[0]);
-                String file = FileSystem.getFilePathFromURI(AddPhotoHelper.this.mActivity, imageUri);
+//                String file = FileSystem.getFilePathFromURI(AddPhotoHelper.this.mActivity, imageUri);
                 String data = Base64.encodeFromFile(file);
                 //String data2 = Base64.encodeBytes(thePic.getNinePatchChunk());
                 rawResponse = Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), data);
@@ -188,7 +230,7 @@ public class AddPhotoHelper {
             } else {
                 mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
             }
-            mProgressDialog.cancel();
+            hideProgressDialog();
         }
 
 //        private void sendAddRequest(final String[] result, final int price) {

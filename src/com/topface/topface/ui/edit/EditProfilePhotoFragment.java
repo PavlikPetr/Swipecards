@@ -39,6 +39,8 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     private Photos mPhotoLinks;
     
     private AddPhotoHelper mAddPhotoHelper;
+    
+    private ViewFlipper mViewFlipper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
 
         // Navigation bar
         ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
@@ -81,15 +83,26 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             }
         });
 
+        mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
+        
         mPhotoGridView = (GridView) root.findViewById(R.id.fragmentGrid);
         mPhotoGridView.setNumColumns(3);
         mPhotoGridView.setAdapter(mPhotoGridAdapter);
         mPhotoGridView.setOnItemClickListener(mOnItemClickListener);
 
         TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
-        title.setVisibility(View.INVISIBLE);
-        
+        title.setVisibility(View.INVISIBLE);        
 
+        ((Button)root.findViewById(R.id.btnAddPhotoAlbum)).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
+        ((Button)root.findViewById(R.id.btnAddPhotoCamera)).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
+        ((Button)root.findViewById(R.id.btnCancel)).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mViewFlipper.setDisplayedChild(0);
+			}
+		});
+        
         return root;
     }
 
@@ -119,9 +132,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 		        deleteRequest.callback(new ApiHandler() {
 					
 					@Override
-					public void success(ApiResponse response) throws NullPointerException {
-						mDeleted.clear();
+					public void success(ApiResponse response) throws NullPointerException {						
 						CacheProfile.photos.removeAll(mDeleted);
+						mDeleted.clear();
 						finishOperations(handler);
 					}
 					
@@ -282,7 +295,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (position == 0) {
-                mAddPhotoHelper.addPhoto();
+            	mViewFlipper.setDisplayedChild(1);                
                 return;
             }
             Data.photos = CacheProfile.photos;            
@@ -292,7 +305,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+        	mViewFlipper.setDisplayedChild(0);
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             	Photo photo = (Photo) msg.obj;
             	
