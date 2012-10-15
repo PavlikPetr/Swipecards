@@ -8,8 +8,9 @@
             android:id="@+id/btnProfileLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:background="@drawable/navigation_menu_item_selector">
+            android:paddingLeft="7dp"
+            android:background="@drawable/navigation_menu_item_selector"
+            android:addStatesFromChildren="true">
 
         <com.topface.topface.ui.views.ImageViewRemote
                 xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"

@@ -443,7 +443,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void setCounter(int position) {
         Search currentSearch = getCurrentUser();
         if (currentSearch != null) {
-            mCounter.setText((position + 1) + "/" + currentSearch.avatars_big.length);
+            mCounter.setText((position + 1) + "/" + currentSearch.photos.size());
             mCounter.setVisibility(View.VISIBLE);
         } else {
             mCounter.setText("-/-");
