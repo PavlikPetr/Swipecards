@@ -185,7 +185,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         String subject;
         String body = Static.EMPTY;
         String topface_version = "unknown";
-        String android_SDK = android.os.Build.VERSION.SDK;
+        String android_SDK = "API" + android.os.Build.VERSION.SDK_INT;
         String android_RELEASE = android.os.Build.VERSION.RELEASE;
         String android_CODENAME = android.os.Build.VERSION.CODENAME;
         String device = android.os.Build.DEVICE;

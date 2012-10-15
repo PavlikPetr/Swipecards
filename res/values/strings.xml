@@ -188,11 +188,11 @@
     <string name="edit_profile_photo">Change photo</string>
     <string name="edit_album_photos">photos</string>
     <string name="edit_interests">interests</string>
-    <string name="edit_back_photo_selected">Selected</string>
+    <string name="edit_selected">Selected</string>
     <string name="edit_name">Name</string>
     <string name="edit_age">Age</string>
     <string name="edit_status">Status</string>
-    <string name="edit_set_as_main">Set as main</string>
+    <string name="edit_set_as_main">Set as main</string>    
     <string name="edit_delete">Delete</string>
     <string name="edit_restore">Restore</string>
 
@@ -413,4 +413,20 @@
     <string name="fill_button">Fill</string>
 
 
+    <plurals name="time_hour">
+        <item quantity="one">%d hour ago</item>
+        <item quantity="few">%d hours ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <plurals name="time_minute">
+        <item quantity="one">%d minute ago</item>
+        <item quantity="few">%d minutes ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+    <plurals name="quantity_photos">
+        <item quantity="one">%d photo</item>
+        <item quantity="few">%d photos</item>
+        <item quantity="other">%d photos</item>
+    </plurals>
+    
 </resources>

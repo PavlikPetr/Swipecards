@@ -181,7 +181,7 @@
     <string name="edit_profile_photo">Поменять фото</string>
     <string name="edit_album_photos">фотографий</string>
     <string name="edit_interests">интересов</string>
-    <string name="edit_back_photo_selected">Выбрана</string>
+    <string name="edit_selected">Выбрана</string>
     <string name="edit_name">Имя</string>
     <string name="edit_age">Возраст</string>
     <string name="edit_status">Статус</string>

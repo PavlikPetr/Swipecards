@@ -21,6 +21,7 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.MainRequest;
+import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -67,15 +68,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         subTitle.setVisibility(View.VISIBLE);
         subTitle.setText(R.string.edit_album);
 
-//        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-//        mSaveButton.setText(getResources().getString(R.string.navigation_save));
-//        mSaveButton.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                saveChanges(null);
-//            }
-//        });
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
         getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
@@ -103,37 +95,78 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
     @Override
     protected boolean hasChanges() {
-        return mSelectedId != mLastSelectedId;
+        return (mSelectedId != mLastSelectedId) || !mDeleted.isEmpty();
     }
 
+    private boolean mOperationsFinished = true;
+    private boolean mCanceled = false;
     @Override
     protected void saveChanges(final Handler handler) {
     	if (hasChanges()) {
 	        prepareRequestSend();
-	        MainRequest request = new MainRequest(getActivity().getApplicationContext());
-	        registerRequest(request);
-	        request.photoid = mSelectedId;
-	        request.callback(new ApiHandler() {
+	        
+	        if (!mDeleted.isEmpty()) {	
+	        	mOperationsFinished = false;
+				PhotoDeleteRequest deleteRequest = new PhotoDeleteRequest(getActivity().getApplicationContext());
+		        registerRequest(deleteRequest);
+		        
+		        int[] photoIds = new int[mDeleted.size()];
+		        for (int i = 0; i < photoIds.length; i++) {
+		        	photoIds[i] = mDeleted.get(i).getId();
+				}
+		        deleteRequest.photos = photoIds;
+		        
+		        deleteRequest.callback(new ApiHandler() {
+					
+					@Override
+					public void success(ApiResponse response) throws NullPointerException {
+						mDeleted.clear();
+						CacheProfile.photos.removeAll(mDeleted);
+						finishOperations(handler);
+					}
+					
+					@Override
+					public void fail(int codeError, ApiResponse response) throws NullPointerException {						
+						finishOperations(handler);
+					}
+				}).exec();
+	        }
+	        
+	        
+	        
+	        MainRequest setAsMainRequest = new MainRequest(getActivity().getApplicationContext());
+	        registerRequest(setAsMainRequest);
+	        setAsMainRequest.photoid = mSelectedId;
+	        setAsMainRequest.callback(new ApiHandler() {
 	
 	            @Override
 	            public void success(ApiResponse response) throws NullPointerException {
 	                CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedId);
 	                getActivity().setResult(Activity.RESULT_OK);
-	                mSelectedId = mLastSelectedId;                
-	                finishRequestSend();
-	                handler.sendEmptyMessage(0);
+	                mSelectedId = mLastSelectedId;                	                
+	                finishOperations(handler);
 	            }
 	
 	            @Override
 	            public void fail(int codeError, ApiResponse response) throws NullPointerException {
 	                getActivity().setResult(Activity.RESULT_CANCELED);
-	                finishRequestSend();
-	                handler.sendEmptyMessage(0);
+	                finishOperations(handler);
+	                
 	            }
-	        }).exec();
+	        }).exec();	        
+	        
     	} else {
     		handler.sendEmptyMessage(0);
     	}
+    }
+    
+    private synchronized void finishOperations(Handler handler) {
+    	if(mOperationsFinished) {
+        	finishRequestSend();
+			handler.sendEmptyMessage(0);
+		} else {
+			mOperationsFinished = true;
+		}
     }
 
     class EditProfileGrigAdapter extends ProfilePhotoGridAdapter {
@@ -155,15 +188,19 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 holder.mBtnSetAsMain = (Button) convertView.findViewById(R.id.btnSetAsMain);
                 holder.mBtnDelete = (Button) convertView.findViewById(R.id.btnDeletePhoto);
                 holder.mBtnRestore = (Button) convertView.findViewById(R.id.btnRestorePhoto);
+                holder.mBtnSelectedAsMain = (Button) convertView.findViewById(R.id.btnSetAsMainSelected);
+                holder.mShadow = (ImageView) convertView.findViewById(R.id.ivShadow);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
-            }
+            }            
             
-            if (position == 0) {
+            if (getItemViewType(position) == T_ADD_BTN) {
                 holder.photo.setBackgroundResource(R.drawable.profile_add_photo_selector);
                 holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
                 holder.mBtnDelete.setVisibility(View.INVISIBLE);
+                holder.mBtnSelectedAsMain.setVisibility(View.INVISIBLE);    
+                holder.mShadow.setVisibility(View.INVISIBLE);
             } else {
             	final int itemId = item.getId();
                 holder.photo.setPhoto(item);
@@ -171,6 +208,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 	holder.mBtnDelete.setVisibility(View.INVISIBLE);
                 	holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
                 	holder.mBtnRestore.setVisibility(View.VISIBLE);
+                	holder.mBtnSelectedAsMain.setVisibility(View.INVISIBLE);
                 	holder.mBtnRestore.setOnClickListener(new OnClickListener() {
 						
 						@Override
@@ -196,7 +234,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 	
                 	if (mLastSelectedId == itemId) {
 	                	holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
+	                	holder.mBtnSelectedAsMain.setVisibility(View.VISIBLE);
 	                } else {
+	                	holder.mBtnSelectedAsMain.setVisibility(View.INVISIBLE);
 	                	holder.mBtnSetAsMain.setVisibility(View.VISIBLE);
 	                	holder.mBtnSetAsMain.setOnClickListener(new OnClickListener() {						
 							@Override
@@ -214,9 +254,11 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
         class ViewHolder {
             ImageViewRemote photo;
+            ImageView mShadow;
             Button mBtnDelete;
             Button mBtnSetAsMain;
             Button mBtnRestore;
+            Button mBtnSelectedAsMain;
         }
     }   
 
@@ -256,13 +298,12 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             	
             	CacheProfile.photos.addFirst(photo);            	
             	mPhotoLinks.add(1,photo);
-            	            	
+            	
             	mPhotoGridAdapter.notifyDataSetChanged();
                 Toast.makeText(getActivity(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 Toast.makeText(getActivity(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
         }
-    };
-
+    };    
 }

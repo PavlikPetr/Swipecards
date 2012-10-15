@@ -14,6 +14,8 @@ import com.topface.topface.utils.GiftGalleryManager;
 
 public class GiftsAdapter extends LoadingListAdapter {
 
+	public static final int T_SEND_BTN = 3;
+	
     private LayoutInflater mInflater;
 
     private GiftGalleryManager<Gift> mGalleryManager;
@@ -34,7 +36,16 @@ public class GiftsAdapter extends LoadingListAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return super.getViewTypeCount();
+        return (super.getViewTypeCount() + 1);
+    }
+    
+    @Override
+    public int getItemViewType(int position) {
+    	if(getItem(position).type == Gift.SEND_BTN) {
+    		return T_SEND_BTN;
+    	} else {
+    		return super.getItemViewType(position);
+    	}
     }
 
     @Override
@@ -51,41 +62,45 @@ public class GiftsAdapter extends LoadingListAdapter {
             mLoaderRetrierProgress.setVisibility(View.INVISIBLE);
             mLoaderRetrierText.setVisibility(View.VISIBLE);
             return mLoaderRetrier;
-        } else {
-            if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_gift, null, false);
+		} else {
+			if (convertView == null) {
+				convertView = mInflater.inflate(R.layout.item_gift, null, false);
 
-                holder = new ViewHolder();
-                holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
-                holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
-                holder.giftText = (TextView) convertView.findViewById(R.id.giftText);
+				holder = new ViewHolder();
+				holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
+				holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
+				holder.giftText = (TextView) convertView.findViewById(R.id.giftText);
 
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            holder.gift = (getItem(position));
-            type = holder.gift.type;
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
 
-            if (type == Gift.PROFILE || type == Gift.PROFILE_NEW) {
-                mGalleryManager.getImage(position, holder.giftImage);
-                holder.giftText.setText(Static.EMPTY);
-                holder.giftText.setVisibility(View.VISIBLE);
-                holder.priceText.setVisibility(View.GONE);
-            } else if (type == Gift.SEND_BTN) {
-                holder.giftImage.setImageResource(R.drawable.chat_gift_selector);
-                holder.giftText.setText(R.string.gifts_send_btn);
-                holder.giftText.setVisibility(View.VISIBLE);
-                holder.priceText.setVisibility(View.GONE);
-            } else {
-                mGalleryManager.getImage(position, holder.giftImage);
-                holder.priceText.setVisibility(View.VISIBLE);
-                holder.priceText.setText(Integer.toString(holder.gift.price));
-                holder.giftText.setVisibility(View.GONE);
-            }
+			holder.gift = (getItem(position));
+			if (type == T_SEND_BTN) {
+				holder.giftImage.setImageBitmap(null);
+				holder.giftImage.setBackgroundResource(R.drawable.chat_gift_selector);
+				holder.giftText.setText(R.string.gifts_send_btn);
+				holder.giftText.setVisibility(View.VISIBLE);
+				holder.priceText.setVisibility(View.GONE);				
+			} else {
+				type = holder.gift.type;
 
-            return convertView;
-        }
+				if (type == Gift.PROFILE || type == Gift.PROFILE_NEW) {
+					mGalleryManager.getImage(position, holder.giftImage);
+					holder.giftText.setText(Static.EMPTY);
+					holder.giftText.setVisibility(View.VISIBLE);
+					holder.priceText.setVisibility(View.GONE);
+				} else {
+					mGalleryManager.getImage(position, holder.giftImage);
+					holder.priceText.setVisibility(View.VISIBLE);
+					holder.priceText.setText(Integer.toString(holder.gift.price));
+					holder.giftText.setVisibility(View.GONE);
+				}
+			}
+		}
+        
+        return convertView;
     }
 
     @Override

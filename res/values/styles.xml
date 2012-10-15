@@ -75,6 +75,11 @@
     <style name="ButtonsText" parent="ShadowUserText">
         <item name="android:textColor">#FFFFFF</item>
     </style>
+    
+    <style name="EditPhotoButtonsText" parent="ButtonsText">        
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
     <style name="LeftMenuButtons">
         <item name="android:textColor">#FFFFFF</item>
@@ -263,6 +268,7 @@
         <item name="android:layout_marginBottom">3dp</item>
         <item name="android:background">@drawable/chat_gift_frame</item>
         <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
 </resources>

@@ -50,17 +50,17 @@ public class Search extends AbstractDataWithPhotos {
                     search.photos = Photos.parse(item.getJSONArray("photos"));
 
                     // avatars
-                    JSONArray avatars = item.getJSONArray("avatars");
-                    int size = avatars.length();
-                    if (size > 0) {
-                        search.avatars_big = new String[size];
-                        search.avatars_small = new String[size];
-                        for (int n = 0; n < avatars.length(); n++) {
-                            JSONObject avatar = avatars.getJSONObject(n);
-                            search.avatars_big[n] = avatar.optString("big");
-                            search.avatars_small[n] = avatar.optString("small");
-                        }
-                    }
+//                    JSONArray avatars = item.getJSONArray("avatars");
+//                    int size = avatars.length();
+//                    if (size > 0) {
+//                        search.avatars_big = new String[size];
+//                        search.avatars_small = new String[size];
+//                        for (int n = 0; n < avatars.length(); n++) {
+//                            JSONObject avatar = avatars.getJSONObject(n);
+//                            search.avatars_big[n] = avatar.optString("big");
+//                            search.avatars_small[n] = avatar.optString("small");
+//                        }
+//                    }
 
                     // city
                     JSONObject city = item.getJSONObject("city");
