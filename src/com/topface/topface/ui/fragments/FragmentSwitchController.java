@@ -2,19 +2,21 @@ package com.topface.topface.ui.fragments;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.*;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 import com.topface.topface.R;
-import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 
 public class FragmentSwitchController extends ViewGroup {
 
-    private int mScrollX;
     private int mOpenDX;
-    private int mClosedDX;
     private int mFullOpenDX;
     private int mWidth;
     private int mAnimation;
@@ -25,17 +27,10 @@ public class FragmentSwitchController extends ViewGroup {
     private boolean mAutoScrolling = false;
     private static final int EXPANDING_PERCENT = 30;
 
-    public static final int CLOSED = 0;
     public static final int EXPAND = 1;
     public static final int EXPAND_FULL = 2;
     public static final int COLLAPSE = 3;
     public static final int COLLAPSE_FULL = 4;
-
-    private final Interpolator mPrixingInterpolator = new Interpolator() {
-        public float getInterpolation(float t) {
-            return (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) + 1.0f;
-        }
-    };
 
     /*
     *   interface FragmentSwitchListener
@@ -46,18 +41,20 @@ public class FragmentSwitchController extends ViewGroup {
         public void beforeExpanding();
     }
 
-    public FragmentSwitchController(Context context) {
-        this(context, null);
-    }
-
     public FragmentSwitchController(Context context, AttributeSet attrs) {
         super(context, attrs);
         mCurrentFragmentId = BaseFragment.F_PROFILE;
+        Interpolator mPrixingInterpolator = new Interpolator() {
+            public float getInterpolation(float t) {
+                return (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) + 1.0f;
+            }
+        };
         mScroller = new Scroller(context, mPrixingInterpolator);
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
         mMinimumVelocity = 10 * configuration.getScaledMinimumFlingVelocity();
         mVelocitySlop = configuration.getScaledMinimumFlingVelocity();
+        //noinspection deprecation
         mTouchSlop = ViewConfiguration.getTouchSlop();
         mAnimation = COLLAPSE;
     }
@@ -74,23 +71,32 @@ public class FragmentSwitchController extends ViewGroup {
         return mAnimation;
     }
 
-    public int getCurrentFragmentId() {
-        return mCurrentFragmentId;
-    }
-
     public void showFragmentWithAnimation(int fragmentId) {
         mCurrentFragmentId = fragmentId;
         snapToScreen(EXPAND_FULL);
     }
 
     public void showFragment(int fragmentId) {
-        mCurrentFragmentId = fragmentId;
-        switchFragment();
+        if (fragmentId != mCurrentFragmentId) {
+            mCurrentFragmentId = fragmentId;
+            switchFragment();
+        } else {
+            closeMenu();
+        }
     }
 
     private void switchFragment() {
+        BaseFragment fragment = getFragmentById(mCurrentFragmentId);
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+
+    }
+
+    private BaseFragment getFragmentById(int id) {
         BaseFragment fragment;
-        switch (mCurrentFragmentId) {
+        switch (id) {
             case BaseFragment.F_PROFILE:
                 fragment = new ProfileFragment();
                 break;
@@ -109,6 +115,9 @@ public class FragmentSwitchController extends ViewGroup {
             case BaseFragment.F_TOPS:
                 fragment = new TopsFragment();
                 break;
+            case BaseFragment.F_VISITORS:
+                fragment = new VisitorsFragment();
+                break;
             case BaseFragment.F_SETTINGS:
                 fragment = new SettingsFragment();
                 break;
@@ -116,8 +125,9 @@ public class FragmentSwitchController extends ViewGroup {
                 fragment = new ProfileFragment();
                 break;
         }
-        mFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        return fragment;
     }
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -134,7 +144,7 @@ public class FragmentSwitchController extends ViewGroup {
         getChildAt(1).layout(0, 0, getChildAt(1).getMeasuredWidth(), getChildAt(1).getMeasuredHeight());
 
         mWidth = getChildAt(1).getWidth();
-        mClosedDX = mWidth / 100 * EXPANDING_PERCENT;
+        int mClosedDX = mWidth / 100 * EXPANDING_PERCENT;
         mOpenDX = mWidth - mClosedDX;
         mFullOpenDX = mWidth - mOpenDX;
     }
@@ -165,7 +175,7 @@ public class FragmentSwitchController extends ViewGroup {
 
     @Override
     public void computeScroll() {
-        mScrollX = mScroller.getCurrX();
+        int mScrollX = mScroller.getCurrX();
         if (!mScroller.isFinished()) {
             if (mScroller.computeScrollOffset()) {
                 scrollTo(mScrollX, getScrollY());
@@ -283,18 +293,18 @@ public class FragmentSwitchController extends ViewGroup {
                         mFragmentSwitchListener.beforeExpanding();
                     }
                 } else {
-                    stopDragging(x);
+                    stopDragging();
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
-                stopDragging(x);
+                stopDragging();
                 break;
             case MotionEvent.ACTION_UP:
                 if (mAnimation == EXPAND) {
                     completeDragging(0);
                     return true;
                 }
-                stopDragging(x);
+                stopDragging();
                 break;
         }
 
@@ -346,7 +356,7 @@ public class FragmentSwitchController extends ViewGroup {
                 completeDragging(initialVelocity);
                 break;
             case MotionEvent.ACTION_CANCEL:
-                stopDragging(x);
+                stopDragging();
                 break;
         }
 
@@ -359,63 +369,62 @@ public class FragmentSwitchController extends ViewGroup {
         setScrollingCacheEnabled(true);
     }
 
-    private void stopDragging(float x) {
+    private void stopDragging() {
         mIsDragging = false;
         setScrollingCacheEnabled(false);
     }
-
-    private int mScrollingVelocityThreshold = 2000;
-    private float mScrollingDistanceThreshold;
 
 
     private void completeDragging(int velocity) {
         mIsDragging = false;
         mAutoScrolling = true;
-        int dx = 0;
-        int duration = 0;
+        int dx;
+        int duration;
 
         if (Math.abs(velocity) < mVelocitySlop)
             velocity = 0;
 
+        int scrollingVelocityThreshold = 2000;
+        float scrollingDistanceThreshold = 0;
         if (velocity > 0) {
             // right - expect EXPAND
             dx = -getRightBound() - getScrollX();
 
-            if (velocity >= mScrollingVelocityThreshold) {
+            if (velocity >= scrollingVelocityThreshold) {
                 //EXPAND because user slides insanely
                 mAnimation = EXPAND;
-                duration = (int) Math.abs(1000 * dx / mScrollingVelocityThreshold);
+                duration = Math.abs(1000 * dx / scrollingVelocityThreshold);
             } else {
                 if (velocity < mMinimumVelocity) {
                     velocity = mMinimumVelocity;
                 }
                 //EXPAND with normal velocity, but check "distance threshold"
-                if (-getScrollX() - getLeftBound() > mScrollingDistanceThreshold) {
+                if (-getScrollX() - getLeftBound() > scrollingDistanceThreshold) {
                     mAnimation = EXPAND;
                 } else {
                     mAnimation = COLLAPSE;
                     dx = -getScrollX() - getLeftBound();
                 }
-                duration = (int) Math.abs(1000 * dx / velocity);
+                duration = Math.abs(1000 * dx / velocity);
             }
             mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
         } else if (velocity < 0) {
             // left - expect COLLAPSE
             dx = -getScrollX() - getLeftBound();
 
-            if (-velocity >= mScrollingVelocityThreshold) {
-                duration = (int) Math.abs(1000 * dx / mScrollingVelocityThreshold);
+            if (-velocity >= scrollingVelocityThreshold) {
+                duration = Math.abs(1000 * dx / scrollingVelocityThreshold);
             } else {
                 if (-velocity < mMinimumVelocity) {
                     velocity = mMinimumVelocity;
                 }
-                duration = (int) Math.abs(1000 * dx / velocity);
+                duration = Math.abs(1000 * dx / velocity);
             }
 
             mAnimation = COLLAPSE;
             mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
         } else {
-            if (-getScrollX() > mScrollingDistanceThreshold) {
+            if (-getScrollX() > scrollingDistanceThreshold) {
                 if (mAnimation == EXPAND) {
                     mAnimation = COLLAPSE;
                     dx = -getScrollX() - getLeftBound();
@@ -428,7 +437,7 @@ public class FragmentSwitchController extends ViewGroup {
                 dx = -getScrollX() - getLeftBound();
             }
 
-            duration = (int) Math.abs(1000 * dx / mMinimumVelocity);
+            duration = Math.abs(1000 * dx / mMinimumVelocity);
 
             mScroller.startScroll(getScrollX(), getScrollY(), dx, getScrollY(), duration);
         }
@@ -457,11 +466,11 @@ public class FragmentSwitchController extends ViewGroup {
             }
         }
 
-        boolean result = false;
+        boolean result;
 
         //for API versions < 14
         if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
-            result = ((ImageSwitcher) v).canScrollHorizontally(-dx);
+            result = v.canScrollHorizontally(-dx);
             //for API versions >= 14 (ICS)
         } else {
             result = ViewCompat.canScrollHorizontally(v, -dx);
@@ -471,10 +480,7 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     protected boolean inBezierThreshold(float x) {
-        if (x < mWidth / 5) {
-            return true;
-        }
-        return false;
+        return x < mWidth / 5;
     }
 
 

@@ -24,7 +24,6 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
-    private SharedPreferences mPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,12 +42,11 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
         mFragmentSwitcher.setFragmentManager(mFragmentManager);
 
-        mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        int lastFragmentId = mPreferences.getInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, BaseFragment.F_PROFILE);
-        CacheProfile.background_id = mPreferences.getInt(Static.PREFERENCES_PROFILE_BACKGROUND_ID, ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
+        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        CacheProfile.background_id = preferences.getInt(Static.PREFERENCES_PROFILE_BACKGROUND_ID, ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
 
-        mFragmentSwitcher.showFragment(lastFragmentId);
-        mFragmentMenu.setSelectedMenu(lastFragmentId);
+        mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
+        mFragmentMenu.selectDefaultMenu();
     }
 
     /*
@@ -86,14 +84,6 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         return false;
     }
 
-    @Override
-    protected void onDestroy() {
-        mPreferences.edit()
-                .putInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, mFragmentSwitcher.getCurrentFragmentId())
-                .commit();
-        super.onDestroy();
-    }
-
     private FragmentMenuListener mOnFragmentMenuListener = new FragmentMenuListener() {
         @Override
         public void onMenuClick(int buttonId) {
@@ -116,6 +106,9 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
                     break;
                 case R.id.btnFragmentTops:
                     fragmentId = BaseFragment.F_TOPS;
+                    break;
+                case R.id.btnFragmentVisitors:
+                    fragmentId = BaseFragment.F_VISITORS;
                     break;
                 case R.id.btnFragmentSettings:
                     fragmentId = BaseFragment.F_SETTINGS;

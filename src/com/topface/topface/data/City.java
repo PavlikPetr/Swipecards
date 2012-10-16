@@ -21,12 +21,7 @@ public class City extends AbstractData {
             JSONArray arr = response.mJSONResult.getJSONArray("cities");
             if (arr.length() > 0)
                 for (int i = 0; i < arr.length(); i++) {
-                    JSONObject item = arr.getJSONObject(i);
-                    City city = new City();
-                    city.id = item.optInt("id");
-                    city.name = item.optString("name");
-                    city.full = item.optString("full");
-                    cities.add(city);
+                    cities.add(parseCity(arr.getJSONObject(i)));
                 }
         } catch (Exception e) {
             Debug.log("City.class", "Wrong response parsing: " + e);
@@ -34,5 +29,15 @@ public class City extends AbstractData {
 
         return cities;
     }
-    //---------------------------------------------------------------------------
+
+    public static City parseCity(JSONObject item) {
+        City city = new City();
+        if (item != null) {
+            city.id = item.optInt("id");
+            city.name = item.optString("name");
+            city.full = item.optString("full");
+        }
+        return city;
+
+    }
 }

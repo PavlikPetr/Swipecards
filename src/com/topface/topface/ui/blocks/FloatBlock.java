@@ -3,9 +3,9 @@ package com.topface.topface.ui.blocks;
 import android.app.Activity;
 import android.support.v4.app.DialogFragment;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.fragments.LikesFragment;
-import com.topface.topface.ui.fragments.MutualFragment;
 import com.topface.topface.ui.fragments.TopsFragment;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.HashMap;

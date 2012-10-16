@@ -92,8 +92,8 @@ public class Photo {
 
         for (HashMap.Entry<String, String> entry : links.entrySet()) {
             int entrySize = getSizeFromKey(entry.getKey());
-            int difference = entrySize - size;
-            if (entrySize >= size && difference < minDifference) {
+            int difference = Math.abs(entrySize - size);
+            if (difference < minDifference) {
                 minDifference = difference;
                 url = entry.getValue();
             }
