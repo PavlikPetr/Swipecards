@@ -123,7 +123,8 @@ public class ConnectionManager {
             //BasicHttpContext httpContext = new BasicHttpContext();
             HttpResponse httpResponse = httpClient.execute(httpPost/* ,
                                                                     * httpContext */);
-            HttpEntity httpEntity = httpResponse.getEntity();
+
+             HttpEntity httpEntity = httpResponse.getEntity();
             if (httpEntity != null) {
                 InputStream is = AndroidHttpClient.getUngzippedContent(httpEntity);
                 BufferedReader r = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FlushedInputStream(is), 8192)));
