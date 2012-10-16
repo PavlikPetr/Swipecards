@@ -2,23 +2,69 @@ package com.topface.topface.utils;
 
 import android.util.Log;
 import com.topface.topface.App;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
+@SuppressWarnings({"ConstantConditions", "PointlessBooleanExpression"})
 public class Debug {
+
+    public static final int MAX_LOG_MESSAGE_LENGTH = 8000;
+    /**
+     * Резать длинные сообщения в логах на несколько
+     */
+    public static final boolean CHUNK_LONG_LOGS = true;
+    /**
+     * Форматировать JSON
+     */
+    private static final boolean FORMAT_JSON = true;
 
     public static void log(Object obj, String msg) {
         if (App.DEBUG) {
             if (obj == null)
-                Log.i(App.TAG, "::" + msg);
+                showChunkedLogInfo(App.TAG, "::" + msg);
             else if (obj instanceof String)
-                Log.i(App.TAG, obj + "::" + msg);
+                showChunkedLogInfo(App.TAG, obj + "::" + msg);
             else
-                Log.i(App.TAG, obj.getClass().getSimpleName() + "::" + msg);
+                showChunkedLogInfo(App.TAG, obj.getClass().getSimpleName() + "::" + msg);
+        }
+    }
+
+    public static void showChunkedLogInfo(String tag, String msg) {
+        if (CHUNK_LONG_LOGS && msg.length() > 4000) {
+            int chunkCount = (int) Math.ceil(msg.length() / MAX_LOG_MESSAGE_LENGTH) + 1;
+            for (int i = 0; i < chunkCount; i++) {
+                int max = MAX_LOG_MESSAGE_LENGTH * (i + 1);
+                if (max >= msg.length()) {
+                    Log.i(tag, msg.substring(MAX_LOG_MESSAGE_LENGTH * i));
+                } else {
+                    Log.i(tag, msg.substring(MAX_LOG_MESSAGE_LENGTH * i, max));
+                }
+            }
+        } else {
+            Log.i(tag, msg);
+        }
+    }
+
+    public static void showChunkedLogError(String tag, String msg) {
+        if (CHUNK_LONG_LOGS && msg.length() > 4000) {
+            int chunkCount = (int) Math.ceil(msg.length() / MAX_LOG_MESSAGE_LENGTH) + 1;
+            for (int i = 0; i < chunkCount; i++) {
+                int max = MAX_LOG_MESSAGE_LENGTH * (i + 1);
+                if (max >= msg.length()) {
+                    Log.e(tag, msg.substring(MAX_LOG_MESSAGE_LENGTH * i));
+                } else {
+                    Log.e(tag, msg.substring(MAX_LOG_MESSAGE_LENGTH * i, max));
+                }
+            }
+        } else {
+            Log.i(tag, msg);
         }
     }
 
     public static void log(String msg) {
         if (App.DEBUG) {
-            Log.i(App.TAG, msg);
+            showChunkedLogInfo(App.TAG, msg);
         }
     }
 
@@ -30,17 +76,33 @@ public class Debug {
             }
             msg = msg != null && !msg.equals("") ? msg + " : " : "";
             String errorText = e.getMessage() == null ? "" : " :: " + e.getMessage();
-            Log.e(App.TAG, msg + errorText + stack.toString());
+            showChunkedLogError(App.TAG, msg + errorText + stack.toString());
         }
     }
 
     public static void error(String msg) {
         if (App.DEBUG) {
-            Log.e(App.TAG, msg);
+            showChunkedLogError(App.TAG, msg);
         }
     }
 
     public static void error(Exception e) {
         error(null, e);
+    }
+
+    public static void logJson(String tag, String title, String json) {
+        if (json != null) {
+            JSONTokener tokener = new JSONTokener(json);
+            JSONObject finalResult;
+            try {
+                finalResult = new JSONObject(tokener);
+                if (FORMAT_JSON) {
+                    Debug.log(tag, title + "\n" + finalResult.toString(4));
+                } else {
+                    Debug.log(tag, title + "\n" + finalResult.toString());
+                }
+            } catch (JSONException ignored) {
+            }
+        }
     }
 }

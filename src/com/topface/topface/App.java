@@ -4,9 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Utils;
 import org.acra.ACRA;
 
 //@ReportsCrashes(formKey = "dE85SXowSDhBcXZvMXAtUEtPMTg4X2c6MQ")
@@ -18,14 +20,30 @@ public class App extends Application {
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
     private static Intent mConnectionIntent;
     private static ConnectionChangeReceiver mConnectionReceiver;
+
+    public static boolean isDebugMode() {
+        boolean debug = false;
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(),
+                    PackageManager.GET_CONFIGURATIONS);
+        } catch (PackageManager.NameNotFoundException e) {
+            Debug.error(e);
+        }
+        if (packageInfo != null) {
+            int flags = packageInfo.applicationInfo.flags;
+            debug = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        }
+        return debug;
+    }
 //    private static PluralResources mPluralResources;
 
     @Override
     public void onCreate() {
         ACRA.init(this);
         super.onCreate();
-        DEBUG = Utils.isDebugMode(this);
         mContext = getApplicationContext();
+        DEBUG = isDebugMode();
         // C2DM
         C2DMUtils.init(getContext());
         Debug.log("App", "+onCreate");
