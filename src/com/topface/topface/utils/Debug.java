@@ -9,7 +9,7 @@ import org.json.JSONTokener;
 @SuppressWarnings({"ConstantConditions", "PointlessBooleanExpression"})
 public class Debug {
 
-    public static final int MAX_LOG_MESSAGE_LENGTH = 8000;
+    public static final int MAX_LOG_MESSAGE_LENGTH = 3500;
     /**
      * Резать длинные сообщения в логах на несколько
      */
@@ -31,7 +31,7 @@ public class Debug {
     }
 
     public static void showChunkedLogInfo(String tag, String msg) {
-        if (CHUNK_LONG_LOGS && msg.length() > 4000) {
+        if (CHUNK_LONG_LOGS && msg.length() > MAX_LOG_MESSAGE_LENGTH) {
             int chunkCount = (int) Math.ceil(msg.length() / MAX_LOG_MESSAGE_LENGTH) + 1;
             for (int i = 0; i < chunkCount; i++) {
                 int max = MAX_LOG_MESSAGE_LENGTH * (i + 1);
@@ -47,7 +47,7 @@ public class Debug {
     }
 
     public static void showChunkedLogError(String tag, String msg) {
-        if (CHUNK_LONG_LOGS && msg.length() > 4000) {
+        if (CHUNK_LONG_LOGS && msg.length() > MAX_LOG_MESSAGE_LENGTH) {
             int chunkCount = (int) Math.ceil(msg.length() / MAX_LOG_MESSAGE_LENGTH) + 1;
             for (int i = 0; i < chunkCount; i++) {
                 int max = MAX_LOG_MESSAGE_LENGTH * (i + 1);
