@@ -11,6 +11,14 @@
             android:layout_centerInParent="true"
             android:visibility="gone"
             style="@android:style/Widget.ProgressBar.Small"/>
+    <Button
+        android:id="@+id/btnRetry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/retry"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        ></Button>
 
     <LinearLayout
             android:id="@+id/ivAuthGroup"

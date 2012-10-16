@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+import android.widget.Toast;
+import com.topface.topface.ui.AuthActivity;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
     public boolean mIsConnected = false;
@@ -39,14 +42,20 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
                     mConnectionType = CONNECTION_WIFI;
                     break;
             }
-
             mIsConnected = activeNetInfo.isConnected();
+            reAuthIfNeed();
         } else {
-            //Toast.makeText(context, "Интернет выключен", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "Интер0нет выключен", Toast.LENGTH_SHORT).show();
             mIsConnected = false;
             mConnectionType = CONNECTION_OFFLINE;
         }
     }
+
+   private void reAuthIfNeed() {
+        if(AuthActivity.mThis!=null) {
+            AuthActivity.mThis.reAuthAfterInternetConnected();
+        }
+   }
 
     public boolean isConnected() {
         return mIsConnected;

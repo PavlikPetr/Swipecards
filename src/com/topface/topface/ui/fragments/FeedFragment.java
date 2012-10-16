@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.R;
@@ -38,12 +36,14 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
     private TextView mBackgroundText;
     protected DoubleBigButton mDoubleButton;
     protected boolean mIsUpdating;
+    private LinearLayout updateErrorMessage;
+    private RelativeLayout mContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(getLayout(), null);
-
+        mContainer = (RelativeLayout)view.findViewById(R.id.container);
         // Home Button
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         // Set title
@@ -196,7 +196,6 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
                         if (isHistoryLoad) {
                             mListAdapter.showRetryItem();
                         }
-                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         onUpdateFail(isPushUpdating || isHistoryLoad);
                         mListView.onRefreshComplete();
                         mListView.setVisibility(View.VISIBLE);
@@ -296,7 +295,7 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
             mBackgroundText.setText("");
-
+            createUpdateErrorMessage();
             if (mBackgroundText.getCompoundDrawables()[0] != null) {
                 ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).stop();
             }
@@ -321,6 +320,34 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
             ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).start();
             mDoubleButton.setClickable(false);
         }
+    }
+
+    private void createUpdateErrorMessage() {
+        if(updateErrorMessage == null){
+            updateErrorMessage = new LinearLayout(getActivity().getApplicationContext());
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.MATCH_PARENT);
+            params.addRule(RelativeLayout.CENTER_IN_PARENT,1);
+            updateErrorMessage.setLayoutParams(params);
+
+            mContainer.addView(updateErrorMessage);
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            inflater.inflate(R.layout.retry_btn,updateErrorMessage);
+
+            Button mRetryBtn = (Button)updateErrorMessage.findViewById(R.id.retry);
+            mRetryBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    retryButtonClick();
+                }
+            });
+        } else {
+            updateErrorMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void retryButtonClick() {
+        updateErrorMessage.setVisibility(View.GONE);
+        updateData(false);
     }
 
 }

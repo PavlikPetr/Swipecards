@@ -52,7 +52,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
     public static final int F_GIFTS = 2;
-    public static final int F_COUNT = F_GIFTS + 1;
+    public static final int F_COUNT = F_GIFTS+1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -73,7 +73,8 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         // Avatar, Name, City
         mUserAvatar = (ImageViewRemote) view.findViewById(R.id.ivUserAvatar);        
         mUserName = (TextView) view.findViewById(R.id.ivUserName);
-        mUserName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
+        String userNameString = CacheProfile.first_name+(isAgeOk(CacheProfile.age)?", "+CacheProfile.age:"");
+        mUserName.setText(userNameString);
         mUserCity = (TextView) view.findViewById(R.id.ivUserCity);
         mUserCity.setText(CacheProfile.city_name);
         mUserProfileHeader = (ViewGroup) view.findViewById(R.id.loProfileHeader);
@@ -231,6 +232,10 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         }
     };
 
+    private boolean isAgeOk(int age) {
+        if(age<=0) return false;
+        return true;
+    }
     /*
     *     ProfilePageAdapter
     */

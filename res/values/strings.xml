@@ -22,6 +22,7 @@
     <!-- Auth Activity -->
     <string name="auth_btn_vk">Login via VKontakte</string>
     <string name="auth_btn_fb">Login via Facebook</string>
+    <string name="retry">Retry</string>
 
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_profile">Profile</string>
@@ -280,17 +281,6 @@
     <string name="invite_error">Could not send the invitation. Please, try again</string>
     <string name="invite_completed">Invitation sent</string>
 
-    <!-- TODO: translate this to english-->
-    <plurals name="time_hour">
-        <item quantity="one">%d час назад</item>
-        <item quantity="few">%d часа назад</item>
-        <item quantity="other">%d часов назад</item>
-    </plurals>
-    <plurals name="time_minute">
-        <item quantity="one">%d минуту назад</item>
-        <item quantity="few">%d минуты назад</item>
-        <item quantity="other">%d минут назад</item>
-    </plurals>
 
     <plurals name="photo">
         <item quantity="one">%d photo</item>

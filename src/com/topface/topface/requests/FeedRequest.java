@@ -42,7 +42,7 @@ public class FeedRequest extends AbstractApiRequest {
                 service = "dialogs";
                 break;
             case LIKES:
-                service = "feedLike";
+                service = "feedLikea";
                 break;
             case MUTUAL:
                 service = "feedSympathy";

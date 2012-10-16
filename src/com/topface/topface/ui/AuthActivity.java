@@ -1,9 +1,11 @@
 package com.topface.topface.ui;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -27,10 +29,14 @@ import com.topface.topface.utils.social.AuthorizationManager;
 public class AuthActivity extends BaseFragmentActivity implements View.OnClickListener {
     private Button mFBButton;
     private Button mVKButton;
+    private Button mRetryButtton;
     private ProgressBar mProgressBar;
     private AuthorizationManager mAuthorizationManager;
 
     private boolean mFromAuthorizationReceiver;
+    private boolean mIsAuthorized = false;
+
+    public static AuthActivity mThis;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +50,8 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case AuthorizationManager.AUTHORIZATION_FAILED:
-                        showButtons();
+//                        showButtons();
+                        authorizationFailed();
                         break;
                     case AuthorizationManager.DIALOG_COMPLETED:
                         hideButtons();
@@ -66,6 +73,9 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mVKButton = (Button) findViewById(R.id.btnAuthVK);
         mVKButton.setOnClickListener(this);
 
+        mRetryButtton = (Button) findViewById(R.id.btnRetry);
+        mRetryButtton.setOnClickListener(this);
+
         // Progress
         mProgressBar = (ProgressBar) findViewById(R.id.prsAuthLoading);
 
@@ -74,9 +84,11 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                     .show();
 
         if (Data.isSSID()) {
+            mIsAuthorized = true;
             hideButtons();
             getProfile();
         } else if (!(new AuthToken(getApplicationContext())).isEmpty()) {
+
             hideButtons();
             mAuthorizationManager.reAuthorize();
         }
@@ -94,12 +106,19 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.\
+        mThis = null;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         checkIntentForReauth(getIntent());
+        mThis=this;
     }
 
-    ;
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -116,11 +135,32 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnAuthVK) {
-            mAuthorizationManager.vkontakteAuth();
-        } else if (view.getId() == R.id.btnAuthFB) {
-            mAuthorizationManager.facebookAuth();
+        if (!Http.isOnline(this)){
+            Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
+                    .show();
+        } else{
+            if (view.getId() == R.id.btnAuthVK) {
+                mAuthorizationManager.vkontakteAuth();
+            } else if (view.getId() == R.id.btnAuthFB) {
+                mAuthorizationManager.facebookAuth();
+            } else if (view.getId() == R.id.btnRetry) {
+                auth(new AuthToken(getApplicationContext()));
+                mRetryButtton.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
         }
+    }
+
+    //TODO: поменять имя метода
+    public void reAuthAfterInternetConnected() {
+        if(!mIsAuthorized){
+           if(!(new AuthToken(getApplicationContext()).isEmpty())){
+               mAuthorizationManager.reAuthorize();
+               hideButtons();
+               mRetryButtton.setVisibility(View.GONE);
+               mProgressBar.setVisibility(View.VISIBLE);
+           }
+       }
     }
 
     private void showButtons() {
@@ -172,6 +212,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                         getProfile();
                     }
                 });
+                mIsAuthorized = true;
             }
 
             @Override
@@ -179,9 +220,12 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showButtons();
-                        Toast.makeText(AuthActivity.this, getString(R.string.general_server_error),
-                                Toast.LENGTH_SHORT).show();
+//                        showButtons();
+//                        Log.d("Topface","fail");
+                        authorizationFailed();
+//                        Toast.makeText(AuthActivity.this, getString(R.string.general_server_error),
+//                                Toast.LENGTH_SHORT).show();
+                        mIsAuthorized = false;
                     }
                 });
             }
@@ -235,4 +279,10 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             }
         }
     }
+
+    private void authorizationFailed() {
+        mRetryButtton.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
+    }
+
 }
