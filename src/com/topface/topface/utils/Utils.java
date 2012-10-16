@@ -1,10 +1,6 @@
 package com.topface.topface.utils;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
@@ -486,22 +482,6 @@ public class Utils {
                 context.getString(R.string.general_data_error),
                 Toast.LENGTH_SHORT
         ).show();
-    }
-
-    public static boolean isDebugMode(Application application) {
-        boolean debug = false;
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = application.getPackageManager().getPackageInfo(application.getPackageName(),
-                    PackageManager.GET_CONFIGURATIONS);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (packageInfo != null) {
-            int flags = packageInfo.applicationInfo.flags;
-            debug = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-        }
-        return debug;
     }
 
 }
