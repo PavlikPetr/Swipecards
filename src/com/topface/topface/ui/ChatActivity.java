@@ -39,8 +39,7 @@ import java.util.LinkedList;
 
 public class ChatActivity extends BaseFragmentActivity implements View.OnClickListener, LocationListener {
     // Data
-    private int mUserId;
-    private String mUserAvatarUrl;
+    private int mUserId;    
     private int mAvatarWidth;
     private boolean mProfileInvoke;
     private boolean mIsAddPanelOpened;
@@ -88,8 +87,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mLoadingLocker = (LockerView) findViewById(R.id.llvChatLoading);
 
         // Params
-        mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
-        mUserAvatarUrl = getIntent().getStringExtra(INTENT_USER_URL);
+        mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);        
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
         int userSex = getIntent().getIntExtra(INTENT_USER_SEX, Static.BOY);
         mAvatarWidth = getResources().getDrawable(R.drawable.chat_avatar_frame).getIntrinsicWidth();
