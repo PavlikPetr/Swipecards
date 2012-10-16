@@ -22,123 +22,130 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
 
-        <LinearLayout
-                android:id="@+id/ratingButtonsFirst"
+        <ViewFlipper
+                android:id="@+id/vfFlipper"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:orientation="horizontal">
-
-            <RelativeLayout
-                    android:id="@+id/loDatingLove"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:background="@android:color/transparent"
-                    android:gravity="center">
-
-                <Button
-                        android:id="@+id/btnDatingLove"
-                        style="@style/DatingButtonsText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:drawableTop="@drawable/dating_delight_selector"
-                        android:text="@string/dashbrd_btn_love"/>
-
-                <TextView
-                        android:id="@+id/tvDatingLovePrice"
-                        style="@style/DatingButtonsText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/btnDatingLove"
-                        android:layout_alignRight="@id/btnDatingLove"
-                        android:layout_marginBottom="9sp"
-                        android:background="@android:color/transparent"
-                        android:drawableRight="@drawable/coins"
-                        android:text="@integer/love_dating_button"
-                        android:textStyle="bold"/>
-            </RelativeLayout>
-
-            <Button
-                    android:id="@+id/btnDatingSympathy"
-                    style="@style/DatingButtonsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:background="@android:color/transparent"
-                    android:drawableTop="@drawable/dating_mutual_selector"
-                    android:text="@string/dashbrd_btn_sympathy"/>
-
-            <Button
-                    android:id="@+id/btnDatingSkip"
-                    style="@style/DatingButtonsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:background="@android:color/transparent"
-                    android:drawableTop="@drawable/dating_skip_selector"
-                    android:text="@string/dashbrd_btn_skip"/>
-
-            <Button
-                    android:id="@+id/btnDatingSwitchNext"
-                    style="@style/DatingButtonsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:background="@android:color/transparent"
-                    android:drawableTop="@drawable/dating_switch_next_selector"
-                    android:text="@string/dashbrd_btn_switch_button"/>
-        </LinearLayout>
-
-        <LinearLayout
-                android:id="@+id/ratingButtonsSecond"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-            <Button
-                    android:id="@+id/btnDatingChat"
-                    style="@style/DatingButtonsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:background="@android:color/transparent"
-                    android:drawableTop="@drawable/dating_chat_selector"
-                    android:text="@string/profile_btn_chat"/>
-
-            <Button
-                    android:id="@+id/btnDatingProfile"
-                    style="@style/DatingButtonsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:background="@android:color/transparent"
-                    android:drawableTop="@drawable/dating_man_selector"
-                    android:text="@string/dashbrd_btn_profile"/>
-
-            <Button
-                    android:id="@+id/btnDatingPrev"
-                    style="@style/DatingButtonsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:background="@android:color/transparent"
-                    android:drawableTop="@drawable/dating_prev_selector"
-                    android:text="@string/dashbrd_btn_prev"/>
-
-            <Button
-                    android:id="@+id/btnDatingSwitchPrev"
-                    style="@style/DatingButtonsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:background="@android:color/transparent"
-                    android:drawableTop="@drawable/dating_switch_prev_selector"
-                    android:text="@string/dashbrd_btn_switch_button"/>
-        </LinearLayout>
+                android:inAnimation="@android:anim/fade_in">        
+        
+	        <LinearLayout
+	                android:id="@+id/ratingButtonsFirst"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_centerHorizontal="true"
+	                android:orientation="horizontal">
+	
+	            <RelativeLayout
+	                    android:id="@+id/loDatingLove"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_weight="1.0"
+	                    android:background="@android:color/transparent"
+	                    android:gravity="center">
+	
+	                <Button
+	                        android:id="@+id/btnDatingLove"
+	                        style="@style/DatingButtonsText"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:background="@android:color/transparent"
+	                        android:drawableTop="@drawable/dating_delight_selector"
+	                        android:text="@string/dashbrd_btn_love"/>
+	
+	                <TextView
+	                        android:id="@+id/tvDatingLovePrice"
+	                        style="@style/DatingButtonsText"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:layout_alignBottom="@id/btnDatingLove"
+	                        android:layout_alignRight="@id/btnDatingLove"
+	                        android:layout_marginBottom="9sp"
+	                        android:background="@android:color/transparent"
+	                        android:drawableRight="@drawable/coins"
+	                        android:text="@integer/love_dating_button"
+	                        android:textStyle="bold"/>
+	            </RelativeLayout>
+	
+	            <Button
+	                    android:id="@+id/btnDatingSympathy"
+	                    style="@style/DatingButtonsText"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_weight="1.0"
+	                    android:background="@android:color/transparent"
+	                    android:drawableTop="@drawable/dating_mutual_selector"
+	                    android:text="@string/dashbrd_btn_sympathy"/>
+	
+	            <Button
+	                    android:id="@+id/btnDatingSkip"
+	                    style="@style/DatingButtonsText"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_weight="1.0"
+	                    android:background="@android:color/transparent"
+	                    android:drawableTop="@drawable/dating_skip_selector"
+	                    android:text="@string/dashbrd_btn_skip"/>
+	
+	            <Button
+	                    android:id="@+id/btnDatingSwitchNext"
+	                    style="@style/DatingButtonsText"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_weight="1.0"
+	                    android:background="@android:color/transparent"
+	                    android:drawableTop="@drawable/dating_switch_next_selector"
+	                    android:text="@string/dashbrd_btn_switch_button"/>
+	        </LinearLayout>
+	
+	        <LinearLayout
+	                android:id="@+id/ratingButtonsSecond"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_centerHorizontal="true"
+	                android:orientation="horizontal"
+	                android:visibility="gone">
+	
+	            <Button
+	                    android:id="@+id/btnDatingChat"
+	                    style="@style/DatingButtonsText"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_weight="1.0"
+	                    android:background="@android:color/transparent"
+	                    android:drawableTop="@drawable/dating_chat_selector"
+	                    android:text="@string/profile_btn_chat"/>
+	
+	            <Button
+	                    android:id="@+id/btnDatingProfile"
+	                    style="@style/DatingButtonsText"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_weight="1.0"
+	                    android:background="@android:color/transparent"
+	                    android:drawableTop="@drawable/dating_man_selector"
+	                    android:text="@string/dashbrd_btn_profile"/>
+	
+	            <Button
+	                    android:id="@+id/btnDatingPrev"
+	                    style="@style/DatingButtonsText"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_weight="1.0"
+	                    android:background="@android:color/transparent"
+	                    android:drawableTop="@drawable/dating_prev_selector"
+	                    android:text="@string/dashbrd_btn_prev"/>
+	
+	            <Button
+	                    android:id="@+id/btnDatingSwitchPrev"
+	                    style="@style/DatingButtonsText"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content"
+	                    android:layout_weight="1.0"
+	                    android:background="@android:color/transparent"
+	                    android:drawableTop="@drawable/dating_switch_prev_selector"
+	                    android:text="@string/dashbrd_btn_switch_button"/>
+	        </LinearLayout>
+		</ViewFlipper>
     </RelativeLayout>
 
     <!-- User info -->
