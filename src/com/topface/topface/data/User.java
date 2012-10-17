@@ -2,10 +2,7 @@ package com.topface.topface.data;
 
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.LinkedList;
 
 /* Класс чужого профиля */
 public class User extends Profile {
@@ -18,13 +15,13 @@ public class User extends Profile {
     public boolean mutual;  // флаг наличия симпатии к авторизованному пользователю
     public int score;       // средний балл оценок пользователя    
     public Photos photos;
-    public Photo photo;    
-    
+    public Photo photo;
+
     public static User parse(int userId, ApiResponse response) { //нужно знать userId
         User profile = new User();
 
         try {
-            JSONObject item = response.mJSONResult.getJSONObject("profiles");
+            JSONObject item = response.jsonResult.getJSONObject("profiles");
             item = item.getJSONObject("" + userId);
 
             parse(profile, item);
@@ -36,9 +33,9 @@ public class User extends Profile {
             profile.ero = item.optBoolean("ero");
             profile.mutual = item.optBoolean("mutual");
             profile.score = item.optInt("score");
-            profile.photo = Photo.parse(item.getJSONObject("photo"));
-            profile.photos = Photos.parse(item.getJSONArray("photos"));                        
-            
+            profile.photo = new Photo(item.getJSONObject("photo"));
+            profile.photos = Photos.parse(item.getJSONArray("photos"));
+
             initPhotos(item, profile);
 
         } catch (Exception e) {
@@ -48,7 +45,4 @@ public class User extends Profile {
         return profile;
     }
 
-    public int getUid() {
-        return uid;
-    }
 }

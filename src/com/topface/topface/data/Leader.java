@@ -12,8 +12,8 @@ public class Leader extends AbstractData {
         Rate doRate = new Rate();
 
         try {
-            money = response.mJSONResult.optInt("money");
-            completed = response.mJSONResult.optBoolean("completed");
+            money = response.jsonResult.optInt("money");
+            completed = response.jsonResult.optBoolean("completed");
             CacheProfile.money = money;
         } catch (Exception e) {
             Debug.log("DoRate.class", "Wrong response parsing: " + e);

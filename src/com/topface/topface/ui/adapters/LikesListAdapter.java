@@ -34,11 +34,6 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     }
 
     @Override
-    protected FeedLike getNewItem(IListLoader.ItemType type) {
-        return new FeedLike(type);
-    }
-
-    @Override
     protected int getItemLayout() {
         return R.layout.item_feed_like;
     }

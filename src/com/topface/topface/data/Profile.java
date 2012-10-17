@@ -8,7 +8,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -79,14 +78,14 @@ public class Profile extends AbstractDataWithPhotos {
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();
 
     private static boolean mIsUserProfile;
-    
+
     public LinkedList<Gift> gifts = new LinkedList<Gift>();
 
     //private static final String profileFileName = "profile.out";
     //private static final long serialVersionUID  = 2748391675222256671L;    
-    
+
     public static Profile parse(ApiResponse response) {
-        return parse(new Profile(), response.mJSONResult);
+        return parse(new Profile(), response.jsonResult);
     }
 
     protected static Profile parse(Profile profile, JSONObject resp) {
@@ -139,9 +138,9 @@ public class Profile extends AbstractDataWithPhotos {
                 gift.feedId = itemGift.optInt("id");
                 profile.gifts.add(gift);
             }
-            
-            Context context = App.getContext();            
-            
+
+            Context context = App.getContext();
+
             // form
             if (!resp.isNull("form")) {
                 JSONObject form = resp.getJSONObject("form");
@@ -421,10 +420,6 @@ public class Profile extends AbstractDataWithPhotos {
         }
 
         return profile;
-    }
-
-    public int getUid() {
-        return uid;
     }
 
     private static void compareFormItemData(FormItem item, int position, Profile profile) {

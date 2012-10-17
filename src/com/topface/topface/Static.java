@@ -15,13 +15,13 @@ public class Static {
     public static final String EQUAL = "=";
     public static final String AMPERSAND = "&";
     public static final String CLIENT_TYPE = "android";
-    public static final String API_BETA_URL = "http://api.beta.topface.ru/?v=" + API_VERSION; //Beta API URL
-    public static final String API_URL = "http://api.topface.com/?v=" + API_VERSION;
-    //public static final String API_URL = API_BETA_URL;
+    public static final String API_BETA_URL = "http://api.beta.topface.com/?v=" + API_VERSION; //Beta API URL
+    //public static final String API_URL = "http://api.topface.com/?v=" + API_VERSION;
+    public static final String API_URL = API_BETA_URL;
     /**
      * Ревизия серверной части, используется толькро при тестировании на бете
      */
-    public static final String REV = "20121016025";
+    public static final String REV = "20121016063";
     public static final String AUTH_VKONTAKTE_ID = "2664589";
     public static final String INTENT_REQUEST_KEY = "requestCode";
     public static final String AUTH_FACEBOOK_ID = "161347997227885";

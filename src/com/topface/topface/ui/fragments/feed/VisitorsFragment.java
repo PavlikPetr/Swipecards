@@ -3,11 +3,8 @@ package com.topface.topface.ui.fragments.feed;
 import android.graphics.drawable.Drawable;
 import com.topface.topface.R;
 import com.topface.topface.data.Visitor;
-import com.topface.topface.data.Visitors;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.FeedAdapter;
-import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
 
 /**
@@ -37,11 +34,6 @@ public class VisitorsFragment extends FeedFragment<Visitor> {
     @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.VISITORS;
-    }
-
-    @Override
-    protected FeedList<Visitor> parseResponse(ApiResponse response) {
-        return Visitors.parse(response);
     }
 
     @Override

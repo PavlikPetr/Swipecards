@@ -16,7 +16,6 @@ public class Data {
     // Data
     public static String SSID;
     public static Bitmap friendAvatar;
-    public static Bitmap ownerAvatar;
     public static Facebook facebook;
     public static LinkedList<City> cityList;
     public static LinkedList<Gift> giftsList;
@@ -28,7 +27,6 @@ public class Data {
     public static LinkedList<Top> topsList;
     public static LinkedList<FeedDialog> dialogList;
     public static LinkedList<FeedLike> likesList;
-    public static LinkedList<FeedInbox> inboxList;
     public static LinkedList<FeedMutual> mutualList;
 
     public static void init(Context context) {
@@ -44,9 +42,6 @@ public class Data {
 
         if (dialogList == null)
             dialogList = new LinkedList<FeedDialog>();
-
-        if (inboxList == null)
-            inboxList = new LinkedList<FeedInbox>();
 
         if (likesList == null)
             likesList = new LinkedList<FeedLike>();
@@ -85,8 +80,6 @@ public class Data {
     public static void release() {
         if (topsList != null)
             topsList.clear();
-        if (inboxList != null)
-            inboxList.clear();
         if (likesList != null)
             likesList.clear();
         if (mutualList != null)

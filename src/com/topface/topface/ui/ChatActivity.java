@@ -40,8 +40,6 @@ import java.util.LinkedList;
 public class ChatActivity extends BaseFragmentActivity implements View.OnClickListener, LocationListener {
     // Data
     private int mUserId;
-    private String mUserAvatarUrl;
-    private int mAvatarWidth;
     private boolean mProfileInvoke;
     private boolean mIsAddPanelOpened;
     private PullToRefreshListView mListView;
@@ -89,10 +87,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
         // Params
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
-        mUserAvatarUrl = getIntent().getStringExtra(INTENT_USER_URL);
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
         int userSex = getIntent().getIntExtra(INTENT_USER_SEX, Static.BOY);
-        mAvatarWidth = getResources().getDrawable(R.drawable.chat_avatar_frame).getIntrinsicWidth();
 
         // Navigation bar
         mHeaderTitle = ((TextView) findViewById(R.id.tvNavigationTitle));

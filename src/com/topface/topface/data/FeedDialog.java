@@ -1,12 +1,24 @@
 package com.topface.topface.data;
 
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.utils.Debug;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class FeedDialog extends AbstractFeedItem {
+public class FeedDialog extends FeedLike {
+    /**
+     * текст сообщения, если type = MESSAGE
+     */
+    public String text;
+
+    /**
+     * идентификатор подарка из ленты
+     */
+    public int gift;
+
+    /**
+     *     * строка ссылки изображения подарка из ленты
+     *    
+     */
+    public String link;
+
     // Constants
     public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
     public static final int PHOTO = 1; // Рекламное уведомление
@@ -19,66 +31,23 @@ public class FeedDialog extends AbstractFeedItem {
     public static final int MESSAGE_WINK = 8; // подмигивание
     public static final int RATE = 9; // Оценка
     public static final int PROMOTION = 10; // Рекламное сообщение
-
     public static final int MAP = 11; // Текущее местоположение
 
     public static final int USER_MESSAGE = 0;
     public static final int FRIEND_MESSAGE = 1;
 
-    public FeedDialog(ItemType retry) {
-        super(retry);
+    public FeedDialog(JSONObject data) {
+        super(data);
     }
 
-    public FeedDialog() {
-        super();
+    public FeedDialog(ItemType type) {
+        super(type);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
-    public static FeedList<FeedDialog> parse(ApiResponse response) {
-        FeedList<FeedDialog> dialogList = new FeedList<FeedDialog>();
-
-        try {
-            FeedDialog.unread_count = response.mJSONResult.getInt("unread");
-            FeedDialog.more = response.mJSONResult.optBoolean("more");
-
-            JSONArray arr = response.mJSONResult.getJSONArray("items");
-            if (arr.length() > 0)
-                dialogList = new FeedList<FeedDialog>();
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject item = arr.getJSONObject(i);
-                FeedDialog dialog = new FeedDialog();
-
-                dialog.type = item.optInt("type");
-                dialog.id = item.optInt("id");
-                dialog.uid = item.optInt("uid");
-                dialog.created = item.optLong("created") * 1000;
-                dialog.target = item.optInt("target");
-                dialog.first_name = item.optString("first_name");
-                dialog.sex = item.optInt("sex");
-                dialog.age = item.optInt("age");
-                dialog.online = item.optBoolean("online");
-
-                // city  
-                JSONObject city = item.optJSONObject("city");
-                if (city != null) {
-                    dialog.city_id = city.optInt("id");
-                    dialog.city_name = city.optString("name");
-                    dialog.city_full = city.optString("full");
-                } else {
-                    dialog.city_id = 0;
-                    dialog.city_name = "";
-                    dialog.city_full = "";
-                }
-
-                dialog.text = item.optString("text");
-
-                initPhotos(item, dialog);
-                dialogList.add(dialog);
-
-            }
-        } catch (Exception e) {
-            Debug.log("FeedDialog.class", "Wrong response parsing: " + e);
-        }
-
-        return dialogList;
+    @Override
+    public void fillData(JSONObject item) {
+        super.fillData(item);
+        text = item.optString("text");
+        link = item.optString("link");
     }
 }

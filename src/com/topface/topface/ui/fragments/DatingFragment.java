@@ -283,7 +283,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.btnDatingChat: {
                 Intent intent = new Intent(getActivity(), ChatActivity.class);
                 intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
-                intent.putExtra(ChatActivity.INTENT_USER_URL, mUserSearchList.get(mCurrentUserPos).getSmallLink());
                 intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
                 intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserSearchList.get(mCurrentUserPos).sex);
                 intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserSearchList.get(mCurrentUserPos).age);
@@ -492,8 +491,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoStatus.setVisibility(View.VISIBLE);
 
         boolean enabled = false;
-        if (!mUserSearchList.isEmpty() && mCurrentUserPos < mUserSearchList.size())
+        if (!mUserSearchList.isEmpty() && mCurrentUserPos < mUserSearchList.size() && currentUser != null) {
             enabled = !currentUser.rated;
+        }
         mMutualBtn.setEnabled(enabled);
         mDelightBtn.setEnabled(enabled);
 

@@ -1,7 +1,5 @@
 package com.topface.topface.data;
 
-import com.topface.topface.utils.Debug;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -13,7 +11,7 @@ import java.util.regex.Pattern;
  * Фотографии пользователей из нашего стораджа фотографий (не напрямую из социальной сети)
  */
 @SuppressWarnings("UnusedDeclaration")
-public class Photo {
+public class Photo extends AbstractData {
 
     public static final String SIZE_ORIGINAL = "original";
     public static final String SIZE_64 = "c64x64";
@@ -34,6 +32,30 @@ public class Photo {
         this.links = links;
     }
 
+    public Photo(JSONObject data) {
+        super(data);
+    }
+
+    @Override
+    protected void fillData(JSONObject photoItem) {
+        super.fillData(photoItem);
+
+        if (photoItem.has("id")) {
+            mId = photoItem.optInt("id");
+            JSONObject linksJson = photoItem.optJSONObject("links");
+            if (linksJson != null) {
+                Iterator photoKeys = linksJson.keys();
+                links = new HashMap<String, String>();
+
+                while (photoKeys.hasNext()) {
+                    String key = photoKeys.next().toString();
+
+                    links.put(key, linksJson.optString(key));
+                }
+            }
+        }
+    }
+
     /**
      * ассоциативный массив ссылок на фотографии пользователя. Ключами элементов массива являются размеры фотографии пользователя в пикселах.
      * Значениями являются ссылки на фотографии пользователя с заданным размером.
@@ -42,27 +64,7 @@ public class Photo {
     protected HashMap<String, String> links;
 
     public static Photo parse(JSONObject photoItem) {
-        Photo photo = null;
-        try {
-            if (photoItem.has("id")) {
-                int mId = photoItem.getInt("id");
-                JSONObject linksJson = photoItem.getJSONObject("links");
-                Iterator photoKeys = linksJson.keys();
-                HashMap<String, String> links = new HashMap<String, String>();
-
-                while (photoKeys.hasNext()) {
-                    String key = photoKeys.next().toString();
-
-                    links.put(key, linksJson.getString(key));
-                }
-                photo = new Photo(mId, links);
-            }
-
-        } catch (JSONException e) {
-            Debug.error(e);
-        }
-
-        return photo;
+        return new Photo(photoItem);
     }
 
     /**

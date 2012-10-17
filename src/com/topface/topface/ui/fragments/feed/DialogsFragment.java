@@ -3,10 +3,8 @@ package com.topface.topface.ui.fragments.feed;
 import android.graphics.drawable.Drawable;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.DialogListAdapter;
-import com.topface.topface.ui.adapters.FeedList;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
@@ -35,8 +33,4 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         return FeedRequest.FeedService.DIALOGS;
     }
 
-    @Override
-    protected FeedList<FeedDialog> parseResponse(ApiResponse response) {
-        return FeedDialog.parse(response);
-    }
 }

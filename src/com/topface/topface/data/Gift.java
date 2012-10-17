@@ -51,7 +51,7 @@ public class Gift extends AbstractDataWithPhotos implements IListLoader {
         LinkedList<Gift> gifts = new LinkedList<Gift>();
 
         try {
-            JSONArray array = response.mJSONResult.getJSONArray("gifts");
+            JSONArray array = response.jsonResult.getJSONArray("gifts");
             for (int i = 0; i < array.length(); i++) {
                 JSONObject item = array.getJSONObject(i);
                 Gift gift = new Gift();
@@ -110,9 +110,4 @@ public class Gift extends AbstractDataWithPhotos implements IListLoader {
         return isListLoaderRetry;
     }
 
-    @Override
-    public void switchToLoader() {
-        isListLoader = false;
-        isListLoaderRetry = true;
-    }
 }

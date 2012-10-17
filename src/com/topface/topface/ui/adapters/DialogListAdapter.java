@@ -68,11 +68,6 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     }
 
     @Override
-    protected FeedDialog getNewItem(IListLoader.ItemType type) {
-        return new FeedDialog(type);
-    }
-
-    @Override
     protected int getItemLayout() {
         return ITEM_LAYOUT;
     }

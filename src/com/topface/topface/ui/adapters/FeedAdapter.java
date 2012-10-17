@@ -9,14 +9,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
-import com.topface.topface.data.AbstractFeedItem;
+import com.topface.topface.data.FeedItem;
 import com.topface.topface.ui.views.ImageViewRemote;
 
 
 /**
  * @param <T>
  */
-public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingListAdapter implements AbsListView.OnScrollListener {
+public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter implements AbsListView.OnScrollListener {
 
     private Context mContext;
     private FeedList<T> mData;
@@ -126,12 +126,12 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
         }
 
         if (item != null) {
-            holder.avatar.setPhoto(item.photo);
+            holder.avatar.setPhoto(item.user.photo);
             setListenerOnAvatar(holder.avatar, item);
 
-            holder.name.setText(getName(item));
-            holder.city.setText(item.city_name);
-            holder.online.setVisibility(item.online ? View.VISIBLE : View.INVISIBLE);
+            holder.name.setText(item.user.getNameAndAge());
+            holder.city.setText(item.user.city.name);
+            holder.online.setVisibility(item.user.online ? View.VISIBLE : View.INVISIBLE);
         }
 
         convertView.setTag(holder);
@@ -149,10 +149,6 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
                 }
             });
         }
-    }
-
-    private String getName(T item) {
-        return item.first_name + ", " + item.age;
     }
 
     protected Context getContext() {
@@ -271,14 +267,14 @@ public abstract class FeedAdapter<T extends AbstractFeedItem> extends LoadingLis
         return holder;
     }
 
-    abstract protected T getNewItem(IListLoader.ItemType type);
-
     protected T getRetryItem() {
-        return getNewItem(IListLoader.ItemType.RETRY);
+        //noinspection unchecked
+        return (T) new FeedItem(IListLoader.ItemType.RETRY);
     }
 
     protected T getLoaderItem() {
-        return getNewItem(IListLoader.ItemType.LOADER);
+        //noinspection unchecked
+        return (T) new FeedItem(IListLoader.ItemType.LOADER);
     }
 
     abstract protected int getItemLayout();

@@ -37,9 +37,9 @@ public class History extends AbstractDataWithPhotos {
         LinkedList<History> historyList = new LinkedList<History>();
 
         try {
-            History.more = response.mJSONResult.optBoolean("more");
+            History.more = response.jsonResult.optBoolean("more");
 
-            JSONArray array = response.mJSONResult.getJSONArray("feed");
+            JSONArray array = response.jsonResult.getJSONArray("feed");
             if (array.length() > 0)
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
@@ -77,9 +77,4 @@ public class History extends AbstractDataWithPhotos {
         return historyList;
     }
 
-    public int getUid() {
-        return uid;
-    }
-
-    ;
 }

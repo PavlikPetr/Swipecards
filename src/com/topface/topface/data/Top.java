@@ -18,7 +18,7 @@ public class Top {
         LinkedList<Top> userList = new LinkedList<Top>();
 
         try {
-            JSONArray arr = response.mJSONResult.getJSONArray("top");
+            JSONArray arr = response.jsonResult.getJSONArray("top");
             if (arr.length() > 0)
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject item = arr.getJSONObject(i);
