@@ -19,6 +19,7 @@ public class User extends Profile {
     public int score;       // средний балл оценок пользователя    
     public Photos photos;
     public Photo photo;    
+    public boolean rated = false;
     
     public static User parse(int userId, ApiResponse response) { //нужно знать userId
         User profile = new User();

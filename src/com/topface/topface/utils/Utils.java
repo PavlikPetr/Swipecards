@@ -224,7 +224,21 @@ public class Utils {
     }
 
     public static String formatMinute(Context context, long minutes) {
-        return  Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
+        byte caseValue = 0;
+        if ((minutes < 11) || (minutes > 19)) {
+            if (minutes % 10 == 1)
+                caseValue = 1;
+            if ((minutes % 10 == 2) || (minutes % 10 == 3) || (minutes % 10 == 4))
+                caseValue = 2;
+        }
+        switch (caseValue) {
+            case 1:
+                return String.format(context.getString(R.string.time_minute_0), minutes);
+            case 2:
+                return String.format(context.getString(R.string.time_minute_1), minutes);
+            default:
+                return String.format(context.getString(R.string.time_minutes), minutes);
+        }
     }
 
     public static String formatDayOfWeek(Context context, int dayOfWeek) {

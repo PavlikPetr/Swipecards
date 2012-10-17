@@ -38,14 +38,16 @@
     <string name="dashbrd_btn_switch_button">Еще…</string>
 
     <!-- Likes Activity -->
+    <string name="likes_header_title">Я нравлюсь</string>
     <string name="likes_background_text">Нет симпатий</string>
 
     <!-- Visitors -->
     <string name="visitors_background_text">No visitors</string>
 
     <!-- Indox & Chat Activity -->
-    <string name="inbox_btn_dbl_left">Все</string>
-    <string name="inbox_btn_dbl_right">Непрочитанные</string>
+    <string name="inbox_header_title">Диалоги</string>
+    <string name="btn_dbl_left">Все</string>
+    <string name="btn_dbl_right">Непрочитанные</string>
     <string name="inbox_background_text">Входящих сообщений нет</string>
     <string name="chat_btn_send">Отправить</string>
     <string name="chat_comment">Написать сообщение</string>

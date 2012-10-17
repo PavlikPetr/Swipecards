@@ -52,8 +52,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mUserInfoStatus;
     private TextView mCounter;
     private View mDatingGroup;
-    private View mFirstRateButtons;
-    private View mSecondRateButtons;
+//    private View mFirstRateButtons;
+//    private View mSecondRateButtons;
     private ImageSwitcher mImageSwitcher;
     private LinkedList<Search> mUserSearchList;
     private ProgressBar mProgressBar;
@@ -65,6 +65,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View mNavigationHeader;
     private Button mSettingsButton;
     private RelativeLayout mDatingLoveBtnLayout;
+    private ViewFlipper mViewFlipper; 
 
     private Drawable singleMutual;
     private Drawable singleDelight;
@@ -77,6 +78,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         View view = inflater.inflate(R.layout.ac_dating, null);
 
+        mViewFlipper =(ViewFlipper) view.findViewById(R.id.vfFlipper);        
+        
         singleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
         singleDelight = getResources().getDrawable(R.drawable.dating_delight_selector);
 
@@ -105,8 +108,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRateController.setOnRateControllerListener(this);
 
         // Rate buttons groups
-        mFirstRateButtons = view.findViewById(R.id.ratingButtonsFirst);
-        mSecondRateButtons = view.findViewById(R.id.ratingButtonsSecond);
+//        mFirstRateButtons = view.findViewById(R.id.ratingButtonsFirst);
+//        mSecondRateButtons = view.findViewById(R.id.ratingButtonsSecond);
 
         // Position
         mCurrentUserPos = -1;
@@ -282,8 +285,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingChat: {
                 Intent intent = new Intent(getActivity(), ChatActivity.class);
-                intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
-                intent.putExtra(ChatActivity.INTENT_USER_URL, mUserSearchList.get(mCurrentUserPos).getSmallLink());
+                intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);                
                 intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
                 intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserSearchList.get(mCurrentUserPos).sex);
                 intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserSearchList.get(mCurrentUserPos).age);
@@ -292,11 +294,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingSwitchNext: {
-                switchRateBtnsGroups();
+                mViewFlipper.setDisplayedChild(1);
             }
             break;
             case R.id.btnDatingSwitchPrev: {
-                switchRateBtnsGroups();
+            	mViewFlipper.setDisplayedChild(0);
             }
             break;
             default:
@@ -451,10 +453,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    public void switchRateBtnsGroups() {
-        mFirstRateButtons.setVisibility(mFirstRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-        mSecondRateButtons.setVisibility(mSecondRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-    }
+//    public void switchRateBtnsGroups() {
+//        mFirstRateButtons.setVisibility(mFirstRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+//        mSecondRateButtons.setVisibility(mSecondRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+//    }
 
     private Search getCurrentUser() {
         try {

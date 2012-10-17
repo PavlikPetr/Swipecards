@@ -13,7 +13,6 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
-import com.topface.topface.ui.views.ImageSwitcher;
 
 public class FragmentSwitchController extends ViewGroup {
 
@@ -471,8 +470,7 @@ public class FragmentSwitchController extends ViewGroup {
 
         //for API versions < 14
         if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
-            //noinspection RedundantCast
-            result = ((ImageSwitcher) v).canScrollHorizontally(-dx);
+            result = v.canScrollHorizontally(-dx);
             //for API versions >= 14 (ICS)
         } else {
             result = ViewCompat.canScrollHorizontally(v, -dx);
