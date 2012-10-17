@@ -337,6 +337,10 @@ public class Utils {
     public static String formatPhotoQuantity(int quantity) {
         return Utils.getQuantityString(R.plurals.photo, (int) quantity, (int) quantity);
     }
+    
+    public static String formatFormMatchesQuantity(int quantity) {
+        return Utils.getQuantityString(R.plurals.form_matches, (int) quantity, (int) quantity);
+    }
 
     public static int getBatteryResource(int power) {
         int n = 50 * power / 100;

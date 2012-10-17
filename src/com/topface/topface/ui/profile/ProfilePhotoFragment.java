@@ -76,12 +76,12 @@ public class ProfilePhotoFragment extends Fragment {
 
         TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
 
-        if (mPhotoLinks != null && mPhotoLinks.size() >= 0) {
-            title.setText(Utils.formatPhotoQuantity(CacheProfile.photos.size()));
-            title.setVisibility(View.VISIBLE);
+        if (mPhotoLinks != null) {
+            title.setText(Utils.formatPhotoQuantity(CacheProfile.photos.size()));            
         } else {
-            title.setVisibility(View.INVISIBLE);
+        	title.setText(Utils.formatPhotoQuantity(0));
         }
+        title.setVisibility(View.VISIBLE);
 
         ((Button)root.findViewById(R.id.btnAddPhotoAlbum)).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
         ((Button)root.findViewById(R.id.btnAddPhotoCamera)).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
