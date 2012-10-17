@@ -40,14 +40,12 @@
 
 
     <!-- Likes Activity -->
-    <string name="likes_header_title">Likes you</string>
     <string name="likes_background_text">No likes</string>
 
     <!-- Visitors -->
     <string name="visitors_background_text">No visitors</string>
 
     <!-- Indox & Chat Activity -->
-    <string name="inbox_header_title">My messages</string>
     <string name="btn_dbl_left">All</string>
     <string name="btn_dbl_right">Unread</string>
     <string name="inbox_background_text">No inbox messages</string>
@@ -72,8 +70,6 @@
 
     <!-- Symphaty Activity -->
     <string name="mutual_header_title">Mutual</string>
-    <string name="symphaty_btn_dbl_left">All</string>
-    <string name="symphaty_btn_dbl_right">Unread</string>
     <string name="mutual_background_text">No symphaties</string>
 
     <!-- Tops Activity -->
@@ -134,7 +130,7 @@
     <string name="edit_name">Name</string>
     <string name="edit_age">Age</string>
     <string name="edit_status">Status</string>
-    <string name="edit_set_as_main">Set as main</string>    
+    <string name="edit_set_as_main">Set as main</string>
     <string name="edit_delete">Delete</string>
     <string name="edit_restore">Restore</string>
 
@@ -276,6 +272,8 @@
         <!-- own_female -->
     </string-array>
 
+    <string name="album_add_photo_title">Add photo</string>
+
     <!-- Экран приглашений -->
     <string name="search_hint">Find friends</string>
     <string name="activity_title_invite">Invitations</string>
@@ -355,10 +353,5 @@
         <item quantity="few">%d minutes ago</item>
         <item quantity="other">%d minutes ago</item>
     </plurals>
-    <plurals name="quantity_photos">
-        <item quantity="one">%d photo</item>
-        <item quantity="few">%d photos</item>
-        <item quantity="other">%d photos</item>
-    </plurals>
-    
+
 </resources>
