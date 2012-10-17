@@ -59,6 +59,7 @@ public class SettingsAccountFragment extends Fragment {
                 Data.removeSSID(getActivity().getApplicationContext());
                 C2DMessaging.unregister(getActivity().getApplicationContext());
                 token.removeToken();
+                Settings.getInstance().resetSettings();
                 startActivity(new Intent(getActivity().getApplicationContext(), AuthActivity.class));
 
                 getActivity().setResult(RESULT_LOGOUT);

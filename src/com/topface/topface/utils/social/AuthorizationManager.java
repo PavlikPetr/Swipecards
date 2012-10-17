@@ -10,9 +10,13 @@ import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
+import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
+import com.topface.topface.utils.http.Http;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -95,6 +99,8 @@ public class AuthorizationManager {
                     String token_key = data.getExtras().getString(WebAuthActivity.ACCESS_TOKEN);
                     String user_id = data.getExtras().getString(WebAuthActivity.USER_ID);
                     String expires_in = data.getExtras().getString(WebAuthActivity.EXPIRES_IN);
+                    String user_name = data.getExtras().getString(WebAuthActivity.USER_NAME);
+                    Settings.getInstance().setSocialAccountName(user_name);
 
                     AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
                     authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
@@ -114,20 +120,8 @@ public class AuthorizationManager {
 
     // facebook methods
     public void facebookAuth() {
-//		AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
-//				        
-//        if(authToken.getTokenKey() != null) {
-//            Data.facebook.setAccessToken(authToken.getTokenKey());
-//        }
-//        long expires = Long.parseLong(authToken.getExpires()); 
-//        if(expires != 0) {
-//        	Data.facebook.setAccessExpires(expires);
-//        }
-//        
-//        if(!Data.facebook.isSessionValid()) {
         mAsyncFacebookRunner = new AsyncFacebookRunner(Data.facebook);
         Data.facebook.authorize(mParentActivity, FB_PERMISSIONS, mDialogListener);
-//        }
     }
 
     private DialogListener mDialogListener = new DialogListener() {
@@ -219,4 +213,83 @@ public class AuthorizationManager {
             }
         }
     };
+    
+    public static void getAccountName(Handler handler) {
+    	AuthToken authToken = new AuthToken(App.getContext());
+
+        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+            getFbName(authToken.getTokenKey(), authToken.getUserId(), handler);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            getVkName(authToken.getTokenKey(), authToken.getUserId(), handler);
+        }
+    }
+    
+    private static final String VkNameUrl = "https://api.vkontakte.ru/method/getProfiles?uid=%s&access_token=%s";
+    public static final int SUCCESS_GET_NAME = 0;
+    public static final int FAILURE_GET_NAME = 1;
+    
+    public static void getVkName(final String token,final String user_id,final Handler handler) {        	
+    	(new Thread() {
+    		@Override
+    		public void run() {
+    			String responseRaw = Http.httpGetRequest(String.format(VkNameUrl, user_id, token));
+    			try {
+    				String result = "";
+					JSONObject response = new JSONObject(responseRaw);
+					JSONArray responseArr = response.optJSONArray("response");
+					if (responseArr.length() > 0) {							
+						JSONObject profile = responseArr.getJSONObject(0);
+						result = profile.optString("first_name") + " " + profile.optString("last_name");							
+					}
+					handler.sendMessage(Message.obtain(null,SUCCESS_GET_NAME,result));
+				} catch (JSONException e) {
+					Debug.log(AuthorizationManager.class, "can't get name in vk:" + e);
+					handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
+				} 
+    		}
+    	}).start();
+    }
+    
+    public static void getFbName(final String token,final String user_id,final Handler handler) {        	
+    	new AsyncFacebookRunner(Data.facebook).request("/"+user_id, new RequestListener() {
+			
+    		@Override
+            public void onComplete(String response, Object state) {
+                try {                   
+                    JSONObject jsonResult = new JSONObject(response);
+                    String user_name = jsonResult.getString("name");
+                    handler.sendMessage(Message.obtain(null,SUCCESS_GET_NAME,user_name));
+                } catch (JSONException e) {
+                    Debug.log("FB", "mRequestListener::onComplete:error");
+                    handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
+                }
+            }
+
+            @Override
+            public void onMalformedURLException(MalformedURLException e, Object state) {
+                Debug.log("FB", "mRequestListener::onMalformedURLException");
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
+            }
+
+            @Override
+            public void onIOException(IOException e, Object state) {
+                Debug.log("FB", "mRequestListener::onIOException");
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
+            }
+
+            @Override
+            public void onFileNotFoundException(FileNotFoundException e, Object state) {
+                Debug.log("FB", "mRequestListener::onFileNotFoundException");
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
+            }
+
+            @Override
+            public void onFacebookError(FacebookError e, Object state) {
+                Debug.log("FB", "mRequestListener::onFacebookError:" + e + ":" + state);
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
+            }
+		});
+    }
+    
+    
 }
