@@ -461,7 +461,7 @@ public class FragmentSwitchController extends ViewGroup {
 
         //for API versions < 14
         if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
-            result = ((ImageSwitcher) v).canScrollHorizontally(-dx);
+            result = ((com.topface.topface.ui.views.ImageSwitcher)v).canScrollHorizontally(-dx);
             //for API versions >= 14 (ICS)
         } else {
             result = ViewCompat.canScrollHorizontally(v, -dx);
