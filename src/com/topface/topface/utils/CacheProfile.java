@@ -138,6 +138,7 @@ public class CacheProfile {
 //        profile.isNewbie = isNewbie;
         
         profile.gifts = gifts;
+        profile.background = background_id;
         return profile;
     }
 
@@ -174,6 +175,7 @@ public class CacheProfile {
         status = profile.status;
 //        isNewbie = profile.isNewbie;
         gifts = profile.gifts;
+        background_id = profile.background;
     }
 
     /**
