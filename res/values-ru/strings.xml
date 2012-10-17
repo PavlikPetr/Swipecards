@@ -11,13 +11,10 @@
     <string name="general_dialog_saving">Сохранение</string>
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка обновления данных</string>
-    <string name="general_footer_previous">Предыдущие сообщения</string>
     <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
     </string>
     <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
-    <string name="general_popup_rating">Понравилось наше приложение? Подними нам рейтинг! Чем выше рейтинг, тем больше
-        интересных людей ты встретишь в TopFace
-    </string>
+
     <string name="general_switch_on">вкл.</string>
     <string name="general_switch_off">выкл.</string>
 
@@ -55,9 +52,7 @@
     <string name="chat_comment">Написать сообщение</string>
     <string name="chat_gift_in">Вы получили подарок.</string>
     <string name="chat_gift_out">Вы отправили подарок.</string>
-    <string name="chat_rate_in">Вас оценили на</string>
-    <string name="chat_rate_out">Вы оценили на</string>
-    <string name="chat_like_in">Вам отправили симпатию</string>
+     <string name="chat_like_in">Вам отправили симпатию</string>
     <string name="chat_like_out">Вы отправили симпатию</string>
     <string name="chat_symphathy_in">Вам отправили взаимную сипматию</string>
     <string name="chat_symphathy_out">Вы отправили взаимную сипматию</string>
@@ -67,31 +62,24 @@
     <string name="chat_sexuality_out">Вы оценили сексуальность.</string>
     <string name="chat_wink_in">Вам подмигнули.</string>
     <string name="chat_wink_out">Вы подмигнули.</string>
-    <string name="chat_money_in">Вам начислена монета</string>
     <string name="chat_dialog_gps">GPS выключен! Включить?</string>
     <string name="chat_dialog_btn_gps_settings">Настройки</string>
     <string name="chat_dialog_btn_gps_cancel">Отмена</string>
-    <string name="chat_dialog_btn_agps_settings">Настройки</string>
     <string name="chat_toast_fail_location">Не удалось определить местоположение</string>
-    <string name="chat_message_copied">Сообщение скопировано</string>
+
 
     <!-- Symphaty Activity -->
     <string name="mutual_header_title">Взаимно</string>
-    <string name="symphaty_btn_dbl_left">Все</string>
-    <string name="symphaty_btn_dbl_right">Непрочитанные</string>
     <string name="mutual_background_text">Симпатий нет</string>
 
     <!-- Tops Activity -->
-    <string name="tops_header_title">Самые красивые</string>
     <string name="tops_btn_boys">Парни</string>
     <string name="tops_btn_girls">Девушки</string>
     <string name="tops_btn_city">Город</string>
 
     <!-- Filter Activity -->
     <string name="filter_filter">Фильтр</string>
-    <string name="filter_header_title">Я ищу</string>
-    <string name="filter_menu_save">Сохранить</string>
-    <string name="filter_girl">Девушки</string>
+     <string name="filter_girl">Девушки</string>
     <string name="filter_boy">Парни</string>
     <string name="filter_from">От</string>
     <string name="filter_to">до</string>
@@ -99,21 +87,13 @@
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_only_beautiful">Только красивые</string>
     <string name="filter_extra_parameters">Дополнительные параметры</string>
-    <string name="filter_place">Местоположение</string>
     <string name="filter_city">Город</string>
-    <string name="filter_sex">Пол</string>
     <string name="filter_age">Возраст</string>
     <string name="filter_online">Онлайн</string>
     <string name="filter_all">Все</string>
-    <string name="filter_nearby">Рядом со мной</string>
     <string name="filter_cities_all">Всем городам</string>
     <string name="filter_select_city">Выбор города</string>
 
-    <!-- Dating Activity -->
-    <string name="dating_header_title_him">Оцени его!</string>
-    <string name="dating_header_title_her">Оцени её!</string>
-    <string name="dating_menu_one">Фильтр</string>
-    <string name="dating_back">К оценкам</string>
 
     <!-- Buying Activity -->
     <string name="buying_header_title">Покупка</string>
@@ -122,7 +102,6 @@
     <string name="buying_default_message">Вы можете отправлять подарки, восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>
     <string name="buying_power">Покупка энергии</string>
-    <string name="buying_buy">Купить</string>
     <string name="buying_recharge">Зарядить на 100%</string>
     <string name="buying_energy">3 USD</string>
     <string name="buying_pack_6coins">Пакет из 6 монет</string>
@@ -131,49 +110,15 @@
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">Пакет из 100 монет</string>
     <string name="buying_100coins">10 USD</string>
-    <string name="buying_info">Вы можете купить монеты и энергию</string>
-    <string name="buying_economy_25">Экономия 25%</string>
-    <string name="buying_economy_40">Экономия 40%</string>
+
 
     <!-- Profile Activity -->
     <string name="profile_header_title">Мой профиль</string>
     <string name="profile_btn_chat">Поболтать</string>
-    <string name="profile_btn_edit">Редактировать</string>
-    <string name="profile_btn_form">Анкета</string>
-    <string name="profile_btn_add">Добавить</string>
-    <string name="profile_btn_buy">Купить</string>
-    <string name="profile_btn_mutual">Взаимно</string>
-    <string name="profile_sex_boy">Парень</string>
-    <string name="profile_sex_girl">Девушка</string>
-    <string name="profile_form">Анкета</string>
-    <string name="profile_form_name">Имя</string>
-    <string name="profile_form_city">Выбор города</string>
-    <string name="profile_foto">Фотографии</string>
-    <string name="profile_foto_ero">Эрофотографии</string>
-    <string name="profile_height">Рост</string>
-    <string name="profile_weight">Вес</string>
-    <string name="profile_education">Учеба</string>
-    <string name="profile_commutability">Общительность</string>
-    <string name="profile_character">Характер</string>
-    <string name="profile_alcohol">Алкоголь</string>
-    <string name="profile_fitness">Комплекция</string>
-    <string name="profile_job">Статус</string>
-    <string name="profile_marriage_male">Женат</string>
-    <string name="profile_marriage_female">Замужем</string>
-    <string name="profile_finances">Доход</string>
-    <string name="profile_smoking">Курение</string>
-    <string name="profile_status">О себе</string>
-    <string name="profile_edit_title">Редактировать</string>
     <string name="profile_add_title">Добавить фотографию</string>
     <string name="profile_add_album">Выбрать из имеющихся</string>
     <string name="profile_add_camera">Сделать снимок</string>
-    <string name="profile_coin_1">1 монета</string>
-    <string name="profile_coin_2">2 монеты</string>
-    <string name="profile_coin_3">3 монеты</string>
-    <string name="profile_ero_price">Выберите цену</string>
-    <string name="profile_btn_ask">Попросить заполнить анкету</string>
-    <string name="profile_msg_ask">Хочу узнать о тебе больше. Заполни, пожалуйста, анкету!</string>
-    <string name="profile_msg_sent">Отправлено</string>
+
 
     <!-- EditProfileActivity -->
     <string name="edit_title">Редактирование</string>
@@ -191,19 +136,8 @@
     <string name="edit_restore">Восстановить</string>
 
     <!-- Album, Ero Album Activity -->
-    <string name="album_header_title">Альбом</string>
     <string name="album_add_photo_title">Добавить фото</string>
-    <string name="album_menu_main">Сделать главной</string>
-    <string name="album_menu_did_main">Главная</string>
-    <string name="album_menu_popup_delete">Вы действительно хотите удалить эту фотографию ?</string>
-    <string name="album_menu_popup_yes">Да</string>
-    <string name="album_menu_popup_no">Нет</string>
-    <string name="album_menu_delete">Удалить</string>
-    <string name="album_menu_did_delete">Удалено</string>
-    <string name="ero_album_btn_like">Рекомендую</string>
-    <string name="ero_album_btn_dislike">Не рекомендую</string>
-    <string name="ero_album_btn_buy">Следующая</string>
-    <string name="ero_album_btn_next">Следующая</string>
+
 
     <!-- Gifts Activity -->
     <string name="gifts_romantic">Романтические</string>
@@ -214,8 +148,7 @@
     <string name="gifts_send_btn">Отправить подарок</string>
 
     <!-- Map Activity -->
-    <string name="map_search">Поиск</string>
-    <string name="map_location_progress">Определяю местоположение</string>
+   <string name="map_location_progress">Определяю местоположение</string>
     <string name="map_confirm">Отпр.</string>
     <string name="map_address">Введите адрес</string>
 
@@ -223,7 +156,6 @@
     <string name="navigation_back_profile">Профиль</string>
     <string name="navigation_back_dialog">Диалоги</string>
     <string name="navigation_back_dating">Знакомства</string>
-    <string name="navigation_back_settings">Настройки</string>
     <string name="navigation_edit">Ред.</string>
     <string name="navigation_save">Сохр.</string>
     <string name="navigation_send">Отпр.</string>
@@ -436,24 +368,15 @@
     </plurals>
 
     <string name="invite_is_free">Отправка приглашения бесплатна</string>
-    <string name="invite_need_select">Выберите одного или нескольких друзей для отправки приглашения</string>
     <string name="invite_error">Не удалось отправить приглашения. Попробуйте еще раз</string>
     <string name="invite_completed">Приглашение отправлено</string>
 
     <!-- Leaders -->
-    <string name="leaders_go_date">Идем на свидание</string>
-    <string name="leaders_leader_now">Теперь вы лидер!</string>
-    <string name="need_select_photo">Сперва нужно выбрать фотографию!</string>
     <string name="photo_add_or">Фотография добавлена</string>
     <string name="photo_add_error">Не удалось добавить фотографию</string>
 
-    <plurals name="leaders_price">
-        <item quantity="one">Встать за %d монету</item>
-        <item quantity="few">Встать за %d монеты</item>
-        <item quantity="other">Встать за %d монет</item>
-    </plurals>
 
-    <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
+
     <string name="leaders_date">Хочу на\nсвидание!</string>
 
     <!-- Settings -->
@@ -467,7 +390,6 @@
     <string name="vibration">Вибросигнал</string>
     <string name="photo_preloading">Предзагрузка фотографий</string>
     <string name="photo_preloading_summary">Предварительная загрузка следующей фотографии в альбоме</string>
-    <string name="preloading">Предзагрузка</string>
     <string name="settings_notifications_header">Оповещения</string>
     <string name="settings_likes">Симпатии</string>
     <string name="settings_mutual">Взаимные симпатии</string>
@@ -498,14 +420,20 @@
         <item quantity="few">%d минуты назад</item>
         <item quantity="other">%d минут назад</item>
     </plurals>
-    <plurals name="quantity_photos">
+
+    <plurals name="photo">
         <item quantity="one">%d фотография</item>
         <item quantity="few">%d фотографии</item>
         <item quantity="other">%d фотографий</item>
     </plurals>
 
-    <string name="profile_settings">Настройки</string>
-    <string name="profile_settings_summary">Настройки приложения</string>
     <string name="fill_button">Заполнить</string>
+
+    <!-- TODO: translate this to russian -->
+    <string name="app_help_url">http://topface.com</string>
+    <string name="app_topface_url">http://topface.com</string>
+
+    <string name="general_dialog_retry">Retry</string>
+
 
 </resources>

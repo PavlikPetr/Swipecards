@@ -38,7 +38,7 @@ import java.util.List;
 public class GeoMapActivity extends MapActivity implements LocationListener, OnItemClickListener, OnClickListener {
 
     //Constants
-    public static final int INTENT_REQUEST_GEO = 112;
+    public static final int INTENT_REQUEST_GEO = 112;    
 
     public static final String INTENT_LONGITUDE_ID = "geo_longitude";
     public static final String INTENT_LATITUDE_ID = "geo_latitude";
@@ -71,16 +71,9 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
         mMapView = (MapView) findViewById(R.id.mapView);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            findViewById(R.id.inputBar).setVisibility(View.GONE);
-
-            double latitude = extras.getDouble(INTENT_LATITUDE_ID);
-            double longitude = extras.getDouble(INTENT_LONGITUDE_ID);
-
-            mGeoLocationManager.setItemOverlayOnTouch(false);
-            mMapView.getController().animateTo(GeoLocationManager.toGeoPoint(latitude, longitude));
-            mGeoLocationManager.setOverlayItem(getApplicationContext(), mMapView, GeoLocationManager.toGeoPoint(latitude, longitude), MAP_INITIAL_ZOOM);
-        } else {
+        int requestKey = getIntent().getIntExtra(Static.INTENT_REQUEST_KEY, 0);
+        
+        if(requestKey == INTENT_REQUEST_GEO){
             //init address autocompletion
             mAddressView = (AutoCompleteTextView) findViewById(R.id.mapAddress);
             mAddressAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, new ArrayList<String>()) {
@@ -121,6 +114,16 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
                     onCurrentLocationRequest();
                 }
             });
+		} else {
+			findViewById(R.id.inputBar).setVisibility(View.GONE);
+
+			double latitude = extras.getDouble(INTENT_LATITUDE_ID);
+			double longitude = extras.getDouble(INTENT_LONGITUDE_ID);
+
+			mGeoLocationManager.setItemOverlayOnTouch(false);
+			mMapView.getController().animateTo(GeoLocationManager.toGeoPoint(latitude, longitude));
+			mGeoLocationManager.setOverlayItem(getApplicationContext(), mMapView,
+					GeoLocationManager.toGeoPoint(latitude, longitude), MAP_INITIAL_ZOOM);
         }
 
 

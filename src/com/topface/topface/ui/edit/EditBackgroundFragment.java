@@ -2,7 +2,6 @@ package com.topface.topface.ui.edit;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,7 +12,9 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import com.topface.topface.R;
-import com.topface.topface.Static;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.http.ProfileBackgrounds.BackgroundItem;
@@ -22,8 +23,7 @@ import com.topface.topface.utils.http.ProfileBackgrounds.ResourceBackgroundItem;
 import java.util.LinkedList;
 
 public class EditBackgroundFragment extends AbstractEditFragment {
-
-    private SharedPreferences mPreferences;
+    
     private int mSelectedId;
     private ListView mBackgroundImagesListView;
     private BackgroundImagesAdapter mAdapter;
@@ -33,8 +33,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                              Bundle savedInstanceState) {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container, false);
-
-        mPreferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        
         mSelectedId = CacheProfile.background_id;
 
         // Navigation bar
@@ -53,16 +52,6 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                 getActivity().finish();
             }
         });
-
-//        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-//        mSaveButton.setText(getResources().getString(R.string.navigation_save));
-//        mSaveButton.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                saveChanges();
-//            }
-//        });
 
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
@@ -94,18 +83,30 @@ public class EditBackgroundFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected void saveChanges(Handler handler) {        
+    protected void saveChanges(final Handler handler) {        
         if (hasChanges()) {
-            prepareRequestSend();
-            CacheProfile.background_id = mSelectedId;          
-            mPreferences.edit().putInt(Static.PREFERENCES_PROFILE_BACKGROUND_ID, mSelectedId).commit();
-          //TODO: make sending to server
-            getActivity().setResult(Activity.RESULT_OK);            
-            finishRequestSend();
-            handler.sendEmptyMessage(0);
+            prepareRequestSend();            
+            
+            SettingsRequest request = new SettingsRequest(getActivity().getApplicationContext());
+            registerRequest(request);
+            request.background = mSelectedId;
+            request.callback(new ApiHandler() {
+				
+				@Override
+				public void success(ApiResponse response) throws NullPointerException {
+					CacheProfile.background_id = mSelectedId;		            
+		            getActivity().setResult(Activity.RESULT_OK);
+		            finishRequestSend();
+		            handler.sendEmptyMessage(0);
+				}
+				
+				@Override
+				public void fail(int codeError, ApiResponse response) throws NullPointerException {					
+					finishRequestSend();
+				}
+			}).exec();
         } else {
-            getActivity().setResult(Activity.RESULT_CANCELED);
-            finishRequestSend();
+            getActivity().setResult(Activity.RESULT_CANCELED);            
             handler.sendEmptyMessage(0);
         }
         

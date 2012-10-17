@@ -8,6 +8,8 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.http.ProfileBackgrounds;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -35,7 +37,7 @@ public class Profile extends AbstractDataWithPhotos {
     // Resources
     public int money; // количество монет у пользователя
     public int power; // количество энергии пользователя
-    public int average_rate; // средняя оценка текущего пользователя
+    public int average_rate; // средняя оценка текущего пользователя    
 
     // Form
 //1    public int form_job_id; // идентификатор рабочей партии пользователя
@@ -80,6 +82,8 @@ public class Profile extends AbstractDataWithPhotos {
     private static boolean mIsUserProfile;
 
     public LinkedList<Gift> gifts = new LinkedList<Gift>();
+    
+    public int background;
 
     //private static final String profileFileName = "profile.out";
     //private static final long serialVersionUID  = 2748391675222256671L;    
@@ -138,9 +142,11 @@ public class Profile extends AbstractDataWithPhotos {
                 gift.feedId = itemGift.optInt("id");
                 profile.gifts.add(gift);
             }
-
-            Context context = App.getContext();
-
+            
+            profile.background = resp.optInt("background",ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
+            
+            Context context = App.getContext();            
+            
             // form
             if (!resp.isNull("form")) {
                 JSONObject form = resp.getJSONObject("form");

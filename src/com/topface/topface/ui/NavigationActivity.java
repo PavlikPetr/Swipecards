@@ -1,22 +1,17 @@
 package com.topface.topface.ui;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 public class NavigationActivity extends FragmentActivity implements View.OnClickListener {
@@ -40,10 +35,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 
         mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
         mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
-        mFragmentSwitcher.setFragmentManager(mFragmentManager);
-
-        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        CacheProfile.background_id = preferences.getInt(Static.PREFERENCES_PROFILE_BACKGROUND_ID, ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
+        mFragmentSwitcher.setFragmentManager(mFragmentManager);        
 
         mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
         mFragmentMenu.selectDefaultMenu();

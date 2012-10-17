@@ -3,7 +3,6 @@
 
     <!-- en -->
     <string name="app_name">Topface</string>
-    <string name="app_market_url">market://details?id=com.topface.topface</string>
     <string name="app_help_url">http://topface.com</string>
     <string name="app_topface_url">http://topface.com</string>
 
@@ -14,12 +13,9 @@
     <string name="general_dialog_saving">Loading</string>
     <string name="general_server_error">Error. Try later</string>
     <string name="general_data_error">Updating error</string>
-    <string name="general_footer_previous">Previous messages</string>
     <string name="general_purchasing_error">Please write message about purchasing error to support@topface.ru</string>
     <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
-    <string name="general_popup_rating">Did you like our application? Raise our rating! The higher rating the more
-        people you will meet in \"TopFace\""
-    </string>
+
     <string name="general_dialog_retry">Retry</string>
     <string name="general_switch_on">on</string>
     <string name="general_switch_off">off</string>
@@ -41,13 +37,7 @@
     <string name="dashbrd_btn_skip">Next</string>
     <string name="dashbrd_btn_prev">Previous</string>
     <string name="dashbrd_btn_switch_button">More…</string>
-    <string name="dashbrd_popup_rating">Did you like our application? Raise our rating! The higher rating the more
-        people you will meet in Topface"
-    </string>
-    <string name="dashbrd_popup_title">RATE ME</string>
-    <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
-    <string name="dashbrd_popup_rate">Yes, I would rate</string>
-    <string name="dashbrd_popup_later">Ask later</string>
+
 
     <!-- Likes Activity -->
     <string name="likes_header_title">Likes you</string>
@@ -65,8 +55,6 @@
     <string name="chat_comment">Send a message</string>
     <string name="chat_gift_in">You got a gift.</string>
     <string name="chat_gift_out">You sent a gift.</string>
-    <string name="chat_rate_in">You have been rated</string>
-    <string name="chat_rate_out">You have rated</string>
     <string name="chat_like_in">You have been sent like</string>
     <string name="chat_like_out">You sent like</string>
     <string name="chat_symphathy_in">You have been sent symphathy</string>
@@ -77,19 +65,18 @@
     <string name="chat_sexuality_out">You have your sexuality rated.</string>
     <string name="chat_wink_in">You received a wink.</string>
     <string name="chat_wink_out">You sent a wink.</string>
-    <string name="chat_money_in">You got a coin</string>
     <string name="chat_dialog_btn_gps_settings">GPS Settings</string>
     <string name="chat_dialog_gps">GPS is disabled! Would you like to enable it?</string>
     <string name="chat_dialog_btn_gps_cancel">Cancel</string>
     <string name="chat_toast_fail_location">Unable to determine the current location</string>
-    <string name="chat_message_copied">Message copied</string>
 
     <!-- Symphaty Activity -->
     <string name="mutual_header_title">Mutual</string>
+    <string name="symphaty_btn_dbl_left">All</string>
+    <string name="symphaty_btn_dbl_right">Unread</string>
     <string name="mutual_background_text">No symphaties</string>
 
     <!-- Tops Activity -->
-    <string name="tops_header_title">Most popular</string>
     <string name="tops_btn_boys">Guys</string>
     <string name="tops_btn_girls">Girls</string>
     <string name="tops_btn_city">City</string>
@@ -104,23 +91,13 @@
     <string name="filter_only_online">Online only</string>
     <string name="filter_only_beautiful">Beatiful only</string>
     <string name="filter_extra_parameters">Extra parameters</string>
-    <string name="filter_header_title">I\'m looking for</string>
-    <string name="filter_menu_save">Save</string>
-    <string name="filter_place">Location</string>
     <string name="filter_city">City</string>
-    <string name="filter_sex">Sex</string>
     <string name="filter_age">Age</string>
     <string name="filter_online">Online</string>
     <string name="filter_all">All</string>
-    <string name="filter_nearby">Near with me</string>
     <string name="filter_cities_all">All cities</string>
     <string name="filter_select_city">Select city</string>
 
-    <!-- Dating Activity -->
-    <string name="dating_header_title_him">Rate him!</string>
-    <string name="dating_header_title_her">Rate her!</string>
-    <string name="dating_menu_one">Filter</string>
-    <string name="dating_back">To scores</string>
 
     <!-- Buying Activity -->
     <string name="buying_header_title">Purchasing</string>
@@ -129,7 +106,6 @@
     <string name="buying_default_message">You can buy gifts, send delights for coins</string>
     <string name="buying_money">Buy coins</string>
     <string name="buying_power">Buy energy</string>
-    <string name="buying_buy">Buy</string>
     <string name="buying_recharge">Recharge on 100%</string>
     <string name="buying_energy">3 USD</string>
     <string name="buying_pack_6coins">6 coins pack</string>
@@ -138,52 +114,17 @@
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">100 coins pack</string>
     <string name="buying_100coins">10 USD</string>
-    <string name="buying_info">You can buy coins and energy</string>
-    <string name="buying_economy_25">Save 25%</string>
-    <string name="buying_economy_40">Save 40%</string>
+
 
     <!-- Profile Activity -->
     <string name="profile_header_title">My Profile</string>
     <string name="profile_btn_chat">Chat</string>
-    <string name="profile_btn_edit">Edit profile</string>
-    <string name="profile_btn_form">Form</string>
-    <string name="profile_btn_add">Add</string>
-    <string name="profile_btn_buy">Buy coins/energy</string>
-    <string name="profile_btn_mutual">Mutual</string>
-    <string name="profile_sex_boy">Male</string>
-    <string name="profile_sex_girl">Female</string>
-    <string name="profile_form">Form</string>
-    <string name="profile_form_name">Name</string>
-    <string name="profile_form_city">Select city</string>
-    <string name="profile_foto">Photo</string>
-    <string name="profile_foto_ero">Erotic photo</string>
-    <string name="profile_height">Height</string>
-    <string name="profile_weight">Weight</string>
-    <string name="profile_education">Education</string>
-    <string name="profile_commutability">Sociability</string>
-    <string name="profile_character">Character</string>
-    <string name="profile_alcohol">Drinking</string>
-    <string name="profile_fitness">Fitness</string>
-    <string name="profile_job">Status</string>
-    <string name="profile_marriage_male">Married</string>
-    <string name="profile_marriage_female">Married</string>
-    <string name="profile_finances">Finances</string>
-    <string name="profile_smoking">Smoking</string>
-    <string name="profile_status">About</string>
-    <string name="profile_edit_title">Edit profile</string>
     <string name="profile_add_title">Add photo</string>
     <string name="profile_add_album">From photo gallery</string>
     <string name="profile_add_camera">Take a picture</string>
-    <string name="profile_coin_1">1 coin</string>
-    <string name="profile_coin_2">2 coins</string>
-    <string name="profile_coin_3">3 coins</string>
-    <string name="profile_ero_price">Choose photo cost</string>
-    <string name="profile_btn_ask">Ask to fill questionnaire</string>
-    <string name="profile_msg_ask">I want to learn more about you. Please fill in the questionnaire!</string>
-    <string name="profile_msg_sent">Sent</string>
 
     <!-- EditProfileActivity -->
-    <string name="edit_title">Editing</string>
+    <string name="edit_title">Edit</string>
     <string name="edit_bg_photo">Background photo</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Change photo</string>
@@ -197,21 +138,6 @@
     <string name="edit_delete">Delete</string>
     <string name="edit_restore">Restore</string>
 
-    <!-- Album, Ero Album Activity -->
-    <string name="album_header_title">Album</string>
-    <string name="album_add_photo_title">Add photo</string>
-    <string name="album_menu_main">Make as main photo</string>
-    <string name="album_menu_did_main">Main</string>
-    <string name="album_menu_popup_delete">Delete photo. Sure?</string>
-    <string name="album_menu_popup_yes">Yes</string>
-    <string name="album_menu_popup_no">No</string>
-    <string name="album_menu_delete">Delete</string>
-    <string name="album_menu_did_delete">Deleted</string>
-    <string name="ero_album_btn_like">Recommend</string>
-    <string name="ero_album_btn_dislike">NOT recommend</string>
-    <string name="ero_album_btn_buy">Next photo</string>
-    <string name="ero_album_btn_next">Next photo</string>
-
     <!-- Gifts Activity -->
     <string name="gifts_romantic">Romantic</string>
     <string name="gifts_friends">Friends</string>
@@ -221,7 +147,6 @@
     <string name="gifts_send_btn">Send a gift</string>
 
     <!-- Map Activity -->
-    <string name="map_search">Search</string>
     <string name="map_location_progress">Locating</string>
     <string name="map_confirm">Send</string>
     <string name="map_address">Enter address</string>
@@ -230,7 +155,6 @@
     <string name="navigation_back_profile">Profile</string>
     <string name="navigation_back_dialog">Dialogs</string>
     <string name="navigation_back_dating">Dating</string>
-    <string name="navigation_back_settings">Settings</string>
     <string name="navigation_edit">Edit</string>
     <string name="navigation_save">Save</string>
     <string name="navigation_send">Send</string>
@@ -362,22 +286,30 @@
         <item quantity="other">You are going to send invitations to %2$d friends and get %1$d {{coins}} for that</item>
     </plurals>
     <string name="invite_is_free">Sending the invitations is free</string>
-    <string name="invite_need_select">Choose one or several of your friends and send them invitations</string>
     <string name="invite_error">Could not send the invitation. Please, try again</string>
     <string name="invite_completed">Invitation sent</string>
 
+    <!-- TODO: translate this to english-->
+    <plurals name="time_hour">
+        <item quantity="one">%d час назад</item>
+        <item quantity="few">%d часа назад</item>
+        <item quantity="other">%d часов назад</item>
+    </plurals>
+    <plurals name="time_minute">
+        <item quantity="one">%d минуту назад</item>
+        <item quantity="few">%d минуты назад</item>
+        <item quantity="other">%d минут назад</item>
+    </plurals>
+
+    <plurals name="photo">
+        <item quantity="one">%d photo</item>
+        <item quantity="few">%d photos</item>
+        <item quantity="other">%d photos</item>
+    </plurals>
 
     <!--Leaders-->
-    <string name="leaders_go_date">Let\'s go for a date</string>
-    <string name="leaders_leader_now">You are a leader now!</string>
-    <string name="need_select_photo">First you a have to choose a photo!</string>
     <string name="photo_add_or">Photo added</string>
     <string name="photo_add_error">Could not add the photo</string>
-    <plurals name="leaders_price">
-        <item quantity="one">Get here for %d coin</item>
-        <item quantity="other">Get here for %d coins</item>
-    </plurals>
-    <string name="leaders_select_photo">Choose the most attractive photo:</string>
     <string name="leaders_date">Wanna\ndate!</string>
 
     <!--Settings-->
@@ -391,7 +323,6 @@
     <string name="vibration">Vibrate</string>
     <string name="photo_preloading">Photo preloading</string>
     <string name="photo_preloading_summary">Preloading the next photo in the album</string>
-    <string name="preloading">Preloading</string>
     <string name="settings_notifications_header">Notifications</string>
     <string name="settings_likes">Likes</string>
     <string name="settings_mutual">Mutual</string>

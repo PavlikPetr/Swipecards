@@ -13,6 +13,7 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
+import com.topface.topface.utils.Utils;
 
 public class UserPhotoFragment extends Fragment {
     private User mUser;
@@ -69,7 +70,7 @@ public class UserPhotoFragment extends Fragment {
         }
 
         if (mPhotoLinks != null && mPhotoLinks.size() >= 0) {
-            mTitle.setText(mPhotoLinks.size() + " фотографий");
+            mTitle.setText(Utils.formatPhotoQuantity(mPhotoLinks.size()));
             mTitle.setVisibility(View.VISIBLE);
         } else {
             mTitle.setVisibility(View.INVISIBLE);

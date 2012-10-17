@@ -10,6 +10,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -33,6 +35,7 @@ import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
+import com.topface.topface.utils.OsmManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 
 import java.util.LinkedList;
@@ -399,13 +402,15 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 Bundle extras = data.getExtras();
                 final double latitude = extras.getDouble(GeoMapActivity.INTENT_LATITUDE_ID);
                 final double longitude = extras.getDouble(GeoMapActivity.INTENT_LONGITUDE_ID);
-//        		final String address = extras.getString(GeoMapActivity.INTENT_ADDRESS_ID);        		
+        		final String address = extras.getString(GeoMapActivity.INTENT_ADDRESS_ID);        		
 
                 CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
                 registerRequest(coordRequest);
                 coordRequest.userid = mUserId;
                 coordRequest.latitude = latitude;
                 coordRequest.longitude = longitude;
+                coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_PLACE;
+                coordRequest.address = address;
                 mLoadingLocker.setVisibility(View.VISIBLE);
                 coordRequest.callback(new ApiHandler() {
 
@@ -496,58 +501,65 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 //		Debug.log(this, location.getLatitude() + " / " + location.getLongitude());
         final double latitude = location.getLatitude();
         final double longitude = location.getLongitude();
-        CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
-        registerRequest(coordRequest);
-        coordRequest.userid = mUserId;
-        coordRequest.latitude = latitude;
-        coordRequest.longitude = longitude;
-        coordRequest.callback(new ApiHandler() {
-
-            @Override
-            public void success(ApiResponse response) throws NullPointerException {
-                final Confirmation confirm = Confirmation.parse(response);
-//				final String address = mGeoManager.getLocationAddress(latitude, longitude);
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if (confirm.completed) {
-                            if (mIsAddPanelOpened)
-                                mSwapControl.snapToScreen(0);
-                            mIsAddPanelOpened = false;
-
-                            History history = new History();
-                            history.type = FeedDialog.MAP;
-                            history.currentLocation = true;
-                            history.latitude = latitude;
-                            history.longitude = longitude;
-                            mAdapter.addSentMessage(history);
-                            mAdapter.notifyDataSetChanged();
-
-//					        Toast.makeText(ChatActivity.this, history.latitude + " " + history.longitude, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                        }
-                        mProgressDialog.dismiss();
-                    }
-                });
-
-            }
-
-            @Override
-            public void fail(int codeError, ApiResponse response)
-                    throws NullPointerException {
-                runOnUiThread(new Runnable() {
+        OsmManager.getAddress(latitude, longitude, new Handler(){
+        	@Override
+        	public void handleMessage(Message msg) {
+        		CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+                registerRequest(coordRequest);
+                coordRequest.userid = mUserId;
+                coordRequest.latitude = latitude;
+                coordRequest.longitude = longitude;  
+                coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_SELF;
+                coordRequest.address = (String)msg.obj;        
+                coordRequest.callback(new ApiHandler() {
 
                     @Override
-                    public void run() {
-                        mProgressDialog.dismiss();
-                        Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    public void success(ApiResponse response) throws NullPointerException {
+                        final Confirmation confirm = Confirmation.parse(response);
+//        				final String address = mGeoManager.getLocationAddress(latitude, longitude);
+                        runOnUiThread(new Runnable() {
 
-            }
-        }).exec();
+                            @Override
+                            public void run() {
+                                if (confirm.completed) {
+                                    if (mIsAddPanelOpened)
+                                        mSwapControl.snapToScreen(0);
+                                    mIsAddPanelOpened = false;
+
+                                    History history = new History();
+                                    history.type = FeedDialog.MAP;
+                                    history.currentLocation = true;
+                                    history.latitude = latitude;
+                                    history.longitude = longitude;
+                                    mAdapter.addSentMessage(history);
+                                    mAdapter.notifyDataSetChanged();
+
+//        					        Toast.makeText(ChatActivity.this, history.latitude + " " + history.longitude, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                }
+                                mProgressDialog.dismiss();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response)
+                            throws NullPointerException {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                mProgressDialog.dismiss();
+                                Toast.makeText(ChatActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+                }).exec();
+        	}
+        });        
 
         mGeoManager.removeLocationListener(this);
         mLocationDetected = true;

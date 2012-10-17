@@ -307,7 +307,7 @@ public class GiftsFragment extends BaseFragment {
 	public void setGifts(LinkedList<Gift> gifts) {
 		mGifts.clear();
 		mGifts.addAll(gifts);
-		if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
+		if (mTag!= null && mTag.equals(GIFTS_USER_PROFILE_TAG)) {
 			mGifts.add(0, Gift.getSendedGiftItem());
 			if (mGifts.size() >= UserProfileActivity.GIFTS_LOAD_COUNT)
 				mGifts.add(new Gift(ItemType.LOADER));

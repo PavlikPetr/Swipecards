@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="time_now">Прямо сейчас</string>
+
+    <plurals name="time_minute">
+        <item quantity="zero">%d минуту назад</item>
+        <item quantity="one">%d минуты назад</item>
+        <item quantity="other">%d минут назад</item>
+    </plurals>
+
+    <string name="time_yesterday">Вчера</string>
+    <string name="time_today">Сегодня</string>
+
+    <string name="time_monday">Пнд</string>
+    <string name="time_tuesday">Втр</string>
+    <string name="time_wednesday">Срд</string>
+    <string name="time_thursday">Чтв</string>
+    <string name="time_friday">Птн</string>
+    <string name="time_saturday">Сбт</string>
+    <string name="time_sunday">Вск</string>
+
+    <string name="time_january">Янв</string>
+    <string name="time_february">Фев</string>
+    <string name="time_march">Мар</string>
+    <string name="time_april">Апр</string>
+    <string name="time_may">Май</string>
+    <string name="time_june">Июн</string>
+    <string name="time_july">Июл</string>
+    <string name="time_august">Авг</string>
+    <string name="time_september">Сен</string>
+    <string name="time_october">Окт</string>
+    <string name="time_november">Нбр</string>
+    <string name="time_december">Дек</string>
+</resources>
