@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidLintMissingTranslation -->
 <resources>
 
     <string name="cache_profile_filter_geo">filter_geo</string>
@@ -9,8 +10,6 @@
     <string name="cache_profile_filter_character">filter_character</string>
     <string name="cache_profile_filter_alcohol">filter_alcohol</string>
     <string name="cache_profile_filter_showoff">filter_showoff</string>
-
-    <string name="cache_profile_name">first_name</string>
 
     <string-array name="profile_background_images">
         <item>@drawable/profile_background_1</item>
