@@ -1,6 +1,8 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
+
+import com.topface.topface.data.Gift;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
@@ -43,6 +45,8 @@ public class CacheProfile {
     public static int background_id;
     public static Photos photos;
     public static Photo photo;
+    
+    public static LinkedList<Gift> gifts = new LinkedList<Gift>();
 
     public static boolean init(Context context) {
         try {
@@ -65,6 +69,7 @@ public class CacheProfile {
         updateCity(profile);
         updateDating(profile);
         updateNotifications(profile);
+        gifts = profile.gifts;
 //        isNewbie = profile.isNewbie;
     }
 
@@ -131,6 +136,8 @@ public class CacheProfile {
         profile.status = status;
         profile.photo = photo;
 //        profile.isNewbie = isNewbie;
+        
+        profile.gifts = gifts;
         return profile;
     }
 
@@ -166,6 +173,7 @@ public class CacheProfile {
         photo = profile.photo;
         status = profile.status;
 //        isNewbie = profile.isNewbie;
+        gifts = profile.gifts;
     }
 
     /**

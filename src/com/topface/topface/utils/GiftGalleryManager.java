@@ -40,10 +40,10 @@ public class GiftGalleryManager<T extends Gift> implements OnScrollListener {
     //---------------------------------------------------------------------------
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (visibleItemCount != 0
-                && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
-            if (mHandler != null)
-                mHandler.sendEmptyMessage(0);
+        if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
+            if (mHandler != null && !mDataList.isEmpty() && mDataList.getLast().isLoader()) {
+            	mHandler.sendEmptyMessage(0);
+            }
         }
     }
 

@@ -8,6 +8,8 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
@@ -77,10 +79,12 @@ public class Profile extends AbstractDataWithPhotos {
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();
 
     private static boolean mIsUserProfile;
+    
+    public LinkedList<Gift> gifts = new LinkedList<Gift>();
 
     //private static final String profileFileName = "profile.out";
-    //private static final long serialVersionUID  = 2748391675222256671L;
-
+    //private static final long serialVersionUID  = 2748391675222256671L;    
+    
     public static Profile parse(ApiResponse response) {
         return parse(new Profile(), response.mJSONResult);
     }
@@ -124,10 +128,22 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.dating_city_full = datingCity.optString("full");
             }
 
-            Context context = App.getContext();
-
+            //gifts
+            JSONArray arrGifts = resp.optJSONArray("gifts");
+            for (int i = 0; i < arrGifts.length(); i++) {
+                JSONObject itemGift = arrGifts.getJSONObject(i);
+                Gift gift = new Gift();
+                gift.id = itemGift.optInt("gift");
+                gift.link = itemGift.optString("link");
+                gift.type = Gift.PROFILE;
+                gift.feedId = itemGift.optInt("id");
+                profile.gifts.add(gift);
+            }
+            
+            Context context = App.getContext();            
+            
             // form
-            if (!resp.isNull("questionary")) {
+            if (!resp.isNull("form")) {
                 JSONObject form = resp.getJSONObject("form");
 
                 FormInfo formInfo = new FormInfo(context, profile);

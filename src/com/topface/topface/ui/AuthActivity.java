@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.topface.topface.Data;
 import com.topface.topface.R;
@@ -19,6 +20,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
@@ -29,7 +31,8 @@ import com.topface.topface.utils.social.AuthorizationManager;
 public class AuthActivity extends BaseFragmentActivity implements View.OnClickListener {
     private Button mFBButton;
     private Button mVKButton;
-    private Button mRetryButtton;
+    private RetryView mRetryView;
+    private RelativeLayout mAuthContainer;
     private ProgressBar mProgressBar;
     private AuthorizationManager mAuthorizationManager;
 
@@ -43,6 +46,15 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         Debug.log(this, "+onCreate");
         setContentView(R.layout.ac_auth);
+
+        mAuthContainer = (RelativeLayout)findViewById(R.id.authContainer);
+
+        mRetryView = new RetryView(getApplicationContext());
+        mRetryView.init(getLayoutInflater());
+        mRetryView.setOnClickListener(this);
+        mRetryView.setVisibility(View.GONE);
+
+        mAuthContainer.addView(mRetryView);
 
         mAuthorizationManager = AuthorizationManager.getInstance(this);
         mAuthorizationManager.setOnAuthorizationHandler(new Handler() {
@@ -72,9 +84,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         // Vkontakte button
         mVKButton = (Button) findViewById(R.id.btnAuthVK);
         mVKButton.setOnClickListener(this);
-
-        mRetryButtton = (Button) findViewById(R.id.btnRetry);
-        mRetryButtton.setOnClickListener(this);
 
         // Progress
         mProgressBar = (ProgressBar) findViewById(R.id.prsAuthLoading);
@@ -143,21 +152,20 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 mAuthorizationManager.vkontakteAuth();
             } else if (view.getId() == R.id.btnAuthFB) {
                 mAuthorizationManager.facebookAuth();
-            } else if (view.getId() == R.id.btnRetry) {
+            } else if (view.equals(mRetryView)) {
                 auth(new AuthToken(getApplicationContext()));
-                mRetryButtton.setVisibility(View.GONE);
+                mRetryView.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
         }
     }
 
-    //TODO: поменять имя метода
     public void reAuthAfterInternetConnected() {
         if(!mIsAuthorized){
            if(!(new AuthToken(getApplicationContext()).isEmpty())){
                mAuthorizationManager.reAuthorize();
                hideButtons();
-               mRetryButtton.setVisibility(View.GONE);
+               mRetryView.setVisibility(View.GONE);
                mProgressBar.setVisibility(View.VISIBLE);
            }
        }
@@ -281,7 +289,8 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void authorizationFailed() {
-        mRetryButtton.setVisibility(View.VISIBLE);
+        hideButtons();
+        mRetryView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }
 

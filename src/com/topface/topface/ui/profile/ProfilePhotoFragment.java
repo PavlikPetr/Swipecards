@@ -23,6 +23,8 @@ public class ProfilePhotoFragment extends Fragment {
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
     private Photos mPhotoLinks;
     private AddPhotoHelper mAddPhotoHelper;
+    
+    private ViewFlipper mViewFlipper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class ProfilePhotoFragment extends Fragment {
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
 
         //Navigation bar
         if (getActivity() instanceof EditContainerActivity) {
@@ -64,6 +66,8 @@ public class ProfilePhotoFragment extends Fragment {
                 }
             });
         }
+        
+        mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
         GridView gridAlbum = (GridView) root.findViewById(R.id.fragmentGrid);
         gridAlbum.setNumColumns(3);
@@ -79,6 +83,16 @@ public class ProfilePhotoFragment extends Fragment {
             title.setVisibility(View.INVISIBLE);
         }
 
+        ((Button)root.findViewById(R.id.btnAddPhotoAlbum)).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
+        ((Button)root.findViewById(R.id.btnAddPhotoCamera)).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
+        ((Button)root.findViewById(R.id.btnCancel)).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mViewFlipper.setDisplayedChild(0);
+			}
+		});
+        
         return root;
     }
 
@@ -92,14 +106,14 @@ public class ProfilePhotoFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
+        mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);        
     }
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (position == 0) {
-                mAddPhotoHelper.addPhoto();
+            	mViewFlipper.setDisplayedChild(1);
                 return;
             }
             Data.photos = CacheProfile.photos;
@@ -112,8 +126,8 @@ public class ProfilePhotoFragment extends Fragment {
 
     private Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+        public void handleMessage(Message msg) {        	
+        	mViewFlipper.setDisplayedChild(0);
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             	Photo photo = (Photo) msg.obj;
             	
@@ -122,7 +136,7 @@ public class ProfilePhotoFragment extends Fragment {
             	            	
             	mProfilePhotoGridAdapter.notifyDataSetChanged();
                 Toast.makeText(getActivity(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
-            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {            	
                 Toast.makeText(getActivity(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
         }

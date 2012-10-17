@@ -19,9 +19,9 @@ import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.BaseApiHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.InviteActivity;
-import com.topface.topface.ui.fragments.LikesFragment;
-import com.topface.topface.ui.fragments.MutualFragment;
 import com.topface.topface.ui.fragments.TopsFragment;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.utils.Device;
 
 import java.util.HashMap;

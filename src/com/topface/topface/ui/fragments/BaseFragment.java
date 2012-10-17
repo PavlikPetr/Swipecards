@@ -12,7 +12,6 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
-    public static final int F_BASE = 1000;
     public static final int F_PROFILE = 1001;
     public static final int F_DATING = 1002;
     public static final int F_LIKES = 1003;
@@ -20,6 +19,7 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
     public static final int F_DIALOGS = 1005;
     public static final int F_TOPS = 1006;
     public static final int F_SETTINGS = 1007;
+    public static final int F_VISITORS = 1008;
 
     protected void onUpdateStart(boolean isFlyUpdating) {
     }

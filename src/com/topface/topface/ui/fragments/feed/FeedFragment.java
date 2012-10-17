@@ -1,10 +1,9 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.feed;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,10 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SwapAnimation;
@@ -36,14 +37,14 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
     private TextView mBackgroundText;
     protected DoubleBigButton mDoubleButton;
     protected boolean mIsUpdating;
-    private LinearLayout updateErrorMessage;
+    private RetryView updateErrorMessage;
     private RelativeLayout mContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(getLayout(), null);
-        mContainer = (RelativeLayout)view.findViewById(R.id.container);
+        mContainer = (RelativeLayout)view.findViewById(R.id.feedContainer);
         // Home Button
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         // Set title
@@ -248,8 +249,8 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
 
         // Double Button
         mDoubleButton = (DoubleBigButton) view.findViewById(R.id.btnDoubleBig);
-        mDoubleButton.setLeftText(getString(R.string.inbox_btn_dbl_left));
-        mDoubleButton.setRightText(getString(R.string.inbox_btn_dbl_right));
+        mDoubleButton.setLeftText(getString(R.string.btn_dbl_left));
+        mDoubleButton.setRightText(getString(R.string.btn_dbl_right));
         mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
         mDoubleButton.setLeftListener(new View.OnClickListener() {
             @Override
@@ -324,22 +325,15 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
 
     private void createUpdateErrorMessage() {
         if(updateErrorMessage == null){
-            updateErrorMessage = new LinearLayout(getActivity().getApplicationContext());
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.MATCH_PARENT);
-            params.addRule(RelativeLayout.CENTER_IN_PARENT,1);
-            updateErrorMessage.setLayoutParams(params);
-
-            mContainer.addView(updateErrorMessage);
-            LayoutInflater inflater = getActivity().getLayoutInflater();
-            inflater.inflate(R.layout.retry_btn,updateErrorMessage);
-
-            Button mRetryBtn = (Button)updateErrorMessage.findViewById(R.id.retry);
-            mRetryBtn.setOnClickListener(new View.OnClickListener() {
+            updateErrorMessage = new RetryView(getActivity().getApplicationContext());
+            updateErrorMessage.init(getActivity().getLayoutInflater());
+            updateErrorMessage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     retryButtonClick();
                 }
             });
+            mContainer.addView(updateErrorMessage);
         } else {
             updateErrorMessage.setVisibility(View.VISIBLE);
         }

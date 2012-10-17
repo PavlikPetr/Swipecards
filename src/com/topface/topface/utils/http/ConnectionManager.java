@@ -2,10 +2,8 @@ package com.topface.topface.utils.http;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
+import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.Static;
@@ -18,15 +16,13 @@ import com.topface.topface.utils.http.Http.FlushedInputStream;
 import com.topface.topface.utils.social.AuthToken;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.protocol.BasicHttpContext;
 
-import java.io.*;
-import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,7 +31,6 @@ public class ConnectionManager {
 
     // Data
     private static ConnectionManager mInstanse;
-    private AndroidHttpClient mHttpClient;
     private ExecutorService mWorker;
     private LinkedList<Thread> mDelayedRequestsThreads;
     // Constants
@@ -43,12 +38,8 @@ public class ConnectionManager {
 
     //---------------------------------------------------------------------------
     private ConnectionManager() {
-        mHttpClient = AndroidHttpClient.newInstance("Android"); // For Avatar Bitmaps
         mWorker = Executors.newFixedThreadPool(2);
         mDelayedRequestsThreads = new LinkedList<Thread>();
-        //mWorker = Executors.newSingleThreadExecutor();
-        //java.lang.System.setProperty("java.net.preferIPv4Stack", "true");
-        //java.lang.System.setProperty("java.net.preferIPv6Addresses", "false");
     }
 
     //---------------------------------------------------------------------------
@@ -83,11 +74,12 @@ public class ConnectionManager {
                     httpPost = new HttpPost(Static.API_URL);
                     httpPost.setHeader("Accept-Encoding", "gzip");
                     httpPost.setHeader("Content-Type", "application/json");
+                    setRevisionHeader(httpPost);
                     httpPost.setEntity(new ByteArrayEntity(apiRequest.toString().getBytes("UTF8")));
 
-                    Debug.log(TAG, "cm_req::" + apiRequest.toString()); // REQUEST
-                    rawResponse = request(httpClient, httpPost); // 
-                    Debug.log(TAG, "cm_resp::" + rawResponse); // RESPONSE
+                    Debug.logJson(TAG, "REQUEST >>>", apiRequest.toString());
+                    rawResponse = request(httpClient, httpPost);
+                    Debug.logJson(TAG, "RESPONSE <<<", rawResponse);
 
                     if (apiRequest.handler != null) {
                         ApiResponse apiResponse = new ApiResponse(rawResponse);
@@ -103,7 +95,7 @@ public class ConnectionManager {
                     }
 
                 } catch (Exception e) {
-                    Debug.log(TAG, "cm_req exception::" + e.toString());
+                    Debug.log(TAG, "REQUEST::ERROR ===\n" + e.toString());
                     if (httpPost != null && !httpPost.isAborted())
                         httpPost.abort();
                 }
@@ -165,6 +157,7 @@ public class ConnectionManager {
             localHttpPost = new HttpPost(Static.API_URL);
             localHttpPost.setHeader("Accept-Encoding", "gzip");
             localHttpPost.setHeader("Content-Type", "application/json");
+            setRevisionHeader(localHttpPost);
             localHttpPost.setEntity(new ByteArrayEntity(authRequest.toString().getBytes("UTF8")));
 
             Debug.log(TAG, "cm_reauth:req0:" + authRequest.toString());
@@ -191,162 +184,21 @@ public class ConnectionManager {
         return response;
     }
 
-    //---------------------------------------------------------------------------
-    public void sendRequestNew(final ApiRequest apiRequest) {
-        mWorker.execute(new Runnable() {
-            @Override
-            public void run() {
-                Socket socket = null;
-                String rawResponse = Static.EMPTY;
-                try {
-                    apiRequest.ssid = Data.SSID;
-
-                    Debug.log(TAG, "s_req::" + apiRequest.toString()); // REQUEST
-
-                    socket = new Socket();
-                    socket.connect(new InetSocketAddress("46.182.29.182", 80), 5000);
-                    socket.setKeepAlive(false);
-                    socket.setSoTimeout(10000);
-
-                    String path = "/?v=1";
-                    BufferedWriter output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF8"));
-                    byte[] buffer = apiRequest.toString().getBytes("UTF8");
-                    output.write("POST " + path + " HTTP/1.0\r\n");
-                    output.write("Content-Length: " + buffer.length + "\r\n");
-                    output.write("Content-Type: application/json\r\n");
-                    output.write("\r\n");
-                    output.write(apiRequest.toString());
-                    output.flush();
-                    //output.close();
-
-                    BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    String line;
-                    StringBuilder sb = new StringBuilder();
-                    boolean reading = false;
-                    for (line = input.readLine(); line != null; line = input.readLine()) {
-                        if (line.equals("") || reading == true) {
-                            reading = true;
-                            sb.append(line);
-                        }
-                    }
-                    rawResponse = sb.toString();
-                    //input.close();
-
-                    Debug.log(TAG, "s_resp::" + rawResponse); // RESPONSE
-
-                } catch (Exception e) {
-                    rawResponse = e.toString();
-
-                    Debug.log(TAG, "s_exception:" + e.getMessage());
-                    for (StackTraceElement st : e.getStackTrace())
-                        Debug.log(TAG, "s_trace: " + st.toString());
-                } finally {
-
-                    try {
-                        socket.shutdownInput();
-                        socket.shutdownOutput();
-                        socket.close();
-                    } catch (IOException e1) {
-                        Debug.log(TAG, "s_exception CLOSE:" + e1.getMessage());
-                    }
-
-                    if (apiRequest.handler != null) {
-                        ApiResponse apiResponse = new ApiResponse(rawResponse);
-                        if (apiResponse.code == ApiResponse.SESSION_NOT_FOUND)
-                            apiResponse = reAuthNew(apiRequest.context, apiRequest);
-                        apiRequest.handler.response(apiResponse);
-                    }
-                    try {
-                        if (socket != null && !socket.isClosed())
-                            socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    //---------------------------------------------------------------------------
-    private ApiResponse reAuthNew(Context context, ApiRequest request) {
-        Debug.log(this, "reAuth");
-        AndroidHttpClient httpClient = AndroidHttpClient.newInstance("Android");
-        HttpPost httpPost = new HttpPost(Static.API_URL);
-        httpPost.addHeader("Accept-Encoding", "gzip");
-        httpPost.setHeader("Content-Type", "application/json");
-
-        AuthToken token = new AuthToken(context);
-        AuthRequest authRequest = new AuthRequest(context);
-        authRequest.platform = token.getSocialNet();
-        authRequest.sid = token.getUserId();
-        authRequest.token = token.getTokenKey();
-
-        String rawResponse = Static.EMPTY;
-        ApiResponse response = null;
-
-        try {
-            final HttpPost localHttpPost = new HttpPost(Static.API_URL);
-            localHttpPost.addHeader("Accept-Encoding", "gzip");
-            localHttpPost.setHeader("Content-Type", "application/json");
-            try {
-                localHttpPost.setEntity(new ByteArrayEntity(authRequest.toString().getBytes("UTF8")));
-            } catch (Exception e) {
-            }
-
-            rawResponse = request(httpClient, localHttpPost);
-            response = new ApiResponse(rawResponse);
-            if (response.code == ApiResponse.RESULT_OK) {
-                Auth auth = Auth.parse(response);
-                Data.saveSSID(context, auth.ssid);
-                request.ssid = auth.ssid;
-                httpPost.setEntity(new ByteArrayEntity(request.toString().getBytes("UTF8")));
-                rawResponse = request(httpClient, httpPost);
-                response = new ApiResponse(rawResponse);
-            } else
-                Data.removeSSID(context);
-        } catch (Exception e) {
+    /**
+     * Добавляет в http запрос куки с номером ревизии для тестирования беты
+     *
+     * @param httpPost запрос к которому будет добавлен заголовок
+     */
+    private void setRevisionHeader(HttpPost httpPost) {
+        if (App.isDebugMode()) {
+            httpPost.setHeader("Cookie", "revnum=" + Static.REV + ";");
         }
-        Debug.log(TAG, "cm_reauth::" + rawResponse); // RESPONSE
-        return response;
-    }
-
-    //---------------------------------------------------------------------------
-    public Bitmap bitmapLoader(String url) {
-        if (url == null)
-            return null;
-        Bitmap bitmap = null;
-        HttpGet httpGet = new HttpGet(url);
-        try {
-            BasicHttpContext localContext = new BasicHttpContext();
-            HttpResponse response = mHttpClient.execute(httpGet, localContext);
-            final int statusCode = response.getStatusLine().getStatusCode();
-            if (statusCode != HttpStatus.SC_OK)
-                return null;
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                InputStream is = entity.getContent();
-                bitmap = BitmapFactory.decodeStream(new FlushedInputStream(is));
-                is.close();
-                //entity.consumeContent();
-            }
-            entity = null;
-        } catch (Exception e) {
-            if (httpGet != null && !httpGet.isAborted())
-                httpGet.abort();
-        }
-        return bitmap;
     }
 
     //---------------------------------------------------------------------------
     @Override
     protected void finalize() throws Throwable {
-        if (mHttpClient != null)
-            mHttpClient.close();/* mHttpClient.getConnectionManager().shutdown(); */
         super.finalize();
-    }
-
-    public AndroidHttpClient getHttpClient() {
-        return mHttpClient;
     }
 
     //---------------------------------------------------------------------------
@@ -371,7 +223,6 @@ public class ConnectionManager {
                 apiRequest.exec();
             }
 
-            ;
         };
         thread.start();
 
@@ -379,11 +230,9 @@ public class ConnectionManager {
     }
 
     //---------------------------------------------------------------------------
-    public void notifyDelayedRequests() {
-        for (int i = 0; i < mDelayedRequestsThreads.size(); i++) {
-            synchronized (mDelayedRequestsThreads.get(i)) {
-                mDelayedRequestsThreads.get(i).notify();
-            }
+    public synchronized void notifyDelayedRequests() {
+        for (Thread mDelayedRequestsThread : mDelayedRequestsThreads) {
+            mDelayedRequestsThread.notify();
         }
 
         mDelayedRequestsThreads.clear();

@@ -71,7 +71,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         editButton.setOnClickListener(this);
 
         // Avatar, Name, City
-        mUserAvatar = (ImageViewRemote) view.findViewById(R.id.ivUserAvatar);        
+        mUserAvatar = (ImageViewRemote) view.findViewById(R.id.ivUserAvatar);
         mUserName = (TextView) view.findViewById(R.id.ivUserName);
         String userNameString = CacheProfile.first_name+(isAgeOk(CacheProfile.age)?", "+CacheProfile.age:"");
         mUserName.setText(userNameString);
@@ -96,7 +96,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         mUserPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
         mUserPower.setText("" + CacheProfile.power + "%");
 
-        // View Pager        
+        // View Pager
         mViewPager = (ViewPager) view.findViewById(R.id.UserViewPager);
         mViewPager.setAdapter(new ProfilePageAdapter(getActivity().getSupportFragmentManager()));
         mViewPager.setOnPageChangeListener(mOnPageChangeListener);
@@ -141,7 +141,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
                         CacheProfile.background_id
                 )
         );
-        
+
         mUserAvatar.setPhoto(CacheProfile.photo);
     }
 
