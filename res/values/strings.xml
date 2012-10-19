@@ -42,6 +42,7 @@
     <!-- Likes Activity -->
     <string name="likes_header_title">Likes you</string>
     <string name="likes_background_text">No likes</string>
+   	<string name="likes_mutual">Mutual</string>
 
     <!-- Visitors -->
     <string name="visitors_background_text">No visitors</string>

@@ -245,6 +245,7 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginRight">8dp</item>
         <item name="android:layout_toLeftOf">@+id/ivArrow</item>
+       	<item name="android:src">@drawable/im_item_mutual_heart</item>
     </style>
     <style name="ChatAvatar">
         <item name="android:background">@drawable/chat_avatar_frame</item>

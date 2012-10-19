@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 public class FeedLike extends AbstractFeedItem {
     public boolean highrate;
+    public boolean mutualed;
 
     public FeedLike() {
         super();
@@ -41,6 +42,7 @@ public class FeedLike extends AbstractFeedItem {
                     like.age = item.optInt("age");
                     like.online = item.optBoolean("online");
                     like.highrate = item.optBoolean("highrate");
+                    like.mutualed = false;
 
                     // city  
                     JSONObject city = item.getJSONObject("city");
