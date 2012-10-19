@@ -45,10 +45,9 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         final FeedLike like = getItem(position);
 
-        holder.heart.setImageResource(like.highrate ?
-                R.drawable.im_item_mutual_heart_top :
-                (like.mutualed ? R.drawable.im_item_dbl_mutual_heart : R.drawable.im_item_mutual_heart));
-
+        holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart : 
+        	(like.highrate ? R.drawable.im_item_mutual_heart_top : R.drawable.im_item_mutual_heart));
+                
         final ViewFlipper vf = holder.flipper;
 
         holder.heart.setOnClickListener(new OnClickListener() {
