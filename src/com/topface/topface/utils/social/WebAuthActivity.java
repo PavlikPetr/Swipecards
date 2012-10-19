@@ -15,7 +15,12 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.http.Http;
+
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,6 +33,7 @@ public class WebAuthActivity extends Activity {
     public final static String ACCESS_TOKEN = "access_token";
     public final static String USER_ID = "user_id";
     public final static String EXPIRES_IN = "expires_in";
+    public final static String USER_NAME = "user_name";
 
     // Data
     private WebView mWebView;
@@ -86,11 +92,13 @@ public class WebAuthActivity extends Activity {
                 String token_key = queryMap.get(ACCESS_TOKEN);
                 String user_id = queryMap.get(USER_ID);
                 String expires_in = queryMap.get(EXPIRES_IN);
+                String user_name = queryMap.get(USER_NAME);
 
                 Intent intent = WebAuthActivity.this.getIntent();
                 intent.putExtra(ACCESS_TOKEN, token_key);
                 intent.putExtra(USER_ID, user_id);
                 intent.putExtra(EXPIRES_IN, expires_in);
+                intent.putExtra(USER_NAME, user_name);
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             } else {
@@ -137,16 +145,22 @@ public class WebAuthActivity extends Activity {
                     Debug.log(WebAuthActivity.this, "url is wrong:" + e);
                 }
 
-                HashMap<String, String> queryMap = parseQueryString(mMatcherToken.group(1));
-
-                mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_COMPLETE, queryMap));
+                final HashMap<String, String> queryMap = parseQueryString(mMatcherToken.group(1));
+                
+                AuthorizationManager.getVkName(queryMap.get(ACCESS_TOKEN), queryMap.get(USER_ID), new Handler(){
+                	@Override
+                	public void handleMessage(Message msg) {                 		
+                		queryMap.put(USER_NAME, (String)msg.obj);
+                		mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_COMPLETE, queryMap));
+                	}
+                });
             } else if (mMatcherError.find() || mMatcherLogout.find()) {
                 view.stopLoading();
                 new AuthToken(getApplicationContext()).removeToken();
                 mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_ERROR));
             }
-        }
-
+        }        
+        
         //---------------------------------------------------------------------------
         @Override
         public void onPageFinished(WebView view, String url) {
