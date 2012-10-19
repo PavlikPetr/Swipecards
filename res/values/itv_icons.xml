@@ -4,6 +4,7 @@
     <!-- Данный конфиг используется для IllustratedTextView -->
     <string-array name="itv_templates">
         <item>{{coins}}</item>
+        <item>{{refresh}}</item>
         <!--
             здесь вы можете добавить ваши шаблоны,
             которые будут заменены картинками из массива itv_icons
@@ -12,6 +13,7 @@
 
     <array name="itv_icons">
         <item>@drawable/resources_coins</item>
+        <item>@drawable/refresh_icon</item>
         <!--
             тут соответсвующие шаблонам из itv_templates изображения
         -->

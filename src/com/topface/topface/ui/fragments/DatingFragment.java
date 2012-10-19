@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,7 @@ import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.*;
 
 import java.util.LinkedList;
@@ -65,7 +67,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View mNavigationHeader;
     private Button mSettingsButton;
     private RelativeLayout mDatingLoveBtnLayout;
-    private ViewFlipper mViewFlipper; 
+    private ViewFlipper mViewFlipper;
+
+    private ImageButton mRetryBtn;
 
     private Drawable singleMutual;
     private Drawable singleDelight;
@@ -77,6 +81,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         super.onCreateView(inflater, container, saved);
 
         View view = inflater.inflate(R.layout.ac_dating, null);
+
+        mRetryBtn = (ImageButton)view.findViewById(R.id.btnUpdate);
+        mRetryBtn.setOnClickListener(this);
 
         mViewFlipper =(ViewFlipper) view.findViewById(R.id.vfFlipper);        
         
@@ -174,6 +181,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
 
+
         updateData(false);
 
         return view;
@@ -217,6 +225,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d("Topface","fail");
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         onUpdateFail(isAddition);
                         unlockControls();
@@ -244,7 +253,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         lockControls();                        
                         mRateController.onRate(currentSearch.uid, 10, currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     }
-                    currentSearch.rated = true;
+//                    currentSearch.rated = true;
                 }
             }
             break;
@@ -258,7 +267,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         lockControls();
                         mRateController.onRate(currentSearch.uid, 9, currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     }
-                    currentSearch.rated = true;
+
                 }
             }
             break;
@@ -301,6 +310,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             	mViewFlipper.setDisplayedChild(0);
             }
             break;
+            case R.id.btnUpdate: {
+                updateData(false);
+                mRetryBtn.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
             default:
         }
     }
@@ -529,7 +543,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void successRate() {
+        getCurrentUser().rated = true;
         showNextUser();
+    }
+
+    @Override
+    public void failRate() {
+        unlockControls();
     }
 
     @Override
@@ -550,6 +570,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     protected void onUpdateFail(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mProgressBar.setVisibility(View.GONE);
+            mRetryBtn.setVisibility(View.VISIBLE);
         }
     }
 

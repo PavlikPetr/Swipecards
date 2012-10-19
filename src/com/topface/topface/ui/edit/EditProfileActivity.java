@@ -168,6 +168,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
                     SettingsRequest request = new SettingsRequest(getApplicationContext());
                     request.cityid = city_id;
+                    sendBroadcast(new Intent().setAction("com.topface.receivers.ConnectionChangeReceiver"));
                     request.callback(new ApiHandler() {
 
                         @Override

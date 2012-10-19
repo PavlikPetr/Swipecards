@@ -1,10 +1,14 @@
 package com.topface.topface.ui;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
@@ -20,6 +24,8 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
 
+    public static NavigationActivity mThis =null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +37,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         mFragmentManager = getSupportFragmentManager();
 
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
 
         mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
@@ -41,9 +48,32 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         mFragmentMenu.selectDefaultMenu();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Button retry = (Button) getWindow().getCurrentFocus().findViewById(Dialog.BUTTON_POSITIVE);
+        Debug.log("retry1");
+        if(retry!=null) {
+            Debug.log("retry");
+            retry.performClick();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mThis = this;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mThis = null;
+    }
+
     /*
-     *  обработчик кнопки открытия меню в заголовке фрагмента 
-     */
+    *  обработчик кнопки открытия меню в заголовке фрагмента
+    */
     @Override
     public void onClick(View view) {
         if (view.getId() != R.id.btnNavigationHome)

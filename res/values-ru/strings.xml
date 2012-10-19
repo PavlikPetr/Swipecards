@@ -21,6 +21,7 @@
     <!-- Auth Activity -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
     <string name="auth_btn_fb">Войти через Facebook</string>
+    <string name="retry">{{refresh}} Повторить попытку</string>
 
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_dating">Знакомства</string>

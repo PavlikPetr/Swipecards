@@ -23,6 +23,7 @@ import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -71,6 +72,9 @@ public class UserProfileActivity extends FragmentActivity {
 
     public static final int GIFTS_LOAD_COUNT = 30;
 
+    private RelativeLayout lockScreen;
+    private RetryView retryBtn;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +115,18 @@ public class UserProfileActivity extends FragmentActivity {
         mUserGifts.setOnClickListener(mInfoClickListener);
         mUserActions = (RadioButton) findViewById(R.id.btnUserActions);
         mUserActions.setOnClickListener(mInfoClickListener);
+
+        lockScreen = (RelativeLayout)findViewById(R.id.lockScreen);
+        retryBtn = new RetryView(getApplicationContext());
+        retryBtn.init(getLayoutInflater());
+        retryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getUserProfile();
+                lockScreen.setVisibility(View.GONE);
+            }
+        });
+        lockScreen.addView(retryBtn);
 
         mViewPager = (ViewPager) findViewById(R.id.UserViewPager);
         mViewPager.setAdapter(new UserProfilePageAdapter(getSupportFragmentManager()));
@@ -176,7 +192,8 @@ public class UserProfileActivity extends FragmentActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(UserProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(UserProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        lockScreen.setVisibility(View.VISIBLE);
                     }
                 });
             }
