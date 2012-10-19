@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
+import com.topface.topface.data.FeedLoader;
 import com.topface.topface.ui.views.ImageViewRemote;
 
 
@@ -269,12 +270,12 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     protected T getRetryItem() {
         //noinspection unchecked
-        return (T) new FeedItem(IListLoader.ItemType.RETRY);
+        return (T) new FeedLoader(IListLoader.ItemType.RETRY);
     }
 
     protected T getLoaderItem() {
         //noinspection unchecked
-        return (T) new FeedItem(IListLoader.ItemType.LOADER);
+        return (T) new FeedLoader(IListLoader.ItemType.LOADER);
     }
 
     abstract protected int getItemLayout();

@@ -3,8 +3,10 @@ package com.topface.topface.ui.fragments.feed;
 import android.graphics.drawable.Drawable;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
+import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.LikesListAdapter;
+import org.json.JSONObject;
 
 public class LikesFragment extends FeedFragment<FeedLike> {
 
@@ -16,6 +18,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected LikesListAdapter getAdapter() {
         return new LikesListAdapter(getActivity(), getUpdaterCallback());
+    }
+
+    @Override
+    protected FeedListData<FeedLike> getFeedList(JSONObject response) {
+        return new FeedListData<FeedLike>(response, FeedLike.class);
     }
 
     @Override

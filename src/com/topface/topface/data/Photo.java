@@ -89,20 +89,21 @@ public class Photo extends AbstractData {
     }
 
     public String getSuitableLink(int size) {
-        int minDifference = Integer.MAX_VALUE;
         String url = null;
-
-        for (HashMap.Entry<String, String> entry : links.entrySet()) {
-            int entrySize = getSizeFromKey(entry.getKey());
-            int difference = Math.abs(entrySize - size);
-            if (difference < minDifference) {
-                minDifference = difference;
-                url = entry.getValue();
+        if (links != null) {
+            int minDifference = Integer.MAX_VALUE;
+            for (HashMap.Entry<String, String> entry : links.entrySet()) {
+                int entrySize = getSizeFromKey(entry.getKey());
+                int difference = Math.abs(entrySize - size);
+                if (difference < minDifference) {
+                    minDifference = difference;
+                    url = entry.getValue();
+                }
             }
-        }
 
-        if (url == null && links.containsKey(SIZE_ORIGINAL)) {
-            url = links.get(SIZE_ORIGINAL);
+            if (url == null && links.containsKey(SIZE_ORIGINAL)) {
+                url = links.get(SIZE_ORIGINAL);
+            }
         }
 
         return url;

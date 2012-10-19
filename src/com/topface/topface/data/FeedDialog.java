@@ -32,16 +32,14 @@ public class FeedDialog extends FeedLike {
     public static final int RATE = 9; // Оценка
     public static final int PROMOTION = 10; // Рекламное сообщение
     public static final int MAP = 11; // Текущее местоположение
+    public static final int ADDRESS = 12; // Произвольное место на карте
+
 
     public static final int USER_MESSAGE = 0;
     public static final int FRIEND_MESSAGE = 1;
 
     public FeedDialog(JSONObject data) {
         super(data);
-    }
-
-    public FeedDialog(ItemType type) {
-        super(type);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     @Override

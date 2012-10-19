@@ -115,7 +115,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.message = (TextView) convertView.findViewById(R.id.chat_message);
                     holder.date = (TextView) convertView.findViewById(R.id.chat_date);
                     holder.avatar.setOnClickListener(mOnClickListener);
-                    holder.avatar.setPhoto(history.photo);
+                    holder.avatar.setPhoto(history.user.photo);
                     break;
                 case T_FRIEND_EXT:
                     convertView = mInflater.inflate(R.layout.chat_friend_ext, null, false);
@@ -158,7 +158,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
                     holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
                     holder.avatar.setOnClickListener(mOnClickListener);
-                    holder.avatar.setPhoto(history.photo);
+                    holder.avatar.setPhoto(history.user.photo);
                     holder.avatar.setVisibility(View.VISIBLE);
                     break;
                 case T_FRIEND_GIFT_EXT:
@@ -194,7 +194,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.prgsAddress = (ProgressBar) convertView
                             .findViewById(R.id.prgsFriendMapAddress);
                     holder.avatar.setOnClickListener(mOnClickListener);
-                    holder.avatar.setPhoto(history.photo);
+                    holder.avatar.setPhoto(history.user.photo);
                     holder.avatar.setVisibility(View.VISIBLE);
                     break;
                 case T_FRIEND_MAP_EXT:
@@ -224,7 +224,8 @@ public class ChatListAdapter extends BaseAdapter {
         } else if (type == T_USER_MAP_PHOTO || type == T_USER_MAP_EXT
                 || type == T_FRIEND_MAP_PHOTO || type == T_FRIEND_MAP_EXT) {
             holder.address.setText(Static.EMPTY);
-            if (history.currentLocation) {
+
+            if (history.type == FeedDialog.ADDRESS) {
                 holder.mapBackground.setBackgroundResource(R.drawable.chat_item_place);
             } else {
                 holder.mapBackground.setBackgroundResource(R.drawable.chat_item_map);
@@ -377,7 +378,7 @@ public class ChatListAdapter extends BaseAdapter {
         mDataList.add(msg);
     }
 
-    public void setDataList(LinkedList<History> dataList) {
+    public void setDataList(FeedList<History> dataList) {
         prepare(dataList);
     }
 
@@ -504,9 +505,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     private void mapAddressDetection(final History history, final TextView tv,
                                      final ProgressBar prgsBar) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(history.latitude).append(history.longitude);
-        final String key = sb.toString();
+        final String key = history.user.geo.getCoordinates().toString();
         String cachedAddress = mAddressesCache.get(key);
 
         if (cachedAddress != null) {
@@ -518,7 +517,10 @@ public class ChatListAdapter extends BaseAdapter {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final String address = OsmManager.getAddress(history.latitude, history.longitude);
+                final String address = OsmManager.getAddress(
+                        history.user.geo.getCoordinates().getLatitude(),
+                        history.user.geo.getCoordinates().getLongitude()
+                );
                 mAddressesCache.put(key, address);
                 tv.post(new Runnable() {
                     @Override

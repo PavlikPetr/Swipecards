@@ -9,13 +9,10 @@ public class FeedLike extends FeedItem {
         super(data);
     }
 
-    public FeedLike(ItemType type) {
-        super(type);
-    }
-
     @Override
     public void fillData(JSONObject item) {
         super.fillData(item);
         highrate = item.optBoolean("highrate");
     }
+
 }

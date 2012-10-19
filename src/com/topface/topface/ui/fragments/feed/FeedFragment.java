@@ -30,6 +30,7 @@ import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SwapAnimation;
+import org.json.JSONObject;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
     protected PullToRefreshListView mListView;
@@ -167,14 +168,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         request.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
-                final FeedListData<T> dialogList = new FeedListData<T>(response.jsonResult);
+                final FeedListData<T> dialogList = getFeedList(response.jsonResult);
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
                         if (isHistoryLoad) {
-                            mListAdapter.addData(dialogList.list);
+                            mListAdapter.addData(dialogList.items);
                         } else {
-                            mListAdapter.setData(dialogList.list);
+                            mListAdapter.setData(dialogList.items);
                         }
                         onUpdateSuccess(isPushUpdating || isHistoryLoad);
                         mListView.onRefreshComplete();
@@ -202,6 +203,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         }).exec();
     }
+
+    protected abstract FeedListData<T> getFeedList(JSONObject response);
 
     private FeedRequest getRequest() {
         return new FeedRequest(getFeedService(), getActivity());

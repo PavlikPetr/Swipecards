@@ -1,14 +1,11 @@
 package com.topface.topface.data;
 
-import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.adapters.IListLoader;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
  * Абстрактный класс, реализующий основные поля и возможности элеметнов ленты (Диалоги, Лайки, Симпатии)
  */
-public class FeedItem extends AbstractData implements IListLoader {
+abstract public class FeedItem extends AbstractLoaderData {
 
     /**
      * идентификатор события в ленте
@@ -39,12 +36,15 @@ public class FeedItem extends AbstractData implements IListLoader {
      */
     public FeedUser user;
 
-    //Loader indicators
-    private boolean isListLoader = false;
-    private boolean isListLoaderRetry = false;
-
     public FeedItem(JSONObject data) {
-        super(data);
+        super(ItemType.NONE);
+        if (data != null) {
+            fillData(data);
+        }
+    }
+
+    public FeedItem(ItemType type) {
+        super(type);
     }
 
     public void fillData(JSONObject item) {
@@ -55,36 +55,4 @@ public class FeedItem extends AbstractData implements IListLoader {
         this.unread = item.optBoolean("unread");
         this.user = new FeedUser(item.optJSONObject("user"));
     }
-
-
-    public FeedItem(IListLoader.ItemType type) {
-        switch (type) {
-            case LOADER:
-                isListLoader = true;
-                break;
-            case RETRY:
-                isListLoaderRetry = true;
-                break;
-            case NONE:
-            default:
-                isListLoader = false;
-                isListLoaderRetry = false;
-                break;
-        }
-    }
-
-    @Override
-    public boolean isLoader() {
-        return isListLoader;
-    }
-
-    @Override
-    public boolean isLoaderRetry() {
-        return isListLoaderRetry;
-    }
-
-    public static <T extends FeedItem> FeedList<T> getList(JSONArray list) {
-        return null;
-    }
-
 }
