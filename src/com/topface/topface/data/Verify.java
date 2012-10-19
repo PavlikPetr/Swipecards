@@ -17,11 +17,11 @@ public class Verify extends Confirmation {
         Verify verify = new Verify(response);
 
         try {
-            verify.money = response.mJSONResult.optInt("money");
-            int power = response.mJSONResult.optInt("power");
+            verify.money = response.jsonResult.optInt("money");
+            int power = response.jsonResult.optInt("power");
             //if(power > 10000) power = 10000;
             verify.power = (int) (power * 0.01);
-            verify.order = response.mJSONResult.optString("order");
+            verify.order = response.jsonResult.optString("order");
         } catch (Exception e) {
             Debug.log("Verify.class", "Wrong response parsing: " + e);
         }

@@ -23,27 +23,25 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.Confirmation;
-import com.topface.topface.data.FeedDialog;
-import com.topface.topface.data.History;
-import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
-import com.topface.topface.utils.OsmManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
+import com.topface.topface.utils.OsmManager;
 
 import java.util.LinkedList;
 
+@SuppressWarnings("deprecation")
 public class ChatActivity extends BaseFragmentActivity implements View.OnClickListener, LocationListener {
     // Data
-    private int mUserId;    
-    private int mAvatarWidth;
+    private int mUserId;
     private boolean mProfileInvoke;
     private boolean mIsAddPanelOpened;
     private PullToRefreshListView mListView;
@@ -60,7 +58,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     // Constants
     private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public static final String INTENT_USER_ID = "user_id";
-    public static final String INTENT_USER_URL = "user_url";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_USER_AVATAR = "user_avatar";
     public static final String INTENT_USER_SEX = "user_sex";
@@ -90,10 +87,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mLoadingLocker = (LockerView) findViewById(R.id.llvChatLoading);
 
         // Params
-        mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);        
+        mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
         int userSex = getIntent().getIntExtra(INTENT_USER_SEX, Static.BOY);
-        mAvatarWidth = getResources().getDrawable(R.drawable.chat_avatar_frame).getIntrinsicWidth();
 
         // Navigation bar
         mHeaderTitle = ((TextView) findViewById(R.id.tvNavigationTitle));
@@ -161,9 +157,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         //Сперва пробуем восстановить данные, если это просто поворот устройства
         Object data = getLastCustomNonConfigurationInstance();
         if (data != null) {
-            mAdapter.setDataList((LinkedList<History>) data);
+            //noinspection unchecked
+            mAdapter.setDataList((FeedList<History>) data);
             mLoadingLocker.setVisibility(View.GONE);
-            return;
         } else {
             //Если это не получилось, грузим с сервера
             update(false);
@@ -189,11 +185,11 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         historyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                final LinkedList<History> dataList = History.parse(response);
+                final FeedListData<History> dataList = new FeedListData<History>(response.jsonResult, History.class);
                 post(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.setDataList(dataList);
+                        mAdapter.setDataList(dataList.items);
                         if (pullToRefresh) {
                             mListView.onRefreshComplete();
                         }
@@ -232,8 +228,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 History history = (History) v.getTag();
                 if (history.type == FeedDialog.MAP) {
                     Intent intent = new Intent(this, GeoMapActivity.class);
-                    intent.putExtra(GeoMapActivity.INTENT_LATITUDE_ID, history.latitude);
-                    intent.putExtra(GeoMapActivity.INTENT_LONGITUDE_ID, history.longitude);
+                    intent.putExtra(GeoMapActivity.INTENT_GEO, history.user.geo);
                     startActivity(intent);
                     return;
                 }
@@ -307,7 +302,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                     History history = new History();
 //	                                history.code = 0;
 //	                                history.gift = 0;
-                                    history.uid = CacheProfile.uid;
+                                    history.user.id = CacheProfile.uid;
                                     history.created = System.currentTimeMillis();
                                     history.text = text;
                                     history.type = FeedDialog.MESSAGE;
@@ -373,7 +368,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                 History history = new History();
 //	                            history.code = 0;
                                 history.gift = id;
-                                history.uid = CacheProfile.uid;
+                                history.user.id = CacheProfile.uid;
                                 history.created = System.currentTimeMillis();
                                 history.text = Static.EMPTY;
                                 history.type = FeedDialog.GIFT;
@@ -402,17 +397,18 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 }).exec();
             } else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
                 Bundle extras = data.getExtras();
-                final double latitude = extras.getDouble(GeoMapActivity.INTENT_LATITUDE_ID);
-                final double longitude = extras.getDouble(GeoMapActivity.INTENT_LONGITUDE_ID);
-        		final String address = extras.getString(GeoMapActivity.INTENT_ADDRESS_ID);        		
+                final Geo geo = extras.getParcelable(GeoMapActivity.INTENT_GEO);
 
                 CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
                 registerRequest(coordRequest);
                 coordRequest.userid = mUserId;
-                coordRequest.latitude = latitude;
-                coordRequest.longitude = longitude;
+                final Coordinates coordinates = geo.getCoordinates();
+                if (coordinates != null) {
+                    coordRequest.latitude = coordinates.getLatitude();
+                    coordRequest.longitude = coordinates.getLongitude();
+                }
                 coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_PLACE;
-                coordRequest.address = address;
+                coordRequest.address = geo.getAddress();
                 mLoadingLocker.setVisibility(View.VISIBLE);
                 coordRequest.callback(new ApiHandler() {
 
@@ -425,9 +421,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                 if (confirm.completed) {
                                     History history = new History();
                                     history.type = FeedDialog.MAP;
-                                    history.currentLocation = false;
-                                    history.latitude = latitude;
-                                    history.longitude = longitude;
+                                    history.user.geo = geo;
                                     mAdapter.addSentMessage(history);
                                     mAdapter.notifyDataSetChanged();
                                 } else {
@@ -503,16 +497,16 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 //		Debug.log(this, location.getLatitude() + " / " + location.getLongitude());
         final double latitude = location.getLatitude();
         final double longitude = location.getLongitude();
-        OsmManager.getAddress(latitude, longitude, new Handler(){
-        	@Override
-        	public void handleMessage(Message msg) {
-        		CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+        OsmManager.getAddress(latitude, longitude, new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
                 registerRequest(coordRequest);
                 coordRequest.userid = mUserId;
                 coordRequest.latitude = latitude;
-                coordRequest.longitude = longitude;  
+                coordRequest.longitude = longitude;
                 coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_SELF;
-                coordRequest.address = (String)msg.obj;        
+                coordRequest.address = (String) msg.obj;
                 coordRequest.callback(new ApiHandler() {
 
                     @Override
@@ -530,9 +524,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
                                     History history = new History();
                                     history.type = FeedDialog.MAP;
-                                    history.currentLocation = true;
-                                    history.latitude = latitude;
-                                    history.longitude = longitude;
+                                    history.user = new FeedUser(null);
+                                    history.user.geo = new Geo("", longitude, latitude);
                                     mAdapter.addSentMessage(history);
                                     mAdapter.notifyDataSetChanged();
 
@@ -560,8 +553,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
                     }
                 }).exec();
-        	}
-        });        
+            }
+        });
 
         mGeoManager.removeLocationListener(this);
         mLocationDetected = true;

@@ -96,14 +96,12 @@ public class ConnectionManager {
 
                         if(apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE){
                             if(doNeedResend){
-                                Debug.log("Resend");
-                                boolean flag = apiRequest.handler.postDelayed(new Runnable() {
+                                apiRequest.handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         sendRequest(apiRequest);
                                     }
                                 },2000);
-                                if(!flag) Debug.log("FAILLL!!!");
                                 doNeedResend = false;
                             } else {
                                 apiRequest.handler.response(apiResponse);
@@ -191,10 +189,10 @@ public class ConnectionManager {
                 Auth auth = Auth.parse(response);
                 Data.saveSSID(context, auth.ssid);
                 request.ssid = auth.ssid;
-                Debug.log(TAG, "cm_reauth:req1:" + request.toString());
+                Debug.logJson(TAG, "REAUTH REQUEST >>>", request.toString());
                 httpPost.setEntity(new ByteArrayEntity(request.toString().getBytes("UTF8")));
                 rawResponse = request(httpClient, httpPost);
-                Debug.log(TAG, "cm_reauth:resp1:" + rawResponse);
+                Debug.logJson(TAG, "REAUTH RESPONSE <<<", rawResponse);
                 response = new ApiResponse(rawResponse);
             } else {
                 Data.removeSSID(context);

@@ -11,7 +11,7 @@ public class NovicePower extends AbstractData {
         NovicePower novice = new NovicePower();
 
         try {
-            int power = response.mJSONResult.optInt("power", 0);
+            int power = response.jsonResult.optInt("power", 0);
             //if(power > 10000) power = 10000;
             novice.power = (int) (power * 0.01);
         } catch (Exception e) {

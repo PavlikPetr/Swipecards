@@ -7,5 +7,4 @@ public interface IListLoader {
 
     public boolean isLoaderRetry();
 
-    public void switchToLoader();
 }

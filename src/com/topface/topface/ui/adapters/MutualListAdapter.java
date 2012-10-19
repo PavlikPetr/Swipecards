@@ -11,11 +11,6 @@ public class MutualListAdapter extends FeedAdapter<FeedMutual> {
     }
 
     @Override
-    protected FeedMutual getNewItem(IListLoader.ItemType type) {
-        return new FeedMutual(type);
-    }
-
-    @Override
     protected int getItemLayout() {
         return R.layout.item_feed_like;
     }

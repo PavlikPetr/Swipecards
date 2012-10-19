@@ -12,13 +12,12 @@ public class Confirmation extends AbstractData {
     }
 
     public static Confirmation parse(ApiResponse response) {
-        Confirmation confirm = new Confirmation(response);
-        return confirm;
+        return new Confirmation(response);
     }
 
     private static Confirmation parse(ApiResponse response, Confirmation confirm) {
         try {
-            confirm.completed = response.mJSONResult.optBoolean("completed");
+            confirm.completed = response.jsonResult.optBoolean("completed");
         } catch (Exception e) {
             Debug.log("Completed.class", "Wrong response parsing: " + e);
         }

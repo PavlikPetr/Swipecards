@@ -257,8 +257,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //Profile.save(profile);
-//                        Profile.save(response.mJSONResult.toString());
                         openNavigationActivity();
                     }
                 });

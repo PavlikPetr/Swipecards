@@ -4,10 +4,11 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@SuppressWarnings("UnusedDeclaration")
 public class ApiResponse {
     // Data
     public int code = -1;
-    public JSONObject mJSONResult;
+    public JSONObject jsonResult;
     // Constants
     public static final int ERRORS_PROCCESED = -2;
     public static final int RESULT_OK = -1;
@@ -46,7 +47,7 @@ public class ApiResponse {
                 json = new JSONObject(response);
             } catch (JSONException e) {
                 code = WRONG_RESPONSE;
-                Debug.log(this, "json resonse is wrong: " + response);
+                Debug.log(this, "json response is wrong: " + response);
             }
         }
 
@@ -65,12 +66,12 @@ public class ApiResponse {
                 return;
             }
 
-            mJSONResult = response;
-            if (!mJSONResult.isNull("error")) {
-                mJSONResult = mJSONResult.getJSONObject("error");
-                code = mJSONResult.getInt("code");
-            } else if (!mJSONResult.isNull("result"))
-                mJSONResult = mJSONResult.getJSONObject("result");
+            jsonResult = response;
+            if (!jsonResult.isNull("error")) {
+                jsonResult = jsonResult.getJSONObject("error");
+                code = jsonResult.getInt("code");
+            } else if (!jsonResult.isNull("result"))
+                jsonResult = jsonResult.getJSONObject("result");
             else
                 code = WRONG_RESPONSE;
         } catch (Exception e) {
@@ -82,8 +83,8 @@ public class ApiResponse {
     //---------------------------------------------------------------------------
     @Override
     public String toString() {
-        if (mJSONResult != null)
-            return mJSONResult.toString();
+        if (jsonResult != null)
+            return jsonResult.toString();
         else
             return "response is null";
     }

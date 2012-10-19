@@ -34,11 +34,6 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     }
 
     @Override
-    protected Visitor getNewItem(IListLoader.ItemType type) {
-        return new Visitor();
-    }
-
-    @Override
     protected int getItemLayout() {
         return R.layout.item_feed_like;
     }

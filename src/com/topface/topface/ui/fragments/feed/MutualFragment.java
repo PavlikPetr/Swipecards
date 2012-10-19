@@ -2,11 +2,11 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.graphics.drawable.Drawable;
 import com.topface.topface.R;
+import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedMutual;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.MutualListAdapter;
+import org.json.JSONObject;
 
 public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
@@ -25,13 +25,13 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    protected FeedRequest.FeedService getFeedService() {
-        return FeedRequest.FeedService.MUTUAL;
+    protected FeedListData<FeedMutual> getFeedList(JSONObject response) {
+        return new FeedListData<FeedMutual>(response, FeedMutual.class);
     }
 
     @Override
-    protected FeedList<FeedMutual> parseResponse(ApiResponse response) {
-        return FeedMutual.parse(response);
+    protected FeedRequest.FeedService getFeedService() {
+        return FeedRequest.FeedService.MUTUAL;
     }
 
 

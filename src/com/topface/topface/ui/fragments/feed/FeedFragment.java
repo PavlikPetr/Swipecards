@@ -16,15 +16,14 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.R;
 import com.topface.topface.Recycle;
 import com.topface.topface.Static;
-import com.topface.topface.data.AbstractFeedItem;
-import com.topface.topface.data.Photo;
+import com.topface.topface.data.FeedItem;
+import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
-import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
@@ -32,8 +31,9 @@ import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SwapAnimation;
+import org.json.JSONObject;
 
-public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
+public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
     private TextView mBackgroundText;
@@ -126,7 +126,7 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AbstractFeedItem item = (AbstractFeedItem) parent.getItemAtPosition(position);
+                FeedItem item = (FeedItem) parent.getItemAtPosition(position);
                 if (!mIsUpdating && item.isLoaderRetry()) {
                     updateUI(new Runnable() {
                         public void run() {
@@ -165,25 +165,23 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
 		};
     }
 
-    protected void onFeedItemClick(AbstractFeedItem item) {
+    protected void onFeedItemClick(FeedItem item) {
         //Open chat activity
         Intent intent = new Intent(getActivity(), ChatActivity.class);
-        intent.putExtra(ChatActivity.INTENT_USER_ID, item.uid);
-        intent.putExtra(ChatActivity.INTENT_USER_URL, item.photo.getSuitableLink(Photo.SIZE_64));
-        intent.putExtra(ChatActivity.INTENT_USER_NAME, item.first_name);
-        intent.putExtra(ChatActivity.INTENT_USER_SEX, item.sex);
-        intent.putExtra(ChatActivity.INTENT_USER_AGE, item.age);
-        intent.putExtra(ChatActivity.INTENT_USER_CITY, item.city_name);
+        intent.putExtra(ChatActivity.INTENT_USER_ID, item.user.id);
+        intent.putExtra(ChatActivity.INTENT_USER_NAME, item.user.first_name);
+        intent.putExtra(ChatActivity.INTENT_USER_SEX, item.user.sex);
+        intent.putExtra(ChatActivity.INTENT_USER_AGE, item.user.age);
+        intent.putExtra(ChatActivity.INTENT_USER_CITY, item.user.city.name);
         startActivity(intent);
     }
 
     public void onAvatarClick(T item, View view) {
         // Open profile activity
         Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-        intent.putExtra(ChatActivity.INTENT_USER_URL, item.photo.getSuitableLink(Photo.SIZE_64));
-        intent.putExtra(UserProfileActivity.INTENT_USER_ID, item.uid);
-        intent.putExtra(UserProfileActivity.INTENT_USER_NAME, item.first_name);
         intent.putExtra(UserProfileActivity.INTENT_MUTUAL_ID, item.id);
+        intent.putExtra(UserProfileActivity.INTENT_USER_ID, item.user.id);
+        intent.putExtra(UserProfileActivity.INTENT_USER_NAME, item.user.first_name);
         startActivity(intent);
     }
 
@@ -194,7 +192,7 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
         FeedRequest request = getRequest();
         registerRequest(request);
 
-        AbstractFeedItem lastItem = mListAdapter.getLastFeedItem();
+        FeedItem lastItem = mListAdapter.getLastFeedItem();
         if (isHistoryLoad && lastItem != null) {
             request.before = lastItem.id;
         }
@@ -203,15 +201,14 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
         request.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
-                final FeedList<T> dialogList = parseResponse(response);
+                final FeedListData<T> dialogList = getFeedList(response.jsonResult);
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        CacheProfile.unread_messages = 0;
                         if (isHistoryLoad) {
-                            mListAdapter.addData(dialogList);
+                            mListAdapter.addData(dialogList.items);
                         } else {
-                            mListAdapter.setData(dialogList);
+                            mListAdapter.setData(dialogList.items);
                         }
                         onUpdateSuccess(isPushUpdating || isHistoryLoad);
                         mListView.onRefreshComplete();
@@ -239,13 +236,13 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
         }).exec();
     }
 
+    protected abstract FeedListData<T> getFeedList(JSONObject response);
+
     private FeedRequest getRequest() {
         return new FeedRequest(getFeedService(), getActivity());
     }
 
     protected abstract FeedRequest.FeedService getFeedService();
-
-    abstract protected FeedList<T> parseResponse(ApiResponse response);
 
     protected void updateData(boolean isPushUpdating) {
         updateData(isPushUpdating, false);

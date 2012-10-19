@@ -2,25 +2,17 @@ package com.topface.topface.ui.profile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.*;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -31,13 +23,11 @@ import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.ui.fragments.ProgressDialogFragment;
 import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.FileSystem;
 import com.topface.topface.utils.http.Http;
-
-import java.io.IOException;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -67,34 +57,34 @@ public class AddPhotoHelper {
     public AddPhotoHelper(Activity activity) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
-    }    
-    
+    }
+
     public void showProgressDialog() {
-    	FragmentManager fm = ((FragmentActivity)mActivity).getSupportFragmentManager();
+        FragmentManager fm = ((FragmentActivity) mActivity).getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
         Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-        if(prev!=null) {
+        if (prev != null) {
             ft.remove(prev);
         }
-        ft.addToBackStack(null);        
+        ft.addToBackStack(null);
 
         DialogFragment newFragment = ProgressDialogFragment.newInstance();
         ft.add(newFragment, ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-        ft.commitAllowingStateLoss();        
+        ft.commitAllowingStateLoss();
     }
-    
+
     public void hideProgressDialog() {
-    	FragmentManager fm = ((FragmentActivity)mActivity).getSupportFragmentManager();
+        FragmentManager fm = ((FragmentActivity) mActivity).getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
         Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-        if(prev!=null) {
+        if (prev != null) {
             ft.remove(prev);
         }
         ft.commitAllowingStateLoss();
     }
-    
+
     /**
      * Добавление фотографии
      */
@@ -110,9 +100,9 @@ public class AddPhotoHelper {
     }
 
     public OnClickListener getAddPhotoClickListener() {
-    	return mOnAddPhotoClickListener;
+        return mOnAddPhotoClickListener;
     }
-    
+
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -178,19 +168,19 @@ public class AddPhotoHelper {
             PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
             add.ssid = Data.SSID;
 
-            Intent intent = intentList[0];            
+            Intent intent = intentList[0];
             if (intent == null)
                 return rawResponse;
 
-            Uri imageUri = intent.getData();            
+            Uri imageUri = intent.getData();
 
             try {
 
                 // Android 4
                 //Bundle extras = intent.getExtras();
                 //Bitmap thePic = extras.getParcelable("data");
-            	//User had pick an image.
-                Cursor cursor = mActivity.getContentResolver().query(imageUri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+                //User had pick an image.
+                Cursor cursor = mActivity.getContentResolver().query(imageUri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
                 cursor.moveToFirst();
 
                 //Link to the image
@@ -215,14 +205,14 @@ public class AddPhotoHelper {
             super.onPostExecute(result);
             if (result != null) {
                 Confirmation c = Confirmation.parse(new ApiResponse(result));
-                if (c.completed) {                    
+                if (c.completed) {
                     Message msg = new Message();
-                    msg.what = ADD_PHOTO_RESULT_OK;                    
+                    msg.what = ADD_PHOTO_RESULT_OK;
                     try {
-						msg.obj = Photo.parse((new JSONObject(result)).optJSONObject("result").optJSONObject("photo"));
-					} catch (JSONException e) {
-						Debug.log(e.toString());
-					}
+                        msg.obj = new Photo((new JSONObject(result)).optJSONObject("result").optJSONObject("photo"));
+                    } catch (JSONException e) {
+                        Debug.log(e.toString());
+                    }
                     mHandler.sendMessage(msg);
                 } else {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
@@ -232,50 +222,6 @@ public class AddPhotoHelper {
             }
             hideProgressDialog();
         }
-
-//        private void sendAddRequest(final String[] result, final int price) {
-//            mActivity.runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    PhotoAddRequest addPhotoRequest = new PhotoAddRequest(mContext);
-//                    addPhotoRequest.big = result[0];
-//                    addPhotoRequest.medium = result[1];
-//                    addPhotoRequest.small = result[2];
-//                    addPhotoRequest.ero = mAddEroState;
-//                    if (mAddEroState) {
-//                        addPhotoRequest.cost = price;
-//                    }
-//                    addPhotoRequest.callback(new ApiHandler() {
-//                        @Override
-//                        public void success(ApiResponse response) {
-//                            Confirmation add = Confirmation.parse(response);
-//                            if (!add.completed)
-//                                return;
-//
-//                            post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_OK);
-//                                    mProgressDialog.hide();
-//                                }
-//                            });
-//                        }
-//
-//                        @Override
-//                        public void fail(int codeError, ApiResponse response) {
-//                            post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
-//                                    Utils.showErrorMessage(mContext);
-//                                    mProgressDialog.hide();
-//                                }
-//                            });
-//                        }
-//                    }).exec();
-//                }
-//            });
-//        }
     }
 }
 

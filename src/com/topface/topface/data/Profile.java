@@ -79,16 +79,16 @@ public class Profile extends AbstractDataWithPhotos {
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();    
 
     private static boolean mIsUserProfile;
-    
+
     public LinkedList<Gift> gifts = new LinkedList<Gift>();
     
     public int background;
 
     //private static final String profileFileName = "profile.out";
     //private static final long serialVersionUID  = 2748391675222256671L;    
-    
+
     public static Profile parse(ApiResponse response) {
-        return parse(new Profile(), response.mJSONResult);
+        return parse(new Profile(), response.jsonResult);
     }
 
     protected static Profile parse(Profile profile, JSONObject resp) {
@@ -427,10 +427,6 @@ public class Profile extends AbstractDataWithPhotos {
         }
 
         return profile;
-    }
-
-    public int getUid() {
-        return uid;
     }
 
 //    private static void compareFormItemData(FormItem item, int position, Profile profile) {

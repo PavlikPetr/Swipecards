@@ -12,13 +12,17 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Filter;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Geo;
 import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.OsmManager;
@@ -30,24 +34,23 @@ import java.util.List;
 /**
  * Activity for map displaying
  * If there is no extra objects in intent than it will locate current position of device.
- * If there are extra latitude(key:GeoMapActivity.INTENT_LATITUDE_ID)
+ * If there are extra latitude(key:GeoMapActivity.INTENT_COORDINATES)
  * and longitude(key:GeoMapActivity.INTENT_LONGITUDE_ID) it will moveTo specific position
  *
  * @author kirussell
  */
+@SuppressWarnings("deprecation")
 public class GeoMapActivity extends MapActivity implements LocationListener, OnItemClickListener, OnClickListener {
 
     //Constants
-    public static final int INTENT_REQUEST_GEO = 112;    
+    public static final int INTENT_REQUEST_GEO = 112;
 
-    public static final String INTENT_LONGITUDE_ID = "geo_longitude";
-    public static final String INTENT_LATITUDE_ID = "geo_latitude";
-    public static final String INTENT_ADDRESS_ID = "geo_address";
+    public static final String INTENT_GEO = "geo_data";
 
     private static final int DIALOG_LOCATION_PROGRESS_ID = 0;
 
-    private static int MAP_INITIAL_ZOOM = 18;
-    private static long LOCATION_PROVIDER_TIMEOUT = 10000;
+    private static final int MAP_INITIAL_ZOOM = 18;
+    private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
 
     //Views and Adapters
     private MapView mMapView;
@@ -72,8 +75,8 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 
         Bundle extras = getIntent().getExtras();
         int requestKey = getIntent().getIntExtra(Static.INTENT_REQUEST_KEY, 0);
-        
-        if(requestKey == INTENT_REQUEST_GEO){
+
+        if (requestKey == INTENT_REQUEST_GEO) {
             //init address autocompletion
             mAddressView = (AutoCompleteTextView) findViewById(R.id.mapAddress);
             mAddressAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, new ArrayList<String>()) {
@@ -90,16 +93,19 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 
             onCurrentLocationRequest();
 
-            ((Button) findViewById(R.id.mapBtnConfirm)).setOnClickListener(new OnClickListener() {
+            findViewById(R.id.mapBtnConfirm).setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     if (mGeoLocationManager.currentPoint != null) {
-                        Intent intent = GeoMapActivity.this.getIntent();
-                        intent.putExtra(INTENT_LONGITUDE_ID, (double) (mGeoLocationManager.currentPoint.getLongitudeE6() / 1E6));
-                        intent.putExtra(INTENT_LATITUDE_ID, (double) (mGeoLocationManager.currentPoint.getLatitudeE6() / 1E6));
-                        intent.putExtra(INTENT_ADDRESS_ID, mGeoLocationManager.currentAddress);
+                        Geo geo = new Geo(
+                                mGeoLocationManager.currentAddress,
+                                mGeoLocationManager.currentPoint.getLongitudeE6() / 1E6,
+                                mGeoLocationManager.currentPoint.getLatitudeE6() / 1E6
+                        );
 
+                        Intent intent = GeoMapActivity.this.getIntent();
+                        intent.putExtra(INTENT_GEO, geo);
                         GeoMapActivity.this.setResult(RESULT_OK, intent);
                     }
 
@@ -107,23 +113,20 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
                 }
             });
 
-            ((Button) findViewById(R.id.mapBtnMyLocation)).setOnClickListener(new OnClickListener() {
+            findViewById(R.id.mapBtnMyLocation).setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     onCurrentLocationRequest();
                 }
             });
-		} else {
-			findViewById(R.id.inputBar).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.inputBar).setVisibility(View.GONE);
+            GeoPoint point = ((Geo) extras.getParcelable(INTENT_GEO)).getCoordinates().getGeoPoint();
 
-			double latitude = extras.getDouble(INTENT_LATITUDE_ID);
-			double longitude = extras.getDouble(INTENT_LONGITUDE_ID);
-
-			mGeoLocationManager.setItemOverlayOnTouch(false);
-			mMapView.getController().animateTo(GeoLocationManager.toGeoPoint(latitude, longitude));
-			mGeoLocationManager.setOverlayItem(getApplicationContext(), mMapView,
-					GeoLocationManager.toGeoPoint(latitude, longitude), MAP_INITIAL_ZOOM);
+            mGeoLocationManager.setItemOverlayOnTouch(false);
+            mMapView.getController().animateTo(point);
+            mGeoLocationManager.setOverlayItem(getApplicationContext(), mMapView, point, MAP_INITIAL_ZOOM);
         }
 
 
@@ -156,6 +159,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
 
             @Override
             public void onFinish() {
+                //noinspection SynchronizeOnNonFinalField
                 synchronized (mGeoLocationManager) {
                     if (!mLocationDetected) {
                         mGeoLocationManager.removeLocationListener(GeoMapActivity.this);
@@ -198,6 +202,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
     //methods for Locations
     @Override
     public void onLocationChanged(Location location) {
+        //noinspection SynchronizeOnNonFinalField
         synchronized (mGeoLocationManager) {
             GeoPoint point = GeoLocationManager.toGeoPoint(location);
             mGeoLocationManager.setOverlayItem(getApplicationContext(), mMapView, point, MAP_INITIAL_ZOOM);
@@ -236,6 +241,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
         @Override
         protected FilterResults performFiltering(final CharSequence constraint) {
             ArrayList<Address> addressList = null;
+            //noinspection PointlessBooleanExpression
             if (!OsmManager.OSMSearchEnabled) {
                 if (constraint != null) {
                     addressList = mGeoLocationManager.getSuggestionAddresses((String) constraint, 5);

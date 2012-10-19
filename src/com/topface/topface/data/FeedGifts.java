@@ -30,9 +30,9 @@ public class FeedGifts extends AbstractDataWithPhotos {
         LinkedList<FeedGifts> feedsList = new LinkedList<FeedGifts>();
 
         try {
-            FeedGifts.more = response.mJSONResult.optBoolean("more");
+            FeedGifts.more = response.jsonResult.optBoolean("more");
 
-            JSONArray arr = response.mJSONResult.getJSONArray("feed");
+            JSONArray arr = response.jsonResult.getJSONArray("feed");
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject item = arr.getJSONObject(i);
 
@@ -74,10 +74,6 @@ public class FeedGifts extends AbstractDataWithPhotos {
         }
 
         return feedsList;
-    }
-
-    public int getUid() {
-        return uid;
     }
 
     ;
