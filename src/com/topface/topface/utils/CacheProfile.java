@@ -1,12 +1,15 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
-
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import com.topface.topface.App;
 import com.topface.topface.data.Gift;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
+import com.topface.topface.requests.ApiResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.LinkedList;
 
@@ -37,45 +40,29 @@ public class CacheProfile {
     public static String dating_city_name; // наименование пользователя в русской локали
     public static String dating_city_full; // полное наименование города
 
-    public static int mAvatarId;  // id главной фотографии пользователя
-
     public static LinkedList<FormItem> forms;
     public static String status; // статус пользователя
     public static boolean isNewbie; // поле новичка
     public static int background_id;
     public static Photos photos;
     public static Photo photo;
-    
+    public static final String PROFILE_CACHE_KEY = "profile_cache";
+
     public static LinkedList<Gift> gifts = new LinkedList<Gift>();
 
-    public static boolean init(Context context) {
-        try {
-            //SharedPreferences preferences = context.getSharedPreferences(Global.PROFILE_PREFERENCES_TAG, Context.MODE_PRIVATE);
-
-            //uid        = preferences.getInt(context.getString(R.string.cache_profile_name),0);
-            //first_name = preferences.getString(context.getString(R.string.cache_profile_name),"");
-            //request.geo    = CacheProfile.filter_geo;
-            //request.online = CacheProfile.filter_online;
-
-        } catch (Exception e) {
-            Debug.log("CacheProfile", "init exception:" + e);
-            return false;
-        }
-        return true;
-    }
-
     public static void setData(Profile profile) {
-        updateAvatars(profile);
         updateCity(profile);
         updateDating(profile);
         updateNotifications(profile);
         gifts = profile.gifts;
-//        isNewbie = profile.isNewbie;
     }
 
-    public static void updateAvatars(Profile profile) {
-//        avatar_big = profile.avatar_big;
-//        avatar_small = profile.avatar_small;
+    private static void setProfileCache(ApiResponse response) {
+        if (response != null) {
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
+            editor.putString(PROFILE_CACHE_KEY, response.toString());
+            editor.commit();
+        }
     }
 
     public static void updateCity(Profile profile) {
@@ -129,20 +116,16 @@ public class CacheProfile {
         profile.dating_city_id = dating_city_id;
         profile.dating_city_name = dating_city_name;
         profile.dating_city_full = dating_city_full;
-
         profile.forms = forms;
-
         profile.photos = photos;
         profile.status = status;
         profile.photo = photo;
-//        profile.isNewbie = isNewbie;
-        
         profile.gifts = gifts;
         profile.background = background_id;
         return profile;
     }
 
-    public static void setProfile(Profile profile) {
+    public static void setProfile(Profile profile, ApiResponse response) {
         uid = profile.uid;
         first_name = profile.first_name;
         age = profile.age;
@@ -173,21 +156,41 @@ public class CacheProfile {
         photos = profile.photos;
         photo = profile.photo;
         status = profile.status;
-//        isNewbie = profile.isNewbie;
         gifts = profile.gifts;
         background_id = profile.background;
+
+        setProfileCache(response);
     }
 
     /**
-     * Опции по умолчанию
+     * Загружает профиль из кэша
+     *
+     * @return profile loaded
      */
-    private static Options options;
-
-    public static Options getOptions() {
-        return options;
-    }
-
-    public static void setOptions(Options newOptions) {
-        options = newOptions;
+    public static boolean loadProfile() {
+        boolean result = false;
+        if (uid == 0) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+            String profileCache = preferences.getString(PROFILE_CACHE_KEY, null);
+            Profile profile;
+            if (profileCache != null) {
+                //Получаем опции из кэша
+                try {
+                    ApiResponse response = new ApiResponse(
+                            new JSONObject(profileCache)
+                    );
+                    profile = Profile.parse(response);
+                    profile.unread_likes = 0;
+                    profile.unread_messages = 0;
+                    profile.unread_rates = 0;
+                    profile.unread_mutual = 0;
+                    setProfile(profile, response);
+                    result = true;
+                } catch (JSONException e) {
+                    Debug.error(e);
+                }
+            }
+        }
+        return result;
     }
 }

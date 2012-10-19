@@ -8,6 +8,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import org.acra.ACRA;
 
@@ -49,6 +50,7 @@ public class App extends Application {
         Debug.log("App", "+onCreate");
         Data.init(getApplicationContext());
         Recycle.init(getApplicationContext());
+        CacheProfile.loadProfile();
         //Начинаем слушать подключение к интернету
         if (mConnectionIntent == null) {
             mConnectionReceiver = new ConnectionChangeReceiver(mContext);
