@@ -22,6 +22,7 @@ import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.IndicatorView;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -47,6 +48,8 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
     private Button mBuyButton;
     private View mUserPowerBkgd;
 
+
+
 //    private HashMap<Integer,Fragment> mFragmentsHash;
 
     public static final int F_PHOTO = 0;
@@ -60,7 +63,6 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         View view = inflater.inflate(R.layout.ac_profile, null);
 
 //		mFragmentsHash = new HashMap<Integer, Fragment>();
-
         // Navigation bar
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.profile_header_title);
@@ -71,7 +73,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         editButton.setOnClickListener(this);
 
         // Avatar, Name, City
-        mUserAvatar = (ImageViewRemote) view.findViewById(R.id.ivUserAvatar);        
+        mUserAvatar = (ImageViewRemote) view.findViewById(R.id.ivUserAvatar);
         mUserName = (TextView) view.findViewById(R.id.ivUserName);
         String userNameString = CacheProfile.first_name+(isAgeOk(CacheProfile.age)?", "+CacheProfile.age:"");
         mUserName.setText(userNameString);
@@ -96,7 +98,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         mUserPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
         mUserPower.setText("" + CacheProfile.power + "%");
 
-        // View Pager        
+        // View Pager
         mViewPager = (ViewPager) view.findViewById(R.id.UserViewPager);
         mViewPager.setAdapter(new ProfilePageAdapter(getActivity().getSupportFragmentManager()));
         mViewPager.setOnPageChangeListener(mOnPageChangeListener);
@@ -141,7 +143,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
                         CacheProfile.background_id
                 )
         );
-        
+
         mUserAvatar.setPhoto(CacheProfile.photo);
     }
 

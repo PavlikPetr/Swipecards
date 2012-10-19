@@ -5,9 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
+import com.topface.topface.ReAuthReceiver;
+import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.ui.AuthActivity;
+import com.topface.topface.ui.NavigationActivity;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
     public boolean mIsConnected = false;
@@ -16,11 +20,14 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
     public static final int CONNECTION_OFFLINE = 0;
     public static final int CONNECTION_MOBILE = 1;
     public static final int CONNECTION_WIFI = 2;
+    Context ctx;
 
     public ConnectionChangeReceiver(Context context) {
         super();
+        ctx = context;
         mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         updateConnectionStatus();
+
     }
 
     @Override
@@ -43,19 +50,45 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
                     break;
             }
             mIsConnected = activeNetInfo.isConnected();
-            reAuthIfNeed();
+            sendBroadCastToActiveActivity(ctx);
+//            reAuthIfNeed(ctx);
         } else {
-//            Toast.makeText(context, "Интер0нет выключен", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "Интернет выключен", Toast.LENGTH_SHORT).show();
             mIsConnected = false;
             mConnectionType = CONNECTION_OFFLINE;
         }
     }
 
-   private void reAuthIfNeed() {
+    private void sendBroadcastReauth(Context context) {
+        Intent intent = new Intent();
+        intent.setAction(ReAuthReceiver.REAUTH_INTENT);
+        context.sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+   private void reAuthIfNeed(Context context) {
         if(AuthActivity.mThis!=null) {
-            AuthActivity.mThis.reAuthAfterInternetConnected();
+//            AuthActivity.mThis.reAuthAfterInternetConnected();
+            sendBroadcastReauth(context);
         }
    }
+
+  private void sendToNavigation() {
+        Intent intent = new Intent();
+        intent.setAction(RetryRequestReceiver.RETRY_INTENT);
+        ctx.sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
+
+  }
+
+   private void sendBroadCastToActiveActivity(Context context) {
+       if(AuthActivity.mThis!=null) {
+           reAuthIfNeed(ctx);
+       } else if(NavigationActivity.mThis!=null){
+           sendToNavigation();
+       }
+   }
+
 
     public boolean isConnected() {
         return mIsConnected;

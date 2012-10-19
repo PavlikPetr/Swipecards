@@ -1,26 +1,19 @@
 package com.topface.topface.utils;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
 import android.text.ClipboardManager;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
-import android.util.DisplayMetrics;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 
-import java.security.MessageDigest;
 import java.util.Calendar;
 
 public class Utils {
@@ -28,21 +21,6 @@ public class Utils {
 
     public static int unixtime() {
         return (int) (System.currentTimeMillis() / 1000L);
-    }
-
-    public static String md5(String value) {
-        if (value == null)
-            return null;
-        try {
-            StringBuilder hexString = new StringBuilder();
-            MessageDigest digester = MessageDigest.getInstance("MD5");
-            digester.update(value.getBytes());
-            byte[] bytes = digester.digest();
-            for (byte aByte : bytes) hexString.append(Integer.toHexString(0xFF & aByte));
-            return hexString.toString();
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     public static Bitmap clippingBitmap(Bitmap bitmap) {
@@ -228,7 +206,7 @@ public class Utils {
     }
 
     public static String formatTime(Context context, long time) {
-        String text = Static.EMPTY;
+        String text;
 
         long day = 1000 * 60 * 60 * 24;
 
@@ -246,7 +224,21 @@ public class Utils {
     }
 
     public static String formatMinute(Context context, long minutes) {
-        return  Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
+        byte caseValue = 0;
+        if ((minutes < 11) || (minutes > 19)) {
+            if (minutes % 10 == 1)
+                caseValue = 1;
+            if ((minutes % 10 == 2) || (minutes % 10 == 3) || (minutes % 10 == 4))
+                caseValue = 2;
+        }
+        switch (caseValue) {
+            case 1:
+                return String.format(context.getString(R.string.time_minute_0), minutes);
+            case 2:
+                return String.format(context.getString(R.string.time_minute_1), minutes);
+            default:
+                return String.format(context.getString(R.string.time_minutes), minutes);
+        }
     }
 
     public static String formatDayOfWeek(Context context, int dayOfWeek) {
@@ -357,7 +349,7 @@ public class Utils {
     }
 
     public static String formatPhotoQuantity(int quantity) {
-        return Utils.getQuantityString(R.plurals.photo, (int) quantity, (int) quantity);
+        return Utils.getQuantityString(R.plurals.quantity_photos, (int) quantity, (int) quantity);
     }
 
     public static int getBatteryResource(int power) {
@@ -492,40 +484,4 @@ public class Utils {
         ).show();
     }
 
-    public static boolean isDebugMode(Application application) {
-        boolean debug = false;
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = application.getPackageManager().getPackageInfo(application.getPackageName(),
-                    PackageManager.GET_CONFIGURATIONS);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (packageInfo != null) {
-            int flags = packageInfo.applicationInfo.flags;
-            debug = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-        }
-        return debug;
-    }
-
-    public float dpFromPx(int px) {
-        return px * App.getContext().getResources().getDisplayMetrics().density;
-    }
-
-    public float pxFromDp(int dx) {
-        return dx / App.getContext().getResources().getDisplayMetrics().density;
-    }
-
-    public static float dpToPx(Context context, float dp) {
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float px = dp * (metrics.densityDpi / 160f);
-        return px;
-    }
-
-    public static float pxToDp(Context context, float px) {
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float dp = px / (metrics.densityDpi / 160f);
-        return dp;
-
-    }
 }

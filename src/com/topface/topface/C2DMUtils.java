@@ -10,9 +10,9 @@ import android.net.Uri;
 import com.google.android.c2dm.C2DMessaging;
 import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.fragments.LikesFragment;
-import com.topface.topface.ui.fragments.MutualFragment;
 import com.topface.topface.ui.fragments.ProfileFragment;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.utils.Settings;
 
 import java.util.Timer;

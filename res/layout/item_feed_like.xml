@@ -29,6 +29,13 @@
                 android:layout_below="@id/tvName"
                 style="@style/ListAgeAndCity"/>
 
+        <!-- время -->
+        <TextView
+                android:id="@+id/tvTime"
+                android:layout_alignBaseline="@id/tvCity"
+                android:visibility="gone"
+                style="@style/ListTime"/>
+
     </RelativeLayout>
 
     <!-- сердце -->

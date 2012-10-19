@@ -14,13 +14,6 @@ import com.topface.topface.utils.CacheProfile;
 public class MenuFragment extends Fragment implements View.OnClickListener {
     private View mRootLayout;
 
-    private Button mBtnProfile;
-    private Button mBtnDating;
-    private Button mBtnLikes;
-    private Button mBtnMutual;
-    private Button mBtnDialogs;
-    private Button mBtnTops;
-    private Button mBtnSettings;
     private Button[] mButtons;
 
     private TextView mTvNotifyLikes;
@@ -28,6 +21,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private TextView mTvNotifyDialogs;
 
     private FragmentMenuListener mFragmentMenuListener;
+    private Button mDefaultMenuItem;
 
     public interface FragmentMenuListener {
         public void onMenuClick(int buttonId);
@@ -42,30 +36,27 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
 
         // Buttons
-        mBtnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
-        mBtnProfile.setOnClickListener(this);
+        Button btnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
+        btnProfile.setOnClickListener(this);
         ImageViewRemote menuAvatar = (ImageViewRemote) mRootLayout.findViewById(R.id.ivMenuAvatar);
         menuAvatar.setPhoto(CacheProfile.photo);
 
-        mBtnDating = (Button) mRootLayout.findViewById(R.id.btnFragmentDating);
-        mBtnDating.setOnClickListener(this);
+        mDefaultMenuItem = (Button) mRootLayout.findViewById(R.id.btnFragmentDating);
 
-        mBtnLikes = (Button) mRootLayout.findViewById(R.id.btnFragmentLikes);
-        mBtnLikes.setOnClickListener(this);
+        mButtons = new Button[]{
+                btnProfile,
+                mDefaultMenuItem,
+                (Button) mRootLayout.findViewById(R.id.btnFragmentLikes),
+                (Button) mRootLayout.findViewById(R.id.btnFragmentMutual),
+                (Button) mRootLayout.findViewById(R.id.btnFragmentDialogs),
+                (Button) mRootLayout.findViewById(R.id.btnFragmentTops),
+                (Button) mRootLayout.findViewById(R.id.btnFragmentVisitors),
+                (Button) mRootLayout.findViewById(R.id.btnFragmentSettings)
+        };
 
-        mBtnMutual = (Button) mRootLayout.findViewById(R.id.btnFragmentMutual);
-        mBtnMutual.setOnClickListener(this);
-
-        mBtnDialogs = (Button) mRootLayout.findViewById(R.id.btnFragmentDialogs);
-        mBtnDialogs.setOnClickListener(this);
-
-        mBtnTops = (Button) mRootLayout.findViewById(R.id.btnFragmentTops);
-        mBtnTops.setOnClickListener(this);
-
-        mBtnSettings = (Button) mRootLayout.findViewById(R.id.btnFragmentSettings);
-        mBtnSettings.setOnClickListener(this);
-
-        mButtons = new Button[]{mBtnProfile, mBtnDating, mBtnLikes, mBtnMutual, mBtnDialogs, mBtnTops, mBtnSettings};
+        for (Button btn : mButtons) {
+            btn.setOnClickListener(this);
+        }
 
         // Notifications
         mTvNotifyLikes = (TextView) mRootLayout.findViewById(R.id.tvNotifyLikes);
@@ -124,42 +115,13 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setClickable(boolean clickable) {
-        mBtnProfile.setClickable(clickable);
-        mBtnDating.setClickable(clickable);
-        mBtnLikes.setClickable(clickable);
-        mBtnMutual.setClickable(clickable);
-        mBtnDialogs.setClickable(clickable);
-        mBtnTops.setClickable(clickable);
-        mBtnSettings.setClickable(clickable);
+        for (Button btn : mButtons) {
+            btn.setClickable(clickable);
+        }
     }
 
-    public void setSelectedMenu(int fragmentId) {
-        switch (fragmentId) {
-            case BaseFragment.F_PROFILE:
-                mBtnProfile.setSelected(true);
-                break;
-            case BaseFragment.F_DATING:
-                mBtnDating.setSelected(true);
-                break;
-            case BaseFragment.F_LIKES:
-                mBtnLikes.setSelected(true);
-                break;
-            case BaseFragment.F_MUTUAL:
-                mBtnMutual.setSelected(true);
-                break;
-            case BaseFragment.F_DIALOGS:
-                mBtnDialogs.setSelected(true);
-                break;
-            case BaseFragment.F_TOPS:
-                mBtnTops.setSelected(true);
-                break;
-            case BaseFragment.F_SETTINGS:
-                mBtnSettings.setSelected(true);
-                break;
-            default:
-                mBtnProfile.setSelected(true);
-                break;
-        }
+    public void selectDefaultMenu() {
+        mDefaultMenuItem.setSelected(true);
     }
 
 }

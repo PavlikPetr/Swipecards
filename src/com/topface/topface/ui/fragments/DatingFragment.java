@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,7 @@ import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.*;
 
 import java.util.LinkedList;
@@ -52,8 +54,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mUserInfoStatus;
     private TextView mCounter;
     private View mDatingGroup;
-    private View mFirstRateButtons;
-    private View mSecondRateButtons;
+//    private View mFirstRateButtons;
+//    private View mSecondRateButtons;
     private ImageSwitcher mImageSwitcher;
     private LinkedList<Search> mUserSearchList;
     private ProgressBar mProgressBar;
@@ -65,6 +67,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View mNavigationHeader;
     private Button mSettingsButton;
     private RelativeLayout mDatingLoveBtnLayout;
+    private ViewFlipper mViewFlipper;
+
+    private ImageButton mRetryBtn;
 
     private Drawable singleMutual;
     private Drawable singleDelight;
@@ -77,6 +82,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         View view = inflater.inflate(R.layout.ac_dating, null);
 
+        mRetryBtn = (ImageButton)view.findViewById(R.id.btnUpdate);
+        mRetryBtn.setOnClickListener(this);
+
+        mViewFlipper =(ViewFlipper) view.findViewById(R.id.vfFlipper);        
+        
         singleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
         singleDelight = getResources().getDrawable(R.drawable.dating_delight_selector);
 
@@ -105,8 +115,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRateController.setOnRateControllerListener(this);
 
         // Rate buttons groups
-        mFirstRateButtons = view.findViewById(R.id.ratingButtonsFirst);
-        mSecondRateButtons = view.findViewById(R.id.ratingButtonsSecond);
+//        mFirstRateButtons = view.findViewById(R.id.ratingButtonsFirst);
+//        mSecondRateButtons = view.findViewById(R.id.ratingButtonsSecond);
 
         // Position
         mCurrentUserPos = -1;
@@ -171,6 +181,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
 
+
         updateData(false);
 
         return view;
@@ -214,6 +225,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d("Topface","fail");
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         onUpdateFail(isAddition);
                         unlockControls();
@@ -241,7 +253,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         lockControls();
                         mRateController.onRate(currentSearch.uid, 10);
                     }
-                    currentSearch.rated = true;
+//                    currentSearch.rated = true;
                 }
             }
             break;
@@ -255,7 +267,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         lockControls();
                         mRateController.onRate(currentSearch.uid, 9);
                     }
-                    currentSearch.rated = true;
+
                 }
             }
             break;
@@ -282,8 +294,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingChat: {
                 Intent intent = new Intent(getActivity(), ChatActivity.class);
-                intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
-                intent.putExtra(ChatActivity.INTENT_USER_URL, mUserSearchList.get(mCurrentUserPos).getSmallLink());
+                intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);                
                 intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
                 intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserSearchList.get(mCurrentUserPos).sex);
                 intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserSearchList.get(mCurrentUserPos).age);
@@ -292,13 +303,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingSwitchNext: {
-                switchRateBtnsGroups();
+                mViewFlipper.setDisplayedChild(1);
             }
             break;
             case R.id.btnDatingSwitchPrev: {
-                switchRateBtnsGroups();
+            	mViewFlipper.setDisplayedChild(0);
             }
             break;
+            case R.id.btnUpdate: {
+                updateData(false);
+                mRetryBtn.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
             default:
         }
     }
@@ -443,7 +459,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void setCounter(int position) {
         Search currentSearch = getCurrentUser();
         if (currentSearch != null) {
-            mCounter.setText((position + 1) + "/" + currentSearch.avatars_big.length);
+            mCounter.setText((position + 1) + "/" + currentSearch.photos.size());
             mCounter.setVisibility(View.VISIBLE);
         } else {
             mCounter.setText("-/-");
@@ -451,10 +467,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    public void switchRateBtnsGroups() {
-        mFirstRateButtons.setVisibility(mFirstRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-        mSecondRateButtons.setVisibility(mSecondRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-    }
+//    public void switchRateBtnsGroups() {
+//        mFirstRateButtons.setVisibility(mFirstRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+//        mSecondRateButtons.setVisibility(mSecondRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+//    }
 
     private Search getCurrentUser() {
         try {
@@ -526,7 +542,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void successRate() {
+        getCurrentUser().rated = true;
         showNextUser();
+    }
+
+    @Override
+    public void failRate() {
+        unlockControls();
     }
 
     @Override
@@ -547,6 +569,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     protected void onUpdateFail(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mProgressBar.setVisibility(View.GONE);
+            mRetryBtn.setVisibility(View.VISIBLE);
         }
     }
 

@@ -1,22 +1,21 @@
 package com.topface.topface.ui;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 public class NavigationActivity extends FragmentActivity implements View.OnClickListener {
@@ -24,7 +23,8 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
-    private SharedPreferences mPreferences;
+
+    public static NavigationActivity mThis =null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,23 +37,43 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         mFragmentManager = getSupportFragmentManager();
 
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
 
         mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
         mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
-        mFragmentSwitcher.setFragmentManager(mFragmentManager);
+        mFragmentSwitcher.setFragmentManager(mFragmentManager);        
 
-        mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        int lastFragmentId = mPreferences.getInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, BaseFragment.F_PROFILE);
-        CacheProfile.background_id = mPreferences.getInt(Static.PREFERENCES_PROFILE_BACKGROUND_ID, ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
+        mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
+        mFragmentMenu.selectDefaultMenu();
+    }
 
-        mFragmentSwitcher.showFragment(lastFragmentId);
-        mFragmentMenu.setSelectedMenu(lastFragmentId);
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Button retry = (Button) getWindow().getCurrentFocus().findViewById(Dialog.BUTTON_POSITIVE);
+        Debug.log("retry1");
+        if(retry!=null) {
+            Debug.log("retry");
+            retry.performClick();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mThis = this;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mThis = null;
     }
 
     /*
-     *  обработчик кнопки открытия меню в заголовке фрагмента 
-     */
+    *  обработчик кнопки открытия меню в заголовке фрагмента
+    */
     @Override
     public void onClick(View view) {
         if (view.getId() != R.id.btnNavigationHome)
@@ -86,14 +106,6 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         return false;
     }
 
-    @Override
-    protected void onDestroy() {
-        mPreferences.edit()
-                .putInt(Static.PREFERENCES_NAVIGATION_LAST_FRAGMENT, mFragmentSwitcher.getCurrentFragmentId())
-                .commit();
-        super.onDestroy();
-    }
-
     private FragmentMenuListener mOnFragmentMenuListener = new FragmentMenuListener() {
         @Override
         public void onMenuClick(int buttonId) {
@@ -116,6 +128,9 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
                     break;
                 case R.id.btnFragmentTops:
                     fragmentId = BaseFragment.F_TOPS;
+                    break;
+                case R.id.btnFragmentVisitors:
+                    fragmentId = BaseFragment.F_VISITORS;
                     break;
                 case R.id.btnFragmentSettings:
                     fragmentId = BaseFragment.F_SETTINGS;

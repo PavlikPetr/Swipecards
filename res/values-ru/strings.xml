@@ -5,6 +5,7 @@
     <string name="app_name">Topface</string>
 
     <!-- General -->
+    <string name="general_cancel">Отмена</string>
     <string name="general_internet_off">Нет подключения к Интернет</string>
     <string name="general_dialog_loading">Загрузка</string>
     <string name="general_dialog_saving">Сохранение</string>
@@ -20,7 +21,7 @@
     <!-- Auth Activity -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
     <string name="auth_btn_fb">Войти через Facebook</string>
-    <string name="retry">Повторить попытку</string>
+    <string name="retry">{{refresh}} Повторить попытку</string>
 
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_dating">Знакомства</string>
@@ -28,6 +29,7 @@
     <string name="dashbrd_btn_sympathy">Симпатия</string>
     <string name="dashbrd_btn_chat">Диалоги</string>
     <string name="dashbrd_btn_tops">Топы</string>
+    <string name="dashbrd_btn_visitors">Гости</string>
     <string name="dashbrd_btn_profile">Профиль</string>
     <string name="dashbrd_btn_settings">Настройки</string>
     <string name="dashbrd_btn_love">Восхищение</string>
@@ -36,11 +38,16 @@
     <string name="dashbrd_btn_switch_button">Еще…</string>
 
     <!-- Likes Activity -->
+    <string name="likes_header_title">Я нравлюсь</string>
     <string name="likes_background_text">Нет симпатий</string>
 
+    <!-- Visitors -->
+    <string name="visitors_background_text">No visitors</string>
+
     <!-- Indox & Chat Activity -->
-    <string name="inbox_btn_dbl_left">Все</string>
-    <string name="inbox_btn_dbl_right">Непрочитанные</string>
+    <string name="inbox_header_title">Диалоги</string>
+    <string name="btn_dbl_left">Все</string>
+    <string name="btn_dbl_right">Непрочитанные</string>
     <string name="inbox_background_text">Входящих сообщений нет</string>
     <string name="chat_btn_send">Отправить</string>
     <string name="chat_comment">Написать сообщение</string>
@@ -77,7 +84,7 @@
     <string name="filter_boy">Парни</string>
     <string name="filter_from">От</string>
     <string name="filter_to">до</string>
-    <string name="filter_in">В</string>
+    <string name="filter_in">В городе</string>
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_only_beautiful">Только красивые</string>
     <string name="filter_extra_parameters">Дополнительные параметры</string>
@@ -110,7 +117,7 @@
     <string name="profile_header_title">Мой профиль</string>
     <string name="profile_btn_chat">Поболтать</string>
     <string name="profile_add_title">Добавить фотографию</string>
-    <string name="profile_add_album">Из фотогалереи</string>
+    <string name="profile_add_album">Выбрать из имеющихся</string>
     <string name="profile_add_camera">Сделать снимок</string>
 
 
@@ -121,7 +128,7 @@
     <string name="edit_profile_photo">Поменять фото</string>
     <string name="edit_album_photos">фотографий</string>
     <string name="edit_interests">интересов</string>
-    <string name="edit_back_photo_selected">Выбрана</string>
+    <string name="edit_selected">Выбрана</string>
     <string name="edit_name">Имя</string>
     <string name="edit_age">Возраст</string>
     <string name="edit_status">Статус</string>

@@ -24,6 +24,7 @@
             android:verticalSpacing="0px"
             android:layout_margin="0px"
             android:padding="0px"
+            android:gravity="center"
             android:fadeScrollbars="true"/>
 
 </LinearLayout>

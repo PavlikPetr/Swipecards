@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/vfFlipper"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:inAnimation="@android:anim/fade_in">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/fragmentTitle"
+            style="@style/BackgroundTitleText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp" />
+
+        <GridView
+            android:id="@+id/fragmentGrid"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="0px"
+            android:background="@android:color/transparent"
+            android:fadeScrollbars="true"
+            android:fadingEdge="none"
+            android:horizontalSpacing="0px"
+            android:listSelector="@android:color/transparent"
+            android:padding="0px"
+            android:verticalSpacing="0px" />
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btnAddPhotoCamera"
+            style="@style/ButtonGrayText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="40px"
+            android:background="@drawable/buying_purchase_selector"
+            android:text="@string/profile_add_camera" />
+        
+        <Button
+            android:id="@+id/btnAddPhotoAlbum"
+            style="@style/ButtonGrayText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20px"
+            android:background="@drawable/buying_purchase_selector"
+            android:text="@string/profile_add_album" />        
+
+        <Button
+            android:id="@+id/btnCancel"
+            style="@style/ButtonGrayText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="40px"
+            android:background="@drawable/buying_purchase_selector"
+            android:text="@string/general_cancel" />
+    </LinearLayout>
+
+</ViewFlipper>

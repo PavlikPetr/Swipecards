@@ -23,6 +23,7 @@ public class AuthRequest extends ApiRequest {
     public AuthRequest(Context context) {
         super(context);
         try {
+            doNeedAlert = false;
             locale = context.getResources().getConfiguration().locale.getLanguage();
             clienttype = Static.CLIENT_TYPE;
             clientversion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;

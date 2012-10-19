@@ -22,7 +22,7 @@ public class FeedGiftsRequest extends ApiRequest {
         try {
             root.put("service", service);
             root.put("ssid", ssid);
-            JSONObject data = new JSONObject().put("limit", limit).put("uid", uid);
+            JSONObject data = new JSONObject().put("limit", limit).put("userid", uid);
             if (from > 0)
                 data.put("from", from);
             root.put("data", data);

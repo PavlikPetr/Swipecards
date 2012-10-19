@@ -57,6 +57,7 @@ public class MainActivity extends BaseFragmentActivity {
                     @Override
                     public void run() {
                         Toast.makeText(MainActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+
                     }
                 });
             }

@@ -1,8 +1,6 @@
 package com.topface.topface.ui.profile;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -10,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.*;
@@ -24,8 +23,10 @@ import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.http.ProfileBackgrounds;
 
 public class UserProfileActivity extends FragmentActivity {
 
@@ -36,6 +37,7 @@ public class UserProfileActivity extends FragmentActivity {
     private ImageViewRemote mUserAvatar;
     private TextView mUserName;
     private TextView mUserCity;
+    private ViewGroup mUserProfileHeader;
 
     private Button mUserDelight;
     private Button mUserMutual;
@@ -54,7 +56,6 @@ public class UserProfileActivity extends FragmentActivity {
 
     private UserFormFragment mFormFragment;
     private UserPhotoFragment mPhotoFragment;
-    private Bitmap mMask;
 
     public User mUser;
 
@@ -71,6 +72,9 @@ public class UserProfileActivity extends FragmentActivity {
 
     public static final int GIFTS_LOAD_COUNT = 30;
 
+    private RelativeLayout lockScreen;
+    private RetryView retryBtn;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +89,9 @@ public class UserProfileActivity extends FragmentActivity {
         String userName = getIntent().getStringExtra(INTENT_USER_NAME); // name
         ((TextView) findViewById(R.id.tvHeaderTitle)).setText(userName);
 
+        mUserProfileHeader = (ViewGroup) findViewById(R.id.loProfileHeader);
+//        mUserProfileHeader.setBackgroundResource(ProfileBackgrounds.DEFAULT_BACKGROUND_RES_ID);
+        
         mRateController = new RateController(this);
         mLockerView = (LockerView) findViewById(R.id.llvProfileLoading);
 
@@ -92,8 +99,8 @@ public class UserProfileActivity extends FragmentActivity {
         mUserName = (TextView) findViewById(R.id.ivUserName);
         mUserCity = (TextView) findViewById(R.id.ivUserCity);
 
-        mUserDelight = (Button) findViewById(R.id.btnUserDelight);
-        mUserDelight.setOnClickListener(mRatesClickListener);
+        mUserDelight = (Button) findViewById(R.id.btnUserDelight);        
+        mUserDelight.setOnClickListener(mRatesClickListener);        
         mUserMutual = (Button) findViewById(R.id.btnUserMutual);
         mUserMutual.setOnClickListener(mRatesClickListener);
         mUserChat = (Button) findViewById(R.id.btnUserChat);
@@ -108,6 +115,18 @@ public class UserProfileActivity extends FragmentActivity {
         mUserGifts.setOnClickListener(mInfoClickListener);
         mUserActions = (RadioButton) findViewById(R.id.btnUserActions);
         mUserActions.setOnClickListener(mInfoClickListener);
+
+        lockScreen = (RelativeLayout)findViewById(R.id.lockScreen);
+        retryBtn = new RetryView(getApplicationContext());
+        retryBtn.init(getLayoutInflater());
+        retryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getUserProfile();
+                lockScreen.setVisibility(View.GONE);
+            }
+        });
+        lockScreen.addView(retryBtn);
 
         mViewPager = (ViewPager) findViewById(R.id.UserViewPager);
         mViewPager.setAdapter(new UserProfilePageAdapter(getSupportFragmentManager()));
@@ -132,11 +151,9 @@ public class UserProfileActivity extends FragmentActivity {
 
         mUserPhoto.setChecked(true);
 
-        mMask = BitmapFactory.decodeResource(getResources(), R.drawable.avatar_frame_mask);
-
-        getUserProfile();
-    }
-
+        getUserProfile();        
+    }    
+    
     private void getUserProfile() {
         mLockerView.setVisibility(View.VISIBLE);
         UserRequest userRequest = new UserRequest(mUserId, getApplicationContext());
@@ -147,6 +164,17 @@ public class UserProfileActivity extends FragmentActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                    	if (mUser.mutual) {
+                    		mUserDelight.setCompoundDrawablesWithIntrinsicBounds(null, 
+                    				getResources().getDrawable(R.drawable.user_dbl_delight_selector), 
+                    				null, null);
+                    		mUserMutual.setCompoundDrawablesWithIntrinsicBounds(null, 
+                    				getResources().getDrawable(R.drawable.user_dbl_mutual_selector), 
+                    				null, null);
+                    		mUserDelight.setEnabled(!mUser.rated);
+                            mUserMutual.setEnabled(!mUser.rated);
+                    	}                        
+                    	mUserProfileHeader.setBackgroundResource(ProfileBackgrounds.getBackgroundResource(getApplicationContext(), mUser.background));
                         mLockerView.setVisibility(View.INVISIBLE);
                         mUserAvatar.setPhoto(mUser.photo);
                         mUserName.setText(mUser.first_name + ", " + mUser.age);
@@ -164,7 +192,8 @@ public class UserProfileActivity extends FragmentActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(UserProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(UserProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        lockScreen.setVisibility(View.VISIBLE);
                     }
                 });
             }
@@ -177,9 +206,15 @@ public class UserProfileActivity extends FragmentActivity {
             switch (view.getId()) {
                 case R.id.btnUserDelight:
                     mRateController.onRate(mUserId, 10);
+                    mUser.rated = true;
+                    mUserDelight.setEnabled(!mUser.rated);
+                    mUserMutual.setEnabled(!mUser.rated);
                     break;
                 case R.id.btnUserMutual:
                     mRateController.onRate(mUserId, 9);
+                    mUser.rated = true;
+                    mUserDelight.setEnabled(!mUser.rated);
+                    mUserMutual.setEnabled(!mUser.rated);
                     break;
                 case R.id.btnUserChat:
                     Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
