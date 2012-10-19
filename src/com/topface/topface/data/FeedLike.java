@@ -7,8 +7,6 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.LinkedList;
-
 public class FeedLike extends AbstractFeedItem {
     public boolean highrate;
 

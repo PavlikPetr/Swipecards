@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.User;
+import com.topface.topface.utils.Utils;
 
 public class UserFormFragment extends Fragment {
     private User mUser;
@@ -28,6 +29,12 @@ public class UserFormFragment extends Fragment {
         listQuestionnaire.setAdapter(mUserPhotoListAdapter);
 
         mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
+        if (mUser != null) {
+        	mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
+        } else {
+        	mTitle.setText(Utils.formatFormMatchesQuantity(0));
+        }
+        mTitle.setVisibility(View.VISIBLE);
 
         return root;
     }
@@ -36,6 +43,8 @@ public class UserFormFragment extends Fragment {
         mUser = user;
         mUserPhotoListAdapter.setUserData(mUser);
         mUserPhotoListAdapter.notifyDataSetChanged();
+        
+        mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
     }
 
 }

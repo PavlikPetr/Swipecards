@@ -2,10 +2,7 @@ package com.topface.topface.data;
 
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.LinkedList;
 
 /* Класс чужого профиля */
 public class User extends Profile {
@@ -20,6 +17,7 @@ public class User extends Profile {
     public Photos photos;
     public Photo photo;    
     public boolean rated = false;
+    public int formMatches = 0;
     
     public static User parse(int userId, ApiResponse response) { //нужно знать userId
         User profile = new User();

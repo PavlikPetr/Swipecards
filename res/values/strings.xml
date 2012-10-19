@@ -73,6 +73,8 @@
 
     <!-- Symphaty Activity -->
     <string name="mutual_header_title">Mutual</string>
+    <string name="symphaty_btn_dbl_left">All</string>
+    <string name="symphaty_btn_dbl_right">Unread</string>
     <string name="mutual_background_text">No symphaties</string>
 
     <!-- Tops Activity -->
@@ -159,6 +161,8 @@
     <string name="navigation_send">Send</string>
 
     <!-- Profile / UserProfile Form -->
+    <string name="form">Questionary</string>
+    
     <string name="form_main">Main</string>
 
     <string-array name="form_main_status">
@@ -290,9 +294,17 @@
 
 
     <plurals name="photo">
+        <item quantity="zero">No photos</item>
         <item quantity="one">%d photo</item>
         <item quantity="few">%d photos</item>
         <item quantity="other">%d photos</item>
+    </plurals>
+    
+    <plurals name="form_matches">
+        <item quantity="zero">You have no matches</item>
+        <item quantity="one">You have %d match</item>
+        <item quantity="few">You have %d matches</item>
+        <item quantity="other">You have %d matches</item>
     </plurals>
 
     <!--Leaders-->

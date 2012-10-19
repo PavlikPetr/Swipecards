@@ -38,6 +38,13 @@ public class UserPhotoFragment extends Fragment {
 
         mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
 
+        if (mPhotoLinks != null) {
+            mTitle.setText(Utils.formatPhotoQuantity(mPhotoLinks.size()));            
+        } else {
+        	mTitle.setText(Utils.formatPhotoQuantity(0));
+        }
+        mTitle.setVisibility(View.VISIBLE);
+        
         return root;
     }
 
@@ -63,18 +70,16 @@ public class UserPhotoFragment extends Fragment {
     };
 
     public void setUserData(User user) {
-        mUser = user;
+        mUser = user;        
         mPhotoLinks = user.photos;
+        
+        if (mPhotoLinks != null) {
+        	mTitle.setText(Utils.formatPhotoQuantity(mPhotoLinks.size()));
+        }
+        
         if (mUserPhotoGridAdapter != null) {
             mUserPhotoGridAdapter.setUserData(user.photos);
-        }
-
-        if (mPhotoLinks != null && mPhotoLinks.size() >= 0) {
-            mTitle.setText(Utils.formatPhotoQuantity(mPhotoLinks.size()));
-            mTitle.setVisibility(View.VISIBLE);
-        } else {
-            mTitle.setVisibility(View.INVISIBLE);
-        }
+        }        
     }
 }
  

@@ -162,6 +162,8 @@
     <string name="navigation_send">Отпр.</string>
 
     <!-- Profile / UserProfile Form -->
+    <string name="form">Анкета</string>
+    
     <string name="form_main">Основное</string>
 
     <string-array name="form_main_status">
@@ -423,9 +425,17 @@
     </plurals>
 
     <plurals name="photo">
+        <item quantity="zero">Нет фотографий</item>
         <item quantity="one">%d фотография</item>
         <item quantity="few">%d фотографии</item>
         <item quantity="other">%d фотографий</item>
+    </plurals>        
+    
+    <plurals name="form_matches">
+        <item quantity="zero">У вас нет совпадений</item>
+        <item quantity="one">У вас %d совпадение</item>
+        <item quantity="few">У вас %d совпадения</item>
+        <item quantity="other">У вас %d совпадений</item>
     </plurals>
 
     <string name="fill_button">Заполнить</string>

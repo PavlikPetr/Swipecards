@@ -3,6 +3,8 @@ package com.topface.topface.ui.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -86,9 +88,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setBackground(R.drawable.edit_big_btn_middle_selector, frame);
         AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
         if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            setText(R.string.settings_account, mSettings.getSocialAccountName(), R.drawable.ic_fb, frame);
+            setAccountNameText(R.string.settings_account, mSettings.getSocialAccountName(), R.drawable.ic_fb, frame);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            setText(R.string.settings_account, mSettings.getSocialAccountName(), R.drawable.ic_vk, frame);
+            setAccountNameText(R.string.settings_account, mSettings.getSocialAccountName(), R.drawable.ic_vk, frame);
         } else {
             setText(R.string.settings_account, frame);
         }
@@ -111,11 +113,29 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleId);
     }
 
-    private void setText(int titleId, String text, int iconRes, ViewGroup frame) {
+    private void setAccountNameText(int titleId, String text, int iconRes, ViewGroup frame) {
         ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleId);
-        TextView textView = (TextView) frame.findViewById(R.id.tvText);
+        final TextView textView = (TextView) frame.findViewById(R.id.tvText);
         textView.setVisibility(View.VISIBLE);
-        textView.setText(text);
+        if (text.isEmpty()) {
+        	mSettings.getSocialAccountNameAsync(new Handler() {
+        		@Override
+        		public void handleMessage(Message msg) {
+        			final String name = (String) msg.obj;
+        			textView.post(new Runnable() {
+						
+						@Override
+						public void run() {
+							textView.setText(name);
+						}
+					});
+        			mSettings.setSocialAccountName(name);
+        		}
+        	});
+        } else {
+        	textView.setText(text);
+        }
+                
         textView.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(iconRes), null, null, null);
     }
 

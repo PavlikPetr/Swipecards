@@ -224,21 +224,7 @@ public class Utils {
     }
 
     public static String formatMinute(Context context, long minutes) {
-        byte caseValue = 0;
-        if ((minutes < 11) || (minutes > 19)) {
-            if (minutes % 10 == 1)
-                caseValue = 1;
-            if ((minutes % 10 == 2) || (minutes % 10 == 3) || (minutes % 10 == 4))
-                caseValue = 2;
-        }
-        switch (caseValue) {
-            case 1:
-                return String.format(context.getString(R.string.time_minute_0), minutes);
-            case 2:
-                return String.format(context.getString(R.string.time_minute_1), minutes);
-            default:
-                return String.format(context.getString(R.string.time_minutes), minutes);
-        }
+        return  Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
     }
 
     public static String formatDayOfWeek(Context context, int dayOfWeek) {
@@ -315,28 +301,6 @@ public class Utils {
     public static void formatTimeOld(TextView tv, long time) {
         Context context = tv.getContext();
         String text;
-        long now = unixtime();
-        long full_time = time * 1000;
-        long t = now - time;
-        if ((time > now) || t < 60)
-            text = context.getString(R.string.time_now);
-        else if (t < 3600)
-            text = formatMinute(t / 60);
-        else if (t < 6 * 3600)
-            text = formatHour(t / 3600);
-        else if (DateUtils.isToday(full_time))
-            text = context.getString(R.string.time_today) + DateFormat.format(" kk:mm", full_time).toString();
-        else {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            if (full_time > (now - (now - cal.getTimeInMillis()) - (24 * 60 * 60 * 1000)))
-                text = context.getString(R.string.time_yesterday) + DateFormat.format(" kk:mm", full_time).toString();
-            else
-                text = DateFormat.format("dd.MM.yyyy kk:mm", full_time).toString();
-        }
-        tv.setText(text);
-    }
 
 
     public static String formatHour(long hours) {
@@ -349,7 +313,11 @@ public class Utils {
     }
 
     public static String formatPhotoQuantity(int quantity) {
-        return Utils.getQuantityString(R.plurals.quantity_photos, (int) quantity, (int) quantity);
+        return Utils.getQuantityString(R.plurals.photo, (int) quantity, (int) quantity);
+    }
+    
+    public static String formatFormMatchesQuantity(int quantity) {
+        return Utils.getQuantityString(R.plurals.form_matches, (int) quantity, (int) quantity);
     }
 
     public static int getBatteryResource(int power) {
