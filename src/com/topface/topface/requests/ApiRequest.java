@@ -22,7 +22,7 @@ public abstract class ApiRequest {
     public Context context;
     public boolean canceled = false;
     private RequestConnection connection;
-    protected boolean doNeedAlert;
+    private boolean doNeedAlert;
 
     public ApiRequest(Context context) {
         ssid = Static.EMPTY;
@@ -61,6 +61,9 @@ public abstract class ApiRequest {
         //ConnectionService.sendRequest(mContext,this);
     }
 
+    protected void doNeedAlert(boolean value) {
+        doNeedAlert = value;
+    }
 
     public void cancel() {
         handler = null;

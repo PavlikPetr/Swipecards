@@ -17,13 +17,13 @@ public class AuthRequest extends ApiRequest {
     public String clienttype; // тип клиента
     public String clientversion; // версия клиента
     public String clientdevice; // тип устройства клиента
-    public String clientid; // уникальныц идентификатор клиентского устройства
+    public String clientid; // уникальный идентификатор клиентского устройства
     public Boolean sandbox; // параметр использования тестовых аккаунтов для уведомлений APNS и C2DM
 
     public AuthRequest(Context context) {
         super(context);
         try {
-            doNeedAlert = false;
+            doNeedAlert(false);
             locale = context.getResources().getConfiguration().locale.getLanguage();
             clienttype = Static.CLIENT_TYPE;
             clientversion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;

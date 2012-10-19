@@ -22,7 +22,7 @@ public class ProfileRequest extends ApiRequest {
 
     public ProfileRequest(Context context) {
         super(context);
-        doNeedAlert = false; //чтобы не предупреждать пользователя алертом о пропаже инета
+        doNeedAlert(false); //чтобы не предупреждать пользователя алертом о пропаже инета
     }
 
     @Override

@@ -5,8 +5,6 @@ import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
 import android.text.ClipboardManager;
-import android.text.format.DateFormat;
-import android.text.format.DateUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
@@ -301,6 +299,7 @@ public class Utils {
     public static void formatTimeOld(TextView tv, long time) {
         Context context = tv.getContext();
         String text;
+    }
 
 
     public static String formatHour(long hours) {
