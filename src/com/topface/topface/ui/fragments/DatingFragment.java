@@ -34,8 +34,8 @@ import com.topface.topface.utils.*;
 
 import java.util.LinkedList;
 
-public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker, RateController.OnRateControllerListener {
-
+public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker, RateController.OnRateControllerListener {	
+	
     private int mCurrentUserPos;
     private int mCurrentPhotoPrevPos;
     private View mResourcesControl;
@@ -250,8 +250,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         updateData(true);
                         return;
                     } else {
-                        lockControls();
-                        mRateController.onRate(currentSearch.uid, 10);
+                        lockControls();                        
+                        mRateController.onRate(currentSearch.uid, 10, currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     }
 //                    currentSearch.rated = true;
                 }
@@ -265,7 +265,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         return;
                     } else {
                         lockControls();
-                        mRateController.onRate(currentSearch.uid, 9);
+                        mRateController.onRate(currentSearch.uid, 9, currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     }
 
                 }

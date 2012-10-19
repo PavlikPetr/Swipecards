@@ -13,6 +13,7 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.utils.Debug;
 
 public class FragmentSwitchController extends ViewGroup {
 
@@ -55,7 +56,7 @@ public class FragmentSwitchController extends ViewGroup {
         mMinimumVelocity = 10 * configuration.getScaledMinimumFlingVelocity();
         mVelocitySlop = configuration.getScaledMinimumFlingVelocity();
         //noinspection deprecation
-        mTouchSlop = ViewConfiguration.getTouchSlop();
+        mTouchSlop = configuration.getScaledTouchSlop();
         mAnimation = COLLAPSE;
     }
 
@@ -302,6 +303,7 @@ public class FragmentSwitchController extends ViewGroup {
             case MotionEvent.ACTION_UP:
                 if (mAnimation == EXPAND) {
                     completeDragging(0);
+                    Debug.log("interseptTouch:true");
                     return true;
                 }
                 stopDragging();
@@ -328,7 +330,7 @@ public class FragmentSwitchController extends ViewGroup {
         float x = event.getX();
 
         switch (action) {
-            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_DOWN:            	
                 mLastMotionX = x;
                 mVelocityTracker.addMovement(event);
                 break;
@@ -467,8 +469,7 @@ public class FragmentSwitchController extends ViewGroup {
         }
 
         boolean result;
-
-        //for API versions < 14
+        
         if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
             result = ((com.topface.topface.ui.views.ImageSwitcher)v).canScrollHorizontally(-dx);
             //for API versions >= 14 (ICS)

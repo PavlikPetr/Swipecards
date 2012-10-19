@@ -17,6 +17,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.fragments.GiftsFragment;
@@ -205,13 +206,13 @@ public class UserProfileActivity extends FragmentActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btnUserDelight:
-                    mRateController.onRate(mUserId, 10);
+                    mRateController.onRate(mUserId, 10, mUser.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     mUser.rated = true;
                     mUserDelight.setEnabled(!mUser.rated);
                     mUserMutual.setEnabled(!mUser.rated);
                     break;
                 case R.id.btnUserMutual:
-                    mRateController.onRate(mUserId, 9);
+                    mRateController.onRate(mUserId, 9, mUser.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     mUser.rated = true;
                     mUserDelight.setEnabled(!mUser.rated);
                     mUserMutual.setEnabled(!mUser.rated);

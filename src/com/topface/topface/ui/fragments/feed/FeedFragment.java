@@ -5,7 +5,9 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.*;
@@ -50,16 +52,22 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
         // Set title
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getTitle());
 
+        init();
+        
         initBackground(view);
         initFilter(view);
-        initListView(view);
+        initListView(view);        
         if (mListAdapter.isNeedUpdate()) {
             updateData(false);
         }
-
+        
         return view;
     }
 
+    protected void init(){
+    	
+    }
+    
     private void initBackground(View view) {
         // ListView background
         mBackgroundText = (TextView) view.findViewById(R.id.tvBackgroundText);
@@ -81,7 +89,8 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
     }
 
     private void initListView(View view) {
-        // ListView
+        // ListView    	
+        
         mListView = (PullToRefreshListView) view.findViewById(R.id.lvFeedList);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
@@ -89,12 +98,15 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
                 updateData(true);
             }
         });
-
-        mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
+        
         mListAdapter = getAdapter();
         mListAdapter.setOnAvatarClickListener(this);
         mListView.setOnScrollListener(mListAdapter);
         mListView.getRefreshableView().setAdapter(mListAdapter);
+        
+        mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
+        mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
+        mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
     }
 
     abstract protected FeedAdapter<T> getAdapter();
@@ -131,6 +143,26 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
                 }
             }
         };
+    }
+    
+    protected AdapterView.OnItemLongClickListener getOnItemLongClickListener() {
+    	return new AdapterView.OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {				
+				return false;
+			}
+    		
+		};
+    }
+    
+    protected OnTouchListener getListViewOnTouchListener() {
+    	return new OnTouchListener() {			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return false;
+			}
+		};
     }
 
     protected void onFeedItemClick(AbstractFeedItem item) {
@@ -233,8 +265,7 @@ public abstract class FeedFragment<T extends AbstractFeedItem> extends BaseFragm
 
         final View toolsBar = view.findViewById(R.id.loToolsBar);
         ViewTreeObserver vto = toolsBar.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @SuppressWarnings("deprecation")
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {            
             @Override
             public void onGlobalLayout() {
                 int y = toolsBar.getMeasuredHeight();

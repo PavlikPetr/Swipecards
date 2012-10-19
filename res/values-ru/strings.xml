@@ -40,6 +40,7 @@
     <!-- Likes Activity -->
     <string name="likes_header_title">Я нравлюсь</string>
     <string name="likes_background_text">Нет симпатий</string>
+    <string name="likes_mutual">Взаимно</string>
 
     <!-- Visitors -->
     <string name="visitors_background_text">No visitors</string>
