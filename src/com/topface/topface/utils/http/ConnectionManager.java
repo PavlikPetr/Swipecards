@@ -38,6 +38,7 @@ public class ConnectionManager {
     private boolean doNeedResend = true;
     // Constants
     public static final String TAG = "CM";
+    public static final int WAITING_TIME = 2000;
 
     //---------------------------------------------------------------------------
     private ConnectionManager() {
@@ -101,7 +102,7 @@ public class ConnectionManager {
                                     public void run() {
                                         sendRequest(apiRequest);
                                     }
-                                },2000);
+                                },WAITING_TIME);
                                 doNeedResend = false;
                             } else {
                                 apiRequest.handler.response(apiResponse);

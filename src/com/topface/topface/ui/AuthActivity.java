@@ -62,7 +62,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case AuthorizationManager.AUTHORIZATION_FAILED:
-//                        showButtons();
                         authorizationFailed();
                         break;
                     case AuthorizationManager.DIALOG_COMPLETED:
