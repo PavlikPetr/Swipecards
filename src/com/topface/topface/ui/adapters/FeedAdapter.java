@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
+
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLoader;
@@ -26,7 +29,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private long mLastUpdate = 0;
     public static final int LIMIT = 40;
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
-    private OnAvatarClickListener<T> mOnAvatarClickListener;
+    private OnAvatarClickListener<T> mOnAvatarClickListener;    
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context;
@@ -46,6 +49,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public ImageView online;
         public TextView text;
         public ImageView heart;
+        public ViewFlipper flipper;
+        public Button flippedBtn;
     }
 
     public FeedAdapter(Context context, Updater updateCallback) {
@@ -77,8 +82,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     @Override
     public long getItemId(int i) {
         return i;
-    }
-
+    }    
+    
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
 
@@ -109,7 +114,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         mLoaderRetrierProgress.setVisibility(View.VISIBLE);
         mLoaderRetrierText.setVisibility(View.INVISIBLE);
         return mLoaderRetrier;
-    }
+    }    
 
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
         FeedViewHolder holder = null;
@@ -264,6 +269,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         holder.name = (TextView) convertView.findViewById(R.id.tvName);
         holder.city = (TextView) convertView.findViewById(R.id.tvCity);
         holder.online = (ImageView) convertView.findViewById(R.id.ivOnline);
+        holder.flipper = (ViewFlipper) convertView.findViewById(R.id.vfFlipper);
+        holder.flippedBtn = (Button) convertView.findViewById(R.id.btnMutual);
 
         return holder;
     }
