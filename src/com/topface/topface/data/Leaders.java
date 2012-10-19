@@ -30,7 +30,7 @@ public class Leaders extends AbstractData {
         Leaders leadersResponse = new Leaders();
         leadersResponse.leaders = new ArrayList<LeaderUser>();
         try {
-            JSONArray leadersArray = response.mJSONResult.getJSONArray("leaders");
+            JSONArray leadersArray = response.jsonResult.getJSONArray("leaders");
             for (int i = 0; i < leadersArray.length(); i++) {
                 JSONObject item = leadersArray.getJSONObject(i);
                 LeaderUser user = new LeaderUser();

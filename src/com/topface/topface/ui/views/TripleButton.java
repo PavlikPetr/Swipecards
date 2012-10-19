@@ -99,7 +99,7 @@ public class TripleButton extends LinearLayout implements OnCheckedChangeListene
             mLeftClickableState = true;
             mMiddleClickableState = false;
             mRightClickableState = true;
-        } else if (n == RIGHT_BUTTON) {
+        } else {
             mLeftClickableState = true;
             mMiddleClickableState = true;
             mRightClickableState = false;

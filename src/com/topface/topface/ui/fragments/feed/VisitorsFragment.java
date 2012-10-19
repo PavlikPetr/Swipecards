@@ -2,25 +2,18 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.graphics.drawable.Drawable;
 import com.topface.topface.R;
+import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Visitor;
-import com.topface.topface.data.Visitors;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.FeedAdapter;
-import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
+import org.json.JSONObject;
 
-/**
- * Created with IntelliJ IDEA.
- * User: gildor
- * Date: 11.10.12
- * Time: 12:08
- * To change this template use File | Settings | File Templates.
- */
+
 public class VisitorsFragment extends FeedFragment<Visitor> {
     @Override
     protected Drawable getBackIcon() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return getResources().getDrawable(R.drawable.visitors_back_icon);
     }
 
     @Override
@@ -33,15 +26,15 @@ public class VisitorsFragment extends FeedFragment<Visitor> {
         return new VisitorsListAdapter(getActivity(), getUpdaterCallback());
     }
 
+    @Override
+    protected FeedListData<Visitor> getFeedList(JSONObject response) {
+        return new FeedListData<Visitor>(response, Visitor.class);
+    }
+
 
     @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.VISITORS;
-    }
-
-    @Override
-    protected FeedList<Visitor> parseResponse(ApiResponse response) {
-        return Visitors.parse(response);
     }
 
     @Override

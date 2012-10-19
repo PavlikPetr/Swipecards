@@ -168,10 +168,10 @@ public class ConnectionManager {
                 Auth auth = Auth.parse(response);
                 Data.saveSSID(context, auth.ssid);
                 request.ssid = auth.ssid;
-                Debug.log(TAG, "cm_reauth:req1:" + request.toString());
+                Debug.logJson(TAG, "REAUTH REQUEST >>>", request.toString());
                 httpPost.setEntity(new ByteArrayEntity(request.toString().getBytes("UTF8")));
                 rawResponse = request(httpClient, httpPost);
-                Debug.log(TAG, "cm_reauth:resp1:" + rawResponse);
+                Debug.logJson(TAG, "REAUTH RESPONSE <<<", rawResponse);
                 response = new ApiResponse(rawResponse);
             } else {
                 Data.removeSSID(context);

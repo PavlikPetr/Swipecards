@@ -99,8 +99,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         checkIntentForReauth(getIntent());
     }
 
-    ;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -205,8 +203,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //Profile.save(profile);
-//                        Profile.save(response.mJSONResult.toString());
                         openNavigationActivity();
                     }
                 });

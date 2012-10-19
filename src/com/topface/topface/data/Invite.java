@@ -12,7 +12,7 @@ public class Invite extends AbstractData {
     public static Invite parse(ApiResponse response) {
         Invite invite = new Invite();
         try {
-            invite.completed = response.mJSONResult.getBoolean("completed");
+            invite.completed = response.jsonResult.getBoolean("completed");
         } catch (Exception e) {
             Debug.error("Invite wrong response parsing", e);
             invite.completed = false;

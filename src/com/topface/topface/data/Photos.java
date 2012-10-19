@@ -13,7 +13,7 @@ public class Photos extends LinkedList<Photo> {
         if (photoArray != null) {
             for (int i = 0; i < photoArray.length(); i++) {
                 try {
-                    photos.push(Photo.parse(photoArray.getJSONObject(i)));
+                    photos.push(new Photo(photoArray.getJSONObject(i)));
                 } catch (JSONException e) {
                     Debug.error("Photo parse error", e);
                 }
@@ -54,5 +54,5 @@ public class Photos extends LinkedList<Photo> {
             }
         }
         return result;
-    }    
+    }
 }

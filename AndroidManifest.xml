@@ -5,7 +5,7 @@
           android:versionCode="31"
           android:versionName="2.0 b">
 
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="16"/>
 
     <!-- permissions -->
     <permission android:name="com.topface.topface.permission.C2D_MESSAGE" android:protectionLevel="signature"/>

@@ -17,10 +17,10 @@ public class SkipRate extends Confirmation {
         SkipRate skip = new SkipRate(response);
 
         try {
-            skip.money = response.mJSONResult.optInt("money");
-            skip.power = response.mJSONResult.optInt("power");
+            skip.money = response.jsonResult.optInt("money");
+            skip.power = response.jsonResult.optInt("power");
             skip.power = (int) (skip.power * 0.01);
-            skip.completed = response.mJSONResult.optBoolean("completed");
+            skip.completed = response.jsonResult.optBoolean("completed");
         } catch (Exception e) {
             Debug.log("SkipRate.class", "Wrong response parsing: " + e);
         }

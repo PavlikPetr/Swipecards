@@ -13,7 +13,6 @@ import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.*;
 import com.topface.topface.R;
-import com.topface.topface.data.Photo;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -202,7 +201,6 @@ public class UserProfileActivity extends FragmentActivity {
                 case R.id.btnUserChat:
                     Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
                     intent.putExtra(ChatActivity.INTENT_USER_ID, mUser.uid);
-                    intent.putExtra(ChatActivity.INTENT_USER_URL, mUser.photo.getSuitableLink(Photo.SIZE_64));
                     intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);
                     intent.putExtra(ChatActivity.INTENT_USER_SEX, mUser.sex);
                     intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
@@ -292,9 +290,6 @@ public class UserProfileActivity extends FragmentActivity {
             switch (position) {
                 case F_PHOTO:
                     fragment = mPhotoFragment = new UserPhotoFragment();
-                    //Bundle bundle = new Bundle();
-                    //bundle.putInt(UserProfileActivity.INTENT_USER_ID, mUserId);
-                    //fragment.setArguments(bundle);
                     break;
                 case F_FORM:
                     fragment = mFormFragment = new UserFormFragment();

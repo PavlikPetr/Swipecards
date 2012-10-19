@@ -50,11 +50,11 @@ public class Options extends AbstractData {
         Options options = new Options();
 
         try {
-            options.price_highrate = response.mJSONResult.optInt("price_highrate");
-            options.price_leader = response.mJSONResult.optInt("price_leader");
-            options.float_type_like = setFloatType(response.mJSONResult.optString("float_type_like"));
-            options.float_type_dialogs = setFloatType(response.mJSONResult.optString("float_type_dialogs"));
-            options.float_type_top = setFloatType(response.mJSONResult.optString("float_type_top"));
+            options.price_highrate = response.jsonResult.optInt("price_highrate");
+            options.price_leader = response.jsonResult.optInt("price_leader");
+            options.float_type_like = setFloatType(response.jsonResult.optString("float_type_like"));
+            options.float_type_dialogs = setFloatType(response.jsonResult.optString("float_type_dialogs"));
+            options.float_type_top = setFloatType(response.jsonResult.optString("float_type_top"));
         } catch (Exception e) {
             Debug.log("Message.class", "Wrong response parsing: " + e);
         }

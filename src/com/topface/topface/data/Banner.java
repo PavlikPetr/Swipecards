@@ -19,7 +19,7 @@ public class Banner extends AbstractData {
         Banner banner = new Banner();
 
         try {
-            JSONObject item = response.mJSONResult;
+            JSONObject item = response.jsonResult;
             banner.name = item.optString("name");
             banner.url = item.optString("url");
             banner.action = item.optString("action");
