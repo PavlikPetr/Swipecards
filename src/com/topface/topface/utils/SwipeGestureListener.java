@@ -38,24 +38,26 @@ public class SwipeGestureListener extends SimpleOnGestureListener {
     }
 
     @Override 
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) { 
-        if (Math.abs(e1.getY() - e2.getY()) > REL_SWIPE_MAX_OFF_PATH) 
-            return false; 
-        if(e1.getX() - e2.getX() > REL_SWIPE_MIN_DISTANCE && 
-            Math.abs(velocityX) > REL_SWIPE_THRESHOLD_VELOCITY) { 
-            if(mSwipeListener != null) {
-            	int position = mListView.pointToPosition((int)e1.getX(), (int)e1.getY());
-            	if (position > 0) 
-            		mSwipeListener.onSwipeR2L(position-1); //TODO магия
-            }
-        }  else if (e2.getX() - e1.getX() > REL_SWIPE_MIN_DISTANCE && 
-            Math.abs(velocityX) > REL_SWIPE_THRESHOLD_VELOCITY) { 
-        	if(mSwipeListener != null) {
-        		int position = mListView.pointToPosition((int)e1.getX(), (int)e1.getY());
-        		if (position > 0)  
-        			mSwipeListener.onSwipeL2R(position-1); //TODO магия
-        	}
-        } 
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    	if (e1 != null && e2 != null) {
+	        if (Math.abs(e1.getY() - e2.getY()) > REL_SWIPE_MAX_OFF_PATH) 
+	            return false; 
+	        if(e1.getX() - e2.getX() > REL_SWIPE_MIN_DISTANCE && 
+	            Math.abs(velocityX) > REL_SWIPE_THRESHOLD_VELOCITY) { 
+	            if(mSwipeListener != null) {
+	            	int position = mListView.pointToPosition((int)e1.getX(), (int)e1.getY());
+	            	if (position > 0) 
+	            		mSwipeListener.onSwipeR2L(position-1); //TODO магия
+	            }
+	        }  else if (e2.getX() - e1.getX() > REL_SWIPE_MIN_DISTANCE && 
+	            Math.abs(velocityX) > REL_SWIPE_THRESHOLD_VELOCITY) { 
+	        	if(mSwipeListener != null) {
+	        		int position = mListView.pointToPosition((int)e1.getX(), (int)e1.getY());
+	        		if (position > 0)  
+	        			mSwipeListener.onSwipeL2R(position-1); //TODO магия
+	        	}
+	        } 
+    	}
         return false; 
     }
 }
