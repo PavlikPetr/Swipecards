@@ -62,7 +62,11 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
             vf.setInAnimation(getContext(), R.anim.slide_in_from_right);
             vf.setOutAnimation(getContext(), android.R.anim.fade_out);
             vf.setDisplayedChild(1);
-            convertView.setActivated(true);
+            if (android.os.Build.VERSION.SDK_INT > 11) {
+            	convertView.setActivated(true);
+            } else {
+            	convertView.setBackgroundResource(R.drawable.im_item_list_bg_activated);
+            }
             holder.flippedBtn.setOnClickListener(new OnClickListener() {
 
                 @Override
@@ -80,7 +84,11 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
                 vf.setInAnimation(getContext(), android.R.anim.fade_in);
                 vf.setOutAnimation(getContext(), R.anim.slide_out_right);
                 vf.setDisplayedChild(0);
-                convertView.setActivated(false);
+                if (android.os.Build.VERSION.SDK_INT > 11) {
+                	convertView.setActivated(false);
+                }else {
+                	convertView.setBackgroundResource(R.drawable.item_list_selector);
+                }
                 mPrevSelectedForMutual = -1;
             }
         }
