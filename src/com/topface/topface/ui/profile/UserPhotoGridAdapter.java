@@ -27,7 +27,8 @@ public class UserPhotoGridAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mPhotoLinks.size();
+        //noinspection ConstantConditions
+        return mPhotoLinks != null ? mPhotoLinks.size() : null;
     }
 
     @Override
