@@ -25,7 +25,7 @@ public class FeedRequest extends AbstractApiRequest {
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = new JSONObject();
         data.put("limit", limit);
-        data.put("new", unread);
+        data.put("new", unread);        
         //data.put("leave", leave);
         if (before > 0) {
             data.put("before", before);
@@ -49,8 +49,8 @@ public class FeedRequest extends AbstractApiRequest {
                 break;
             case VISITORS:
                 service = "visitors";
+                break;
         }
         return service;
-    }
-
+    }      
 }

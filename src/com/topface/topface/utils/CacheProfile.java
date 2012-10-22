@@ -24,6 +24,7 @@ public class CacheProfile {
     public static int unread_likes;    // количество непрочитанных “понравилось” пользователя
     public static int unread_messages; // количество непрочитанных сообщений пользователя
     public static int unread_mutual;   // количество непрочитанных симпатий
+    public static int unread_visitors;   // количество непрочитанных гостей
 
     // City
     public static int city_id;      // идентификтаор города пользователя

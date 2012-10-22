@@ -85,6 +85,11 @@
     <style name="ButtonsText" parent="ShadowUserText">
         <item name="android:textColor">#FFFFFF</item>
     </style>
+    
+    <style name="NotificationText" parent="ShadowUserText">
+        <item name="android:textSize">9sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
 
     <style name="EditPhotoButtonsText" parent="ButtonsText">
         <item name="android:textSize">10sp</item>
