@@ -8,6 +8,15 @@ import java.util.LinkedList;
 
 public class Photos extends LinkedList<Photo> {
 
+    public Photos(JSONArray photos) {
+        this();
+        addAll(parse(photos));
+    }
+
+    public Photos() {
+        super();
+    }
+
     public static Photos parse(JSONArray photoArray) {
         Photos photos = new Photos();
         if (photoArray != null) {

@@ -6,8 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.*;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.R;
@@ -28,11 +27,6 @@ import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SwapAnimation;
 import org.json.JSONObject;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
     protected PullToRefreshListView mListView;
@@ -197,7 +191,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         FeedItem lastItem = mListAdapter.getLastFeedItem();
         if (isHistoryLoad && lastItem != null) {
-            request.before = lastItem.id;
+            request.to = lastItem.id;
         }
         request.limit = FeedAdapter.LIMIT;
         request.unread = mDoubleButton.isRightButtonChecked();

@@ -83,7 +83,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="6dp"
                     style="@style/ItemtText"
-                    android:text="@string/likes_mutual"
+                    android:text="@string/dashbrd_btn_sympathy"
                     android:background="@drawable/likes_btn_mutual_selector"/>
         </RelativeLayout>
     </ViewFlipper>
