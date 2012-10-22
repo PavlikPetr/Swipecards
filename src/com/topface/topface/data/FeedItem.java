@@ -52,7 +52,8 @@ abstract public class FeedItem extends AbstractLoaderData {
         this.id = item.optInt("id");
         this.created = item.optLong("created") * 1000;
         this.target = item.optInt("target");
-        this.unread = item.optBoolean("unread");
+        this.unread = item.optBoolean("unread");        
         this.user = new FeedUser(item.optJSONObject("user"));
+        
     }
 }

@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,15 +17,16 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
         mClass = itemClass;
         if (data != null) {
             fillData(data);
-        }
+        }        
     }
 
     @Override
     protected void fillData(JSONObject data) {
         super.fillData(data);
         unread = data.optInt("unread");
-        more = data.optBoolean("more");
-        items = getList(data.optJSONArray("items"));
+        more = data.optBoolean("more");        
+        items = getList(data.optJSONArray("items"));        
+        setUnread(unread);
     }
 
     private <T extends FeedItem> FeedList<T> getList(JSONArray list) {
@@ -43,5 +45,17 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
             }
         }
         return result;
+    }
+    
+    private void setUnread(int unread) {
+    	if(mClass.equals(FeedLike.class)) {
+    		CacheProfile.unread_likes = unread;
+    	} else if(mClass.equals(FeedDialog.class)) {
+    		CacheProfile.unread_messages = unread;
+    	} else if(mClass.equals(FeedMutual.class)) {
+    		CacheProfile.unread_mutual = unread;
+    	} else if(mClass.equals(Visitor.class)) {
+    		CacheProfile.unread_visitors = unread;
+    	}
     }
 }
