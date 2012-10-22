@@ -415,18 +415,7 @@
     <string name="settings_ask_developer">Вопрос разработчикам</string>
     <string name="settings_payment_problems">Проблемы с оплатой</string>
     <string name="settings_cooperation">Сотрудничество</string>
-    <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>
-
-    <plurals name="time_hour">
-        <item quantity="one">%d час назад</item>
-        <item quantity="few">%d часа назад</item>
-        <item quantity="other">%d часов назад</item>
-    </plurals>
-    <plurals name="time_minute">
-        <item quantity="one">%d минуту назад</item>
-        <item quantity="few">%d минуты назад</item>
-        <item quantity="other">%d минут назад</item>
-    </plurals>
+    <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>    
 
     <plurals name="photo">
         <item quantity="zero">Нет фотографий</item>

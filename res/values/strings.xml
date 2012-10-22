@@ -292,22 +292,7 @@
     </plurals>
     <string name="invite_is_free">Sending the invitations is free</string>
     <string name="invite_error">Could not send the invitation. Please, try again</string>
-    <string name="invite_completed">Invitation sent</string>
-
-
-    <plurals name="photo">
-        <item quantity="zero">No photos</item>
-        <item quantity="one">%d photo</item>
-        <item quantity="few">%d photos</item>
-        <item quantity="other">%d photos</item>
-    </plurals>
-
-    <plurals name="form_matches">
-        <item quantity="zero">You have no matches</item>
-        <item quantity="one">You have %d match</item>
-        <item quantity="few">You have %d matches</item>
-        <item quantity="other">You have %d matches</item>
-    </plurals>
+    <string name="invite_completed">Invitation sent</string>    
 
     <!--Leaders-->
     <string name="photo_add_or">Photo added</string>
@@ -350,16 +335,18 @@
     <string name="profile_gifts">Gifts</string>
     <string name="profile_actions">Actions</string>
 
-
-    <plurals name="time_hour">
-        <item quantity="one">%d hour ago</item>
-        <item quantity="few">%d hours ago</item>
-        <item quantity="other">%d hours ago</item>
-    </plurals>
-    <plurals name="time_minute">
-        <item quantity="one">%d minute ago</item>
-        <item quantity="few">%d minutes ago</item>
-        <item quantity="other">%d minutes ago</item>
+    <plurals name="photo">
+        <item quantity="zero">No photos</item>
+        <item quantity="one">%d photo</item>
+        <item quantity="few">%d photos</item>
+        <item quantity="other">%d photos</item>
     </plurals>
 
+    <plurals name="form_matches">
+        <item quantity="zero">You have no matches</item>
+        <item quantity="one">You have %d match</item>
+        <item quantity="few">You have %d matches</item>
+        <item quantity="other">You have %d matches</item>
+    </plurals>
+    
 </resources>
