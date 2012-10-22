@@ -7,7 +7,8 @@ import org.json.JSONObject;
 public class FeedRequest extends AbstractApiRequest {
     // Data
     public int limit;   // максимальное количество запрашиваемых диалогов. ОДЗ: 0 < limit <= 50
-    public int before;  // идентификатор последнего диалога для отображения. В случае отсутствия параметра диалоги возвращаются от последнего
+    public int to;  // идентификатор последнего диалога для отображения. В случае отсутствия параметра диалоги возвращаются от последнего
+    public int from;  // идентификатор последнего диалога для запроса новых сообщений после данного идентификатора
     public boolean unread;  // параметр получения только тех диалогов, в которых есть непрочитанные сообщения
     private FeedService mService;
     //private boolean leave; //Оставить сообщения не прочитанными
@@ -27,8 +28,12 @@ public class FeedRequest extends AbstractApiRequest {
         data.put("limit", limit);
         data.put("new", unread);
         //data.put("leave", leave);
-        if (before > 0) {
-            data.put("before", before);
+        if (to > 0) {
+            data.put("to", to);
+        }
+
+        if (from > 0) {
+            data.put("from", from);
         }
 
         return data;

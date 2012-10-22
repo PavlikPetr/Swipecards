@@ -112,7 +112,7 @@ public class ConnectionManager {
                     }
 
                 } catch (Exception e) {
-                    Debug.error(TAG + "::REQUEST::ERROR ===\n" + e.toString());
+                    Debug.error(TAG + "::REQUEST::ERROR ===\n", e);
                     if (httpPost != null && !httpPost.isAborted())
                         httpPost.abort();
                 }

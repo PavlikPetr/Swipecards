@@ -11,7 +11,7 @@
 
         <!-- header bar -->
 
-        <include layout="@layout/bar_navigation_header" />
+        <include layout="@layout/bar_navigation_header"/>
 
         <!-- static info -->
 
@@ -177,7 +177,7 @@
                         android:drawablePadding="-5sp"
                         android:drawableTop="@drawable/user_photo_selector"
                         android:gravity="center"
-                        android:text="Photo"
+                        android:text="@string/profile_photo"
                         android:textSize="10sp"/>
 
                 <RadioButton
@@ -189,20 +189,33 @@
                         android:drawablePadding="-5sp"
                         android:drawableTop="@drawable/user_questionnaire_selector"
                         android:gravity="center"
-                        android:text="Form"
+                        android:text="@string/profile_form"
                         android:textSize="10sp"/>
 
                 <RadioButton
-                    android:id="@+id/btnUserActions"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:button="@android:color/transparent"
-                    android:drawablePadding="-5sp"
-                    android:drawableTop="@drawable/user_actions_selector"
-                    android:gravity="center"
-                    android:text="Actions"
-                    android:textSize="10sp" />
+                        android:id="@+id/btnUserGifts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:button="@android:color/transparent"
+                        android:drawablePadding="-5sp"
+                        android:drawableTop="@drawable/user_gifts_selector"
+                        android:gravity="center"
+                        android:text="@string/profile_gifts"
+                        android:textSize="10sp"/>
+
+                <RadioButton
+                        android:id="@+id/btnUserActions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:button="@android:color/transparent"
+                        android:drawablePadding="-5sp"
+                        android:drawableTop="@drawable/user_actions_selector"
+                        android:gravity="center"
+                        android:text="@string/profile_actions"
+                        android:textSize="10sp"
+                        android:visibility="invisible"/>
             </RadioGroup>
         </RelativeLayout>
 
@@ -219,6 +232,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:visibility="gone"/>
+
     <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

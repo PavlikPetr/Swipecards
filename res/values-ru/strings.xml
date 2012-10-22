@@ -26,7 +26,7 @@
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_dating">Знакомства</string>
     <string name="dashbrd_btn_likes">Я нравлюсь</string>
-    <string name="dashbrd_btn_sympathy">Симпатия</string>
+    <string name="dashbrd_btn_sympathy">Взаимно</string>
     <string name="dashbrd_btn_chat">Диалоги</string>
     <string name="dashbrd_btn_tops">Топы</string>
     <string name="dashbrd_btn_visitors">Гости</string>
@@ -448,7 +448,12 @@
     <string name="app_help_url">http://topface.com</string>
     <string name="app_topface_url">http://topface.com</string>
 
-    <string name="general_dialog_retry">Retry</string>
+    <string name="general_dialog_retry">Повторить</string>
+
+    <string name="profile_photo">Фото</string>
+    <string name="profile_form">Анкета</string>
+    <string name="profile_gifts">Подарки</string>
+    <string name="profile_actions">Действия</string>
 
 
 </resources>

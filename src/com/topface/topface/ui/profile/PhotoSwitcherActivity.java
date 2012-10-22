@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import com.topface.topface.Data;
 import com.topface.topface.R;
@@ -18,7 +19,6 @@ public class PhotoSwitcherActivity extends Activity {
 
     private TextView mCounter;
     private ViewGroup mHeaderBar;
-    private ImageSwitcher mImageSwitcher;
     private Photos mPhotoLinks;
 
     public static final String INTENT_OWNER = "owner";
@@ -49,14 +49,24 @@ public class PhotoSwitcherActivity extends Activity {
         mCounter = ((TextView) findViewById(R.id.tvHeaderTitle));
 
         // Gallery
-        mImageSwitcher = ((ImageSwitcher) findViewById(R.id.galleryAlbum));
-        mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
-        mImageSwitcher.setOnClickListener(mOnClickListener);
+        ImageSwitcher imageSwitcher = ((ImageSwitcher) findViewById(R.id.galleryAlbum));
+        imageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
+        imageSwitcher.setOnClickListener(mOnClickListener);
 
         mPhotoLinks = isOwner ? CacheProfile.photos : Data.photos;
 
-        mImageSwitcher.setData(mPhotoLinks);
-        mImageSwitcher.setCurrentItem(position, false);
+        imageSwitcher.setData(mPhotoLinks);
+        imageSwitcher.setCurrentItem(position, false);
+
+        Button backButton = ((Button) findViewById(R.id.btnNavigationBack));
+        backButton.setVisibility(View.VISIBLE);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(Activity.RESULT_CANCELED);
+                finish();
+            }
+        });
 
         setCounter(position);
     }

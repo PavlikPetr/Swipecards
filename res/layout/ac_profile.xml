@@ -47,6 +47,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/ivUserAvatar">
+
                     <TextView
                             android:id="@+id/ivUserName"
                             android:layout_width="wrap_content"
@@ -103,6 +104,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/user_mutual_bg">
+
                     <TextView
                             android:id="@+id/tvUserMoney"
                             android:layout_width="wrap_content"
@@ -122,6 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/user_chat_bg">
+
                     <TextView
                             android:id="@+id/tvUserPower"
                             android:layout_width="wrap_content"
@@ -164,7 +167,7 @@
                         android:drawablePadding="-5sp"
                         android:gravity="center"
                         android:textSize="10sp"
-                        android:text="Photo"/>
+                        android:text="@string/profile_photo"/>
 
                 <!-- Form -->
                 <RadioButton
@@ -177,7 +180,7 @@
                         android:drawablePadding="-5sp"
                         android:gravity="center"
                         android:textSize="10sp"
-                        android:text="Form"/>
+                        android:text="@string/profile_form"/>
 
                 <!-- Gifts -->
                 <RadioButton
@@ -190,7 +193,7 @@
                         android:drawablePadding="-5sp"
                         android:gravity="center"
                         android:textSize="10sp"
-                        android:text="Gifts"/>
+                        android:text="@string/profile_gifts"/>
 
             </RadioGroup>
 
