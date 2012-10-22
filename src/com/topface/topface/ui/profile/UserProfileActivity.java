@@ -3,31 +3,39 @@ package com.topface.topface.ui.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.*;
+
 import com.topface.topface.R;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.UserRequest;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.GiftsFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
-public class UserProfileActivity extends FragmentActivity {
+public class UserProfileActivity extends BaseFragmentActivity {
 
     private int mUserId;
     private int mMutualId;
@@ -61,15 +69,18 @@ public class UserProfileActivity extends FragmentActivity {
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_MUTUAL_ID = "mutual_id";
     public static final String INTENT_USER_NAME = "user_name";
-    public static final String INTENT_CHAT_INVOKE = "chat_invoke";
+    public static final String INTENT_CHAT_INVOKE = "chat_invoke";        
 
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
     public static final int F_GIFTS = 2;
-    public static final int F_ACTIONS = 3;
-    public static final int F_COUNT = F_ACTIONS + 1;
+//    public static final int F_ACTIONS = 3;
+    public static final int F_COUNT = F_GIFTS + 1;
 
     public static final int GIFTS_LOAD_COUNT = 30;
+
+    private RelativeLayout lockScreen;
+    private RetryView retryBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,14 +90,40 @@ public class UserProfileActivity extends FragmentActivity {
 
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1); // свой - чужой профиль
         mMutualId = getIntent().getIntExtra(INTENT_MUTUAL_ID, -1);
-        mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE, false); // пришли из чата
+        mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE, false); // пришли из чата        
 
-        // Header Name
+        // Navigation bar
         String userName = getIntent().getStringExtra(INTENT_USER_NAME); // name
-        ((TextView) findViewById(R.id.tvHeaderTitle)).setText(userName);
+        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(userName);
 
-        mUserProfileHeader = (ViewGroup) findViewById(R.id.loProfileHeader);
-//        mUserProfileHeader.setBackgroundResource(ProfileBackgrounds.DEFAULT_BACKGROUND_RES_ID);
+        (findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        if (getIntent().hasExtra(INTENT_PREV_ENTITY)) {
+	        Button btnBack = (Button)findViewById(R.id.btnNavigationBackWithText);        
+	        btnBack.setVisibility(View.VISIBLE);
+	        btnBack.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					finish();
+				}
+			});
+        	String prevEntity = getIntent().getStringExtra(INTENT_PREV_ENTITY); 
+        	if(prevEntity.equals(ChatActivity.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_chat);
+        	} else if(prevEntity.equals(DatingFragment.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_dating);
+        	} else if(prevEntity.equals(DialogsFragment.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_dialog);
+        	} else if(prevEntity.equals(LikesFragment.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_likes);
+        	} else if(prevEntity.equals(MutualFragment.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_mutual);
+        	} else if(prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_visitors);
+        	}
+        	
+        }
+        
+        mUserProfileHeader = (ViewGroup) findViewById(R.id.loProfileHeader);        
         
         mRateController = new RateController(this);
         mLockerView = (LockerView) findViewById(R.id.llvProfileLoading);
@@ -111,6 +148,18 @@ public class UserProfileActivity extends FragmentActivity {
         mUserGifts.setOnClickListener(mInfoClickListener);
         mUserActions = (RadioButton) findViewById(R.id.btnUserActions);
         mUserActions.setOnClickListener(mInfoClickListener);
+
+        lockScreen = (RelativeLayout)findViewById(R.id.lockScreen);
+        retryBtn = new RetryView(getApplicationContext());
+        retryBtn.init(getLayoutInflater());
+        retryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getUserProfile();
+                lockScreen.setVisibility(View.GONE);
+            }
+        });
+        lockScreen.addView(retryBtn);
 
         mViewPager = (ViewPager) findViewById(R.id.UserViewPager);
         mViewPager.setAdapter(new UserProfilePageAdapter(getSupportFragmentManager()));
@@ -176,7 +225,8 @@ public class UserProfileActivity extends FragmentActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(UserProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(UserProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        lockScreen.setVisibility(View.VISIBLE);
                     }
                 });
             }
@@ -207,6 +257,7 @@ public class UserProfileActivity extends FragmentActivity {
                     intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
                     intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
                     intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
+                    intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, UserProfileActivity.this.getClass().getSimpleName());
                     startActivity(intent);
                     break;
                 default:
@@ -231,10 +282,10 @@ public class UserProfileActivity extends FragmentActivity {
                     mIndicatorView.setIndicator(F_GIFTS);
                     mViewPager.setCurrentItem(F_GIFTS);
                     break;
-                case R.id.btnUserActions:
-                    mIndicatorView.setIndicator(F_ACTIONS);
-                    mViewPager.setCurrentItem(F_ACTIONS);
-                    break;
+//                case R.id.btnUserActions:
+//                    mIndicatorView.setIndicator(F_ACTIONS);
+//                    mViewPager.setCurrentItem(F_ACTIONS);
+//                    break;
             }
         }
     };
@@ -263,10 +314,10 @@ public class UserProfileActivity extends FragmentActivity {
                     mIndicatorView.setIndicator(F_GIFTS);
                     ((RadioButton) mUserRadioGroup.getChildAt(F_GIFTS)).setChecked(true);
                     break;
-                case F_ACTIONS:
-                    mIndicatorView.setIndicator(F_ACTIONS);
-                    ((RadioButton) mUserRadioGroup.getChildAt(F_ACTIONS)).setChecked(true);
-                    break;
+//                case F_ACTIONS:
+//                    mIndicatorView.setIndicator(F_ACTIONS);
+//                    ((RadioButton) mUserRadioGroup.getChildAt(F_ACTIONS)).setChecked(true);
+//                    break;
             }
         }
     };
@@ -298,9 +349,9 @@ public class UserProfileActivity extends FragmentActivity {
                 case F_GIFTS:
                     fragment = new GiftsFragment();
                     break;
-                case F_ACTIONS:
-                    fragment = new UserActionsFragment();
-                    break;
+//                case F_ACTIONS:
+//                    fragment = new UserActionsFragment();
+//                    break;
             }
             return fragment;
         }

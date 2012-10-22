@@ -2,6 +2,12 @@
 <resources>
     <string name="time_now">Right now</string>
 
+    <plurals name="time_hour">
+        <item quantity="one">%d час назад</item>
+        <item quantity="few">%d часа назад</item>
+        <item quantity="other">%d часов назад</item>
+    </plurals>
+
     <plurals name="time_minute">
         <item quantity="zero">%d minutes ago</item>
         <item quantity="one">%d minute ago</item>

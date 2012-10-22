@@ -21,6 +21,7 @@
     <!-- Auth Activity -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
     <string name="auth_btn_fb">Войти через Facebook</string>
+    <string name="retry">{{refresh}} Повторить попытку</string>
 
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_dating">Знакомства</string>
@@ -156,7 +157,11 @@
     <!-- Navigation Header -->
     <string name="navigation_back_profile">Профиль</string>
     <string name="navigation_back_dialog">Диалоги</string>
+    <string name="navigation_back_likes">Вы нравитесь</string>
+    <string name="navigation_back_mutual">Взаимно</string>
+    <string name="navigation_back_visitors">Гости</string>
     <string name="navigation_back_dating">Знакомства</string>
+    <string name="navigation_back_chat">Чат</string>
     <string name="navigation_edit">Ред.</string>
     <string name="navigation_save">Сохр.</string>
     <string name="navigation_send">Отпр.</string>

@@ -22,10 +22,12 @@ public class UserRequest extends AbstractApiRequest {
         if (fields != null && fields.size() > 0) {
             this.fields = fields;
         }
+        doNeedAlert(false);
     }
 
     public UserRequest(ArrayList<Integer> uids, Context context) {
         this(uids, null, context);
+
     }
 
     public UserRequest(int uid, Context context) {
@@ -33,6 +35,7 @@ public class UserRequest extends AbstractApiRequest {
         ArrayList<Integer> data = new ArrayList<Integer>();
         data.add(uid);
         this.uids = data;
+        doNeedAlert(false);
     }
 
     @Override

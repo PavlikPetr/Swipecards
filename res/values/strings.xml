@@ -23,6 +23,7 @@
     <!-- Auth Activity -->
     <string name="auth_btn_vk">Login via VKontakte</string>
     <string name="auth_btn_fb">Login via Facebook</string>
+    <string name="retry">{{refresh}} Retry</string>
 
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_profile">Profile</string>
@@ -151,7 +152,11 @@
     <!-- Navigation Header -->
     <string name="navigation_back_profile">Profile</string>
     <string name="navigation_back_dialog">Dialogs</string>
-    <string name="navigation_back_dating">Dating</string>
+    <string name="navigation_back_likes">Likes</string>
+    <string name="navigation_back_mutual">Mutual</string>
+    <string name="navigation_back_visitors">Visitors</string>
+    <string name="navigation_back_dating">Dating</string>    
+    <string name="navigation_back_chat">Chat</string>
     <string name="navigation_edit">Edit</string>
     <string name="navigation_save">Save</string>
     <string name="navigation_send">Send</string>
@@ -290,17 +295,6 @@
     <string name="invite_error">Could not send the invitation. Please, try again</string>
     <string name="invite_completed">Invitation sent</string>
 
-    <!-- TODO: translate this to english-->
-    <plurals name="time_hour">
-        <item quantity="one">%d час назад</item>
-        <item quantity="few">%d часа назад</item>
-        <item quantity="other">%d часов назад</item>
-    </plurals>
-    <plurals name="time_minute">
-        <item quantity="one">%d минуту назад</item>
-        <item quantity="few">%d минуты назад</item>
-        <item quantity="other">%d минут назад</item>
-    </plurals>
 
     <plurals name="photo">
         <item quantity="zero">No photos</item>

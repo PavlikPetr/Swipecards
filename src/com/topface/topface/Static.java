@@ -45,5 +45,5 @@ public class Static {
     public static final String PREFERENCES_NEWBIE_DATING_RATE_IT = "newbie_dating_rate_it";
     // Profile
     //public static final String PREFERENCES_PROFILE_FILTER_GEO = "cache_profile_filter_geo";
-    //public static final String PREFERENCES_PROFILE_FILTER_ONLINE = "cache_profile_filter_online";
+    //public static final String PREFERENCES_PROFILE_FILTER_ONLINE = "cache_profile_filter_online";    
 }

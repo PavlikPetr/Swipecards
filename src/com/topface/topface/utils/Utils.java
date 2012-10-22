@@ -5,8 +5,6 @@ import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
 import android.text.ClipboardManager;
-import android.text.format.DateFormat;
-import android.text.format.DateUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
@@ -301,27 +299,6 @@ public class Utils {
     public static void formatTimeOld(TextView tv, long time) {
         Context context = tv.getContext();
         String text;
-        long now = unixtime();
-        long full_time = time * 1000;
-        long t = now - time;
-        if ((time > now) || t < 60)
-            text = context.getString(R.string.time_now);
-        else if (t < 3600)
-            text = formatMinute(t / 60);
-        else if (t < 6 * 3600)
-            text = formatHour(t / 3600);
-        else if (DateUtils.isToday(full_time))
-            text = context.getString(R.string.time_today) + DateFormat.format(" kk:mm", full_time).toString();
-        else {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            if (full_time > (now - (now - cal.getTimeInMillis()) - (24 * 60 * 60 * 1000)))
-                text = context.getString(R.string.time_yesterday) + DateFormat.format(" kk:mm", full_time).toString();
-            else
-                text = DateFormat.format("dd.MM.yyyy kk:mm", full_time).toString();
-        }
-        tv.setText(text);
     }
 
 

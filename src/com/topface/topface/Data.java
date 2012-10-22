@@ -75,6 +75,7 @@ public class Data {
         midnight = cal.getTimeInMillis();
 
         LocalBroadcastManager.getInstance(context).registerReceiver(new ReAuthReceiver(), new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
+
     }
 
     public static void release() {

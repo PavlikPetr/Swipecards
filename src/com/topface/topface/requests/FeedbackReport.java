@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class FeedbackReport extends AbstractApiRequest {
 
-    private static String service = "userfeedback";
+    private static String service = "clientFeedback";
 
     public String subject;
     public String text;
@@ -20,7 +20,7 @@ public class FeedbackReport extends AbstractApiRequest {
     protected JSONObject getRequestData() throws JSONException {
         JSONObject result = new JSONObject();
         result.put("subject", subject);
-        result.put("text", text);
+        result.put("message", text);
         result.put("extra", extra);
         return result;
     }

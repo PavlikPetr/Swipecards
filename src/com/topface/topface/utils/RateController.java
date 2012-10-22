@@ -27,6 +27,7 @@ public class RateController {
 
     public interface OnRateControllerListener {
         public void successRate();
+        public void failRate();
     }
 
     public RateController(Activity context) {
@@ -58,21 +59,31 @@ public class RateController {
                 MessageRequest messageRequest = new MessageRequest(mContext);
                 messageRequest.message = comment;
                 messageRequest.userid = userId;
+
                 messageRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
+                        mContext.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                sendRate(userId, rate);
+                                mCommentDialog.cancel();
+                                mCommentText.setText("");
+                                mInputManager.hideSoftInputFromWindow(mCommentText.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+                            }
+                        });
+
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
+                        mCommentDialog.cancel();
+                        sendRate(userId, rate);
                     }
                 }).exec();
 
 
-                sendRate(userId, rate);
-                mCommentDialog.cancel();
-                mCommentText.setText("");
-                mInputManager.hideSoftInputFromWindow(mCommentText.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+
             }
         });
         mCommentDialog.show();
@@ -101,6 +112,14 @@ public class RateController {
 
             @Override
             public void fail(int codeError, ApiResponse response) {
+                if (mOnRateControllerListener != null) {
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mOnRateControllerListener.failRate();
+                        }
+                    });
+                }
             }
         }).exec();
     }

@@ -146,7 +146,7 @@ public class Profile extends AbstractDataWithPhotos {
             
             Context context = App.getContext();            
             
-            // form
+         // form
             if (!resp.isNull("form")) {
                 JSONObject form = resp.getJSONObject("form");
 
@@ -203,8 +203,10 @@ public class Profile extends AbstractDataWithPhotos {
                     profile.forms.add(formItem);
                 }
 
-                //7 height  position 3
-                formItem = new FormItem(R.array.form_main_height, Integer.toString(form.optInt("height")), FormItem.DATA);
+                //7 height  position 3                
+                int h = form.optInt("height");
+                String height = (h == 0) ? null : Integer.toString(form.optInt("height"));
+                formItem = new FormItem(R.array.form_main_height, height, FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -214,7 +216,9 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //8 weight  position 4
-                formItem = new FormItem(R.array.form_main_weight, Integer.toString(form.optInt("weight")), FormItem.DATA);
+                int w = form.optInt("weight");
+                String weight = w == 0 ? null : Integer.toString(form.optInt("weight"));
+                formItem = new FormItem(R.array.form_main_weight, weight, FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -330,9 +334,16 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //22 restaurants  position 14
-                formItem = new FormItem(R.array.form_habits_restaurants, form.optString("restaurants"), FormItem.DATA);
+                String rest = form.optString("first_dating");
+                String restraunts = rest.trim().isEmpty() ? null : rest;
+                formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                	if (restraunts != null)
+                		profile.forms.add(formItem);
+                } else {
+                	profile.forms.add(formItem);
+                }
 
                 //23 DIVIDER
                 profile.forms.add(FormItem.getDivider());
@@ -343,14 +354,28 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.forms.add(formItem);
 
                 //25 first_dating  position 15
-                formItem = new FormItem(R.array.form_detail_about_dating, form.optString("first_dating"), FormItem.DATA);
+                String dd = form.optString("first_dating");
+                String datingDetails = dd.trim().isEmpty() ? null : dd;
+                formItem = new FormItem(R.array.form_detail_about_dating, datingDetails, FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                	if (datingDetails != null)
+                		profile.forms.add(formItem);
+                } else {
+                	profile.forms.add(formItem);
+                }
 
                 //26 achievements  position 16
-                formItem = new FormItem(R.array.form_detail_archievements, form.optString("achievements"), FormItem.DATA);
+                String ach = form.optString("first_dating");
+                String achievments = dd.trim().isEmpty() ? null : ach;
+                formItem = new FormItem(R.array.form_detail_archievements, achievments, FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                	if (achievments != null)
+                		profile.forms.add(formItem);
+                } else {
+                	profile.forms.add(formItem);
+                }
 
                 //27 DIVIDER
                 profile.forms.add(FormItem.getDivider());

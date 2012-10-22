@@ -11,7 +11,7 @@
 
         <!-- header bar -->
 
-        <include layout="@layout/bar_btn_header" />
+        <include layout="@layout/bar_navigation_header" />
 
         <!-- static info -->
 
@@ -214,7 +214,8 @@
                     android:drawableTop="@drawable/user_actions_selector"
                     android:gravity="center"
                     android:text="Actions"
-                    android:textSize="10sp" />
+                    android:textSize="10sp" 
+                    android:visibility="invisible"/>
             </RadioGroup>
         </RelativeLayout>
 
@@ -231,5 +232,12 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="gone" />
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/chat_add_panel_bg"
+            android:visibility="gone"
+            android:id="@+id/lockScreen"
+            />
 
 </RelativeLayout>

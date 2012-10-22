@@ -14,9 +14,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.Data;
@@ -27,6 +29,11 @@ import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.fragments.DatingFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.SwapControl;
@@ -99,14 +106,33 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         headerSubtitle.setText(getIntent().getStringExtra(INTENT_USER_CITY));
 
         (findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-        final Button btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
-        if (mProfileInvoke) {
-            btnBack.setText(getResources().getString(R.string.navigation_back_profile));
-        } else {
-            btnBack.setText(getResources().getString(R.string.navigation_back_dialog));
+        if (getIntent().hasExtra(INTENT_PREV_ENTITY)) {
+	        Button btnBack = (Button)findViewById(R.id.btnNavigationBackWithText);        
+	        btnBack.setVisibility(View.VISIBLE);
+	        btnBack.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					finish();
+				}
+			});
+        	String prevEntity = getIntent().getStringExtra(INTENT_PREV_ENTITY); 
+        	if(prevEntity.equals(ChatActivity.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_chat);
+        	} else if(prevEntity.equals(DatingFragment.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_dating);
+        	} else if(prevEntity.equals(DialogsFragment.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_dialog);
+        	} else if(prevEntity.equals(LikesFragment.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_likes);
+        	} else if(prevEntity.equals(MutualFragment.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_mutual);
+        	} else if(prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_visitors);
+        	} else if(prevEntity.equals(UserProfileActivity.class.getSimpleName())) {
+        		btnBack.setText(R.string.navigation_back_profile);
+        	}
+        	
         }
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setOnClickListener(this);
 
         final Button btnProfile = (Button) findViewById(R.id.btnNavigationProfileBar);
         switch (userSex) {
@@ -270,6 +296,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 intent.putExtra(UserProfileActivity.INTENT_USER_ID, mUserId);
                 intent.putExtra(UserProfileActivity.INTENT_CHAT_INVOKE, true);
                 intent.putExtra(UserProfileActivity.INTENT_USER_NAME, mHeaderTitle.getText());
+                intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, ChatActivity.this.getClass().getSimpleName());
                 startActivity(intent);
             }
             break;
