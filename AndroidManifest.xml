@@ -5,10 +5,15 @@
           android:versionCode="31"
           android:versionName="2.0 b">
 
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="16"/>
+    <uses-sdk
+            android:minSdkVersion="7"
+            android:targetSdkVersion="16"/>
 
     <!-- permissions -->
-    <permission android:name="com.topface.topface.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
+    <permission
+            android:name="com.topface.topface.permission.C2D_MESSAGE"
+            android:protectionLevel="signature"/>
+
     <uses-permission android:name="com.topface.topface.permission.C2D_MESSAGE"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -38,23 +43,37 @@
         </activity>
 
         <!-- activity -->
-        <activity android:name=".ui.MainActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".utils.social.WebAuthActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".ui.NavigationActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".ui.CitySearchActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".ui.GeoMapActivity" android:screenOrientation="portrait"
-                  android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".ui.FilterActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".ui.profile.UserProfileActivity" android:screenOrientation="portrait"/>
+        <activity
+                android:name=".utils.social.WebAuthActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".ui.NavigationActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".ui.CitySearchActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".ui.GeoMapActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="adjustResize"/>
+        <activity
+                android:name=".ui.profile.UserProfileActivity"
+                android:screenOrientation="portrait"/>
         <activity android:name=".ui.profile.PhotoSwitcherActivity"/>
-        <activity android:name=".ui.edit.EditProfileActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".ui.edit.EditContainerActivity" android:screenOrientation="portrait"/>
+        <activity
+                android:name=".ui.edit.EditProfileActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".ui.edit.EditContainerActivity"
+                android:screenOrientation="portrait"/>
         <activity android:name=".ui.ChatActivity"/>
         <activity android:name=".ui.GiftsActivity"/>
         <activity android:name=".ui.InviteActivity"/>
         <activity android:name=".ui.LeadersActivity"/>
         <activity android:name=".ui.settings.SettingsContainerActivity"/>
-        <activity android:name=".billing.BuyingActivity" android:screenOrientation="portrait"/>
+        <activity
+                android:name=".billing.BuyingActivity"
+                android:screenOrientation="portrait"/>
 
         <!-- services -->
         <service android:name=".services.NotificationService"/>
@@ -71,8 +90,9 @@
 
         <!-- c2dm -->
         <service android:name=".C2DMReceiver"/>
-        <receiver android:name="com.google.android.c2dm.C2DMBroadcastReceiver"
-                  android:permission="com.google.android.c2dm.permission.SEND">
+        <receiver
+                android:name="com.google.android.c2dm.C2DMBroadcastReceiver"
+                android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
                 <category android:name="com.topface.topface"/>

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
+import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedLoader;
 import com.topface.topface.ui.views.ImageViewRemote;
 
@@ -176,13 +177,13 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         void onFeedUpdate();
     }
 
-    public void setData(FeedList<T> data) {
+    public void setData(FeedListData<T> data) {
         removeLoaderItem();
         FeedList<T> currentData = getData();
         currentData.clear();
-        currentData.addAll(data);
+        currentData.addAll(data.items);
 
-        addLoaderItem();
+        addLoaderItem(data.more);
 
         notifyDataSetChanged();
         setLastUpdate();
@@ -193,18 +194,20 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         mLastUpdate = System.currentTimeMillis();
     }
 
-    private void addLoaderItem() {
+    private void addLoaderItem(boolean hasMore) {
         FeedList<T> currentData = getData();
-        if (!currentData.isEmpty() && currentData.size() > LIMIT / 2) {
+        if (hasMore && !currentData.isEmpty()) {
             currentData.add(getLoaderItem());
         }
     }
 
-    public void addData(FeedList<T> data) {
+    public void addData(FeedListData<T> data) {
         removeLoaderItem();
-        if (data != null && !data.isEmpty()) {
-            getData().addAll(data);
-            addLoaderItem();
+        if (data != null) {
+            if (!data.items.isEmpty()) {
+                getData().addAll(data.items);
+            }
+            addLoaderItem(data.more);
         }
         notifyDataSetChanged();
         setLastUpdate();

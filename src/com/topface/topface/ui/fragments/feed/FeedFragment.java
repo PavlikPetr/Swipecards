@@ -203,9 +203,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     @Override
                     public void run() {
                         if (isHistoryLoad) {
-                            mListAdapter.addData(dialogList.items);
+                            mListAdapter.addData(dialogList);
                         } else {
-                            mListAdapter.setData(dialogList.items);
+                            mListAdapter.setData(dialogList);
                         }
                         onUpdateSuccess(isPushUpdating || isHistoryLoad);
                         mListView.onRefreshComplete();
