@@ -152,14 +152,14 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         feedbackRequest.callback(new ApiHandler() {
 
             @Override
-            public void success(ApiResponse response) throws NullPointerException {
-                mEditText.setText(Static.EMPTY);
+            public void success(ApiResponse response) throws NullPointerException {                
                 mReport.body = Static.EMPTY;
                 finishRequestSend();
                 updateUI(new Runnable() {
 
                     @Override
                     public void run() {
+                    	mEditText.setText(Static.EMPTY);
                         Toast.makeText(getActivity(),
                                 getString(R.string.settings_feedback_success_msg),
                                 Toast.LENGTH_SHORT).show();
