@@ -21,6 +21,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -188,13 +189,11 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void openNavigationActivity() {
-        startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
-        //TODO: Подчинить перелогин
-//        if (!mFromAuthorizationReceiver) {
-//              startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
-//        } else {
-//            ConnectionManager.getInstance().notifyDelayedRequests();
-//        }
+        if (!mFromAuthorizationReceiver) {
+            startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
+        } else {
+            ConnectionManager.getInstance().notifyDelayedRequests();
+        }
         finish();
     }
 
