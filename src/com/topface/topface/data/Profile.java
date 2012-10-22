@@ -8,7 +8,6 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.http.ProfileBackgrounds;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,35 +35,8 @@ public class Profile extends AbstractDataWithPhotos {
     // Resources
     public int money; // количество монет у пользователя
     public int power; // количество энергии пользователя
-    public int average_rate; // средняя оценка текущего пользователя    
 
-    // Form
-//1    public int form_job_id; // идентификатор рабочей партии пользователя
-//2    public String form_job; // описание оригинальной работы пользователя
-//3    public int form_status_id; // идентификатор предопределенного статуса пользователя
-//4    public String form_status; // описание оригинального статуса пользователя
-//5    public int form_education_id; // идентификатор предопределенного уровня образования пользователя
-//6    public int form_marriage_id; // идентификатор предопределенного семейного положения пользователя
-//7    public int form_finances_id; // идентификатор предопределенного финансового положения пользователя
-//8    public int form_character_id; // идентификатор предопределенной характеристики пользователя
-//9    public int form_smoking_id; // идентификатор предопределенного отношения к курению пользователя
-//10    public int form_alcohol_id; // идентификатор предопределенного отношения к алкоголю пользователя
-//11    public int form_fitness_id; // идентификатор предопределенного отношения к спорту пользователя
-//12    public int form_communication_id; // идентификатор предопределенного отношения к коммуникациям пользователя
-//13    public int form_weight; // вес пользователя
-//14    public int form_height; // рост пользователя
-//15    public int form_hair_id; // идентификатор цвета воло пользователя
-//16    public int form_eye_id; // идентификатор цвета глаз пользователя
-//17    public int form_children_id; // идентификатор количества детей пользователя
-//18    public int form_residence_id; // идентификатор условий проживания пользователя
-//19    public int form_car_id; // идентификатор наличия автомобиля у пользователя
-//20    public String form_car; // текстовое описание присутствующего автомобиля у пользователя
-//21    public String form_first_dating; // текстовое описание свидания пользователя
-//22    public String form_achievements; // текстовое описание достижений пользователя
-//23    //{Array} form_countries; // массив идентификаторов стран, в которых бывал пользователь
-//24    public String form_restaurants; // описание предпочитаемых ресторанов пользователя
-//25    public String form_valuables; // описание ценностей пользователя
-//26    public String form_aspirations; // описание достижений пользователя
+    public int average_rate; // средняя оценка текущего пользователя
 
     // Dating
     public int dating_sex; // пол пользователей для поиска
@@ -76,12 +48,11 @@ public class Profile extends AbstractDataWithPhotos {
 
     public String status; // статус пользователя
 
-    public LinkedList<FormItem> forms = new LinkedList<FormItem>();    
+    public LinkedList<FormItem> forms = new LinkedList<FormItem>();
 
     private static boolean mIsUserProfile;
 
     public LinkedList<Gift> gifts = new LinkedList<Gift>();
-    
     public int background;
 
     //private static final String profileFileName = "profile.out";
@@ -141,12 +112,12 @@ public class Profile extends AbstractDataWithPhotos {
                 gift.feedId = itemGift.optInt("id");
                 profile.gifts.add(gift);
             }
-            
-            profile.background = resp.optInt("background",ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
-            
-            Context context = App.getContext();            
-            
-         // form
+
+            profile.background = resp.optInt("background", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
+
+            Context context = App.getContext();
+
+            // form
             if (!resp.isNull("form")) {
                 JSONObject form = resp.getJSONObject("form");
 
@@ -156,7 +127,8 @@ public class Profile extends AbstractDataWithPhotos {
 
                 if (profile instanceof User) {
                     mIsUserProfile = true;
-                    ((User)profile).formMatches = form.optInt("goodness");
+
+                    ((User) profile).formMatches = form.optInt("goodness");
                 }
 
                 //1 HEADER -= MAIN =-
@@ -430,7 +402,6 @@ public class Profile extends AbstractDataWithPhotos {
 //                formItem.value = "" + form.optInt("aspirations");
 //                formItem.equal = false;
 //                profile.forms.add(formItem);
-
             }
 
             initPhotos(resp, profile);

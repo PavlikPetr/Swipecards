@@ -1,7 +1,6 @@
 package com.topface.topface.ui.settings;
 
 import java.util.Locale;
-
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -206,7 +205,6 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             StringBuilder strBuilder = new StringBuilder();
 
             strBuilder.append("Topface version:").append(topface_version).append("\n");
-            
             strBuilder.append("Device:").append(device).append("/").append(model).append("\n");
             strBuilder.append("Device language:").append(Locale.getDefault().getDisplayLanguage()).append("\n");            
             
@@ -220,7 +218,6 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             
             return strBuilder.toString();
         }
-
     }
 
 	@Override

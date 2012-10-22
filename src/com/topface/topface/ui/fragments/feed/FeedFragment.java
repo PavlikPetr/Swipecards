@@ -188,7 +188,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         intent.putExtra(UserProfileActivity.INTENT_USER_ID, item.user.id);
         intent.putExtra(UserProfileActivity.INTENT_USER_NAME, item.user.first_name);
         intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
-
         startActivity(intent);
     }
 

@@ -47,7 +47,7 @@ public class ApiResponse {
                 json = new JSONObject(response);
             } catch (JSONException e) {
                 code = WRONG_RESPONSE;
-                Debug.log(this, "json response is wrong: " + response);
+                Debug.error("json response is wrong: " + response, e);
             }
         }
 
@@ -61,7 +61,7 @@ public class ApiResponse {
     public void parseJson(JSONObject response) {
         try {
             if (response == null) {
-                Debug.log(this, "json response is null");
+                Debug.error("JSON response is null");
                 code = NULL_RESPONSE;
                 return;
             }
@@ -76,7 +76,7 @@ public class ApiResponse {
                 code = WRONG_RESPONSE;
         } catch (Exception e) {
             code = WRONG_RESPONSE;
-            Debug.log(this, "json resonse is wrong:" + response);
+            Debug.error("json resonse is wrong:" + response, e);
         }
     }
 

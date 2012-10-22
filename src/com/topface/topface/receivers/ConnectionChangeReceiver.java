@@ -59,17 +59,9 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         }
     }
 
-    private void sendBroadcastReauth(Context context) {
-        Intent intent = new Intent();
-        intent.setAction(ReAuthReceiver.REAUTH_INTENT);
-        context.sendBroadcast(intent);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    }
-
    private void reAuthIfNeed(Context context) {
         if(AuthActivity.mThis!=null) {
-//            AuthActivity.mThis.reAuthAfterInternetConnected();
-            sendBroadcastReauth(context);
+            AuthActivity.mThis.reAuthAfterInternetConnected();
         }
    }
 

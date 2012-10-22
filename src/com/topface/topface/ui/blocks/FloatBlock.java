@@ -6,7 +6,6 @@ import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.TopsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
-import com.topface.topface.utils.CacheProfile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +21,7 @@ public class FloatBlock {
 
     public FloatBlock(Activity activity) {
         super();
-        mOptions = CacheProfile.getOptions();
+        //mOptions = CacheProfile.getOptions();
         mActivity = activity;
         mActivityMap = new HashMap<String, String>();
         setActivityMap();

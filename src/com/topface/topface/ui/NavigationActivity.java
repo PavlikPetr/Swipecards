@@ -49,17 +49,6 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        Button retry = (Button) getWindow().getCurrentFocus().findViewById(Dialog.BUTTON_POSITIVE);
-        Debug.log("retry1");
-        if(retry!=null) {
-            Debug.log("retry");
-            retry.performClick();
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         mThis = this;
@@ -158,4 +147,3 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         }
     };
 }
-

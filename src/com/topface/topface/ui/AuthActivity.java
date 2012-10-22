@@ -1,11 +1,9 @@
 package com.topface.topface.ui;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -47,7 +45,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         Debug.log(this, "+onCreate");
         setContentView(R.layout.ac_auth);
 
-        mAuthContainer = (RelativeLayout)findViewById(R.id.authContainer);
+        mAuthContainer = (RelativeLayout) findViewById(R.id.authContainer);
 
         mRetryView = new RetryView(getApplicationContext());
         mRetryView.init(getLayoutInflater());
@@ -122,9 +120,8 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     protected void onResume() {
         super.onResume();
         checkIntentForReauth(getIntent());
-        mThis=this;
+        mThis = this;
     }
-
 
 
     @Override
@@ -142,10 +139,10 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        if (!Http.isOnline(this)){
+        if (!Http.isOnline(this)) {
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
                     .show();
-        } else{
+        } else {
             if (view.getId() == R.id.btnAuthVK) {
                 mAuthorizationManager.vkontakteAuth();
             } else if (view.getId() == R.id.btnAuthFB) {
@@ -159,14 +156,14 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     public void reAuthAfterInternetConnected() {
-        if(!mIsAuthorized){
-           if(!(new AuthToken(getApplicationContext()).isEmpty())){
-               mAuthorizationManager.reAuthorize();
-               hideButtons();
-               mRetryView.setVisibility(View.GONE);
-               mProgressBar.setVisibility(View.VISIBLE);
-           }
-       }
+        if (!mIsAuthorized) {
+            if (!(new AuthToken(getApplicationContext()).isEmpty())) {
+                mAuthorizationManager.reAuthorize();
+                hideButtons();
+                mRetryView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void showButtons() {
@@ -239,12 +236,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void getProfile() {
-        //Profile.deleteProfile();
-//        if(Profile.isProfileExist()) {
-//            CacheProfile.setProfile(Profile.load());
-//            openNavigationActivity();
-//            return;
-//        }
 
         ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
         registerRequest(profileRequest);
@@ -252,7 +243,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         profileRequest.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
-                CacheProfile.setProfile(Profile.parse(response));
+                CacheProfile.setProfile(Profile.parse(response), response);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -290,5 +281,4 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mRetryView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }
-
 }

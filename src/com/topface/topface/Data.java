@@ -111,5 +111,4 @@ public class Data {
         editor.putString(Static.PREFERENCES_SSID, SSID = Static.EMPTY);
         editor.commit();
     }
-
 }

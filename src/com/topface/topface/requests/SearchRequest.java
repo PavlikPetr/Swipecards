@@ -1,13 +1,12 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SearchRequest extends ApiRequest {
+public class SearchRequest extends AbstractApiRequest {
     // Data
-    private String service = "search";
+    private static final String mServiceName = "search";
     public int limit; // размер получаемой выборки 10 <= limit <= 50
     public boolean geo; // необходимости геопозиционного поиска
     public boolean ero; // флаг необходимости эротического поиска
@@ -18,16 +17,17 @@ public class SearchRequest extends ApiRequest {
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("limit", limit).put("geo", geo).put("ero", ero).put("online", online));
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
-        }
-
-        return root.toString();
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject()
+                .put("limit", limit)
+                .put("geo", geo)
+                .put("ero", ero)
+                .put("online", online);
     }
+
+    @Override
+    protected String getServiceName() {
+        return mServiceName;
+    }
+
 }
