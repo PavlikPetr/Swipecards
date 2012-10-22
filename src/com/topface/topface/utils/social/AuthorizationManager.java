@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
@@ -16,7 +15,6 @@ import com.topface.topface.Data;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.http.Http;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -214,9 +212,9 @@ public class AuthorizationManager {
             }
         }
     };
-    
+
     public static void getAccountName(Handler handler) {
-    	AuthToken authToken = new AuthToken(App.getContext());
+        AuthToken authToken = new AuthToken(App.getContext());
 
         if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             getFbName(authToken.getTokenKey(), authToken.getUserId(), handler);
@@ -224,73 +222,73 @@ public class AuthorizationManager {
             getVkName(authToken.getTokenKey(), authToken.getUserId(), handler);
         }
     }
-    
+
     private static final String VkNameUrl = "https://api.vkontakte.ru/method/getProfiles?uid=%s&access_token=%s";
     public static final int SUCCESS_GET_NAME = 0;
     public static final int FAILURE_GET_NAME = 1;
-    
-    public static void getVkName(final String token,final String user_id,final Handler handler) {        	
-    	(new Thread() {
-    		@Override
-    		public void run() {
-    			String responseRaw = Http.httpGetRequest(String.format(VkNameUrl, user_id, token));
-    			try {
-    				String result = "";
-					JSONObject response = new JSONObject(responseRaw);
-					JSONArray responseArr = response.optJSONArray("response");
-					if (responseArr.length() > 0) {							
-						JSONObject profile = responseArr.getJSONObject(0);
-						result = profile.optString("first_name") + " " + profile.optString("last_name");							
-					}
-					handler.sendMessage(Message.obtain(null,SUCCESS_GET_NAME,result));
-				} catch (JSONException e) {
-					Debug.log(AuthorizationManager.class, "can't get name in vk:" + e);
-					handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
-				} 
-    		}
-    	}).start();
+
+    public static void getVkName(final String token, final String user_id, final Handler handler) {
+        (new Thread() {
+            @Override
+            public void run() {
+                String responseRaw = Http.httpGetRequest(String.format(VkNameUrl, user_id, token));
+                try {
+                    String result = "";
+                    JSONObject response = new JSONObject(responseRaw);
+                    JSONArray responseArr = response.optJSONArray("response");
+                    if (responseArr.length() > 0) {
+                        JSONObject profile = responseArr.getJSONObject(0);
+                        result = profile.optString("first_name") + " " + profile.optString("last_name");
+                    }
+                    handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, result));
+                } catch (JSONException e) {
+                    Debug.log(AuthorizationManager.class, "can't get name in vk:" + e);
+                    handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
+                }
+            }
+        }).start();
     }
-    
-    public static void getFbName(final String token,final String user_id,final Handler handler) {        	
-    	new AsyncFacebookRunner(Data.facebook).request("/"+user_id, new RequestListener() {
-			
-    		@Override
+
+    public static void getFbName(final String token, final String user_id, final Handler handler) {
+        new AsyncFacebookRunner(Data.facebook).request("/" + user_id, new RequestListener() {
+
+            @Override
             public void onComplete(String response, Object state) {
-                try {                   
+                try {
                     JSONObject jsonResult = new JSONObject(response);
                     String user_name = jsonResult.getString("name");
-                    handler.sendMessage(Message.obtain(null,SUCCESS_GET_NAME,user_name));
+                    handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, user_name));
                 } catch (JSONException e) {
                     Debug.log("FB", "mRequestListener::onComplete:error");
-                    handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
+                    handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
                 }
             }
 
             @Override
             public void onMalformedURLException(MalformedURLException e, Object state) {
                 Debug.log("FB", "mRequestListener::onMalformedURLException");
-                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
             }
 
             @Override
             public void onIOException(IOException e, Object state) {
                 Debug.log("FB", "mRequestListener::onIOException");
-                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
             }
 
             @Override
             public void onFileNotFoundException(FileNotFoundException e, Object state) {
                 Debug.log("FB", "mRequestListener::onFileNotFoundException");
-                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
             }
 
             @Override
             public void onFacebookError(FacebookError e, Object state) {
                 Debug.log("FB", "mRequestListener::onFacebookError:" + e + ":" + state);
-                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME,""));
+                handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
             }
-		});
+        });
     }
-    
-    
+
+
 }

@@ -164,7 +164,7 @@
     </integer-array>
 
 
-   <!-- Marriage ******************************************************************************** -->
+    <!-- Marriage ******************************************************************************** -->
     <string-array name="profile_form_marriage_male">
         <item>@string/profile_form_marriage_male_0</item>
         <item>@string/profile_form_marriage_male_1</item>

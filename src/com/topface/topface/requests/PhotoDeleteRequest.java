@@ -1,17 +1,14 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-
-import com.topface.topface.data.Photo;
 import com.topface.topface.utils.Debug;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PhotoDeleteRequest extends ApiRequest {
     // Data
-    private String service = "photoDelete";    
+    private String service = "photoDelete";
     public int[] photos;
 
     public PhotoDeleteRequest(Context context) {
@@ -31,11 +28,11 @@ public class PhotoDeleteRequest extends ApiRequest {
 
         return root.toString();
     }
-    
+
     private JSONArray getPhotosJson() throws JSONException {
         JSONArray photosJson = new JSONArray();
         for (int photo : photos) {
-        	photosJson.put(photo);
+            photosJson.put(photo);
         }
         return photosJson;
     }

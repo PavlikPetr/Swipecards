@@ -34,7 +34,7 @@ public class ProfileFormFragment extends BaseFragment {
         mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
 //        mTitle.setText(R.string.form);
         mTitle.setVisibility(View.GONE);
-        
+
         return root;
     }
 

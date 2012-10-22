@@ -29,13 +29,12 @@ import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
-import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.*;
 
 import java.util.LinkedList;
 
-public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker, RateController.OnRateControllerListener {	
-	
+public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker, RateController.OnRateControllerListener {
+
     private int mCurrentUserPos;
     private int mCurrentPhotoPrevPos;
     private View mResourcesControl;
@@ -54,7 +53,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mUserInfoStatus;
     private TextView mCounter;
     private View mDatingGroup;
-//    private View mFirstRateButtons;
+    //    private View mFirstRateButtons;
 //    private View mSecondRateButtons;
     private ImageSwitcher mImageSwitcher;
     private LinkedList<Search> mUserSearchList;
@@ -82,11 +81,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         View view = inflater.inflate(R.layout.ac_dating, null);
 
-        mRetryBtn = (ImageButton)view.findViewById(R.id.btnUpdate);
+        mRetryBtn = (ImageButton) view.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
 
-        mViewFlipper =(ViewFlipper) view.findViewById(R.id.vfFlipper);        
-        
+        mViewFlipper = (ViewFlipper) view.findViewById(R.id.vfFlipper);
+
         singleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
         singleDelight = getResources().getDrawable(R.drawable.dating_delight_selector);
 
@@ -225,7 +224,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("Topface","fail");
+                        Log.d("Topface", "fail");
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         onUpdateFail(isAddition);
                         unlockControls();
@@ -250,7 +249,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         updateData(true);
                         return;
                     } else {
-                        lockControls();                        
+                        lockControls();
                         mRateController.onRate(currentSearch.uid, 10, currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     }
 //                    currentSearch.rated = true;
@@ -307,7 +306,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingSwitchPrev: {
-            	mViewFlipper.setDisplayedChild(0);
+                mViewFlipper.setDisplayedChild(0);
             }
             break;
             case R.id.btnUpdate: {

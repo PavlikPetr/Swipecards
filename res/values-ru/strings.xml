@@ -54,7 +54,7 @@
     <string name="chat_comment">Написать сообщение</string>
     <string name="chat_gift_in">Вы получили подарок.</string>
     <string name="chat_gift_out">Вы отправили подарок.</string>
-     <string name="chat_like_in">Вам отправили симпатию</string>
+    <string name="chat_like_in">Вам отправили симпатию</string>
     <string name="chat_like_out">Вы отправили симпатию</string>
     <string name="chat_symphathy_in">Вам отправили взаимную сипматию</string>
     <string name="chat_symphathy_out">Вы отправили взаимную сипматию</string>
@@ -81,7 +81,7 @@
 
     <!-- Filter Activity -->
     <string name="filter_filter">Фильтр</string>
-     <string name="filter_girl">Девушки</string>
+    <string name="filter_girl">Девушки</string>
     <string name="filter_boy">Парни</string>
     <string name="filter_from">От</string>
     <string name="filter_to">до</string>
@@ -150,7 +150,7 @@
     <string name="gifts_send_btn">Отправить подарок</string>
 
     <!-- Map Activity -->
-   <string name="map_location_progress">Определяю местоположение</string>
+    <string name="map_location_progress">Определяю местоположение</string>
     <string name="map_confirm">Отпр.</string>
     <string name="map_address">Введите адрес</string>
 
@@ -164,7 +164,7 @@
 
     <!-- Profile / UserProfile Form -->
     <string name="form">Анкета</string>
-    
+
     <string name="form_main">Основное</string>
 
     <string-array name="form_main_status">
@@ -380,7 +380,6 @@
     <string name="photo_add_error">Не удалось добавить фотографию</string>
 
 
-
     <string name="leaders_date">Хочу на\nсвидание!</string>
 
     <!-- Settings -->
@@ -430,8 +429,8 @@
         <item quantity="one">%d фотография</item>
         <item quantity="few">%d фотографии</item>
         <item quantity="other">%d фотографий</item>
-    </plurals>        
-    
+    </plurals>
+
     <plurals name="form_matches">
         <item quantity="zero">У вас нет совпадений</item>
         <item quantity="one">У вас %d совпадение</item>

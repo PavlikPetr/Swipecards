@@ -23,7 +23,7 @@ import com.topface.topface.utils.http.ProfileBackgrounds.ResourceBackgroundItem;
 import java.util.LinkedList;
 
 public class EditBackgroundFragment extends AbstractEditFragment {
-    
+
     private int mSelectedId;
     private ListView mBackgroundImagesListView;
     private BackgroundImagesAdapter mAdapter;
@@ -33,7 +33,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                              Bundle savedInstanceState) {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container, false);
-        
+
         mSelectedId = CacheProfile.background_id;
 
         // Navigation bar
@@ -83,33 +83,33 @@ public class EditBackgroundFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected void saveChanges(final Handler handler) {        
+    protected void saveChanges(final Handler handler) {
         if (hasChanges()) {
-            prepareRequestSend();            
-            
+            prepareRequestSend();
+
             SettingsRequest request = new SettingsRequest(getActivity().getApplicationContext());
             registerRequest(request);
             request.background = mSelectedId;
             request.callback(new ApiHandler() {
-				
-				@Override
-				public void success(ApiResponse response) throws NullPointerException {
-					CacheProfile.background_id = mSelectedId;		            
-		            getActivity().setResult(Activity.RESULT_OK);
-		            finishRequestSend();
-		            handler.sendEmptyMessage(0);
-				}
-				
-				@Override
-				public void fail(int codeError, ApiResponse response) throws NullPointerException {					
-					finishRequestSend();
-				}
-			}).exec();
+
+                @Override
+                public void success(ApiResponse response) throws NullPointerException {
+                    CacheProfile.background_id = mSelectedId;
+                    getActivity().setResult(Activity.RESULT_OK);
+                    finishRequestSend();
+                    handler.sendEmptyMessage(0);
+                }
+
+                @Override
+                public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    finishRequestSend();
+                }
+            }).exec();
         } else {
-            getActivity().setResult(Activity.RESULT_CANCELED);            
+            getActivity().setResult(Activity.RESULT_CANCELED);
             handler.sendEmptyMessage(0);
         }
-        
+
     }
 
     @Override
@@ -218,14 +218,14 @@ public class EditBackgroundFragment extends AbstractEditFragment {
         }
     }
 
-	@Override
-	protected void lockUi() {		
-		mBackgroundImagesListView.setEnabled(false);	
-		mAdapter.notifyDataSetChanged();
-	}
+    @Override
+    protected void lockUi() {
+        mBackgroundImagesListView.setEnabled(false);
+        mAdapter.notifyDataSetChanged();
+    }
 
-	@Override
-	protected void unlockUi() {		
-		mBackgroundImagesListView.setEnabled(true);		
-	}
+    @Override
+    protected void unlockUi() {
+        mBackgroundImagesListView.setEnabled(true);
+    }
 }

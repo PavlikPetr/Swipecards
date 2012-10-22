@@ -22,18 +22,18 @@ public class AuthToken {
     public static final String SN_FACEBOOK = "fb";
     public static final String SN_VKONTAKTE = "vk";
 
-    //---------------------------------------------------------------------------
+
     public AuthToken(Context context) {
         mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         loadToken();
     }
 
-    //---------------------------------------------------------------------------
+
     public boolean isToken() {
         return mTokenKey != null && mTokenKey.length() > 0;
     }
 
-    //---------------------------------------------------------------------------
+
     public void loadToken() {
         mSnType = mPreferences.getString(TOKEN_NETWORK, Static.EMPTY);
         mUserId = mPreferences.getString(TOKEN_USER_ID, Static.EMPTY);
@@ -41,7 +41,7 @@ public class AuthToken {
         mExpiresIn = mPreferences.getString(TOKEN_EXPIRES, Static.EMPTY);
     }
 
-    //---------------------------------------------------------------------------
+
     public void saveToken(String sn_type, String user_Id, String token_key, String expires_in) {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(TOKEN_NETWORK, mSnType = sn_type);
@@ -51,32 +51,32 @@ public class AuthToken {
         editor.commit();
     }
 
-    //---------------------------------------------------------------------------
+
     public void removeToken() {
         saveToken(Static.EMPTY, Static.EMPTY, Static.EMPTY, Static.EMPTY);
     }
 
-    //---------------------------------------------------------------------------
+
     public String getSocialNet() {
         return mSnType;
     }
 
-    //---------------------------------------------------------------------------
+
     public String getUserId() {
         return mUserId;
     }
 
-    //---------------------------------------------------------------------------
+
     public String getTokenKey() {
         return mTokenKey;
     }
 
-    //---------------------------------------------------------------------------
+
     public String getExpires() {
         return mExpiresIn;
     }
 
-    //---------------------------------------------------------------------------
+
     public boolean isEmpty() {
         if (mSnType.equals(Static.EMPTY)) {
             return true;

@@ -30,9 +30,9 @@ public class UserFormFragment extends Fragment {
 
         mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
         if (mUser != null) {
-        	mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
+            mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
         } else {
-        	mTitle.setText(Utils.formatFormMatchesQuantity(0));
+            mTitle.setText(Utils.formatFormMatchesQuantity(0));
         }
         mTitle.setVisibility(View.VISIBLE);
 
@@ -43,7 +43,7 @@ public class UserFormFragment extends Fragment {
         mUser = user;
         mUserPhotoListAdapter.setUserData(mUser);
         mUserPhotoListAdapter.notifyDataSetChanged();
-        
+
         mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
     }
 

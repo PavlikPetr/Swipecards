@@ -13,7 +13,7 @@ public class Newbie {
     public boolean buy_energy;
     public boolean rate_it;
 
-    //---------------------------------------------------------------------------
+
     public Newbie(SharedPreferences preferences) {
         // dashboard
         profile = preferences.getBoolean(Static.PREFERENCES_NEWBIE_DASHBOARD_PROFILE, false);
@@ -35,14 +35,15 @@ public class Newbie {
          * rate_it = false; */
     }
 
-    //---------------------------------------------------------------------------
+
     public boolean isDashboardCompleted() {
         return profile & dating & likes & tops;
     }
 
-    //---------------------------------------------------------------------------
+
     public boolean isDatingCompleted() {
         return free_energy & buy_energy & rate_it;
     }
-    //---------------------------------------------------------------------------
+
+
 }

@@ -58,8 +58,7 @@ public class IllustratedTextView extends TextView {
                 );
             }
 
-        }
-        else {
+        } else {
             spannableString = (SpannableString) text;
         }
 

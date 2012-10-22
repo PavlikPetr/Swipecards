@@ -34,7 +34,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     private Profile mProfile;
     private FormInfo mFormInfo;
 
-    private EditText mEditText;    
+    private EditText mEditText;
 
     public EditFormItemInputFragment() {
     }
@@ -161,13 +161,13 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         }
     }
 
-	@Override
-	protected void lockUi() {
-		mEditText.setEnabled(false);		
-	}
+    @Override
+    protected void lockUi() {
+        mEditText.setEnabled(false);
+    }
 
-	@Override
-	protected void unlockUi() {
-		mEditText.setEnabled(true);
-	}
+    @Override
+    protected void unlockUi() {
+        mEditText.setEnabled(true);
+    }
 }

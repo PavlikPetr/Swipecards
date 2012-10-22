@@ -12,9 +12,11 @@ import com.topface.topface.Recycle;
 import com.topface.topface.utils.CacheProfile;
 
 public class InformerView extends ViewGroup {
-    //---------------------------------------------------------------------------
+
+
     // class Informer
-    //---------------------------------------------------------------------------
+
+
     class Informer { // информер нажатой звезды
         public float _x; // х
         public float _y; // у
@@ -78,7 +80,7 @@ public class InformerView extends ViewGroup {
         }
     }
 
-    //---------------------------------------------------------------------------
+
     // Data
     private Button mProfileBtn; // кнопка на профиль
     private Button mChatBtn; // кнопка в чат
@@ -88,7 +90,7 @@ public class InformerView extends ViewGroup {
     private Paint informerTitlePaintLow = new Paint();
     private Paint informerPaint = new Paint();
 
-    //---------------------------------------------------------------------------
+
     public InformerView(Context context) {
         super(context);
 
@@ -122,14 +124,14 @@ public class InformerView extends ViewGroup {
         mInformer = new Informer(Recycle.s_DatingInformer.getWidth(), Recycle.s_DatingInformer.getHeight());
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         mInformer.draw(canvas);
     }
 
-    //-------------------------------------------------------------------------
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = (int) (Recycle.s_DatingInformer.getWidth() * 1.1); // вычисление своей ширины
@@ -142,7 +144,7 @@ public class InformerView extends ViewGroup {
         setMeasuredDimension(width, height);
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 
@@ -161,24 +163,24 @@ public class InformerView extends ViewGroup {
         mProfileBtn.layout(x, y, x + mProfileBtn.getMeasuredWidth(), y + mProfileBtn.getMeasuredHeight());
     }
 
-    //---------------------------------------------------------------------------
+
     public void setVisible(boolean visible) {
         mInformer._visible = visible;
     }
 
-    //---------------------------------------------------------------------------
+
     public void setData(float y, int index) {
         mInformer._y = y;
         mInformer._index = index;
     }
 
-    //---------------------------------------------------------------------------
+
     public void setBlock(boolean block) {
         mChatBtn.setEnabled(block);
         mProfileBtn.setEnabled(block);
     }
 
-    //---------------------------------------------------------------------------
+
     public void release() {
         mProfileBtn = null;
         mChatBtn = null;
@@ -186,5 +188,6 @@ public class InformerView extends ViewGroup {
         informerTitlePaintHight = null;
         informerPaint = null;
     }
-    //---------------------------------------------------------------------------
+
+
 }

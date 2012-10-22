@@ -182,16 +182,16 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
 
     @Override
     protected void saveChanges(Handler handler) {
-    	handler.sendEmptyMessage(0);
+        handler.sendEmptyMessage(0);
     }
 
-	@Override
-	protected void lockUi() {
-		mListView.setEnabled(false);
-	}
+    @Override
+    protected void lockUi() {
+        mListView.setEnabled(false);
+    }
 
-	@Override
-	protected void unlockUi() {
-		mListView.setEnabled(true);
-	}
+    @Override
+    protected void unlockUi() {
+        mListView.setEnabled(true);
+    }
 }

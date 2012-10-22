@@ -42,7 +42,7 @@
 
     <!-- Likes Activity -->
     <string name="likes_background_text">No likes</string>
-   	<string name="likes_mutual">Mutual</string>
+    <string name="likes_mutual">Mutual</string>
 
     <!-- Visitors -->
     <string name="visitors_background_text">No visitors</string>
@@ -159,7 +159,7 @@
 
     <!-- Profile / UserProfile Form -->
     <string name="form">Questionary</string>
-    
+
     <string name="form_main">Main</string>
 
     <string-array name="form_main_status">
@@ -298,7 +298,7 @@
         <item quantity="few">%d photos</item>
         <item quantity="other">%d photos</item>
     </plurals>
-    
+
     <plurals name="form_matches">
         <item quantity="zero">You have no matches</item>
         <item quantity="one">You have %d match</item>

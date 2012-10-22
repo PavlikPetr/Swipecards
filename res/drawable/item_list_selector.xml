@@ -2,5 +2,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true" android:drawable="@drawable/im_item_list_bg_pressed"/>
     <item android:state_activated="true" android:drawable="@drawable/im_item_list_bg_activated"/>
-    <item android:drawable="@drawable/im_item_list_bg"/>    
+    <item android:drawable="@drawable/im_item_list_bg"/>
 </selector>

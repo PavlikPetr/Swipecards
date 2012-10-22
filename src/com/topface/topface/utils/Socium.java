@@ -24,13 +24,13 @@ public class Socium {
     private Context mContext;
     private AuthToken mToken;
 
-    //---------------------------------------------------------------------------
+
     public Socium(Context context) {
         mContext = context;
         mToken = new AuthToken(mContext);
     }
 
-    //---------------------------------------------------------------------------
+
     public String[] uploadPhoto(Uri uri) {
         if (mToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE))
             return uploadPhotoVK(uri);
@@ -40,7 +40,7 @@ public class Socium {
             return null;
     }
 
-    //---------------------------------------------------------------------------
+
     public String[] uploadPhotoVK(Uri uri) {
         String[] result = new String[3];
         try {
@@ -154,7 +154,7 @@ public class Socium {
         return result;
     }
 
-    //---------------------------------------------------------------------------
+
     public String[] uploadPhotoFB(Uri uri) {
         String[] result = new String[3];
         try {
@@ -225,7 +225,7 @@ public class Socium {
         return result;
     }
 
-    //---------------------------------------------------------------------------
+
     public static int getImageOrientation(Context context, Uri photoUri) {
         Cursor cursor = context.getContentResolver().query(photoUri, new String[]{MediaStore.Images.ImageColumns.ORIENTATION}, null, null, null);
         if (cursor.getCount() != 1)
@@ -234,5 +234,6 @@ public class Socium {
 
         return cursor.getInt(0);
     }
-    //---------------------------------------------------------------------------
+
+
 }

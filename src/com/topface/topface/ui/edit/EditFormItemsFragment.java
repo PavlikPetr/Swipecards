@@ -87,7 +87,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                 mListView, false);
         ((TextView) header.findViewById(R.id.tvTitle)).setText(formItemTitle);
         mListView.addHeaderView(header);
-        
+
         mAdapter = new FormCheckingDataAdapter(getActivity().getApplicationContext(),
                 mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData}),
                 mFormInfo.getIdsByTitleId(mTitleId), mSeletedDataId);
@@ -138,7 +138,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                 }
             }
         } else {
-        	handler.sendEmptyMessage(0);
+            handler.sendEmptyMessage(0);
         }
     }
 
@@ -235,23 +235,23 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
             convertView.setEnabled(mListView.isEnabled());
             return convertView;
-        }        
-        
-		class ViewHolder {
+        }
+
+        class ViewHolder {
             TextView mTitle;
             ImageView mBackground;
             ImageView mCheck;
         }
     }
 
-	@Override
-	protected void lockUi() {
-		mListView.setEnabled(false);
-		mAdapter.notifyDataSetChanged();
-	}
+    @Override
+    protected void lockUi() {
+        mListView.setEnabled(false);
+        mAdapter.notifyDataSetChanged();
+    }
 
-	@Override
-	protected void unlockUi() {
-		mListView.setEnabled(true);		
-	}
+    @Override
+    protected void unlockUi() {
+        mListView.setEnabled(true);
+    }
 }

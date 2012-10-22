@@ -15,7 +15,8 @@ import com.topface.topface.utils.http.Http;
 
 public class MainActivity extends BaseFragmentActivity {
     // Data
-    //---------------------------------------------------------------------------
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +34,7 @@ public class MainActivity extends BaseFragmentActivity {
         }
     }
 
-    //---------------------------------------------------------------------------
+
     private void getProfile() {
         ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
         registerRequest(profileRequest);
@@ -64,11 +65,12 @@ public class MainActivity extends BaseFragmentActivity {
         }).exec();
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onDestroy() {
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
-    //---------------------------------------------------------------------------
+
+
 }

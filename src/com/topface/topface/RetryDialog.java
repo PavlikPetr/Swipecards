@@ -29,7 +29,7 @@ public class RetryDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mReciever = new BroadcastReceiver(){
+        mReciever = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 RetryDialog.this.getButton(Dialog.BUTTON_POSITIVE).performClick();

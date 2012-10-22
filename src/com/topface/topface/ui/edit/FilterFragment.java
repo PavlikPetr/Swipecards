@@ -578,9 +578,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
     }
 
-	@Override
-	protected void lockUi() { }
+    @Override
+    protected void lockUi() {
+    }
 
-	@Override
-	protected void unlockUi() {	}
+    @Override
+    protected void unlockUi() {
+    }
 }

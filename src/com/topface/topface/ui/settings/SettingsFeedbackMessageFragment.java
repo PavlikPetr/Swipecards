@@ -211,9 +211,11 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         }
     }
 
-	@Override
-	protected void lockUi() { }
+    @Override
+    protected void lockUi() {
+    }
 
-	@Override
-	protected void unlockUi() { }
+    @Override
+    protected void unlockUi() {
+    }
 }

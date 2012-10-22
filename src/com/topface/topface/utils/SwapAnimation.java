@@ -17,7 +17,7 @@ public class SwapAnimation extends Animation {
         mAnimatedView = view;
         View mHiddenView = view.findViewById(hiddenView);
 
-        if (mHiddenView == null){
+        if (mHiddenView == null) {
             throw new NullPointerException();
         }
 

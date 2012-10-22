@@ -15,12 +15,7 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.http.Http;
-
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -46,7 +41,7 @@ public class WebAuthActivity extends Activity {
     // Constants
     public static final int INTENT_WEB_AUTH = 101;
 
-    //---------------------------------------------------------------------------
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Debug.log(this, "+onCreate");
@@ -63,7 +58,7 @@ public class WebAuthActivity extends Activity {
         mWebView.setWebViewClient(new VkAuthClient(getApplicationContext(), mWebView, mProgressBar, new WebHandler()));
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onDestroy() {
         mWebView.destroy();
@@ -74,9 +69,10 @@ public class WebAuthActivity extends Activity {
         super.onDestroy();
     }
 
-    //---------------------------------------------------------------------------
+
     // class WebHandler
-    //---------------------------------------------------------------------------
+
+
     private class WebHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -111,22 +107,23 @@ public class WebAuthActivity extends Activity {
         }
     }
 
-    //---------------------------------------------------------------------------
+
     // VkAuthClient
-    //---------------------------------------------------------------------------
+
+
     public class VkAuthClient extends WebViewClient {
         // Data
         private Handler mHandler;
         private String mUrl = "http://api.vkontakte.ru/oauth/authorize?client_id=" + Static.AUTH_VKONTAKTE_ID + "&scope=" + VK_PERMISSIONS + "&redirect_uri=http://api.vkontakte.ru/blank.html&display=touch&response_type=token";
 
-        //---------------------------------------------------------------------------
+
         public VkAuthClient(Context context, WebView webView, View progressIndicator, Handler handler) {
             super();
             mHandler = handler;
             webView.loadUrl(mUrl);
         }
 
-        //---------------------------------------------------------------------------
+
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
@@ -146,29 +143,29 @@ public class WebAuthActivity extends Activity {
                 }
 
                 final HashMap<String, String> queryMap = parseQueryString(mMatcherToken.group(1));
-                
-                AuthorizationManager.getVkName(queryMap.get(ACCESS_TOKEN), queryMap.get(USER_ID), new Handler(){
-                	@Override
-                	public void handleMessage(Message msg) {                 		
-                		queryMap.put(USER_NAME, (String)msg.obj);
-                		mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_COMPLETE, queryMap));
-                	}
+
+                AuthorizationManager.getVkName(queryMap.get(ACCESS_TOKEN), queryMap.get(USER_ID), new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        queryMap.put(USER_NAME, (String) msg.obj);
+                        mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_COMPLETE, queryMap));
+                    }
                 });
             } else if (mMatcherError.find() || mMatcherLogout.find()) {
                 view.stopLoading();
                 new AuthToken(getApplicationContext()).removeToken();
                 mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_ERROR));
             }
-        }        
-        
-        //---------------------------------------------------------------------------
+        }
+
+
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             mProgressBar.setVisibility(View.GONE);
         }
 
-        //---------------------------------------------------------------------------
+
         public HashMap<String, String> parseQueryString(String query) {
             String[] params = query.split("&");
             HashMap<String, String> map = new HashMap<String, String>();
@@ -179,7 +176,9 @@ public class WebAuthActivity extends Activity {
             }
             return map;
         }
-        //---------------------------------------------------------------------------
+
+
     }
-    //---------------------------------------------------------------------------
+
+
 }

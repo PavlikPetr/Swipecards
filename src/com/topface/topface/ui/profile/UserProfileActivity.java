@@ -91,7 +91,7 @@ public class UserProfileActivity extends FragmentActivity {
 
         mUserProfileHeader = (ViewGroup) findViewById(R.id.loProfileHeader);
 //        mUserProfileHeader.setBackgroundResource(ProfileBackgrounds.DEFAULT_BACKGROUND_RES_ID);
-        
+
         mRateController = new RateController(this);
         mLockerView = (LockerView) findViewById(R.id.llvProfileLoading);
 
@@ -99,8 +99,8 @@ public class UserProfileActivity extends FragmentActivity {
         mUserName = (TextView) findViewById(R.id.ivUserName);
         mUserCity = (TextView) findViewById(R.id.ivUserCity);
 
-        mUserDelight = (Button) findViewById(R.id.btnUserDelight);        
-        mUserDelight.setOnClickListener(mRatesClickListener);        
+        mUserDelight = (Button) findViewById(R.id.btnUserDelight);
+        mUserDelight.setOnClickListener(mRatesClickListener);
         mUserMutual = (Button) findViewById(R.id.btnUserMutual);
         mUserMutual.setOnClickListener(mRatesClickListener);
         mUserChat = (Button) findViewById(R.id.btnUserChat);
@@ -116,7 +116,7 @@ public class UserProfileActivity extends FragmentActivity {
         mUserActions = (RadioButton) findViewById(R.id.btnUserActions);
         mUserActions.setOnClickListener(mInfoClickListener);
 
-        lockScreen = (RelativeLayout)findViewById(R.id.lockScreen);
+        lockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
         retryBtn = new RetryView(getApplicationContext());
         retryBtn.init(getLayoutInflater());
         retryBtn.setOnClickListener(new View.OnClickListener() {
@@ -151,9 +151,9 @@ public class UserProfileActivity extends FragmentActivity {
 
         mUserPhoto.setChecked(true);
 
-        getUserProfile();        
-    }    
-    
+        getUserProfile();
+    }
+
     private void getUserProfile() {
         mLockerView.setVisibility(View.VISIBLE);
         UserRequest userRequest = new UserRequest(mUserId, getApplicationContext());
@@ -164,17 +164,17 @@ public class UserProfileActivity extends FragmentActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    	if (mUser.mutual) {
-                    		mUserDelight.setCompoundDrawablesWithIntrinsicBounds(null, 
-                    				getResources().getDrawable(R.drawable.user_dbl_delight_selector), 
-                    				null, null);
-                    		mUserMutual.setCompoundDrawablesWithIntrinsicBounds(null, 
-                    				getResources().getDrawable(R.drawable.user_dbl_mutual_selector), 
-                    				null, null);
-                    		mUserDelight.setEnabled(!mUser.rated);
+                        if (mUser.mutual) {
+                            mUserDelight.setCompoundDrawablesWithIntrinsicBounds(null,
+                                    getResources().getDrawable(R.drawable.user_dbl_delight_selector),
+                                    null, null);
+                            mUserMutual.setCompoundDrawablesWithIntrinsicBounds(null,
+                                    getResources().getDrawable(R.drawable.user_dbl_mutual_selector),
+                                    null, null);
+                            mUserDelight.setEnabled(!mUser.rated);
                             mUserMutual.setEnabled(!mUser.rated);
-                    	}                        
-                    	mUserProfileHeader.setBackgroundResource(ProfileBackgrounds.getBackgroundResource(getApplicationContext(), mUser.background));
+                        }
+                        mUserProfileHeader.setBackgroundResource(ProfileBackgrounds.getBackgroundResource(getApplicationContext(), mUser.background));
                         mLockerView.setVisibility(View.INVISIBLE);
                         mUserAvatar.setPhoto(mUser.photo);
                         mUserName.setText(mUser.first_name + ", " + mUser.age);

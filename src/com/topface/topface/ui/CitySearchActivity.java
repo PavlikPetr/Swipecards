@@ -39,7 +39,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     public static final String INTENT_CITY_NAME = "city_name";
     public static final String INTENT_CITY_FULL_NAME = "city_full";
 
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,7 +164,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         update();
     }
 
-    //---------------------------------------------------------------------------
+
     private void update() {
         mProgressBar.setVisibility(View.VISIBLE);
 
@@ -202,7 +202,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         }).exec();
     }
 
-    //---------------------------------------------------------------------------
+
     private void city(String prefix) {
         searchCitiesRequest = new SearchCitiesRequest(this);
         registerRequest(searchCitiesRequest);
@@ -235,7 +235,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         }).exec();
     }
 
-    //---------------------------------------------------------------------------
+
     private void fillData(LinkedList<City> citiesList) {
         mDataList.clear();
         mDataList.addAll(citiesList);
@@ -244,14 +244,14 @@ public class CitySearchActivity extends BaseFragmentActivity {
             mNameList.add(city.full);
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onDestroy() {
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public void finish() {
         super.finish();

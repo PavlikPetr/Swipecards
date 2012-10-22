@@ -1,14 +1,10 @@
 package com.topface.topface.ui;
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
@@ -24,7 +20,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
 
-    public static NavigationActivity mThis =null;
+    public static NavigationActivity mThis = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +38,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 
         mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
         mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
-        mFragmentSwitcher.setFragmentManager(mFragmentManager);        
+        mFragmentSwitcher.setFragmentManager(mFragmentManager);
 
         mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
         mFragmentMenu.selectDefaultMenu();

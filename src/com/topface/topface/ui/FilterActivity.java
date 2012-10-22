@@ -31,9 +31,11 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
 public class FilterActivity extends BasePreferenceActivity implements LocationListener {
-    //---------------------------------------------------------------------------
+
+
     // class TempFilter
-    //---------------------------------------------------------------------------
+
+
     class TempFilter {
         int sex; // пол пользователей
         int age_start; // возраст от
@@ -44,7 +46,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         boolean geo; // искать по координатам
     }
 
-    //---------------------------------------------------------------------------
+
     // Data
     private TempFilter mTemp;
     //private CheckBoxPreference mNearby_;  // геопозиционирование отключено
@@ -61,7 +63,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
     public static final int CITY_SELECTED = 2;
     public static final int INTENT_FILTER_ACTIVITY = 110;
 
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,28 +169,28 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onStart() {
         super.onStart();
         //App.bind(getBaseContext());
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onStop() {
         //App.unbind();
         super.onStop();
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onDestroy() {
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }
 
-    //---------------------------------------------------------------------------
+
     public void getCoords() {
         boolean gpsEnabled = false;
         boolean networkEnabled = false;
@@ -211,7 +213,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
             }
     }
 
-    //---------------------------------------------------------------------------
+
     public void sendFilter() {
         // сохранение данных
         CacheProfile.dating_city_name = mTemp.city_name;
@@ -258,7 +260,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         Debug.log(this, "3.city_id:" + mTemp.city_id);
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -276,9 +278,10 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         }
     }
 
-    //---------------------------------------------------------------------------
+
     // Menu
-    //---------------------------------------------------------------------------
+
+
     private static final int MENU_SAVE = 0;
 
     @Override
@@ -287,7 +290,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         return super.onCreatePanelMenu(featureId, menu);
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
@@ -301,9 +304,10 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         return super.onMenuItemSelected(featureId, item);
     }
 
-    //---------------------------------------------------------------------------
+
     // Listeners
-    //---------------------------------------------------------------------------
+
+
     // sex
     Preference.OnPreferenceClickListener mOnSexListener = new Preference.OnPreferenceClickListener() {
         public boolean onPreferenceClick(final Preference preference) {
@@ -323,7 +327,8 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
             return true;
         }
     };
-    //---------------------------------------------------------------------------
+
+
     // age
     int leftPosition;
     int rightPosition;
@@ -402,7 +407,8 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
             return true;
         }
     };
-    //---------------------------------------------------------------------------
+
+
     // online
     Preference.OnPreferenceClickListener mOnOnlineListener = new Preference.OnPreferenceClickListener() {
         public boolean onPreferenceClick(final Preference preference) {
@@ -422,7 +428,8 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
             return true;
         }
     };
-    //---------------------------------------------------------------------------
+
+
     // select city
     Preference.OnPreferenceClickListener mOnSelectCityListener = new Preference.OnPreferenceClickListener() {
         public boolean onPreferenceClick(final Preference preference) {
@@ -432,9 +439,10 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
         }
     };
 
-    //---------------------------------------------------------------------------
+
     // User Location
-    //---------------------------------------------------------------------------  
+
+
     @Override
     public void onLocationChanged(final Location location) {
         SettingsRequest settingsRequest = new SettingsRequest(getApplicationContext());
@@ -480,7 +488,7 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public void onBackPressed() {
         Debug.log(this, "onBackPressed");
@@ -521,5 +529,6 @@ public class FilterActivity extends BasePreferenceActivity implements LocationLi
             }
         }).start();
     }
-    //---------------------------------------------------------------------------    
+
+
 }

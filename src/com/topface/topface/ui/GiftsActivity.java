@@ -123,13 +123,13 @@ public class GiftsActivity extends BaseFragmentActivity {
             giftRequest.callback(new ApiHandler() {
                 @Override
                 public void success(final ApiResponse response) {
-                	Data.giftsList.addAll(Gift.parse(response));
+                    Data.giftsList.addAll(Gift.parse(response));
                     mGiftsCollection.add(Data.giftsList);
                     mGiftFragment.setGifts(mGiftsCollection.getGifts());
 
                     runOnUiThread(new Runnable() {
                         @Override
-                        public void run() {                            
+                        public void run() {
                             mLoadingLocker.setVisibility(View.GONE);
                         }
                     });

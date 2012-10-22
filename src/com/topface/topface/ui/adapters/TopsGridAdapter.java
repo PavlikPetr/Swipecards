@@ -10,31 +10,33 @@ import com.topface.topface.ui.views.ThumbView;
 import com.topface.topface.utils.GalleryGridManager;
 
 public class TopsGridAdapter extends BaseAdapter {
-    //---------------------------------------------------------------------------
+
+
     // class ViewHolder
-    //---------------------------------------------------------------------------
+
+
     static class ViewHolder {
         ThumbView thumbView;
     }
 
-    //---------------------------------------------------------------------------
+
     // Data
     private LayoutInflater mInflater;
     private GalleryGridManager mGalleryManager;
 
-    //---------------------------------------------------------------------------
+
     public TopsGridAdapter(Context context, GalleryGridManager galleryManager) {
         mInflater = LayoutInflater.from(context);
         mGalleryManager = galleryManager;
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public int getCount() {
         return mGalleryManager.size();
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -56,16 +58,17 @@ public class TopsGridAdapter extends BaseAdapter {
         return convertView;
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public Object getItem(int position) {
         return null;
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public long getItemId(int position) {
         return position;
     }
-    //---------------------------------------------------------------------------
+
+
 }

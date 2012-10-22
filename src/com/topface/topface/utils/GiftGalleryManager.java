@@ -12,7 +12,7 @@ public class GiftGalleryManager<T extends Gift> implements OnScrollListener {
     private LinkedList<T> mDataList;
     private Handler mHandler;
 
-    //---------------------------------------------------------------------------
+
     public GiftGalleryManager(LinkedList<T> dataList, Handler handler) {
         mHandler = handler;
         mDataList = dataList;
@@ -37,12 +37,12 @@ public class GiftGalleryManager<T extends Gift> implements OnScrollListener {
     public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
             if (mHandler != null && !mDataList.isEmpty() && mDataList.getLast().isLoader()) {
-            	mHandler.sendEmptyMessage(0);
+                mHandler.sendEmptyMessage(0);
             }
         }
     }

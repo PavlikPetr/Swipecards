@@ -15,22 +15,19 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
 public class NotificationService extends Service {
-    // Data
-    // Constants
-    public static final int MSG_PURCHASE = 104;
     // Intents
     public static final String PURCHASE_DATA = "data";
     public static final String PURCHASE_SIGNATURE = "signature";
     // Actions
     private static final String ACTION_PURCHASE = "com.topface.topface.PURCHASE";
 
-    //---------------------------------------------------------------------------
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Debug.log("NotifyService", "onStartCommand");
@@ -50,14 +47,14 @@ public class NotificationService extends Service {
         return START_STICKY;
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public void onDestroy() {
         Debug.log("notifyService", "onDestroy");
         super.onDestroy();
     }
 
-    //---------------------------------------------------------------------------
+
     public static void purchase(Context context, String data, String signature) {
         Intent intent = new Intent(context, NotificationService.class);
         intent.setAction(ACTION_PURCHASE);
@@ -66,7 +63,7 @@ public class NotificationService extends Service {
         context.startService(intent);
     }
 
-    //---------------------------------------------------------------------------
+
     private void verifyPurchase(final String data, final String signature) {
         // сохранить ордер
         final VerifyRequest verifyRequest = new VerifyRequest(getApplicationContext());
@@ -99,5 +96,6 @@ public class NotificationService extends Service {
             }
         }).exec();
     }
-    //---------------------------------------------------------------------------
+
+
 }

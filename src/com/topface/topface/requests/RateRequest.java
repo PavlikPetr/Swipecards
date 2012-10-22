@@ -6,10 +6,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RateRequest extends ApiRequest {
-	
-	public static final int DEFAULT_MUTUAL = 1;
-	public static final int DEFAULT_NO_MUTUAL = 0;
-	
+
+    public static final int DEFAULT_MUTUAL = 1;
+    public static final int DEFAULT_NO_MUTUAL = 0;
+
     // Data
     private String service = "rate";
     public int userid; // идентификатор пользователя для оценки
