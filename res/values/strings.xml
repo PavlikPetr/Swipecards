@@ -15,6 +15,7 @@
     <string name="general_data_error">Updating error</string>
     <string name="general_purchasing_error">Please write message about purchasing error to support@topface.ru</string>
     <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
+    <string name="general_msg_copied">Text has been copied</string>
 
     <string name="general_dialog_retry">Retry</string>
     <string name="general_switch_on">on</string>

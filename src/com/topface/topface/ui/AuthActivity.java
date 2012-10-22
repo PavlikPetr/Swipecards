@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,8 @@ import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+
+import java.util.List;
 
 public class AuthActivity extends BaseFragmentActivity implements View.OnClickListener {
     private Button mFBButton;
@@ -189,11 +192,14 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void openNavigationActivity() {
-        if (!mFromAuthorizationReceiver) {
+        ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+
+        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+        if (!mFromAuthorizationReceiver || (taskList.get(0).numActivities == 1 &&
+                taskList.get(0).topActivity.getClassName().equals(this.getClass().getName()))) {
             startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
-        } else {
-            ConnectionManager.getInstance().notifyDelayedRequests();
         }
+        ConnectionManager.getInstance().notifyDelayedRequests();
         finish();
     }
 

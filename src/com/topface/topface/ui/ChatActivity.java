@@ -153,7 +153,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             }
         });
         mListView.setAdapter(mAdapter);
-
         //Сперва пробуем восстановить данные, если это просто поворот устройства
         Object data = getLastCustomNonConfigurationInstance();
         if (data != null) {
@@ -259,6 +258,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             break;
             case R.id.btnNavigationBackWithText: {
                 finish();
+            }
+            break;
+            case R.id.chat_message: {
+
             }
             break;
             default: {

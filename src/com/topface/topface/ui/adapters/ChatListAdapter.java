@@ -1,14 +1,13 @@
 package com.topface.topface.ui.adapters;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -16,6 +15,7 @@ import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.MemoryCacheTemplate;
 import com.topface.topface.utils.OsmManager;
 
@@ -207,9 +207,23 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.avatar.setVisibility(View.INVISIBLE);
                     break;
             }
+            if(holder.message!=null){
+                holder.message.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        ClipboardManager clipboard = (ClipboardManager)
+                                mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("", holder.message.getText().toString()); //TODO: Сюда надо поставить какой-нибудь тэг
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mContext,R.string.general_msg_copied,Toast.LENGTH_SHORT).show();
+                        return false;  //To change body of implemented methods use File | Settings | File Templates.
+                    }
+                });
+            }
             if (convertView != null) {
                 convertView.setTag(holder);
             }
+
         } else
             holder = (ViewHolder) convertView.getTag();
 
