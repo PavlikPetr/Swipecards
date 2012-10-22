@@ -27,6 +27,7 @@ public class RateController {
 
     public interface OnRateControllerListener {
         public void successRate();
+
         public void failRate();
     }
 
@@ -83,7 +84,6 @@ public class RateController {
                 }).exec();
 
 
-
             }
         });
         mCommentDialog.show();
@@ -123,7 +123,7 @@ public class RateController {
             }
         }).exec();
     }
-    
+
     public void onRate(final int userId, final int rate, final int mutualId) {
         if (rate < 10) {
             sendRate(userId, rate, mutualId);
@@ -162,7 +162,7 @@ public class RateController {
         });
         mCommentDialog.show();
     }
-    
+
     private void sendRate(final int userid, final int rate, final int mutualId) {
         RateRequest doRate = new RateRequest(mContext);
         doRate.userid = userid;

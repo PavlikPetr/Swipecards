@@ -330,7 +330,7 @@ public class FragmentSwitchController extends ViewGroup {
         float x = event.getX();
 
         switch (action) {
-            case MotionEvent.ACTION_DOWN:            	
+            case MotionEvent.ACTION_DOWN:
                 mLastMotionX = x;
                 mVelocityTracker.addMovement(event);
                 break;
@@ -469,7 +469,7 @@ public class FragmentSwitchController extends ViewGroup {
         }
 
         boolean result;
-        
+
         if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
             result = ((com.topface.topface.ui.views.ImageSwitcher) v).canScrollHorizontally(-dx);
         } else {

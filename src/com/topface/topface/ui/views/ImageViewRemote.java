@@ -5,6 +5,8 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
@@ -26,6 +28,8 @@ public class ImageViewRemote extends ImageView {
     public static final int LOADING_COMPLETE = 0;
     private static final int LOADING_ERROR = 1;
     private ImagePostProcessor mPostProcessor;
+    Animation mAnimation = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
+
 
     public ImageViewRemote(Context context) {
         super(context);
@@ -101,6 +105,16 @@ public class ImageViewRemote extends ImageView {
         }
 
         return isCorrectSrc;
+    }
+
+    @Override
+    public void setImageBitmap(Bitmap bm) {
+        super.setImageBitmap(bm);
+        //Показываем анимацию только в том случае, если ImageView видно пользователю
+        if (isShown()) {
+            startAnimation(mAnimation);
+        }
+
     }
 
     private ImageLoadingListener getListener(final Handler handler) {

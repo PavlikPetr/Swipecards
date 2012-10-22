@@ -473,5 +473,6 @@ public final class AndroidHttpClient implements HttpClient {
     public static long parseDate(String dateString) {
         return HttpDateTime.parse(dateString);
     }
-    //---------------------------------------------------------------------------
+
+
 }

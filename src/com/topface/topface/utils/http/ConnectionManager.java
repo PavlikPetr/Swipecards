@@ -38,20 +38,20 @@ public class ConnectionManager {
     public static final String TAG = "CM";
     public static final int WAITING_TIME = 2000;
 
-    //---------------------------------------------------------------------------
+
     private ConnectionManager() {
         mWorker = Executors.newFixedThreadPool(2);
         mDelayedRequestsThreads = new LinkedList<Thread>();
     }
 
-    //---------------------------------------------------------------------------
+
     public static ConnectionManager getInstance() {
         if (mInstanse == null)
             mInstanse = new ConnectionManager();
         return mInstanse;
     }
 
-    //---------------------------------------------------------------------------
+
     public RequestConnection sendRequest(final ApiRequest apiRequest) {
         final RequestConnection connection = new RequestConnection();
         mWorker.execute(new Runnable() {
@@ -112,7 +112,7 @@ public class ConnectionManager {
                     }
 
                 } catch (Exception e) {
-                    Debug.error(TAG + "::REQUEST::ERROR ===\n" + e.toString());
+                    Debug.error(TAG + "::REQUEST::ERROR ===\n", e);
                     if (httpPost != null && !httpPost.isAborted())
                         httpPost.abort();
                 }
@@ -124,7 +124,7 @@ public class ConnectionManager {
         return connection;
     }
 
-    //---------------------------------------------------------------------------
+
     private String request(AndroidHttpClient httpClient, HttpPost httpPost) {
         String rawResponse = Static.EMPTY;
 
@@ -155,7 +155,7 @@ public class ConnectionManager {
 
         return rawResponse;
     }
-    //---------------------------------------------------------------------------
+
 
     private ApiResponse reAuth(Context context, AndroidHttpClient httpClient, HttpPost httpPost, ApiRequest request) {
         Debug.log(this, "reAuth");
@@ -212,13 +212,6 @@ public class ConnectionManager {
         }
     }
 
-    //---------------------------------------------------------------------------
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-    }
-
-    //---------------------------------------------------------------------------
     private void sendBroadcastReauth(Context context) {
         Intent intent = new Intent();
         intent.setAction(ReAuthReceiver.REAUTH_INTENT);
@@ -226,7 +219,7 @@ public class ConnectionManager {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    //---------------------------------------------------------------------------
+
     private void addDelayedRequest(final ApiRequest apiRequest) {
         Thread thread = new Thread() {
 
@@ -246,7 +239,7 @@ public class ConnectionManager {
         mDelayedRequestsThreads.add(thread);
     }
 
-    //---------------------------------------------------------------------------
+
     public synchronized void notifyDelayedRequests() {
         for (Thread mDelayedRequestsThread : mDelayedRequestsThreads) {
             mDelayedRequestsThread.notify();

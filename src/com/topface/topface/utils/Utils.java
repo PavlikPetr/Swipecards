@@ -222,7 +222,7 @@ public class Utils {
     }
 
     public static String formatMinute(Context context, long minutes) {
-        return  Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
+        return Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
     }
 
     public static String formatDayOfWeek(Context context, int dayOfWeek) {
@@ -314,7 +314,7 @@ public class Utils {
     public static String formatPhotoQuantity(int quantity) {
         return Utils.getQuantityString(R.plurals.photo, (int) quantity, (int) quantity);
     }
-    
+
     public static String formatFormMatchesQuantity(int quantity) {
         return Utils.getQuantityString(R.plurals.form_matches, (int) quantity, (int) quantity);
     }
@@ -450,5 +450,4 @@ public class Utils {
                 Toast.LENGTH_SHORT
         ).show();
     }
-
 }

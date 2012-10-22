@@ -79,7 +79,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
         if (requestKey == INTENT_REQUEST_GEO) {
             //init address autocompletion
             mAddressView = (AutoCompleteTextView) findViewById(R.id.mapAddress);
-            mAddressAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, new ArrayList<String>()) {
+            mAddressAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.dropdown_item_1line, new ArrayList<String>()) {
                 Filter mFilter = new AddressFilter();
 
                 @Override

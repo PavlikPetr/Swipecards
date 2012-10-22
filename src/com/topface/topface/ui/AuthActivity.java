@@ -33,7 +33,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     private Button mFBButton;
     private Button mVKButton;
     private RetryView mRetryView;
-    private RelativeLayout mAuthContainer;
     private ProgressBar mProgressBar;
     private AuthorizationManager mAuthorizationManager;
 
@@ -48,14 +47,13 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         Debug.log(this, "+onCreate");
         setContentView(R.layout.ac_auth);
 
-        mAuthContainer = (RelativeLayout) findViewById(R.id.authContainer);
-
         mRetryView = new RetryView(getApplicationContext());
         mRetryView.init(getLayoutInflater());
         mRetryView.setOnClickListener(this);
         mRetryView.setVisibility(View.GONE);
 
-        mAuthContainer.addView(mRetryView);
+        RelativeLayout authContainer = (RelativeLayout) findViewById(R.id.authContainer);
+        authContainer.addView(mRetryView);
 
         mAuthorizationManager = AuthorizationManager.getInstance(this);
         mAuthorizationManager.setOnAuthorizationHandler(new Handler() {
@@ -122,7 +120,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        checkIntentForReauth(getIntent());
+        checkIntentForReauth();
         mThis = this;
     }
 
@@ -272,7 +270,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         }).exec();
     }
 
-    private void checkIntentForReauth(Intent intent) {
+    private void checkIntentForReauth() {
         Bundle data = getIntent().getExtras();
         if (data != null) {
             if (data.get(ReAuthReceiver.REAUTH_FROM_RECEIVER) != null) {
@@ -287,5 +285,4 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mRetryView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }
-
 }

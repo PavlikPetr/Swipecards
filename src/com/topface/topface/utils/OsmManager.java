@@ -3,7 +3,6 @@ package com.topface.topface.utils;
 import android.location.Address;
 import android.os.Handler;
 import android.os.Message;
-
 import com.topface.topface.Static;
 import com.topface.topface.utils.http.Http;
 import org.json.JSONArray;
@@ -73,17 +72,17 @@ public class OsmManager {
         }
         return resultSB.toString();
     }
-    
+
     public static void getAddress(final double lat, final double lon, final Handler handler) {
-    	(new Thread() {
-    		@Override
-    		public void run() {
-    			String address = getAddress(lat, lon);
-    			Message msg = new Message();
-    			msg.obj = address;
-    			handler.sendMessage(msg);
-    		}
-    	}).start();    	
+        (new Thread() {
+            @Override
+            public void run() {
+                String address = getAddress(lat, lon);
+                Message msg = new Message();
+                msg.obj = address;
+                handler.sendMessage(msg);
+            }
+        }).start();
     }
 
     public static ArrayList<Address> getSuggestionAddresses(String text, int maxNumber) {

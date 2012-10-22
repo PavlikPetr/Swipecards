@@ -13,26 +13,26 @@ import com.topface.topface.utils.Utils;
 
 public class UserFormFragment extends Fragment {
     private User mUser;
-    private UserFormListAdapter mUserPhotoListAdapter;
+    private UserFormListAdapter mUserFormListAdapter;
     private TextView mTitle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserPhotoListAdapter = new UserFormListAdapter(getActivity().getApplicationContext());
+        mUserFormListAdapter = new UserFormListAdapter(getActivity().getApplicationContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_form, container, false);
         ListView listQuestionnaire = (ListView) root.findViewById(R.id.fragmentFormList);
-        listQuestionnaire.setAdapter(mUserPhotoListAdapter);
+        listQuestionnaire.setAdapter(mUserFormListAdapter);
 
         mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
         if (mUser != null) {
-        	mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
+            mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
         } else {
-        	mTitle.setText(Utils.formatFormMatchesQuantity(0));
+            mTitle.setText(Utils.formatFormMatchesQuantity(0));
         }
         mTitle.setVisibility(View.VISIBLE);
 
@@ -41,8 +41,8 @@ public class UserFormFragment extends Fragment {
 
     public void setUserData(User user) {
         mUser = user;
-        mUserPhotoListAdapter.setUserData(mUser);
-        mUserPhotoListAdapter.notifyDataSetChanged();
+        mUserFormListAdapter.setUserData(mUser);
+        mUserFormListAdapter.notifyDataSetChanged();
         
         mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
     }

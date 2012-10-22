@@ -70,17 +70,17 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 Filter filter = (Filter) o;
 
                 if (filter.sex != sex) return false;
-                if (filter.age_start != age_start) return false;
-                if (filter.age_end != age_end) return false;
-                if (filter.city_id != city_id) return false;
-                if (filter.geo != geo) return false;
-                if (filter.online != online) return false;
-                if (filter.beauty != beauty) return false;
-                if (filter.status_id != status_id) return false;
-                if (filter.marriage_id != marriage_id) return false;
-                if (filter.character_id != character_id) return false;
-                if (filter.alcohol_id != alcohol_id) return false;
-                if (filter.showoff_id != showoff_id) return false;
+                else if (filter.age_start != age_start) return false;
+                else if (filter.age_end != age_end) return false;
+                else if (filter.city_id != city_id) return false;
+                else if (filter.geo != geo) return false;
+                else if (filter.online != online) return false;
+                else if (filter.beauty != beauty) return false;
+                else if (filter.status_id != status_id) return false;
+                else if (filter.marriage_id != marriage_id) return false;
+                else if (filter.character_id != character_id) return false;
+                else if (filter.alcohol_id != alcohol_id) return false;
+                else if (filter.showoff_id != showoff_id) return false;
 
                 return true;
             } else {
@@ -90,6 +90,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
         @Override
         protected Filter clone() throws CloneNotSupportedException {
+            super.clone();
             Filter filter = new Filter();
 
             filter.sex = sex;
@@ -122,7 +123,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         ((TextView) getActivity().findViewById(R.id.tvNavigationTitle))
                 .setText(R.string.filter_filter);
 
-        ((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
         mBackButton.setVisibility(View.VISIBLE);
         mBackButton.setText(R.string.navigation_back_dating);
@@ -429,7 +430,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.filter_age));
         builder.setView(view);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
                 mFilter.age_start = Integer.parseInt(tvFrom.getText().toString());
                 mFilter.age_end = Integer.parseInt(tvTo.getText().toString());
@@ -455,14 +456,17 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     protected void saveChanges(Handler handler) {
         prepareRequestSend();
 
-        //TODO send request
-
         FilterRequest filterRequest = new FilterRequest(getActivity().getApplicationContext());
         registerRequest(filterRequest);
         filterRequest.city = mFilter.city_id;
         filterRequest.sex = mFilter.sex;
         filterRequest.agebegin = mFilter.age_start;
         filterRequest.ageend = mFilter.age_end;
+        filterRequest.xstatus = mFilter.status_id;
+        filterRequest.character = mFilter.character_id;
+        filterRequest.marriage = mFilter.marriage_id;
+        //Финансовое положение и бюст - по сути одно поле, отправляем их оба, что бы не париться с опрееделением пола
+        filterRequest.finances = filterRequest.breast = mFilter.showoff_id;
         prepareRequestSend();
         filterRequest.callback(new ApiHandler() {
 
@@ -578,9 +582,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
     }
 
-	@Override
-	protected void lockUi() { }
+    @Override
+    protected void lockUi() {
+    }
 
-	@Override
-	protected void unlockUi() {	}
+    @Override
+    protected void unlockUi() {
+    }
 }

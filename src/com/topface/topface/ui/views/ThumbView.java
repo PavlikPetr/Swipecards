@@ -20,7 +20,7 @@ public class ThumbView extends ImageViewRemote {
     public static Paint s_PaintLine;
     public static Paint s_PaintText;
 
-    //---------------------------------------------------------------------------
+
     public ThumbView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -45,7 +45,7 @@ public class ThumbView extends ImageViewRemote {
         }
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     protected void onDraw(Canvas canvas) {
         int width = getMeasuredWidth();
@@ -90,11 +90,12 @@ public class ThumbView extends ImageViewRemote {
         }
     }
 
-    //---------------------------------------------------------------------------
+
     public static void release() {
         s_PaintState = null;
         s_PaintLine = null;
         s_PaintText = null;
     }
-    //---------------------------------------------------------------------------
+
+
 }

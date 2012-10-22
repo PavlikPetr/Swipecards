@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.widget.Toast;
-import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -59,27 +56,27 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         }
     }
 
-   private void reAuthIfNeed(Context context) {
-        if(AuthActivity.mThis!=null) {
+    private void reAuthIfNeed(Context context) {
+        if (AuthActivity.mThis != null) {
             AuthActivity.mThis.reAuthAfterInternetConnected();
         }
-   }
+    }
 
-  private void sendToNavigation() {
+    private void sendToNavigation() {
         Intent intent = new Intent();
         intent.setAction(RetryRequestReceiver.RETRY_INTENT);
         ctx.sendBroadcast(intent);
         LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
 
-  }
+    }
 
-   private void sendBroadCastToActiveActivity(Context context) {
-       if(AuthActivity.mThis!=null) {
-           reAuthIfNeed(ctx);
-       } else if(NavigationActivity.mThis!=null){
-           sendToNavigation();
-       }
-   }
+    private void sendBroadCastToActiveActivity(Context context) {
+        if (AuthActivity.mThis != null) {
+            reAuthIfNeed(ctx);
+        } else if (NavigationActivity.mThis != null) {
+            sendToNavigation();
+        }
+    }
 
 
     public boolean isConnected() {

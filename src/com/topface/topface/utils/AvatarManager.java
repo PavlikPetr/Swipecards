@@ -22,23 +22,23 @@ public class AvatarManager<T extends AbstractDataWithPhotos> implements AbsListV
         mHandler = handler;
     }
 
-    //---------------------------------------------------------------------------
+
     public void setDataList(LinkedList<T> dataList) {
         clear();
         mDataList = dataList;
     }
 
-    //---------------------------------------------------------------------------
+
     public T get(int position) {
         return mDataList.get(position);
     }
 
-    //---------------------------------------------------------------------------
+
     public int size() {
         return mDataList.size();
     }
 
-    //---------------------------------------------------------------------------
+
     private void clear() {
         int size = mCache.size();
         for (int i = 0; i < size; ++i) {

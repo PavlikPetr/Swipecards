@@ -26,7 +26,7 @@
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_dating">Знакомства</string>
     <string name="dashbrd_btn_likes">Я нравлюсь</string>
-    <string name="dashbrd_btn_sympathy">Симпатия</string>
+    <string name="dashbrd_btn_sympathy">Взаимно</string>
     <string name="dashbrd_btn_chat">Диалоги</string>
     <string name="dashbrd_btn_tops">Топы</string>
     <string name="dashbrd_btn_visitors">Гости</string>
@@ -54,7 +54,7 @@
     <string name="chat_comment">Написать сообщение</string>
     <string name="chat_gift_in">Вы получили подарок.</string>
     <string name="chat_gift_out">Вы отправили подарок.</string>
-     <string name="chat_like_in">Вам отправили симпатию</string>
+    <string name="chat_like_in">Вам отправили симпатию</string>
     <string name="chat_like_out">Вы отправили симпатию</string>
     <string name="chat_symphathy_in">Вам отправили взаимную сипматию</string>
     <string name="chat_symphathy_out">Вы отправили взаимную сипматию</string>
@@ -81,7 +81,7 @@
 
     <!-- Filter Activity -->
     <string name="filter_filter">Фильтр</string>
-     <string name="filter_girl">Девушки</string>
+    <string name="filter_girl">Девушки</string>
     <string name="filter_boy">Парни</string>
     <string name="filter_from">От</string>
     <string name="filter_to">до</string>
@@ -150,21 +150,25 @@
     <string name="gifts_send_btn">Отправить подарок</string>
 
     <!-- Map Activity -->
-   <string name="map_location_progress">Определяю местоположение</string>
+    <string name="map_location_progress">Определяю местоположение</string>
     <string name="map_confirm">Отпр.</string>
     <string name="map_address">Введите адрес</string>
 
     <!-- Navigation Header -->
     <string name="navigation_back_profile">Профиль</string>
     <string name="navigation_back_dialog">Диалоги</string>
+    <string name="navigation_back_likes">Вы нравитесь</string>
+    <string name="navigation_back_mutual">Взаимно</string>
+    <string name="navigation_back_visitors">Гости</string>
     <string name="navigation_back_dating">Знакомства</string>
+    <string name="navigation_back_chat">Чат</string>
     <string name="navigation_edit">Ред.</string>
     <string name="navigation_save">Сохр.</string>
     <string name="navigation_send">Отпр.</string>
 
     <!-- Profile / UserProfile Form -->
     <string name="form">Анкета</string>
-    
+
     <string name="form_main">Основное</string>
 
     <string-array name="form_main_status">
@@ -380,7 +384,6 @@
     <string name="photo_add_error">Не удалось добавить фотографию</string>
 
 
-
     <string name="leaders_date">Хочу на\nсвидание!</string>
 
     <!-- Settings -->
@@ -412,26 +415,15 @@
     <string name="settings_ask_developer">Вопрос разработчикам</string>
     <string name="settings_payment_problems">Проблемы с оплатой</string>
     <string name="settings_cooperation">Сотрудничество</string>
-    <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>
-
-    <plurals name="time_hour">
-        <item quantity="one">%d час назад</item>
-        <item quantity="few">%d часа назад</item>
-        <item quantity="other">%d часов назад</item>
-    </plurals>
-    <plurals name="time_minute">
-        <item quantity="one">%d минуту назад</item>
-        <item quantity="few">%d минуты назад</item>
-        <item quantity="other">%d минут назад</item>
-    </plurals>
+    <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>    
 
     <plurals name="photo">
         <item quantity="zero">Нет фотографий</item>
         <item quantity="one">%d фотография</item>
         <item quantity="few">%d фотографии</item>
         <item quantity="other">%d фотографий</item>
-    </plurals>        
-    
+    </plurals>
+
     <plurals name="form_matches">
         <item quantity="zero">У вас нет совпадений</item>
         <item quantity="one">У вас %d совпадение</item>
@@ -445,7 +437,12 @@
     <string name="app_help_url">http://topface.com</string>
     <string name="app_topface_url">http://topface.com</string>
 
-    <string name="general_dialog_retry">Retry</string>
+    <string name="general_dialog_retry">Повторить</string>
+
+    <string name="profile_photo">Фото</string>
+    <string name="profile_form">Анкета</string>
+    <string name="profile_gifts">Подарки</string>
+    <string name="profile_actions">Действия</string>
 
 
 </resources>

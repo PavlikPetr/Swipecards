@@ -157,7 +157,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     mAdapter.notifyDataSetChanged();
                     break;
                 case EditContainerActivity.INTENT_EDIT_ALBUM:
-                	mProfilePhoto.setPhoto(CacheProfile.photo);
+                    mProfilePhoto.setPhoto(CacheProfile.photo);
                     mAdapter.notifyDataSetChanged();
                     break;
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
@@ -191,7 +191,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                             Toast.makeText(EditProfileActivity.this, getString(R.string.general_data_error),
                                     Toast.LENGTH_SHORT).show();
                         }
-                    }).exec();                
+                    }).exec();
                 default:
                     break;
             }

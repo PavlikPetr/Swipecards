@@ -80,7 +80,7 @@ public class ApiResponse {
         }
     }
 
-    //---------------------------------------------------------------------------
+
     @Override
     public String toString() {
         if (jsonResult != null)
@@ -88,5 +88,6 @@ public class ApiResponse {
         else
             return "response is null";
     }
-    //---------------------------------------------------------------------------
+
+
 }

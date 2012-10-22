@@ -11,13 +11,13 @@ public class SwapControl extends ViewGroup {
     private int mScrollY;
     private Scroller mScroller;
 
-    //-------------------------------------------------------------------------
+
     public SwapControl(Context context, AttributeSet attrs) {
         super(context, attrs);
         mScroller = new Scroller(context);
     }
 
-    //-------------------------------------------------------------------------
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -25,7 +25,7 @@ public class SwapControl extends ViewGroup {
         getChildAt(1).measure(widthMeasureSpec, getChildAt(1).getMeasuredHeight());
     }
 
-    //-------------------------------------------------------------------------
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int count = getChildCount();
@@ -38,7 +38,7 @@ public class SwapControl extends ViewGroup {
         }
     }
 
-    //-------------------------------------------------------------------------
+
     @Override
     public void computeScroll() {
         if (mScroller.computeScrollOffset()) {
@@ -48,7 +48,7 @@ public class SwapControl extends ViewGroup {
         }
     }
 
-    //-------------------------------------------------------------------------
+
     public void snapToScreen(int screenPosition) {
         int h = getChildAt(1).getHeight();
         if (screenPosition == 1)
@@ -58,5 +58,6 @@ public class SwapControl extends ViewGroup {
 
         invalidate();
     }
-    //-------------------------------------------------------------------------
+
+
 }

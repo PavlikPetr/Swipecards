@@ -392,7 +392,7 @@ public class ChatListAdapter extends BaseAdapter {
         mDataList.add(msg);
     }
 
-    public void setDataList(FeedList<History> dataList) {
+    public void setDataList(LinkedList<History> dataList) {
         prepare(dataList);
     }
 

@@ -18,7 +18,7 @@ public class User extends Profile {
     public Photo photo;
     public boolean rated;
     public int formMatches = 0;
-    
+
     public static User parse(int userId, ApiResponse response) { //нужно знать userId
         User profile = new User();
 

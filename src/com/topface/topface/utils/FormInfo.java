@@ -193,10 +193,18 @@ public class FormInfo {
                 result.residenceid = selectedValueId;
                 break;
             case R.array.form_main_height:
-                result.height = Integer.parseInt(selectedValue);
+            	try{
+            		result.height = Integer.parseInt(selectedValue);
+            	} catch (Exception e) {
+            		result.height = 0;
+				}
                 break;
             case R.array.form_main_weight:
-                result.weight = Integer.parseInt(selectedValue);
+            	try{
+            		result.weight = Integer.parseInt(selectedValue);
+            	} catch (Exception e) {
+            		result.weight = 0;
+				}
                 break;
             case R.array.form_habits_restaurants:
                 result.restaurants = selectedValue;

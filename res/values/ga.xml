@@ -17,7 +17,6 @@
     <string name="com.topface.topface.ui.CitySearchActivity">/CitySearchActivity</string>
     <string name="com.topface.topface.ui.DashboardActivity">/DashboardActivity</string>
     <string name="com.topface.topface.ui.DatingActivity">/PageDating</string>
-    <string name="com.topface.topface.ui.FilterActivity">/FilterActivity</string>
     <string name="com.topface.topface.ui.InboxActivity">/PageDialogs</string>
     <string name="com.topface.topface.ui.InviteActivity">/InviteActivity</string>
     <string name="com.topface.topface.ui.LeadersActivity">/LeadersActivity</string>

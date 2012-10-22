@@ -30,18 +30,18 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     private int mTitleId;
     private String mData;
-    private String mInputData;
+    private String mInputData = "";
     private Profile mProfile;
     private FormInfo mFormInfo;
 
-    private EditText mEditText;    
+    private EditText mEditText;
 
     public EditFormItemInputFragment() {
     }
 
     public EditFormItemInputFragment(int titleId, String data) {
         mTitleId = titleId;
-        mData = data;
+        mData = data == null ? Static.EMPTY : data;
         mProfile = CacheProfile.getProfile();
     }
 
@@ -161,13 +161,13 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         }
     }
 
-	@Override
-	protected void lockUi() {
-		mEditText.setEnabled(false);		
-	}
+    @Override
+    protected void lockUi() {
+        mEditText.setEnabled(false);
+    }
 
-	@Override
-	protected void unlockUi() {
-		mEditText.setEnabled(true);
-	}
+    @Override
+    protected void unlockUi() {
+        mEditText.setEnabled(true);
+    }
 }

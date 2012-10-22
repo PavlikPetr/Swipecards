@@ -9,7 +9,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.edit.EditMainFormItemsFragment.EditType;
-import com.topface.topface.ui.profile.ProfilePhotoFragment;
 
 public class EditContainerActivity extends BaseFragmentActivity {
 
@@ -26,7 +25,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_EDIT_PROFILE_PHOTO = 107;
 
     public static final int INTENT_EDIT_FILTER = 201;
-    public static final int INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM =202;
+    public static final int INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM = 202;
 
     private Fragment mFragment;
 
@@ -75,8 +74,8 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 mFragment = new FilterChooseFormItemFragment(titleId, dataId, data, FilterFragment.mTargetUser);
                 break;
             case INTENT_EDIT_PROFILE_PHOTO:
-            	mFragment = new EditProfilePhotoFragment();
-            	break;
+                mFragment = new EditProfilePhotoFragment();
+                break;
             default:
                 break;
         }
@@ -89,23 +88,25 @@ public class EditContainerActivity extends BaseFragmentActivity {
 
     @Override
     public void finish() {
-    	if (mFragment instanceof AbstractEditFragment) {
-    		AbstractEditFragment editFragment = (AbstractEditFragment) mFragment;
-    		if(editFragment.mSaveButton == null) {
-    			editFragment.saveChanges(mFinishHandler);
-    		} else {
-    			super.finish();
-    		}
-    	} else {
-    		super.finish();
-    	}
-    	
+        if (mFragment instanceof AbstractEditFragment) {
+            AbstractEditFragment editFragment = (AbstractEditFragment) mFragment;
+            if (editFragment.mSaveButton == null) {
+                editFragment.saveChanges(mFinishHandler);
+            } else {
+                super.finish();
+            }
+        } else {
+            super.finish();
+        }
+
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
     }
-    
+
     Handler mFinishHandler = new Handler() {
-    	public void handleMessage(Message msg) {
-    		EditContainerActivity.super.finish();
-    	};
+        public void handleMessage(Message msg) {
+            EditContainerActivity.super.finish();
+        }
+
+        ;
     };
 }

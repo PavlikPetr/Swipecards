@@ -60,17 +60,7 @@
 
     <style name="ButtonBlueText" parent="ButtonGrayText">
         <item name="android:textColor">#9FCCF3</item>
-    </style>
-
-    <style name="ButtonGrayText" parent="ItemTitleText">
-        <item name="android:textColor">#B5B5B5</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="ButtonBlueText" parent="ButtonGrayText">
-        <item name="android:textColor">#9FCCF3</item>
-    </style>
+    </style>    
 
     <style name="ItemtText" parent="ShadowItemFont">
         <item name="android:textColor">#B8B8B8</item>
@@ -93,6 +83,11 @@
     </style>
 
     <style name="ButtonsText" parent="ShadowUserText">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    
+    <style name="NotificationText" parent="ShadowUserText">
+        <item name="android:textSize">9sp</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
@@ -245,7 +240,7 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginRight">8dp</item>
         <item name="android:layout_toLeftOf">@+id/ivArrow</item>
-       	<item name="android:src">@drawable/im_item_mutual_heart</item>
+        <item name="android:src">@drawable/im_item_mutual_heart</item>
     </style>
     <style name="ChatAvatar">
         <item name="android:background">@drawable/chat_avatar_frame</item>

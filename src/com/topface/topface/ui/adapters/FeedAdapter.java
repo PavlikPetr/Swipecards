@@ -4,15 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
-
+import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
+import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedLoader;
 import com.topface.topface.ui.views.ImageViewRemote;
 
@@ -29,7 +24,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private long mLastUpdate = 0;
     public static final int LIMIT = 40;
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
-    private OnAvatarClickListener<T> mOnAvatarClickListener;    
+    private OnAvatarClickListener<T> mOnAvatarClickListener;
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context;
@@ -82,8 +77,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     @Override
     public long getItemId(int i) {
         return i;
-    }    
-    
+    }
+
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
 
@@ -114,7 +109,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         mLoaderRetrierProgress.setVisibility(View.VISIBLE);
         mLoaderRetrierText.setVisibility(View.INVISIBLE);
         return mLoaderRetrier;
-    }    
+    }
 
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
         FeedViewHolder holder = null;
@@ -182,13 +177,13 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         void onFeedUpdate();
     }
 
-    public void setData(FeedList<T> data) {
+    public void setData(FeedListData<T> data) {
         removeLoaderItem();
         FeedList<T> currentData = getData();
         currentData.clear();
-        currentData.addAll(data);
+        currentData.addAll(data.items);
 
-        addLoaderItem();
+        addLoaderItem(data.more);
 
         notifyDataSetChanged();
         setLastUpdate();
@@ -199,18 +194,20 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         mLastUpdate = System.currentTimeMillis();
     }
 
-    private void addLoaderItem() {
+    private void addLoaderItem(boolean hasMore) {
         FeedList<T> currentData = getData();
-        if (!currentData.isEmpty() && currentData.size() > LIMIT / 2) {
+        if (hasMore && !currentData.isEmpty()) {
             currentData.add(getLoaderItem());
         }
     }
 
-    public void addData(FeedList<T> data) {
+    public void addData(FeedListData<T> data) {
         removeLoaderItem();
-        if (data != null && !data.isEmpty()) {
-            getData().addAll(data);
-            addLoaderItem();
+        if (data != null) {
+            if (!data.items.isEmpty()) {
+                getData().addAll(data.items);
+            }
+            addLoaderItem(data.more);
         }
         notifyDataSetChanged();
         setLastUpdate();

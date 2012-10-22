@@ -45,9 +45,9 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         final FeedLike like = getItem(position);
 
-        holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart : 
-        	(like.highrate ? R.drawable.im_item_mutual_heart_top : R.drawable.im_item_mutual_heart));
-                
+        holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart :
+                (like.highrate ? R.drawable.im_item_mutual_heart_top : R.drawable.im_item_mutual_heart));
+
         final ViewFlipper vf = holder.flipper;
 
         holder.heart.setOnClickListener(new OnClickListener() {
@@ -63,9 +63,9 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
             vf.setOutAnimation(getContext(), android.R.anim.fade_out);
             vf.setDisplayedChild(1);
             if (android.os.Build.VERSION.SDK_INT > 11) {
-            	convertView.setActivated(true);
+                convertView.setActivated(true);
             } else {
-            	convertView.setBackgroundResource(R.drawable.im_item_list_bg_activated);
+                convertView.setBackgroundResource(R.drawable.im_item_list_bg_activated);
             }
             holder.flippedBtn.setOnClickListener(new OnClickListener() {
 
@@ -85,9 +85,9 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
                 vf.setOutAnimation(getContext(), R.anim.slide_out_right);
                 vf.setDisplayedChild(0);
                 if (android.os.Build.VERSION.SDK_INT > 11) {
-                	convertView.setActivated(false);
-                }else {
-                	convertView.setBackgroundResource(R.drawable.item_list_selector);
+                    convertView.setActivated(false);
+                } else {
+                    convertView.setBackgroundResource(R.drawable.item_list_selector);
                 }
                 mPrevSelectedForMutual = -1;
             }

@@ -6,8 +6,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CoordinatesRequest extends ApiRequest {
-	public static final int COORDINATES_TYPE_SELF = 1;
-	public static final int COORDINATES_TYPE_PLACE = 2;
+    public static final int COORDINATES_TYPE_SELF = 1;
+    public static final int COORDINATES_TYPE_PLACE = 2;
     // Data
     private String service = "coordinates";
     public int userid; // идентификатор пользователя, кому послали сообщение
@@ -27,11 +27,11 @@ public class CoordinatesRequest extends ApiRequest {
             root.put("service", service);
             root.put("ssid", ssid);
             root.put("data", new JSONObject()
-            		.put("receiverid", userid)
-            		.put("longitude", longitude)
-            		.put("latitude", latitude)
-            		.put("type", type)
-            		.put("message", address));
+                    .put("receiverid", userid)
+                    .put("longitude", longitude)
+                    .put("latitude", latitude)
+                    .put("type", type)
+                    .put("message", address));
         } catch (JSONException e) {
             Debug.log(this, "Wrong request compiling: " + e);
         }

@@ -10,28 +10,28 @@ public class MemorySyncCache {
     // Data
     private ConcurrentHashMap<Integer, SoftReference<Bitmap>> mCache;
 
-    //---------------------------------------------------------------------------
+
     public MemorySyncCache() {
         mCache = new ConcurrentHashMap<Integer, SoftReference<Bitmap>>();
     }
 
-    //---------------------------------------------------------------------------
+
     public boolean containsKey(Integer key) {
         return mCache.containsKey(key);
     }
 
-    //---------------------------------------------------------------------------
+
     public Bitmap get(Integer position) {
         SoftReference<Bitmap> ref = mCache.get(position);
         return ref != null ? ref.get() : null;
     }
 
-    //---------------------------------------------------------------------------
+
     public void put(Integer key, Bitmap bitmap) {
         mCache.put(key, new SoftReference<Bitmap>(bitmap));
     }
 
-    //---------------------------------------------------------------------------
+
     public void clear() {
         Debug.log(this, "memory cache clearing");
         int size = mCache.size();
@@ -44,5 +44,6 @@ public class MemorySyncCache {
         }
         mCache.clear();
     }
-    //---------------------------------------------------------------------------  
+
+
 }

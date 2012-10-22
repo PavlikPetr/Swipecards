@@ -7,9 +7,7 @@ import android.preference.PreferenceManager;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Auth;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 /**
@@ -65,19 +63,19 @@ public class Settings {
 
     public boolean getSetting(String key) {
         return mSettings.getBoolean(key, true);
-    }    
-    
-    public String getSocialAccountName() {    	
+    }
+
+    public String getSocialAccountName() {
         return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
     }
-    
+
     public void getSocialAccountNameAsync(final Handler handler) {
-    	(new Thread(){
-    		@Override
-    		public void run() {
-    			AuthorizationManager.getAccountName(handler);
-    		}
-    	}).start();
+        (new Thread() {
+            @Override
+            public void run() {
+                AuthorizationManager.getAccountName(handler);
+            }
+        }).start();
     }
 
     public String getPreloading() {
@@ -144,8 +142,8 @@ public class Settings {
 
         return false;
     }
-    
+
     public void resetSettings() {
-    	setSocialAccountName(Static.EMPTY);
+        setSocialAccountName(Static.EMPTY);
     }
 }

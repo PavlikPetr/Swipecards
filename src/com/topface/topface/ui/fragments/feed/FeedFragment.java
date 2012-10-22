@@ -4,12 +4,8 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -28,7 +24,6 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.RetryView;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SwapAnimation;
 import org.json.JSONObject;
@@ -46,28 +41,28 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(getLayout(), null);
-        mContainer = (RelativeLayout)view.findViewById(R.id.feedContainer);
+        mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
         // Home Button
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         // Set title
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getTitle());
 
         init();
-        
+
         initBackground(view);
         initFilter(view);
-        initListView(view);        
+        initListView(view);
         if (mListAdapter.isNeedUpdate()) {
             updateData(false);
         }
-        
+
         return view;
     }
 
-    protected void init(){
-    	
+    protected void init() {
+
     }
-    
+
     private void initBackground(View view) {
         // ListView background
         mBackgroundText = (TextView) view.findViewById(R.id.tvBackgroundText);
@@ -90,7 +85,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void initListView(View view) {
         // ListView    	
-        
+
         mListView = (PullToRefreshListView) view.findViewById(R.id.lvFeedList);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
@@ -98,12 +93,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 updateData(true);
             }
         });
-        
+
         mListAdapter = getAdapter();
         mListAdapter.setOnAvatarClickListener(this);
         mListView.setOnScrollListener(mListAdapter);
         mListView.getRefreshableView().setAdapter(mListAdapter);
-        
+
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
         mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
         mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
@@ -144,25 +139,25 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         };
     }
-    
-    protected AdapterView.OnItemLongClickListener getOnItemLongClickListener() {
-    	return new AdapterView.OnItemLongClickListener() {
 
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {				
-				return false;
-			}
-    		
-		};
+    protected AdapterView.OnItemLongClickListener getOnItemLongClickListener() {
+        return new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                return false;
+            }
+
+        };
     }
-    
+
     protected OnTouchListener getListViewOnTouchListener() {
-    	return new OnTouchListener() {			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return false;
-			}
-		};
+        return new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        };
     }
 
     protected void onFeedItemClick(FeedItem item) {
@@ -173,6 +168,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         intent.putExtra(ChatActivity.INTENT_USER_SEX, item.user.sex);
         intent.putExtra(ChatActivity.INTENT_USER_AGE, item.user.age);
         intent.putExtra(ChatActivity.INTENT_USER_CITY, item.user.city.name);
+        intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
         startActivity(intent);
     }
 
@@ -182,6 +178,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         intent.putExtra(UserProfileActivity.INTENT_MUTUAL_ID, item.id);
         intent.putExtra(UserProfileActivity.INTENT_USER_ID, item.user.id);
         intent.putExtra(UserProfileActivity.INTENT_USER_NAME, item.user.first_name);
+        intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
         startActivity(intent);
     }
 
@@ -194,7 +191,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         FeedItem lastItem = mListAdapter.getLastFeedItem();
         if (isHistoryLoad && lastItem != null) {
-            request.before = lastItem.id;
+            request.to = lastItem.id;
         }
         request.limit = FeedAdapter.LIMIT;
         request.unread = mDoubleButton.isRightButtonChecked();
@@ -206,9 +203,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     @Override
                     public void run() {
                         if (isHistoryLoad) {
-                            mListAdapter.addData(dialogList.items);
+                            mListAdapter.addData(dialogList);
                         } else {
-                            mListAdapter.setData(dialogList.items);
+                            mListAdapter.setData(dialogList);
                         }
                         onUpdateSuccess(isPushUpdating || isHistoryLoad);
                         mListView.onRefreshComplete();
@@ -226,6 +223,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         if (isHistoryLoad) {
                             mListAdapter.showRetryItem();
                         }
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         onUpdateFail(isPushUpdating || isHistoryLoad);
                         mListView.onRefreshComplete();
                         mListView.setVisibility(View.VISIBLE);
@@ -262,7 +260,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         final View toolsBar = view.findViewById(R.id.loToolsBar);
         ViewTreeObserver vto = toolsBar.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {            
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 int y = toolsBar.getMeasuredHeight();
@@ -352,7 +350,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void createUpdateErrorMessage() {
-        if(updateErrorMessage == null){
+        if (updateErrorMessage == null) {
             updateErrorMessage = new RetryView(getActivity().getApplicationContext());
             updateErrorMessage.init(getActivity().getLayoutInflater());
             updateErrorMessage.setOnClickListener(new View.OnClickListener() {

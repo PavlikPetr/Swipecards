@@ -27,7 +27,9 @@ import java.util.HashMap;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment {
 
-    public enum EditType {NAME, AGE, STATUS};
+    public enum EditType {NAME, AGE, STATUS}
+
+    ;
 
     private EditType[] mTypes;
     private HashMap<EditType, String> hashChangedData = new HashMap<EditMainFormItemsFragment.EditType, String>();
@@ -265,23 +267,23 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
         return request;
     }
 
-	@Override
-	protected void lockUi() {
-		if (mEdName != null) 
-			mEdName.setEnabled(false);
-		if (mEdAge != null)
-			mEdAge.setEnabled(false);
-	    if (mEdStatus != null) 
-	    	mEdStatus.setEnabled(false);
-	}
+    @Override
+    protected void lockUi() {
+        if (mEdName != null)
+            mEdName.setEnabled(false);
+        if (mEdAge != null)
+            mEdAge.setEnabled(false);
+        if (mEdStatus != null)
+            mEdStatus.setEnabled(false);
+    }
 
-	@Override
-	protected void unlockUi() {
-		if (mEdName != null) 
-			mEdName.setEnabled(true);
-		if (mEdAge != null)
-			mEdAge.setEnabled(true);
-	    if (mEdStatus != null) 
-	    	mEdStatus.setEnabled(true);
-	}
+    @Override
+    protected void unlockUi() {
+        if (mEdName != null)
+            mEdName.setEnabled(true);
+        if (mEdAge != null)
+            mEdAge.setEnabled(true);
+        if (mEdStatus != null)
+            mEdStatus.setEnabled(true);
+    }
 }

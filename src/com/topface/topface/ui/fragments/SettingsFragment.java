@@ -118,24 +118,24 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         final TextView textView = (TextView) frame.findViewById(R.id.tvText);
         textView.setVisibility(View.VISIBLE);
         if (text.isEmpty()) {
-        	mSettings.getSocialAccountNameAsync(new Handler() {
-        		@Override
-        		public void handleMessage(Message msg) {
-        			final String name = (String) msg.obj;
-        			textView.post(new Runnable() {
-						
-						@Override
-						public void run() {
-							textView.setText(name);
-						}
-					});
-        			mSettings.setSocialAccountName(name);
-        		}
-        	});
+            mSettings.getSocialAccountNameAsync(new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    final String name = (String) msg.obj;
+                    textView.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            textView.setText(name);
+                        }
+                    });
+                    mSettings.setSocialAccountName(name);
+                }
+            });
         } else {
-        	textView.setText(text);
+            textView.setText(text);
         }
-                
+
         textView.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(iconRes), null, null, null);
     }
 

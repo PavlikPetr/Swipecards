@@ -18,7 +18,7 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
     protected static final int T_ADD_BTN = 0;
     protected static final int T_PHOTO = 1;
     protected static final int T_COUNT = T_PHOTO + 1;
-    
+
     // class ViewHolder
     static class ViewHolder {
         ImageViewRemote photo;
@@ -36,18 +36,18 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-    	if (position == 0) {
-    		return T_ADD_BTN;
-    	} else {
-    		return T_PHOTO; 
-    	}    	
+        if (position == 0) {
+            return T_ADD_BTN;
+        } else {
+            return T_PHOTO;
+        }
     }
-    
+
     @Override
     public int getViewTypeCount() {
-    	return T_COUNT;
+        return T_COUNT;
     }
-    
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -64,7 +64,7 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
         if (getItemViewType(position) == T_ADD_BTN) {
             holder.photo.setBackgroundResource(R.drawable.profile_add_photo_selector);
         } else {
-            holder.photo.setPhoto(getItem(position));            
+            holder.photo.setPhoto(getItem(position));
         }
 
         return convertView;
