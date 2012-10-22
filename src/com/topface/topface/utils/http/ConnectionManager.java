@@ -2,7 +2,6 @@ package com.topface.topface.utils.http;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.App;
 import com.topface.topface.Data;
@@ -12,7 +11,6 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.requests.UserRequest;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.Http.FlushedInputStream;
 import com.topface.topface.utils.social.AuthToken;
@@ -95,18 +93,18 @@ public class ConnectionManager {
                             apiResponse.code = ApiResponse.ERRORS_PROCCESED;
                         }
 
-                        if(apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE){
-                            if(doNeedResend){
+                        if (apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE) {
+                            if (doNeedResend) {
                                 apiRequest.handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         sendRequest(apiRequest);
                                     }
-                                },WAITING_TIME);
+                                }, WAITING_TIME);
                                 doNeedResend = false;
                             } else {
                                 apiRequest.handler.response(apiResponse);
-                                doNeedResend =true;
+                                doNeedResend = true;
                             }
                         } else {
                             apiRequest.handler.response(apiResponse);
@@ -114,11 +112,9 @@ public class ConnectionManager {
                     }
 
                 } catch (Exception e) {
-                    Debug.log(TAG, "REQUEST::ERROR ===\n" + e.toString());
+                    Debug.error(TAG + "::REQUEST::ERROR ===\n" + e.toString());
                     if (httpPost != null && !httpPost.isAborted())
-                    httpPost.abort();
-
-//
+                        httpPost.abort();
                 }
                 if (httpClient != null) {
                     httpClient.close();
@@ -137,7 +133,7 @@ public class ConnectionManager {
             HttpResponse httpResponse = httpClient.execute(httpPost/* ,
                                                                     * httpContext */);
 
-             HttpEntity httpEntity = httpResponse.getEntity();
+            HttpEntity httpEntity = httpResponse.getEntity();
             if (httpEntity != null) {
                 InputStream is = AndroidHttpClient.getUngzippedContent(httpEntity);
                 BufferedReader r = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FlushedInputStream(is), 8192)));
