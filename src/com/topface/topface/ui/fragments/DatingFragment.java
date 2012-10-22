@@ -266,7 +266,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         lockControls();
                         mRateController.onRate(currentSearch.uid, 9, currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     }
-
+                    currentSearch.rated = true;
                 }
             }
             break;
@@ -288,6 +288,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 Intent intent = new Intent(getActivity(), UserProfileActivity.class);
                 intent.putExtra(UserProfileActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).uid);
                 intent.putExtra(UserProfileActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
+                intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass().getSimpleName());
                 startActivity(intent);
             }
             break;
@@ -298,6 +299,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserSearchList.get(mCurrentUserPos).sex);
                 intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserSearchList.get(mCurrentUserPos).age);
                 intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserSearchList.get(mCurrentUserPos).city_name);
+                intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass().getSimpleName());
                 startActivity(intent);
             }
             break;

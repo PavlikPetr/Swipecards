@@ -152,7 +152,11 @@
     <!-- Navigation Header -->
     <string name="navigation_back_profile">Profile</string>
     <string name="navigation_back_dialog">Dialogs</string>
-    <string name="navigation_back_dating">Dating</string>
+    <string name="navigation_back_likes">Likes</string>
+    <string name="navigation_back_mutual">Mutual</string>
+    <string name="navigation_back_visitors">Visitors</string>
+    <string name="navigation_back_dating">Dating</string>    
+    <string name="navigation_back_chat">Chat</string>
     <string name="navigation_edit">Edit</string>
     <string name="navigation_save">Save</string>
     <string name="navigation_send">Send</string>

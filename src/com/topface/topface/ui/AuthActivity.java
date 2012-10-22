@@ -279,5 +279,4 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mRetryView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }
-
 }

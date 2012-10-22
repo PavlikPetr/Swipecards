@@ -217,5 +217,4 @@
             android:layout_height="wrap_content"
             android:background="@drawable/profile_buy"/>
 
-
 </RelativeLayout>

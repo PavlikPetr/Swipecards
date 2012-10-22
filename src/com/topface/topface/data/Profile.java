@@ -35,6 +35,7 @@ public class Profile extends AbstractDataWithPhotos {
     // Resources
     public int money; // количество монет у пользователя
     public int power; // количество энергии пользователя
+
     public int average_rate; // средняя оценка текущего пользователя
 
     // Dating
@@ -52,7 +53,6 @@ public class Profile extends AbstractDataWithPhotos {
     private static boolean mIsUserProfile;
 
     public LinkedList<Gift> gifts = new LinkedList<Gift>();
-
     public int background;
 
     //private static final String profileFileName = "profile.out";
@@ -127,6 +127,7 @@ public class Profile extends AbstractDataWithPhotos {
 
                 if (profile instanceof User) {
                     mIsUserProfile = true;
+
                     ((User) profile).formMatches = form.optInt("goodness");
                 }
 
@@ -141,7 +142,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("character_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("character_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
@@ -151,7 +152,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("communication_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("communication_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
@@ -169,27 +170,31 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("fitness_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("fitness_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
 
-                //7 height  position 3
-                formItem = new FormItem(R.array.form_main_height, Integer.toString(form.optInt("height")), FormItem.DATA);
+                //7 height  position 3                
+                int h = form.optInt("height");
+                String height = (h == 0) ? null : Integer.toString(form.optInt("height"));
+                formItem = new FormItem(R.array.form_main_height, height, FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("height_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("height_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
 
                 //8 weight  position 4
-                formItem = new FormItem(R.array.form_main_weight, Integer.toString(form.optInt("weight")), FormItem.DATA);
+                int w = form.optInt("weight");
+                String weight = w == 0 ? null : Integer.toString(form.optInt("weight"));
+                formItem = new FormItem(R.array.form_main_weight, weight, FormItem.DATA);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("weight_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("weight_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
@@ -199,7 +204,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("hair_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("hair_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
@@ -209,7 +214,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("eyes_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("eyes_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
@@ -227,7 +232,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("marriage_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("marriage_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
@@ -237,7 +242,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("education_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("education_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
@@ -247,7 +252,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("finances_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("finances_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
@@ -257,7 +262,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("residence_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("residence_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
@@ -267,7 +272,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("car_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("car_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
@@ -285,7 +290,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("smoking_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("smoking_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
@@ -295,15 +300,22 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, profile, form.optBoolean("alcohol_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("alcohol_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }
 
                 //22 restaurants  position 14
-                formItem = new FormItem(R.array.form_habits_restaurants, form.optString("restaurants"), FormItem.DATA);
+                String rest = form.optString("first_dating");
+                String restraunts = rest.trim().isEmpty() ? null : rest;
+                formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                	if (restraunts != null)
+                		profile.forms.add(formItem);
+                } else {
+                	profile.forms.add(formItem);
+                }
 
                 //23 DIVIDER
                 profile.forms.add(FormItem.getDivider());
@@ -314,22 +326,98 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.forms.add(formItem);
 
                 //25 first_dating  position 15
-                formItem = new FormItem(R.array.form_detail_about_dating, form.optString("first_dating"), FormItem.DATA);
+                String dd = form.optString("first_dating");
+                String datingDetails = dd.trim().isEmpty() ? null : dd;
+                formItem = new FormItem(R.array.form_detail_about_dating, datingDetails, FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                	if (datingDetails != null)
+                		profile.forms.add(formItem);
+                } else {
+                	profile.forms.add(formItem);
+                }
 
                 //26 achievements  position 16
-                formItem = new FormItem(R.array.form_detail_archievements, form.optString("achievements"), FormItem.DATA);
+                String ach = form.optString("first_dating");
+                String achievments = dd.trim().isEmpty() ? null : ach;
+                formItem = new FormItem(R.array.form_detail_archievements, achievments, FormItem.DATA);
                 formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                if (mIsUserProfile) {
+                	if (achievments != null)
+                		profile.forms.add(formItem);
+                } else {
+                	profile.forms.add(formItem);
+                }
 
                 //27 DIVIDER
                 profile.forms.add(FormItem.getDivider());
 
+                //  header -= ????????? =-
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.HEADER;
+//                formItem.title = "?????????";
+//                formItem.value = Static.EMPTY;
+//                formItem.equal = false;
+//                profile.forms.add(formItem);
+//                
+//                //  job vs job_id
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.DATA;
+//                formItem.title = "job";
+//                formItem.value = formInfo.getJob(form.optInt("job"));
+//                formItem.equal = false;
+//                profile.forms.add(formItem);
+//                
+//                //  status vs status_id
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.DATA;
+//                formItem.title = "status";
+//                formItem.value = formInfo.getJob(form.optInt("status"));
+//                formItem.equal = false;
+//                profile.forms.add(formItem);                
+//                
+//                //  children
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.DATA;
+//                formItem.title = "children";
+//                formItem.value = "" + form.optInt("children_id");
+//                formItem.equal = false;
+//                profile.forms.add(formItem);
+//                
+//                //  form_countries
+//                //{Array} form_countries; // массив идентификаторов стран, в которых бывал пользователь
+//                
+//                //  valuables
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.DATA;
+//                formItem.title = "valuables";
+//                formItem.value = "" + form.optInt("valuables");
+//                formItem.equal = false;
+//                profile.forms.add(formItem);
+// 
+//                //  aspirations
+//                formItem = new FormItem();
+//                formItem.type  = FormItem.DATA;
+//                formItem.title = "aspirations";
+//                formItem.value = "" + form.optInt("aspirations");
+//                formItem.equal = false;
+//                profile.forms.add(formItem);
             }
 
             initPhotos(resp, profile);
 
+            // newbie
+//            if (!resp.isNull("flags")) {
+//                JSONArray flags = resp.getJSONArray("flags");
+//                for (int i = 0; i < flags.length(); i++) {
+//                    profile.isNewbie = true;
+//                    String item = flags.getString(i);
+//                    if (item.equals("NOVICE_ENERGY")) {
+//                        profile.isNewbie = false;
+//                        break;
+//                    }
+//                }
+//            }
         } catch (Exception e) {
             Debug.log("Profile.class", "Wrong response parsing: " + e);
         }
@@ -337,10 +425,124 @@ public class Profile extends AbstractDataWithPhotos {
         return profile;
     }
 
-    private static void compareFormItemData(FormItem item, Profile profile, boolean matches) {
-        item.equal = matches;
-        if (item.dataId > 0) {
-            profile.forms.add(item);
-        }
+//    private static void compareFormItemData(FormItem item, int position, Profile profile) {
+//        if (item.dataId > 0) {
+//            if (item.dataId == CacheProfile.forms.get(position).dataId)
+//                item.equal = true;
+//            profile.forms.add(item);
+//        }
+//    }
+    
+    private static void compareFormItemData(FormItem item, int position, Profile profile,boolean matches) {
+    	item.equal = matches;
+    	if (item.dataId > 0) {
+	        profile.forms.add(item);
+    	}
     }
+
+//    public static Profile load() {
+//        Profile profile = null;
+//        ObjectInputStream oin = null;
+//        try {
+//            oin = new ObjectInputStream(App.getContext().openFileInput(profileFileName));
+//            profile = (Profile)oin.readObject();
+//        } catch(Exception e) {
+//            Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
+//        } finally {
+//            try {
+//                if(oin != null) oin.close();
+//            } catch(IOException e) {}
+//        }
+//        return profile;
+//    }
+
+//    public static Profile load() {
+//        BufferedReader br = null;
+//        StringBuilder sb = new StringBuilder();
+//        Profile profile = new Profile();
+//        try {
+//            br = new BufferedReader(new InputStreamReader(App.getContext().openFileInput(profileFileName)));
+//            if (br != null)
+//              for (String line = br.readLine(); line != null; line = br.readLine())
+//                  sb.append(line);
+//        } catch(Exception e) {
+//            Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
+//        } finally {
+//            try {
+//                if(br != null) br.close();
+//            } catch(IOException e) {
+//                Debug.error(e);
+//            }
+//        }
+//        JSONObject json;
+//        try {
+//            json = new JSONObject(sb.toString());
+//        } catch(JSONException e) {
+//            json = new JSONObject();
+//        }
+//        return Profile.parse(profile, json);
+//    }
+
+//    public static void save(final Profile profile) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ObjectOutputStream oos = null;
+//                try {
+//                    oos = new ObjectOutputStream(App.getContext().openFileOutput(profileFileName, Context.MODE_PRIVATE));
+//                    oos.writeObject(profile);
+//                    oos.flush();
+//                } catch(Exception e) {
+//                    Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
+//                } finally {
+//                    try {
+//                        if(oos != null) oos.close();
+//                    } catch(IOException e) {}            
+//                }
+//            }
+//        }).start();
+//    }
+
+//    public static void save(final String response) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                BufferedOutputStream bos = null;
+//                try {
+//                    bos = new BufferedOutputStream(App.getContext().openFileOutput(profileFileName, Context.MODE_PRIVATE));
+//                    bos.write(response.getBytes("UTF8"));
+//                    bos.flush();
+//                } catch(Exception e) {
+//                    Toast.makeText(App.getContext(), "", Toast.LENGTH_SHORT).show();
+//                } finally {
+//                    try {
+//                        if(bos != null) bos.close();
+//                    } catch(IOException e) {
+//                        Debug.error(e);
+//                    }
+//                }
+//            }
+//        }).start();
+//    }
+
+//    public static boolean isProfileExist() {
+//        File file = new File(App.getContext().getFilesDir(), profileFileName);
+//        return file.exists();
+//    }
+//    
+//    public static void deleteProfile() {
+//        File file = new File(App.getContext().getFilesDir(), profileFileName);
+//        if(file.exists()) {
+//          file.delete();
+//        }
+//    }
 }
+
+// "ADMIN_MESSAGE","QUESTIONARY_FILLED","CHANGE_PHOTO","STANDALONE_BONUS","STANDALONE",
+// "GUARDBIT","ADMIN_MESSAGES_WITH_ID","IS_TOPFACE_MEMBER","IS_LICE_MER_MEMBER","MAXSTATS_WATCHED",
+// "MAXSTATS_CHECKED","MESSAGES_FEW","MESSAGES_MANY","GIFTS_NO","GIFTS_FEW","GIFTS_MANY","ACTIVE",
+// "SEXUALITY_FIRST_SEND","FACEBOOK_VIRUS_ACTION_OLD","FACEBOOK_VIRUS_ACTION_OLD_2",
+// "FACEBOOK_VIRUS_ACTION_OLD_3","FACEBOOK_VIRUS_ACTION_OLD_4","FACEBOOK_VIRUS_ACTION_OLD_5",
+// "FACEBOOK_VIRUS_ACTION_OLD_6","FRIENDS_DUMPED","MY_FRIENDS_CANNOT_SEE_ME","FACEBOOK_VIRUS_ACTION",
+// "HAS_RESET_SEXUALITY","HAS_RESET_SEXUALITY_2","IN_SEARCH","SHOW_NEWDESIGN_TIPS","MOBILE_USER",
+// "PHONE_APP_USED","NOVICE_BONUS_SHOW","PHONE_APP_ADMSG_RECEIVED"

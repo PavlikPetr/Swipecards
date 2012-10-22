@@ -6,10 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.*;
 import android.view.View.OnTouchListener;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.R;
@@ -30,6 +28,11 @@ import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.SwapAnimation;
 import org.json.JSONObject;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
     protected PullToRefreshListView mListView;
@@ -171,6 +174,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         intent.putExtra(ChatActivity.INTENT_USER_SEX, item.user.sex);
         intent.putExtra(ChatActivity.INTENT_USER_AGE, item.user.age);
         intent.putExtra(ChatActivity.INTENT_USER_CITY, item.user.city.name);
+        intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
         startActivity(intent);
     }
 
@@ -180,6 +184,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         intent.putExtra(UserProfileActivity.INTENT_MUTUAL_ID, item.id);
         intent.putExtra(UserProfileActivity.INTENT_USER_ID, item.user.id);
         intent.putExtra(UserProfileActivity.INTENT_USER_NAME, item.user.first_name);
+        intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
         startActivity(intent);
     }
 
@@ -224,6 +229,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         if (isHistoryLoad) {
                             mListAdapter.showRetryItem();
                         }
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         onUpdateFail(isPushUpdating || isHistoryLoad);
                         mListView.onRefreshComplete();
                         mListView.setVisibility(View.VISIBLE);

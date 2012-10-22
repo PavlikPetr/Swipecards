@@ -9,25 +9,25 @@
 
     <include
             android:id="@+id/loErrorMessage"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             layout="@layout/item_edit_form_select"/>
 
     <include
             android:id="@+id/loAskDevelopers"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             layout="@layout/item_edit_form_select"/>
 
     <include
             android:id="@+id/loPaymentProblem"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             layout="@layout/item_edit_form_select"/>
 
     <include
             android:id="@+id/loCooperation"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             layout="@layout/item_edit_form_select"/>
 

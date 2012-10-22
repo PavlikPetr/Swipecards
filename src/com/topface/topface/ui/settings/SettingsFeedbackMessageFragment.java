@@ -1,5 +1,6 @@
 package com.topface.topface.ui.settings;
 
+import java.util.Locale;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -24,6 +25,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.ui.edit.AbstractEditFragment;
+import com.topface.topface.utils.social.AuthToken;
 
 public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
@@ -149,14 +151,14 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         feedbackRequest.callback(new ApiHandler() {
 
             @Override
-            public void success(ApiResponse response) throws NullPointerException {
-                mEditText.setText(Static.EMPTY);
+            public void success(ApiResponse response) throws NullPointerException {                
                 mReport.body = Static.EMPTY;
                 finishRequestSend();
                 updateUI(new Runnable() {
 
                     @Override
                     public void run() {
+                    	mEditText.setText(Static.EMPTY);
                         Toast.makeText(getActivity(),
                                 getString(R.string.settings_feedback_success_msg),
                                 Toast.LENGTH_SHORT).show();
@@ -203,10 +205,17 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             StringBuilder strBuilder = new StringBuilder();
 
             strBuilder.append("Topface version:").append(topface_version).append("\n");
+            strBuilder.append("Device:").append(device).append("/").append(model).append("\n");
+            strBuilder.append("Device language:").append(Locale.getDefault().getDisplayLanguage()).append("\n");            
+            
+            AuthToken authToken = new AuthToken(getActivity().getApplicationContext());     
+            strBuilder.append("Social net:").append(authToken.getSocialNet()).append("\n");
+            strBuilder.append("Social token:").append(authToken.getTokenKey()).append("\n");
+            strBuilder.append("Social id:").append(authToken.getUserId()).append("\n");            
+            
             strBuilder.append("Android version:").append(android_CODENAME).append("/");
             strBuilder.append(android_RELEASE).append("/").append(android_SDK).append("\n");
-            strBuilder.append("Device:").append(device).append("/").append(model);
-
+            
             return strBuilder.toString();
         }
     }

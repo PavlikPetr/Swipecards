@@ -143,4 +143,3 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         }
     };
 }
-

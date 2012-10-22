@@ -30,7 +30,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     private int mTitleId;
     private String mData;
-    private String mInputData;
+    private String mInputData = "";
     private Profile mProfile;
     private FormInfo mFormInfo;
 
@@ -41,7 +41,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     public EditFormItemInputFragment(int titleId, String data) {
         mTitleId = titleId;
-        mData = data;
+        mData = data == null ? Static.EMPTY : data;
         mProfile = CacheProfile.getProfile();
     }
 
