@@ -75,6 +75,7 @@
     <string name="mutual_background_text">Симпатий нет</string>
 
     <!-- Tops Activity -->
+    <string name="tops_title">Топы</string>
     <string name="tops_btn_boys">Парни</string>
     <string name="tops_btn_girls">Девушки</string>
     <string name="tops_btn_city">Город</string>

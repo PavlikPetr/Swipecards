@@ -23,6 +23,7 @@ import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
@@ -62,6 +63,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
 
 //		mFragmentsHash = new HashMap<Integer, Fragment>();
         // Navigation bar
+        mNavBarController = new NavigationBarController((ViewGroup)view.findViewById(R.id.loNavigationBar));
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.profile_header_title);
 

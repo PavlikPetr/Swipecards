@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.http.IRequestClient;
 
 import java.util.LinkedList;
 
 public abstract class BaseFragment extends Fragment implements IRequestClient {
 
+	protected NavigationBarController mNavBarController;
+	
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
     public static final int F_PROFILE = 1001;
@@ -34,6 +37,12 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
         getActivity().runOnUiThread(action);
     }
 
+    @Override
+    public void onResume() {
+    	if (mNavBarController != null) mNavBarController.refreshNotificators();
+    	super.onResume();
+    }
+    
     @Override
     public void onDestroy() {
         super.onDestroy();

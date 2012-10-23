@@ -75,6 +75,7 @@
     <string name="mutual_background_text">No symphaties</string>
 
     <!-- Tops Activity -->
+    <string name="tops_title">Tops</string>
     <string name="tops_btn_boys">Guys</string>
     <string name="tops_btn_girls">Girls</string>
     <string name="tops_btn_city">City</string>
