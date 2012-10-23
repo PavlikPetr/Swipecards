@@ -152,6 +152,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 case EditContainerActivity.INTENT_EDIT_FORM_ITEM:
                     mAdapter.notifyDataSetChanged();
                     break;
+                case EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM:
+                    mAdapter.notifyDataSetChanged();
+                    break;
                 case EditContainerActivity.INTENT_EDIT_PROFILE_PHOTO:
                     mProfilePhoto.setPhoto(CacheProfile.photo);
                     mAdapter.notifyDataSetChanged();

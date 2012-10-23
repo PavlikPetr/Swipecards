@@ -141,7 +141,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
                         @Override
                         public void success(ApiResponse response) throws NullPointerException {
-                            item.value = mInputData;
+                            item.value = mInputData.isEmpty() ? null : mInputData;
                             mFormInfo.fillFormItem(item);
                             getActivity().setResult(Activity.RESULT_OK);
                             mData = mInputData;

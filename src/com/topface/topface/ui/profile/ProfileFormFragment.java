@@ -1,11 +1,11 @@
 package com.topface.topface.ui.profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.topface.topface.R;
@@ -15,36 +15,33 @@ import com.topface.topface.utils.FormItem;
 
 public class ProfileFormFragment extends BaseFragment {
 
-	private ProfileFormListAdapter mProfilePhotoListAdapter;
+	private ProfileFormListAdapter mProfileFormListAdapter;
 	private TextView mTitle;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mProfilePhotoListAdapter = new ProfileFormListAdapter(getActivity().getApplicationContext());
-		mProfilePhotoListAdapter.setOnFillListener(mOnFillClickListener);
+		mProfileFormListAdapter = new ProfileFormListAdapter(getActivity().getApplicationContext());
+		mProfileFormListAdapter.setOnFillListener(mOnFillClickListener);
 	}
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_form, container, false);
 		ListView formListView = (ListView) root.findViewById(R.id.fragmentFormList);
-		formListView.setAdapter(mProfilePhotoListAdapter);
+		formListView.setAdapter(mProfileFormListAdapter);
 
 		mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
 		mTitle.setVisibility(View.GONE);
+		((ImageView) root.findViewById(R.id.ivDivider)).setVisibility(View.GONE);
 
 		return root;
-	}
-
+	}	
+	
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if ((requestCode == EditContainerActivity.INTENT_EDIT_FORM_ITEM || requestCode == EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM)
-				&& resultCode == Activity.RESULT_OK) {
-
-			mProfilePhotoListAdapter.notifyDataSetChanged();
-		}
+	public void onResume() {
+		mProfileFormListAdapter.notifyDataSetChanged();
+		super.onResume();
 	}
 
 	View.OnClickListener mOnFillClickListener = new View.OnClickListener() {

@@ -117,7 +117,7 @@ public class UserFormListAdapter extends BaseAdapter {
                 if (item.equal)
                     holder.mState.setImageResource(R.drawable.user_cell_on);  // GREEN POINT
                 else
-                    holder.mState.setImageResource(R.drawable.user_cell_off);
+                    holder.mState.setImageResource(R.drawable.user_cell);
                 break;
         }
 
