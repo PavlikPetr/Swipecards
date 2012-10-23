@@ -64,6 +64,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                         authorizationFailed();
                         break;
                     case AuthorizationManager.DIALOG_COMPLETED:
+                        Debug.log("Dialog completed");
                         hideButtons();
                         break;
                     case AuthorizationManager.TOKEN_RECEIVED:
@@ -129,7 +130,9 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
-        hideButtons();
+        if(resultCode!=RESULT_CANCELED)
+            hideButtons();
+        else showButtons();
     }
 
     @Override
@@ -149,6 +152,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             } else if (view.getId() == R.id.btnAuthFB) {
                 mAuthorizationManager.facebookAuth();
             } else if (view.equals(mRetryView)) {
+                Debug.log("Retrying");
                 auth(new AuthToken(getApplicationContext()));
                 mRetryView.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
@@ -230,8 +234,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 //                        showButtons();
 //                        Log.d("Topface","fail");
                         authorizationFailed();
-//                        Toast.makeText(AuthActivity.this, getString(R.string.general_server_error),
-//                                Toast.LENGTH_SHORT).show();
                         mIsAuthorized = false;
                     }
                 });
@@ -240,7 +242,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void getProfile() {
-
+        Debug.log("geting profile");
         ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
         registerRequest(profileRequest);
         profileRequest.part = ProfileRequest.P_ALL;

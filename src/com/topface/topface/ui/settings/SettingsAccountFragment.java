@@ -1,7 +1,10 @@
 package com.topface.topface.ui.settings;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,9 +13,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import com.facebook.android.Facebook;
 import com.google.android.c2dm.C2DMessaging;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
@@ -59,6 +64,7 @@ public class SettingsAccountFragment extends Fragment {
                 Data.removeSSID(getActivity().getApplicationContext());
                 C2DMessaging.unregister(getActivity().getApplicationContext());
                 token.removeToken();
+                new FacebookLogoutTask().execute();
                 Settings.getInstance().resetSettings();
                 startActivity(new Intent(getActivity().getApplicationContext(), AuthActivity.class));
 
@@ -70,4 +76,16 @@ public class SettingsAccountFragment extends Fragment {
         return root;
     }
 
+    class FacebookLogoutTask extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object... params) {
+            try{
+                Data.facebook.logout(getActivity().getApplicationContext());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 }

@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.*;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
+import com.topface.topface.utils.Debug;
 
 public class ImageSwitcher extends ViewPager {
 
@@ -87,6 +88,7 @@ public class ImageSwitcher extends ViewPager {
         }
 
         public Object instantiateItem(ViewGroup pager, int position) {
+            Debug.log("Page has been created");
             LayoutInflater inflater = (LayoutInflater) pager.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_album_gallery, null);
             ImageViewRemote imageView = (ImageViewRemote) view.findViewById(R.id.ivPreView);
