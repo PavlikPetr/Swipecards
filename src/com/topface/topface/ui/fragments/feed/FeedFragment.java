@@ -25,6 +25,7 @@ import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.SwapAnimation;
 import org.json.JSONObject;
 
@@ -42,9 +43,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
-        // Home Button
+        // Navigation bar
+        mNavBarController = new NavigationBarController((ViewGroup)view.findViewById(R.id.loNavigationBar));
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
-        // Set title
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getTitle());
 
         init();
@@ -211,6 +212,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         mListView.onRefreshComplete();
                         mListView.setVisibility(View.VISIBLE);
                         mIsUpdating = false;
+                        if (mNavBarController != null)mNavBarController.refreshNotificators();
                     }
                 });
             }

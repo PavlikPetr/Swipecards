@@ -53,6 +53,22 @@
             android:gravity="center_horizontal"
             style="@style/NotificationText"            
             android:visibility="invisible"/>
+        
+        <TextView
+            android:id="@+id/tvNotificationMutual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/btnNavigationHome"
+            android:layout_alignRight="@id/btnNavigationHome"
+            android:background="@drawable/topface_notification_likes"
+            android:layout_marginTop="-5dp"
+            android:layout_marginRight="-5dp"
+            android:paddingLeft="4dp"            
+            android:paddingRight="11dp"
+            android:paddingTop="0dp"
+            android:gravity="center_horizontal"
+            style="@style/NotificationText"            
+            android:visibility="invisible"/>
 
         <Button
                 android:id="@+id/btnNavigationBack"

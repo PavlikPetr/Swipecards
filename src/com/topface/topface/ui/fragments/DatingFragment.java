@@ -95,6 +95,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserSearchList = new LinkedList<SearchUser>();
 
         // Navigation Header
+        mNavBarController = new NavigationBarController((ViewGroup)view.findViewById(R.id.loNavigationBar));
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_dating));
         mNavigationHeader = view.findViewById(R.id.loNavigationBar);

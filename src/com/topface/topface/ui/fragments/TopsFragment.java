@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.topface.Data;
 import com.topface.topface.R;
@@ -31,6 +32,7 @@ import com.topface.topface.ui.views.ThumbView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GalleryGridManager;
+import com.topface.topface.utils.NavigationBarController;
 
 import java.util.LinkedList;
 
@@ -59,8 +61,10 @@ public class TopsFragment extends BaseFragment {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.ac_tops, null);
 
-        // Home Button
+        // Navigation bar
+        mNavBarController = new NavigationBarController((ViewGroup)view.findViewById(R.id.loNavigationBar));
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
+        ((TextView)view.findViewById(R.id.tvNavigationTitle)).setText(R.string.tops_title);
 
         // Data
         Data.topsList = new LinkedList<Top>();

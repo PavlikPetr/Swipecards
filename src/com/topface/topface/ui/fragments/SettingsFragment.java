@@ -18,6 +18,7 @@ import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
+import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -28,18 +29,19 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-        View root = inflater.inflate(R.layout.ac_settings, null);
+        View view = inflater.inflate(R.layout.ac_settings, null);
 
         mSettings = Settings.getInstance();
 
         // Navigation bar
-        (root.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
-        ((TextView) root.findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_header_title);
+        mNavBarController = new NavigationBarController((ViewGroup)view.findViewById(R.id.loNavigationBar));
+        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
+        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_header_title);
 
         // Init settings views
-        initViews(root);
+        initViews(view);
 
-        return root;
+        return view;
     }
 
     private void initViews(View root) {

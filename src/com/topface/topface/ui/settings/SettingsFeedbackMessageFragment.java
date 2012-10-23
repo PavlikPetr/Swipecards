@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.topface.R;
@@ -68,8 +69,10 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             public void onClick(View v) {
                 saveChanges(null);
             }
-        });
-
+        });        
+        
+        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
+        
         Bundle extras = getActivity().getIntent().getExtras();
         switch (extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN)) {
             case ERROR_MESSAGE:
@@ -135,8 +138,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     @Override
     protected boolean hasChanges() {
         return !mReport.body.isEmpty();
-    }
-
+    }    
+    
     @Override
     protected void saveChanges(Handler handler) {
         InputMethodManager imm = (InputMethodManager) getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -204,17 +207,17 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         public String getExtra() {
             StringBuilder strBuilder = new StringBuilder();
 
-            strBuilder.append("Topface version:").append(topface_version).append("\n");
-            strBuilder.append("Device:").append(device).append("/").append(model).append("\n");
-            strBuilder.append("Device language:").append(Locale.getDefault().getDisplayLanguage()).append("\n");            
+            strBuilder.append("<p>Topface version:").append(topface_version).append("</p>");
+            strBuilder.append("<p>Device:").append(device).append("/").append(model).append("</p>");
+            strBuilder.append("<p>Device language:").append(Locale.getDefault().getDisplayLanguage()).append("</p>");            
             
             AuthToken authToken = new AuthToken(getActivity().getApplicationContext());     
-            strBuilder.append("Social net:").append(authToken.getSocialNet()).append("\n");
-            strBuilder.append("Social token:").append(authToken.getTokenKey()).append("\n");
-            strBuilder.append("Social id:").append(authToken.getUserId()).append("\n");            
+            strBuilder.append("<p>Social net:").append(authToken.getSocialNet()).append("</p>");
+            strBuilder.append("<p>Social token:").append(authToken.getTokenKey()).append("</p>");
+            strBuilder.append("<p>Social id:").append(authToken.getUserId()).append("</p>");            
             
-            strBuilder.append("Android version:").append(android_CODENAME).append("/");
-            strBuilder.append(android_RELEASE).append("/").append(android_SDK).append("\n");
+            strBuilder.append("<p>Android version:").append(android_CODENAME).append("/");
+            strBuilder.append(android_RELEASE).append("/").append(android_SDK).append("</p>");
             
             return strBuilder.toString();
         }
@@ -222,9 +225,13 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
     @Override
     protected void lockUi() {
+    	mBackButton.setEnabled(false);
+    	mEditText.setEnabled(false);
     }
 
     @Override
     protected void unlockUi() {
+    	mBackButton.setEnabled(true);
+    	mEditText.setEnabled(true);
     }
 }

@@ -119,20 +119,20 @@ public class ProfileFormListAdapter extends BaseAdapter {
             case T_DATA:
                 holder.mTitle.setText(item.title.toUpperCase());
                 if (item.value != null) {
+                	holder.mState.setImageResource(R.drawable.user_cell);
                     holder.mValue.setText(item.value);
                     holder.mValue.setVisibility(View.VISIBLE);
                     holder.mFill.setVisibility(View.INVISIBLE);
                 } else {
+                	holder.mState.setImageResource(R.drawable.user_cell_off);
                     holder.mValue.setVisibility(View.INVISIBLE);
                     holder.mFill.setVisibility(View.VISIBLE);
                     holder.mFill.setOnClickListener(mOnFillListener);
                     holder.mFill.setTag(item);
-                }
-                holder.mState.setImageResource(R.drawable.user_cell);
+                }                
                 holder.mState.setVisibility(View.VISIBLE);
                 break;
-        }
-
+        }                
         return convertView;
     }
 
