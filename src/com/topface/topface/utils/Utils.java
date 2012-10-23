@@ -215,8 +215,12 @@ public class Utils {
             text = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
         else if (time > Data.midnight - day * 5)
             text = formatDayOfWeek(context, cal.get(Calendar.DAY_OF_WEEK));
-        else
+
+        else if (time > Data.midnight - day * 365)
             text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH));
+
+        else
+            text = cal.get(Calendar.DAY_OF_MONTH) + " " +formatMonth(context, cal.get(Calendar.MONTH)) + " " + cal.get(Calendar.YEAR);
 
         return text;
     }
