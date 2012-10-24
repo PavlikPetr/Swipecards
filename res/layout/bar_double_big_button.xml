@@ -3,6 +3,7 @@
                 android:id="@+id/loToolsBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:background="@drawable/im_bar_button">
 
     <com.topface.topface.ui.views.DoubleBigButton
