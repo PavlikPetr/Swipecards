@@ -7,41 +7,52 @@
     <RelativeLayout
         android:id="@+id/fragmentTitle"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" >
 
         <ImageView
             android:id="@+id/ivState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true" 
-            android:src="@drawable/user_cell"/>
-        
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/user_cell_center" />
+
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/ivState"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/ivState"
             android:singleLine="true"
             android:textColor="#B8B8B8"
-            android:textSize="16sp" 
-            android:textStyle="bold"/>
-        
-        <ImageView        
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp" 
-            android:src="@drawable/im_item_arrow"/>
-
+            android:layout_marginRight="5dp"
+            android:src="@drawable/im_item_arrow" />
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/ivDivider"
+    <include 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/item_divider" />
+        android:id="@+id/ivDivider"
+        layout="@layout/item_divider" />    
+
+    <Button
+        android:id="@+id/btnAskForm"
+        style="@style/ButtonGrayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="40px"
+        android:background="@drawable/buying_purchase_selector"
+        android:text="@string/profile_ask_form" 
+        android:visibility="gone"/>
 
     <ListView
         android:id="@+id/fragmentFormList"

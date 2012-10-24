@@ -172,6 +172,7 @@
         <item>@string/profile_form_marriage_male_4</item>
         <item>@string/profile_form_marriage_male_5</item>
         <item>@string/profile_form_marriage_male_6</item>
+        <item>@string/profile_form_marriage_male_7</item>
     </string-array>
 
     <string-array name="profile_form_marriage_female">
@@ -182,11 +183,13 @@
         <item>@string/profile_form_marriage_female_4</item>
         <item>@string/profile_form_marriage_female_5</item>
         <item>@string/profile_form_marriage_female_6</item>
+        <item>@string/profile_form_marriage_female_7</item>
     </string-array>
 
     <integer-array name="profile_form_marriage_ids">
         <item>1</item>
         <item>2</item>
+        <item>8</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>

@@ -6,9 +6,11 @@
               android:orientation="vertical">
 
     <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:background="@drawable/im_btn_like_bg">
 
         <TextView
@@ -22,10 +24,12 @@
 
     <Button
             android:id="@+id/btnLogout"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@drawable/settings_logout_selector"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/buying_purchase_selector"
             android:text="@string/settings_logout"
             style="@style/ItemtText"
             android:textSize="16sp"

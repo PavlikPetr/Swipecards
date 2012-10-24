@@ -83,19 +83,21 @@
 
     <string name="profile_form_marriage_male_0">Not yet</string>
     <string name="profile_form_marriage_male_1">No longer</string>
-    <string name="profile_form_marriage_male_2">Still</string>
-    <string name="profile_form_marriage_male_3">Yes</string>
-    <string name="profile_form_marriage_male_4">Yes and forever</string>
-    <string name="profile_form_marriage_male_5">Is it a problem?</string>
-    <string name="profile_form_marriage_male_6">Never</string>
+    <string name="profile_form_marriage_male_2">Have a girl friend</string>
+    <string name="profile_form_marriage_male_3">Still</string>
+    <string name="profile_form_marriage_male_4">Yes</string>
+    <string name="profile_form_marriage_male_5">Yes and forever</string>
+    <string name="profile_form_marriage_male_6">Is it a problem?</string>
+    <string name="profile_form_marriage_male_7">Never</string>    
 
     <string name="profile_form_marriage_female_0">Not yet</string>
     <string name="profile_form_marriage_female_1">No longer</string>
-    <string name="profile_form_marriage_female_2">Still</string>
-    <string name="profile_form_marriage_female_3">Yes</string>
-    <string name="profile_form_marriage_female_4">Yes and forever</string>
-    <string name="profile_form_marriage_female_5">Is it a problem?</string>
-    <string name="profile_form_marriage_female_6">Never</string>
+    <string name="profile_form_marriage_female_2">Have a boy friend</string>
+    <string name="profile_form_marriage_female_3">Still</string>
+    <string name="profile_form_marriage_female_4">Yes</string>
+    <string name="profile_form_marriage_female_5">Yes and forever</string>
+    <string name="profile_form_marriage_female_6">Is it a problem?</string>
+    <string name="profile_form_marriage_female_7">Never</string>
 
     <string name="profile_form_finances_male_0">Very high income</string>
     <string name="profile_form_finances_male_1">I can share</string>

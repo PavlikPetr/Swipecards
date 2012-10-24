@@ -212,11 +212,11 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //10 eye  position 6
-                formItem = new FormItem(R.array.form_physique_eyes, form.optInt("eyes_id"), FormItem.DATA, headerItem);
+                formItem = new FormItem(R.array.form_physique_eyes, form.optInt("eye_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
-                    compareFormItemData(formItem, position, profile, form.optBoolean("eyes_goodness", false));
+                    compareFormItemData(formItem, position, profile, form.optBoolean("eye_goodness", false));
                 } else {
                     profile.forms.add(formItem);
                 }

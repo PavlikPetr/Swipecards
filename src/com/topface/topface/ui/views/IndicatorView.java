@@ -35,7 +35,7 @@ public class IndicatorView extends View {
         mMeasures = new LinkedHashMap<Integer, Integer>(4);
         mPoints = new LinkedHashMap<Integer, Integer>(4);
         mIndicator = BitmapFactory.decodeResource(getResources(), R.drawable.user_sign);
-        mDivider = BitmapFactory.decodeResource(getResources(), R.drawable.user_divider);
+        mDivider = BitmapFactory.decodeResource(getResources(), R.drawable.user_divider);        
         mDividerY = mIndicator.getHeight() - mDivider.getHeight();
     }
 

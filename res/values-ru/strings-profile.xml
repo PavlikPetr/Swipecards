@@ -83,19 +83,21 @@
 
     <string name="profile_form_marriage_male_0">Еще нет</string>
     <string name="profile_form_marriage_male_1">Уже нет</string>
-    <string name="profile_form_marriage_male_2">Пока да</string>
-    <string name="profile_form_marriage_male_3">Да</string>
-    <string name="profile_form_marriage_male_4">Да и навсегда</string>
-    <string name="profile_form_marriage_male_5">А кому это мешает?</string>
-    <string name="profile_form_marriage_male_6">Никогда</string>
+    <string name="profile_form_marriage_male_2">Есть девушка</string>
+    <string name="profile_form_marriage_male_3">Пока да</string>
+    <string name="profile_form_marriage_male_4">Да</string>
+    <string name="profile_form_marriage_male_5">Да и навсегда</string>
+    <string name="profile_form_marriage_male_6">А кому это мешает?</string>
+    <string name="profile_form_marriage_male_7">Никогда</string>	    
 
     <string name="profile_form_marriage_female_0">Еще нет</string>
     <string name="profile_form_marriage_female_1">Уже нет</string>
-    <string name="profile_form_marriage_female_2">Пока да</string>
-    <string name="profile_form_marriage_female_3">Да</string>
-    <string name="profile_form_marriage_female_4">Да и навсегда</string>
-    <string name="profile_form_marriage_female_5">А кому это мешает?</string>
-    <string name="profile_form_marriage_female_6">Никогда</string>
+    <string name="profile_form_marriage_female_2">Есть парень</string>
+    <string name="profile_form_marriage_female_3">Пока да</string>
+    <string name="profile_form_marriage_female_4">Да</string>
+    <string name="profile_form_marriage_female_5">Да и навсегда</string>
+    <string name="profile_form_marriage_female_6">А кому это мешает?</string>
+    <string name="profile_form_marriage_female_7">Никогда</string>    
 
     <string name="profile_form_finances_male_0">Очень высокий доход</string>
     <string name="profile_form_finances_male_1">Могу поделиться</string>

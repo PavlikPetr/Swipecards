@@ -33,7 +33,7 @@ public class ProfileFormFragment extends BaseFragment {
 
 		mTitleLayout = root.findViewById(R.id.fragmentTitle);
 		mTitleLayout.setVisibility(View.GONE);
-		((ImageView) root.findViewById(R.id.ivDivider)).setVisibility(View.GONE);
+		(root.findViewById(R.id.ivDivider)).setVisibility(View.GONE);
 
 		return root;
 	}	
