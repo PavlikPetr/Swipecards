@@ -16,7 +16,7 @@ import com.topface.topface.utils.FormItem;
 public class ProfileFormFragment extends BaseFragment {
 
 	private ProfileFormListAdapter mProfileFormListAdapter;
-	private TextView mTitle;
+	private View mTitleLayout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,8 +31,8 @@ public class ProfileFormFragment extends BaseFragment {
 		ListView formListView = (ListView) root.findViewById(R.id.fragmentFormList);
 		formListView.setAdapter(mProfileFormListAdapter);
 
-		mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
-		mTitle.setVisibility(View.GONE);
+		mTitleLayout = root.findViewById(R.id.fragmentTitle);
+		mTitleLayout.setVisibility(View.GONE);
 		((ImageView) root.findViewById(R.id.ivDivider)).setVisibility(View.GONE);
 
 		return root;

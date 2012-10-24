@@ -123,22 +123,24 @@ public class Profile extends AbstractDataWithPhotos {
 
                 FormInfo formInfo = new FormInfo(context, profile);
 
+                FormItem headerItem;
                 FormItem formItem;
 
                 if (profile instanceof User) {
                     mIsUserProfile = true;
 
-                    ((User) profile).formMatches = form.optInt("goodness");
+//                    ((User) profile).formMatches = form.optInt("goodness");
+                    ((User) profile).formMatches = 0;
                 }
 
                 //1 HEADER -= MAIN =-
-                formItem = new FormItem(R.string.form_main, FormItem.HEADER);
-                formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                headerItem = new FormItem(R.string.form_main, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+                profile.forms.add(headerItem);
 
                 //2 character  position 0
                 int position = 0;
-                formItem = new FormItem(R.array.form_main_character, form.optInt("character_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_main_character, form.optInt("character_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -148,7 +150,7 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //3 communication position 1
-                formItem = new FormItem(R.array.form_main_communication, form.optInt("communication_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_main_communication, form.optInt("communication_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -161,12 +163,12 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.forms.add(FormItem.getDivider());
 
                 //5 HEADER -= PHYSIQUE =-
-                formItem = new FormItem(R.string.form_physique, FormItem.HEADER);
-                formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                headerItem = new FormItem(R.string.form_physique, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+                profile.forms.add(headerItem);
 
                 //6 fitness  position 2
-                formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitness_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitness_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -178,7 +180,7 @@ public class Profile extends AbstractDataWithPhotos {
                 //7 height  position 3                
                 int h = form.optInt("height");
                 String height = (h == 0) ? null : Integer.toString(form.optInt("height"));
-                formItem = new FormItem(R.array.form_main_height, height, FormItem.DATA);
+                formItem = new FormItem(R.array.form_main_height, height, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -190,7 +192,7 @@ public class Profile extends AbstractDataWithPhotos {
                 //8 weight  position 4
                 int w = form.optInt("weight");
                 String weight = w == 0 ? null : Integer.toString(form.optInt("weight"));
-                formItem = new FormItem(R.array.form_main_weight, weight, FormItem.DATA);
+                formItem = new FormItem(R.array.form_main_weight, weight, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -200,7 +202,7 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //9 hair  position 5
-                formItem = new FormItem(R.array.form_physique_hairs, form.optInt("hair_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_physique_hairs, form.optInt("hair_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -210,7 +212,7 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //10 eye  position 6
-                formItem = new FormItem(R.array.form_physique_eyes, form.optInt("eyes_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_physique_eyes, form.optInt("eyes_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -223,12 +225,12 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.forms.add(FormItem.getDivider());
 
                 //12 HEADER -= SOCIAL =-
-                formItem = new FormItem(R.string.form_social, FormItem.HEADER);
-                formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                headerItem = new FormItem(R.string.form_social, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+                profile.forms.add(headerItem);
 
                 //13 marriage position 7
-                formItem = new FormItem(R.array.form_social_marriage, form.optInt("marriage_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_social_marriage, form.optInt("marriage_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -238,7 +240,7 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //14 education  position 8
-                formItem = new FormItem(R.array.form_social_education, form.optInt("education_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_social_education, form.optInt("education_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -248,7 +250,7 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //15 finances  position 9
-                formItem = new FormItem(R.array.form_social_finances, form.optInt("finances_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_social_finances, form.optInt("finances_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -258,7 +260,7 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //16 residence  position 10
-                formItem = new FormItem(R.array.form_social_residence, form.optInt("residence_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_social_residence, form.optInt("residence_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -268,7 +270,7 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //17 car vs car_id  position 11
-                formItem = new FormItem(R.array.form_social_car, form.optInt("car_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_social_car, form.optInt("car_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -281,12 +283,12 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.forms.add(FormItem.getDivider());
 
                 //19 HEADER -= HABITS =-
-                formItem = new FormItem(R.string.form_habits, FormItem.HEADER);
-                formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                headerItem = new FormItem(R.string.form_habits, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+                profile.forms.add(headerItem);
 
                 //20 smoking  position 12
-                formItem = new FormItem(R.array.form_habits_smoking, form.optInt("smoking_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_habits_smoking, form.optInt("smoking_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -296,7 +298,7 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //21 alcohol  position 13
-                formItem = new FormItem(R.array.form_habits_alcohol, form.optInt("alcohol_id"), FormItem.DATA);
+                formItem = new FormItem(R.array.form_habits_alcohol, form.optInt("alcohol_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                     position++;
@@ -308,7 +310,7 @@ public class Profile extends AbstractDataWithPhotos {
                 //22 restaurants  position 14
                 String rest = form.optString("restaurants");
                 String restraunts = rest.trim().isEmpty() ? null : rest;
-                formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA);
+                formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                 	if (restraunts != null)
@@ -321,14 +323,14 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.forms.add(FormItem.getDivider());
 
                 //24 HEADER -= DETAIL =-
-                formItem = new FormItem(R.string.form_detail, FormItem.HEADER);
-                formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
+                headerItem = new FormItem(R.string.form_detail, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+                profile.forms.add(headerItem);
 
                 //25 first_dating  position 15
                 String dd = form.optString("first_dating");
                 String datingDetails = dd.trim().isEmpty() ? null : dd;
-                formItem = new FormItem(R.array.form_detail_about_dating, datingDetails, FormItem.DATA);
+                formItem = new FormItem(R.array.form_detail_about_dating, datingDetails, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                 	if (datingDetails != null)
@@ -339,8 +341,8 @@ public class Profile extends AbstractDataWithPhotos {
 
                 //26 achievements  position 16
                 String ach = form.optString("aspirations");
-                String achievments = dd.trim().isEmpty() ? null : ach;
-                formItem = new FormItem(R.array.form_detail_archievements, achievments, FormItem.DATA);
+                String achievments = ach.trim().isEmpty() ? null : ach;
+                formItem = new FormItem(R.array.form_detail_archievements, achievments, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
                 	if (achievments != null)
@@ -434,9 +436,12 @@ public class Profile extends AbstractDataWithPhotos {
 //    }
     
     private static void compareFormItemData(FormItem item, int position, Profile profile,boolean matches) {
-    	item.equal = matches;
+    	item.equal = matches;    	
     	if (item.dataId > 0) {
 	        profile.forms.add(item);
+	        if (item.equal) {
+	        	((User) profile).formMatches++;
+	        }
     	}
     }
 
