@@ -9,7 +9,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"/>
 
-
     <!-- Header -->
     <TextView
             android:id="@+id/tvHeader"
@@ -38,7 +37,7 @@
             android:layout_toRightOf="@id/ivState"
             android:layout_below="@id/tvTitle"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content"            
             android:textColor="#B8B8B8"
             android:textSize="13sp"
             />"

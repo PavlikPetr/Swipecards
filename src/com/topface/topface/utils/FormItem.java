@@ -7,6 +7,7 @@ public class FormItem {
     public int type;
     public String title;
     public String value;
+    public FormItem header;
     public boolean equal;
 
     public int titleId = NO_RESOURCE_ID;
@@ -29,13 +30,21 @@ public class FormItem {
         this.value = Static.EMPTY;
         this.dataId = NO_RESOURCE_ID;
         this.equal = false;
-    }
+    }    
 
     public FormItem(int titleId, int dataId, int type) {
         this.titleId = titleId;
         this.dataId = dataId;
         this.type = type;
         this.equal = false;
+    }
+    
+    public FormItem(int titleId, int dataId, int type, FormItem header) {
+        this.titleId = titleId;
+        this.dataId = dataId;
+        this.type = type;
+        this.equal = false;
+        this.header = header;
     }
 
     public FormItem(int titleId, String data, int type) {
@@ -44,6 +53,15 @@ public class FormItem {
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
         this.equal = false;
+    }
+    
+    public FormItem(int titleId, String data, int type, FormItem header) {
+        this.titleId = titleId;
+        this.value = data;
+        this.dataId = NO_RESOURCE_ID;
+        this.type = type;
+        this.equal = false;
+        this.header = header;
     }
 
     private FormItem(int type) {

@@ -119,13 +119,49 @@ public class UserFormListAdapter extends BaseAdapter {
                 else
                     holder.mState.setImageResource(R.drawable.user_cell);
                 break;
-        }
-
+        }        
+        
         return convertView;
     }
 
     public void setUserData(User user) {
-        mUserForms = user.forms;
+        mUserForms = prepareData((LinkedList<FormItem>)user.forms.clone());
+    }
+    
+    private LinkedList<FormItem> prepareData(LinkedList<FormItem> userForms) {
+    	int i = 0;
+    	while (i<userForms.size()) {    		
+			if(userForms.get(i).type == FormItem.HEADER) {
+				FormItem headerItem = userForms.get(i);
+				if(!hasRelatedFormItem(headerItem,userForms,i)) {
+					userForms.remove(i);
+					if(i-1 >= 0) {
+						if(userForms.get(i-1).type == FormItem.DIVIDER) {
+							userForms.remove(i-1);
+						}
+						i--;
+					}
+				} else {
+					i++;
+				}
+				
+			} else {
+				i++;
+			}
+		}
+    	
+    	if(!userForms.isEmpty() && (userForms.get(0).type == FormItem.DIVIDER)) {
+    		userForms.remove(0);
+    	}
+    	
+    	return userForms;
+    }
+    
+    private boolean hasRelatedFormItem(FormItem header, LinkedList<FormItem> userForms, int startPos) {
+    	for (int i = startPos; i < userForms.size(); i++) {
+			if (userForms.get(i).header == header) return true; 
+		}
+    	return false;
     }
 
 }

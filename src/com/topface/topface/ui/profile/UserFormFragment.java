@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.topface.topface.R;
@@ -14,7 +15,9 @@ import com.topface.topface.utils.Utils;
 public class UserFormFragment extends Fragment {
     private User mUser;
     private UserFormListAdapter mUserFormListAdapter;
+    private View mTitleLayout;
     private TextView mTitle;
+    private ImageView mState;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,13 +31,16 @@ public class UserFormFragment extends Fragment {
         ListView listQuestionnaire = (ListView) root.findViewById(R.id.fragmentFormList);
         listQuestionnaire.setAdapter(mUserFormListAdapter);
 
-        mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
+        mTitleLayout = root.findViewById(R.id.fragmentTitle);
+        mTitle = (TextView) root.findViewById(R.id.tvTitle);
+        mState = (ImageView) root.findViewById(R.id.ivState);
         if (mUser != null) {
-            mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
+        	initFormHeader();
         } else {
             mTitle.setText(Utils.formatFormMatchesQuantity(0));
+            mState.setImageResource(R.drawable.user_cell);
         }
-        mTitle.setVisibility(View.VISIBLE);
+        mTitleLayout.setVisibility(View.VISIBLE);
 
         return root;
     }
@@ -44,7 +50,16 @@ public class UserFormFragment extends Fragment {
         mUserFormListAdapter.setUserData(mUser);
         mUserFormListAdapter.notifyDataSetChanged();
         
-        mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
+        initFormHeader();
+    }
+    
+    private void initFormHeader() {
+    	mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
+        if(mUser.formMatches > 0) {
+        	mState.setImageResource(R.drawable.user_cell_on);
+        } else {
+            mState.setImageResource(R.drawable.user_cell);
+        }
     }
 
 }
