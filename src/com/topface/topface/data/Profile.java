@@ -129,7 +129,8 @@ public class Profile extends AbstractDataWithPhotos {
                 if (profile instanceof User) {
                     mIsUserProfile = true;
 
-                    ((User) profile).formMatches = form.optInt("goodness");
+//                    ((User) profile).formMatches = form.optInt("goodness");
+                    ((User) profile).formMatches = 0;
                 }
 
                 //1 HEADER -= MAIN =-
@@ -435,9 +436,12 @@ public class Profile extends AbstractDataWithPhotos {
 //    }
     
     private static void compareFormItemData(FormItem item, int position, Profile profile,boolean matches) {
-    	item.equal = matches;
+    	item.equal = matches;    	
     	if (item.dataId > 0) {
 	        profile.forms.add(item);
+	        if (item.equal) {
+	        	((User) profile).formMatches++;
+	        }
     	}
     }
 

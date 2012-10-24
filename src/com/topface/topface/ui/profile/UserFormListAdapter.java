@@ -17,6 +17,10 @@ public class UserFormListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private LinkedList<FormItem> mUserForms;
+    private LinkedList<FormItem> mInitialUserForms;
+    private LinkedList<FormItem> mMatchedUserForms;
+    
+    private boolean isMatchedDataOnly = false;
 
     private static final int T_HEADER = 0;
     private static final int T_DIVIDER = 1;
@@ -124,11 +128,44 @@ public class UserFormListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setUserData(User user) {
-        mUserForms = prepareData((LinkedList<FormItem>)user.forms.clone());
+    public void setUserData(User user) {        
+        mInitialUserForms = removeEmptyHeaders((LinkedList<FormItem>)user.forms.clone());        
+        mMatchedUserForms = removeEmptyHeaders(removeNotMatchedItems((LinkedList<FormItem>) mInitialUserForms.clone())); 
+        setAllData();
     }
     
-    private LinkedList<FormItem> prepareData(LinkedList<FormItem> userForms) {
+    public void setMatchedDataOnly() {
+    	mUserForms = mMatchedUserForms;
+    	isMatchedDataOnly = true;
+    }
+    
+    public void setAllData() {
+    	mUserForms = mInitialUserForms;
+    	isMatchedDataOnly = false;
+    }
+    
+    public boolean isMatchedDataOnly() {
+    	return isMatchedDataOnly;
+    }
+    
+    private LinkedList<FormItem> removeNotMatchedItems(LinkedList<FormItem> userForms) {
+    	int i = 0;
+    	while (i<userForms.size()) {
+    		if (userForms.get(i).type == FormItem.DATA) {
+    			if (!userForms.get(i).equal) {
+    				userForms.remove(i);
+    			} else {
+    				i++;
+    			}
+    		} else {
+    			i++;
+    		}
+    	}
+    	
+    	return userForms;
+    }
+    
+    private LinkedList<FormItem> removeEmptyHeaders(LinkedList<FormItem> userForms) {
     	int i = 0;
     	while (i<userForms.size()) {    		
 			if(userForms.get(i).type == FormItem.HEADER) {

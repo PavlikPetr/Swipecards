@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -41,6 +42,15 @@ public class UserFormFragment extends Fragment {
             mState.setImageResource(R.drawable.user_cell);
         }
         mTitleLayout.setVisibility(View.VISIBLE);
+        mTitleLayout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if (mUserFormListAdapter.isMatchedDataOnly()) mUserFormListAdapter.setAllData();
+				else mUserFormListAdapter.setMatchedDataOnly();
+				mUserFormListAdapter.notifyDataSetChanged();
+			}
+		});
 
         return root;
     }
