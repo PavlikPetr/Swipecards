@@ -330,7 +330,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                     History history = new History();
 //	                                history.code = 0;
 //	                                history.gift = 0;
-                                    //history.user.id = CacheProfile.uid;
+                                    history.user = new FeedUser(null);
+                                    history.user.id = CacheProfile.uid;
                                     history.created = System.currentTimeMillis();
                                     history.text = text;
                                     history.type = FeedDialog.MESSAGE;
@@ -449,6 +450,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                             public void run() {
                                 if (confirm.completed) {
                                     History history = new History();
+                                    history.user = new FeedUser(null);
                                     history.type = FeedDialog.MAP;
                                     history.user.geo = geo;
                                     mAdapter.addSentMessage(history);
