@@ -3,12 +3,12 @@ package com.topface.topface.utils;
 import android.os.Handler;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import com.topface.topface.data.Gift;
+import com.topface.topface.data.FeedGift;
 import com.topface.topface.ui.views.ImageViewRemote;
 
 import java.util.LinkedList;
 
-public class GiftGalleryManager<T extends Gift> implements OnScrollListener {
+public class GiftGalleryManager<T extends FeedGift> implements OnScrollListener {
     private LinkedList<T> mDataList;
     private Handler mHandler;
 
@@ -30,7 +30,7 @@ public class GiftGalleryManager<T extends Gift> implements OnScrollListener {
     }
 
     public void getImage(final int position, final ImageViewRemote imageView) {
-        imageView.setRemoteSrc(mDataList.get(position).link);
+        imageView.setRemoteSrc(mDataList.get(position).gift.link);
     }
 
     @Override

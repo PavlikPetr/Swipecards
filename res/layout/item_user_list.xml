@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:textColor="#2B2B2B"
-            android:textSize="22sp"            
+            android:textSize="22sp"
             />
 
     <!-- Title -->
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textColor="#212121"
-            android:textSize="9sp"            
+            android:textSize="9sp"
             />
 
     <!-- Value -->
@@ -37,9 +37,9 @@
             android:layout_toRightOf="@id/ivState"
             android:layout_below="@id/tvTitle"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"            
+            android:layout_height="wrap_content"
             android:textColor="#B8B8B8"
-            android:textSize="13sp"            
+            android:textSize="13sp"
             />
 
     <Button
@@ -47,10 +47,11 @@
             android:layout_toRightOf="@id/ivState"
             android:layout_below="@id/tvTitle"
             android:layout_width="wrap_content"
-            android:layout_height="26dp" 
-            android:textColor="#B8B8B8"            
-            android:background="@drawable/profile_fill_selector"            
+            android:layout_height="26dp"
+            android:textColor="#B8B8B8"
+            android:background="@drawable/profile_fill_selector"
             android:text="@string/fill_button"
+            android:textSize="13sp"
             android:visibility="gone"/>
 
 </RelativeLayout>
