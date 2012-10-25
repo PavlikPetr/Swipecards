@@ -34,7 +34,7 @@ abstract public class FeedItem extends AbstractLoaderData {
     /**
      * Пользователь (автор) элемента списка
      */
-    public FeedUser user;
+    public FeedUser user;        
 
     public FeedItem(JSONObject data) {
         super(ItemType.NONE);
@@ -53,7 +53,6 @@ abstract public class FeedItem extends AbstractLoaderData {
         this.created = item.optLong("created") * 1000;
         this.target = item.optInt("target");
         this.unread = item.optBoolean("unread");        
-        this.user = new FeedUser(item.optJSONObject("user"));
-        
+        this.user = new FeedUser(item.optJSONObject("user"));        
     }
 }

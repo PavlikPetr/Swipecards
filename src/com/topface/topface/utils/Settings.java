@@ -8,6 +8,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 /**
@@ -145,5 +146,39 @@ public class Settings {
 
     public void resetSettings() {
         setSocialAccountName(Static.EMPTY);
+    }
+        
+    public SendMailNotificationsRequest getMailNotificationRequest(String key, boolean value, Context context) {    	
+    	if(key.equals(SETTINGS_C2DM_LIKES_EMAIL)) {
+    		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
+    		request.sympathy = value;
+    		request.mutual = getSetting(SETTINGS_C2DM_MUTUAL_EMAIL);
+    		request.chat = getSetting(SETTINGS_C2DM_MESSAGES_EMAIL);
+    		request.guests = getSetting(SETTINGS_C2DM_GUESTS_EMAIL);
+    		return request;
+    	} else if(key.equals(SETTINGS_C2DM_MUTUAL_EMAIL)) {
+    		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
+    		request.mutual = value;
+    		request.sympathy = getSetting(SETTINGS_C2DM_LIKES_EMAIL);
+    		request.chat = getSetting(SETTINGS_C2DM_MESSAGES_EMAIL);
+    		request.guests = getSetting(SETTINGS_C2DM_GUESTS_EMAIL);
+    		return request;
+    	} else if(key.equals(SETTINGS_C2DM_MESSAGES_EMAIL)) {
+    		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
+    		request.chat = value;
+    		request.sympathy = getSetting(SETTINGS_C2DM_LIKES_EMAIL);
+    		request.mutual = getSetting(SETTINGS_C2DM_MUTUAL_EMAIL);
+    		request.guests = getSetting(SETTINGS_C2DM_GUESTS_EMAIL);
+    		return request;
+    	} else if(key.equals(SETTINGS_C2DM_GUESTS_EMAIL)) {
+    		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
+    		request.guests = value;
+    		request.sympathy = getSetting(SETTINGS_C2DM_LIKES_EMAIL);
+    		request.mutual = getSetting(SETTINGS_C2DM_MUTUAL_EMAIL);
+    		request.chat = getSetting(SETTINGS_C2DM_MESSAGES_EMAIL);
+    		return request;
+    	} else {
+    		return null;
+    	}
     }
 }

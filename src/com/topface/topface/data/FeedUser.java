@@ -30,8 +30,7 @@ public class FeedUser extends AbstractData {
     /**
      * Объект основного фото пользователя
      */
-    public Photo photo;
-    public Geo geo;
+    public Photo photo;    
 
     public FeedUser(JSONObject user) {
         super(user);
@@ -43,8 +42,7 @@ public class FeedUser extends AbstractData {
         this.age = user.optInt("age");
         this.online = user.optBoolean("online");
         this.city = new City(user.optJSONObject("city"));
-        this.photo = new Photo(user.optJSONObject("photo"));
-        this.geo = new Geo(user.optJSONObject("geo"));
+        this.photo = new Photo(user.optJSONObject("photo"));        
     }
 
     public String getNameAndAge() {
