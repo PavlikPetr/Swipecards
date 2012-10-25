@@ -26,7 +26,8 @@
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_dating">Знакомства</string>
     <string name="dashbrd_btn_likes">Я нравлюсь</string>
-    <string name="dashbrd_btn_sympathy">Взаимно</string>
+    <string name="dashbrd_btn_sympathy">Симпатия</string>
+    <string name="dashbrd_btn_sympathy_mutual">Взаимно</string>
     <string name="dashbrd_btn_chat">Диалоги</string>
     <string name="dashbrd_btn_tops">Топы</string>
     <string name="dashbrd_btn_visitors">Гости</string>
@@ -416,7 +417,7 @@
     <string name="settings_ask_developer">Вопрос разработчикам</string>
     <string name="settings_payment_problems">Проблемы с оплатой</string>
     <string name="settings_cooperation">Сотрудничество</string>
-    <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>    
+    <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>
 
     <plurals name="photo">
         <item quantity="zero">Нет фотографий</item>

@@ -370,6 +370,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         // buttons drawables
         mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual : singleMutual, null, null);
+        mMutualBtn.setText(currUser.mutual ? getString(R.string.dashbrd_btn_sympathy_mutual) : getString(R.string.dashbrd_btn_sympathy));
         mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleDelight : singleDelight, null, null);
 
         //photos
