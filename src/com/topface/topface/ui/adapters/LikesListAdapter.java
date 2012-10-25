@@ -114,6 +114,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     protected FeedViewHolder getEmptyHolder(View convertView, FeedLike item) {
         FeedViewHolder holder = super.getEmptyHolder(convertView, item);
         holder.heart = (ImageView) convertView.findViewById(R.id.ivHeart);
+        holder.heart.setVisibility(View.VISIBLE);
         return holder;
     }
 

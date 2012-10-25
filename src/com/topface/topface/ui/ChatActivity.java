@@ -327,7 +327,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                             @Override
                             public void run() {
                                 if (confirm.completed) {
-                                    History history = new History();                                    
+                                    History history = new History();
 //	                                history.code = 0;
 //	                                history.gift = 0;
                                     //history.user.id = CacheProfile.uid;
@@ -396,6 +396,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                 History history = new History();
 //	                            history.code = 0;
                                 history.gift = id;
+                                history.user = new FeedUser(null);
                                 history.user.id = CacheProfile.uid;
                                 history.created = System.currentTimeMillis();
                                 history.text = Static.EMPTY;
