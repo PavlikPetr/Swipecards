@@ -1,6 +1,9 @@
 package com.topface.topface.data;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
@@ -46,6 +49,11 @@ public class Options extends AbstractData {
      */
     public String float_type_top = FLOAT_TYPE_BANNER;
 
+    /**
+     * Настройки уведомлений на почту
+     */
+    public MailNotifications mail_notifications;
+    
     public static Options parse(ApiResponse response) {
         Options options = new Options();
 
@@ -55,6 +63,10 @@ public class Options extends AbstractData {
             options.float_type_like = setFloatType(response.jsonResult.optString("float_type_like"));
             options.float_type_dialogs = setFloatType(response.jsonResult.optString("float_type_dialogs"));
             options.float_type_top = setFloatType(response.jsonResult.optString("float_type_top"));
+            
+            options.mail_notifications = !response.jsonResult.has("mailnotifications") ? 
+            		null : (new MailNotifications(response.jsonResult.optJSONObject("mailnotifications")));            
+            
         } catch (Exception e) {
             Debug.log("Message.class", "Wrong response parsing: " + e);
         }
@@ -74,4 +86,18 @@ public class Options extends AbstractData {
         }
     }
 
+    public static class MailNotifications {
+    	public boolean sympathy;
+    	public boolean mutual;
+    	public boolean chat;
+    	public boolean guests;
+    	
+    	public MailNotifications(JSONObject obj) {
+    		sympathy = obj.optBoolean("sympathy");
+    		mutual = obj.optBoolean("mutual");
+    		chat = obj.optBoolean("chat");
+    		guests = obj.optBoolean("guests");
+		}
+    }
+    
 }

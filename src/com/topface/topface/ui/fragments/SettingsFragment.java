@@ -1,5 +1,7 @@
 package com.topface.topface.ui.fragments;
 
+import java.util.LinkedList;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +17,11 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.OptionsRequest;
+import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
@@ -44,9 +51,43 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         return view;
     }
 
+    interface Method {
+    	void onExecute(String key, boolean value);
+    }
+    
     private void initViews(View root) {
         ViewGroup frame;
 
+        OptionsRequest request = new OptionsRequest(getActivity().getApplicationContext());
+        final LinkedList<Method> methodsList = new LinkedList<SettingsFragment.Method>();
+        ApiHandler handler = new ApiHandler() {
+			
+			@Override
+			public void success(ApiResponse response) throws NullPointerException {
+				final Options options = Options.parse(response);
+				if (options.mail_notifications != null) {
+					getActivity().runOnUiThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							for (Method method : methodsList) {
+								method.onExecute(Settings.SETTINGS_C2DM_LIKES_EMAIL, options.mail_notifications.sympathy);
+								method.onExecute(Settings.SETTINGS_C2DM_MUTUAL_EMAIL, options.mail_notifications.mutual);
+								method.onExecute(Settings.SETTINGS_C2DM_MESSAGES_EMAIL, options.mail_notifications.chat);
+								method.onExecute(Settings.SETTINGS_C2DM_GUESTS_EMAIL, options.mail_notifications.guests);
+							}
+						}
+					});					
+				}				
+			}
+			
+			@Override
+			public void fail(int codeError, ApiResponse response) throws NullPointerException {
+				
+			}
+		};
+        request.callback(handler);
+        
         // Notifications header
         frame = (ViewGroup) root.findViewById(R.id.loNotificationsHeader);
         setText(R.string.settings_notifications_header, frame);
@@ -55,29 +96,29 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loLikes);
         setBackground(R.drawable.edit_big_btn_top, frame);
         setText(R.string.settings_likes, frame);
-        initEditNotificationFrame(Settings.SETTINGS_C2DM_LIKES_PHONE,
-                Settings.SETTINGS_C2DM_LIKES_EMAIL, frame);
+        methodsList.add(initEditNotificationFrame(Settings.SETTINGS_C2DM_LIKES_PHONE,
+                Settings.SETTINGS_C2DM_LIKES_EMAIL, frame));
 
         // Mutual
         frame = (ViewGroup) root.findViewById(R.id.loMutual);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_mutual, frame);
-        initEditNotificationFrame(Settings.SETTINGS_C2DM_MUTUAL_PHONE,
-                Settings.SETTINGS_C2DM_MUTUAL_EMAIL, frame);
+        methodsList.add(initEditNotificationFrame(Settings.SETTINGS_C2DM_MUTUAL_PHONE,
+                Settings.SETTINGS_C2DM_MUTUAL_EMAIL, frame));
 
         // Chat
         frame = (ViewGroup) root.findViewById(R.id.loChat);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_messages, frame);
-        initEditNotificationFrame(Settings.SETTINGS_C2DM_MESSAGES_PHONE,
-                Settings.SETTINGS_C2DM_MESSAGES_EMAIL, frame);
+        methodsList.add(initEditNotificationFrame(Settings.SETTINGS_C2DM_MESSAGES_PHONE,
+                Settings.SETTINGS_C2DM_MESSAGES_EMAIL, frame));
 
         // Guests
         frame = (ViewGroup) root.findViewById(R.id.loGuests);
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
-        initEditNotificationFrame(Settings.SETTINGS_C2DM_GUESTS_PHONE,
-                Settings.SETTINGS_C2DM_GUESTS_EMAIL, frame);
+        methodsList.add(initEditNotificationFrame(Settings.SETTINGS_C2DM_GUESTS_PHONE,
+                Settings.SETTINGS_C2DM_GUESTS_EMAIL, frame));
 
         // Help
         frame = (ViewGroup) root.findViewById(R.id.loHelp);
@@ -109,8 +150,10 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
         setText(R.string.settings_about, frame);
         frame.setOnClickListener(this);
+        
+        request.exec();
     }
-
+    
     private void setText(int titleId, ViewGroup frame) {
         ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleId);
     }
@@ -141,16 +184,28 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         textView.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(iconRes), null, null, null);
     }
 
-    private void initEditNotificationFrame(String phoneKey, String emailKey, ViewGroup frame) {
+    private Method initEditNotificationFrame(String phoneKey,final String emailKey, ViewGroup frame) {
         CheckBox checkBox = (CheckBox) frame.findViewById(R.id.cbPhone);
         checkBox.setTag(phoneKey);
         checkBox.setChecked(mSettings.getSetting(phoneKey));
         checkBox.setOnCheckedChangeListener(this);
 
-        checkBox = (CheckBox) frame.findViewById(R.id.cbMail);
-        checkBox.setTag(emailKey);
-        checkBox.setChecked(mSettings.getSetting(emailKey));
-        checkBox.setOnCheckedChangeListener(this);
+        final CheckBox checkBoxEmail = (CheckBox) frame.findViewById(R.id.cbMail);
+        checkBoxEmail.setTag(emailKey);
+        checkBoxEmail.setChecked(false);
+        checkBoxEmail.setEnabled(false);
+        checkBoxEmail.setOnCheckedChangeListener(this);     
+        
+        return new Method() {
+			
+			@Override
+			public void onExecute(String key, boolean value) {
+				if (emailKey.equals(key)) {
+					checkBoxEmail.setEnabled(true);
+					checkBoxEmail.setChecked(value);
+				}
+			}
+		};
     }
 
     private void setBackground(int resId, ViewGroup frame) {
@@ -185,9 +240,40 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        String key = (String) buttonView.getTag();
-        mSettings.setSetting(key, isChecked);
+    public void onCheckedChanged(final CompoundButton buttonView,final boolean isChecked) {
+        final String key = (String) buttonView.getTag();        
+        
+        SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(key,isChecked,getActivity().getApplicationContext());
+        if (request != null) {
+        	buttonView.setEnabled(false);
+        	request.callback(new ApiHandler() {
+				
+				@Override
+				public void success(ApiResponse response) throws NullPointerException {
+					buttonView.post(new Runnable() {
+						
+						@Override
+						public void run() {
+							buttonView.setEnabled(true);
+						}
+					});
+					
+					mSettings.setSetting(key, isChecked);
+				}
+				
+				@Override
+				public void fail(int codeError, ApiResponse response) throws NullPointerException {
+					buttonView.post(new Runnable() {
+						
+						@Override
+						public void run() {
+							buttonView.setEnabled(true);
+						}
+					});
+					mSettings.setSetting(key, !isChecked);
+				}
+			}).exec();
+        }
     }
 
     @Override
