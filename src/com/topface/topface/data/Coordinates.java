@@ -14,7 +14,7 @@ public class Coordinates extends AbstractData implements Parcelable {
     private GeoPoint mGeoPoint;
 
     public Coordinates(JSONObject jsonObject) throws WrongCoordinatesException, JSONException {
-        this(jsonObject.getDouble("lng"), jsonObject.getDouble("lat"));
+        this(jsonObject.getDouble("longitude"), jsonObject.getDouble("latitude"));
     }
 
     public Coordinates(double longitude, double latitude) throws WrongCoordinatesException {

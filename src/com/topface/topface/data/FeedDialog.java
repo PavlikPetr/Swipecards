@@ -18,7 +18,11 @@ public class FeedDialog extends FeedLike {
      *    
      */
     public String link;
-
+    /**
+     * Координаты местоположения
+     */
+    public Geo geo;
+    
     // Constants
     public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
     public static final int PHOTO = 1; // Рекламное уведомление
@@ -31,8 +35,8 @@ public class FeedDialog extends FeedLike {
     public static final int MESSAGE_WINK = 8; // подмигивание
     public static final int RATE = 9; // Оценка
     public static final int PROMOTION = 10; // Рекламное сообщение
-    public static final int MAP = 11; // Текущее местоположение
-    public static final int ADDRESS = 12; // Произвольное место на карте
+    public static final int MAP = 12; // Текущее местоположение
+    public static final int ADDRESS = 13; // Произвольное место на карте
 
 
     public static final int USER_MESSAGE = 0;
@@ -47,5 +51,6 @@ public class FeedDialog extends FeedLike {
         super.fillData(item);
         text = item.optString("text");
         link = item.optString("link");
+        geo = new Geo(item);
     }
 }

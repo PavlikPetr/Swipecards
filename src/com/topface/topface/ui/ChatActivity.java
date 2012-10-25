@@ -249,9 +249,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         if (v instanceof ImageView) {
             if (v.getTag() instanceof History) {
                 History history = (History) v.getTag();
-                if (history.type == FeedDialog.MAP) {
+                if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
                     Intent intent = new Intent(this, GeoMapActivity.class);
-                    intent.putExtra(GeoMapActivity.INTENT_GEO, history.user.geo);
+                    intent.putExtra(GeoMapActivity.INTENT_GEO, history.geo);
                     startActivity(intent);
                     return;
                 }
@@ -451,8 +451,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                 if (confirm.completed) {
                                     History history = new History();
                                     history.user = new FeedUser(null);
-                                    history.type = FeedDialog.MAP;
-                                    history.user.geo = geo;
+                                    history.type = FeedDialog.ADDRESS;
+                                    history.geo = geo;
                                     mAdapter.addSentMessage(history);
                                     mAdapter.notifyDataSetChanged();
                                 } else {
@@ -556,7 +556,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                     History history = new History();
                                     history.type = FeedDialog.MAP;
                                     history.user = new FeedUser(null);
-                                    history.user.geo = new Geo("", longitude, latitude);
+                                    history.geo = new Geo("", longitude, latitude);
                                     mAdapter.addSentMessage(history);
                                     mAdapter.notifyDataSetChanged();
 
