@@ -85,7 +85,9 @@ public class PhotoAlbumActivity extends TrackedActivity {
         mGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                PhotoAlbumActivity.this.setCounter(position + 1, Data.photoAlbum.size()); //  УПРАВЛЕНИЕ СЧЕТЧИКОМ
+                if (Data.photoAlbum != null) {
+                    PhotoAlbumActivity.this.setCounter(position + 1, mGalleryAdapter.getCount()); //  УПРАВЛЕНИЕ СЧЕТЧИКОМ
+                }
             }
 
             @Override
