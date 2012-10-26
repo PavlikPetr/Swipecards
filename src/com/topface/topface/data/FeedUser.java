@@ -43,6 +43,7 @@ public class FeedUser extends AbstractData {
         this.online = user.optBoolean("online");
         this.city = new City(user.optJSONObject("city"));
         this.photo = new Photo(user.optJSONObject("photo"));        
+        this.sex = user.optInt("sex");
     }
 
     public String getNameAndAge() {
