@@ -85,7 +85,7 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         
         int [] tmpInt = mFormInfo.getIdsByTitleId(mTitleId); 
         int [] ids = Arrays.copyOf(tmpInt, tmpInt.length + 1);
-        ids[ids.length-1] = FormItem.NO_RESOURCE_ID;
+        ids[ids.length-1] = FormItem.NOT_SPECIFIED_ID;
         
         mListView.setAdapter(new FormCheckingDataAdapter(getActivity().getApplicationContext(),
                 data, ids, mSeletedDataId));

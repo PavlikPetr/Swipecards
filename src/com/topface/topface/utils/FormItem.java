@@ -19,6 +19,7 @@ public class FormItem {
     public static final int DIVIDER = 4;
 
     public static final int NO_RESOURCE_ID = -1;
+    public static final int NOT_SPECIFIED_ID = 0;
 
     private static FormItem divider = null;
 
