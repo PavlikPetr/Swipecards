@@ -20,6 +20,7 @@ import com.topface.topface.utils.OsmManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -403,7 +404,9 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     private void prepare(LinkedList<History> dataList) {
-
+    	// because of stackFromBottom of PullToRefreshListView does not work
+    	Collections.reverse(dataList);
+    	
         SimpleDateFormat dowFormat = new SimpleDateFormat("EEEE");
 
         long day = 1000 * 60 * 60 * 24;
