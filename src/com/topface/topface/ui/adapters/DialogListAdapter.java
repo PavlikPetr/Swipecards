@@ -8,6 +8,8 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.utils.Utils;
 
+import java.util.Calendar;
+
 public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
     public static final int ITEM_LAYOUT = R.layout.item_feed_dialog;

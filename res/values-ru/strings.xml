@@ -14,6 +14,7 @@
     <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
     </string>
     <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
+    <string name="general_msg_copied">Текст скопирован</string>
 
     <string name="general_switch_on">вкл.</string>
     <string name="general_switch_off">выкл.</string>
@@ -416,7 +417,7 @@
     <string name="settings_ask_developer">Вопрос разработчикам</string>
     <string name="settings_payment_problems">Проблемы с оплатой</string>
     <string name="settings_cooperation">Сотрудничество</string>
-    <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>    
+    <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>
 
     <plurals name="photo">
         <item quantity="zero">Нет фотографий</item>

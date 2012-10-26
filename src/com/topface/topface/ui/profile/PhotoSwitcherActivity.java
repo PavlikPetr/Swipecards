@@ -14,12 +14,14 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.PreloadManager;
 
 public class PhotoSwitcherActivity extends Activity {
 
     private TextView mCounter;
     private ViewGroup mHeaderBar;
     private Photos mPhotoLinks;
+    private PreloadManager mPreloadManager;
 
     public static final String INTENT_OWNER = "owner";
     public static final String INTENT_USER_ID = "user_id";
@@ -29,7 +31,7 @@ public class PhotoSwitcherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_photos);
-
+        mPreloadManager = new PreloadManager(getApplicationContext());
         // Extras
         Intent intent = getIntent();
         boolean isOwner = intent.getBooleanExtra(INTENT_OWNER, false);
@@ -85,6 +87,7 @@ public class PhotoSwitcherActivity extends Activity {
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
+            mPreloadManager.preloadPhoto(mPhotoLinks.get(position));
             setCounter(position);
         }
 

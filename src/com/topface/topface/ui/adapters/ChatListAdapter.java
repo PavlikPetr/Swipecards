@@ -1,7 +1,7 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.ClipData;
-import android.content.ClipboardManager;
+import android.text.ClipboardManager;
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -211,10 +211,11 @@ public class ChatListAdapter extends BaseAdapter {
                 holder.message.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
+
                         ClipboardManager clipboard = (ClipboardManager)
                                 mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("", holder.message.getText().toString()); //TODO: Сюда надо поставить какой-нибудь тэг
-                        clipboard.setPrimaryClip(clip);
+//                        ClipData clip = ClipData.newPlainText("", holder.message.getText().toString()); //TODO: Сюда надо поставить какой-нибудь тэг
+                        clipboard.setText(holder.message.getText());
                         Toast.makeText(mContext,R.string.general_msg_copied,Toast.LENGTH_SHORT).show();
                         return false;  //To change body of implemented methods use File | Settings | File Templates.
                     }

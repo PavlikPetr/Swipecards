@@ -64,7 +64,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                         authorizationFailed();
                         break;
                     case AuthorizationManager.DIALOG_COMPLETED:
-                        Debug.log("Dialog completed");
                         hideButtons();
                         break;
                     case AuthorizationManager.TOKEN_RECEIVED:
