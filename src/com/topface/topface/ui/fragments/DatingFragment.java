@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.*;
+import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.billing.BuyingActivity;
@@ -36,7 +37,6 @@ import java.util.LinkedList;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker, RateController.OnRateControllerListener {
 
-    private int mCurrentUserPos;
     private int mCurrentPhotoPrevPos;
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
@@ -92,10 +92,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         doubleDelight = getResources().getDrawable(R.drawable.dating_dbl_delight_selector);
 
         // Data
-        mUserSearchList = new LinkedList<SearchUser>();
+        if (Data.searchList != null) {
+            mUserSearchList = Data.searchList;
+        } else {
+            mUserSearchList = new LinkedList<SearchUser>();
+            //Храним список пользователей в статичном поле, дабы каждый раз не перезапрашивать
+            Data.searchList = mUserSearchList;
+        }
 
         // Navigation Header
-        mNavBarController = new NavigationBarController((ViewGroup)view.findViewById(R.id.loNavigationBar));
+        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_dating));        
         mNavigationHeader = view.findViewById(R.id.loNavigationBar);
@@ -117,8 +123,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 //        mFirstRateButtons = view.findViewById(R.id.ratingButtonsFirst);
 //        mSecondRateButtons = view.findViewById(R.id.ratingButtonsSecond);
 
-        // Position
-        mCurrentUserPos = -1;
+        //Если мы вернулись в этот фрагмент, то декриментим позицию, что бы оказаться на последнем пользователе
+        Data.searchPosition--;
 
         // Dating controls
         mDatingGroup = view.findViewById(R.id.loDatingGroup);
@@ -179,8 +185,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
 
-
-        updateData(false);
+        showNextUser();
 
         return view;
     }
@@ -244,7 +249,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.btnDatingLove: {
                 SearchUser currentSearch = getCurrentUser();
                 if (currentSearch != null) {
-                    if (mCurrentUserPos > mUserSearchList.size() - 1) {
+                    if (Data.searchPosition > mUserSearchList.size() - 1) {
                         updateData(true);
                         return;
                     } else {
@@ -258,7 +263,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.btnDatingSympathy: {
                 SearchUser currentSearch = getCurrentUser();
                 if (currentSearch != null) {
-                    if (mCurrentUserPos > mUserSearchList.size() - 1) {
+                    if (Data.searchPosition > mUserSearchList.size() - 1) {
                         updateData(true);
                         return;
                     } else {
@@ -285,19 +290,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-                intent.putExtra(UserProfileActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).id);
-                intent.putExtra(UserProfileActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
+                intent.putExtra(UserProfileActivity.INTENT_USER_ID, mUserSearchList.get(Data.searchPosition).id);
+                intent.putExtra(UserProfileActivity.INTENT_USER_NAME, mUserSearchList.get(Data.searchPosition).first_name);
                 intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass().getSimpleName());
                 startActivity(intent);
             }
             break;
             case R.id.btnDatingChat: {
                 Intent intent = new Intent(getActivity(), ChatActivity.class);
-                intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(mCurrentUserPos).id);
-                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(mCurrentUserPos).first_name);
-                intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserSearchList.get(mCurrentUserPos).sex);
-                intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserSearchList.get(mCurrentUserPos).age);
-                intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserSearchList.get(mCurrentUserPos).city.name);
+                intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(Data.searchPosition).id);
+                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(Data.searchPosition).first_name);
+                intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserSearchList.get(Data.searchPosition).sex);
+                intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserSearchList.get(Data.searchPosition).age);
+                intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserSearchList.get(Data.searchPosition).city.name);
                 intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass().getSimpleName());
                 startActivity(intent);
             }
@@ -320,12 +325,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void showNextUser() {
-        if (mCurrentUserPos < mUserSearchList.size() - 1) {
-            ++mCurrentUserPos;
+        if (Data.searchPosition < mUserSearchList.size() - 1) {
+            ++Data.searchPosition;
             fillUserInfo(getCurrentUser());
+            unlockControls();
         }
-        if (mCurrentUserPos == mUserSearchList.size() - 1 || mUserSearchList.size() - 6 <= mCurrentUserPos) {
-            if (mCurrentUserPos < 0) {
+        if (Data.searchPosition == mUserSearchList.size() - 1 || mUserSearchList.size() - 6 <= Data.searchPosition) {
+            if (Data.searchPosition < 0) {
                 updateData(false);
             } else {
                 updateData(true);
@@ -336,9 +342,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void prevUser() {
-        if (mCurrentUserPos > 0) {
-            --mCurrentUserPos;
-            fillUserInfo(mUserSearchList.get(mCurrentUserPos));
+        if (Data.searchPosition > 0) {
+            --Data.searchPosition;
+            fillUserInfo(mUserSearchList.get(Data.searchPosition));
         }
         showNewbie(); // NEWBIE
     }
@@ -364,6 +370,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         // buttons drawables
         mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual : singleMutual, null, null);
+        mMutualBtn.setText(currUser.mutual ? getString(R.string.dashbrd_btn_sympathy_mutual) : getString(R.string.dashbrd_btn_sympathy));
         mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleDelight : singleDelight, null, null);
 
         //photos
@@ -474,7 +481,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private SearchUser getCurrentUser() {
         try {
-            return mUserSearchList.get(mCurrentUserPos);
+            return mUserSearchList.get(Data.searchPosition);
         } catch (Exception e) {
             Debug.log(e.toString());
             return null;
@@ -508,14 +515,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoStatus.setVisibility(View.VISIBLE);
 
         boolean enabled = false;
-        if (!mUserSearchList.isEmpty() && mCurrentUserPos < mUserSearchList.size() && currentUser != null) {
+        if (!mUserSearchList.isEmpty() && Data.searchPosition < mUserSearchList.size() && currentUser != null) {
             enabled = !currentUser.rated;
         }
         mMutualBtn.setEnabled(enabled);
         mDelightBtn.setEnabled(enabled);
 
         mSkipBtn.setEnabled(true);
-        mPrevBtn.setEnabled(mCurrentUserPos > 0);
+        mPrevBtn.setEnabled(Data.searchPosition > 0);
 
         enabled = (currentUser != null);
         mProfileBtn.setEnabled(enabled);

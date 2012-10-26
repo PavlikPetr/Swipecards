@@ -29,6 +29,8 @@ public class ImageViewRemote extends ImageView {
     private static final int LOADING_ERROR = 1;
     private ImagePostProcessor mPostProcessor;
     Animation mAnimation = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
+    private String mCurrentSrc;
+    private boolean mIsAnimationEnabled;
 
 
     public ImageViewRemote(Context context) {
@@ -91,6 +93,13 @@ public class ImageViewRemote extends ImageView {
     public boolean setRemoteSrc(String remoteSrc, Handler handler) {
         boolean isCorrectSrc = true;
         if (remoteSrc != null && remoteSrc.trim().length() > 0) {
+            if (!remoteSrc.equals(mCurrentSrc)) {
+                mCurrentSrc = remoteSrc;
+                mIsAnimationEnabled = true;
+            } else {
+                mIsAnimationEnabled = false;
+            }
+
             ImagePostProcessor processor = getPostProcessor();
             setImageBitmap(null);
             if (processor != null) {
@@ -102,6 +111,8 @@ public class ImageViewRemote extends ImageView {
         } else {
             isCorrectSrc = false;
             setImageBitmap(null);
+            mCurrentSrc = null;
+            mIsAnimationEnabled = true;
         }
 
         return isCorrectSrc;
@@ -111,7 +122,7 @@ public class ImageViewRemote extends ImageView {
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
         //Показываем анимацию только в том случае, если ImageView видно пользователю
-        if (isShown()) {
+        if (mIsAnimationEnabled && isShown()) {
             startAnimation(mAnimation);
         }
 

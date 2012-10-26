@@ -25,9 +25,8 @@ public class Data {
     public static long midnight;
     // Data cache
     public static LinkedList<Top> topsList;
-    public static LinkedList<FeedDialog> dialogList;
-    public static LinkedList<FeedLike> likesList;
-    public static LinkedList<FeedMutual> mutualList;
+    public static LinkedList<SearchUser> searchList;
+    public static int searchPosition = 0;
 
     public static void init(Context context) {
         //removeSSID(context); // for test
@@ -39,15 +38,6 @@ public class Data {
         // Data Cache
         if (topsList == null)
             topsList = new LinkedList<Top>();
-
-        if (dialogList == null)
-            dialogList = new LinkedList<FeedDialog>();
-
-        if (likesList == null)
-            likesList = new LinkedList<FeedLike>();
-
-        if (mutualList == null)
-            mutualList = new LinkedList<FeedMutual>();
 
         if (giftsList == null)
             giftsList = new LinkedList<Gift>();
@@ -81,10 +71,6 @@ public class Data {
     public static void release() {
         if (topsList != null)
             topsList.clear();
-        if (likesList != null)
-            likesList.clear();
-        if (mutualList != null)
-            mutualList.clear();
     }
 
     public static boolean isSSID() {
