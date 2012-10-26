@@ -458,6 +458,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
         FilterRequest filterRequest = new FilterRequest(getActivity().getApplicationContext());
         registerRequest(filterRequest);
+        filterRequest.beauty = mFilter.beauty;
         filterRequest.city = mFilter.city_id;
         filterRequest.sex = mFilter.sex;
         filterRequest.agebegin = mFilter.age_start;
