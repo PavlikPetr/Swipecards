@@ -445,6 +445,7 @@
     <string name="profile_form">Анкета</string>
     <string name="profile_gifts">Подарки</string>
     <string name="profile_actions">Действия</string>
+    <string name="profile_empty_form">Пользователь не заполнил анкету</string>    
     <string name="profile_ask_form">Попросить заполнить анкету</string>
 
 </resources>

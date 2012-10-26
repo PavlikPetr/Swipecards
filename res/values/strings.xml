@@ -338,6 +338,7 @@
     <string name="profile_form">Form</string>
     <string name="profile_gifts">Gifts</string>
     <string name="profile_actions">Actions</string>
+    <string name="profile_empty_form">User did not filled the form</string>
     <string name="profile_ask_form">Ask to fill the form</string>
 
     <plurals name="photo">
