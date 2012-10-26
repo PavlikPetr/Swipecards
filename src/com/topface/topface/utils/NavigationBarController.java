@@ -35,12 +35,13 @@ public class NavigationBarController {
 			mMutualNotificator.setVisibility(View.VISIBLE);
 			mLikesNotificator.setVisibility(View.INVISIBLE);
 			mDialogsNotificator.setVisibility(View.INVISIBLE);							
-		} else if(CacheProfile.unread_likes > 0) {
-			mLikesNotificator.setText(Integer.toString(CacheProfile.unread_likes));
-			mLikesNotificator.setVisibility(View.VISIBLE);
-			mDialogsNotificator.setVisibility(View.INVISIBLE);	
-			mMutualNotificator.setVisibility(View.INVISIBLE);			
-		}				
+		} 
+//		else if(CacheProfile.unread_likes > 0) {
+//			mLikesNotificator.setText(Integer.toString(CacheProfile.unread_likes));
+//			mLikesNotificator.setVisibility(View.VISIBLE);
+//			mDialogsNotificator.setVisibility(View.INVISIBLE);	
+//			mMutualNotificator.setVisibility(View.INVISIBLE);			
+//		}				
 	}
 	
 	

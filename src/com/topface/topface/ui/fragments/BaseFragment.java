@@ -24,13 +24,13 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
     public static final int F_SETTINGS = 1007;
     public static final int F_VISITORS = 1008;
 
-    protected void onUpdateStart(boolean isFlyUpdating) {
+    protected void onUpdateStart(boolean isFlyUpdating) {    	
     }
 
     protected void onUpdateSuccess(boolean isFlyUpdating) {
     }
 
-    protected void onUpdateFail(boolean isFlyUpdating) {
+    protected void onUpdateFail(boolean isFlyUpdating) {    	
     }
 
     protected void updateUI(Runnable action) {
