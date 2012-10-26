@@ -50,9 +50,9 @@ public class FeedDialog extends FeedLike {
     public void fillData(JSONObject item) {
         super.fillData(item);
         text = item.optString("text");
-        link = item.optString("link");
-        if (item.has("geo")) {
-            geo = new Geo(item);
+        link = item.optString("link");        
+        if (type == MAP || type == ADDRESS) {
+        	geo = new Geo(item);
         }
     }
 }

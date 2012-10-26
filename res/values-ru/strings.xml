@@ -171,6 +171,8 @@
     <!-- Profile / UserProfile Form -->
     <string name="form">Анкета</string>
 
+    <string name="form_not_specified">Не указано</string>
+    
     <string name="form_main">Основное</string>
 
     <string-array name="form_main_status">
@@ -445,6 +447,7 @@
     <string name="profile_form">Анкета</string>
     <string name="profile_gifts">Подарки</string>
     <string name="profile_actions">Действия</string>
+    <string name="profile_empty_form">Пользователь не заполнил анкету</string>    
     <string name="profile_ask_form">Попросить заполнить анкету</string>
 
     <!--Leaders-->

@@ -165,7 +165,9 @@
 
     <!-- Profile / UserProfile Form -->
     <string name="form">Questionary</string>
-
+	
+	<string name="form_not_specified">Not specified</string>
+	
     <string name="form_main">Main</string>
 
     <string-array name="form_main_status">
@@ -338,6 +340,7 @@
     <string name="profile_form">Form</string>
     <string name="profile_gifts">Gifts</string>
     <string name="profile_actions">Actions</string>
+    <string name="profile_empty_form">User did not filled the form</string>
     <string name="profile_ask_form">Ask to fill the form</string>
 
     <plurals name="photo">

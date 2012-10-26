@@ -1,5 +1,8 @@
 package com.topface.topface.ui.profile;
 
+import java.util.LinkedList;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.User;
+import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 
 public class UserFormFragment extends Fragment implements OnClickListener{
@@ -21,6 +26,7 @@ public class UserFormFragment extends Fragment implements OnClickListener{
     private TextView mTitle;
     private ImageView mState;
     private Button mAskToFillForm;
+    private ViewGroup mEmptyFormLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +40,9 @@ public class UserFormFragment extends Fragment implements OnClickListener{
         ListView listQuestionnaire = (ListView) root.findViewById(R.id.fragmentFormList);
         listQuestionnaire.setAdapter(mUserFormListAdapter);
 
-        mAskToFillForm =(Button)root.findViewById(R.id.btnAskForm);
+        mEmptyFormLayout = (ViewGroup) root.findViewById(R.id.loEmptyForm);
+            
+        mAskToFillForm =(Button) mEmptyFormLayout.findViewById(R.id.btnEmptyForm);
         mAskToFillForm.setOnClickListener(this);
         
         mTitleLayout = root.findViewById(R.id.fragmentTitle);
@@ -62,14 +70,29 @@ public class UserFormFragment extends Fragment implements OnClickListener{
     private void initFormHeader() {
     	mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));    	
     	
-        if(mUser.formMatches > 0) {
-        	mState.setImageResource(R.drawable.user_cell_center_on);
-        	mTitleLayout.setOnClickListener(this);        	
-        } else {
-            mState.setImageResource(R.drawable.user_cell_center);
-        }
+    	if (formIsEmpty(mUser.forms)) {
+    		mEmptyFormLayout.setVisibility(View.VISIBLE);
+    	} else {    		
+	        if(mUser.formMatches > 0) {
+	        	mState.setImageResource(R.drawable.user_cell_center_on);
+	        	mTitleLayout.setOnClickListener(this);        	
+	        } else {
+	            mState.setImageResource(R.drawable.user_cell_center);
+	        }
+    	}
     }
 
+    private boolean formIsEmpty(LinkedList<FormItem> forms) {
+    	for (FormItem formItem : forms) {
+			if(formItem.type == FormItem.DATA) {
+				if(formItem.dataId != FormItem.NO_RESOURCE_ID || 
+						formItem.value != null)
+					return false;
+			}
+		}
+    	return true;
+    }
+    
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -78,8 +101,16 @@ public class UserFormFragment extends Fragment implements OnClickListener{
 			else mUserFormListAdapter.setMatchedDataOnly();
 			mUserFormListAdapter.notifyDataSetChanged();
 			break;
-		case R.id.btnAskForm:
-			// TODO Send Ask to fill form
+		case R.id.btnEmptyForm:
+			Intent intent = new Intent(getActivity(), ChatActivity.class);
+            intent.putExtra(ChatActivity.INTENT_USER_ID, mUser.uid);
+            intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);
+            intent.putExtra(ChatActivity.INTENT_USER_SEX, mUser.sex);
+            intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
+            intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
+            intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
+            intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, UserProfileActivity.class.getSimpleName());
+            startActivity(intent);
 			break;
 		}		
 	}

@@ -36,23 +36,41 @@
             android:src="@drawable/im_item_arrow" />
     </RelativeLayout>
 
-    <include 
+    <include
+        android:id="@+id/ivDivider"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ivDivider"
-        layout="@layout/item_divider" />    
+        layout="@layout/item_divider" />
 
-    <Button
-        android:id="@+id/btnAskForm"
-        style="@style/ButtonGrayText"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/loEmptyForm"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="40px"
-        android:background="@drawable/buying_purchase_selector"
-        android:text="@string/profile_ask_form" 
-        android:visibility="gone"/>
+        android:orientation="vertical" 
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvEmptyForm"
+            style="@style/BackgroundTitleText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/profile_empty_form" />
+
+        <Button
+            android:id="@+id/btnEmptyForm"
+            style="@style/ButtonGrayText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="40px"
+            android:background="@drawable/buying_purchase_selector"
+            android:text="@string/profile_ask_form"/>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/fragmentFormList"
