@@ -92,13 +92,14 @@ public class ImageViewRemote extends ImageView {
 
     public boolean setRemoteSrc(String remoteSrc, Handler handler) {
         boolean isCorrectSrc = true;
-        if (!remoteSrc.equals(mCurrentSrc)) {
-            mCurrentSrc = remoteSrc;
-            mIsAnimationEnabled = true;
-        } else {
-            mIsAnimationEnabled = false;
-        }
         if (remoteSrc != null && remoteSrc.trim().length() > 0) {
+            if (!remoteSrc.equals(mCurrentSrc)) {
+                mCurrentSrc = remoteSrc;
+                mIsAnimationEnabled = true;
+            } else {
+                mIsAnimationEnabled = false;
+            }
+
             ImagePostProcessor processor = getPostProcessor();
             setImageBitmap(null);
             if (processor != null) {
@@ -110,6 +111,8 @@ public class ImageViewRemote extends ImageView {
         } else {
             isCorrectSrc = false;
             setImageBitmap(null);
+            mCurrentSrc = null;
+            mIsAnimationEnabled = true;
         }
 
         return isCorrectSrc;
