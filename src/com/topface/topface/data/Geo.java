@@ -3,7 +3,6 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.topface.topface.utils.Debug;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -39,9 +38,6 @@ public class Geo extends AbstractData implements Parcelable {
         try {
             this.mCoordinates = new Coordinates(data);
         } catch (Coordinates.WrongCoordinatesException e) {
-            this.mCoordinates = null;
-            Debug.error(e);
-        } catch (JSONException e) {
             this.mCoordinates = null;
             Debug.error(e);
         }

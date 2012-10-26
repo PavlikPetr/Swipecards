@@ -192,7 +192,6 @@ public class AddPhotoHelper {
                 String data = Base64.encodeFromFile(file);
                 //String data2 = Base64.encodeBytes(thePic.getNinePatchChunk());
                 rawResponse = Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), data);
-                data = null;
             } catch (IOException e) {
                 Debug.log("Photo not uploaded");
             }

@@ -204,7 +204,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.avatar.setVisibility(View.INVISIBLE);
                     break;
             }
-            if(holder.message!=null){
+            if (holder.message != null) {
                 holder.message.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
@@ -212,7 +212,7 @@ public class ChatListAdapter extends BaseAdapter {
                                 mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("", holder.message.getText().toString()); //TODO: Сюда надо поставить какой-нибудь тэг
                         clipboard.setPrimaryClip(clip);
-                        Toast.makeText(mContext,R.string.general_msg_copied,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.general_msg_copied, Toast.LENGTH_SHORT).show();
                         return false;  //To change body of implemented methods use File | Settings | File Templates.
                     }
                 });
@@ -538,6 +538,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     private void mapAddressDetection(final History history, final TextView tv,
                                      final ProgressBar prgsBar) {
+
         final String key = history.geo.getCoordinates().toString();
         String cachedAddress = mAddressesCache.get(key);
 

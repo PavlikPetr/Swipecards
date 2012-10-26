@@ -1,7 +1,8 @@
 package com.topface.topface.requests;
 
 import android.test.InstrumentationTestCase;
-import com.topface.topface.data.Leaders;
+import com.topface.topface.data.FeedUserListData;
+import com.topface.topface.data.Leader;
 import com.topface.topface.data.Photo;
 
 import java.util.concurrent.CountDownLatch;
@@ -30,17 +31,17 @@ public class LeadersRequestTest extends InstrumentationTestCase {
                 .callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) throws NullPointerException {
-                        Leaders leaders = Leaders.parse(response);
-                        assertNotNull("Leaders result is null", leaders.leaders);
-                        assertTrue("Leaders result is empty", leaders.leaders.size() > 0);
-                        for (Leaders.LeaderUser user : leaders.leaders) {
-                            assertNotNull("Leader user is null", user);
-                            assertTrue("Leader id is incorrect", user.user_id > 0);
-                            assertNotNull("Leader has't city", user.city);
-                            assertTrue("Leader city id is incorrect", user.city.id > 0);
-                            assertNotNull("Leader photo is null", user.photo);
-                            assertTrue("Leader has't original photo", user.photo.getSuitableLink(Photo.SIZE_ORIGINAL) != null);
-                            assertTrue("Leader getSuitableLink error", user.photo.getSuitableLink(Photo.SIZE_128) != null);
+                        FeedUserListData<Leader> leaders = new FeedUserListData<Leader>(response.jsonResult, Leader.class);
+                        assertNotNull("Leaders result is null", leaders);
+                        assertTrue("Leaders result is empty", leaders.size() > 0);
+                        for (Leader item : leaders) {
+                            assertNotNull("Leader item is null", item);
+                            assertTrue("Leader id is incorrect", item.id > 0);
+                            assertNotNull("Leader has't city", item.city);
+                            assertTrue("Leader city id is incorrect", item.city.id > 0);
+                            assertNotNull("Leader photo is null", item.photo);
+                            assertTrue("Leader has't original photo", item.photo.getSuitableLink(Photo.SIZE_ORIGINAL) != null);
+                            assertTrue("Leader getSuitableLink error", item.photo.getSuitableLink(Photo.SIZE_128) != null);
                         }
                         signal.countDown();
                     }

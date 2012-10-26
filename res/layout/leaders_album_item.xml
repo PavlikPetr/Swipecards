@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+        >
+
+    <com.topface.topface.ui.views.UniversalFrameImageView
+            android:id="@+id/leaderAlbumPhoto"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            topface:frameSrc="@drawable/leaders_buy_frame"
+            android:scaleType="centerCrop"
+            />
+
+    <ImageView
+            android:id="@+id/checkbox"
+            android:layout_height="25dp"
+            android:layout_width="25dp"
+            android:src="@drawable/ic_leaders_checkbox"
+            android:layout_marginTop="42dp"
+            android:layout_marginLeft="5dp"
+            android:visibility="gone"
+            />
+
+</RelativeLayout>

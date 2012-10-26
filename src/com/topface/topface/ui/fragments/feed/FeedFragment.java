@@ -20,6 +20,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
@@ -56,6 +57,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mListAdapter.isNeedUpdate()) {
             updateData(false);
         }
+
+        new FloatBlock(getActivity(), (ViewGroup) view);
 
         return view;
     }
@@ -176,7 +179,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     public void onAvatarClick(T item, View view) {
         // Open profile activity
         Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-        intent.putExtra(UserProfileActivity.INTENT_MUTUAL_ID, item.id);
         intent.putExtra(UserProfileActivity.INTENT_USER_ID, item.user.id);
         intent.putExtra(UserProfileActivity.INTENT_USER_NAME, item.user.first_name);
         intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());

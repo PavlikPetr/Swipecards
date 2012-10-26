@@ -5,14 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import com.topface.topface.R;
-import com.topface.topface.data.Leaders;
-import com.topface.topface.data.Photo;
-import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.imageloader.RoundPostProcessor;
-
-import java.util.ArrayList;
+import com.topface.topface.data.Leader;
+import com.topface.topface.ui.views.ImageViewRemote;
 
 /**
  * Адаптер для блока лидеров
@@ -21,14 +16,12 @@ import java.util.ArrayList;
  */
 public class LeadersAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
-    private ArrayList<Leaders.LeaderUser> mLeaders;
-    private RoundPostProcessor mPostProcessor;
+    private FeedList<Leader> mLeaders;
 
-    public LeadersAdapter(Context context, Leaders leaders) {
+    public LeadersAdapter(Context context, FeedList<Leader> leaders) {
         super();
         mInflater = LayoutInflater.from(context);
-        mLeaders = leaders.leaders;
-        mPostProcessor = new RoundPostProcessor();
+        mLeaders = leaders;
     }
 
     @Override
@@ -37,38 +30,31 @@ public class LeadersAdapter extends BaseAdapter {
     }
 
     @Override
-    public Leaders.LeaderUser getItem(int i) {
+    public Leader getItem(int i) {
         return mLeaders.get(i);
     }
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return i;
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        ImageView avatar;
-        Leaders.LeaderUser leader = getItem(i);
+        ImageViewRemote avatar;
+        Leader leader = getItem(i);
 
         if (view == null) {
             view = mInflater.inflate(R.layout.leaders_item, null);
-            avatar = (ImageView) view.findViewById(R.id.leaderAvatar);
+            avatar = (ImageViewRemote) view.findViewById(R.id.leaderAvatar);
             view.setTag(avatar);
         } else {
-            avatar = (ImageView) view.getTag();
+            avatar = (ImageViewRemote) view.getTag();
         }
 
-        setLeaderAvatar(leader.photo, avatar);
+        avatar.setPhoto(leader.photo);
 
         return view;
     }
 
-    private void setLeaderAvatar(Photo photo, final ImageView avatar) {
-        DefaultImageLoader.getInstance().displayImage(
-                photo.getSuitableLink(Photo.SIZE_128),
-                avatar,
-                mPostProcessor
-        );
-    }
 }
