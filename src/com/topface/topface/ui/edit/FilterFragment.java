@@ -27,6 +27,7 @@ import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
+import com.topface.topface.utils.FormItem;
 
 import java.util.HashMap;
 
@@ -544,22 +545,22 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
                 switch (titleId) {
                     case R.array.form_main_status:
-                        mFilter.status_id = selectedId;
+                        mFilter.status_id = selectedId == FormItem.NO_RESOURCE_ID ? 0 : selectedId;
                         break;
                     case R.array.form_social_marriage:
-                        mFilter.marriage_id = selectedId;
+                        mFilter.marriage_id = selectedId == FormItem.NO_RESOURCE_ID ? 0 : selectedId;
                         break;
                     case R.array.form_main_character:
-                        mFilter.character_id = selectedId;
+                        mFilter.character_id = selectedId == FormItem.NO_RESOURCE_ID ? 0 : selectedId;
                         break;
                     case R.array.form_habits_alcohol:
-                        mFilter.alcohol_id = selectedId;
+                        mFilter.alcohol_id = selectedId == FormItem.NO_RESOURCE_ID ? 0 : selectedId;
                         break;
                     case R.array.form_physique_breast:
-                        mFilter.showoff_id = selectedId;
+                        mFilter.showoff_id = selectedId == FormItem.NO_RESOURCE_ID ? 0 : selectedId;
                         break;
                     case R.array.form_social_finances:
-                        mFilter.showoff_id = selectedId;
+                        mFilter.showoff_id = selectedId == FormItem.NO_RESOURCE_ID ? 0 : selectedId;
                         break;
                 }
 

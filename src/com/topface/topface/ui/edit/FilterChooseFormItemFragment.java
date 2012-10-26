@@ -1,5 +1,8 @@
 package com.topface.topface.ui.edit;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +16,7 @@ import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.utils.FormInfo;
+import com.topface.topface.utils.FormItem;
 
 public class FilterChooseFormItemFragment extends AbstractEditFragment {
 
@@ -74,9 +78,17 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         ((TextView) header.findViewById(R.id.tvTitle)).setText(formItemTitle);
         mListView.addHeaderView(header);
 
+                 
+        String [] tmpStr = mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData});        
+        String [] data = Arrays.copyOf(tmpStr, tmpStr.length +1);
+        data[data.length-1] = getResources().getString(R.string.form_not_specified);        
+        
+        int [] tmpInt = mFormInfo.getIdsByTitleId(mTitleId); 
+        int [] ids = Arrays.copyOf(tmpInt, tmpInt.length + 1);
+        ids[ids.length-1] = FormItem.NO_RESOURCE_ID;
+        
         mListView.setAdapter(new FormCheckingDataAdapter(getActivity().getApplicationContext(),
-                mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData}),
-                mFormInfo.getIdsByTitleId(mTitleId), mSeletedDataId));
+                data, ids, mSeletedDataId));
         return root;
     }
 

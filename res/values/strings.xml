@@ -165,7 +165,9 @@
 
     <!-- Profile / UserProfile Form -->
     <string name="form">Questionary</string>
-
+	
+	<string name="form_not_specified">Not specified</string>
+	
     <string name="form_main">Main</string>
 
     <string-array name="form_main_status">
