@@ -3,9 +3,6 @@
 <resources>
 
     <!-- Filter pref name -->
-    <string name="s_dating_sex">dating_sex</string>
-    <string name="s_dating_age">dating_age</string>
-    <string name="s_dating_cities_all">dating_cities_all</string>
     <string name="s_dating_select_city">dating_select_city</string>
     <string name="s_dating_city">dating_city</string>
 

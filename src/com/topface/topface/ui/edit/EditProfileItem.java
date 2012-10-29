@@ -6,8 +6,6 @@ import com.topface.topface.R;
 public abstract class EditProfileItem {
     public enum Type {TOP, MIDDLE, BOTTOM, NONE}
 
-    ;
-
     private Type mType = Type.MIDDLE;
 
     public String getTitle() {

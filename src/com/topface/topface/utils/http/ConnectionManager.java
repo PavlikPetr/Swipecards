@@ -79,7 +79,7 @@ public class ConnectionManager {
                     setRevisionHeader(httpPost);
                     httpPost.setEntity(new ByteArrayEntity(apiRequest.toString().getBytes("UTF8")));
 
-                    Debug.logJson(TAG, "REQUEST >>>", apiRequest.toString());
+                    Debug.logJson(TAG, "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(), apiRequest.toString());
                     rawResponse = request(httpClient, httpPost);
                     Debug.logJson(TAG, "RESPONSE <<<", rawResponse);
 
@@ -186,7 +186,7 @@ public class ConnectionManager {
                 Auth auth = Auth.parse(response);
                 Data.saveSSID(context, auth.ssid);
                 request.ssid = auth.ssid;
-                Debug.logJson(TAG, "REAUTH REQUEST >>>", request.toString());
+                Debug.logJson(TAG, "REAUTH REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(), request.toString());
                 httpPost.setEntity(new ByteArrayEntity(request.toString().getBytes("UTF8")));
                 rawResponse = request(httpClient, httpPost);
                 Debug.logJson(TAG, "REAUTH RESPONSE <<<", rawResponse);
@@ -201,14 +201,19 @@ public class ConnectionManager {
         return response;
     }
 
+    private String getRevNum() {
+        return App.isDebugMode() ? Static.REV : "";
+    }
+
     /**
      * Добавляет в http запрос куки с номером ревизии для тестирования беты
      *
      * @param httpPost запрос к которому будет добавлен заголовок
      */
     private void setRevisionHeader(HttpPost httpPost) {
-        if (App.isDebugMode()) {
-            httpPost.setHeader("Cookie", "revnum=" + Static.REV + ";");
+        String rev = getRevNum();
+        if (rev != null && rev.length() > 0) {
+            httpPost.setHeader("Cookie", "revnum=" + rev + ";");
         }
     }
 
