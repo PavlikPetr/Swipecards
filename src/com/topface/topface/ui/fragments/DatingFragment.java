@@ -8,6 +8,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,6 +69,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private ViewFlipper mViewFlipper;
 
     private ImageButton mRetryBtn;
+    private PreloadManager mPreloadManager;
 
     private Drawable singleMutual;
     private Drawable singleDelight;
@@ -185,8 +187,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
 
+        mPreloadManager = new PreloadManager(getActivity().getApplicationContext());
         showNextUser();
-
         return view;
     }
 
@@ -228,13 +230,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("Topface", "fail");
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         onUpdateFail(isAddition);
                         unlockControls();
                     }
                 });
-
             }
         }).exec();
     }
@@ -337,6 +337,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 updateData(true);
             }
         }
+
+        mPreloadManager.preloadPhoto(mUserSearchList, Data.searchPosition+1);
 
         //showNewbie(); // NEWBIE
     }
@@ -614,6 +616,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
+
             if (position == 1 && mCurrentPhotoPrevPos == 0) {
                 hideControls();
             } else if (position == 0 && mCurrentPhotoPrevPos > 0) {
@@ -632,6 +635,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onPageScrollStateChanged(int arg0) {
         }
     };
+
 
     private View.OnClickListener mOnNewbieClickListener = new View.OnClickListener() {
         @Override

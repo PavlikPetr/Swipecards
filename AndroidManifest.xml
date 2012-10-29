@@ -75,6 +75,7 @@
         <activity
                 android:name=".billing.BuyingActivity"
                 android:screenOrientation="portrait"/>
+        <activity android:name=".ui.BanActivity"/>
 
         <!-- services -->
         <service android:name=".services.NotificationService"/>

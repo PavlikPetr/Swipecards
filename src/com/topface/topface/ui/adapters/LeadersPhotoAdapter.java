@@ -1,23 +1,31 @@
 package com.topface.topface.ui.adapters;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import com.topface.topface.R;
+import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
+import com.topface.topface.ui.LeadersActivity;
+import com.topface.topface.ui.views.ImageViewRemote;
 
-public class LeadersAlbumAdapter extends BaseAdapter {
-    /* private LeadersActivity.PhotoSelector mPhotoSelector;
+public class LeadersPhotoAdapter extends BaseAdapter {
+    private LeadersActivity.PhotoSelector mPhotoSelector;
     // class ViewHolder
 
     static class ViewHolder {
-        ImageView imageView;
+        ImageViewRemote imageView;
         ImageView checkbox;
     }
 
-    private LinkedList<Album> mAlbumsList;
+    private Photos mAlbumsList;
     private LayoutInflater mInflater;
 
 
-    public LeadersAlbumAdapter(Context context, LinkedList<Album> albumList, LeadersActivity.PhotoSelector selector) {
+    public LeadersPhotoAdapter(Context context, Photos albumList, LeadersActivity.PhotoSelector selector) {
         mAlbumsList = albumList;
         mInflater = LayoutInflater.from(context);
         mAlbumsList.addFirst(null);
@@ -31,7 +39,7 @@ public class LeadersAlbumAdapter extends BaseAdapter {
 
 
     @Override
-    public Album getItem(int position) {
+    public Photo getItem(int position) {
         return mAlbumsList.get(position);
     }
 
@@ -47,7 +55,7 @@ public class LeadersAlbumAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.leaders_album_item, parent, false);
-            holder.imageView = (ImageView) convertView.findViewById(R.id.leaderAlbumPhoto);
+            holder.imageView = (ImageViewRemote) convertView.findViewById(R.id.leaderAlbumPhoto);
             holder.checkbox = (ImageView) convertView.findViewById(R.id.checkbox);
             convertView.setTag(holder);
         } else {
@@ -63,36 +71,10 @@ public class LeadersAlbumAdapter extends BaseAdapter {
                             View.VISIBLE :
                             View.GONE
             );
-            loadingImage(position, holder.imageView);
+            holder.imageView.setPhoto(getItem(position));
         }
 
         return convertView;
     }
 
-    public void loadingImage(final int position, ImageView view) {
-        DefaultImageLoader.getInstance().displayImage(
-                getItem(position).getBigLink(),
-                view
-        );
-    }*/
-
-    @Override
-    public int getCount() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 }

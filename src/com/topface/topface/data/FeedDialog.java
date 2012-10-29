@@ -22,7 +22,7 @@ public class FeedDialog extends FeedLike {
      * Координаты местоположения
      */
     public Geo geo;
-    
+
     // Constants
     public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
     public static final int PHOTO = 1; // Рекламное уведомление

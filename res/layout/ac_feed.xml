@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-
-                android:background="@drawable/im_list_bkgrd">
+                android:background="@drawable/bg_main"
+                android:layout_height="fill_parent">
 
     <include
             android:layout_width="fill_parent"
@@ -21,10 +20,11 @@
         <!-- button bar -->
         <include layout="@layout/bar_double_big_button"/>
 
+        <include layout="@layout/leaders"/>
+
         <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/im_feeds_bg"
                 android:id="@+id/feedContainer">
 
             <TextView
@@ -65,8 +65,11 @@
             </LinearLayout>
 
         </RelativeLayout>
+
+        <include layout="@layout/banner"/>
     </LinearLayout>
 
     <ImageView style="@style/HeaderShadow"/>
+
 
 </RelativeLayout>

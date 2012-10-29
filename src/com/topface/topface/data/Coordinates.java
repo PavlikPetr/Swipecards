@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.android.maps.GeoPoint;
 import com.topface.topface.utils.Debug;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Coordinates extends AbstractData implements Parcelable {
@@ -13,8 +12,8 @@ public class Coordinates extends AbstractData implements Parcelable {
     private double mLongitude;
     private GeoPoint mGeoPoint;
 
-    public Coordinates(JSONObject jsonObject) throws WrongCoordinatesException, JSONException {
-        this(jsonObject.getDouble("longitude"), jsonObject.getDouble("latitude"));
+    public Coordinates(JSONObject jsonObject) throws WrongCoordinatesException {
+        this(jsonObject.optDouble("longitude", -1), jsonObject.optDouble("latitude", -1));
     }
 
     public Coordinates(double longitude, double latitude) throws WrongCoordinatesException {
