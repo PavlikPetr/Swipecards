@@ -45,7 +45,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     private boolean mIsAuthorized = false;
 
     public static AuthActivity mThis;
-    private static final int BAN_CODE = 1;
+    public static final int BAN_CODE = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,10 +63,14 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         BroadcastReceiver mReceiver = new BroadcastReceiver(){
             @Override
             public void onReceive(Context context, Intent intent) {
-                reAuthAfterInternetConnected(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,0));
+                int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,-1);
+                reAuthAfterInternetConnected(mConnectionType);
             }
         };
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,new IntentFilter(ConnectionChangeReceiver.REAUTH));
+        IntentFilter filterReauthBan = new IntentFilter();
+        filterReauthBan.addAction(ConnectionChangeReceiver.REAUTH);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,filterReauthBan);
+
         mAuthorizationManager = AuthorizationManager.getInstance(this);
         mAuthorizationManager.setOnAuthorizationHandler(new Handler() {
             @Override
@@ -278,19 +282,12 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //showButtons();
-                        if(finalCodeError == ApiResponse.BAN) {
-                            try{
-                                Intent intent = new Intent(AuthActivity.this,BanActivity.class);
-                                intent.putExtra(BanActivity.BANNING_INTENT,finalResponse.jsonResult.get("message").toString());
-                                startActivityForResult(intent,BAN_CODE);
-                            } catch(Exception e) {
-                                e.printStackTrace();
-                            }
-                        } else {
+                        if(finalResponse.code == ApiResponse.BAN)
+                            showButtons();
+                        else {
                             authorizationFailed();
                             Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
-                                    Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -14,6 +14,7 @@ import com.topface.topface.R;
  */
 public class BanActivity extends Activity {
     public static final String BANNING_INTENT = "banning_intent";
+    public static final String MESSAGE = "ban_message";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.

@@ -11,6 +11,8 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.ui.AuthActivity;
+import com.topface.topface.ui.BanActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.Http.FlushedInputStream;
 import com.topface.topface.utils.social.AuthToken;
@@ -18,6 +20,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -37,7 +40,7 @@ public class ConnectionManager {
     // Constants
     public static final String TAG = "CM";
     public static final int WAITING_TIME = 2000;
-
+    public static final String BAN_RESPONSE = "ban_response";
 
     private ConnectionManager() {
         mWorker = Executors.newFixedThreadPool(2);
@@ -93,7 +96,12 @@ public class ConnectionManager {
                             apiResponse.code = ApiResponse.ERRORS_PROCCESED;
                         }
                         if(apiResponse.code == ApiResponse.BAN) {
-                             apiRequest.handler.fail(apiResponse.code,apiResponse);
+//                            sendBroadcastBanned(apiRequest,apiResponse);
+                            Intent intent = new Intent(apiRequest.context,BanActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra(BanActivity.BANNING_INTENT,apiResponse.jsonResult.get("message").toString());
+                            apiRequest.context.startActivity(intent);
+                            apiRequest.handler.fail(apiResponse.code,apiResponse);
                         } else
                         if (apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE) {
                             if (doNeedResend) {
@@ -219,6 +227,17 @@ public class ConnectionManager {
         intent.setAction(ReAuthReceiver.REAUTH_INTENT);
         context.sendBroadcast(intent);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    private void sendBroadcastBanned(ApiRequest request, ApiResponse response) {
+        Intent intent = new Intent();
+        intent.setAction(BAN_RESPONSE);
+        try{
+            intent.putExtra(BanActivity.MESSAGE, response.jsonResult.get("message").toString());
+            LocalBroadcastManager.getInstance(request.context).sendBroadcast(intent);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
