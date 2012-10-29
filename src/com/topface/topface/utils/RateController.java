@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +18,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.RateRequest;
+import com.topface.topface.ui.NavigationActivity;
 
 public class RateController {
     private Activity mContext;
@@ -31,12 +33,18 @@ public class RateController {
         public void failRate();
     }
 
-    public RateController(Activity context) {
+    public RateController(final Activity context) {
         mContext = context;
         mCommentDialog = new Dialog(context);
         mCommentDialog.setTitle(R.string.chat_comment);
         mCommentDialog.setContentView(R.layout.popup_comment);
         mCommentDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        mCommentDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                ((NavigationActivity)context).onDialogCancel();
+            }
+        });
         mCommentText = (EditText) mCommentDialog.findViewById(R.id.etPopupComment);
         mInputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
     }

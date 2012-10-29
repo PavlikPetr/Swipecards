@@ -239,6 +239,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }).exec();
     }
 
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -612,6 +614,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             unlockControls();
         }
     };
+
+    public void onDialogCancel() {
+        unlockControls();
+    }
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
