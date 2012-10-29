@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.*;
-
 import com.topface.topface.R;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiHandler;
@@ -39,8 +38,6 @@ import org.json.JSONArray;
 public class UserProfileActivity extends BaseFragmentActivity {
 
     private int mUserId;
-    private int mMutualId;
-    private boolean mChatInvoke;
 
     private ImageViewRemote mUserAvatar;
     private TextView mUserName;
@@ -49,7 +46,6 @@ public class UserProfileActivity extends BaseFragmentActivity {
 
     private Button mUserDelight;
     private Button mUserMutual;
-    private Button mUserChat;
 
     private RadioGroup mUserRadioGroup;
     private RadioButton mUserPhoto;
@@ -68,20 +64,24 @@ public class UserProfileActivity extends BaseFragmentActivity {
     public User mUser;
 
     public static final String INTENT_USER_ID = "user_id";
-    public static final String INTENT_MUTUAL_ID = "mutual_id";
     public static final String INTENT_USER_NAME = "user_name";
-    public static final String INTENT_CHAT_INVOKE = "chat_invoke";        
+    public static final String INTENT_CHAT_INVOKE = "chat_invoke";
 
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
     public static final int F_GIFTS = 2;
-//    public static final int F_ACTIONS = 3;
+    //    public static final int F_ACTIONS = 3;
     public static final int F_COUNT = F_GIFTS + 1;
 
     public static final int GIFTS_LOAD_COUNT = 30;
 
     private RelativeLayout lockScreen;
-    private RetryView retryBtn;
+    private OnClickListener finishActivityListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,8 +90,6 @@ public class UserProfileActivity extends BaseFragmentActivity {
         setContentView(R.layout.ac_user_profile);
 
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1); // свой - чужой профиль
-        mMutualId = getIntent().getIntExtra(INTENT_MUTUAL_ID, -1);
-        mChatInvoke = getIntent().getBooleanExtra(INTENT_CHAT_INVOKE, false); // пришли из чата        
 
         // Navigation bar
         String userName = getIntent().getStringExtra(INTENT_USER_NAME); // name
@@ -99,33 +97,31 @@ public class UserProfileActivity extends BaseFragmentActivity {
 
         (findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
         if (getIntent().hasExtra(INTENT_PREV_ENTITY)) {
-	        Button btnBack = (Button)findViewById(R.id.btnNavigationBackWithText);        
-	        btnBack.setVisibility(View.VISIBLE);
-	        btnBack.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					finish();
-				}
-			});
-        	String prevEntity = getIntent().getStringExtra(INTENT_PREV_ENTITY); 
-        	if(prevEntity.equals(ChatActivity.class.getSimpleName())) {
-        		btnBack.setText(R.string.navigation_back_chat);
-        	} else if(prevEntity.equals(DatingFragment.class.getSimpleName())) {
-        		btnBack.setText(R.string.navigation_back_dating);
-        	} else if(prevEntity.equals(DialogsFragment.class.getSimpleName())) {
-        		btnBack.setText(R.string.navigation_back_dialog);
-        	} else if(prevEntity.equals(LikesFragment.class.getSimpleName())) {
-        		btnBack.setText(R.string.navigation_back_likes);
-        	} else if(prevEntity.equals(MutualFragment.class.getSimpleName())) {
-        		btnBack.setText(R.string.navigation_back_mutual);
-        	} else if(prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
-        		btnBack.setText(R.string.navigation_back_visitors);
-        	}
-        	
+            Button btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
+            btnBack.setVisibility(View.VISIBLE);
+            btnBack.setOnClickListener(finishActivityListener);
+            String prevEntity = getIntent().getStringExtra(INTENT_PREV_ENTITY);
+            if (prevEntity.equals(ChatActivity.class.getSimpleName())) {
+                btnBack.setText(R.string.navigation_back_chat);
+            } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
+                btnBack.setText(R.string.navigation_back_dating);
+            } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
+                btnBack.setText(R.string.navigation_back_dialog);
+            } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
+                btnBack.setText(R.string.navigation_back_likes);
+            } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
+                btnBack.setText(R.string.navigation_back_mutual);
+            } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
+                btnBack.setText(R.string.navigation_back_visitors);
+            }
+        } else {
+            Button btnBack = (Button) findViewById(R.id.btnNavigationBack);
+            btnBack.setVisibility(View.VISIBLE);
+            btnBack.setOnClickListener(finishActivityListener);
         }
-        
-        mUserProfileHeader = (ViewGroup) findViewById(R.id.loProfileHeader);        
-        
+
+        mUserProfileHeader = (ViewGroup) findViewById(R.id.loProfileHeader);
+
         mRateController = new RateController(this);
         mLockerView = (LockerView) findViewById(R.id.llvProfileLoading);
 
@@ -137,8 +133,8 @@ public class UserProfileActivity extends BaseFragmentActivity {
         mUserDelight.setOnClickListener(mRatesClickListener);
         mUserMutual = (Button) findViewById(R.id.btnUserMutual);
         mUserMutual.setOnClickListener(mRatesClickListener);
-        mUserChat = (Button) findViewById(R.id.btnUserChat);
-        mUserChat.setOnClickListener(mRatesClickListener);
+        findViewById(R.id.btnUserChat)
+                .setOnClickListener(mRatesClickListener);
 
         mUserRadioGroup = (RadioGroup) findViewById(R.id.UserRadioGroup);
         mUserPhoto = (RadioButton) findViewById(R.id.btnUserPhoto);
@@ -151,7 +147,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
         mUserActions.setOnClickListener(mInfoClickListener);
 
         lockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
-        retryBtn = new RetryView(getApplicationContext());
+        RetryView retryBtn = new RetryView(getApplicationContext());
         retryBtn.init(getLayoutInflater());
         retryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,7 +212,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
                         mUserProfileHeader.setBackgroundResource(ProfileBackgrounds.getBackgroundResource(getApplicationContext(), mUser.background));
                         mLockerView.setVisibility(View.INVISIBLE);
                         mUserAvatar.setPhoto(mUser.photo);
-                        mUserName.setText(mUser.first_name + ", " + mUser.age);
+                        mUserName.setText(mUser.getNameAndAge());
                         mUserCity.setText(mUser.city_name);
                         if (mFormFragment != null)
                             mFormFragment.setUserData(mUser);

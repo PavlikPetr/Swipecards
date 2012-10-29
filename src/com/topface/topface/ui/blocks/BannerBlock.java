@@ -38,10 +38,10 @@ public class BannerBlock {
     private ImageView mBannerView;
     private Map<String, String> mBannersMap = new HashMap<String, String>();
 
-    public BannerBlock(Activity activity) {
+    public BannerBlock(Activity activity, ViewGroup layout) {
         super();
         mActivity = activity;
-        mBannerView = (ImageView) mActivity.findViewById(R.id.ivBanner);
+        mBannerView = (ImageView) layout.findViewById(R.id.ivBanner);
         setBannersMap();
 
         if (isCorrectResolution() &&

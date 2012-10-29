@@ -5,7 +5,8 @@
                 android:layout_width="wrap_content"
                 android:paddingRight="2dp"
         >
-    <ImageView
+
+    <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/leaderAvatar"
             android:layout_height="64dp"
             android:layout_width="64dp"

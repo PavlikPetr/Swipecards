@@ -58,7 +58,7 @@ public class Debug {
                 }
             }
         } else {
-            Log.i(tag, msg);
+            Log.e(tag, msg);
         }
     }
 

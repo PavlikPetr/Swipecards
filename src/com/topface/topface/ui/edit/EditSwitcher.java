@@ -28,6 +28,12 @@ public class EditSwitcher {
         }
     }
 
+    public void setEnabled(boolean enabled) {
+    	mCheckbox.setEnabled(enabled);
+    	mTextOn.setEnabled(enabled);
+    	mTextOff.setEnabled(enabled);
+    }
+    
     public void doSwitch() {
         setChecked(!mCheckbox.isChecked());
     }

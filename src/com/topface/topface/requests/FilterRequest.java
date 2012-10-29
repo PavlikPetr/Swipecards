@@ -8,6 +8,11 @@ public class FilterRequest extends AbstractApiRequest {
     private static final String SERVICE_NAME = "filter";
 
     /**
+     * флаг "только красивые"
+     */
+    public boolean beauty;
+    
+    /**
      * код пола пользователей для поиска
      */
     public int sex;
@@ -59,6 +64,7 @@ public class FilterRequest extends AbstractApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
+        		.put("beautiful",beauty)
                 .put("sex", sex)
                 .put("city", city)
                 .put("agebegin", agebegin)

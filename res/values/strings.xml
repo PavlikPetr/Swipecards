@@ -165,7 +165,9 @@
 
     <!-- Profile / UserProfile Form -->
     <string name="form">Questionary</string>
-
+	
+	<string name="form_not_specified">Not specified</string>
+	
     <string name="form_main">Main</string>
 
     <string-array name="form_main_status">
@@ -338,6 +340,7 @@
     <string name="profile_form">Form</string>
     <string name="profile_gifts">Gifts</string>
     <string name="profile_actions">Actions</string>
+    <string name="profile_empty_form">User did not filled the form</string>
     <string name="profile_ask_form">Ask to fill the form</string>
 
     <plurals name="photo">
@@ -353,5 +356,17 @@
         <item quantity="few">You have %d matches</item>
         <item quantity="other">You have %d matches</item>
     </plurals>
+
+    <string name="leaders_go_date">Put me here!</string>
+    <string name="leaders_leader_now">You are a leader now!</string>
+    <string name="need_select_photo">First you a have to choose a photo!</string>
+    <string name="photo_add_or">Photo added</string>
+    <string name="photo_add_error">Could not add the photo</string>
+    <plurals name="leaders_price">
+        <item quantity="one">Get here for %d coin</item>
+        <item quantity="other">Get here for %d coins</item>
+    </plurals>
+    <string name="leaders_select_photo">Choose the most attractive photo:</string>
+    <string name="leaders_date">Put me\nhere!</string>
 
 </resources>

@@ -22,7 +22,7 @@ public class FeedDialog extends FeedLike {
      * Координаты местоположения
      */
     public Geo geo;
-    
+
     // Constants
     public static final int DEFAULT = 0; // По-умолчанию. Нигде не используется. Если возникает, наверное, надо что-то сделать
     public static final int PHOTO = 1; // Рекламное уведомление
@@ -50,7 +50,9 @@ public class FeedDialog extends FeedLike {
     public void fillData(JSONObject item) {
         super.fillData(item);
         text = item.optString("text");
-        link = item.optString("link");
-        geo = new Geo(item);
+        link = item.optString("link");        
+        if (type == MAP || type == ADDRESS) {
+        	geo = new Geo(item);
+        }
     }
 }

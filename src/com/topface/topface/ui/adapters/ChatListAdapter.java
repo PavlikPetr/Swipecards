@@ -20,6 +20,7 @@ import com.topface.topface.utils.OsmManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -204,7 +205,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.avatar.setVisibility(View.INVISIBLE);
                     break;
             }
-            if(holder.message!=null){
+            if (holder.message != null) {
                 holder.message.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
@@ -404,7 +405,9 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     private void prepare(LinkedList<History> dataList) {
-
+    	// because of stackFromBottom of PullToRefreshListView does not work
+    	Collections.reverse(dataList);
+    	
         SimpleDateFormat dowFormat = new SimpleDateFormat("EEEE");
 
         long day = 1000 * 60 * 60 * 24;
@@ -539,32 +542,34 @@ public class ChatListAdapter extends BaseAdapter {
 
     private void mapAddressDetection(final History history, final TextView tv,
                                      final ProgressBar prgsBar) {
-        final String key = history.geo.getCoordinates().toString();
-        String cachedAddress = mAddressesCache.get(key);
-
-        if (cachedAddress != null) {
-            tv.setText(cachedAddress);
-            return;
-        }
-
-        prgsBar.setVisibility(View.VISIBLE);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final String address = OsmManager.getAddress(
-                        history.geo.getCoordinates().getLatitude(),
-                        history.geo.getCoordinates().getLongitude()
-                );
-                mAddressesCache.put(key, address);
-                tv.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv.setText(address);
-                        prgsBar.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }).start();
+    	if (history.geo != null) {
+	        final String key = history.geo.getCoordinates().toString();
+	        String cachedAddress = mAddressesCache.get(key);
+	
+	        if (cachedAddress != null) {
+	            tv.setText(cachedAddress);
+	            return;
+	        }
+	
+	        prgsBar.setVisibility(View.VISIBLE);
+	        new Thread(new Runnable() {
+	            @Override
+	            public void run() {
+	                final String address = OsmManager.getAddress(
+	                        history.geo.getCoordinates().getLatitude(),
+	                        history.geo.getCoordinates().getLongitude()
+	                );
+	                mAddressesCache.put(key, address);
+	                tv.post(new Runnable() {
+	                    @Override
+	                    public void run() {
+	                        tv.setText(address);
+	                        prgsBar.setVisibility(View.GONE);
+	                    }
+	                });
+	            }
+	        }).start();
+    	}
 
     }
 

@@ -146,6 +146,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                             getActivity().setResult(Activity.RESULT_OK);
                             mData = mInputData;
                             finishRequestSend();
+                            getActivity().finish();
                         }
 
                         @Override

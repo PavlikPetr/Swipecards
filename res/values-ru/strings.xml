@@ -172,6 +172,8 @@
     <!-- Profile / UserProfile Form -->
     <string name="form">Анкета</string>
 
+    <string name="form_not_specified">Не указано</string>
+    
     <string name="form_main">Основное</string>
 
     <string-array name="form_main_status">
@@ -446,6 +448,21 @@
     <string name="profile_form">Анкета</string>
     <string name="profile_gifts">Подарки</string>
     <string name="profile_actions">Действия</string>
+    <string name="profile_empty_form">Пользователь не заполнил анкету</string>    
     <string name="profile_ask_form">Попросить заполнить анкету</string>
+
+    <!--Leaders-->
+    <string name="leaders_go_date">Хочу сюда!</string>
+    <string name="leaders_leader_now">Теперь вы лидер!</string>
+    <string name="need_select_photo">Сперва нужно выбрать фотографию!</string>
+    <string name="photo_add_or">Фотография добавлена</string>
+    <string name="photo_add_error">Не удалось добавить фотографию</string>
+    <plurals name="leaders_price">
+        <item quantity="one">Встать за %d монету</item>
+        <item quantity="few">Встать за %d монеты</item>
+        <item quantity="other">Встать за %d монет</item>
+    </plurals>
+    <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
+    <string name="leaders_date">Хочу\nсюда!</string>
 
 </resources>

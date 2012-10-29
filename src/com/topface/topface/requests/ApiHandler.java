@@ -7,15 +7,15 @@ abstract public class ApiHandler extends Handler {
 
     public void response(ApiResponse response) {
         try {
-            if (response.code == ApiResponse.ERRORS_PROCCESED)
-                ;
-            else if (response.code != ApiResponse.RESULT_OK)
+            if (response.code == ApiResponse.ERRORS_PROCCESED) {
+                //TODO: Обрабатывать результат
+            } else if (response.code != ApiResponse.RESULT_OK) {
                 fail(response.code, response);
-            else
+            } else {
                 success(response);
+            }
         } catch (Exception e) {
-            Debug.error("api handler exception:", e);
-            Debug.log(e.toString());
+            Debug.error("api handler exception", e);
         }
     }
 

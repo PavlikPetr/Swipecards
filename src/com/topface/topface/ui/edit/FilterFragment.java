@@ -27,6 +27,7 @@ import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
+import com.topface.topface.utils.FormItem;
 
 import java.util.HashMap;
 
@@ -43,6 +44,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private ImageView mCheckGirl;
     private ImageView mCheckBoy;
+    private ViewGroup mXStatusFrame;
+    private ViewGroup mMarriageFrame;
+    private ViewGroup mCharacterFrame;
+    private ViewGroup mAlcoholFrame;
     private ViewGroup mShowOffFrame;
     private HashMap<Integer, TextView> hashTextViewByTitleId = new HashMap<Integer, TextView>();
 
@@ -166,11 +171,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mFilter.geo = mPreferences.getBoolean(getString(R.string.cache_profile_filter_geo), false);
         mFilter.online = mPreferences.getBoolean(getString(R.string.cache_profile_filter_online), false);
         mFilter.beauty = mPreferences.getBoolean(getString(R.string.cache_profile_filter_beautiful), false);
-        mFilter.status_id = mPreferences.getInt(getString(R.string.cache_profile_filter_status), 0);
-        mFilter.marriage_id = mPreferences.getInt(getString(R.string.cache_profile_filter_marriage), 0);
-        mFilter.character_id = mPreferences.getInt(getString(R.string.cache_profile_filter_character), 0);
-        mFilter.alcohol_id = mPreferences.getInt(getString(R.string.cache_profile_filter_alcohol), 0);
-        mFilter.showoff_id = mPreferences.getInt(getString(R.string.cache_profile_filter_showoff), 0);
+        mFilter.status_id = mPreferences.getInt(getString(R.string.cache_profile_filter_status), FormItem.NOT_SPECIFIED_ID);
+        mFilter.marriage_id = mPreferences.getInt(getString(R.string.cache_profile_filter_marriage), FormItem.NOT_SPECIFIED_ID);
+        mFilter.character_id = mPreferences.getInt(getString(R.string.cache_profile_filter_character), FormItem.NOT_SPECIFIED_ID);
+        mFilter.alcohol_id = mPreferences.getInt(getString(R.string.cache_profile_filter_alcohol), FormItem.NOT_SPECIFIED_ID);
+        mFilter.showoff_id = mPreferences.getInt(getString(R.string.cache_profile_filter_showoff), FormItem.NOT_SPECIFIED_ID);
 
         try {
             mInitFilter = mFilter.clone();
@@ -259,36 +264,36 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         ((TextView) frame.findViewById(R.id.tvTitle)).setText(R.string.filter_extra_parameters);
 
         // Dating Status
-        frame = (ViewGroup) root.findViewById(R.id.loDatingStatus);
-        setBackground(R.drawable.edit_big_btn_top_selector, frame);
+        mXStatusFrame = (ViewGroup) root.findViewById(R.id.loDatingStatus);
+        setBackground(R.drawable.edit_big_btn_top_selector, mXStatusFrame);
         setText(R.array.form_main_status,
-                mFormInfo.getEntry(R.array.form_main_status, mFilter.status_id), frame);
-        frame.setTag(R.array.form_main_status);
-        frame.setOnClickListener(this);
+                mFormInfo.getEntry(R.array.form_main_status, mFilter.status_id), mXStatusFrame);
+        mXStatusFrame.setTag(R.array.form_main_status);
+        mXStatusFrame.setOnClickListener(this);
 
         // Marriage
-        frame = (ViewGroup) root.findViewById(R.id.loMarriage);
-        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
+        mMarriageFrame = (ViewGroup) root.findViewById(R.id.loMarriage);
+        setBackground(R.drawable.edit_big_btn_middle_selector, mMarriageFrame);
         setText(R.array.form_social_marriage,
-                mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage_id), frame);
-        frame.setTag(R.array.form_social_marriage);
-        frame.setOnClickListener(this);
+                mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage_id), mMarriageFrame);
+        mMarriageFrame.setTag(R.array.form_social_marriage);
+        mMarriageFrame.setOnClickListener(this);
 
         // Character
-        frame = (ViewGroup) root.findViewById(R.id.loCharacter);
-        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
+        mCharacterFrame = (ViewGroup) root.findViewById(R.id.loCharacter);
+        setBackground(R.drawable.edit_big_btn_middle_selector, mCharacterFrame);
         setText(R.array.form_main_character,
-                mFormInfo.getEntry(R.array.form_main_character, mFilter.character_id), frame);
-        frame.setTag(R.array.form_main_character);
-        frame.setOnClickListener(this);
+                mFormInfo.getEntry(R.array.form_main_character, mFilter.character_id), mCharacterFrame);
+        mCharacterFrame.setTag(R.array.form_main_character);
+        mCharacterFrame.setOnClickListener(this);
 
         // Alcohol
-        frame = (ViewGroup) root.findViewById(R.id.loAlcohol);
-        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
+        mAlcoholFrame = (ViewGroup) root.findViewById(R.id.loAlcohol);
+        setBackground(R.drawable.edit_big_btn_middle_selector, mAlcoholFrame);
         setText(R.array.form_habits_alcohol,
-                mFormInfo.getEntry(R.array.form_habits_alcohol, mFilter.alcohol_id), frame);
-        frame.setTag(R.array.form_habits_alcohol);
-        frame.setOnClickListener(this);
+                mFormInfo.getEntry(R.array.form_habits_alcohol, mFilter.alcohol_id), mAlcoholFrame);
+        mAlcoholFrame.setTag(R.array.form_habits_alcohol);
+        mAlcoholFrame.setOnClickListener(this);
 
         // ShowOff
         mShowOffFrame = (ViewGroup) root.findViewById(R.id.loShowOff);
@@ -458,6 +463,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
         FilterRequest filterRequest = new FilterRequest(getActivity().getApplicationContext());
         registerRequest(filterRequest);
+        filterRequest.beauty = mFilter.beauty;
         filterRequest.city = mFilter.city_id;
         filterRequest.sex = mFilter.sex;
         filterRequest.agebegin = mFilter.age_start;
@@ -476,6 +482,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 refreshSaveState();
                 getActivity().setResult(Activity.RESULT_OK);
                 finishRequestSend();
+                getActivity().finish();
             }
 
             @Override
@@ -584,9 +591,33 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     @Override
     protected void lockUi() {
+    	mBackButton.setEnabled(false);
+    	mCheckGirl.setEnabled(false);
+    	mCheckBoy.setEnabled(false);
+    	mAgeFrame.setEnabled(false);
+    	mCityFrame.setEnabled(false);
+    	mSwitchOnline.setEnabled(false);
+    	mSwitchBeautifull.setEnabled(false);
+    	mXStatusFrame.setEnabled(false);
+    	mMarriageFrame.setEnabled(false);
+    	mCharacterFrame.setEnabled(false);
+    	mAlcoholFrame.setEnabled(false);
+    	mShowOffFrame.setEnabled(false);
     }
 
     @Override
     protected void unlockUi() {
+    	mBackButton.setEnabled(true);
+    	mCheckGirl.setEnabled(true);
+    	mCheckBoy.setEnabled(true);
+    	mAgeFrame.setEnabled(true);
+    	mCityFrame.setEnabled(true);
+    	mSwitchOnline.setEnabled(true);
+    	mSwitchBeautifull.setEnabled(true);
+    	mXStatusFrame.setEnabled(true);
+    	mMarriageFrame.setEnabled(true);
+    	mCharacterFrame.setEnabled(true);
+    	mAlcoholFrame.setEnabled(true);
+    	mShowOffFrame.setEnabled(true);
     }
 }
