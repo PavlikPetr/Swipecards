@@ -13,6 +13,7 @@
     <string name="general_data_error">Ошибка обновления данных</string>
     <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
     </string>
+    <string name="general_msg_copied">Текст скопирован</string>
 
     <string name="general_switch_on">вкл.</string>
     <string name="general_switch_off">выкл.</string>

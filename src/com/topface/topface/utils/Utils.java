@@ -12,6 +12,7 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Utils {
     private static PluralResources mPluralResources;
@@ -209,13 +210,16 @@ public class Utils {
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(time);
+        Calendar cal2 = Calendar.getInstance();
+        int currentYear = cal2.get(Calendar.YEAR);
+        cal2.set(currentYear,Calendar.JANUARY,1);
 
         if (time > Data.midnight)
             text = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
         else if (time > Data.midnight - day * 5)
             text = formatDayOfWeek(context, cal.get(Calendar.DAY_OF_WEEK));
 
-        else if (time > Data.midnight - day * 365)
+        else if (time > cal2.getTimeInMillis())
             text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH));
 
         else

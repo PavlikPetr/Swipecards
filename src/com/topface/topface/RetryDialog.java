@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import com.topface.topface.receivers.ConnectionChangeReceiver;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,7 +33,8 @@ public class RetryDialog extends AlertDialog {
         mReciever = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                RetryDialog.this.getButton(Dialog.BUTTON_POSITIVE).performClick();
+                if(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,0) != ConnectionChangeReceiver.CONNECTION_OFFLINE)
+                    RetryDialog.this.getButton(Dialog.BUTTON_POSITIVE).performClick();
             }
         };
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mReciever, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));

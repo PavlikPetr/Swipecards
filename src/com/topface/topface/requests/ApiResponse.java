@@ -34,6 +34,7 @@ public class ApiResponse {
     public static final int ITUNES_CONNECTION = 19;
     public static final int INVERIFIED_TOKEN = 20;
     public static final int NO_INERNET_CONNECTION = 21;
+    public static final int BAN = 28;
     // local
     public static final int NULL_RESPONSE = 100;
     public static final int WRONG_RESPONSE = 101;

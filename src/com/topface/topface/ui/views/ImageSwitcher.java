@@ -7,8 +7,10 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.*;
 import com.topface.topface.R;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.PreloadManager;
 
 public class ImageSwitcher extends ViewPager {
 
@@ -16,8 +18,8 @@ public class ImageSwitcher extends ViewPager {
     private ImageSwitcherAdapter mImageSwitcherAdapter;
     private Photos mPhotoLinks;
     private OnClickListener mOnClickListener;
-
     private Handler mUpdatedHandler;
+    private static final String VIEW_TAG = "view_container";
 
     public ImageSwitcher(Context context) {
         this(context, null);
@@ -38,7 +40,12 @@ public class ImageSwitcher extends ViewPager {
 
     public void setData(Photos photoLinks) {
         mPhotoLinks = photoLinks;
+        mImageSwitcherAdapter.setIsFirstInstantiate(true);
         this.setAdapter(mImageSwitcherAdapter);
+    }
+
+    public void setPhoto(int position) {
+        mImageSwitcherAdapter.setPhotoToPosition(position);
     }
 
     @Override
@@ -69,6 +76,31 @@ public class ImageSwitcher extends ViewPager {
         }
     };
 
+    @Override
+    public void setOnPageChangeListener(OnPageChangeListener listener) {
+        final OnPageChangeListener finalListener = listener;
+        super.setOnPageChangeListener(new OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+                finalListener.onPageScrolled(i,v,i1);
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                setPhoto(i);
+                finalListener.onPageSelected(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+                finalListener.onPageScrollStateChanged(i);
+            }
+        });
+
+    }
+
+
+
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -81,6 +113,7 @@ public class ImageSwitcher extends ViewPager {
     *  class ImageSwitcherAdapter
     */
     class ImageSwitcherAdapter extends PagerAdapter {
+        private boolean isFirstInstantiate = true;
 
         @Override
         public int getCount() {
@@ -88,11 +121,15 @@ public class ImageSwitcher extends ViewPager {
         }
 
         public Object instantiateItem(ViewGroup pager, int position) {
-            Debug.log("Page has been created");
             LayoutInflater inflater = (LayoutInflater) pager.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_album_gallery, null);
+            view.setTag(VIEW_TAG+Integer.toString(position));
             ImageViewRemote imageView = (ImageViewRemote) view.findViewById(R.id.ivPreView);
-            imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler);
+            if(isFirstInstantiate) {
+                imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler); //TODO: Сделать здесь что-нибудь получше
+                isFirstInstantiate = false;
+            } //else
+//                mPreloadManager.preloadImage(mPhotoLinks.get(position).getSuitableLink(Photo.SIZE_960));
             pager.addView(view);
             return view;
         }
@@ -105,6 +142,19 @@ public class ImageSwitcher extends ViewPager {
         @Override
         public boolean isViewFromObject(View view, Object object) {
             return view == object;
+        }
+
+        public void setPhotoToPosition(int position) {
+            if(!isFirstInstantiate) {
+                View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG+Integer.toString(position));
+                ImageViewRemote imageView = (ImageViewRemote)baseLayout.findViewById(R.id.ivPreView);
+                if(imageView.getBackground()==null)
+                    imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler);
+            }
+        }
+
+        public void setIsFirstInstantiate(boolean value) {
+            isFirstInstantiate = value;
         }
     }
 }

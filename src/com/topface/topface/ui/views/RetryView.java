@@ -2,6 +2,7 @@ package com.topface.topface.ui.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,5 +33,10 @@ public class RetryView extends LinearLayout {
 
     public void setErrorMsg(String errorMsg) {
         mErrorMsg.setText(errorMsg);
+    }
+
+    public void setMessageVisibility () {
+        mErrorMsg.setVisibility(View.VISIBLE);
+        mRetryBtn.setVisibility(View.GONE);
     }
 }
