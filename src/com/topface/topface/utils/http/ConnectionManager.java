@@ -1,6 +1,8 @@
 package com.topface.topface.utils.http;
 
+import android.app.Application;
 import android.content.Context;
+import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
 import com.topface.topface.data.Auth;
@@ -11,6 +13,7 @@ import com.topface.topface.utils.AuthToken;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Http;
 import com.topface.topface.utils.Http.FlushedInputStream;
+import com.topface.topface.utils.Utils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -63,6 +66,7 @@ public class ConnectionManager {
                     httpPost = new HttpPost(Static.API_URL);
                     httpPost.setHeader("Accept-Encoding", "gzip");
                     httpPost.setHeader("Content-Type", "application/json");
+                    setRevisionHeader(httpPost);
                     httpPost.setEntity(new ByteArrayEntity(apiRequest.toString().getBytes("UTF8")));
 
                     Debug.log(TAG, "cm_req::" + apiRequest.toString()); // REQUEST
@@ -130,6 +134,7 @@ public class ConnectionManager {
             localHttpPost = new HttpPost(Static.API_URL);
             localHttpPost.setHeader("Accept-Encoding", "gzip");
             localHttpPost.setHeader("Content-Type", "application/json");
+            setRevisionHeader(httpPost);
             localHttpPost.setEntity(new ByteArrayEntity(authRequest.toString().getBytes("UTF8")));
 
             Debug.log(TAG, "cm_reauth:req_0:" + authRequest.toString());
@@ -155,13 +160,15 @@ public class ConnectionManager {
         return response;
     }
 
-    public AndroidHttpClient getHttpClient() {
-        return mHttpClient;
-    }
-
     @Override
     protected void finalize() throws Throwable {
         if (mHttpClient != null) mHttpClient.close();/*mHttpClient.getConnectionManager().shutdown();*/
         super.finalize();
+    }
+
+    private void setRevisionHeader(HttpPost httpPost) {
+        if (Utils.isDebugMode((Application) App.getContext())) {
+            httpPost.setHeader("Cookie", "revnum=" + Static.REV + ";");
+        }
     }
 }

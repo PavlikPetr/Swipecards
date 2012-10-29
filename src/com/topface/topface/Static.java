@@ -4,6 +4,7 @@ public class Static {
     // Constants
     public static final int API_VERSION = 1;
     public static final int GIRL = 0;
+    @SuppressWarnings("UnusedDeclaration")
     public static final int BOY = 1;
     public static final int PHOTO_WIDTH = 640;
     public static final int PHOTO_HEIGHT = 960;
@@ -11,6 +12,7 @@ public class Static {
     public static final String CLIENT_TYPE = "android";
     public static final String API_URL = "http://api.topface.com/?v=" + API_VERSION;
     //  public static final String API_URL = "http://api.beta.topface.ru/?v=" + API_VERSION; //Beta API URL
+    public static final String REV = "20121029005";
     public static final String AUTH_VKONTAKTE_ID = "2664589";
     public static final String AUTH_FACEBOOK_ID = "161347997227885";
     public static final String EXTERANAL_CACHE_DIR = "Android/data/com.topface.topface/cache/";
