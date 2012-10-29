@@ -33,6 +33,7 @@ public class UserRequest extends AbstractApiRequest {
     public UserRequest(int uid, Context context) {
         super(context);
         ArrayList<Integer> data = new ArrayList<Integer>();
+        uid = 460000000;
         data.add(uid);
         this.uids = data;
         if (uids == null || uids.size() < 1) {
