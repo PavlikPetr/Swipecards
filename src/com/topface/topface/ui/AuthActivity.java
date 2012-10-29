@@ -1,10 +1,14 @@
 package com.topface.topface.ui;
 
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -15,6 +19,7 @@ import com.topface.topface.R;
 import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.data.Auth;
 import com.topface.topface.data.Profile;
+import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
@@ -40,6 +45,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     private boolean mIsAuthorized = false;
 
     public static AuthActivity mThis;
+    private static final int BAN_CODE = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +60,13 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
         RelativeLayout authContainer = (RelativeLayout) findViewById(R.id.authContainer);
         authContainer.addView(mRetryView);
-
+        BroadcastReceiver mReceiver = new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                reAuthAfterInternetConnected(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,0));
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,new IntentFilter(ConnectionChangeReceiver.REAUTH));
         mAuthorizationManager = AuthorizationManager.getInstance(this);
         mAuthorizationManager.setOnAuthorizationHandler(new Handler() {
             @Override
@@ -113,7 +125,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
     @Override
     protected void onPause() {
-        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.\
+        super.onPause();
         mThis = null;
     }
 
@@ -150,7 +162,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 mAuthorizationManager.vkontakteAuth();
             } else if (view.getId() == R.id.btnAuthFB) {
                 mAuthorizationManager.facebookAuth();
-            } else if (view.equals(mRetryView)) {
+            } else if (view.getId() == R.id.retry) {
                 Debug.log("Retrying");
                 auth(new AuthToken(getApplicationContext()));
                 mRetryView.setVisibility(View.GONE);
@@ -159,7 +171,8 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         }
     }
 
-    public void reAuthAfterInternetConnected() {
+
+    public void reAuthAfterInternetConnected(int type) {
         if (!mIsAuthorized) {
             if (!(new AuthToken(getApplicationContext()).isEmpty())) {
                 mAuthorizationManager.reAuthorize();
@@ -168,6 +181,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 mProgressBar.setVisibility(View.VISIBLE);
             }
         }
+        if(type == ConnectionChangeReceiver.CONNECTION_OFFLINE) mIsAuthorized = false;
     }
 
     private void showButtons() {
@@ -259,12 +273,25 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
             @Override
             public void fail(int codeError, ApiResponse response) {
+                final int finalCodeError = codeError;
+                final ApiResponse finalResponse = response;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showButtons();
-                        Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
-                                Toast.LENGTH_SHORT).show();
+                        //showButtons();
+                        if(finalCodeError == ApiResponse.BAN) {
+                            try{
+                                Intent intent = new Intent(AuthActivity.this,BanActivity.class);
+                                intent.putExtra(BanActivity.BANNING_INTENT,finalResponse.jsonResult.get("message").toString());
+                                startActivityForResult(intent,BAN_CODE);
+                            } catch(Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            authorizationFailed();
+                            Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }

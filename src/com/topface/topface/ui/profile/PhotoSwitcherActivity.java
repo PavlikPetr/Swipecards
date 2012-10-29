@@ -87,7 +87,7 @@ public class PhotoSwitcherActivity extends Activity {
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            mPreloadManager.preloadPhoto(mPhotoLinks.get(position));
+            mPreloadManager.preloadPhoto(mPhotoLinks,position+1);
             setCounter(position);
         }
 

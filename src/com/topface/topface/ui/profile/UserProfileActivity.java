@@ -34,6 +34,7 @@ import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
+import org.json.JSONArray;
 
 public class UserProfileActivity extends BaseFragmentActivity {
 
@@ -193,6 +194,11 @@ public class UserProfileActivity extends BaseFragmentActivity {
         userRequest.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
+                try{
+                    Object test = response.jsonResult.get("profiles");
+                    if(test.equals(new JSONArray("[]"))) lockScreen.setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                }
                 mUser = User.parse(mUserId, response);
                 runOnUiThread(new Runnable() {
                     @Override

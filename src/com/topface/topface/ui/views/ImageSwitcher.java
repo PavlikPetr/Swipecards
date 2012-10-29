@@ -19,6 +19,7 @@ public class ImageSwitcher extends ViewPager {
     private Photos mPhotoLinks;
     private OnClickListener mOnClickListener;
     private Handler mUpdatedHandler;
+    private static final String VIEW_TAG = "view_container";
 
     public ImageSwitcher(Context context) {
         this(context, null);
@@ -122,7 +123,7 @@ public class ImageSwitcher extends ViewPager {
         public Object instantiateItem(ViewGroup pager, int position) {
             LayoutInflater inflater = (LayoutInflater) pager.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_album_gallery, null);
-            view.setTag(position); //TODO: подставить сюда маску
+            view.setTag(VIEW_TAG+Integer.toString(position));
             ImageViewRemote imageView = (ImageViewRemote) view.findViewById(R.id.ivPreView);
             if(isFirstInstantiate) {
                 imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler); //TODO: Сделать здесь что-нибудь получше
@@ -145,7 +146,7 @@ public class ImageSwitcher extends ViewPager {
 
         public void setPhotoToPosition(int position) {
             if(!isFirstInstantiate) {
-                View baseLayout = ImageSwitcher.this.findViewWithTag(position);//TODO: Сюда тоже подставить маску
+                View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG+Integer.toString(position));
                 ImageViewRemote imageView = (ImageViewRemote)baseLayout.findViewById(R.id.ivPreView);
                 if(imageView.getBackground()==null)
                     imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler);

@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.GiftGalleryManager;
@@ -18,9 +19,9 @@ public class GiftsAdapter extends LoadingListAdapter {
 
     private LayoutInflater mInflater;
 
-    private GiftGalleryManager<Gift> mGalleryManager;
+    private GiftGalleryManager<FeedGift> mGalleryManager;
 
-    public GiftsAdapter(Context context, GiftGalleryManager<Gift> galleryManager) {
+    public GiftsAdapter(Context context, GiftGalleryManager<FeedGift> galleryManager) {
         mInflater = LayoutInflater.from(context);
         mGalleryManager = galleryManager;
 
@@ -41,7 +42,8 @@ public class GiftsAdapter extends LoadingListAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (getItem(position).type == Gift.SEND_BTN) {
+        FeedGift item = getItem(position);
+        if (item != null && item.gift != null && item.gift.type == Gift.SEND_BTN) {
             return T_SEND_BTN;
         } else {
             return super.getItemViewType(position);
@@ -76,7 +78,6 @@ public class GiftsAdapter extends LoadingListAdapter {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            holder.gift = (getItem(position));
             if (type == T_SEND_BTN) {
                 holder.giftImage.setImageBitmap(null);
                 holder.giftImage.setBackgroundResource(R.drawable.chat_gift_selector);
@@ -84,9 +85,8 @@ public class GiftsAdapter extends LoadingListAdapter {
                 holder.giftText.setVisibility(View.VISIBLE);
                 holder.priceText.setVisibility(View.GONE);
             } else {
-                type = holder.gift.type;
-
-                if (type == Gift.PROFILE || type == Gift.PROFILE_NEW) {
+                FeedGift item = getItem(position);
+                if (item.gift.type == Gift.PROFILE || item.gift.type == Gift.PROFILE_NEW) {
                     mGalleryManager.getImage(position, holder.giftImage);
                     holder.giftText.setText(Static.EMPTY);
                     holder.giftText.setVisibility(View.VISIBLE);
@@ -94,7 +94,7 @@ public class GiftsAdapter extends LoadingListAdapter {
                 } else {
                     mGalleryManager.getImage(position, holder.giftImage);
                     holder.priceText.setVisibility(View.VISIBLE);
-                    holder.priceText.setText(Integer.toString(holder.gift.price));
+                    holder.priceText.setText(Integer.toString(item.gift.price));
                     holder.giftText.setVisibility(View.GONE);
                 }
             }
@@ -104,7 +104,7 @@ public class GiftsAdapter extends LoadingListAdapter {
     }
 
     @Override
-    public Gift getItem(int position) {
+    public FeedGift getItem(int position) {
         return mGalleryManager.get(position);
     }
 
@@ -117,7 +117,6 @@ public class GiftsAdapter extends LoadingListAdapter {
         ImageViewRemote giftImage;
         TextView priceText;
         TextView giftText;
-        public Gift gift;
     }
 
 }

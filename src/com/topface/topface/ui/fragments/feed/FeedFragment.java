@@ -44,7 +44,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
         // Navigation bar
-        mNavBarController = new NavigationBarController((ViewGroup)view.findViewById(R.id.loNavigationBar));
+        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getTitle());
 
@@ -195,7 +195,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             request.to = lastItem.id;
         }
         request.limit = FeedAdapter.LIMIT;
-        request.unread = mDoubleButton.isRightButtonChecked();
+        request.unread = isShowUnreadItems();
         request.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
@@ -212,7 +212,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         mListView.onRefreshComplete();
                         mListView.setVisibility(View.VISIBLE);
                         mIsUpdating = false;
-                        if (mNavBarController != null)mNavBarController.refreshNotificators();
+                        if (mNavBarController != null) mNavBarController.refreshNotificators();
                     }
                 });
             }
@@ -236,6 +236,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }).exec();
     }
 
+    protected boolean isShowUnreadItems() {
+        return mDoubleButton.isRightButtonChecked();
+    }
+
     protected abstract FeedListData<T> getFeedList(JSONObject response);
 
     private FeedRequest getRequest() {
@@ -249,8 +253,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     @SuppressWarnings("deprecation")
-    private void initFilter(View view) {
+    protected void initFilter(View view) {
         final View controlGroup = view.findViewById(R.id.loControlsGroup);
+        view.findViewById(R.id.loToolsBar).setVisibility(View.VISIBLE);
         View showToolsBarButton = view.findViewById(R.id.btnNavigationSettingsBar);
         showToolsBarButton.setVisibility(View.VISIBLE);
         showToolsBarButton.setOnClickListener(new View.OnClickListener() {
@@ -275,6 +280,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         });
 
+        initDoubleButton(view);
+    }
+
+    protected void initDoubleButton(View view) {
         // Double Button
         mDoubleButton = (DoubleBigButton) view.findViewById(R.id.btnDoubleBig);
         mDoubleButton.setLeftText(getString(R.string.btn_dbl_left));
@@ -313,7 +322,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     mBackgroundText.getCompoundDrawables()[1],
                     mBackgroundText.getCompoundDrawables()[2],
                     mBackgroundText.getCompoundDrawables()[3]);
-            mDoubleButton.setClickable(true);
+            setFilterSwitcherState(true);
         }
     }
 
@@ -333,7 +342,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     mBackgroundText.getCompoundDrawables()[1],
                     mBackgroundText.getCompoundDrawables()[2],
                     mBackgroundText.getCompoundDrawables()[3]);
-            mDoubleButton.setClickable(true);
+            setFilterSwitcherState(true);
         }
     }
 
@@ -347,8 +356,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     mBackgroundText.getCompoundDrawables()[2],
                     mBackgroundText.getCompoundDrawables()[3]);
             ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).start();
-            mDoubleButton.setClickable(false);
+            setFilterSwitcherState(false);
         }
+    }
+
+    protected void setFilterSwitcherState(boolean clickable) {
+        mDoubleButton.setClickable(clickable);
     }
 
     private void createUpdateErrorMessage() {

@@ -34,7 +34,8 @@
     <string name="dashbrd_btn_tops">Most popular</string>
     <string name="dashbrd_btn_visitors">Visitors</string>
     <string name="dashbrd_btn_settings">Settings</string>
-    <string name="dashbrd_btn_sympathy">Mutual</string>
+    <string name="dashbrd_btn_sympathy">Sympathy</string>
+    <string name="dashbrd_btn_sympathy_mutual">Mutual</string>
     <string name="dashbrd_btn_love">Delight</string>
     <string name="dashbrd_btn_skip">Next</string>
     <string name="dashbrd_btn_prev">Previous</string>
@@ -294,7 +295,7 @@
     </plurals>
     <string name="invite_is_free">Sending the invitations is free</string>
     <string name="invite_error">Could not send the invitation. Please, try again</string>
-    <string name="invite_completed">Invitation sent</string>    
+    <string name="invite_completed">Invitation sent</string>
 
     <!--Leaders-->
     <string name="photo_add_or">Photo added</string>
@@ -332,10 +333,12 @@
     <string name="settings_cooperation">Cooperation</string>
     <string name="settings_feedback_success_msg">Thank you, message was sent succesfully</string>
     <string name="fill_button">Fill</string>
+
     <string name="profile_photo">Photo</string>
     <string name="profile_form">Form</string>
     <string name="profile_gifts">Gifts</string>
     <string name="profile_actions">Actions</string>
+    <string name="profile_ask_form">Ask to fill the form</string>
 
     <plurals name="photo">
         <item quantity="zero">No photos</item>
@@ -350,5 +353,5 @@
         <item quantity="few">You have %d matches</item>
         <item quantity="other">You have %d matches</item>
     </plurals>
-    
+
 </resources>

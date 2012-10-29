@@ -9,7 +9,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"/>
 
-
     <!-- Header -->
     <TextView
             android:id="@+id/tvHeader"
@@ -41,17 +40,18 @@
             android:layout_height="wrap_content"
             android:textColor="#B8B8B8"
             android:textSize="13sp"
-            />"
+            />
 
     <Button
             android:id="@+id/btnFill"
             android:layout_toRightOf="@id/ivState"
             android:layout_below="@id/tvTitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="26dp"
             android:textColor="#B8B8B8"
             android:background="@drawable/profile_fill_selector"
             android:text="@string/fill_button"
+            android:textSize="13sp"
             android:visibility="gone"/>
 
 </RelativeLayout>

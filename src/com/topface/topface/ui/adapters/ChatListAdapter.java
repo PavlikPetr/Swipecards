@@ -15,7 +15,6 @@ import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.MemoryCacheTemplate;
 import com.topface.topface.utils.OsmManager;
 
@@ -172,8 +171,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
                     holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
                     holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivUserMapBg);
-                    holder.prgsAddress = (ProgressBar) convertView
-                            .findViewById(R.id.prgsUserMapAddress);
+                    holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.prgsUserMapAddress);
                     holder.avatar.setPhoto(CacheProfile.photo);
                     holder.avatar.setVisibility(View.VISIBLE);
                     break;
@@ -182,8 +180,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
                     holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
                     holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivUserMapBg);
-                    holder.prgsAddress = (ProgressBar) convertView
-                            .findViewById(R.id.prgsUserMapAddress);
+                    holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.prgsUserMapAddress);
                     holder.avatar.setVisibility(View.INVISIBLE);
                     break;
                 case T_FRIEND_MAP_PHOTO:
@@ -214,7 +211,7 @@ public class ChatListAdapter extends BaseAdapter {
 
                         ClipboardManager clipboard = (ClipboardManager)
                                 mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-//                        ClipData clip = ClipData.newPlainText("", holder.message.getText().toString()); //TODO: Сюда надо поставить какой-нибудь тэг
+//                        ClipData clip = ClipData.newPlainText("", holder.message.getText().toString());
                         clipboard.setText(holder.message.getText());
                         Toast.makeText(mContext,R.string.general_msg_copied,Toast.LENGTH_SHORT).show();
                         return false;  //To change body of implemented methods use File | Settings | File Templates.
@@ -240,7 +237,7 @@ public class ChatListAdapter extends BaseAdapter {
                 || type == T_FRIEND_MAP_PHOTO || type == T_FRIEND_MAP_EXT) {
             holder.address.setText(Static.EMPTY);
 
-            if (history.type == FeedDialog.ADDRESS) {
+            if (history.type == FeedDialog.MAP) {
                 holder.mapBackground.setBackgroundResource(R.drawable.chat_item_place);
             } else {
                 holder.mapBackground.setBackgroundResource(R.drawable.chat_item_map);
@@ -388,6 +385,15 @@ public class ChatListAdapter extends BaseAdapter {
                     mItemLayoutList.add(T_USER_MAP_PHOTO);
 
             }
+        } else if (msg.type == FeedDialog.ADDRESS) {
+            if (prevHistory == null)
+                mItemLayoutList.add(T_USER_MAP_PHOTO);
+            else {
+                if (prevHistory.target == FeedDialog.USER_MESSAGE)
+                    mItemLayoutList.add(T_USER_MAP_EXT);
+                else
+                    mItemLayoutList.add(T_USER_MAP_PHOTO);
+            }
         }
 
         mDataList.add(msg);
@@ -479,6 +485,12 @@ public class ChatListAdapter extends BaseAdapter {
                         else
                             item_type = T_FRIEND_MAP_PHOTO;
                         break;
+                    case FeedDialog.ADDRESS:
+                        if (history.target == prev_target)
+                            item_type = T_FRIEND_MAP_EXT;
+                        else
+                            item_type = T_FRIEND_MAP_PHOTO;
+                        break;
                     default:
                         if (history.target == prev_target)
                             item_type = T_FRIEND_EXT;
@@ -495,6 +507,13 @@ public class ChatListAdapter extends BaseAdapter {
                             item_type = T_USER_GIFT_PHOTO;
                         break;
                     case FeedDialog.MAP:
+                        if (history.target == prev_target) {
+                            item_type = T_USER_MAP_EXT;
+                        } else {
+                            item_type = T_USER_MAP_PHOTO;
+                        }
+                        break;
+                    case FeedDialog.ADDRESS:
                         if (history.target == prev_target) {
                             item_type = T_USER_MAP_EXT;
                         } else {
@@ -520,7 +539,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     private void mapAddressDetection(final History history, final TextView tv,
                                      final ProgressBar prgsBar) {
-        final String key = history.user.geo.getCoordinates().toString();
+        final String key = history.geo.getCoordinates().toString();
         String cachedAddress = mAddressesCache.get(key);
 
         if (cachedAddress != null) {
@@ -533,8 +552,8 @@ public class ChatListAdapter extends BaseAdapter {
             @Override
             public void run() {
                 final String address = OsmManager.getAddress(
-                        history.user.geo.getCoordinates().getLatitude(),
-                        history.user.geo.getCoordinates().getLongitude()
+                        history.geo.getCoordinates().getLatitude(),
+                        history.geo.getCoordinates().getLongitude()
                 );
                 mAddressesCache.put(key, address);
                 tv.post(new Runnable() {

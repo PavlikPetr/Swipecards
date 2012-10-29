@@ -2,7 +2,6 @@ package com.topface.topface.data;
 
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,7 +9,7 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class Gift extends AbstractDataWithPhotos implements IListLoader {
+public class Gift extends AbstractDataWithPhotos {
 
     public static final int ROMANTIC = 0;
     public static final int FRIENDS = 2;
@@ -25,27 +24,6 @@ public class Gift extends AbstractDataWithPhotos implements IListLoader {
     public String link;
     public int price;
     public int feedId;
-
-    //Loader indicators
-    public boolean isListLoader = false;
-    public boolean isListLoaderRetry = false;
-
-    public Gift() {
-
-    }
-
-    public Gift(IListLoader.ItemType type) {
-        switch (type) {
-            case LOADER:
-                isListLoader = true;
-                break;
-            case RETRY:
-                isListLoaderRetry = true;
-                break;
-            default:
-                break;
-        }
-    }
 
     public static LinkedList<Gift> parse(ApiResponse response) {
         LinkedList<Gift> gifts = new LinkedList<Gift>();
@@ -94,20 +72,6 @@ public class Gift extends AbstractDataWithPhotos implements IListLoader {
         Gift result = new Gift();
         result.type = Gift.SEND_BTN;
         return result;
-    }
-
-    public String getLargeLink() {
-        return link;
-    }
-
-    @Override
-    public boolean isLoader() {
-        return isListLoader;
-    }
-
-    @Override
-    public boolean isLoaderRetry() {
-        return isListLoaderRetry;
     }
 
 }

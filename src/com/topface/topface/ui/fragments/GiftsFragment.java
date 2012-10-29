@@ -14,16 +14,14 @@ import android.widget.GridView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.FeedGifts;
-import com.topface.topface.data.Gift;
-import com.topface.topface.data.Profile;
-import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.data.*;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
@@ -43,10 +41,10 @@ public class GiftsFragment extends BaseFragment {
     public static final int GIFTS_COLUMN_LANDSCAPE = 5;
 
     private GiftsAdapter mGridAdapter;
-    private GiftGalleryManager<Gift> mGalleryManager;
+    private GiftGalleryManager<FeedGift> mGalleryManager;
 
     private Profile mProfile;
-    private LinkedList<Gift> mGifts = new LinkedList<Gift>();
+    private FeedList<FeedGift> mGifts = new FeedList<FeedGift>();
     private boolean mIsUpdating = false;
 
     // TODO Data giftsList remove
@@ -57,7 +55,7 @@ public class GiftsFragment extends BaseFragment {
             mProfile = ((UserProfileActivity) activity).mUser;
             mTag = GIFTS_USER_PROFILE_TAG;
             setGifts(mProfile.gifts);
-            mGalleryManager = new GiftGalleryManager<Gift>(mGifts, new Handler() {
+            mGalleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
                 @Override
                 public void handleMessage(Message msg) {
                     if (!mIsUpdating && mGifts.getLast().isLoader()) {
@@ -69,7 +67,7 @@ public class GiftsFragment extends BaseFragment {
             mProfile = CacheProfile.getProfile();
             mTag = GIFTS_ALL_TAG;
             setGifts(mProfile.gifts);
-            mGalleryManager = new GiftGalleryManager<Gift>(mGifts, new Handler() {
+            mGalleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
                 @Override
                 public void handleMessage(Message msg) {
                     if (!mIsUpdating && mGifts.getLast().isLoader()) {
@@ -79,7 +77,7 @@ public class GiftsFragment extends BaseFragment {
             });
         } else {
             mTag = GIFTS_ALL_TAG;
-            mGalleryManager = new GiftGalleryManager<Gift>(mGifts, null);
+            mGalleryManager = new GiftGalleryManager<FeedGift>(mGifts, null);
         }
 
         mGridAdapter = new GiftsAdapter(activity.getApplicationContext(), mGalleryManager);
@@ -104,13 +102,13 @@ public class GiftsFragment extends BaseFragment {
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    FeedGift item = (FeedGift) parent.getItemAtPosition(position);
                     Intent intent = getActivity().getIntent();
                     if (view.getTag() instanceof ViewHolder) {
-                        ViewHolder holder = ((ViewHolder) view.getTag());
-                        if (holder.gift.type != Gift.PROFILE && holder.gift.type != Gift.SEND_BTN) {
-                            intent.putExtra(GiftsActivity.INTENT_GIFT_ID, holder.gift.id);
-                            intent.putExtra(GiftsActivity.INTENT_GIFT_URL, holder.gift.link);
-                            intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, holder.gift.price);
+                        if (item.gift.type != Gift.PROFILE && item.gift.type != Gift.SEND_BTN) {
+                            intent.putExtra(GiftsActivity.INTENT_GIFT_ID, item.gift.id);
+                            intent.putExtra(GiftsActivity.INTENT_GIFT_URL, item.gift.link);
+                            intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, item.gift.price);
 
                             getActivity().setResult(Activity.RESULT_OK, intent);
                             getActivity().finish();
@@ -132,9 +130,9 @@ public class GiftsFragment extends BaseFragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (view.getTag() instanceof ViewHolder) {
-                        ViewHolder holder = ((ViewHolder) view.getTag());
-                        if (holder.gift != null) {
-                            if (holder.gift.type == Gift.SEND_BTN) {
+                        FeedGift item = (FeedGift) parent.getItemAtPosition(position);
+                        if (item.gift != null) {
+                            if (item.gift.type == Gift.SEND_BTN) {
                                 Intent intent = new Intent(getActivity().getApplicationContext(),
                                         GiftsActivity.class);
                                 startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
@@ -150,7 +148,7 @@ public class GiftsFragment extends BaseFragment {
                                     @Override
                                     public void run() {
                                         removeLoaderItem();
-                                        mGifts.add(new Gift(ItemType.LOADER));
+                                        mGifts.add(new FeedGift(ItemType.LOADER));
                                         update();
                                     }
                                 });
@@ -188,10 +186,11 @@ public class GiftsFragment extends BaseFragment {
                     registerRequest(sendGift);
                     sendGift.giftId = id;
                     sendGift.userId = mProfile.uid;
-                    final Gift sendedGift = new Gift();
-                    sendedGift.id = sendGift.giftId;
-                    sendedGift.link = url;
-                    sendedGift.type = Gift.PROFILE_NEW;
+                    final FeedGift sendedGift = new FeedGift();
+                    sendedGift.gift = new Gift();
+                    sendedGift.gift.id = sendGift.giftId;
+                    sendedGift.gift.link = url;
+                    sendedGift.gift.type = Gift.PROFILE_NEW;
                     sendGift.callback(new ApiHandler() {
                         @Override
                         public void success(ApiResponse response) throws NullPointerException {
@@ -254,9 +253,9 @@ public class GiftsFragment extends BaseFragment {
         request.uid = userId;
         if (!mGifts.isEmpty()) {
             if (mGifts.getLast().isLoader() || mGifts.getLast().isLoaderRetry()) {
-                request.from = mGifts.get(mGifts.size() - 2).feedId;
+                request.from = mGifts.get(mGifts.size() - 2).gift.feedId;
             } else {
-                request.from = mGifts.get(mGifts.size() - 1).feedId;
+                request.from = mGifts.get(mGifts.size() - 1).gift.feedId;
             }
         }
 
@@ -264,20 +263,17 @@ public class GiftsFragment extends BaseFragment {
 
             @Override
             public void success(ApiResponse response) throws NullPointerException {
-
-                final LinkedList<FeedGifts> feedGifts = FeedGifts.parse(response);
+                final FeedListData<FeedGift> feedGifts = new FeedListData<FeedGift>(response.jsonResult, FeedGift.class);
 
                 updateUI(new Runnable() {
 
                     @Override
                     public void run() {
                         removeLoaderItem();
-                        for (FeedGifts feed : feedGifts) {
-                            mGifts.add(feed.gift);
-                        }
+                        mGifts.addAll(feedGifts.items);
 
-                        if (FeedGifts.more) {
-                            mGifts.add(new Gift(ItemType.LOADER));
+                        if (FeedGift.more) {
+                            mGifts.add(new FeedGift(ItemType.LOADER));
                         }
                         update();
                     }
@@ -291,7 +287,7 @@ public class GiftsFragment extends BaseFragment {
                     @Override
                     public void run() {
                         removeLoaderItem();
-                        mGifts.add(new Gift(ItemType.RETRY));
+                        mGifts.add(new FeedGift(ItemType.RETRY));
                         update();
                     }
                 });
@@ -309,11 +305,15 @@ public class GiftsFragment extends BaseFragment {
 
     public void setGifts(LinkedList<Gift> gifts) {
         mGifts.clear();
-        mGifts.addAll(gifts);
+        for (Gift gift : gifts) {
+            FeedGift item = new FeedGift();
+            item.gift = gift;
+            mGifts.add(item);
+        }
         if (mTag != null && mTag.equals(GIFTS_USER_PROFILE_TAG)) {
-            mGifts.add(0, Gift.getSendedGiftItem());
+            mGifts.add(0, FeedGift.getSendedGiftItem());
             if (mGifts.size() >= UserProfileActivity.GIFTS_LOAD_COUNT)
-                mGifts.add(new Gift(ItemType.LOADER));
+                mGifts.add(new FeedGift(ItemType.LOADER));
         }
     }
 

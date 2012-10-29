@@ -10,7 +10,7 @@ import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import org.json.JSONObject;
 
 
-public class VisitorsFragment extends FeedFragment<Visitor> {
+public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
     @Override
     protected Drawable getBackIcon() {
         return getResources().getDrawable(R.drawable.visitors_back_icon);

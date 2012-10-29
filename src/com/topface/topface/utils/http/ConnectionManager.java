@@ -92,7 +92,9 @@ public class ConnectionManager {
                             addDelayedRequest(apiRequest);
                             apiResponse.code = ApiResponse.ERRORS_PROCCESED;
                         }
-
+                        if(apiResponse.code == ApiResponse.BAN) {
+                             apiRequest.handler.fail(apiResponse.code,apiResponse);
+                        } else
                         if (apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE) {
                             if (doNeedResend) {
                                 apiRequest.handler.postDelayed(new Runnable() {
