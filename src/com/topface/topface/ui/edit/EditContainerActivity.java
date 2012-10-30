@@ -106,7 +106,5 @@ public class EditContainerActivity extends BaseFragmentActivity {
         public void handleMessage(Message msg) {
             EditContainerActivity.super.finish();
         }
-
-        ;
     };
 }

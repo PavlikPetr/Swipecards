@@ -186,4 +186,94 @@
 
     <string name="profile_form_car_female_0">Да</string>
     <string name="profile_form_car_female_1">Нет</string>
+
+    <string name="form_main_status_0">Цель знакомства</string>
+
+    <string name="form_main_character_0">Характер</string>
+    <string name="form_main_character_1">Характер</string>
+    <string name="form_main_character_2">Ваш характер</string>
+    <string name="form_main_character_3">Ваш характер</string>
+
+    <string name="form_main_communication_0">Общительность</string>
+
+    <string name="form_main_height_0">Рост</string>
+    <string name="form_main_height_1">Рост</string>
+    <string name="form_main_height_2">Ваш рост</string>
+    <string name="form_main_height_3">Ваш рост</string>
+
+    <string name="form_main_weight_0">Вес</string>
+    <string name="form_main_weight_1">Вес</string>
+    <string name="form_main_weight_2">Ваш вес</string>
+    <string name="form_main_weight_3">Ваш вес</string>
+
+    <string name="form_physique_fitness_0">Комплекция</string>
+    <string name="form_physique_fitness_1">Комплекция</string>
+    <string name="form_physique_fitness_2">Ваша комплекция</string>
+    <string name="form_physique_fitness_3">Ваша комплекция</string>
+
+    <string name="form_physique_hairs_0">Цвет волос</string>
+    <string name="form_physique_hairs_1">Цвет волос</string>
+    <string name="form_physique_hairs_2">Ваш цвет волос</string>
+    <string name="form_physique_hairs_3">Ваш цвет волос</string>
+
+    <string name="form_physique_eyes_0">Цвет глаз</string>
+    <string name="form_physique_eyes_1">Цвет глаз</string>
+    <string name="form_physique_eyes_2">Ваш цвет глаз</string>
+    <string name="form_physique_eyes_3">Ваш цвет глаз</string>
+
+    <string name="form_physique_breast_0">Рамер груди</string>
+    <string name="form_physique_breast_1">Рамер груди</string>
+    <string name="form_physique_breast_2">Ваш рамер груди</string>
+    <string name="form_physique_breast_3">Ваш рамер груди</string>
+
+    <string name="form_social_marriage_0">Состоит ли в браке?</string>
+    <string name="form_social_marriage_1">Состоит ли в браке?</string>
+    <string name="form_social_marriage_2">Состоите ли вы в браке?</string>
+    <string name="form_social_marriage_3">Состоите ли вы в браке?</string>
+
+    <string name="form_social_education_0">Образование</string>
+    <string name="form_social_education_1">Образование</string>
+    <string name="form_social_education_2">Ваше образование</string>
+    <string name="form_social_education_3">Ваше образование</string>
+
+    <string name="form_social_finances_0">Материальное положение</string>
+    <string name="form_social_finances_1">Материальное положение</string>
+    <string name="form_social_finances_2">Ваше материальное положение</string>
+    <string name="form_social_finances_3">Ваше материальное положение</string>
+
+    <string name="form_social_residence_0">Условия проживания</string>
+    <string name="form_social_residence_1">Условия проживания</string>
+    <string name="form_social_residence_2">Ваши условия проживания</string>
+    <string name="form_social_residence_3">Ваши условия проживания</string>
+
+    <string name="form_social_car_0">Наличие машины</string>
+    <string name="form_social_car_1">Наличие машины</string>
+    <string name="form_social_car_2">Наличие у вас машины</string>
+    <string name="form_social_car_3">Наличие у вас машины</string>
+
+    <string name="form_habits_smoking_0">Отношение к курению</string>
+    <string name="form_habits_smoking_1">Отношение к курению</string>
+    <string name="form_habits_smoking_2">Ваше отношение к курению</string>
+    <string name="form_habits_smoking_3">Ваше отношение к курению</string>
+
+    <string name="form_habits_alcohol_0">Отношение к алкоголю</string>
+    <string name="form_habits_alcohol_1">Отношение к алкоголю</string>
+    <string name="form_habits_alcohol_2">Ваше отношение к алкоголю</string>
+    <string name="form_habits_alcohol_3">Ваше отношение к алкоголю</string>
+
+    <string name="form_habits_restaurants_0">Любимые рестораны</string>
+    <string name="form_habits_restaurants_1">Любимые рестораны</string>
+    <string name="form_habits_restaurants_2">Ваши любимые рестораны</string>
+    <string name="form_habits_restaurants_3">Ваши любимые рестораны</string>
+
+    <string name="form_detail_about_dating_0">О первом свидании с девушкой</string>
+    <string name="form_detail_about_dating_1">О идеальном первом свидании</string>
+    <string name="form_detail_about_dating_2">Каким будет ваше первое свидание с девушкой?</string>
+    <string name="form_detail_about_dating_3">Опишите идеальное свидание</string>
+
+    <string name="form_detail_archievements_0">Лучшие достижения в жизни</string>
+    <string name="form_detail_archievements_1">Лучшие достижения в жизни</string>
+    <string name="form_detail_archievements_2">Ваши лучшие достижения в жизни</string>
+    <string name="form_detail_archievements_3">Ваши лучшие достижения в жизни</string>
+
 </resources>

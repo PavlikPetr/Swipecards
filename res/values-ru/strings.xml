@@ -6,14 +6,14 @@
 
     <!-- General -->
     <string name="general_cancel">Отмена</string>
-    <string name="general_internet_off">Нет подключения к Интернет</string>
+    <string name="general_internet_off">Нет подключения к интернету</string>
     <string name="general_dialog_loading">Загрузка</string>
     <string name="general_dialog_saving">Сохранение</string>
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
-    <string name="general_data_error">Ошибка обновления данных</string>
+    <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
     </string>
-    <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
+    <string name="general_vk_album_name">    Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопирован</string>
 
     <string name="general_switch_on">вкл.</string>
@@ -27,10 +27,10 @@
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_dating">Знакомства</string>
     <string name="dashbrd_btn_likes">Я нравлюсь</string>
-    <string name="dashbrd_btn_sympathy">Симпатия</string>
+    <string name="dashbrd_btn_sympathy">Симпатия</string>    <!--TODO:в документе здесь "Взаимно", а sympathy_mutual вообще нет-->
     <string name="dashbrd_btn_sympathy_mutual">Взаимно</string>
     <string name="dashbrd_btn_chat">Диалоги</string>
-    <string name="dashbrd_btn_tops">Топы</string>
+    <string name="dashbrd_btn_tops">Топ</string>
     <string name="dashbrd_btn_visitors">Гости</string>
     <string name="dashbrd_btn_profile">Профиль</string>
     <string name="dashbrd_btn_settings">Настройки</string>
@@ -45,7 +45,7 @@
     <string name="likes_mutual">Взаимно</string>
 
     <!-- Visitors -->
-    <string name="visitors_background_text">No visitors</string>
+    <string name="visitors_background_text">Нет гостей</string>
 
     <!-- Indox & Chat Activity -->
     <string name="inbox_header_title">Диалоги</string>
@@ -56,9 +56,9 @@
     <string name="chat_comment">Написать сообщение</string>
     <string name="chat_gift_in">Вы получили подарок.</string>
     <string name="chat_gift_out">Вы отправили подарок.</string>
-    <string name="chat_like_in">Вам отправили симпатию</string>
+    <string name="chat_like_in">Вам прислали симпатию</string>
     <string name="chat_like_out">Вы отправили симпатию</string>
-    <string name="chat_symphathy_in">Вам отправили взаимную сипматию</string>
+    <string name="chat_symphathy_in">Вам прислали взаимную симпатию</string>
     <string name="chat_symphathy_out">Вы отправили взаимную сипматию</string>
     <string name="chat_wish_in">Вам отправили Тайное Желание.</string>
     <string name="chat_wish_out">Вы отправили Тайное Желание.</string>
@@ -77,7 +77,7 @@
     <string name="mutual_background_text">Симпатий нет</string>
 
     <!-- Tops Activity -->
-    <string name="tops_title">Топы</string>
+    <string name="tops_title">Топ</string>
     <string name="tops_btn_boys">Парни</string>
     <string name="tops_btn_girls">Девушки</string>
     <string name="tops_btn_city">Город</string>
@@ -101,10 +101,10 @@
 
 
     <!-- Buying Activity -->
-    <string name="buying_header_title">Покупка</string>
+    <string name="buying_header_title">Покупки</string>
     <string name="buying_you_have">У вас</string>
     <string name="buying_you_have_no_coins_for_gift">Вам не хватает %d {{coins}} для покупки подарка</string>
-    <string name="buying_default_message">Вы можете отправлять подарки, восхищения за монеты</string>
+    <string name="buying_default_message">Вы можете отправлять подарки и восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>
     <string name="buying_power">Покупка энергии</string>
     <string name="buying_recharge">Зарядить на 100%</string>
@@ -173,200 +173,17 @@
     <string name="form">Анкета</string>
 
     <string name="form_not_specified">Не указано</string>
-    
+
     <string name="form_main">Основное</string>
-
-    <string-array name="form_main_status">
-        <item>Цель знакомства</item>
-        <!-- all -->
-    </string-array>
-
-    <string-array name="form_main_character">
-        <item>Характер</item>
-        <!-- male -->
-        <item>Характер</item>
-        <!-- female -->
-        <item>Ваш характер</item>
-        <!-- own_male -->
-        <item>Ваш характер</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_main_communication">
-        <item>Общительность</item>
-        <!-- all -->
-    </string-array>
-    <string-array name="form_main_height">
-        <item>Рост</item>
-        <!-- male -->
-        <item>Рост</item>
-        <!-- female -->
-        <item>Ваш рост</item>
-        <!-- own_male -->
-        <item>Ваш рост</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_main_weight">
-        <item>Вес</item>
-        <!-- male -->
-        <item>Вес</item>
-        <!-- female -->
-        <item>Ваш вес</item>
-        <!-- own_male -->
-        <item>Ваш вес</item>
-        <!-- own_female -->
-    </string-array>
 
     <string name="form_physique">Физические данные</string>
 
-    <string-array name="form_physique_fitness">
-        <item>Комплекция</item>
-        <!-- male -->
-        <item>Комплекция</item>
-        <!-- female -->
-        <item>Ваша комплекция</item>
-        <!-- own_male -->
-        <item>Ваша комплекция</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_physique_hairs">
-        <item>Цвет волос</item>
-        <!-- male -->
-        <item>Цвет волос</item>
-        <!-- female -->
-        <item>Ваш цвет волос</item>
-        <!-- own_male -->
-        <item>Ваш цвет волос</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_physique_eyes">
-        <item>Цвет глаз</item>
-        <!-- male -->
-        <item>Цвет глаз</item>
-        <!-- female -->
-        <item>Ваш цвет глаз</item>
-        <!-- own_male -->
-        <item>Ваш цвет глаз</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_physique_breast">
-        <item>Рамер груди</item>
-        <!-- male -->
-        <item>Рамер груди</item>
-        <!-- female -->
-        <item>Ваш рамер груди</item>
-        <!-- own_male -->
-        <item>Ваш рамер груди</item>
-        <!-- own_female -->
-    </string-array>
-
     <string name="form_social">Социальное</string>
-
-    <string-array name="form_social_marriage">
-        <item>Состоит ли в браке?</item>
-        <!-- male -->
-        <item>Состоит ли в браке?</item>
-        <!-- female -->
-        <item>Состоите ли вы в браке?</item>
-        <!-- own_male -->
-        <item>Состоите ли вы в браке?</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_social_education">
-        <item>Образование</item>
-        <!-- male -->
-        <item>Образование</item>
-        <!-- female -->
-        <item>Ваше образование</item>
-        <!-- own_male -->
-        <item>Ваше образование</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_social_finances">
-        <item>Материальное положение</item>
-        <!-- male -->
-        <item>Материальное положение</item>
-        <!-- female -->
-        <item>Ваше материальное положение</item>
-        <!-- own_male -->
-        <item>Ваше материальное положение</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_social_residence">
-        <item>Условия проживания</item>
-        <!-- male -->
-        <item>Условия проживания</item>
-        <!-- female -->
-        <item>Ваши условия проживания</item>
-        <!-- own_male -->
-        <item>Ваши условия проживания</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_social_car">
-        <item>Наличие машины</item>
-        <!-- male -->
-        <item>Наличие машины</item>
-        <!-- female -->
-        <item>Наличие у вас машины</item>
-        <!-- own_male -->
-        <item>Наличие у вас машины</item>
-        <!-- own_female -->
-    </string-array>
 
     <string name="form_habits">Привычки</string>
 
-    <string-array name="form_habits_smoking">
-        <item>Отношение к курению</item>
-        <!-- male -->
-        <item>Отношение к курению</item>
-        <!-- female -->
-        <item>Ваше отношение к курению</item>
-        <!-- own_male -->
-        <item>Ваше отношение к курению</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_habits_alcohol">
-        <item>Отношение к алкоголю</item>
-        <!-- male -->
-        <item>Отношение к алкоголю</item>
-        <!-- female -->
-        <item>Ваше отношение к алкоголю</item>
-        <!-- own_male -->
-        <item>Ваше отношение к алкоголю</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_habits_restaurants">
-        <item>Любимые рестораны</item>
-        <!-- male -->
-        <item>Любимые рестораны</item>
-        <!-- female -->
-        <item>Ваши любимые рестораны</item>
-        <!-- own_male -->
-        <item>Ваши любимые рестораны</item>
-        <!-- own_female -->
-    </string-array>
+     <string name="form_detail">Подробнее</string>
 
-    <string name="form_detail">Подробнее</string>
-
-    <string-array name="form_detail_about_dating">
-        <item>О первом свидании с девушкой</item>
-        <!-- male -->
-        <item>О идеальном первом свидании</item>
-        <!-- female -->
-        <item>Каким будет ваше первое свидание с девушкой?</item>
-        <!-- own_male -->
-        <item>Опишите идеальное свидание</item>
-        <!-- own_female -->
-    </string-array>
-    <string-array name="form_detail_archievements">
-        <item>Лучшие достижения в жизни</item>
-        <!-- male -->
-        <item>Лучшие достижения в жизни</item>
-        <!-- female -->
-        <item>Ваши лучшие достижения в жизни</item>
-        <!-- own_male -->
-        <item>Ваши лучшие достижения в жизни</item>
-        <!-- own_female -->
-    </string-array>
 
     <!-- Экран приглашений -->
     <string name="search_hint">Найти друзей</string>
@@ -448,7 +265,7 @@
     <string name="profile_form">Анкета</string>
     <string name="profile_gifts">Подарки</string>
     <string name="profile_actions">Действия</string>
-    <string name="profile_empty_form">Пользователь не заполнил анкету</string>    
+    <string name="profile_empty_form">Пользователь не заполнил анкету</string>
     <string name="profile_ask_form">Попросить заполнить анкету</string>
 
     <!--Leaders-->
@@ -465,4 +282,5 @@
     <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
     <string name="leaders_date">Хочу\nсюда!</string>
 
+    <string name="general_profile_error">Ошибка загрузки профиля</string>
 </resources>

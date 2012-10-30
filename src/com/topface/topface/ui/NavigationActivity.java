@@ -13,6 +13,7 @@ import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment;
@@ -62,7 +63,6 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         super.onPause();
         mThis = null;
     }
-
     /*
     *  обработчик кнопки открытия меню в заголовке фрагмента
     */
@@ -134,6 +134,11 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
             mFragmentSwitcher.showFragmentWithAnimation(fragmentId);
         }
     };
+
+    public void onDialogCancel () {
+        DatingFragment datingFragment = (DatingFragment)mFragmentManager.findFragmentById(R.id.fragment_container);
+        datingFragment.onDialogCancel();
+    }
 
     private FragmentSwitchListener mFragmentSwitchListener = new FragmentSwitchListener() {
         @Override
