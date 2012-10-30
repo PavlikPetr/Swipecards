@@ -1,17 +1,11 @@
 package com.topface.topface.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.View;
 import com.topface.topface.R;
-import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
@@ -19,7 +13,6 @@ import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchL
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 public class NavigationActivity extends FragmentActivity implements View.OnClickListener {
@@ -63,6 +56,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         super.onPause();
         mThis = null;
     }
+
     /*
     *  обработчик кнопки открытия меню в заголовке фрагмента
     */
@@ -135,8 +129,8 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         }
     };
 
-    public void onDialogCancel () {
-        DatingFragment datingFragment = (DatingFragment)mFragmentManager.findFragmentById(R.id.fragment_container);
+    public void onDialogCancel() {
+        DatingFragment datingFragment = (DatingFragment) mFragmentManager.findFragmentById(R.id.fragment_container);
         datingFragment.onDialogCancel();
     }
 
