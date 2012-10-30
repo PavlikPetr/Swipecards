@@ -223,7 +223,7 @@ public class AuthorizationManager {
         }
     }
 
-    private static final String VkNameUrl = "https://api.vkontakte.ru/method/getProfiles?uid=%s&access_token=%s";
+    private static final String VK_NAME_URL = "https://api.vk.com/method/getProfiles?uid=%s&access_token=%s";
     public static final int SUCCESS_GET_NAME = 0;
     public static final int FAILURE_GET_NAME = 1;
 
@@ -231,7 +231,7 @@ public class AuthorizationManager {
         (new Thread() {
             @Override
             public void run() {
-                String responseRaw = Http.httpGetRequest(String.format(VkNameUrl, user_id, token));
+                String responseRaw = Http.httpGetRequest(String.format(VK_NAME_URL, user_id, token));
                 try {
                     String result = "";
                     JSONObject response = new JSONObject(responseRaw);
@@ -289,5 +289,5 @@ public class AuthorizationManager {
             }
         });
     }
-    
+
 }

@@ -1,7 +1,6 @@
 package com.topface.topface.utils.social;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -29,6 +28,9 @@ public class WebAuthActivity extends Activity {
     public final static String USER_ID = "user_id";
     public final static String EXPIRES_IN = "expires_in";
     public final static String USER_NAME = "user_name";
+    public static final String VK_OUATH_DOMAIN = "https://oauth.vk.com";
+    public static final String VK_OUATH_REDIRECT = VK_OUATH_DOMAIN + "/blank.html";
+    public static final String VK_OAUTH_URL = VK_OUATH_DOMAIN + "/authorize";
 
     // Data
     private WebView mWebView;
@@ -55,7 +57,7 @@ public class WebAuthActivity extends Activity {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setVerticalScrollbarOverlay(true);
         mWebView.setVerticalFadingEdgeEnabled(true);
-        mWebView.setWebViewClient(new VkAuthClient(getApplicationContext(), mWebView, mProgressBar, new WebHandler()));
+        mWebView.setWebViewClient(new VkAuthClient(mWebView, new WebHandler()));
     }
 
 
@@ -114,10 +116,10 @@ public class WebAuthActivity extends Activity {
     public class VkAuthClient extends WebViewClient {
         // Data
         private Handler mHandler;
-        private String mUrl = "http://api.vkontakte.ru/oauth/authorize?client_id=" + Static.AUTH_VKONTAKTE_ID + "&scope=" + VK_PERMISSIONS + "&redirect_uri=http://api.vkontakte.ru/blank.html&display=touch&response_type=token";
+        private String mUrl = VK_OAUTH_URL + "?client_id=" + Static.AUTH_VK_ID + "&scope=" + VK_PERMISSIONS + "&redirect_uri=" + VK_OUATH_REDIRECT + "&display=touch&response_type=token";
 
 
-        public VkAuthClient(Context context, WebView webView, View progressIndicator, Handler handler) {
+        public VkAuthClient(WebView webView, Handler handler) {
             super();
             mHandler = handler;
             webView.loadUrl(mUrl);

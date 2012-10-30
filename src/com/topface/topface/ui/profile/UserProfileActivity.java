@@ -170,6 +170,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
             @Override
             public void onGlobalLayout() {
                 ViewTreeObserver obs = mIndicatorView.getViewTreeObserver();
+                //noinspection deprecation
                 obs.removeGlobalOnLayoutListener(this);
 
                 mIndicatorView.setButtonMeasure(R.id.btnUserPhoto, mUserPhoto.getMeasuredWidth());

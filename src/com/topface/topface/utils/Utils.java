@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
-import android.text.ClipboardManager;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
@@ -224,7 +223,7 @@ public class Utils {
             text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH));
 
         else
-            text = cal.get(Calendar.DAY_OF_MONTH) + " " +formatMonth(context, cal.get(Calendar.MONTH)) + " " + cal.get(Calendar.YEAR);
+            text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH)) + " " + cal.get(Calendar.YEAR);
 
         return text;
     }
@@ -435,11 +434,6 @@ public class Utils {
             default:
                 return R.drawable.battery_50;
         }
-    }
-
-    public static void copyTextToClipboard(String text, Context context) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        clipboard.setText(text);
     }
 
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {

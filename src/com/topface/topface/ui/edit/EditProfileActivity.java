@@ -365,11 +365,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                             CacheProfile.background_id));
             int w = getResources().getDrawable(R.drawable.edit_icon_photo).getIntrinsicWidth();
             int h = getResources().getDrawable(R.drawable.edit_icon_photo).getIntrinsicHeight();
-            ;
-            BitmapDrawable resized = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
-                    original, w, h, true));
 
-            return resized;
+            return new BitmapDrawable(
+                    getResources(),
+                    Bitmap.createScaledBitmap(original, w, h, true)
+            );
         }
 
         @Override

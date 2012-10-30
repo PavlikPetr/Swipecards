@@ -37,8 +37,6 @@ public class GeoLocationManager {
 
     public static enum LocationProviderType {GPS, AGPS, NONE}
 
-    ;
-
     public GeoPoint currentPoint;
     public String currentAddress;
 
@@ -328,8 +326,6 @@ public class GeoLocationManager {
 
 
                 }
-
-                ;
             }).start();
             currentPoint = point;
         }
@@ -338,9 +334,12 @@ public class GeoLocationManager {
             Point screenPoint = new Point();
             mapView.getProjection().toPixels(point, screenPoint);
             GeoPoint p = mapView.getProjection().fromPixels(screenPoint.x, screenPoint.y - mPinHeight);
-            final MapView.LayoutParams lParams = new MapView.LayoutParams(MapView.LayoutParams.WRAP_CONTENT,
-                    MapView.LayoutParams.WRAP_CONTENT, p, MapView.LayoutParams.BOTTOM_CENTER);
-            return lParams;
+            return new MapView.LayoutParams(
+                    MapView.LayoutParams.WRAP_CONTENT,
+                    MapView.LayoutParams.WRAP_CONTENT,
+                    p,
+                    MapView.LayoutParams.BOTTOM_CENTER
+            );
         }
 
         @Override

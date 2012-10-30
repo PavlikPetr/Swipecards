@@ -87,6 +87,7 @@ public class LockerView extends RelativeLayout {
         mTextView.setCompoundDrawablePadding(a.getDimensionPixelSize(
                 R.styleable.LockerView_android_drawablePadding, 0));
 
+        //noinspection deprecation
         mTextView.setBackgroundDrawable(a.getDrawable(R.styleable.LockerView_messageBackground));
 
         int padding = a.getDimensionPixelSize(R.styleable.LockerView_messagePadding, 0);

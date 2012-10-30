@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment {
 
-    public enum EditType {NAME, AGE, STATUS};
+    public enum EditType {NAME, AGE, STATUS}
 
     private EditType[] mTypes;
     private HashMap<EditType, String> hashChangedData = new HashMap<EditMainFormItemsFragment.EditType, String>();

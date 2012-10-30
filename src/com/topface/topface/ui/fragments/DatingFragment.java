@@ -105,7 +105,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Navigation Header
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
-        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_dating));        
+        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_dating));
         mNavigationHeader = view.findViewById(R.id.loNavigationBar);
         Button settingsButton = (Button) view.findViewById(R.id.btnNavigationSettingsBar);
         settingsButton.setVisibility(View.VISIBLE);
@@ -356,7 +356,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void fillUserInfo(SearchUser currUser) {
         // User Info
         lockControls();
-        mUserInfoCity.setText(currUser.city.name);
+        if (currUser.city != null) {
+            mUserInfoCity.setText(currUser.city.name);
+        }
         mUserInfoStatus.setText(currUser.status);
         mUserInfoName.setText(currUser.first_name + ", " + currUser.age);
         if (currUser.online)
