@@ -39,6 +39,7 @@ public class UserRequest extends AbstractApiRequest {
             throw new NullPointerException();
         }
         doNeedAlert(false);
+
     }
 
     @Override

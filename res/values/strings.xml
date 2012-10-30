@@ -169,6 +169,8 @@
 
     <string name="form_main">Main</string>
 
+    <string name="general_profile_error">Getting profile error</string>
+
     <string-array name="form_main_status">
         <item>Цель знакомства</item>
         <!-- all -->

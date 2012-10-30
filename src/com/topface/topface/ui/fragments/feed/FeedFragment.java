@@ -60,7 +60,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             updateData(false);
         }
 
-        new FloatBlock(getActivity(), (ViewGroup) view);
+        new FloatBlock(getActivity(), this, (ViewGroup) view);
 
         return view;
     }

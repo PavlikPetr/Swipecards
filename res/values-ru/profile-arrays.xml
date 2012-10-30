@@ -379,4 +379,187 @@
         <item>2</item>
     </integer-array>
 
+    <string-array name="form_main_status">
+        <item>@string/form_main_status_0</item>
+        <!-- all -->
+    </string-array>
+
+    <string-array name="form_main_character">
+        <item>@string/form_main_character_0</item>
+        <!-- male -->
+        <item>@string/form_main_character_1</item>
+        <!-- female -->
+        <item>@string/form_main_character_2</item>
+        <!-- own_male -->
+        <item>@string/form_main_character_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_main_communication">
+        <item>@string/form_main_communication_0</item>
+        <!-- all -->
+    </string-array>
+    <string-array name="form_main_height">
+        <item>@string/form_main_height_0</item>
+        <!-- male -->
+        <item>@string/form_main_height_1</item>
+        <!-- female -->
+        <item>@string/form_main_height_2</item>
+        <!-- own_male -->
+        <item>@string/form_main_height_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_main_weight">
+        <item>@string/form_main_weight_0</item>
+        <!-- male -->
+        <item>@string/form_main_weight_1</item>
+        <!-- female -->
+        <item>@string/form_main_weight_2</item>
+        <!-- own_male -->
+        <item>@string/form_main_weight_3</item>
+        <!-- own_female -->
+    </string-array>
+
+    <string-array name="form_physique_fitness">
+        <item>@string/form_physique_fitness_0</item>
+        <!-- male -->
+        <item>@string/form_physique_fitness_1</item>
+        <!-- female -->
+        <item>@string/form_physique_fitness_2</item>
+        <!-- own_male -->
+        <item>@string/form_physique_fitness_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_physique_hairs">
+        <item>@string/form_physique_hairs_0</item>
+        <!-- male -->
+        <item>@string/form_physique_hairs_1</item>
+        <!-- female -->
+        <item>@string/form_physique_hairs_2</item>
+        <!-- own_male -->
+        <item>@string/form_physique_hairs_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_physique_eyes">
+        <item>@string/form_physique_eyes_0</item>
+        <!-- male -->
+        <item>@string/form_physique_eyes_1</item>
+        <!-- female -->
+        <item>@string/form_physique_eyes_2</item>
+        <!-- own_male -->
+        <item>@string/form_physique_eyes_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_physique_breast">
+        <item>@string/form_physique_breast_0</item>
+        <!-- male -->
+        <item>@string/form_physique_breast_1</item>
+        <!-- female -->
+        <item>@string/form_physique_breast_2</item>
+        <!-- own_male -->
+        <item>@string/form_physique_breast_3</item>
+        <!-- own_female -->
+    </string-array>
+
+    <string-array name="form_social_marriage">
+        <item>@string/form_social_marriage_0</item>
+        <!-- male -->
+        <item>@string/form_social_marriage_1</item>
+        <!-- female -->
+        <item>@string/form_social_marriage_2</item>
+        <!-- own_male -->
+        <item>@string/form_social_marriage_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_social_education">
+        <item>@string/form_social_education_0</item>
+        <!-- male -->
+        <item>@string/form_social_education_1</item>
+        <!-- female -->
+        <item>@string/form_social_education_2</item>
+        <!-- own_male -->
+        <item>@string/form_social_education_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_social_finances">
+        <item>@string/form_social_finances_0</item>
+        <!-- male -->
+        <item>@string/form_social_finances_1</item>
+        <!-- female -->
+        <item>@string/form_social_finances_2</item>
+        <!-- own_male -->
+        <item>@string/form_social_finances_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_social_residence">
+        <item>@string/form_social_residence_0</item>
+        <!-- male -->
+        <item>@string/form_social_residence_1</item>
+        <!-- female -->
+        <item>@string/form_social_residence_2</item>
+        <!-- own_male -->
+        <item>@string/form_social_residence_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_social_car">
+        <item>@string/form_social_car_0</item>
+        <!-- male -->
+        <item>@string/form_social_car_1</item>
+        <!-- female -->
+        <item>@string/form_social_car_2</item>
+        <!-- own_male -->
+        <item>@string/form_social_car_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_habits_smoking">
+        <item>@string/form_habits_smoking_0</item>
+        <!-- male -->
+        <item>@string/form_habits_smoking_1</item>
+        <!-- female -->
+        <item>@string/form_habits_smoking_2</item>
+        <!-- own_male -->
+        <item>@string/form_habits_smoking_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_habits_alcohol">
+        <item>@string/form_habits_alcohol_0</item>
+        <!-- male -->
+        <item>@string/form_habits_alcohol_1</item>
+        <!-- female -->
+        <item>@string/form_habits_alcohol_2</item>
+        <!-- own_male -->
+        <item>@string/form_habits_alcohol_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_habits_restaurants">
+        <item>@string/form_habits_restaurants_0</item>
+        <!-- male -->
+        <item>@string/form_habits_restaurants_1</item>
+        <!-- female -->
+        <item>@string/form_habits_restaurants_2</item>
+        <!-- own_male -->
+        <item>@string/form_habits_restaurants_3</item>
+        <!-- own_female -->
+    </string-array>
+
+    <string-array name="form_detail_about_dating">
+        <item>@string/form_detail_about_dating_0</item>
+        <!-- male -->
+        <item>@string/form_detail_about_dating_1</item>
+        <!-- female -->
+        <item>@string/form_detail_about_dating_2</item>
+        <!-- own_male -->
+        <item>@string/form_detail_about_dating_3</item>
+        <!-- own_female -->
+    </string-array>
+    <string-array name="form_detail_archievements">
+        <item>@string/form_detail_archievements_0</item>
+        <!-- male -->
+        <item>@string/form_detail_archievements_1</item>
+        <!-- female -->
+        <item>@string/form_detail_archievements_2</item>
+        <!-- own_male -->
+        <item>@string/form_detail_archievements_3</item>
+        <!-- own_female -->
+    </string-array>
+
 </resources>
