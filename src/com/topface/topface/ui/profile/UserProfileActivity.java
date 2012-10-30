@@ -149,6 +149,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
         lockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
         RetryView retryBtn = new RetryView(getApplicationContext());
         retryBtn.init(getLayoutInflater());
+        retryBtn.setErrorMsg(getString(R.string.general_profile_error));
         retryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,6 +187,12 @@ public class UserProfileActivity extends BaseFragmentActivity {
 
     private void getUserProfile() {
         mLockerView.setVisibility(View.VISIBLE);
+        if(mUserId < 1) {
+            mLockerView.setVisibility(View.INVISIBLE);
+            lockScreen.setVisibility(View.VISIBLE);
+            lockScreen.findViewById(R.id.retry).setVisibility(View.GONE);
+            return;
+        }
         UserRequest userRequest = new UserRequest(mUserId, getApplicationContext());
         userRequest.callback(new ApiHandler() {
             @Override
@@ -229,6 +236,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
                     public void run() {
 //                        Toast.makeText(UserProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         lockScreen.setVisibility(View.VISIBLE);
+                        lockScreen.findViewById(R.id.retry).setVisibility(View.VISIBLE);
                     }
                 });
             }

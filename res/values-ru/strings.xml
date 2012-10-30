@@ -282,4 +282,5 @@
     <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
     <string name="leaders_date">Хочу\nсюда!</string>
 
+    <string name="general_profile_error">Ошибка загрузки профиля</string>
 </resources>
