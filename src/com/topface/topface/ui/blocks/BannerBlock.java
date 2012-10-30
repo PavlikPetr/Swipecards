@@ -1,12 +1,15 @@
 package com.topface.topface.ui.blocks;
 
 import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.adfonic.android.AdfonicView;
 import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.Data;
@@ -17,11 +20,12 @@ import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.BaseApiHandler;
-import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.InviteActivity;
 import com.topface.topface.ui.fragments.TopsFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.Device;
 
 import java.util.HashMap;
@@ -35,32 +39,34 @@ import java.util.regex.Pattern;
 public class BannerBlock {
 
     private Activity mActivity;
+    private Fragment mFragment;
     private ImageView mBannerView;
     private Map<String, String> mBannersMap = new HashMap<String, String>();
 
-    public BannerBlock(Activity activity, ViewGroup layout) {
+    public BannerBlock(Activity activity, Fragment fragment, ViewGroup layout) {
         super();
         mActivity = activity;
+        mFragment = fragment;
         mBannerView = (ImageView) layout.findViewById(R.id.ivBanner);
         setBannersMap();
 
         if (isCorrectResolution() &&
-                mBannersMap.containsKey(mActivity.getClass().toString())) {
+                mBannersMap.containsKey(mFragment.getClass().toString())) {
             loadBanner();
         }
     }
 
     private void setBannersMap() {
-        //TODO: fix intents
         mBannersMap.put(LikesFragment.class.toString(), BannerRequest.LIKE);
         mBannersMap.put(MutualFragment.class.toString(), BannerRequest.LIKE);
-        mBannersMap.put(ChatActivity.class.toString(), BannerRequest.INBOX);
+        mBannersMap.put(DialogsFragment.class.toString(), BannerRequest.INBOX);
         mBannersMap.put(TopsFragment.class.toString(), BannerRequest.TOP);
+        mBannersMap.put(VisitorsFragment.class.toString(), BannerRequest.LIKE);
     }
 
     private void loadBanner() {
         BannerRequest bannerRequest = new BannerRequest(mActivity.getApplicationContext());
-        bannerRequest.place = mBannersMap.get(mActivity.getClass().toString());
+        bannerRequest.place = mBannersMap.get(mFragment.getClass().toString());
         bannerRequest.callback(new BaseApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -87,7 +93,7 @@ public class BannerBlock {
                 if (deviceWidth > imageWidth) {
                     ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
                     params.height = (int) ((deviceWidth / imageWidth) * (float) loadedImage.getHeight());
-                    mBannerView.setLayoutParams(params);
+                    mBannerView.setLayoutParams(params);                    
                     mBannerView.invalidate();
                 }
             }
