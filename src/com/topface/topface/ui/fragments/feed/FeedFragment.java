@@ -70,7 +70,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public void onResume() {
     	super.onResume();
-    	mFloatBlock.onResume();
+    	mFloatBlock.onResume();    	
     }
     
     @Override

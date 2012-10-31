@@ -3,25 +3,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-        >
+                android:layout_width="wrap_content">
 
-    <com.topface.topface.ui.views.UniversalFrameImageView
-            android:id="@+id/leaderAlbumPhoto"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            topface:frameSrc="@drawable/leaders_buy_frame"
-            android:scaleType="centerCrop"
-            />
-
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/leaderAlbumPhoto"   
+            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"         
+            ivr:postProcessor="mask"
+            ivr:clipMask="@drawable/user_mask_album"
+            android:scaleType="centerInside"
+            android:background="@drawable/user_frame_album_center"
+            android:layout_width="97dp"
+            android:layout_height="107dp"            
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_centerInParent="true"/>
+    
+    <ImageView
+            android:id="@+id/ivAddPhoto"
+            android:layout_width="97dp"
+            android:layout_height="107dp"    
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"        
+            android:background="@drawable/profile_add_photo_selector"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+    
     <ImageView
             android:id="@+id/checkbox"
             android:layout_height="25dp"
             android:layout_width="25dp"
             android:src="@drawable/ic_leaders_checkbox"
-            android:layout_marginTop="42dp"
-            android:layout_marginLeft="5dp"
-            android:visibility="gone"
-            />
+            android:layout_alignBottom="@id/leaderAlbumPhoto"
+            android:layout_alignLeft="@id/leaderAlbumPhoto"
+            android:layout_marginBottom="10dp"            
+            android:visibility="gone"/>
 
 </RelativeLayout>

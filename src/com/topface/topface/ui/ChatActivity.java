@@ -339,7 +339,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 							public void run() {
 								if (confirm.completed) {
 									History history = new History(response);
-									history.target = FeedDialog.USER_MESSAGE;
+//									history.target = FeedDialog.USER_MESSAGE;
 									mAdapter.addSentMessage(history);
 									mAdapter.notifyDataSetChanged();
 									mEditBox.getText().clear();
@@ -406,7 +406,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 							@Override
 							public void run() {
 								History history = new History(response);
-								history.target = FeedDialog.USER_MESSAGE;
+//						E;
 								mAdapter.addSentMessage(history);
 								mAdapter.notifyDataSetChanged();
 								mLoadingLocker.setVisibility(View.GONE);
@@ -457,7 +457,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 							public void run() {
 								if (confirm.completed) {
 									History history = new History(response);
-									history.target = FeedDialog.USER_MESSAGE;
+//									history.target = FeedDialog.USER_MESSAGE;
 									mAdapter.addSentMessage(history);
 									mAdapter.notifyDataSetChanged();
 								} else {
@@ -564,7 +564,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 										mSwapControl.snapToScreen(0);
 									mIsAddPanelOpened = false;
 									History history = new History(response);
-									history.target = FeedDialog.USER_MESSAGE;
+//									history.target = FeedDialog.USER_MESSAGE;
 									mAdapter.addSentMessage(history);
 									mAdapter.notifyDataSetChanged();
 								} else {
