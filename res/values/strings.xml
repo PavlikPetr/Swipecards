@@ -84,8 +84,7 @@
     <string name="filter_filter">Filter</string>
     <string name="filter_girl">Girls</string>
     <string name="filter_boy">Guys</string>
-    <string name="filter_from">From</string>
-    <string name="filter_to">to</string>
+    <string name="filter_age_string">From %1$d to %2$d</string>
     <string name="filter_in">In</string>
     <string name="filter_only_online">Online only</string>
     <string name="filter_only_beautiful">Beatiful only</string>
