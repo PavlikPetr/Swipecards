@@ -41,7 +41,7 @@ public class Options extends AbstractData {
      */
     public String float_type_like = FLOAT_TYPE_BANNER;
     /**
-     * Показывать баннеры или лидеров на странице чатов
+     * Показывать баннеры или лидеров на странице диалогов
      */
     public String float_type_dialogs = FLOAT_TYPE_BANNER;
     /**

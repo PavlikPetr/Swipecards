@@ -13,7 +13,7 @@
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
     </string>
-    <string name="general_vk_album_name">    Topface http://vk.com/app2257829</string>
+    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопирован</string>
 
     <string name="general_switch_on">вкл.</string>
@@ -22,7 +22,7 @@
     <!-- Auth Activity -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
     <string name="auth_btn_fb">Войти через Facebook</string>
-    <string name="retry">{{refresh}} Повторить попытку</string>
+    <string name="retry">Повторить попытку</string>
 
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_dating">Знакомства</string>
@@ -86,9 +86,8 @@
     <string name="filter_filter">Фильтр</string>
     <string name="filter_girl">Девушки</string>
     <string name="filter_boy">Парни</string>
-    <string name="filter_from">От</string>
-    <string name="filter_to">до</string>
-    <string name="filter_in">В городе</string>
+    <string name="filter_age_string">От %1$d до %2$d</string>
+    <string name="filter_in">Город</string>
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_only_beautiful">Только красивые</string>
     <string name="filter_extra_parameters">Дополнительные параметры</string>
@@ -96,7 +95,7 @@
     <string name="filter_age">Возраст</string>
     <string name="filter_online">Онлайн</string>
     <string name="filter_all">Все</string>
-    <string name="filter_cities_all">Всем городам</string>
+    <string name="filter_cities_all">По всем городам</string>
     <string name="filter_select_city">Выбор города</string>
 
 
@@ -182,7 +181,7 @@
 
     <string name="form_habits">Привычки</string>
 
-     <string name="form_detail">Подробнее</string>
+    <string name="form_detail">Подробнее</string>
 
 
     <!-- Экран приглашений -->

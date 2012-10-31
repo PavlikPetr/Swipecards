@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.topface.topface.R;
 
 public class RetryView extends LinearLayout {
+    public static final String REFRESH_TEMPLATE = "{{refresh}} ";
     private IllustratedTextView mRetryBtn;
     private TextView mErrorMsg;
 
@@ -22,6 +23,7 @@ public class RetryView extends LinearLayout {
     public void init(LayoutInflater inflater) {
         inflater.inflate(R.layout.btn_retry, this);
         mRetryBtn = (IllustratedTextView) findViewById(R.id.retry);
+        mRetryBtn.setText(REFRESH_TEMPLATE + mRetryBtn.getText());
         mErrorMsg = (TextView) findViewById(R.id.err_msg);
     }
 
@@ -35,7 +37,7 @@ public class RetryView extends LinearLayout {
         mErrorMsg.setText(errorMsg);
     }
 
-    public void setMessageVisibility () {
+    public void setMessageVisibility() {
         mErrorMsg.setVisibility(View.VISIBLE);
         mRetryBtn.setVisibility(View.GONE);
     }

@@ -1,8 +1,7 @@
 package com.topface.topface.ui.adapters;
 
-import android.content.ClipData;
-import android.text.ClipboardManager;
 import android.content.Context;
+import android.text.ClipboardManager;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -210,11 +209,11 @@ public class ChatListAdapter extends BaseAdapter {
                     @Override
                     public boolean onLongClick(View v) {
 
-                        ClipboardManager clipboard = (ClipboardManager)
-                                mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-//                        ClipData clip = ClipData.newPlainText("", holder.message.getText().toString());
+                        @SuppressWarnings("deprecation")
+                        ClipboardManager clipboard =
+                                (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                         clipboard.setText(holder.message.getText());
-                        Toast.makeText(mContext,R.string.general_msg_copied,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.general_msg_copied, Toast.LENGTH_SHORT).show();
                         return false;  //To change body of implemented methods use File | Settings | File Templates.
                     }
                 });
@@ -405,15 +404,21 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     private void prepare(LinkedList<History> dataList) {
-    	// because of stackFromBottom of PullToRefreshListView does not work
-    	Collections.reverse(dataList);
-    	
+        // because of stackFromBottom of PullToRefreshListView does not work
+        Collections.reverse(dataList);
+
         SimpleDateFormat dowFormat = new SimpleDateFormat("EEEE");
 
         long day = 1000 * 60 * 60 * 24;
         long numb = Data.midnight - day * 5;
 
-        mDataList = new LinkedList<History>();
+        if (mDataList != null) {
+        	mDataList.clear();
+        } else {
+        	mDataList = new LinkedList<History>();
+        }
+        
+        mItemLayoutList.clear();
 
         int prev_target = -1;
         long prev_date = 0;
@@ -542,34 +547,34 @@ public class ChatListAdapter extends BaseAdapter {
 
     private void mapAddressDetection(final History history, final TextView tv,
                                      final ProgressBar prgsBar) {
-    	if (history.geo != null) {
-	        final String key = history.geo.getCoordinates().toString();
-	        String cachedAddress = mAddressesCache.get(key);
-	
-	        if (cachedAddress != null) {
-	            tv.setText(cachedAddress);
-	            return;
-	        }
-	
-	        prgsBar.setVisibility(View.VISIBLE);
-	        new Thread(new Runnable() {
-	            @Override
-	            public void run() {
-	                final String address = OsmManager.getAddress(
-	                        history.geo.getCoordinates().getLatitude(),
-	                        history.geo.getCoordinates().getLongitude()
-	                );
-	                mAddressesCache.put(key, address);
-	                tv.post(new Runnable() {
-	                    @Override
-	                    public void run() {
-	                        tv.setText(address);
-	                        prgsBar.setVisibility(View.GONE);
-	                    }
-	                });
-	            }
-	        }).start();
-    	}
+        if (history.geo != null) {
+            final String key = history.geo.getCoordinates().toString();
+            String cachedAddress = mAddressesCache.get(key);
+
+            if (cachedAddress != null) {
+                tv.setText(cachedAddress);
+                return;
+            }
+
+            prgsBar.setVisibility(View.VISIBLE);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final String address = OsmManager.getAddress(
+                            history.geo.getCoordinates().getLatitude(),
+                            history.geo.getCoordinates().getLongitude()
+                    );
+                    mAddressesCache.put(key, address);
+                    tv.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            tv.setText(address);
+                            prgsBar.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            }).start();
+        }
 
     }
 

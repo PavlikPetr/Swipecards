@@ -56,17 +56,13 @@
                         android:dividerHeight="0dp"
                         android:fadeScrollbars="true"
                         android:fadingEdge="none"/>
-
-                <ImageView
-                        android:id="@+id/ivBanner"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="visible"/>
+                
+                <include layout="@layout/banner"/>
             </LinearLayout>
 
         </RelativeLayout>
 
-        <include layout="@layout/banner"/>
+        
     </LinearLayout>
 
     <ImageView style="@style/HeaderShadow"/>

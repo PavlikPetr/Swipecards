@@ -11,18 +11,17 @@ public class SwapAnimation extends Animation {
     private boolean mWasEndedAlready = false;
     private static final int DURATION = 200;
 
-    public SwapAnimation(View view, int hiddenView) {
+    public SwapAnimation(View view, View hiddenView) {
         setDuration(DURATION);
 
         mAnimatedView = view;
-        View mHiddenView = view.findViewById(hiddenView);
 
-        if (mHiddenView == null) {
+        if (hiddenView == null) {
             throw new NullPointerException();
         }
 
         mStartY = mAnimatedView.getPaddingTop();
-        mEndY = (mStartY == Static.HEADER_SHADOW_SHIFT ? (0 - mHiddenView.getHeight() + Static.HEADER_SHADOW_SHIFT) : Static.HEADER_SHADOW_SHIFT);
+        mEndY = (mStartY == Static.HEADER_SHADOW_SHIFT ? (0 - hiddenView.getHeight() + Static.HEADER_SHADOW_SHIFT) : Static.HEADER_SHADOW_SHIFT);
     }
 
     @Override

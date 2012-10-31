@@ -13,6 +13,7 @@ import android.view.Window;
 import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -35,11 +36,14 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private SearchCitiesRequest searchCitiesRequest;
     // Constants
     public static final int INTENT_CITY_SEARCH_ACTIVITY = 100;
+    public static final int INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY = 101;
     public static final String INTENT_CITY_ID = "city_id";
     public static final String INTENT_CITY_NAME = "city_name";
     public static final String INTENT_CITY_FULL_NAME = "city_full";
 
-
+    private String mAllCitiesString;
+    private int mRequestKey;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,10 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
+        
+        mRequestKey = getIntent().getIntExtra(Static.INTENT_REQUEST_KEY, 0);
+        mAllCitiesString = getResources().getString(R.string.filter_cities_all);
+        
         // Data
         mTopCitiesList = new LinkedList<City>();
         mDataList = new LinkedList<City>();
@@ -237,7 +245,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
 
     private void fillData(LinkedList<City> citiesList) {
-        mDataList.clear();
+        mDataList.clear();        
+        if (mRequestKey == INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY)
+        	mDataList.add(City.createCity(City.ALL_CITIES,mAllCitiesString,mAllCitiesString));
         mDataList.addAll(citiesList);
         mNameList.clear();
         for (City city : mDataList)

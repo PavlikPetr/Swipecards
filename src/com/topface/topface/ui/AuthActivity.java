@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import com.topface.topface.C2DMUtils;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.ReAuthReceiver;
@@ -46,7 +47,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     private boolean mIsAuthorized = false;
 
     public static AuthActivity mThis;
-    public static final int BAN_CODE = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,16 +61,16 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
         RelativeLayout authContainer = (RelativeLayout) findViewById(R.id.authContainer);
         authContainer.addView(mRetryView);
-        BroadcastReceiver mReceiver = new BroadcastReceiver(){
+        BroadcastReceiver mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,-1);
+                int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
                 reAuthAfterInternetConnected(mConnectionType);
             }
         };
         IntentFilter filterReauthBan = new IntentFilter();
         filterReauthBan.addAction(ConnectionChangeReceiver.REAUTH);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,filterReauthBan);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filterReauthBan);
 
         mAuthorizationManager = AuthorizationManager.getInstance(this);
         mAuthorizationManager.setOnAuthorizationHandler(new Handler() {
@@ -146,7 +146,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
-        if(resultCode!=RESULT_CANCELED)
+        if (resultCode != RESULT_CANCELED)
             hideButtons();
         else showButtons();
     }
@@ -186,7 +186,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 mProgressBar.setVisibility(View.VISIBLE);
             }
         }
-        if(type == ConnectionChangeReceiver.CONNECTION_OFFLINE) mIsAuthorized = false;
+        if (type == ConnectionChangeReceiver.CONNECTION_OFFLINE) mIsAuthorized = false;
     }
 
     private void showButtons() {
@@ -212,7 +212,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void openNavigationActivity() {
-        ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+        ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 
         List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
         if (!mFromAuthorizationReceiver || (taskList.get(0).numActivities == 1 &&
@@ -235,13 +235,15 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 Debug.log(this, "Auth");
                 Auth auth = Auth.parse(response);
                 Data.saveSSID(getApplicationContext(), auth.ssid);
+                C2DMUtils.init(AuthActivity.this);
+                mIsAuthorized = true;
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         getProfile();
                     }
                 });
-                mIsAuthorized = true;
             }
 
             @Override
@@ -278,17 +280,16 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                final int finalCodeError = codeError;
                 final ApiResponse finalResponse = response;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(finalResponse.code == ApiResponse.BAN)
+                        if (finalResponse.code == ApiResponse.BAN)
                             showButtons();
                         else {
                             authorizationFailed();
                             Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
-                                   Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
