@@ -2,6 +2,7 @@ package com.topface.topface.ui.blocks;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.ViewGroup;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.TopsFragment;
@@ -23,6 +24,7 @@ public class FloatBlock {
     private Activity mActivity;
     private Fragment mFragment;
     private LeadersBlock mLeaders;
+    private BannerBlock mBanner;
     private final ViewGroup mLayout;
 
     public FloatBlock(Activity activity, Fragment fragment, ViewGroup layoutView) {
@@ -41,7 +43,7 @@ public class FloatBlock {
         if (mBannersMap.containsKey(currentFragment)) {
             String floatType = mBannersMap.get(currentFragment);
             if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
-                new BannerBlock(mActivity,mFragment, mLayout);
+            	mBanner = new BannerBlock(mActivity,mFragment, mLayout);
             } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
                 mLeaders = new LeadersBlock(mActivity, mLayout);
             }
@@ -62,5 +64,19 @@ public class FloatBlock {
         if (mLeaders != null) {
             mLeaders.loadLeaders();
         }
+    }
+    
+    public void onResume() {
+    	if (mBanner != null) mBanner.onResume();
+    }
+    
+    public void onPause() {
+    	if (mBanner != null) mBanner.onPause();
+    }
+    
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    	if (mBanner != null) 
+    		return mBanner.onKeyDown(keyCode, event);
+    	return false;
     }
 }

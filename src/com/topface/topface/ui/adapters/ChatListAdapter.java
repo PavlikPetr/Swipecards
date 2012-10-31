@@ -412,7 +412,13 @@ public class ChatListAdapter extends BaseAdapter {
         long day = 1000 * 60 * 60 * 24;
         long numb = Data.midnight - day * 5;
 
-        mDataList = new LinkedList<History>();
+        if (mDataList != null) {
+        	mDataList.clear();
+        } else {
+        	mDataList = new LinkedList<History>();
+        }
+        
+        mItemLayoutList.clear();
 
         int prev_target = -1;
         long prev_date = 0;

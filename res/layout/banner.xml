@@ -2,7 +2,6 @@
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
     <ImageView
-        xmlns:android="http://schemas.android.com/apk/res/android"    	
 		android:id="@+id/ivBanner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -12,20 +11,26 @@
     
     <com.google.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"         
-        android:id="@+id/adView"
+        android:id="@+id/adMobView"
 		android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         ads:adUnitId="a1506c2c0d9899a"
         ads:adSize="BANNER"
-        ads:testDevices="TEST_EMULATOR, TEST_DEVICE_ID"
-        ads:loadAdOnCreate="false"/>
+        ads:testDevices="0009fefc45872f"
+        ads:loadAdOnCreate="false"
+        android:visibility="gone"/>
     
     <com.adfonic.android.AdfonicView
        xmlns:adfonic="http://schemas.android.com/apk/lib/com.adfonic.android"
-       android:id="@+id/adfonicView"
+       android:id="@+id/adFonicView"
        android:layout_width="wrap_content"
-       android:layout_height="wrap_content"       
-       adfonic:refresh_ad="false"       
-       adfonic:adfonic_adslot_id="ac2d82c3-75d7-46d6-afa3-808ee1140706"       
-       />
+       android:layout_height="wrap_content"
+       adfonic:refresh_ad="false"
+       android:visibility="gone"/>
+        
+    <ru.wapstart.plus1.sdk.Plus1BannerView
+       android:id="@+id/adPlus1View"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:visibility="gone"/>
 </merge>

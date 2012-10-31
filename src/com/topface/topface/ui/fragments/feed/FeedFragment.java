@@ -40,6 +40,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected boolean mIsUpdating;
     private RetryView updateErrorMessage;
     private RelativeLayout mContainer;
+    
+    private FloatBlock mFloatBlock;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -60,11 +62,23 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             updateData(false);
         }
 
-        new FloatBlock(getActivity(), this, (ViewGroup) view);
+        mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
 
         return view;
     }
 
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	mFloatBlock.onResume();
+    }
+    
+    @Override
+    public void onPause() {
+    	super.onPause();
+    	mFloatBlock.onPause();
+    }
+    
     protected void init() {
 
     }
