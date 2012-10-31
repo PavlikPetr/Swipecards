@@ -5,17 +5,15 @@
                 android:background="@drawable/im_list_bkgrd">
 
     <!-- header bar -->
-    <FrameLayout
+    <include
             android:id="@+id/loNavigationBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            layout="@layout/bar_navigation_header"/>
 
-        <include layout="@layout/bar_navigation_header"/>
-    </FrameLayout>
 
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:id="@+id/loControlsGroup"
             android:layout_below="@id/loNavigationBar"
             android:orientation="vertical">
 

@@ -68,7 +68,7 @@
     <Button
             android:id="@+id/btnFragmentMutual"
             android:layout_below="@id/btnFragmentLikes"
-            android:text="@string/dashbrd_btn_sympathy"
+            android:text="@string/mutual_header_title"
             android:drawableLeft="@drawable/topface_sympathy"
             style="@style/LeftMenuButtons"/>
 

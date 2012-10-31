@@ -4,14 +4,16 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.R;
 import com.topface.topface.Recycle;
-import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiHandler;
@@ -20,6 +22,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.profile.UserProfileActivity;
@@ -27,7 +30,6 @@ import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
-import com.topface.topface.utils.SwapAnimation;
 import org.json.JSONObject;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
@@ -270,32 +272,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     @SuppressWarnings("deprecation")
     protected void initFilter(View view) {
-        final View controlGroup = view.findViewById(R.id.loControlsGroup);
-        view.findViewById(R.id.loToolsBar).setVisibility(View.VISIBLE);
-        View showToolsBarButton = view.findViewById(R.id.btnNavigationSettingsBar);
-        showToolsBarButton.setVisibility(View.VISIBLE);
-        showToolsBarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                controlGroup.startAnimation(new SwapAnimation(controlGroup, R.id.loToolsBar));
-            }
-        });
-
-        final View toolsBar = view.findViewById(R.id.loToolsBar);
-        ViewTreeObserver vto = toolsBar.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int y = toolsBar.getMeasuredHeight();
-                if (y != 0) {
-                    y += Static.HEADER_SHADOW_SHIFT;
-                    controlGroup.setPadding(controlGroup.getPaddingLeft(), -y, controlGroup.getPaddingRight(), controlGroup.getPaddingBottom());
-                    ViewTreeObserver obs = controlGroup.getViewTreeObserver();
-                    obs.removeGlobalOnLayoutListener(this);
-                }
-            }
-        });
-
+        new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.btnNavigationSettingsBar, R.id.loToolsBar);
         initDoubleButton(view);
     }
 

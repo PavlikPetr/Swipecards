@@ -13,7 +13,7 @@
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
     </string>
-    <string name="general_vk_album_name">    Topface http://vk.com/app2257829</string>
+    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопирован</string>
 
     <string name="general_switch_on">вкл.</string>
@@ -27,7 +27,8 @@
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_dating">Знакомства</string>
     <string name="dashbrd_btn_likes">Я нравлюсь</string>
-    <string name="dashbrd_btn_sympathy">Симпатия</string>    <!--TODO:в документе здесь "Взаимно", а sympathy_mutual вообще нет-->
+    <string name="dashbrd_btn_sympathy">Симпатия</string>
+    <!--TODO:в документе здесь "Взаимно", а sympathy_mutual вообще нет-->
     <string name="dashbrd_btn_sympathy_mutual">Взаимно</string>
     <string name="dashbrd_btn_chat">Диалоги</string>
     <string name="dashbrd_btn_tops">Топ</string>
@@ -86,8 +87,7 @@
     <string name="filter_filter">Фильтр</string>
     <string name="filter_girl">Девушки</string>
     <string name="filter_boy">Парни</string>
-    <string name="filter_from">От</string>
-    <string name="filter_to">до</string>
+    <string name="filter_age_string">От %1$d до %2$d</string>
     <string name="filter_in">В городе</string>
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_only_beautiful">Только красивые</string>
@@ -182,7 +182,7 @@
 
     <string name="form_habits">Привычки</string>
 
-     <string name="form_detail">Подробнее</string>
+    <string name="form_detail">Подробнее</string>
 
 
     <!-- Экран приглашений -->

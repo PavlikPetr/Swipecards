@@ -9,11 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -25,6 +21,7 @@ import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.TopRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.TopsGridAdapter;
+import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.LockerView;
@@ -62,9 +59,12 @@ public class TopsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.ac_tops, null);
 
         // Navigation bar
-        mNavBarController = new NavigationBarController((ViewGroup)view.findViewById(R.id.loNavigationBar));
+        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
-        ((TextView)view.findViewById(R.id.tvNavigationTitle)).setText(R.string.tops_title);
+        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.tops_title);
+
+        //Инициализируем кнопку фильтров
+        new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.btnNavigationSettingsBar, R.id.toolsBar);
 
         // Data
         Data.topsList = new LinkedList<Top>();
@@ -286,4 +286,5 @@ public class TopsFragment extends BaseFragment {
             mBtnDouble.setClickable(true);
         }
     }
+
 }

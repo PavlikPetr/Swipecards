@@ -373,12 +373,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private String buildAgeString() {
-        StringBuilder strBuilder = new StringBuilder();
-        strBuilder.append(getResources().getString(R.string.filter_from)).append(" ")
-                .append(mFilter.age_start).append(" ");
-        strBuilder.append(getResources().getString(R.string.filter_to)).append(" ")
-                .append(mFilter.age_end);
-        return strBuilder.toString();
+        return getString(R.string.filter_age_string, mFilter.age_start, mFilter.age_end);
     }
 
     int leftPosition;
@@ -591,33 +586,33 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     @Override
     protected void lockUi() {
-    	mBackButton.setEnabled(false);
-    	mCheckGirl.setEnabled(false);
-    	mCheckBoy.setEnabled(false);
-    	mAgeFrame.setEnabled(false);
-    	mCityFrame.setEnabled(false);
-    	mSwitchOnline.setEnabled(false);
-    	mSwitchBeautifull.setEnabled(false);
-    	mXStatusFrame.setEnabled(false);
-    	mMarriageFrame.setEnabled(false);
-    	mCharacterFrame.setEnabled(false);
-    	mAlcoholFrame.setEnabled(false);
-    	mShowOffFrame.setEnabled(false);
+        mBackButton.setEnabled(false);
+        mCheckGirl.setEnabled(false);
+        mCheckBoy.setEnabled(false);
+        mAgeFrame.setEnabled(false);
+        mCityFrame.setEnabled(false);
+        mSwitchOnline.setEnabled(false);
+        mSwitchBeautifull.setEnabled(false);
+        mXStatusFrame.setEnabled(false);
+        mMarriageFrame.setEnabled(false);
+        mCharacterFrame.setEnabled(false);
+        mAlcoholFrame.setEnabled(false);
+        mShowOffFrame.setEnabled(false);
     }
 
     @Override
     protected void unlockUi() {
-    	mBackButton.setEnabled(true);
-    	mCheckGirl.setEnabled(true);
-    	mCheckBoy.setEnabled(true);
-    	mAgeFrame.setEnabled(true);
-    	mCityFrame.setEnabled(true);
-    	mSwitchOnline.setEnabled(true);
-    	mSwitchBeautifull.setEnabled(true);
-    	mXStatusFrame.setEnabled(true);
-    	mMarriageFrame.setEnabled(true);
-    	mCharacterFrame.setEnabled(true);
-    	mAlcoholFrame.setEnabled(true);
-    	mShowOffFrame.setEnabled(true);
+        mBackButton.setEnabled(true);
+        mCheckGirl.setEnabled(true);
+        mCheckBoy.setEnabled(true);
+        mAgeFrame.setEnabled(true);
+        mCityFrame.setEnabled(true);
+        mSwitchOnline.setEnabled(true);
+        mSwitchBeautifull.setEnabled(true);
+        mXStatusFrame.setEnabled(true);
+        mMarriageFrame.setEnabled(true);
+        mCharacterFrame.setEnabled(true);
+        mAlcoholFrame.setEnabled(true);
+        mShowOffFrame.setEnabled(true);
     }
 }
