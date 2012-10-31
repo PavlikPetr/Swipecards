@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.City;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiHandler;
@@ -363,7 +364,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private String buildCityString() {
-        if (mFilter.city_id == 0) {
+        if (mFilter.city_id == City.ALL_CITIES) {
             return getResources().getString(R.string.filter_cities_all);
         } else {
             StringBuilder strBuilder = new StringBuilder();
@@ -505,7 +506,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 break;
             case R.id.loCity:
                 Intent intent = new Intent(getActivity().getApplicationContext(), CitySearchActivity.class);
-                startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+                startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY);
                 break;
             case R.id.loOnline:
                 mSwitchOnline.doSwitch();
@@ -565,12 +566,13 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 }
 
                 hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, selectedId));
-            } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
+            } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY) {
                 int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
                 String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
 
                 if (city_id == 0) {
                     mFilter.geo = false;
+                    mFilter.city_id = city_id;
                 } else {
                     mFilter.city_id = city_id;
                     mFilter.city_name = city_name;
