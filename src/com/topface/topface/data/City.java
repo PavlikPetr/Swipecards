@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 
 public class City extends AbstractData {
+	public final static int ALL_CITIES = 0;
+	
     /**
      * уникальных код города
      */
@@ -23,6 +25,12 @@ public class City extends AbstractData {
 
     public City(JSONObject city) {
         super(city);
+    }
+    
+    private City(int id,String name,String full) {
+    	this.id = id;
+    	this.name = name;
+    	this.full = full;
     }
 
     protected void fillData(JSONObject city) {
@@ -46,4 +54,9 @@ public class City extends AbstractData {
 
         return cities;
     }
+    
+    public static City createCity(int id,String name, String full) {    	
+    	return new City(id,name,full);
+    }
+    		
 }

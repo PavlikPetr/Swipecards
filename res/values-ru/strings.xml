@@ -88,7 +88,7 @@
     <string name="filter_girl">Девушки</string>
     <string name="filter_boy">Парни</string>
     <string name="filter_age_string">От %1$d до %2$d</string>
-    <string name="filter_in">В городе</string>
+    <string name="filter_in">Город</string>
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_only_beautiful">Только красивые</string>
     <string name="filter_extra_parameters">Дополнительные параметры</string>
@@ -96,7 +96,7 @@
     <string name="filter_age">Возраст</string>
     <string name="filter_online">Онлайн</string>
     <string name="filter_all">Все</string>
-    <string name="filter_cities_all">Всем городам</string>
+    <string name="filter_cities_all">По всем городам</string>
     <string name="filter_select_city">Выбор города</string>
 
 
