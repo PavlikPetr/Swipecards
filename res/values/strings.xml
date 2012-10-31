@@ -23,7 +23,7 @@
     <!-- Auth Activity -->
     <string name="auth_btn_vk">Login via VKontakte</string>
     <string name="auth_btn_fb">Login via Facebook</string>
-    <string name="retry">{{refresh}} Retry</string>
+    <string name="retry">Retry</string>
 
     <!-- Topface (Dashboard) Activity -->
     <string name="dashbrd_btn_profile">Profile</string>
