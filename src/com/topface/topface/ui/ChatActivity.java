@@ -332,19 +332,13 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 				messageRequest.userid = mUserId;
 				messageRequest.callback(new ApiHandler() {
 					@Override
-					public void success(ApiResponse response) {
+					public void success(final ApiResponse response) {
 						final Confirmation confirm = Confirmation.parse(response);
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
 								if (confirm.completed) {
-									//TODO History object from server answer
-									History history = new History();
-									history.user = new FeedUser(null);
-									history.user.id = CacheProfile.uid;
-									history.created = System.currentTimeMillis();
-									history.text = text;
-									history.type = FeedDialog.MESSAGE;
+									History history = new History(response);
 									mAdapter.addSentMessage(history);
 									mAdapter.notifyDataSetChanged();
 									mEditBox.getText().clear();
@@ -401,7 +395,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 				mIsAddPanelOpened = false;
 				sendGift.callback(new ApiHandler() {
 					@Override
-					public void success(ApiResponse response) throws NullPointerException {
+					public void success(final ApiResponse response) throws NullPointerException {
 						SendGiftAnswer answer = SendGiftAnswer.parse(response);
 						CacheProfile.power = answer.power;
 						CacheProfile.money = answer.money;
@@ -410,15 +404,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
-								//TODO History object from server answer
-								History history = new History();
-								history.gift = id;
-								history.user = new FeedUser(null);
-								history.user.id = CacheProfile.uid;
-								history.created = System.currentTimeMillis();
-								history.text = Static.EMPTY;
-								history.type = FeedDialog.GIFT;
-								history.link = url;
+								History history = new History(response);
 								mAdapter.addSentMessage(history);
 								mAdapter.notifyDataSetChanged();
 								mLoadingLocker.setVisibility(View.GONE);
@@ -462,17 +448,13 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 				coordRequest.callback(new ApiHandler() {
 
 					@Override
-					public void success(ApiResponse response) throws NullPointerException {
+					public void success(final ApiResponse response) throws NullPointerException {
 						final Confirmation confirm = Confirmation.parse(response);
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
 								if (confirm.completed) {
-									//TODO History object from server answer
-									History history = new History();
-									history.user = new FeedUser(null);
-									history.type = FeedDialog.ADDRESS;
-									history.geo = geo;
+									History history = new History(response);									
 									mAdapter.addSentMessage(history);
 									mAdapter.notifyDataSetChanged();
 								} else {
@@ -566,7 +548,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 				coordRequest.callback(new ApiHandler() {
 
 					@Override
-					public void success(ApiResponse response) throws NullPointerException {
+					public void success(final ApiResponse response) throws NullPointerException {
 						final Confirmation confirm = Confirmation.parse(response);
 						// final String address =
 						// mGeoManager.getLocationAddress(latitude, longitude);
@@ -578,18 +560,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 									if (mIsAddPanelOpened)
 										mSwapControl.snapToScreen(0);
 									mIsAddPanelOpened = false;
-									//TODO History object from server answer
-									History history = new History();
-									history.type = FeedDialog.MAP;
-									history.user = new FeedUser(null);
-									history.geo = new Geo("", longitude, latitude);
+									History history = new History(response);									
 									mAdapter.addSentMessage(history);
 									mAdapter.notifyDataSetChanged();
-
-									// Toast.makeText(ChatActivity.this,
-									// history.latitude + " " +
-									// history.longitude,
-									// Toast.LENGTH_SHORT).show();
 								} else {
 									Toast.makeText(ChatActivity.this,
 											R.string.general_server_error, Toast.LENGTH_SHORT)
