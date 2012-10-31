@@ -9,8 +9,10 @@ import android.view.*;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
+import com.topface.topface.utils.TopfaceNotificationManager;
 
 public class ImageSwitcher extends ViewPager {
 
@@ -150,6 +152,9 @@ public class ImageSwitcher extends ViewPager {
                 ImageViewRemote imageView = (ImageViewRemote)baseLayout.findViewById(R.id.ivPreView);
                 if(imageView.getBackground()==null)
                     imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler);
+                imageView.setDrawingCacheEnabled(true);
+                imageView.buildDrawingCache();
+//                TopfaceNotificationManager.getInstance(ImageSwitcher.this.getContext()).showNotification("test","test", NavigationActivity.mThis,imageView.getDrawingCache());
             }
         }
 
