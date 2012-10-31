@@ -106,9 +106,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 		headerSubtitle.setText(getIntent().getStringExtra(INTENT_USER_CITY));
 
 		(findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-		if (getIntent().hasExtra(INTENT_PREV_ENTITY)) {
-			Button btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
-			btnBack.setVisibility(View.VISIBLE);
+        Button btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
+        btnBack.setVisibility(View.VISIBLE);
+        if (getIntent().hasExtra(INTENT_PREV_ENTITY)) {
 			btnBack.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -132,7 +132,14 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 				btnBack.setText(R.string.navigation_back_profile);
 			}
 
-		}
+		} else {
+            btnBack.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(ChatActivity.this,NavigationActivity.class));
+                }
+            });
+        }
 
 		final Button btnProfile = (Button) findViewById(R.id.btnNavigationProfileBar);
 		switch (userSex) {

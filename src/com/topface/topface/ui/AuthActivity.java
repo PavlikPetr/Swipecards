@@ -28,6 +28,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.social.AuthToken;
