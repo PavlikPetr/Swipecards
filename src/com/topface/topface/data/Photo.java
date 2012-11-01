@@ -15,6 +15,7 @@ public class Photo extends AbstractData {
 
     public static final String SIZE_ORIGINAL = "original";
     public static final String SIZE_64 = "c64x64";
+    public static final String SIZE_150 = "r150x-";
     public static final String SIZE_128 = "c128x128";
     public static final String SIZE_192 = "c192x192";
     public static final String SIZE_256 = "c256x256";
@@ -93,11 +94,15 @@ public class Photo extends AbstractData {
         if (links != null) {
             int minDifference = Integer.MAX_VALUE;
             for (HashMap.Entry<String, String> entry : links.entrySet()) {
-                int entrySize = getSizeFromKey(entry.getKey());
-                int difference = Math.abs(entrySize - size);
-                if (difference < minDifference) {
-                    minDifference = difference;
-                    url = entry.getValue();
+                String entryKey = entry.getKey();
+                //Не используем редкие размеры фотографий
+                if (!entryKey.equals(SIZE_64) && !entryKey.equals(SIZE_150)) {
+                    int entrySize = getSizeFromKey(entryKey);
+                    int difference = Math.abs(entrySize - size);
+                    if (difference < minDifference) {
+                        minDifference = difference;
+                        url = entry.getValue();
+                    }
                 }
             }
 

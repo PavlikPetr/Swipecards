@@ -7,12 +7,35 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-/* Класс профиля окна топов */
+/**
+ * Класс профиля окна топов
+ */
 public class Top {
-    // Data
-    public int uid; // идентификатор красивого пользователя 
-    public String photo; // URL аватарки красивого пользователя
-    public int liked; // процент абсолютного значения красоты
+    /**
+     * идентификатор красивого пользователя
+     */
+    public int uid;
+    /**
+     * URL аватарки красивого пользователя
+     */
+    public String photo;
+    /**
+     * процент абсолютного значения красоты
+     */
+    public int liked;
+    /**
+     * возраст
+     */
+    public int age;
+    /**
+     * имя
+     */
+    public String name;
+
+    /**
+     * онлайн статус
+     */
+    public boolean online;
 
     public static LinkedList<Top> parse(ApiResponse response) {
         LinkedList<Top> userList = new LinkedList<Top>();
@@ -26,8 +49,9 @@ public class Top {
                     topUser.liked = item.optInt("liked");
                     topUser.photo = item.optString("photo");
                     topUser.uid = item.optInt("uid");
-
-                    //initPhotos(item, topUser); // не формат
+                    topUser.name = item.optString("name");
+                    topUser.age = item.optInt("age");
+                    topUser.online = item.optBoolean("online");
 
                     userList.add(topUser);
                 }

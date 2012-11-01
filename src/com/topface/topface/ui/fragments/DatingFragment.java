@@ -4,15 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -109,7 +105,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_dating));
         mNavigationHeader = view.findViewById(R.id.loNavigationBar);
-        Button settingsButton = (Button) view.findViewById(R.id.btnNavigationSettingsBar);
+        ImageButton settingsButton = (ImageButton) view.findViewById(R.id.btnNavigationSettingsBar);
         settingsButton.setVisibility(View.VISIBLE);
         settingsButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -242,7 +238,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -342,7 +337,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         }
 
-        mPreloadManager.preloadPhoto(mUserSearchList, Data.searchPosition+1);
+        mPreloadManager.preloadPhoto(mUserSearchList, Data.searchPosition + 1);
 
         //showNewbie(); // NEWBIE
     }
@@ -358,6 +353,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void fillUserInfo(SearchUser currUser) {
         // User Info
         lockControls();
+        if (currUser == null) {
+            showNextUser();
+            return;
+        }
         if (currUser.city != null) {
             mUserInfoCity.setText(currUser.city.name);
         }

@@ -20,7 +20,6 @@ public class Data {
     public static LinkedList<City> cityList;
     public static LinkedList<Gift> giftsList;
     public static Photos photos;
-    public static int GRID_COLUMN;
     public static int screen_width;
     public static long midnight;
     // Data cache
@@ -42,20 +41,8 @@ public class Data {
         if (giftsList == null)
             giftsList = new LinkedList<Gift>();
 
+        //noinspection deprecation
         screen_width = (Device.getOrientation(context) == Device.LANDSCAPE) ? Device.getDisplay(context).getHeight() : Device.getDisplay(context).getWidth();
-
-        switch (screen_width) {
-            case Device.W_240:
-            case Device.W_320:
-                GRID_COLUMN = 2;
-                break;
-            case Device.W_480:
-                GRID_COLUMN = 3;
-                break;
-            default:
-                GRID_COLUMN = 4;
-                break;
-        }
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);

@@ -9,6 +9,13 @@
         <item name="android:shadowDy">-2</item>
     </style>
 
+    <style name="ShadowItemFontBottom">
+        <item name="android:shadowColor">#222222</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">2</item>
+    </style>
+
     <style name="ShadowButtonFont">
         <item name="android:shadowColor">#222222</item>
         <item name="android:shadowRadius">1</item>
@@ -60,7 +67,7 @@
 
     <style name="ButtonBlueText" parent="ButtonGrayText">
         <item name="android:textColor">#9FCCF3</item>
-    </style>    
+    </style>
 
     <style name="ItemtText" parent="ShadowItemFont">
         <item name="android:textColor">#B8B8B8</item>
@@ -85,7 +92,7 @@
     <style name="ButtonsText" parent="ShadowUserText">
         <item name="android:textColor">#FFFFFF</item>
     </style>
-    
+
     <style name="NotificationText" parent="ShadowUserText">
         <item name="android:textSize">9sp</item>
         <item name="android:textColor">#FFFFFF</item>
@@ -242,6 +249,7 @@
         <item name="android:layout_toLeftOf">@+id/ivArrow</item>
         <item name="android:src">@drawable/im_item_mutual_heart</item>
     </style>
+
     <style name="ChatAvatar">
         <item name="android:background">@drawable/chat_avatar_frame</item>
         <item name="android:layout_width">35dp</item>
@@ -271,6 +279,7 @@
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_alignParentRight">false</item>
     </style>
+
     <style name="Gift">
         <item name="postProcessor">rounded</item>
         <item name="android:layout_width">97dp</item>
@@ -285,6 +294,35 @@
         <item name="android:background">@drawable/chat_gift_frame</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="Informer" parent="ShadowItemFontBottom">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginLeft">210dp</item>
+        <item name="android:background">@drawable/im_informer</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">3dp</item>
+        <item name="android:paddingRight">3dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="BackButton" parent="android:Widget.ImageButton">
+        <item name="android:src">@drawable/navigation_back_selector</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">30dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:visibility">gone</item>
     </style>
 
 </resources>

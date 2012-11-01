@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -116,7 +115,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
                 btnBack.setText(R.string.navigation_back_visitors);
             }
         } else {
-            Button btnBack = (Button) findViewById(R.id.btnNavigationBack);
+            ImageButton btnBack = (ImageButton) findViewById(R.id.btnNavigationBack);
             btnBack.setVisibility(View.VISIBLE);
             btnBack.setOnClickListener(finishActivityListener);
         }
@@ -189,7 +188,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
 
     private void getUserProfile() {
         mLockerView.setVisibility(View.VISIBLE);
-        if(mUserId < 1) {
+        if (mUserId < 1) {
             mLockerView.setVisibility(View.INVISIBLE);
             lockScreen.setVisibility(View.VISIBLE);
             lockScreen.findViewById(R.id.retry).setVisibility(View.GONE);
@@ -199,10 +198,11 @@ public class UserProfileActivity extends BaseFragmentActivity {
         userRequest.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
-                try{
+                try {
                     Object test = response.jsonResult.get("profiles");
-                    if(test.equals(new JSONArray("[]"))) lockScreen.setVisibility(View.VISIBLE);
+                    if (test.equals(new JSONArray("[]"))) lockScreen.setVisibility(View.VISIBLE);
                 } catch (Exception e) {
+                    Debug.error(e);
                 }
                 mUser = User.parse(mUserId, response);
                 runOnUiThread(new Runnable() {
@@ -223,6 +223,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
                         mUserAvatar.setPhoto(mUser.photo);
                         mUserName.setText(mUser.getNameAndAge());
                         mUserCity.setText(mUser.city_name);
+                        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(mUser.getNameAndAge());
                         if (mFormFragment != null)
                             mFormFragment.setUserData(mUser);
                         if (mPhotoFragment != null)

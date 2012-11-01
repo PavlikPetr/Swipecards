@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import com.topface.topface.Data;
 import com.topface.topface.R;
@@ -60,7 +60,7 @@ public class PhotoSwitcherActivity extends Activity {
         imageSwitcher.setData(mPhotoLinks);
         imageSwitcher.setCurrentItem(position, false);
 
-        Button backButton = ((Button) findViewById(R.id.btnNavigationBack));
+        ImageButton backButton = ((ImageButton) findViewById(R.id.btnNavigationBack));
         backButton.setVisibility(View.VISIBLE);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +74,9 @@ public class PhotoSwitcherActivity extends Activity {
     }
 
     private void setCounter(int position) {
-        mCounter.setText((position + 1) + "/" + mPhotoLinks.size());
+        if (mPhotoLinks != null) {
+            mCounter.setText((position + 1) + "/" + mPhotoLinks.size());
+        }
     }
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -87,7 +89,7 @@ public class PhotoSwitcherActivity extends Activity {
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            mPreloadManager.preloadPhoto(mPhotoLinks,position+1);
+            mPreloadManager.preloadPhoto(mPhotoLinks, position + 1);
             setCounter(position);
         }
 
