@@ -73,7 +73,7 @@ public class C2DMUtils {
 
             switch (type) {
                 case C2DM_TYPE_MESSAGE:
-                    if (Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_MESSAGES_PHONE)) {
+                    if (Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_DIALOGS_PHONE)) {
                         i = new Intent(context, ChatActivity.class);
                         i.putExtra(
                                 ChatActivity.INTENT_USER_ID,
@@ -99,7 +99,7 @@ public class C2DMUtils {
                     break;
 
                 case C2DM_TYPE_GUESTS:
-                    if (Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_GUESTS_PHONE)) {
+                    if (Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_VISITORS_PHONE)) {
                         //TODO GuestsFragment
                         i = new Intent(context, ProfileFragment.class);
                     }

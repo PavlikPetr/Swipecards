@@ -33,6 +33,7 @@ import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.RateController.OnRateControllerListener;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import org.json.JSONArray;
 
@@ -205,6 +206,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
                 } catch (Exception e) {
                 }
                 mUser = User.parse(mUserId, response);
+                mRateController.setOnRateControllerListener(mRateControllerListener);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -243,7 +245,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
                 });
             }
         }).exec();
-    }
+    }    
 
     View.OnClickListener mRatesClickListener = new View.OnClickListener() {
         @Override
@@ -251,15 +253,13 @@ public class UserProfileActivity extends BaseFragmentActivity {
             switch (view.getId()) {
                 case R.id.btnUserDelight:
                     mRateController.onRate(mUserId, 10, mUser.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
-                    mUser.rated = true;
-                    mUserDelight.setEnabled(!mUser.rated);
-                    mUserMutual.setEnabled(!mUser.rated);
+                    mUserDelight.setEnabled(false);
+                    mUserMutual.setEnabled(false);
                     break;
                 case R.id.btnUserMutual:
                     mRateController.onRate(mUserId, 9, mUser.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
-                    mUser.rated = true;
-                    mUserDelight.setEnabled(!mUser.rated);
-                    mUserMutual.setEnabled(!mUser.rated);
+                    mUserDelight.setEnabled(false);
+                    mUserMutual.setEnabled(false);
                     break;
                 case R.id.btnUserChat:
                     Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
@@ -277,6 +277,23 @@ public class UserProfileActivity extends BaseFragmentActivity {
             }
         }
     };
+    
+    OnRateControllerListener mRateControllerListener = new OnRateControllerListener() {
+		
+		@Override
+		public void successRate() {
+			mUser.rated = true;	
+			mUserDelight.setEnabled(!mUser.rated);
+            mUserMutual.setEnabled(!mUser.rated);
+		}
+		
+		@Override
+		public void failRate() {
+			mUser.rated = false;
+			mUserDelight.setEnabled(!mUser.rated);
+            mUserMutual.setEnabled(!mUser.rated);
+		}
+	};
 
     View.OnClickListener mInfoClickListener = new View.OnClickListener() {
         @Override

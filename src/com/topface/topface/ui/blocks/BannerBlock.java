@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.net.Uri;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,6 +20,7 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Banner;
+import com.topface.topface.data.Options;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
@@ -31,6 +31,7 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Device;
 
 import java.util.HashMap;
@@ -54,37 +55,43 @@ public class BannerBlock {
     private Fragment mFragment;
     private View mBannerView;
     private Plus1BannerAsker mPLus1Asker;
-    private Map<String, String> mBannersMap = new HashMap<String, String>();    
+    private Map<String, String> mBannersMap = new HashMap<String, String>();   
+    private Options mOptions;
 
     public BannerBlock(Activity activity, Fragment fragment, ViewGroup layout) {
         super();
         mActivity = activity;
         mFragment = fragment;
         setBannersMap();
-        
-        //TODO Banner initialization
-//        if (true) {
-////	        mBannerView = (AdView) layout.findViewById(R.id.adMobView);
-//	        
-////	        mBannerView = (AdfonicView) layout.findViewById(R.id.adFonicView);        
-//						
-////			mBannerView = (Plus1BannerView) layout.findViewById(R.id.adPlus1View);			
-//			
-//			showBanner(null);
-//		} else {		
-//			mBannerView = (ImageView) layout.findViewById(R.id.ivBanner);
-//			if (isCorrectResolution() && mBannersMap.containsKey(mFragment.getClass().toString())) {
-//				loadBanner();
-//			}
-//		}
+        mOptions = CacheProfile.getOptions();
+        String fragmentId = mFragment.getClass().toString();
+                
+        if (mBannersMap.containsKey(fragmentId)) {
+	        String bannerType = mOptions.pages.get(mBannersMap.get(fragmentId)).banner; 
+	        if (bannerType.equals(Options.BANNER_TOPFACE)) {
+	        	mBannerView = (ImageView) layout.findViewById(R.id.ivBanner);
+				if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
+					loadBanner();
+				}	        
+			} else {
+				if(bannerType.equals(Options.BANNER_ADMOB))  {
+					mBannerView = (AdView) layout.findViewById(R.id.adMobView);
+				} else if(bannerType.equals(Options.BANNER_ADFONIC)) {	        
+					mBannerView = (AdfonicView) layout.findViewById(R.id.adFonicView);
+				} else if (bannerType.equals(Options.BANNER_WAPSTART)) {
+					mBannerView = (Plus1BannerView) layout.findViewById(R.id.adPlus1View);
+				}			
+				showBanner(null);
+			}
+		}
     }
 
     private void setBannersMap() {
-        mBannersMap.put(LikesFragment.class.toString(), BannerRequest.LIKE);
-        mBannersMap.put(MutualFragment.class.toString(), BannerRequest.LIKE);
-        mBannersMap.put(DialogsFragment.class.toString(), BannerRequest.INBOX);
-        mBannersMap.put(TopsFragment.class.toString(), BannerRequest.TOP);
-        mBannersMap.put(VisitorsFragment.class.toString(), BannerRequest.LIKE);
+        mBannersMap.put(LikesFragment.class.toString(), Options.PAGE_LIKES);
+        mBannersMap.put(MutualFragment.class.toString(), Options.PAGE_MUTUAL);
+        mBannersMap.put(DialogsFragment.class.toString(), Options.PAGE_DIALOGS);
+        mBannersMap.put(TopsFragment.class.toString(), Options.PAGE_TOP);
+        mBannersMap.put(VisitorsFragment.class.toString(), Options.PAGE_VISITORS);
     }
 
     private void loadBanner() {
