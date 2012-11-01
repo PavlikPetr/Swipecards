@@ -332,25 +332,25 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
                 mLoadingLocker.setVisibility(View.VISIBLE);
 
-                MessageRequest messageRequest = new MessageRequest(
-                        ChatActivity.this.getApplicationContext());
-                registerRequest(messageRequest);
-                messageRequest.message = mEditBox.getText().toString();
-                messageRequest.userid = mUserId;
-                messageRequest.callback(new ApiHandler() {
-                    @Override
-                    public void success(final ApiResponse response) {
-                        final Confirmation confirm = Confirmation.parse(response);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (confirm.completed) {
-                                    History history = new History(response);
-                                    history.target = FeedDialog.USER_MESSAGE;
-                                    mAdapter.addSentMessage(history);
-                                    mAdapter.notifyDataSetChanged();
-                                    mEditBox.getText().clear();
-                                    mLoadingLocker.setVisibility(View.GONE);
+				MessageRequest messageRequest = new MessageRequest(
+						ChatActivity.this.getApplicationContext());
+				registerRequest(messageRequest);
+				messageRequest.message = mEditBox.getText().toString();
+				messageRequest.userid = mUserId;
+				messageRequest.callback(new ApiHandler() {
+					@Override
+					public void success(final ApiResponse response) {
+						final Confirmation confirm = Confirmation.parse(response);
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								if (confirm.completed) {
+									History history = new History(response);
+//									history.target = FeedDialog.USER_MESSAGE;
+									mAdapter.addSentMessage(history);
+									mAdapter.notifyDataSetChanged();
+									mEditBox.getText().clear();
+									mLoadingLocker.setVisibility(View.GONE);
 
                                     InputMethodManager imm = (InputMethodManager) getApplicationContext()
                                             .getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -383,43 +383,43 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         }
     };
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                mLoadingLocker.setVisibility(View.VISIBLE);
-                Bundle extras = data.getExtras();
-                final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-                final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
-                final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
-                Debug.log(this, "id:" + id + " url:" + url);
-                SendGiftRequest sendGift = new SendGiftRequest(getApplicationContext());
-                registerRequest(sendGift);
-                sendGift.giftId = id;
-                sendGift.userId = mUserId;
-                if (mIsAddPanelOpened)
-                    mSwapControl.snapToScreen(0);
-                mIsAddPanelOpened = false;
-                sendGift.callback(new ApiHandler() {
-                    @Override
-                    public void success(final ApiResponse response) throws NullPointerException {
-                        SendGiftAnswer answer = SendGiftAnswer.parse(response);
-                        CacheProfile.power = answer.power;
-                        CacheProfile.money = answer.money;
-                        Debug.log(ChatActivity.this, "power:" + answer.power + " money:"
-                                + answer.money);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                History history = new History(response);
-                                history.target = FeedDialog.USER_MESSAGE;
-                                mAdapter.addSentMessage(history);
-                                mAdapter.notifyDataSetChanged();
-                                mLoadingLocker.setVisibility(View.GONE);
-                            }
-                        });
-                    }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+				mLoadingLocker.setVisibility(View.VISIBLE);
+				Bundle extras = data.getExtras();
+				final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+				final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+				final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+				Debug.log(this, "id:" + id + " url:" + url);
+				SendGiftRequest sendGift = new SendGiftRequest(getApplicationContext());
+				registerRequest(sendGift);
+				sendGift.giftId = id;
+				sendGift.userId = mUserId;
+				if (mIsAddPanelOpened)
+					mSwapControl.snapToScreen(0);
+				mIsAddPanelOpened = false;
+				sendGift.callback(new ApiHandler() {
+					@Override
+					public void success(final ApiResponse response) throws NullPointerException {
+						SendGiftAnswer answer = SendGiftAnswer.parse(response);
+						CacheProfile.power = answer.power;
+						CacheProfile.money = answer.money;
+						Debug.log(ChatActivity.this, "power:" + answer.power + " money:"
+								+ answer.money);
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								History history = new History(response);
+								history.target = FeedDialog.USER_MESSAGE;
+								mAdapter.addSentMessage(history);
+								mAdapter.notifyDataSetChanged();
+								mLoadingLocker.setVisibility(View.GONE);
+							}
+						});
+					}
 
                     @Override
                     public void fail(int codeError, final ApiResponse response)
@@ -456,26 +456,26 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 mLoadingLocker.setVisibility(View.VISIBLE);
                 coordRequest.callback(new ApiHandler() {
 
-                    @Override
-                    public void success(final ApiResponse response) throws NullPointerException {
-                        final Confirmation confirm = Confirmation.parse(response);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (confirm.completed) {
-                                    History history = new History(response);
-                                    history.target = FeedDialog.USER_MESSAGE;
-                                    mAdapter.addSentMessage(history);
-                                    mAdapter.notifyDataSetChanged();
-                                } else {
-                                    Toast.makeText(ChatActivity.this,
-                                            R.string.general_server_error, Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                                mLoadingLocker.setVisibility(View.GONE);
-                            }
-                        });
-                    }
+					@Override
+					public void success(final ApiResponse response) throws NullPointerException {
+						final Confirmation confirm = Confirmation.parse(response);
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								if (confirm.completed) {
+									History history = new History(response);
+									history.target = FeedDialog.USER_MESSAGE;
+									mAdapter.addSentMessage(history);
+									mAdapter.notifyDataSetChanged();
+								} else {
+									Toast.makeText(ChatActivity.this,
+											R.string.general_server_error, Toast.LENGTH_SHORT)
+											.show();
+								}
+								mLoadingLocker.setVisibility(View.GONE);
+							}
+						});
+					}
 
                     @Override
                     public void fail(int codeError, ApiResponse response)
@@ -564,24 +564,24 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                         // mGeoManager.getLocationAddress(latitude, longitude);
                         runOnUiThread(new Runnable() {
 
-                            @Override
-                            public void run() {
-                                if (confirm.completed) {
-                                    if (mIsAddPanelOpened)
-                                        mSwapControl.snapToScreen(0);
-                                    mIsAddPanelOpened = false;
-                                    History history = new History(response);
-                                    history.target = FeedDialog.USER_MESSAGE;
-                                    mAdapter.addSentMessage(history);
-                                    mAdapter.notifyDataSetChanged();
-                                } else {
-                                    Toast.makeText(ChatActivity.this,
-                                            R.string.general_server_error, Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                                mProgressDialog.dismiss();
-                            }
-                        });
+							@Override
+							public void run() {
+								if (confirm.completed) {
+									if (mIsAddPanelOpened)
+										mSwapControl.snapToScreen(0);
+									mIsAddPanelOpened = false;
+									History history = new History(response);
+//									history.target = FeedDialog.USER_MESSAGE;
+									mAdapter.addSentMessage(history);
+									mAdapter.notifyDataSetChanged();
+								} else {
+									Toast.makeText(ChatActivity.this,
+											R.string.general_server_error, Toast.LENGTH_SHORT)
+											.show();
+								}
+								mProgressDialog.dismiss();
+							}
+						});
 
                     }
 

@@ -204,9 +204,6 @@
     <string name="photo_add_or">Фотография добавлена</string>
     <string name="photo_add_error">Не удалось добавить фотографию</string>
 
-
-    <string name="leaders_date">Хочу на\nсвидание!</string>
-
     <!-- Settings -->
     <string name="settings_header_title">Настройки</string>
     <string name="settings_wifi">Только по Wi-Fi</string>
@@ -268,7 +265,7 @@
     <string name="profile_ask_form">Попросить заполнить анкету</string>
 
     <!--Leaders-->
-    <string name="leaders_go_date">Хочу сюда!</string>
+    <string name="leaders_go_date">Хочу сюда</string>
     <string name="leaders_leader_now">Теперь вы лидер!</string>
     <string name="need_select_photo">Сперва нужно выбрать фотографию!</string>
     <string name="photo_add_or">Фотография добавлена</string>
@@ -278,8 +275,7 @@
         <item quantity="few">Встать за %d монеты</item>
         <item quantity="other">Встать за %d монет</item>
     </plurals>
-    <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
-    <string name="leaders_date">Хочу\nсюда!</string>
+    <string name="leaders_select_photo">Выберите эффектную фотографию:</string>    
 
     <string name="general_profile_error">Ошибка загрузки профиля</string>
 </resources>

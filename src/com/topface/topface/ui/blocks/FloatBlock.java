@@ -19,7 +19,7 @@ import java.util.Map;
  * Блок для страниц, где нужно показывать баннеры или лидеров
  */
 public class FloatBlock {
-    private Map<String, String> mBannersMap;
+    private Map<String, String> mFloatTypeMap;
     private Options mOptions;
     private Activity mActivity;
     private Fragment mFragment;
@@ -32,7 +32,7 @@ public class FloatBlock {
         mOptions = CacheProfile.getOptions();
         mActivity = activity;
         mFragment = fragment;
-        mBannersMap = new HashMap<String, String>();
+        mFloatTypeMap = new HashMap<String, String>();
         mLayout = layoutView;
         setActivityMap();
         initBlock();
@@ -40,24 +40,30 @@ public class FloatBlock {
 
     private void initBlock() {
         String currentFragment = mFragment.getClass().toString();
-        if (mBannersMap.containsKey(currentFragment)) {
-            String floatType = mBannersMap.get(currentFragment);
+        if (mFloatTypeMap.containsKey(currentFragment)) {
+            String floatType = mFloatTypeMap.get(currentFragment);
             if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
             	mBanner = new BannerBlock(mActivity,mFragment, mLayout);
             } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
                 mLeaders = new LeadersBlock(mActivity, mLayout);
             }
+            mLeaders = new LeadersBlock(mActivity, mLayout);
         }
         //Если переданого активити нет в карте, то не инициализируем ни один блок
     }
 
     private void setActivityMap() {
-        mBannersMap = new HashMap<String, String>();
-        mBannersMap.put(LikesFragment.class.toString(), mOptions.float_type_like);
-        mBannersMap.put(MutualFragment.class.toString(), mOptions.float_type_like);
-        mBannersMap.put(TopsFragment.class.toString(), mOptions.float_type_top);
-        mBannersMap.put(DialogsFragment.class.toString(), mOptions.float_type_dialogs);
-        mBannersMap.put(VisitorsFragment.class.toString(), mOptions.float_type_like);
+        mFloatTypeMap = new HashMap<String, String>();
+        if (mOptions.pages.containsKey(Options.PAGE_LIKES))
+        	mFloatTypeMap.put(LikesFragment.class.toString(), mOptions.pages.get(Options.PAGE_LIKES).floatType);
+        if (mOptions.pages.containsKey(Options.PAGE_MUTUAL))
+        	mFloatTypeMap.put(MutualFragment.class.toString(), mOptions.pages.get(Options.PAGE_MUTUAL).floatType);
+        if (mOptions.pages.containsKey(Options.PAGE_TOP))
+        	mFloatTypeMap.put(TopsFragment.class.toString(), mOptions.pages.get(Options.PAGE_TOP).floatType);
+        if (mOptions.pages.containsKey(Options.PAGE_DIALOGS))
+        	mFloatTypeMap.put(DialogsFragment.class.toString(), mOptions.pages.get(Options.PAGE_DIALOGS).floatType);
+        if (mOptions.pages.containsKey(Options.PAGE_VISITORS))
+        	mFloatTypeMap.put(VisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_VISITORS).floatType);
     }
 
     public void update() {
@@ -68,6 +74,7 @@ public class FloatBlock {
     
     public void onResume() {
     	if (mBanner != null) mBanner.onResume();
+    	update();
     }
     
     public void onPause() {

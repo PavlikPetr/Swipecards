@@ -65,16 +65,20 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 			@Override
 			public void success(ApiResponse response) throws NullPointerException {
 				final Options options = Options.parse(response);
-				if (options.mail_notifications != null) {
+				if (options.hasMail) {
 					getActivity().runOnUiThread(new Runnable() {
 						
 						@Override
 						public void run() {
 							for (Method method : methodsList) {
-								method.onExecute(Settings.SETTINGS_C2DM_LIKES_EMAIL, options.mail_notifications.sympathy);
-								method.onExecute(Settings.SETTINGS_C2DM_MUTUAL_EMAIL, options.mail_notifications.mutual);
-								method.onExecute(Settings.SETTINGS_C2DM_MESSAGES_EMAIL, options.mail_notifications.chat);
-								method.onExecute(Settings.SETTINGS_C2DM_GUESTS_EMAIL, options.mail_notifications.guests);
+								if(options.pages.containsKey(Options.PAGE_LIKES))
+									method.onExecute(Settings.SETTINGS_C2DM_LIKES_EMAIL, options.pages.get(Options.PAGE_LIKES).mail);
+								if(options.pages.containsKey(Options.PAGE_MUTUAL))
+									method.onExecute(Settings.SETTINGS_C2DM_MUTUAL_EMAIL, options.pages.get(Options.PAGE_MUTUAL).mail);
+								if(options.pages.containsKey(Options.PAGE_DIALOGS))
+									method.onExecute(Settings.SETTINGS_C2DM_DIALOGS_EMAIL, options.pages.get(Options.PAGE_DIALOGS).mail);
+								if(options.pages.containsKey(Options.PAGE_VISITORS))
+									method.onExecute(Settings.SETTINGS_C2DM_VISITORS_EMAIL, options.pages.get(Options.PAGE_VISITORS).mail);
 							}
 						}
 					});					
@@ -110,15 +114,15 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loChat);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_messages, frame);
-        methodsList.add(initEditNotificationFrame(Settings.SETTINGS_C2DM_MESSAGES_PHONE,
-                Settings.SETTINGS_C2DM_MESSAGES_EMAIL, frame));
+        methodsList.add(initEditNotificationFrame(Settings.SETTINGS_C2DM_DIALOGS_PHONE,
+                Settings.SETTINGS_C2DM_DIALOGS_EMAIL, frame));
 
         // Guests
         frame = (ViewGroup) root.findViewById(R.id.loGuests);
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
-        methodsList.add(initEditNotificationFrame(Settings.SETTINGS_C2DM_GUESTS_PHONE,
-                Settings.SETTINGS_C2DM_GUESTS_EMAIL, frame));
+        methodsList.add(initEditNotificationFrame(Settings.SETTINGS_C2DM_VISITORS_PHONE,
+                Settings.SETTINGS_C2DM_VISITORS_EMAIL, frame));
 
         // Help
         frame = (ViewGroup) root.findViewById(R.id.loHelp);

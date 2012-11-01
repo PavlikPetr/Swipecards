@@ -3,18 +3,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/leadersBlock"
                 android:layout_width="fill_parent"
-                android:layout_height="77dp"
+                android:layout_height="67dp"
                 android:paddingTop="6dp"
                 android:paddingBottom="6dp"
-                android:background="@drawable/bg_main"
-                android:visibility="gone"
-        >
+                android:background="@drawable/bg_leaders"
+                android:visibility="gone">
 
     <com.topface.topface.ui.blocks.HorizontalListView
             android:id="@+id/leadersList"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:layout_marginLeft="75dp"
+            android:layout_marginLeft="58dp"
             />
 
     <Button
@@ -22,8 +21,9 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:background="@drawable/btn_leaders_date_selector"
-            android:text="@string/leaders_date"
-            android:textSize="13sp"
+            android:text="@string/leaders_go_date"
+            android:textSize="11sp"
+            android:textScaleX="0.9"
             android:textColor="#FFFFFF"
             android:shadowDy="-1"
             android:shadowColor="#444444"
@@ -31,7 +31,6 @@
             android:gravity="left|center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:layout_marginLeft="5dp"
-            />
+            android:layout_marginLeft="5dp"/>
 
 </RelativeLayout>
