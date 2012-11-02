@@ -1,5 +1,7 @@
 package com.topface.topface.ui.profile;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,11 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.views.ImageSwitcher;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
 
@@ -26,6 +27,7 @@ public class PhotoSwitcherActivity extends Activity {
     public static final String INTENT_OWNER = "owner";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_ALBUM_POS = "album_position";
+    public static final String INTENT_PHOTOS = "album_photos";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +35,12 @@ public class PhotoSwitcherActivity extends Activity {
         setContentView(R.layout.ac_photos);
         mPreloadManager = new PreloadManager(getApplicationContext());
         // Extras
-        Intent intent = getIntent();
-        boolean isOwner = intent.getBooleanExtra(INTENT_OWNER, false);
+        Intent intent = getIntent();        
         int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
-        int uid = intent.getIntExtra(INTENT_USER_ID, -1);
+        int uid = intent.getIntExtra(INTENT_USER_ID, -1);        
+        ArrayList<Photo> arrList = intent.getExtras().getParcelableArrayList(INTENT_PHOTOS);
+        mPhotoLinks = new Photos();
+        mPhotoLinks.addAll(arrList);
 
         if (uid == -1) {
             Debug.log(this, "Intent param is wrong");
@@ -55,7 +59,7 @@ public class PhotoSwitcherActivity extends Activity {
         imageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         imageSwitcher.setOnClickListener(mOnClickListener);
 
-        mPhotoLinks = isOwner ? CacheProfile.photos : Data.photos;
+//        mPhotoLinks = isOwner ? CacheProfile.photos : Data.photos;
 
         imageSwitcher.setData(mPhotoLinks);
         imageSwitcher.setCurrentItem(position, false);

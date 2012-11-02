@@ -20,6 +20,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private TextView mTvNotifyLikes;
     private TextView mTvNotifyMutual;
     private TextView mTvNotifyDialogs;
+    private TextView mTvNotifyVisitors;
 
     private FragmentMenuListener mFragmentMenuListener;
     private Button mDefaultMenuItem;
@@ -70,6 +71,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         mTvNotifyLikes = (TextView) mRootLayout.findViewById(R.id.tvNotifyLikes);
         mTvNotifyMutual = (TextView) mRootLayout.findViewById(R.id.tvNotifyMutual);
         mTvNotifyDialogs = (TextView) mRootLayout.findViewById(R.id.tvNotifyDialogs);
+        mTvNotifyVisitors = (TextView) mRootLayout.findViewById(R.id.tvNotifyVisitors);
 
         hide();
 
@@ -111,6 +113,13 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             mTvNotifyDialogs.setVisibility(View.VISIBLE);
         } else {
             mTvNotifyDialogs.setVisibility(View.INVISIBLE);
+        }
+        
+        if (CacheProfile.unread_visitors > 0){
+        	mTvNotifyVisitors.setText(" " + CacheProfile.unread_visitors + " ");
+        	mTvNotifyVisitors.setVisibility(View.VISIBLE);
+        } else {
+        	mTvNotifyVisitors.setVisibility(View.INVISIBLE);
         }
     }
 

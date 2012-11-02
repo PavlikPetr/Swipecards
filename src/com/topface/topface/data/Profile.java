@@ -26,6 +26,7 @@ public class Profile extends AbstractDataWithPhotos {
     public int unread_likes; // количество непрочитанных “понравилось” пользователя
     public int unread_messages; // количество непрочитанных сообщений пользователя
     public int unread_mutual; // количество непрочитанных симпатий
+    public int unread_visitors; // количество непрочитанных гостей
 
     // City
     public int city_id; // идентификтаор города пользователя
@@ -68,6 +69,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.unread_likes = resp.optInt("unread_likes");
             profile.unread_messages = resp.optInt("unread_messages");
             profile.unread_mutual = resp.optInt("unread_symphaties");
+            profile.unread_visitors = resp.optInt("unread_visitors");
             profile.average_rate = resp.optInt("average_rate");
             profile.money = resp.optInt("money");
 
