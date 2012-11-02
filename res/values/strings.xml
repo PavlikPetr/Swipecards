@@ -55,10 +55,10 @@
     <string name="chat_comment">Send a message</string>
     <string name="chat_gift_in">You got a gift.</string>
     <string name="chat_gift_out">You sent a gift.</string>
-    <string name="chat_like_in">You have been sent like</string>
-    <string name="chat_like_out">You sent like</string>
-    <string name="chat_symphathy_in">You have been sent symphathy</string>
-    <string name="chat_symphathy_out">You sent symphathy</string>
+    <string name="chat_like_in">You have been sent sympathy</string>
+    <string name="chat_like_out">You sent sympathy</string>
+    <string name="chat_symphathy_in">You have been sent delight</string>
+    <string name="chat_symphathy_out">You sent delight</string>
     <string name="chat_wish_in">Secret wish received.</string>
     <string name="chat_wish_out">Secret wish sent.</string>
     <string name="chat_sexuality_in">Sexuality rated.</string>

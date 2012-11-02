@@ -58,8 +58,8 @@
     <string name="chat_gift_out">Вы отправили подарок.</string>
     <string name="chat_like_in">Вам прислали симпатию</string>
     <string name="chat_like_out">Вы отправили симпатию</string>
-    <string name="chat_symphathy_in">Вам прислали взаимную симпатию</string>
-    <string name="chat_symphathy_out">Вы отправили взаимную сипматию</string>
+    <string name="chat_symphathy_in">Вам прислали восхищение</string>
+    <string name="chat_symphathy_out">Вы отправили восхищение</string>
     <string name="chat_wish_in">Вам отправили Тайное Желание.</string>
     <string name="chat_wish_out">Вы отправили Тайное Желание.</string>
     <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>

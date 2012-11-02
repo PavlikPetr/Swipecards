@@ -590,7 +590,9 @@ public class ChatListAdapter extends BaseAdapter {
 
     public LinkedList<History> getDataCopy() {
         //noinspection unchecked
-        return (LinkedList<History>) mDataList.clone();
+    	LinkedList<History> dataClone = (LinkedList<History>) mDataList.clone(); 
+    	Collections.reverse(dataClone);
+        return dataClone;
 
     }
 }

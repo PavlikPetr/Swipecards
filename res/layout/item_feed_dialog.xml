@@ -30,7 +30,8 @@
                 style="@style/ListCity"/>
 
         <!-- текст -->
-        <TextView
+        <com.topface.topface.ui.views.IllustratedTextView
+            	
                 android:id="@+id/tvText"
                 android:layout_below="@id/tvName"
                 android:layout_toLeftOf="@+id/tvTime"
