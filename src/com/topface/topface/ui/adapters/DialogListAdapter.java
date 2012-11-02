@@ -69,10 +69,11 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
             	text = "{{map}} "+dialog.text;
                 break;
             case FeedDialog.MAP:
-                text = "{{map}} "+dialog.text;
+                text = "{{my_map}} "+dialog.text;
                 break;
             case FeedDialog.GIFT:
-                text = (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
+            	text = "{{gift}} ";
+                text += (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
                         getContext().getString(R.string.chat_gift_in) :
                         getContext().getString(R.string.chat_gift_out);
                 break;
@@ -95,7 +96,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
             case FeedDialog.RATE:
             case FeedDialog.PROMOTION:
             case FeedDialog.PHOTO:
-            	counter = 2;
+            	counter = dialog.unreadCounter;
             	break;
             case FeedDialog.ADDRESS:
             case FeedDialog.MAP:                

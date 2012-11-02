@@ -7,6 +7,7 @@
         <item>{{refresh}}</item>
         <item>{{my_map}}</item>
         <item>{{map}}</item>
+        <item>{{gift}}</item>
         <!--
             здесь вы можете добавить ваши шаблоны,
             которые будут заменены картинками из массива itv_icons
@@ -18,6 +19,7 @@
         <item>@drawable/refresh_icon</item>
         <item>@drawable/ico_my_map</item>
         <item>@drawable/ico_map</item>
+        <item>@drawable/ico_gift</item>
         <!--
             тут соответсвующие шаблонам из itv_templates изображения
         -->
