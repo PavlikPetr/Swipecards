@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
@@ -36,10 +37,17 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
 
         // Buttons
-        Button btnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
+        final Button btnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
         btnProfile.setOnClickListener(this);
         ImageViewRemote menuAvatar = (ImageViewRemote) mRootLayout.findViewById(R.id.ivMenuAvatar);
         menuAvatar.setPhoto(CacheProfile.photo);
+        menuAvatar.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				btnProfile.callOnClick();				
+			}
+		});
 
         mDefaultMenuItem = (Button) mRootLayout.findViewById(R.id.btnFragmentDating);
 

@@ -47,7 +47,7 @@ public class FloatBlock {
             } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
                 mLeaders = new LeadersBlock(mActivity, mLayout);
             }
-            mLeaders = new LeadersBlock(mActivity, mLayout);
+            //mLeaders = new LeadersBlock(mActivity, mLayout);
         }
         //Если переданого активити нет в карте, то не инициализируем ни один блок
     }

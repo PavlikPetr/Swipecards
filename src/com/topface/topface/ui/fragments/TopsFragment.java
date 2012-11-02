@@ -22,6 +22,7 @@ import com.topface.topface.requests.TopRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.TopsAdapter;
 import com.topface.topface.ui.blocks.FilterBlock;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.LockerView;
@@ -40,6 +41,7 @@ public class TopsFragment extends BaseFragment {
     private LockerView mLoadingLocker;
     private ActionData mActionData;
     private DoubleButton mBtnDouble;
+    private FloatBlock mFloatBlock;
 
     private static int GIRLS = 0;
     private static int BOYS = 1;
@@ -135,6 +137,8 @@ public class TopsFragment extends BaseFragment {
 
         updateData();
 
+        mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
+        
         return view;
     }
 
@@ -256,6 +260,18 @@ public class TopsFragment extends BaseFragment {
         mGridAdapter = null;
     }
 
+    @Override
+    public void onResume() {    	
+    	super.onResume();
+    	mFloatBlock.onResume();    	
+    }
+    
+    @Override
+    public void onPause() {    	
+    	super.onPause();
+    	mFloatBlock.onPause();
+    }
+    
     @Override
     protected void onUpdateStart(boolean isPushUpdating) {
         if (!isPushUpdating) {

@@ -19,16 +19,17 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.data.Auth;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.requests.OptionsRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.social.AuthToken;
@@ -270,12 +271,45 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             @Override
             public void success(final ApiResponse response) {
                 CacheProfile.setProfile(Profile.parse(response), response);
+                
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        openNavigationActivity();
+                    	OptionsRequest request = new OptionsRequest(getApplicationContext());                        
+                        ApiHandler handler = new ApiHandler() {
+                			
+                			@Override
+                			public void success(ApiResponse response) throws NullPointerException {
+                				Options.parse(response);
+                				runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                    	openNavigationActivity();
+                                    }
+                				});
+                			}
+                			
+                			@Override
+                			public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                				final ApiResponse finalResponse = response;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (finalResponse.code == ApiResponse.BAN)
+                                            showButtons();
+                                        else {
+                                            authorizationFailed();
+                                            Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                			}
+                		};
+                        request.callback(handler);  
+                        request.exec();
                     }
-                });
+				});
             }
 
             @Override

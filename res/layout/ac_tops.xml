@@ -15,12 +15,13 @@
             android:layout_height="fill_parent"
             android:id="@+id/loControlsGroup"
             android:layout_below="@id/loNavigationBar"
-            android:orientation="vertical">
-
-        <include layout="@layout/leaders"/>
+            android:orientation="vertical">        
 
         <!-- button bar -->
         <include layout="@layout/bar_tops_button"/>
+        
+        <!-- leaders -->
+        <include layout="@layout/leaders"/>
 
         <!-- gallery -->
         <GridView
