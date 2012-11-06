@@ -469,7 +469,7 @@ public class FragmentSwitchController extends ViewGroup {
         boolean result;
 
         if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
-            result = v.canScrollHorizontally(-dx);
+            result = ((com.topface.topface.ui.views.ImageSwitcher) v).canScrollHorizontally(-dx);
         } else {
             result = ViewCompat.canScrollHorizontally(v, -dx);
         }

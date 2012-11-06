@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -138,7 +139,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
                         @Override
                         public void success(ApiResponse response) throws NullPointerException {
-                            item.value = mInputData.isEmpty() ? null : mInputData;
+                            item.value = TextUtils.isEmpty(mInputData) ? null : mInputData;
                             mFormInfo.fillFormItem(item);
                             getActivity().setResult(Activity.RESULT_OK);
                             mData = mInputData;

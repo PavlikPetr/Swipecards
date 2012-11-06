@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.view.textservice.TextInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -114,7 +116,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 String after = s.toString();
-                if (before.isEmpty() && !after.isEmpty() || !before.isEmpty() && after.isEmpty()) {
+                if (TextUtils.isEmpty(before) && !TextUtils.isEmpty(after) || !TextUtils.isEmpty(before) && TextUtils.isEmpty(after)) {
                     mReport.body = after;
                     refreshSaveState();
                 }
@@ -137,7 +139,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
     @Override
     protected boolean hasChanges() {
-        return !mReport.body.isEmpty();
+        return !TextUtils.isEmpty(mReport.body);
     }    
     
     @Override

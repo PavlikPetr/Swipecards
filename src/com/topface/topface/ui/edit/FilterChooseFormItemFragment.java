@@ -15,6 +15,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FilterChooseFormItemFragment extends AbstractEditFragment {
@@ -74,15 +75,20 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         ((TextView) header.findViewById(R.id.tvTitle)).setText(formItemTitle);
         mListView.addHeaderView(header);
 
+        
+        ArrayList<String> listStr = new ArrayList<String>();        
+        listStr.addAll(Arrays.asList(mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData})));
+        listStr.add(getResources().getString(R.string.form_not_specified));
+        String[] data = new String[listStr.size()];
+        listStr.toArray(data);
 
-        String[] tmpStr = mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData});
-        String[] data = Arrays.copyOf(tmpStr, tmpStr.length + 1);
-        data[data.length - 1] = getResources().getString(R.string.form_not_specified);
-
-        int[] tmpInt = mFormInfo.getIdsByTitleId(mTitleId);
-        int[] ids = Arrays.copyOf(tmpInt, tmpInt.length + 1);
-        ids[ids.length - 1] = FormItem.NOT_SPECIFIED_ID;
-
+        ArrayList<Integer> listInt = new ArrayList<Integer>();
+        for (int elem : mFormInfo.getIdsByTitleId(mTitleId)) {
+			listInt.add(elem);
+		}
+        listInt.add(FormItem.NOT_SPECIFIED_ID);
+        Integer[] ids = (Integer[]) listInt.toArray(new Integer[listInt.size()]);
+        
         mListView.setAdapter(new FormCheckingDataAdapter(getActivity().getApplicationContext(),
                 data, ids, mSeletedDataId));
         return root;
@@ -92,10 +98,10 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
 
         private LayoutInflater mInflater;
         private String[] mListData;
-        private int[] mIds;
+        private Integer[] mIds;
         private int mLastSelected;
 
-        public FormCheckingDataAdapter(Context context, String[] data, int[] ids, int selectedId) {
+        public FormCheckingDataAdapter(Context context, String[] data, Integer[] ids, int selectedId) {
             mInflater = LayoutInflater.from(context);
             mListData = data;
             mIds = ids;

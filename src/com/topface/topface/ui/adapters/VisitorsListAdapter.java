@@ -40,6 +40,6 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     
     @Override
 	protected int getNewItemLayout() {		
-		return getItemLayout();
+		return R.layout.item_new_feed_like;
 	}
 }
