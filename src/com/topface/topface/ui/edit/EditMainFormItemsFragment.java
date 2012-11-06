@@ -50,7 +50,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
         TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
         subTitle.setVisibility(View.VISIBLE);
 
-        ((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
         mBackButton.setVisibility(View.VISIBLE);
         mBackButton.setText(R.string.navigation_edit);

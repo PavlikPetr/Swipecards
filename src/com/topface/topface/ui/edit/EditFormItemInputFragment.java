@@ -36,9 +36,6 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     private EditText mEditText;
 
-    public EditFormItemInputFragment() {
-    }
-
     public EditFormItemInputFragment(int titleId, String data) {
         mTitleId = titleId;
         mData = data == null ? Static.EMPTY : data;
@@ -58,7 +55,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         subTitle.setVisibility(View.VISIBLE);
         subTitle.setText(R.string.edit_bg_photo);
 
-        ((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
         mBackButton.setVisibility(View.VISIBLE);
         mBackButton.setText(R.string.navigation_edit);

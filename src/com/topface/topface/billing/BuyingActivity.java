@@ -68,7 +68,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         // Title Header
         ((TextView) findViewById(R.id.tvNavigationTitle))
                 .setText(getString(R.string.buying_header_title));
-        (findViewById(R.id.btnNavigationHome)).setVisibility(View.INVISIBLE);
+        findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
         ImageButton backButton = ((ImageButton) findViewById(R.id.btnNavigationBack));
         backButton.setVisibility(View.VISIBLE);
         backButton.setOnClickListener(new OnClickListener() {
@@ -92,7 +92,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
                 Utils.getBatteryResource(CacheProfile.power));
         Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                 bitmap.getHeight(), matrix, true);
-        BitmapDrawable battery = new BitmapDrawable(scaledBitmap);
+        BitmapDrawable battery = new BitmapDrawable(getResources(), scaledBitmap);
 
         mResourcesPower = (TextView) findViewById(R.id.tvResourcesPower);
         mResourcesPower.setCompoundDrawablesWithIntrinsicBounds(null, null, battery, null);

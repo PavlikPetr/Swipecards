@@ -102,7 +102,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         // Navigation Header
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
-        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
+        view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_dating));
         mNavigationHeader = view.findViewById(R.id.loNavigationBar);
         ImageButton settingsButton = (ImageButton) view.findViewById(R.id.btnNavigationSettingsBar);
@@ -352,36 +352,36 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void fillUserInfo(SearchUser currUser) {
         // User Info        
-	    if (currUser != null) {
-	    	lockControls();
-	        if (currUser.city != null) {
-	            mUserInfoCity.setText(currUser.city.name);
-	        }
-	        mUserInfoStatus.setText(currUser.status);
-	        mUserInfoName.setText(currUser.first_name + ", " + currUser.age);
-	        if (currUser.online)
-	            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.im_online), null, null, null);
-	        else
-	            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.im_offline), null, null, null);
-	
-	        if (currUser.sex == Static.BOY) {
-	            mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-	                    getResources().getDrawable(R.drawable.dating_man_selector), null, null);
-	        } else if (currUser.sex == Static.GIRL) {
-	            mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-	                    getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
-	        }
-	
-	        // buttons drawables
-	        mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual : singleMutual, null, null);
-	        mMutualBtn.setText(currUser.mutual ? getString(R.string.dashbrd_btn_sympathy_mutual) : getString(R.string.dashbrd_btn_sympathy));
-	        mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleDelight : singleDelight, null, null);
-	
-	        //photos
-	        mImageSwitcher.setData(currUser.photos);
-	        mImageSwitcher.setCurrentItem(0, true);
-	        mCurrentPhotoPrevPos = 0;
-	        setCounter(mCurrentPhotoPrevPos);
+        if (currUser != null) {
+            lockControls();
+            if (currUser.city != null) {
+                mUserInfoCity.setText(currUser.city.name);
+            }
+            mUserInfoStatus.setText(currUser.status);
+            mUserInfoName.setText(currUser.first_name + ", " + currUser.age);
+            if (currUser.online)
+                mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.im_online), null, null, null);
+            else
+                mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.im_offline), null, null, null);
+
+            if (currUser.sex == Static.BOY) {
+                mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                        getResources().getDrawable(R.drawable.dating_man_selector), null, null);
+            } else if (currUser.sex == Static.GIRL) {
+                mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                        getResources().getDrawable(R.drawable.dating_woman_selector), null, null);
+            }
+
+            // buttons drawables
+            mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual : singleMutual, null, null);
+            mMutualBtn.setText(currUser.mutual ? getString(R.string.dashbrd_btn_sympathy_mutual) : getString(R.string.dashbrd_btn_sympathy));
+            mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleDelight : singleDelight, null, null);
+
+            //photos
+            mImageSwitcher.setData(currUser.photos);
+            mImageSwitcher.setCurrentItem(0, true);
+            mCurrentPhotoPrevPos = 0;
+            setCounter(mCurrentPhotoPrevPos);
         }
     }
 

@@ -38,9 +38,6 @@ public class EditFormItemsFragment extends AbstractEditFragment {
         mProfile = CacheProfile.getProfile();
     }
 
-    public EditFormItemsFragment() {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mProfile);
@@ -56,7 +53,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
         String formItemTitle = mFormInfo.getFormTitle(mTitleId);
         subTitle.setText(formItemTitle);
 
-        ((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
         mBackButton.setVisibility(View.VISIBLE);
         mBackButton.setText(R.string.navigation_edit);
@@ -188,7 +185,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
+            ViewHolder holder;
 
             if (convertView == null) {
                 holder = new ViewHolder();

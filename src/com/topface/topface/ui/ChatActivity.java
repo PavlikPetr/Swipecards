@@ -102,7 +102,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         headerSubtitle.setVisibility(View.VISIBLE);
         headerSubtitle.setText(getIntent().getStringExtra(INTENT_USER_CITY));
 
-        (findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         Button btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
         btnBack.setVisibility(View.VISIBLE);
         if (getIntent().hasExtra(INTENT_PREV_ENTITY)) {
