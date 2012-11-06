@@ -46,7 +46,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 			
 			@Override
 			public void onClick(View v) {
-				btnProfile.callOnClick();				
+//				btnProfile.callOnClick(); ??
+                btnProfile.performClick();
 			}
 		});
 
