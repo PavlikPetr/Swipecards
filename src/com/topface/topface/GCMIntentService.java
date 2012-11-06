@@ -12,13 +12,7 @@ import com.topface.topface.utils.Settings;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Ilya Vorobiev
- * Date: 31.10.12
- * Time: 15:36
- * To change this template use File | Settings | File Templates.
- */
+
 public class GCMIntentService extends GCMBaseIntentService {
     public static final String SENDER_ID = "932206034265";
 
@@ -44,14 +38,14 @@ public class GCMIntentService extends GCMBaseIntentService {
         //Сообщаем о том что есть новое уведомление и нужно обновить список
         Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);
         String user = intent.getStringExtra("user");
-        Debug.logJson("GCM","User", user);
+        Debug.logJson("GCM", "User", user);
         broadcastReceiver.putExtra("id", getUserId(user));
         context.sendBroadcast(broadcastReceiver);
     }
 
     @Override
     protected void onError(Context context, String s) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Debug.error(String.format("GCM Error: %s", s));
     }
 
     @Override
@@ -61,7 +55,7 @@ public class GCMIntentService extends GCMBaseIntentService {
             public void run() {
                 Looper.prepare();
 
-                Debug.log("onRegistered", registrationId);
+                Debug.log("GCM onRegistered", registrationId);
 
                 RegistrationTokenRequest registrationRequest = new RegistrationTokenRequest(getApplicationContext());
                 registrationRequest.token = registrationId;
@@ -73,6 +67,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
+                        Debug.error(String.format("RegistrationRequest fail: #%d %s", codeError, response));
                     }
                 }).exec();
                 Looper.loop();
@@ -82,14 +77,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     @Override
     protected void onUnregistered(Context context, String s) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Debug.log(String.format("GCM onUnregistered: %s", s));
     }
 
     private String getUserId(String user) {
         String id = "";
-        JSONObject userJSON = null;
         try {
-            userJSON = new JSONObject(user);
+            JSONObject userJSON = new JSONObject(user);
             id = userJSON.optString("id");
         } catch (JSONException e) {
             Debug.error(e);
