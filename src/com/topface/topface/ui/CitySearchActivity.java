@@ -43,7 +43,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
     private String mAllCitiesString;
     private int mRequestKey;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,10 +53,10 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
-        
+
         mRequestKey = getIntent().getIntExtra(Static.INTENT_REQUEST_KEY, 0);
         mAllCitiesString = getResources().getString(R.string.filter_cities_all);
-        
+
         // Data
         mTopCitiesList = new LinkedList<City>();
         mDataList = new LinkedList<City>();
@@ -64,8 +64,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
         // Title Header        
         ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.filter_city));
-        ((Button) findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
-        Button btnBack = (Button) findViewById(R.id.btnNavigationBack);
+        findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
+        View btnBack = findViewById(R.id.btnNavigationBack);
         btnBack.setVisibility(View.VISIBLE);
         btnBack.setOnClickListener(new OnClickListener() {
             @Override
@@ -87,7 +87,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                ViewHolder holder = null;
+                ViewHolder holder;
 
                 if (convertView == null) {
                     holder = new ViewHolder();
@@ -245,9 +245,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
 
     private void fillData(LinkedList<City> citiesList) {
-        mDataList.clear();        
+        mDataList.clear();
         if (mRequestKey == INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY)
-        	mDataList.add(City.createCity(City.ALL_CITIES,mAllCitiesString,mAllCitiesString));
+            mDataList.add(City.createCity(City.ALL_CITIES, mAllCitiesString, mAllCitiesString));
         mDataList.addAll(citiesList);
         mNameList.clear();
         for (City city : mDataList)
