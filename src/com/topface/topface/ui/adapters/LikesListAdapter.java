@@ -125,7 +125,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
     @Override
 	protected int getNewItemLayout() {		
-		return getItemLayout();
+		return R.layout.item_new_feed_like;
 	}
     
     public void setOnMutualListener(OnMutualListener listener) {

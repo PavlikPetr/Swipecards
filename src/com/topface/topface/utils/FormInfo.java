@@ -45,7 +45,8 @@ public class FormInfo {
                     break;
             }
         } catch (Exception e) {
-
+        	Debug.error(e);
+        	title = Static.EMPTY;        	
         } finally {
             formItem.title = title;
             formItem.value = data;
@@ -282,7 +283,7 @@ public class FormInfo {
         if (variants.length <= 0)
             return result;
         if (variants.length == 1) {
-            return variants[0];
+            return variants[0] == null ? result : variants[0];
         }
 
         if (mProfile instanceof User) {
@@ -305,6 +306,7 @@ public class FormInfo {
             }
         }
 
+        if (result == null) result = Static.EMPTY;
         return result;
     }
 

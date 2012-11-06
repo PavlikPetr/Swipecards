@@ -268,7 +268,11 @@ public class ConnectionManager {
 
     public synchronized void notifyDelayedRequests() {
         for (Thread mDelayedRequestsThread : mDelayedRequestsThreads) {
-            mDelayedRequestsThread.notify();
+        	try {
+        		mDelayedRequestsThread.notify();
+        	} catch (Exception ex) {
+        		Debug.log(ex.toString());
+        	}
         }
 
         mDelayedRequestsThreads.clear();
