@@ -39,8 +39,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         mSettings = Settings.getInstance();
 
         // Navigation bar
-        mNavBarController = new NavigationBarController((ViewGroup)view.findViewById(R.id.loNavigationBar));
-        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
+        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
+        view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_header_title);
 
         // Init settings views
@@ -53,7 +53,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         ViewGroup frame;
 
         Options options = CacheProfile.getOptions();
-        
+
         // Notifications header
         frame = (ViewGroup) root.findViewById(R.id.loNotificationsHeader);
         setText(R.string.settings_notifications_header, frame);
@@ -63,28 +63,28 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setBackground(R.drawable.edit_big_btn_top, frame);
         setText(R.string.settings_likes, frame);
         initEditNotificationFrame(Settings.SETTINGS_C2DM_LIKES_PHONE,
-        		Settings.SETTINGS_C2DM_LIKES_EMAIL, frame,options.hasMail,options.pages.get(Options.PAGE_LIKES).mail);
+                Settings.SETTINGS_C2DM_LIKES_EMAIL, frame, options.hasMail, options.pages.get(Options.PAGE_LIKES).mail);
 
         // Mutual
         frame = (ViewGroup) root.findViewById(R.id.loMutual);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_mutual, frame);
         initEditNotificationFrame(Settings.SETTINGS_C2DM_MUTUAL_PHONE,
-        		Settings.SETTINGS_C2DM_MUTUAL_EMAIL, frame,options.hasMail,options.pages.get(Options.PAGE_MUTUAL).mail);
+                Settings.SETTINGS_C2DM_MUTUAL_EMAIL, frame, options.hasMail, options.pages.get(Options.PAGE_MUTUAL).mail);
 
         // Chat
         frame = (ViewGroup) root.findViewById(R.id.loChat);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_messages, frame);
         initEditNotificationFrame(Settings.SETTINGS_C2DM_DIALOGS_PHONE,
-                Settings.SETTINGS_C2DM_DIALOGS_EMAIL, frame,options.hasMail,options.pages.get(Options.PAGE_DIALOGS).mail);
+                Settings.SETTINGS_C2DM_DIALOGS_EMAIL, frame, options.hasMail, options.pages.get(Options.PAGE_DIALOGS).mail);
 
         // Guests
         frame = (ViewGroup) root.findViewById(R.id.loGuests);
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
         initEditNotificationFrame(Settings.SETTINGS_C2DM_VISITORS_PHONE,
-                Settings.SETTINGS_C2DM_VISITORS_EMAIL, frame,options.hasMail,options.pages.get(Options.PAGE_VISITORS).mail);
+                Settings.SETTINGS_C2DM_VISITORS_EMAIL, frame, options.hasMail, options.pages.get(Options.PAGE_VISITORS).mail);
 
         // Help
         frame = (ViewGroup) root.findViewById(R.id.loHelp);
@@ -115,11 +115,11 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loAbout);
         setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
         setText(R.string.settings_about, frame);
-        frame.setOnClickListener(this);        
-        
-        
+        frame.setOnClickListener(this);
+
+
     }
-    
+
     private void setText(int titleId, ViewGroup frame) {
         ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleId);
     }
@@ -150,7 +150,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         textView.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(iconRes), null, null, null);
     }
 
-    private void initEditNotificationFrame(String phoneKey,final String emailKey, ViewGroup frame, boolean enabled, boolean checked) {
+    private void initEditNotificationFrame(String phoneKey, final String emailKey, ViewGroup frame, boolean enabled, boolean checked) {
         CheckBox checkBox = (CheckBox) frame.findViewById(R.id.cbPhone);
         checkBox.setTag(phoneKey);
         checkBox.setChecked(mSettings.getSetting(phoneKey));
@@ -160,7 +160,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         checkBoxEmail.setTag(emailKey);
         checkBoxEmail.setChecked(checked);
         checkBoxEmail.setEnabled(enabled);
-        checkBoxEmail.setOnCheckedChangeListener(this);        
+        checkBoxEmail.setOnCheckedChangeListener(this);
     }
 
     private void setBackground(int resId, ViewGroup frame) {
@@ -195,39 +195,39 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     @Override
-    public void onCheckedChanged(final CompoundButton buttonView,final boolean isChecked) {
-        final String key = (String) buttonView.getTag();        
-        
-        SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(key,isChecked,getActivity().getApplicationContext());
+    public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+        final String key = (String) buttonView.getTag();
+
+        SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(key, isChecked, getActivity().getApplicationContext());
         if (request != null) {
-        	buttonView.setEnabled(false);
-        	request.callback(new ApiHandler() {
-				
-				@Override
-				public void success(ApiResponse response) throws NullPointerException {
-					buttonView.post(new Runnable() {
-						
-						@Override
-						public void run() {
-							buttonView.setEnabled(true);
-						}
-					});
-					
-					mSettings.setSetting(key, isChecked);
-				}
-				
-				@Override
-				public void fail(int codeError, ApiResponse response) throws NullPointerException {
-					buttonView.post(new Runnable() {
-						
-						@Override
-						public void run() {
-							buttonView.setEnabled(true);
-						}
-					});
-					mSettings.setSetting(key, !isChecked);
-				}
-			}).exec();
+            buttonView.setEnabled(false);
+            request.callback(new ApiHandler() {
+
+                @Override
+                public void success(ApiResponse response) throws NullPointerException {
+                    buttonView.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            buttonView.setEnabled(true);
+                        }
+                    });
+
+                    mSettings.setSetting(key, isChecked);
+                }
+
+                @Override
+                public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    buttonView.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            buttonView.setEnabled(true);
+                        }
+                    });
+                    mSettings.setSetting(key, !isChecked);
+                }
+            }).exec();
         }
     }
 

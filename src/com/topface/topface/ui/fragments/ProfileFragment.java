@@ -30,17 +30,12 @@ import com.topface.topface.utils.http.ProfileBackgrounds;
 public class ProfileFragment extends BaseFragment implements OnClickListener {
 
     private ImageViewRemote mUserAvatar;
-    private TextView mUserName;
-    private TextView mUserCity;
     private ViewGroup mUserProfileHeader;
 
     private RadioGroup mUserRadioGroup;
     private RadioButton mUserPhoto;
     private RadioButton mUserForm;
     private RadioButton mUserGifts;
-
-    private TextView mUserMoney;
-    private TextView mUserPower;
 
     private IndicatorView mIndicatorView;
     private ViewPager mViewPager;
@@ -63,8 +58,8 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
 
 //		mFragmentsHash = new HashMap<Integer, Fragment>();
         // Navigation bar
-        mNavBarController = new NavigationBarController((ViewGroup)view.findViewById(R.id.loNavigationBar));
-        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
+        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
+        view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.profile_header_title);
 
         Button editButton = (Button) view.findViewById(R.id.btnNavigationRightWithText);
@@ -74,11 +69,11 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
 
         // Avatar, Name, City
         mUserAvatar = (ImageViewRemote) view.findViewById(R.id.ivUserAvatar);
-        mUserName = (TextView) view.findViewById(R.id.ivUserName);
+        TextView userName = (TextView) view.findViewById(R.id.ivUserName);
         String userNameString = CacheProfile.first_name + (isAgeOk(CacheProfile.age) ? ", " + CacheProfile.age : "");
-        mUserName.setText(userNameString);
-        mUserCity = (TextView) view.findViewById(R.id.ivUserCity);
-        mUserCity.setText(CacheProfile.city_name);
+        userName.setText(userNameString);
+        TextView userCity = (TextView) view.findViewById(R.id.ivUserCity);
+        userCity.setText(CacheProfile.city_name);
         mUserProfileHeader = (ViewGroup) view.findViewById(R.id.loProfileHeader);
 
         // Actions Button
@@ -91,12 +86,12 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         mUserGifts.setOnClickListener(mInfoClickListener);
 
         // Resources
-        mUserMoney = (TextView) view.findViewById(R.id.tvUserMoney);
-        mUserMoney.setText("" + CacheProfile.money);
-        mUserPower = (TextView) view.findViewById(R.id.tvUserPower);
-        mUserPower.setOnClickListener(mBuyClickListener);
-        mUserPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
-        mUserPower.setText("" + CacheProfile.power + "%");
+        TextView userMoney = (TextView) view.findViewById(R.id.tvUserMoney);
+        userMoney.setText("" + CacheProfile.money);
+        TextView userPower = (TextView) view.findViewById(R.id.tvUserPower);
+        userPower.setOnClickListener(mBuyClickListener);
+        userPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+        userPower.setText("" + CacheProfile.power + "%");
 
         // View Pager
         mViewPager = (ViewPager) view.findViewById(R.id.UserViewPager);
@@ -124,6 +119,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
                     layoutBuyButton();
                     mIndicatorView.reCompute();
                     ViewTreeObserver obs = mIndicatorView.getViewTreeObserver();
+                    //noinspection deprecation
                     obs.removeGlobalOnLayoutListener(this);
                 }
             }
@@ -235,8 +231,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
     };
 
     private boolean isAgeOk(int age) {
-        if (age <= 0) return false;
-        return true;
+        return age > 0;
     }
 
     /*

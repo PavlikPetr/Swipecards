@@ -60,7 +60,7 @@ public class TopsFragment extends BaseFragment {
 
         // Navigation bar
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
-        (view.findViewById(R.id.btnNavigationHome)).setOnClickListener((NavigationActivity) getActivity());
+        view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.tops_title);
 
         //Инициализируем кнопку фильтров
@@ -138,7 +138,7 @@ public class TopsFragment extends BaseFragment {
         updateData();
 
         mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
-        
+
         return view;
     }
 
@@ -261,17 +261,17 @@ public class TopsFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {    	
-    	super.onResume();
-    	mFloatBlock.onResume();    	
+    public void onResume() {
+        super.onResume();
+        mFloatBlock.onResume();
     }
-    
+
     @Override
-    public void onPause() {    	
-    	super.onPause();
-    	mFloatBlock.onPause();
+    public void onPause() {
+        super.onPause();
+        mFloatBlock.onPause();
     }
-    
+
     @Override
     protected void onUpdateStart(boolean isPushUpdating) {
         if (!isPushUpdating) {

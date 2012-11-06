@@ -96,7 +96,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
         String userName = getIntent().getStringExtra(INTENT_USER_NAME); // name
         ((TextView) findViewById(R.id.tvNavigationTitle)).setText(userName);
 
-        (findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         if (getIntent().hasExtra(INTENT_PREV_ENTITY)) {
             Button btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
             btnBack.setVisibility(View.VISIBLE);
@@ -246,7 +246,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
                 });
             }
         }).exec();
-    }    
+    }
 
     View.OnClickListener mRatesClickListener = new View.OnClickListener() {
         @Override
@@ -278,23 +278,23 @@ public class UserProfileActivity extends BaseFragmentActivity {
             }
         }
     };
-    
+
     OnRateControllerListener mRateControllerListener = new OnRateControllerListener() {
-		
-		@Override
-		public void successRate() {
-			mUser.rated = true;	
-			mUserDelight.setEnabled(!mUser.rated);
+
+        @Override
+        public void successRate() {
+            mUser.rated = true;
+            mUserDelight.setEnabled(!mUser.rated);
             mUserMutual.setEnabled(!mUser.rated);
-		}
-		
-		@Override
-		public void failRate() {
-			mUser.rated = false;
-			mUserDelight.setEnabled(!mUser.rated);
+        }
+
+        @Override
+        public void failRate() {
+            mUser.rated = false;
+            mUserDelight.setEnabled(!mUser.rated);
             mUserMutual.setEnabled(!mUser.rated);
-		}
-	};
+        }
+    };
 
     View.OnClickListener mInfoClickListener = new View.OnClickListener() {
         @Override

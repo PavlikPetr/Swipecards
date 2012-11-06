@@ -2,7 +2,6 @@ package com.topface.topface.ui.edit;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -42,7 +41,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
         subTitle.setVisibility(View.VISIBLE);
         subTitle.setText(R.string.edit_bg_photo);
 
-        ((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
         btnBack.setVisibility(View.VISIBLE);
         btnBack.setText(R.string.navigation_edit);
@@ -67,9 +66,9 @@ public class EditBackgroundFragment extends AbstractEditFragment {
         LinkedList<BackgroundItem> result = new LinkedList<BackgroundItem>();
         int[] backgroundsIds = ProfileBackgrounds.getAllBackgroundIds(getActivity().getApplicationContext());
 
-        for (int i = 0; i < backgroundsIds.length; i++) {
-            boolean selected = CacheProfile.background_id == backgroundsIds[i] ? true : false;
-            result.add(ProfileBackgrounds.getResourceBackgroundItem(getActivity().getApplicationContext(), backgroundsIds[i]).setSelected(selected));
+        for (int backgroundsId : backgroundsIds) {
+            boolean selected = CacheProfile.background_id == backgroundsId;
+            result.add(ProfileBackgrounds.getResourceBackgroundItem(getActivity().getApplicationContext(), backgroundsId).setSelected(selected));
         }
 
         return result;
@@ -145,7 +144,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
+            ViewHolder holder;
             final BackgroundItem item = getItem(position);
 
             if (convertView == null) {
@@ -192,29 +191,6 @@ public class EditBackgroundFragment extends AbstractEditFragment {
             ImageView mImageView;
             ImageView mFrameImageView;
             ViewGroup mSelected;
-        }
-    }
-
-    class BitmapBackgroundItem implements BackgroundItem {
-
-        private Bitmap mBitmap;
-        private boolean selected;
-
-        public BitmapBackgroundItem(Bitmap bitmap) {
-            mBitmap = bitmap;
-        }
-
-        public Bitmap getBitmap() {
-            return mBitmap;
-        }
-
-        public boolean isSelected() {
-            return selected;
-        }
-
-        public BackgroundItem setSelected(boolean selected) {
-            this.selected = selected;
-            return (BackgroundItem) this;
         }
     }
 

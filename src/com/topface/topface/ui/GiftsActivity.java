@@ -39,7 +39,7 @@ public class GiftsActivity extends BaseFragmentActivity {
         this.setContentView(R.layout.ac_gifts);
 
         ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.gifts_title);
-        (findViewById(R.id.btnNavigationHome)).setVisibility(View.INVISIBLE);
+        findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
         Button backButton = ((Button) findViewById(R.id.btnNavigationBack));
         backButton.setVisibility(View.VISIBLE);
         backButton.setOnClickListener(new OnClickListener() {

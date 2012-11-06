@@ -1,8 +1,5 @@
 package com.topface.topface.ui.edit;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +14,8 @@ import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+
+import java.util.Arrays;
 
 public class FilterChooseFormItemFragment extends AbstractEditFragment {
 
@@ -40,9 +39,6 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         mProfile = profile;
     }
 
-    public FilterChooseFormItemFragment() {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mProfile);
@@ -58,7 +54,7 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         String formItemTitle = mFormInfo.getFormTitle(mTitleId);
         subTitle.setText(formItemTitle);
 
-        ((Button) getActivity().findViewById(R.id.btnNavigationHome)).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
         mBackButton.setVisibility(View.VISIBLE);
         mBackButton.setText(R.string.navigation_edit);
@@ -78,15 +74,15 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         ((TextView) header.findViewById(R.id.tvTitle)).setText(formItemTitle);
         mListView.addHeaderView(header);
 
-                 
-        String [] tmpStr = mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData});        
-        String [] data = Arrays.copyOf(tmpStr, tmpStr.length +1);
-        data[data.length-1] = getResources().getString(R.string.form_not_specified);        
-        
-        int [] tmpInt = mFormInfo.getIdsByTitleId(mTitleId); 
-        int [] ids = Arrays.copyOf(tmpInt, tmpInt.length + 1);
-        ids[ids.length-1] = FormItem.NOT_SPECIFIED_ID;
-        
+
+        String[] tmpStr = mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData});
+        String[] data = Arrays.copyOf(tmpStr, tmpStr.length + 1);
+        data[data.length - 1] = getResources().getString(R.string.form_not_specified);
+
+        int[] tmpInt = mFormInfo.getIdsByTitleId(mTitleId);
+        int[] ids = Arrays.copyOf(tmpInt, tmpInt.length + 1);
+        ids[ids.length - 1] = FormItem.NOT_SPECIFIED_ID;
+
         mListView.setAdapter(new FormCheckingDataAdapter(getActivity().getApplicationContext(),
                 data, ids, mSeletedDataId));
         return root;
@@ -132,7 +128,7 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
+            ViewHolder holder;
 
             if (convertView == null) {
                 holder = new ViewHolder();
