@@ -314,7 +314,7 @@
     <style name="BackButton" parent="android:Widget.ImageButton">
         <item name="android:src">@drawable/navigation_back_selector</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:background">@android:color/transparent</item>

@@ -181,8 +181,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/navigation_male_profile_selector"
                 android:background="@android:color/transparent"
+                android:src="@drawable/navigation_male_profile_selector"
                 android:visibility="gone"/>
     </RelativeLayout>
 
