@@ -1,5 +1,7 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
@@ -18,10 +20,12 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DeleteRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -32,6 +36,8 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
 import org.json.JSONObject;
 
+import static android.widget.AdapterView.OnItemClickListener;
+
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
@@ -40,7 +46,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected boolean mIsUpdating;
     private RetryView updateErrorMessage;
     private RelativeLayout mContainer;
-    
+
+    protected String[]
+            strings;
+
+    private final int DELETE_BUTTON = 0;
+    private final int COPY_BUTTON = 1;
+
     private FloatBlock mFloatBlock;
 
     @Override
@@ -48,6 +60,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
+        strings = new String[]{getString(R.string.default_delete_title), getString(R.string.default_copy_title)};
         // Navigation bar
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
@@ -70,7 +83,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public void onResume() {
     	super.onResume();
-    	mFloatBlock.onResume();    	
+    	mFloatBlock.onResume();
     }
     
     @Override
@@ -137,8 +150,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         };
     }
 
-    protected AdapterView.OnItemClickListener getOnItemClickListener() {
-        return new AdapterView.OnItemClickListener() {
+    protected OnItemClickListener getOnItemClickListener() {
+        return new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FeedItem item = (FeedItem) parent.getItemAtPosition(position);
@@ -164,11 +177,53 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return new AdapterView.OnItemLongClickListener() {
 
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.default_spinner_title).setItems(strings,new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DELETE_BUTTON:
+                                deleteItem(position-1);
+                                break;
+                            case COPY_BUTTON:
+
+                                break;
+                        }
+                    }
+                });
+                builder.create().show();
                 return false;
             }
 
         };
+    }
+
+    private void deleteItem(final int position) {
+        DeleteRequest dr = new DeleteRequest(getActivity());
+        dr.id = mListAdapter.getItem(position).id;
+        registerRequest(dr);
+        dr.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) throws NullPointerException {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FeedList<T> mFeedList = mListAdapter.getData();
+                        mFeedList.remove(position);
+                        mListAdapter.setData(mFeedList);
+//                        mListView.setAdapter(mListAdapter);
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                Debug.log(response.toString());
+            }
+        }).exec();
+
     }
 
     protected OnTouchListener getListViewOnTouchListener() {

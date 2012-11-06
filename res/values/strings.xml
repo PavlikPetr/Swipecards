@@ -43,6 +43,10 @@
     <string name="default_notification_title">@string/app_name</string>
     <string name="default_notification_text">You\'ve got something new!</string><!--TODO: Переделать-->
 
+    <!--Feed editing-->
+    <string name="default_spinner_title">Choose action</string>
+    <string name="default_delete_title">Delete</string>
+    <string name="default_copy_title">Copy</string>
 
     <!-- Likes Activity -->
     <string name="likes_background_text">No likes</string>

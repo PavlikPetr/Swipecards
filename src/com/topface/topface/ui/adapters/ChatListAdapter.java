@@ -214,7 +214,7 @@ public class ChatListAdapter extends BaseAdapter {
                                 (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                         clipboard.setText(holder.message.getText());
                         Toast.makeText(mContext, R.string.general_msg_copied, Toast.LENGTH_SHORT).show();
-                        return false;  //To change body of implemented methods use File | Settings | File Templates.
+                        return false;
                     }
                 });
             }

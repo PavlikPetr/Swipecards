@@ -214,6 +214,12 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     }
 
+    public void setData(FeedList<T> data) {
+        mData = data;
+        notifyDataSetChanged();
+        setLastUpdate();
+    }
+
     private void setLastUpdate() {
         mLastUpdate = System.currentTimeMillis();
     }
