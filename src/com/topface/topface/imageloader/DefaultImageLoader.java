@@ -13,6 +13,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
 
+@SuppressWarnings("UnusedDeclaration")
 public class DefaultImageLoader {
 
     private static ImageLoader mImageLoader;
@@ -66,7 +67,9 @@ public class DefaultImageLoader {
             getImageLoader().displayImage(uri, imageView, options, listener, postProcessor);
         } catch (Exception e) {
             Debug.error("ImageLoader displayImage error", e);
-            listener.onLoadingFailed(FailReason.UNKNOWN);
+            if (listener != null) {
+                listener.onLoadingFailed(FailReason.UNKNOWN);
+            }
         }
     }
 

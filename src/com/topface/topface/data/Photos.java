@@ -1,12 +1,13 @@
 package com.topface.topface.data;
 
+
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
-public class Photos extends LinkedList<Photo> {
+public class Photos extends ArrayList<Photo> {
 
     public Photos(JSONArray photos) {
         this();
@@ -22,7 +23,7 @@ public class Photos extends LinkedList<Photo> {
         if (photoArray != null) {
             for (int i = 0; i < photoArray.length(); i++) {
                 try {
-                    photos.push(new Photo(photoArray.getJSONObject(i)));
+                    photos.addFirst(new Photo(photoArray.getJSONObject(i)));
                 } catch (JSONException e) {
                     Debug.error("Photo parse error", e);
                 }
@@ -63,5 +64,17 @@ public class Photos extends LinkedList<Photo> {
             }
         }
         return result;
+    }
+
+    public Photo getFirst() {
+        if (!this.isEmpty()) {
+            return this.get(0);
+        }
+
+        return null;
+    }
+
+    public void addFirst(Photo value) {
+        this.add(0, value);
     }
 }

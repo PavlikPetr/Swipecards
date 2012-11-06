@@ -86,6 +86,7 @@ public class CacheProfile {
         unread_likes = profile.unread_likes;
         unread_messages = profile.unread_messages;
         unread_mutual = profile.unread_mutual;
+        unread_visitors = profile.unread_visitors;
         average_rate = profile.average_rate;
     }
 
@@ -103,6 +104,7 @@ public class CacheProfile {
         profile.unread_likes = unread_likes;
         profile.unread_messages = unread_messages;
         profile.unread_mutual = unread_mutual;
+        profile.unread_visitors = unread_visitors;
         profile.average_rate = average_rate;
 
         profile.city_id = city_id;
@@ -137,6 +139,7 @@ public class CacheProfile {
         unread_likes = profile.unread_likes;
         unread_messages = profile.unread_messages;
         unread_mutual = profile.unread_mutual;
+        unread_visitors = profile.unread_visitors;
         average_rate = profile.average_rate;
 
         city_id = profile.city_id;
@@ -183,6 +186,7 @@ public class CacheProfile {
                     profile.unread_messages = 0;
                     profile.unread_rates = 0;
                     profile.unread_mutual = 0;
+                    profile.unread_visitors = 0;
                     setProfile(profile, response);
                     result = true;
                 } catch (JSONException e) {

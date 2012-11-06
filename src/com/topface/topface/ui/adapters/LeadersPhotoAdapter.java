@@ -16,8 +16,13 @@ public class LeadersPhotoAdapter extends BaseAdapter {
     private LeadersActivity.PhotoSelector mPhotoSelector;
     // class ViewHolder
 
+    protected static final int T_ADD_BTN = 0;
+    protected static final int T_PHOTO = 1;
+    protected static final int T_COUNT = T_PHOTO + 1;    
+    
     static class ViewHolder {
         ImageViewRemote imageView;
+        ImageView addPhoto;
         ImageView checkbox;
     }
 
@@ -47,6 +52,20 @@ public class LeadersPhotoAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return T_ADD_BTN;
+        } else {
+            return T_PHOTO;
+        }
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return T_COUNT;
+    }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -56,16 +75,20 @@ public class LeadersPhotoAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.leaders_album_item, parent, false);
             holder.imageView = (ImageViewRemote) convertView.findViewById(R.id.leaderAlbumPhoto);
+            holder.addPhoto = (ImageView) convertView.findViewById(R.id.ivAddPhoto);
             holder.checkbox = (ImageView) convertView.findViewById(R.id.checkbox);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (position == 0 && getItem(position) == null) {
-            holder.imageView.setImageResource(R.drawable.btn_leaders_add_photo);
+        if (getItemViewType(position) == T_ADD_BTN) {
+        	holder.imageView.setVisibility(View.GONE);        	
             holder.checkbox.setVisibility(View.GONE);
+            holder.addPhoto.setVisibility(View.VISIBLE);
         } else {
+        	holder.imageView.setVisibility(View.VISIBLE);
+        	holder.addPhoto.setVisibility(View.GONE);        	
             holder.checkbox.setVisibility(
                     mPhotoSelector.getItemId() == position ?
                             View.VISIBLE :

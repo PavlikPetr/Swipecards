@@ -20,15 +20,15 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.TopRequest;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.adapters.TopsGridAdapter;
+import com.topface.topface.ui.adapters.TopsAdapter;
 import com.topface.topface.ui.blocks.FilterBlock;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.ThumbView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.GalleryGridManager;
 import com.topface.topface.utils.NavigationBarController;
 
 import java.util.LinkedList;
@@ -36,12 +36,12 @@ import java.util.LinkedList;
 public class TopsFragment extends BaseFragment {
 
     private GridView mGallery;
-    private TopsGridAdapter mGridAdapter;
-    private GalleryGridManager mGalleryGridManager;
+    private TopsAdapter mGridAdapter;
     private Button mCityButton;
     private LockerView mLoadingLocker;
     private ActionData mActionData;
     private DoubleButton mBtnDouble;
+    private FloatBlock mFloatBlock;
 
     private static int GIRLS = 0;
     private static int BOYS = 1;
@@ -118,7 +118,6 @@ public class TopsFragment extends BaseFragment {
         mGallery = (GridView) view.findViewById(R.id.grdTopsGallary);
         mGallery.setAnimationCacheEnabled(false);
         mGallery.setScrollingCacheEnabled(false);
-        mGallery.setNumColumns(Data.GRID_COLUMN);
         mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -133,12 +132,13 @@ public class TopsFragment extends BaseFragment {
         });
 
         // Control creating
-        mGalleryGridManager = new GalleryGridManager(getActivity(), Data.topsList);
-        mGridAdapter = new TopsGridAdapter(getActivity(), mGalleryGridManager);
+        mGridAdapter = new TopsAdapter(getActivity(), Data.topsList);
         mGallery.setAdapter(mGridAdapter);
 
         updateData();
 
+        mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
+        
         return view;
     }
 
@@ -255,14 +255,23 @@ public class TopsFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mGalleryGridManager != null) {
-            mGalleryGridManager = null;
-        }
 
         mGallery = null;
         mGridAdapter = null;
     }
 
+    @Override
+    public void onResume() {    	
+    	super.onResume();
+    	mFloatBlock.onResume();    	
+    }
+    
+    @Override
+    public void onPause() {    	
+    	super.onPause();
+    	mFloatBlock.onPause();
+    }
+    
     @Override
     protected void onUpdateStart(boolean isPushUpdating) {
         if (!isPushUpdating) {

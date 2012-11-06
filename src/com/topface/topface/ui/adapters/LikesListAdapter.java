@@ -123,8 +123,13 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         return R.layout.item_feed_like;
     }
 
+    @Override
+	protected int getNewItemLayout() {		
+		return getItemLayout();
+	}
+    
     public void setOnMutualListener(OnMutualListener listener) {
         mMutualListener = listener;
-    }
+    }	
 
 }

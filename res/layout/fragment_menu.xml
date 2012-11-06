@@ -14,12 +14,14 @@
 
         <com.topface.topface.ui.views.ImageViewRemote
                 xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
-                ivr:postProcessor="rounded"
+                ivr:postProcessor="mask"
+                ivr:clipMask="@drawable/frame_menu_mask"
+                android:background="@drawable/frame_menu_mask"
                 android:id="@+id/ivMenuAvatar"
                 android:src="@drawable/topface_male_profile_button"
                 android:layout_centerVertical="true"
-                android:layout_width="35dp"
-                android:layout_height="35dp"/>
+                android:layout_width="30dp"
+                android:layout_height="30dp"/>
 
         <Button
                 android:id="@+id/btnFragmentProfile"
@@ -28,7 +30,7 @@
                 android:layout_toRightOf="@id/ivMenuAvatar"
                 android:layout_centerVertical="true"
                 android:text="@string/dashbrd_btn_profile"
-                android:paddingLeft="7dp"
+                android:paddingLeft="12dp"
                 android:background="@android:color/transparent"
                 style="@style/LeftMenuButtons"/>
 
@@ -53,16 +55,8 @@
     <!-- UNREAD LIKES -->
     <TextView
             android:id="@+id/tvNotifyLikes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/btnFragmentLikes"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="180dp"
-            android:background="@drawable/im_informer"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="12dp"
-            android:visibility="visible"/>
+            style="@style/Informer"/>
 
     <!-- Mutual - Sympathy -->
     <Button
@@ -75,16 +69,8 @@
     <!-- UNREAD MUTUAL -->
     <TextView
             android:id="@+id/tvNotifyMutual"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/btnFragmentMutual"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="180dp"
-            android:background="@drawable/im_informer"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="12dp"
-            android:visibility="visible"/>
+            style="@style/Informer"/>
 
     <!-- Dialogs - Messages - Chat -->
     <Button
@@ -97,16 +83,8 @@
     <!-- UNREAD DIALOGS -->
     <TextView
             android:id="@+id/tvNotifyDialogs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/btnFragmentDialogs"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="180dp"
-            android:background="@drawable/im_informer"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="12dp"
-            android:visibility="visible"/>
+            style="@style/Informer"/>
 
     <!-- Tops -->
     <Button
@@ -124,12 +102,17 @@
             android:drawableLeft="@drawable/topface_visitors"
             style="@style/LeftMenuButtons"/>
 
+    <TextView
+            android:id="@+id/tvNotifyVisitors"
+            android:layout_alignBaseline="@+id/btnFragmentVisitors"
+            style="@style/Informer"/>
+
     <!-- Settings -->
     <Button
             android:id="@+id/btnFragmentSettings"
             android:layout_below="@id/btnFragmentVisitors"
             android:text="@string/dashbrd_btn_settings"
-            android:drawableLeft="@drawable/topface_menu_settings"
+            android:drawableLeft="@drawable/topface_settings"
             style="@style/LeftMenuButtons"/>
 
 </RelativeLayout>

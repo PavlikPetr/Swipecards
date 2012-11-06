@@ -155,16 +155,16 @@ public class FragmentSwitchController extends ViewGroup {
         switch (typeAnimation) {
             case EXPAND:
                 mFragmentSwitchListener.beforeExpanding();
-                mScroller.startScroll(getLeftBound(), 0, -getRightBound(), 0, 300);
+                mScroller.startScroll(getLeftBound(), 0, -getRightBound(), 0, 500);
                 break;
             case COLLAPSE:
-                mScroller.startScroll(-getRightBound(), 0, getRightBound(), 0, 300);
+                mScroller.startScroll(-getRightBound(), 0, getRightBound(), 0, 500);
                 break;
             case EXPAND_FULL:
-                mScroller.startScroll(-getRightBound(), 0, -(mFullOpenDX), 0, 300);
+                mScroller.startScroll(-getRightBound(), 0, -(mFullOpenDX), 0, 500);
                 break;
             case COLLAPSE_FULL:
-                mScroller.startScroll(-mWidth, 0, mWidth, 0, 300);
+                mScroller.startScroll(-mWidth, 0, mWidth, 0, 500);
                 break;
             default:
                 break;
@@ -469,7 +469,7 @@ public class FragmentSwitchController extends ViewGroup {
         boolean result;
 
         if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
-            result = ((com.topface.topface.ui.views.ImageSwitcher) v).canScrollHorizontally(-dx);
+            result = ((com.topface.topface.ui.views.ImageSwitcher)v).canScrollHorizontally(-dx);
         } else {
             result = ViewCompat.canScrollHorizontally(v, -dx);
         }

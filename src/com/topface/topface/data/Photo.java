@@ -2,6 +2,9 @@ package com.topface.topface.data;
 
 import org.json.JSONObject;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.regex.Matcher;
@@ -11,10 +14,11 @@ import java.util.regex.Pattern;
  * Фотографии пользователей из нашего стораджа фотографий (не напрямую из социальной сети)
  */
 @SuppressWarnings("UnusedDeclaration")
-public class Photo extends AbstractData {
+public class Photo extends AbstractData implements Parcelable{
 
     public static final String SIZE_ORIGINAL = "original";
     public static final String SIZE_64 = "c64x64";
+    public static final String SIZE_150 = "r150x-";
     public static final String SIZE_128 = "c128x128";
     public static final String SIZE_192 = "c192x192";
     public static final String SIZE_256 = "c256x256";
@@ -93,11 +97,15 @@ public class Photo extends AbstractData {
         if (links != null) {
             int minDifference = Integer.MAX_VALUE;
             for (HashMap.Entry<String, String> entry : links.entrySet()) {
-                int entrySize = getSizeFromKey(entry.getKey());
-                int difference = Math.abs(entrySize - size);
-                if (difference < minDifference) {
-                    minDifference = difference;
-                    url = entry.getValue();
+                String entryKey = entry.getKey();
+                //Не используем редкие размеры фотографий
+                if (!entryKey.equals(SIZE_64) && !entryKey.equals(SIZE_150)) {
+                    int entrySize = getSizeFromKey(entryKey);
+                    int difference = Math.abs(entrySize - size);
+                    if (difference < minDifference) {
+                        minDifference = difference;
+                        url = entry.getValue();
+                    }
                 }
             }
 
@@ -126,4 +134,40 @@ public class Photo extends AbstractData {
     public int getId() {
         return mId;
     }
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(mId);
+		dest.writeInt(links.size());
+		for (String key : links.keySet()) {
+			dest.writeString(key);
+			dest.writeString(links.get(key));
+		}
+		
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static final Parcelable.Creator CREATOR =
+	    	new Parcelable.Creator() {
+	            public Photo createFromParcel(Parcel in) {
+	            	int id = in.readInt();
+	            	int hashSize = in.readInt();
+	            	HashMap<String, String> links = new HashMap<String, String>();
+	            	
+	            	for (int i = 0; i < hashSize; i++) {
+						links.put(in.readString(),in.readString());
+					}
+	            	
+	                return new Photo(id,links);
+	            }
+	 
+	            public Photo[] newArray(int size) {
+	                return new Photo[size];
+	            }
+	        };
 }

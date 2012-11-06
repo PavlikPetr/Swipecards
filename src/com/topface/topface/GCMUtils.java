@@ -51,7 +51,6 @@ public class GCMUtils {
         final String regId = GCMRegistrar.getRegistrationId(context);
         if (regId.equals("")) {
             GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
-
             Debug.log("Registered: "+regId);
         } else {
             Debug.log("Already registered, regID is "+regId);
@@ -105,20 +104,18 @@ public class GCMUtils {
 
             switch (type) {
                 case GCM_TYPE_MESSAGE:
-                    if (Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_MESSAGES_PHONE)) {
-                        if(user.id !=0){
-                            i = new Intent(context, ChatActivity.class);
+                    if(user.id !=0){
+                        i = new Intent(context, ChatActivity.class);
 
-                            i.putExtra(
-                                    ChatActivity.INTENT_USER_ID,
-                                    user.id
-                            );
-                            i.putExtra(ChatActivity.INTENT_USER_NAME, user.name);
-                            i.putExtra(ChatActivity.INTENT_USER_AVATAR,user.photoUrl );
-                            i.putExtra(ChatActivity.INTENT_USER_AGE,user.age);
-                        } else {
-                            i = new Intent(context,NavigationActivity.class);
-                        }
+                        i.putExtra(
+                                ChatActivity.INTENT_USER_ID,
+                                user.id
+                        );
+                        i.putExtra(ChatActivity.INTENT_USER_NAME, user.name);
+                        i.putExtra(ChatActivity.INTENT_USER_AVATAR,user.photoUrl );
+                        i.putExtra(ChatActivity.INTENT_USER_AGE,user.age);
+                    } else {
+                        i = new Intent(context,NavigationActivity.class);
                     }
                     break;
 
@@ -138,10 +135,8 @@ public class GCMUtils {
                     break;
 
                 case GCM_TYPE_GUESTS:
-                    if (Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_GUESTS_PHONE)) {
-                        i = new Intent(context, NavigationActivity.class);
-                        i.putExtra(NEXT_INTENT, BaseFragment.F_VISITORS);
-                    }
+                    i = new Intent(context, NavigationActivity.class);
+                    i.putExtra(NEXT_INTENT, BaseFragment.F_VISITORS);
                     break;
                 default:
                     i = new Intent(context, AuthActivity.class);

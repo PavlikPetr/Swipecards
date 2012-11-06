@@ -3,17 +3,12 @@
                 android:id="@+id/loHeaderBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:background="@drawable/im_bar_header">
 
-    <Button
+    <ImageButton
             android:id="@+id/btnNavigationBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="5dp"
-            android:background="@drawable/navigation_back_selector"
-            android:visibility="gone"/>
+            style="@style/BackButton"/>
 
     <TextView
             android:id="@+id/tvHeaderTitle"
@@ -23,14 +18,16 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"/>
 
-    <Button
+    <ImageButton
             android:id="@+id/btnHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
             android:visibility="gone"
-            android:background="@drawable/profile_bar_selector"/>
+            android:background="@android:color/transparent"
+            android:src="@drawable/profile_bar_selector"/>
 
 </RelativeLayout>

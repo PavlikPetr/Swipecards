@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private TextView mTvNotifyLikes;
     private TextView mTvNotifyMutual;
     private TextView mTvNotifyDialogs;
+    private TextView mTvNotifyVisitors;
 
     private FragmentMenuListener mFragmentMenuListener;
     private Button mDefaultMenuItem;
@@ -36,10 +38,18 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
 
         // Buttons
-        Button btnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
+        final Button btnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
         btnProfile.setOnClickListener(this);
         ImageViewRemote menuAvatar = (ImageViewRemote) mRootLayout.findViewById(R.id.ivMenuAvatar);
         menuAvatar.setPhoto(CacheProfile.photo);
+        menuAvatar.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+//				btnProfile.callOnClick(); ??
+                btnProfile.performClick();
+			}
+		});
 
         mDefaultMenuItem = (Button) mRootLayout.findViewById(R.id.btnFragmentDating);
 
@@ -62,6 +72,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         mTvNotifyLikes = (TextView) mRootLayout.findViewById(R.id.tvNotifyLikes);
         mTvNotifyMutual = (TextView) mRootLayout.findViewById(R.id.tvNotifyMutual);
         mTvNotifyDialogs = (TextView) mRootLayout.findViewById(R.id.tvNotifyDialogs);
+        mTvNotifyVisitors = (TextView) mRootLayout.findViewById(R.id.tvNotifyVisitors);
 
         hide();
 
@@ -103,6 +114,13 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             mTvNotifyDialogs.setVisibility(View.VISIBLE);
         } else {
             mTvNotifyDialogs.setVisibility(View.INVISIBLE);
+        }
+        
+        if (CacheProfile.unread_visitors > 0){
+        	mTvNotifyVisitors.setText(" " + CacheProfile.unread_visitors + " ");
+        	mTvNotifyVisitors.setVisibility(View.VISIBLE);
+        } else {
+        	mTvNotifyVisitors.setVisibility(View.INVISIBLE);
         }
     }
 

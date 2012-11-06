@@ -13,6 +13,7 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 public class UserPhotoFragment extends Fragment {
@@ -65,6 +66,7 @@ public class UserPhotoFragment extends Fragment {
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
+            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, mUser.photos);
             startActivity(intent);
         }
     };

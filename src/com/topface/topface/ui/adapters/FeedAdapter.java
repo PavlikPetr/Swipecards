@@ -17,6 +17,9 @@ import com.topface.topface.ui.views.ImageViewRemote;
  */
 public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter implements AbsListView.OnScrollListener {
 
+	protected static final int T_NEW = 3;
+	protected static final int T_COUNT = 1;
+	
     private Context mContext;
     private FeedList<T> mData;
     private LayoutInflater mInflater;
@@ -42,6 +45,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public TextView city;
         public TextView time;
         public ImageView online;
+        public TextView unreadCounter;
         public TextView text;
         public ImageView heart;
         public ViewFlipper flipper;
@@ -79,6 +83,25 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return i;
     }
 
+    @Override
+    public int getViewTypeCount() {    	
+    	return super.getViewTypeCount()+T_COUNT;
+    }
+    
+    @Override
+    public int getItemViewType(int position) {    	
+    	int superType = super.getItemViewType(position);
+    	if (superType == T_OTHER) {
+    		if (getItem(position).unread) {
+    			return T_NEW;
+    		} else {
+    			return T_OTHER;
+    		}
+    	} else {
+    		return superType;
+    	}
+    }
+    
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
 
@@ -119,10 +142,11 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
 
         final T item = getItem(position);
+        final int type = getItemViewType(position);
 
         //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
         if (holder == null) {
-            convertView = getInflater().inflate(getItemLayout(), null, false);
+            convertView = getInflater().inflate(type==T_NEW ? getNewItemLayout() : getItemLayout(), null, false);
             holder = getEmptyHolder(convertView, item);
         }
 
@@ -283,6 +307,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     abstract protected int getItemLayout();
+    abstract protected int getNewItemLayout();
 
     public boolean isNeedUpdate() {
         return isEmpty() || (System.currentTimeMillis() > mLastUpdate + CACHE_TIMEOUT);

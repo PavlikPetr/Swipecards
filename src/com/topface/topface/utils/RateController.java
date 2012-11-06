@@ -42,8 +42,17 @@ public class RateController {
         mCommentDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                if(NavigationActivity.mThis != null)
-                ((NavigationActivity)context).onDialogCancel();
+            	if(context instanceof NavigationActivity) {
+            		((NavigationActivity)context).onDialogCancel();
+            	}
+            	mContext.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                    	if (mOnRateControllerListener != null)
+                    		mOnRateControllerListener.failRate();
+                    }
+                });
+            	
             }
         });
         mCommentText = (EditText) mCommentDialog.findViewById(R.id.etPopupComment);

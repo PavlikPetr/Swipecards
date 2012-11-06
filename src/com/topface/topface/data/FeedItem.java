@@ -28,6 +28,10 @@ abstract public class FeedItem extends AbstractLoaderData {
      */
     public boolean unread;
     /**
+     * Счетчик непрочитанных сообщений
+     */
+    public int unreadCounter;
+    /**
      * имеются ли в ленте ещё элементы для пользователя
      */
     public static boolean more;
@@ -52,7 +56,8 @@ abstract public class FeedItem extends AbstractLoaderData {
         this.id = item.optInt("id");
         this.created = item.optLong("created") * 1000;
         this.target = item.optInt("target");
-        this.unread = item.optBoolean("unread");        
+        this.unread = item.optBoolean("unread");
+        this.unreadCounter = item.optInt("unreadCount");
         this.user = new FeedUser(item.optJSONObject("user"));        
     }
 }

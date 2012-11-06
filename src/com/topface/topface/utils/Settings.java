@@ -27,12 +27,13 @@ public class Settings {
 
     public static final String SETTINGS_C2DM_LIKES_PHONE = "settings_like_phone";
     public static final String SETTINGS_C2DM_MUTUAL_PHONE = "settings_mutual_phone";
-    public static final String SETTINGS_C2DM_MESSAGES_PHONE = "settings_messages_phone";
-    public static final String SETTINGS_C2DM_GUESTS_PHONE = "settings_guests_phone";
+    public static final String SETTINGS_C2DM_DIALOGS_PHONE = "settings_messages_phone";
+    public static final String SETTINGS_C2DM_VISITORS_PHONE = "settings_guests_phone";
+    
     public static final String SETTINGS_C2DM_LIKES_EMAIL = "settings_like_email";
     public static final String SETTINGS_C2DM_MUTUAL_EMAIL = "settings_mutual_email";
-    public static final String SETTINGS_C2DM_MESSAGES_EMAIL = "settings_messages_email";
-    public static final String SETTINGS_C2DM_GUESTS_EMAIL = "settings_guests_email";
+    public static final String SETTINGS_C2DM_DIALOGS_EMAIL = "settings_messages_email";
+    public static final String SETTINGS_C2DM_VISITORS_EMAIL = "settings_guests_email";
 
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mEditor;
@@ -153,29 +154,29 @@ public class Settings {
     		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
     		request.sympathy = value;
     		request.mutual = getSetting(SETTINGS_C2DM_MUTUAL_EMAIL);
-    		request.chat = getSetting(SETTINGS_C2DM_MESSAGES_EMAIL);
-    		request.guests = getSetting(SETTINGS_C2DM_GUESTS_EMAIL);
+    		request.chat = getSetting(SETTINGS_C2DM_DIALOGS_EMAIL);
+    		request.guests = getSetting(SETTINGS_C2DM_VISITORS_EMAIL);
     		return request;
     	} else if(key.equals(SETTINGS_C2DM_MUTUAL_EMAIL)) {
     		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
     		request.mutual = value;
     		request.sympathy = getSetting(SETTINGS_C2DM_LIKES_EMAIL);
-    		request.chat = getSetting(SETTINGS_C2DM_MESSAGES_EMAIL);
-    		request.guests = getSetting(SETTINGS_C2DM_GUESTS_EMAIL);
+    		request.chat = getSetting(SETTINGS_C2DM_DIALOGS_EMAIL);
+    		request.guests = getSetting(SETTINGS_C2DM_VISITORS_EMAIL);
     		return request;
-    	} else if(key.equals(SETTINGS_C2DM_MESSAGES_EMAIL)) {
+    	} else if(key.equals(SETTINGS_C2DM_DIALOGS_EMAIL)) {
     		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
     		request.chat = value;
     		request.sympathy = getSetting(SETTINGS_C2DM_LIKES_EMAIL);
     		request.mutual = getSetting(SETTINGS_C2DM_MUTUAL_EMAIL);
-    		request.guests = getSetting(SETTINGS_C2DM_GUESTS_EMAIL);
+    		request.guests = getSetting(SETTINGS_C2DM_VISITORS_EMAIL);
     		return request;
-    	} else if(key.equals(SETTINGS_C2DM_GUESTS_EMAIL)) {
+    	} else if(key.equals(SETTINGS_C2DM_VISITORS_EMAIL)) {
     		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
     		request.guests = value;
     		request.sympathy = getSetting(SETTINGS_C2DM_LIKES_EMAIL);
     		request.mutual = getSetting(SETTINGS_C2DM_MUTUAL_EMAIL);
-    		request.chat = getSetting(SETTINGS_C2DM_MESSAGES_EMAIL);
+    		request.chat = getSetting(SETTINGS_C2DM_DIALOGS_EMAIL);
     		return request;
     	} else {
     		return null;

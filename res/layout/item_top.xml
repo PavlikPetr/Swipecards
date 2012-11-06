@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ivTG"
+            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+            ivr:clipMask="@drawable/frame_top_mask"
+            ivr:postProcessor="mask"
+            android:background="@drawable/frame_top"
+            android:paddingLeft="1dp"
+            android:paddingRight="0.5dp"
+            android:paddingBottom="0.5dp"
+            android:scaleType="centerCrop"
+            android:layout_width="108dp"
+            android:layout_height="108dp"/>
+
+    <TextView
+            android:id="@+id/topsRating"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="#FFFFFF"
+            android:drawableRight="@drawable/tops_heart"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="5dp"
+            android:textSize="12sp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            style="@style/ShadowItemFontBottom"
+            />
+
+    <TextView
+            android:id="@+id/topsName"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="5dp"
+            android:layout_alignParentBottom="true"
+            style="@style/ShadowItemFontBottom"
+            android:textSize="14sp"
+            />
+
+
+    <ImageView
+            android:id="@+id/ivOnline"
+            android:layout_alignRight="@id/ivTG"
+            android:layout_alignParentRight="false"
+            style="@style/OnlineIndicator"/>
+
+</RelativeLayout>
