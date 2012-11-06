@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -128,7 +129,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleId);
         final TextView textView = (TextView) frame.findViewById(R.id.tvText);
         textView.setVisibility(View.VISIBLE);
-        if (text.isEmpty()) {
+        if (TextUtils.isEmpty(text)) {
             mSettings.getSocialAccountNameAsync(new Handler() {
                 @Override
                 public void handleMessage(Message msg) {

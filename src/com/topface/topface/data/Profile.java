@@ -1,6 +1,8 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.text.TextUtils;
+
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
@@ -311,7 +313,7 @@ public class Profile extends AbstractDataWithPhotos {
 
                 //22 restaurants  position 14
                 String rest = form.optString("restaurants");
-                String restraunts = rest.trim().isEmpty() ? null : rest;
+                String restraunts = TextUtils.isEmpty(rest.trim()) ? null : rest;
                 formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
@@ -331,7 +333,7 @@ public class Profile extends AbstractDataWithPhotos {
 
                 //25 first_dating  position 15
                 String dd = form.optString("first_dating");
-                String datingDetails = dd.trim().isEmpty() ? null : dd;
+                String datingDetails = TextUtils.isEmpty(dd.trim()) ? null : dd;
                 formItem = new FormItem(R.array.form_detail_about_dating, datingDetails, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
@@ -343,7 +345,7 @@ public class Profile extends AbstractDataWithPhotos {
 
                 //26 achievements  position 16
                 String ach = form.optString("aspirations");
-                String achievments = ach.trim().isEmpty() ? null : ach;
+                String achievments = TextUtils.isEmpty(ach.trim()) ? null : ach;
                 formItem = new FormItem(R.array.form_detail_archievements, achievments, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {

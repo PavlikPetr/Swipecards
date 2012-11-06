@@ -17,6 +17,6 @@ public class MutualListAdapter extends FeedAdapter<FeedMutual> {
     
     @Override
 	protected int getNewItemLayout() {		
-		return getItemLayout();
+		return R.layout.item_feed_like;
 	}
 }
