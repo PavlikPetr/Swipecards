@@ -1,10 +1,12 @@
 package com.topface.topface.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
@@ -29,8 +31,6 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         setContentView(R.layout.ac_navigation);
         Debug.log(this, "onCreate");
 
-        AuthorizationManager.getInstance(this).extendAccessToken();
-
         mFragmentManager = getSupportFragmentManager();
 
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
@@ -41,14 +41,23 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
         mFragmentSwitcher.setFragmentManager(mFragmentManager);
 
-        mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
-        mFragmentMenu.selectDefaultMenu();
+        Intent intent = getIntent();
+        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT,-1);
+        if(id != -1) {
+            mFragmentSwitcher.showFragmentWithAnimation(id);
+        } else {
+            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
+            mFragmentMenu.selectDefaultMenu();
+        }
+        AuthorizationManager.getInstance(this).extendAccessToken();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mThis = this;
+
     }
 
     @Override
@@ -90,6 +99,12 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
             mFragmentSwitcher.closeMenu();
         }
         return false;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
     }
 
     private FragmentMenuListener mOnFragmentMenuListener = new FragmentMenuListener() {

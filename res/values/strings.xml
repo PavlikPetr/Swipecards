@@ -40,6 +40,9 @@
     <string name="dashbrd_btn_prev">Previous</string>
     <string name="dashbrd_btn_switch_button">More…</string>
 
+    <string name="default_notification_title">@string/app_name</string>
+    <string name="default_notification_text">You\'ve got something new!</string><!--TODO: Переделать-->
+
 
     <!-- Likes Activity -->
     <string name="likes_background_text">No likes</string>

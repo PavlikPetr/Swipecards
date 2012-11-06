@@ -46,7 +46,8 @@ public class App extends Application {
         mContext = getApplicationContext();
         DEBUG = isDebugMode();
         // C2DM
-        C2DMUtils.init(getContext());
+//        C2DMUtils.init(getContext());
+        GCMUtils.init(getContext());
         Debug.log("App", "+onCreate");
         Data.init(getApplicationContext());
         Recycle.init(getApplicationContext());

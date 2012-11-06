@@ -95,20 +95,13 @@
             </intent-filter>
         </receiver>
 
-        <!-- c2dm -->
-        <service android:name=".C2DMReceiver" />
+        <!-- gcm -->
+        <service android:name=".GCMIntentService" />
 
-        <receiver
-            android:name="com.google.android.c2dm.C2DMBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+        <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.topface.topface" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-
                 <category android:name="com.topface.topface" />
             </intent-filter>
         </receiver>

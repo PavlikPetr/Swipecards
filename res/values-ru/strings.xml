@@ -39,6 +39,9 @@
     <string name="dashbrd_btn_prev">Предыдущая</string>
     <string name="dashbrd_btn_switch_button">Еще…</string>
 
+    <string name="default_notification_title">Topface</string>
+    <string name="default_notification_text">У вас есть что-то новое!</string><!--TODO: Переделать-->
+
     <!-- Likes Activity -->
     <string name="likes_header_title">Я нравлюсь</string>
     <string name="likes_background_text">Нет симпатий</string>

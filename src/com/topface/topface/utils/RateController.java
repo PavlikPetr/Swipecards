@@ -42,6 +42,7 @@ public class RateController {
         mCommentDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
+                if(NavigationActivity.mThis != null)
                 ((NavigationActivity)context).onDialogCancel();
             }
         });

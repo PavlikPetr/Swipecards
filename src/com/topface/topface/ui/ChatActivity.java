@@ -3,9 +3,7 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -20,9 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.topface.topface.Data;
-import com.topface.topface.R;
-import com.topface.topface.Static;
+import com.topface.topface.*;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
@@ -61,6 +57,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 	private static ProgressDialog mProgressDialog;
 	private boolean mLocationDetected = false;
 
+    private boolean mReceiverRegistered = false;
 	// Constants
 	private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public static final String INTENT_USER_ID = "user_id";
@@ -139,6 +136,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     startActivity(new Intent(ChatActivity.this,NavigationActivity.class));
                 }
             });
+            btnBack.setText(R.string.navigation_back_dating);
         }
 
 		final Button btnProfile = (Button) findViewById(R.id.btnNavigationProfileBar);
@@ -258,7 +256,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
 	@Override
 	public void onClick(View v) {
-		if (v instanceof ImageView) {
+        if (v instanceof ImageView) {
 			if (v.getTag() instanceof History) {
 				History history = (History) v.getTag();
 				if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
@@ -321,7 +319,25 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 		}
 	}
 
-	private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mReceiverRegistered) {
+            registerReceiver(mNewMessageReceiver, new IntentFilter(GCMUtils.GCM_NOTIFICATION));
+            mReceiverRegistered = true;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
+        if(mReceiverRegistered) {
+            unregisterReceiver(mNewMessageReceiver);
+            mReceiverRegistered = false;
+        }
+    }
+
+    private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
 		@Override
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			if (actionId == EditorInfo.IME_ACTION_SEND) {
@@ -660,4 +676,15 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 	public Object onRetainCustomNonConfigurationInstance() {
 		return mAdapter.getDataCopy();
 	}
+
+    private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String id = intent.getStringExtra("id");
+            if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
+                update(true);
+                GCMUtils.cancelNotification(ChatActivity.this);
+            }
+        }
+    };
 }
