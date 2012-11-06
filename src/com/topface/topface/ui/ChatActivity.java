@@ -3,9 +3,7 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -20,9 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.topface.topface.Data;
-import com.topface.topface.R;
-import com.topface.topface.Static;
+import com.topface.topface.*;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
@@ -61,18 +57,19 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private static ProgressDialog mProgressDialog;
     private boolean mLocationDetected = false;
 
-    // Constants
-    private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    public static final String INTENT_USER_ID = "user_id";
-    public static final String INTENT_USER_NAME = "user_name";
-    public static final String INTENT_USER_AVATAR = "user_avatar";
-    public static final String INTENT_USER_SEX = "user_sex";
-    public static final String INTENT_USER_AGE = "user_age";
-    public static final String INTENT_USER_CITY = "user_city";
-    public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
-    private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
-    private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
-    private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
+    private boolean mReceiverRegistered = false;
+	// Constants
+	private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public static final String INTENT_USER_ID = "user_id";
+	public static final String INTENT_USER_NAME = "user_name";
+	public static final String INTENT_USER_AVATAR = "user_avatar";
+	public static final String INTENT_USER_SEX = "user_sex";
+	public static final String INTENT_USER_AGE = "user_age";
+	public static final String INTENT_USER_CITY = "user_city";
+	public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
+	private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
+	private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
+	private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
 
     // Managers
     private GeoLocationManager mGeoManager = null;
@@ -137,8 +134,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(ChatActivity.this, NavigationActivity.class));
+                    finish();
                 }
             });
+            btnBack.setText(R.string.navigation_back_dating);
         }
 
         final ImageButton btnProfile = (ImageButton) findViewById(R.id.btnNavigationProfileBar);
@@ -256,51 +255,51 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mHistoryList = null;
     }
 
-    @Override
-    public void onClick(View v) {
+	@Override
+	public void onClick(View v) {
         if (v instanceof ImageView) {
-            if (v.getTag() instanceof History) {
-                History history = (History) v.getTag();
-                if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
-                    Intent intent = new Intent(this, GeoMapActivity.class);
-                    intent.putExtra(GeoMapActivity.INTENT_GEO, history.geo);
-                    startActivity(intent);
-                    return;
-                }
-            }
-        }
-        switch (v.getId()) {
-            case R.id.btnChatAdd: {
-                if (mIsAddPanelOpened)
-                    mSwapControl.snapToScreen(0);
-                else
-                    mSwapControl.snapToScreen(1);
-                mIsAddPanelOpened = !mIsAddPanelOpened;
-            }
-            break;
-            case R.id.btnChatGift: {
-                startActivityForResult(new Intent(this, GiftsActivity.class),
-                        GiftsActivity.INTENT_REQUEST_GIFT);
-            }
-            break;
-            case R.id.btnChatPlace: {
-                sendUserCurrentLocation();
-                // Toast.makeText(ChatActivity.this, "Place",
-                // Toast.LENGTH_SHORT).show();
-            }
-            break;
-            case R.id.btnChatMap: {
-                startActivityForResult(new Intent(this, GeoMapActivity.class),
-                        GeoMapActivity.INTENT_REQUEST_GEO);
-                // Toast.makeText(ChatActivity.this, "Map",
-                // Toast.LENGTH_SHORT).show();
-            }
-            break;
-            case R.id.btnNavigationBackWithText: {
-                finish();
-            }
-            break;
-            case R.id.chat_message: {
+			if (v.getTag() instanceof History) {
+				History history = (History) v.getTag();
+				if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
+					Intent intent = new Intent(this, GeoMapActivity.class);
+					intent.putExtra(GeoMapActivity.INTENT_GEO, history.geo);
+					startActivity(intent);
+					return;
+				}
+			}
+		}
+		switch (v.getId()) {
+		case R.id.btnChatAdd: {
+			if (mIsAddPanelOpened)
+				mSwapControl.snapToScreen(0);
+			else
+				mSwapControl.snapToScreen(1);
+			mIsAddPanelOpened = !mIsAddPanelOpened;
+		}
+			break;
+		case R.id.btnChatGift: {
+			startActivityForResult(new Intent(this, GiftsActivity.class),
+					GiftsActivity.INTENT_REQUEST_GIFT);
+		}
+			break;
+		case R.id.btnChatPlace: {
+			sendUserCurrentLocation();
+			// Toast.makeText(ChatActivity.this, "Place",
+			// Toast.LENGTH_SHORT).show();
+		}
+			break;
+		case R.id.btnChatMap: {
+			startActivityForResult(new Intent(this, GeoMapActivity.class),
+					GeoMapActivity.INTENT_REQUEST_GEO);
+			// Toast.makeText(ChatActivity.this, "Map",
+			// Toast.LENGTH_SHORT).show();
+		}
+			break;
+		case R.id.btnNavigationBackWithText: {
+			finish();
+		}
+			break;
+		case R.id.chat_message: {
 
             }
             break;
@@ -321,11 +320,29 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mReceiverRegistered) {
+            registerReceiver(mNewMessageReceiver, new IntentFilter(GCMUtils.GCM_NOTIFICATION));
+            mReceiverRegistered = true;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
+        if(mReceiverRegistered) {
+            unregisterReceiver(mNewMessageReceiver);
+            mReceiverRegistered = false;
+        }
+    }
+
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
-        @Override
-        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-                final String text = v.getText().toString();
+		@Override
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			if (actionId == EditorInfo.IME_ACTION_SEND) {
+				final String text = v.getText().toString();
 
                 if (text == null || text.length() == 0)
                     return false;
@@ -656,8 +673,19 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         }
     }
 
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        return mAdapter.getDataCopy();
-    }
+	@Override
+	public Object onRetainCustomNonConfigurationInstance() {
+		return mAdapter.getDataCopy();
+	}
+
+    private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String id = intent.getStringExtra("id");
+            if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
+                update(true);
+                GCMUtils.cancelNotification(ChatActivity.this);
+            }
+        }
+    };
 }

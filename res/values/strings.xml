@@ -27,12 +27,9 @@
     <string name="dashbrd_btn_love">Admiration</string>
     <string name="dashbrd_btn_skip">Next</string>
     <string name="dashbrd_btn_prev">Previous</string>
-    <string name="dashbrd_btn_switch_button">More...</string>
-    <string name="likes_header_title">People who like me</string>
-    <string name="likes_background_text">No sympathies</string>
-    <string name="likes_mutual">Mutual</string>
-    <string name="visitors_background_text">No guests</string>
-    <string name="inbox_header_title">Dialogs</string>
+    <string name="dashbrd_btn_switch_button">More…</string>
+    <string name="likes_background_text">No likes</string>
+    <string name="visitors_background_text">No visitors</string>
     <string name="btn_dbl_left">All</string>
     <string name="btn_dbl_right">Unread</string>
     <string name="inbox_background_text">No incoming messages</string>
@@ -207,4 +204,8 @@
     </plurals>
     <string name="leaders_select_photo">Please select marvelous photo:</string>
     <string name="general_profile_error">Error loading profile</string>
+
+    <string name="default_notification_title">@string/app_name</string>
+    <string name="default_notification_text">You\'ve got something new!</string>
+
 </resources>

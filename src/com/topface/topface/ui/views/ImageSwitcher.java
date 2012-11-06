@@ -7,12 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.*;
 import com.topface.topface.R;
-import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.PreloadManager;
-import com.topface.topface.utils.TopfaceNotificationManager;
 
 public class ImageSwitcher extends ViewPager {
 
@@ -22,10 +17,6 @@ public class ImageSwitcher extends ViewPager {
     private OnClickListener mOnClickListener;
     private Handler mUpdatedHandler;
     private static final String VIEW_TAG = "view_container";
-
-    public ImageSwitcher(Context context) {
-        this(context, null);
-    }
 
     public ImageSwitcher(Context context, AttributeSet attrs) {
         super(context, attrs);

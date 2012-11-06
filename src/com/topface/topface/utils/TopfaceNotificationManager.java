@@ -1,6 +1,5 @@
 package com.topface.topface.utils;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,24 +7,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import com.topface.topface.R;
-import com.topface.topface.ui.NavigationActivity;
-
-import java.util.logging.StreamHandler;
 
 public class TopfaceNotificationManager {
     private static TopfaceNotificationManager mInstance;
     private NotificationCompat.Builder mNotificationBuilder;
     private NotificationManager mNotificationManager;
-    private int count = 0;
-    private int id = 1312; //Completely random number
+    public static final int id = 1312; //Completely random number
     private float scale = 0;
-    float width = 64;
-    float height = 64;
+    private float width = 64;
+    private float height = 64;
+    private TaskStackBuilder stackBuilder;
 
     public static TopfaceNotificationManager getInstance(Context context) {
         if(mInstance == null) {
@@ -48,25 +42,27 @@ public class TopfaceNotificationManager {
 
         width *= scale;
         height *= scale;
+        ctx = context;
+        stackBuilder = TaskStackBuilder.create(context);
     }
 
-    public void showNotification(String title, String message, Activity parentActivity, Bitmap icon) {
-        count++;
+    public void showNotification(String title, String message, Bitmap icon, int unread, Intent intent) {
+
+        stackBuilder.addNextIntent(intent);//addNextIntent(intent);
 
         Bitmap scaledIcon = Utils.clipAndScaleBitmap(icon,(int)width,(int)height);
 
         mNotificationBuilder.setContentTitle(title);
         mNotificationBuilder.setContentText(message);
         mNotificationBuilder.setLargeIcon(scaledIcon);
-        mNotificationBuilder.setNumber(count);
+        if(unread>0)
+            mNotificationBuilder.setNumber(unread);
         mNotificationBuilder.setAutoCancel(true);
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(parentActivity);
-        stackBuilder.addParentStack(parentActivity);
-        stackBuilder.addNextIntent(new Intent(parentActivity, NavigationActivity.class));
-
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mNotificationBuilder.setContentIntent(resultPendingIntent);
         mNotificationManager.notify(id, mNotificationBuilder.getNotification());
     }
+
+    private Context ctx;
 }
