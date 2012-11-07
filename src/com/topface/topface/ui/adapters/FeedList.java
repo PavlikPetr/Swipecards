@@ -1,6 +1,5 @@
 package com.topface.topface.ui.adapters;
 
-import java.util.Collections;
 import java.util.LinkedList;
 
 
@@ -15,9 +14,8 @@ public class FeedList<T> extends LinkedList<T> {
         this.clear();
         for(int i=0; i<array.length; i++) {
             if(array[i]!=null)
-                push(array[i]);
+                addLast(array[i]);
         }
-        Collections.reverse(this);
         return removedItem;
     }
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.topface.Data;
@@ -40,7 +39,7 @@ public class GiftsActivity extends BaseFragmentActivity {
 
         ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.gifts_title);
         findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
-        Button backButton = ((Button) findViewById(R.id.btnNavigationBack));
+        View backButton = findViewById(R.id.btnNavigationBack);
         backButton.setVisibility(View.VISIBLE);
         backButton.setOnClickListener(new OnClickListener() {
             @Override

@@ -7,9 +7,9 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AuthRequest extends ApiRequest {
+public class AuthRequest extends AbstractApiRequest {
     // Data
-    private String service = "auth";
+    public static final String SERVICE_NAME = "auth";
     public String sid; // id пользователя в социальной сети
     public String token; // токен авторизации в соц сети
     public String platform; // код социальной сети
@@ -34,17 +34,22 @@ public class AuthRequest extends ApiRequest {
         }
     }
 
-    public String toString() {
-        JSONObject root = new JSONObject();
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject()
+                .put("sid", sid)
+                .put("token", token)
+                .put("platform", platform)
+                .put("locale", locale)
+                .put("clienttype", clienttype)
+                .put("clientversion", clientversion)
+                .put("clientdevice", clientdevice)
+                .put("clientid", clientid)
+                .put("sandbox", sandbox);
+    }
 
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("sid", sid).put("token", token).put("platform", platform).put("locale", locale).put("clienttype", clienttype).put("clientversion", clientversion).put("clientdevice", clientdevice).put("clientid", clientid).put("sandbox", sandbox));
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
-        }
-
-        return root.toString();
+    @Override
+    protected String getServiceName() {
+        return SERVICE_NAME;
     }
 }

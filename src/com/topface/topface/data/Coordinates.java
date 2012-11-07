@@ -13,7 +13,7 @@ public class Coordinates extends AbstractData implements Parcelable {
     private GeoPoint mGeoPoint;
 
     public Coordinates(JSONObject jsonObject) throws WrongCoordinatesException {
-        this(jsonObject.optDouble("longitude", -1), jsonObject.optDouble("latitude", -1));
+        this(jsonObject.optDouble("longitude"), jsonObject.optDouble("latitude"));
     }
 
     public Coordinates(double longitude, double latitude) throws WrongCoordinatesException {
@@ -38,7 +38,7 @@ public class Coordinates extends AbstractData implements Parcelable {
     }
 
     public static boolean isCorrectCoordinates(double longitude, double latitude) {
-        return Math.abs(longitude) <= 180 && Math.abs(latitude) <= 180;
+        return Math.abs(longitude) <= 180 && Math.abs(latitude) <= 90;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Coordinates extends AbstractData implements Parcelable {
     public class WrongCoordinatesException extends Exception {
         @Override
         public String getMessage() {
-            return "Coordinates value must be => -180 and <= 180";
+            return "Longitude value must be => -180 and <= 180, Latitude value must be => -90 and <= 90";
         }
     }
 

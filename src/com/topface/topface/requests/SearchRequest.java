@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class SearchRequest extends AbstractApiRequest {
     // Data
-    private static final String mServiceName = "search";
+    public static final String SERVICE_NAME = "search";
     public int limit; // размер получаемой выборки 10 <= limit <= 50
     public boolean geo; // необходимости геопозиционного поиска
     public boolean ero; // флаг необходимости эротического поиска
@@ -27,7 +27,7 @@ public class SearchRequest extends AbstractApiRequest {
 
     @Override
     protected String getServiceName() {
-        return mServiceName;
+        return SERVICE_NAME;
     }
 
 }

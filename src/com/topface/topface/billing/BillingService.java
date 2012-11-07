@@ -27,6 +27,7 @@ import android.util.Log;
 import com.android.vending.billing.IMarketBillingService;
 import com.topface.topface.billing.Consts.ResponseCode;
 import com.topface.topface.billing.Security.VerifiedPurchase;
+import com.topface.topface.utils.Debug;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,10 +122,6 @@ public class BillingService extends Service implements ServiceConnection {
     class RequestPurchase extends BillingRequest {
         public final String mProductId;
         public final String mDeveloperPayload;
-
-        public RequestPurchase(String itemId) {
-            this(itemId, null);
-        }
 
         public RequestPurchase(String itemId, String developerPayload) {
             super(-1);
@@ -246,8 +243,10 @@ public class BillingService extends Service implements ServiceConnection {
     }
 
     @Override
-    public void onStart(Intent intent, int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        int result = super.onStartCommand(intent, flags, startId);
         handleCommand(intent, startId);
+        return result;
     }
 
     public void handleCommand(Intent intent, int startId) {
@@ -278,6 +277,7 @@ public class BillingService extends Service implements ServiceConnection {
             if (bindResult)
                 return true;
         } catch (SecurityException e) {
+            Debug.error(e);
         }
         return false;
     }
@@ -361,6 +361,7 @@ public class BillingService extends Service implements ServiceConnection {
         try {
             unbindService(this);
         } catch (IllegalArgumentException e) {
+            Debug.error(e);
         }
     }
 }//BillingService

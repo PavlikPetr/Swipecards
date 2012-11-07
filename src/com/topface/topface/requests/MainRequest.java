@@ -1,13 +1,12 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainRequest extends ApiRequest {
+public class MainRequest extends AbstractApiRequest {
     // Data
-    private String service = "main";
+    public static final String service = "main";
     public int photoid; // идентификатор фотографии для установки в качестве главной
 
     public MainRequest(Context context) {
@@ -15,16 +14,12 @@ public class MainRequest extends ApiRequest {
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("photoid", photoid));
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
-        }
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject().put("photoid", photoid);
+    }
 
-        return root.toString();
+    @Override
+    protected String getServiceName() {
+        return service;
     }
 }

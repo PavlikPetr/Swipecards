@@ -604,9 +604,21 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     public History removeItem(int position) {
-        History item = mDataList.removeWithReindex(position);
+        History item = mDataList.get(position);
+        smartRemove(position);
         notifyDataSetChanged();
         return item;
+    }
+
+    private void smartRemove(int position) {
+        for(int i=position;i<mDataList.size()-1;i++) {
+            mDataList.set(i,mDataList.get(i+1));
+        }
+        mDataList.remove(mDataList.size()-1);
+        for(int i=position;i<mItemLayoutList.size()-1;i++) {
+            mItemLayoutList.set(i,mItemLayoutList.get(i+1));
+        }
+        mItemLayoutList.remove(mItemLayoutList.size()-1);
     }
 
     public LinkedList<History> getDataCopy() {

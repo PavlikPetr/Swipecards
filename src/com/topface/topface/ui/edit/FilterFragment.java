@@ -63,7 +63,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         String city_name; // город в котором ищем пользователей
         boolean geo; // искать по координатам
         boolean online; // в сети или нет
-        boolean beauty; // красивая или нет
+        boolean beautiful; // красивая или нет
         int status_id; // цель знакомства
         int marriage_id; // состоит ли в браке
         int character_id; // характер
@@ -81,7 +81,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 else if (filter.city_id != city_id) return false;
                 else if (filter.geo != geo) return false;
                 else if (filter.online != online) return false;
-                else if (filter.beauty != beauty) return false;
+                else if (filter.beautiful != beautiful) return false;
                 else if (filter.status_id != status_id) return false;
                 else if (filter.marriage_id != marriage_id) return false;
                 else if (filter.character_id != character_id) return false;
@@ -105,7 +105,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             filter.city_id = city_id;
             filter.geo = geo;
             filter.online = online;
-            filter.beauty = beauty;
+            filter.beautiful = beautiful;
             filter.status_id = status_id;
             filter.marriage_id = marriage_id;
             filter.character_id = character_id;
@@ -171,7 +171,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mFilter.city_name = CacheProfile.dating_city_name;
         mFilter.geo = mPreferences.getBoolean(getString(R.string.cache_profile_filter_geo), false);
         mFilter.online = mPreferences.getBoolean(getString(R.string.cache_profile_filter_online), false);
-        mFilter.beauty = mPreferences.getBoolean(getString(R.string.cache_profile_filter_beautiful), false);
+        mFilter.beautiful = mPreferences.getBoolean(getString(R.string.cache_profile_filter_beautiful), false);
         mFilter.status_id = mPreferences.getInt(getString(R.string.cache_profile_filter_status), FormItem.NOT_SPECIFIED_ID);
         mFilter.marriage_id = mPreferences.getInt(getString(R.string.cache_profile_filter_marriage), FormItem.NOT_SPECIFIED_ID);
         mFilter.character_id = mPreferences.getInt(getString(R.string.cache_profile_filter_character), FormItem.NOT_SPECIFIED_ID);
@@ -194,7 +194,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putBoolean(getString(R.string.cache_profile_filter_geo), mFilter.geo);
         editor.putBoolean(getString(R.string.cache_profile_filter_online), mFilter.online);
-        editor.putBoolean(getString(R.string.cache_profile_filter_beautiful), mFilter.beauty);
+        editor.putBoolean(getString(R.string.cache_profile_filter_beautiful), mFilter.beautiful);
         editor.putInt(getString(R.string.cache_profile_filter_status), mFilter.status_id);
         editor.putInt(getString(R.string.cache_profile_filter_marriage), mFilter.marriage_id);
         editor.putInt(getString(R.string.cache_profile_filter_character), mFilter.character_id);
@@ -257,7 +257,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
         setText(R.string.filter_only_beautiful, frame);
         mSwitchBeautifull = new EditSwitcher(frame);
-        mSwitchBeautifull.setChecked(mFilter.beauty);
+        mSwitchBeautifull.setChecked(mFilter.beautiful);
         frame.setOnClickListener(this);
 
         // Extra Header
@@ -459,7 +459,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
         FilterRequest filterRequest = new FilterRequest(getActivity().getApplicationContext());
         registerRequest(filterRequest);
-        filterRequest.beauty = mFilter.beauty;
+        filterRequest.beautiful = mFilter.beautiful;
         filterRequest.city = mFilter.city_id;
         filterRequest.sex = mFilter.sex;
         filterRequest.agebegin = mFilter.age_start;
@@ -514,7 +514,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 break;
             case R.id.loBeautiful:
                 mSwitchBeautifull.doSwitch();
-                mFilter.beauty = mSwitchBeautifull.isChecked();
+                mFilter.beautiful = mSwitchBeautifull.isChecked();
                 break;
             case R.id.loDatingStatus:
                 startEditFilterFormItem(v, mFilter.status_id);

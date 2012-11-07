@@ -1,13 +1,12 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class TopRequest extends ApiRequest {
+public class TopRequest extends AbstractApiRequest {
     // Data
-    private String service = "top";
+    public static final String service = "top";
     public int sex; // пол самых красивых 
     public int city; // город самых красивых
 
@@ -16,17 +15,12 @@ public class TopRequest extends ApiRequest {
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject().put("sex", sex).put("city", city);
+    }
 
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("sex", sex).put("city", city));
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
-        }
-
-        return root.toString();
+    @Override
+    protected String getServiceName() {
+        return service;
     }
 }

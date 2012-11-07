@@ -34,8 +34,8 @@ public class UserRequest extends AbstractApiRequest {
         super(context);
         ArrayList<Integer> data = new ArrayList<Integer>();
         data.add(uid);
-        this.uids = data;
-        if (uids == null || uids.size() < 1) {
+        uids = data;
+        if (uids.size() < 1) {
             throw new NullPointerException();
         }
         doNeedAlert(false);

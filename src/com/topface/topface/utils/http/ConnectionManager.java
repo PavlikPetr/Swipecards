@@ -78,9 +78,10 @@ public class ConnectionManager {
                     httpPost.setHeader("Accept-Encoding", "gzip");
                     httpPost.setHeader("Content-Type", "application/json");
                     setRevisionHeader(httpPost);
-                    httpPost.setEntity(new ByteArrayEntity(apiRequest.toString().getBytes("UTF8")));
+                    String requestString = apiRequest.toString();
+                    httpPost.setEntity(new ByteArrayEntity(requestString.getBytes("UTF8")));
 
-                    Debug.logJson(TAG, "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(), apiRequest.toString());
+                    Debug.logJson(TAG, "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(), requestString);
                     rawResponse = request(httpClient, httpPost);
                     Debug.logJson(TAG, "RESPONSE <<<", rawResponse);
 
@@ -96,11 +97,10 @@ public class ConnectionManager {
                         if(apiResponse.code == ApiResponse.BAN) {
                             Intent intent = new Intent(apiRequest.context,BanActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra(BanActivity.BANNING_INTENT,apiResponse.jsonResult.get("message").toString());
+                            intent.putExtra(BanActivity.BANNING_INTENT, apiResponse.jsonResult.get("message").toString());
                             apiRequest.context.startActivity(intent);
-                            apiRequest.handler.fail(apiResponse.code,apiResponse);
-                        } else
-                        if (apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE) {
+                            apiRequest.handler.fail(apiResponse.code, apiResponse);
+                        } else if (apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE) {
                             if (doNeedResend) {
                                 apiRequest.handler.postDelayed(new Runnable() {
                                     @Override
@@ -255,11 +255,11 @@ public class ConnectionManager {
 
     public synchronized void notifyDelayedRequests() {
         for (Thread mDelayedRequestsThread : mDelayedRequestsThreads) {
-        	try {
-        		mDelayedRequestsThread.notify();
-        	} catch (Exception ex) {
-        		Debug.log(ex.toString());
-        	}
+            try {
+                mDelayedRequestsThread.notify();
+            } catch (Exception ex) {
+                Debug.log(ex.toString());
+            }
         }
 
         mDelayedRequestsThreads.clear();

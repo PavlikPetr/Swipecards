@@ -5,6 +5,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LeadersRequest extends AbstractApiRequest {
+
+    public static final String SERVICE_NAME = "leaders";
+
     public LeadersRequest(Context context) {
         super(context);
     }
@@ -16,6 +19,6 @@ public class LeadersRequest extends AbstractApiRequest {
 
     @Override
     protected String getServiceName() {
-        return "leaders";
+        return SERVICE_NAME;
     }
 }

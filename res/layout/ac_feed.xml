@@ -55,9 +55,10 @@
                         android:layout_weight="1"
                         android:cacheColorHint="#00000000"
                         android:dividerHeight="0dp"
+                        android:divider="@android:color/transparent"
                         android:fadeScrollbars="true"
                         android:fadingEdge="none"/>
-                
+
                 <include layout="@layout/banner"/>
             </LinearLayout>
             <com.topface.topface.ui.views.LockerView
@@ -67,7 +68,7 @@
                     android:layout_height="fill_parent"/>
         </RelativeLayout>
 
-        
+
     </LinearLayout>
 
     <ImageView style="@style/HeaderShadow"/>

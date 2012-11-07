@@ -1,30 +1,25 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RegistrationTokenRequest extends ApiRequest {
+public class RegistrationTokenRequest extends AbstractApiRequest {
     // Data
-    private String service = "registrationToken";
+    public static final String service = "registrationToken";
     public String token; //Токен регистрации в C2DM
 
     public RegistrationTokenRequest(Context context) {
         super(context);
     }
 
-    public String toString() {
-        JSONObject root = new JSONObject();
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject().put("token", token);
+    }
 
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("token", token));
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
-        }
-
-        return root.toString();
+    @Override
+    protected String getServiceName() {
+        return service;
     }
 }

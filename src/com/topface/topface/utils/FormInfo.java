@@ -45,8 +45,8 @@ public class FormInfo {
                     break;
             }
         } catch (Exception e) {
-        	Debug.error(e);
-        	title = Static.EMPTY;        	
+            Debug.error(e);
+            title = Static.EMPTY;
         } finally {
             formItem.title = title;
             formItem.value = data;
@@ -54,8 +54,7 @@ public class FormInfo {
     }
 
     private String getEntryById(String[] entries, int[] ids, int targetId) {
-        if (entries.length != ids.length) {
-            Debug.error("Form entries' length don't match ids' length");
+        if (entries == null || ids == null || entries.length != ids.length) {
             return null;
         }
 
@@ -194,18 +193,18 @@ public class FormInfo {
                 result.residenceid = selectedValueId;
                 break;
             case R.array.form_main_height:
-            	try{
-            		result.height = Integer.parseInt(selectedValue);
-            	} catch (Exception e) {
-            		result.height = 0;
-				}
+                try {
+                    result.height = Integer.parseInt(selectedValue);
+                } catch (Exception e) {
+                    result.height = 0;
+                }
                 break;
             case R.array.form_main_weight:
-            	try{
-            		result.weight = Integer.parseInt(selectedValue);
-            	} catch (Exception e) {
-            		result.weight = 0;
-				}
+                try {
+                    result.weight = Integer.parseInt(selectedValue);
+                } catch (Exception e) {
+                    result.weight = 0;
+                }
                 break;
             case R.array.form_habits_restaurants:
                 result.restaurants = selectedValue;
@@ -319,5 +318,5 @@ public class FormInfo {
             default:
                 return Static.EMPTY;
         }
-    }    
+    }
 }

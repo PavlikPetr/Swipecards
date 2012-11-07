@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.ListView;
 import com.google.android.gcm.GCMRegistrar;
+import com.topface.topface.data.Photo;
 import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -24,13 +25,7 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Ilya Vorobiev
- * Date: 31.10.12
- * Time: 16:37
- * To change this template use File | Settings | File Templates.
- */
+
 public class GCMUtils {
     public static final String GCM_REGISTERED = "gcmRegistered";
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
@@ -51,26 +46,32 @@ public class GCMUtils {
         final String regId = GCMRegistrar.getRegistrationId(context);
         if (regId.equals("")) {
             GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
-            Debug.log("Registered: "+regId);
+            Debug.log("Registered: " + regId);
         } else {
-            Debug.log("Already registered, regID is "+regId);
+            Debug.log("Already registered, regID is " + regId);
         }
     }
 
+    /**
+     * Метод для тестирования GCM сообщений
+     *
+     * @param context контекст приложения
+     */
+    @SuppressWarnings("UnusedDeclaration")
     public static void generateFakeNotification(Context context) {
         Intent intent = new Intent();
-        intent.putExtra("text","asd");
-        intent.putExtra("title","da");
-        intent.putExtra("type","0");
-        intent.putExtra("unread","1");
-        intent.putExtra("counters","788");
-        try{
-            intent.putExtra("user",new JSONObject().put("id","43945394").put("photo", new JSONObject().put("c128x128", "http://imgs.topface.com/u43945394/c128x128/nnf6g6.jpg")).put("name","Ilya").put("age","21").toString());
+        intent.putExtra("text", "asd");
+        intent.putExtra("title", "da");
+        intent.putExtra("type", "0");
+        intent.putExtra("unread", "1");
+        intent.putExtra("counters", "788");
+        try {
+            intent.putExtra("user", new JSONObject().put("id", "43945394").put("photo", new JSONObject().put("c128x128", "http://imgs.topface.com/u43945394/c128x128/nnf6g6.jpg")).put("name", "Ilya").put("age", "21").toString());
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        showNotification(intent,context);
+        showNotification(intent, context);
     }
 
     public static void setRegisteredFlag(Context context) {
@@ -91,12 +92,12 @@ public class GCMUtils {
             User user = new User();
             user.json2User(extra.getStringExtra("user"));
             String title = extra.getStringExtra("title");
-            if(title==null || title.equals("")) {
+            if (title == null || title.equals("")) {
                 title = context.getString(R.string.default_notification_title);
             }
 
             String countersString = extra.getStringExtra("counters");
-            if(countersString != null)
+            if (countersString != null)
                 setCounters(countersString);
 
             final TopfaceNotificationManager mNotificationManager = TopfaceNotificationManager.getInstance(context);
@@ -104,7 +105,7 @@ public class GCMUtils {
 
             switch (type) {
                 case GCM_TYPE_MESSAGE:
-                    if(user.id !=0){
+                    if (user.id != 0) {
                         i = new Intent(context, ChatActivity.class);
 
                         i.putExtra(
@@ -112,10 +113,10 @@ public class GCMUtils {
                                 user.id
                         );
                         i.putExtra(ChatActivity.INTENT_USER_NAME, user.name);
-                        i.putExtra(ChatActivity.INTENT_USER_AVATAR,user.photoUrl );
-                        i.putExtra(ChatActivity.INTENT_USER_AGE,user.age);
+                        i.putExtra(ChatActivity.INTENT_USER_AVATAR, user.photoUrl);
+                        i.putExtra(ChatActivity.INTENT_USER_AGE, user.age);
                     } else {
-                        i = new Intent(context,NavigationActivity.class);
+                        i = new Intent(context, NavigationActivity.class);
                     }
                     break;
 
@@ -168,7 +169,7 @@ public class GCMUtils {
             CacheProfile.unread_mutual = countersJson.optInt("unread_sympaties");
             CacheProfile.unread_visitors = countersJson.optInt("unread_visitors");
         } catch (JSONException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            Debug.error(e);
         }
 
     }
@@ -212,14 +213,18 @@ public class GCMUtils {
         public int age;
         public String city;
 
-        public User(){}
+        public User() {
+        }
 
         public void json2User(String json) {
-            try{
+            try {
                 JSONObject obj = new JSONObject(json);
                 id = obj.optInt("id");
                 name = obj.optString("name");
-                photoUrl = obj.optJSONObject("photo").optString("c128x128");
+                JSONObject photo = obj.optJSONObject("photo");
+                if (photo != null && photo.has(Photo.SIZE_128)) {
+                    photoUrl = obj.optJSONObject("photo").optString(Photo.SIZE_128);
+                }
                 age = obj.optInt("age");
                 city = obj.optString("city");
             } catch (Exception e) {

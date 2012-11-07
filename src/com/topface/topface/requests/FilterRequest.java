@@ -10,7 +10,7 @@ public class FilterRequest extends AbstractApiRequest {
     /**
      * флаг "только красивые"
      */
-    public boolean beauty;
+    public boolean beautiful;
 
     /**
      * код пола пользователей для поиска
@@ -64,7 +64,7 @@ public class FilterRequest extends AbstractApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
-                .put("beautiful", beauty)
+                .put("beautiful", beautiful)
                 .put("sex", sex)
                 .put("city", city)
                 .put("agebegin", agebegin)
