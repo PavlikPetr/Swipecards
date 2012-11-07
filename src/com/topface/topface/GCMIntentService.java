@@ -12,13 +12,6 @@ import com.topface.topface.utils.Settings;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Ilya Vorobiev
- * Date: 31.10.12
- * Time: 15:36
- * To change this template use File | Settings | File Templates.
- */
 public class GCMIntentService extends GCMBaseIntentService {
     public static final String SENDER_ID = "932206034265";
 
@@ -68,7 +61,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                 registrationRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        C2DMUtils.setRegisteredFlag(context);
+                        GCMUtils.setRegisteredFlag(context);
                     }
 
                     @Override

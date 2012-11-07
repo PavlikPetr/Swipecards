@@ -10,6 +10,11 @@ import org.json.JSONObject;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
+    public DialogsFragment() {
+        super();
+        setIsDeletable(false);
+    }
+
     @Override
     protected int getTitle() {
         return R.string.dashbrd_btn_chat;

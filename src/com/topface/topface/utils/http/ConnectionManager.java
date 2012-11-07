@@ -11,7 +11,6 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.Http.FlushedInputStream;
@@ -20,7 +19,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -96,7 +94,6 @@ public class ConnectionManager {
                             apiResponse.code = ApiResponse.ERRORS_PROCCESED;
                         }
                         if(apiResponse.code == ApiResponse.BAN) {
-//                            sendBroadcastBanned(apiRequest,apiResponse);
                             Intent intent = new Intent(apiRequest.context,BanActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra(BanActivity.BANNING_INTENT,apiResponse.jsonResult.get("message").toString());
@@ -234,16 +231,6 @@ public class ConnectionManager {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    private void sendBroadcastBanned(ApiRequest request, ApiResponse response) {
-        Intent intent = new Intent();
-        intent.setAction(BAN_RESPONSE);
-        try{
-            intent.putExtra(BanActivity.MESSAGE, response.jsonResult.get("message").toString());
-            LocalBroadcastManager.getInstance(request.context).sendBroadcast(intent);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 
     private void addDelayedRequest(final ApiRequest apiRequest) {

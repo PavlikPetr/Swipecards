@@ -14,19 +14,15 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import com.topface.topface.C2DMUtils;
 import com.topface.topface.Data;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.requests.OptionsRequest;
-import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -236,7 +232,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 Debug.log(this, "Auth");
                 Auth auth = Auth.parse(response);
                 Data.saveSSID(getApplicationContext(), auth.ssid);
-                C2DMUtils.init(AuthActivity.this);
+                GCMUtils.init(AuthActivity.this);
                 mIsAuthorized = true;
 
                 runOnUiThread(new Runnable() {

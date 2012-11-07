@@ -31,6 +31,7 @@ import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
@@ -46,25 +47,29 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected boolean mIsUpdating;
     private RetryView updateErrorMessage;
     private RelativeLayout mContainer;
+    private LockerView lockView;
 
-    protected String[]
-            strings;
+    protected String[] editButtonsNames;
 
     private final int DELETE_BUTTON = 0;
-    private final int COPY_BUTTON = 1;
 
     private FloatBlock mFloatBlock;
+
+    protected boolean isDeletable = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
-        strings = new String[]{getString(R.string.default_delete_title), getString(R.string.default_copy_title)};
+        editButtonsNames = new String[]{getString(R.string.default_delete_title)};
         // Navigation bar
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getTitle());
+
+        lockView = (LockerView)view.findViewById(R.id.llvFeedLoading);
+        lockView.setVisibility(View.GONE);
 
         init();
 
@@ -175,25 +180,23 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected AdapterView.OnItemLongClickListener getOnItemLongClickListener() {
         return new AdapterView.OnItemLongClickListener() {
-
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.default_spinner_title).setItems(strings,new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DELETE_BUTTON:
-                                deleteItem(position-1);
-                                break;
-                            case COPY_BUTTON:
-
-                                break;
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id) {
+                if(isDeletable){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.default_spinner_title).setItems(editButtonsNames,new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DELETE_BUTTON:
+                                   lockView.setVisibility(View.VISIBLE);
+                                   deleteItem((int)id);
+                                   break;
+                            }
                         }
-                    }
-                });
-                builder.create().show();
+                    });
+                    builder.create().show();
+                }
                 return false;
             }
 
@@ -210,10 +213,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        lockView.setVisibility(View.GONE);
                         FeedList<T> mFeedList = mListAdapter.getData();
                         mFeedList.remove(position);
                         mListAdapter.setData(mFeedList);
-//                        mListView.setAdapter(mListAdapter);
                     }
                 });
             }
@@ -221,6 +224,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void fail(int codeError, ApiResponse response) throws NullPointerException {
                 Debug.log(response.toString());
+                lockView.setVisibility(View.GONE);
             }
         }).exec();
 
@@ -307,6 +311,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 });
             }
         }).exec();
+    }
+
+    protected void setIsDeletable(boolean value) {
+        isDeletable = value;
     }
 
     protected boolean isShowUnreadItems() {
