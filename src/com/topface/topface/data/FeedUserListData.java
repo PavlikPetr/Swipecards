@@ -14,14 +14,13 @@ public class FeedUserListData<T extends FeedUser> extends FeedList<T> {
 
     public FeedUserListData(JSONObject data, Class<T> itemClass) {
         mClass = itemClass;
-        fillData(data);
         if (data != null) {
             fillData(data);
         }
     }
 
     protected void fillData(JSONObject data) {
-        JSONArray list = data.optJSONArray("items");
+        JSONArray list = data.optJSONArray("users");
         if (list != null) {
             for (int i = 0; i < list.length(); i++) {
                 JSONObject item = list.optJSONObject(i);
