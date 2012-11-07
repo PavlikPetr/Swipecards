@@ -1,14 +1,13 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PhotoDeleteRequest extends ApiRequest {
+public class PhotoDeleteRequest extends AbstractApiRequest {
     // Data
-    private String service = "photoDelete";
+    public static final String service = "photoDelete";
     public int[] photos;
 
     public PhotoDeleteRequest(Context context) {
@@ -16,17 +15,13 @@ public class PhotoDeleteRequest extends ApiRequest {
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("photoid", getPhotosJson()));
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
-        }
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject().put("photoid", getPhotosJson());
+    }
 
-        return root.toString();
+    @Override
+    protected String getServiceName() {
+        return service;
     }
 
     private JSONArray getPhotosJson() throws JSONException {

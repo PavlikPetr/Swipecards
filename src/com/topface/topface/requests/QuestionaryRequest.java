@@ -1,13 +1,12 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class QuestionaryRequest extends ApiRequest {
+public class QuestionaryRequest extends AbstractApiRequest {
     // Data
-    private String service = "questionary";
+    public static final String service = "questionary";
     public int jobid = -1; // идентификатор рабочей партии пользователя
     public String job; // описание оригинальной работы пользователя
     public int statusid = -1; // идентификатор предопределенного статуса пользователя
@@ -18,7 +17,7 @@ public class QuestionaryRequest extends ApiRequest {
     public int characterid = -1; // идентификатор предопределенной характеристики пользователя
     public int smokingid = -1; // идентификатор предопределенного отношения к курению пользователя
     public int alcoholid = -1; // идентификатор предопределенного отношения к алкоголю пользователя
-    public int fitnessid = -1; // идентификатор предопределенного отношения к спорту пользователя
+    public int fitnessid = -1; // идентификатор предопределенного Fотношения к спорту пользователя
     public int communicationid = -1; // идентификатор предопределенного отношения к коммуникациям пользователя    
     public int weight = -1; // вес пользователя
     public int height = -1; // рост пользователя
@@ -42,70 +41,39 @@ public class QuestionaryRequest extends ApiRequest {
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            JSONObject data = new JSONObject();
-            if (weight != -1)
-                data.put("weight", weight);
-            if (height != -1)
-                data.put("height", height);
-            if (height != -1)
-                data.put("height", height);
+    protected JSONObject getRequestData() throws JSONException {
+        JSONObject data = new JSONObject();
+        data
+                .put("car", car)
+                .put("firstdating", firstdating)
+                .put("achievements", achievements)
+                .put("restaurants ", restaurants)
+                .put("valuables", valuables)
+                .put("aspirations", aspirations);
 
-            if (educationid != -1)
-                data.put("educationid", educationid);
-            if (marriageid != -1)
-                data.put("marriageid", marriageid);
-            if (financesid != -1)
-                data.put("financesid", financesid);
-            if (characterid != -1)
-                data.put("characterid", characterid);
-            if (smokingid != -1)
-                data.put("smokingid", smokingid);
-            if (alcoholid != -1)
-                data.put("alcoholid", alcoholid);
-            if (fitnessid != -1)
-                data.put("fitnessid", fitnessid);
-            if (communicationid != -1)
-                data.put("communicationid", communicationid);
+        if (weight != -1) data.put("weight", weight);
+        if (height != -1) data.put("height", height);
+        if (height != -1) data.put("height", height);
+        if (educationid != -1) data.put("educationid", educationid);
+        if (marriageid != -1) data.put("marriageid", marriageid);
+        if (financesid != -1) data.put("financesid", financesid);
+        if (characterid != -1) data.put("characterid", characterid);
+        if (smokingid != -1) data.put("smokingid", smokingid);
+        if (alcoholid != -1) data.put("alcoholid", alcoholid);
+        if (fitnessid != -1) data.put("fitnessid", fitnessid);
+        if (communicationid != -1) data.put("communicationid", communicationid);
+        if (hairid != -1) data.put("hairid", hairid);
+        if (eyeid != -1) data.put("eyeid", eyeid);
+        if (childrenid != -1) data.put("childrenid", childrenid);
+        if (residenceid != -1) data.put("residenceid", residenceid);
+        if (carid != -1) data.put("carid", carid);
 
-            if (hairid != -1)
-                data.put("hairid", hairid);
-            if (eyeid != -1)
-                data.put("eyeid", eyeid);
-            if (childrenid != -1)
-                data.put("childrenid", childrenid);
-            if (residenceid != -1)
-                data.put("residenceid", residenceid);
-            if (carid != -1)
-                data.put("carid", carid);
-            if (car != null)
-                data.put("car", car);
-            if (firstdating != null)
-                data.put("firstdating", firstdating);
-            if (achievements != null)
-                data.put("achievements", achievements);
-//            if(countries  != null)
-//                data.put("countries " ,countries );
-            if (restaurants != null)
-                data.put("restaurants ", restaurants);
-            if (valuables != null)
-                data.put("valuables", valuables);
-            if (aspirations != null)
-                data.put("aspirations", aspirations);
+        return data;
+    }
 
-
-            /*if(name!=null)
-          * data.put("name",name); */
-            root.put("data", data);
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
-        }
-
-        return root.toString();
+    @Override
+    protected String getServiceName() {
+        return service;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
 }

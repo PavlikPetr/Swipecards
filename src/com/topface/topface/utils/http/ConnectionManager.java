@@ -11,7 +11,6 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.Http.FlushedInputStream;
@@ -20,7 +19,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -80,9 +78,10 @@ public class ConnectionManager {
                     httpPost.setHeader("Accept-Encoding", "gzip");
                     httpPost.setHeader("Content-Type", "application/json");
                     setRevisionHeader(httpPost);
-                    httpPost.setEntity(new ByteArrayEntity(apiRequest.toString().getBytes("UTF8")));
+                    String requestString = apiRequest.toString();
+                    httpPost.setEntity(new ByteArrayEntity(requestString.getBytes("UTF8")));
 
-                    Debug.logJson(TAG, "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(), apiRequest.toString());
+                    Debug.logJson(TAG, "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(), requestString);
                     rawResponse = request(httpClient, httpPost);
                     Debug.logJson(TAG, "RESPONSE <<<", rawResponse);
 
@@ -95,15 +94,14 @@ public class ConnectionManager {
                             addDelayedRequest(apiRequest);
                             apiResponse.code = ApiResponse.ERRORS_PROCCESED;
                         }
-                        if(apiResponse.code == ApiResponse.BAN) {
+                        if (apiResponse.code == ApiResponse.BAN) {
 //                            sendBroadcastBanned(apiRequest,apiResponse);
-                            Intent intent = new Intent(apiRequest.context,BanActivity.class);
+                            Intent intent = new Intent(apiRequest.context, BanActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra(BanActivity.BANNING_INTENT,apiResponse.jsonResult.get("message").toString());
+                            intent.putExtra(BanActivity.BANNING_INTENT, apiResponse.jsonResult.get("message").toString());
                             apiRequest.context.startActivity(intent);
-                            apiRequest.handler.fail(apiResponse.code,apiResponse);
-                        } else
-                        if (apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE) {
+                            apiRequest.handler.fail(apiResponse.code, apiResponse);
+                        } else if (apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE) {
                             if (doNeedResend) {
                                 apiRequest.handler.postDelayed(new Runnable() {
                                     @Override
@@ -237,10 +235,10 @@ public class ConnectionManager {
     private void sendBroadcastBanned(ApiRequest request, ApiResponse response) {
         Intent intent = new Intent();
         intent.setAction(BAN_RESPONSE);
-        try{
+        try {
             intent.putExtra(BanActivity.MESSAGE, response.jsonResult.get("message").toString());
             LocalBroadcastManager.getInstance(request.context).sendBroadcast(intent);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -268,11 +266,11 @@ public class ConnectionManager {
 
     public synchronized void notifyDelayedRequests() {
         for (Thread mDelayedRequestsThread : mDelayedRequestsThreads) {
-        	try {
-        		mDelayedRequestsThread.notify();
-        	} catch (Exception ex) {
-        		Debug.log(ex.toString());
-        	}
+            try {
+                mDelayedRequestsThread.notify();
+            } catch (Exception ex) {
+                Debug.log(ex.toString());
+            }
         }
 
         mDelayedRequestsThreads.clear();

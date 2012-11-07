@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class NovicePowerRequest extends ApiRequest {
     // Data
-    private String service = "novicePower";
+    public static final String service = "novicePower";
 
     public NovicePowerRequest(Context context) {
         super(context);

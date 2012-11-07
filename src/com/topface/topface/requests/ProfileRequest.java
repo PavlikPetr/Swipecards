@@ -1,14 +1,13 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ProfileRequest extends ApiRequest {
+public class ProfileRequest extends AbstractApiRequest {
     // Data
-    private String service = "profile";
+    public static final String SERVICE_NAME = "profile";
     public int part; // часть профиля, необходимая для загрузки
     //public String  fields;  //массив интересующих полей профиля
     // Constants
@@ -26,42 +25,40 @@ public class ProfileRequest extends ApiRequest {
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            JSONArray fields = null;
-            switch (part) {
-                case P_NOTIFICATION:
-                    fields = getNotification();
-                    break;
-                case P_FILTER:
-                    fields = getFilter();
-                    break;
-                case P_QUESTIONARY:
-                    fields = getQuestionary();
-                    break;
-                case P_ALBUM:
-                    fields = getAlbum();
-                    break;
-                case P_DASHBOARD:
-                    fields = getDashboard();
-                    break;
-                case P_INFO:
-                    fields = getInfo();
-                    break;
-                case P_ALL:
-                default:
-                    fields = new JSONArray();
-                    break;
-            }
-            root.put("data", new JSONObject().put("fields", fields));
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
+    protected JSONObject getRequestData() throws JSONException {
+
+        JSONArray fields;
+        switch (part) {
+            case P_NOTIFICATION:
+                fields = getNotification();
+                break;
+            case P_FILTER:
+                fields = getFilter();
+                break;
+            case P_QUESTIONARY:
+                fields = getQuestionary();
+                break;
+            case P_ALBUM:
+                fields = getAlbum();
+                break;
+            case P_DASHBOARD:
+                fields = getDashboard();
+                break;
+            case P_INFO:
+                fields = getInfo();
+                break;
+            case P_ALL:
+            default:
+                fields = new JSONArray();
+                break;
         }
 
-        return root.toString();
+        return new JSONObject().put("fields", fields);
+    }
+
+    @Override
+    protected String getServiceName() {
+        return SERVICE_NAME;
     }
 
     private JSONArray getNotification() {

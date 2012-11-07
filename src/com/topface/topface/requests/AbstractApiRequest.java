@@ -5,6 +5,8 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.UUID;
+
 /**
  * Абстрактная версия ApiRequest для упрощенной релизации запросов к API
  * <p/>
@@ -13,6 +15,8 @@ import org.json.JSONObject;
  */
 public abstract class AbstractApiRequest extends ApiRequest {
 
+    private final String requestId = getRequestId();
+
     public AbstractApiRequest(Context context) {
         super(context);
     }
@@ -20,6 +24,7 @@ public abstract class AbstractApiRequest extends ApiRequest {
     protected JSONObject getRequest() {
         JSONObject root = new JSONObject();
         try {
+            root.put("id", requestId);
             root.put("service", getServiceName());
             root.put("ssid", ssid);
             JSONObject data = getRequestData();
@@ -40,5 +45,9 @@ public abstract class AbstractApiRequest extends ApiRequest {
     @Override
     public String toString() {
         return getRequest().toString();
+    }
+
+    private String getRequestId() {
+        return UUID.randomUUID().toString();
     }
 }

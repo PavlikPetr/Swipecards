@@ -1,13 +1,12 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class BannerRequest extends ApiRequest {
+public class BannerRequest extends AbstractApiRequest {
     // Data
-    private String service = "banner";
+    public static final String SERVICE_NAME = "banner";
     public String place; // идентификатор места отображения баннера. Возможные значения: LIKE, MUTUAL, MESSAGES, TOP
     // Constants
     public static final String TOP = "TOP";
@@ -20,16 +19,13 @@ public class BannerRequest extends ApiRequest {
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("place", place));
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
-        }
-
-        return root.toString();
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject().put("place", place);
     }
+
+    @Override
+    protected String getServiceName() {
+        return SERVICE_NAME;
+    }
+
 }

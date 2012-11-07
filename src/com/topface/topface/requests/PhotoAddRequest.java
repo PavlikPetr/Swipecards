@@ -1,13 +1,12 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PhotoAddRequest extends ApiRequest {
+public class PhotoAddRequest extends AbstractApiRequest {
     // Data
-    private String service = "photoAdd";
+    public static final String service = "photoAdd";
 
     public boolean ero; // флаг, является ли фотография эротической
     public int cost; // стоимость просмотра эротической фотографии
@@ -17,16 +16,12 @@ public class PhotoAddRequest extends ApiRequest {
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("ero", ero).put("cost", cost));
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
-        }
+    protected JSONObject getRequestData() throws JSONException {
+        return null;
+    }
 
-        return root.toString();
+    @Override
+    protected String getServiceName() {
+        return service;
     }
 }

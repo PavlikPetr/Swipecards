@@ -10,6 +10,7 @@ import java.util.Collection;
 
 public class InviteRequest extends AbstractApiRequest {
     public static final int MIN_PHONE_LENGTH = 10;
+    public static final String SERVICE_NAME = "invite";
     private ArrayList<Recipient> recipients;       // строка данных заказа от Google Play
 
     public InviteRequest(Context context) {
@@ -24,7 +25,7 @@ public class InviteRequest extends AbstractApiRequest {
 
     @Override
     protected String getServiceName() {
-        return "invite";
+        return SERVICE_NAME;
     }
 
     private JSONArray getRecipientsJson() throws JSONException {

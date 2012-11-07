@@ -1,13 +1,12 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MessageRequest extends ApiRequest {
+public class MessageRequest extends AbstractApiRequest {
     // Data
-    private String service = "message";
+    public static final String service = "message";
     public int userid; // идентификатор пользователя, кому послали сообщение
     public String message; // текст сообщения в UTF-8. min размер текста - 1 символ, max - 1024 
 
@@ -16,16 +15,14 @@ public class MessageRequest extends ApiRequest {
     }
 
     @Override
-    public String toString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("service", service);
-            root.put("ssid", ssid);
-            root.put("data", new JSONObject().put("userid", userid).put("message", message));
-        } catch (JSONException e) {
-            Debug.log(this, "Wrong request compiling: " + e);
-        }
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject()
+                .put("userid", userid)
+                .put("message", message);
+    }
 
-        return root.toString();
+    @Override
+    protected String getServiceName() {
+        return service;
     }
 }
