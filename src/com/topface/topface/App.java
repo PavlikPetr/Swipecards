@@ -45,8 +45,7 @@ public class App extends Application {
         super.onCreate();
         mContext = getApplicationContext();
         DEBUG = isDebugMode();
-        // C2DM
-//        C2DMUtils.init(getContext());
+        // GCM
         GCMUtils.init(getContext());
         Debug.log("App", "+onCreate");
         Data.init(getApplicationContext());

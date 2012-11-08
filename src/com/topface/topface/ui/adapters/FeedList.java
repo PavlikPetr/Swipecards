@@ -7,4 +7,5 @@ public class FeedList<T> extends LinkedList<T> {
     public boolean hasItem(int id) {
         return size() > id;
     }
+
 }

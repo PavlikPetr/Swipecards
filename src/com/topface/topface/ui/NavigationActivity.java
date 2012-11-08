@@ -101,12 +101,6 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         return false;
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
-    }
-
     private FragmentMenuListener mOnFragmentMenuListener = new FragmentMenuListener() {
         @Override
         public void onMenuClick(int buttonId) {

@@ -12,6 +12,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MemoryCacheTemplate;
@@ -38,7 +39,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mInflater;
-    private LinkedList<History> mDataList; // data
+    private FeedList<History> mDataList; // data
     private LinkedList<Integer> mItemLayoutList; // types
     private HashMap<Integer, String> mItemTimeList; // date
     private View.OnClickListener mOnClickListener;
@@ -60,13 +61,24 @@ public class ChatListAdapter extends BaseAdapter {
     private static final int T_FRIEND_MAP_EXT = 12;
     private static final int T_COUNT = 13;
 
+
+
+    ChatActivity.OnListViewItemLongClickListener mLongClickListener;
+
+
+
     public ChatListAdapter(Context context, LinkedList<History> dataList) {
         mContext = context;
         mItemLayoutList = new LinkedList<Integer>();
         mItemTimeList = new HashMap<Integer, String>();
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mAddressesCache = new MemoryCacheTemplate<String, String>();
+
         prepare(dataList);
+    }
+
+    public void setOnItemLongClickListener (ChatActivity.OnListViewItemLongClickListener l) {
+        mLongClickListener = l;
     }
 
     public void setOnAvatarListener(View.OnClickListener onAvatarListener) {
@@ -99,7 +111,7 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         final int type = getItemViewType(position);
         final History history = getItem(position);
@@ -204,20 +216,7 @@ public class ChatListAdapter extends BaseAdapter {
                     holder.avatar.setVisibility(View.INVISIBLE);
                     break;
             }
-            if (holder.message != null) {
-                holder.message.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
 
-                        @SuppressWarnings("deprecation")
-                        ClipboardManager clipboard =
-                                (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                        clipboard.setText(holder.message.getText());
-                        Toast.makeText(mContext, R.string.general_msg_copied, Toast.LENGTH_SHORT).show();
-                        return false;  //To change body of implemented methods use File | Settings | File Templates.
-                    }
-                });
-            }
             if (convertView != null) {
                 convertView.setTag(holder);
             }
@@ -345,8 +344,24 @@ public class ChatListAdapter extends BaseAdapter {
 
         holder.date.setText(dateFormat.format(history.created));
         // Utils.formatTime(holder.date, msg.created);
-
+        if (holder.message != null && convertView!=null) {
+            convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    mLongClickListener.onLongClick(position, holder.message);
+                    return false;
+                }
+            });
+        }
         return convertView;
+    }
+
+    public void copyText(String text) {
+        @SuppressWarnings("deprecation")
+        ClipboardManager clipboard =
+                (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.setText(text);
+        Toast.makeText(mContext, R.string.general_msg_copied, Toast.LENGTH_SHORT).show();
     }
 
     public void addSentMessage(History msg) {
@@ -415,7 +430,7 @@ public class ChatListAdapter extends BaseAdapter {
         if (mDataList != null) {
         	mDataList.clear();
         } else {
-        	mDataList = new LinkedList<History>();
+        	mDataList = new FeedList<History>();
         }
         
         mItemLayoutList.clear();
@@ -586,6 +601,24 @@ public class ChatListAdapter extends BaseAdapter {
         mDataList = null;
         mInflater = null;
         mItemLayoutList = null;
+    }
+
+    public History removeItem(int position) {
+        History item = mDataList.get(position);
+        removeAtPosition(position);
+        notifyDataSetChanged();
+        return item;
+    }
+
+    private void removeAtPosition(int position) {
+        for(int i=position;i<mDataList.size()-1;i++) {
+            mDataList.set(i,mDataList.get(i+1));
+        }
+        mDataList.remove(mDataList.size()-1);
+        for(int i=position;i<mItemLayoutList.size()-1;i++) {
+            mItemLayoutList.set(i,mItemLayoutList.get(i+1));
+        }
+        mItemLayoutList.remove(mItemLayoutList.size()-1);
     }
 
     public LinkedList<History> getDataCopy() {

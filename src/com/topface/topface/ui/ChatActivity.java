@@ -18,7 +18,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.topface.topface.*;
+import com.topface.topface.Data;
+import com.topface.topface.GCMUtils;
+import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
@@ -57,6 +60,11 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private static ProgressDialog mProgressDialog;
     private boolean mLocationDetected = false;
 
+    private String[] editButtonsNames;
+
+    private static final int DELETE_BUTTON = 1;
+    private static final int COPY_BUTTON = 0;
+
     private boolean mReceiverRegistered = false;
 	// Constants
 	private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -89,6 +97,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         // Locker
         mLoadingLocker = (LockerView) findViewById(R.id.llvChatLoading);
 
+        editButtonsNames = new String[]{getString(R.string.default_copy_title), getString(R.string.default_delete_title)};
         // Params
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
@@ -184,6 +193,47 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 update(true);
             }
         });
+        mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
+
+            @Override
+            public void onLongClick(final int position, final View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+                builder.setTitle(R.string.default_spinner_title).setItems(editButtonsNames, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DELETE_BUTTON:
+                                deleteItem(position);
+                                break;
+                            case COPY_BUTTON:
+                                mAdapter.copyText(((TextView)v).getText().toString());
+                                break;
+                        }
+                    }
+                });
+                builder.create().show();
+            }
+        });
+//        mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
+//            @Override
+//            public void onLongClick(final int position, final View v) {
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+//                builder.setTitle(R.string.default_spinner_title).setItems(editButtonsNames,new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        switch (which){
+//                            case DELETE_BUTTON:
+//                                deleteItem(position-1);
+//                                break;
+//                            case COPY_BUTTON:
+//                                mAdapter.copyText(((TextView) v).getText().toString());
+//                                break;
+//                        }
+//                    }
+//                });
+//                builder.create().show();
+//            }
+//        });
         mListView.setAdapter(mAdapter);
         // Сперва пробуем восстановить данные, если это просто поворот
         // устройства
@@ -196,6 +246,29 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             // Если это не получилось, грузим с сервера
             update(false);
         }
+    }
+
+    private void deleteItem(final int position) {
+        DeleteRequest dr = new DeleteRequest(this);
+        dr.id = mAdapter.getItem(position).id;
+        registerRequest(dr);
+        dr.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) throws NullPointerException {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                         mAdapter.removeItem(position);
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                Debug.log(response.toString());
+            }
+        }).exec();
+
     }
 
     @Override
@@ -688,4 +761,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             }
         }
     };
+
+    public interface OnListViewItemLongClickListener {
+        public void onLongClick(int position,View v);
+    }
 }

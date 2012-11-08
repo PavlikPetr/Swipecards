@@ -28,6 +28,16 @@
     <string name="dashbrd_btn_skip">Next</string>
     <string name="dashbrd_btn_prev">Previous</string>
     <string name="dashbrd_btn_switch_button">More…</string>
+
+    <string name="default_notification_title">@string/app_name</string>
+    <string name="default_notification_text">You\'ve got something new!</string><!--TODO: Переделать-->
+
+    <!--Feed editing-->
+    <string name="default_spinner_title">Choose action</string>
+    <string name="default_delete_title">Delete</string>
+    <string name="default_copy_title">Copy</string>
+
+    <!-- Likes Activity -->
     <string name="likes_background_text">No likes</string>
     <string name="visitors_background_text">No visitors</string>
     <string name="btn_dbl_left">All</string>

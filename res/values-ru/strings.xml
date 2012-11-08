@@ -43,6 +43,11 @@
     <string name="default_notification_text">У вас есть что-то новое!</string>
     <!--TODO: Переделать-->
 
+    <!--Feed editing-->
+    <string name="default_spinner_title">Выберите действие</string>
+    <string name="default_delete_title">Удалить</string>
+    <string name="default_copy_title">Копировать</string>
+
     <!-- Likes Activity -->
     <string name="likes_header_title">Я нравлюсь</string>
     <string name="likes_background_text">Нет симпатий</string>

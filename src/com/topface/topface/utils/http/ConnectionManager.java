@@ -94,9 +94,8 @@ public class ConnectionManager {
                             addDelayedRequest(apiRequest);
                             apiResponse.code = ApiResponse.ERRORS_PROCCESED;
                         }
-                        if (apiResponse.code == ApiResponse.BAN) {
-//                            sendBroadcastBanned(apiRequest,apiResponse);
-                            Intent intent = new Intent(apiRequest.context, BanActivity.class);
+                        if(apiResponse.code == ApiResponse.BAN) {
+                            Intent intent = new Intent(apiRequest.context,BanActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra(BanActivity.BANNING_INTENT, apiResponse.jsonResult.get("message").toString());
                             apiRequest.context.startActivity(intent);
@@ -232,16 +231,6 @@ public class ConnectionManager {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    private void sendBroadcastBanned(ApiRequest request, ApiResponse response) {
-        Intent intent = new Intent();
-        intent.setAction(BAN_RESPONSE);
-        try {
-            intent.putExtra(BanActivity.MESSAGE, response.jsonResult.get("message").toString());
-            LocalBroadcastManager.getInstance(request.context).sendBroadcast(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 
     private void addDelayedRequest(final ApiRequest apiRequest) {
