@@ -3,14 +3,16 @@
     <string name="time_now">Прямо сейчас</string>
 
     <plurals name="time_hour">
+        <item quantity="zero">менее часа назад</item>
         <item quantity="one">%d час назад</item>
         <item quantity="few">%d часа назад</item>
         <item quantity="other">%d часов назад</item>
     </plurals>
 
     <plurals name="time_minute">
-        <item quantity="zero">%d минуту назад</item>
-        <item quantity="one">%d минуты назад</item>
+        <item quantity="zero">Только что</item>
+        <item quantity="one">%d минуту назад</item>
+        <item quantity="few">%d минуты назад</item>
         <item quantity="other">%d минут назад</item>
     </plurals>
 

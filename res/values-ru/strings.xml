@@ -40,7 +40,8 @@
     <string name="dashbrd_btn_switch_button">Еще…</string>
 
     <string name="default_notification_title">Topface</string>
-    <string name="default_notification_text">У вас есть что-то новое!</string><!--TODO: Переделать-->
+    <string name="default_notification_text">У вас есть что-то новое!</string>
+    <!--TODO: Переделать-->
 
     <!-- Likes Activity -->
     <string name="likes_header_title">Я нравлюсь</string>
@@ -271,14 +272,12 @@
     <string name="leaders_go_date">Хочу сюда</string>
     <string name="leaders_leader_now">Теперь вы лидер!</string>
     <string name="need_select_photo">Сперва нужно выбрать фотографию!</string>
-    <string name="photo_add_or">Фотография добавлена</string>
-    <string name="photo_add_error">Не удалось добавить фотографию</string>
     <plurals name="leaders_price">
         <item quantity="one">Встать за %d монету</item>
         <item quantity="few">Встать за %d монеты</item>
         <item quantity="other">Встать за %d монет</item>
     </plurals>
-    <string name="leaders_select_photo">Выберите эффектную фотографию:</string>    
+    <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
 
     <string name="general_profile_error">Ошибка загрузки профиля</string>
 </resources>
