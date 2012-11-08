@@ -209,4 +209,7 @@
     <string name="default_spinner_title">Choose action</string>
     <string name="default_delete_title">Delete</string>
     <string name="default_copy_title">Copy</string>
+
+    <string name="dating_header_girls">Girls from %1$d to %2$d</string>
+    <string name="dating_header_guys">Guys from %1$d to %2$d</string>
 </resources>
