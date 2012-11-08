@@ -605,12 +605,12 @@ public class ChatListAdapter extends BaseAdapter {
 
     public History removeItem(int position) {
         History item = mDataList.get(position);
-        smartRemove(position);
+        removeAtPosition(position);
         notifyDataSetChanged();
         return item;
     }
 
-    private void smartRemove(int position) {
+    private void removeAtPosition(int position) {
         for(int i=position;i<mDataList.size()-1;i++) {
             mDataList.set(i,mDataList.get(i+1));
         }
