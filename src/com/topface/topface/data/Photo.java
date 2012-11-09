@@ -108,7 +108,6 @@ public class Photo extends AbstractData implements Parcelable{
                     }
                 }
             }
-
             if (url == null && links.containsKey(SIZE_ORIGINAL)) {
                 url = links.get(SIZE_ORIGINAL);
             }
