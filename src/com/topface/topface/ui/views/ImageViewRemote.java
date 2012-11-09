@@ -19,6 +19,9 @@ import com.topface.topface.imageloader.MaskClipPostProcessor;
 import com.topface.topface.imageloader.RoundCornersPostProcessor;
 import com.topface.topface.imageloader.RoundPostProcessor;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ImageViewRemote extends ImageView {
 
     private static final int POST_PROCESSOR_NONE = 0;
@@ -27,10 +30,26 @@ public class ImageViewRemote extends ImageView {
     private static final int POST_PROCESSOR_MASK = 3;
     public static final int LOADING_COMPLETE = 0;
     private static final int LOADING_ERROR = 1;
+    /**
+     * Максимальное количество дополнительных попыток загрузки изображения
+     */
+    private static final int MAX_REPEAT_COUNT = 1;
+    /**
+     * Задержка перед следующей попыткой загрузки изображения
+     */
+    private static final long REPEAT_SCHEDULE = 2000;
     private ImagePostProcessor mPostProcessor;
     Animation mAnimation = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
     private String mCurrentSrc;
     private boolean mIsAnimationEnabled;
+    /**
+     * Счетчик попыток загрузить фотографию
+     */
+    private int mRepeatCounter = 0;
+    /**
+     * Объект таймера с задержкой запроса но
+     */
+    private Timer mRepeatTimer;
 
 
     public ImageViewRemote(Context context) {
@@ -91,7 +110,23 @@ public class ImageViewRemote extends ImageView {
     }
 
     public boolean setRemoteSrc(String remoteSrc, Handler handler) {
+        return setRemoteSrc(remoteSrc, handler, false);
+    }
+
+    public boolean setRemoteSrc(String remoteSrc, Handler handler, boolean isRepeat) {
         boolean isCorrectSrc = true;
+        //Отменяем текущую загрузку, если ImageViewRemote уже используется для другого изображения
+        getImageLoader().getImageLoader().cancelDisplayTask(this);
+        //Если это не повторный запрос изображения, то сбрасываем счетчик повторов
+        if (!isRepeat) {
+            mRepeatCounter = 0;
+        }
+        //Отменяем таймер повтора загрузки изображения, если он есть
+        if (mRepeatTimer != null) {
+            mRepeatTimer.cancel();
+            mRepeatTimer = null;
+        }
+
         if (remoteSrc != null && remoteSrc.trim().length() > 0) {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
@@ -100,13 +135,8 @@ public class ImageViewRemote extends ImageView {
                 mIsAnimationEnabled = false;
             }
 
-            ImagePostProcessor processor = getPostProcessor();
             setImageBitmap(null);
-            if (processor != null) {
-                getImageLoader().displayImage(remoteSrc, this, null, getListener(handler), processor);
-            } else {
-                getImageLoader().displayImage(remoteSrc, this, null, getListener(handler));
-            }
+            getImageLoader().displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
 
         } else {
             isCorrectSrc = false;
@@ -128,28 +158,8 @@ public class ImageViewRemote extends ImageView {
 
     }
 
-    private ImageLoadingListener getListener(final Handler handler) {
-        ImageLoadingListener listener = null;
-        if (handler != null) {
-            listener = new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingFailed(FailReason failReason) {
-                    handler.sendEmptyMessage(LOADING_ERROR);
-                    setImageResource(R.drawable.im_photo_error);
-                }
-
-                @Override
-                public void onLoadingComplete(Bitmap loadedImage) {
-                    handler.sendEmptyMessage(LOADING_COMPLETE);
-                }
-
-                @Override
-                public void onLoadingCancelled() {
-                    handler.sendEmptyMessage(LOADING_ERROR);
-                }
-            };
-        }
-        return listener;
+    private ImageLoadingListener getListener(final Handler handler, final String remoteSrc) {
+        return new RepeatImageLoadingListener(handler, remoteSrc);
     }
 
     public boolean setRemoteSrc(String remoteSrc) {
@@ -182,5 +192,56 @@ public class ImageViewRemote extends ImageView {
         }
 
         return result;
+    }
+
+    class RepeatImageLoadingListener extends SimpleImageLoadingListener {
+        private final Handler mHandler;
+        private final String mRemoteSrc;
+
+        public RepeatImageLoadingListener(Handler handler, String remoteSrc) {
+            mRemoteSrc = remoteSrc;
+            mHandler = handler;
+        }
+
+        @Override
+        public void onLoadingFailed(FailReason failReason) {
+            if (mRepeatCounter >= MAX_REPEAT_COUNT) {
+                mRepeatCounter = 0;
+                if (mHandler != null) {
+                    mHandler.sendEmptyMessage(LOADING_ERROR);
+                }
+                setImageResource(R.drawable.im_photo_error);
+            } else {
+                mRepeatCounter++;
+                mRepeatTimer = new Timer();
+                mRepeatTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        ImageViewRemote.this.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                setRemoteSrc(mRemoteSrc, mHandler, true);
+                            }
+                        });
+                    }
+                }, REPEAT_SCHEDULE);
+            }
+        }
+
+        @Override
+        public void onLoadingComplete(Bitmap loadedImage) {
+            mRepeatCounter = 0;
+            if (mHandler != null) {
+                mHandler.sendEmptyMessage(LOADING_COMPLETE);
+            }
+        }
+
+        @Override
+        public void onLoadingCancelled() {
+            mRepeatCounter = 0;
+            if (mHandler != null) {
+                mHandler.sendEmptyMessage(LOADING_ERROR);
+            }
+        }
     }
 }
