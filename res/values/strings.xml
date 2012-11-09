@@ -12,8 +12,8 @@
     <string name="general_msg_copied">Message copied</string>
     <string name="general_switch_on">on</string>
     <string name="general_switch_off">off</string>
-    <string name="auth_btn_vk">Login with your vk.com account</string>
-    <string name="auth_btn_fb">Login with your Facebook account</string>
+    <string name="auth_btn_vk">Login with vk.com</string>
+    <string name="auth_btn_fb">Login with Facebook</string>
     <string name="retry">Retry</string>
     <string name="dashbrd_btn_dating">Dating</string>
     <string name="dashbrd_btn_likes">People who like me</string>
@@ -28,36 +28,29 @@
     <string name="dashbrd_btn_skip">Next</string>
     <string name="dashbrd_btn_prev">Previous</string>
     <string name="dashbrd_btn_switch_button">More…</string>
-
-    <string name="default_notification_title">@string/app_name</string>
-    <string name="default_notification_text">You\'ve got something new!</string><!--TODO: Переделать-->
-
-    <!--Feed editing-->
-    <string name="default_spinner_title">Choose action</string>
-    <string name="default_delete_title">Delete</string>
-    <string name="default_copy_title">Copy</string>
-
-    <!-- Likes Activity -->
-    <string name="likes_background_text">No likes</string>
-    <string name="visitors_background_text">No visitors</string>
+    <string name="likes_header_title">People who like me</string>
+    <string name="likes_background_text">No sympathies</string>
+    <string name="likes_mutual">Mutual</string>
+    <string name="visitors_background_text">No guests</string>
+    <string name="inbox_header_title">Dialogs</string>
     <string name="btn_dbl_left">All</string>
     <string name="btn_dbl_right">Unread</string>
     <string name="inbox_background_text">No incoming messages</string>
     <string name="chat_btn_send">Send</string>
     <string name="chat_comment">Write a message</string>
     <string name="chat_gift_in">You have recieved a new gift</string>
-    <string name="chat_gift_out">Someone has sent a gift to you</string>
+    <string name="chat_gift_out">You have sent a gift.</string>
     <string name="chat_like_in">Someone likes you!</string>
     <string name="chat_like_out">You have sent a sympathy</string>
     <string name="chat_symphathy_in">You have been sent delight</string>
     <string name="chat_symphathy_out">You sent delight</string>
     <string name="chat_wish_in">Someone has sent a Secret Wish to you.</string>
-    <string name="chat_wish_out">Someone has sent a Secret Wish to you.</string>
+    <string name="chat_wish_out">You have sent a Secret Wish.</string>
     <string name="chat_sexuality_in">You sexuality has been rated</string>
     <string name="chat_sexuality_out">You have rated sexuality</string>
     <string name="chat_wink_in">Someone has slipped a wink to you.</string>
     <string name="chat_wink_out">Someone has slipped a wink to you.</string>
-    <string name="chat_dialog_gps">GPS is on! Turn off?</string>
+    <string name="chat_dialog_gps">GPS is off! Turn on?</string>
     <string name="chat_dialog_btn_gps_settings">Settings</string>
     <string name="chat_dialog_btn_gps_cancel">Cancel</string>
     <string name="chat_toast_fail_location">Cannot identify your location</string>
@@ -70,7 +63,7 @@
     <string name="filter_filter">Filter</string>
     <string name="filter_girl">Girls</string>
     <string name="filter_boy">Guys</string>
-    <string name="filter_age_string">from %1$d up to %2$d</string>
+    <string name="filter_age_string">from %1$d to %2$d</string>
     <string name="filter_in">In</string>
     <string name="filter_only_online">Online only</string>
     <string name="filter_only_beautiful">Beautiful only</string>
@@ -104,7 +97,7 @@
     <string name="edit_bg_photo">Background image</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Change photo</string>
-    <string name="edit_album_photos">phtos</string>
+    <string name="edit_album_photos">photos</string>
     <string name="edit_interests">Interests</string>
     <string name="edit_selected">Selected</string>
     <string name="edit_name">Name</string>
@@ -144,12 +137,9 @@
     <string name="activity_title_invite">Invitations</string>
     <string name="send_invite">Send</string>
     <plurals name="invite_bonus_text">
-        <item quantity="zero">Invite your friends and for every confirmed friend you will get 20 {{coins}}</item>
-        <item quantity="other">You are going to send invitation to %2$d friends and you will get frot this %1$d
-            {{coins}}
-        </item>
-        <item quantity="one">You are going to send invitation to %2$d friend and you will get frot this %1$d {{coins}}
-        </item>
+        <item quantity="zero">Invite your friends and for every confirmed friend you will get 20</item>
+        <item quantity="other">You are going to send invitation to %2$d friends and you will get frot this %1$d</item>
+        <item quantity="one">You are going to send invitation to %2$d friend and you will get frot this %1$d</item>
     </plurals>
     <string name="invite_is_free">Invitation is free!</string>
     <string name="invite_error">An error has occured during sending you invitations. Please, try again.</string>
@@ -193,7 +183,7 @@
     <plurals name="form_matches">
         <item quantity="zero">You have no matches</item>
         <item quantity="other">You have %d matches</item>
-        <item quantity="one">You have %d matches</item>
+        <item quantity="one">You have %d match</item>
     </plurals>
     <string name="fill_button">Fill</string>
     <string name="app_help_url">http://topface.com</string>
@@ -203,11 +193,11 @@
     <string name="profile_form">Profile</string>
     <string name="profile_gifts">Gifts</string>
     <string name="profile_actions">Actions</string>
-    <string name="profile_empty_form">Users hasn\'t filled his profile yet</string>
+    <string name="profile_empty_form">User hasn\'t filled his profile yet</string>
     <string name="profile_ask_form">Ask to fill profile</string>
     <string name="leaders_go_date">Put me here!</string>
     <string name="leaders_leader_now">You are leader!</string>
-    <string name="need_select_photo">Please, select photot!</string>
+    <string name="need_select_photo">Please, select photo!</string>
     <plurals name="leaders_price">
         <item quantity="other">Веcome for %d coins</item>
         <item quantity="one">Become for %d coin</item>
@@ -215,7 +205,11 @@
     <string name="leaders_select_photo">Please select marvelous photo:</string>
     <string name="general_profile_error">Error loading profile</string>
 
-    <string name="default_notification_title">@string/app_name</string>
-    <string name="default_notification_text">You\'ve got something new!</string>
+    <!--Feed editing-->
+    <string name="default_spinner_title">Choose action</string>
+    <string name="default_delete_title">Delete</string>
+    <string name="default_copy_title">Copy</string>
 
+    <string name="dating_header_girls">Girls from %1$d to %2$d</string>
+    <string name="dating_header_guys">Guys from %1$d to %2$d</string>
 </resources>
