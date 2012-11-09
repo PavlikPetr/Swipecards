@@ -2,7 +2,6 @@ package com.topface.topface.data;
 
 import android.content.Context;
 import android.text.TextUtils;
-
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
@@ -21,7 +20,7 @@ public class Profile extends AbstractDataWithPhotos {
     public int uid; // id пользователя в топфейсе
     public String first_name; // имя пользователя
     public int age; // возраст пользователя
-    public int sex; // секс пользователя
+    public int sex; // пол пользователя
 
     // Unread
     public int unread_rates; // количество непрочитанных оценок пользователя
@@ -317,10 +316,10 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
-                	if (restraunts != null)
-                		profile.forms.add(formItem);
+                    if (restraunts != null)
+                        profile.forms.add(formItem);
                 } else {
-                	profile.forms.add(formItem);
+                    profile.forms.add(formItem);
                 }
 
                 //23 DIVIDER
@@ -337,10 +336,10 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_detail_about_dating, datingDetails, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
-                	if (datingDetails != null)
-                		profile.forms.add(formItem);
+                    if (datingDetails != null)
+                        profile.forms.add(formItem);
                 } else {
-                	profile.forms.add(formItem);
+                    profile.forms.add(formItem);
                 }
 
                 //26 achievements  position 16
@@ -349,10 +348,10 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_detail_archievements, achievments, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (mIsUserProfile) {
-                	if (achievments != null)
-                		profile.forms.add(formItem);
+                    if (achievments != null)
+                        profile.forms.add(formItem);
                 } else {
-                	profile.forms.add(formItem);
+                    profile.forms.add(formItem);
                 }
 
                 //27 DIVIDER
@@ -438,15 +437,15 @@ public class Profile extends AbstractDataWithPhotos {
 //            profile.forms.add(item);
 //        }
 //    }
-    
-    private static void compareFormItemData(FormItem item, int position, Profile profile,boolean matches) {
-    	item.equal = matches;    	
-    	if (item.dataId > 0) {
-	        profile.forms.add(item);
-	        if (item.equal) {
-	        	((User) profile).formMatches++;
-	        }
-    	}
+
+    private static void compareFormItemData(FormItem item, int position, Profile profile, boolean matches) {
+        item.equal = matches;
+        if (item.dataId > 0) {
+            profile.forms.add(item);
+            if (item.equal) {
+                ((User) profile).formMatches++;
+            }
+        }
     }
 
 //    public static Profile load() {

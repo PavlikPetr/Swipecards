@@ -23,8 +23,7 @@
         android:layout_below="@id/loNavigationBar"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical">                    
-        
+            android:orientation="vertical">
         <include layout="@layout/feed_control"/>
     </LinearLayout>
 
@@ -35,6 +34,7 @@
             android:layout_centerInParent="true"
             android:visibility="gone"
             style="@android:style/Widget.ProgressBar.Small"/>
+
     <ImageButton
             android:id="@+id/btnUpdate"
             android:src="@drawable/btn_refresh_selector"

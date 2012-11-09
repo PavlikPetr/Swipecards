@@ -109,7 +109,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Navigation Header
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
-        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getResources().getString(R.string.dashbrd_btn_dating));
+
+        setHeader(view);
+
         mNavigationHeader = view.findViewById(R.id.loNavigationBar);
         ImageButton settingsButton = (ImageButton) view.findViewById(R.id.btnNavigationSettingsBar);
         settingsButton.setVisibility(View.VISIBLE);
@@ -619,9 +621,31 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             lockControls();
             updateData(false);
+            View view = getView();
+            setHeader(view);
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void setHeader(View view) {
+        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(
+                getString(
+                        CacheProfile.dating_sex == Static.BOY ?
+                                R.string.dating_header_guys : R.string.dating_header_girls,
+                        CacheProfile.dating_age_start,
+                        CacheProfile.dating_age_end
+                )
+        );
+
+        TextView subTitle = (TextView) view.findViewById(R.id.tvNavigationSubtitle);
+        subTitle.setVisibility(View.VISIBLE);
+        subTitle.setText(
+                CacheProfile.dating_city_name != null && !CacheProfile.dating_city_name.equals("") ?
+                        CacheProfile.dating_city_name :
+                        getString(R.string.filter_cities_all)
+
+        );
     }
 
     private boolean mIsHide;

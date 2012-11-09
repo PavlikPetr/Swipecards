@@ -41,12 +41,6 @@
 
     <string name="default_notification_title">Topface</string>
     <string name="default_notification_text">У вас есть что-то новое!</string>
-    <!--TODO: Переделать-->
-
-    <!--Feed editing-->
-    <string name="default_spinner_title">Выберите действие</string>
-    <string name="default_delete_title">Удалить</string>
-    <string name="default_copy_title">Копировать</string>
 
     <!-- Likes Activity -->
     <string name="likes_header_title">Я нравлюсь</string>
@@ -260,7 +254,6 @@
 
     <string name="fill_button">Заполнить</string>
 
-    <!-- TODO: translate this to russian -->
     <string name="app_help_url">http://topface.com</string>
     <string name="app_topface_url">http://topface.com</string>
 
@@ -285,4 +278,14 @@
     <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
 
     <string name="general_profile_error">Ошибка загрузки профиля</string>
+
+    <!--Feed editing-->
+    <string name="default_spinner_title">Выберите действие</string>
+    <string name="default_delete_title">Удалить</string>
+    <string name="default_copy_title">Копировать</string>
+
+    <string name="dating_header_girls">Девушки от %1$d до %2$d</string>
+    <string name="dating_header_guys">Парни от %1$d до %2$d</string>
+
+
 </resources>

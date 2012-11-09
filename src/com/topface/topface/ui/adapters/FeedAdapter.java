@@ -11,6 +11,8 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedLoader;
 import com.topface.topface.ui.views.ImageViewRemote;
 
+import java.util.Collections;
+
 
 /**
  * @param <T>
@@ -220,11 +222,11 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         setLastUpdate();
     }
 
-    private void setLastUpdate() {
+    protected void setLastUpdate() {
         mLastUpdate = System.currentTimeMillis();
     }
 
-    private void addLoaderItem(boolean hasMore) {
+    protected void addLoaderItem(boolean hasMore) {
         FeedList<T> currentData = getData();
         if (hasMore && !currentData.isEmpty()) {
             currentData.add(getLoaderItem());
@@ -236,6 +238,21 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (data != null) {
             if (!data.items.isEmpty()) {
                 getData().addAll(data.items);
+            }
+            addLoaderItem(data.more);
+        }
+        notifyDataSetChanged();
+        setLastUpdate();
+    }
+
+    public void addDataFirst(FeedListData<T> data) {
+        removeLoaderItem();
+        Collections.reverse(data.items);
+        if(data!=null) {
+            if(!data.items.isEmpty()) {
+                for(T item : data.items) {
+                    getData().addFirst(item);
+                }
             }
             addLoaderItem(data.more);
         }
@@ -262,7 +279,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         notifyDataSetChanged();
     }
 
-    private void removeLoaderItem() {
+    protected void removeLoaderItem() {
         FeedList<T> data = getData();
         if (!data.isEmpty()) {
             T lastItem = data.getLast();
@@ -286,6 +303,15 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             }
         }
 
+        return item;
+    }
+
+    public T getFirstItem() {
+        T item = null;
+        if(!isEmpty()) {
+            FeedList<T> data = getData();
+            item = data.getFirst();
+        }
         return item;
     }
 

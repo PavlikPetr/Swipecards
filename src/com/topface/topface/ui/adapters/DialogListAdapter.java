@@ -6,7 +6,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
+import com.topface.topface.data.FeedListData;
 import com.topface.topface.utils.Utils;
+
+import java.util.Collections;
 
 public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
@@ -117,6 +120,39 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         }
         holder.time = (TextView) convertView.findViewById(R.id.tvTime);
         return holder;
+    }
+
+    @Override
+    public void addDataFirst(FeedListData<FeedDialog> data) {
+        removeLoaderItem();
+        Collections.reverse(data.items);
+        if(data!=null) {
+            if(!data.items.isEmpty()) {
+                for(FeedDialog item : data.items) {
+                    if(!addItemToStartOfFeed(item)) {
+                        getData().addFirst(item);
+                    }
+                }
+            }
+            addLoaderItem(data.more);
+        }
+        notifyDataSetChanged();
+        setLastUpdate();
+    }
+
+    private boolean addItemToStartOfFeed(FeedDialog item) {
+        for(FeedDialog dialog : getData()) {
+            if(item.user.id == dialog.user.id) {
+                setItemToStartOfFeed(dialog,item);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void setItemToStartOfFeed(FeedDialog dialog, FeedDialog item) {
+        getData().remove(dialog);
+        getData().addFirst(item);
     }
 
     @Override

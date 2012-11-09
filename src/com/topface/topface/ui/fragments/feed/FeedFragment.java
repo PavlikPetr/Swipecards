@@ -268,8 +268,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         registerRequest(request);
 
         FeedItem lastItem = mListAdapter.getLastFeedItem();
+        FeedItem firstItem = mListAdapter.getFirstItem();
+
         if (isHistoryLoad && lastItem != null) {
             request.to = lastItem.id;
+        }
+        if (isPushUpdating) {
+            request.from = firstItem.id;
         }
         request.limit = FeedAdapter.LIMIT;
         request.unread = isShowUnreadItems();
@@ -282,7 +287,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     public void run() {
                         if (isHistoryLoad) {
                             mListAdapter.addData(dialogList);
-                        } else {
+                        } else if(isPushUpdating){
+                            mListAdapter.addDataFirst(dialogList);
+                        } else{
                             mListAdapter.setData(dialogList);
                         }
                         onUpdateSuccess(isPushUpdating || isHistoryLoad);
