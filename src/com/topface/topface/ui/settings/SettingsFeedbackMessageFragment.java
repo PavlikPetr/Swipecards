@@ -22,6 +22,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
@@ -32,7 +34,7 @@ import com.topface.topface.utils.social.AuthToken;
 
 public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
-    public static final String INTENT_FEEDBACK_TYPE = "feedback message_type";
+    public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
 
     public static final int UNKNOWN = 0;
     public static final int ERROR_MESSAGE = 1;
@@ -188,7 +190,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         }).exec();
     }
 
-    class Report {
+    class Report {    	
         String subject;
         String body = Static.EMPTY;
         String topface_version = "unknown";
@@ -199,7 +201,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         String model = android.os.Build.MODEL;
 
         public String getSubject() {
-            return subject;
+        	AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
+            return "["+Static.PLATFORM+"]"+subject + " {"+authToken.getSocialNet()+"_id="+authToken.getUserId()+"}";
         }
 
         public String getBody() {
@@ -213,6 +216,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             strBuilder.append("<p>Device:").append(device).append("/").append(model).append("</p>");
             strBuilder.append("<p>Device language:").append(Locale.getDefault().getDisplayLanguage()).append("</p>");            
             
+            strBuilder.append("<p>Topface SSID:").append(Data.SSID).append("</p>");
             AuthToken authToken = new AuthToken(getActivity().getApplicationContext());     
             strBuilder.append("<p>Social net:").append(authToken.getSocialNet()).append("</p>");
             strBuilder.append("<p>Social token:").append(authToken.getTokenKey()).append("</p>");

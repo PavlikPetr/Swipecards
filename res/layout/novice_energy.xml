@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivBackground"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY" />
+
+    <ImageView
+        android:id="@+id/ivMask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/sympathy_mask" 
+        android:background="#ff0000"/>
+
+    <ImageView
+        android:id="@+id/ivArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/ivMask"
+        android:layout_alignTop="@id/ivMask"       
+        android:layout_marginTop="16dp"
+        android:src="@drawable/sympathy_arrow" />
+
+    <TextView
+        android:id="@+id/ivBubble"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivArrow" 
+        android:layout_centerHorizontal="true"        
+        android:background="@drawable/sympathy_buble"
+        android:gravity="center"
+        android:lines="4"
+        android:text="Отправляйте симпатии тем, кто вам действительно нравится, чтобы начать приятное знакомство"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+</RelativeLayout>

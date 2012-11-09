@@ -2,27 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="#080808">
+                android:background="@drawable/im_list_bkgrd">
 
     <!-- Dating Album -->
     <com.topface.topface.ui.views.ImageSwitcher
             android:id="@+id/glrDatingAlbum"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>
+    
+    <ImageView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"     
+        android:background="@drawable/dating_shadow"/>    
 
+    <include 
+            layout="@layout/bar_navigation_header"
+            android:id="@+id/loNavigationBar"/>
     <LinearLayout
+        android:layout_below="@id/loNavigationBar"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical">
-        <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/loNavigationBar">
-            <include layout="@layout/bar_navigation_header"/>
-        </FrameLayout>
+            android:orientation="vertical">                    
+        
         <include layout="@layout/feed_control"/>
     </LinearLayout>
-
 
     <ProgressBar
             android:id="@+id/prsDatingLoading"
@@ -49,6 +53,13 @@
             android:visibility="invisible"/>
 
     <ImageView
-            style="@style/HeaderShadow"/>
-
+        android:id="@+id/ivHeaderShadow"
+        style="@style/HeaderShadow"/>
+        	
+    <com.topface.topface.ui.views.NoviceLayout
+        android:id="@+id/loNovice"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"/>
+    
 </RelativeLayout>

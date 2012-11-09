@@ -3,12 +3,14 @@ package com.topface.topface;
 @SuppressWarnings("UnusedDeclaration")
 public class Static {
     // Constants
+	
     public static final int API_VERSION = 2;
     public static final int GIRL = 0;
     public static final int BOY = 1;
     public static final int PHOTO_WIDTH = 640;
     public static final int PHOTO_HEIGHT = 960;
     public static final int HEADER_SHADOW_SHIFT = -1;
+    public static final String PLATFORM = "Android";
     public static final String EMPTY = "";
     public static final String SLASH = "/";
     public static final String QUESTION = "?";

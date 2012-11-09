@@ -193,7 +193,7 @@
     <string name="profile_form">Profile</string>
     <string name="profile_gifts">Gifts</string>
     <string name="profile_actions">Actions</string>
-    <string name="profile_empty_form">User hasn't filled his profile yet</string>
+    <string name="profile_empty_form">User hasn\'t filled his profile yet</string>
     <string name="profile_ask_form">Ask to fill profile</string>
     <string name="leaders_go_date">Put me here!</string>
     <string name="leaders_leader_now">You are leader!</string>
