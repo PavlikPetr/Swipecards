@@ -43,7 +43,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
     private Button mDelightBtn;
-    private Button mSympathyBtn;
+    private Button mMutualBtn;
     private Button mSkipBtn;
     private Button mPrevBtn;
     private Button mProfileBtn;
@@ -160,8 +160,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Control Buttons
         mDelightBtn = (Button) view.findViewById(R.id.btnDatingLove);
         mDelightBtn.setOnClickListener(this);
-        mSympathyBtn = (Button) view.findViewById(R.id.btnDatingSympathy);
-        mSympathyBtn.setOnClickListener(this);
+        mMutualBtn = (Button) view.findViewById(R.id.btnDatingSympathy);
+        mMutualBtn.setOnClickListener(this);
         mSkipBtn = (Button) view.findViewById(R.id.btnDatingSkip);
         mSkipBtn.setOnClickListener(this);
         mPrevBtn = (Button) view.findViewById(R.id.btnDatingPrev);
@@ -400,13 +400,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
 
             // buttons drawables
-<<<<<<< .merge_file_AznOlB
             mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual : singleMutual, null, null);
             mMutualBtn.setText(currUser.mutual ? getString(R.string.general_mutual) : getString(R.string.general_sympathy));
-=======
-            mSympathyBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual : singleMutual, null, null);
-            mSympathyBtn.setText(currUser.mutual ? getString(R.string.dashbrd_btn_sympathy_mutual) : getString(R.string.dashbrd_btn_sympathy));
->>>>>>> .merge_file_B9t1IO
+
             mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleDelight : singleDelight, null, null);
 
             //photos
@@ -531,7 +527,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoName.setVisibility(View.INVISIBLE);
         mUserInfoCity.setVisibility(View.INVISIBLE);
         mUserInfoStatus.setVisibility(View.INVISIBLE);
-        mSympathyBtn.setEnabled(false);
+        mMutualBtn.setEnabled(false);
         mDelightBtn.setEnabled(false);
         mSkipBtn.setEnabled(false);
         mPrevBtn.setEnabled(false);
@@ -555,7 +551,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (!mUserSearchList.isEmpty() && Data.searchPosition < mUserSearchList.size() && currentUser != null) {
             enabled = !currentUser.rated;
         }
-        mSympathyBtn.setEnabled(enabled);
+        mMutualBtn.setEnabled(enabled);
         mDelightBtn.setEnabled(enabled);
 
         mSkipBtn.setEnabled(true);

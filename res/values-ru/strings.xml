@@ -5,27 +5,36 @@
     <string name="app_name">Topface</string>
 
     <!-- General -->
-    <string name="general_boys">Парни</string>
-    <string name="general_girls">Девушки</string>
+
+    <string name="general_error">ОШИБКА</string>
+    <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
+    <string name="general_ok">OK</string>
+    <string name="general_yes">Да</string>
+    <string name="general_no">Нет</string>
     <string name="general_cancel">Отмена</string>
-    <string name="general_internet_off">Нет подключения к интернету</string>
+    <string name="general_delete_title">Удалить</string>
     <string name="general_dialog_loading">Загрузка</string>
     <string name="general_dialog_saving">Сохранение</string>
+    <string name="general_fill_button">Заполнить</string>
+    <string name="general_send_full">Отправить</string>
+    <string name="general_dialog_retry">Повторить</string>
+    <string name="general_copy_title">Копировать</string>
+    <string name="general_back">Обратно</string>
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
+    <string name="general_internet_off">Нет подключения к интернету</string>
     <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопирован</string>
-    <string name="general_dialog_retry">Повторить</string>
     <string name="general_spinner_title">Выберите действие</string>
-    <string name="general_delete_title">Удалить</string>
-    <string name="general_copy_title">Копировать</string>
     <string name="general_profile_error">Ошибка загрузки профиля</string>
-    <string name="general_fill_button">Заполнить</string>
+
     <string name="general_edit_button">Ред.</string>
     <string name="general_save_button">Сохр.</string>
     <string name="general_send_button">Отпр.</string>
-    <string name="general_send_full">Отправить</string>
+
+    <string name="general_boys">Парни</string>
+    <string name="general_girls">Девушки</string>
     <string name="general_city">Город</string>
     <string name="general_dating">Знакомства</string>
     <string name="general_likes">Я нравлюсь</string>
