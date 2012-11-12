@@ -144,7 +144,7 @@
                         android:drawablePadding="-10dp"
                         android:drawableTop="@drawable/user_mutual_selector"
                         android:paddingTop="0dp"
-                        android:text="@string/dashbrd_btn_sympathy"/>
+                        android:text="@string/general_sympathy"/>
 
                 <Button
                         android:id="@+id/btnUserChat"
