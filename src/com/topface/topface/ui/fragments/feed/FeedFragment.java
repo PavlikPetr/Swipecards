@@ -386,10 +386,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     mBackgroundText.getCompoundDrawables()[2],
                     mBackgroundText.getCompoundDrawables()[3]);
             setFilterSwitcherState(true);
+        } else {
+            makeAllItemsRead();
         }
     }
 
     abstract protected int getEmptyFeedText();
+    abstract protected void makeAllItemsRead();
 
     @Override
     protected void onUpdateFail(boolean isPushUpdating) {

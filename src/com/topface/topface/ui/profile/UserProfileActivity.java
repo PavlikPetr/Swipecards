@@ -240,6 +240,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
                     @Override
                     public void run() {
 //                        Toast.makeText(UserProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        mLockerView.setVisibility(View.GONE);
                         lockScreen.setVisibility(View.VISIBLE);
                         lockScreen.findViewById(R.id.retry).setVisibility(View.VISIBLE);
                     }

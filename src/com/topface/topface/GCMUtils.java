@@ -42,6 +42,7 @@ public class GCMUtils {
     public static void init(Context context) {
         GCMRegistrar.checkDevice(context);
         GCMRegistrar.checkManifest(context);
+        GCMRegistrar.unregister(context);
         final String regId = GCMRegistrar.getRegistrationId(context);
         if (regId.equals("")) {
             GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
