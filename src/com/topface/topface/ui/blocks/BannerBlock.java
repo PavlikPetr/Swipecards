@@ -84,6 +84,9 @@ public class BannerBlock {
 				showBanner(null);
 			}
 		}
+        
+//        mBannerView = (Plus1BannerView) layout.findViewById(R.id.adPlus1View);
+//        showBanner(null);
     }
 
     private void setBannersMap() {
@@ -125,7 +128,10 @@ public class BannerBlock {
     		((AdfonicView)mBannerView).loadAd(request);   		
     	}else if (mBannerView instanceof Plus1BannerView) {
     		mBannerView.setVisibility(View.VISIBLE);
-    		mPLus1Asker = new Plus1BannerAsker(new Plus1BannerRequest().setApplicationId(PLUS1_ID), ((Plus1BannerView) mBannerView).enableCloseButton().enableAnimationFromBottom());
+    		mPLus1Asker = new Plus1BannerAsker(new Plus1BannerRequest().setApplicationId(PLUS1_ID), 
+    				((Plus1BannerView) mBannerView).setAutorefreshEnabled(false));
+    		mPLus1Asker.setRemoveBannersOnPause(true);
+    		mPLus1Asker.setDisabledWebViewCorePausing(true);
     	} else if (mBannerView instanceof ImageView) {
 	        DefaultImageLoader.getInstance().displayImage(banner.url, (ImageView)mBannerView, new SimpleImageLoadingListener() {
 	            @Override

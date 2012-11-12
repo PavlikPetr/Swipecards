@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.*;
@@ -30,6 +32,7 @@ import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
 
 import java.util.LinkedList;
@@ -40,7 +43,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
     private Button mDelightBtn;
-    private Button mMutualBtn;
+    private Button mSympathyBtn;
     private Button mSkipBtn;
     private Button mPrevBtn;
     private Button mProfileBtn;
@@ -63,6 +66,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private SharedPreferences mPreferences;
     private RateController mRateController;
     private View mNavigationHeader;
+    private View mNavigationHeaderShadow;
     private RelativeLayout mDatingLoveBtnLayout;
     private ViewFlipper mViewFlipper;
 
@@ -73,13 +77,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Drawable singleDelight;
     private Drawable doubleMutual;
     private Drawable doubleDelight;
+    
+    private NoviceLayout mNoviceSymathy;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
 
-        View view = inflater.inflate(R.layout.ac_dating, null);
-
+        View view = inflater.inflate(R.layout.ac_dating, null);        
+        
         mRetryBtn = (ImageButton) view.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
 
@@ -116,7 +122,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
             }
         });
-
+        mNavigationHeaderShadow = view.findViewById(R.id.ivHeaderShadow);
+        
         // Rate Controller
         mRateController = new RateController(getActivity());
         mRateController.setOnRateControllerListener(this);
@@ -153,8 +160,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Control Buttons
         mDelightBtn = (Button) view.findViewById(R.id.btnDatingLove);
         mDelightBtn.setOnClickListener(this);
-        mMutualBtn = (Button) view.findViewById(R.id.btnDatingSympathy);
-        mMutualBtn.setOnClickListener(this);
+        mSympathyBtn = (Button) view.findViewById(R.id.btnDatingSympathy);
+        mSympathyBtn.setOnClickListener(this);
         mSkipBtn = (Button) view.findViewById(R.id.btnDatingSkip);
         mSkipBtn.setOnClickListener(this);
         mPrevBtn = (Button) view.findViewById(R.id.btnDatingPrev);
@@ -187,6 +194,24 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
 
+        //Novice layouts
+        mNoviceSymathy = (NoviceLayout) view.findViewById(R.id.loNovice);
+        
+//        mNoviceSymathy.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				mSympathyBtn.performClick();				
+//			}
+//        });    
+        
+//        mNoviceSymathy.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//			}
+//        });
+        
         mPreloadManager = new PreloadManager(getActivity().getApplicationContext());
         showNextUser();
         return view;
@@ -375,8 +400,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
 
             // buttons drawables
+<<<<<<< .merge_file_AznOlB
             mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual : singleMutual, null, null);
             mMutualBtn.setText(currUser.mutual ? getString(R.string.general_mutual) : getString(R.string.general_sympathy));
+=======
+            mSympathyBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual : singleMutual, null, null);
+            mSympathyBtn.setText(currUser.mutual ? getString(R.string.dashbrd_btn_sympathy_mutual) : getString(R.string.dashbrd_btn_sympathy));
+>>>>>>> .merge_file_B9t1IO
             mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleDelight : singleDelight, null, null);
 
             //photos
@@ -501,7 +531,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoName.setVisibility(View.INVISIBLE);
         mUserInfoCity.setVisibility(View.INVISIBLE);
         mUserInfoStatus.setVisibility(View.INVISIBLE);
-        mMutualBtn.setEnabled(false);
+        mSympathyBtn.setEnabled(false);
         mDelightBtn.setEnabled(false);
         mSkipBtn.setEnabled(false);
         mPrevBtn.setEnabled(false);
@@ -525,7 +555,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (!mUserSearchList.isEmpty() && Data.searchPosition < mUserSearchList.size() && currentUser != null) {
             enabled = !currentUser.rated;
         }
-        mMutualBtn.setEnabled(enabled);
+        mSympathyBtn.setEnabled(enabled);
         mDelightBtn.setEnabled(enabled);
 
         mSkipBtn.setEnabled(true);
@@ -544,6 +574,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void showControls() {
         mNavigationHeader.setVisibility(View.VISIBLE);
+        mNavigationHeaderShadow.setVisibility(View.VISIBLE);
         mDatingGroup.setVisibility(View.VISIBLE);
         mIsHide = false;
     }
@@ -552,6 +583,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void hideControls() {
         mDatingGroup.setVisibility(View.INVISIBLE);
         mNavigationHeader.setVisibility(View.INVISIBLE);
+        mNavigationHeaderShadow.setVisibility(View.INVISIBLE);
         mIsHide = true;
     }
 
