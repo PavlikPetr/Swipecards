@@ -26,6 +26,11 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
+    protected void makeAllItemsRead() {
+
+    }
+
+    @Override
     protected Drawable getBackIcon() {
         return getResources().getDrawable(R.drawable.dialogs_back_icon);
     }
