@@ -103,17 +103,17 @@ public class UserProfileActivity extends BaseFragmentActivity {
             btnBack.setOnClickListener(finishActivityListener);
             String prevEntity = getIntent().getStringExtra(INTENT_PREV_ENTITY);
             if (prevEntity.equals(ChatActivity.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_chat);
+                btnBack.setText(R.string.general_chat);
             } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_dating);
+                btnBack.setText(R.string.general_dating);
             } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_dialog);
+                btnBack.setText(R.string.general_dialogs);
             } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_likes);
+                btnBack.setText(R.string.general_likes_me);
             } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_mutual);
+                btnBack.setText(R.string.general_mutual);
             } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_visitors);
+                btnBack.setText(R.string.general_visitors);
             }
         } else {
             ImageButton btnBack = (ImageButton) findViewById(R.id.btnNavigationBack);

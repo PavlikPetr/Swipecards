@@ -56,7 +56,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
         getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
         mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.navigation_edit);
+        mBackButton.setText(R.string.general_edit_button);
         mBackButton.setOnClickListener(new OnClickListener() {
 
             @Override

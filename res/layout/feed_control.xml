@@ -50,7 +50,7 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:drawableTop="@drawable/dating_delight_selector"
-                            android:text="@string/dashbrd_btn_love"/>
+                            android:text="@string/dating_delight_button"/>
 
                     <TextView
                             android:id="@+id/tvDatingLovePrice"
@@ -84,7 +84,7 @@
                         android:layout_weight="1.0"
                         android:background="@android:color/transparent"
                         android:drawableTop="@drawable/dating_skip_selector"
-                        android:text="@string/dashbrd_btn_skip"/>
+                        android:text="@string/dating_skip_button"/>
 
                 <Button
                         android:id="@+id/btnDatingSwitchNext"
@@ -94,7 +94,7 @@
                         android:layout_weight="1.0"
                         android:background="@android:color/transparent"
                         android:drawableTop="@drawable/dating_switch_next_selector"
-                        android:text="@string/dashbrd_btn_switch_button"/>
+                            android:text="@string/dating_switch_button"/>
             </LinearLayout>
 
             <LinearLayout
@@ -123,7 +123,7 @@
                         android:layout_weight="1.0"
                         android:background="@android:color/transparent"
                         android:drawableTop="@drawable/dating_man_selector"
-                        android:text="@string/dashbrd_btn_profile"/>
+                        android:text="@string/general_profile"/>
 
                 <Button
                         android:id="@+id/btnDatingPrev"
@@ -133,7 +133,7 @@
                         android:layout_weight="1.0"
                         android:background="@android:color/transparent"
                         android:drawableTop="@drawable/dating_prev_selector"
-                        android:text="@string/dashbrd_btn_prev"/>
+                        android:text="@string/dating_prev_button"/>
 
                 <Button
                         android:id="@+id/btnDatingSwitchPrev"
@@ -143,7 +143,7 @@
                         android:layout_weight="1.0"
                         android:background="@android:color/transparent"
                         android:drawableTop="@drawable/dating_switch_prev_selector"
-                        android:text="@string/dashbrd_btn_switch_button"/>
+                        android:text="@string/dating_switch_button"/>
             </LinearLayout>
         </ViewFlipper>
     </RelativeLayout>

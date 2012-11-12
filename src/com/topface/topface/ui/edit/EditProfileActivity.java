@@ -46,7 +46,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
         findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         Button btnBackToProfile = (Button) findViewById(R.id.btnNavigationBackWithText);
-        btnBackToProfile.setText(R.string.navigation_back_profile);
+        btnBackToProfile.setText(R.string.general_profile);
         btnBackToProfile.setVisibility(View.VISIBLE);
         btnBackToProfile.setOnClickListener(this);
 

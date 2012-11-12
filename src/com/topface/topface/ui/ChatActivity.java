@@ -97,7 +97,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         // Locker
         mLoadingLocker = (LockerView) findViewById(R.id.llvChatLoading);
 
-        editButtonsNames = new String[]{getString(R.string.default_copy_title), getString(R.string.default_delete_title)};
+        editButtonsNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title)};
         // Params
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
         mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
@@ -123,19 +123,19 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             });
             String prevEntity = getIntent().getStringExtra(INTENT_PREV_ENTITY);
             if (prevEntity.equals(ChatActivity.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_chat);
+                btnBack.setText(R.string.general_chat);
             } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.navigation_back_dating);
             } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_dialog);
+                btnBack.setText(R.string.general_chat);
             } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.navigation_back_likes);
             } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_mutual);
+                btnBack.setText(R.string.general_mutual);
             } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_visitors);
+                btnBack.setText(R.string.general_dating);
             } else if (prevEntity.equals(UserProfileActivity.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_profile);
+                btnBack.setText(R.string.general_profile);
             }
 
         } else {
@@ -198,7 +198,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             @Override
             public void onLongClick(final int position, final View v) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
-                builder.setTitle(R.string.default_spinner_title).setItems(editButtonsNames, new DialogInterface.OnClickListener() {
+                builder.setTitle(R.string.general_spinner_title).setItems(editButtonsNames, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -718,7 +718,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 builder = new AlertDialog.Builder(this);
                 builder.setMessage(this.getText(R.string.chat_dialog_gps))
                         .setCancelable(false)
-                        .setPositiveButton(this.getText(R.string.chat_dialog_btn_gps_settings),
+                        .setPositiveButton(this.getText(R.string.general_settings),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         Intent gpsOptionsIntent = new Intent(
@@ -726,7 +726,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                         startActivity(gpsOptionsIntent);
                                     }
                                 });
-                builder.setNegativeButton(this.getText(R.string.chat_dialog_btn_gps_cancel),
+                builder.setNegativeButton(this.getText(R.string.general_cancel),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();

@@ -58,7 +58,7 @@ public class SettingsAboutFragment extends Fragment {
         // Extra
         TextView extra = (TextView) root.findViewById(R.id.tvExtra);
         String extraText = getResources().getString(R.string.settings_extra) + " " +
-                getResources().getString(R.string.app_topface_url);
+                getResources().getString(R.string.settings_topface_url);
         extra.setText(extraText);
 
         return root;

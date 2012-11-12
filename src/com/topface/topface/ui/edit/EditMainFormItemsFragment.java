@@ -53,7 +53,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
         getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
         mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.navigation_edit);
+        mBackButton.setText(R.string.general_edit_button);
         mBackButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +62,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
         });
 
         mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setText(getResources().getString(R.string.navigation_save));
+        mSaveButton.setText(getResources().getString(R.string.general_save_button));
         mSaveButton.setOnClickListener(new OnClickListener() {
 
             @Override

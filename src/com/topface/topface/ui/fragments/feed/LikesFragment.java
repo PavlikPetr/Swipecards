@@ -30,7 +30,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected int getTitle() {
-        return R.string.dashbrd_btn_likes;
+        return R.string.general_likes;
     }
 
     @Override

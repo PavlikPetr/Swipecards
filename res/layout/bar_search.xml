@@ -17,7 +17,7 @@
             android:background="@drawable/bg_search_field"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="10dip"
-            android:hint="@string/search_hint"
+            android:hint="@string/invite_search_hint"
             />
 
     <ImageView

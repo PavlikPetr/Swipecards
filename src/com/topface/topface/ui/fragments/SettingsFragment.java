@@ -175,7 +175,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         switch (v.getId()) {
             case R.id.loHelp:
                 intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(getResources().getString(R.string.app_help_url)));
+                intent.setData(Uri.parse(getResources().getString(R.string.settings_help_url)));
                 startActivity(intent);
                 break;
             case R.id.loAccount:

@@ -61,7 +61,7 @@ public class TopsFragment extends BaseFragment {
         // Navigation bar
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
-        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.tops_title);
+        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.general_tops);
 
         //Инициализируем кнопку фильтров
         new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.btnNavigationSettingsBar, R.id.toolsBar);
@@ -84,8 +84,8 @@ public class TopsFragment extends BaseFragment {
 
         // Double Button
         mBtnDouble = (DoubleButton) view.findViewById(R.id.btnDoubleTops);
-        mBtnDouble.setLeftText(getString(R.string.tops_btn_boys));
-        mBtnDouble.setRightText(getString(R.string.tops_btn_girls));
+        mBtnDouble.setLeftText(getString(R.string.general_boys));
+        mBtnDouble.setRightText(getString(R.string.general_girls));
         mBtnDouble.setChecked(mActionData.sex == 0 ? DoubleButton.RIGHT_BUTTON : DoubleButton.LEFT_BUTTON);
         // BOYS
         mBtnDouble.setLeftListener(new View.OnClickListener() {

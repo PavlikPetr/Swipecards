@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/ivMenuAvatar"
                 android:layout_centerVertical="true"
-                android:text="@string/dashbrd_btn_profile"
+                android:text="@string/general_profile"
                 android:paddingLeft="12dp"
                 android:background="@android:color/transparent"
                 style="@style/LeftMenuButtons"/>
@@ -40,7 +40,7 @@
     <Button
             android:id="@+id/btnFragmentDating"
             android:layout_below="@id/btnProfileLayout"
-            android:text="@string/dashbrd_btn_dating"
+            android:text="@string/general_dating"
             android:drawableLeft="@drawable/topface_dating"
             style="@style/LeftMenuButtons"/>
 
@@ -48,7 +48,7 @@
     <Button
             android:id="@+id/btnFragmentLikes"
             android:layout_below="@id/btnFragmentDating"
-            android:text="@string/dashbrd_btn_likes"
+            android:text="@string/general_likes"
             android:drawableLeft="@drawable/topface_likes"
             style="@style/LeftMenuButtons"/>
 
@@ -62,7 +62,7 @@
     <Button
             android:id="@+id/btnFragmentMutual"
             android:layout_below="@id/btnFragmentLikes"
-            android:text="@string/mutual_header_title"
+            android:text="@string/general_mutual"
             android:drawableLeft="@drawable/topface_sympathy"
             style="@style/LeftMenuButtons"/>
 
@@ -76,7 +76,7 @@
     <Button
             android:id="@+id/btnFragmentDialogs"
             android:layout_below="@id/btnFragmentMutual"
-            android:text="@string/dashbrd_btn_chat"
+            android:text="@string/general_chat"
             android:drawableLeft="@drawable/topface_chat"
             style="@style/LeftMenuButtons"/>
 
@@ -90,7 +90,7 @@
     <Button
             android:id="@+id/btnFragmentTops"
             android:layout_below="@id/btnFragmentDialogs"
-            android:text="@string/dashbrd_btn_tops"
+            android:text="@string/general_tops"
             android:drawableLeft="@drawable/topface_tops"
             style="@style/LeftMenuButtons"/>
 
@@ -98,7 +98,7 @@
     <Button
             android:id="@+id/btnFragmentVisitors"
             android:layout_below="@id/btnFragmentTops"
-            android:text="@string/dashbrd_btn_visitors"
+            android:text="@string/general_visitors"
             android:drawableLeft="@drawable/topface_visitors"
             style="@style/LeftMenuButtons"/>
 
@@ -111,7 +111,7 @@
     <Button
             android:id="@+id/btnFragmentSettings"
             android:layout_below="@id/btnFragmentVisitors"
-            android:text="@string/dashbrd_btn_settings"
+            android:text="@string/general_settings"
             android:drawableLeft="@drawable/topface_settings"
             style="@style/LeftMenuButtons"/>
 

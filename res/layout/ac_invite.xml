@@ -32,7 +32,7 @@
                 android:layout_alignParentRight="true"
                 android:background="@drawable/btn_invite"
                 android:singleLine="true"
-                android:text="@string/send_invite"
+                android:text="@string/general_send_full"
                 android:textSize="14dip"/>
 
         <com.topface.topface.ui.views.IllustratedTextView

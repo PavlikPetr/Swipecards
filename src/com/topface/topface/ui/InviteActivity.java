@@ -48,7 +48,7 @@ public class InviteActivity extends TrackedActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_invite);
         //Устанавливаем заголовок активити
-        ((TextView) findViewById(R.id.tvHeaderTitle)).setText(R.string.activity_title_invite);
+        ((TextView) findViewById(R.id.tvHeaderTitle)).setText(R.string.invite_title);
 
         mContactList = (ListView) findViewById(R.id.contactsList);
         mContactList.setOnItemClickListener(mListItemCheckListener);

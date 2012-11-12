@@ -306,10 +306,10 @@ public class ChatListAdapter extends BaseAdapter {
             case FeedDialog.SYMPHATHY:
                 switch (history.target) {
                     case FeedDialog.FRIEND_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_symphathy_in));
+                        holder.message.setText(mContext.getString(R.string.chat_mutual_in));
                         break;
                     case FeedDialog.USER_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_symphathy_out));
+                        holder.message.setText(mContext.getString(R.string.chat_mutual_out));
                         break;
                 }
                 break;

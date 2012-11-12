@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="6dp"
-                android:text="@string/map_confirm"
+                android:text="@string/general_send_button"
                 android:textSize="12sp"
                 android:textColor="#FFFFFF"
                 android:background="@drawable/map_send_selector"/>

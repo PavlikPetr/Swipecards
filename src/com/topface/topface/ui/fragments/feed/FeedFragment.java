@@ -62,7 +62,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
-        editButtonsNames = new String[]{getString(R.string.default_delete_title)};
+        editButtonsNames = new String[]{getString(R.string.general_delete_title)};
         // Navigation bar
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
@@ -184,7 +184,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id) {
                 if(isDeletable){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(R.string.default_spinner_title).setItems(editButtonsNames,new DialogInterface.OnClickListener() {
+                    builder.setTitle(R.string.general_spinner_title).setItems(editButtonsNames,new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which){
@@ -349,8 +349,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void initDoubleButton(View view) {
         // Double Button
         mDoubleButton = (DoubleBigButton) view.findViewById(R.id.btnDoubleBig);
-        mDoubleButton.setLeftText(getString(R.string.btn_dbl_left));
-        mDoubleButton.setRightText(getString(R.string.btn_dbl_right));
+        mDoubleButton.setLeftText(getString(R.string.chat_btn_dbl_left));
+        mDoubleButton.setRightText(getString(R.string.chat_btn_dbl_right));
         mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
         mDoubleButton.setLeftListener(new View.OnClickListener() {
             @Override
