@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
+import android.os.Build;
+import android.view.Display;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
@@ -451,5 +454,18 @@ public class Utils {
                 context.getString(R.string.general_data_error),
                 Toast.LENGTH_SHORT
         ).show();
+    }
+    
+    public static Point getSrceenSize(Context context) {
+    	Point size = null;
+    	WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		if (Build.VERSION.SDK_INT < 13) {
+			size = new Point(display.getWidth(),display.getHeight());
+		} else {
+			size = new Point();
+			display.getSize(size);
+		}
+		return size;
     }
 }
