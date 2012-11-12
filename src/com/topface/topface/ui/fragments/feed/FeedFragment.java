@@ -240,7 +240,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void onFeedItemClick(FeedItem item) {
-        //Open chat activity
+        //Open mailchat activity
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID, item.user.id);
         intent.putExtra(ChatActivity.INTENT_USER_NAME, item.user.first_name);
