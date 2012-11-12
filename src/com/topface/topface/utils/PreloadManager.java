@@ -61,7 +61,7 @@ public class PreloadManager {
         if (photo != null && canLoad) {
             int size = Math.max(height, width);
             if (size > 0) {
-                preloadImage(photo.getSuitableLink(size));
+                preloadImage(photo.getSuitableLink(width, height));
             } else {
                 preloadImage(photo.getSuitableLink(Photo.SIZE_960));
             }
