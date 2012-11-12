@@ -13,11 +13,19 @@
             ivr:postProcessor="mask"
             android:background="@drawable/frame_top"
             android:paddingLeft="1dp"
-            android:paddingRight="0.5dp"
+            android:paddingRight="1dp"
+            android:paddingTop="0.5dp"
             android:paddingBottom="0.5dp"
             android:scaleType="centerCrop"
-            android:layout_width="108dp"
+            android:layout_width="106dp"
             android:layout_height="108dp"/>
+
+    <ImageView 
+        android:src="@drawable/frame_top_shadow"
+        android:scaleType="fitXY"           
+        android:paddingTop="0.5dp"        
+        android:layout_width="108dp"
+        android:layout_height="108dp"/>
 
     <TextView
             android:id="@+id/topsRating"
@@ -50,6 +58,6 @@
             android:id="@+id/ivOnline"
             android:layout_alignRight="@id/ivTG"
             android:layout_alignParentRight="false"
-            style="@style/OnlineIndicator"/>
+            style="@style/OnlineIndicatorStatic"/>
 
 </RelativeLayout>

@@ -176,6 +176,17 @@
         <item name="android:src">@drawable/list_online_selector</item>
         <item name="android:visibility">invisible</item>
     </style>
+    
+    <style name="OnlineIndicatorStatic">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginTop">0px</item>
+        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:src">@drawable/im_list_online_pressed</item>
+        <item name="android:visibility">invisible</item>
+    </style>
 
     <style name="ListArrow">
         <item name="android:layout_width">wrap_content</item>
