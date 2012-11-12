@@ -17,7 +17,6 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.TopfaceNotificationManager;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,7 +83,7 @@ public class GCMUtils {
     public static void showNotification(final Intent extra, Context context) {
         final String data = extra.getStringExtra("text");
         if (data != null) {
-            Intent i = null;
+            Intent i;
 
             String typeString = extra.getStringExtra("type");
             int type = typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
@@ -122,17 +121,17 @@ public class GCMUtils {
 
 
                 case GCM_TYPE_SYMPATHY:
-                    if (Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_MUTUAL_PHONE)) {
+//                    if (Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_MUTUAL_PHONE)) {
                         i = new Intent(context, NavigationActivity.class);
                         i.putExtra(NEXT_INTENT, BaseFragment.F_MUTUAL);
-                    }
+//                    }
                     break;
 
                 case GCM_TYPE_LIKE:
-                    if (Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_LIKES_PHONE)) {
+//                    if (Settings.getInstance().getSetting(Settings.SETTINGS_C2DM_LIKES_PHONE)) {
                         i = new Intent(context, NavigationActivity.class);
                         i.putExtra(NEXT_INTENT, BaseFragment.F_LIKES);
-                    }
+//                    }
                     break;
 
                 case GCM_TYPE_GUESTS:

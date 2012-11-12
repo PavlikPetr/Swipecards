@@ -55,7 +55,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mRetryView.init(getLayoutInflater());
         mRetryView.setOnClickListener(this);
         mRetryView.setVisibility(View.GONE);
-
         RelativeLayout authContainer = (RelativeLayout) findViewById(R.id.authContainer);
         authContainer.addView(mRetryView);
         BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -165,7 +164,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             } else if (view.getId() == R.id.btnAuthFB) {
                 mAuthorizationManager.facebookAuth();
             } else if (view.getId() == R.id.retry) {
-                Debug.log("Retrying");
                 auth(new AuthToken(getApplicationContext()));
                 mRetryView.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);

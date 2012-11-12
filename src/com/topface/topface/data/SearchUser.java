@@ -26,7 +26,7 @@ public class SearchUser extends FeedUser {
         super.fillData(user);
 
         status = user.optString("status");
-        mutual = user.optBoolean("mutual");
+        mutual = user.optBoolean("mailmutual");
         photos = new Photos(user.optJSONArray("photos"));
     }
 }

@@ -33,7 +33,7 @@ public class User extends Profile {
             profile.status = item.optString("status");
             profile.online = item.optBoolean("online");
             profile.ero = item.optBoolean("ero");
-            profile.mutual = item.optBoolean("mutual");
+            profile.mutual = item.optBoolean("mailmutual");
             profile.score = item.optInt("score");
             profile.photo = new Photo(item.getJSONObject("photo"));
             profile.photos = Photos.parse(item.getJSONArray("photos"));

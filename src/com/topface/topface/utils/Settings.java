@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -25,15 +26,6 @@ public class Settings {
 
     public static final String SETTINGS_SOCIAL_ACCOUNT_NAME = "social_account_name";
 
-    public static final String SETTINGS_C2DM_LIKES_PHONE = "settings_like_phone";
-    public static final String SETTINGS_C2DM_MUTUAL_PHONE = "settings_mutual_phone";
-    public static final String SETTINGS_C2DM_DIALOGS_PHONE = "settings_messages_phone";
-    public static final String SETTINGS_C2DM_VISITORS_PHONE = "settings_guests_phone";
-    
-    public static final String SETTINGS_C2DM_LIKES_EMAIL = "settings_like_email";
-    public static final String SETTINGS_C2DM_MUTUAL_EMAIL = "settings_mutual_email";
-    public static final String SETTINGS_C2DM_DIALOGS_EMAIL = "settings_messages_email";
-    public static final String SETTINGS_C2DM_VISITORS_EMAIL = "settings_guests_email";
 
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mEditor;
@@ -149,37 +141,43 @@ public class Settings {
         setSocialAccountName(Static.EMPTY);
     }
         
-    public SendMailNotificationsRequest getMailNotificationRequest(String key, boolean value, Context context) {    	
-    	if(key.equals(SETTINGS_C2DM_LIKES_EMAIL)) {
-    		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
-    		request.sympathy = value;
-    		request.mutual = getSetting(SETTINGS_C2DM_MUTUAL_EMAIL);
-    		request.chat = getSetting(SETTINGS_C2DM_DIALOGS_EMAIL);
-    		request.guests = getSetting(SETTINGS_C2DM_VISITORS_EMAIL);
-    		return request;
-    	} else if(key.equals(SETTINGS_C2DM_MUTUAL_EMAIL)) {
-    		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
-    		request.mutual = value;
-    		request.sympathy = getSetting(SETTINGS_C2DM_LIKES_EMAIL);
-    		request.chat = getSetting(SETTINGS_C2DM_DIALOGS_EMAIL);
-    		request.guests = getSetting(SETTINGS_C2DM_VISITORS_EMAIL);
-    		return request;
-    	} else if(key.equals(SETTINGS_C2DM_DIALOGS_EMAIL)) {
-    		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
-    		request.chat = value;
-    		request.sympathy = getSetting(SETTINGS_C2DM_LIKES_EMAIL);
-    		request.mutual = getSetting(SETTINGS_C2DM_MUTUAL_EMAIL);
-    		request.guests = getSetting(SETTINGS_C2DM_VISITORS_EMAIL);
-    		return request;
-    	} else if(key.equals(SETTINGS_C2DM_VISITORS_EMAIL)) {
-    		SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
-    		request.guests = value;
-    		request.sympathy = getSetting(SETTINGS_C2DM_LIKES_EMAIL);
-    		request.mutual = getSetting(SETTINGS_C2DM_MUTUAL_EMAIL);
-    		request.chat = getSetting(SETTINGS_C2DM_DIALOGS_EMAIL);
-    		return request;
-    	} else {
-    		return null;
-    	}
+    public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
+        SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
+        Options options = CacheProfile.getOptions();
+
+
+        request.mailsympathy = options.notifications.get(Options.NOTIFICATIONS_LIKES).mail;
+        request.mailmutual = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).mail;
+        request.mailchat = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).mail;
+        request.mailguests = options.notifications.get(Options.NOTIFICATIONS_VISITOR).mail;
+
+        request.apnssympathy = options.notifications.get(Options.NOTIFICATIONS_LIKES).apns;
+        request.apnsmutual = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns;
+        request.apnschat = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns;
+        request.apnsguests = options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns;
+
+        switch (key) {
+            case Options.NOTIFICATIONS_LIKES:
+                if(isMail) request.mailsympathy = value;
+                else request.apnssympathy = value;
+                break;
+            case Options.NOTIFICATIONS_MESSAGE:
+                if(isMail) request.mailchat = value;
+                else request.apnschat = value;
+                break;
+            case Options.NOTIFICATIONS_SYMPATHY:
+                if(isMail) request.mailmutual = value;
+                else request.apnsmutual = value;
+                break;
+            case Options.NOTIFICATIONS_VISITOR:
+                if(isMail) request.mailguests = value;
+                else request.apnsguests = value;
+                break;
+            default:
+                return null;
+
+        }
+
+        return request;
     }
 }
