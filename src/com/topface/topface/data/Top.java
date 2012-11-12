@@ -10,15 +10,11 @@ import java.util.LinkedList;
 /**
  * Класс профиля окна топов
  */
-public class Top {
+public class Top extends AbstractDataWithPhotos{
     /**
      * идентификатор красивого пользователя
      */
-    public int uid;
-    /**
-     * URL аватарки красивого пользователя
-     */
-    public String photo;
+    public int uid;    
     /**
      * процент абсолютного значения красоты
      */
@@ -41,17 +37,17 @@ public class Top {
         LinkedList<Top> userList = new LinkedList<Top>();
 
         try {
-            JSONArray arr = response.jsonResult.getJSONArray("top");
+            JSONArray arr = response.jsonResult.getJSONArray("users");
             if (arr.length() > 0)
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject item = arr.getJSONObject(i);
                     Top topUser = new Top();
-                    topUser.liked = item.optInt("liked");
-                    topUser.photo = item.optString("photo");
-                    topUser.uid = item.optInt("uid");
-                    topUser.name = item.optString("name");
+                    topUser.liked = item.optInt("liked");                    
+                    topUser.uid = item.optInt("id");
+                    topUser.name = item.optString("first_name");
                     topUser.age = item.optInt("age");
                     topUser.online = item.optBoolean("online");
+                    initPhotos(item,topUser);
 
                     userList.add(topUser);
                 }
