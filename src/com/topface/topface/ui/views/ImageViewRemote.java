@@ -183,7 +183,7 @@ public class ImageViewRemote extends ImageView {
         if (photo != null) {
             int size = Math.max(getLayoutParams().height, getLayoutParams().width);
             if (size > 0) {
-                result = setRemoteSrc(photo.getSuitableLink(size), handler);
+                result = setRemoteSrc(photo.getSuitableLink(getLayoutParams().height, getLayoutParams().width), handler);
             } else {
                 result = setRemoteSrc(photo.getSuitableLink(Photo.SIZE_960), handler);
             }
