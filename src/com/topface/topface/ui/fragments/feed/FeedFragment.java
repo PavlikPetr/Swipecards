@@ -1,11 +1,11 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Recycle;
 import com.topface.topface.data.FeedItem;
@@ -73,6 +74,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         init();
 
+
         initBackground(view);
         initFilter(view);
         initListView(view);
@@ -100,6 +102,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void init() {
 
     }
+
 
     private void initBackground(View view) {
         // ListView background

@@ -14,6 +14,9 @@ import android.widget.TextView;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
@@ -57,24 +60,40 @@ public class SettingsAccountFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Data.removeSSID(getActivity().getApplicationContext());
-                GCMRegistrar.unregister(getActivity().getApplicationContext());
-                token.removeToken();
-                new FacebookLogoutTask().execute();
-                Settings.getInstance().resetSettings();
-                startActivity(new Intent(getActivity().getApplicationContext(), AuthActivity.class));
+                LogoutRequest logoutRequest = new LogoutRequest(getActivity());
+                logoutRequest.callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) throws NullPointerException {
+                        GCMRegistrar.unregister(getActivity().getApplicationContext());
+                        Data.removeSSID(getActivity().getApplicationContext());
+                        token.removeToken();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new FacebookLogoutTask().execute();
+                            }
+                        });
+                        Settings.getInstance().resetSettings();
+                        startActivity(new Intent(getActivity().getApplicationContext(), AuthActivity.class));
+                        getActivity().setResult(RESULT_LOGOUT);
+                        getActivity().finish();
+                    }
 
-                getActivity().setResult(RESULT_LOGOUT);
-                getActivity().finish();
+                    @Override
+                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+
+                    }
+                }).exec();
+
             }
         });
 
         return root;
     }
 
-    class FacebookLogoutTask extends AsyncTask {
+    class FacebookLogoutTask<Object> extends AsyncTask {
         @Override
-        protected Object doInBackground(Object... params) {
+        protected java.lang.Object doInBackground(java.lang.Object... params) {
             try{
                 Data.facebook.logout(getActivity().getApplicationContext());
 
@@ -83,5 +102,6 @@ public class SettingsAccountFragment extends Fragment {
             }
             return null;
         }
+
     }
 }

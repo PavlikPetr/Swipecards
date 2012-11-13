@@ -221,10 +221,10 @@
     <string name="form_physique_eyes_2">Ваш цвет глаз</string>
     <string name="form_physique_eyes_3">Ваш цвет глаз</string>
 
-    <string name="form_physique_breast_0">Рамер груди</string>
-    <string name="form_physique_breast_1">Рамер груди</string>
-    <string name="form_physique_breast_2">Ваш рамер груди</string>
-    <string name="form_physique_breast_3">Ваш рамер груди</string>
+    <string name="form_physique_breast_0">Размер груди</string>
+    <string name="form_physique_breast_1">Размер груди</string>
+    <string name="form_physique_breast_2">Ваш размер груди</string>
+    <string name="form_physique_breast_3">Ваш размер груди</string>
 
     <string name="form_social_marriage_0">Состоит ли в браке?</string>
     <string name="form_social_marriage_1">Состоит ли в браке?</string>
