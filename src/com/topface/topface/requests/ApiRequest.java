@@ -47,6 +47,7 @@ public abstract class ApiRequest {
                     handler.fail(0, new ApiResponse(""));
                 }
             });
+
             retryDialog.show();
 
 
