@@ -12,14 +12,12 @@ import android.graphics.Point;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
@@ -32,9 +30,10 @@ public class NoviceLayout extends RelativeLayout {
 	
 	private ImageView mMask;
 	private ImageView mBackground;	
-	private ViewGroup mParent; 
 	
-	private OnClickListener mListener;
+	private OnClickListener mMaskListener;
+	private OnClickListener mBackgroundListener;
+	
 	
 	public NoviceLayout(Context context) {
 		super(context);
@@ -46,7 +45,7 @@ public class NoviceLayout extends RelativeLayout {
 		mContext = context;
 	}		
 	
-	public void setLayoutRes(int res,OnClickListener listener) {
+	public void setLayoutRes(int res,OnClickListener maskListener) {
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		removeAllViews();
@@ -55,8 +54,7 @@ public class NoviceLayout extends RelativeLayout {
         setVisibility(View.VISIBLE);
         
         mMask = (ImageView) findViewById(R.id.ivMask);
-        mBackground = (ImageView) findViewById(R.id.ivBackground);
-        mParent = (ViewGroup) findViewById(R.id.loParent);
+        mBackground = (ImageView) findViewById(R.id.ivBackground);        
         TextView bubble = (TextView) findViewById(R.id.ivBubble);
         Typeface tf = Typeface.createFromAsset(mContext.getAssets(), "neucha.otf"); 
         bubble.setTypeface(tf);
@@ -75,9 +73,15 @@ public class NoviceLayout extends RelativeLayout {
 			}
 		});
         
-        //mMask.setVisibility(View.INVISIBLE);
-        mListener = listener;        
+        mMask.setVisibility(View.INVISIBLE);
+        mMaskListener = maskListener;     
+        mBackgroundListener = null;
 	}	
+	
+	public void setLayoutRes(int res,OnClickListener maskListener, OnClickListener backgroundListener) {
+		setLayoutRes(res,maskListener);
+		mBackgroundListener = backgroundListener;
+	}
 	
 	private Bitmap getMaskedBackgroundBitmap(ImageView maskView,int[] point) {		
 		Bitmap mask = ((BitmapDrawable)mMask.getDrawable()).getBitmap();		
@@ -101,14 +105,19 @@ public class NoviceLayout extends RelativeLayout {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (isPointInsideView(event.getX(),event.getY(),mMask)) {
-			mListener.onClick(mMask);
-			this.setVisibility(View.GONE);
-			return super.onTouchEvent(event);
-		} else {
-			this.setVisibility(View.GONE);
-			return true;
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (mBackgroundListener != null) mBackgroundListener.onClick(this);
+			
+			if (isPointInsideView(event.getX(),event.getY(),mMask) && mMaskListener != null) {
+				mMaskListener.onClick(mMask);			
+				this.setVisibility(View.GONE);
+				return true;
+			} else {
+				this.setVisibility(View.GONE);
+				return true;
+			}
 		}
+		return true;
 	}
 	
 	private boolean isPointInsideView(float x, float y, View view){

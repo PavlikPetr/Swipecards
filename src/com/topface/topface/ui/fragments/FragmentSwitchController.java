@@ -40,6 +40,8 @@ public class FragmentSwitchController extends ViewGroup {
         public void afterClosing();
 
         public void beforeExpanding();
+        
+        public void afterOpening();
     }
 
     public FragmentSwitchController(Context context, AttributeSet attrs) {
@@ -197,6 +199,11 @@ public class FragmentSwitchController extends ViewGroup {
             if (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL) {
                 mFragmentSwitchListener.afterClosing();
             }
+            
+            if (mAnimation == EXPAND || mAnimation == EXPAND_FULL) {
+                mFragmentSwitchListener.afterOpening();
+            }
+            
             if (mAnimation == EXPAND_FULL) {
                 fullExpanding();
             }

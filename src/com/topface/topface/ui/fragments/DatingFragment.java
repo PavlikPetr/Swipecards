@@ -10,10 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.*;
@@ -58,9 +56,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private ImageSwitcher mImageSwitcher;
     private LinkedList<SearchUser> mUserSearchList;
     private ProgressBar mProgressBar;
-    private Newbie mNewbie;
-    private AlphaAnimation mAlphaAnimation;
-    private SharedPreferences mPreferences;
+    private Novice mNovice;
+    private AlphaAnimation mAlphaAnimation;    
     private RateController mRateController;
     private View mNavigationHeader;
     private View mNavigationHeaderShadow;
@@ -132,7 +129,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingGroup = view.findViewById(R.id.loDatingGroup);
 
         // Preferences
-        mPreferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);        
+        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);        
 
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
@@ -184,24 +181,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
 
         // Newbie
-        mNewbie = new Newbie(mPreferences);
-        mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);
-      //sympathy
-      mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				mSympathyBtn.performClick();				
-			}
-      });    
-      
-      //energy
-//      mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//			}
-//      });
+        mNovice = new Novice(preferences);
+        mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);      
         
         mPreloadManager = new PreloadManager(getActivity().getApplicationContext());
         showNextUser();
@@ -356,16 +337,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
 
         mPreloadManager.preloadPhoto(mUserSearchList, Data.searchPosition + 1);
-
-        //showNewbie(); // NEWBIE
+        if (getCurrentUser() != null) {
+        	showNovice();
+        }
     }
 
     private void prevUser() {
         if (Data.searchPosition > 0) {
             --Data.searchPosition;
             fillUserInfo(mUserSearchList.get(Data.searchPosition));
-        }
-        showNewbie(); // NEWBIE
+        }        
     }
 
     private void fillUserInfo(SearchUser currUser) {
@@ -399,7 +380,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mImageSwitcher.setData(currUser.photos);
             mImageSwitcher.setCurrentItem(0, true);
             mCurrentPhotoPrevPos = 0;
-            setCounter(mCurrentPhotoPrevPos);
+            setCounter(mCurrentPhotoPrevPos);            
         }
     }
 
@@ -440,67 +421,29 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         showNextUser();
     }
 
-    private void showNewbie() {
-//        mNewbieView.setVisibility(View.INVISIBLE);
-
-        if (mNewbie.isDatingCompleted())
-            return;
-
-        SharedPreferences.Editor editor = mPreferences.edit();
-
-//        if (!mNewbie.free_energy && CacheProfile.isNewbie) {
-//            mNewbie.free_energy = true;
-//            editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_FREE_ENERGY, true);
-//            mNewbieView.setBackgroundResource(R.drawable.newbie_free_energy);
-//            mNewbieView.setOnClickListener(mOnNewbieEnergyClickListener);
-//            mNewbieView.setVisibility(View.VISIBLE);
-//            mNewbieView.startAnimation(mAlphaAnimation);
-//
-//        } else if (!mNewbie.rate_it) {
-//            mNewbie.rate_it = true;
-//            editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_RATE_IT, true);
-//            mNewbieView.setBackgroundResource(R.drawable.newbie_rate_it);
-//            mNewbieView.setVisibility(View.VISIBLE);
-//            mNewbieView.startAnimation(mAlphaAnimation);
-//            mNewbieView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mNewbieView.setVisibility(View.INVISIBLE);
-//                }
-//            });
-//
-//        } else if (!mNewbie.buy_energy && CacheProfile.power <= 30) {
-//            mNewbie.buy_energy = true;
-//            editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_BUY_ENERGY, true);
-//            mNewbieView.setBackgroundResource(R.drawable.newbie_buy_energy);
-//            mNewbieView.setVisibility(View.VISIBLE);
-//            mNewbieView.startAnimation(mAlphaAnimation);
-//            mNewbieView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mNewbieView.setVisibility(View.INVISIBLE);
-//                }
-//            });
-//        }
-
-        editor.commit();
+    private void showNovice() {
+        if (mNovice.isDatingCompleted())
+            return;        
         
-        //sympathy
-//        mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				mSympathyBtn.performClick();				
-//			}
-//        });    
-        
-        //energy
-        mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-			}
-        });
+        if (mNovice.showBatteryBonus) {
+        	mNoviceLayout.setLayoutRes(R.layout.novice_battery_bonus, null, mOnNewbieEnergyClickListener);
+        	mNoviceLayout.startAnimation(mAlphaAnimation);
+        	mNovice.completeShowBatteryBonus();
+        } else if (mNovice.showSympathy) {
+        	mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					mSympathyBtn.performClick();					
+				}
+			});
+        	mNoviceLayout.startAnimation(mAlphaAnimation);
+        	mNovice.completeShowSympathy();
+        } else if (mNovice.showEnergy && CacheProfile.power <= 30) {
+        	mNoviceLayout.setLayoutRes(R.layout.novice_energy, null);
+        	mNoviceLayout.startAnimation(mAlphaAnimation);
+        	mNovice.completeShowEnergy();
+        }
     }
 
     public void setCounter(int position) {
@@ -701,7 +644,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View.OnClickListener mOnNewbieEnergyClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-//            mNewbieView.setVisibility(View.INVISIBLE);
             mResourcesPower.setBackgroundResource(R.anim.battery);
             mResourcesPower.setText("");
             final AnimationDrawable mailAnimation = (AnimationDrawable) mResourcesPower.getBackground();
@@ -721,7 +663,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     updateUI(new Runnable() {
                         @Override
                         public void run() {
-                            mResourcesPower.setText("+100%");
+                            mResourcesPower.setText("+"+CacheProfile.power+"%");
                         }
                     });
                 }

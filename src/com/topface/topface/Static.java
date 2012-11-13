@@ -45,6 +45,10 @@ public class Static {
     public static final String PREFERENCES_NEWBIE_DATING_FREE_ENERGY = "newbie_dating_free_energy";
     public static final String PREFERENCES_NEWBIE_DATING_BUY_ENERGY = "newbie_dating_buy_energy";
     public static final String PREFERENCES_NEWBIE_DATING_RATE_IT = "newbie_dating_rate_it";
+    
+    public static final String PREFERENCES_NOVICE_DATING_ENERGY = "novice_dating_energy";
+    public static final String PREFERENCES_NOVICE_DATING_SYMPATHY = "novice_dating_sympathy";
+    public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE = "novice_menu_fill_profile";
     // Profile
     //public static final String PREFERENCES_PROFILE_FILTER_GEO = "cache_profile_filter_geo";
     //public static final String PREFERENCES_PROFILE_FILTER_ONLINE = "cache_profile_filter_online";    

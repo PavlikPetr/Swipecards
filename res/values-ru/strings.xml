@@ -287,5 +287,10 @@
     <string name="dating_header_girls">Девушки от %1$d до %2$d</string>
     <string name="dating_header_guys">Парни от %1$d до %2$d</string>
 
-
+	<!-- Novice -->
+    <string name="novice_sympathy">Отправляйте симпатии тем, кто вам\nдействительно нравится,\nчтобы начать приятное знакомство</string>
+    <string name="novice_energy">Чем выше заряд батарейки,\nтем чаще вас оценивают.\nНе забывайте зарядить\nбатарейку, купив энергию.</string>
+    <string name="novice_battery_bonus">Энергия дает вам популярность\nи новые оценки. Вы можете\nзарядить батарейку, купив\n100% энергии. Первый заряд\nмы дарим вам бесплатно!</string>
+    <string name="novice_fill_profile">Заполнить профиль, чтобы\nзаинтересовать других</string>
+    
 </resources>

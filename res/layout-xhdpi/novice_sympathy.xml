@@ -69,5 +69,8 @@
         android:textSize="22sp"
         android:textColor="#000000"
         android:gravity="center"
-        android:text="Отправляйте симпатии тем, кто вам\n действительно нравится,\n чтобы начать приятное знакомство"/>
+        android:text="@string/novice_sympathy"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
 </RelativeLayout>
