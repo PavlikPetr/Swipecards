@@ -8,10 +8,14 @@ public class SendMailNotificationsRequest extends AbstractApiRequest {
 
     private static final String SERVICE_NAME = "notifications";
 
-    public Boolean sympathy = null;
-    public Boolean mutual = null;
-    public Boolean chat = null;
-    public Boolean guests = null;
+    public Boolean mailsympathy = null;
+    public Boolean mailmutual = null;
+    public Boolean mailchat = null;
+    public Boolean mailguests = null;
+    public Boolean apnssympathy = null;
+    public Boolean apnsmutual = null;
+    public Boolean apnschat = null;
+    public Boolean apnsguests = null;
 
     public SendMailNotificationsRequest(Context context) {
         super(context);
@@ -20,10 +24,14 @@ public class SendMailNotificationsRequest extends AbstractApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject result = new JSONObject();
-        if (sympathy != null) result.put("sympathy", sympathy);
-        if (mutual != null) result.put("mutual", mutual);
-        if (chat != null) result.put("chat", chat);
-        if (guests != null) result.put("guests", guests);
+        if (mailsympathy != null) result.put("mailsympathy", mailsympathy);
+        if (mailmutual != null) result.put("mailmutual", mailmutual);
+        if (mailchat != null) result.put("mailmessage", mailchat);
+        if (mailguests != null) result.put("mailvisitor", mailguests);
+        if(apnssympathy != null) result.put("apnssympathy", apnssympathy);
+        if(apnsmutual != null) result.put("apnsmutual", apnsmutual);
+        if(apnschat != null) result.put("apnsmessage", apnschat);
+        if(apnsguests != null) result.put("apnsvisitor", apnsguests);
         return result;
     }
 

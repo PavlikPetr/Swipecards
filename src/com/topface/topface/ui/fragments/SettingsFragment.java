@@ -63,29 +63,25 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loLikes);
         setBackground(R.drawable.edit_big_btn_top, frame);
         setText(R.string.settings_likes, frame);
-        initEditNotificationFrame(Settings.SETTINGS_C2DM_LIKES_PHONE,
-                Settings.SETTINGS_C2DM_LIKES_EMAIL, frame, options.hasMail, options.pages.get(Options.PAGE_LIKES).mail);
+        initEditNotificationFrame(options.NOTIFICATIONS_LIKES, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_LIKES).mail,options.notifications.get(Options.NOTIFICATIONS_LIKES).apns);
 
         // Mutual
         frame = (ViewGroup) root.findViewById(R.id.loMutual);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_mutual, frame);
-        initEditNotificationFrame(Settings.SETTINGS_C2DM_MUTUAL_PHONE,
-                Settings.SETTINGS_C2DM_MUTUAL_EMAIL, frame, options.hasMail, options.pages.get(Options.PAGE_MUTUAL).mail);
+        initEditNotificationFrame(options.NOTIFICATIONS_SYMPATHY, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).mail,options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns);
 
         // Chat
         frame = (ViewGroup) root.findViewById(R.id.loChat);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_messages, frame);
-        initEditNotificationFrame(Settings.SETTINGS_C2DM_DIALOGS_PHONE,
-                Settings.SETTINGS_C2DM_DIALOGS_EMAIL, frame, options.hasMail, options.pages.get(Options.PAGE_DIALOGS).mail);
+        initEditNotificationFrame(options.NOTIFICATIONS_MESSAGE, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_MESSAGE).mail,options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns);
 
         // Guests
         frame = (ViewGroup) root.findViewById(R.id.loGuests);
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
-        initEditNotificationFrame(Settings.SETTINGS_C2DM_VISITORS_PHONE,
-                Settings.SETTINGS_C2DM_VISITORS_EMAIL, frame, options.hasMail, options.pages.get(Options.PAGE_VISITORS).mail);
+        initEditNotificationFrame(options.NOTIFICATIONS_VISITOR, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_VISITOR).mail,options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns);
 
         // Help
         frame = (ViewGroup) root.findViewById(R.id.loHelp);
@@ -151,15 +147,15 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         textView.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(iconRes), null, null, null);
     }
 
-    private void initEditNotificationFrame(String phoneKey, final String emailKey, ViewGroup frame, boolean enabled, boolean checked) {
+    private void initEditNotificationFrame(int key, ViewGroup frame, boolean enabled, boolean mailChecked, boolean phoneChecked) {
         CheckBox checkBox = (CheckBox) frame.findViewById(R.id.cbPhone);
-        checkBox.setTag(phoneKey);
-        checkBox.setChecked(mSettings.getSetting(phoneKey));
+        checkBox.setTag(Options.generateKey(key,false));
+        checkBox.setChecked(phoneChecked);
         checkBox.setOnCheckedChangeListener(this);
 
         final CheckBox checkBoxEmail = (CheckBox) frame.findViewById(R.id.cbMail);
-        checkBoxEmail.setTag(emailKey);
-        checkBoxEmail.setChecked(checked);
+        checkBoxEmail.setTag(Options.generateKey(key,true));
+        checkBoxEmail.setChecked(mailChecked);
         checkBoxEmail.setEnabled(enabled);
         checkBoxEmail.setOnCheckedChangeListener(this);
     }
@@ -199,26 +195,31 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
         final String key = (String) buttonView.getTag();
 
-        SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(key, isChecked, getActivity().getApplicationContext());
+        String[] buttonInfo = key.split(Options.GENERAL_SEPARATOR);
+        final Integer type = Integer.parseInt(buttonInfo[0]);
+        final boolean isMail = Boolean.parseBoolean(buttonInfo[1]);
+
+        SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(type, isMail, isChecked, getActivity().getApplicationContext());
         if (request != null) {
             buttonView.setEnabled(false);
             request.callback(new ApiHandler() {
 
                 @Override
                 public void success(ApiResponse response) throws NullPointerException {
-                    buttonView.post(new Runnable() {
+                   buttonView.post(new Runnable() {
 
                         @Override
                         public void run() {
                             buttonView.setEnabled(true);
                         }
                     });
-
-                    mSettings.setSetting(key, isChecked);
+                    if(isMail) CacheProfile.getOptions().notifications.get(type).mail = isChecked;
+                    else CacheProfile.getOptions().notifications.get(type).apns = isChecked;
                 }
 
                 @Override
                 public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    //TODO: Здесь нужно что-то делать, чтобы пользователь понял, что у него не получилось отменить нотификации.
                     buttonView.post(new Runnable() {
 
                         @Override
@@ -226,7 +227,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                             buttonView.setEnabled(true);
                         }
                     });
-                    mSettings.setSetting(key, !isChecked);
+                    buttonView.setChecked(!isChecked);
+                    if(isMail) CacheProfile.getOptions().notifications.get(type).mail = !isChecked;
+                    else CacheProfile.getOptions().notifications.get(type).apns = !isChecked;
                 }
             }).exec();
         }
