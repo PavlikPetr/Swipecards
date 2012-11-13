@@ -373,11 +373,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onUpdateSuccess(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
-
+            
             if (mListAdapter.isEmpty()) {
                 mBackgroundText.setText(getEmptyFeedText());
             } else {
-                mBackgroundText.setText("");
+                mBackgroundText.setVisibility(View.INVISIBLE);
             }
 
             if (mBackgroundText.getCompoundDrawables()[0] != null) {
@@ -419,6 +419,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onUpdateStart(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.INVISIBLE);
+            mBackgroundText.setVisibility(View.VISIBLE);
             mBackgroundText.setText(R.string.general_dialog_loading);
             mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(Recycle.s_Loader,
                     mBackgroundText.getCompoundDrawables()[1],
