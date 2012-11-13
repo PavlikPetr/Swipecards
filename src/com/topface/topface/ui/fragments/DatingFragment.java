@@ -55,13 +55,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mUserInfoStatus;
     private TextView mCounter;
     private View mDatingGroup;
-    //    private View mFirstRateButtons;
-//    private View mSecondRateButtons;
     private ImageSwitcher mImageSwitcher;
     private LinkedList<SearchUser> mUserSearchList;
     private ProgressBar mProgressBar;
     private Newbie mNewbie;
-    private ImageView mNewbieView;
     private AlphaAnimation mAlphaAnimation;
     private SharedPreferences mPreferences;
     private RateController mRateController;
@@ -78,7 +75,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Drawable doubleMutual;
     private Drawable doubleDelight;
     
-    private NoviceLayout mNoviceSymathy;
+    private NoviceLayout mNoviceLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -128,10 +125,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRateController = new RateController(getActivity());
         mRateController.setOnRateControllerListener(this);
 
-        // Rate buttons groups
-//        mFirstRateButtons = view.findViewById(R.id.ratingButtonsFirst);
-//        mSecondRateButtons = view.findViewById(R.id.ratingButtonsSecond);
-
         //Если мы вернулись в этот фрагмент, то декриментим позицию, что бы оказаться на последнем пользователе
         Data.searchPosition--;
 
@@ -139,11 +132,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingGroup = view.findViewById(R.id.loDatingGroup);
 
         // Preferences
-        mPreferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-
-        // Newbie
-        mNewbie = new Newbie(mPreferences);
-        mNewbieView = (ImageView) view.findViewById(R.id.ivNewbie);
+        mPreferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);        
 
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
@@ -194,23 +183,25 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
 
-        //Novice layouts
-        mNoviceSymathy = (NoviceLayout) view.findViewById(R.id.loNovice);
-        
-//        mNoviceSymathy.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
+        // Newbie
+        mNewbie = new Newbie(mPreferences);
+        mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);
+      //sympathy
+      mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mSympathyBtn.performClick();				
+			}
+      });    
+      
+      //energy
+//      mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
 //			
 //			@Override
 //			public void onClick(View v) {
-//				mSympathyBtn.performClick();				
 //			}
-//        });    
-        
-//        mNoviceSymathy.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//			}
-//        });
+//      });
         
         mPreloadManager = new PreloadManager(getActivity().getApplicationContext());
         showNextUser();
@@ -450,49 +441,66 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void showNewbie() {
-        mNewbieView.setVisibility(View.INVISIBLE);
+//        mNewbieView.setVisibility(View.INVISIBLE);
 
         if (mNewbie.isDatingCompleted())
             return;
 
         SharedPreferences.Editor editor = mPreferences.edit();
 
-        if (!mNewbie.free_energy && CacheProfile.isNewbie) {
-            mNewbie.free_energy = true;
-            editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_FREE_ENERGY, true);
-            mNewbieView.setBackgroundResource(R.drawable.newbie_free_energy);
-            mNewbieView.setOnClickListener(mOnNewbieClickListener);
-            mNewbieView.setVisibility(View.VISIBLE);
-            mNewbieView.startAnimation(mAlphaAnimation);
-
-        } else if (!mNewbie.rate_it) {
-            mNewbie.rate_it = true;
-            editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_RATE_IT, true);
-            mNewbieView.setBackgroundResource(R.drawable.newbie_rate_it);
-            mNewbieView.setVisibility(View.VISIBLE);
-            mNewbieView.startAnimation(mAlphaAnimation);
-            mNewbieView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mNewbieView.setVisibility(View.INVISIBLE);
-                }
-            });
-
-        } else if (!mNewbie.buy_energy && CacheProfile.power <= 30) {
-            mNewbie.buy_energy = true;
-            editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_BUY_ENERGY, true);
-            mNewbieView.setBackgroundResource(R.drawable.newbie_buy_energy);
-            mNewbieView.setVisibility(View.VISIBLE);
-            mNewbieView.startAnimation(mAlphaAnimation);
-            mNewbieView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mNewbieView.setVisibility(View.INVISIBLE);
-                }
-            });
-        }
+//        if (!mNewbie.free_energy && CacheProfile.isNewbie) {
+//            mNewbie.free_energy = true;
+//            editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_FREE_ENERGY, true);
+//            mNewbieView.setBackgroundResource(R.drawable.newbie_free_energy);
+//            mNewbieView.setOnClickListener(mOnNewbieEnergyClickListener);
+//            mNewbieView.setVisibility(View.VISIBLE);
+//            mNewbieView.startAnimation(mAlphaAnimation);
+//
+//        } else if (!mNewbie.rate_it) {
+//            mNewbie.rate_it = true;
+//            editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_RATE_IT, true);
+//            mNewbieView.setBackgroundResource(R.drawable.newbie_rate_it);
+//            mNewbieView.setVisibility(View.VISIBLE);
+//            mNewbieView.startAnimation(mAlphaAnimation);
+//            mNewbieView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mNewbieView.setVisibility(View.INVISIBLE);
+//                }
+//            });
+//
+//        } else if (!mNewbie.buy_energy && CacheProfile.power <= 30) {
+//            mNewbie.buy_energy = true;
+//            editor.putBoolean(Static.PREFERENCES_NEWBIE_DATING_BUY_ENERGY, true);
+//            mNewbieView.setBackgroundResource(R.drawable.newbie_buy_energy);
+//            mNewbieView.setVisibility(View.VISIBLE);
+//            mNewbieView.startAnimation(mAlphaAnimation);
+//            mNewbieView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mNewbieView.setVisibility(View.INVISIBLE);
+//                }
+//            });
+//        }
 
         editor.commit();
+        
+        //sympathy
+//        mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				mSympathyBtn.performClick();				
+//			}
+//        });    
+        
+        //energy
+        mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+			}
+        });
     }
 
     public void setCounter(int position) {
@@ -505,11 +513,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mCounter.setVisibility(View.INVISIBLE);
         }
     }
-
-//    public void switchRateBtnsGroups() {
-//        mFirstRateButtons.setVisibility(mFirstRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-//        mSecondRateButtons.setVisibility(mSecondRateButtons.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-//    }
 
     private SearchUser getCurrentUser() {
         try {
@@ -695,10 +698,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
 
-    private View.OnClickListener mOnNewbieClickListener = new View.OnClickListener() {
+    private View.OnClickListener mOnNewbieEnergyClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mNewbieView.setVisibility(View.INVISIBLE);
+//            mNewbieView.setVisibility(View.INVISIBLE);
             mResourcesPower.setBackgroundResource(R.anim.battery);
             mResourcesPower.setText("");
             final AnimationDrawable mailAnimation = (AnimationDrawable) mResourcesPower.getBackground();

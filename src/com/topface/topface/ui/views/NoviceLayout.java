@@ -12,17 +12,16 @@ import android.graphics.Point;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,6 +32,7 @@ public class NoviceLayout extends RelativeLayout {
 	
 	private ImageView mMask;
 	private ImageView mBackground;	
+	private ViewGroup mParent; 
 	
 	private OnClickListener mListener;
 	
@@ -49,11 +49,14 @@ public class NoviceLayout extends RelativeLayout {
 	public void setLayoutRes(int res,OnClickListener listener) {
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+		removeAllViews();
+		
         inflater.inflate(res, this, true);
         setVisibility(View.VISIBLE);
         
         mMask = (ImageView) findViewById(R.id.ivMask);
         mBackground = (ImageView) findViewById(R.id.ivBackground);
+        mParent = (ViewGroup) findViewById(R.id.loParent);
         TextView bubble = (TextView) findViewById(R.id.ivBubble);
         Typeface tf = Typeface.createFromAsset(mContext.getAssets(), "neucha.otf"); 
         bubble.setTypeface(tf);
@@ -64,19 +67,16 @@ public class NoviceLayout extends RelativeLayout {
 			@Override
 			public void onGlobalLayout() {
 				int[] point = new int[2];
-				int[] offset = new int[2];				
-				mMask.getLocationOnScreen(point);
-				mBackground.getLocationOnScreen(offset);
-				point[0] = point[0] - offset[0];
-				point[1] = point[1] - offset[1];	
+				mMask.getLocationOnScreen(point);				
 				mBackground.setImageBitmap(getMaskedBackgroundBitmap(mMask,point));
 				ViewTreeObserver obs = mMask.getViewTreeObserver();
+				invalidate();
 				obs.removeGlobalOnLayoutListener(this);
 			}
 		});
         
-//        mMask.setVisibility(View.INVISIBLE);
-        mListener = listener;
+        //mMask.setVisibility(View.INVISIBLE);
+        mListener = listener;        
 	}	
 	
 	private Bitmap getMaskedBackgroundBitmap(ImageView maskView,int[] point) {		
