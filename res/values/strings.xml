@@ -212,4 +212,10 @@
 
     <string name="dating_header_girls">Girls from %1$d to %2$d</string>
     <string name="dating_header_guys">Guys from %1$d to %2$d</string>
+    
+    <!-- Novice -->
+    <string name="novice_sympathy"></string>
+    <string name="novice_energy"></string>
+    <string name="novice_battery_bonus"></string>
+    <string name="novice_fill_profile"></string>
 </resources>
