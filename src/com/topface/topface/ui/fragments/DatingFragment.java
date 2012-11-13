@@ -73,6 +73,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Drawable doubleDelight;
     
     private NoviceLayout mNoviceLayout;
+    private View mDatingResources;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -136,7 +137,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAlphaAnimation.setDuration(400L);
 
         // Resources
-        view.findViewById(R.id.loDatingResources).setOnClickListener(this);
+        mDatingResources = view.findViewById(R.id.loDatingResources);
+        mDatingResources.setOnClickListener(this);
         mResourcesPower = (TextView) view.findViewById(R.id.tvResourcesPower);
         mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
         mResourcesPower.setText("" + CacheProfile.power + "%");
@@ -440,7 +442,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         	mNoviceLayout.startAnimation(mAlphaAnimation);
         	mNovice.completeShowSympathy();
         } else if (mNovice.showEnergy && CacheProfile.power <= 30) {
-        	mNoviceLayout.setLayoutRes(R.layout.novice_energy, null);
+        	mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					mDatingResources.performClick();
+				}
+			});
         	mNoviceLayout.startAnimation(mAlphaAnimation);
         	mNovice.completeShowEnergy();
         }
