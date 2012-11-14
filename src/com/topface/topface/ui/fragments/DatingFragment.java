@@ -74,6 +74,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private NoviceLayout mNoviceLayout;
     private View mDatingResources;
+    
+    private boolean hasOneSympathyOrDelight = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -254,7 +256,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         return;
                     } else {
                         lockControls();
-                        mRateController.onRate(currentSearch.id, 10, currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                        mRateController.onRate(currentSearch.id, 10, currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);                        
                     }
 //                    currentSearch.rated = true;
                 }
@@ -268,7 +270,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         return;
                     } else {
                         lockControls();
-                        mRateController.onRate(currentSearch.id, 9, currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                        mRateController.onRate(currentSearch.id, 9, currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);                     
                     }
                     currentSearch.rated = true;
                 }
@@ -278,7 +280,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 skipUser();
                 SearchUser currentSearch = getCurrentUser();
                 if (currentSearch != null) {
-                    currentSearch.skipped = true;
+                    currentSearch.skipped = true;             
                 }
 
             }
@@ -341,6 +343,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mPreloadManager.preloadPhoto(mUserSearchList, Data.searchPosition + 1);
         if (getCurrentUser() != null) {
             showNovice();
+            hasOneSympathyOrDelight = true;
         }
     }
 
@@ -428,11 +431,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mNovice.isDatingCompleted())
             return;
 
-        if (mNovice.showBatteryBonus) {
-            mNoviceLayout.setLayoutRes(R.layout.novice_battery_bonus, null, mOnNewbieEnergyClickListener);
-            mNoviceLayout.startAnimation(mAlphaAnimation);
-            mNovice.completeShowBatteryBonus();
-        } else if (mNovice.showSympathy) {
+        if (mNovice.showSympathy) {
             mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
 
                 @Override
@@ -442,7 +441,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             });
             mNoviceLayout.startAnimation(mAlphaAnimation);
             mNovice.completeShowSympathy();
-        } else if (mNovice.showEnergy && CacheProfile.power <= 30) {
+        } else if (mNovice.showBatteryBonus) {
+            mNoviceLayout.setLayoutRes(R.layout.novice_battery_bonus, null, mOnNewbieEnergyClickListener);
+            mNoviceLayout.startAnimation(mAlphaAnimation);
+            mNovice.completeShowBatteryBonus();
+        } else if (mNovice.showEnergy && hasOneSympathyOrDelight && CacheProfile.power <= 10) {
             mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
 
                 @Override

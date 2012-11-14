@@ -18,6 +18,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Utils {
+	public static final long WEEK = 604800L;
+	public static final long DAY = 86400L;
+	
     private static PluralResources mPluralResources;
 
     public static int unixtime() {
