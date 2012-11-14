@@ -39,7 +39,6 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.OsmManager;
-import com.topface.topface.utils.social.AuthToken;
 
 import java.util.LinkedList;
 
@@ -86,11 +85,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Если приходим с нотификации незалогинеными, нужно вернуться в AuthActivity
-        if(!Data.isSSID() || (new AuthToken(getApplicationContext())).isEmpty()) {
-            startActivityForResult(new Intent(this,AuthActivity.class),101);
-//            finish();
-        }
+
         setContentView(R.layout.ac_chat);
         Debug.log(this, "+onCreate");
 

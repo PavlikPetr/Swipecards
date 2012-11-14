@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
-import com.topface.topface.Data;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -16,7 +15,6 @@ import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchL
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 public class NavigationActivity extends FragmentActivity implements View.OnClickListener {
@@ -29,11 +27,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        //Если приходим с нотификации незалогинеными, нужно вернуться в AuthActivity
-        if(!Data.isSSID() || (new AuthToken(getApplicationContext())).isEmpty()) {
-            startActivity(new Intent(this,AuthActivity.class));
-            finish();
-        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
         Debug.log(this, "onCreate");

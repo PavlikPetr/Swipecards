@@ -119,7 +119,7 @@ public class ImageSwitcher extends ViewPager {
             view.setTag(VIEW_TAG+Integer.toString(position));
             ImageViewRemote imageView = (ImageViewRemote) view.findViewById(R.id.ivPreView);
             if(isFirstInstantiate) {
-                imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler); //TODO: Сделать здесь что-нибудь получше
+                imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler);
                 isFirstInstantiate = false;
             } //else
 //                mPreloadManager.preloadImage(mPhotoLinks.get(position).getSuitableLink(Photo.SIZE_960));

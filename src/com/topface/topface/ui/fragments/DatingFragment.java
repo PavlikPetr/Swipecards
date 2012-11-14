@@ -10,10 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.*;
@@ -660,12 +658,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 
-    private Handler mUnlockHandler = new Handler() {
-        @Override
-        public void handleMessage(android.os.Message msg) {
-            unlockControls();
-        }
-    };
+    private Handler mUnlockHandler;
+
+    {
+        mUnlockHandler = new Handler() {
+            @Override
+            public void handleMessage(android.os.Message msg) {
+                unlockControls();
+            }
+        };
+    }
 
     public void onDialogCancel() {
         unlockControls();
