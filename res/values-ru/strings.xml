@@ -19,7 +19,7 @@
     <string name="general_send_full">Отправить</string>
     <string name="general_dialog_retry">Повторить</string>
     <string name="general_copy_title">Копировать</string>
-    <string name="general_back">Обратно</string>
+    <string name="general_back">Назад</string>
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_internet_off">Нет подключения к интернету</string>
@@ -28,6 +28,8 @@
     <string name="general_msg_copied">Текст скопирован</string>
     <string name="general_spinner_title">Выберите действие</string>
     <string name="general_profile_error">Ошибка загрузки профиля</string>
+    <string name="general_dbl_all">Все</string>
+    <string name="general_dbl_unread">Непрочитанные</string>
 
     <string name="general_edit_button">Ред.</string>
     <string name="general_save_button">Сохр.</string>
@@ -40,6 +42,7 @@
     <string name="general_likes">Я нравлюсь</string>
     <string name="general_likes_me">Вы нравитесь</string>
     <string name="general_sympathy">Симпатия</string>
+    <string name="general_delight">Восхищение</string>
     <string name="general_mutual">Взаимно</string>
     <string name="general_dialogs">Диалоги</string>
     <string name="general_tops">Топ</string>
@@ -52,14 +55,15 @@
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
     <string name="auth_btn_fb">Войти через Facebook</string>
     <string name="auth_retry">Повторить попытку</string>
+    <string name="auth_vk_name">ВКонтакте</string>
 
     <!-- Dating -->
     <string name="dating_header_girls">Девушки от %1$d до %2$d</string>
     <string name="dating_header_guys">Парни от %1$d до %2$d</string>
     <string name="dating_switch_button">Еще…</string>
-    <string name="dating_delight_button">Восхищение</string>
     <string name="dating_skip_button">Следующая</string>
     <string name="dating_prev_button">Предыдущая</string>
+    <string name="dating_chat_button">Поболтать</string>
 
     <!-- Likes -->
     <string name="likes_background_text">Нет симпатий</string>
@@ -71,8 +75,6 @@
     <string name="mutual_background_text">Симпатий нет</string>
 
     <!-- Chat -->
-    <string name="chat_btn_dbl_left">Все</string>
-    <string name="chat_btn_dbl_right">Непрочитанные</string>
     <string name="chat_background_text">Входящих сообщений нет</string>
     <string name="chat_comment">Написать сообщение</string>
     <string name="chat_gift_in">Вы получили подарок.</string>
@@ -203,6 +205,7 @@
     <string name="settings_photo_preloading">Предзагрузка фотографий</string>
     <string name="settings_photo_preloading_summary">Предварительная загрузка следующей фотографии в альбоме</string>
     <string name="settings_notifications_header">Оповещения</string>
+    <string name="settings_other_header">Прочее</string>
     <string name="settings_likes">Симпатии</string>
     <string name="settings_mutual">Взаимные симпатии</string>
     <string name="settings_messages">Сообщения</string>
@@ -216,6 +219,7 @@
     <string name="settings_rights_reserved">Topface все права защищены</string>
     <string name="settings_extra">Подробную информацию можно найти на</string>
     <string name="settings_logout">Выйти из аккаунта</string>
+    <string name="settings_logout_msg">Вы действительно хотите выйти?</string>
     <string name="settings_error_message">Сообщение об ошибке</string>
     <string name="settings_ask_developer">Вопрос разработчикам</string>
     <string name="settings_payment_problems">Проблемы с оплатой</string>

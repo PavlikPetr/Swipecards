@@ -349,8 +349,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void initDoubleButton(View view) {
         // Double Button
         mDoubleButton = (DoubleBigButton) view.findViewById(R.id.btnDoubleBig);
-        mDoubleButton.setLeftText(getString(R.string.chat_btn_dbl_left));
-        mDoubleButton.setRightText(getString(R.string.chat_btn_dbl_right));
+        mDoubleButton.setLeftText(getString(R.string.general_dbl_all));
+        mDoubleButton.setRightText(getString(R.string.general_dbl_unread));
         mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
         mDoubleButton.setLeftListener(new View.OnClickListener() {
             @Override

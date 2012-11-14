@@ -118,7 +118,7 @@
                             android:drawablePadding="-10dp"
                             android:drawableTop="@drawable/user_delight_selector"
                             android:paddingTop="0dp"
-                            android:text="@string/dating_delight_button"/>
+                            android:text="@string/general_delight"/>
 
                     <TextView
                             android:id="@+id/tvDatingLovePrice"

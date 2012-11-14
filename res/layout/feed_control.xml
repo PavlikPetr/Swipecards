@@ -50,7 +50,7 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:drawableTop="@drawable/dating_delight_selector"
-                            android:text="@string/dating_delight_button"/>
+                            android:text="@string/general_delight"/>
 
                     <TextView
                             android:id="@+id/tvDatingLovePrice"
@@ -74,7 +74,7 @@
                         android:layout_weight="1.0"
                         android:background="@android:color/transparent"
                         android:drawableTop="@drawable/dating_mutual_selector"
-                        android:text="@string/dashbrd_btn_sympathy"/>
+                        android:text="EGGS"/>
 
                 <Button
                         android:id="@+id/btnDatingSkip"
@@ -113,7 +113,7 @@
                         android:layout_weight="1.0"
                         android:background="@android:color/transparent"
                         android:drawableTop="@drawable/dating_chat_selector"
-                        android:text="@string/profile_btn_chat"/>
+                        android:text="@string/dating_chat_button"/>
 
                 <Button
                         android:id="@+id/btnDatingProfile"

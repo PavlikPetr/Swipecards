@@ -76,7 +76,7 @@
     <Button
             android:id="@+id/btnFragmentDialogs"
             android:layout_below="@id/btnFragmentMutual"
-            android:text="@string/general_chat"
+            android:text="@string/general_dialogs"
             android:drawableLeft="@drawable/topface_chat"
             style="@style/LeftMenuButtons"/>
 
