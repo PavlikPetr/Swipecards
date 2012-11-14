@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Looper;
 import com.google.android.gcm.GCMBaseIntentService;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import org.json.JSONException;
@@ -49,29 +46,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     @Override
     protected void onRegistered(final Context context, final String registrationId) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-
-                Debug.log("GCM onRegistered", registrationId);
-
-                RegistrationTokenRequest registrationRequest = new RegistrationTokenRequest(getApplicationContext());
-                registrationRequest.token = registrationId;
-                registrationRequest.callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                        GCMUtils.setRegisteredFlag(context);
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        Debug.error(String.format("RegistrationRequest fail: #%d %s", codeError, response));
-                    }
-                }).exec();
-                Looper.loop();
-            }
-        }).start();
+        GCMUtils.sendRegId(context,registrationId);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class App extends Application {
         mContext = getApplicationContext();
         DEBUG = isDebugMode();
         // GCM
-        GCMUtils.init(getContext());
+//        GCMUtils.init(getContext());
         Debug.log("App", "+onCreate");
         Data.init(getApplicationContext());
         Recycle.init(getApplicationContext());

@@ -1,7 +1,12 @@
 package com.topface.topface.ui.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.NavigationBarController;
@@ -15,6 +20,7 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
 	
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
+    private BroadcastReceiver updateCountersReceiver;
     public static final int F_PROFILE = 1001;
     public static final int F_DATING = 1002;
     public static final int F_LIKES = 1003;
@@ -41,8 +47,15 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
     public void onResume() {
     	if (mNavBarController != null) mNavBarController.refreshNotificators();
     	super.onResume();
+        setUpdateCounersReceiver();
     }
-    
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateCountersReceiver);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -69,4 +82,16 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
         intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
         super.startActivityForResult(intent, requestCode);
     }
+
+    private void setUpdateCounersReceiver() {
+        updateCountersReceiver = new BroadcastReceiver(){
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mNavBarController.refreshNotificators();
+            }
+        };
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(updateCountersReceiver,new IntentFilter(GCMUtils.GCM_UPDATE_COUNTERS));
+    }
+
 }

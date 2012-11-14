@@ -39,8 +39,7 @@ public class CacheProfile {
     public static String dating_city_full; // полное наименование города
 
     public static LinkedList<FormItem> forms;
-    public static String status; // статус пользователя
-    public static boolean isNewbie; // поле новичка
+    public static String status; // статус пользователя    
     public static int background_id;
     public static Photos photos;
     public static Photo photo;
