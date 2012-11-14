@@ -428,11 +428,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mNovice.isDatingCompleted())
             return;
 
-        if (mNovice.showBatteryBonus) {
-            mNoviceLayout.setLayoutRes(R.layout.novice_battery_bonus, null, mOnNewbieEnergyClickListener);
-            mNoviceLayout.startAnimation(mAlphaAnimation);
-            mNovice.completeShowBatteryBonus();
-        } else if (mNovice.showSympathy) {
+        if (mNovice.showSympathy) {
             mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
 
                 @Override
@@ -442,7 +438,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             });
             mNoviceLayout.startAnimation(mAlphaAnimation);
             mNovice.completeShowSympathy();
-        } else if (mNovice.showEnergy && CacheProfile.power <= 30) {
+        }else if (mNovice.showBatteryBonus) {
+            mNoviceLayout.setLayoutRes(R.layout.novice_battery_bonus, null, mOnNewbieEnergyClickListener);
+            mNoviceLayout.startAnimation(mAlphaAnimation);
+            mNovice.completeShowBatteryBonus();
+        } else if (mNovice.showEnergy && CacheProfile.power <= 10) {
             mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
 
                 @Override
