@@ -57,7 +57,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private LinkedList<SearchUser> mUserSearchList;
     private ProgressBar mProgressBar;
     private Novice mNovice;
-    private AlphaAnimation mAlphaAnimation;    
+    private AlphaAnimation mAlphaAnimation;
     private RateController mRateController;
     private View mNavigationHeader;
     private View mNavigationHeaderShadow;
@@ -71,7 +71,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Drawable singleDelight;
     private Drawable doubleMutual;
     private Drawable doubleDelight;
-    
+
     private NoviceLayout mNoviceLayout;
     private View mDatingResources;
 
@@ -79,8 +79,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
 
-        View view = inflater.inflate(R.layout.ac_dating, null);        
-        
+        View view = inflater.inflate(R.layout.ac_dating, null);
+
         mRetryBtn = (ImageButton) view.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
 
@@ -118,7 +118,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         });
         mNavigationHeaderShadow = view.findViewById(R.id.ivHeaderShadow);
-        
+
         // Rate Controller
         mRateController = new RateController(getActivity());
         mRateController.setOnRateControllerListener(this);
@@ -130,7 +130,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingGroup = view.findViewById(R.id.loDatingGroup);
 
         // Preferences
-        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);        
+        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
 
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
@@ -184,8 +184,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         // Newbie
         mNovice = new Novice(preferences);
-        mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);      
-        
+        mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);
+
         mPreloadManager = new PreloadManager(getActivity().getApplicationContext());
         showNextUser();
         return view;
@@ -340,7 +340,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         mPreloadManager.preloadPhoto(mUserSearchList, Data.searchPosition + 1);
         if (getCurrentUser() != null) {
-        	showNovice();
+            showNovice();
         }
     }
 
@@ -348,7 +348,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (Data.searchPosition > 0) {
             --Data.searchPosition;
             fillUserInfo(mUserSearchList.get(Data.searchPosition));
-        }        
+        }
     }
 
     private void fillUserInfo(SearchUser currUser) {
@@ -383,7 +383,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mImageSwitcher.setData(currUser.photos);
             mImageSwitcher.setCurrentItem(0, true);
             mCurrentPhotoPrevPos = 0;
-            setCounter(mCurrentPhotoPrevPos);            
+            setCounter(mCurrentPhotoPrevPos);
         }
     }
 
@@ -426,32 +426,32 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void showNovice() {
         if (mNovice.isDatingCompleted())
-            return;        
-        
+            return;
+
         if (mNovice.showBatteryBonus) {
-        	mNoviceLayout.setLayoutRes(R.layout.novice_battery_bonus, null, mOnNewbieEnergyClickListener);
-        	mNoviceLayout.startAnimation(mAlphaAnimation);
-        	mNovice.completeShowBatteryBonus();
+            mNoviceLayout.setLayoutRes(R.layout.novice_battery_bonus, null, mOnNewbieEnergyClickListener);
+            mNoviceLayout.startAnimation(mAlphaAnimation);
+            mNovice.completeShowBatteryBonus();
         } else if (mNovice.showSympathy) {
-        	mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					mSympathyBtn.performClick();					
-				}
-			});
-        	mNoviceLayout.startAnimation(mAlphaAnimation);
-        	mNovice.completeShowSympathy();
+            mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    mMutualBtn.performClick();
+                }
+            });
+            mNoviceLayout.startAnimation(mAlphaAnimation);
+            mNovice.completeShowSympathy();
         } else if (mNovice.showEnergy && CacheProfile.power <= 30) {
-        	mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					mDatingResources.performClick();
-				}
-			});
-        	mNoviceLayout.startAnimation(mAlphaAnimation);
-        	mNovice.completeShowEnergy();
+            mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    mDatingResources.performClick();
+                }
+            });
+            mNoviceLayout.startAnimation(mAlphaAnimation);
+            mNovice.completeShowEnergy();
         }
     }
 
@@ -672,7 +672,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     updateUI(new Runnable() {
                         @Override
                         public void run() {
-                            mResourcesPower.setText("+"+CacheProfile.power+"%");
+                            mResourcesPower.setText("+" + CacheProfile.power + "%");
                         }
                     });
                 }
