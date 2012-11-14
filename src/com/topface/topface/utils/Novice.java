@@ -1,12 +1,7 @@
 package com.topface.topface.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import android.content.SharedPreferences;
-import android.text.format.Time;
 
 import com.topface.topface.Static;
 
@@ -21,12 +16,12 @@ public class Novice {
     private SharedPreferences mPreferences;
 
     public Novice(SharedPreferences preferences) {
-        showSympathy = preferences.getBoolean(Static.PREFERENCES_NOVICE_DATING_SYMPATHY, true);
+    	mPreferences = preferences;
+    	
+        showSympathy = mPreferences.getBoolean(Static.PREFERENCES_NOVICE_DATING_SYMPATHY, true);
         showEnergy = getShowEnergy(); //preferences.getBoolean(Static.PREFERENCES_NOVICE_DATING_ENERGY, true);
-        showBatteryBonus = !Novice.giveNovicePower;
-        showFillProfile = getShowProfile();//preferences.getBoolean(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE, true);
-        
-        mPreferences = preferences;
+        showBatteryBonus = Novice.giveNovicePower;
+        showFillProfile = getShowProfile();//preferences.getBoolean(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE, true);        
     }
 
     public boolean isMenuCompleted() {
@@ -38,14 +33,14 @@ public class Novice {
     }    
 
     private boolean getShowEnergy() {    	
+    	boolean result = mPreferences.getBoolean(Static.PREFERENCES_NOVICE_DATING_ENERGY, true);
+    	if (result) return true;
+    	
     	long todayTime = Utils.unixtime();
     	long lastTime = mPreferences.getLong(Static.PREFERENCES_NOVICE_DATING_ENERGY_DATE,0);    	    	
 
-    	if(lastTime > 0) {    		
-    		if ((lastTime - todayTime) > Utils.WEEK) {
-	    		SharedPreferences.Editor editor = mPreferences.edit();
-		    	editor.putLong(Static.PREFERENCES_NOVICE_DATING_ENERGY_DATE,todayTime);
-		    	editor.commit();
+    	if(lastTime > 0) { 
+    		if ((todayTime - lastTime) >= Utils.WEEK) {	    		
 		    	return true;
     		} else {
     			return false;
@@ -65,7 +60,7 @@ public class Novice {
     	long lastTime = mPreferences.getLong(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE,0);    	
     	
     	if(lastTime > 0) {    		
-    		if ((lastTime - todayTime) > Utils.DAY) {
+    		if ((todayTime - lastTime) >= Utils.DAY) {
 		    	return true;
     		} else {
     			return false;
@@ -82,25 +77,26 @@ public class Novice {
     	showSympathy = false;
     	SharedPreferences.Editor editor = mPreferences.edit();
     	editor.putBoolean(Static.PREFERENCES_NOVICE_DATING_SYMPATHY, false);
-//    	editor.commit();
+    	editor.commit();
     }
     
     public void completeShowEnergy() {
     	showEnergy = false;
-//    	SharedPreferences.Editor editor = mPreferences.edit();
-//    	editor.putBoolean(Static.PREFERENCES_NOVICE_DATING_ENERGY, false);
-//    	editor.commit();
+    	SharedPreferences.Editor editor = mPreferences.edit();
+    	editor.putLong(Static.PREFERENCES_NOVICE_DATING_ENERGY_DATE,Utils.unixtime());
+    	editor.putBoolean(Static.PREFERENCES_NOVICE_DATING_ENERGY, false);
+    	editor.commit();
     }
     
     public void completeShowFillProfile() {
     	showFillProfile = false;
     	SharedPreferences.Editor editor = mPreferences.edit();
     	editor.putBoolean(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE, false);
-//    	editor.commit();
+    	editor.commit();
     }
     
     public void completeShowBatteryBonus() {
     	showBatteryBonus = false;
-//    	Novice.giveNovicePower = false;    	
+    	Novice.giveNovicePower = false;    	
     }
 }
