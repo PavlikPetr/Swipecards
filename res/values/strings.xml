@@ -201,7 +201,7 @@
         <item quantity="other">%d photos</item>
         <item quantity="one">%d photo</item>
     </plurals>
-    <string name="novice_sympathy">Sen</string>
+    <string name="novice_sympathy">Send messages only to those\nwho really attracts you.\nThat might be a good start!</string>
     <string name="novice_energy">The higher your battery charge is,\nthe more rates you will get.\nDon\'t forget to
         charge your\nbattery, by purchasing energy
     </string>
