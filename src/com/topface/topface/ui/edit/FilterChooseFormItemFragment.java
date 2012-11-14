@@ -58,7 +58,7 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
         mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.navigation_edit);
+        mBackButton.setText(R.string.general_edit_button);
         mBackButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -75,8 +75,8 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         ((TextView) header.findViewById(R.id.tvTitle)).setText(formItemTitle);
         mListView.addHeaderView(header);
 
-        
-        ArrayList<String> listStr = new ArrayList<String>();        
+
+        ArrayList<String> listStr = new ArrayList<String>();
         listStr.addAll(Arrays.asList(mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData})));
         listStr.add(getResources().getString(R.string.form_not_specified));
         String[] data = new String[listStr.size()];
@@ -84,11 +84,11 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
 
         ArrayList<Integer> listInt = new ArrayList<Integer>();
         for (int elem : mFormInfo.getIdsByTitleId(mTitleId)) {
-			listInt.add(elem);
-		}
+            listInt.add(elem);
+        }
         listInt.add(FormItem.NOT_SPECIFIED_ID);
-        Integer[] ids = (Integer[]) listInt.toArray(new Integer[listInt.size()]);
-        
+        Integer[] ids = listInt.toArray(new Integer[listInt.size()]);
+
         mListView.setAdapter(new FormCheckingDataAdapter(getActivity().getApplicationContext(),
                 data, ids, mSeletedDataId));
         return root;

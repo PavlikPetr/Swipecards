@@ -5,6 +5,7 @@
               android:layout_height="wrap_content"
               android:orientation="vertical"
         >
+
     <TextView
             android:id="@+id/err_msg"
             android:layout_width="fill_parent"
@@ -15,13 +16,15 @@
             android:gravity="center"
             android:layout_margin="10dp"
             />
+
     <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             >
+
         <com.topface.topface.ui.views.IllustratedTextView
                 android:id="@+id/retry"
-                android:text="@string/retry"
+                android:text="@string/general_dialog_retry"
                 android:textColor="#B8B8B8"
                 android:gravity="center"
                 android:layout_width="wrap_content"
