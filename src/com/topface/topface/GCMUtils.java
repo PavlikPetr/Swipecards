@@ -163,6 +163,7 @@ public class GCMUtils {
                 final TempImageViewRemote fakeImageView = new TempImageViewRemote(context);
                 fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
                 final Intent newI = i;//new Intent(context,ChatActivity.class);
+                newI.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 final String finalTitle = title;
                 fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
                     @Override

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
@@ -20,7 +21,9 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileItem.Type;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
@@ -36,6 +39,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     private Button mEditName;
     private Button mEditCity;
     private ImageViewRemote mProfilePhoto;
+    private TextView editProfileMsg;
+
+    private boolean hasStartedFromAuthActivity;
+
+    public static String FROM_AUTH_ACTIVITY = "com.topface.topface.FROM_AUTH";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         btnBackToProfile.setText(R.string.general_profile);
         btnBackToProfile.setVisibility(View.VISIBLE);
         btnBackToProfile.setOnClickListener(this);
+
+        hasStartedFromAuthActivity = getIntent().getBooleanExtra(FROM_AUTH_ACTIVITY,false);
 
         // ListView
         mEditItems = new LinkedList<EditProfileItem>();
@@ -74,6 +84,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         mProfilePhoto = (ImageViewRemote) header.findViewById(R.id.ivProfilePhoto);
         mProfilePhoto.setOnClickListener(this);
         mProfilePhoto.setPhoto(CacheProfile.photo);
+        if(hasStartedFromAuthActivity) {
+            editProfileMsg = (TextView) findViewById(R.id.EditProfileMessage);
+            editProfileMsg.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initEditItems() {
@@ -127,6 +141,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                         CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
                 break;
             case R.id.btnNavigationBackWithText:
+                if(hasStartedFromAuthActivity){
+                    Intent intent = new Intent(this, NavigationActivity.class);
+                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE);
+                    startActivity(intent);
+                }
                 finish();
                 break;
             case R.id.ivProfilePhoto:
@@ -250,7 +269,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             int type = getItemViewType(position);
 
             // get holder
-            ViewHolder holder = null;
+            ViewHolder holder;
             if (convertView == null) {
                 holder = new ViewHolder();
 

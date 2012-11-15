@@ -23,6 +23,7 @@ public class AuthRequest extends AbstractApiRequest {
     public AuthRequest(Context context) {
         super(context);
         try {
+            doNeedAuthorize(false);
             doNeedAlert(false);
             locale = context.getResources().getConfiguration().locale.getLanguage();
             clienttype = Static.CLIENT_TYPE;

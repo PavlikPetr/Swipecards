@@ -618,12 +618,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 
-    private Handler mUnlockHandler = new Handler() {
-        @Override
-        public void handleMessage(android.os.Message msg) {
-            unlockControls();
-        }
-    };
+    private Handler mUnlockHandler;
+
+    {
+        mUnlockHandler = new Handler() {
+            @Override
+            public void handleMessage(android.os.Message msg) {
+                unlockControls();
+            }
+        };
+    }
 
     public void onDialogCancel() {
         unlockControls();

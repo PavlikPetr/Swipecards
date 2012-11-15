@@ -3,6 +3,7 @@
 
     <!-- App -->
     <string name="app_name">Topface</string>
+    <string name="app_locale">ru</string>
 
     <!-- General -->
 
@@ -270,5 +271,6 @@
         Добавьте свои лучшие фотографии,\nчтобы получать больше симпатий.
     </string>
 
-
+    <string name="general_edit_profile_message">Пожалуйста, заполните необходимые поля анкеты</string>
+    <string name="general_premium_access_error">Для данной функции необходим Премиум</string>
 </resources>
