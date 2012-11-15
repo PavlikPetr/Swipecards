@@ -3,6 +3,7 @@
 
     <!-- App -->
     <string name="app_name">Topface</string>
+    <string name="app_locale">ru</string>
 
     <!-- General -->
 
@@ -31,7 +32,6 @@
     <string name="general_profile_error">Ошибка загрузки профиля</string>
     <string name="general_dbl_all">Все</string>
     <string name="general_dbl_unread">Непрочитанные</string>
-    <string name="premium_access_error">Для данной функции необходим Премиум</string>
 
     <string name="general_edit_button">Ред.</string>
     <string name="general_save_button">Сохр.</string>
@@ -272,4 +272,5 @@
     </string>
 
     <string name="general_edit_profile_message">Пожалуйста, заполните необходимые поля анкеты</string>
+    <string name="general_premium_access_error">Для данной функции необходим Премиум</string>
 </resources>
