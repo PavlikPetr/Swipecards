@@ -109,13 +109,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected void makeAllItemsRead() {
-        for(FeedLike item : mListAdapter.getData()) {
-            item.unread = false;
-        }
-    }
-
-    @Override
     protected Drawable getBackIcon() {
         return getResources().getDrawable(R.drawable.likes_back_icon);
     }
