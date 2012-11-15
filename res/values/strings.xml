@@ -59,7 +59,7 @@
   <string name="mutual_background_text">No sympathies</string>
   <string name="chat_background_text">No incoming messages</string>
   <string name="chat_comment">Write a message</string>
-  <string name="chat_gift_in">You have recieved a new gift</string>
+  <string name="chat_gift_in">You have received a new gift</string>
   <string name="chat_gift_out">You have sent a gift.</string>
   <string name="chat_like_in">Someone likes you!</string>
   <string name="chat_like_out">You have sent a sympathy</string>
@@ -88,7 +88,7 @@
   <string name="buying_you_have_no_coins_for_gift">You need %d {{coins}} to buy this gift</string>
   <string name="buying_default_message">Here you may send gifts and presents for coins</string>
   <string name="buying_money">Purchase coins</string>
-  <string name="buying_power">Buy energry</string>
+  <string name="buying_power">Buy energy</string>
   <string name="buying_recharge">Get 100% charge</string>
   <string name="buying_energy">3 USD</string>
   <string name="buying_pack_6coins">6 coins package</string>
@@ -195,7 +195,7 @@
     <item quantity="other">Веcome for %d coins</item>
     <item quantity="one">Become for %d coin</item>
   </plurals>
-  <string name="photo_add_or">Photo has beed added</string>
+  <string name="photo_add_or">Photo has been added</string>
   <string name="photo_add_error">An error occured during adding your photo. Please, try again.</string>
   <plurals name="photo">
     <item quantity="zero">No photos</item>

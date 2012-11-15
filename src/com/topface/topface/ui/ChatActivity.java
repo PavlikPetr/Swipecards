@@ -82,7 +82,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     // Managers
     private GeoLocationManager mGeoManager = null;
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

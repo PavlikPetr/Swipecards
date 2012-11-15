@@ -7,6 +7,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("serial")
 public class Photos extends ArrayList<Photo> {
 
     public Photos(JSONArray photos) {

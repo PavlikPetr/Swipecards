@@ -5,6 +5,7 @@ import org.json.JSONArray;
 
 import java.util.LinkedList;
 
+@SuppressWarnings("serial")
 public class Search extends LinkedList<SearchUser> {
 
     public Search(ApiResponse response) {

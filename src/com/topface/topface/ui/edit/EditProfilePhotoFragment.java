@@ -110,8 +110,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         return (mSelectedAsMainId != mLastSelectedAsMainId) || !mDeleted.isEmpty();
     }
 
-    private boolean mOperationsFinished = true;
-    private boolean mCanceled = false;
+    private boolean mOperationsFinished = true;    
 
     @Override
     protected void saveChanges(final Handler handler) {

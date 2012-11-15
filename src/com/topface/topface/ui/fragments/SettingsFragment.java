@@ -63,25 +63,25 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loLikes);
         setBackground(R.drawable.edit_big_btn_top, frame);
         setText(R.string.settings_likes, frame);
-        initEditNotificationFrame(options.NOTIFICATIONS_LIKES, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_LIKES).mail,options.notifications.get(Options.NOTIFICATIONS_LIKES).apns);
+        initEditNotificationFrame(Options.NOTIFICATIONS_LIKES, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_LIKES).mail,options.notifications.get(Options.NOTIFICATIONS_LIKES).apns);
 
         // Mutual
         frame = (ViewGroup) root.findViewById(R.id.loMutual);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_mutual, frame);
-        initEditNotificationFrame(options.NOTIFICATIONS_SYMPATHY, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).mail,options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns);
+        initEditNotificationFrame(Options.NOTIFICATIONS_SYMPATHY, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).mail,options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns);
 
         // Chat
         frame = (ViewGroup) root.findViewById(R.id.loChat);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_messages, frame);
-        initEditNotificationFrame(options.NOTIFICATIONS_MESSAGE, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_MESSAGE).mail,options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns);
+        initEditNotificationFrame(Options.NOTIFICATIONS_MESSAGE, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_MESSAGE).mail,options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns);
 
         // Guests
         frame = (ViewGroup) root.findViewById(R.id.loGuests);
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
-        initEditNotificationFrame(options.NOTIFICATIONS_VISITOR, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_VISITOR).mail,options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns);
+        initEditNotificationFrame(Options.NOTIFICATIONS_VISITOR, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_VISITOR).mail,options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns);
 
         // Help
         frame = (ViewGroup) root.findViewById(R.id.loHelp);

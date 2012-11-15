@@ -13,7 +13,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
 
-@SuppressWarnings("UnusedDeclaration")
 public class DefaultImageLoader {
 
     private static ImageLoader mImageLoader;

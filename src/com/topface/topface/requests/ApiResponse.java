@@ -4,7 +4,6 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@SuppressWarnings("UnusedDeclaration")
 public class ApiResponse {
     // Data
     public int code = -1;

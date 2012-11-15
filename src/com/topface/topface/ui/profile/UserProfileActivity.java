@@ -171,7 +171,8 @@ public class UserProfileActivity extends BaseFragmentActivity {
         mIndicatorView.setIndicator(F_PHOTO);
         ViewTreeObserver vto = mIndicatorView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-            @Override
+            @SuppressWarnings("deprecation")
+			@Override
             public void onGlobalLayout() {
                 ViewTreeObserver obs = mIndicatorView.getViewTreeObserver();
                 //noinspection deprecation

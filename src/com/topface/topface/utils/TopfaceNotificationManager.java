@@ -64,5 +64,6 @@ public class TopfaceNotificationManager {
         mNotificationManager.notify(id, mNotificationBuilder.getNotification());
     }
 
-    private Context ctx;
+    @SuppressWarnings("unused")
+	private Context ctx;
 }

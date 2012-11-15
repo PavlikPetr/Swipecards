@@ -64,7 +64,8 @@ public class LockerView extends RelativeLayout {
         this.addView(mTextView);
     }
 
-    private void setAttrs(AttributeSet attrs) {
+    @SuppressWarnings("deprecation")
+	private void setAttrs(AttributeSet attrs) {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.LockerView);
 
         this.setGravity(a.getInteger(R.styleable.LockerView_android_gravity, Gravity.CENTER));

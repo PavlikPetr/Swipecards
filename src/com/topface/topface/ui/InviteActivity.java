@@ -147,7 +147,8 @@ public class InviteActivity extends TrackedActivity {
      * @param filter подстрока имени контакта по которой производится поиск
      * @return курсок к базе из ContactsCobtract
      */
-    private Cursor getContacts(String filter) {
+    @SuppressWarnings("deprecation")
+	private Cursor getContacts(String filter) {
         // Run query
         Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
         String[] projection = new String[]{

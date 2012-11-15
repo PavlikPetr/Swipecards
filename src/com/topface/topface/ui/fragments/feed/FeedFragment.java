@@ -146,7 +146,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         mListView.getRefreshableView().setAdapter(mListAdapter);        
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
         mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
-        mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
+        //mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
 
         mListView.scrollBy(0, 2);
     }
@@ -356,8 +356,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void updateData(boolean isPushUpdating) {
         updateData(isPushUpdating, false);
     }
-
-    @SuppressWarnings("deprecation")
+    
     protected void initFilter(View view) {
         new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.btnNavigationSettingsBar, R.id.loToolsBar);
         initDoubleButton(view);

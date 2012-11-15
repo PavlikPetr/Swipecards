@@ -73,7 +73,8 @@ public class SettingsAccountFragment extends Fragment {
                         Data.removeSSID(getActivity().getApplicationContext());
                         token.removeToken();
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override
+                            @SuppressWarnings({ "rawtypes", "unchecked" })
+							@Override
                             public void run() {
                                 new FacebookLogoutTask().execute();
                             }
@@ -96,7 +97,8 @@ public class SettingsAccountFragment extends Fragment {
         return root;
     }
 
-    class FacebookLogoutTask<Object> extends AsyncTask {
+    @SuppressWarnings({ "rawtypes", "hiding" })
+	class FacebookLogoutTask<Object> extends AsyncTask {
         @Override
         protected java.lang.Object doInBackground(java.lang.Object... params) {
             try{

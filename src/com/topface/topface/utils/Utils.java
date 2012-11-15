@@ -7,7 +7,6 @@ import android.graphics.PorterDuff.Mode;
 import android.os.Build;
 import android.view.Display;
 import android.view.WindowManager;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
@@ -307,12 +306,6 @@ public class Utils {
         }
         return context.getString(resurseId);
     }
-
-    public static void formatTimeOld(TextView tv, long time) {
-        Context context = tv.getContext();
-        String text;
-    }
-
 
     public static String formatHour(long hours) {
         return Utils.getQuantityString(R.plurals.time_hour, (int) hours, (int) hours);

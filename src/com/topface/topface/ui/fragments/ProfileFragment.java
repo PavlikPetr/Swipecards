@@ -109,7 +109,8 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         mIndicatorView.setIndicator(F_PHOTO);
         ViewTreeObserver vto = mIndicatorView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-            @Override
+            @SuppressWarnings("deprecation")
+			@Override
             public void onGlobalLayout() {
                 mIndicatorView.setButtonMeasure(R.id.btnUserPhoto, mUserPhoto.getMeasuredWidth());
                 mIndicatorView.setButtonMeasure(R.id.btnUserQuestionnaire, mUserForm.getMeasuredWidth());

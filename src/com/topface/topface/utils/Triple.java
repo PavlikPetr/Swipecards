@@ -11,7 +11,8 @@ public class Triple<F, S, T> {
         this.third = third;
     }
 
-    public boolean equals(Object o) {
+    @SuppressWarnings("unchecked")
+	public boolean equals(Object o) {
         if (o == this) return true;
         if (!(o instanceof Triple)) return false;
         final Triple<F, S, T> other;

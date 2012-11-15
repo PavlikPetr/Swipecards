@@ -30,22 +30,17 @@ public class SwipeGestureListener extends SimpleOnGestureListener {
         REL_SWIPE_THRESHOLD_VELOCITY = (int) (200.0f * dm.densityDpi / 160.0f + 0.5);
         mSwipeListener = listener;
         mListView = listView;
-    }
-
+    }    
+   
     @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        int position = mListView.pointToPosition((int) e.getX(), (int) e.getY());
-        mSwipeListener.onTap(position);
+    public boolean onSingleTapConfirmed(MotionEvent e) {
+    	int position = mListView.pointToPosition((int) e.getX(), (int) e.getY());
+	    mSwipeListener.onTap(position);
         return false;
-    }            
-    
-//    @Override
-//    public boolean onDown(MotionEvent e) {    	
-//    	return false;
-//    }
+    }
     
     @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {    	
         if (e1 != null && e2 != null) {    	
             if (Math.abs(e1.getY() - e2.getY()) > 2*REL_SWIPE_MAX_OFF_PATH) {            	
                 return false;
@@ -69,13 +64,5 @@ public class SwipeGestureListener extends SimpleOnGestureListener {
             }
         }
         return false;
-    }
-    
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-//    	if (Math.abs(e1.getX() - e2.getX()) > REL_SWIPE_MIN_DISTANCE) {
-//    		return true;
-//    	}
-    	return super.onScroll(e1, e2, distanceX, distanceY);
-    }
+    }    
 }

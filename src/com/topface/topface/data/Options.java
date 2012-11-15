@@ -43,9 +43,7 @@ public class Options extends AbstractData {
 	 */
 	public final static String FLOAT_TYPE_BANNER = "BANNER";
 	public final static String FLOAT_TYPE_LEADERS = "LEADERS";
-	public final static String FLOAT_TYPE_NONE = "NONE";
-
-	private final static String DEFAULT_FLOAT_TYPE = FLOAT_TYPE_BANNER;
+	public final static String FLOAT_TYPE_NONE = "NONE";	
 
 	/**
 	 * Идентификаторы типов баннеров
