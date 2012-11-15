@@ -40,12 +40,5 @@ public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
     @Override
     protected int getEmptyFeedText() {
         return R.string.visitors_background_text;
-    }
-
-    @Override
-    protected void makeAllItemsRead() {
-        for(Visitor item : mListAdapter.getData()) {
-            item.unread = false;
-        }
-    }
+    }    
 }

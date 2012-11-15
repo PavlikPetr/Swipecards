@@ -27,7 +27,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected void makeAllItemsRead() {
-
+    	
     }
 
     @Override
