@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
+    <string name="app_locale">en</string>
     <string name="general_error">ERROR</string>
     <string name="general_warning">WARNING</string>
     <string name="general_ok">OK</string>
@@ -50,7 +51,6 @@
     <string name="dating_header_girls">Girls from %1$d to %2$d</string>
     <string name="dating_header_guys">Guys from %1$d to %2$d</string>
     <string name="dating_switch_button">More…</string>
-    <string name="premium_access_error">You need premium for this</string>
     <string name="dating_skip_button">Next</string>
     <string name="dating_prev_button">Previous</string>
     <string name="dating_chat_button">Chat</string>
@@ -211,4 +211,5 @@
     </string>
     <string name="novice_fill_profile">Add your best photos,\nto get more likes</string>
     <string name="general_edit_profile_message"></string>
+    <string name="general_premium_access_error">Для данной функции необходим Премиум</string>
 </resources>

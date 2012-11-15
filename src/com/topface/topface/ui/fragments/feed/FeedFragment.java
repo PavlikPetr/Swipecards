@@ -317,7 +317,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         }
                         if(codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
                             updateErrorMessage.showOnlyMessage(true);
-                            updateErrorMessage.setErrorMsg(getString(R.string.premium_access_error));
+                            updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
                         } else {
                             updateErrorMessage.showOnlyMessage(false);
                             updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
