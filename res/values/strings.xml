@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">Topface</string>
+  <string name="app_locale">en_US</string>
   <string name="general_error">ERROR</string>
   <string name="general_warning">WARNING</string>
   <string name="general_ok">OK</string>
@@ -148,7 +149,7 @@
   <string name="invite_completed">Invitation sent</string>
   <plurals name="invite_bonus_text">
     <item quantity="zero">Invite your friends and for every confirmed friend you will get 20</item>
-    <item quantity="other">You are going to send invitation to %2$d friends and you will get frot this %1$d</item>
+    <item quantity="other">You are going to send invitation to %2$d friends and you will get for this %1$d</item>
     <item quantity="one">You are going to send invitation to %2$d friend and you will get for this %1$d</item>
   </plurals>
   <string name="settings_header_title">Settings</string>
