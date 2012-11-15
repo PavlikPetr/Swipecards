@@ -109,7 +109,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
             } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_dialogs);
             } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.general_likes_me);
+                btnBack.setText(R.string.general_likes);
             } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_mutual);
             } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
