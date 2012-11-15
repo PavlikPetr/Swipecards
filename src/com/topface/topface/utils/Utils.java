@@ -15,7 +15,6 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class Utils {
 	public static final long WEEK = 604800L;
@@ -459,7 +458,8 @@ public class Utils {
         ).show();
     }
     
-    public static Point getSrceenSize(Context context) {
+    @SuppressWarnings("deprecation")
+	public static Point getSrceenSize(Context context) {
     	Point size = null;
     	WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();

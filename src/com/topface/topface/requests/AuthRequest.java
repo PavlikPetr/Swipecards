@@ -2,6 +2,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 import android.os.Build;
+
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
 import org.json.JSONException;
@@ -25,7 +27,8 @@ public class AuthRequest extends AbstractApiRequest {
         try {
             doNeedAuthorize(false);
             doNeedAlert(false);
-            locale = context.getResources().getConfiguration().locale.getLanguage();
+            //locale = context.getResources().getConfiguration().locale.toString();
+            locale = context.getResources().getString(R.string.app_locale);
             clienttype = Static.CLIENT_TYPE;
             clientversion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
             clientdevice = Build.BRAND + " " + Build.MANUFACTURER;

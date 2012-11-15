@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.support.v4.content.LocalBroadcastManager;
 import com.facebook.android.Facebook;
 import com.topface.topface.data.*;
 import com.topface.topface.utils.Device;
+import com.topface.topface.utils.Utils;
 
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -42,7 +44,8 @@ public class Data {
             giftsList = new LinkedList<Gift>();
 
         //noinspection deprecation
-        screen_width = (Device.getOrientation(context) == Device.LANDSCAPE) ? Device.getDisplay(context).getHeight() : Device.getDisplay(context).getWidth();
+        Point screenSize = Utils.getSrceenSize(context);
+        screen_width = (Device.getOrientation(context) == Device.LANDSCAPE) ? screenSize.y : screenSize.x;
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);

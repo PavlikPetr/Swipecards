@@ -1,6 +1,5 @@
 package com.topface.topface;
 
-@SuppressWarnings("UnusedDeclaration")
 public class Static {
     // Constants
 	

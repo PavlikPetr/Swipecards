@@ -64,8 +64,7 @@ public class GCMUtils {
      * Метод для тестирования GCM сообщений
      *
      * @param context контекст приложения
-     */
-    @SuppressWarnings("UnusedDeclaration")
+     */    
     public static void generateFakeNotification(Context context) {
         Intent intent = new Intent();
         intent.putExtra("text", "asd");
@@ -260,7 +259,8 @@ public class GCMUtils {
         public String name;
         public String photoUrl;
         public int age;
-        public String city;
+        @SuppressWarnings("unused")
+		public String city;
 
         public User() {
         }
