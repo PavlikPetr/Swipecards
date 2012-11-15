@@ -18,12 +18,14 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.AuthActivity;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
 
 public class SettingsAccountFragment extends Fragment {
 
     public static final int RESULT_LOGOUT = 666;
+    private LockerView lockerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class SettingsAccountFragment extends Fragment {
                 getActivity().finish();
             }
         });
+        lockerView = (LockerView)root.findViewById(R.id.llvLogoutLoading);
+        lockerView.setVisibility(View.GONE);
         ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_account);
 
         Drawable icon = null;
@@ -61,6 +65,7 @@ public class SettingsAccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 LogoutRequest logoutRequest = new LogoutRequest(getActivity());
+                lockerView.setVisibility(View.VISIBLE);
                 logoutRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) throws NullPointerException {
@@ -81,7 +86,7 @@ public class SettingsAccountFragment extends Fragment {
 
                     @Override
                     public void fail(int codeError, ApiResponse response) throws NullPointerException {
-
+                        lockerView.setVisibility(View.GONE);
                     }
                 }).exec();
 
