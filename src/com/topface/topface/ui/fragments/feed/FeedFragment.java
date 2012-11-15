@@ -138,13 +138,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         mListAdapter.setOnAvatarClickListener(this);
         mListView.setOnScrollListener(mListAdapter);
         mListView.getRefreshableView().setAdapter(mListAdapter);
-        ImageView iv = new ImageView(getActivity());
+        
+        ImageView iv = new ImageView(getActivity().getApplicationContext());
         iv.setBackgroundResource(R.drawable.im_header_item_list_bg);
         iv.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mListView.getRefreshableView().addHeaderView(iv);
+        
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
         mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
-        mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
+        //mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
+        //TODO uncomment delete
+        mListView.scrollBy(0, 2);
     }
 
     abstract protected FeedAdapter<T> getAdapter();
@@ -405,7 +409,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     abstract protected int getEmptyFeedText();
-    abstract protected void makeAllItemsRead();
+    
+    protected void makeAllItemsRead() {
+    	for(FeedItem item : mListAdapter.getData()) {
+            item.unread = false;
+        }
+    }
 
     @Override
     protected void onUpdateFail(boolean isPushUpdating) {

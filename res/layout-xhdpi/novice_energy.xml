@@ -40,9 +40,10 @@
         android:lines="4"
         android:text="@string/novice_energy"
         android:textColor="#000000"
-        android:textSize="22sp"
-        android:paddingTop="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="10dp"/>
+        android:textSize="20sp"
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"/>
 
 </RelativeLayout>
