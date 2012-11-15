@@ -23,6 +23,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
+import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -106,7 +107,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         if (Data.isSSID()) {
             mIsAuthorized = true;
             hideButtons();
-            getProfile();
+            getProfile(false);
         } else if (!(new AuthToken(getApplicationContext())).isEmpty()) {
             hideButtons();
             mAuthorizationManager.reAuthorize();
@@ -206,17 +207,18 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         });
     }
 
-    private void openNavigationActivity() {
+    private void openActivity(Intent intent) {
         ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 
         List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
         if (!mFromAuthorizationReceiver || (taskList.get(0).numActivities == 1 &&
                 taskList.get(0).topActivity.getClassName().equals(this.getClass().getName()))) {
-            startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
+            startActivity(intent);
         }
         ConnectionManager.getInstance().notifyDelayedRequests();
         finish();
     }
+
 
     private void auth(AuthToken token) {
         AuthRequest authRequest = new AuthRequest(getApplicationContext());
@@ -236,7 +238,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        getProfile();
+                        getProfile(true);
                     }
                 });
             }
@@ -256,7 +258,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         }).exec();
     }
 
-    private void getProfile() {
+    private void getProfile(final boolean isFirstTime) {
         Debug.log("geting profile");
         ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
         registerRequest(profileRequest);
@@ -278,9 +280,16 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 				runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                    	openNavigationActivity();
+                                        if (!isProfileNormal() && isFirstTime) {
+                                            Intent intent = new Intent(AuthActivity.this,EditProfileActivity.class);
+                                            intent.putExtra(EditProfileActivity.FROM_AUTH_ACTIVITY,true);
+                                            openActivity(intent);
+                                        } else {
+                                            Intent intent = new Intent(AuthActivity.this,NavigationActivity.class);
+                                    	    openActivity(intent);
+                                        }
                                     }
-                				});
+                                });
                 			}
                 			
                 			@Override
@@ -323,6 +332,11 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 });
             }
         }).exec();
+    }
+
+    private boolean isProfileNormal() {
+        Profile profile = CacheProfile.getProfile();
+        return (profile.age != 0 && profile.city_id != 0 && profile.photo != null);
     }
 
     private void checkIntentForReauth() {

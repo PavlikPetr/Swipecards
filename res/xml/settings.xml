@@ -7,8 +7,8 @@
                 android:key="settings_c2dm"
                 android:persistent="true"
                 android:defaultValue="true"
-                android:title="@string/notifications"
-                android:summary="@string/notifications_summary"
+                android:title="@string/settings_notifications"
+                android:summary="@string/settings_notifications_summary"
                 />
 
         <RingtonePreference
@@ -17,13 +17,13 @@
                 android:showDefault="true"
                 android:persistent="true"
                 android:ringtoneType="notification"
-                android:title="@string/select_ringtone"/>
+                android:title="@string/settings_select_ringtone"/>
 
         <CheckBoxPreference
                 android:key="settings_c2dm_vibration"
                 android:persistent="true"
                 android:defaultValue="true"
-                android:title="@string/vibration"/>
+                android:title="@string/settings_vibration"/>
 
     </PreferenceCategory>
 
@@ -31,8 +31,8 @@
         <ListPreference
                 android:key="settings_preloading"
                 android:persistent="true"
-                android:summary="@string/photo_preloading_summary"
-                android:title="@string/photo_preloading"/>
+                android:summary="@string/settings_photo_preloading_summary"
+                android:title="@string/settings_photo_preloading"/>
         <!--ListPreference
                 android:key="settings_preloading_type"
                 android:persistent="true"

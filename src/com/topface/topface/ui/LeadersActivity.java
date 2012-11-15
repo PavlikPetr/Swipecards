@@ -90,7 +90,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                             }).exec();
 
                 } else {
-                    Toast.makeText(LeadersActivity.this, R.string.need_select_photo, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LeadersActivity.this, R.string.leaders_need_photo, Toast.LENGTH_SHORT).show();
                 }
             }
         });

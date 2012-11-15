@@ -64,8 +64,8 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                 break;
             case FeedDialog.SYMPHATHY:
             	text = (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
-                        getContext().getString(R.string.chat_symphathy_in) :
-                        getContext().getString(R.string.chat_symphathy_out);
+                        getContext().getString(R.string.chat_mutual_in) :
+                        getContext().getString(R.string.chat_mutual_out);
                         
             	break;
             case FeedDialog.ADDRESS:

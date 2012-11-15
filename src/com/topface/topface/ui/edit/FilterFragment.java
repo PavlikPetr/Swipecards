@@ -142,7 +142,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         });
 
         mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setText(getResources().getString(R.string.navigation_save));
+        mSaveButton.setText(getResources().getString(R.string.general_save_button));
         mSaveButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -215,7 +215,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         // Girl
         frame = (ViewGroup) root.findViewById(R.id.loGirl);
         setBackground(R.drawable.edit_big_btn_top_selector, frame);
-        setText(R.string.filter_girl, frame);
+        setText(R.string.general_girls  , frame);
         mCheckGirl = (ImageView) frame.findViewById(R.id.ivCheck);
         if (mFilter.sex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);
@@ -225,7 +225,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         // Boy
         frame = (ViewGroup) root.findViewById(R.id.loBoy);
         setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
-        setText(R.string.filter_boy, frame);
+        setText(R.string.general_boys, frame);
         mCheckBoy = (ImageView) frame.findViewById(R.id.ivCheck);
         if (mFilter.sex == Static.BOY) {
             mCheckBoy.setVisibility(View.VISIBLE);
@@ -368,7 +368,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             return getResources().getString(R.string.filter_cities_all);
         } else {
             StringBuilder strBuilder = new StringBuilder();
-            strBuilder.append(getResources().getString(R.string.filter_in)).append(" ").append(mFilter.city_name);
+            strBuilder.append(getResources().getString(R.string.general_city)).append(" ").append(mFilter.city_name);
             return strBuilder.toString();
         }
     }

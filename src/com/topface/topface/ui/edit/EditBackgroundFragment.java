@@ -44,7 +44,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
         getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
         btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.navigation_edit);
+        btnBack.setText(R.string.general_edit_button);
         btnBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -63,7 +63,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         mNameList = new LinkedList<String>();
 
         // Title Header        
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.filter_city));
+        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.general_city));
         findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         View btnBack = findViewById(R.id.btnNavigationBack);
         btnBack.setVisibility(View.VISIBLE);

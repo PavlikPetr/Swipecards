@@ -1,20 +1,25 @@
 package com.topface.topface.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
+import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 public class NavigationActivity extends FragmentActivity implements View.OnClickListener {
@@ -25,6 +30,9 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 
     public static NavigationActivity mThis = null;
 
+    private NoviceLayout mNoviceLayout;
+    private Novice mNovice;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -51,7 +59,9 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
             mFragmentMenu.selectDefaultMenu();
         }
         AuthorizationManager.getInstance(this).extendAccessToken();
-
+        
+        mNovice = new Novice(getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE));        
+        mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
     }
 
     @Override
@@ -157,5 +167,18 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
             mFragmentMenu.setClickable(false);
             mFragmentMenu.hide();
         }
+
+		@Override
+		public void afterOpening() {
+			if (mNovice.isMenuCompleted()) return;
+			
+			if (mNovice.showFillProfile) {
+				mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
+		        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+		        alphaAnimation.setDuration(400L);		        
+		        mNoviceLayout.startAnimation(alphaAnimation);				
+				mNovice.completeShowFillProfile();
+			}
+		}
     };
 }

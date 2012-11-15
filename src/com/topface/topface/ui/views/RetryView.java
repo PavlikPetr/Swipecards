@@ -12,6 +12,7 @@ public class RetryView extends LinearLayout {
     public static final String REFRESH_TEMPLATE = "{{refresh}} ";
     private IllustratedTextView mRetryBtn;
     private TextView mErrorMsg;
+    private boolean showOnlyMessage;
 
     public RetryView(Context context) {
         super(context);
@@ -29,16 +30,21 @@ public class RetryView extends LinearLayout {
 
     @Override
     public void setOnClickListener(OnClickListener l) {
-        // super.setOnClickListener(l);
         mRetryBtn.setOnClickListener(l);
+    }
+
+    @Override
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+        if(showOnlyMessage) mRetryBtn.setVisibility(View.GONE);
+    }
+
+    public void showOnlyMessage(boolean value) {
+        showOnlyMessage = value;
     }
 
     public void setErrorMsg(String errorMsg) {
         mErrorMsg.setText(errorMsg);
     }
 
-    public void setMessageVisibility() {
-        mErrorMsg.setVisibility(View.VISIBLE);
-        mRetryBtn.setVisibility(View.GONE);
-    }
 }

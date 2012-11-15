@@ -16,7 +16,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
 
     @Override
     protected int getTitle() {
-        return R.string.mutual_header_title;
+        return R.string.general_mutual;
     }
 
     @Override

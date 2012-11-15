@@ -18,7 +18,7 @@ public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
 
     @Override
     protected int getTitle() {
-        return R.string.dashbrd_btn_visitors;
+        return R.string.general_visitors;
     }
 
     @Override

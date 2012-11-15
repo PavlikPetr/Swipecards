@@ -17,12 +17,12 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected int getTitle() {
-        return R.string.dashbrd_btn_chat;
+        return R.string.general_chat;
     }
 
     @Override
     protected int getEmptyFeedText() {
-        return R.string.inbox_background_text;
+        return R.string.chat_background_text;
     }
 
     @Override

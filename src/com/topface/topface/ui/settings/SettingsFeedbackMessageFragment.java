@@ -66,7 +66,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         });
 
         mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setText(R.string.navigation_send);
+        mSaveButton.setText(R.string.general_send_button);
         mSaveButton.setOnClickListener(new OnClickListener() {
 
             @Override

@@ -101,7 +101,7 @@ public class GCMUtils {
             user.json2User(extra.getStringExtra("user"));
             String title = extra.getStringExtra("title");
             if (title == null || title.equals("")) {
-                title = context.getString(R.string.default_notification_title);
+                title = context.getString(R.string.app_name);
             }
 
             Options options = CacheProfile.getOptions();

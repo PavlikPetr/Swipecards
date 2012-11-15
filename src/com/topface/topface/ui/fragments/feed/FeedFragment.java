@@ -1,11 +1,11 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.app.AlertDialog;
-import android.content.*;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Recycle;
 import com.topface.topface.data.FeedItem;
@@ -63,7 +62,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
-        editButtonsNames = new String[]{getString(R.string.default_delete_title)};
+        editButtonsNames = new String[]{getString(R.string.general_delete_title)};
         // Navigation bar
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
@@ -83,7 +82,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
 
         mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
-
+        createUpdateErrorMessage();
         return view;
     }
 
@@ -187,7 +186,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id) {
                 if(isDeletable){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(R.string.default_spinner_title).setItems(editButtonsNames,new DialogInterface.OnClickListener() {
+                    builder.setTitle(R.string.general_spinner_title).setItems(editButtonsNames,new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which){
@@ -305,12 +304,20 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
+            public void fail(final int codeError, ApiResponse response) {
+
+               updateUI(new Runnable() {
                     @Override
                     public void run() {
                         if (isHistoryLoad) {
                             mListAdapter.showRetryItem();
+                        }
+                        if(codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
+                            updateErrorMessage.showOnlyMessage(true);
+                            updateErrorMessage.setErrorMsg(getString(R.string.premium_access_error));
+                        } else {
+                            updateErrorMessage.showOnlyMessage(false);
+                            updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
                         }
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         onUpdateFail(isPushUpdating || isHistoryLoad);
@@ -352,8 +359,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void initDoubleButton(View view) {
         // Double Button
         mDoubleButton = (DoubleBigButton) view.findViewById(R.id.btnDoubleBig);
-        mDoubleButton.setLeftText(getString(R.string.btn_dbl_left));
-        mDoubleButton.setRightText(getString(R.string.btn_dbl_right));
+        mDoubleButton.setLeftText(getString(R.string.general_dbl_all));
+        mDoubleButton.setRightText(getString(R.string.general_dbl_unread));
         mDoubleButton.setChecked(DoubleBigButton.LEFT_BUTTON);
         mDoubleButton.setLeftListener(new View.OnClickListener() {
             @Override
@@ -373,11 +380,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onUpdateSuccess(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
-
+            
             if (mListAdapter.isEmpty()) {
                 mBackgroundText.setText(getEmptyFeedText());
             } else {
-                mBackgroundText.setText("");
+                mBackgroundText.setVisibility(View.INVISIBLE);
             }
 
             if (mBackgroundText.getCompoundDrawables()[0] != null) {
@@ -402,7 +409,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
             mBackgroundText.setText("");
-            createUpdateErrorMessage();
+            showUpdateErrorMessage();
             if (mBackgroundText.getCompoundDrawables()[0] != null) {
                 ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).stop();
             }
@@ -419,6 +426,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onUpdateStart(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.INVISIBLE);
+            mBackgroundText.setVisibility(View.VISIBLE);
             mBackgroundText.setText(R.string.general_dialog_loading);
             mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(Recycle.s_Loader,
                     mBackgroundText.getCompoundDrawables()[1],
@@ -444,9 +452,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 }
             });
             mContainer.addView(updateErrorMessage);
-        } else {
-            updateErrorMessage.setVisibility(View.VISIBLE);
+            updateErrorMessage.setVisibility(View.GONE);
         }
+    }
+
+    private void showUpdateErrorMessage() {
+        updateErrorMessage.setVisibility(View.VISIBLE);
     }
 
     private void retryButtonClick() {

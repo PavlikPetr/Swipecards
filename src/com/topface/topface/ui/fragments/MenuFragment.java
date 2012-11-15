@@ -46,7 +46,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 			
 			@Override
 			public void onClick(View v) {
-//				btnProfile.callOnClick(); ??
                 btnProfile.performClick();
 			}
 		});
@@ -142,6 +141,16 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         mDefaultMenuItem.setSelected(true);
     }
 
+    public OnClickListener getProfileButtonOnClickListener() {
+    	final Button btnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
+    	return new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				btnProfile.performClick();
+			}
+		};
+    }
 }
 
 

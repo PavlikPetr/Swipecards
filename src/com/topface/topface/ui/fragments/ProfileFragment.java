@@ -64,7 +64,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
 
         Button editButton = (Button) view.findViewById(R.id.btnNavigationRightWithText);
         editButton.setVisibility(View.VISIBLE);
-        editButton.setText(getResources().getString(R.string.navigation_edit));
+        editButton.setText(getResources().getString(R.string.general_edit_button));
         editButton.setOnClickListener(this);
 
         // Avatar, Name, City
