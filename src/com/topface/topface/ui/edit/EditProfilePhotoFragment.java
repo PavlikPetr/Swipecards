@@ -31,8 +31,8 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     private ArrayList<Photo> mDeleted = new ArrayList<Photo>();
 
     private ProfilePhotoGridAdapter mPhotoGridAdapter;
-    private int mLastSelectedId;
-    private int mSelectedId;
+    private int mLastSelectedAsMainId;
+    private int mSelectedAsMainId;
 
     private GridView mPhotoGridView;
     private Photos mPhotoLinks;
@@ -44,8 +44,8 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSelectedId = CacheProfile.photo.getId();
-        mLastSelectedId = mSelectedId;
+        mSelectedAsMainId = CacheProfile.photo.getId();
+        mLastSelectedAsMainId = mSelectedAsMainId;
 
         mPhotoLinks = new Photos();
         mPhotoLinks.add(null);
@@ -107,7 +107,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
     @Override
     protected boolean hasChanges() {
-        return (mSelectedId != mLastSelectedId) || !mDeleted.isEmpty();
+        return (mSelectedAsMainId != mLastSelectedAsMainId) || !mDeleted.isEmpty();
     }
 
     private boolean mOperationsFinished = true;
@@ -145,27 +145,28 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 }).exec();
             }
 
-
-            MainRequest setAsMainRequest = new MainRequest(getActivity().getApplicationContext());
-            registerRequest(setAsMainRequest);
-            setAsMainRequest.photoid = mSelectedId;
-            setAsMainRequest.callback(new ApiHandler() {
-
-                @Override
-                public void success(ApiResponse response) throws NullPointerException {
-                    CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedId);
-                    getActivity().setResult(Activity.RESULT_OK);
-                    mSelectedId = mLastSelectedId;
-                    finishOperations(handler);
-                }
-
-                @Override
-                public void fail(int codeError, ApiResponse response) throws NullPointerException {
-                    getActivity().setResult(Activity.RESULT_CANCELED);
-                    finishOperations(handler);
-
-                }
-            }).exec();
+            if (mSelectedAsMainId != mLastSelectedAsMainId) {
+	            MainRequest setAsMainRequest = new MainRequest(getActivity().getApplicationContext());
+	            registerRequest(setAsMainRequest);
+	            setAsMainRequest.photoid = mSelectedAsMainId;
+	            setAsMainRequest.callback(new ApiHandler() {
+	
+	                @Override
+	                public void success(ApiResponse response) throws NullPointerException {
+	                    CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
+	                    getActivity().setResult(Activity.RESULT_OK);
+	                    mSelectedAsMainId = mLastSelectedAsMainId;
+	                    finishOperations(handler);
+	                }
+	
+	                @Override
+	                public void fail(int codeError, ApiResponse response) throws NullPointerException {
+	                    getActivity().setResult(Activity.RESULT_CANCELED);
+	                    finishOperations(handler);
+	
+	                }
+	            }).exec();
+            }
 
         } else {
             handler.sendEmptyMessage(0);
@@ -236,15 +237,15 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     holder.mBtnDelete.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (itemId == mLastSelectedId) {
-                                mLastSelectedId = mSelectedId;
+                            if (itemId == mLastSelectedAsMainId) {
+                                mLastSelectedAsMainId = mSelectedAsMainId;
                             }
                             mDeleted.add(item);
                             notifyDataSetChanged();
                         }
                     });
 
-                    if (mLastSelectedId == itemId) {
+                    if (mLastSelectedAsMainId == itemId) {
                         holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
                         holder.mBtnSelectedAsMain.setVisibility(View.VISIBLE);
                     } else {
@@ -253,7 +254,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                         holder.mBtnSetAsMain.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                mLastSelectedId = itemId;
+                                mLastSelectedAsMainId = itemId;
                                 notifyDataSetChanged();
                             }
                         });

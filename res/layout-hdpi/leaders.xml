@@ -12,14 +12,14 @@
     <com.topface.topface.ui.blocks.HorizontalListView
             android:id="@+id/leadersList"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
+            android:layout_marginTop="0.5dp"
             android:layout_width="fill_parent"
             android:layout_marginLeft="58dp"
             />
 
     <Button
             android:id="@+id/leadersDateBtn"
-            android:layout_height="55dp"
+            android:layout_height="55.5dp"
             android:layout_width="wrap_content"
             android:background="@drawable/btn_leaders_date_selector"
             android:text="@string/leaders_go_date"
