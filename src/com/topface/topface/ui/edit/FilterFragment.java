@@ -132,7 +132,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
         mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.navigation_back_dating);
+        mBackButton.setText(R.string.general_dating);
         mBackButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -215,7 +215,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         // Girl
         frame = (ViewGroup) root.findViewById(R.id.loGirl);
         setBackground(R.drawable.edit_big_btn_top_selector, frame);
-        setText(R.string.general_girls  , frame);
+        setText(R.string.general_girls, frame);
         mCheckGirl = (ImageView) frame.findViewById(R.id.ivCheck);
         if (mFilter.sex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);

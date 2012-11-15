@@ -23,7 +23,8 @@
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_internet_off">Нет подключения к интернету</string>
-    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
+    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
+    </string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопирован</string>
     <string name="general_spinner_title">Выберите действие</string>
@@ -255,13 +256,20 @@
     </plurals>
 
 
-	<!-- Novice -->
-    <string name="novice_sympathy">Отправляйте симпатии тем, кто вам\nдействительно нравится,\nчтобы начать приятное знакомство</string>
-    <string name="novice_energy">Чем выше заряд батарейки,\nтем чаще вас оценивают.\nНе забывайте зарядить\nбатарейку, купив энергию.</string>
-    <string name="novice_battery_bonus">Энергия дает вам популярность\nи новые оценки. Вы можете\nзарядить батарейку, купив\n100% энергии. Первый заряд\nмы дарим вам бесплатно!</string>
-    <string name="novice_fill_profile">Заполнить профиль, чтобы\nзаинтересовать других</string>
+    <!-- Novice -->
+    <string name="novice_sympathy">
+        Отправляйте симпатии тем, кто вам\nдействительно нравится,\nчтобы начать приятное знакомство
+    </string>
+    <string name="novice_energy">
+        Чем выше заряд батарейки,\nтем чаще вас оценивают.\nНе забывайте зарядить\nбатарейку, купив энергию.
+    </string>
+    <string name="novice_battery_bonus">
+        Энергия дает вам популярность\nи новые оценки. Вы можете\nзарядить батарейку, купив\n
+        100% энергии. Первый заряд\nмы дарим вам бесплатно!
+    </string>
+    <string name="novice_fill_profile">
+        Добавьте свои лучшие фотографии,\nчтобы получать больше симпатий.
+    </string>
 
-    <string name="general_edit_profile_message">Пожалуйста, заполнте необходимые поля анкеты</string>
-    
-
+    <string name="general_edit_profile_message">Пожалуйста, заполните необходимые поля анкеты</string>
 </resources>

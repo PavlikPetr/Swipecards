@@ -44,7 +44,7 @@
 	        android:lines="2"
 	        android:text="@string/novice_fill_profile"
 	        android:textColor="#000000"
-	        android:textSize="22sp" 
+	        android:textSize="18sp" 
 	        android:layout_marginTop="-40dp"
 	        android:paddingLeft="15dp"
 	        android:paddingRight="15dp"

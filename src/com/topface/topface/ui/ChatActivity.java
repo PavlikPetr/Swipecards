@@ -66,18 +66,18 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private static final int COPY_BUTTON = 0;
 
     private boolean mReceiverRegistered = false;
-	// Constants
-	private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public static final String INTENT_USER_ID = "user_id";
-	public static final String INTENT_USER_NAME = "user_name";
-	public static final String INTENT_USER_AVATAR = "user_avatar";
-	public static final String INTENT_USER_SEX = "user_sex";
-	public static final String INTENT_USER_AGE = "user_age";
-	public static final String INTENT_USER_CITY = "user_city";
-	public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
-	private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
-	private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
-	private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
+    // Constants
+    private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public static final String INTENT_USER_ID = "user_id";
+    public static final String INTENT_USER_NAME = "user_name";
+    public static final String INTENT_USER_AVATAR = "user_avatar";
+    public static final String INTENT_USER_SEX = "user_sex";
+    public static final String INTENT_USER_AGE = "user_age";
+    public static final String INTENT_USER_CITY = "user_city";
+    public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
+    private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
+    private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
+    private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
 
     // Managers
     private GeoLocationManager mGeoManager = null;
@@ -126,11 +126,11 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             if (prevEntity.equals(ChatActivity.class.getSimpleName())) {
                 btnBack.setText(R.string.general_chat);
             } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_dating);
+                btnBack.setText(R.string.general_dating);
             } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_chat);
             } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.navigation_back_likes);
+                btnBack.setText(R.string.general_likes);
             } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_mutual);
             } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
@@ -147,7 +147,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     finish();
                 }
             });
-            btnBack.setText(R.string.navigation_back_dating);
+            btnBack.setText(R.string.general_dating);
         }
 
         final ImageButton btnProfile = (ImageButton) findViewById(R.id.btnNavigationProfileBar);
@@ -207,7 +207,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                 deleteItem(position);
                                 break;
                             case COPY_BUTTON:
-                                mAdapter.copyText(((TextView)v).getText().toString());
+                                mAdapter.copyText(((TextView) v).getText().toString());
                                 break;
                         }
                     }
@@ -259,7 +259,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                         mAdapter.removeItem(position);
+                        mAdapter.removeItem(position);
                     }
                 });
             }
@@ -329,51 +329,51 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mHistoryList = null;
     }
 
-	@Override
-	public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
         if (v instanceof ImageView) {
-			if (v.getTag() instanceof History) {
-				History history = (History) v.getTag();
-				if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
-					Intent intent = new Intent(this, GeoMapActivity.class);
-					intent.putExtra(GeoMapActivity.INTENT_GEO, history.geo);
-					startActivity(intent);
-					return;
-				}
-			}
-		}
-		switch (v.getId()) {
-		case R.id.btnChatAdd: {
-			if (mIsAddPanelOpened)
-				mSwapControl.snapToScreen(0);
-			else
-				mSwapControl.snapToScreen(1);
-			mIsAddPanelOpened = !mIsAddPanelOpened;
-		}
-			break;
-		case R.id.btnChatGift: {
-			startActivityForResult(new Intent(this, GiftsActivity.class),
-					GiftsActivity.INTENT_REQUEST_GIFT);
-		}
-			break;
-		case R.id.btnChatPlace: {
-			sendUserCurrentLocation();
-			// Toast.makeText(ChatActivity.this, "Place",
-			// Toast.LENGTH_SHORT).show();
-		}
-			break;
-		case R.id.btnChatMap: {
-			startActivityForResult(new Intent(this, GeoMapActivity.class),
-					GeoMapActivity.INTENT_REQUEST_GEO);
-			// Toast.makeText(ChatActivity.this, "Map",
-			// Toast.LENGTH_SHORT).show();
-		}
-			break;
-		case R.id.btnNavigationBackWithText: {
-			finish();
-		}
-			break;
-		case R.id.chat_message: {
+            if (v.getTag() instanceof History) {
+                History history = (History) v.getTag();
+                if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
+                    Intent intent = new Intent(this, GeoMapActivity.class);
+                    intent.putExtra(GeoMapActivity.INTENT_GEO, history.geo);
+                    startActivity(intent);
+                    return;
+                }
+            }
+        }
+        switch (v.getId()) {
+            case R.id.btnChatAdd: {
+                if (mIsAddPanelOpened)
+                    mSwapControl.snapToScreen(0);
+                else
+                    mSwapControl.snapToScreen(1);
+                mIsAddPanelOpened = !mIsAddPanelOpened;
+            }
+            break;
+            case R.id.btnChatGift: {
+                startActivityForResult(new Intent(this, GiftsActivity.class),
+                        GiftsActivity.INTENT_REQUEST_GIFT);
+            }
+            break;
+            case R.id.btnChatPlace: {
+                sendUserCurrentLocation();
+                // Toast.makeText(ChatActivity.this, "Place",
+                // Toast.LENGTH_SHORT).show();
+            }
+            break;
+            case R.id.btnChatMap: {
+                startActivityForResult(new Intent(this, GeoMapActivity.class),
+                        GeoMapActivity.INTENT_REQUEST_GEO);
+                // Toast.makeText(ChatActivity.this, "Map",
+                // Toast.LENGTH_SHORT).show();
+            }
+            break;
+            case R.id.btnNavigationBackWithText: {
+                finish();
+            }
+            break;
+            case R.id.chat_message: {
 
             }
             break;
@@ -406,17 +406,17 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     @Override
     protected void onPause() {
         super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
-        if(mReceiverRegistered) {
+        if (mReceiverRegistered) {
             unregisterReceiver(mNewMessageReceiver);
             mReceiverRegistered = false;
         }
     }
 
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
-		@Override
-		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-			if (actionId == EditorInfo.IME_ACTION_SEND) {
-				final String text = v.getText().toString();
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                final String text = v.getText().toString();
 
                 if (text == null || text.length() == 0)
                     return false;
@@ -747,10 +747,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         }
     }
 
-	@Override
-	public Object onRetainCustomNonConfigurationInstance() {
-		return mAdapter.getDataCopy();
-	}
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return mAdapter.getDataCopy();
+    }
 
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -764,6 +764,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     };
 
     public interface OnListViewItemLongClickListener {
-        public void onLongClick(int position,View v);
+        public void onLongClick(int position, View v);
     }
 }

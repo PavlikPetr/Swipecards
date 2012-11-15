@@ -66,7 +66,6 @@ public class Profile extends AbstractDataWithPhotos {
 
     protected static Profile parse(Profile profile, JSONObject resp) {
         try {
-            resp.remove("age");
             profile.unread_rates = resp.optInt("unread_rates");
             profile.unread_likes = resp.optInt("unread_likes");
             profile.unread_messages = resp.optInt("unread_messages");
