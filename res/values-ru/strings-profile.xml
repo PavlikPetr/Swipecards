@@ -4,13 +4,13 @@
     <string name="profile_form_status_male_0">Любви и серьезных отношений</string>
     <string name="profile_form_status_male_1">Отношений без обязательств</string>
     <string name="profile_form_status_male_2">Дружбы и общения</string>
-    <string name="profile_form_status_male_3">Хочу много оценок</string>
+    <string name="profile_form_status_male_3">Хочу много симпатий</string>
     <string name="profile_form_status_male_4">Хочу поболтать</string>
 
     <string name="profile_form_status_female_0">Любви и серьезных отношений</string>
     <string name="profile_form_status_female_1">Отношений без обязательств</string>
     <string name="profile_form_status_female_2">Дружбы и общения</string>
-    <string name="profile_form_status_female_3">Хочу много оценок</string>
+    <string name="profile_form_status_female_3">Хочу много симпатий</string>
     <string name="profile_form_status_female_4">Хочу поболтать</string>
 
     <string name="profile_form_education_male_0">Среднее</string>
