@@ -138,7 +138,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         mListAdapter.setOnAvatarClickListener(this);
         mListView.setOnScrollListener(mListAdapter);
         mListView.getRefreshableView().setAdapter(mListAdapter);
-
+        ImageView iv = new ImageView(getActivity());
+        iv.setBackgroundResource(R.drawable.im_header_item_list_bg);
+        iv.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        mListView.getRefreshableView().addHeaderView(iv);
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
         mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
         mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
