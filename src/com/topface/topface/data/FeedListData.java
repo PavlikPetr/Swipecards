@@ -29,7 +29,8 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
         setUnread(unread);
     }
 
-    private <T extends FeedItem> FeedList<T> getList(JSONArray list) {
+    @SuppressWarnings({ "hiding", "unchecked" })
+	private <T extends FeedItem> FeedList<T> getList(JSONArray list) {
         FeedList<T> result = new FeedList<T>();
         if (list != null) {
             for (int i = 0; i < list.length(); i++) {

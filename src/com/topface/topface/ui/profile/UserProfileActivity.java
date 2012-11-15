@@ -64,6 +64,8 @@ public class UserProfileActivity extends BaseFragmentActivity {
 
     public User mUser;
 
+    private boolean mFromChat = false; 
+    
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_CHAT_INVOKE = "chat_invoke";
@@ -104,6 +106,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
             String prevEntity = getIntent().getStringExtra(INTENT_PREV_ENTITY);
             if (prevEntity.equals(ChatActivity.class.getSimpleName())) {
                 btnBack.setText(R.string.general_chat);
+                mFromChat = true;
             } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_dating);
             } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
@@ -264,15 +267,19 @@ public class UserProfileActivity extends BaseFragmentActivity {
                     mUserMutual.setEnabled(false);
                     break;
                 case R.id.btnUserChat:
-                    Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
-                    intent.putExtra(ChatActivity.INTENT_USER_ID, mUser.uid);
-                    intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);
-                    intent.putExtra(ChatActivity.INTENT_USER_SEX, mUser.sex);
-                    intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
-                    intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
-                    intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
-                    intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, UserProfileActivity.this.getClass().getSimpleName());
-                    startActivity(intent);
+                	if (mFromChat) {
+                		finish();
+                	} else {
+	                    Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
+	                    intent.putExtra(ChatActivity.INTENT_USER_ID, mUser.uid);
+	                    intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);
+	                    intent.putExtra(ChatActivity.INTENT_USER_SEX, mUser.sex);
+	                    intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
+	                    intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
+	                    intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
+	                    intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, UserProfileActivity.this.getClass().getSimpleName());
+	                    startActivity(intent);
+                	}
                     break;
                 default:
                     break;
