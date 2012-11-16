@@ -105,7 +105,9 @@ public class WebAuthActivity extends Activity {
                 setResult(Activity.RESULT_CANCELED);
                 finish();
             }
-            mProgressBar.setVisibility(View.GONE);
+            if (mProgressBar != null) {
+                mProgressBar.setVisibility(View.GONE);
+            }
         }
     }
 

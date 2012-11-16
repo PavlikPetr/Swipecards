@@ -32,11 +32,13 @@ public class GCMIntentService extends GCMBaseIntentService {
             }).start();
         }
         //Сообщаем о том что есть новое уведомление и нужно обновить список
-        Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);
-        String user = intent.getStringExtra("user");
-        Debug.logJson("GCM", "User", user);
-        broadcastReceiver.putExtra("id", getUserId(user));
-        context.sendBroadcast(broadcastReceiver);
+        if(intent != null && intent.getStringExtra("user") != null){
+            Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);
+            String user = intent.getStringExtra("user");
+            Debug.logJson("GCM", "User", user);
+            broadcastReceiver.putExtra("id", getUserId(user));
+            context.sendBroadcast(broadcastReceiver);
+        }
     }
 
     @Override
@@ -60,6 +62,8 @@ public class GCMIntentService extends GCMBaseIntentService {
             JSONObject userJSON = new JSONObject(user);
             id = userJSON.optString("id");
         } catch (JSONException e) {
+            Debug.error(e);
+        } catch (Exception e) {
             Debug.error(e);
         }
 
