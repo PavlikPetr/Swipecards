@@ -144,7 +144,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             btnBack.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(ChatActivity.this, NavigationActivity.class));
                     finish();
                 }
             });
