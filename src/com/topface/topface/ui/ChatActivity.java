@@ -14,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -83,7 +82,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private GeoLocationManager mGeoManager = null;
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -144,7 +143,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             btnBack.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(ChatActivity.this, NavigationActivity.class));
                     finish();
                 }
             });
@@ -444,9 +442,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                     mEditBox.getText().clear();
                                     mLoadingLocker.setVisibility(View.GONE);
 
-                                    InputMethodManager imm = (InputMethodManager) getApplicationContext()
-                                            .getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(mEditBox.getWindowToken(), 0);
+
                                 } else {
                                     Toast.makeText(ChatActivity.this,
                                             getString(R.string.general_server_error),
