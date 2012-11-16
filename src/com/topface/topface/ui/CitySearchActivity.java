@@ -244,7 +244,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
 
-    private void fillData(LinkedList<City> citiesList) {
+    private synchronized void fillData(LinkedList<City> citiesList) {
         mDataList.clear();
         if (mRequestKey == INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY)
             mDataList.add(City.createCity(City.ALL_CITIES, mAllCitiesString, mAllCitiesString));
