@@ -32,7 +32,7 @@
     <com.topface.topface.ui.views.AutoResizeTextView
         android:id="@+id/ivBubble"
         android:layout_width="275dp"
-        android:layout_height="155dp"
+        android:layout_height="165dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/ivArrow"
         android:background="@drawable/tip_energy_bubble"
@@ -40,7 +40,7 @@
         android:lines="5"
         android:text="@string/novice_battery_bonus"
         android:textColor="#000000"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:paddingTop="20dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
