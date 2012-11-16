@@ -61,6 +61,8 @@ public class GCMIntentService extends GCMBaseIntentService {
             id = userJSON.optString("id");
         } catch (JSONException e) {
             Debug.error(e);
+        } catch (Exception e) {
+            Debug.error(e);
         }
 
         return id;
