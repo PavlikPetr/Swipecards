@@ -129,7 +129,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_dating);
             } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.general_chat);
+                btnBack.setText(R.string.general_dialogs);
             } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_likes);
             } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {

@@ -46,9 +46,9 @@ public class TopfaceNotificationManager {
         stackBuilder = TaskStackBuilder.create(context);
     }
 
-    public void showNotification(String title, String message, Bitmap icon, int unread, Intent intent) {
-
-        stackBuilder.addNextIntent(intent);//addNextIntent(intent);
+    public void showNotification(int userId, String title, String message, Bitmap icon, int unread, Intent intent) {    	
+    	
+//        stackBuilder.addNextIntent(intent);//addNextIntent(intent);
 
         Bitmap scaledIcon = Utils.clipAndScaleBitmap(icon,(int)width,(int)height);
 
@@ -59,7 +59,8 @@ public class TopfaceNotificationManager {
             mNotificationBuilder.setNumber(unread);
         mNotificationBuilder.setAutoCancel(true);
 
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mNotificationBuilder.setContentIntent(resultPendingIntent);
         mNotificationManager.notify(id, mNotificationBuilder.getNotification());
     }

@@ -96,7 +96,7 @@ public class GCMUtils {
             String typeString = extra.getStringExtra("type");
             int type = typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
 
-            User user = new User();
+            final User user = new User();
             user.json2User(extra.getStringExtra("user"));
             String title = extra.getStringExtra("title");
             if (title == null || title.equals("")) {
@@ -118,10 +118,7 @@ public class GCMUtils {
                         if (user.id != 0) {
                             i = new Intent(context, ChatActivity.class);
 
-                            i.putExtra(
-                                    ChatActivity.INTENT_USER_ID,
-                                    user.id
-                            );
+                            i.putExtra(ChatActivity.INTENT_USER_ID,user.id);
                             i.putExtra(ChatActivity.INTENT_USER_NAME, user.name);
                             i.putExtra(ChatActivity.INTENT_USER_AVATAR, user.photoUrl);
                             i.putExtra(ChatActivity.INTENT_USER_AGE, user.age);
@@ -169,7 +166,7 @@ public class GCMUtils {
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
 
-                        mNotificationManager.showNotification(finalTitle, data, fakeImageView.getImageBitmap(), Integer.parseInt(extra.getStringExtra("unread")), newI);
+                        mNotificationManager.showNotification(user.id, finalTitle, data, fakeImageView.getImageBitmap(), Integer.parseInt(extra.getStringExtra("unread")), newI);
                     }
                 });
             }

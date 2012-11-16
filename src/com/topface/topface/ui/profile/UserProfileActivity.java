@@ -90,7 +90,12 @@ public class UserProfileActivity extends BaseFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Debug.log(this, "+onCreate");
-        setContentView(R.layout.ac_user_profile);
+        try {
+        	setContentView(R.layout.ac_user_profile);
+        } catch (Exception ex) {
+        	Debug.error(ex);
+        	finish();
+        }
 
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1); // свой - чужой профиль
 

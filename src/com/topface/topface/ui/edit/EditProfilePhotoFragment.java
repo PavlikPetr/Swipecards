@@ -165,6 +165,10 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 	
 	                }
 	            }).exec();
+            } else {
+            	getActivity().setResult(Activity.RESULT_OK);
+                mSelectedAsMainId = mLastSelectedAsMainId;
+            	finishOperations(handler);
             }
 
         } else {
