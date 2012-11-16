@@ -16,8 +16,8 @@ import java.util.LinkedList;
 
 public abstract class BaseFragment extends Fragment implements IRequestClient {
 
-	protected NavigationBarController mNavBarController;
-	
+    protected NavigationBarController mNavBarController;
+
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
     private BroadcastReceiver updateCountersReceiver;
@@ -30,13 +30,13 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
     public static final int F_SETTINGS = 1007;
     public static final int F_VISITORS = 1008;
 
-    protected void onUpdateStart(boolean isFlyUpdating) {    	
+    protected void onUpdateStart(boolean isFlyUpdating) {
     }
 
     protected void onUpdateSuccess(boolean isFlyUpdating) {
     }
 
-    protected void onUpdateFail(boolean isFlyUpdating) {    	
+    protected void onUpdateFail(boolean isFlyUpdating) {
     }
 
     protected void updateUI(Runnable action) {
@@ -45,8 +45,8 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
 
     @Override
     public void onResume() {
-    	if (mNavBarController != null) mNavBarController.refreshNotificators();
-    	super.onResume();
+        if (mNavBarController != null) mNavBarController.refreshNotificators();
+        super.onResume();
         setUpdateCounersReceiver();
     }
 
@@ -84,14 +84,20 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
     }
 
     private void setUpdateCounersReceiver() {
-        updateCountersReceiver = new BroadcastReceiver(){
+        updateCountersReceiver = new BroadcastReceiver() {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                mNavBarController.refreshNotificators();
+                if (mNavBarController != null) {
+                    mNavBarController.refreshNotificators();
+                }
             }
         };
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(updateCountersReceiver,new IntentFilter(GCMUtils.GCM_UPDATE_COUNTERS));
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(
+                        updateCountersReceiver,
+                        new IntentFilter(GCMUtils.GCM_UPDATE_COUNTERS)
+                );
     }
 
 }
