@@ -55,7 +55,7 @@ public class GCMUtils {
             GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
             Debug.log("Registered: " + regId);
         } else {
-            sendRegId(context,regId);
+            sendRegId(context, regId);
             Debug.log("Already registered, regID is " + regId);
         }
     }
@@ -64,7 +64,7 @@ public class GCMUtils {
      * Метод для тестирования GCM сообщений
      *
      * @param context контекст приложения
-     */    
+     */
     public static void generateFakeNotification(Context context) {
         Intent intent = new Intent();
         intent.putExtra("text", "asd");
@@ -114,11 +114,11 @@ public class GCMUtils {
 
             switch (type) {
                 case GCM_TYPE_MESSAGE:
-                    if(options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns) {
+                    if (options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns) {
                         if (user.id != 0) {
                             i = new Intent(context, ChatActivity.class);
 
-                            i.putExtra(ChatActivity.INTENT_USER_ID,user.id);
+                            i.putExtra(ChatActivity.INTENT_USER_ID, user.id);
                             i.putExtra(ChatActivity.INTENT_USER_NAME, user.name);
                             i.putExtra(ChatActivity.INTENT_USER_AVATAR, user.photoUrl);
                             i.putExtra(ChatActivity.INTENT_USER_AGE, user.age);
@@ -144,7 +144,7 @@ public class GCMUtils {
                     break;
 
                 case GCM_TYPE_GUESTS:
-                    if(options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns) {
+                    if (options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns) {
                         i = new Intent(context, NavigationActivity.class);
                         i.putExtra(NEXT_INTENT, BaseFragment.F_VISITORS);
                     }
@@ -257,7 +257,7 @@ public class GCMUtils {
         public String photoUrl;
         public int age;
         @SuppressWarnings("unused")
-		public String city;
+        public String city;
 
         public User() {
         }
@@ -274,7 +274,7 @@ public class GCMUtils {
                 age = obj.optInt("age");
                 city = obj.optString("city");
             } catch (Exception e) {
-                e.printStackTrace();
+                Debug.error(e);
             }
 
         }
