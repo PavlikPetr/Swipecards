@@ -3,6 +3,7 @@
 
     <!-- App -->
     <string name="app_name">Topface</string>
+    <string name="app_locale">ru_RU</string>
 
     <!-- General -->
 
@@ -233,7 +234,7 @@
 
     <!-- Leaders -->
     <string name="leaders_go_date">Хочу сюда</string>
-    <string name="leaders_leader_now">Теперь вы лидер!</string>
+    <string name="leaders_leader_now">Теперь вас увидят все!</string>
     <string name="leaders_need_photo">Сперва нужно выбрать фотографию!</string>
     <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
 
@@ -270,5 +271,6 @@
         Добавьте свои лучшие фотографии,\nчтобы получать больше симпатий.
     </string>
 
-
+    <string name="general_edit_profile_message">Пожалуйста, заполните необходимые поля анкеты</string>
+    <string name="general_premium_access_error">Для данной функции необходим Премиум</string>
 </resources>

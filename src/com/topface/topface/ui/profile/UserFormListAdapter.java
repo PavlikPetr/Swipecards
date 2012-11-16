@@ -128,7 +128,8 @@ public class UserFormListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setUserData(User user) {        
+    @SuppressWarnings("unchecked")
+	public void setUserData(User user) {        
         mInitialUserForms = removeEmptyHeaders((LinkedList<FormItem>)user.forms.clone());        
         mMatchedUserForms = removeEmptyHeaders(removeNotMatchedItems((LinkedList<FormItem>) mInitialUserForms.clone())); 
         setAllData();

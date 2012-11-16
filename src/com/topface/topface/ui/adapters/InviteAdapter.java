@@ -35,7 +35,8 @@ public class InviteAdapter extends CursorAdapter {
         public InviteRequest.Recipient recipient;
     }
 
-    public InviteAdapter(Context context, Cursor c, TriggersList<Long, InviteRequest.Recipient> triggers) {
+    @SuppressWarnings("deprecation")
+	public InviteAdapter(Context context, Cursor c, TriggersList<Long, InviteRequest.Recipient> triggers) {
         super(context, c);
         mInflater = LayoutInflater.from(context);
         mTriggersList = triggers;

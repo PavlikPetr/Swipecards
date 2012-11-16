@@ -8,6 +8,7 @@ import org.json.JSONObject;
 /**
  * Базоый тип данных для парсинга ответов, состоящих из элемента item, содержащим объекты FeedUser
  */
+@SuppressWarnings("serial")
 public class FeedUserListData<T extends FeedUser> extends FeedList<T> {
 
     private final Class<T> mClass;

@@ -64,8 +64,7 @@ public class GCMUtils {
      * Метод для тестирования GCM сообщений
      *
      * @param context контекст приложения
-     */
-    @SuppressWarnings("UnusedDeclaration")
+     */    
     public static void generateFakeNotification(Context context) {
         Intent intent = new Intent();
         intent.putExtra("text", "asd");
@@ -97,7 +96,7 @@ public class GCMUtils {
             String typeString = extra.getStringExtra("type");
             int type = typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
 
-            User user = new User();
+            final User user = new User();
             user.json2User(extra.getStringExtra("user"));
             String title = extra.getStringExtra("title");
             if (title == null || title.equals("")) {
@@ -119,10 +118,7 @@ public class GCMUtils {
                         if (user.id != 0) {
                             i = new Intent(context, ChatActivity.class);
 
-                            i.putExtra(
-                                    ChatActivity.INTENT_USER_ID,
-                                    user.id
-                            );
+                            i.putExtra(ChatActivity.INTENT_USER_ID,user.id);
                             i.putExtra(ChatActivity.INTENT_USER_NAME, user.name);
                             i.putExtra(ChatActivity.INTENT_USER_AVATAR, user.photoUrl);
                             i.putExtra(ChatActivity.INTENT_USER_AGE, user.age);
@@ -163,13 +159,14 @@ public class GCMUtils {
                 final TempImageViewRemote fakeImageView = new TempImageViewRemote(context);
                 fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
                 final Intent newI = i;//new Intent(context,ChatActivity.class);
+                newI.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 final String finalTitle = title;
                 fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
 
-                        mNotificationManager.showNotification(finalTitle, data, fakeImageView.getImageBitmap(), Integer.parseInt(extra.getStringExtra("unread")), newI);
+                        mNotificationManager.showNotification(user.id, finalTitle, data, fakeImageView.getImageBitmap(), Integer.parseInt(extra.getStringExtra("unread")), newI);
                     }
                 });
             }
@@ -259,7 +256,8 @@ public class GCMUtils {
         public String name;
         public String photoUrl;
         public int age;
-        public String city;
+        @SuppressWarnings("unused")
+		public String city;
 
         public User() {
         }

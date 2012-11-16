@@ -1,6 +1,5 @@
 package com.topface.topface;
 
-@SuppressWarnings("UnusedDeclaration")
 public class Static {
     // Constants
 	
@@ -38,17 +37,12 @@ public class Static {
     public static final String PREFERENCES_TOPS_CITY_POS = "tops_city_pos";
     public static final String PREFERENCES_PROFILE_BACKGROUND_ID = "profile_background_id";
     public static final String PREFERENCES_NAVIGATION_LAST_FRAGMENT = "navigation_last_fragment";
-    public static final String PREFERENCES_NEWBIE_DASHBOARD_PROFILE = "newbie_dashboard_profile";
-    public static final String PREFERENCES_NEWBIE_DASHBOARD_DATING = "newbie_dashboard_dating";
-    public static final String PREFERENCES_NEWBIE_DASHBOARD_LIKES = "newbie_dashboard_likes";
-    public static final String PREFERENCES_NEWBIE_DASHBOARD_TOPS = "newbie_dashboard_tops";
-    public static final String PREFERENCES_NEWBIE_DATING_FREE_ENERGY = "newbie_dating_free_energy";
-    public static final String PREFERENCES_NEWBIE_DATING_BUY_ENERGY = "newbie_dating_buy_energy";
-    public static final String PREFERENCES_NEWBIE_DATING_RATE_IT = "newbie_dating_rate_it";
     
     public static final String PREFERENCES_NOVICE_DATING_ENERGY = "novice_dating_energy";
+    public static final String PREFERENCES_NOVICE_DATING_ENERGY_DATE = "novice_dating_energy_date_tag";
     public static final String PREFERENCES_NOVICE_DATING_SYMPATHY = "novice_dating_sympathy";
     public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE = "novice_menu_fill_profile";
+    public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE = "novice_menu_fill_profile_date_tag";
     // Profile
     //public static final String PREFERENCES_PROFILE_FILTER_GEO = "cache_profile_filter_geo";
     //public static final String PREFERENCES_PROFILE_FILTER_ONLINE = "cache_profile_filter_online";    

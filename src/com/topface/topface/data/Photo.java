@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 /**
  * Фотографии пользователей из нашего стораджа фотографий (не напрямую из социальной сети)
  */
-@SuppressWarnings("UnusedDeclaration")
 public class Photo extends AbstractData implements Parcelable{
 
     public static final String SIZE_ORIGINAL = "original";
@@ -88,7 +87,8 @@ public class Photo extends AbstractData implements Parcelable{
             mId = photoItem.optInt("id");
             JSONObject linksJson = photoItem.optJSONObject("links");
             if (linksJson != null) {
-                Iterator photoKeys = linksJson.keys();
+                @SuppressWarnings("rawtypes")
+				Iterator photoKeys = linksJson.keys();
                 links = new HashMap<String, String>();
 
                 while (photoKeys.hasNext()) {

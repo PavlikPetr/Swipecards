@@ -33,7 +33,8 @@ public class TrackedPreferenceActivity extends PreferenceActivity {
      * GoogleAnalytics support goes back to Android 1.5 and therefore cannot use
      * the Fragment API.
      */
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public Object onRetainNonConfigurationInstance() {
         Object o = super.onRetainNonConfigurationInstance();
 

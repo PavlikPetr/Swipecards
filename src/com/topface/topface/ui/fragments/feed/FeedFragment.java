@@ -1,11 +1,11 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.app.AlertDialog;
-import android.content.*;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Recycle;
 import com.topface.topface.data.FeedItem;
@@ -83,7 +82,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
 
         mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
-
+        createUpdateErrorMessage();
         return view;
     }
 
@@ -137,12 +136,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         mListAdapter = getAdapter();
         mListAdapter.setOnAvatarClickListener(this);
-        mListView.setOnScrollListener(mListAdapter);
-        mListView.getRefreshableView().setAdapter(mListAdapter);
-
+        mListView.setOnScrollListener(mListAdapter);        
+        
+        ImageView iv = new ImageView(getActivity().getApplicationContext());
+        iv.setBackgroundResource(R.drawable.im_header_item_list_bg);
+        iv.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        mListView.getRefreshableView().addHeaderView(iv);
+        
+        mListView.getRefreshableView().setAdapter(mListAdapter);        
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
         mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
-        mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
+        //mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
+
+        mListView.scrollBy(0, 2);
     }
 
     abstract protected FeedAdapter<T> getAdapter();
@@ -305,12 +311,20 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
+            public void fail(final int codeError, ApiResponse response) {
+
+               updateUI(new Runnable() {
                     @Override
                     public void run() {
                         if (isHistoryLoad) {
                             mListAdapter.showRetryItem();
+                        }
+                        if(codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
+                            updateErrorMessage.showOnlyMessage(true);
+                            updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
+                        } else {
+                            updateErrorMessage.showOnlyMessage(false);
+                            updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
                         }
                         Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         onUpdateFail(isPushUpdating || isHistoryLoad);
@@ -342,8 +356,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void updateData(boolean isPushUpdating) {
         updateData(isPushUpdating, false);
     }
-
-    @SuppressWarnings("deprecation")
+    
     protected void initFilter(View view) {
         new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.btnNavigationSettingsBar, R.id.loToolsBar);
         initDoubleButton(view);
@@ -395,14 +408,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     abstract protected int getEmptyFeedText();
-    abstract protected void makeAllItemsRead();
+    
+    protected void makeAllItemsRead() {
+    	for(FeedItem item : mListAdapter.getData()) {
+            item.unread = false;
+        }
+    }
 
     @Override
     protected void onUpdateFail(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
             mBackgroundText.setText("");
-            createUpdateErrorMessage();
+            showUpdateErrorMessage();
             if (mBackgroundText.getCompoundDrawables()[0] != null) {
                 ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).stop();
             }
@@ -445,9 +463,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 }
             });
             mContainer.addView(updateErrorMessage);
-        } else {
-            updateErrorMessage.setVisibility(View.VISIBLE);
+            updateErrorMessage.setVisibility(View.GONE);
         }
+    }
+
+    private void showUpdateErrorMessage() {
+        updateErrorMessage.setVisibility(View.VISIBLE);
     }
 
     private void retryButtonClick() {

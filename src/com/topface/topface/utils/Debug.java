@@ -6,7 +6,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-@SuppressWarnings({"ConstantConditions", "PointlessBooleanExpression"})
 public class Debug {
 
     public static final int MAX_LOG_MESSAGE_LENGTH = 3500;
@@ -91,18 +90,20 @@ public class Debug {
     }
 
     public static void logJson(String tag, String title, String json) {
-        if (json != null) {
-            JSONTokener tokener = new JSONTokener(json);
-            JSONObject finalResult;
-            try {
-                finalResult = new JSONObject(tokener);
-                if (FORMAT_JSON) {
-                    Debug.log(tag, title + "\n" + finalResult.toString(4));
-                } else {
-                    Debug.log(tag, title + "\n" + finalResult.toString());
-                }
-            } catch (JSONException ignored) {
-            }
-        }
+    	if (App.DEBUG) {
+	        if (json != null) {
+	            JSONTokener tokener = new JSONTokener(json);
+	            JSONObject finalResult;
+	            try {
+	                finalResult = new JSONObject(tokener);
+	                if (FORMAT_JSON) {
+	                    Debug.log(tag, title + "\n" + finalResult.toString(4));
+	                } else {
+	                    Debug.log(tag, title + "\n" + finalResult.toString());
+	                }
+	            } catch (JSONException ignored) {
+	            }
+	        }
+    	}
     }
 }

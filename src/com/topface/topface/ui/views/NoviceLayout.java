@@ -62,6 +62,7 @@ public class NoviceLayout extends RelativeLayout {
         ViewTreeObserver vto = mMask.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 			
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onGlobalLayout() {
 				int[] point = new int[2];

@@ -8,8 +8,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.social.AuthToken;
 import org.acra.ACRA;
 
 //@ReportsCrashes(formKey = "dE85SXowSDhBcXZvMXAtUEtPMTg4X2c6MQ")
@@ -55,6 +57,10 @@ public class App extends Application {
         if (mConnectionIntent == null) {
             mConnectionReceiver = new ConnectionChangeReceiver(mContext);
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
+        }
+        //Если приходим с нотификации незалогинеными, нужно вернуться в AuthActivity
+        if(!Data.isSSID() || (new AuthToken(getApplicationContext())).isEmpty()) {
+            startActivity(new Intent(this, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         }
     }
 

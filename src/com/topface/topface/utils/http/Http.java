@@ -59,8 +59,7 @@ public class Http {
     public static String httpPostDataRequest(String request, String postParams, byte[] dataParams) {
         return httpRequest(HTTP_POST_REQUEST, request, postParams, dataParams, null);
     }
-
-    @SuppressWarnings("UnusedDeclaration")
+    
     public static String httpPostDataRequest(String request, String postParams, InputStream is) {
         return httpRequest(HTTP_POST_REQUEST, request, postParams, null, is);
     }

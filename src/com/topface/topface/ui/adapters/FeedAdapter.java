@@ -328,12 +328,14 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return holder;
     }
 
-    protected T getRetryItem() {
+    @SuppressWarnings("unchecked")
+	protected T getRetryItem() {
         //noinspection unchecked
         return (T) new FeedLoader(IListLoader.ItemType.RETRY);
     }
 
-    protected T getLoaderItem() {
+    @SuppressWarnings("unchecked")
+	protected T getLoaderItem() {
         //noinspection unchecked
         return (T) new FeedLoader(IListLoader.ItemType.LOADER);
     }

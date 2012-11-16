@@ -111,8 +111,7 @@ public class Settings {
      * Нужно ли в данный момент запускать предзагрузку фотографии следующего пользователя
      *
      * @return начинать ли предзагрузку
-     */
-    @SuppressWarnings("UnusedDeclaration")
+     */    
     public boolean isPreloadUser() {
         return isPreloadingEnabled(mContext.getString(R.string.settings_preloading_type_user));
     }

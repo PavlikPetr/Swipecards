@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="time_now">Now</string>
-    <plurals name="time_hour">
-        <item quantity="one">%d hour ago</item>
-        <item quantity="other">%d hours ago</item>
-    </plurals>
-    <plurals name="time_minute">
-        <item quantity="other">%d minutes ago</item>
-        <item quantity="one">%d minute ago</item>
-    </plurals>
-    <string name="time_yesterday">Yesterday</string>
-    <string name="time_today">Today</string>
-    <string name="time_monday">Mon</string>
-    <string name="time_tuesday">Tue</string>
-    <string name="time_wednesday">Wed</string>
-    <string name="time_thursday">Thu</string>
-    <string name="time_friday">Fri</string>
-    <string name="time_saturday">Sat</string>
-    <string name="time_sunday">Sun</string>
-    <string name="time_january">Jan</string>
-    <string name="time_february">Feb</string>
-    <string name="time_march">Mar</string>
-    <string name="time_april">Apr</string>
-    <string name="time_may">May</string>
-    <string name="time_june">Jun</string>
-    <string name="time_july">Jul</string>
-    <string name="time_august">Aug</string>
-    <string name="time_september">Sep</string>
-    <string name="time_october">Oct</string>
-    <string name="time_november">Nov</string>
-    <string name="time_december">Dec</string>
+  <string name="time_now">Now</string>
+  <plurals name="time_hour">
+    <item quantity="zero"></item>
+    <item quantity="other">%d hours ago</item>
+    <item quantity="one">%d hour ago</item>
+  </plurals>
+  <plurals name="time_minute">
+    <item quantity="zero">%d minute ago</item>
+    <item quantity="other">%d minutes ago</item>
+    <item quantity="one">%d minute ago</item>
+  </plurals>
+  <string name="time_yesterday">Yesterday</string>
+  <string name="time_today">Today</string>
+  <string name="time_monday">Mon</string>
+  <string name="time_tuesday">Tue</string>
+  <string name="time_wednesday">Wed</string>
+  <string name="time_thursday">Thu</string>
+  <string name="time_friday">Fri</string>
+  <string name="time_saturday">Sat</string>
+  <string name="time_sunday">Sun</string>
+  <string name="time_january">Jan</string>
+  <string name="time_february">Feb</string>
+  <string name="time_march">Mar</string>
+  <string name="time_april">Apr</string>
+  <string name="time_may">May</string>
+  <string name="time_june">Jun</string>
+  <string name="time_july">Jul</string>
+  <string name="time_august">Aug</string>
+  <string name="time_september">Sep</string>
+  <string name="time_october">Oct</string>
+  <string name="time_november">Nov</string>
+  <string name="time_december">Dec</string>
 </resources>

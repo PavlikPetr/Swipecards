@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+@SuppressWarnings("deprecation")
 public class ChatListAdapter extends BaseAdapter {
     // class ViewHolder
     static class ViewHolder {
@@ -357,7 +358,6 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     public void copyText(String text) {
-        @SuppressWarnings("deprecation")
         ClipboardManager clipboard =
                 (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setText(text);
@@ -621,7 +621,8 @@ public class ChatListAdapter extends BaseAdapter {
         mItemLayoutList.remove(mItemLayoutList.size()-1);
     }
 
-    public LinkedList<History> getDataCopy() {
+    @SuppressWarnings("unchecked")
+	public LinkedList<History> getDataCopy() {
         //noinspection unchecked
     	LinkedList<History> dataClone = (LinkedList<History>) mDataList.clone(); 
     	Collections.reverse(dataClone);

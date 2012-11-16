@@ -69,7 +69,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
                             @Override
                             public void onTap(int position) {
-
                                 FeedItem item = (FeedItem) mListView.getRefreshableView().getItemAtPosition(position);
                                 if (!mIsUpdating && item.isLoaderRetry()) {
                                     updateUI(new Runnable() {
@@ -106,13 +105,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected int getEmptyFeedText() {
         return R.string.likes_background_text;
-    }
-
-    @Override
-    protected void makeAllItemsRead() {
-        for(FeedLike item : mListAdapter.getData()) {
-            item.unread = false;
-        }
     }
 
     @Override

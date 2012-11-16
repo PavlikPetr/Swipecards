@@ -64,6 +64,8 @@ public class UserProfileActivity extends BaseFragmentActivity {
 
     public User mUser;
 
+    private boolean mFromChat = false; 
+    
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_CHAT_INVOKE = "chat_invoke";
@@ -88,7 +90,12 @@ public class UserProfileActivity extends BaseFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Debug.log(this, "+onCreate");
-        setContentView(R.layout.ac_user_profile);
+        try {
+        	setContentView(R.layout.ac_user_profile);
+        } catch (Exception ex) {
+        	Debug.error(ex);
+        	finish();
+        }
 
         mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1); // свой - чужой профиль
 
@@ -104,12 +111,13 @@ public class UserProfileActivity extends BaseFragmentActivity {
             String prevEntity = getIntent().getStringExtra(INTENT_PREV_ENTITY);
             if (prevEntity.equals(ChatActivity.class.getSimpleName())) {
                 btnBack.setText(R.string.general_chat);
+                mFromChat = true;
             } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_dating);
             } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_dialogs);
             } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.general_likes_me);
+                btnBack.setText(R.string.general_likes);
             } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_mutual);
             } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
@@ -168,7 +176,8 @@ public class UserProfileActivity extends BaseFragmentActivity {
         mIndicatorView.setIndicator(F_PHOTO);
         ViewTreeObserver vto = mIndicatorView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-            @Override
+            @SuppressWarnings("deprecation")
+			@Override
             public void onGlobalLayout() {
                 ViewTreeObserver obs = mIndicatorView.getViewTreeObserver();
                 //noinspection deprecation
@@ -264,15 +273,19 @@ public class UserProfileActivity extends BaseFragmentActivity {
                     mUserMutual.setEnabled(false);
                     break;
                 case R.id.btnUserChat:
-                    Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
-                    intent.putExtra(ChatActivity.INTENT_USER_ID, mUser.uid);
-                    intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);
-                    intent.putExtra(ChatActivity.INTENT_USER_SEX, mUser.sex);
-                    intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
-                    intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
-                    intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
-                    intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, UserProfileActivity.this.getClass().getSimpleName());
-                    startActivity(intent);
+                	if (mFromChat) {
+                		finish();
+                	} else {
+	                    Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
+	                    intent.putExtra(ChatActivity.INTENT_USER_ID, mUser.uid);
+	                    intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);
+	                    intent.putExtra(ChatActivity.INTENT_USER_SEX, mUser.sex);
+	                    intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
+	                    intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
+	                    intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
+	                    intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, UserProfileActivity.this.getClass().getSimpleName());
+	                    startActivity(intent);
+                	}
                     break;
                 default:
                     break;

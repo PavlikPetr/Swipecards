@@ -19,8 +19,8 @@
                 android:layout_height="fill_parent"
                 android:background="@drawable/chat_add_panel_bg"
                 android:visibility="gone"
-                android:id="@+id/lockScreen"
-                />
+                android:id="@+id/lockScreen"/>
+        
         <RelativeLayout
                 android:id="@+id/loProfileHeader"
                 android:layout_width="wrap_content"

@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
@@ -25,10 +26,11 @@ public class Device {
 
     public static boolean init(Context context) {
         try {
+        	Point sizes = Utils.getSrceenSize(context);
             if (getOrientation(context) == LANDSCAPE)
-                width = getDisplay(context).getHeight();
+                width = sizes.y;
             else
-                width = getDisplay(context).getWidth();
+                width = sizes.x;
 
             if (width == 0) {
                 Debug.log("Device", "init error");
@@ -71,9 +73,9 @@ public class Device {
      * @return размер дисплея по максимальной стороне
      */
     public static int getMaxDisplaySize(Context context) {
+    	Point sizes = Utils.getSrceenSize(context);
         return getOrientation(context) == LANDSCAPE ?
-                getDisplay(context).getWidth() :
-                getDisplay(context).getHeight();
+        		sizes.x : sizes.y;
     }
 
     public static int getMaxDisplaySize() {

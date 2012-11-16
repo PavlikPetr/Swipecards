@@ -13,7 +13,6 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 public class UserPhotoFragment extends Fragment {

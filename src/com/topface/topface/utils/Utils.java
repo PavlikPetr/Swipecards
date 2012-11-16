@@ -7,7 +7,6 @@ import android.graphics.PorterDuff.Mode;
 import android.os.Build;
 import android.view.Display;
 import android.view.WindowManager;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
@@ -15,9 +14,11 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class Utils {
+	public static final long WEEK = 604800L;
+	public static final long DAY = 86400L;
+	
     private static PluralResources mPluralResources;
 
     public static int unixtime() {
@@ -306,12 +307,6 @@ public class Utils {
         return context.getString(resurseId);
     }
 
-    public static void formatTimeOld(TextView tv, long time) {
-        Context context = tv.getContext();
-        String text;
-    }
-
-
     public static String formatHour(long hours) {
         return Utils.getQuantityString(R.plurals.time_hour, (int) hours, (int) hours);
     }
@@ -456,7 +451,8 @@ public class Utils {
         ).show();
     }
     
-    public static Point getSrceenSize(Context context) {
+    @SuppressWarnings("deprecation")
+	public static Point getSrceenSize(Context context) {
     	Point size = null;
     	WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();

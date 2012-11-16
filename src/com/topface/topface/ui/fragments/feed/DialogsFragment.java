@@ -17,7 +17,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected int getTitle() {
-        return R.string.general_chat;
+        return R.string.general_dialogs;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected void makeAllItemsRead() {
-
+    	
     }
 
     @Override

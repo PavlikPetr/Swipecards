@@ -74,7 +74,7 @@
                         android:layout_weight="1.0"
                         android:background="@android:color/transparent"
                         android:drawableTop="@drawable/dating_mutual_selector"
-                        android:text="EGGS"/>
+                        android:text="@string/general_sympathy"/>
 
                 <Button
                         android:id="@+id/btnDatingSkip"

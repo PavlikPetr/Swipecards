@@ -113,6 +113,12 @@
             android:layout_below="@id/btnFragmentVisitors"
             android:text="@string/general_settings"
             android:drawableLeft="@drawable/topface_settings"
-            style="@style/LeftMenuButtons"/>
+            style="@style/LeftMenuButtons"/>    
+            
+    <ImageView 
+        android:layout_below="@id/btnFragmentSettings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/navigation_menu_line"/>
 
 </RelativeLayout>

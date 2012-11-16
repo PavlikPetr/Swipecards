@@ -39,7 +39,6 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.OsmManager;
-import com.topface.topface.utils.social.AuthToken;
 
 import java.util.LinkedList;
 
@@ -83,14 +82,11 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     // Managers
     private GeoLocationManager mGeoManager = null;
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Если приходим с нотификации незалогинеными, нужно вернуться в AuthActivity
-        if (!Data.isSSID() || (new AuthToken(getApplicationContext())).isEmpty()) {
-            startActivityForResult(new Intent(this, AuthActivity.class), 101);
-//            finish();
-        }
+
         setContentView(R.layout.ac_chat);
         Debug.log(this, "+onCreate");
 
@@ -133,7 +129,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_dating);
             } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
-                btnBack.setText(R.string.general_chat);
+                btnBack.setText(R.string.general_dialogs);
             } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_likes);
             } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
