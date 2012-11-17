@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.Data;
@@ -54,6 +55,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private EditText mEditBox;
     private TextView mHeaderTitle;
     private LockerView mLoadingLocker;
+    private Button mSendButton;
 
     private SwapControl mSwapControl;
     private static ProgressDialog mProgressDialog;
@@ -181,6 +183,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mEditBox = (EditText) findViewById(R.id.edChatBox);
         mEditBox.setOnEditorActionListener(mEditorActionListener);
 
+        //Send Button
+        mSendButton = (Button) findViewById(R.id.btnSend);
+        mSendButton.setOnClickListener(this);
+        
         // ListView
         mListView = (PullToRefreshListView) findViewById(R.id.lvChatList);
 
@@ -342,6 +348,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             }
         }
         switch (v.getId()) {
+	        case R.id.btnSend: {
+	        	sendMessage();
+	        }
+	        break;
             case R.id.btnChatAdd: {
                 if (mIsAddPanelOpened)
                     mSwapControl.snapToScreen(0);
@@ -414,63 +424,66 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-                final String text = v.getText().toString();
-
-                if (text == null || text.length() == 0)
-                    return false;
-
-                mLoadingLocker.setVisibility(View.VISIBLE);
-
-                MessageRequest messageRequest = new MessageRequest(
-                        ChatActivity.this.getApplicationContext());
-                registerRequest(messageRequest);
-                messageRequest.message = mEditBox.getText().toString();
-                messageRequest.userid = mUserId;
-                messageRequest.callback(new ApiHandler() {
-                    @Override
-                    public void success(final ApiResponse response) {
-                        final Confirmation confirm = Confirmation.parse(response);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (confirm.completed) {
-                                    History history = new History(response);
-//									history.target = FeedDialog.USER_MESSAGE;
-                                    mAdapter.addSentMessage(history);
-                                    mAdapter.notifyDataSetChanged();
-                                    mEditBox.getText().clear();
-                                    mLoadingLocker.setVisibility(View.GONE);
-
-
-                                } else {
-                                    Toast.makeText(ChatActivity.this,
-                                            getString(R.string.general_server_error),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(ChatActivity.this,
-                                        getString(R.string.general_data_error), Toast.LENGTH_SHORT)
-                                        .show();
-                                mLoadingLocker.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                }).exec();
-                return true;
+            if (actionId == EditorInfo.IME_ACTION_SEND) {            
+                return sendMessage();
             }
             return false;
         }
     };
 
+    private boolean sendMessage() {    	
+    	final String text = mEditBox.getText().toString();
+    	if (text == null || text.length() == 0)                	
+            return false;
+    	
+        mLoadingLocker.setVisibility(View.VISIBLE);
+
+        MessageRequest messageRequest = new MessageRequest(
+                ChatActivity.this.getApplicationContext());
+        registerRequest(messageRequest);
+        messageRequest.message = mEditBox.getText().toString();
+        messageRequest.userid = mUserId;
+        messageRequest.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                final Confirmation confirm = Confirmation.parse(response);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (confirm.completed) {
+                            History history = new History(response);
+//							history.target = FeedDialog.USER_MESSAGE;
+                            mAdapter.addSentMessage(history);
+                            mAdapter.notifyDataSetChanged();
+                            mEditBox.getText().clear();
+                            mLoadingLocker.setVisibility(View.GONE);
+
+
+                        } else {
+                            Toast.makeText(ChatActivity.this,
+                                    getString(R.string.general_server_error),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ChatActivity.this,
+                                getString(R.string.general_data_error), Toast.LENGTH_SHORT)
+                                .show();
+                        mLoadingLocker.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }).exec();
+        return true;
+    }
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

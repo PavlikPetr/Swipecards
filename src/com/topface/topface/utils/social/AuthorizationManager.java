@@ -236,11 +236,13 @@ public class AuthorizationManager {
                     String result = "";
                     JSONObject response = new JSONObject(responseRaw);
                     JSONArray responseArr = response.optJSONArray("response");
-                    if (responseArr.length() > 0) {
-                        JSONObject profile = responseArr.getJSONObject(0);
-                        result = profile.optString("first_name") + " " + profile.optString("last_name");
+                    if (responseArr != null) {
+	                    if (responseArr.length() > 0) {
+	                        JSONObject profile = responseArr.getJSONObject(0);
+	                        result = profile.optString("first_name") + " " + profile.optString("last_name");
+	                    }
+	                    handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, result));
                     }
-                    handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, result));
                 } catch (JSONException e) {
                     Debug.log(AuthorizationManager.class, "can't get name in vk:" + e);
                     handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));

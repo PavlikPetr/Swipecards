@@ -206,7 +206,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         lockControls();
         if (!isAddition)
             onUpdateStart(isAddition);
-        Debug.log(this, "update");
+        Debug.log(this, "update");        
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         SearchRequest searchRequest = new SearchRequest(getActivity());

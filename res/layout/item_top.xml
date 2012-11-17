@@ -38,6 +38,7 @@
             android:textSize="12sp"
             android:singleLine="true"
             android:ellipsize="end"
+            android:layout_alignParentTop="true"
             style="@style/ShadowItemFontBottom"
             />
 
@@ -48,9 +49,10 @@
             android:textColor="#FFFFFF"
             android:layout_marginBottom="3dp"
             android:layout_marginLeft="5dp"
-            android:layout_alignParentBottom="true"
+            android:layout_alignBottom="@id/ivTG"
             style="@style/ShadowItemFontBottom"
             android:textSize="14sp"
+            android:text=""
             />
 
 

@@ -31,5 +31,16 @@
             android:inputType="text"
             android:textColor="#000000"
             android:background="@drawable/chat_editbox_selector"/>
+    
+     <Button
+            android:id="@+id/btnSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"
+            android:text="@string/general_send_button"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/map_send_selector"/>
 
 </LinearLayout>

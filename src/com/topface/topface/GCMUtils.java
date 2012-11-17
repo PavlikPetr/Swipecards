@@ -48,16 +48,20 @@ public class GCMUtils {
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
 
     public static void init(Context context) {
-        GCMRegistrar.checkDevice(context);
-        GCMRegistrar.checkManifest(context);
-        final String regId = GCMRegistrar.getRegistrationId(context);
-        if (regId.equals("")) {
-            GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
-            Debug.log("Registered: " + regId);
-        } else {
-            sendRegId(context, regId);
-            Debug.log("Already registered, regID is " + regId);
-        }
+    	try {
+	        GCMRegistrar.checkDevice(context);
+	        GCMRegistrar.checkManifest(context);
+	        final String regId = GCMRegistrar.getRegistrationId(context);
+	        if (regId.equals("")) {
+	            GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
+	            Debug.log("Registered: " + regId);
+	        } else {
+	            sendRegId(context, regId);
+	            Debug.log("Already registered, regID is " + regId);
+	        }
+    	} catch (Exception ex) {
+    		Debug.error(ex);
+    	}
     }
 
     /**
@@ -110,7 +114,6 @@ public class GCMUtils {
                 setCounters(countersString, context);
 
             final TopfaceNotificationManager mNotificationManager = TopfaceNotificationManager.getInstance(context);
-
 
             switch (type) {
                 case GCM_TYPE_MESSAGE:

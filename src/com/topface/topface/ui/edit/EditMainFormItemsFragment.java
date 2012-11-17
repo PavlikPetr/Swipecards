@@ -22,6 +22,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 
 import java.util.HashMap;
 
@@ -255,7 +256,11 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
                         request.name = changedValue;
                         break;
                     case AGE:
-                        request.age = Integer.parseInt(changedValue);
+                    	try {
+                    		request.age = Integer.parseInt(changedValue);
+                    	} catch (Exception e) {
+							Debug.error(e);
+						}
                         break;
                     case STATUS:
                         request.status = changedValue;

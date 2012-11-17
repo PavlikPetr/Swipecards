@@ -282,7 +282,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (isHistoryLoad && lastItem != null) {
             request.to = lastItem.id;
         }
-        if (isPushUpdating) {
+        if (isPushUpdating && firstItem != null) {
             request.from = firstItem.id;
         }
         request.limit = FeedAdapter.LIMIT;
