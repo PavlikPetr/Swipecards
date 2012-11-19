@@ -317,6 +317,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 });
             }
         }).exec();
+        GCMUtils.cancelNotification(this);
     }
 
     private void release() {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -48,15 +49,17 @@ public class GCMUtils {
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
 
     public static void init(Context context) {
-        GCMRegistrar.checkDevice(context);
-        GCMRegistrar.checkManifest(context);
-        final String regId = GCMRegistrar.getRegistrationId(context);
-        if (regId.equals("")) {
-            GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
-            Debug.log("Registered: " + regId);
-        } else {
-            sendRegId(context, regId);
-            Debug.log("Already registered, regID is " + regId);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+            GCMRegistrar.checkDevice(context);
+            GCMRegistrar.checkManifest(context);
+            final String regId = GCMRegistrar.getRegistrationId(context);
+            if (regId.equals("")) {
+                GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
+                Debug.log("Registered: " + regId);
+            } else {
+                sendRegId(context, regId);
+                Debug.log("Already registered, regID is " + regId);
+            }
         }
     }
 
