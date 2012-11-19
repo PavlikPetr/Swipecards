@@ -53,7 +53,10 @@ public class ProfileRequest extends AbstractApiRequest {
                 break;
         }
 
-        return new JSONObject().put("fields", fields);
+        return new JSONObject()
+                .put("fields", fields)
+                        //При запросе профиля считаем текущего пользователя "гостем"
+                .put("visitor", true);
     }
 
     @Override
