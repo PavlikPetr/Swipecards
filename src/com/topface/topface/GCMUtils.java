@@ -41,25 +41,31 @@ public class GCMUtils {
     public static final int GCM_TYPE_SYMPATHY = 1;
     public static final int GCM_TYPE_LIKE = 2;
     public static final int GCM_TYPE_GUESTS = 3;
-
+    public static final int GCM_NO_NOTIFICATION = -2;
     public static final String GCM_UPDATE_COUNTERS = "com.topface.topface.action.UPDATE_COUNTERS";
 
     public static final String NEXT_INTENT = "next";
 
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
 
+    public static int  lastNotificationType = GCM_NO_NOTIFICATION;
+
     public static void init(Context context) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            GCMRegistrar.checkDevice(context);
-            GCMRegistrar.checkManifest(context);
-            final String regId = GCMRegistrar.getRegistrationId(context);
-            if (regId.equals("")) {
-                GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
-                Debug.log("Registered: " + regId);
-            } else {
-                sendRegId(context, regId);
-                Debug.log("Already registered, regID is " + regId);
-            }
+            try {
+                GCMRegistrar.checkDevice(context);
+                GCMRegistrar.checkManifest(context);
+                final String regId = GCMRegistrar.getRegistrationId(context);
+                if (regId.equals("")) {
+                    GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
+                    Debug.log("Registered: " + regId);
+                } else {
+                    sendRegId(context, regId);
+                    Debug.log("Already registered, regID is " + regId);
+                }
+            } catch (Exception ex) {
+                Debug.error(ex);
+            }    
         }
     }
 
@@ -114,11 +120,11 @@ public class GCMUtils {
 
             final TopfaceNotificationManager mNotificationManager = TopfaceNotificationManager.getInstance(context);
 
-
             switch (type) {
                 case GCM_TYPE_MESSAGE:
                     if (options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns) {
                         if (user.id != 0) {
+                            lastNotificationType = GCM_TYPE_MESSAGE;
                             i = new Intent(context, ChatActivity.class);
 
                             i.putExtra(ChatActivity.INTENT_USER_ID, user.id);
@@ -134,6 +140,7 @@ public class GCMUtils {
 
                 case GCM_TYPE_SYMPATHY:
                     if (options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns) {
+                        lastNotificationType = GCM_TYPE_SYMPATHY;
                         i = new Intent(context, NavigationActivity.class);
                         i.putExtra(NEXT_INTENT, BaseFragment.F_MUTUAL);
                     }
@@ -141,6 +148,7 @@ public class GCMUtils {
 
                 case GCM_TYPE_LIKE:
                     if (options.notifications.get(Options.NOTIFICATIONS_LIKES).apns) {
+                        lastNotificationType = GCM_TYPE_LIKE;
                         i = new Intent(context, NavigationActivity.class);
                         i.putExtra(NEXT_INTENT, BaseFragment.F_LIKES);
                     }
@@ -148,6 +156,7 @@ public class GCMUtils {
 
                 case GCM_TYPE_GUESTS:
                     if (options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns) {
+                        lastNotificationType = GCM_TYPE_GUESTS;
                         i = new Intent(context, NavigationActivity.class);
                         i.putExtra(NEXT_INTENT, BaseFragment.F_VISITORS);
                     }
@@ -161,7 +170,7 @@ public class GCMUtils {
                 i.putExtra("C2DM", true);
                 final TempImageViewRemote fakeImageView = new TempImageViewRemote(context);
                 fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
-                final Intent newI = i;//new Intent(context,ChatActivity.class);
+                final Intent newI = i;
                 newI.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 final String finalTitle = title;
                 fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
@@ -196,15 +205,17 @@ public class GCMUtils {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    public static void cancelNotification(final Context context) {
+    public static void cancelNotification(final Context context, final int type) {
         //Отменяем уведомления с небольшой задержкой,
         //что бы на ICS успело доиграть уведомление (длинные не успеют. но не страшно. все стандартные - короткие)
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                NotificationManager notificationManager =
-                        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancel(TopfaceNotificationManager.id);
+                if(type == lastNotificationType) {
+                    NotificationManager notificationManager =
+                            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(TopfaceNotificationManager.id);
+                }
             }
         }, NOTIFICATION_CANCEL_DELAY);
 

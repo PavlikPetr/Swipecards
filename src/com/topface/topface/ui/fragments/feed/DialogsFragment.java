@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.graphics.drawable.Drawable;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
@@ -50,4 +51,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         return FeedRequest.FeedService.DIALOGS;
     }
 
+    @Override
+    protected int getType() {
+        return GCMUtils.GCM_NO_NOTIFICATION;
+    }
 }

@@ -4,6 +4,7 @@
                 android:layout_height="fill_parent"
                 android:orientation="vertical"
                 android:background="@drawable/bg_main">
+    
 
     <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,9 +14,14 @@
             android:orientation="vertical">
 
         <include layout="@layout/bar_navigation_header"/>
+        <ImageView style="@style/HeaderShadow"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@drawable/im_bar_header_shadow"/>
 
-        <include layout="@layout/bar_triple_btn"/>
+        <include layout="@layout/bar_triple_btn" android:layout_marginTop="-2dp"/>        
     </LinearLayout>
+
 
     <ImageView
             android:id="@+id/giftHeaderDivider"
@@ -67,4 +73,5 @@
             style="@style/LoadingLocker"
             android:visibility="gone"
             />
+        
 </RelativeLayout>

@@ -53,8 +53,8 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         setContentView(R.layout.ac_auth);
 
         mRetryView = new RetryView(getApplicationContext());
-        mRetryView.init(getLayoutInflater());
-        mRetryView.setOnClickListener(this);
+        mRetryView.setErrorMsg(getString(R.string.general_data_error));
+        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry),this);
         mRetryView.setVisibility(View.GONE);
         RelativeLayout authContainer = (RelativeLayout) findViewById(R.id.authContainer);
         authContainer.addView(mRetryView);

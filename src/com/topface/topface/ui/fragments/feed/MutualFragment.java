@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.graphics.drawable.Drawable;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedMutual;
@@ -38,5 +39,10 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected int getEmptyFeedText() {
         return R.string.mutual_background_text;
-    }   
+    }
+
+    @Override
+    protected int getType() {
+        return GCMUtils.GCM_TYPE_SYMPATHY;
+    }
 }

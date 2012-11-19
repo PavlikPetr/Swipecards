@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView.OnItemClickListener;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
@@ -52,6 +53,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
+    protected int getType() {
+        return GCMUtils.GCM_TYPE_LIKE;
+    }
+
+    @Override
     protected OnTouchListener getListViewOnTouchListener() {
         final GestureDetector gd = new GestureDetector(getActivity().getApplicationContext(),
                 new SwipeGestureListener(getActivity().getApplicationContext(), mListView.getRefreshableView(),
@@ -70,19 +76,21 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                             @Override
                             public void onTap(int position) {
                                 FeedItem item = (FeedItem) mListView.getRefreshableView().getItemAtPosition(position);
-                                if (!mIsUpdating && item.isLoaderRetry()) {
-                                    updateUI(new Runnable() {
-                                        public void run() {
-                                            mListAdapter.showLoaderItem();
-                                        }
-                                    });
-                                    updateData(false, true);
-                                } else {
-                                    try {
-                                        onFeedItemClick(item);
-                                    } catch (Exception e) {
-                                        Debug.error("FeedItem click error:", e);
-                                    }
+                                if (item != null) {
+	                                if (!mIsUpdating && item.isLoaderRetry()) {
+	                                    updateUI(new Runnable() {
+	                                        public void run() {
+	                                            mListAdapter.showLoaderItem();
+	                                        }
+	                                    });
+	                                    updateData(false, true);
+	                                } else {
+	                                    try {
+	                                        onFeedItemClick(item);
+	                                    } catch (Exception e) {
+	                                        Debug.error("FeedItem click error:", e);
+	                                    }
+	                                }
                                 }
                             }
                         })

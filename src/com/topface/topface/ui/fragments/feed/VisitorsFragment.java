@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.graphics.drawable.Drawable;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Visitor;
@@ -40,5 +41,10 @@ public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
     @Override
     protected int getEmptyFeedText() {
         return R.string.visitors_background_text;
-    }    
+    }
+
+    @Override
+    protected int getType() {
+        return GCMUtils.GCM_TYPE_GUESTS;
+    }
 }

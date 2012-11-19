@@ -157,15 +157,15 @@ public class UserProfileActivity extends BaseFragmentActivity {
 
         lockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
         RetryView retryBtn = new RetryView(getApplicationContext());
-        retryBtn.init(getLayoutInflater());
         retryBtn.setErrorMsg(getString(R.string.general_profile_error));
-        retryBtn.setOnClickListener(new View.OnClickListener() {
+        retryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
             @Override
             public void onClick(View v) {
                 getUserProfile();
                 lockScreen.setVisibility(View.GONE);
             }
         });
+
         lockScreen.addView(retryBtn);
 
         mViewPager = (ViewPager) findViewById(R.id.UserViewPager);

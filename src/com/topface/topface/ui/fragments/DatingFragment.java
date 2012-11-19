@@ -31,6 +31,7 @@ import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.*;
 
 import java.util.LinkedList;
@@ -66,6 +67,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private ViewFlipper mViewFlipper;
 
     private ImageButton mRetryBtn;
+    private RetryView emptySearchDialog;
     private PreloadManager mPreloadManager;
 
     private Drawable singleMutual;
@@ -86,6 +88,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         mRetryBtn = (ImageButton) view.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
+
+
 
         mViewFlipper = (ViewFlipper) view.findViewById(R.id.vfFlipper);
 
@@ -116,7 +120,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         setHeader(view);
 
         mNavigationHeader = view.findViewById(R.id.loNavigationBar);
-        ImageButton settingsButton = (ImageButton) view.findViewById(R.id.btnNavigationSettingsBar);
+        final ImageButton settingsButton = (ImageButton) view.findViewById(R.id.btnNavigationSettingsBar);
         settingsButton.setVisibility(View.VISIBLE);
         settingsButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -126,6 +130,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
             }
         });
+
+
+
         mNavigationHeaderShadow = view.findViewById(R.id.ivHeaderShadow);
 
         // Rate Controller
@@ -198,15 +205,33 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);
 
         mPreloadManager = new PreloadManager(getActivity().getApplicationContext());
+        emptySearchDialog = new RetryView(getActivity());
+        emptySearchDialog.setErrorMsg(getString(R.string.general_search_null_response_error));
+        emptySearchDialog.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                showNextUser();
+                updateData(false);
+            }
+        });
+        emptySearchDialog.addButton(getString(R.string.change_filters),new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingsButton.performClick();
+            }
+        });
+        emptySearchDialog.setVisibility(View.GONE);
+        ((RelativeLayout)view.findViewById(R.id.ac_dating_container)).addView(emptySearchDialog);
         showNextUser();
         return view;
     }
 
     private void updateData(final boolean isAddition) {
         lockControls();
+        emptySearchDialog.setVisibility(View.GONE);
         if (!isAddition)
             onUpdateStart(isAddition);
-        Debug.log(this, "update");
+        Debug.log(this, "update");        
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         SearchRequest searchRequest = new SearchRequest(getActivity());
@@ -223,16 +248,24 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        if (isAddition) {
-                            mUserSearchList.addAll(userList);
+                        if(userList.size() != 0) {
+                            mImageSwitcher.setVisibility(View.VISIBLE);
+                            if (isAddition) {
+                                mUserSearchList.addAll(userList);
+                                unlockControls();
+                            } else {
+                                mUserSearchList.clear();
+                                mUserSearchList.addAll(userList);
+                                onUpdateSuccess(isAddition);
+                                showNextUser();
+                                unlockControls();
+                            }
                         } else {
-                            mUserSearchList.clear();
-                            mUserSearchList.addAll(userList);
-                            onUpdateSuccess(isAddition);
-                            showNextUser();
+                            mImageSwitcher.setVisibility(View.GONE);
+                            mProgressBar.setVisibility(View.GONE);
+                            emptySearchDialog.setVisibility(View.VISIBLE);
                         }
 
-                        unlockControls();
                     }
                 });
 
