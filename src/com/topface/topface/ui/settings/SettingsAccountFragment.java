@@ -19,6 +19,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -44,7 +45,7 @@ public class SettingsAccountFragment extends Fragment {
                 getActivity().finish();
             }
         });
-        lockerView = (LockerView)root.findViewById(R.id.llvLogoutLoading);
+        lockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         lockerView.setVisibility(View.GONE);
         ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_account);
 
@@ -60,7 +61,7 @@ public class SettingsAccountFragment extends Fragment {
         textName.setText(Settings.getInstance().getSocialAccountName());
         textName.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
-        ((Button) root.findViewById(R.id.btnLogout)).setOnClickListener(new OnClickListener() {
+        root.findViewById(R.id.btnLogout).setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -73,8 +74,8 @@ public class SettingsAccountFragment extends Fragment {
                         Data.removeSSID(getActivity().getApplicationContext());
                         token.removeToken();
                         getActivity().runOnUiThread(new Runnable() {
-                            @SuppressWarnings({ "rawtypes", "unchecked" })
-							@Override
+                            @SuppressWarnings({"rawtypes", "unchecked"})
+                            @Override
                             public void run() {
                                 new FacebookLogoutTask().execute();
                             }
@@ -97,15 +98,15 @@ public class SettingsAccountFragment extends Fragment {
         return root;
     }
 
-    @SuppressWarnings({ "rawtypes", "hiding" })
-	class FacebookLogoutTask<Object> extends AsyncTask {
+    @SuppressWarnings({"rawtypes", "hiding"})
+    class FacebookLogoutTask extends AsyncTask {
         @Override
         protected java.lang.Object doInBackground(java.lang.Object... params) {
-            try{
+            try {
                 Data.facebook.logout(getActivity().getApplicationContext());
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Debug.error(e);
             }
             return null;
         }

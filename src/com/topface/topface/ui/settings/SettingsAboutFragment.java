@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.topface.topface.R;
+import com.topface.topface.utils.Debug;
 
 import java.util.Calendar;
 
@@ -44,7 +45,7 @@ public class SettingsAboutFragment extends Fragment {
             pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
             versionNumber = pInfo.versionName;
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            Debug.error(e);
         }
         version.setText(getResources().getString(R.string.settings_version) + " " + versionNumber);
 
