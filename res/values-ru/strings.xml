@@ -218,7 +218,7 @@
     <string name="settings_about">О программе</string>
     <string name="settings_version">Версия</string>
     <string name="settings_copyright">Копирайт 2010-</string>
-    <string name="settings_rights_reserved">Topface все права защищены</string>
+    <string name="settings_rights_reserved">Topface \nВсе права защищены</string>
     <string name="settings_extra">Подробную информацию можно найти на</string>
     <string name="settings_logout">Выйти из аккаунта</string>
     <string name="settings_logout_msg">Вы действительно хотите выйти?</string>
@@ -276,4 +276,5 @@
 
     <string name="general_search_null_response_error">Ничего не найдено. Попробуйте изменить фильтры</string>
     <string name="change_filters">Изменить фильтры</string>
+    <string name="filter_city_fail">"Не найдено ни одного города начинающегося с "</string>
 </resources>
