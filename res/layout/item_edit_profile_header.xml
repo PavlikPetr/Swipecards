@@ -59,7 +59,10 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginLeft="8dp">
 
-            <Button
+            <include layout="@layout/item_edit_profile_name_select"
+                android:id="@+id/loProfileName"/>
+            
+            <!-- Button
                     android:id="@+id/btnEditName"
                     style="@style/ItemTitleText"
                     android:layout_width="fill_parent"
@@ -72,14 +75,14 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="5dp"
                     android:singleLine="true"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"/-->
 
             <Button
                     android:id="@+id/btnEditCity"
                     style="@style/ItemTitleText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/btnEditName"
+                    android:layout_below="@id/loProfileName"
                     android:background="@drawable/edit_btn_bottom_selector"
                     android:drawableRight="@drawable/im_item_arrow"
                     android:ellipsize="end"

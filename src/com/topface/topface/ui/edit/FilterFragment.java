@@ -45,6 +45,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private ImageView mCheckGirl;
     private ImageView mCheckBoy;
+    private ViewGroup mLoGirls;
+    private ViewGroup mLoBoys;
     private ViewGroup mXStatusFrame;
     private ViewGroup mMarriageFrame;
     private ViewGroup mCharacterFrame;
@@ -54,6 +56,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private EditSwitcher mSwitchOnline;
     private EditSwitcher mSwitchBeautifull;
+    private ViewGroup mLoSwitchOnline;
+    private ViewGroup mLoSwitchBeautifull;
 
     class Filter implements Cloneable {
         int sex; // пол пользователей
@@ -209,28 +213,26 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
     }
 
-    private void initViews(ViewGroup root) {
-        ViewGroup frame;
-
+    private void initViews(ViewGroup root) {        
         // Girl
-        frame = (ViewGroup) root.findViewById(R.id.loGirl);
-        setBackground(R.drawable.edit_big_btn_top_selector, frame);
-        setText(R.string.general_girls, frame);
-        mCheckGirl = (ImageView) frame.findViewById(R.id.ivCheck);
+        mLoGirls = (ViewGroup) root.findViewById(R.id.loGirl);
+        setBackground(R.drawable.edit_big_btn_top_selector, mLoGirls);
+        setText(R.string.general_girls, mLoGirls);
+        mCheckGirl = (ImageView) mLoGirls.findViewById(R.id.ivCheck);
         if (mFilter.sex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);
         }
-        frame.setOnClickListener(this);
+        mLoGirls.setOnClickListener(this);
 
         // Boy
-        frame = (ViewGroup) root.findViewById(R.id.loBoy);
-        setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
-        setText(R.string.general_boys, frame);
-        mCheckBoy = (ImageView) frame.findViewById(R.id.ivCheck);
+        mLoBoys = (ViewGroup) root.findViewById(R.id.loBoy);
+        setBackground(R.drawable.edit_big_btn_bottom_selector, mLoBoys);
+        setText(R.string.general_boys, mLoBoys);
+        mCheckBoy = (ImageView) mLoBoys.findViewById(R.id.ivCheck);
         if (mFilter.sex == Static.BOY) {
             mCheckBoy.setVisibility(View.VISIBLE);
         }
-        frame.setOnClickListener(this);
+        mLoBoys.setOnClickListener(this);
 
         // Age
         mAgeFrame = (ViewGroup) root.findViewById(R.id.loAge);
@@ -245,23 +247,23 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mCityFrame.setOnClickListener(this);
 
         // Online
-        frame = (ViewGroup) root.findViewById(R.id.loOnline);
-        setBackground(R.drawable.edit_big_btn_top_selector, frame);
-        setText(R.string.filter_online, frame);
-        mSwitchOnline = new EditSwitcher(frame);
+        mLoSwitchOnline = (ViewGroup) root.findViewById(R.id.loOnline);
+        setBackground(R.drawable.edit_big_btn_top_selector, mLoSwitchOnline);
+        setText(R.string.filter_online, mLoSwitchOnline);
+        mSwitchOnline = new EditSwitcher(mLoSwitchOnline);
         mSwitchOnline.setChecked(mFilter.online);
-        frame.setOnClickListener(this);
+        mLoSwitchOnline.setOnClickListener(this);
 
         // Beautiful
-        frame = (ViewGroup) root.findViewById(R.id.loBeautiful);
-        setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
-        setText(R.string.filter_only_beautiful, frame);
-        mSwitchBeautifull = new EditSwitcher(frame);
+        mLoSwitchBeautifull = (ViewGroup) root.findViewById(R.id.loBeautiful);
+        setBackground(R.drawable.edit_big_btn_bottom_selector, mLoSwitchBeautifull);
+        setText(R.string.filter_only_beautiful, mLoSwitchBeautifull);
+        mSwitchBeautifull = new EditSwitcher(mLoSwitchBeautifull);
         mSwitchBeautifull.setChecked(mFilter.beautiful);
-        frame.setOnClickListener(this);
+        mLoSwitchBeautifull.setOnClickListener(this);
 
         // Extra Header
-        frame = (ViewGroup) root.findViewById(R.id.loExtraHeader);
+        ViewGroup frame = (ViewGroup) root.findViewById(R.id.loExtraHeader);
         ((TextView) frame.findViewById(R.id.tvTitle)).setText(R.string.filter_extra_parameters);
 
         // Dating Status
@@ -589,8 +591,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     protected void lockUi() {
         mBackButton.setEnabled(false);
-        mCheckGirl.setEnabled(false);
-        mCheckBoy.setEnabled(false);
+        mLoGirls.setEnabled(false);        
+        mLoBoys.setEnabled(false);
         mAgeFrame.setEnabled(false);
         mCityFrame.setEnabled(false);
         mSwitchOnline.setEnabled(false);
@@ -605,12 +607,12 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     protected void unlockUi() {
         mBackButton.setEnabled(true);
-        mCheckGirl.setEnabled(true);
-        mCheckBoy.setEnabled(true);
+        mLoGirls.setEnabled(true);
+        mLoBoys.setEnabled(true);
         mAgeFrame.setEnabled(true);
         mCityFrame.setEnabled(true);
-        mSwitchOnline.setEnabled(true);
-        mSwitchBeautifull.setEnabled(true);
+        mLoSwitchOnline.setEnabled(true);
+        mLoSwitchBeautifull.setEnabled(true);
         mXStatusFrame.setEnabled(true);
         mMarriageFrame.setEnabled(true);
         mCharacterFrame.setEnabled(true);

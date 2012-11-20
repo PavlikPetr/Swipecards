@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
@@ -26,9 +27,9 @@ import com.topface.topface.utils.Debug;
 
 import java.util.HashMap;
 
-public class EditMainFormItemsFragment extends AbstractEditFragment {
+public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener{
 
-    public enum EditType {NAME, AGE, STATUS}
+    public enum EditType {NAME, AGE, STATUS};
 
     private EditType[] mTypes;
     private HashMap<EditType, String> hashChangedData = new HashMap<EditMainFormItemsFragment.EditType, String>();
@@ -36,6 +37,13 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
     private EditText mEdName;
     private EditText mEdAge;
     private EditText mEdStatus;
+    private int mSex;
+    private View mLoGirl;
+    private View mLoBoy;
+    
+    
+    private ImageView mCheckGirl;
+    private ImageView mCheckBoy;
 
     public EditMainFormItemsFragment(EditType[] type) {
         mTypes = type;
@@ -74,6 +82,29 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
 
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
+        mSex = CacheProfile.sex;
+        mLoGirl = (ViewGroup) root.findViewById(R.id.loGirl);                        
+        ((ImageView) mLoGirl.findViewById(R.id.ivEditBackground))
+        	.setImageResource(R.drawable.edit_big_btn_top_selector);        
+        ((TextView) mLoGirl.findViewById(R.id.tvTitle))
+        	.setText(R.string.general_girl);        
+        mCheckGirl = (ImageView) mLoGirl.findViewById(R.id.ivCheck);
+        if (mSex == Static.GIRL) {
+            mCheckGirl.setVisibility(View.VISIBLE);
+        }
+        mLoGirl.setOnClickListener(this);
+        
+        mLoBoy = (ViewGroup) root.findViewById(R.id.loBoy);
+        ((ImageView) mLoBoy.findViewById(R.id.ivEditBackground))
+	    	.setImageResource(R.drawable.edit_big_btn_bottom_selector);        
+	    ((TextView) mLoBoy.findViewById(R.id.tvTitle))
+	    	.setText(R.string.general_boy);        
+	    mCheckBoy = (ImageView) mLoBoy.findViewById(R.id.ivCheck);
+	    if (mSex == Static.BOY) {
+	        mCheckBoy.setVisibility(View.VISIBLE);
+	    }
+	    mLoBoy.setOnClickListener(this);
+        
         ViewGroup loName = (ViewGroup) root.findViewById(R.id.loName);
         loName.setVisibility(View.GONE);
         ViewGroup loAge = (ViewGroup) root.findViewById(R.id.loAge);
@@ -182,7 +213,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
         for (EditType type : hashChangedData.keySet()) {
             if (!getDataByEditType(type).equals(hashChangedData.get(type)))
                 return true;
-        }
+        }        
+        if (mSex != CacheProfile.sex) return true;        
         return false;
     }
 
@@ -205,9 +237,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
                     for (EditType type : hashChangedData.keySet()) {
                         setDataByEditType(type, hashChangedData.get(type));
                     }
+                    CacheProfile.sex = mSex;
                     getActivity().setResult(Activity.RESULT_OK);
                     finishRequestSend();
-                    getActivity().finish();
+                    getActivity().finish();                    
                 }
 
                 @Override
@@ -227,7 +260,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
             case AGE:
                 return Integer.toString(CacheProfile.age);
             case STATUS:
-                return CacheProfile.status;
+                return CacheProfile.status;            
         }
         return Static.EMPTY;
     }
@@ -268,6 +301,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
                 }
             }
         }
+        request.sex = mSex;
         return request;
     }
 
@@ -279,6 +313,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
             mEdAge.setEnabled(false);
         if (mEdStatus != null)
             mEdStatus.setEnabled(false);
+        if (mLoBoy != null)
+        	mLoBoy.setEnabled(false);
+        if (mLoGirl != null)
+        	mLoGirl.setEnabled(false);
     }
 
     @Override
@@ -289,5 +327,35 @@ public class EditMainFormItemsFragment extends AbstractEditFragment {
             mEdAge.setEnabled(true);
         if (mEdStatus != null)
             mEdStatus.setEnabled(true);
+        if (mLoBoy != null)
+        	mLoBoy.setEnabled(true);
+        if (mLoGirl != null)
+        	mLoGirl.setEnabled(true);
+    }
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.loGirl:
+            switchSex(Static.GIRL);
+            break;
+        case R.id.loBoy:
+            switchSex(Static.BOY);
+            break;
+		default:
+			break;
+		}
+	}
+	
+	private void switchSex(int sex) {
+        if (sex == Static.GIRL) {
+            mCheckGirl.setVisibility(View.VISIBLE);
+            mCheckBoy.setVisibility(View.INVISIBLE);            
+        } else {
+            mCheckBoy.setVisibility(View.VISIBLE);
+            mCheckGirl.setVisibility(View.INVISIBLE);    
+        }        
+        mSex = sex;
+        refreshSaveState();
     }
 }
