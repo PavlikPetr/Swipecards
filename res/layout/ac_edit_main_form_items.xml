@@ -5,7 +5,9 @@
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
-    <TextView style="@style/BackgroundFormTitleText"
+    <TextView
+        android:id="@+id/tvSexTitle" 
+        style="@style/BackgroundFormTitleText"
         android:text="@string/general_sex"
         android:layout_marginTop="10dp"/>
     

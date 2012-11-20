@@ -40,6 +40,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     private int mSex;
     private View mLoGirl;
     private View mLoBoy;
+    private TextView mSexTitle;
     
     
     private ImageView mCheckGirl;
@@ -82,6 +83,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
+        mSexTitle = (TextView) root.findViewById(R.id.tvSexTitle);
+        mSexTitle.setVisibility(View.GONE);
+        
         mSex = CacheProfile.sex;
         mLoGirl = (ViewGroup) root.findViewById(R.id.loGirl);                        
         ((ImageView) mLoGirl.findViewById(R.id.ivEditBackground))
@@ -93,6 +97,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             mCheckGirl.setVisibility(View.VISIBLE);
         }
         mLoGirl.setOnClickListener(this);
+        mLoGirl.setVisibility(View.GONE);
         
         mLoBoy = (ViewGroup) root.findViewById(R.id.loBoy);
         ((ImageView) mLoBoy.findViewById(R.id.ivEditBackground))
@@ -104,6 +109,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 	        mCheckBoy.setVisibility(View.VISIBLE);
 	    }
 	    mLoBoy.setOnClickListener(this);
+	    mLoBoy.setVisibility(View.GONE);
         
         ViewGroup loName = (ViewGroup) root.findViewById(R.id.loName);
         loName.setVisibility(View.GONE);
@@ -116,6 +122,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             String data = getDataByEditType(type);
             switch (type) {
                 case NAME:
+                	mSexTitle.setVisibility(View.VISIBLE);
+                	mLoBoy.setVisibility(View.VISIBLE);
+                	mLoGirl.setVisibility(View.VISIBLE);
                     loName.setVisibility(View.VISIBLE);
                     ((TextView) loName.findViewById(R.id.tvTitle)).setText(R.string.edit_name);
                     mEdName = (EditText) loName.findViewById(R.id.edText);
