@@ -13,8 +13,9 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
 
-//@ReportsCrashes(formKey = "dE85SXowSDhBcXZvMXAtUEtPMTg4X2c6MQ")
+@ReportsCrashes(formKey = "dFpvb09LSDhycV9idXhFTWwzWVd3VkE6MQ")
 public class App extends Application {
     // Constants
     public static final String TAG = "Topface";
@@ -59,7 +60,7 @@ public class App extends Application {
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
         }
         //Если приходим с нотификации незалогинеными, нужно вернуться в AuthActivity
-        if(!Data.isSSID() || (new AuthToken(getApplicationContext())).isEmpty()) {
+        if (!Data.isSSID() || (new AuthToken(getApplicationContext())).isEmpty()) {
             startActivity(new Intent(this, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         }
     }
