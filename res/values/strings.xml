@@ -106,7 +106,7 @@
     <string name="profile_form">Profile</string>
     <string name="profile_gifts">Gifts</string>
     <string name="profile_actions">Actions</string>
-    <string name="profile_empty_form">User hasn't filled in his profile yet</string>
+    <string name="profile_empty_form">User hasn\'t filled in his profile yet</string>
     <string name="profile_ask_form">Ask to fill in the profile</string>
     <string name="edit_title">Edit</string>
     <string name="edit_bg_photo">Background image</string>
@@ -145,7 +145,7 @@
     <string name="invite_search_hint">Find friends</string>
     <string name="invite_title">Invitations</string>
     <string name="invite_is_free">Invitation is free!</string>
-    <string name="invite_error">Can't send the invitations. Please, try again.</string>
+    <string name="invite_error">Can\'t send the invitations. Please, try again.</string>
     <string name="invite_completed">Invitation sent</string>
     <plurals name="invite_bonus_text">
         <item quantity="zero">Invite your friends and for every confirmed friend you will get 20</item>
