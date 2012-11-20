@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView.OnItemClickListener;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
@@ -49,6 +50,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected OnItemClickListener getOnItemClickListener() {
         return null;
+    }
+
+    @Override
+    protected int getType() {
+        return GCMUtils.GCM_TYPE_LIKE;
     }
 
     @Override

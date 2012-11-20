@@ -252,6 +252,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             // Если это не получилось, грузим с сервера
             update(false);
         }
+        GCMUtils.cancelNotification(this,GCMUtils.GCM_TYPE_MESSAGE);
     }
 
     private void deleteItem(final int position) {
@@ -768,7 +769,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             String id = intent.getStringExtra("id");
             if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
                 update(true);
-                GCMUtils.cancelNotification(ChatActivity.this);
+                GCMUtils.cancelNotification(ChatActivity.this,GCMUtils.GCM_TYPE_MESSAGE);
             }
         }
     };

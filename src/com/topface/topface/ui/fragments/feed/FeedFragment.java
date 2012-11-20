@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Recycle;
 import com.topface.topface.data.FeedItem;
@@ -83,6 +84,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
         createUpdateErrorMessage();
+        GCMUtils.cancelNotification(getActivity(),getType());
         return view;
     }
 
@@ -118,6 +120,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected abstract Drawable getBackIcon();
 
     abstract protected int getTitle();
+    abstract protected int getType();
 
     protected int getLayout() {
         return R.layout.ac_feed;
@@ -455,8 +458,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private void createUpdateErrorMessage() {
         if (updateErrorMessage == null) {
             updateErrorMessage = new RetryView(getActivity().getApplicationContext());
-            updateErrorMessage.init(getActivity().getLayoutInflater());
-            updateErrorMessage.setOnClickListener(new View.OnClickListener() {
+            updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
+            updateErrorMessage.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     retryButtonClick();

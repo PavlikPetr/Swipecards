@@ -208,4 +208,6 @@
   <string name="novice_fill_profile">Add your best photos,\nto get more likes</string>
   <string name="general_edit_profile_message">Please, fill in all the obligatory fields in you profile</string>
   <string name="general_premium_access_error">To do this you have to be VIP</string>
+  <string name="general_search_null_response_error">Nothing has been found. Try to change filters.</string>
+  <string name="change_filters">Change filters</string>
 </resources>

@@ -273,4 +273,7 @@
 
     <string name="general_edit_profile_message">Пожалуйста, заполните необходимые поля анкеты</string>
     <string name="general_premium_access_error">Для данной функции необходим Премиум</string>
+
+    <string name="general_search_null_response_error">Ничего не найдено. Попробуйте изменить фильтры</string>
+    <string name="change_filters">Изменить фильтры</string>
 </resources>
