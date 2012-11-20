@@ -353,7 +353,7 @@ public class Profile extends AbstractDataWithPhotos {
                 }
 
                 //26 achievements  position 16
-                String ach = form.optString("aspirations");
+                String ach = form.optString("achievements");
                 String achievments = TextUtils.isEmpty(ach.trim()) ? null : ach;
                 formItem = new FormItem(R.array.form_detail_archievements, achievments, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
