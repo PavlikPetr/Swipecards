@@ -44,7 +44,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSelectedAsMainId = CacheProfile.photo.getId();
+        mSelectedAsMainId = CacheProfile.photo == null ? -1 : CacheProfile.photo.getId();
         mLastSelectedAsMainId = mSelectedAsMainId;
 
         mPhotoLinks = new Photos();
