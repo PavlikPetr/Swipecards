@@ -36,7 +36,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     private ListView mEditsListView;
     private EditsAdapter mAdapter;
     private LinkedList<EditProfileItem> mEditItems;
-    private Button mEditName;
+    private TextView mEditName;
+    private TextView mEditAge;
+    private ImageView mEditSex;
     private Button mEditCity;
     private ImageViewRemote mProfilePhoto;
     private TextView editProfileMsg;
@@ -70,9 +72,18 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_header, mEditsListView, false);
 
-        mEditName = (Button) header.findViewById(R.id.btnEditName);
-        mEditName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
-        mEditName.setOnClickListener(this);
+        ViewGroup profileNameLayout = (ViewGroup) header.findViewById(R.id.loProfileName);
+        ((ImageView)profileNameLayout.findViewById(R.id.ivNameEditBackground)).setOnClickListener(this);
+        mEditName = (TextView)profileNameLayout.findViewById(R.id.tvName);
+        mEditName.setText(CacheProfile.first_name + ", ");
+        mEditAge = (TextView)profileNameLayout.findViewById(R.id.tvAge);
+        mEditAge.setText(Integer.toString(CacheProfile.age));
+        mEditSex = (ImageView)profileNameLayout.findViewById(R.id.ivSexIcon);
+        mEditSex.setImageResource(CacheProfile.sex == Static.BOY ? 
+        		R.drawable.ico_boy : 
+        		R.drawable.ico_girl);
+        
+        
         mEditCity = (Button) header.findViewById(R.id.btnEditCity);
         mEditCity.setText(CacheProfile.city_name);
         mEditCity.setOnClickListener(this);
@@ -132,7 +143,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnEditName:
+            case R.id.ivNameEditBackground:
                 startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),
                         EditContainerActivity.INTENT_EDIT_NAME_AGE);
                 break;
@@ -160,7 +171,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case EditContainerActivity.INTENT_EDIT_NAME_AGE:
-                    mEditName.setText(CacheProfile.first_name + ", " + CacheProfile.age);
+                    mEditName.setText(CacheProfile.first_name + ", ");
+                    mEditAge.setText(Integer.toString(CacheProfile.age));
+                    mEditSex.setImageResource(CacheProfile.sex == Static.BOY ? 
+                    		R.drawable.ico_boy : 
+                    		R.drawable.ico_girl);
                     break;
                 case EditContainerActivity.INTENT_EDIT_STATUS:
                     mAdapter.notifyDataSetChanged();

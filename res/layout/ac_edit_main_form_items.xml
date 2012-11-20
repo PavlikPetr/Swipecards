@@ -1,30 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_horizontal"
-              android:orientation="vertical">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvSexTitle" 
+        style="@style/BackgroundFormTitleText"
+        android:text="@string/general_sex"
+        android:layout_marginTop="10dp"/>
+    
+    <include
+        android:id="@+id/loGirl"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"        
+        layout="@layout/item_edit_form_check" />
 
     <include
-            android:id="@+id/loName"
-            layout="@layout/item_edit_form_input"/>
+        android:id="@+id/loBoy"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/item_edit_form_check" />
 
     <include
-            android:id="@+id/loAge"
-            layout="@layout/item_edit_form_input"/>
+        android:id="@+id/loName"
+        layout="@layout/item_edit_form_input" />
+
+    <include
+        android:id="@+id/loAge"
+        layout="@layout/item_edit_form_input" />
 
     <ListView
-            android:id="@+id/lvList"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:cacheColorHint="#00000000"
-            android:divider="@android:color/transparent"
-            android:fadeScrollbars="true"
-            android:fadingEdge="none"
-            android:listSelector="@android:color/transparent"/>
+        android:id="@+id/lvList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="#00000000"
+        android:divider="@android:color/transparent"
+        android:fadeScrollbars="true"
+        android:fadingEdge="none"
+        android:listSelector="@android:color/transparent" />
 
     <include
-            android:id="@+id/loStatus"
-            layout="@layout/item_edit_form_input"/>
+        android:id="@+id/loStatus"
+        layout="@layout/item_edit_form_input" />
 
 </LinearLayout>

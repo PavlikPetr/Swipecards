@@ -54,7 +54,9 @@ public class GiftsFragment extends BaseFragment {
         if (activity instanceof UserProfileActivity) {
             mProfile = ((UserProfileActivity) activity).mUser;
             mTag = GIFTS_USER_PROFILE_TAG;
-            setGifts(mProfile.gifts);
+            if (mProfile != null) { 
+            	setGifts(mProfile.gifts);
+            }
             mGalleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
                 @Override
                 public void handleMessage(Message msg) {
@@ -315,8 +317,8 @@ public class GiftsFragment extends BaseFragment {
             if (mGifts.size() >= UserProfileActivity.GIFTS_LOAD_COUNT)
                 mGifts.add(new FeedGift(ItemType.LOADER));
         }
-    }
-
+    }   
+    
     @Override
     public void onDestroy() {
         super.onDestroy();

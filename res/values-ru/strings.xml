@@ -218,7 +218,7 @@
     <string name="settings_about">О программе</string>
     <string name="settings_version">Версия</string>
     <string name="settings_copyright">Копирайт 2010-</string>
-    <string name="settings_rights_reserved">Topface все права защищены</string>
+    <string name="settings_rights_reserved">Topface \nВсе права защищены</string>
     <string name="settings_extra">Подробную информацию можно найти на</string>
     <string name="settings_logout">Выйти из аккаунта</string>
     <string name="settings_logout_msg">Вы действительно хотите выйти?</string>
@@ -261,10 +261,10 @@
         Отправляйте симпатии тем, кто вам\nдействительно нравится,\nчтобы начать приятное знакомство
     </string>
     <string name="novice_energy">
-        Чем выше заряд батарейки,\nтем чаще вас оценивают.\nНе забывайте зарядить\nбатарейку, купив энергию.
+        Чем выше заряд батарейки,\nтем чаще вас показывают.\nНе забывайте зарядить\nбатарейку, купив энергию.
     </string>
     <string name="novice_battery_bonus">
-        Энергия дает вам популярность\nи новые оценки. Вы можете\nзарядить батарейку, купив\n
+        Энергия дает вам популярность\nи новые симпатии. Вы можете\nзарядить батарейку, купив\n
         100% энергии. Первый заряд\nмы дарим вам бесплатно!
     </string>
     <string name="novice_fill_profile">
@@ -276,4 +276,9 @@
 
     <string name="general_search_null_response_error">Ничего не найдено. Попробуйте изменить фильтры</string>
     <string name="change_filters">Изменить фильтры</string>
+    
+    <string name="general_sex">Пол</string>
+    <string name="general_girl">Женский</string>
+    <string name="general_boy">Мужской</string>
+    <string name="filter_city_fail">"Не найдено ни одного города начинающегося с "</string>
 </resources>

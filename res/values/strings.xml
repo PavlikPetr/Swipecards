@@ -174,7 +174,7 @@
   <string name="settings_about">About</string>
   <string name="settings_version">Version</string>
   <string name="settings_copyright">Copyright 2010-</string>
-  <string name="settings_rights_reserved">Topface. All rights reserved</string>
+  <string name="settings_rights_reserved">Topface \nAll rights reserved</string>
   <string name="settings_extra">More information you can find on</string>
   <string name="settings_logout">Log out</string>
   <string name="settings_logout_msg">Do you really want to exit?</string>
@@ -210,4 +210,9 @@
   <string name="general_premium_access_error">To do this you have to be VIP</string>
   <string name="general_search_null_response_error">Nothing has been found. Try to change filters.</string>
   <string name="change_filters">Change filters</string>
+  
+  <string name="general_sex">Sex</string>
+  <string name="general_girl">Female</string>
+  <string name="general_boy">Male</string>
+  <string name="filter_city_fail">"Не найдено ни одного города начинающегося с "</string>
 </resources>
