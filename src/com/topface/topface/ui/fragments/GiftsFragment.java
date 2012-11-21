@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -47,15 +46,13 @@ public class GiftsFragment extends BaseFragment {
     private FeedList<FeedGift> mGifts = new FeedList<FeedGift>();
     private boolean mIsUpdating = false;
 
-    // TODO Data giftsList remove
-
     @Override
     public void onAttach(Activity activity) {
         if (activity instanceof UserProfileActivity) {
             mProfile = ((UserProfileActivity) activity).mUser;
             mTag = GIFTS_USER_PROFILE_TAG;
-            if (mProfile != null) { 
-            	setGifts(mProfile.gifts);
+            if (mProfile != null) {
+                setGifts(mProfile.gifts);
             }
             mGalleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
                 @Override
@@ -93,11 +90,6 @@ public class GiftsFragment extends BaseFragment {
         GridView gridView = (GridView) view.findViewById(R.id.fragmentGrid);
         gridView.setAnimationCacheEnabled(false);
         gridView.setScrollingCacheEnabled(true);
-
-        int columns = this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? GIFTS_COLUMN_PORTRAIT
-                : GIFTS_COLUMN_LANDSCAPE;
-
-        gridView.setNumColumns(columns);
 
         if (mTag.equals(GIFTS_ALL_TAG)) {
             view.findViewById(R.id.fragmentTitle).setVisibility(View.GONE);
@@ -317,8 +309,8 @@ public class GiftsFragment extends BaseFragment {
             if (mGifts.size() >= UserProfileActivity.GIFTS_LOAD_COUNT)
                 mGifts.add(new FeedGift(ItemType.LOADER));
         }
-    }   
-    
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -12,11 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
@@ -27,9 +23,9 @@ import com.topface.topface.utils.Debug;
 
 import java.util.HashMap;
 
-public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener{
+public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener {
 
-    public enum EditType {NAME, AGE, STATUS};
+    public enum EditType {NAME, AGE, STATUS}
 
     private EditType[] mTypes;
     private HashMap<EditType, String> hashChangedData = new HashMap<EditMainFormItemsFragment.EditType, String>();
@@ -40,9 +36,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     private int mSex;
     private View mLoGirl;
     private View mLoBoy;
-    private TextView mSexTitle;
-    
-    
+
+
     private ImageView mCheckGirl;
     private ImageView mCheckBoy;
 
@@ -83,34 +78,34 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
-        mSexTitle = (TextView) root.findViewById(R.id.tvSexTitle);
-        mSexTitle.setVisibility(View.GONE);
-        
+        TextView sexTitle = (TextView) root.findViewById(R.id.tvSexTitle);
+        sexTitle.setVisibility(View.GONE);
+
         mSex = CacheProfile.sex;
-        mLoGirl = (ViewGroup) root.findViewById(R.id.loGirl);                        
+        mLoGirl = root.findViewById(R.id.loGirl);
         ((ImageView) mLoGirl.findViewById(R.id.ivEditBackground))
-        	.setImageResource(R.drawable.edit_big_btn_top_selector);        
+                .setImageResource(R.drawable.edit_big_btn_top_selector);
         ((TextView) mLoGirl.findViewById(R.id.tvTitle))
-        	.setText(R.string.general_girl);        
+                .setText(R.string.general_girl);
         mCheckGirl = (ImageView) mLoGirl.findViewById(R.id.ivCheck);
         if (mSex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);
         }
         mLoGirl.setOnClickListener(this);
         mLoGirl.setVisibility(View.GONE);
-        
-        mLoBoy = (ViewGroup) root.findViewById(R.id.loBoy);
+
+        mLoBoy = root.findViewById(R.id.loBoy);
         ((ImageView) mLoBoy.findViewById(R.id.ivEditBackground))
-	    	.setImageResource(R.drawable.edit_big_btn_bottom_selector);        
-	    ((TextView) mLoBoy.findViewById(R.id.tvTitle))
-	    	.setText(R.string.general_boy);        
-	    mCheckBoy = (ImageView) mLoBoy.findViewById(R.id.ivCheck);
-	    if (mSex == Static.BOY) {
-	        mCheckBoy.setVisibility(View.VISIBLE);
-	    }
-	    mLoBoy.setOnClickListener(this);
-	    mLoBoy.setVisibility(View.GONE);
-        
+                .setImageResource(R.drawable.edit_big_btn_bottom_selector);
+        ((TextView) mLoBoy.findViewById(R.id.tvTitle))
+                .setText(R.string.general_boy);
+        mCheckBoy = (ImageView) mLoBoy.findViewById(R.id.ivCheck);
+        if (mSex == Static.BOY) {
+            mCheckBoy.setVisibility(View.VISIBLE);
+        }
+        mLoBoy.setOnClickListener(this);
+        mLoBoy.setVisibility(View.GONE);
+
         ViewGroup loName = (ViewGroup) root.findViewById(R.id.loName);
         loName.setVisibility(View.GONE);
         ViewGroup loAge = (ViewGroup) root.findViewById(R.id.loAge);
@@ -122,9 +117,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             String data = getDataByEditType(type);
             switch (type) {
                 case NAME:
-                	mSexTitle.setVisibility(View.VISIBLE);
-                	mLoBoy.setVisibility(View.VISIBLE);
-                	mLoGirl.setVisibility(View.VISIBLE);
+                    sexTitle.setVisibility(View.VISIBLE);
+                    mLoBoy.setVisibility(View.VISIBLE);
+                    mLoGirl.setVisibility(View.VISIBLE);
                     loName.setVisibility(View.VISIBLE);
                     ((TextView) loName.findViewById(R.id.tvTitle)).setText(R.string.edit_name);
                     mEdName = (EditText) loName.findViewById(R.id.edText);
@@ -151,7 +146,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                             }
                         }
                     });
-                    subTitle.setText(R.string.edit_name);
                     break;
                 case AGE:
                     loAge.setVisibility(View.VISIBLE);
@@ -222,9 +216,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         for (EditType type : hashChangedData.keySet()) {
             if (!getDataByEditType(type).equals(hashChangedData.get(type)))
                 return true;
-        }        
-        if (mSex != CacheProfile.sex) return true;        
-        return false;
+        }
+        return mSex != CacheProfile.sex;
     }
 
     @Override
@@ -249,7 +242,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                     CacheProfile.sex = mSex;
                     getActivity().setResult(Activity.RESULT_OK);
                     finishRequestSend();
-                    getActivity().finish();                    
+                    getActivity().finish();
                 }
 
                 @Override
@@ -269,7 +262,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             case AGE:
                 return Integer.toString(CacheProfile.age);
             case STATUS:
-                return CacheProfile.status;            
+                return CacheProfile.status;
         }
         return Static.EMPTY;
     }
@@ -298,11 +291,11 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         request.name = changedValue;
                         break;
                     case AGE:
-                    	try {
-                    		request.age = Integer.parseInt(changedValue);
-                    	} catch (Exception e) {
-							Debug.error(e);
-						}
+                        try {
+                            request.age = Integer.parseInt(changedValue);
+                        } catch (Exception e) {
+                            Debug.error(e);
+                        }
                         break;
                     case STATUS:
                         request.status = changedValue;
@@ -323,9 +316,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         if (mEdStatus != null)
             mEdStatus.setEnabled(false);
         if (mLoBoy != null)
-        	mLoBoy.setEnabled(false);
+            mLoBoy.setEnabled(false);
         if (mLoGirl != null)
-        	mLoGirl.setEnabled(false);
+            mLoGirl.setEnabled(false);
     }
 
     @Override
@@ -337,33 +330,33 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         if (mEdStatus != null)
             mEdStatus.setEnabled(true);
         if (mLoBoy != null)
-        	mLoBoy.setEnabled(true);
+            mLoBoy.setEnabled(true);
         if (mLoGirl != null)
-        	mLoGirl.setEnabled(true);
+            mLoGirl.setEnabled(true);
     }
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.loGirl:
-            switchSex(Static.GIRL);
-            break;
-        case R.id.loBoy:
-            switchSex(Static.BOY);
-            break;
-		default:
-			break;
-		}
-	}
-	
-	private void switchSex(int sex) {
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.loGirl:
+                switchSex(Static.GIRL);
+                break;
+            case R.id.loBoy:
+                switchSex(Static.BOY);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void switchSex(int sex) {
         if (sex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);
-            mCheckBoy.setVisibility(View.INVISIBLE);            
+            mCheckBoy.setVisibility(View.INVISIBLE);
         } else {
             mCheckBoy.setVisibility(View.VISIBLE);
-            mCheckGirl.setVisibility(View.INVISIBLE);    
-        }        
+            mCheckGirl.setVisibility(View.INVISIBLE);
+        }
         mSex = sex;
         refreshSaveState();
     }

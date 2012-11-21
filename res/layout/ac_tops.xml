@@ -15,11 +15,11 @@
             android:layout_height="fill_parent"
             android:id="@+id/loControlsGroup"
             android:layout_below="@id/loNavigationBar"
-            android:orientation="vertical">        
+            android:orientation="vertical">
 
         <!-- button bar -->
         <include layout="@layout/bar_tops_button"/>
-        
+
         <!-- leaders -->
         <include layout="@layout/leaders"/>
 
@@ -34,8 +34,9 @@
                 android:fadeScrollbars="true"
                 android:fadingEdge="none"
                 android:stretchMode="columnWidth"
+                android:numColumns="auto_fit"
+                android:columnWidth="120dp"
                 android:paddingTop="5dp"
-                android:numColumns="3"
                 android:horizontalSpacing="0px"
                 android:listSelector="@android:color/transparent"
                 android:verticalSpacing="0px">

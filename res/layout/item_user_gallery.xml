@@ -11,9 +11,7 @@
             android:scaleType="centerInside"
             android:background="@drawable/user_frame_album_center"
             android:layout_width="98dp"
-            android:layout_height="105.5dp"
-            android:paddingLeft="0.5dp"
-            android:paddingRight="0.5dp"
+            android:layout_height="105dp"
             android:layout_centerInParent="true"/>
 
 </RelativeLayout>

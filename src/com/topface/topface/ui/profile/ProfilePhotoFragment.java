@@ -70,7 +70,6 @@ public class ProfilePhotoFragment extends Fragment {
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
         GridView gridAlbum = (GridView) root.findViewById(R.id.fragmentGrid);
-        gridAlbum.setNumColumns(3);
         gridAlbum.setAdapter(mProfilePhotoGridAdapter);
         gridAlbum.setOnItemClickListener(mOnItemClickListener);
 
@@ -83,9 +82,9 @@ public class ProfilePhotoFragment extends Fragment {
         }
         title.setVisibility(View.VISIBLE);
 
-        ((Button) root.findViewById(R.id.btnAddPhotoAlbum)).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
-        ((Button) root.findViewById(R.id.btnAddPhotoCamera)).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
-        ((Button) root.findViewById(R.id.btnCancel)).setOnClickListener(new OnClickListener() {
+        root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
+        root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
+        root.findViewById(R.id.btnCancel).setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -121,7 +120,7 @@ public class ProfilePhotoFragment extends Fragment {
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, --position);
             intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
-            
+
             startActivity(intent);
         }
     };

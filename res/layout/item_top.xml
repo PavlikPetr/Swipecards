@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp">
@@ -20,12 +20,12 @@
             android:layout_width="106dp"
             android:layout_height="108dp"/>
 
-    <ImageView 
-        android:src="@drawable/frame_top_shadow"
-        android:scaleType="fitXY"           
-        android:paddingTop="0.5dp"        
-        android:layout_width="108dp"
-        android:layout_height="108dp"/>
+    <ImageView
+            android:src="@drawable/frame_top_shadow"
+            android:scaleType="fitXY"
+            android:paddingTop="0.5dp"
+            android:layout_width="108dp"
+            android:layout_height="108dp"/>
 
     <TextView
             android:id="@+id/topsRating"

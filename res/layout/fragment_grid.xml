@@ -25,6 +25,9 @@
             android:layout_margin="0px"
             android:padding="0px"
             android:gravity="center"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+            android:columnWidth="105dp"
             android:fadeScrollbars="true"/>
 
 </LinearLayout>
