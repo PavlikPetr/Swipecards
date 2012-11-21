@@ -1,6 +1,7 @@
 package com.topface.topface.ui.profile;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
     public ProfileFormListAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mProfileForms = CacheProfile.forms;
+        mProfileForms = CacheProfile.forms;        
     }
 
     @Override
