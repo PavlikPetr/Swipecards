@@ -25,7 +25,7 @@ public class TopfaceNotificationManager {
             mInstance = new TopfaceNotificationManager(context);
         }
         return mInstance;
-    }
+    } 	
 
     private TopfaceNotificationManager(Context context) {
         mNotificationBuilder = new NotificationCompat.Builder(context);

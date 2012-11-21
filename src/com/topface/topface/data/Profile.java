@@ -145,21 +145,21 @@ public class Profile extends AbstractDataWithPhotos {
 				headerItem = new FormItem(R.string.form_main, FormItem.HEADER);
 				formInfo.fillFormItem(headerItem);
 				profile.forms.add(headerItem);
-
-				// 2 character position 0
+				
 				int position = 0;
 
-				formItem = new FormItem(R.array.form_main_status, form.optInt("status_id"),
-						FormItem.DATA, headerItem);
-				formInfo.fillFormItem(formItem);
-				if (mIsUserProfile) {
-					position++;
-					compareFormItemData(formItem, position, profile,
-							form.optBoolean("status_goodness", false));
-				} else {
-					profile.forms.add(formItem);
-				}
+//				formItem = new FormItem(R.array.form_main_status, form.optInt("status_id"),
+//						FormItem.DATA, headerItem);
+//				formInfo.fillFormItem(formItem);
+//				if (mIsUserProfile) {
+//					position++;
+//					compareFormItemData(formItem, position, profile,
+//							form.optBoolean("status_goodness", false));
+//				} else {
+//					profile.forms.add(formItem);
+//				}
 
+				// 2 character position 0
 				formItem = new FormItem(R.array.form_main_character, form.optInt("character_id"),
 						FormItem.DATA, headerItem);
 				formInfo.fillFormItem(formItem);
