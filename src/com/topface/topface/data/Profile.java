@@ -2,7 +2,6 @@ package com.topface.topface.data;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
