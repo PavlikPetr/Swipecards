@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import com.topface.topface.R;
 
 public class TopfaceNotificationManager {
@@ -18,15 +17,15 @@ public class TopfaceNotificationManager {
     public static final int id = 1312; //Completely random number
     private float scale = 0;
     private float width = 64;
-    private float height = 64;
-    private TaskStackBuilder stackBuilder;
+    private float height = 64;    
+    private Context ctx;    
 
     public static TopfaceNotificationManager getInstance(Context context) {
         if(mInstance == null) {
             mInstance = new TopfaceNotificationManager(context);
         }
         return mInstance;
-    }
+    } 	
 
     private TopfaceNotificationManager(Context context) {
         mNotificationBuilder = new NotificationCompat.Builder(context);
@@ -43,7 +42,7 @@ public class TopfaceNotificationManager {
         width *= scale;
         height *= scale;
         ctx = context;
-        stackBuilder = TaskStackBuilder.create(context);
+//        stackBuilder = TaskStackBuilder.create(context);
     }
 
     public void showNotification(int userId, String title, String message, Bitmap icon, int unread, Intent intent) {    	
@@ -63,8 +62,5 @@ public class TopfaceNotificationManager {
 //        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mNotificationBuilder.setContentIntent(resultPendingIntent);
         mNotificationManager.notify(id, mNotificationBuilder.getNotification());
-    }
-
-    @SuppressWarnings("unused")
-	private Context ctx;
+    }	
 }
