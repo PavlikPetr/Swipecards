@@ -50,7 +50,7 @@ public abstract class ApiRequest {
             retryDialog.setButton(Dialog.BUTTON_NEGATIVE, context.getString(R.string.general_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    handler.fail(0, new ApiResponse(""));
+                    if (handler != null) handler.fail(0, new ApiResponse(""));
                 }
             });
 

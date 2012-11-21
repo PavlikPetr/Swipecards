@@ -1,6 +1,5 @@
 package com.topface.topface.ui.settings;
 
-import java.util.Locale;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -16,12 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -29,7 +23,10 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.ui.edit.AbstractEditFragment;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
+
+import java.util.Locale;
 
 public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
@@ -72,10 +69,10 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             public void onClick(View v) {
                 saveChanges(null);
             }
-        });        
-        
+        });
+
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
-        
+
         Bundle extras = getActivity().getIntent().getExtras();
         switch (extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN)) {
             case ERROR_MESSAGE:
@@ -130,7 +127,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                     getActivity().getPackageName(), 0);
             mReport.topface_version = pInfo.versionName;
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            Debug.error(e);
         }
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -141,8 +138,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     @Override
     protected boolean hasChanges() {
         return !TextUtils.isEmpty(mReport.body);
-    }    
-    
+    }
+
     @Override
     protected void saveChanges(Handler handler) {
         InputMethodManager imm = (InputMethodManager) getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -157,14 +154,14 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         feedbackRequest.callback(new ApiHandler() {
 
             @Override
-            public void success(ApiResponse response) throws NullPointerException {                
+            public void success(ApiResponse response) throws NullPointerException {
                 mReport.body = Static.EMPTY;
                 finishRequestSend();
                 updateUI(new Runnable() {
 
                     @Override
                     public void run() {
-                    	mEditText.setText(Static.EMPTY);
+                        mEditText.setText(Static.EMPTY);
                         Toast.makeText(getActivity(),
                                 getString(R.string.settings_feedback_success_msg),
                                 Toast.LENGTH_SHORT).show();
@@ -189,7 +186,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         }).exec();
     }
 
-    class Report {    	
+    class Report {
         String subject;
         String body = Static.EMPTY;
         String topface_version = "unknown";
@@ -200,8 +197,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         String model = android.os.Build.MODEL;
 
         public String getSubject() {
-        	AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
-            return "["+Static.PLATFORM+"]"+subject + " {"+authToken.getSocialNet()+"_id="+authToken.getUserId()+"}";
+            AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
+            return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserId() + "}";
         }
 
         public String getBody() {
@@ -213,30 +210,30 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
             strBuilder.append("<p>Topface version:").append(topface_version).append("</p>");
             strBuilder.append("<p>Device:").append(device).append("/").append(model).append("</p>");
-            strBuilder.append("<p>Device language:").append(Locale.getDefault().getDisplayLanguage()).append("</p>");            
-            
+            strBuilder.append("<p>Device language:").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
+
             strBuilder.append("<p>Topface SSID:").append(Data.SSID).append("</p>");
-            AuthToken authToken = new AuthToken(getActivity().getApplicationContext());     
+            AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
             strBuilder.append("<p>Social net:").append(authToken.getSocialNet()).append("</p>");
             strBuilder.append("<p>Social token:").append(authToken.getTokenKey()).append("</p>");
-            strBuilder.append("<p>Social id:").append(authToken.getUserId()).append("</p>");            
-            
+            strBuilder.append("<p>Social id:").append(authToken.getUserId()).append("</p>");
+
             strBuilder.append("<p>Android version:").append(android_CODENAME).append("/");
             strBuilder.append(android_RELEASE).append("/").append(android_SDK).append("</p>");
-            
+
             return strBuilder.toString();
         }
     }
 
     @Override
     protected void lockUi() {
-    	mBackButton.setEnabled(false);
-    	mEditText.setEnabled(false);
+        mBackButton.setEnabled(false);
+        mEditText.setEnabled(false);
     }
 
     @Override
     protected void unlockUi() {
-    	mBackButton.setEnabled(true);
-    	mEditText.setEnabled(true);
+        mBackButton.setEnabled(true);
+        mEditText.setEnabled(true);
     }
 }

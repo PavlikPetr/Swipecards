@@ -43,6 +43,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private ImageView mCheckGirl;
     private ImageView mCheckBoy;
+    private ViewGroup mLoGirls;
+    private ViewGroup mLoBoys;
     private ViewGroup mXStatusFrame;
     private ViewGroup mMarriageFrame;
     private ViewGroup mCharacterFrame;
@@ -52,6 +54,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private EditSwitcher mSwitchOnline;
     private EditSwitcher mSwitchBeautifull;
+    private ViewGroup mLoSwitchOnline;
+    private ViewGroup mLoSwitchBeautifull;
 
     class Filter implements Cloneable {
         int sex; // пол пользователей
@@ -62,7 +66,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         boolean geo; // искать по координатам
         boolean online; // в сети или нет
         boolean beautiful; // красивая или нет
-        int status_id; // цель знакомства
+        int xstatus_id; // цель знакомства
         int marriage_id; // состоит ли в браке
         int character_id; // характер
         int alcohol_id; // отношение к алкоголю
@@ -80,7 +84,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 else if (filter.geo != geo) return false;
                 else if (filter.online != online) return false;
                 else if (filter.beautiful != beautiful) return false;
-                else if (filter.status_id != status_id) return false;
+                else if (filter.xstatus_id != xstatus_id) return false;
                 else if (filter.marriage_id != marriage_id) return false;
                 else if (filter.character_id != character_id) return false;
                 else if (filter.alcohol_id != alcohol_id) return false;
@@ -104,7 +108,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             filter.geo = geo;
             filter.online = online;
             filter.beautiful = beautiful;
-            filter.status_id = status_id;
+            filter.xstatus_id = xstatus_id;
             filter.marriage_id = marriage_id;
             filter.character_id = character_id;
             filter.alcohol_id = alcohol_id;
@@ -170,7 +174,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mFilter.geo = mPreferences.getBoolean(getString(R.string.cache_profile_filter_geo), false);
         mFilter.online = mPreferences.getBoolean(getString(R.string.cache_profile_filter_online), false);
         mFilter.beautiful = mPreferences.getBoolean(getString(R.string.cache_profile_filter_beautiful), false);
-        mFilter.status_id = mPreferences.getInt(getString(R.string.cache_profile_filter_status), FormItem.NOT_SPECIFIED_ID);
+        mFilter.xstatus_id = mPreferences.getInt(getString(R.string.cache_profile_filter_status), FormItem.NOT_SPECIFIED_ID);
         mFilter.marriage_id = mPreferences.getInt(getString(R.string.cache_profile_filter_marriage), FormItem.NOT_SPECIFIED_ID);
         mFilter.character_id = mPreferences.getInt(getString(R.string.cache_profile_filter_character), FormItem.NOT_SPECIFIED_ID);
         mFilter.alcohol_id = mPreferences.getInt(getString(R.string.cache_profile_filter_alcohol), FormItem.NOT_SPECIFIED_ID);
@@ -193,7 +197,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         editor.putBoolean(getString(R.string.cache_profile_filter_geo), mFilter.geo);
         editor.putBoolean(getString(R.string.cache_profile_filter_online), mFilter.online);
         editor.putBoolean(getString(R.string.cache_profile_filter_beautiful), mFilter.beautiful);
-        editor.putInt(getString(R.string.cache_profile_filter_status), mFilter.status_id);
+        editor.putInt(getString(R.string.cache_profile_filter_status), mFilter.xstatus_id);
         editor.putInt(getString(R.string.cache_profile_filter_marriage), mFilter.marriage_id);
         editor.putInt(getString(R.string.cache_profile_filter_character), mFilter.character_id);
         editor.putInt(getString(R.string.cache_profile_filter_alcohol), mFilter.alcohol_id);
@@ -207,28 +211,26 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
     }
 
-    private void initViews(ViewGroup root) {
-        ViewGroup frame;
-
+    private void initViews(ViewGroup root) {        
         // Girl
-        frame = (ViewGroup) root.findViewById(R.id.loGirl);
-        setBackground(R.drawable.edit_big_btn_top_selector, frame);
-        setText(R.string.general_girls, frame);
-        mCheckGirl = (ImageView) frame.findViewById(R.id.ivCheck);
+        mLoGirls = (ViewGroup) root.findViewById(R.id.loGirl);
+        setBackground(R.drawable.edit_big_btn_top_selector, mLoGirls);
+        setText(R.string.general_girls, mLoGirls);
+        mCheckGirl = (ImageView) mLoGirls.findViewById(R.id.ivCheck);
         if (mFilter.sex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);
         }
-        frame.setOnClickListener(this);
+        mLoGirls.setOnClickListener(this);
 
         // Boy
-        frame = (ViewGroup) root.findViewById(R.id.loBoy);
-        setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
-        setText(R.string.general_boys, frame);
-        mCheckBoy = (ImageView) frame.findViewById(R.id.ivCheck);
+        mLoBoys = (ViewGroup) root.findViewById(R.id.loBoy);
+        setBackground(R.drawable.edit_big_btn_bottom_selector, mLoBoys);
+        setText(R.string.general_boys, mLoBoys);
+        mCheckBoy = (ImageView) mLoBoys.findViewById(R.id.ivCheck);
         if (mFilter.sex == Static.BOY) {
             mCheckBoy.setVisibility(View.VISIBLE);
         }
-        frame.setOnClickListener(this);
+        mLoBoys.setOnClickListener(this);
 
         // Age
         mAgeFrame = (ViewGroup) root.findViewById(R.id.loAge);
@@ -243,30 +245,30 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mCityFrame.setOnClickListener(this);
 
         // Online
-        frame = (ViewGroup) root.findViewById(R.id.loOnline);
-        setBackground(R.drawable.edit_big_btn_top_selector, frame);
-        setText(R.string.filter_online, frame);
-        mSwitchOnline = new EditSwitcher(frame);
+        mLoSwitchOnline = (ViewGroup) root.findViewById(R.id.loOnline);
+        setBackground(R.drawable.edit_big_btn_top_selector, mLoSwitchOnline);
+        setText(R.string.filter_online, mLoSwitchOnline);
+        mSwitchOnline = new EditSwitcher(mLoSwitchOnline);
         mSwitchOnline.setChecked(mFilter.online);
-        frame.setOnClickListener(this);
+        mLoSwitchOnline.setOnClickListener(this);
 
         // Beautiful
-        frame = (ViewGroup) root.findViewById(R.id.loBeautiful);
-        setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
-        setText(R.string.filter_only_beautiful, frame);
-        mSwitchBeautifull = new EditSwitcher(frame);
+        mLoSwitchBeautifull = (ViewGroup) root.findViewById(R.id.loBeautiful);
+        setBackground(R.drawable.edit_big_btn_bottom_selector, mLoSwitchBeautifull);
+        setText(R.string.filter_only_beautiful, mLoSwitchBeautifull);
+        mSwitchBeautifull = new EditSwitcher(mLoSwitchBeautifull);
         mSwitchBeautifull.setChecked(mFilter.beautiful);
-        frame.setOnClickListener(this);
+        mLoSwitchBeautifull.setOnClickListener(this);
 
         // Extra Header
-        frame = (ViewGroup) root.findViewById(R.id.loExtraHeader);
+        ViewGroup frame = (ViewGroup) root.findViewById(R.id.loExtraHeader);
         ((TextView) frame.findViewById(R.id.tvTitle)).setText(R.string.filter_extra_parameters);
 
         // Dating Status
         mXStatusFrame = (ViewGroup) root.findViewById(R.id.loDatingStatus);
         setBackground(R.drawable.edit_big_btn_top_selector, mXStatusFrame);
         setText(R.array.form_main_status,
-                mFormInfo.getEntry(R.array.form_main_status, mFilter.status_id), mXStatusFrame);
+                mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus_id), mXStatusFrame);
         mXStatusFrame.setTag(R.array.form_main_status);
         mXStatusFrame.setOnClickListener(this);
 
@@ -394,7 +396,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         filterRequest.sex = mFilter.sex;
         filterRequest.agebegin = mFilter.age_start;
         filterRequest.ageend = mFilter.age_end;
-        filterRequest.xstatus = mFilter.status_id;
+        filterRequest.xstatus = mFilter.xstatus_id;
         filterRequest.character = mFilter.character_id;
         filterRequest.marriage = mFilter.marriage_id;
         //Финансовое положение и бюст - по сути одно поле, отправляем их оба, что бы не париться с опрееделением пола
@@ -451,7 +453,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 mFilter.beautiful = mSwitchBeautifull.isChecked();
                 break;
             case R.id.loDatingStatus:
-                startEditFilterFormItem(v, mFilter.status_id);
+                startEditFilterFormItem(v, mFilter.xstatus_id);
                 break;
             case R.id.loMarriage:
                 startEditFilterFormItem(v, mFilter.marriage_id);
@@ -480,7 +482,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
                 switch (titleId) {
                     case R.array.form_main_status:
-                        mFilter.status_id = selectedId;
+                        mFilter.xstatus_id = selectedId;
                         break;
                     case R.array.form_social_marriage:
                         mFilter.marriage_id = selectedId;
@@ -532,8 +534,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     protected void lockUi() {
         mBackButton.setEnabled(false);
-        mCheckGirl.setEnabled(false);
-        mCheckBoy.setEnabled(false);
+        mLoGirls.setEnabled(false);        
+        mLoBoys.setEnabled(false);
         mAgeFrame.setEnabled(false);
         mCityFrame.setEnabled(false);
         mSwitchOnline.setEnabled(false);
@@ -548,12 +550,12 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     protected void unlockUi() {
         mBackButton.setEnabled(true);
-        mCheckGirl.setEnabled(true);
-        mCheckBoy.setEnabled(true);
+        mLoGirls.setEnabled(true);
+        mLoBoys.setEnabled(true);
         mAgeFrame.setEnabled(true);
         mCityFrame.setEnabled(true);
-        mSwitchOnline.setEnabled(true);
-        mSwitchBeautifull.setEnabled(true);
+        mLoSwitchOnline.setEnabled(true);
+        mLoSwitchBeautifull.setEnabled(true);
         mXStatusFrame.setEnabled(true);
         mMarriageFrame.setEnabled(true);
         mCharacterFrame.setEnabled(true);

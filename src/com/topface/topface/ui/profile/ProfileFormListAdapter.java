@@ -37,7 +37,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
     public ProfileFormListAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mProfileForms = CacheProfile.forms;
+        mProfileForms = CacheProfile.forms;        
     }
 
     @Override

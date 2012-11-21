@@ -299,17 +299,19 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             public void success(ApiResponse response) {
                 final FeedListData<History> dataList = new FeedListData<History>(
                         response.jsonResult, History.class);
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.setDataList(dataList.items);
-                        if (pullToRefresh) {
-                            mListView.onRefreshComplete();
-                        }
-                        mLoadingLocker.setVisibility(View.GONE);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+                if(ChatActivity.this != null) {
+	                post(new Runnable() {
+	                    @Override
+	                    public void run() {
+	                        mAdapter.setDataList(dataList.items);
+	                        if (pullToRefresh) {
+	                            mListView.onRefreshComplete();
+	                        }
+	                        mLoadingLocker.setVisibility(View.GONE);
+	                        mAdapter.notifyDataSetChanged();
+	                    }
+	                });
+                }
             }
 
             @Override

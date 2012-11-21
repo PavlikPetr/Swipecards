@@ -183,6 +183,7 @@ public class ImageViewRemote extends ImageView {
         if (photo != null) {
             int size = Math.max(getLayoutParams().height, getLayoutParams().width);
             if (size > 0) {
+                //noinspection SuspiciousNameCombination
                 result = setRemoteSrc(photo.getSuitableLink(getLayoutParams().height, getLayoutParams().width), handler);
             } else {
                 result = setRemoteSrc(photo.getSuitableLink(Photo.SIZE_960), handler);
@@ -205,26 +206,28 @@ public class ImageViewRemote extends ImageView {
 
         @Override
         public void onLoadingFailed(FailReason failReason) {
-            if (mRepeatCounter >= MAX_REPEAT_COUNT) {
-                mRepeatCounter = 0;
-                if (mHandler != null) {
-                    mHandler.sendEmptyMessage(LOADING_ERROR);
-                }
-                setImageResource(R.drawable.im_photo_error);
-            } else {
-                mRepeatCounter++;
-                mRepeatTimer = new Timer();
-                mRepeatTimer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        ImageViewRemote.this.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                setRemoteSrc(mRemoteSrc, mHandler, true);
-                            }
-                        });
+            if (FailReason.OUT_OF_MEMORY != failReason) {
+                if (mRepeatCounter >= MAX_REPEAT_COUNT) {
+                    mRepeatCounter = 0;
+                    if (mHandler != null) {
+                        mHandler.sendEmptyMessage(LOADING_ERROR);
                     }
-                }, REPEAT_SCHEDULE);
+                    setImageResource(R.drawable.im_photo_error);
+                } else {
+                    mRepeatCounter++;
+                    mRepeatTimer = new Timer();
+                    mRepeatTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            ImageViewRemote.this.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    setRemoteSrc(mRemoteSrc, mHandler, true);
+                                }
+                            });
+                        }
+                    }, REPEAT_SCHEDULE);
+                }
             }
         }
 

@@ -6,7 +6,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.*;
+
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Photo;
@@ -33,8 +35,17 @@ public class LeadersActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_leaders);
-        ((TextView) findViewById(R.id.tvHeaderTitle)).setText(R.string.leaders_go_date);
-
+        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.leaders_go_date);        
+        findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
+        View backButton = findViewById(R.id.btnNavigationBack);
+        backButton.setVisibility(View.VISIBLE);
+        backButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {                
+                finish();
+            }
+        });
+        
         mProgressBar = (ProgressBar) findViewById(R.id.loader);
         mLeadersContent = (ViewGroup) findViewById(R.id.leadersContent);
         mListView = (HorizontalListView) findViewById(R.id.photoAlbum);

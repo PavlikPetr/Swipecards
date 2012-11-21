@@ -10,6 +10,10 @@ public class FeedGift extends FeedItem {
         super(type);
     }
 
+    public FeedGift(JSONObject data) {
+        super(data);
+    }
+    
     public FeedGift() {
         super((JSONObject) null);
     }

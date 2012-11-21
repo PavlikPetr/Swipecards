@@ -44,7 +44,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSelectedAsMainId = CacheProfile.photo.getId();
+        mSelectedAsMainId = CacheProfile.photo == null ? -1 : CacheProfile.photo.getId();
         mLastSelectedAsMainId = mSelectedAsMainId;
 
         mPhotoLinks = new Photos();
@@ -85,7 +85,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
         mPhotoGridView = (GridView) root.findViewById(R.id.fragmentGrid);
-        mPhotoGridView.setNumColumns(3);
         mPhotoGridView.setAdapter(mPhotoGridAdapter);
         mPhotoGridView.setOnItemClickListener(mOnItemClickListener);
 
@@ -110,7 +109,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         return (mSelectedAsMainId != mLastSelectedAsMainId) || !mDeleted.isEmpty();
     }
 
-    private boolean mOperationsFinished = true;    
+    private boolean mOperationsFinished = true;
 
     @Override
     protected void saveChanges(final Handler handler) {
@@ -145,30 +144,30 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             }
 
             if (mSelectedAsMainId != mLastSelectedAsMainId) {
-	            MainRequest setAsMainRequest = new MainRequest(getActivity().getApplicationContext());
-	            registerRequest(setAsMainRequest);
-	            setAsMainRequest.photoid = mSelectedAsMainId;
-	            setAsMainRequest.callback(new ApiHandler() {
-	
-	                @Override
-	                public void success(ApiResponse response) throws NullPointerException {
-	                    CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
-	                    getActivity().setResult(Activity.RESULT_OK);
-	                    mSelectedAsMainId = mLastSelectedAsMainId;
-	                    finishOperations(handler);
-	                }
-	
-	                @Override
-	                public void fail(int codeError, ApiResponse response) throws NullPointerException {
-	                    getActivity().setResult(Activity.RESULT_CANCELED);
-	                    finishOperations(handler);
-	
-	                }
-	            }).exec();
+                MainRequest setAsMainRequest = new MainRequest(getActivity().getApplicationContext());
+                registerRequest(setAsMainRequest);
+                setAsMainRequest.photoid = mSelectedAsMainId;
+                setAsMainRequest.callback(new ApiHandler() {
+
+                    @Override
+                    public void success(ApiResponse response) throws NullPointerException {
+                        CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
+                        getActivity().setResult(Activity.RESULT_OK);
+                        mSelectedAsMainId = mLastSelectedAsMainId;
+                        finishOperations(handler);
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                        getActivity().setResult(Activity.RESULT_CANCELED);
+                        finishOperations(handler);
+
+                    }
+                }).exec();
             } else {
-            	getActivity().setResult(Activity.RESULT_OK);
+                getActivity().setResult(Activity.RESULT_OK);
                 mSelectedAsMainId = mLastSelectedAsMainId;
-            	finishOperations(handler);
+                finishOperations(handler);
             }
 
         } else {

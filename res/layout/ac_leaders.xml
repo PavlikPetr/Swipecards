@@ -7,9 +7,7 @@
 
     <include
             android:id="@+id/loNavigationBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/bar_btn_header"/>
+            layout="@layout/bar_navigation_header"/>
 
     <LinearLayout
             android:id="@+id/leadersContent"

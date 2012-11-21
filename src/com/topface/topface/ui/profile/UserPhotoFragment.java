@@ -32,7 +32,6 @@ public class UserPhotoFragment extends Fragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
 
         GridView gridAlbum = (GridView) root.findViewById(R.id.fragmentGrid);
-        gridAlbum.setNumColumns(3);
         gridAlbum.setAdapter(mUserPhotoGridAdapter);
         gridAlbum.setOnItemClickListener(mOnItemClickListener);
 

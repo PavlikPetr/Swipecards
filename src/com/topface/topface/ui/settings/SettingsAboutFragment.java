@@ -4,6 +4,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.topface.topface.R;
+import com.topface.topface.utils.Debug;
 
 import java.util.Calendar;
 
@@ -21,30 +23,39 @@ public class SettingsAboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_about, container, false);
+        final FragmentActivity activity = getActivity();
 
         // Navigation bar
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
+        activity.findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
+        Button btnBack = (Button) activity.findViewById(R.id.btnNavigationBackWithText);
         btnBack.setVisibility(View.VISIBLE);
         btnBack.setText(R.string.settings_header_title);
         btnBack.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                activity.finish();
             }
         });
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_about);
+        ((TextView) activity.findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_about);
 
         // Version
         TextView version = (TextView) root.findViewById(R.id.tvVersion);
-        String versionNumber = "2.0.0";
+        String versionNumber;
+
+        try {
+            versionNumber = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName;
+        } catch (NameNotFoundException e) {
+            versionNumber = "unknown";
+            Debug.error(e);
+        }
+
         try {
             PackageInfo pInfo;
-            pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            pInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
             versionNumber = pInfo.versionName;
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            Debug.error(e);
         }
         version.setText(getResources().getString(R.string.settings_version) + " " + versionNumber);
 
