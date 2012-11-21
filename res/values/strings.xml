@@ -210,4 +210,7 @@
   <string name="general_premium_access_error">To do this you have to be VIP</string>
   <string name="general_search_null_response_error">Nothing has been found. Try to change filters.</string>
   <string name="change_filters">Change filters</string>
+  <string name="age_filter_man">You are rating guys </string>
+    <string name="age_filter_girl">You are rating girls </string>
+
 </resources>

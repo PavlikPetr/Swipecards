@@ -1,9 +1,7 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -380,74 +378,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     int leftPosition;
     int rightPosition;
 
-    private void createNumberPickerDialog() {
-        // 0  1  2  3  4  5  total 6
-        final int[] ages = {16, 20, 24, 28, 32, 99};
-        for (int i = 0; i < ages.length - 1; i++) {
-            if (mFilter.age_start >= ages[i])
-                leftPosition = i;
-            if (mFilter.age_end >= ages[i])
-                rightPosition = i;
-        }
-        View view = LayoutInflater.from(getActivity().getApplicationContext()).inflate(R.layout.pref_age_picker, null);
-        final TextView tvFrom = (TextView) view.findViewById(R.id.tvFilterFrom);
-        tvFrom.setText("" + mFilter.age_start);
-        final TextView tvTo = (TextView) view.findViewById(R.id.tvFilterTo);
-        tvTo.setText("" + mFilter.age_end);
-
-        Button fromUp = (Button) view.findViewById(R.id.btnFilterFromUp);
-        fromUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (leftPosition < ages.length - 1)
-                    tvFrom.setText("" + (ages[++leftPosition]));
-            }
-        });
-        Button fromDown = (Button) view.findViewById(R.id.btnFilterFromDown);
-        fromDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (leftPosition > 0)
-                    tvFrom.setText("" + (ages[--leftPosition]));
-            }
-        });
-        Button toUp = (Button) view.findViewById(R.id.btnFilterToUp);
-        toUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (rightPosition < ages.length - 1)
-                    tvTo.setText("" + (ages[++rightPosition]));
-            }
-        });
-        Button toDown = (Button) view.findViewById(R.id.btnFilterToDown);
-        toDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (rightPosition > 0)
-                    tvTo.setText("" + (ages[--rightPosition]));
-            }
-        });
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getString(R.string.filter_age));
-        builder.setView(view);
-        builder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
-                mFilter.age_start = Integer.parseInt(tvFrom.getText().toString());
-                mFilter.age_end = Integer.parseInt(tvTo.getText().toString());
-                if (mFilter.age_start > mFilter.age_end) {
-                    mFilter.age_start = mFilter.age_end;
-                    leftPosition = rightPosition;
-                }
-                setText(buildAgeString(), mAgeFrame);
-                refreshSaveState();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     @Override
     protected boolean hasChanges() {
         return !mInitFilter.equals(mFilter);
@@ -502,7 +432,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 switchSex(Static.BOY);
                 break;
             case R.id.loAge:
-                createNumberPickerDialog();
+                Intent ageEditIntent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
+                ageEditIntent.putExtra(EditContainerActivity.INTENT_AGE_START, mFilter.age_start);
+                ageEditIntent.putExtra(EditContainerActivity.INTENT_AGE_END, mFilter.age_end);
+                ageEditIntent.putExtra(EditContainerActivity.FILTER_SEX,mFilter.sex);
+                startActivityForResult(ageEditIntent,EditContainerActivity.INTENT_EDIT_AGE);
                 break;
             case R.id.loCity:
                 Intent intent = new Intent(getActivity().getApplicationContext(), CitySearchActivity.class);
@@ -579,6 +513,15 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 }
 
                 setText(buildCityString(), mCityFrame);
+            } else if (requestCode == EditContainerActivity.INTENT_EDIT_AGE) {
+                int ageStart = extras.getInt(EditContainerActivity.INTENT_AGE_START);
+                int ageEnd = extras.getInt(EditContainerActivity.INTENT_AGE_END);
+                if(ageEnd != 0 && ageStart != 0) {
+                    mFilter.age_end = ageEnd;
+                    mFilter.age_start = ageStart;
+                    setText(buildAgeString(), mAgeFrame);
+                }
+
             }
             refreshSaveState();
         } else {

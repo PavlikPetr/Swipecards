@@ -210,7 +210,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         emptySearchDialog.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                showNextUser();
                 updateData(false);
             }
         });
