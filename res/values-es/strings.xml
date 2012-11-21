@@ -34,11 +34,11 @@
     <string name="general_girls">Chicas</string>
     <string name="general_city">Ciudad</string>
     <string name="general_dating">Encuentros</string>
-    <string name="general_likes">Les gusto</string>
-    <string name="general_likes_me">Les gustas</string>
+    <string name="general_likes">Simpatías</string>
+    <string name="general_likes_me">Simpatías</string>
     <string name="general_sympathy">Simpatía</string>
     <string name="general_delight">Admiración</string>
-    <string name="general_mutual">Mutuamente</string>
+    <string name="general_mutual">Simpatías mutuas</string>
     <string name="general_dialogs">Diálogos</string>
     <string name="general_tops">Top</string>
     <string name="general_visitors">Huéspedes</string>
@@ -203,7 +203,7 @@
         <item quantity="one">%d foto</item>
     </plurals>
     <string name="novice_sympathy">Envía simpatías a los\nquienes te gustan para\nhacer conocimiento</string>
-    <string name="novice_fill_profile">¡Elige tus mejores fotos para recibir más simpatías</string>
+    <string name="novice_fill_profile">¡Elige tus mejores fotos para recibir más simpatías!</string>
     <string name="general_edit_profile_message">Por favor, rellena los campos necesarios de tu perfil</string>
     <string name="general_premium_access_error">Para esta función es necesario estar Premium</string>
 </resources>
