@@ -15,52 +15,48 @@ public class TopfaceNotificationManager {
     private NotificationCompat.Builder mNotificationBuilder;
     private NotificationManager mNotificationManager;
     public static final int id = 1312; //Completely random number
-    private float scale = 0;
     private float width = 64;
-    private float height = 64;    
-    private Context ctx;    
+    private float height = 64;
+    private Context ctx;
 
     public static TopfaceNotificationManager getInstance(Context context) {
-        if(mInstance == null) {
+        if (mInstance == null) {
             mInstance = new TopfaceNotificationManager(context);
         }
         return mInstance;
-    } 	
+    }
 
     private TopfaceNotificationManager(Context context) {
         mNotificationBuilder = new NotificationCompat.Builder(context);
 
-        if(Settings.getInstance().isVibrationEnabled())
+        if (Settings.getInstance().isVibrationEnabled())
             mNotificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
 
-        mNotificationBuilder.setSound(RingtoneManager.getActualDefaultRingtoneUri(context,RingtoneManager.TYPE_NOTIFICATION));
+        mNotificationBuilder.setSound(RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION));
         mNotificationBuilder.setSmallIcon(R.drawable.ic_notification);
 
-        mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        scale = context.getResources().getDisplayMetrics().density;
+        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        float scale = context.getResources().getDisplayMetrics().density;
 
         width *= scale;
         height *= scale;
         ctx = context;
-//        stackBuilder = TaskStackBuilder.create(context);
     }
 
-    public void showNotification(int userId, String title, String message, Bitmap icon, int unread, Intent intent) {    	
-    	
-//        stackBuilder.addNextIntent(intent);//addNextIntent(intent);
+    public void showNotification(int userId, String title, String message, Bitmap icon, int unread, Intent intent) {
 
-        Bitmap scaledIcon = Utils.clipAndScaleBitmap(icon,(int)width,(int)height);
+        Bitmap scaledIcon = Utils.clipAndScaleBitmap(icon, (int) width, (int) height);
 
         mNotificationBuilder.setContentTitle(title);
         mNotificationBuilder.setContentText(message);
         mNotificationBuilder.setLargeIcon(scaledIcon);
-        if(unread>0)
+        if (unread > 0)
             mNotificationBuilder.setNumber(unread);
         mNotificationBuilder.setAutoCancel(true);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mNotificationBuilder.setContentIntent(resultPendingIntent);
+        //noinspection deprecation
         mNotificationManager.notify(id, mNotificationBuilder.getNotification());
-    }	
+    }
 }
