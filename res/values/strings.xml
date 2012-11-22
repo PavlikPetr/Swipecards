@@ -213,4 +213,10 @@
     <string name="novice_fill_profile">Add your best photos,\nto get more likes</string>
     <string name="general_edit_profile_message">Please, fill in all the obligatory fields in you profile</string>
     <string name="general_premium_access_error">To do this you have to be VIP</string>
+    <string name="general_search_null_response_error">Not found. Try to change filters</string>
+    <string name="change_filters">Change filters</string>
+    <string name="general_sex">Sex</string>
+    <string name="general_girl">Female</string>
+    <string name="general_boy">Male</string>
+    <string name="filter_city_fail">Couldn\'t find cities beginning with «%s»</string>
 </resources>

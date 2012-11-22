@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="time_now">Teraz</string>
+    <plurals name="time_hour">
+        <item quantity="few">%d godziny temu</item>
+        <item quantity="other">%d godzin temu</item>
+        <item quantity="one">%d godzinę temu</item>
+    </plurals>
+    <plurals name="time_minute">
+        <item quantity="zero">%d minutę temu</item>
+        <item quantity="other">%d minut temu</item>
+        <item quantity="one">%d minuty temu</item>
+    </plurals>
+    <string name="time_yesterday">Wczoraj</string>
+    <string name="time_today">Dziś</string>
+    <string name="time_monday">Pon</string>
+    <string name="time_tuesday">Wt</string>
+    <string name="time_wednesday">Śr</string>
+    <string name="time_thursday">Czw</string>
+    <string name="time_friday">Pt</string>
+    <string name="time_saturday">Sob</string>
+    <string name="time_sunday">Niedz</string>
+    <string name="time_january">Sty</string>
+    <string name="time_february">Luty</string>
+    <string name="time_march">Marz</string>
+    <string name="time_april">Kwie</string>
+    <string name="time_may">Maj</string>
+    <string name="time_june">Czerw</string>
+    <string name="time_july">Lip</string>
+    <string name="time_august">Sier</string>
+    <string name="time_september">Wrzes</string>
+    <string name="time_october">Paźd</string>
+    <string name="time_november">List</string>
+    <string name="time_december">Gru</string>
+</resources>

@@ -213,4 +213,5 @@
     <string name="novice_fill_profile">¡Elige tus mejores fotos para recibir más simpatías!</string>
     <string name="general_edit_profile_message">Por favor, rellena los campos necesarios de tu perfil</string>
     <string name="general_premium_access_error">Para esta función es necesario estar Premium</string>
+    <string name="change_filters">Cambiar filtros</string>
 </resources>
