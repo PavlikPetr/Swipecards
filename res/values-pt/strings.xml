@@ -219,6 +219,7 @@
     <string name="general_edit_profile_message">Por favor, preencha espaços necessários do questonário</string>
     <string name="general_premium_access_error">É preciso Premium para esta função</string>
     <string name="general_search_null_response_error">Nada foi encontrado. Tente mudar filtros</string>
+    <string name="change_filters">Modificar filtros</string>
     <string name="general_sex">Genero</string>
     <string name="general_girl">Feminino</string>
     <string name="general_boy">Masculino</string>

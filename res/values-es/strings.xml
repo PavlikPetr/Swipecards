@@ -213,5 +213,10 @@
     <string name="novice_fill_profile">¡Elige tus mejores fotos para recibir más simpatías!</string>
     <string name="general_edit_profile_message">Por favor, rellena los campos necesarios de tu perfil</string>
     <string name="general_premium_access_error">Para esta función es necesario estar Premium</string>
+    <string name="general_search_null_response_error">De nada es encontrado. Prueba cambiar filtros</string>
     <string name="change_filters">Cambiar filtros</string>
+    <string name="general_sex">Sexo</string>
+    <string name="general_girl">Femenino</string>
+    <string name="general_boy">Masculino</string>
+    <string name="filter_city_fail">No podemos encontrar ciudades que comienzan con «%s»</string>
 </resources>

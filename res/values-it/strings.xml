@@ -209,4 +209,8 @@
     <string name="novice_fill_profile">Aggiungi le tue foto migliori\nper ricevere più segni di simpatia.</string>
     <string name="general_edit_profile_message">Per favore riempi i campi obbligatori del questionario</string>
     <string name="general_premium_access_error">Devi avere lo stato Premium per questa funzione</string>
+    <string name="change_filters">Cambiare filtri</string>
+    <string name="general_sex">Sesso</string>
+    <string name="general_girl">Femmina</string>
+    <string name="general_boy">Maschio</string>
 </resources>
