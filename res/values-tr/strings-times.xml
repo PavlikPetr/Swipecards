@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="time_now">Hemen şimdi</string>
+    <plurals name="time_hour">
+        <item quantity="zero">%d saat önce</item>
+        <item quantity="other">%d saat önce</item>
+        <item quantity="one">%d saat önce</item>
+    </plurals>
+    <plurals name="time_minute">
+        <item quantity="zero">%d dakika önce</item>
+        <item quantity="other">%d dakika önce</item>
+        <item quantity="one">%d dakika önce</item>
+    </plurals>
+    <string name="time_yesterday">Dün</string>
+    <string name="time_today">Bugün</string>
+    <string name="time_monday">Pzt</string>
+    <string name="time_tuesday">Sal</string>
+    <string name="time_wednesday">Prş</string>
+    <string name="time_thursday">Prş</string>
+    <string name="time_friday">Cum</string>
+    <string name="time_saturday">Cmt</string>
+    <string name="time_sunday">Paz</string>
+    <string name="time_january">Oca</string>
+    <string name="time_february">Şub</string>
+    <string name="time_march">Mar</string>
+    <string name="time_april">Nis</string>
+    <string name="time_may">May</string>
+    <string name="time_june">Haz</string>
+    <string name="time_july">Tem</string>
+    <string name="time_august">Ağu</string>
+    <string name="time_september">Eyl</string>
+    <string name="time_october">Eki</string>
+    <string name="time_november">Kas</string>
+    <string name="time_december">Ara</string>
+</resources>
