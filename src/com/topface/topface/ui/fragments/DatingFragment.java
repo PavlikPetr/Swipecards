@@ -16,7 +16,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.*;
-
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
@@ -93,7 +92,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRetryBtn.setOnClickListener(this);
 
 
-
         mViewFlipper = (ViewFlipper) view.findViewById(R.id.vfFlipper);
 
         if (isAdded()) {
@@ -133,7 +131,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
             }
         });
-
 
 
         mNavigationHeaderShadow = view.findViewById(R.id.ivHeaderShadow);
@@ -216,14 +213,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 updateData(false);
             }
         });
-        emptySearchDialog.addButton(App.getContext().getString(R.string.change_filters),new OnClickListener() {
+        emptySearchDialog.addButton(App.getContext().getString(R.string.change_filters), new OnClickListener() {
             @Override
             public void onClick(View v) {
                 settingsButton.performClick();
             }
         });
         emptySearchDialog.setVisibility(View.GONE);
-        ((RelativeLayout)view.findViewById(R.id.ac_dating_container)).addView(emptySearchDialog);
+        ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(emptySearchDialog);
         showNextUser();
         return view;
     }
@@ -233,7 +230,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         emptySearchDialog.setVisibility(View.GONE);
         if (!isAddition)
             onUpdateStart(isAddition);
-        Debug.log(this, "update");        
+        Debug.log(this, "update");
         SharedPreferences preferences = App.getContext().getSharedPreferences(
                 Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         SearchRequest searchRequest = new SearchRequest(App.getContext());
@@ -242,7 +239,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         searchRequest.geo = preferences.getBoolean(App.getContext().getString(R.string.cache_profile_filter_geo),
                 false);
         searchRequest.online = preferences.getBoolean(
-        		App.getContext().getString(R.string.cache_profile_filter_online), false);
+                App.getContext().getString(R.string.cache_profile_filter_online), false);
         searchRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -250,7 +247,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        if(userList.size() != 0) {
+                        if (userList.size() != 0) {
                             mImageSwitcher.setVisibility(View.VISIBLE);
                             if (isAddition) {
                                 mUserSearchList.addAll(userList);
@@ -424,16 +421,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             mUserInfoStatus.setText(currUser.status);
             mUserInfoName.setText(currUser.first_name + ", " + currUser.age);
-                   
-            Resources res = App.getContext().getResources();            
-            
+
+            Resources res = App.getContext().getResources();
+
             if (isAdded()) {
                 if (currUser.online) {
                     mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
-                    		res.getDrawable(R.drawable.im_online), null, null, null);
+                            res.getDrawable(R.drawable.im_online), null, null, null);
                 } else {
                     mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
-                    		res.getDrawable(R.drawable.im_offline), null, null, null);
+                            res.getDrawable(R.drawable.im_offline), null, null, null);
                 }
 
                 if (currUser.sex == Static.BOY) {

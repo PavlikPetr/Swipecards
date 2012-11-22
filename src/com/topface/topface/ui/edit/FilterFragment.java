@@ -211,7 +211,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
     }
 
-    private void initViews(ViewGroup root) {        
+    private void initViews(ViewGroup root) {
         // Girl
         mLoGirls = (ViewGroup) root.findViewById(R.id.loGirl);
         setBackground(R.drawable.edit_big_btn_top_selector, mLoGirls);
@@ -437,8 +437,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 Intent ageEditIntent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
                 ageEditIntent.putExtra(EditContainerActivity.INTENT_AGE_START, mFilter.age_start);
                 ageEditIntent.putExtra(EditContainerActivity.INTENT_AGE_END, mFilter.age_end);
-                ageEditIntent.putExtra(EditContainerActivity.FILTER_SEX,mFilter.sex);
-                startActivityForResult(ageEditIntent,EditContainerActivity.INTENT_EDIT_AGE);
+                ageEditIntent.putExtra(EditContainerActivity.FILTER_SEX, mFilter.sex);
+                startActivityForResult(ageEditIntent, EditContainerActivity.INTENT_EDIT_AGE);
                 break;
             case R.id.loCity:
                 Intent intent = new Intent(getActivity().getApplicationContext(), CitySearchActivity.class);
@@ -518,7 +518,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             } else if (requestCode == EditContainerActivity.INTENT_EDIT_AGE) {
                 int ageStart = extras.getInt(EditContainerActivity.INTENT_AGE_START);
                 int ageEnd = extras.getInt(EditContainerActivity.INTENT_AGE_END);
-                if(ageEnd != 0 && ageStart != 0) {
+                if (ageEnd != 0 && ageStart != 0) {
                     mFilter.age_end = ageEnd;
                     mFilter.age_start = ageStart;
                     setText(buildAgeString(), mAgeFrame);
@@ -534,7 +534,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     protected void lockUi() {
         mBackButton.setEnabled(false);
-        mLoGirls.setEnabled(false);        
+        mLoGirls.setEnabled(false);
         mLoBoys.setEnabled(false);
         mAgeFrame.setEnabled(false);
         mCityFrame.setEnabled(false);
