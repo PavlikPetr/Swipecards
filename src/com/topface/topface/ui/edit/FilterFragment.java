@@ -57,6 +57,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mLoSwitchOnline;
     private ViewGroup mLoSwitchBeautifull;
 
+    public static final int webAbsoluteMaxAge = 99;
+
     class Filter implements Cloneable {
         int sex; // пол пользователей
         int age_start; // возраст от
@@ -374,7 +376,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private String buildAgeString() {
-        return getString(R.string.filter_age_string, mFilter.age_start, mFilter.age_end);
+        String plus = mFilter.age_end == webAbsoluteMaxAge?"+":"";
+        int age_end = mFilter.age_end == webAbsoluteMaxAge?EditAgeFragment.absoluteMax: mFilter.age_end;
+        return getString(R.string.filter_age_string, mFilter.age_start, age_end) + plus;
     }
 
     int leftPosition;
@@ -519,6 +523,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 int ageStart = extras.getInt(EditContainerActivity.INTENT_AGE_START);
                 int ageEnd = extras.getInt(EditContainerActivity.INTENT_AGE_END);
                 if(ageEnd != 0 && ageStart != 0) {
+                    if(ageEnd == EditAgeFragment.absoluteMax) {
+                        ageEnd = webAbsoluteMaxAge;
+                    }
                     mFilter.age_end = ageEnd;
                     mFilter.age_start = ageStart;
                     setText(buildAgeString(), mAgeFrame);

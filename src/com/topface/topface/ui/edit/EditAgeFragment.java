@@ -19,8 +19,9 @@ public class EditAgeFragment extends AbstractEditFragment {
     private int sex;
     private String baseSexString;
 
-    private static final int absoluteMin = 16;
-    private static final int absoluteMax = 99;
+    public static final int absoluteMin = 16;
+    public static final int absoluteMax = 80;
+
 
     private  RangeSeekBar<Integer> rsb;
 
@@ -79,7 +80,6 @@ public class EditAgeFragment extends AbstractEditFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = getActivity().getIntent();
-
                 intent.putExtra(EditContainerActivity.INTENT_AGE_START, age_start);
                 intent.putExtra(EditContainerActivity.INTENT_AGE_END, age_end);
 
@@ -92,7 +92,8 @@ public class EditAgeFragment extends AbstractEditFragment {
     }
 
     private String makeString(int age_start, int age_end) {
-        return baseSexString + " " + Integer.toString(age_start) + " - " + Integer.toString(age_end);
+        String plus = age_end == absoluteMax?"+":"";
+        return baseSexString + " " + Integer.toString(age_start) + " - " + Integer.toString(age_end) + plus;
     }
 
     @Override

@@ -1,11 +1,11 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.*;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -50,6 +50,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private RelativeLayout mContainer;
     private LockerView lockView;
 
+    private BroadcastReceiver mBroadcastReceiver;
+
     protected String[] editButtonsNames;
 
     private final int DELETE_BUTTON = 0;
@@ -84,6 +86,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
         createUpdateErrorMessage();
+        BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                makeItemReadWithId(intent.getIntExtra(ChatActivity.INTENT_ITEM_ID,-1));
+            }
+        };
+        getActivity().registerReceiver(mBroadcastReceiver,new IntentFilter(ChatActivity.MAKE_ITEM_READ));
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(mBroadcastReceiver,new IntentFilter(ChatActivity.MAKE_ITEM_READ));
         GCMUtils.cancelNotification(getActivity(),getType());
         return view;
     }
@@ -92,12 +102,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     public void onResume() {
     	super.onResume();
     	mFloatBlock.onResume();
+
     }
     
     @Override
     public void onPause() {
     	super.onPause();
     	mFloatBlock.onPause();
+
     }
     
     protected void init() {
@@ -260,6 +272,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         intent.putExtra(ChatActivity.INTENT_USER_AGE, item.user.age);
         intent.putExtra(ChatActivity.INTENT_USER_CITY, item.user.city.name);
         intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
+        intent.putExtra(ChatActivity.INTENT_ITEM_ID, item.id);
         startActivity(intent);
     }
 
@@ -477,6 +490,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private void retryButtonClick() {
         updateErrorMessage.setVisibility(View.GONE);
         updateData(false);
+    }
+
+    private void makeItemReadWithId(int id) {
+        for(FeedItem item : mListAdapter.getData()) {
+            if(item.id == id) {
+               item.unread = false;
+               mListAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
 }

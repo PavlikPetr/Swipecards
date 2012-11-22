@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -76,6 +77,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     public static final String INTENT_USER_AGE = "user_age";
     public static final String INTENT_USER_CITY = "user_city";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
+    public static final String INTENT_ITEM_ID = "item_id";
+    public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
     private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
     private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
@@ -252,6 +255,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             // Если это не получилось, грузим с сервера
             update(false);
         }
+
         GCMUtils.cancelNotification(this,GCMUtils.GCM_TYPE_MESSAGE);
     }
 
@@ -297,6 +301,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         historyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
+                if (getIntent().getIntExtra(INTENT_ITEM_ID,-1) != -1) {
+                    LocalBroadcastManager.getInstance(ChatActivity.this).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID,getIntent().getIntExtra(INTENT_ITEM_ID,-1)));
+                }
                 final FeedListData<History> dataList = new FeedListData<History>(
                         response.jsonResult, History.class);
                 if(ChatActivity.this != null) {

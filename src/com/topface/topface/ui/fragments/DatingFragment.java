@@ -29,7 +29,9 @@ import com.topface.topface.data.SkipRate;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
+import com.topface.topface.ui.edit.FilterFragment;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
@@ -663,17 +665,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setHeader(View view) {
-        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(App.getContext().getString(
+        String plus = CacheProfile.dating_age_end == FilterFragment.webAbsoluteMaxAge?"+":"";
+        int age = CacheProfile.dating_age_end == FilterFragment.webAbsoluteMaxAge?EditAgeFragment.absoluteMax:CacheProfile.dating_age_end;
+                ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(App.getContext().getString(
                 CacheProfile.dating_sex == Static.BOY ? R.string.dating_header_guys
                         : R.string.dating_header_girls, CacheProfile.dating_age_start,
-                CacheProfile.dating_age_end));
+                age) + plus);
 
         TextView subTitle = (TextView) view.findViewById(R.id.tvNavigationSubtitle);
         subTitle.setVisibility(View.VISIBLE);
         subTitle.setText(CacheProfile.dating_city_name != null
                 && !CacheProfile.dating_city_name.equals("") ? CacheProfile.dating_city_name
                 : App.getContext().getString(R.string.filter_cities_all)
-
         );
     }
 
