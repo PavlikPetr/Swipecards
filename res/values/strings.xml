@@ -145,7 +145,7 @@
     <string name="invite_search_hint">Find friends</string>
     <string name="invite_title">Invitations</string>
     <string name="invite_is_free">Invitation is free!</string>
-    <string name="invite_error">Can't send the invitations. Please, try again.</string>
+    <string name="invite_error">Can\'t send the invitations. Please, try again.</string>
     <string name="invite_completed">Invitation sent</string>
     <plurals name="invite_bonus_text">
         <item quantity="zero">Invite your friends and for every confirmed friend you will get 20</item>
