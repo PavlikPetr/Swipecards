@@ -18,7 +18,7 @@
     <string name="general_server_error">Błąd, Spróbuj później</string>
     <string name="general_data_error">Błąd. Spróbuj ponownie</string>
     <string name="general_internet_off">Nie połączenia z Internetem</string>
-    <string name="general_purchasing_error">Proszę, napisz wiadomość o błędzie zakupu na support@topface.ru</string>
+    <string name="general_purchasing_error">Prosimy napisać wiadomość o błędzie kupowania na support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Tekst został skopiowany</string>
     <string name="general_spinner_title">Wybierz działanie</string>
@@ -203,14 +203,9 @@
         <item quantity="other">%d zdjęć</item>
         <item quantity="one">%d zdjęcie</item>
     </plurals>
-    <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby zacząć miłą znajomość
-    </string>
-    <string name="novice_energy">Im więcej energii,\ntym częściej Cię pokazują.\nNie zapominaj doładować\nenergię
-        kupując ją.
-    </string>
-    <string name="novice_battery_bonus">Energia daje Ci popularność\ni nowe sympatie. Możesz\ndoładować energię
-        kupując\n 100% energii. Pierwsze doładowanie\n dostaniesz od nas za darmo!
-    </string>
+    <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby zacząć miłą znajomość</string>
+    <string name="novice_energy">Im więcej energii,\ntym częściej Cię pokazują.\nNie zapominaj doładować\nenergię kupując ją.</string>
+    <string name="novice_battery_bonus">Energia daje Ci popularność\ni nowe sympatie. Możesz\ndoładować energię kupując\n 100% energii. Pierwsze doładowanie\n dostaniesz od nas za darmo!</string>
     <string name="novice_fill_profile">Dodaj swoje najlepsze zdjęcia,\naby zdobywać więcej sympatii.</string>
     <string name="general_edit_profile_message">Prosimy o uzupełnienie wszystkich pól ankiety</string>
     <string name="general_premium_access_error">Dla tej opcji potrzebny jest Premium</string>

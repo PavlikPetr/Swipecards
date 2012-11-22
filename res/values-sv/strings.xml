@@ -19,7 +19,7 @@
     <string name="general_server_error">Det har uppstått ett fel. Försök senare</string>
     <string name="general_data_error">Det har uppstått ett fel. Vänligen försök igen</string>
     <string name="general_internet_off">Anslutning till Internet saknas</string>
-    <string name="general_purchasing_error">Vänligen meddela misslyckat inköp till support@topface.ru</string>
+    <string name="general_purchasing_error">Vänligen meddela inköpsfelet till support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Texten kopierad</string>
     <string name="general_spinner_title">Välj handling</string>
@@ -201,9 +201,7 @@
         <item quantity="other">%d foton</item>
         <item quantity="one">%d foto</item>
     </plurals>
-    <string name="novice_sympathy">Skicka sympatier till dem\ndu verkligen gillar,\nför att inleda ett trevligt
-        förhållande
-    </string>
+    <string name="novice_sympathy">Skicka sympatier till dem\ndu verkligen gillar,\nför att inleda ett trevligt förhållande</string>
     <string name="novice_fill_profile">Lägg till dina bästa foton,\för att få fler sympatier.</string>
     <string name="general_edit_profile_message">Vänligen fyll i nödvändiga fälten i profilen</string>
     <string name="general_premium_access_error">För denna funktion behövs Premium</string>

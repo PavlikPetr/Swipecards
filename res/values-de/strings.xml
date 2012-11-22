@@ -202,15 +202,9 @@
         <item quantity="other">%d Fotos</item>
         <item quantity="one">%d Foto</item>
     </plurals>
-    <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich gefallen,\num eine angenehme
-        Bekanntschaft anzufangen
-    </string>
-    <string name="novice_energy">Je höher die Ladung der Batterie, \ndesto öfter schätzt man Sie ein. \nVergessen Sie
-        nicht die Batterie\nzu laden, kaufend die Kraft.
-    </string>
-    <string name="novice_battery_bonus">Die Kraft gibt Ihnen die Popularität\nund neue Sympathien. Kaufen Sie\n100% der
-        Kraft und\nladen Sie Ihre Batterie.
-    </string>
+    <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich gefallen,\num eine angenehme Bekanntschaft anzufangen</string>
+    <string name="novice_energy">Je höher die Ladung der Batterie, \ndesto öfter schätzt man Sie ein. \nVergessen Sie nicht die Batterie\nzu laden, kaufend die Kraft.</string>
+    <string name="novice_battery_bonus">Die Kraft gibt Ihnen die Popularität\nund neue Sympathien. Kaufen Sie\n100% der Kraft und\nladen Sie Ihre Batterie.</string>
     <string name="novice_fill_profile">Fügen Sie Ihre besten Fotos hinzu, \num mehr Sympathien zu erhalten.</string>
     <string name="general_edit_profile_message">Bitte, füllen Sie notwendige Felder des Fragebogens</string>
     <string name="general_premium_access_error">Für diese Funktion braucht man Premium</string>

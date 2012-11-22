@@ -19,9 +19,7 @@
     <string name="general_server_error">Eroare. Incercati mai tarziu</string>
     <string name="general_data_error">Eroare. Mai incearca o data</string>
     <string name="general_internet_off">Conectare la Internet inaccesibila</string>
-    <string name="general_purchasing_error">Va rugam, sa trimiti mesaj despre eroarea cumparaturii la
-        support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Va rugam, sa trimiti mesaj despre eroarea cumparaturii la support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Textul a fost copiat</string>
     <string name="general_spinner_title">Alegeti actiunea</string>
@@ -51,7 +49,7 @@
     <string name="auth_retry">Mai incercati o data</string>
     <string name="auth_vk_name">VKontacte</string>
     <string name="dating_header_girls">Fete de la %1$d pana la %2$d</string>
-    <string name="dating_header_guys">Baieti de la %1$d pana la %2$d</string>
+    <string name="dating_header_guys">Baieti de la  %1$d pana la %2$d</string>
     <string name="dating_switch_button">Inca.........</string>
     <string name="dating_skip_button">Urmatoarea</string>
     <string name="dating_prev_button">Precedent</string>
@@ -206,8 +204,6 @@
         <item quantity="other">%d poze</item>
         <item quantity="one">%d poza</item>
     </plurals>
-    <string name="novice_sympathy">Trimiteti simpatii la cei \n care va sunt dragi cu adevarat, \n pentru a incepe o
-        cunostinta placuta
-    </string>
+    <string name="novice_sympathy">Trimiteti simpatii la cei \n care va sunt dragi cu adevarat, \n pentru a incepe o cunostinta placuta</string>
     <string name="novice_fill_profile">Adauga pozele tale cele mai tari, \n pentru a primi mai multe simpatii.</string>
 </resources>

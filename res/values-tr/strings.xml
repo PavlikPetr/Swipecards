@@ -19,8 +19,7 @@
     <string name="general_server_error">Hata. Daha sonra yeniden deneyin</string>
     <string name="general_data_error">Hata. Bir daha deneyin</string>
     <string name="general_internet_off">İnternete bağlı değil</string>
-    <string name="general_purchasing_error">Lütfen, alış veriş hatası hakkında support@topface.ru adresine yazın
-    </string>
+    <string name="general_purchasing_error">Lütfen, alış veriş hatası hakkında support@topface.ru adresine yazın</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Metin kopyalandı</string>
     <string name="general_spinner_title">Adımınızı seçin</string>
@@ -150,11 +149,8 @@
     <string name="invite_completed">Davetiye gönderildi</string>
     <plurals name="invite_bonus_text">
         <item quantity="zero">Arkadaşlarını davet et ve kişi başı 20şer .. kazan.</item>
-        <item quantity="other">Siz, %2$d arkadaşlarınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d
-            kazanırsınız
-        </item>
-        <item quantity="one">Siz, %2$d arkadaşınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız
-        </item>
+        <item quantity="other">Siz, %2$d arkadaşlarınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
+        <item quantity="one">Siz, %2$d arkadaşınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
     </plurals>
     <string name="settings_header_title">Ayarlar</string>
     <string name="settings_wifi">Sadece Wi-Fi ile</string>
@@ -206,14 +202,9 @@
         <item quantity="other">%d fotoğraf</item>
         <item quantity="one">%d fotoğraf</item>
     </plurals>
-    <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin
-    </string>
-    <string name="novice_energy">Bataryanın şarjı ne kadar yuksek \no kadar sık siz gösteriliyorsunuz. \nBataryayı
-        doldurmayı \n unutmayın.
-    </string>
-    <string name="novice_battery_bonus">Enerji size popülerlik \nve yeni sempati veriyor. %100 enerji \nalıp \nbataryayı
-        \nşarj edebilirsiniz. İlk şarjı size bedava hediye ediyoruz!
-    </string>
+    <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin</string>
+    <string name="novice_energy">Bataryanın şarjı ne kadar yuksek \no kadar sık siz gösteriliyorsunuz. \nBataryayı doldurmayı \n unutmayın.</string>
+    <string name="novice_battery_bonus">Enerji size popülerlik \nve yeni sempati veriyor. %100 enerji \nalıp \nbataryayı \nşarj edebilirsiniz. İlk şarjı size bedava hediye ediyoruz!</string>
     <string name="novice_fill_profile">Daha fazla sempati almak \n için en iyi fotoğrafınızı yükleyin.</string>
     <string name="general_edit_profile_message">Lütfen, anketin gerekli boşlukları doldurun</string>
     <string name="general_premium_access_error">Bu fonksiyon için Premium gerek</string>

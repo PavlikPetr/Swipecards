@@ -19,8 +19,7 @@
     <string name="general_server_error">Klaida. Bandykite vėliau</string>
     <string name="general_data_error">Klaida. Bandykite dar kartą</string>
     <string name="general_internet_off">Negalima prisijungti prie interneto</string>
-    <string name="general_purchasing_error">Prašome parašyti pranešimą apie pirkimo klaidą adresu support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Prašome, parašyti pranešimą apie pirkimo klaidą adresu support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Tekstas nukopijuotas</string>
     <string name="general_spinner_title">Pasirinkite veiksmą</string>
@@ -205,7 +204,5 @@
         <item quantity="other">%d fotografijų</item>
         <item quantity="one">%d fotografija</item>
     </plurals>
-    <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad pradėtumėte malonią
-        pažintį
-    </string>
+    <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad pradėtumėte malonią pažintį</string>
 </resources>

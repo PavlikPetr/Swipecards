@@ -19,9 +19,7 @@
     <string name="general_server_error">Errore. Riprova più tardi</string>
     <string name="general_data_error">Errore. Riprova più tardi</string>
     <string name="general_internet_off">Non c’è collegamento a Internet</string>
-    <string name="general_purchasing_error">Per favore, invia il messaggio sull’errore di acquisto a
-        support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Per favore, invia il messaggio sull’errore di acquisto a support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Il testo è stato copiato</string>
     <string name="general_spinner_title">Scegli l’azione</string>
@@ -88,7 +86,7 @@
     <string name="buying_header_title">Acquisti</string>
     <string name="buying_you_have">Hai</string>
     <string name="buying_you_have_no_coins_for_gift">Ti mancano %d {{coins}} per comprare il regalo</string>
-    <string name="buying_default_message">Puoi inviare regali e segni di ammirazione pagando con le monete</string>
+    <string name="buying_default_message">Puoi inviare regali e segni di ammirazione pagando  con le monete</string>
     <string name="buying_money">Acquisto monete</string>
     <string name="buying_power">Acquisto energia</string>
     <string name="buying_recharge">Caricare al 100%</string>
@@ -203,9 +201,7 @@
         <item quantity="other">%d foto</item>
         <item quantity="one">%d foto</item>
     </plurals>
-    <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono veramente\nper iniziare una
-        piacevole relazione
-    </string>
+    <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono veramente\nper iniziare una piacevole relazione</string>
     <string name="novice_fill_profile">Aggiungi le tue foto migliori\nper ricevere più segni di simpatia.</string>
     <string name="general_edit_profile_message">Per favore riempi i campi obbligatori del questionario</string>
     <string name="general_premium_access_error">Devi avere lo stato Premium per questa funzione</string>
