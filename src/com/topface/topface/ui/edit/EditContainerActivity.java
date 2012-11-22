@@ -16,6 +16,10 @@ public class EditContainerActivity extends BaseFragmentActivity {
     public static final String INTENT_FORM_DATA_ID = "data_id";
     public static final String INTENT_FORM_DATA = "data";
 
+    public static final String INTENT_AGE_START = "age_start";
+    public static final String INTENT_AGE_END = "age_end";
+    public static final String FILTER_SEX = "filter_sex";
+
     public static final int INTENT_EDIT_NAME_AGE = 101;
     public static final int INTENT_EDIT_STATUS = 102;
     public static final int INTENT_EDIT_BACKGROUND = 103;
@@ -23,6 +27,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_EDIT_FORM_ITEM = 105;
     public static final int INTENT_EDIT_INPUT_FORM_ITEM = 106;
     public static final int INTENT_EDIT_PROFILE_PHOTO = 107;
+    public static final int INTENT_EDIT_AGE = 108;
 
     public static final int INTENT_EDIT_FILTER = 201;
     public static final int INTENT_EDIT_FILTER_FORM_CHOOSE_ITEM = 202;
@@ -76,6 +81,12 @@ public class EditContainerActivity extends BaseFragmentActivity {
             case INTENT_EDIT_PROFILE_PHOTO:
                 mFragment = new EditProfilePhotoFragment();
                 break;
+            case INTENT_EDIT_AGE:
+                int age_start = intent.getIntExtra(INTENT_AGE_START,16);
+                int age_end = intent.getIntExtra(INTENT_AGE_END,32);
+                int sex = intent.getIntExtra(FILTER_SEX,1);
+                mFragment = new EditAgeFragment(age_start,age_end,sex);
+                break;
             default:
                 break;
         }
@@ -98,7 +109,6 @@ public class EditContainerActivity extends BaseFragmentActivity {
         } else {
             super.finish();
         }
-
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
     }
 
