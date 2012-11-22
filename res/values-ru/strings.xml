@@ -280,7 +280,7 @@
     <string name="general_girl">Женский</string>
     <string name="general_boy">Мужской</string>
     <string name="filter_city_fail">Не найдено ни одного города начинающегося с «%s»</string>
-    <string name="age_filter_man">Вы оцениваете парней</string>
-    <string name="age_filter_girl">Вы оцениваете девушек</string>
+    <string name="age_filter_man">Вам интересны парни</string>
+    <string name="age_filter_girl">Вам интересны девушки</string>
 
 </resources>
