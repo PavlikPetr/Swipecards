@@ -178,6 +178,7 @@
     <string name="settings_about">Program hakkında</string>
     <string name="settings_version">Versiyon</string>
     <string name="settings_copyright">Copyright 2010-</string>
+    <string name="settings_rights_reserved">Topface \nTüm hakları saklıdır.</string>
     <string name="settings_extra">Daha detaylı bilgi şurada bulabilirsiniz</string>
     <string name="settings_logout">Hesaptan çıkmak</string>
     <string name="settings_logout_msg">Gerçekten çıkmak istiyor musunuz?</string>
@@ -195,8 +196,8 @@
     <string name="leaders_need_photo">Önce fotoğraf seçin!</string>
     <string name="leaders_select_photo">Etkileyici fotoğraf seçin:</string>
     <plurals name="leaders_price">
-        <item quantity="other">Встать за %d монет - %d paraya durmak</item>
-        <item quantity="one">Встать за %d монету - %d paraya durmak</item>
+        <item quantity="other">%d paraya durmak</item>
+        <item quantity="one">%d paraya durmak</item>
     </plurals>
     <string name="photo_add_or">Fotoğraf eklendi</string>
     <string name="photo_add_error">Fotoğraf eklenemedi</string>
@@ -207,7 +208,21 @@
     </plurals>
     <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin
     </string>
+    <string name="novice_energy">Bataryanın şarjı ne kadar yuksek \no kadar sık siz gösteriliyorsunuz. \nBataryayı
+        doldurmayı \n unutmayın.
+    </string>
+    <string name="novice_battery_bonus">Enerji size popülerlik \nve yeni sempati veriyor. %100 enerji \nalıp \nbataryayı
+        \nşarj edebilirsiniz. İlk şarjı size bedava hediye ediyoruz!
+    </string>
     <string name="novice_fill_profile">Daha fazla sempati almak \n için en iyi fotoğrafınızı yükleyin.</string>
     <string name="general_edit_profile_message">Lütfen, anketin gerekli boşlukları doldurun</string>
     <string name="general_premium_access_error">Bu fonksiyon için Premium gerek</string>
+    <string name="general_search_null_response_error">Hiçbir şey bulunamadı. Filtreleri değiştirmeyi deneyin</string>
+    <string name="change_filters">Filtreleri değiştirmek</string>
+    <string name="general_sex">Cinsiyet</string>
+    <string name="general_girl">Kadın</string>
+    <string name="general_boy">Erkek</string>
+    <string name="filter_city_fail">‘%s’ başlayan hiçbir şehir bulunamadı</string>
+    <string name="age_filter_man">Siz erkeklere not veriyorsunuz</string>
+    <string name="age_filter_girl">Siz kızlara not veriyorsunuz</string>
 </resources>

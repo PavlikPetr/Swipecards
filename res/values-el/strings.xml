@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">ru_RU</string>
+    <string name="app_locale">el_GR</string>
     <string name="general_error">ΛΑΘΟΣ</string>
     <string name="general_warning">ΠΡΟΕΙΔΟΠΟΙΗΣΗ</string>
     <string name="general_ok">ΚΑΛ\'Α</string>
@@ -140,8 +140,8 @@
     <string name="form_detail">Περισσότερο</string>
     <plurals name="form_matches">
         <item quantity="zero">Δεν έχετε σύμπτωσης</item>
-        <item quantity="other">Έχετε%d σύμπτωσης</item>
-        <item quantity="one">Έχετε%d σύμπτωση</item>
+        <item quantity="other">Έχετε %d σύμπτωσης</item>
+        <item quantity="one">Έχετε %d σύμπτωση</item>
     </plurals>
     <string name="invite_search_hint">Βρείτε τους φίλους σας</string>
     <string name="invite_title">Προσκλήσεις</string>
@@ -150,8 +150,8 @@
     <string name="invite_completed">Πρόσκληση αποστέλλονται</string>
     <plurals name="invite_bonus_text">
         <item quantity="zero">Προσκαλέστε τους φίλους σας και να παρέτε για καθεμία από τις 20</item>
-        <item quantity="other">Θα πάμε για να στείλετε προσκλήσεις%2$d στους φίλους και να παρέτε γι \'αυτό% 1$d</item>
-        <item quantity="one">Θα πάμε για να στείλετε μια πρόσκληση για%2$d στους φίλους και να παρέτε γι \'αυτό% 1$d
+        <item quantity="other">Θα πάμε για να στείλετε προσκλήσεις %2$d στους φίλους και να παρέτε γι \'αυτό %1$d</item>
+        <item quantity="one">Θα πάμε για να στείλετε μια πρόσκληση για %2$d στους φίλους και να παρέτε γι \'αυτό %1$d
         </item>
     </plurals>
     <string name="settings_header_title">Ρυθμίσεις</string>
@@ -223,5 +223,5 @@
     <string name="general_sex">Φύλο</string>
     <string name="general_girl">Θηλυκός</string>
     <string name="general_boy">Αρσενικός</string>
-    <string name="filter_city_fail">Βρέθηκε καμία πόλη που αρχίζει με «% s»</string>
+    <string name="filter_city_fail">Βρέθηκε καμία πόλη που αρχίζει με «%s»</string>
 </resources>

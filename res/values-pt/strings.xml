@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">pt-PT</string>
+    <string name="app_locale">ru_RU</string>
     <string name="general_error">ERRO</string>
     <string name="general_warning">AVISO</string>
     <string name="general_ok">OK</string>
@@ -224,4 +224,6 @@
     <string name="general_girl">Feminino</string>
     <string name="general_boy">Masculino</string>
     <string name="filter_city_fail">Não foi encontrada nenhuma cidade que se começa com «%s»</string>
+    <string name="age_filter_man">Você avalia os rapazes</string>
+    <string name="age_filter_girl">Você avalia as meninas</string>
 </resources>

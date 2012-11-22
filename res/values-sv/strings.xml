@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">sv-SE</string>
+    <string name="app_locale">sv_SE</string>
     <string name="general_error">FEL</string>
     <string name="general_warning">VARNING</string>
     <string name="general_ok">OK</string>

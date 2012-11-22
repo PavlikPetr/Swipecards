@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">ro-RO</string>
+    <string name="app_locale">ro_RO</string>
     <string name="general_error">EROARE</string>
     <string name="general_warning">PREINTAMPINARE</string>
     <string name="general_ok">OK</string>
