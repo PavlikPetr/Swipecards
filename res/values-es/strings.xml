@@ -19,8 +19,7 @@
     <string name="general_server_error">Error. Intente más tarde</string>
     <string name="general_data_error">Error. Intenta una vez más</string>
     <string name="general_internet_off">No hay conexión a Internet</string>
-    <string name="general_purchasing_error">Por favor, envía el mensaje de error de la compra a support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Por favor, envía el mensaje de error de la compra a support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Mensaje copiado</string>
     <string name="general_spinner_title">Elige la acción</string>
@@ -34,11 +33,11 @@
     <string name="general_girls">Chicas</string>
     <string name="general_city">Ciudad</string>
     <string name="general_dating">Encuentros</string>
-    <string name="general_likes">Les gusto</string>
-    <string name="general_likes_me">Les gustas</string>
+    <string name="general_likes">Simpatías</string>
+    <string name="general_likes_me">Simpatías</string>
     <string name="general_sympathy">Simpatía</string>
     <string name="general_delight">Admiración</string>
-    <string name="general_mutual">Mutuamente</string>
+    <string name="general_mutual">Simpatías mutuas</string>
     <string name="general_dialogs">Diálogos</string>
     <string name="general_tops">Top</string>
     <string name="general_visitors">Huéspedes</string>
@@ -175,6 +174,7 @@
     <string name="settings_about">Sobre Topface</string>
     <string name="settings_version">Versión</string>
     <string name="settings_copyright">Copyright 2010-</string>
+    <string name="settings_rights_reserved">Topface \nTodos los derechos reservados</string>
     <string name="settings_extra">Puedes encontrar la información detallada en</string>
     <string name="settings_logout">Salir</string>
     <string name="settings_logout_msg">¿Quieres salir seguramente?</string>
@@ -203,7 +203,15 @@
         <item quantity="one">%d foto</item>
     </plurals>
     <string name="novice_sympathy">Envía simpatías a los\nquienes te gustan para\nhacer conocimiento</string>
-    <string name="novice_fill_profile">¡Elige tus mejores fotos para recibir más simpatías</string>
+    <string name="novice_energy">Más la carga de la pila,\nmás a menudo te muestran.\nNo olvide comprar la energía\npara cargar la pila.</string>
+    <string name="novice_battery_bonus">La energía te da popularidad\ny nuevas simpatías. Para cargar\nla pila compra 100%\nde la energía. ¡Te regalamos\nla primera carga gratis!</string>
+    <string name="novice_fill_profile">¡Elige tus mejores fotos para recibir más simpatías!</string>
     <string name="general_edit_profile_message">Por favor, rellena los campos necesarios de tu perfil</string>
     <string name="general_premium_access_error">Para esta función es necesario estar Premium</string>
+    <string name="general_search_null_response_error">De nada es encontrado. Prueba cambiar filtros</string>
+    <string name="change_filters">Cambiar filtros</string>
+    <string name="general_sex">Sexo</string>
+    <string name="general_girl">Femenino</string>
+    <string name="general_boy">Masculino</string>
+    <string name="filter_city_fail">No podemos encontrar ciudades que comienzan con «%s»</string>
 </resources>

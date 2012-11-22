@@ -82,10 +82,10 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 mFragment = new EditProfilePhotoFragment();
                 break;
             case INTENT_EDIT_AGE:
-                int age_start = intent.getIntExtra(INTENT_AGE_START,16);
-                int age_end = intent.getIntExtra(INTENT_AGE_END,32);
-                int sex = intent.getIntExtra(FILTER_SEX,1);
-                mFragment = new EditAgeFragment(age_start,age_end,sex);
+                int age_start = intent.getIntExtra(INTENT_AGE_START, 16);
+                int age_end = intent.getIntExtra(INTENT_AGE_END, 32);
+                int sex = intent.getIntExtra(FILTER_SEX, 1);
+                mFragment = new EditAgeFragment(age_start, age_end, sex);
                 break;
             default:
                 break;

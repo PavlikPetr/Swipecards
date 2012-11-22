@@ -126,6 +126,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             pInfo = getActivity().getPackageManager().getPackageInfo(
                     getActivity().getPackageName(), 0);
             mReport.topface_version = pInfo.versionName;
+            mReport.topface_versionCode = pInfo.versionCode;
         } catch (NameNotFoundException e) {
             Debug.error(e);
         }
@@ -190,9 +191,10 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         String subject;
         String body = Static.EMPTY;
         String topface_version = "unknown";
+        int topface_versionCode = 0;
         String android_SDK = "API" + android.os.Build.VERSION.SDK_INT;
         String android_RELEASE = android.os.Build.VERSION.RELEASE;
-        String android_CODENAME = android.os.Build.VERSION.CODENAME;
+        String android_CODENAME = android.os.Build.VERSION.CODENAME;        
         String device = android.os.Build.DEVICE;
         String model = android.os.Build.MODEL;
 
@@ -208,7 +210,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         public String getExtra() {
             StringBuilder strBuilder = new StringBuilder();
 
-            strBuilder.append("<p>Topface version:").append(topface_version).append("</p>");
+            strBuilder.append("<p>Topface version:").append(topface_version).append("/").append(topface_versionCode).append("</p>");
             strBuilder.append("<p>Device:").append(device).append("/").append(model).append("</p>");
             strBuilder.append("<p>Device language:").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
 

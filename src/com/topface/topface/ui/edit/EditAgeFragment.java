@@ -23,7 +23,7 @@ public class EditAgeFragment extends AbstractEditFragment {
     public static final int absoluteMax = 80;
 
 
-    private  RangeSeekBar<Integer> rsb;
+    private RangeSeekBar<Integer> rsb;
 
     public EditAgeFragment(int age_start, int age_end, int sex) {
         this.age_end = age_end;
@@ -33,9 +33,9 @@ public class EditAgeFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view  = inflater.inflate(R.layout.pref_age_picker_hor, null);
+        View view = inflater.inflate(R.layout.pref_age_picker_hor, null);
 
-        if(sex == 0) {
+        if (sex == 0) {
             baseSexString = getString(R.string.age_filter_girl);
         } else {
             baseSexString = getString(R.string.age_filter_man);
@@ -55,11 +55,10 @@ public class EditAgeFragment extends AbstractEditFragment {
         });
 
 
+        final TextView tv = (TextView) view.findViewById(R.id.apValue);
+        tv.setText(makeString(age_start, age_end));
 
-        final TextView tv = (TextView)view.findViewById(R.id.apValue);
-        tv.setText(makeString(age_start,age_end));
-
-        rsb = new RangeSeekBar<Integer>(absoluteMin,absoluteMax,getActivity());
+        rsb = new RangeSeekBar<Integer>(absoluteMin, absoluteMax, getActivity());
         rsb.setMinimalRange(20);
         rsb.setSelectedMaxValue(age_end);
         rsb.setSelectedMinValue(age_start);
@@ -68,10 +67,10 @@ public class EditAgeFragment extends AbstractEditFragment {
             public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue, RangeSeekBar.Thumb thumbId) {
                 age_start = minValue;
                 age_end = maxValue;
-                tv.setText(makeString(age_start , age_end));
+                tv.setText(makeString(age_start, age_end));
             }
         });
-        ((LinearLayout)view.findViewById(R.id.apContainer)).addView(rsb);
+        ((LinearLayout) view.findViewById(R.id.apContainer)).addView(rsb);
 
         mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
         mSaveButton.setVisibility(View.VISIBLE);
@@ -83,7 +82,7 @@ public class EditAgeFragment extends AbstractEditFragment {
                 intent.putExtra(EditContainerActivity.INTENT_AGE_START, age_start);
                 intent.putExtra(EditContainerActivity.INTENT_AGE_END, age_end);
 
-                getActivity().setResult(Activity.RESULT_OK,intent);
+                getActivity().setResult(Activity.RESULT_OK, intent);
                 getActivity().finish();
             }
         });

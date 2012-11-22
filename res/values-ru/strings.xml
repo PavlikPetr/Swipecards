@@ -24,8 +24,7 @@
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_internet_off">Нет подключения к интернету</string>
-    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопирован</string>
     <string name="general_spinner_title">Выберите действие</string>
@@ -40,7 +39,7 @@
     <string name="general_boys">Парни</string>
     <string name="general_girls">Девушки</string>
     <string name="general_city">Город</string>
-    <string name="general_dating">Знакомства</string>
+    <string name="general_dating">Знакомства</string>A
     <string name="general_likes">Я нравлюсь</string>
     <string name="general_likes_me">Вы нравитесь</string>
     <string name="general_sympathy">Симпатия</string>
@@ -280,7 +279,7 @@
     <string name="general_girl">Женский</string>
     <string name="general_boy">Мужской</string>
     <string name="filter_city_fail">Не найдено ни одного города начинающегося с «%s»</string>
-    <string name="age_filter_man">Вы оцениваете парней </string>
-    <string name="age_filter_girl">Вы оцениваете девушек </string>
-    
+    <string name="age_filter_man">Вам интересны парни</string>
+    <string name="age_filter_girl">Вам интересны девушки</string>
+
 </resources>
