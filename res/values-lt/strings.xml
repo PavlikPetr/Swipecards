@@ -176,6 +176,7 @@
     <string name="settings_about">Apie programą</string>
     <string name="settings_version">Versija</string>
     <string name="settings_copyright">Copyright 2010-</string>
+    <string name="settings_rights_reserved">Topface \nVisos teisės apsaugotos</string>
     <string name="settings_extra">Detalią informaciją galima rasti</string>
     <string name="settings_logout">Išeiti iš paskyros</string>
     <string name="settings_logout_msg">Jūs tikrai norite išeiti?</string>
@@ -189,6 +190,7 @@
     <string name="settings_help_url">http://topface.com</string>
     <string name="settings_topface_url">http://topface.com</string>
     <string name="leaders_go_date">Noriu čionai</string>
+    <string name="leaders_leader_now">Dabar jus pamatys visi!</string>
     <string name="leaders_need_photo">Pirmiausiai reikia išrinkti fotografiją!</string>
     <string name="leaders_select_photo">Išrinkite efektingą fotografiją</string>
     <plurals name="leaders_price">
@@ -205,4 +207,17 @@
         <item quantity="one">%d fotografija</item>
     </plurals>
     <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad pradėtumėte malonią pažintį</string>
+    <string name="novice_energy">Kuo didesnis baterijos krūvis\ntuo dažniau jus rodo.\nNeužmirškite įkrauti\nbateriją, nusipirkę energijos.</string>
+    <string name="novice_battery_bonus">Energija duoda jums populiarumą\nir naujas simpatijas. Jūs galite\nįkrauti bateriją, nusipirkę\n100% energijos. Pirmą įkrovimą\nmes jums dovanojame nemokamai!</string>
+    <string name="novice_fill_profile">Pridėkite savo geriausias fotografijas,\nkad gautumėte daugiau simpatijų.</string>
+    <string name="general_edit_profile_message">Prašome užpildyti visus būtinus anketos laukelius</string>
+    <string name="general_premium_access_error">Šiai funkcijai būtina turėti Premium</string>
+    <string name="general_search_null_response_error">Nieko nerasta. Pabandykite pakeisti filtrus</string>
+    <string name="change_filters">Pakeisti filtrus</string>
+    <string name="general_sex">Lytis</string>
+    <string name="general_girl">Moteriška</string>
+    <string name="general_boy">Vyriška</string>
+    <string name="filter_city_fail">Nerastas nei vienas miestas prasidedantis "%s"</string>
+    <string name="age_filter_man">Jus domina vaikinai</string>
+    <string name="age_filter_girl">Jus domina merginos</string>
 </resources>

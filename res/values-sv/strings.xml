@@ -205,4 +205,11 @@
     <string name="novice_fill_profile">Lägg till dina bästa foton,\för att få fler sympatier.</string>
     <string name="general_edit_profile_message">Vänligen fyll i nödvändiga fälten i profilen</string>
     <string name="general_premium_access_error">För denna funktion behövs Premium</string>
+    <string name="change_filters">Ändra filtrar</string>
+    <string name="general_sex">Kön</string>
+    <string name="general_girl">Kvinna</string>
+    <string name="general_boy">man</string>
+    <string name="filter_city_fail">Det har inte hittats någon stad som börjar på «%s»</string>
+    <string name="age_filter_man">Du är intresserad av killar</string>
+    <string name="age_filter_girl">Du är intresserad av tjejer</string>
 </resources>

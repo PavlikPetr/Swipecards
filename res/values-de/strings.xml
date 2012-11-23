@@ -214,4 +214,6 @@
     <string name="general_girl">Weiblich</string>
     <string name="general_boy">Männlich</string>
     <string name="filter_city_fail">Keine Stadt gefunden, der mit «%s» beginnt</string>
+    <string name="age_filter_man">Sie interessieren sich für Männer</string>
+    <string name="age_filter_girl">Sie interessieren sich für Mädchen</string>
 </resources>

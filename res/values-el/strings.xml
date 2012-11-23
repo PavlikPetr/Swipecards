@@ -214,4 +214,6 @@
     <string name="general_girl">Θηλυκός</string>
     <string name="general_boy">Αρσενικός</string>
     <string name="filter_city_fail">Βρέθηκε καμία πόλη που αρχίζει με «%s»</string>
+    <string name="age_filter_man">‘Εχετε ενδιαφέρον για άντρες</string>
+    <string name="age_filter_girl">‘Εχετε ενδιαφέρον για κοπέλες</string>
 </resources>

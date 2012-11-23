@@ -3,10 +3,12 @@
     <string name="profile_form_status_male_0">Meilės ir rimtų santykių</string>
     <string name="profile_form_status_male_1">Santykių be įsipareigojimų</string>
     <string name="profile_form_status_male_2">Draugystės ir bendravimo</string>
+    <string name="profile_form_status_male_3">Noriu daug simpatijų</string>
     <string name="profile_form_status_male_4">Noriu paplepėti</string>
     <string name="profile_form_status_female_0">Meilės ir rimtų santykių</string>
     <string name="profile_form_status_female_1">Santykių be įsipareigojimų</string>
     <string name="profile_form_status_female_2">Draugystės ir bendravimo</string>
+    <string name="profile_form_status_female_3">Noriu daug simpatijų</string>
     <string name="profile_form_status_female_4">Noriu paplepėti</string>
     <string name="profile_form_education_male_0">Vidurinis</string>
     <string name="profile_form_education_male_1">Dar mokausi</string>
