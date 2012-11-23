@@ -281,5 +281,13 @@
     <string name="filter_city_fail">Не найдено ни одного города начинающегося с «%s»</string>
     <string name="age_filter_man">Вам интересны парни</string>
     <string name="age_filter_girl">Вам интересны девушки</string>
+    <string name="dashbrd_popup_rating">
+        Понравилось наше приложение? Подними нам рейтинг! Чем выше рейтинг, тем больше
+        интересных людей ты встретишь в Topface
+    </string>
+    <string name="dashbrd_popup_title">Рейтинг</string>
+    <string name="dashbrd_popup_cancel">Больше не спрашивать</string>
+    <string name="dashbrd_popup_rate">Выставить рейтинг</string>
+    <string name="dashbrd_popup_later">Спросить позже</string>
 
 </resources>

@@ -1,13 +1,17 @@
 package com.topface.topface.ui;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -24,6 +28,8 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 public class NavigationActivity extends FragmentActivity implements View.OnClickListener {
 
+    public static final String RATING_POPUP = "RATING_POPUP";
+    public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
@@ -62,6 +68,10 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
         
         mNovice = new Novice(getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE));        
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+
+        if (App.isOnline()) {
+            ratingPopup();
+        }
     }
 
     @Override
@@ -181,4 +191,66 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 			}
 		}
     };
+
+    /**
+     * Попап с предложение оценить предложение
+     */
+    private void ratingPopup() {
+        final SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+
+        long date_start = preferences.getLong(RATING_POPUP, 1);
+        long date_now = new java.util.Date().getTime();
+
+        if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT)) {
+            return;
+        }
+        else if (date_start == 1) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putLong("RATING_POPUP", new java.util.Date().getTime());
+            editor.commit();
+            return;
+        }
+
+        final Dialog ratingPopup = new Dialog(this) {
+            @Override
+            public void onBackPressed() {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong(RATING_POPUP, new java.util.Date().getTime());
+                editor.commit();
+                super.onBackPressed();
+            }
+        };
+        ratingPopup.setTitle(R.string.dashbrd_popup_title);
+        ratingPopup.setContentView(R.layout.popup_rating);
+        ratingPopup.show();
+
+        ratingPopup.findViewById(R.id.btnRatingPopupRate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.topface.topface")));
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong(RATING_POPUP, 0);
+                editor.commit();
+                ratingPopup.cancel();
+            }
+        });
+        ratingPopup.findViewById(R.id.btnRatingPopupLate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong(RATING_POPUP, new java.util.Date().getTime());
+                editor.commit();
+                ratingPopup.cancel();
+            }
+        });
+        ratingPopup.findViewById(R.id.btnRatingPopupCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong(RATING_POPUP, 0);
+                editor.commit();
+                ratingPopup.cancel();
+            }
+        });
+    }
 }
