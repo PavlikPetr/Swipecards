@@ -131,6 +131,7 @@ public class GCMUtils {
                             i.putExtra(ChatActivity.INTENT_USER_NAME, user.name);
                             i.putExtra(ChatActivity.INTENT_USER_AVATAR, user.photoUrl);
                             i.putExtra(ChatActivity.INTENT_USER_AGE, user.age);
+                            i.putExtra(ChatActivity.INTENT_USER_CITY, user.city);
                         } else {
                             i = new Intent(context, NavigationActivity.class);
                         }
