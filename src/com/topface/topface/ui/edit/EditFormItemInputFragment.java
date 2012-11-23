@@ -54,7 +54,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                 .setText(R.string.edit_title);
         TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
         subTitle.setVisibility(View.VISIBLE);
-        subTitle.setText(R.string.edit_bg_photo);
+        subTitle.setText(mFormInfo.getFormTitle(mTitleId));
 
         getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
