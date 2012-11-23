@@ -214,4 +214,9 @@
     <string name="general_girl">Female</string>
     <string name="general_boy">Male</string>
     <string name="filter_city_fail">Couldn\'t find cities beginning with «%s»</string>
+    <string name="dashbrd_popup_rating">Did you like our application? Raise our rating! The higher rating the more people you will meet in Topface</string>
+    <string name="dashbrd_popup_title">Rate me</string>
+    <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
+    <string name="dashbrd_popup_rate">Yes, I would rate</string>
+    <string name="dashbrd_popup_later">Ask later</string>
 </resources>
