@@ -1,0 +1,15 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+    <!-- avatar -->
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/left_icon"
+            style="@style/ChatAvatarInvisible"/>
+
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ivChatGift"
+            android:layout_toLeftOf="@id/left_icon"
+            style="@style/Gift"/>
+
+</RelativeLayout>

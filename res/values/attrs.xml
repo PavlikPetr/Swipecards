@@ -1,20 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <declare-styleable name="PullToRefresh">
-        <attr name="adapterViewBackground" format="reference|color" />
-        <attr name="headerBackground"      format="reference|color" />
-        <attr name="headerTextColor"       format="color" />
-        <attr name="mode">
-            <flag name="pullDownFromTop"  value="0x1" />
-            <flag name="pullUpFromBottom" value="0x2" />
-        </attr>
+    <declare-styleable name="UniversalFrameImageView">
+        <attr name="frameSrc" format="reference"/>
     </declare-styleable>
-    
-    <declare-styleable name="RoundedImageView">
-        <attr name="frame" >
-            <flag name="dialog"  value="0x0" />
-            <flag name="chat"    value="0x1" />
+
+    <declare-styleable name="LockerView">
+        <attr name="android:gravity"/>
+        <attr name="android:text"/>
+        <attr name="android:textColor"/>
+        <attr name="android:textSize"/>
+        <attr name="android:shadowColor"/>
+        <attr name="android:shadowRadius"/>
+        <attr name="android:shadowDx"/>
+        <attr name="android:shadowDy"/>
+        <attr name="android:drawableLeft"/>
+        <attr name="android:drawableTop"/>
+        <attr name="android:drawableRight"/>
+        <attr name="android:drawableBottom"/>
+        <attr name="android:drawablePadding"/>
+        <attr name="android:indeterminateDrawable"/>
+        <attr name="messageGravity" format="integer"/>
+        <attr name="messageBackground" format="reference|color"/>
+        <attr name="messagePadding" format="dimension"/>
+        <attr name="messagePaddingLeft" format="dimension"/>
+        <attr name="messagePaddingTop" format="dimension"/>
+        <attr name="messagePaddingRight" format="dimension"/>
+        <attr name="messagePaddingBottom" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="ImageViewRemote">
+        <!--attr name="stubImage" format="reference" />
+        <attr name="imageForEmptyUri" format="reference" /-->
+        <attr name="remoteSrc" format="string"/>
+        <attr name="cornersRadius" format="dimension"/>
+        <attr name="clipMask" format="reference"/>
+        <attr name="postProcessor">
+            <flag name="none" value="0"/>
+            <flag name="rounded" value="1"/>
+            <flag name="roundCorners" value="2"/>
+            <flag name="mask" value="3"/>
         </attr>
     </declare-styleable>
 

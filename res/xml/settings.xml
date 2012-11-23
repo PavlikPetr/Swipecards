@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Уведомления">
+        <CheckBoxPreference
+                android:key="settings_c2dm"
+                android:persistent="true"
+                android:defaultValue="true"
+                android:title="@string/settings_notifications"
+                android:summary="@string/settings_notifications_summary"
+                />
+
+        <RingtonePreference
+                android:key="settings_c2dm_ringtone"
+                android:showSilent="true"
+                android:showDefault="true"
+                android:persistent="true"
+                android:ringtoneType="notification"
+                android:title="@string/settings_select_ringtone"/>
+
+        <CheckBoxPreference
+                android:key="settings_c2dm_vibration"
+                android:persistent="true"
+                android:defaultValue="true"
+                android:title="@string/settings_vibration"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Предзагрузка фотографий">
+        <ListPreference
+                android:key="settings_preloading"
+                android:persistent="true"
+                android:summary="@string/settings_photo_preloading_summary"
+                android:title="@string/settings_photo_preloading"/>
+        <!--ListPreference
+                android:key="settings_preloading_type"
+                android:persistent="true"
+                android:summary="Какие фотографии грузить заранее"
+                android:title="Тип"/-->
+    </PreferenceCategory>
+
+</PreferenceScreen>

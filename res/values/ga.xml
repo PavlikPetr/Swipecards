@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Настройки Google Analytics, используемые через библиотеку EasyTrack, AndroidLintUnusedResources -->
+<!--suppress AndroidLintMissingTranslation, AndroidLintUnusedResources -->
+<resources>
+    <!--suppress AndroidLintTypographyDashes -->
+    <string name="ga_api_key">UA-22657456-4</string>
+
+    <!-- Если значение @bool/debug равно true, то данные на сервер отправляться не будут -->
+    <bool name="ga_debug">false</bool>
+    <bool name="ga_dryRun">false</bool>
+    <bool name="ga_auto_activity_tracking">true</bool>
+
+    <!-- Синонимы для Активити, где name каноническое имя Activity, а значение - ключ для отображения в GA -->
+    <string name="com.topface.topface.billing.BuyingActivity">/PagePurchase</string>
+    <string name="com.topface.topface.ui.AuthActivity">/AuthActivity</string>
+    <string name="com.topface.topface.ui.ChatActivity">/ChatActivity</string>
+    <string name="com.topface.topface.ui.CitySearchActivity">/CitySearchActivity</string>
+    <string name="com.topface.topface.ui.DashboardActivity">/DashboardActivity</string>
+    <string name="com.topface.topface.ui.DatingActivity">/PageDating</string>
+    <string name="com.topface.topface.ui.InboxActivity">/PageDialogs</string>
+    <string name="com.topface.topface.ui.InviteActivity">/InviteActivity</string>
+    <string name="com.topface.topface.ui.LeadersActivity">/LeadersActivity</string>
+    <string name="com.topface.topface.ui.LikesActivity">/PageLikes</string>
+    <string name="com.topface.topface.ui.MainActivity">/TopfaceStarted</string>
+    <string name="com.topface.topface.ui.profile.album.PhotoAlbumActivity">/PhotoAlbumActivity</string>
+    <string name="com.topface.topface.ui.profile.album.PhotoEroAlbumActivity">/PhotoEroAlbumActivity</string>
+    <string name="com.topface.topface.ui.profile.EditProfileActivity">/EditProfileActivity</string>
+    <string name="com.topface.topface.ui.profile.ProfileActivity">/PageProfile</string>
+    <string name="com.topface.topface.ui.SymphatyActivity">/PageMutual</string>
+    <string name="com.topface.topface.ui.TopsActivity">/PageTop</string>
+    <string name="com.topface.topface.ui.WebAuthActivity">/WebAuthActivity</string>
+
+</resources>

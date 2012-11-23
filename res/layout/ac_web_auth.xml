@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#080808" >
-    
-  <WebView android:id="@+id/wvWebFrame"
-      android:layout_height="fill_parent"
-      android:layout_width="fill_parent">
-  </WebView>
-  
-  <ProgressBar
-      android:id="@+id/prsWebLoading"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:visibility="gone"
-      style="@android:style/Widget.ProgressBar.Small" />
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#080808">
+
+    <WebView android:id="@+id/wvWebFrame"
+             android:layout_height="fill_parent"
+             android:layout_width="fill_parent">
+    </WebView>
+
+    <ProgressBar
+            android:id="@+id/prsWebLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            style="@android:style/Widget.ProgressBar.Small"/>
 
 </RelativeLayout>

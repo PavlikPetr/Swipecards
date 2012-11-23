@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:paddingRight="2dp">
+
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/leaderAvatar"
+            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+            ivr:postProcessor="mask"
+            ivr:clipMask="@drawable/leader_mask"
+            android:layout_height="53dp"
+            android:layout_width="53dp"
+            android:background="@drawable/leaders_avatar_frame"                        
+            android:scaleType="centerInside"
+            />
+
+</RelativeLayout>

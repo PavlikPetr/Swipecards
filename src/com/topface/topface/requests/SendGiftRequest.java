@@ -1,0 +1,29 @@
+package com.topface.topface.requests;
+
+import android.content.Context;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class SendGiftRequest extends AbstractApiRequest {
+
+    static final String USER_ID = "userid";
+    static final String GIFT_ID = "giftid";
+
+    public static final String service = "gift";
+    public int userId;
+    public int giftId;
+
+    public SendGiftRequest(Context context) {
+        super(context);
+    }
+
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject().put(USER_ID, userId).put(GIFT_ID, giftId);
+    }
+
+    @Override
+    protected String getServiceName() {
+        return service;
+    }
+}

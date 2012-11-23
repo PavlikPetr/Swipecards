@@ -1,206 +1,357 @@
 package com.topface.topface.ui;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.facebook.android.*;
-import com.facebook.android.AsyncFacebookRunner.RequestListener;
-import com.facebook.android.Facebook.*;
-import com.topface.topface.R;
-import com.topface.topface.Data;
-import com.topface.topface.data.Auth;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.utils.AuthToken;
-import com.topface.topface.utils.Debug;
-import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+import com.topface.topface.Data;
+import com.topface.topface.GCMUtils;
+import com.topface.topface.R;
+import com.topface.topface.ReAuthReceiver;
+import com.topface.topface.data.Auth;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
+import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.requests.*;
+import com.topface.topface.ui.edit.EditProfileActivity;
+import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.http.ConnectionManager;
+import com.topface.topface.utils.http.Http;
+import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
 
-public class AuthActivity extends Activity implements View.OnClickListener  {
-  // Data
-  private Button mFBButton;
-  private Button mVKButton;
-  private ProgressBar mProgressBar;
-  private AsyncFacebookRunner mAsyncFacebookRunner;
-  private AuthRequest authRequest;
-  private String[] FB_PERMISSIONS = {"user_photos","publish_stream","email","publish_actions"};
-  //---------------------------------------------------------------------------
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    Debug.log(this,"+onCreate");
-    setContentView(R.layout.ac_auth);
-    
-    // Facebook button
-    mFBButton = (Button)findViewById(R.id.btnAuthFB);
-    mFBButton.setOnClickListener(this);
+import java.util.List;
 
-    // Vkontakte button
-    mVKButton = (Button)findViewById(R.id.btnAuthVK);
-    mVKButton.setOnClickListener(this);
-    
-    // Progress
-    mProgressBar = (ProgressBar)findViewById(R.id.prsAuthLoading);
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    Debug.log(this,"-onDestroy");
-    mAsyncFacebookRunner = null;
-    if(authRequest!=null) authRequest.cancel();
-    super.onDestroy();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onActivityResult(int requestCode,int resultCode,Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    Debug.log(this,"onActivityResult");
+public class AuthActivity extends BaseFragmentActivity implements View.OnClickListener {
+    private Button mFBButton;
+    private Button mVKButton;
+    private RetryView mRetryView;
+    private ProgressBar mProgressBar;
+    private AuthorizationManager mAuthorizationManager;
 
-    if(requestCode==WebAuthActivity.INTENT_WEB_AUTH && resultCode==Activity.RESULT_OK) {
-      startActivity(new Intent(this,MainActivity.class));
-      finish();
-    } else if(requestCode!=WebAuthActivity.INTENT_WEB_AUTH && resultCode==Activity.RESULT_OK) {
-      Data.facebook.authorizeCallback(requestCode, resultCode, data);
-    }
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public void onClick(View view) {
-    if(view.getId() == R.id.btnAuthVK) {
-      Intent intent = new Intent(getApplicationContext(), WebAuthActivity.class);
-      startActivityForResult(intent, WebAuthActivity.INTENT_WEB_AUTH);
-    } else if(view.getId() == R.id.btnAuthFB) {
-      mAsyncFacebookRunner = new AsyncFacebookRunner(Data.facebook);
-      Data.facebook.authorize(this, FB_PERMISSIONS, mDialogListener);
-    }
-  }
-  //---------------------------------------------------------------------------
-  private void showButtons() {
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        mFBButton.setVisibility(View.VISIBLE);
-        mVKButton.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE); 
-      }
-    });
-  }
-  //---------------------------------------------------------------------------
-  private void hideButtons() {
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        mFBButton.setVisibility(View.INVISIBLE);
-        mVKButton.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE); 
-      }
-    });
-  }
-  //---------------------------------------------------------------------------
-  private void auth(AuthToken token){
-    authRequest = new AuthRequest(getApplicationContext());
-    authRequest.platform = token.getSocialNet();
-    authRequest.sid      = token.getUserId();
-    authRequest.token    = token.getTokenKey();
-    authRequest.callback(new ApiHandler() {
-      @Override
-      public void success(ApiResponse response) {
-        Debug.log(this,"Auth");
-        Auth auth = Auth.parse(response);
-        Data.saveSSID(getApplicationContext(),auth.ssid);
-        post(new Runnable() {
-          @Override
-          public void run() {
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-            finish();
-          }
+    private boolean mFromAuthorizationReceiver;
+    private boolean mIsAuthorized = false;
+
+    public static AuthActivity mThis;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Debug.log(this, "+onCreate");
+        setContentView(R.layout.ac_auth);
+
+        mRetryView = new RetryView(getApplicationContext());
+        mRetryView.setErrorMsg(getString(R.string.general_data_error));
+        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry),this);
+        mRetryView.setVisibility(View.GONE);
+        RelativeLayout authContainer = (RelativeLayout) findViewById(R.id.authContainer);
+        authContainer.addView(mRetryView);
+        BroadcastReceiver mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
+                reAuthAfterInternetConnected(mConnectionType);
+            }
+        };
+        IntentFilter filterReauthBan = new IntentFilter();
+        filterReauthBan.addAction(ConnectionChangeReceiver.REAUTH);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filterReauthBan);
+
+        mAuthorizationManager = AuthorizationManager.getInstance(this);
+        mAuthorizationManager.setOnAuthorizationHandler(new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case AuthorizationManager.AUTHORIZATION_FAILED:
+                        authorizationFailed();
+                        break;
+                    case AuthorizationManager.DIALOG_COMPLETED:
+                        hideButtons();
+                        break;
+                    case AuthorizationManager.TOKEN_RECEIVED:
+                        auth((AuthToken) msg.obj);
+                        break;
+                    default:
+                        super.handleMessage(msg);
+                }
+            }
         });
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-        showButtons();
-        post(new Runnable() {
-          @Override
-          public void run() {
-            Toast.makeText(AuthActivity.this,getString(R.string.general_server_error),Toast.LENGTH_SHORT).show();
-          }
-        });
-      }
-    }).exec();
-  }
-  //---------------------------------------------------------------------------
-  private DialogListener mDialogListener = new DialogListener(){
-    @Override
-    public void onComplete(Bundle values) {
-      Debug.log("FB","mDialogListener::onComplete");
-      mAsyncFacebookRunner.request("/me", mRequestListener);
-      hideButtons();
+
+        // Facebook button
+        mFBButton = (Button) findViewById(R.id.btnAuthFB);
+        mFBButton.setOnClickListener(this);
+
+        // Vkontakte button
+        mVKButton = (Button) findViewById(R.id.btnAuthVK);
+        mVKButton.setOnClickListener(this);
+
+        // Progress
+        mProgressBar = (ProgressBar) findViewById(R.id.prsAuthLoading);
+
+        if (!Http.isOnline(this))
+            Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
+                    .show();
+
+        if (Data.isSSID()) {
+            mIsAuthorized = true;
+            hideButtons();
+            getProfile(false);
+        } else if (!(new AuthToken(getApplicationContext())).isEmpty()) {
+            hideButtons();
+            mAuthorizationManager.reAuthorize();
+        }
     }
+
     @Override
-    public void onFacebookError(FacebookError e) {
-      Debug.log("FB","mDialogListener::onFacebookError:"+e.getMessage());
-      showButtons();
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (!(new AuthToken(getApplicationContext())).isEmpty()) {
+            hideButtons();
+            mAuthorizationManager.reAuthorize();
+        } else {
+            showButtons();
+        }
     }
+
     @Override
-    public void onError(DialogError e) {
-      Debug.log("FB","mDialogListener::onError");
-      showButtons();
+    protected void onPause() {
+        super.onPause();
+        mThis = null;
     }
+
     @Override
-    public void onCancel() {
-      Debug.log("FB","mDialogListener::onCancel");
-      showButtons();
+    protected void onResume() {
+        super.onResume();
+        checkIntentForReauth();
+        mThis = this;
     }
-  };
-  //---------------------------------------------------------------------------
-  private RequestListener mRequestListener = new RequestListener() {
+
+
     @Override
-    public void onComplete(String response,Object state) {
-      try {
-        Debug.log("FB","mRequestListener::onComplete");
-        JSONObject jsonResult = new JSONObject(response);
-        String user_id = jsonResult.getString("id");
-        final AuthToken authToken = new AuthToken(getApplicationContext());
-        authToken.saveToken(AuthToken.SN_FACEBOOK, user_id, Data.facebook.getAccessToken(), ""+Data.facebook.getAccessExpires());
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_CANCELED)
+            hideButtons();
+        else showButtons();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Debug.log(this, "-onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (!Http.isOnline(this)) {
+            Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            if (view.getId() == R.id.btnAuthVK) {
+                mAuthorizationManager.vkontakteAuth();
+            } else if (view.getId() == R.id.btnAuthFB) {
+                mAuthorizationManager.facebookAuth();
+            } else if (view.getId() == R.id.retry) {
+                auth(new AuthToken(getApplicationContext()));
+                mRetryView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+
+    public void reAuthAfterInternetConnected(int type) {
+        if (!mIsAuthorized) {
+            if (!(new AuthToken(getApplicationContext()).isEmpty())) {
+                mAuthorizationManager.reAuthorize();
+                hideButtons();
+                mRetryView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        }
+        if (type == ConnectionChangeReceiver.CONNECTION_OFFLINE) mIsAuthorized = false;
+    }
+
+    private void showButtons() {
         runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
-            AuthActivity.this.auth(authToken); 
-          }
+            @Override
+            public void run() {
+                mFBButton.setVisibility(View.VISIBLE);
+                mVKButton.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
+            }
         });
-      } catch(JSONException e) {
-        Debug.log("FB","mRequestListener::onComplete:error");
-        showButtons();
-      }
     }
-    @Override
-    public void onMalformedURLException(MalformedURLException e,Object state) {
-      Debug.log("FB","mRequestListener::onMalformedURLException");
-      showButtons();
+
+    private void hideButtons() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mFBButton.setVisibility(View.INVISIBLE);
+                mVKButton.setVisibility(View.INVISIBLE);
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        });
     }
-    @Override
-    public void onIOException(IOException e,Object state) {
-      Debug.log("FB","mRequestListener::onIOException");
-      showButtons();
+
+    private void openActivity(Intent intent) {
+        ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+
+        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+        if (!mFromAuthorizationReceiver || (taskList.get(0).numActivities == 1 &&
+                taskList.get(0).topActivity.getClassName().equals(this.getClass().getName()))) {
+            startActivity(intent);
+        }
+        ConnectionManager.getInstance().notifyDelayedRequests();
+        finish();
     }
-    @Override
-    public void onFileNotFoundException(FileNotFoundException e,Object state) {
-      Debug.log("FB","mRequestListener::onFileNotFoundException");
-      showButtons();
+
+
+    private void auth(AuthToken token) {
+        AuthRequest authRequest = new AuthRequest(getApplicationContext());
+        registerRequest(authRequest);
+        authRequest.platform = token.getSocialNet();
+        authRequest.sid = token.getUserId();
+        authRequest.token = token.getTokenKey();
+        authRequest.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                Debug.log(this, "Auth");
+                Auth auth = Auth.parse(response);
+                Data.saveSSID(getApplicationContext(), auth.ssid);
+                GCMUtils.init(AuthActivity.this);
+                mIsAuthorized = true;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getProfile(true);
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        showButtons();
+//                        Log.d("Topface","fail");
+                        authorizationFailed();
+                        mIsAuthorized = false;
+                    }
+                });
+            }
+        }).exec();
     }
-    @Override
-    public void onFacebookError(FacebookError e,Object state) {
-      Debug.log("FB","mRequestListener::onFacebookError:"+e+":"+state);
-      showButtons();
+
+    private void getProfile(final boolean isFirstTime) {
+        Debug.log("geting profile");
+        ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
+        registerRequest(profileRequest);
+        profileRequest.part = ProfileRequest.P_ALL;
+        profileRequest.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                CacheProfile.setProfile(Profile.parse(response), response);
+                
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                    	OptionsRequest request = new OptionsRequest(getApplicationContext());                        
+                        ApiHandler handler = new ApiHandler() {
+                			
+                			@Override
+                			public void success(ApiResponse response) throws NullPointerException {
+                				Options.parse(response);
+                				runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!isProfileNormal() && isFirstTime) {
+                                            Intent intent = new Intent(AuthActivity.this,EditProfileActivity.class);
+                                            intent.putExtra(EditProfileActivity.FROM_AUTH_ACTIVITY,true);
+                                            openActivity(intent);
+                                        } else {
+                                            Intent intent = new Intent(AuthActivity.this,NavigationActivity.class);
+                                    	    openActivity(intent);
+                                        }
+                                    }
+                                });
+                			}
+                			
+                			@Override
+                			public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                				final ApiResponse finalResponse = response;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (finalResponse.code == ApiResponse.BAN)
+                                            showButtons();
+                                        else {
+                                            authorizationFailed();
+                                            Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                			}
+                		};
+                        request.callback(handler);  
+                        request.exec();
+                    }
+				});
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                final ApiResponse finalResponse = response;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (finalResponse.code == ApiResponse.BAN)
+                            showButtons();
+                        else {
+                            authorizationFailed();
+                            Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }).exec();
     }
-  };
-  //---------------------------------------------------------------------------
+
+    private boolean isProfileNormal() {
+        Profile profile = CacheProfile.getProfile();
+        return (profile.age != 0 && profile.city_id != 0 && profile.photo != null);
+    }
+
+    private void checkIntentForReauth() {
+        Bundle data = getIntent().getExtras();
+        if (data != null) {
+            if (data.get(ReAuthReceiver.REAUTH_FROM_RECEIVER) != null) {
+                mFromAuthorizationReceiver = data.getBoolean(
+                        ReAuthReceiver.REAUTH_FROM_RECEIVER, false);
+            }
+        }
+    }
+
+    private void authorizationFailed() {
+        hideButtons();
+        mRetryView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
+    }
 }

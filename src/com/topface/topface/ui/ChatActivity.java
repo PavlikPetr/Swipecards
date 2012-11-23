@@ -1,199 +1,789 @@
 package com.topface.topface.ui;
 
-import java.util.LinkedList;
-import com.topface.topface.R;
-import com.topface.topface.data.History;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.HistoryRequest;
-import com.topface.topface.requests.MessageRequest;
-import com.topface.topface.ui.adapters.ChatListAdapter;
-import com.topface.topface.ui.profile.ProfileActivity;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Http;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.*;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.widget.*;
 
-public class ChatActivity extends Activity implements View.OnClickListener {
-  // Data
-  private int mUserId;
-  private boolean mProfileInvoke;
-  private ListView mListView;
-  private ChatListAdapter mAdapter;
-  private LinkedList<History> mHistoryList;
-  private EditText mEdBox;
-  private TextView mHeaderTitle;
-  private ProgressBar mProgressBar;
-  private MessageRequest messageRequest;
-  private HistoryRequest historyRequest;
-  // Constants
-  private static final int LIMIT = 50;
-  public  static final String INTENT_USER_ID = "user_id";
-  public  static final String INTENT_USER_NAME = "user_name";
-  public  static final String INTENT_PROFILE_INVOKE = "profile_invoke";
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.ac_chat);
-    Debug.log(this,"+onCreate");
-    
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.topface.topface.Data;
+import com.topface.topface.GCMUtils;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.data.*;
+import com.topface.topface.requests.*;
+import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.fragments.DatingFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.profile.UserProfileActivity;
+import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.SwapControl;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.GeoLocationManager;
+import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
+import com.topface.topface.utils.OsmManager;
+
+import java.util.LinkedList;
+
+@SuppressWarnings("deprecation")
+public class ChatActivity extends BaseFragmentActivity implements View.OnClickListener,
+        LocationListener {
     // Data
-    mHistoryList = new LinkedList<History>();
-    
-    // Title Header
-    mHeaderTitle = ((TextView)findViewById(R.id.tvHeaderTitle));
-    
-    // ListView
-    mListView = (ListView)findViewById(R.id.lvChatList);
-    
-    // Progress
-    mProgressBar = (ProgressBar)findViewById(R.id.prsChatLoading);
-    
-    // params
-    mUserId = getIntent().getIntExtra(INTENT_USER_ID,-1);
-    mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE,false);
-    mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME));
-    
-    // Profile Button
-    View btnProfile = findViewById(R.id.btnChatProfile);
-    btnProfile.setVisibility(View.VISIBLE);
-    btnProfile.setOnClickListener(this);
-    
-    // Edit Box
-    mEdBox = (EditText)findViewById(R.id.edChatBox);
-    
-    // Send Button
-    Button btnSend = (Button)findViewById(R.id.btnChatSend);
-    btnSend.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        final String text = mEdBox.getText().toString();
-        
-        if(text==null || text.length()==0) return;
-        
-        mProgressBar.setVisibility(View.VISIBLE);
+    private int mUserId;
+    private boolean mProfileInvoke;
+    private boolean mIsAddPanelOpened;
+    private PullToRefreshListView mListView;
+    private ChatListAdapter mAdapter;
+    private LinkedList<History> mHistoryList;
+    private EditText mEditBox;
+    private TextView mHeaderTitle;
+    private LockerView mLoadingLocker;
+    private Button mSendButton;
 
-        InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mEdBox.getWindowToken(),0);
+    private SwapControl mSwapControl;
+    private static ProgressDialog mProgressDialog;
+    private boolean mLocationDetected = false;
+
+    private String[] editButtonsNames;
+
+    private static final int DELETE_BUTTON = 1;
+    private static final int COPY_BUTTON = 0;
+
+    private boolean mReceiverRegistered = false;
+    // Constants
+    private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public static final String INTENT_USER_ID = "user_id";
+    public static final String INTENT_USER_NAME = "user_name";
+    public static final String INTENT_USER_AVATAR = "user_avatar";
+    public static final String INTENT_USER_SEX = "user_sex";
+    public static final String INTENT_USER_AGE = "user_age";
+    public static final String INTENT_USER_CITY = "user_city";
+    public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
+    public static final String INTENT_ITEM_ID = "item_id";
+    public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
+    private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
+    private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
+    private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
+
+    // Managers
+    private GeoLocationManager mGeoManager = null;
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.ac_chat);
+        Debug.log(this, "+onCreate");
+
+        // Data
+        mHistoryList = new LinkedList<History>();
+
+        // Swap Control
+        mSwapControl = ((SwapControl) findViewById(R.id.swapFormView));
+
+        // Locker
+        mLoadingLocker = (LockerView) findViewById(R.id.llvChatLoading);
+
+        editButtonsNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title)};
+        // Params
+        mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
+        mProfileInvoke = getIntent().getBooleanExtra(INTENT_PROFILE_INVOKE, false);
+        int userSex = getIntent().getIntExtra(INTENT_USER_SEX, Static.BOY);
+
+        // Navigation bar
+        mHeaderTitle = ((TextView) findViewById(R.id.tvNavigationTitle));
+        mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME) + ", "
+                + getIntent().getIntExtra(INTENT_USER_AGE, 0));
+        TextView headerSubtitle = ((TextView) findViewById(R.id.tvNavigationSubtitle));
+        headerSubtitle.setVisibility(View.VISIBLE);
+        headerSubtitle.setText(getIntent().getStringExtra(INTENT_USER_CITY));
+
+        findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
+        Button btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
+        btnBack.setVisibility(View.VISIBLE);
+        if (getIntent().hasExtra(INTENT_PREV_ENTITY)) {
+            btnBack.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            String prevEntity = getIntent().getStringExtra(INTENT_PREV_ENTITY);
+            if (prevEntity.equals(ChatActivity.class.getSimpleName())) {
+                btnBack.setText(R.string.general_chat);
+            } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
+                btnBack.setText(R.string.general_dating);
+            } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
+                btnBack.setText(R.string.general_dialogs);
+            } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
+                btnBack.setText(R.string.general_likes);
+            } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
+                btnBack.setText(R.string.general_mutual);
+            } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
+                btnBack.setText(R.string.general_dating);
+            } else if (prevEntity.equals(UserProfileActivity.class.getSimpleName())) {
+                btnBack.setText(R.string.general_profile);
+            }
+
+        } else {
+            btnBack.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            btnBack.setText(R.string.general_dating);
+        }
+
+        final ImageButton btnProfile = (ImageButton) findViewById(R.id.btnNavigationProfileBar);
+        switch (userSex) {
+            case Static.BOY:
+                btnProfile.setImageResource(R.drawable.navigation_male_profile_selector);
+                break;
+            case Static.GIRL:
+                btnProfile.setImageResource(R.drawable.navigation_female_profile_selector);
+                break;
+        }
+        btnProfile.setVisibility(View.VISIBLE);
+        btnProfile.setOnClickListener(this);
+
+        // View btnProfile = findViewById(R.id.btnHeaderProfile);
+        // btnProfile.setVisibility(View.VISIBLE);
+        // btnProfile.setOnClickListener(this);
+
+        // Add Button
+        findViewById(R.id.btnChatAdd).setOnClickListener(this);
+
+        // Gift Button
+        findViewById(R.id.btnChatGift).setOnClickListener(this);
+
+        // Place Button
+        findViewById(R.id.btnChatPlace).setOnClickListener(this);
+
+        // Map Button
+        findViewById(R.id.btnChatMap).setOnClickListener(this);
+
+        // Edit Box
+        mEditBox = (EditText) findViewById(R.id.edChatBox);
+        mEditBox.setOnEditorActionListener(mEditorActionListener);
+
+        //Send Button
+        mSendButton = (Button) findViewById(R.id.btnSend);
+        mSendButton.setOnClickListener(this);
         
-        messageRequest = new MessageRequest(ChatActivity.this.getApplicationContext());
-        messageRequest.message = mEdBox.getText().toString(); 
-        messageRequest.userid  = mUserId;
-        messageRequest.callback(new ApiHandler() {
-          @Override
-          public void success(ApiResponse response) {
-            post(new Runnable() {
-              @Override
-              public void run() {
-                History history = new History();
-                history.code=0;
-                history.gift=0;
-                history.owner_id=0;
-                history.created=System.currentTimeMillis();
-                history.text=text;
-                history.type=History.MESSAGE;
-                mAdapter.addSentMessage(history);
-                mAdapter.notifyDataSetChanged();
-                mEdBox.getText().clear();
-                mProgressBar.setVisibility(View.GONE);
-              }
-            });
-          }
-          @Override
-          public void fail(int codeError,ApiResponse response) {
-            post(new Runnable() {
-              @Override
-              public void run() {
-                Toast.makeText(ChatActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
-                mProgressBar.setVisibility(View.GONE);
-              }
-            });
-          }
-        }).exec();
-      }
-    });
-    
-    mAdapter = new ChatListAdapter(getApplicationContext(),mUserId,mHistoryList);
-    mAdapter.setOnAvatarListener(this);
-    mListView.setAdapter(mAdapter);
-    
-    Http.avatarOwnerPreloading();
-    
-    update();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  protected void onDestroy() {
-    if(messageRequest!=null) messageRequest.cancel();
-    if(historyRequest!=null) historyRequest.cancel();
-    
-    release();    
-    Debug.log(this,"-onDestroy");
-    super.onDestroy();
-  }
-  //---------------------------------------------------------------------------
-  private void update() {
-    mProgressBar.setVisibility(View.VISIBLE);
-    historyRequest = new HistoryRequest(getApplicationContext());
-    historyRequest.userid = mUserId; 
-    historyRequest.limit  = LIMIT;
-    historyRequest.callback(new ApiHandler() {
-      @Override
-      public void success(ApiResponse response) {
-        LinkedList<History> dataList = History.parse(response);
-        mAdapter.setDataList(dataList);
-        post(new Runnable() {
-          @Override
-          public void run() {
-            mProgressBar.setVisibility(View.GONE);
-            mAdapter.notifyDataSetChanged();
-          }
+        // ListView
+        mListView = (PullToRefreshListView) findViewById(R.id.lvChatList);
+
+        // Adapter
+        mAdapter = new ChatListAdapter(getApplicationContext(), mHistoryList);
+        mAdapter.setOnAvatarListener(this);
+        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                update(true);
+            }
         });
-      }
-      @Override
-      public void fail(int codeError,ApiResponse response) {
-        post(new Runnable() {
-          @Override
-          public void run() {
-            Toast.makeText(ChatActivity.this,getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
-            mProgressBar.setVisibility(View.GONE);
-          }
+        mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
+
+            @Override
+            public void onLongClick(final int position, final View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+                builder.setTitle(R.string.general_spinner_title).setItems(editButtonsNames, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DELETE_BUTTON:
+                                deleteItem(position);
+                                break;
+                            case COPY_BUTTON:
+                                mAdapter.copyText(((TextView) v).getText().toString());
+                                break;
+                        }
+                    }
+                });
+                builder.create().show();
+            }
         });
-      }
-    }).exec();
-  }
-  //---------------------------------------------------------------------------
-  private void release() {
-    mEdBox = null;
-    mListView = null;
-    if(mAdapter!=null)
-      mAdapter.release();
-    mAdapter = null;
-    mHistoryList = null;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public void onClick(View v) {
-    if(mProfileInvoke) {
-      finish();
-      return;
+//        mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
+//            @Override
+//            public void onLongClick(final int position, final View v) {
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+//                builder.setTitle(R.string.default_spinner_title).setItems(editButtonsNames,new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        switch (which){
+//                            case DELETE_BUTTON:
+//                                deleteItem(position-1);
+//                                break;
+//                            case COPY_BUTTON:
+//                                mAdapter.copyText(((TextView) v).getText().toString());
+//                                break;
+//                        }
+//                    }
+//                });
+//                builder.create().show();
+//            }
+//        });
+        mListView.setAdapter(mAdapter);
+        // Сперва пробуем восстановить данные, если это просто поворот
+        // устройства
+        Object data = getLastCustomNonConfigurationInstance();
+        if (data != null) {
+            // noinspection unchecked
+            mAdapter.setDataList((LinkedList<History>) data);
+            mLoadingLocker.setVisibility(View.GONE);
+        } else {
+            // Если это не получилось, грузим с сервера
+            update(false);
+        }
+
+        GCMUtils.cancelNotification(this,GCMUtils.GCM_TYPE_MESSAGE);
     }
-    Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
-    intent.putExtra(ProfileActivity.INTENT_USER_ID,mUserId);
-    intent.putExtra(ProfileActivity.INTENT_CHAT_INVOKE,true);
-    intent.putExtra(ProfileActivity.INTENT_USER_NAME,mHeaderTitle.getText());
-    startActivity(intent);
-  }
-  //---------------------------------------------------------------------------
+
+    private void deleteItem(final int position) {
+        DeleteRequest dr = new DeleteRequest(this);
+        dr.id = mAdapter.getItem(position).id;
+        registerRequest(dr);
+        dr.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) throws NullPointerException {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.removeItem(position);
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                Debug.log(response.toString());
+            }
+        }).exec();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        release();
+        Data.friendAvatar = null;
+        Debug.log(this, "-onDestroy");
+        super.onDestroy();
+    }
+
+    private void update(final boolean pullToRefresh) {
+        if (!pullToRefresh) {
+            mLoadingLocker.setVisibility(View.VISIBLE);
+        }
+        HistoryRequest historyRequest = new HistoryRequest(getApplicationContext());
+        registerRequest(historyRequest);
+        historyRequest.userid = mUserId;
+        historyRequest.limit = LIMIT;
+        historyRequest.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                if (getIntent().getIntExtra(INTENT_ITEM_ID,-1) != -1) {
+                    LocalBroadcastManager.getInstance(ChatActivity.this).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID,getIntent().getIntExtra(INTENT_ITEM_ID,-1)));
+                }
+                final FeedListData<History> dataList = new FeedListData<History>(
+                        response.jsonResult, History.class);
+                if(ChatActivity.this != null) {
+	                post(new Runnable() {
+	                    @Override
+	                    public void run() {
+	                        mAdapter.setDataList(dataList.items);
+	                        if (pullToRefresh) {
+	                            mListView.onRefreshComplete();
+	                        }
+	                        mLoadingLocker.setVisibility(View.GONE);
+	                        mAdapter.notifyDataSetChanged();
+	                    }
+	                });
+                }
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ChatActivity.this, getString(R.string.general_data_error),
+                                Toast.LENGTH_SHORT).show();
+                        mLoadingLocker.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }).exec();
+    }
+
+    private void release() {
+        mEditBox = null;
+        mListView = null;
+        if (mAdapter != null)
+            mAdapter.release();
+        mAdapter = null;
+        mHistoryList = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v instanceof ImageView) {
+            if (v.getTag() instanceof History) {
+                History history = (History) v.getTag();
+                if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
+                    Intent intent = new Intent(this, GeoMapActivity.class);
+                    intent.putExtra(GeoMapActivity.INTENT_GEO, history.geo);
+                    startActivity(intent);
+                    return;
+                }
+            }
+        }
+        switch (v.getId()) {
+	        case R.id.btnSend: {
+	        	sendMessage();
+	        }
+	        break;
+            case R.id.btnChatAdd: {
+                if (mIsAddPanelOpened)
+                    mSwapControl.snapToScreen(0);
+                else
+                    mSwapControl.snapToScreen(1);
+                mIsAddPanelOpened = !mIsAddPanelOpened;
+            }
+            break;
+            case R.id.btnChatGift: {
+                startActivityForResult(new Intent(this, GiftsActivity.class),
+                        GiftsActivity.INTENT_REQUEST_GIFT);
+            }
+            break;
+            case R.id.btnChatPlace: {
+                sendUserCurrentLocation();
+                // Toast.makeText(ChatActivity.this, "Place",
+                // Toast.LENGTH_SHORT).show();
+            }
+            break;
+            case R.id.btnChatMap: {
+                startActivityForResult(new Intent(this, GeoMapActivity.class),
+                        GeoMapActivity.INTENT_REQUEST_GEO);
+                // Toast.makeText(ChatActivity.this, "Map",
+                // Toast.LENGTH_SHORT).show();
+            }
+            break;
+            case R.id.btnNavigationBackWithText: {
+                finish();
+            }
+            break;
+            case R.id.chat_message: {
+
+            }
+            break;
+            default: {
+                if (mProfileInvoke) {
+                    finish();
+                    return;
+                }
+                Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                intent.putExtra(UserProfileActivity.INTENT_USER_ID, mUserId);
+                intent.putExtra(UserProfileActivity.INTENT_CHAT_INVOKE, true);
+                intent.putExtra(UserProfileActivity.INTENT_USER_NAME, mHeaderTitle.getText());
+                intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, ChatActivity.this.getClass()
+                        .getSimpleName());
+                startActivity(intent);
+            }
+            break;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mReceiverRegistered) {
+            registerReceiver(mNewMessageReceiver, new IntentFilter(GCMUtils.GCM_NOTIFICATION));
+            mReceiverRegistered = true;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
+        if (mReceiverRegistered) {
+            unregisterReceiver(mNewMessageReceiver);
+            mReceiverRegistered = false;
+        }
+    }
+
+    private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {            
+                return sendMessage();
+            }
+            return false;
+        }
+    };
+
+    private boolean sendMessage() {    	
+    	final String text = mEditBox.getText().toString();
+    	if (text == null || text.length() == 0)                	
+            return false;
+    	
+        mLoadingLocker.setVisibility(View.VISIBLE);
+
+        MessageRequest messageRequest = new MessageRequest(
+                ChatActivity.this.getApplicationContext());
+        registerRequest(messageRequest);
+        messageRequest.message = mEditBox.getText().toString();
+        messageRequest.userid = mUserId;
+        messageRequest.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                final Confirmation confirm = Confirmation.parse(response);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (confirm.completed) {
+                            History history = new History(response);
+//							history.target = FeedDialog.USER_MESSAGE;
+                            mAdapter.addSentMessage(history);
+                            mAdapter.notifyDataSetChanged();
+                            mEditBox.getText().clear();
+                            mLoadingLocker.setVisibility(View.GONE);
+
+
+                        } else {
+                            Toast.makeText(ChatActivity.this,
+                                    getString(R.string.general_server_error),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ChatActivity.this,
+                                getString(R.string.general_data_error), Toast.LENGTH_SHORT)
+                                .show();
+                        mLoadingLocker.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }).exec();
+        return true;
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+                mLoadingLocker.setVisibility(View.VISIBLE);
+                Bundle extras = data.getExtras();
+                final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+                final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+                final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+                Debug.log(this, "id:" + id + " url:" + url);
+                SendGiftRequest sendGift = new SendGiftRequest(getApplicationContext());
+                registerRequest(sendGift);
+                sendGift.giftId = id;
+                sendGift.userId = mUserId;
+                if (mIsAddPanelOpened)
+                    mSwapControl.snapToScreen(0);
+                mIsAddPanelOpened = false;
+                sendGift.callback(new ApiHandler() {
+                    @Override
+                    public void success(final ApiResponse response) throws NullPointerException {
+                        SendGiftAnswer answer = SendGiftAnswer.parse(response);
+                        CacheProfile.power = answer.power;
+                        CacheProfile.money = answer.money;
+                        Debug.log(ChatActivity.this, "power:" + answer.power + " money:"
+                                + answer.money);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                History history = new History(response);
+                                history.target = FeedDialog.USER_MESSAGE;
+                                mAdapter.addSentMessage(history);
+                                mAdapter.notifyDataSetChanged();
+                                mLoadingLocker.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void fail(int codeError, final ApiResponse response)
+                            throws NullPointerException {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (response.code == ApiResponse.PAYMENT) {
+                                    Intent intent = new Intent(getApplicationContext(),
+                                            BuyingActivity.class);
+                                    intent.putExtra(BuyingActivity.INTENT_USER_COINS, price
+                                            - CacheProfile.money);
+                                    startActivity(intent);
+                                }
+                                mLoadingLocker.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }).exec();
+            } else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
+                Bundle extras = data.getExtras();
+                final Geo geo = extras.getParcelable(GeoMapActivity.INTENT_GEO);
+
+                CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+                registerRequest(coordRequest);
+                coordRequest.userid = mUserId;
+                final Coordinates coordinates = geo.getCoordinates();
+                if (coordinates != null) {
+                    coordRequest.latitude = coordinates.getLatitude();
+                    coordRequest.longitude = coordinates.getLongitude();
+                }
+                coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_PLACE;
+                coordRequest.address = geo.getAddress();
+                mLoadingLocker.setVisibility(View.VISIBLE);
+                coordRequest.callback(new ApiHandler() {
+
+                    @Override
+                    public void success(final ApiResponse response) throws NullPointerException {
+                        final Confirmation confirm = Confirmation.parse(response);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (confirm.completed) {
+                                    History history = new History(response);
+                                    history.target = FeedDialog.USER_MESSAGE;
+                                    mAdapter.addSentMessage(history);
+                                    mAdapter.notifyDataSetChanged();
+                                } else {
+                                    Toast.makeText(ChatActivity.this,
+                                            R.string.general_server_error, Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                                mLoadingLocker.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response)
+                            throws NullPointerException {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(ChatActivity.this, R.string.general_server_error,
+                                        Toast.LENGTH_SHORT).show();
+                                mLoadingLocker.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }).exec();
+
+                if (mIsAddPanelOpened)
+                    mSwapControl.snapToScreen(0);
+                mIsAddPanelOpened = false;
+            }
+        } else {
+            if (mIsAddPanelOpened)
+                mSwapControl.snapToScreen(0);
+            mIsAddPanelOpened = false;
+        }
+    }
+
+    private void sendUserCurrentLocation() {
+        mLocationDetected = false;
+
+        if (mGeoManager == null) {
+            mGeoManager = new GeoLocationManager(getApplicationContext());
+        }
+
+        if (mGeoManager.availableLocationProvider(LocationProviderType.AGPS)) {
+            mGeoManager.setLocationListener(LocationProviderType.AGPS, this);
+            showDialog(DIALOG_LOCATION_PROGRESS_ID);
+        } else if (mGeoManager.availableLocationProvider(LocationProviderType.GPS)) {
+            mGeoManager.setLocationListener(LocationProviderType.GPS, this);
+            (new CountDownTimer(LOCATION_PROVIDER_TIMEOUT, LOCATION_PROVIDER_TIMEOUT) {
+
+                @Override
+                public void onTick(long millisUntilFinished) {
+                }
+
+                @Override
+                public void onFinish() {
+                    // noinspection SynchronizeOnNonFinalField
+                    synchronized (mGeoManager) {
+                        if (!mLocationDetected) {
+                            mGeoManager.removeLocationListener(ChatActivity.this);
+                            mProgressDialog.dismiss();
+                            Toast.makeText(ChatActivity.this, R.string.chat_toast_fail_location,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }).start();
+            showDialog(DIALOG_LOCATION_PROGRESS_ID);
+        } else {
+            showDialog(DIALOG_GPS_ENABLE_NO_AGPS_ID);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        // Debug.log(this, location.getLatitude() + " / " +
+        // location.getLongitude());
+        final double latitude = location.getLatitude();
+        final double longitude = location.getLongitude();
+        OsmManager.getAddress(latitude, longitude, new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+                registerRequest(coordRequest);
+                coordRequest.userid = mUserId;
+                coordRequest.latitude = latitude;
+                coordRequest.longitude = longitude;
+                coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_SELF;
+                coordRequest.address = (String) msg.obj;
+                coordRequest.callback(new ApiHandler() {
+
+                    @Override
+                    public void success(final ApiResponse response) throws NullPointerException {
+                        final Confirmation confirm = Confirmation.parse(response);
+                        // final String address =
+                        // mGeoManager.getLocationAddress(latitude, longitude);
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                if (confirm.completed) {
+                                    if (mIsAddPanelOpened)
+                                        mSwapControl.snapToScreen(0);
+                                    mIsAddPanelOpened = false;
+                                    History history = new History(response);
+//									history.target = FeedDialog.USER_MESSAGE;
+                                    mAdapter.addSentMessage(history);
+                                    mAdapter.notifyDataSetChanged();
+                                } else {
+                                    Toast.makeText(ChatActivity.this,
+                                            R.string.general_server_error, Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                                mProgressDialog.dismiss();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response)
+                            throws NullPointerException {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                mProgressDialog.dismiss();
+                                Toast.makeText(ChatActivity.this, R.string.general_server_error,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+                }).exec();
+            }
+        });
+
+        mGeoManager.removeLocationListener(this);
+        mLocationDetected = true;
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    @Override
+    protected android.app.Dialog onCreateDialog(int id) {
+        AlertDialog.Builder builder;
+        AlertDialog alert;
+        switch (id) {
+            case DIALOG_GPS_ENABLE_NO_AGPS_ID:
+                builder = new AlertDialog.Builder(this);
+                builder.setMessage(this.getText(R.string.chat_dialog_gps))
+                        .setCancelable(false)
+                        .setPositiveButton(this.getText(R.string.general_settings),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        Intent gpsOptionsIntent = new Intent(
+                                                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                        startActivity(gpsOptionsIntent);
+                                    }
+                                });
+                builder.setNegativeButton(this.getText(R.string.general_cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                alert = builder.create();
+                return alert;
+            case DIALOG_LOCATION_PROGRESS_ID:
+                mProgressDialog = new ProgressDialog(this);
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mProgressDialog.setMessage(this.getText(R.string.map_location_progress));
+                return mProgressDialog;
+            default:
+                return super.onCreateDialog(id);
+
+        }
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return mAdapter.getDataCopy();
+    }
+
+    private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String id = intent.getStringExtra("id");
+            if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
+                update(true);
+                GCMUtils.cancelNotification(ChatActivity.this,GCMUtils.GCM_TYPE_MESSAGE);
+            }
+        }
+    };
+
+    public interface OnListViewItemLongClickListener {
+        public void onLongClick(int position, View v);
+    }
 }

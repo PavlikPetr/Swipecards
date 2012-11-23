@@ -1,10 +1,26 @@
 package com.topface.topface.data;
 
 import com.topface.topface.requests.ApiResponse;
+import org.json.JSONObject;
 
 public abstract class AbstractData {
-  public static Object parse(ApiResponse response) { return null; }
-  public int getUid() { return -1; };
-  public String getBigLink() { return null; };
-  public String getSmallLink() { return null; };
+
+    public AbstractData() {
+        this(null);
+    }
+
+    public AbstractData(JSONObject data) {
+        if (data != null) {
+            fillData(data);
+        }
+    }
+
+    protected void fillData(JSONObject data) {
+        //Extend me
+    }
+
+    public static Object parse(ApiResponse response) {
+        return null;
+    }
+
 }

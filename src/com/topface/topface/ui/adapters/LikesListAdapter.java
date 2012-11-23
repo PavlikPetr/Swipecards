@@ -1,122 +1,137 @@
 package com.topface.topface.ui.adapters;
 
+import android.content.Context;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ViewFlipper;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.utils.AvatarManager;
-import com.topface.topface.ui.views.RoundedImageView;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Utils;
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-public class LikesListAdapter extends BaseAdapter {
-  //---------------------------------------------------------------------------
-  // class ViewHolder
-  //---------------------------------------------------------------------------
-  static class ViewHolder {
-    public RoundedImageView mAvatar;
-    public TextView  mName;
-    public TextView  mCity;
-    public TextView  mTime;
-    public ImageView mHeart;
-    public ImageView mArrow;
-  }
-  //---------------------------------------------------------------------------
-  // Data
-  private LayoutInflater mInflater;
-  private AvatarManager<FeedLike> mAvatarManager;
-  private int mOwnerCityID;
-  // Constants
-  private static final int T_ALL   = 0;
-  private static final int T_CITY  = 1;
-  private static final int T_COUNT = 2;
-  //---------------------------------------------------------------------------
-  public LikesListAdapter(Context context,AvatarManager<FeedLike> avatarManager) {
-    mAvatarManager = avatarManager;
-    mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    mOwnerCityID = CacheProfile.city_id;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public int getCount() {
-    return mAvatarManager.size();
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public FeedLike getItem(int position) {
-    return mAvatarManager.get(position);
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public long getItemId(int position) {
-    return position;
-  }
-  //---------------------------------------------------------------------------
-  @Override 
-  public int getViewTypeCount() {
-    return T_COUNT;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public int getItemViewType(int position) {
-    return mAvatarManager.get(position).city_id==mOwnerCityID ? T_CITY : T_ALL;
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public View getView(int position, View convertView, ViewGroup parent) {
-    ViewHolder holder;
+public class LikesListAdapter extends FeedAdapter<FeedLike> {
+    private int mSelectedForMutual = -1;
+    private int mPrevSelectedForMutual = -1;
+
+    private int T_SELETED_FOR_MUTUAL = 3;
+    private int T_COUNT = 1;
+
+    private OnMutualListener mMutualListener;
+
+    public interface OnMutualListener {
+        void onMutual(int userId, int rate, int mutualId);
+    }
+
+    public LikesListAdapter(Context context, Updater updateCallback) {
+        super(context, updateCallback);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mSelectedForMutual == position && !getItem(position).mutualed) {
+            return T_SELETED_FOR_MUTUAL;
+        } else return super.getItemViewType(position);
+    }
+
+    @Override
+    public int getViewTypeCount() {
+
+        return (super.getViewTypeCount() + T_COUNT);
+    }
+
+    @Override
+    protected View getContentView(final int position, View convertView, ViewGroup viewGroup) {
+        convertView = super.getContentView(position, convertView, viewGroup);
+        FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
+        final FeedLike like = getItem(position);
+
+        holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart :
+                (like.highrate ? R.drawable.im_item_mutual_heart_top : R.drawable.im_item_mutual_heart));
+
+        final ViewFlipper vf = holder.flipper;
+
+        holder.heart.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                setSelectedForMutual(position);
+            }
+        });
+
+        if (position == mSelectedForMutual) {
+            vf.setInAnimation(getContext(), R.anim.slide_in_from_right);
+            vf.setOutAnimation(getContext(), android.R.anim.fade_out);
+            vf.setDisplayedChild(1);
+            if (android.os.Build.VERSION.SDK_INT > 11) {
+                convertView.setActivated(true);
+            } else {
+                convertView.setBackgroundResource(R.drawable.im_item_list_bg_activated);
+            }
+            holder.flippedBtn.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (mMutualListener != null) {
+                        mMutualListener.onMutual(getItem(position).user.id, 9, like.id);
+                        setSelectedForMutual(-1);
+                        like.mutualed = true;
+                    }
+                }
+            });
+
+        } else {
+            if (mPrevSelectedForMutual == position) {
+                vf.setInAnimation(getContext(), android.R.anim.fade_in);
+                vf.setOutAnimation(getContext(), R.anim.slide_out_right);
+                vf.setDisplayedChild(0);
+                if (android.os.Build.VERSION.SDK_INT > 11) {
+                    convertView.setActivated(false);
+                } else {
+                    convertView.setBackgroundResource(R.drawable.item_list_selector);
+                }
+                mPrevSelectedForMutual = -1;
+            }
+        }
+
+        return convertView;
+    }
+
+    public void setSelectedForMutual(int position) {
+        if (position != -1) {
+        	if (getItem(position) instanceof FeedLike) {
+	            if (!getItem(position).mutualed) {
+	                mPrevSelectedForMutual = mSelectedForMutual;
+	                mSelectedForMutual = position;
+	                notifyDataSetChanged();
+	            }
+        	}
+        } else {
+            mPrevSelectedForMutual = mSelectedForMutual;
+            mSelectedForMutual = position;
+            notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    protected FeedViewHolder getEmptyHolder(View convertView, FeedLike item) {
+        FeedViewHolder holder = super.getEmptyHolder(convertView, item);
+        holder.heart = (ImageView) convertView.findViewById(R.id.ivHeart);
+        holder.heart.setVisibility(View.VISIBLE);
+        return holder;
+    }
+
+    @Override
+    protected int getItemLayout() {
+        return R.layout.item_feed_like;
+    }
+
+    @Override
+	protected int getNewItemLayout() {		
+		return R.layout.item_new_feed_like;
+	}
     
-    int type = getItemViewType(position);
+    public void setOnMutualListener(OnMutualListener listener) {
+        mMutualListener = listener;
+    }	
 
-    if(convertView==null) {
-      holder = new ViewHolder();
-      
-      convertView = mInflater.inflate(R.layout.item_likes_gallery, null, false);
-      
-      holder.mAvatar = (RoundedImageView)convertView.findViewById(R.id.ivAvatar);
-      holder.mName   = (TextView)convertView.findViewById(R.id.tvName);
-      holder.mCity   = (TextView)convertView.findViewById(R.id.tvCity);
-      holder.mTime   = (TextView)convertView.findViewById(R.id.tvTime);
-      holder.mHeart  = (ImageView)convertView.findViewById(R.id.ivHeart);
-      holder.mArrow  = (ImageView)convertView.findViewById(R.id.ivArrow);
-      
-      switch(type) {
-        case T_ALL:
-          convertView.setBackgroundResource(R.drawable.item_all_selector);
-          break;
-        case T_CITY:
-          convertView.setBackgroundResource(R.drawable.item_city_selector);
-          break;
-      }
-
-      convertView.setTag(holder);
-    } else
-      holder = (ViewHolder)convertView.getTag();
-    
-
-    mAvatarManager.getImage(position,holder.mAvatar);
-
-    FeedLike likes = getItem(position);
-    holder.mName.setText(likes.first_name + ", " + likes.age);
-    holder.mCity.setText(likes.city_name);
-    Utils.formatTime(holder.mTime,likes.created);
-    holder.mArrow.setImageResource(R.drawable.im_item_arrow);
-    if(likes.rate == 10)
-      holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart_top);
-    else
-      holder.mHeart.setImageResource(R.drawable.im_item_mutual_heart);
-    
-    return convertView;
-  }
-  //---------------------------------------------------------------------------
-  public void release() {
-    mInflater=null;
-    mAvatarManager=null;
-  }
-  //---------------------------------------------------------------------------
 }

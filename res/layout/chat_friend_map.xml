@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/left_icon"
+        android:background="@drawable/chat_item_map_bg"
+        android:orientation="vertical"
+        android:padding="13dp" >
+
+        <ImageView
+            android:id="@+id/ivFriendMapBg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/chat_item_map" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/tvChatMapAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="10sp" />
+
+            <ProgressBar
+                android:id="@+id/prgsFriendMapAddress"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!-- avatar -->
+
+    <com.topface.topface.ui.views.ImageViewRemote
+        android:id="@+id/left_icon"
+        style="@style/ChatFriendAvatar" />
+
+</RelativeLayout>

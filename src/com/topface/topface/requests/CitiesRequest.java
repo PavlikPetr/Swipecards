@@ -1,32 +1,25 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.Debug;
-import android.content.Context;
 
-public class CitiesRequest extends ApiRequest {
-  // Data
-  private String service = "cities";
-  public  String type;  // тип выборки перечня городов. Пока поддерживается только “top”
-  //---------------------------------------------------------------------------
-  public CitiesRequest(Context context) {
-    super(context);
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public String toString() {
-    JSONObject root = new JSONObject();
-    try {
-      root.put("service",service);
-      root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("type",type));
-    } catch(JSONException e) {
-      Debug.log(this,"Wrong request compiling: " + e);
+public class CitiesRequest extends AbstractApiRequest {
+    // Data
+    public static final String SERVICE_NAME = "cities";
+    public String type; // тип выборки перечня городов. Пока поддерживается только “top”
+
+    public CitiesRequest(Context context) {
+        super(context);
     }
-    
-    return root.toString();
-  }
-  //---------------------------------------------------------------------------
-}
 
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject().put("type", type);
+    }
+
+    @Override
+    protected String getServiceName() {
+        return SERVICE_NAME;
+    }
+}

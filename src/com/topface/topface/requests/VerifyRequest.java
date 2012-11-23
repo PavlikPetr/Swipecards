@@ -1,33 +1,26 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.Debug;
-import android.content.Context;
 
-public class VerifyRequest extends ApiRequest {
-  // Data
-  private String service = "verify";
-  public String  data;       // строка данных заказа от Google Play
-  public String  signature;  // подпись данных заказа
-  //---------------------------------------------------------------------------
-  public VerifyRequest(Context context) {
-    super(context);
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public String toString() {
-    JSONObject root = new JSONObject();
-    try {
-      root.put("service",service);
-      root.put("ssid",ssid);
-      JSONObject jsondata = new JSONObject().put("data",data).put("signature",signature);
-      root.put("data",jsondata);
-    } catch(JSONException e) {
-      Debug.log(this,"Wrong request compiling: " + e);
+public class VerifyRequest extends AbstractApiRequest {
+    // Data
+    public static final String service = "verify";
+    public String data; // строка данных заказа от Google Play
+    public String signature; // подпись данных заказа
+
+    public VerifyRequest(Context context) {
+        super(context);
     }
-    
-    return root.toString();
-  }
-  //---------------------------------------------------------------------------
+
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject().put("data", data).put("signature", signature);
+    }
+
+    @Override
+    protected String getServiceName() {
+        return service;
+    }
 }

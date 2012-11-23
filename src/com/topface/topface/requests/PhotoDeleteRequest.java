@@ -1,31 +1,34 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.Debug;
-import android.content.Context;
 
-public class PhotoDeleteRequest extends ApiRequest {
-  // Data
-  private String service = "photoDelete";
-  public int photoid;    // идентификатор фотографии для установки в качестве главной
-  //---------------------------------------------------------------------------
-  public PhotoDeleteRequest(Context context) {
-    super(context);
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public String toString() {
-    JSONObject root = new JSONObject();
-    try {
-      root.put("service",service);
-      root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("photoid",photoid));
-    } catch(JSONException e) {
-      Debug.log(this,"Wrong request compiling: " + e);
+public class PhotoDeleteRequest extends AbstractApiRequest {
+    // Data
+    public static final String service = "photoDelete";
+    public int[] photos;
+
+    public PhotoDeleteRequest(Context context) {
+        super(context);
     }
-    
-    return root.toString();
-  }
-  //---------------------------------------------------------------------------
+
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject().put("photoid", getPhotosJson());
+    }
+
+    @Override
+    protected String getServiceName() {
+        return service;
+    }
+
+    private JSONArray getPhotosJson() throws JSONException {
+        JSONArray photosJson = new JSONArray();
+        for (int photo : photos) {
+            photosJson.put(photo);
+        }
+        return photosJson;
+    }
 }

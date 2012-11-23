@@ -1,35 +1,34 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.Debug;
-import android.content.Context;
 
-public class HistoryRequest extends ApiRequest {
-  // Data
-  private String service = "history";
-  public int userid;  // идентификатор пользователя для получения истории сообщений с ним текущего пользвоателя
-  public int offset;  // смещение истории сообщений
-  public int limit;   // количество получаемых элементов истории сообщений
-  //---------------------------------------------------------------------------
-  public HistoryRequest(Context context) {
-    super(context);
-  }
-  //---------------------------------------------------------------------------
-  @Override
-  public String toString() {
-    JSONObject root = new JSONObject();
-    try {
-      root.put("service",service);
-      root.put("ssid",ssid);
-      root.put("data",new JSONObject().put("userid",userid)
-                                      .put("offset",offset)
-                                      .put("limit",limit));
-    } catch(JSONException e) {
-      Debug.log(this,"Wrong request compiling: " + e);
+public class HistoryRequest extends AbstractApiRequest {
+    // Data
+    public static final String service = "history";
+    public int userid; // идентификатор пользователя для получения истории сообщений с ним текущего пользвоателя
+    //public int offset; // смещение истории сообщений
+    public int limit; // количество получаемых элементов истории сообщений
+    public int to; // идентификатор сообщения до которого будет осуществляться выборка истории
+
+    public HistoryRequest(Context context) {
+        super(context);
     }
-    
-    return root.toString();
-  }
-  //---------------------------------------------------------------------------
+
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
+        JSONObject data = new JSONObject().put("userid", userid).put("limit", limit);
+        if (to > 0) {
+            data.put("to", to);
+        }
+
+        return data;
+    }
+
+    @Override
+    protected String getServiceName() {
+        return service;
+    }
+
 }

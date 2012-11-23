@@ -1,100 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- ru -->
+
+    <!-- App -->
     <string name="app_name">Topface</string>
-    
-    <!-- General  -->
-    <string name="general_internet_off">Нет подключения к Интернет</string>
+    <string name="app_locale">ru_RU</string>
+
+    <!-- General -->
+
+    <string name="general_error">ОШИБКА</string>
+    <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
+    <string name="general_ok">OK</string>
+    <string name="general_yes">Да</string>
+    <string name="general_no">Нет</string>
+    <string name="general_cancel">Отмена</string>
+    <string name="general_delete_title">Удалить</string>
     <string name="general_dialog_loading">Загрузка</string>
+    <string name="general_dialog_saving">Сохранение</string>
+    <string name="general_fill_button">Заполнить</string>
+    <string name="general_send_full">Отправить</string>
+    <string name="general_dialog_retry">Повторить</string>
+    <string name="general_copy_title">Копировать</string>
+    <string name="general_back">Назад</string>
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
-    <string name="general_data_error">Ошибка обновления данных</string>
-    <string name="general_footer_previous">Предыдущие сообщения</string>
+    <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
+    <string name="general_internet_off">Нет подключения к интернету</string>
     <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
-    <string name="general_vk_album_name">Топфейс http://vkontakte.ru/app2257829</string>
-    
-    <!-- Auth Activity  -->
+    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
+    <string name="general_msg_copied">Текст скопирован</string>
+    <string name="general_spinner_title">Выберите действие</string>
+    <string name="general_profile_error">Ошибка загрузки профиля</string>
+    <string name="general_dbl_all">Все</string>
+    <string name="general_dbl_unread">Непрочитанные</string>
+
+    <string name="general_edit_button">Ред.</string>
+    <string name="general_save_button">Сохр.</string>
+    <string name="general_send_button">Отпр.</string>
+
+    <string name="general_boys">Парни</string>
+    <string name="general_girls">Девушки</string>
+    <string name="general_city">Город</string>
+    <string name="general_dating">Знакомства</string>
+    <string name="general_likes">Я нравлюсь</string>
+    <string name="general_likes_me">Вы нравитесь</string>
+    <string name="general_sympathy">Симпатия</string>
+    <string name="general_delight">Восхищение</string>
+    <string name="general_mutual">Взаимно</string>
+    <string name="general_dialogs">Диалоги</string>
+    <string name="general_tops">Топ</string>
+    <string name="general_visitors">Гости</string>
+    <string name="general_profile">Профиль</string>
+    <string name="general_settings">Настройки</string>
+    <string name="general_chat">Чат</string>
+
+    <!-- Auth -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
     <string name="auth_btn_fb">Войти через Facebook</string>
+    <string name="auth_retry">Повторить попытку</string>
+    <string name="auth_vk_name">ВКонтакте</string>
 
-    <!-- Topface (Dashboard) Activity -->
-    <string name="dashbrd_btn_dating">Знакомства</string>
-    <string name="dashbrd_btn_likes">Я нравлюсь</string>
-    <string name="dashbrd_btn_mutual">Взаимно</string>
-    <string name="dashbrd_btn_chat">Диалоги</string>
-    <string name="dashbrd_btn_tops">Топы</string>
-    <string name="dashbrd_btn_profile">Профиль</string>
-    <string name="dashbrd_btn_settings">Настройки</string>
-    <string name="dashbrd_btn_sympathy">Симпатия</string>
-    <string name="dashbrd_btn_love">Восхищение</string>
-    <string name="dashbrd_btn_skip">Следующий</string>
-    <string name="dashbrd_popup_rating">Понравилось наше приложение? Подними нам рейтинг! Чем выше рейтинг, тем больше интересных людей ты встретишь в TopFace</string>
-    <string name="dashbrd_popup_title">РЕЙТИНГ</string>
-    <string name="dashbrd_popup_cancel">Больше не спрашивать</string>
-    <string name="dashbrd_popup_rate">Выставить рейтинг</string>
-    <string name="dashbrd_popup_later">Спросить позже</string>
-    
-    <!-- Likes Activity -->
-    <string name="likes_header_title">Я нравлюсь</string>
-    <string name="likes_btn_dbl_left">Все</string>
-    <string name="likes_btn_dbl_right">Непрочитанные</string>
-    
-    <!-- Indox & Chat Activity -->
-    <string name="inbox_header_title">Диалоги</string>
-    <string name="inbox_btn_dbl_left">Все</string>
-    <string name="inbox_btn_dbl_right">Непрочитанные</string>
-    <string name="chat_btn_send">Отправить</string>
+    <!-- Dating -->
+    <string name="dating_header_girls">Девушки от %1$d до %2$d</string>
+    <string name="dating_header_guys">Парни от %1$d до %2$d</string>
+    <string name="dating_switch_button">Еще…</string>
+    <string name="dating_skip_button">Следующая</string>
+    <string name="dating_prev_button">Предыдущая</string>
+    <string name="dating_chat_button">Поболтать</string>
+
+    <!-- Likes -->
+    <string name="likes_background_text">Нет симпатий</string>
+
+    <!-- Visitors -->
+    <string name="visitors_background_text">Нет гостей</string>
+
+    <!-- Mutual -->
+    <string name="mutual_background_text">Симпатий нет</string>
+
+    <!-- Chat -->
+    <string name="chat_background_text">Входящих сообщений нет</string>
     <string name="chat_comment">Написать сообщение</string>
     <string name="chat_gift_in">Вы получили подарок.</string>
     <string name="chat_gift_out">Вы отправили подарок.</string>
-    <string name="chat_rate_in">Вас оценили на</string>
-    <string name="chat_rate_out">Вы оценили</string>
+    <string name="chat_like_in">Вам прислали симпатию</string>
+    <string name="chat_like_out">Вы отправили симпатию</string>
+    <string name="chat_mutual_in">Вам прислали восхищение</string>
+    <string name="chat_mutual_out">Вы отправили восхищение</string>
     <string name="chat_wish_in">Вам отправили Тайное Желание.</string>
     <string name="chat_wish_out">Вы отправили Тайное Желание.</string>
     <string name="chat_sexuality_in">Вашу сексуальность оценили.</string>
     <string name="chat_sexuality_out">Вы оценили сексуальность.</string>
-    <string name="chat_money_in">Вам начислена монета</string>
-    
-    <!-- Symphaty Activity -->
-    <string name="symphaty_header_title">Взаимно</string>
-    <string name="symphaty_btn_dbl_left">Все</string>
-    <string name="symphaty_btn_dbl_right">Непрочитанные</string>
-    
-    <!-- Tops Activity -->
-    <string name="tops_header_title">Самые красивые</string>
-    <string name="tops_btn_boys">Парни</string>
-    <string name="tops_btn_girls">Девушки</string>
-    <string name="tops_btn_city">Город</string>
-    
-    <!-- Filter Activity -->
-    <string name="filter_header_title">Я ищу</string>
-    <string name="filter_menu_save">Сохранить</string>
+    <string name="chat_wink_in">Вам подмигнули.</string>
+    <string name="chat_wink_out">Вы подмигнули.</string>
+    <string name="chat_dialog_gps">GPS выключен! Включить?</string>
+    <string name="chat_toast_fail_location">Не удалось определить местоположение</string>
+
+    <!-- Filter -->
     <string name="filter_filter">Фильтр</string>
-    <string name="filter_place">Местоположение</string>
-    <string name="filter_city">Город</string>
-    <string name="filter_sex">Пол</string>
+    <string name="filter_age_string">От %1$d до %2$d</string>
+    <string name="filter_only_online">Только онлайн</string>
+    <string name="filter_only_beautiful">Только красивые</string>
+    <string name="filter_extra_parameters">Дополнительные параметры</string>
     <string name="filter_age">Возраст</string>
-    <string name="filter_boy">Парня</string>
-    <string name="filter_girl">Девушку</string>
     <string name="filter_online">Онлайн</string>
     <string name="filter_all">Все</string>
-    <string name="filter_only_online">Только онлайн</string>
-    <string name="filter_from">С</string>
-    <string name="filter_to">до</string>
-    <string name="filter_nearby">Рядом со мной</string>
-    <string name="filter_cities_all">Всем городам</string>
+    <string name="filter_cities_all">По всем городам</string>
     <string name="filter_select_city">Выбор города</string>
-    
-    <!-- Dating Activity -->
-    <string name="dating_header_title_him">Оцени его!</string>
-    <string name="dating_header_title_her">Оцени её!</string>
-    <string name="dating_menu_one">Фильтр</string>
-    <string name="dating_back">К оценкам</string>
-    
-    <!-- Buying Activity -->
-    <string name="buying_header_title">Покупка</string>
+
+    <!-- Buying -->
+    <string name="buying_header_title">Покупки</string>
+    <string name="buying_you_have">У вас</string>
+    <string name="buying_you_have_no_coins_for_gift">Вам не хватает %d {{coins}} для покупки подарка</string>
+    <string name="buying_default_message">Вы можете отправлять подарки и восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>
     <string name="buying_power">Покупка энергии</string>
-    <string name="buying_buy">Купить</string>
     <string name="buying_recharge">Зарядить на 100%</string>
     <string name="buying_energy">3 USD</string>
     <string name="buying_pack_6coins">Пакет из 6 монет</string>
@@ -103,71 +120,174 @@
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">Пакет из 100 монет</string>
     <string name="buying_100coins">10 USD</string>
-    <string name="buying_info">Вы можете купить монеты и энергию</string>
-    <string name="buying_economy_25">Экономия 25%</string>
-    <string name="buying_economy_40">Экономия 40%</string>
-    
-    <!-- Profile Activity -->
+
+    <!-- Profile  -->
     <string name="profile_header_title">Мой профиль</string>
     <string name="profile_btn_chat">Поболтать</string>
-    <string name="profile_btn_edit">Редактировать</string>
-    <string name="profile_btn_form">Анкета</string>
-    <string name="profile_btn_add">Добавить</string>
-    <string name="profile_btn_buy">Купить</string>
-    <string name="profile_btn_exit">Выйти</string>
-    <string name="profile_btn_mutual">Взаимно</string>
-    <string name="profile_sex_boy">Парень</string>
-    <string name="profile_sex_girl">Девушка</string>
-    <string name="profile_form">Анкета</string>
-    <string name="profile_form_name">Имя</string>
-    <string name="profile_form_city">Выбор города</string>
-    <string name="profile_foto">Фотографии</string>
-    <string name="profile_foto_ero">Эрофотографии</string>
-    <string name="profile_height">Рост</string>
-    <string name="profile_weight">Вес</string>
-    <string name="profile_education">Учеба</string>
-    <string name="profile_commutability">Общительность</string>
-    <string name="profile_character">Характер</string>
-    <string name="profile_alcohol">Алкоголь</string>
-    <string name="profile_fitness">Комплекция</string>
-    <string name="profile_job">Статус</string>
-    <string name="profile_marriage_male">Женат</string>
-    <string name="profile_marriage_female">Замужем</string>
-    <string name="profile_finances">Доход</string>
-    <string name="profile_smoking">Курение</string>
-    <string name="profile_status">О себе</string>
-    <string name="profile_edit_title">Редактировать</string>
     <string name="profile_add_title">Добавить фотографию</string>
-    <string name="profile_add_album">Из фотогалереи</string>
+    <string name="profile_add_album">Выбрать из имеющихся</string>
     <string name="profile_add_camera">Сделать снимок</string>
-    <string name="profile_coin_1">1 монета</string>
-    <string name="profile_coin_2">2 монеты</string>
-    <string name="profile_coin_3">3 монеты</string>
-    <string name="profile_ero_price">Выберите цену</string>
-    <string name="profile_btn_ask">Попросить заполнить анкету</string>
-    <string name="profile_msg_ask">Хочу узнать о тебе больше. Заполни, пожалуйста, анкету!</string>
-    <string name="profile_msg_sent">Отправлено</string>
-    
-    <!-- Album, Ero Album Activity -->
-    <string name="album_header_title">Альбом</string>
+    <string name="profile_photo">Фото</string>
+    <string name="profile_form">Анкета</string>
+    <string name="profile_gifts">Подарки</string>
+    <string name="profile_actions">Действия</string>
+    <string name="profile_empty_form">Пользователь не заполнил анкету</string>
+    <string name="profile_ask_form">Попросить заполнить анкету</string>
+
+    <!-- Profile editing  -->
+    <string name="edit_title">Редактирование</string>
+    <string name="edit_bg_photo">Фоновая фотография</string>
+    <string name="edit_album">Альбом</string>
+    <string name="edit_profile_photo">Поменять фото</string>
+    <string name="edit_album_photos">фотографий</string>
+    <string name="edit_interests">интересов</string>
+    <string name="edit_selected">Выбрана</string>
+    <string name="edit_name">Имя</string>
+    <string name="edit_age">Возраст</string>
+    <string name="edit_status">Статус</string>
+    <string name="edit_set_as_main">Сделать главной</string>
+    <string name="edit_delete">Удалить</string>
+    <string name="edit_restore">Восстановить</string>
+
+    <!-- Albums -->
     <string name="album_add_photo_title">Добавить фото</string>
-    <string name="album_menu_main">Сделать главной</string>
-    <string name="album_menu_did_main">Главная</string>
-    <string name="album_menu_popup_delete">Вы действительно хотите удалить эту фотографию ?</string>
-    <string name="album_menu_popup_yes">Да</string>
-    <string name="album_menu_popup_no">Нет</string>
-    <string name="album_menu_delete">Удалить</string>
-    <string name="album_menu_did_delete">Удалено</string>
-    <string name="ero_album_btn_like">Рекомендую</string>
-    <string name="ero_album_btn_dislike">Не рекомендую</string>
-    <string name="ero_album_btn_buy">Следующая</string>
-    <string name="ero_album_btn_next">Следующая</string>
-    
-    
-    <!-- Pull2Refresh Module -->
-    <string name="pull_to_refresh_pull_label">Тяните</string>
-    <string name="pull_to_refresh_release_label">Отпустите</string>
-    <string name="pull_to_refresh_refreshing_label">Обновление</string>
-    <string name="pull_to_refresh_tap_label">Нажмите</string>
-  
+
+    <!-- Gifts -->
+    <string name="gifts_romantic">Романтические</string>
+    <string name="gifts_friends">Дружеские</string>
+    <string name="gifts">Подарки</string>
+    <string name="gifts_present">Поздравительные</string>
+    <string name="gifts_title">Выберите подарок</string>
+    <string name="gifts_send_btn">Отправить подарок</string>
+
+    <!-- Map -->
+    <string name="map_location_progress">Определяю местоположение</string>
+    <string name="map_address">Введите адрес</string>
+
+    <!-- Profile / UserProfile Form -->
+    <string name="form">Анкета</string>
+    <string name="form_not_specified">Не указано</string>
+    <string name="form_main">Основное</string>
+    <string name="form_physique">Физические данные</string>
+    <string name="form_social">Социальное</string>
+    <string name="form_habits">Привычки</string>
+    <string name="form_detail">Подробнее</string>
+
+    <plurals name="form_matches">
+        <item quantity="zero">У вас нет совпадений</item>
+        <item quantity="one">У вас %d совпадение</item>
+        <item quantity="few">У вас %d совпадения</item>
+        <item quantity="other">У вас %d совпадений</item>
+    </plurals>
+
+    <!-- Invitation -->
+    <string name="invite_search_hint">Найти друзей</string>
+    <string name="invite_title">Приглашения</string>
+    <string name="invite_is_free">Отправка приглашения бесплатна</string>
+    <string name="invite_error">Не удалось отправить приглашения. Попробуйте еще раз</string>
+    <string name="invite_completed">Приглашение отправлено</string>
+
+    <plurals name="invite_bonus_text">
+        <item quantity="zero">Пригласите друзей и получите за каждого по 20 {{coins}}</item>
+        <item quantity="one">Вы собираетесь отправить приглашение %2$d другу и получите за это %1$d {{coins}}</item>
+        <item quantity="few">Вы собираетесь отправить приглашения %2$d друзьям и получите за это %1$d {{coins}}</item>
+        <item quantity="other">Вы собираетесь отправить приглашения %2$d друзьям и получите за это %1$d {{coins}}</item>
+    </plurals>
+
+    <!-- Settings -->
+    <string name="settings_header_title">Настройки</string>
+    <string name="settings_wifi">Только по Wi-Fi</string>
+    <string name="settings_on">Включена</string>
+    <string name="settings_off">Выключена</string>
+    <string name="settings_notifications">Уведомления</string>
+    <string name="settings_notifications_summary">Уведомления о новых сообщениях и симпатиях</string>
+    <string name="settings_select_ringtone">Выбрать рингтон</string>
+    <string name="settings_vibration">Вибросигнал</string>
+    <string name="settings_photo_preloading">Предзагрузка фотографий</string>
+    <string name="settings_photo_preloading_summary">Предварительная загрузка следующей фотографии в альбоме</string>
+    <string name="settings_notifications_header">Оповещения</string>
+    <string name="settings_other_header">Прочее</string>
+    <string name="settings_likes">Симпатии</string>
+    <string name="settings_mutual">Взаимные симпатии</string>
+    <string name="settings_messages">Сообщения</string>
+    <string name="settings_guests">Гости</string>
+    <string name="settings_help">Помощь</string>
+    <string name="settings_account">Аккаунт</string>
+    <string name="settings_feedback">Оставить отзыв</string>
+    <string name="settings_about">О программе</string>
+    <string name="settings_version">Версия</string>
+    <string name="settings_copyright">Копирайт 2010-</string>
+    <string name="settings_rights_reserved">Topface \nВсе права защищены</string>
+    <string name="settings_extra">Подробную информацию можно найти на</string>
+    <string name="settings_logout">Выйти из аккаунта</string>
+    <string name="settings_logout_msg">Вы действительно хотите выйти?</string>
+    <string name="settings_error_message">Сообщение об ошибке</string>
+    <string name="settings_ask_developer">Вопрос разработчикам</string>
+    <string name="settings_payment_problems">Проблемы с оплатой</string>
+    <string name="settings_cooperation">Сотрудничество</string>
+    <string name="settings_feedback_success_msg">Спасибо, сообщение было успешно отослано</string>
+    <string name="settings_switch_on">вкл.</string>
+    <string name="settings_switch_off">выкл.</string>
+    <string name="settings_help_url">http://topface.com</string>
+    <string name="settings_topface_url">http://topface.com</string>
+
+    <!-- Leaders -->
+    <string name="leaders_go_date">Хочу сюда</string>
+    <string name="leaders_leader_now">Теперь вас увидят все!</string>
+    <string name="leaders_need_photo">Сперва нужно выбрать фотографию!</string>
+    <string name="leaders_select_photo">Выберите эффектную фотографию:</string>
+
+    <plurals name="leaders_price">
+        <item quantity="one">Встать за %d монету</item>
+        <item quantity="few">Встать за %d монеты</item>
+        <item quantity="other">Встать за %d монет</item>
+    </plurals>
+
+    <!-- Add photo -->
+    <string name="photo_add_or">Фотография добавлена</string>
+    <string name="photo_add_error">Не удалось добавить фотографию</string>
+
+    <plurals name="photo">
+        <item quantity="zero">Нет фотографий</item>
+        <item quantity="one">%d фотография</item>
+        <item quantity="few">%d фотографии</item>
+        <item quantity="other">%d фотографий</item>
+    </plurals>
+
+
+    <!-- Novice -->
+    <string name="novice_sympathy">
+        Отправляйте симпатии тем, кто вам\nдействительно нравится,\nчтобы начать приятное знакомство
+    </string>
+    <string name="novice_energy">
+        Чем выше заряд батарейки,\nтем чаще вас показывают.\nНе забывайте зарядить\nбатарейку, купив энергию.
+    </string>
+    <string name="novice_battery_bonus">
+        Энергия дает вам популярность\nи новые симпатии. Вы можете\nзарядить батарейку, купив\n
+        100% энергии. Первый заряд\nмы дарим вам бесплатно!
+    </string>
+    <string name="novice_fill_profile">
+        Добавьте свои лучшие фотографии,\nчтобы получать больше симпатий.
+    </string>
+
+    <string name="general_edit_profile_message">Пожалуйста, заполните необходимые поля анкеты</string>
+    <string name="general_premium_access_error">Для данной функции необходим Премиум</string>
+
+    <string name="general_search_null_response_error">Ничего не найдено. Попробуйте изменить фильтры</string>
+    <string name="change_filters">Изменить фильтры</string>
+    <string name="general_sex">Пол</string>
+    <string name="general_girl">Женский</string>
+    <string name="general_boy">Мужской</string>
+    <string name="filter_city_fail">Не найдено ни одного города начинающегося с «%s»</string>
+    <string name="age_filter_man">Вам интересны парни</string>
+    <string name="age_filter_girl">Вам интересны девушки</string>
+    <string name="dashbrd_popup_rating">
+        Понравилось наше приложение? Подними нам рейтинг! Чем выше рейтинг, тем больше
+        интересных людей ты встретишь в Topface
+    </string>
+    <string name="dashbrd_popup_title">Рейтинг</string>
+    <string name="dashbrd_popup_cancel">Больше не спрашивать</string>
+    <string name="dashbrd_popup_rate">Выставить рейтинг</string>
+    <string name="dashbrd_popup_later">Спросить позже</string>
+
 </resources>
