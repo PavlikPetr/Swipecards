@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.Data;
@@ -42,6 +41,8 @@ import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.OsmManager;
 
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @SuppressWarnings("deprecation")
 public class ChatActivity extends BaseFragmentActivity implements View.OnClickListener,
@@ -82,6 +83,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
     private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
     private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
+
+    private Timer mTimer;
 
     // Managers
     private GeoLocationManager mGeoManager = null;
@@ -223,26 +226,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 builder.create().show();
             }
         });
-//        mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
-//            @Override
-//            public void onLongClick(final int position, final View v) {
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
-//                builder.setTitle(R.string.default_spinner_title).setItems(editButtonsNames,new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        switch (which){
-//                            case DELETE_BUTTON:
-//                                deleteItem(position-1);
-//                                break;
-//                            case COPY_BUTTON:
-//                                mAdapter.copyText(((TextView) v).getText().toString());
-//                                break;
-//                        }
-//                    }
-//                });
-//                builder.create().show();
-//            }
-//        });
+
         mListView.setAdapter(mAdapter);
         // Сперва пробуем восстановить данные, если это просто поворот
         // устройства
@@ -255,7 +239,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             // Если это не получилось, грузим с сервера
             update(false);
         }
-
         GCMUtils.cancelNotification(this,GCMUtils.GCM_TYPE_MESSAGE);
     }
 
@@ -298,6 +281,11 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         registerRequest(historyRequest);
         historyRequest.userid = mUserId;
         historyRequest.limit = LIMIT;
+        if(pullToRefresh) {
+            if(mAdapter.getDataCopy().getFirst() != null) {
+                historyRequest.from = mAdapter.getDataCopy().getFirst().id;
+            }
+        }
         historyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -310,7 +298,11 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 	                post(new Runnable() {
 	                    @Override
 	                    public void run() {
-	                        mAdapter.setDataList(dataList.items);
+                            if(pullToRefresh) {
+                                mAdapter.addAll(dataList.items);
+                            }  else {
+	                            mAdapter.setDataList(dataList.items);
+                            }
 	                        if (pullToRefresh) {
 	                            mListView.onRefreshComplete();
 	                        }
@@ -420,6 +412,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             registerReceiver(mNewMessageReceiver, new IntentFilter(GCMUtils.GCM_NOTIFICATION));
             mReceiverRegistered = true;
         }
+        startTimer();
+        GCMUtils.lastUserId = mUserId; //Не показываем нотификации в чате с пользователем,
+                                       //чтобы, в случае задержки нотификации, не делать лишних
+                                       //оповещений
     }
 
     @Override
@@ -429,6 +425,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             unregisterReceiver(mNewMessageReceiver);
             mReceiverRegistered = false;
         }
+        stopTimer();
+        GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
     }
 
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
@@ -778,6 +776,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             String id = intent.getStringExtra("id");
             if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
                 update(true);
+                restartTimer();
                 GCMUtils.cancelNotification(ChatActivity.this,GCMUtils.GCM_TYPE_MESSAGE);
             }
         }
@@ -785,5 +784,32 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     public interface OnListViewItemLongClickListener {
         public void onLongClick(int position, View v);
+    }
+
+    private void startTimer () {
+        int period = Integer.parseInt(getString(R.string.default_chat_update_period));
+        mTimer = new Timer();
+        mTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        update(true);
+                    }
+                });
+            }
+        },period,period);
+    }
+
+    private void stopTimer () {
+        if(mTimer != null) {
+            mTimer.cancel();
+        }
+    }
+
+    private void restartTimer () {
+        stopTimer();
+        startTimer();
     }
 }

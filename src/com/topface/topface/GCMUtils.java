@@ -50,6 +50,8 @@ public class GCMUtils {
 
     public static int  lastNotificationType = GCM_NO_NOTIFICATION;
 
+    public static int lastUserId = -1;
+
     public static void init(Context context) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             try {
@@ -178,8 +180,9 @@ public class GCMUtils {
                     @Override
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
-
-                        mNotificationManager.showNotification(user.id, finalTitle, data, fakeImageView.getImageBitmap(), Integer.parseInt(extra.getStringExtra("unread")), newI);
+                        if(user.id != lastUserId) {
+                            mNotificationManager.showNotification(user.id, finalTitle, data, fakeImageView.getImageBitmap(), Integer.parseInt(extra.getStringExtra("unread")), newI);
+                        }
                     }
                 });
             }
