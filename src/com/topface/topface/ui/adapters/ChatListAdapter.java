@@ -75,7 +75,7 @@ public class ChatListAdapter extends BaseAdapter {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mAddressesCache = new MemoryCacheTemplate<String, String>();
 
-        prepare(dataList);
+        prepare(dataList, true);
     }
 
     public void setOnItemLongClickListener (ChatActivity.OnListViewItemLongClickListener l) {
@@ -415,10 +415,10 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     public void setDataList(LinkedList<History> dataList) {
-        prepare(dataList);
+        prepare(dataList, true);
     }
 
-    private void prepare(LinkedList<History> dataList) {
+    private void prepare(LinkedList<History> dataList, boolean doNeedClear) {
         // because of stackFromBottom of PullToRefreshListView does not work
         Collections.reverse(dataList);
 
@@ -427,16 +427,39 @@ public class ChatListAdapter extends BaseAdapter {
         long day = 1000 * 60 * 60 * 24;
         long numb = Data.midnight - day * 5;
 
-        if (mDataList != null) {
-        	mDataList.clear();
+        if (mDataList != null ) {
+            if(doNeedClear) {
+        	    mDataList.clear();
+            }
         } else {
         	mDataList = new FeedList<History>();
         }
-        
-        mItemLayoutList.clear();
+        if(doNeedClear) {
+            mItemLayoutList.clear();
+        }
 
         int prev_target = -1;
         long prev_date = 0;
+        if(!doNeedClear) {
+            if(mDataList.getLast() != null) {
+                prev_date = mDataList.getLast().created;
+                if(prev_date >Data.midnight) {
+                    prev_date = Data.midnight;
+                } else if(prev_date > Data.midnight - day) {
+                    prev_date = Data.midnight - day;
+                } else if (prev_date > Data.midnight - day * 2) {
+                    prev_date = Data.midnight - day * 2;
+                } else if (prev_date > Data.midnight - day * 3) {
+                    prev_date = Data.midnight - day * 3;
+                } else if (prev_date > Data.midnight - day * 4) {
+                    prev_date = Data.midnight - day * 4;
+                } else if (prev_date > Data.midnight - day * 5) {
+                    prev_date = Data.midnight - day * 5;
+                }
+                prev_target = mDataList.getLast().target;
+            }
+        }
+
         for (History history : dataList) {
             if (history == null) {
                 continue;
@@ -628,5 +651,9 @@ public class ChatListAdapter extends BaseAdapter {
     	Collections.reverse(dataClone);
         return dataClone;
 
+    }
+
+    public void addAll(LinkedList<History> dataList) {
+        prepare(dataList,false);
     }
 }

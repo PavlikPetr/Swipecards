@@ -278,6 +278,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     public void onAvatarClick(T item, View view) {
         // Open profile activity
+        item.unread = false;
         Intent intent = new Intent(getActivity(), UserProfileActivity.class);
         intent.putExtra(UserProfileActivity.INTENT_USER_ID, item.user.id);
         intent.putExtra(UserProfileActivity.INTENT_USER_NAME, item.user.first_name);

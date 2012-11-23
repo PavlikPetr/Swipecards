@@ -11,6 +11,7 @@ public class HistoryRequest extends AbstractApiRequest {
     //public int offset; // смещение истории сообщений
     public int limit; // количество получаемых элементов истории сообщений
     public int to; // идентификатор сообщения до которого будет осуществляться выборка истории
+    public int from; //идентификатор сообщения после которого будет осуществляться выборка истории
 
     public HistoryRequest(Context context) {
         super(context);
@@ -22,7 +23,9 @@ public class HistoryRequest extends AbstractApiRequest {
         if (to > 0) {
             data.put("to", to);
         }
-
+        if (from > 0) {
+            data.put("from", from);
+        }
         return data;
     }
 
