@@ -289,5 +289,8 @@
     <string name="dashbrd_popup_cancel">Больше не спрашивать</string>
     <string name="dashbrd_popup_rate">Выставить рейтинг</string>
     <string name="dashbrd_popup_later">Спросить позже</string>
+    <string name="buying_store_connect">Запрашиваю iTunes Store</string>
+    <string name="buying_store_purchase">Совершаю покупку в iTunes Store</string>
+    <string name="buying_tf_ack_sending">Отправляю информацию о покупке в Topface</string>
 
 </resources>
