@@ -293,4 +293,5 @@
     <string name="buying_store_purchase">Совершаю покупку в iTunes Store</string>
     <string name="buying_tf_ack_sending">Отправляю информацию о покупке в Topface</string>
 
+    <string name="settings_melody">Мелодия уведомления</string>
 </resources>

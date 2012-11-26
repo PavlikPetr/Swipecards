@@ -1,6 +1,8 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +23,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
@@ -31,6 +34,7 @@ import com.topface.topface.utils.social.AuthToken;
 public class SettingsFragment extends BaseFragment implements OnClickListener, OnCheckedChangeListener {
 
     private Settings mSettings;
+    private EditSwitcher mSwitchVibration;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -82,6 +86,20 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
         initEditNotificationFrame(Options.NOTIFICATIONS_VISITOR, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_VISITOR).mail,options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns);
+
+        // Vibration
+        frame = (ViewGroup) root.findViewById(R.id.loVibration);
+        setBackground(R.drawable.edit_big_btn_top, frame);
+        setText(R.string.settings_vibration, frame);
+        mSwitchVibration = new EditSwitcher(frame);
+        mSwitchVibration.setChecked(mSettings.isVibrationEnabled());
+        frame.setOnClickListener(this);
+
+        //Melody
+        frame = (ViewGroup) root.findViewById(R.id.loMelody);
+        setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
+        setText(R.string.settings_melody, frame);
+        frame.setOnClickListener(this);
 
         // Help
         frame = (ViewGroup) root.findViewById(R.id.loHelp);
@@ -186,6 +204,17 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_ABOUT);
                 break;
+            case R.id.loVibration:
+                mSwitchVibration.doSwitch();
+                mSettings.setSetting(Settings.SETTINGS_C2DM_VIBRATION,mSwitchVibration.isChecked());
+                break;
+            case R.id.loMelody:
+                intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.settings_melody));
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mSettings.getRingtone());
+                startActivityForResult(intent,Settings.REQUEST_CODE_RINGTONE);
+                break;
             default:
                 break;
         }
@@ -237,7 +266,14 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == SettingsAccountFragment.RESULT_LOGOUT &&
+        if (requestCode == Settings.REQUEST_CODE_RINGTONE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                if (uri != null) {
+                    mSettings.setSetting(Settings.SETTINGS_C2DM_RINGTONE, uri.toString());
+                }
+            }
+        } else if (resultCode == SettingsAccountFragment.RESULT_LOGOUT &&
                 requestCode == SettingsContainerActivity.INTENT_ACCOUNT) {
             getActivity().finish();
         }
