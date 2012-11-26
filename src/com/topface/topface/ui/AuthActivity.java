@@ -54,7 +54,14 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
         mRetryView = new RetryView(getApplicationContext());
         mRetryView.setErrorMsg(getString(R.string.general_data_error));
-        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry),this);
+        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry),new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth(new AuthToken(getApplicationContext()));
+                mRetryView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        });
         mRetryView.setVisibility(View.GONE);
         RelativeLayout authContainer = (RelativeLayout) findViewById(R.id.authContainer);
         authContainer.addView(mRetryView);
@@ -164,10 +171,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 mAuthorizationManager.vkontakteAuth();
             } else if (view.getId() == R.id.btnAuthFB) {
                 mAuthorizationManager.facebookAuth();
-            } else if (view.getId() == R.id.retry) {
-                auth(new AuthToken(getApplicationContext()));
-                mRetryView.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
             }
         }
     }

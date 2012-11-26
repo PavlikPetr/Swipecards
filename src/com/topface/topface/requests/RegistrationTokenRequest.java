@@ -11,6 +11,7 @@ public class RegistrationTokenRequest extends AbstractApiRequest {
 
     public RegistrationTokenRequest(Context context) {
         super(context);
+        doNeedAlert(false);
     }
 
     @Override
@@ -22,4 +23,5 @@ public class RegistrationTokenRequest extends AbstractApiRequest {
     protected String getServiceName() {
         return service;
     }
+
 }
