@@ -85,6 +85,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
             finish();
         }
     };
+    private RetryView retryBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -156,7 +157,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
         mUserActions.setOnClickListener(mInfoClickListener);
 
         lockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
-        RetryView retryBtn = new RetryView(getApplicationContext());
+        retryBtn = new RetryView(getApplicationContext());
         retryBtn.setErrorMsg(getString(R.string.general_profile_error));
         retryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
             @Override
@@ -200,8 +201,8 @@ public class UserProfileActivity extends BaseFragmentActivity {
         mLockerView.setVisibility(View.VISIBLE);
         if (mUserId < 1) {
             mLockerView.setVisibility(View.INVISIBLE);
+            retryBtn.showOnlyMessage(true);
             lockScreen.setVisibility(View.VISIBLE);
-            lockScreen.findViewById(R.id.retry).setVisibility(View.GONE);
             return;
         }
         UserRequest userRequest = new UserRequest(mUserId, getApplicationContext());
@@ -251,7 +252,8 @@ public class UserProfileActivity extends BaseFragmentActivity {
 //                        Toast.makeText(UserProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mLockerView.setVisibility(View.GONE);
                         lockScreen.setVisibility(View.VISIBLE);
-                        lockScreen.findViewById(R.id.retry).setVisibility(View.VISIBLE);
+                        retryBtn.showOnlyMessage(false);
+//                        lockScreen.findViewById(R.id.retry).setVisibility(View.VISIBLE);
                     }
                 });
             }

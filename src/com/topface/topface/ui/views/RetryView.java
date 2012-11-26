@@ -73,6 +73,11 @@ public class RetryView extends LinearLayout {
 
     public void showOnlyMessage(boolean value) {
         showOnlyMessage = value;
+        if(showOnlyMessage) {
+            mButtonContainer.setVisibility(View.GONE);
+        } else {
+            mButtonContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setTextViewSettings() {
