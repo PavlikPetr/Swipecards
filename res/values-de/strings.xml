@@ -216,4 +216,9 @@
     <string name="filter_city_fail">Keine Stadt gefunden, der mit «%s» beginnt</string>
     <string name="age_filter_man">Sie interessieren sich für Männer</string>
     <string name="age_filter_girl">Sie interessieren sich für Mädchen</string>
+    <string name="dashbrd_popup_rating">Gefällt unsere Anwendung? Erhöhen Sie unser Rating! Je höher das Rating ist, desto mehr interessante Leute treffen Sie in Topface</string>
+    <string name="dashbrd_popup_title">Rating</string>
+    <string name="dashbrd_popup_cancel">Nicht fragen mehr</string>
+    <string name="dashbrd_popup_rate">Rating ausstellen</string>
+    <string name="dashbrd_popup_later">Später fragen</string>
 </resources>

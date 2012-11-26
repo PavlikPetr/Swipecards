@@ -216,4 +216,9 @@
     <string name="filter_city_fail">Βρέθηκε καμία πόλη που αρχίζει με «%s»</string>
     <string name="age_filter_man">‘Εχετε ενδιαφέρον για άντρες</string>
     <string name="age_filter_girl">‘Εχετε ενδιαφέρον για κοπέλες</string>
+    <string name="dashbrd_popup_rating">Άρεσε εφαρμογή μας? Ανασηκώστε το βαθμολογίας μας!  Όσο υψηλότερη είναι η βαθμολογίας, τόσο πιο πολλοί ενδιαφέροντες ανθρώπους μπορείς να συναντήσεις στη Topface</string>
+    <string name="dashbrd_popup_title">Βαθμολογίας</string>
+    <string name="dashbrd_popup_cancel">Μην ρωτήσετε</string>
+    <string name="dashbrd_popup_rate">Ρυθμίστε το βαθμολογίας</string>
+    <string name="dashbrd_popup_later">Ρωτήστε αργότερα</string>
 </resources>
