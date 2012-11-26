@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import com.topface.topface.App;
@@ -26,6 +27,7 @@ public class Settings {
 
     public static final String SETTINGS_SOCIAL_ACCOUNT_NAME = "social_account_name";
 
+    public static final int REQUEST_CODE_RINGTONE = 333;
 
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mEditor;
@@ -47,6 +49,11 @@ public class Settings {
 
     public void setSetting(String key, boolean value) {
         mEditor.putBoolean(key, value);
+        mEditor.commit();
+    }
+
+    public void setSetting(String key, String value) {
+        mEditor.putString(key, value);
         mEditor.commit();
     }
 
@@ -82,8 +89,8 @@ public class Settings {
         return mContext.getString(R.string.settings_preloading_type_photo);
     }
 
-    public String getRingtone() {
-        return mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND);
+    public Uri getRingtone() {
+        return Uri.parse(mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND));
     }
 
     public Boolean isVibrationEnabled() {

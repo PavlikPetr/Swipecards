@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import com.topface.topface.R;
 
@@ -27,15 +26,6 @@ public class TopfaceNotificationManager {
     }
 
     private TopfaceNotificationManager(Context context) {
-        mNotificationBuilder = new NotificationCompat.Builder(context);
-
-        if (Settings.getInstance().isVibrationEnabled())
-            mNotificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
-
-        mNotificationBuilder.setSound(RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_NOTIFICATION));
-        mNotificationBuilder.setSmallIcon(R.drawable.ic_notification);
-
-        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         float scale = context.getResources().getDisplayMetrics().density;
 
         width *= scale;
@@ -46,6 +36,18 @@ public class TopfaceNotificationManager {
     public void showNotification(int userId, String title, String message, Bitmap icon, int unread, Intent intent) {
 
         Bitmap scaledIcon = Utils.clipAndScaleBitmap(icon, (int) width, (int) height);
+
+        mNotificationBuilder = new NotificationCompat.Builder(ctx);
+
+        mNotificationBuilder.setSmallIcon(R.drawable.ic_notification);
+
+        mNotificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Settings.getInstance().isVibrationEnabled())
+            mNotificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+
+
+        mNotificationBuilder.setSound(Settings.getInstance().getRingtone());
 
         mNotificationBuilder.setContentTitle(title);
         mNotificationBuilder.setContentText(message);
