@@ -36,7 +36,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     private int mSex;
     private View mLoGirl;
     private View mLoBoy;
-
+    private Button mExtraSaveButton;
 
     private ImageView mCheckGirl;
     private ImageView mCheckBoy;
@@ -66,9 +66,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             }
         });
 
-        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setText(getResources().getString(R.string.general_save_button));
-        mSaveButton.setOnClickListener(new OnClickListener() {
+        mExtraSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
+        mExtraSaveButton.setText(getResources().getString(R.string.general_save_button));
+        mExtraSaveButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -221,7 +221,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     }
 
     @Override
-    protected void saveChanges(Handler handler) {
+    protected void saveChanges(final Handler handler) {
         InputMethodManager imm = (InputMethodManager) getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (mEdName != null) imm.hideSoftInputFromWindow(mEdName.getWindowToken(), 0);
         if (mEdAge != null) imm.hideSoftInputFromWindow(mEdAge.getWindowToken(), 0);
@@ -243,6 +243,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                     getActivity().setResult(Activity.RESULT_OK);
                     finishRequestSend();
                     getActivity().finish();
+                    handler.sendEmptyMessage(0);
                 }
 
                 @Override
@@ -250,8 +251,11 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         throws NullPointerException {
                     getActivity().setResult(Activity.RESULT_CANCELED);
                     finishRequestSend();
+                    handler.sendEmptyMessage(0);
                 }
             }).exec();
+        } else {
+            handler.sendEmptyMessage(0);
         }
     }
 
@@ -359,5 +363,53 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         }
         mSex = sex;
         refreshSaveState();
+    }
+
+    @Override
+    protected void refreshSaveState() {
+        super.refreshSaveState();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mExtraSaveButton != null) {
+                    if (hasChanges()) {
+                        mExtraSaveButton.setVisibility(View.VISIBLE);
+                    } else {
+                        mExtraSaveButton.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void prepareRequestSend() {
+        super.prepareRequestSend();
+        getActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (mExtraSaveButton != null) {
+                    mExtraSaveButton.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void finishRequestSend() {
+        super.finishRequestSend();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mRightPrsBar != null) {
+                    if (hasChanges()) {
+                        if (mExtraSaveButton != null) {
+                            mExtraSaveButton.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            }
+        });
     }
 }

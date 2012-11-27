@@ -57,6 +57,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mLoSwitchOnline;
     private ViewGroup mLoSwitchBeautifull;
 
+    private Button mExtraSaveButton;
+
     public static final int webAbsoluteMaxAge = 99;
 
     class Filter implements Cloneable {
@@ -145,9 +147,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             }
         });
 
-        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setText(getResources().getString(R.string.general_save_button));
-        mSaveButton.setOnClickListener(new OnClickListener() {
+        mExtraSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
+        mExtraSaveButton.setText(getResources().getString(R.string.general_save_button));
+        mExtraSaveButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -390,7 +392,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     @Override
-    protected void saveChanges(Handler handler) {
+    protected void saveChanges(final Handler handler) {
         prepareRequestSend();
 
         FilterRequest filterRequest = new FilterRequest(getActivity().getApplicationContext());
@@ -414,7 +416,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 refreshSaveState();
                 getActivity().setResult(Activity.RESULT_OK);
                 finishRequestSend();
-                getActivity().finish();
+                handler.sendEmptyMessage(0);
             }
 
             @Override
@@ -422,10 +424,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 getActivity().setResult(Activity.RESULT_CANCELED);
                 refreshSaveState();
                 finishRequestSend();
+                handler.sendEmptyMessage(0);
             }
         }).exec();
-
-        getActivity().setResult(Activity.RESULT_OK);
     }
 
     @Override
@@ -561,12 +562,60 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoBoys.setEnabled(true);
         mAgeFrame.setEnabled(true);
         mCityFrame.setEnabled(true);
-        mLoSwitchOnline.setEnabled(true);
-        mLoSwitchBeautifull.setEnabled(true);
+        mSwitchOnline.setEnabled(true);
+        mSwitchBeautifull.setEnabled(true);
         mXStatusFrame.setEnabled(true);
         mMarriageFrame.setEnabled(true);
         mCharacterFrame.setEnabled(true);
         mAlcoholFrame.setEnabled(true);
         mShowOffFrame.setEnabled(true);
+    }
+
+    @Override
+    protected void refreshSaveState() {
+        super.refreshSaveState();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mExtraSaveButton != null) {
+                    if (hasChanges()) {
+                        mExtraSaveButton.setVisibility(View.VISIBLE);
+                    } else {
+                        mExtraSaveButton.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void prepareRequestSend() {
+        super.prepareRequestSend();
+        getActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (mExtraSaveButton != null) {
+                    mExtraSaveButton.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void finishRequestSend() {
+        super.finishRequestSend();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mRightPrsBar != null) {
+                    if (hasChanges()) {
+                        if (mExtraSaveButton != null) {
+                            mExtraSaveButton.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            }
+        });
     }
 }
