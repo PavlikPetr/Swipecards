@@ -32,7 +32,6 @@
                     android:id="@+id/ratingButtonsFirst"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
                     android:orientation="horizontal">
 
                 <RelativeLayout
@@ -101,7 +100,6 @@
                     android:id="@+id/ratingButtonsSecond"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
                     android:orientation="horizontal"
                     android:visibility="gone">
 

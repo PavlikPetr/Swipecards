@@ -29,7 +29,7 @@
                 android:id="@+id/btnFilterFromDown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/numberpicker_down_btn"/>:
+                android:background="@drawable/numberpicker_down_btn"/>
     </LinearLayout>
 
     <!-- right -->

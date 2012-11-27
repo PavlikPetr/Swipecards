@@ -52,7 +52,6 @@ public class App extends Application {
         GCMUtils.init(getContext());
         Debug.log("App", "+onCreate");
         Data.init(getApplicationContext());
-        Recycle.init(getApplicationContext());
         CacheProfile.loadProfile();
         //Начинаем слушать подключение к интернету
         if (mConnectionIntent == null) {

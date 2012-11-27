@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">hu_HU</string>
+    <string name="app_locale">ru_RU</string>
     <string name="general_error">HIBA</string>
     <string name="general_warning">FIGYELMEZTETÉS</string>
     <string name="general_ok">OK</string>
@@ -50,7 +50,7 @@
     <string name="auth_vk_name">Vkontakte</string>
     <string name="dating_header_girls">Lányok %1$d-től %2$d-ig</string>
     <string name="dating_header_guys">Fiúk %1$d-től %2$d-ig</string>
-    <string name="dating_switch_button">Több...</string>
+    <string name="dating_switch_button">Több…</string>
     <string name="dating_skip_button">Következő</string>
     <string name="dating_prev_button">Előző</string>
     <string name="dating_chat_button">Csevegés</string>
