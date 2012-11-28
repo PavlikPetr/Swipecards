@@ -26,7 +26,6 @@ import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.ui.views.ThumbView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
@@ -151,8 +150,6 @@ public class TopsFragment extends BaseFragment {
         editor.putString(Static.PREFERENCES_TOPS_CITY_NAME, mActionData.city_name);
         editor.putInt(Static.PREFERENCES_TOPS_CITY_POS, mActionData.city_popup_pos);
         editor.commit();
-
-        ThumbView.release();
 
         super.onDestroy();
     }

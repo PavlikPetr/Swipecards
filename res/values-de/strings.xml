@@ -50,7 +50,7 @@
     <string name="auth_vk_name">VKontakte</string>
     <string name="dating_header_girls">Mädchen von %1$d bis %2$d</string>
     <string name="dating_header_guys">Männer von %1$d bis %2$d</string>
-    <string name="dating_switch_button">Noch...</string>
+    <string name="dating_switch_button">Noch…</string>
     <string name="dating_skip_button">Nächste</string>
     <string name="dating_prev_button">Vorige</string>
     <string name="dating_chat_button">Plaudern</string>

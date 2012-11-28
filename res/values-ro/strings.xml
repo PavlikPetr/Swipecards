@@ -50,7 +50,7 @@
     <string name="auth_vk_name">VKontacte</string>
     <string name="dating_header_girls">Fete de la %1$d pana la %2$d</string>
     <string name="dating_header_guys">Baieti de la  %1$d pana la %2$d</string>
-    <string name="dating_switch_button">Inca.........</string>
+    <string name="dating_switch_button">Inca…</string>
     <string name="dating_skip_button">Urmatoarea</string>
     <string name="dating_prev_button">Precedent</string>
     <string name="dating_chat_button">A sta la taifas</string>
@@ -206,4 +206,7 @@
     </plurals>
     <string name="novice_sympathy">Trimiteti simpatii la cei \n care va sunt dragi cu adevarat, \n pentru a incepe o cunostinta placuta</string>
     <string name="novice_fill_profile">Adauga pozele tale cele mai tari, \n pentru a primi mai multe simpatii.</string>
+    <string name="age_filter_man">Dmv va sunt interesati baietii</string>
+    <string name="age_filter_girl">Dmv va sunt interesante fetele</string>
+    <string name="buying_store_connect">Solicit Tunes Store</string>
 </resources>

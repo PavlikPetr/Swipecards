@@ -300,4 +300,6 @@
     <string name="buying_tf_ack_sending">Отправляю информацию о покупке в Topface</string>
 
     <string name="edit_refresh_status">Обновить статус</string>
+
+    <string name="ban_title">Поздравляем! Вы забанены</string>
 </resources>

@@ -129,7 +129,6 @@
                             android:textColor="#FFFFFF"
                             android:textSize="15sp"
                             android:textStyle="bold"
-                            android:text="0"
                             android:drawableRight="@drawable/resources_coins"
                             android:drawablePadding="4dp"/>
                 </RelativeLayout>
@@ -150,7 +149,6 @@
                             android:textColor="#FFFFFF"
                             android:textSize="12sp"
                             android:textStyle="bold"
-                            android:text="0"
                             android:background="@drawable/resources_battery"/>
                 </RelativeLayout>
                 <!-- android:drawableTop="@drawable/user_chat_selector"  -->

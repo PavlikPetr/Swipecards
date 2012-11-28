@@ -612,7 +612,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 case INTEGER:
                     return (int) value;
                 case FLOAT:
-                    return new Float(value);
+                    return (float) value;
                 case SHORT:
                     return (short) value;
                 case BYTE:
