@@ -145,8 +145,8 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                             getActivity().setResult(Activity.RESULT_OK);
                             mData = mInputData;
                             finishRequestSend();
-                            handler.sendEmptyMessage(0);
-                            //getActivity().finish();
+                            if (handler == null) getActivity().finish();
+                            else handler.sendEmptyMessage(0);
                         }
 
                         @Override
@@ -154,14 +154,15 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                                 throws NullPointerException {
                             getActivity().setResult(Activity.RESULT_CANCELED);
                             finishRequestSend();
-                            handler.sendEmptyMessage(0);
+                            if (handler != null) handler.sendEmptyMessage(0);
                         }
                     }).exec();
                     break;
                 }
             }
         } else {
-            handler.sendEmptyMessage(0);
+            if (handler == null) getActivity().finish();
+            else handler.sendEmptyMessage(0);
         }
     }
 

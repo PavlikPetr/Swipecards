@@ -43,6 +43,12 @@ public class FormInfo {
                     break;
                 case FormItem.HEADER:
                     title = getFormTitle(formItem);
+                case FormItem.STATUS:
+                    title = getFormTitle(formItem);
+                    if(formItem.dataId != FormItem.NO_RESOURCE_ID) {
+                        data = getEntryById(getEntriesByTitleId(formItem.titleId), getIdsByTitleId(formItem.titleId), formItem.dataId);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -154,6 +160,9 @@ public class FormInfo {
         switch (titleId) {
             case R.array.form_main_status:
                 result.statusid = selectedValueId;
+                break;
+            case R.array.form_main_about_status:
+                result.status = selectedValue;
                 break;
             case R.array.form_main_character:
                 result.characterid = selectedValueId;
@@ -316,6 +325,8 @@ public class FormInfo {
             case FormItem.HEADER:
                 return mResources.getString(formItem.titleId);
             case FormItem.DATA:
+                return getFormTitle(formItem.titleId);
+            case FormItem.STATUS:
                 return getFormTitle(formItem.titleId);
             default:
                 return Static.EMPTY;

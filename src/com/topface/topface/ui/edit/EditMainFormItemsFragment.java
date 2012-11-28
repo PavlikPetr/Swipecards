@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,12 +21,14 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.FormItem;
 
 import java.util.HashMap;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener {
 
     public enum EditType {NAME, AGE, STATUS}
+    public static final int MAX_STATUS_LENGTH = 200;
 
     private EditType[] mTypes;
     private HashMap<EditType, String> hashChangedData = new HashMap<EditMainFormItemsFragment.EditType, String>();
@@ -179,6 +182,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                     loStatus.setVisibility(View.VISIBLE);
                     ((TextView) loStatus.findViewById(R.id.tvTitle)).setText(R.string.edit_status);
                     mEdStatus = (EditText) loStatus.findViewById(R.id.edText);
+                    InputFilter[] filters = new InputFilter[1];
+                    filters[0] = new InputFilter.LengthFilter(MAX_STATUS_LENGTH);
+                    mEdStatus.setFilters(filters);
                     mEdStatus.setText(data);
                     mEdStatus.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                     mEdStatus.addTextChangedListener(new TextWatcher() {
@@ -186,6 +192,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
+
                         }
 
                         @Override
@@ -242,8 +249,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                     CacheProfile.sex = mSex;
                     getActivity().setResult(Activity.RESULT_OK);
                     finishRequestSend();
-                    getActivity().finish();
-                    handler.sendEmptyMessage(0);
+                    if (handler == null) getActivity().finish();
+                    else handler.sendEmptyMessage(0);
                 }
 
                 @Override
@@ -251,11 +258,12 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         throws NullPointerException {
                     getActivity().setResult(Activity.RESULT_CANCELED);
                     finishRequestSend();
-                    handler.sendEmptyMessage(0);
+                    if (handler != null) handler.sendEmptyMessage(0);
                 }
             }).exec();
         } else {
-            handler.sendEmptyMessage(0);
+            if (handler == null) getActivity().finish();
+            else handler.sendEmptyMessage(0);
         }
     }
 
@@ -281,6 +289,12 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 break;
             case STATUS:
                 CacheProfile.status = data;
+                for(FormItem item : CacheProfile.forms) {
+                    if (item.type == FormItem.STATUS) {
+                        item.value = CacheProfile.status;
+                        break;
+                    }
+                }
                 break;
         }
     }

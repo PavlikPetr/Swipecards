@@ -16,7 +16,8 @@ public class FormItem {
     // Constants
     public static final int HEADER = 1;
     public static final int DATA = 3;
-    public static final int DIVIDER = 4;
+    public static final int STATUS = 4;
+    public static final int DIVIDER = 5;
 
     public static final int NO_RESOURCE_ID = -1;
     public static final int NOT_SPECIFIED_ID = 0;

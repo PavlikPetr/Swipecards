@@ -298,4 +298,6 @@
     <string name="buying_store_connect">Запрашиваю iTunes Store</string>
     <string name="buying_store_purchase">Совершаю покупку в iTunes Store</string>
     <string name="buying_tf_ack_sending">Отправляю информацию о покупке в Topface</string>
+
+    <string name="edit_refresh_status">Обновить статус</string>
 </resources>

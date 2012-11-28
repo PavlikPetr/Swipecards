@@ -229,4 +229,10 @@
     <string name="form_detail_archievements_1">Best achievements</string>
     <string name="form_detail_archievements_2">Your best achievements</string>
     <string name="form_detail_archievements_3">Your best achievements</string>
+    <string name="form_main_personal_status_0">Status</string>
+    <string name="form_main_about_status_0">About him</string>
+    <string name="form_main_about_status_1">About her</string>
+    <string name="form_main_about_status_2">About you</string>
+    <string name="form_main_about_status_3">About you</string>
+
 </resources>

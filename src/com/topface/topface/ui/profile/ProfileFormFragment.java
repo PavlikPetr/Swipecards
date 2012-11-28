@@ -49,7 +49,10 @@ public class ProfileFormFragment extends BaseFragment {
 			if (formItem instanceof FormItem) {
 				FormItem item = (FormItem) formItem;
 
-				if (item.dataId == FormItem.NO_RESOURCE_ID) {
+                if (item.type == FormItem.STATUS) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
+                    startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_STATUS);
+                } else if (item.dataId == FormItem.NO_RESOURCE_ID) {
 					Intent intent = new Intent(getActivity().getApplicationContext(),
 							EditContainerActivity.class);
 					intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, item.titleId);
@@ -58,12 +61,12 @@ public class ProfileFormFragment extends BaseFragment {
 					startActivityForResult(intent,
 							EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM);
 				} else {
-					Intent intent = new Intent(getActivity().getApplicationContext(),
-							EditContainerActivity.class);
-					intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, item.titleId);
-					intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, item.dataId);
-					intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, item.value);
-					startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FORM_ITEM);
+                        Intent intent = new Intent(getActivity().getApplicationContext(),
+                                EditContainerActivity.class);
+                        intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, item.titleId);
+                        intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, item.dataId);
+                        intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, item.value);
+                        startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FORM_ITEM);
 				}
 			}
 		}

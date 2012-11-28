@@ -61,7 +61,8 @@ public class QuestionaryRequest extends AbstractApiRequest {
 				.put("achievements", achievements)
 				.put("restaurants", restaurants)
 				.put("valuables", valuables)
-				.put("aspirations", aspirations);
+				.put("aspirations", aspirations)
+                .put("status", status);
 
 		if (statusid != -1)
 			data.put("statusid", statusid);
