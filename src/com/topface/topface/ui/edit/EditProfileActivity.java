@@ -119,6 +119,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 item = (new EditForm()).setFormItem(formItem);
             } else if (formItem.type == FormItem.DIVIDER) {
                 continue;
+            } else if (formItem.type == FormItem.STATUS) {
+                continue;
             }
 
             // set position type info
@@ -375,6 +377,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         public String getTitle() {
+            if (CacheProfile.status.trim().isEmpty()) {
+                return getString(R.string.edit_refresh_status);
+            }
             return CacheProfile.status;
         }
 

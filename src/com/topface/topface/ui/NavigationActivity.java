@@ -35,7 +35,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
-    public static final int UPDATE_INTERVAL = 3 * 60 * 1000;
+    public static final int UPDATE_INTERVAL = 1 * 60 * 1000;
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;

@@ -17,14 +17,15 @@ import java.util.LinkedList;
 public class ProfileFormListAdapter extends BaseAdapter {
     // Data
     private LayoutInflater mInflater;
-    private LinkedList<FormItem> mProfileForms;
+    private LinkedList<FormItem> mProfileForms = new LinkedList<FormItem>();
     private View.OnClickListener mOnFillListener;
 
     // Constants
     private static final int T_HEADER = 0;
     private static final int T_DIVIDER = 1;
     private static final int T_DATA = 2;
-    private static final int T_COUNT = T_DATA + 1;
+    private static final int T_STATUS = 3;
+    private static final int T_COUNT = T_STATUS + 1;
 
     // class ViewHolder
     private static class ViewHolder {
@@ -37,7 +38,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
     public ProfileFormListAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mProfileForms = CacheProfile.forms;        
+        mProfileForms.addAll(CacheProfile.forms);
     }
 
     @Override
@@ -67,6 +68,8 @@ public class ProfileFormListAdapter extends BaseAdapter {
                 return T_HEADER;
             case FormItem.DATA:
                 return T_DATA;
+            case FormItem.STATUS:
+                return T_STATUS;
             case FormItem.DIVIDER:
                 return T_DIVIDER;
             default:
@@ -94,6 +97,14 @@ public class ProfileFormListAdapter extends BaseAdapter {
                     holder.mValue = (TextView) convertView.findViewById(R.id.tvValue);
                     holder.mFill = (Button) convertView.findViewById(R.id.btnFill);
                     break;
+                case T_STATUS:
+                    convertView = mInflater.inflate(R.layout.item_user_list, null, false);
+                    holder.mState = (ImageView) convertView.findViewById(R.id.ivState);
+                    holder.mHeader = (TextView) convertView.findViewById(R.id.tvHeader);
+                    holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+                    holder.mValue = (TextView) convertView.findViewById(R.id.tvValue);
+                    holder.mFill = (Button) convertView.findViewById(R.id.btnFill);
+                    break;
             }
 
             switch (type) {
@@ -102,6 +113,9 @@ public class ProfileFormListAdapter extends BaseAdapter {
                     break;
                 case T_DATA:
                     convertView.setBackgroundResource(R.drawable.user_list_cell_bg);
+                    break;
+                case T_STATUS:
+                    convertView.setBackgroundResource(R.drawable.bg_user_list);
                     break;
             }
             convertView.setTag(holder);
@@ -119,20 +133,35 @@ public class ProfileFormListAdapter extends BaseAdapter {
             case T_DATA:
                 holder.mTitle.setText(item.title.toUpperCase());
                 if (item.value != null) {
-                	holder.mState.setImageResource(R.drawable.user_cell);
-                    holder.mValue.setText(item.value);
+                    holder.mState.setImageResource(R.drawable.user_cell);
+                    holder.mValue.setText(item.value.toLowerCase());
                     holder.mValue.setVisibility(View.VISIBLE);
-                    holder.mFill.setVisibility(View.INVISIBLE);
+                    holder.mFill.setVisibility(View.GONE);
                 } else {
-                	holder.mState.setImageResource(R.drawable.user_cell_off);
-                    holder.mValue.setVisibility(View.INVISIBLE);
+                    holder.mState.setImageResource(R.drawable.user_cell_off);
+                    holder.mValue.setVisibility(View.GONE);
                     holder.mFill.setVisibility(View.VISIBLE);
                     holder.mFill.setOnClickListener(mOnFillListener);
                     holder.mFill.setTag(item);
-                }                
-                holder.mState.setVisibility(View.VISIBLE);
+                }
                 break;
-        }                
+            case T_STATUS:
+                holder.mTitle.setText(item.title.toUpperCase());
+                holder.mState.setImageResource(R.drawable.user_cell);
+                if (!item.value.trim().isEmpty()) {
+                    holder.mValue.setText(item.value);
+                    holder.mValue.setVisibility(View.VISIBLE);
+                } else {
+                    holder.mValue.setVisibility(View.GONE);
+                }
+
+                holder.mFill.setText(R.string.edit_refresh_status);
+                holder.mFill.setVisibility(View.VISIBLE);
+                holder.mFill.setOnClickListener(mOnFillListener);
+                holder.mFill.setTag(item);
+                break;
+        }
+        convertView.requestLayout();
         return convertView;
     }
 

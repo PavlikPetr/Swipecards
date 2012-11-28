@@ -49,7 +49,7 @@
     <string name="auth_vk_name">VKontakte</string>
     <string name="dating_header_girls">Kobiety od %1$d do %2$d</string>
     <string name="dating_header_guys">Mężczyźni od %1$d do %2$d</string>
-    <string name="dating_switch_button">Jeszcze...</string>
+    <string name="dating_switch_button">Jeszcze…</string>
     <string name="dating_skip_button">Następna</string>
     <string name="dating_prev_button">Poprzednia</string>
     <string name="dating_chat_button">Pogadać</string>

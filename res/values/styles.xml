@@ -114,7 +114,7 @@
     </style>
 
     <style name="LoadingLocker">
-        <item name="android:paddingTop">20px</item>
+        <item name="android:paddingTop">14dp</item>
         <item name="android:text">@string/general_dialog_loading</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">#FFFFFF</item>
@@ -171,7 +171,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_alignParentTop">true</item>
-        <item name="android:layout_marginTop">0px</item>
+        <item name="android:layout_marginTop">0dp</item>
         <item name="android:layout_marginRight">6dp</item>
         <item name="android:src">@drawable/list_online_selector</item>
         <item name="android:visibility">invisible</item>
@@ -182,7 +182,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_alignParentTop">true</item>
-        <item name="android:layout_marginTop">0px</item>
+        <item name="android:layout_marginTop">0dp</item>
         <item name="android:layout_marginRight">6dp</item>
         <item name="android:src">@drawable/im_list_online_pressed</item>
         <item name="android:visibility">invisible</item>

@@ -16,7 +16,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
-import com.topface.topface.Recycle;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiHandler;
@@ -60,6 +59,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private FloatBlock mFloatBlock;
 
     protected boolean isDeletable = true;
+    private Drawable mLoader0;
+    private AnimationDrawable mLoader;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -441,7 +442,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).stop();
             }
 
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(Recycle.s_Loader_0,
+            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
                     mBackgroundText.getCompoundDrawables()[1],
                     mBackgroundText.getCompoundDrawables()[2],
                     mBackgroundText.getCompoundDrawables()[3]);
@@ -467,7 +468,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).stop();
             }
 
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(Recycle.s_Loader_0,
+            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
                     mBackgroundText.getCompoundDrawables()[1],
                     mBackgroundText.getCompoundDrawables()[2],
                     mBackgroundText.getCompoundDrawables()[3]);
@@ -481,7 +482,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mListView.setVisibility(View.INVISIBLE);
             mBackgroundText.setVisibility(View.VISIBLE);
             mBackgroundText.setText(R.string.general_dialog_loading);
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(Recycle.s_Loader,
+            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader(),
                     mBackgroundText.getCompoundDrawables()[1],
                     mBackgroundText.getCompoundDrawables()[2],
                     mBackgroundText.getCompoundDrawables()[3]);
@@ -538,6 +539,22 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 updateData(true,false);
             }
         }
+    }
+
+    private Drawable getLoader0() {
+        if (mLoader0 == null && isAdded()) {
+            mLoader0 = getResources().getDrawable(R.drawable.loader0);
+        }
+        return mLoader0;
+    }
+
+
+
+    private AnimationDrawable getLoader() {
+        if (mLoader == null && isAdded()) {
+            mLoader = (AnimationDrawable) getResources().getDrawable(R.drawable.loader);
+        }
+        return mLoader;
     }
 
 }

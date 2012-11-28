@@ -10,8 +10,10 @@ public class EditSwitcher {
     private CheckBox mCheckbox;
     private TextView mTextOn;
     private TextView mTextOff;
+    private ViewGroup mRoot;
 
     public EditSwitcher(ViewGroup root) {
+        mRoot = root;
         mCheckbox = (CheckBox) root.findViewById(R.id.cbSwitch);
         mTextOn = (TextView) root.findViewById(R.id.tvSwitchOn);
         mTextOff = (TextView) root.findViewById(R.id.tvSwitchOff);
@@ -29,6 +31,7 @@ public class EditSwitcher {
     }
 
     public void setEnabled(boolean enabled) {
+        mRoot.setEnabled(enabled);
     	mCheckbox.setEnabled(enabled);
     	mTextOn.setEnabled(enabled);
     	mTextOff.setEnabled(enabled);

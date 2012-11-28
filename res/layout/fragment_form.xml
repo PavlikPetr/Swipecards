@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="40px"
+            android:layout_marginTop="26dp"
             android:background="@drawable/buying_purchase_selector"
             android:text="@string/profile_ask_form"/>
     </LinearLayout>

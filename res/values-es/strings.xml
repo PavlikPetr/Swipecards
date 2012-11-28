@@ -163,7 +163,7 @@
     <string name="settings_photo_preloading">Precarca de fotos</string>
     <string name="settings_photo_preloading_summary">Precarga de foto siguiente en álbum</string>
     <string name="settings_notifications_header">Notificaciones</string>
-    <string name="settings_other_header">Otro...</string>
+    <string name="settings_other_header">Otro…</string>
     <string name="settings_likes">Simpatías</string>
     <string name="settings_mutual">Simpatías mutuas</string>
     <string name="settings_messages">Mensajes</string>

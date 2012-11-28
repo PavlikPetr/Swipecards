@@ -216,4 +216,9 @@
     <string name="filter_city_fail">‘%s’ başlayan hiçbir şehir bulunamadı</string>
     <string name="age_filter_man">Siz erkeklere not veriyorsunuz</string>
     <string name="age_filter_girl">Siz kızlara not veriyorsunuz</string>
+    <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar yüksekse o kadar çok ilginç insanlarla Topface’de karşılaşırsın</string>
+    <string name="dashbrd_popup_title">Reyting</string>
+    <string name="dashbrd_popup_cancel">Bir daha sorma</string>
+    <string name="dashbrd_popup_rate">Reyting göstermek</string>
+    <string name="dashbrd_popup_later">Daha sonra sormak</string>
 </resources>
