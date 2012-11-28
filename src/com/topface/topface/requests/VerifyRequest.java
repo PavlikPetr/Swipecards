@@ -20,7 +20,7 @@ public class VerifyRequest extends AbstractApiRequest {
     }
 
     @Override
-    protected String getServiceName() {
+    public String getServiceName() {
         return service;
     }
 }

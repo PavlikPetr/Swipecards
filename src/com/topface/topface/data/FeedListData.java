@@ -1,16 +1,18 @@
 package com.topface.topface.data;
 
 import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class FeedListData<T extends FeedItem> extends AbstractData {
 
-    public int unread;
+    private static final int NO_TYPE = -1;
     public boolean more;
     public FeedList<T> items;
+    public HashMap<String,Integer> counters;
     private final Class<T> mClass;
 
     public FeedListData(JSONObject data, Class<T> itemClass) {
@@ -23,10 +25,8 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
     @Override
     protected void fillData(JSONObject data) {
         super.fillData(data);
-        unread = data.optInt("unread");
         more = data.optBoolean("more");
         items = getList(data.optJSONArray("items"));
-        setUnread(unread);
     }
 
     @SuppressWarnings({ "hiding", "unchecked" })
@@ -48,15 +48,4 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
         return result;
     }
 
-    private void setUnread(int unread) {
-        if (mClass.equals(FeedLike.class)) {
-            CacheProfile.unread_likes = unread;
-        } else if (mClass.equals(FeedDialog.class)) {
-            CacheProfile.unread_messages = unread;
-        } else if (mClass.equals(FeedMutual.class)) {
-            CacheProfile.unread_mutual = unread;
-        } else if (mClass.equals(Visitor.class)) {
-            CacheProfile.unread_visitors = unread;
-        }
-    }
 }

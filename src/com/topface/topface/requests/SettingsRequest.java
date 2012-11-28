@@ -39,7 +39,7 @@ public class SettingsRequest extends AbstractApiRequest {
     }
 
     @Override
-    protected String getServiceName() {
+    public String getServiceName() {
         return service;
     }
 

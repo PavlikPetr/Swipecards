@@ -14,6 +14,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.SwipeGestureListener;
@@ -53,8 +54,13 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected int getType() {
+    protected int getTypeForGCM() {
         return GCMUtils.GCM_TYPE_LIKE;
+    }
+
+    @Override
+    protected int getTypeForCounters() {
+        return CountersManager.LIKES;
     }
 
     @Override
@@ -113,6 +119,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected int getEmptyFeedText() {
         return R.string.likes_background_text;
+    }
+
+    @Override
+    protected void decrementCounters() {
+        CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.LIKES);
     }
 
     @Override

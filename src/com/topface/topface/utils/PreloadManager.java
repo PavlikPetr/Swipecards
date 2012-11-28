@@ -53,7 +53,7 @@ public class PreloadManager {
 
     public void preloadPhoto (Photos photos,int position) {
         if(position<photos.size()) {
-            preloadNextPhoto(photos.get(position)); //TODO: Этот код какой-то неправильный, надо что-то придумать
+            preloadNextPhoto(photos.get(position));
         }
     }
 

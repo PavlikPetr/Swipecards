@@ -83,7 +83,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
     private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
     private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
-
+    private  int itemId;
     private Timer mTimer;
 
     // Managers
@@ -96,7 +96,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
         setContentView(R.layout.ac_chat);
         Debug.log(this, "+onCreate");
-
+        itemId = getIntent().getIntExtra(INTENT_ITEM_ID,-1);
         // Data
         mHistoryList = new LinkedList<History>();
 
@@ -289,8 +289,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         historyRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                if (getIntent().getIntExtra(INTENT_ITEM_ID,-1) != -1) {
-                    LocalBroadcastManager.getInstance(ChatActivity.this).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID,getIntent().getIntExtra(INTENT_ITEM_ID,-1)));
+                if (itemId != -1) {
+                    LocalBroadcastManager.getInstance(ChatActivity.this).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID,itemId));
+                    itemId = -1;
                 }
                 final FeedListData<History> dataList = new FeedListData<History>(
                         response.jsonResult, History.class);

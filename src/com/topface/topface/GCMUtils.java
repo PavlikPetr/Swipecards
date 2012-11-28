@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
 import android.widget.ListView;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.data.Options;
@@ -23,6 +22,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.TopfaceNotificationManager;
 import org.json.JSONException;
@@ -41,14 +41,13 @@ public class GCMUtils {
     public static final int GCM_TYPE_SYMPATHY = 1;
     public static final int GCM_TYPE_LIKE = 2;
     public static final int GCM_TYPE_GUESTS = 3;
-    public static final int GCM_NO_NOTIFICATION = -2;
-    public static final String GCM_UPDATE_COUNTERS = "com.topface.topface.action.UPDATE_COUNTERS";
+    public static final int GCM_TYPE_DIALOGS = 4;
 
     public static final String NEXT_INTENT = "next";
 
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
 
-    public static int  lastNotificationType = GCM_NO_NOTIFICATION;
+    public static int  lastNotificationType = GCM_TYPE_DIALOGS;
 
     public static int lastUserId = -1;
 
@@ -192,21 +191,15 @@ public class GCMUtils {
     private static void setCounters(String counters, Context context) {
         try {
             JSONObject countersJson = new JSONObject(counters);
-            CacheProfile.unread_likes = countersJson.optInt("unread_likes");
-            CacheProfile.unread_messages = countersJson.optInt("unread_messages");
-            CacheProfile.unread_mutual = countersJson.optInt("unread_sympaties");
-            CacheProfile.unread_visitors = countersJson.optInt("unread_visitors");
-            sendBroadcastUpdateCounters(context);
+            CountersManager.getInstance(context).setMethod(CountersManager.CHANGED_BY_GCM);
+            CountersManager.getInstance(context).setAllCounters(countersJson.optInt("unread_likes"),
+                    countersJson.optInt("unread_sympaties"),
+                    countersJson.optInt("unread_messages"),
+                    countersJson.optInt("unread_visitors"));
         } catch (JSONException e) {
             Debug.error(e);
         }
 
-    }
-
-    private static void sendBroadcastUpdateCounters(Context context) {
-        Intent intent = new Intent();
-        intent.setAction(GCM_UPDATE_COUNTERS);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     public static void cancelNotification(final Context context, final int type) {
