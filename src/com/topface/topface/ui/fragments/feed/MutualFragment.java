@@ -7,6 +7,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedMutual;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.MutualListAdapter;
+import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
 
 public class MutualFragment extends FeedFragment<FeedMutual> {
@@ -42,7 +43,17 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    protected int getType() {
+    protected void decrementCounters() {
+        CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.SYMPATHY);
+    }
+
+    @Override
+    protected int getTypeForGCM() {
         return GCMUtils.GCM_TYPE_SYMPATHY;
+    }
+
+    @Override
+    protected int getTypeForCounters() {
+        return CountersManager.SYMPATHY;
     }
 }

@@ -61,7 +61,8 @@ public class QuestionaryRequest extends AbstractApiRequest {
 				.put("achievements", achievements)
 				.put("restaurants", restaurants)
 				.put("valuables", valuables)
-				.put("aspirations", aspirations);
+				.put("aspirations", aspirations)
+                .put("status", status);
 
 		if (statusid != -1)
 			data.put("statusid", statusid);
@@ -104,7 +105,7 @@ public class QuestionaryRequest extends AbstractApiRequest {
 	}
 
 	@Override
-	protected String getServiceName() {
+    public String getServiceName() {
 		return service; // To change body of implemented methods use File |
 						// Settings | File Templates.
 	}

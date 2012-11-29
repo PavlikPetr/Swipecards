@@ -15,6 +15,9 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
@@ -26,15 +29,20 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.social.AuthorizationManager;
 
+import java.util.Calendar;
+
 public class NavigationActivity extends FragmentActivity implements View.OnClickListener {
 
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
+    public static final int UPDATE_INTERVAL = 1 * 60 * 1000;
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
 
     public static NavigationActivity mThis = null;
+
+    private SharedPreferences mPreferences;
 
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
@@ -43,8 +51,11 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.ac_navigation);
         Debug.log(this, "onCreate");
+
+
 
         mFragmentManager = getSupportFragmentManager();
 
@@ -65,8 +76,10 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
             mFragmentMenu.selectDefaultMenu();
         }
         AuthorizationManager.getInstance(this).extendAccessToken();
-        
-        mNovice = new Novice(getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE));        
+
+        mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        setStopTime();
+        mNovice = new Novice(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
 
         if (App.isOnline()) {
@@ -75,16 +88,42 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT,-1);
+        if(id != -1) {
+            mFragmentSwitcher.showFragmentWithAnimation(id);
+        } else {
+            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
+            mFragmentMenu.selectDefaultMenu();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         mThis = this;
+        long startTime = Calendar.getInstance().getTimeInMillis();
+        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME,-1);
+        if(stopTime != -1) {
+            if(startTime - stopTime > UPDATE_INTERVAL) {
+                ProfileRequest pr = new ProfileRequest(this);
+                pr.callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) throws NullPointerException {}
 
+                    @Override
+                    public void fail(int codeError, ApiResponse response) throws NullPointerException {}
+                }).exec();
+            }
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mThis = null;
+        setStopTime();
     }
 
     /*
@@ -192,6 +231,7 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 		}
     };
 
+
     /**
      * Попап с предложение оценить предложение
      */
@@ -252,5 +292,10 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
                 ratingPopup.cancel();
             }
         });
+    }
+
+    private void setStopTime() {
+        long stopTime = Calendar.getInstance().getTimeInMillis();
+        mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME,stopTime).commit();
     }
 }

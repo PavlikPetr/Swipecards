@@ -42,6 +42,8 @@ public class Static {
     public static final String PREFERENCES_NOVICE_DATING_SYMPATHY = "novice_dating_sympathy";
     public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE = "novice_menu_fill_profile";
     public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE = "novice_menu_fill_profile_date_tag";
+    public static final String PREFERENCES_STOP_TIME = "preferences_stop_time";
+
     // Profile
     //public static final String PREFERENCES_PROFILE_FILTER_GEO = "cache_profile_filter_geo";
     //public static final String PREFERENCES_PROFILE_FILTER_ONLINE = "cache_profile_filter_online";    

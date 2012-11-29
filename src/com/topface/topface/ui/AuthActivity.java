@@ -44,6 +44,8 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     private boolean mFromAuthorizationReceiver;
     private boolean mIsAuthorized = false;
 
+    private BroadcastReceiver mReceiver;
+
     public static AuthActivity mThis;
 
     @Override
@@ -65,7 +67,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mRetryView.setVisibility(View.GONE);
         RelativeLayout authContainer = (RelativeLayout) findViewById(R.id.authContainer);
         authContainer.addView(mRetryView);
-        BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
@@ -136,6 +138,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     protected void onPause() {
         super.onPause();
         mThis = null;
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
     @Override

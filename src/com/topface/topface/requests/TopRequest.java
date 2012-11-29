@@ -20,7 +20,7 @@ public class TopRequest extends AbstractApiRequest {
     }
 
     @Override
-    protected String getServiceName() {
+    public String getServiceName() {
         return service;
     }
 }

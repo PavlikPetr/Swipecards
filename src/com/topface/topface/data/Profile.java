@@ -134,9 +134,9 @@ public class Profile extends AbstractDataWithPhotos {
 				FormItem headerItem;
 				FormItem formItem;
 
-				if (profile instanceof User) {
+                mIsUserProfile = false;
+                if (profile instanceof User) {
 					mIsUserProfile = true;
-
 					// ((User) profile).formMatches = form.optInt("goodness");
 					((User) profile).formMatches = 0;
 				}
@@ -158,6 +158,34 @@ public class Profile extends AbstractDataWithPhotos {
 //				} else {
 //					profile.forms.add(formItem);
 //				}
+
+                // personal status
+                String status = profile.status;
+                if (mIsUserProfile && status.trim().isEmpty()) {
+                    status = null;
+                }
+                formItem = new FormItem(R.array.form_main_personal_status, status,
+                        mIsUserProfile ? FormItem.DATA : FormItem.STATUS, headerItem);
+                formInfo.fillFormItem(formItem);
+                if (mIsUserProfile) {
+                    if (status != null)
+                        profile.forms.add(formItem);
+                } else {
+                    profile.forms.add(formItem);
+                }
+
+                // about status
+                String as = form.optString("status");
+                String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
+                formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
+                        FormItem.DATA, headerItem);
+                formInfo.fillFormItem(formItem);
+                if (mIsUserProfile) {
+                    if (aboutStatus != null)
+                        profile.forms.add(formItem);
+                } else {
+                    profile.forms.add(formItem);
+                }
 
 				// 2 character position 0
 				formItem = new FormItem(R.array.form_main_character, form.optInt("character_id"),

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.RetryDialog;
@@ -13,6 +14,8 @@ import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.http.RequestConnection;
 import com.topface.topface.utils.social.AuthToken;
+
+import java.util.Calendar;
 
 public abstract class ApiRequest {
     // Data
@@ -37,6 +40,7 @@ public abstract class ApiRequest {
     }
 
     public void exec() {
+        setStopTime();
         if (!Http.isOnline(context) && doNeedAlert) {
             RetryDialog retryDialog = new RetryDialog(context);
             retryDialog.setMessage(context.getString(R.string.general_internet_off));
@@ -76,5 +80,11 @@ public abstract class ApiRequest {
         if (connection != null)
             connection.abort();
         canceled = true;
+    }
+
+    private void setStopTime() {
+        SharedPreferences mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        long stopTime = Calendar.getInstance().getTimeInMillis();
+        mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
     }
 }

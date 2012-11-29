@@ -40,7 +40,7 @@ public abstract class AbstractApiRequest extends ApiRequest {
 
     protected abstract JSONObject getRequestData() throws JSONException;
 
-    abstract protected String getServiceName();
+    public abstract String getServiceName();
 
     @Override
     public String toString() {

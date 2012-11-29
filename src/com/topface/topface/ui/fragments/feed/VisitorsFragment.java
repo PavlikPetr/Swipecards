@@ -8,6 +8,7 @@ import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
+import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
 
 
@@ -44,7 +45,17 @@ public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
     }
 
     @Override
-    protected int getType() {
+    protected void decrementCounters() {
+        CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.VISITORS);
+    }
+
+    @Override
+    protected int getTypeForGCM() {
         return GCMUtils.GCM_TYPE_GUESTS;
+    }
+
+    @Override
+    protected int getTypeForCounters() {
+        return CountersManager.VISITORS;
     }
 }

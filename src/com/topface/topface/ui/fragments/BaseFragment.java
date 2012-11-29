@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.http.IRequestClient;
 
@@ -47,13 +47,13 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
     public void onResume() {
         if (mNavBarController != null) mNavBarController.refreshNotificators();
         super.onResume();
-        setUpdateCounersReceiver();
+        setUpdateCountersReceiver();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateCountersReceiver);
+//        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateCountersReceiver);
     }
 
     @Override
@@ -83,21 +83,22 @@ public abstract class BaseFragment extends Fragment implements IRequestClient {
         super.startActivityForResult(intent, requestCode);
     }
 
-    private void setUpdateCounersReceiver() {
-        updateCountersReceiver = new BroadcastReceiver() {
+    private void setUpdateCountersReceiver() {
+        if(updateCountersReceiver == null){
+            updateCountersReceiver = new BroadcastReceiver() {
 
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (mNavBarController != null) {
-                    mNavBarController.refreshNotificators();
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (mNavBarController != null) {
+                        mNavBarController.refreshNotificators();
+                    }
                 }
-            }
-        };
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(
-                        updateCountersReceiver,
-                        new IntentFilter(GCMUtils.GCM_UPDATE_COUNTERS)
-                );
+            };
+            LocalBroadcastManager.getInstance(getActivity())
+                    .registerReceiver(
+                            updateCountersReceiver,
+                            new IntentFilter(CountersManager.UPDATE_COUNTERS)
+                    );
+        }
     }
-
 }
