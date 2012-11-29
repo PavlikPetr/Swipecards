@@ -76,6 +76,8 @@ public class UserProfileActivity extends BaseFragmentActivity {
     //    public static final int F_ACTIONS = 3;
     public static final int F_COUNT = F_GIFTS + 1;
 
+    RetryView retryBtn;
+
     public static final int GIFTS_LOAD_COUNT = 30;
 
     private RelativeLayout lockScreen;
@@ -156,7 +158,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
         mUserActions.setOnClickListener(mInfoClickListener);
 
         lockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
-        RetryView retryBtn = new RetryView(getApplicationContext());
+        retryBtn = new RetryView(getApplicationContext());
         retryBtn.setErrorMsg(getString(R.string.general_profile_error));
         retryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
             @Override
@@ -251,7 +253,8 @@ public class UserProfileActivity extends BaseFragmentActivity {
 //                        Toast.makeText(UserProfileActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         mLockerView.setVisibility(View.GONE);
                         lockScreen.setVisibility(View.VISIBLE);
-                        lockScreen.findViewById(R.id.retry).setVisibility(View.VISIBLE);
+                        retryBtn.showOnlyMessage(false);
+//                        lockScreen.findViewById(R.id.retry).setVisibility(View.VISIBLE);
                     }
                 });
             }
