@@ -175,8 +175,7 @@ public class GiftsFragment extends BaseFragment {
                 final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
 
                 if (mProfile != null) {
-                    final SendGiftRequest sendGift = new SendGiftRequest(getActivity()
-                            .getApplicationContext());
+                    final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
                     registerRequest(sendGift);
                     sendGift.giftId = id;
                     sendGift.userId = mProfile.uid;
