@@ -30,6 +30,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     private FragmentMenuListener mFragmentMenuListener;
     private Button mDefaultMenuItem;
+    BroadcastReceiver mBroadcastReceiver;
 
     public interface FragmentMenuListener {
         public void onMenuClick(int buttonId);
@@ -81,7 +82,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
         hide();
 
-        BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 refreshNotifications();
@@ -104,6 +105,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     public void setOnMenuListener(FragmentMenuListener onFragmentMenuListener) {
         mFragmentMenuListener = onFragmentMenuListener;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 
     public void refreshNotifications() {

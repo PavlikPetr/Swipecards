@@ -7,8 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.RetryRequestReceiver;
-import com.topface.topface.ui.AuthActivity;
-import com.topface.topface.ui.NavigationActivity;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
     public boolean mIsConnected = false;
@@ -64,7 +62,6 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         Intent intent = new Intent();
         intent.setAction(REAUTH);
         intent.putExtra(CONNECTION_TYPE,mConnectionType);
-        ctx.sendBroadcast(intent);
         LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
     }
 
@@ -72,17 +69,12 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         Intent intent = new Intent();
         intent.setAction(RetryRequestReceiver.RETRY_INTENT);
         intent.putExtra(CONNECTION_TYPE,mConnectionType);
-        ctx.sendBroadcast(intent);
         LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
-
     }
 
     private void sendBroadCastToActiveActivity(Context context) {
-        if (AuthActivity.mThis != null) {
-            reAuthIfNeed();
-        } else if (NavigationActivity.mThis != null) {
-            sendToNavigation();
-        }
+        reAuthIfNeed();
+        sendToNavigation();
     }
 
 

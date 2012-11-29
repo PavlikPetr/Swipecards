@@ -26,6 +26,7 @@ import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
@@ -151,10 +152,14 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             btnBack.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent = new Intent(ChatActivity.this,NavigationActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_DIALOGS);
+                    startActivity(intent);
                     finish();
                 }
             });
-            btnBack.setText(R.string.general_dating);
+            btnBack.setText(R.string.general_dialogs);
         }
 
         final ImageButton btnProfile = (ImageButton) findViewById(R.id.btnNavigationProfileBar);

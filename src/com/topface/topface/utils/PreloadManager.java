@@ -1,11 +1,6 @@
 package com.topface.topface.utils;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
-import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.SearchUser;
@@ -26,15 +21,6 @@ public class PreloadManager {
         this.mContext = mContext;
 
         checkConnectionType(ConnectionChangeReceiver.getConnectionType());
-
-        BroadcastReceiver mReceiver = new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                checkConnectionType(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,0));
-            }
-        };
-
-        LocalBroadcastManager.getInstance(mContext).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
     }
 
     public PreloadManager(Context mContext) {
@@ -76,7 +62,7 @@ public class PreloadManager {
         return DefaultImageLoader.getInstance();
     }
 
-    private void checkConnectionType(int type) {
+    public void checkConnectionType(int type) {
         switch(type) {
             case ConnectionChangeReceiver.CONNECTION_WIFI:
                 canLoad = true;

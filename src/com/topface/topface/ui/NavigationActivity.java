@@ -88,6 +88,18 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT,-1);
+        if(id != -1) {
+            mFragmentSwitcher.showFragmentWithAnimation(id);
+        } else {
+            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
+            mFragmentMenu.selectDefaultMenu();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         mThis = this;
