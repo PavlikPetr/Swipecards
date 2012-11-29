@@ -242,6 +242,8 @@ public class AuthorizationManager {
 	                        result = profile.optString("first_name") + " " + profile.optString("last_name");
 	                    }
 	                    handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, result));
+                    } else {
+                        handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
                     }
                 } catch (JSONException e) {
                     Debug.log(AuthorizationManager.class, "can't get name in vk:" + e);
