@@ -40,7 +40,7 @@ public class FeedRequest extends AbstractApiRequest {
     }
 
     @Override
-    protected String getServiceName() {
+    public String getServiceName() {
         String service = null;
         switch (mService) {
             case DIALOGS:

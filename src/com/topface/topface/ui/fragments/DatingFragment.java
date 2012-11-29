@@ -1,14 +1,13 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +15,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.*;
-import com.topface.topface.App;
-import com.topface.topface.Data;
-import com.topface.topface.R;
-import com.topface.topface.Static;
+import com.topface.topface.*;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.NovicePower;
 import com.topface.topface.data.Search;
 import com.topface.topface.data.SearchUser;
 import com.topface.topface.data.SkipRate;
+import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -73,6 +70,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private ImageButton mRetryBtn;
     private RetryView emptySearchDialog;
     private PreloadManager mPreloadManager;
+
+    private BroadcastReceiver mReceiver;
 
     private Drawable singleMutual;
     private Drawable singleDelight;
@@ -223,6 +222,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         });
         emptySearchDialog.setVisibility(View.GONE);
         ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(emptySearchDialog);
+         mReceiver = new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(mPreloadManager != null) {
+                    mPreloadManager.checkConnectionType(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,0));
+                }
+            }
+        };
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         showNextUser();
         return view;
     }
@@ -698,6 +707,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 unlockControls();
             }
         };
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
     }
 
     public void onDialogCancel() {

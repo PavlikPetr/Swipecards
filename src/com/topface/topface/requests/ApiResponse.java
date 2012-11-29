@@ -8,6 +8,8 @@ public class ApiResponse {
     // Data
     public int code = -1;
     public JSONObject jsonResult;
+    public JSONObject counters;
+    public String method;
     // Constants
     public static final int ERRORS_PROCCESED = -2;
     public static final int RESULT_OK = -1;
@@ -71,8 +73,15 @@ public class ApiResponse {
             if (!jsonResult.isNull("error")) {
                 jsonResult = jsonResult.getJSONObject("error");
                 code = jsonResult.getInt("code");
-            } else if (!jsonResult.isNull("result"))
+            } else if (!jsonResult.isNull("result")) {
+                if(!jsonResult.isNull("counters"))  {
+                    counters = jsonResult.getJSONObject("counters");
+                }
+                if(!jsonResult.isNull("method")) {
+                    method = jsonResult.optString("method");
+                }
                 jsonResult = jsonResult.getJSONObject("result");
+            }
             else
                 code = WRONG_RESPONSE;
         } catch (Exception e) {

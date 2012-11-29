@@ -250,6 +250,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     if (mLastSelectedAsMainId == itemId) {
                         holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
                         holder.mBtnSelectedAsMain.setVisibility(View.VISIBLE);
+                        holder.mBtnDelete.setVisibility(View.GONE);
                     } else {
                         holder.mBtnSelectedAsMain.setVisibility(View.INVISIBLE);
                         holder.mBtnSetAsMain.setVisibility(View.VISIBLE);

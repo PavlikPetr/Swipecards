@@ -1,7 +1,12 @@
 package com.topface.topface.ui.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,6 +16,7 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 
 public class MenuFragment extends Fragment implements View.OnClickListener {
     private View mRootLayout;
@@ -24,6 +30,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     private FragmentMenuListener mFragmentMenuListener;
     private Button mDefaultMenuItem;
+    BroadcastReceiver mBroadcastReceiver;
 
     public interface FragmentMenuListener {
         public void onMenuClick(int buttonId);
@@ -75,6 +82,13 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
         hide();
 
+         mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                refreshNotifications();
+            }
+        };
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(mBroadcastReceiver,new IntentFilter(CountersManager.UPDATE_COUNTERS));
         return mRootLayout;
     }
 
@@ -91,6 +105,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     public void setOnMenuListener(FragmentMenuListener onFragmentMenuListener) {
         mFragmentMenuListener = onFragmentMenuListener;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 
     public void refreshNotifications() {

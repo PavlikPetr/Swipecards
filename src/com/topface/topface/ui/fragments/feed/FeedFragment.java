@@ -33,6 +33,7 @@ import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
 import org.json.JSONObject;
@@ -49,7 +50,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private RelativeLayout mContainer;
     private LockerView lockView;
 
-    private BroadcastReceiver mBroadcastReceiver;
+    private BroadcastReceiver readItemReceiver;
 
     protected String[] editButtonsNames;
 
@@ -82,38 +83,55 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         initFilter(view);
         initListView(view);
         if (mListAdapter.isNeedUpdate()) {
-            updateData(false);
+            updateData(false, true);
         }
+
+        readItemReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int itemId = intent.getIntExtra(ChatActivity.INTENT_ITEM_ID,-1);
+                if(itemId != -1){
+                    makeItemReadWithId(itemId);
+                } else {
+                    String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
+                    if(lastMethod != null) {
+                        updateDataAfterReceivingCounters(lastMethod);
+                    }
+                }
+            }
+        };
+
+        IntentFilter filter = new IntentFilter(ChatActivity.MAKE_ITEM_READ);
+        filter.addAction(CountersManager.UPDATE_COUNTERS);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver,filter);
 
         mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
         createUpdateErrorMessage();
-        BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                makeItemReadWithId(intent.getIntExtra(ChatActivity.INTENT_ITEM_ID,-1));
-            }
-        };
-        getActivity().registerReceiver(mBroadcastReceiver,new IntentFilter(ChatActivity.MAKE_ITEM_READ));
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(mBroadcastReceiver,new IntentFilter(ChatActivity.MAKE_ITEM_READ));
-        GCMUtils.cancelNotification(getActivity(),getType());
 
+        GCMUtils.cancelNotification(getActivity(), getTypeForGCM());
         return view;
     }
+
 
     @Override
     public void onResume() {
     	super.onResume();
     	mFloatBlock.onResume();
-
     }
     
     @Override
     public void onPause() {
     	super.onPause();
     	mFloatBlock.onPause();
-
     }
-    
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
+    }
+
     protected void init() {
 
     }
@@ -134,7 +152,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected abstract Drawable getBackIcon();
 
     abstract protected int getTitle();
-    abstract protected int getType();
+    abstract protected int getTypeForGCM();
+    abstract protected int getTypeForCounters(); //TODO: Надо сделать что-то единообразное для того и того. Возможно стоит вынести типы фидов в константы
 
     protected int getLayout() {
         return R.layout.ac_feed;
@@ -147,7 +166,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                updateData(true);
+                updateData(true, true);
             }
         });
 
@@ -280,8 +299,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     public void onAvatarClick(T item, View view) {
         // Open profile activity
-        item.unread = false;
-        mListAdapter.notifyDataSetChanged();
+        if(item.unread) {
+            item.unread = false;
+            decrementCounters();
+            mListAdapter.notifyDataSetChanged();
+        }
         Intent intent = new Intent(getActivity(), UserProfileActivity.class);
         intent.putExtra(UserProfileActivity.INTENT_USER_ID, item.user.id);
         intent.putExtra(UserProfileActivity.INTENT_USER_NAME, item.user.first_name);
@@ -289,7 +311,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         startActivity(intent);
     }
 
-    protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad) {
+    protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
         mIsUpdating = true;
         onUpdateStart(isPushUpdating || isHistoryLoad);
 
@@ -317,6 +339,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         if (isHistoryLoad) {
                             mListAdapter.addData(dialogList);
                         } else if(isPushUpdating){
+                            if(makeItemsRead) {
+                                makeAllItemsRead();
+                            }
                             mListAdapter.addDataFirst(dialogList);
                         } else{
                             mListAdapter.setData(dialogList);
@@ -368,13 +393,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected abstract FeedListData<T> getFeedList(JSONObject response);
 
     private FeedRequest getRequest() {
-        return new FeedRequest(getFeedService(), getActivity());
+        return new FeedRequest(getFeedService(), getActivity().getApplicationContext());
     }
 
     protected abstract FeedRequest.FeedService getFeedService();
 
-    protected void updateData(boolean isPushUpdating) {
-        updateData(isPushUpdating, false);
+    protected void updateData(boolean isPushUpdating, boolean makeItemsRead) {
+        updateData(isPushUpdating, false, makeItemsRead);
     }
     
     protected void initFilter(View view) {
@@ -391,13 +416,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         mDoubleButton.setLeftListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateData(false);
+                updateData(false, true);
             }
         });
         mDoubleButton.setRightListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateData(false);
+                updateData(false, true);
             }
         });
     }
@@ -422,8 +447,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     mBackgroundText.getCompoundDrawables()[2],
                     mBackgroundText.getCompoundDrawables()[3]);
             setFilterSwitcherState(true);
-        } else {
-            makeAllItemsRead();
         }
     }
 
@@ -472,6 +495,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         mDoubleButton.setClickable(clickable);
     }
 
+    protected void decrementCounters() {
+
+    }
+
     private void createUpdateErrorMessage() {
         if (updateErrorMessage == null) {
             updateErrorMessage = new RetryView(getActivity().getApplicationContext());
@@ -493,14 +520,23 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void retryButtonClick() {
         updateErrorMessage.setVisibility(View.GONE);
-        updateData(false);
+        updateData(false, true);
     }
 
     private void makeItemReadWithId(int id) {
         for(FeedItem item : mListAdapter.getData()) {
-            if(item.id == id) {
+            if(item.id == id && item.unread) {
                item.unread = false;
                mListAdapter.notifyDataSetChanged();
+               decrementCounters();
+            }
+        }
+    }
+
+    private void updateDataAfterReceivingCounters(String lastMethod) {
+        if(!lastMethod.equals(CountersManager.NULL_METHOD) && !lastMethod.equals(getRequest().getServiceName())) {
+            if(CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters()) > 0) {
+                updateData(true,false);
             }
         }
     }
