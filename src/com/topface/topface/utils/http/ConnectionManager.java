@@ -2,7 +2,6 @@ package com.topface.topface.utils.http;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.ReAuthReceiver;
@@ -228,10 +227,7 @@ public class ConnectionManager {
         Intent intent = new Intent();
         intent.setAction(ReAuthReceiver.REAUTH_INTENT);
         context.sendBroadcast(intent);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
-
-
 
     private void addDelayedRequest(final ApiRequest apiRequest) {
         Thread thread = new Thread() {

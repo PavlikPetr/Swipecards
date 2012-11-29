@@ -31,26 +31,54 @@
             android:layout_height="wrap_content"
             android:layout_alignRight="@id/ivEditBackground"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp">
+            android:gravity="center_vertical">
 
         <!-- c2dm notification -->
-        <CheckBox
-                android:id="@+id/cbPhone"
+        <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/settings_phone_selector"
-                android:button="@android:color/transparent"
-                android:layout_marginRight="10dp"
-                />
+                android:layout_marginRight="5dp">
+
+            <CheckBox
+                    android:id="@+id/cbPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_phone_selector"
+                    android:button="@android:color/transparent"
+                    android:layout_centerInParent="true"
+                    />
+
+            <ProgressBar
+                    android:id="@+id/prsPhone"
+                    style="@android:style/Widget.ProgressBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"/>
+        </RelativeLayout>
 
         <!-- e-mail notification -->
-        <CheckBox
-                android:id="@+id/cbMail"
+        <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/settings_mail_selector"
-                android:button="@android:color/transparent"
-                />
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp">
+            <CheckBox
+                    android:id="@+id/cbMail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/settings_mail_selector"
+                    android:button="@android:color/transparent"
+                    android:layout_centerInParent="true"
+                    />
+            <ProgressBar
+                    android:id="@+id/prsMail"
+                    style="@android:style/Widget.ProgressBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"/>
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>
