@@ -94,7 +94,7 @@ public class ConnectionManager {
                             addDelayedRequest(apiRequest);
                             apiResponse.code = ApiResponse.ERRORS_PROCCESED;
                         }
-                        if(apiResponse.code == ApiResponse.BAN) {
+                        if (apiResponse.code == ApiResponse.BAN) {
                             Intent intent = new Intent(apiRequest.context,BanActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra(BanActivity.BANNING_INTENT, apiResponse.jsonResult.get("message").toString());

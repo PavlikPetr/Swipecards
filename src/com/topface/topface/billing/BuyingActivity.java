@@ -23,23 +23,20 @@ import com.topface.topface.billing.BillingService.RequestPurchase;
 import com.topface.topface.billing.BillingService.RestoreTransactions;
 import com.topface.topface.billing.Consts.PurchaseState;
 import com.topface.topface.billing.Consts.ResponseCode;
-import com.topface.topface.services.NotificationService;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
 public class BuyingActivity extends Activity implements View.OnClickListener {
 
-    private Handler mHandler;
     private ViewGroup mMoney6;
     private ViewGroup mMoney40;
     private ViewGroup mMoney100;
+    private ViewGroup mPremium;
     private ViewGroup mPower;
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
     private BillingService mBillingService;
-    private TopfacePurchaseObserver mTopfacePurchaseObserver;
-    private ProgressDialog mProgressDialog;
 
     public static final String INTENT_USER_COINS = "user_coins";
 
@@ -111,11 +108,13 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         }
 
         // Progress Bar
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage(getString(R.string.general_dialog_loading));
+        new ProgressDialog(this).setMessage(getString(R.string.general_dialog_loading));
 
         mPower = (ViewGroup) findViewById(R.id.btnBuyingPower);
         mPower.setOnClickListener(this);
+
+        mPremium = (ViewGroup) findViewById(R.id.btnPremium);
+        mPremium.setOnClickListener(this);
 
         mMoney6 = (ViewGroup) findViewById(R.id.btnBuyingMoney6);
         mMoney6.setOnClickListener(this);
@@ -126,15 +125,12 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         mMoney100 = (ViewGroup) findViewById(R.id.btnBuyingMoney100);
         mMoney100.setOnClickListener(this);
 
-        mHandler = new Handler();
-        mTopfacePurchaseObserver = new TopfacePurchaseObserver(mHandler);
-
         mBillingService = new BillingService();
         mBillingService.setContext(this);
 
-        ResponseHandler.register(mTopfacePurchaseObserver);
+        ResponseHandler.register(new TopfacePurchaseObserver(new Handler()));
 
-        if (!mBillingService.checkBillingSupported()) {
+        if (!mBillingService.checkBillingSupported(Consts.ITEM_TYPE_INAPP)) {
             Toast.makeText(getApplicationContext(), "Play Market not available", Toast.LENGTH_SHORT)
                     .show();
         }
@@ -161,69 +157,93 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.btnPremium:
+                mBillingService.requestPurchase("topface.premium.month.test3", Consts.ITEM_TYPE_SUBSCRIPTION, null); //topface.premium.month.test
+//                mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_SUBSCRIPTION, null); //topface.premium.month.test
+                break;
             case R.id.btnBuyingMoney6:
-                mBillingService.requestPurchase("topface.coins.6", null); // topface.coins.6
+                mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_INAPP, null); // topface.coins.6
                 // //
                 // android.test.purchased
                 break;
             case R.id.btnBuyingMoney40:
-                mBillingService.requestPurchase("topface.coins.40", null); // topface.coins.40
+                mBillingService.requestPurchase("topface.coins.40", Consts.ITEM_TYPE_INAPP, null); // topface.coins.40
                 // //
                 // android.test.canceled
                 break;
             case R.id.btnBuyingMoney100:
-                mBillingService.requestPurchase("topface.coins.100", null); // topface.coins.100
+                mBillingService.requestPurchase("topface.coins.100", Consts.ITEM_TYPE_INAPP, null); // topface.coins.100
                 // //android.test.refunded
                 break;
             case R.id.btnBuyingPower:
-                mBillingService.requestPurchase("topface.energy.10000", null); // topface.energy.10000
+                mBillingService.requestPurchase("topface.energy.10000", Consts.ITEM_TYPE_INAPP, null); // topface.energy.10000
                 // //android.test.item_unavailable
                 break;
         }
     }
 
-    /*
-      * class TopfacePurchaseObserver
-      */
     private class TopfacePurchaseObserver extends PurchaseObserver {
         public TopfacePurchaseObserver(Handler handler) {
             super(BuyingActivity.this, handler);
         }
 
         @Override
-        public void onBillingSupported(boolean supported) {
-            if (supported) {
-                mMoney6.setEnabled(true);
-                mMoney40.setEnabled(true);
-                mMoney100.setEnabled(true);
-                mPower.setEnabled(true);
+        public void onBillingSupported(boolean supported, String type) {
+            Debug.log("Buying: supported: " + supported);
+
+            if (type == null || type.equals(Consts.ITEM_TYPE_INAPP)) {
+                if (supported) {
+                    mMoney6.setEnabled(true);
+                    mMoney40.setEnabled(true);
+                    mMoney100.setEnabled(true);
+                    mPower.setEnabled(true);
+                } else {
+                    mMoney6.setEnabled(false);
+                    mMoney40.setEnabled(false);
+                    mMoney100.setEnabled(false);
+                    mPower.setEnabled(false);
+                    Toast.makeText(getApplicationContext(), getString(R.string.buy_play_market_not_available), Toast.LENGTH_SHORT).show();
+                }
+            } else if (type.equals(Consts.ITEM_TYPE_SUBSCRIPTION)) {
+                mPremium.setEnabled(true);
             } else {
-                // showDialog(2);
-                mMoney6.setEnabled(false);
-                mMoney40.setEnabled(false);
-                mMoney100.setEnabled(false);
-                mPower.setEnabled(false);
-                Toast.makeText(getApplicationContext(), "Play Market not available",
-                        Toast.LENGTH_SHORT).show();
+                mPremium.setEnabled(false);
+                Toast.makeText(getApplicationContext(), getString(R.string.buy_subscription_not_available), Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
-        public void onPurchaseStateChange(PurchaseState purchaseState, String data, String signature) {
-            if (purchaseState != PurchaseState.PURCHASED)
-                return;
-            NotificationService.purchase(getApplicationContext(), data, signature);
+        public void onPurchaseStateChange(PurchaseState purchaseState, String itemId,
+                                          int quantity, long purchaseTime, String developerPayload,
+                                          String signedData, String signature) {
+
+            if (purchaseState == PurchaseState.PURCHASED) {
+                Debug.log("Вот мы и купили, нужно понять что делать с интерфейсом");
+            }
         }
 
         @Override
-        public void onRequestPurchaseResponse(RequestPurchase request, ResponseCode responseCode) {
-            Debug.log("BuyingActivity", "onRequestPurchaseResponse");
+        public void onRequestPurchaseResponse(RequestPurchase request,
+                                              ResponseCode responseCode) {
+            Debug.log("Buying " + request.mProductId + ": " + responseCode);
+            if (responseCode == ResponseCode.RESULT_OK) {
+                Debug.log("Buying: purchase was successfully sent to server");
+            } else if (responseCode == ResponseCode.RESULT_USER_CANCELED) {
+                Debug.log("Buying: user canceled purchase");
+            } else {
+                Debug.log("Buying: purchase failed");
+            }
         }
 
         @Override
         public void onRestoreTransactionsResponse(RestoreTransactions request,
                                                   ResponseCode responseCode) {
-            Debug.log("BuyingActivity", "onRestoreTransactionsResponse");
+            if (responseCode == ResponseCode.RESULT_OK) {
+                //Нам восстанавливать транзакции при переустановки приложения не нужно, нам об это и так сервер скажет
+                Debug.log("Buying: completed RestoreTransactions request");
+            } else {
+                Debug.log("Buying: RestoreTransactions error: " + responseCode);
+            }
         }
     }
 

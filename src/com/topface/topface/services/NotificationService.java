@@ -92,7 +92,6 @@ public class NotificationService extends Service {
                         Toast.makeText(getApplicationContext(), getString(R.string.general_purchasing_error), Toast.LENGTH_LONG).show();
                     }
                 });
-                // обратитесь в суппорт, ваш ордер
             }
         }).exec();
     }

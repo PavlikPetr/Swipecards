@@ -2,7 +2,6 @@ package com.topface.topface.data;
 
 import android.content.Context;
 import android.text.TextUtils;
-
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
@@ -40,6 +39,7 @@ public class Profile extends AbstractDataWithPhotos {
 	// Resources
 	public int money; // количество монет у пользователя
 	public int power; // количество энергии пользователя
+	public float premium; // есть ли у пользователя премиум статус
 
 	public int average_rate; // средняя оценка текущего пользователя
 

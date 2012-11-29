@@ -16,16 +16,23 @@ import com.topface.topface.billing.Consts.ResponseCode;
 
 import java.lang.reflect.Method;
 
+/**
+ * An interface for observing changes related to purchases. The main application
+ * extends this class and registers an instance of that derived class with
+ * {@link ResponseHandler}. The main application implements the callbacks
+ * {@link #onBillingSupported(boolean)} and
+ * {@link #onPurchaseStateChange(PurchaseState, String, int, long)}.  These methods
+ * are used to update the UI.
+ */
 public abstract class PurchaseObserver {
-    // Data
     private static final String TAG = "PurchaseObserver";
     private final Activity mActivity;
     private final Handler mHandler;
     private Method mStartIntentSender;
     private Object[] mStartIntentSenderArgs = new Object[5];
-
-    @SuppressWarnings("rawtypes")
-    private static final Class[] START_INTENT_SENDER_SIG = new Class[]{IntentSender.class, Intent.class, int.class, int.class, int.class};
+    private static final Class[] START_INTENT_SENDER_SIG = new Class[] {
+        IntentSender.class, Intent.class, int.class, int.class, int.class
+    };
 
     public PurchaseObserver(Activity activity, Handler handler) {
         mActivity = activity;
@@ -33,18 +40,70 @@ public abstract class PurchaseObserver {
         initCompatibilityLayer();
     }
 
-    public abstract void onBillingSupported(boolean supported);
+    /**
+     * This is the callback that is invoked when Android Market responds to the
+     * {@link BillingService#checkBillingSupported()} request.
+     * @param supported true if in-app billing is supported.
+     */
+    public abstract void onBillingSupported(boolean supported, String type);
 
-    public abstract void onPurchaseStateChange(PurchaseState purchaseState, String data, String signature);
+    /**
+     * This is the callback that is invoked when an item is purchased,
+     * refunded, or canceled.  It is the callback invoked in response to
+     * calling {@link BillingService#requestPurchase(String)}.  It may also
+     * be invoked asynchronously when a purchase is made on another device
+     * (if the purchase was for a Market-managed item), or if the purchase
+     * was refunded, or the charge was canceled.  This handles the UI
+     * update.  The database update is handled in
+     * {@link ResponseHandler#purchaseResponse(android.content.Context, PurchaseState,
+     * String, String, long)}.
+     * @param purchaseState the purchase state of the item
+     * @param itemId a string identifying the item (the "SKU")
+     * @param quantity the current quantity of this item after the purchase
+     * @param purchaseTime the time the product was purchased, in
+     * @param signedData
+     * @param signature
+     */
+    public abstract void onPurchaseStateChange(PurchaseState purchaseState,
+                                               String itemId, int quantity, long purchaseTime, String developerPayload, String signedData, String signature);
 
-    //public abstract void onPurchaseStateChange(PurchaseState purchaseState,String itemId,int quantity,long purchaseTime,String developerPayload);
-    public abstract void onRequestPurchaseResponse(RequestPurchase request, ResponseCode responseCode);
+    /**
+     * This is called when we receive a response code from Market for a
+     * RequestPurchase request that we made.  This is NOT used for any
+     * purchase state changes.  All purchase state changes are received in
+     * {@link #onPurchaseStateChange(PurchaseState, String, int, long)}.
+     * This is used for reporting various errors, or if the user backed out
+     * and didn't purchase the item.  The possible response codes are:
+     *   RESULT_OK means that the order was sent successfully to the server.
+     *       The onPurchaseStateChange() will be invoked later (with a
+     *       purchase state of PURCHASED or CANCELED) when the order is
+     *       charged or canceled.  This response code can also happen if an
+     *       order for a Market-managed item was already sent to the server.
+     *   RESULT_USER_CANCELED means that the user didn't buy the item.
+     *   RESULT_SERVICE_UNAVAILABLE means that we couldn't connect to the
+     *       Android Market server (for example if the data connection is down).
+     *   RESULT_BILLING_UNAVAILABLE means that in-app billing is not
+     *       supported yet.
+     *   RESULT_ITEM_UNAVAILABLE means that the item this app offered for
+     *       sale does not exist (or is not published) in the server-side
+     *       catalog.
+     *   RESULT_ERROR is used for any other errors (such as a server error).
+     */
+    public abstract void onRequestPurchaseResponse(RequestPurchase request,
+            ResponseCode responseCode);
 
-    public abstract void onRestoreTransactionsResponse(RestoreTransactions request, ResponseCode responseCode);
+    /**
+     * This is called when we receive a response code from Android Market for a
+     * RestoreTransactions request that we made.  A response code of
+     * RESULT_OK means that the request was successfully sent to the server.
+     */
+    public abstract void onRestoreTransactionsResponse(RestoreTransactions request,
+            ResponseCode responseCode);
 
     private void initCompatibilityLayer() {
         try {
-            mStartIntentSender = mActivity.getClass().getMethod("startIntentSender", START_INTENT_SENDER_SIG);
+            mStartIntentSender = mActivity.getClass().getMethod("startIntentSender",
+                    START_INTENT_SENDER_SIG);
         } catch (SecurityException e) {
             mStartIntentSender = null;
         } catch (NoSuchMethodException e) {
@@ -54,17 +113,25 @@ public abstract class PurchaseObserver {
 
     void startBuyPageActivity(PendingIntent pendingIntent, Intent intent) {
         if (mStartIntentSender != null) {
+            // This is on Android 2.0 and beyond.  The in-app buy page activity
+            // must be on the activity stack of the application.
             try {
+                // This implements the method call:
+                // mActivity.startIntentSender(pendingIntent.getIntentSender(),
+                //     intent, 0, 0, 0);
                 mStartIntentSenderArgs[0] = pendingIntent.getIntentSender();
                 mStartIntentSenderArgs[1] = intent;
-                mStartIntentSenderArgs[2] = Integer.valueOf(0);
-                mStartIntentSenderArgs[3] = Integer.valueOf(0);
-                mStartIntentSenderArgs[4] = Integer.valueOf(0);
+                mStartIntentSenderArgs[2] = 0;
+                mStartIntentSenderArgs[3] = 0;
+                mStartIntentSenderArgs[4] = 0;
                 mStartIntentSender.invoke(mActivity, mStartIntentSenderArgs);
             } catch (Exception e) {
                 Log.e(TAG, "error starting activity", e);
             }
         } else {
+            // This is on Android version 1.6. The in-app buy page activity must be on its
+            // own separate activity stack instead of on the activity stack of
+            // the application.
             try {
                 pendingIntent.send(mActivity, 0 /* code */, intent);
             } catch (CanceledException e) {
@@ -73,10 +140,23 @@ public abstract class PurchaseObserver {
         }
     }
 
-    void postPurchaseStateChange(final PurchaseState purchaseState, final String data, final String signature) {
+    /**
+     * Updates the UI after the database has been updated.  This method runs
+     * in a background thread so it has to post a Runnable to run on the UI
+     * thread.
+     * @param purchaseState the purchase state of the item
+     * @param itemId a string identifying the item
+     * @param quantity the quantity of items in this purchase
+     * @param signedData
+     * @param signature
+     */
+    void postPurchaseStateChange(final PurchaseState purchaseState, final String itemId,
+                                 final int quantity, final long purchaseTime, final String developerPayload, final String signedData, final String signature) {
         mHandler.post(new Runnable() {
+            @Override
             public void run() {
-                onPurchaseStateChange(purchaseState, data, signature);
+                onPurchaseStateChange(
+                        purchaseState, itemId, quantity, purchaseTime, developerPayload, signedData, signature);
             }
         });
     }
