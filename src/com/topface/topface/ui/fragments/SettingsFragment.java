@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -24,20 +25,40 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class SettingsFragment extends BaseFragment implements OnClickListener, OnCheckedChangeListener {
 
     private Settings mSettings;
     private EditSwitcher mSwitchVibration;
     private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<String, ProgressBar>();
-    private Timer mSendTimer = new Timer();
+    private CountDownTimer mSendTimer = new CountDownTimer(3000,3000) {
+        @Override
+        public void onTick(long l) { }
+
+        @Override
+        public void onFinish() {
+            SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(CacheProfile.getOptions(), getActivity().getApplicationContext());
+            if (request != null) {
+                request.callback(new ApiHandler() {
+
+                    @Override
+                    public void success(ApiResponse response) throws NullPointerException {
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                        Debug.log("failed to send notifications options");
+                    }
+                }).exec();
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -287,12 +308,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             }
         } else {
             CacheProfile.getOptions().notifications.get(type).apns = isChecked;
-            mSendTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-
-                }
-            }, 2L * 1000);
+            mSendTimer.cancel();
+            mSendTimer.start();
         }
     }
 

@@ -18,8 +18,9 @@
 
     <ImageView
             android:id="@+id/ivShadow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="98dp"
+            android:layout_height="105.5dp"
+            android:padding="1dp"
             android:layout_centerInParent="true"
             android:src="@drawable/edit_photo_frame_shadow"/>
 
@@ -36,8 +37,8 @@
             android:text="@string/edit_selected"
             android:clickable="false"
             android:visibility="invisible"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"            
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             />
 
     <Button
