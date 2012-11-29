@@ -282,7 +282,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         if (!pullToRefresh) {
             mLoadingLocker.setVisibility(View.VISIBLE);
         }
-        HistoryRequest historyRequest = new HistoryRequest(getApplicationContext());
+        HistoryRequest historyRequest = new HistoryRequest(this);
         registerRequest(historyRequest);
         historyRequest.userid = mUserId;
         historyRequest.limit = LIMIT;
@@ -433,6 +433,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         }
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
+        Debug.log("ChatActivity::onPause");
     }
 
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
@@ -453,7 +454,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mLoadingLocker.setVisibility(View.VISIBLE);
 
         MessageRequest messageRequest = new MessageRequest(
-                ChatActivity.this.getApplicationContext());
+                ChatActivity.this);
         registerRequest(messageRequest);
         messageRequest.message = mEditBox.getText().toString();
         messageRequest.userid = mUserId;
@@ -509,7 +510,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
                 final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
                 Debug.log(this, "id:" + id + " url:" + url);
-                SendGiftRequest sendGift = new SendGiftRequest(getApplicationContext());
+                SendGiftRequest sendGift = new SendGiftRequest(this);
                 registerRequest(sendGift);
                 sendGift.giftId = id;
                 sendGift.userId = mUserId;
@@ -558,7 +559,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 Bundle extras = data.getExtras();
                 final Geo geo = extras.getParcelable(GeoMapActivity.INTENT_GEO);
 
-                CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+                CoordinatesRequest coordRequest = new CoordinatesRequest(this);
                 registerRequest(coordRequest);
                 coordRequest.userid = mUserId;
                 final Coordinates coordinates = geo.getCoordinates();
@@ -663,7 +664,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         OsmManager.getAddress(latitude, longitude, new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+                CoordinatesRequest coordRequest = new CoordinatesRequest(ChatActivity.this);
                 registerRequest(coordRequest);
                 coordRequest.userid = mUserId;
                 coordRequest.latitude = latitude;

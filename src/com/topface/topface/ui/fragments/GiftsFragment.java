@@ -242,7 +242,7 @@ public class GiftsFragment extends BaseFragment {
 
     private void onNewFeeds(int userId) {
         mIsUpdating = true;
-        FeedGiftsRequest request = new FeedGiftsRequest(getActivity().getApplicationContext());
+        FeedGiftsRequest request = new FeedGiftsRequest(getActivity());
         request.limit = UserProfileActivity.GIFTS_LOAD_COUNT;
         request.uid = userId;
         if (!mGifts.isEmpty()) {

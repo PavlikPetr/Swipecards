@@ -46,7 +46,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mFormInfo = new FormInfo(getActivity().getApplicationContext(), mProfile);
+        mFormInfo = new FormInfo(getActivity(), mProfile);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.item_edit_form_input, null, false);
 

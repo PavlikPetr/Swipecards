@@ -205,7 +205,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     final String city_full = extras.getString(CitySearchActivity.INTENT_CITY_FULL_NAME);
                     final int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
 
-                    SettingsRequest request = new SettingsRequest(getApplicationContext());
+                    SettingsRequest request = new SettingsRequest(this);
                     request.cityid = city_id;
                     sendBroadcast(new Intent().setAction("com.topface.receivers.ConnectionChangeReceiver"));
                     request.callback(new ApiHandler() {

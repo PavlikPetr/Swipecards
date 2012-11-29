@@ -12,6 +12,7 @@ public class VerifyRequest extends AbstractApiRequest {
 
     public VerifyRequest(Context context) {
         super(context);
+        doNeedAlert(false);
     }
 
     @Override

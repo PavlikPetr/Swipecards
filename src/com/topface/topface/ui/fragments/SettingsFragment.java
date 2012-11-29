@@ -228,7 +228,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         final Integer type = Integer.parseInt(buttonInfo[0]);
         final boolean isMail = Boolean.parseBoolean(buttonInfo[1]);
 
-        SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(type, isMail, isChecked, getActivity().getApplicationContext());
+        SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(type, isMail, isChecked, getActivity());
         if (request != null) {
             buttonView.setEnabled(false);
             request.callback(new ApiHandler() {
