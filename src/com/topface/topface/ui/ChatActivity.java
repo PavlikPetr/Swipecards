@@ -34,12 +34,14 @@ import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.OsmManager;
+import com.topface.topface.utils.http.Http;
 
 import java.util.LinkedList;
 import java.util.Timer;
@@ -89,6 +91,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     // Managers
     private GeoLocationManager mGeoManager = null;
+    private RelativeLayout lockScreen;
+    private RetryView retryBtn;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -194,6 +198,19 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mEditBox = (EditText) findViewById(R.id.edChatBox);
         mEditBox.setOnEditorActionListener(mEditorActionListener);
 
+        lockScreen = (RelativeLayout) findViewById(R.id.llvLockScreen);
+        retryBtn = new RetryView(getApplicationContext());
+        retryBtn.setErrorMsg(getString(R.string.general_data_error));
+        retryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                update(false);
+                lockScreen.setVisibility(View.GONE);
+            }
+        });
+
+        lockScreen.addView(retryBtn);
+
         //Send Button
         mSendButton = (Button) findViewById(R.id.btnSend);
         mSendButton.setOnClickListener(this);
@@ -287,8 +304,11 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         historyRequest.userid = mUserId;
         historyRequest.limit = LIMIT;
         if(pullToRefresh) {
-            if(mAdapter.getDataCopy().getFirst() != null) {
-                historyRequest.from = mAdapter.getDataCopy().getFirst().id;
+            LinkedList<History> data = mAdapter.getDataCopy();
+            if(!data.isEmpty()) {
+                if(data.getFirst() != null) {
+                    historyRequest.from = data.getFirst().id;
+                }
             }
         }
         historyRequest.callback(new ApiHandler() {
@@ -297,6 +317,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 if (itemId != -1) {
                     LocalBroadcastManager.getInstance(ChatActivity.this).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID,itemId));
                     itemId = -1;
+                }
+                if(pullToRefresh || mTimer == null) {
+                    restartTimer();
                 }
                 final FeedListData<History> dataList = new FeedListData<History>(
                         response.jsonResult, History.class);
@@ -327,6 +350,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                         Toast.makeText(ChatActivity.this, getString(R.string.general_data_error),
                                 Toast.LENGTH_SHORT).show();
                         mLoadingLocker.setVisibility(View.GONE);
+                        lockScreen.setVisibility(View.VISIBLE);
+                        stopTimer();
                     }
                 });
             }
@@ -415,7 +440,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     protected void onResume() {
         super.onResume();
         if (!mReceiverRegistered) {
-            registerReceiver(mNewMessageReceiver, new IntentFilter(GCMUtils.GCM_NOTIFICATION));
+            IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
+            registerReceiver(mNewMessageReceiver, filter);
+
             mReceiverRegistered = true;
         }
         startTimer();
@@ -774,6 +801,13 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
+        if(lockScreen != null) {
+            if(lockScreen.getVisibility() == View.VISIBLE) {
+                return null;
+            }
+        } else if(!Http.isOnline(this)) {
+            return null;
+        }
         return mAdapter.getDataCopy();
     }
 
@@ -802,7 +836,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        update(true);
+                            update(true);
                     }
                 });
             }
