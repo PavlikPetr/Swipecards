@@ -89,7 +89,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         mPhotoGridView.setOnItemClickListener(mOnItemClickListener);
 
         TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
-        title.setVisibility(View.INVISIBLE);
+        title.setVisibility(View.GONE);
 
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
         root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
