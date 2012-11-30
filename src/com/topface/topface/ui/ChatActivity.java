@@ -92,7 +92,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     // Managers
     private GeoLocationManager mGeoManager = null;
     private RelativeLayout lockScreen;
-    private RetryView retryBtn;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -199,7 +198,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mEditBox.setOnEditorActionListener(mEditorActionListener);
 
         lockScreen = (RelativeLayout) findViewById(R.id.llvLockScreen);
-        retryBtn = new RetryView(getApplicationContext());
+        RetryView retryBtn = new RetryView(getApplicationContext());
         retryBtn.setErrorMsg(getString(R.string.general_data_error));
         retryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
             @Override
@@ -326,25 +325,27 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 if(pullToRefresh || mTimer == null) {
                     restartTimer();
                 }
-                final FeedListData<History> dataList = new FeedListData<History>(
-                        response.jsonResult, History.class);
-                if(ChatActivity.this != null) {
-                    post(new Runnable() {
-                        @Override
-                        public void run() {
+                final FeedListData<History> dataList = new FeedListData<History>(response.jsonResult, History.class);
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mAdapter != null) {
                             if(pullToRefresh) {
                                 mAdapter.addAll(dataList.items);
                             }  else {
                                 mAdapter.setDataList(dataList.items);
                             }
-                            if (pullToRefresh) {
-                                mListView.onRefreshComplete();
-                            }
-                            mLoadingLocker.setVisibility(View.GONE);
                             mAdapter.notifyDataSetChanged();
                         }
-                    });
-                }
+                        if (pullToRefresh && mListView != null) {
+                            mListView.onRefreshComplete();
+                        }
+                        if (mLoadingLocker != null) {
+                            mLoadingLocker.setVisibility(View.GONE);
+                        }
+
+                    }
+                });
             }
 
             @Override
