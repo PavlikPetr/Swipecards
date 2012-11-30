@@ -46,7 +46,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private T minimalRange;
     private double normalizedMinimalRange = 0;
 
-
+    private Bitmap bgBitmap;
     /**
      * Default color of a {@link RangeSeekBar}, #FF33B5E5. This is also known as "Ice Cream Sandwich" blue.
      */
@@ -92,6 +92,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         // make RangeSeekBar focusable. This solves focus handling issues in case EditText widgets are being used along with the RangeSeekBar within ScollViews.
         setFocusable(true);
         setFocusableInTouchMode(true);
+
         init();
     }
 
@@ -423,8 +424,10 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     }
 
     private void drawBackground(Canvas canvas) {
-
-        canvas.drawBitmap(Bitmap.createScaledBitmap(bg, getWidth(), bg.getHeight(), false), 0, 0, paint);
+        if(bgBitmap == null) {
+            bgBitmap = Bitmap.createScaledBitmap(bg, getWidth(), bg.getHeight(), false);
+        }
+        canvas.drawBitmap(bgBitmap, 0, 0, paint);
     }
 
     /**
