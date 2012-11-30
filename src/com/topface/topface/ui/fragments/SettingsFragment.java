@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -12,11 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
-import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiHandler;
@@ -27,14 +25,40 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
+
+import java.util.HashMap;
 
 public class SettingsFragment extends BaseFragment implements OnClickListener, OnCheckedChangeListener {
 
     private Settings mSettings;
     private EditSwitcher mSwitchVibration;
+    private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<String, ProgressBar>();
+    private CountDownTimer mSendTimer = new CountDownTimer(3000,3000) {
+        @Override
+        public void onTick(long l) { }
+
+        @Override
+        public void onFinish() {
+            SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(CacheProfile.getOptions(), getActivity().getApplicationContext());
+            if (request != null) {
+                request.callback(new ApiHandler() {
+
+                    @Override
+                    public void success(ApiResponse response) throws NullPointerException {
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                        Debug.log("failed to send notifications options");
+                    }
+                }).exec();
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -67,25 +91,25 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loLikes);
         setBackground(R.drawable.edit_big_btn_top, frame);
         setText(R.string.settings_likes, frame);
-        initEditNotificationFrame(Options.NOTIFICATIONS_LIKES, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_LIKES).mail,options.notifications.get(Options.NOTIFICATIONS_LIKES).apns);
+        initEditNotificationFrame(Options.NOTIFICATIONS_LIKES, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_LIKES).mail, options.notifications.get(Options.NOTIFICATIONS_LIKES).apns);
 
         // Mutual
         frame = (ViewGroup) root.findViewById(R.id.loMutual);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_mutual, frame);
-        initEditNotificationFrame(Options.NOTIFICATIONS_SYMPATHY, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).mail,options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns);
+        initEditNotificationFrame(Options.NOTIFICATIONS_SYMPATHY, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).mail, options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns);
 
         // Chat
         frame = (ViewGroup) root.findViewById(R.id.loChat);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_messages, frame);
-        initEditNotificationFrame(Options.NOTIFICATIONS_MESSAGE, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_MESSAGE).mail,options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns);
+        initEditNotificationFrame(Options.NOTIFICATIONS_MESSAGE, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_MESSAGE).mail, options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns);
 
         // Guests
         frame = (ViewGroup) root.findViewById(R.id.loGuests);
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
-        initEditNotificationFrame(Options.NOTIFICATIONS_VISITOR, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_VISITOR).mail,options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns);
+        initEditNotificationFrame(Options.NOTIFICATIONS_VISITOR, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_VISITOR).mail, options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns);
 
         // Vibration
         frame = (ViewGroup) root.findViewById(R.id.loVibration);
@@ -165,17 +189,28 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         textView.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(iconRes), null, null, null);
     }
 
-    private void initEditNotificationFrame(int key, ViewGroup frame, boolean enabled, boolean mailChecked, boolean phoneChecked) {
+    private void initEditNotificationFrame(int key, ViewGroup frame, boolean hasMail, boolean mailChecked, boolean phoneChecked) {
         CheckBox checkBox = (CheckBox) frame.findViewById(R.id.cbPhone);
-        checkBox.setTag(Options.generateKey(key,false));
+        ProgressBar prsPhone = (ProgressBar) frame.findViewById(R.id.prsPhone);
+        String phoneNotifierKey = Options.generateKey(key, false);
+        hashNotifiersProgressBars.put(phoneNotifierKey, prsPhone);
+        checkBox.setTag(phoneNotifierKey);
         checkBox.setChecked(phoneChecked);
         checkBox.setOnCheckedChangeListener(this);
 
         final CheckBox checkBoxEmail = (CheckBox) frame.findViewById(R.id.cbMail);
-        checkBoxEmail.setTag(Options.generateKey(key,true));
-        checkBoxEmail.setChecked(mailChecked);
-        checkBoxEmail.setEnabled(enabled);
-        checkBoxEmail.setOnCheckedChangeListener(this);
+        ProgressBar prsMail = (ProgressBar) frame.findViewById(R.id.prsMail);
+        String mailNotifierKey = Options.generateKey(key, true);
+        hashNotifiersProgressBars.put(mailNotifierKey, prsMail);
+        if (hasMail) {
+            checkBoxEmail.setTag(mailNotifierKey);
+            checkBoxEmail.setChecked(mailChecked);
+            checkBoxEmail.setEnabled(hasMail);
+            checkBoxEmail.setOnCheckedChangeListener(this);
+        } else {
+            checkBoxEmail.setVisibility(View.GONE);
+            prsMail.setVisibility(View.GONE);
+        }
     }
 
     private void setBackground(int resId, ViewGroup frame) {
@@ -206,14 +241,14 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 break;
             case R.id.loVibration:
                 mSwitchVibration.doSwitch();
-                mSettings.setSetting(Settings.SETTINGS_C2DM_VIBRATION,mSwitchVibration.isChecked());
+                mSettings.setSetting(Settings.SETTINGS_C2DM_VIBRATION, mSwitchVibration.isChecked());
                 break;
             case R.id.loMelody:
                 intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.settings_melody));
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mSettings.getRingtone());
-                startActivityForResult(intent,Settings.REQUEST_CODE_RINGTONE);
+                startActivityForResult(intent, Settings.REQUEST_CODE_RINGTONE);
                 break;
             default:
                 break;
@@ -227,40 +262,54 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         String[] buttonInfo = key.split(Options.GENERAL_SEPARATOR);
         final Integer type = Integer.parseInt(buttonInfo[0]);
         final boolean isMail = Boolean.parseBoolean(buttonInfo[1]);
+        final ProgressBar prs = hashNotifiersProgressBars.get(key);
 
-        SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(type, isMail, isChecked, getActivity().getApplicationContext());
-        if (request != null) {
-            buttonView.setEnabled(false);
-            request.callback(new ApiHandler() {
+        if (isMail) {
+            SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(type, isMail, isChecked, getActivity().getApplicationContext());
+            if (request != null) {
+                buttonView.post(new Runnable() {
 
-                @Override
-                public void success(ApiResponse response) throws NullPointerException {
-                   buttonView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonView.setEnabled(false);
+                        prs.setVisibility(View.VISIBLE);
+                    }
+                });
+                request.callback(new ApiHandler() {
 
-                        @Override
-                        public void run() {
-                            buttonView.setEnabled(true);
-                        }
-                    });
-                    if(isMail) CacheProfile.getOptions().notifications.get(type).mail = isChecked;
-                    else CacheProfile.getOptions().notifications.get(type).apns = isChecked;
-                }
+                    @Override
+                    public void success(ApiResponse response) throws NullPointerException {
+                        buttonView.post(new Runnable() {
 
-                @Override
-                public void fail(int codeError, ApiResponse response) throws NullPointerException {
-                    //TODO: Здесь нужно что-то делать, чтобы пользователь понял, что у него не получилось отменить нотификации.
-                    buttonView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                buttonView.setEnabled(true);
+                                prs.setVisibility(View.GONE);
+                            }
+                        });
+                        CacheProfile.getOptions().notifications.get(type).mail = isChecked;
+                    }
 
-                        @Override
-                        public void run() {
-                            buttonView.setEnabled(true);
-                        }
-                    });
-                    buttonView.setChecked(!isChecked);
-                    if(isMail) CacheProfile.getOptions().notifications.get(type).mail = !isChecked;
-                    else CacheProfile.getOptions().notifications.get(type).apns = !isChecked;
-                }
-            }).exec();
+                    @Override
+                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                        //TODO: Здесь нужно что-то делать, чтобы пользователь понял, что у него не получилось отменить нотификации.
+                        buttonView.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                buttonView.setEnabled(true);
+                                prs.setVisibility(View.GONE);
+                            }
+                        });
+                        buttonView.setChecked(!isChecked);
+                        CacheProfile.getOptions().notifications.get(type).mail = !isChecked;
+                    }
+                }).exec();
+            }
+        } else {
+            CacheProfile.getOptions().notifications.get(type).apns = isChecked;
+            mSendTimer.cancel();
+            mSendTimer.start();
         }
     }
 

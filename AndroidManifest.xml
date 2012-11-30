@@ -99,6 +99,13 @@
             </intent-filter>
         </receiver>
 
+
+        <receiver android:name=".ReAuthReceiver" >
+            <intent-filter>
+                <action android:name="com.topface.topface.action.AUTH" />
+            </intent-filter>
+        </receiver>
+
         <!-- gcm -->
         <service android:name=".GCMIntentService" />
 

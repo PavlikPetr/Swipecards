@@ -89,7 +89,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         mPhotoGridView.setOnItemClickListener(mOnItemClickListener);
 
         TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
-        title.setVisibility(View.INVISIBLE);
+        title.setVisibility(View.GONE);
 
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
         root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
@@ -118,7 +118,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
             if (!mDeleted.isEmpty()) {
                 mOperationsFinished = false;
-                PhotoDeleteRequest deleteRequest = new PhotoDeleteRequest(getActivity().getApplicationContext());
+                PhotoDeleteRequest deleteRequest = new PhotoDeleteRequest(getActivity());
                 registerRequest(deleteRequest);
 
                 int[] photoIds = new int[mDeleted.size()];
@@ -144,7 +144,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             }
 
             if (mSelectedAsMainId != mLastSelectedAsMainId) {
-                MainRequest setAsMainRequest = new MainRequest(getActivity().getApplicationContext());
+                MainRequest setAsMainRequest = new MainRequest(getActivity());
                 registerRequest(setAsMainRequest);
                 setAsMainRequest.photoid = mSelectedAsMainId;
                 setAsMainRequest.callback(new ApiHandler() {

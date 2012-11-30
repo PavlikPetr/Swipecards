@@ -148,19 +148,8 @@ public class Settings {
     }
         
     public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
-        SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
         Options options = CacheProfile.getOptions();
-
-
-        request.mailsympathy = options.notifications.get(Options.NOTIFICATIONS_LIKES).mail;
-        request.mailmutual = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).mail;
-        request.mailchat = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).mail;
-        request.mailguests = options.notifications.get(Options.NOTIFICATIONS_VISITOR).mail;
-
-        request.apnssympathy = options.notifications.get(Options.NOTIFICATIONS_LIKES).apns;
-        request.apnsmutual = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns;
-        request.apnschat = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns;
-        request.apnsguests = options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns;
+        SendMailNotificationsRequest request = getMailNotificationRequest(options,context);
 
         switch (key) {
             case Options.NOTIFICATIONS_LIKES:
@@ -181,8 +170,23 @@ public class Settings {
                 break;
             default:
                 return null;
-
         }
+
+        return request;
+    }
+
+    public SendMailNotificationsRequest getMailNotificationRequest(Options options, Context context) {
+        SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
+
+        request.mailsympathy = options.notifications.get(Options.NOTIFICATIONS_LIKES).mail;
+        request.mailmutual = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).mail;
+        request.mailchat = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).mail;
+        request.mailguests = options.notifications.get(Options.NOTIFICATIONS_VISITOR).mail;
+
+        request.apnssympathy = options.notifications.get(Options.NOTIFICATIONS_LIKES).apns;
+        request.apnsmutual = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns;
+        request.apnschat = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns;
+        request.apnsguests = options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns;
 
         return request;
     }

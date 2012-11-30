@@ -395,7 +395,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     protected void saveChanges(final Handler handler) {
         prepareRequestSend();
 
-        FilterRequest filterRequest = new FilterRequest(getActivity().getApplicationContext());
+        FilterRequest filterRequest = new FilterRequest(getActivity());
         registerRequest(filterRequest);
         filterRequest.beautiful = mFilter.beautiful;
         filterRequest.city = mFilter.city_id;

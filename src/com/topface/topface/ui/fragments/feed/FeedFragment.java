@@ -194,7 +194,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void onFeedUpdate() {
                 if (!mIsUpdating) {
-                    updateData(false, true);
+                    updateData(false, true, false);
                 }
             }
         };
@@ -211,7 +211,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                             mListAdapter.showLoaderItem();
                         }
                     });
-                    updateData(false, true);
+                    updateData(false, true, false);
                 } else {
                     try {
                         onFeedItemClick(item);
@@ -393,7 +393,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected abstract FeedListData<T> getFeedList(JSONObject response);
 
     private FeedRequest getRequest() {
-        return new FeedRequest(getFeedService(), getActivity().getApplicationContext());
+        return new FeedRequest(getFeedService(), getActivity());
     }
 
     protected abstract FeedRequest.FeedService getFeedService();

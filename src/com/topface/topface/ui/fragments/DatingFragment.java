@@ -159,10 +159,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingResources = view.findViewById(R.id.loDatingResources);
         mDatingResources.setOnClickListener(this);
         mResourcesPower = (TextView) view.findViewById(R.id.tvResourcesPower);
-        mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
-        mResourcesPower.setText("" + CacheProfile.power + "%");
         mResourcesMoney = (TextView) view.findViewById(R.id.tvResourcesMoney);
-        mResourcesMoney.setText("" + CacheProfile.money);
+        updateResources();
 
         // Control Buttons
         mDelightBtn = (Button) view.findViewById(R.id.btnDatingLove);
@@ -244,7 +242,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         Debug.log(this, "update");
         SharedPreferences preferences = App.getContext().getSharedPreferences(
                 Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
-        SearchRequest searchRequest = new SearchRequest(App.getContext());
+        SearchRequest searchRequest = new SearchRequest(getActivity());
         registerRequest(searchRequest);
         searchRequest.limit = 20;
         searchRequest.geo = preferences.getBoolean(App.getContext().getString(R.string.cache_profile_filter_geo),
@@ -414,6 +412,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             showNovice();
             hasOneSympathyOrDelight = true;
         }
+        updateResources();
     }
 
     private void prevUser() {
@@ -485,15 +484,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     if (skipRate.completed) {
                         CacheProfile.power = skipRate.power;
                         CacheProfile.money = skipRate.money;
-                        updateUI(new Runnable() {
-                            @Override
-                            public void run() {
-                                mResourcesPower.setBackgroundResource(Utils
-                                        .getBatteryResource(CacheProfile.power));
-                                mResourcesPower.setText(CacheProfile.power + "%");
-                                mResourcesMoney.setText("" + CacheProfile.money);
-                            }
-                        });
+                        updateResources();
                     } else {
                         Toast.makeText(getActivity(), App.getContext().getString(R.string.general_server_error),
                                 Toast.LENGTH_SHORT).show();
@@ -658,6 +649,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateResources();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK
                 && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
@@ -777,4 +774,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 
+    private void updateResources() {
+        updateUI(new Runnable() {
+            @Override
+            public void run() {
+                mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
+                mResourcesPower.setText(CacheProfile.power + "%");
+                mResourcesMoney.setText("" + CacheProfile.money);
+            }
+        });
+    }
 }

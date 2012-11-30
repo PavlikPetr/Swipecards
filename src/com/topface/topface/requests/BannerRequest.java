@@ -16,6 +16,7 @@ public class BannerRequest extends AbstractApiRequest {
 
     public BannerRequest(Context context) {
         super(context);
+        doNeedAlert(false);
     }
 
     @Override

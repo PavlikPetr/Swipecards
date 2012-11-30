@@ -14,6 +14,8 @@
     <string name="settings_preloading_type_user">user</string>
     <string name="settings_preloading_type_photo">photo</string>
     <string name="settings_preloading_type_all">all</string>
+    <string name="settings_help_url">http://topface.com/faq-mobile?from=android</string>
+    <string name="settings_topface_url">http://topface.com</string>
 
     <string name="default_resource_value">0</string>
 

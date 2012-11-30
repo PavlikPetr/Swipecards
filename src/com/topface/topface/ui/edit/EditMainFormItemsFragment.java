@@ -300,7 +300,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     }
 
     private SettingsRequest getSettigsRequest() {
-        SettingsRequest request = new SettingsRequest(getActivity().getApplicationContext());
+        SettingsRequest request = new SettingsRequest(getActivity());
         for (EditType type : hashChangedData.keySet()) {
             String changedValue = hashChangedData.get(type);
             if (!changedValue.equals(getDataByEditType(type))) {

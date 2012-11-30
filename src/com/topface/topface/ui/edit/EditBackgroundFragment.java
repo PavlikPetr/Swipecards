@@ -86,7 +86,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
         if (hasChanges()) {
             prepareRequestSend();
 
-            SettingsRequest request = new SettingsRequest(getActivity().getApplicationContext());
+            SettingsRequest request = new SettingsRequest(getActivity());
             registerRequest(request);
             request.background = mSelectedId;
             request.callback(new ApiHandler() {
