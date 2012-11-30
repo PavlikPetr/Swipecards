@@ -13,6 +13,7 @@ public class OptionsRequest extends AbstractApiRequest {
 
     public OptionsRequest(Context context) {
         super(context);
+        doNeedAlert(false);
     }
 
     @Override

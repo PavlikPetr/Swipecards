@@ -205,7 +205,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
             lockScreen.setVisibility(View.VISIBLE);
             return;
         }
-        UserRequest userRequest = new UserRequest(mUserId, getApplicationContext());
+        UserRequest userRequest = new UserRequest(mUserId, this);
         userRequest.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {

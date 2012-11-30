@@ -28,6 +28,7 @@ public abstract class ApiRequest {
     private boolean doNeedAuthorize;
 
     public ApiRequest(Context context) {
+        //Нельзя передавать Application Context!!!! Только контекст Activity
         ssid = Static.EMPTY;
         this.context = context;
         doNeedAlert = true;

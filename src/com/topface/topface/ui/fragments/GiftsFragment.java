@@ -175,8 +175,7 @@ public class GiftsFragment extends BaseFragment {
                 final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
 
                 if (mProfile != null) {
-                    final SendGiftRequest sendGift = new SendGiftRequest(getActivity()
-                            .getApplicationContext());
+                    final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
                     registerRequest(sendGift);
                     sendGift.giftId = id;
                     sendGift.userId = mProfile.uid;
@@ -242,7 +241,7 @@ public class GiftsFragment extends BaseFragment {
 
     private void onNewFeeds(int userId) {
         mIsUpdating = true;
-        FeedGiftsRequest request = new FeedGiftsRequest(getActivity().getApplicationContext());
+        FeedGiftsRequest request = new FeedGiftsRequest(getActivity());
         request.limit = UserProfileActivity.GIFTS_LOAD_COUNT;
         request.uid = userId;
         if (!mGifts.isEmpty()) {

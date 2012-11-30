@@ -247,8 +247,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void addDataFirst(FeedListData<T> data) {
         removeLoaderItem();
-        Collections.reverse(data.items);
-        if(data!=null) {
+        if(data != null) {
+            Collections.reverse(data.items);
             if(!data.items.isEmpty()) {
                 for(T item : data.items) {
                     getData().addFirst(item);

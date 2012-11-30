@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.topface.topface"
     android:installLocation="auto"
-    android:versionCode="39"
-    android:versionName="2.0.1" >
+    android:versionCode="40"
+    android:versionName="2.0.2" >
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -36,7 +36,8 @@
         <uses-library android:name="com.google.android.maps" />
 
         <!-- main Activity -->
-        <activity android:name=".ui.AuthActivity" >
+        <activity android:name=".ui.AuthActivity"
+                  android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,6 +48,7 @@
         <!-- activity -->
         <activity
             android:name=".utils.social.WebAuthActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.NavigationActivity"

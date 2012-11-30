@@ -28,6 +28,7 @@ public class AuthRequestTest extends InstrumentationTestCase {
                 authRequest.platform = token.getSocialNet();
                 authRequest.sid = token.getUserId();
                 authRequest.token = token.getTokenKey();
+                authRequest.locale = "en_US";
                 authRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) throws NullPointerException {

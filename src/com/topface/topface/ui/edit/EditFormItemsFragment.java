@@ -40,7 +40,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mFormInfo = new FormInfo(getActivity().getApplicationContext(), mProfile);
+        mFormInfo = new FormInfo(getActivity(), mProfile);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
                 false);

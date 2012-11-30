@@ -10,6 +10,7 @@ public class LeadersRequest extends AbstractApiRequest {
 
     public LeadersRequest(Context context) {
         super(context);
+        doNeedAlert(false);
     }
 
     @Override

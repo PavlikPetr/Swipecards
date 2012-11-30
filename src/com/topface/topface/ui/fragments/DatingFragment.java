@@ -242,7 +242,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         Debug.log(this, "update");
         SharedPreferences preferences = App.getContext().getSharedPreferences(
                 Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
-        SearchRequest searchRequest = new SearchRequest(App.getContext());
+        SearchRequest searchRequest = new SearchRequest(getActivity());
         registerRequest(searchRequest);
         searchRequest.limit = 20;
         searchRequest.geo = preferences.getBoolean(App.getContext().getString(R.string.cache_profile_filter_geo),

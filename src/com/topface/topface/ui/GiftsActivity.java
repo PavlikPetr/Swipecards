@@ -117,7 +117,7 @@ public class GiftsActivity extends BaseFragmentActivity {
         if (Data.giftsList.isEmpty()) {
             mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
             mLoadingLocker.setVisibility(View.VISIBLE);
-            GiftsRequest giftRequest = new GiftsRequest(getApplicationContext());
+            GiftsRequest giftRequest = new GiftsRequest(this);
             registerRequest(giftRequest);
             giftRequest.callback(new ApiHandler() {
                 @Override

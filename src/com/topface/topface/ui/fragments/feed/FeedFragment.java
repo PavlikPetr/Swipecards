@@ -393,7 +393,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected abstract FeedListData<T> getFeedList(JSONObject response);
 
     private FeedRequest getRequest() {
-        return new FeedRequest(getFeedService(), getActivity().getApplicationContext());
+        return new FeedRequest(getFeedService(), getActivity());
     }
 
     protected abstract FeedRequest.FeedService getFeedService();
