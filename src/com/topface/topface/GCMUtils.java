@@ -59,7 +59,7 @@ public class GCMUtils {
                 final String regId = GCMRegistrar.getRegistrationId(context);
                 if (regId.equals("")) {
                     GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
-                    Debug.log("Registered: " + regId);
+                    Debug.log("Registered: " + GCMRegistrar.getRegistrationId(context));
                 } else {
                     sendRegId(context, regId);
                     Debug.log("Already registered, regID is " + regId);
