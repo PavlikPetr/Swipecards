@@ -1,18 +1,11 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 import com.topface.topface.R;
+import com.topface.topface.ui.analytics.TrackedActivity;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Ilya Vorobiev
- * Date: 26.10.12
- * Time: 15:39
- * To change this template use File | Settings | File Templates.
- */
-public class BanActivity extends Activity {
+public class BanActivity extends TrackedActivity {
     public static final String BANNING_INTENT = "banning_intent";
     public static final String MESSAGE = "ban_message";
     @Override

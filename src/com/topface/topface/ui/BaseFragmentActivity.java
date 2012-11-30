@@ -2,14 +2,15 @@ package com.topface.topface.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.utils.http.IRequestClient;
 
 import java.util.LinkedList;
 
-public class BaseFragmentActivity extends FragmentActivity implements IRequestClient {
+public class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
 	public static final String INTENT_PREV_ENTITY = "prev_entity";
 	
@@ -18,6 +19,18 @@ public class BaseFragmentActivity extends FragmentActivity implements IRequestCl
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EasyTracker.getInstance().activityStop(this);
     }
 
     @Override

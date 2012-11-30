@@ -2,7 +2,6 @@ package com.topface.topface.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,10 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
+import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.Utils;
 
-public class UserPhotoFragment extends Fragment {
+public class UserPhotoFragment extends TrackedFragment {
     private User mUser;
     private UserPhotoGridAdapter mUserPhotoGridAdapter;
     private TextView mTitle;

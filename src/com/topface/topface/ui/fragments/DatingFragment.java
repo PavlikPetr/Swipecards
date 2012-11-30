@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.*;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.NovicePower;
@@ -298,6 +299,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.loDatingResources: {
+                EasyTracker.getTracker().trackEvent("Dating", "BuyClick", "", 1L);
                 startActivity(new Intent(getActivity(), BuyingActivity.class));
             }
             break;
@@ -312,6 +314,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mRateController.onRate(currentSearch.id, 10,
                                 currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL
                                         : RateRequest.DEFAULT_NO_MUTUAL);
+
+                        EasyTracker.getTracker().trackEvent("Dating", "Rate",
+                                "AdmirationSend" + (currentSearch.mutual ? "mutual" : ""),
+                                (long) CacheProfile.getOptions().price_highrate);
                     }
                     // currentSearch.rated = true;
                 }
@@ -328,6 +334,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mRateController.onRate(currentSearch.id, 9,
                                 currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL
                                         : RateRequest.DEFAULT_NO_MUTUAL);
+
+                        EasyTracker.getTracker().trackEvent("Dating", "Rate",
+                                "SympathySend" + (currentSearch.mutual ? "mutual" : ""), 0L);
                     }
                     currentSearch.rated = true;
                 }
@@ -338,12 +347,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 SearchUser currentSearch = getCurrentUser();
                 if (currentSearch != null) {
                     currentSearch.skipped = true;
+
+                    EasyTracker.getTracker().trackEvent("Dating", "Rate", "Skip", 0L);
                 }
 
             }
             break;
             case R.id.btnDatingPrev: {
                 prevUser();
+                EasyTracker.getTracker().trackEvent("Dating", "Additional", "Prev", 0L);
             }
 
             break;
@@ -356,6 +368,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass()
                         .getSimpleName());
                 startActivity(intent);
+                EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
             }
             break;
             case R.id.btnDatingChat: {
@@ -373,10 +386,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass()
                         .getSimpleName());
                 startActivity(intent);
+
+                EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
             }
             break;
             case R.id.btnDatingSwitchNext: {
                 mViewFlipper.setDisplayedChild(1);
+                EasyTracker.getTracker().trackEvent("Dating", "Additional", "Switch", 1L);
             }
             break;
             case R.id.btnDatingSwitchPrev: {

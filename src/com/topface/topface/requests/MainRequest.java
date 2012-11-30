@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,5 +22,11 @@ public class MainRequest extends AbstractApiRequest {
     @Override
     public String getServiceName() {
         return service;
+    }
+
+    @Override
+    public void exec() {
+        super.exec();
+        EasyTracker.getTracker().trackEvent("Profile", "PhotoSetMain", "", 1L);
     }
 }

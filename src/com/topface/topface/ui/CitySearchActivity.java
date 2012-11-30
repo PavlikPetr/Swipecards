@@ -24,16 +24,11 @@ import com.topface.topface.utils.Debug;
 import java.util.LinkedList;
 
 public class CitySearchActivity extends BaseFragmentActivity {
-    // Data
-    private EditText mCityInputView;
-    private ListView mCityListView;
     private ArrayAdapter<String> mListAdapter;
     private LinkedList<City> mTopCitiesList;
     private LinkedList<City> mDataList;
     private LinkedList<String> mNameList;
     private ProgressBar mProgressBar;
-    private CitiesRequest citiesRequest;
-    private SearchCitiesRequest searchCitiesRequest;
     // Constants
     public static final int INTENT_CITY_SEARCH_ACTIVITY = 100;
     public static final int INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY = 101;
@@ -128,11 +123,11 @@ public class CitySearchActivity extends BaseFragmentActivity {
         };
 
         // ListView
-        mCityListView = (ListView) findViewById(R.id.lvCityList);
-        mCityListView.setAdapter(mListAdapter);
+        ListView cityListView = (ListView) findViewById(R.id.lvCityList);
+        cityListView.setAdapter(mListAdapter);
 
         // возврат значения и выход
-        mCityListView.setOnItemClickListener(new OnItemClickListener() {
+        cityListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 Intent intent = CitySearchActivity.this.getIntent();
@@ -148,8 +143,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
         });
 
         // EditText
-        mCityInputView = (EditText) findViewById(R.id.etCityInput);
-        mCityInputView.addTextChangedListener(new TextWatcher() {
+        EditText cityInputView = (EditText) findViewById(R.id.etCityInput);
+        cityInputView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -176,7 +171,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private void update() {
         mProgressBar.setVisibility(View.VISIBLE);
 
-        citiesRequest = new CitiesRequest(this);
+        CitiesRequest citiesRequest = new CitiesRequest(this);
         registerRequest(citiesRequest);
         citiesRequest.type = "top";
         citiesRequest.callback(new ApiHandler() {
@@ -212,7 +207,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
 
     private void city(String prefix) {
-        searchCitiesRequest = new SearchCitiesRequest(this);
+        SearchCitiesRequest searchCitiesRequest = new SearchCitiesRequest(this);
         registerRequest(searchCitiesRequest);
         searchCitiesRequest.prefix = prefix;
         searchCitiesRequest.callback(new ApiHandler() {

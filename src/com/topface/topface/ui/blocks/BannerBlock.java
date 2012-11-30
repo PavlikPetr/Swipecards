@@ -14,7 +14,7 @@ import com.adfonic.android.AdfonicView;
 import com.adfonic.android.api.Request;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
-import com.google.android.apps.analytics.easytracking.EasyTracker;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
@@ -24,7 +24,6 @@ import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.BaseApiHandler;
-import com.topface.topface.ui.InviteActivity;
 import com.topface.topface.ui.fragments.TopsFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
@@ -150,11 +149,11 @@ public class BannerBlock {
                 public void onClick(View v) {
                     Intent intent = null;
                     if (banner.action.equals(Banner.ACTION_PAGE)) {
-                        EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0);
+                        EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0L);
                         intent = new Intent(mActivity, BuyingActivity.class); // "parameter":"PURCHASE"
-                    } else if (banner.action.equals(Banner.INVITE_PAGE)) {
-                        EasyTracker.getTracker().trackEvent("Banner", "Invite", "", 0);
-                        intent = new Intent(mActivity, InviteActivity.class);
+//                    } else if (banner.action.equals(Banner.INVITE_PAGE)) {
+//                        EasyTracker.getTracker().trackEvent("Banner", "Invite", "", 0L);
+//                        intent = new Intent(mActivity, InviteActivity.class);
                     } else if (banner.action.equals(Banner.ACTION_URL)) {
                         intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
                     }
@@ -177,7 +176,7 @@ public class BannerBlock {
     private void sendStat(String action, String label) {
         action = action == null ? "" : action;
         label = label == null ? "" : label;
-        EasyTracker.getTracker().trackEvent("Banner", action, label, 0);
+        EasyTracker.getTracker().trackEvent("Banner", action, label, 0L);
     }
 
     private String getBannerName(String bannerUrl) {

@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,6 +33,12 @@ public class CoordinatesRequest extends AbstractApiRequest {
     @Override
     public String getServiceName() {
         return SERVICE_NAME;
+    }
+
+    @Override
+    public void exec() {
+        super.exec();
+        EasyTracker.getTracker().trackEvent("Feed", "CoordinatesSend", "Type" + String.valueOf(type), 1L);
     }
 
 }

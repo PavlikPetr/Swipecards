@@ -74,7 +74,6 @@
         <activity android:name=".ui.ChatActivity" >
         </activity>
         <activity android:name=".ui.GiftsActivity" />
-        <activity android:name=".ui.InviteActivity" />
         <activity android:name=".ui.LeadersActivity" android:screenOrientation="portrait" />
         <activity android:name=".ui.settings.SettingsContainerActivity" />
         <activity

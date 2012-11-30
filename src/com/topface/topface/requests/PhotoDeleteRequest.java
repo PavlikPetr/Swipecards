@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,5 +31,11 @@ public class PhotoDeleteRequest extends AbstractApiRequest {
             photosJson.put(photo);
         }
         return photosJson;
+    }
+
+    @Override
+    public void exec() {
+        super.exec();
+        EasyTracker.getTracker().trackEvent("Profile", "PhotoDelete", "", 1L);
     }
 }
