@@ -2,6 +2,7 @@ package com.topface.topface.ui.blocks;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,6 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Banner;
@@ -166,10 +166,12 @@ public class BannerBlock {
     }
 
     /**
-     * Не показываем баннер на маленьких экранах
+     * Показываем баннер на всех устройствах, кроме устройств с маленьким экраном
      */
     private boolean isCorrectResolution() {
-        return Data.screen_width > Device.W_240;
+        int screenSize = (mActivity.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK);
+        return  screenSize != Configuration.SCREENLAYOUT_SIZE_SMALL;
     }
 
     private void sendStat(String action, String label) {
