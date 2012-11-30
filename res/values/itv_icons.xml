@@ -8,6 +8,7 @@
         <item>{{my_map}}</item>
         <item>{{map}}</item>
         <item>{{gift}}</item>
+        <item>{{outbox}}</item>
         <!--
             здесь вы можете добавить ваши шаблоны,
             которые будут заменены картинками из массива itv_icons
@@ -20,6 +21,7 @@
         <item>@drawable/ico_my_map</item>
         <item>@drawable/ico_map</item>
         <item>@drawable/ico_gift</item>
+        <item>@drawable/ico_outbox</item>
         <!--
             тут соответсвующие шаблонам из itv_templates изображения
         -->
