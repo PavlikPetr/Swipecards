@@ -249,7 +249,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     private void deleteItem(final int position) {
         DeleteRequest dr = new DeleteRequest(this);
-        dr.id = mAdapter.getItem(position).id;
+        History item = mAdapter.getItem(position);
+        if (item == null)
+            return;
+        dr.id = item.id;
         registerRequest(dr);
         dr.callback(new ApiHandler() {
             @Override

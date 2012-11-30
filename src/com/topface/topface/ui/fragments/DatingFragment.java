@@ -418,7 +418,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void prevUser() {
         if (Data.searchPosition > 0) {
             --Data.searchPosition;
-            fillUserInfo(mUserSearchList.get(Data.searchPosition));
+            if (!mUserSearchList.isEmpty()) {
+                fillUserInfo(mUserSearchList.get(Data.searchPosition));
+            }
         }
     }
 

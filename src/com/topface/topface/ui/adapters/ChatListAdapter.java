@@ -627,9 +627,12 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     public History removeItem(int position) {
-        History item = mDataList.get(position);
-        removeAtPosition(position);
-        notifyDataSetChanged();
+        History item = null;
+        if (!mDataList.isEmpty() && position < mDataList.size() && position > 0) {
+            item = mDataList.get(position);
+            removeAtPosition(position);
+            notifyDataSetChanged();
+        }
         return item;
     }
 

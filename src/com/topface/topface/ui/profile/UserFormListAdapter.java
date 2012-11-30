@@ -117,7 +117,7 @@ public class UserFormListAdapter extends BaseAdapter {
                 break;
             case T_DATA:
                 holder.mTitle.setText(item.title.toUpperCase());
-                holder.mValue.setText(item.value);
+                holder.mValue.setText(item.value.toLowerCase());
                 if (item.equal)
                     holder.mState.setImageResource(R.drawable.user_cell_on);  // GREEN POINT
                 else
