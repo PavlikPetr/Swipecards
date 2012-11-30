@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,12 +17,13 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.AuthActivity;
+import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
 
-public class SettingsAccountFragment extends Fragment {
+public class SettingsAccountFragment extends TrackedFragment {
 
     public static final int RESULT_LOGOUT = 666;
     private LockerView lockerView;

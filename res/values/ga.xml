@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Настройки Google Analytics, используемые через библиотеку EasyTrack, AndroidLintUnusedResources -->
-<!--suppress AndroidLintMissingTranslation, AndroidLintUnusedResources -->
-<resources>
-    <!--suppress AndroidLintTypographyDashes -->
-    <string name="ga_api_key">UA-22657456-4</string>
+<!-- Настройки Google Analytics, используемые через библиотеку EasyTrack -->
+<!--suppress AndroidLintTypographyDashes -->
+<resources xmlns:tools="https://schemas.android.com/tools" tools:ignore="TypographyDashes">
+	<!-- The Google Analytics tracking ID to which to send your data. Dashes in the ID must be unencoded. You can disable your tracking by not providing this value. -->
+	<string name="ga_trackingId">UA-36704890-1</string>
 
-    <!-- Если значение @bool/debug равно true, то данные на сервер отправляться не будут -->
-    <bool name="ga_debug">false</bool>
-    <bool name="ga_dryRun">false</bool>
-    <bool name="ga_auto_activity_tracking">true</bool>
+	<!-- The name of your app, used in the app name dimension in your reports. Defaults to the value found in the package. -->
+	<!--<string name="ga_appName">Topface</string>-->
 
-    <!-- Синонимы для Активити, где name каноническое имя Activity, а значение - ключ для отображения в GA -->
-    <string name="com.topface.topface.billing.BuyingActivity">/PagePurchase</string>
-    <string name="com.topface.topface.ui.AuthActivity">/AuthActivity</string>
-    <string name="com.topface.topface.ui.ChatActivity">/ChatActivity</string>
-    <string name="com.topface.topface.ui.CitySearchActivity">/CitySearchActivity</string>
-    <string name="com.topface.topface.ui.DashboardActivity">/DashboardActivity</string>
-    <string name="com.topface.topface.ui.DatingActivity">/PageDating</string>
-    <string name="com.topface.topface.ui.InboxActivity">/PageDialogs</string>
-    <string name="com.topface.topface.ui.InviteActivity">/InviteActivity</string>
-    <string name="com.topface.topface.ui.LeadersActivity">/LeadersActivity</string>
-    <string name="com.topface.topface.ui.LikesActivity">/PageLikes</string>
-    <string name="com.topface.topface.ui.MainActivity">/TopfaceStarted</string>
-    <string name="com.topface.topface.ui.profile.album.PhotoAlbumActivity">/PhotoAlbumActivity</string>
-    <string name="com.topface.topface.ui.profile.album.PhotoEroAlbumActivity">/PhotoEroAlbumActivity</string>
-    <string name="com.topface.topface.ui.profile.EditProfileActivity">/EditProfileActivity</string>
-    <string name="com.topface.topface.ui.profile.ProfileActivity">/PageProfile</string>
-    <string name="com.topface.topface.ui.SymphatyActivity">/PageMutual</string>
-    <string name="com.topface.topface.ui.TopsActivity">/PageTop</string>
-    <string name="com.topface.topface.ui.WebAuthActivity">/WebAuthActivity</string>
+	<!-- The version of your application, used in the app version dimension within your reports. Defaults to the version found in the package. -->
+	<!--<string name="ga_appVersion"></string>-->
+
+	<!-- Flag to enable or writing of debug information to the log, useful for troubleshooting your implementation. false by default. -->
+	<bool name="ga_debug">false</bool>
+
+	<!-- The dispatch period in seconds. Defaults to 30 minutes. -->
+	<!--<integer name="ga_dispatchPeriod">1800</integer>-->
+
+	<!-- The sample rate to use. Default is 100.0. It can be any value between 0.0 and 100.0 -->
+	<string name="ga_sampleFrequency">100.0</string>
+
+	<!-- Automatically track a screen view each time a user starts an Activity. false by default. -->
+	<bool name="ga_autoActivityTracking">false</bool>
+
+	<!-- Tells Google Analytics to anonymize the information sent by the tracker objects by removing the last octet of the IP address prior to its storage. Note that this will slightly reduce the accuracy of geographic reporting. false by default. -->
+	<bool name="ga_anonymizeIp">false</bool>
+
+	<!-- Automatically track an Exception each time an uncaught exception is thrown in your application. false by default. -->
+	<bool name="ga_reportUncaughtExceptions">true</bool>
+
+	<!-- The amount of time (in seconds) your application can stay in the background before the session is ended. Default is 30 seconds. Negative value disables EasyTracker session management. -->
+	<integer name="ga_sessionTimeout">30</integer>
+
 
 </resources>

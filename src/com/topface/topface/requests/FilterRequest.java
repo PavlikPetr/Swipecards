@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,5 +81,11 @@ public class FilterRequest extends AbstractApiRequest {
     @Override
     public String getServiceName() {
         return SERVICE_NAME;
+    }
+
+    @Override
+    public void exec() {
+        super.exec();
+        EasyTracker.getTracker().trackEvent("Dating", "ChangeFilter", "", 1L);
     }
 }

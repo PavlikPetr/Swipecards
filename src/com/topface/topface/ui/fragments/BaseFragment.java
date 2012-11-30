@@ -4,17 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.http.IRequestClient;
 
 import java.util.LinkedList;
 
-public abstract class BaseFragment extends Fragment implements IRequestClient {
+public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
 
     protected NavigationBarController mNavBarController;
 

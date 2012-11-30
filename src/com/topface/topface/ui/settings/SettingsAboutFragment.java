@@ -3,7 +3,6 @@ package com.topface.topface.ui.settings;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +11,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.topface.topface.R;
+import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.Debug;
 
 import java.util.Calendar;
 
-public class SettingsAboutFragment extends Fragment {
+public class SettingsAboutFragment extends TrackedFragment {
 
 
     @Override

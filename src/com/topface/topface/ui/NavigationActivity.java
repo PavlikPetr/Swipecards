@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
@@ -18,6 +17,7 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.FragmentSwitchController;
@@ -31,7 +31,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.Calendar;
 
-public class NavigationActivity extends FragmentActivity implements View.OnClickListener {
+public class NavigationActivity extends TrackedFragmentActivity implements View.OnClickListener {
 
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
@@ -296,6 +296,11 @@ public class NavigationActivity extends FragmentActivity implements View.OnClick
 
     private void setStopTime() {
         long stopTime = Calendar.getInstance().getTimeInMillis();
-        mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME,stopTime).commit();
+        mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
+    }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
     }
 }

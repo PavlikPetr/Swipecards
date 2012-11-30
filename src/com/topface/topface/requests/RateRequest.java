@@ -31,4 +31,9 @@ public class RateRequest extends AbstractApiRequest {
     public String getServiceName() {
         return service;
     }
+
+    @Override
+    public void exec() {
+        super.exec();
+    }
 }

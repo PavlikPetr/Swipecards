@@ -22,4 +22,9 @@ public class SkipRateRequest extends AbstractApiRequest {
     public String getServiceName() {
         return SERVICE_NAME;
     }
+
+    @Override
+    public void exec() {
+        super.exec();
+    }
 }

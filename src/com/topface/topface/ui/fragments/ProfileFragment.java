@@ -14,6 +14,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -228,6 +229,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         @Override
         public void onClick(View view) {
             startActivity(new Intent(getActivity(), BuyingActivity.class));
+            EasyTracker.getTracker().trackEvent("Profile", "BuyClick", "", 1L);
         }
     };
 

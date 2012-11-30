@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,10 +14,11 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.edit.EditContainerActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-public class ProfilePhotoFragment extends Fragment {
+public class ProfilePhotoFragment extends BaseFragment {
 
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
     private Photos mPhotoLinks;

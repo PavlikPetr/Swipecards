@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.Data;
@@ -34,12 +35,14 @@ import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.OsmManager;
+import com.topface.topface.utils.http.Http;
 
 import java.util.LinkedList;
 import java.util.Timer;
@@ -58,7 +61,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private EditText mEditBox;
     private TextView mHeaderTitle;
     private LockerView mLoadingLocker;
-    private Button mSendButton;
 
     private SwapControl mSwapControl;
     private static ProgressDialog mProgressDialog;
@@ -89,6 +91,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     // Managers
     private GeoLocationManager mGeoManager = null;
+    private RelativeLayout lockScreen;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -194,9 +197,22 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mEditBox = (EditText) findViewById(R.id.edChatBox);
         mEditBox.setOnEditorActionListener(mEditorActionListener);
 
+        lockScreen = (RelativeLayout) findViewById(R.id.llvLockScreen);
+        RetryView retryBtn = new RetryView(getApplicationContext());
+        retryBtn.setErrorMsg(getString(R.string.general_data_error));
+        retryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                update(false);
+                lockScreen.setVisibility(View.GONE);
+            }
+        });
+
+        lockScreen.addView(retryBtn);
+
         //Send Button
-        mSendButton = (Button) findViewById(R.id.btnSend);
-        mSendButton.setOnClickListener(this);
+        Button sendButton = (Button) findViewById(R.id.btnSend);
+        sendButton.setOnClickListener(this);
         
         // ListView
         mListView = (PullToRefreshListView) findViewById(R.id.lvChatList);
@@ -221,9 +237,11 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                         switch (which) {
                             case DELETE_BUTTON:
                                 deleteItem(position);
+                                EasyTracker.getTracker().trackEvent("Chat", "DeleteItem", "", 1L);
                                 break;
                             case COPY_BUTTON:
                                 mAdapter.copyText(((TextView) v).getText().toString());
+                                EasyTracker.getTracker().trackEvent("Chat", "CopyItemText", "", 1L);
                                 break;
                         }
                     }
@@ -285,13 +303,16 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         if (!pullToRefresh) {
             mLoadingLocker.setVisibility(View.VISIBLE);
         }
-        HistoryRequest historyRequest = new HistoryRequest(getApplicationContext());
+        HistoryRequest historyRequest = new HistoryRequest(this);
         registerRequest(historyRequest);
         historyRequest.userid = mUserId;
         historyRequest.limit = LIMIT;
         if(pullToRefresh) {
-            if(mAdapter.getDataCopy().getFirst() != null) {
-                historyRequest.from = mAdapter.getDataCopy().getFirst().id;
+            LinkedList<History> data = mAdapter.getDataCopy();
+            if(!data.isEmpty()) {
+                if(data.getFirst() != null) {
+                    historyRequest.from = data.getFirst().id;
+                }
             }
         }
         historyRequest.callback(new ApiHandler() {
@@ -301,25 +322,30 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     LocalBroadcastManager.getInstance(ChatActivity.this).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID,itemId));
                     itemId = -1;
                 }
-                final FeedListData<History> dataList = new FeedListData<History>(
-                        response.jsonResult, History.class);
-                if(ChatActivity.this != null) {
-	                post(new Runnable() {
-	                    @Override
-	                    public void run() {
+                if(pullToRefresh || mTimer == null) {
+                    restartTimer();
+                }
+                final FeedListData<History> dataList = new FeedListData<History>(response.jsonResult, History.class);
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mAdapter != null) {
                             if(pullToRefresh) {
                                 mAdapter.addAll(dataList.items);
                             }  else {
-	                            mAdapter.setDataList(dataList.items);
+                                mAdapter.setDataList(dataList.items);
                             }
-	                        if (pullToRefresh) {
-	                            mListView.onRefreshComplete();
-	                        }
-	                        mLoadingLocker.setVisibility(View.GONE);
-	                        mAdapter.notifyDataSetChanged();
-	                    }
-	                });
-                }
+                            mAdapter.notifyDataSetChanged();
+                        }
+                        if (pullToRefresh && mListView != null) {
+                            mListView.onRefreshComplete();
+                        }
+                        if (mLoadingLocker != null) {
+                            mLoadingLocker.setVisibility(View.GONE);
+                        }
+
+                    }
+                });
             }
 
             @Override
@@ -330,6 +356,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                         Toast.makeText(ChatActivity.this, getString(R.string.general_data_error),
                                 Toast.LENGTH_SHORT).show();
                         mLoadingLocker.setVisibility(View.GONE);
+                        lockScreen.setVisibility(View.VISIBLE);
+                        stopTimer();
                     }
                 });
             }
@@ -361,6 +389,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         switch (v.getId()) {
 	        case R.id.btnSend: {
 	        	sendMessage();
+                EasyTracker.getTracker().trackEvent("Chat", "SendMessage", "", 1L);
 	        }
 	        break;
             case R.id.btnChatAdd: {
@@ -369,17 +398,21 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 else
                     mSwapControl.snapToScreen(1);
                 mIsAddPanelOpened = !mIsAddPanelOpened;
+
+                EasyTracker.getTracker().trackEvent("Chat", "AdditionalClick", "", 1L);
             }
             break;
             case R.id.btnChatGift: {
                 startActivityForResult(new Intent(this, GiftsActivity.class),
                         GiftsActivity.INTENT_REQUEST_GIFT);
+                EasyTracker.getTracker().trackEvent("Chat", "SendGiftClick", "", 1L);
             }
             break;
             case R.id.btnChatPlace: {
                 sendUserCurrentLocation();
                 // Toast.makeText(ChatActivity.this, "Place",
                 // Toast.LENGTH_SHORT).show();
+                EasyTracker.getTracker().trackEvent("Chat", "SendPlaceClick", "", 1L);
             }
             break;
             case R.id.btnChatMap: {
@@ -387,6 +420,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                         GeoMapActivity.INTENT_REQUEST_GEO);
                 // Toast.makeText(ChatActivity.this, "Map",
                 // Toast.LENGTH_SHORT).show();
+                EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
             }
             break;
             case R.id.btnNavigationBackWithText: {
@@ -418,7 +452,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     protected void onResume() {
         super.onResume();
         if (!mReceiverRegistered) {
-            registerReceiver(mNewMessageReceiver, new IntentFilter(GCMUtils.GCM_NOTIFICATION));
+            IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
+            registerReceiver(mNewMessageReceiver, filter);
+
             mReceiverRegistered = true;
         }
         startTimer();
@@ -436,27 +472,25 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         }
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
+        Debug.log("ChatActivity::onPause");
     }
 
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
-                return sendMessage();
-            }
-            return false;
+            return actionId == EditorInfo.IME_ACTION_SEND && sendMessage();
         }
     };
 
-    private boolean sendMessage() {
+    private boolean sendMessage() {    	
     	final String text = mEditBox.getText().toString();
-    	if (text == null || text.length() == 0)
+    	if (text == null || text.length() == 0)                	
             return false;
-
+    	
         mLoadingLocker.setVisibility(View.VISIBLE);
 
         MessageRequest messageRequest = new MessageRequest(
-                ChatActivity.this.getApplicationContext());
+                ChatActivity.this);
         registerRequest(messageRequest);
         messageRequest.message = mEditBox.getText().toString();
         messageRequest.userid = mUserId;
@@ -474,7 +508,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                             mAdapter.notifyDataSetChanged();
                             mEditBox.getText().clear();
                             mLoadingLocker.setVisibility(View.GONE);
-
 
                         } else {
                             Toast.makeText(ChatActivity.this,
@@ -500,7 +533,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         }).exec();
         return true;
     }
-
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -512,7 +545,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
                 final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
                 Debug.log(this, "id:" + id + " url:" + url);
-                SendGiftRequest sendGift = new SendGiftRequest(getApplicationContext());
+                SendGiftRequest sendGift = new SendGiftRequest(this);
                 registerRequest(sendGift);
                 sendGift.giftId = id;
                 sendGift.userId = mUserId;
@@ -561,7 +594,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 Bundle extras = data.getExtras();
                 final Geo geo = extras.getParcelable(GeoMapActivity.INTENT_GEO);
 
-                CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+                CoordinatesRequest coordRequest = new CoordinatesRequest(this);
                 registerRequest(coordRequest);
                 coordRequest.userid = mUserId;
                 final Coordinates coordinates = geo.getCoordinates();
@@ -666,7 +699,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         OsmManager.getAddress(latitude, longitude, new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                CoordinatesRequest coordRequest = new CoordinatesRequest(getApplicationContext());
+                CoordinatesRequest coordRequest = new CoordinatesRequest(ChatActivity.this);
                 registerRequest(coordRequest);
                 coordRequest.userid = mUserId;
                 coordRequest.latitude = latitude;
@@ -776,6 +809,13 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
+        if(lockScreen != null) {
+            if(lockScreen.getVisibility() == View.VISIBLE) {
+                return null;
+            }
+        } else if(!Http.isOnline(this)) {
+            return null;
+        }
         return mAdapter.getDataCopy();
     }
 
@@ -804,7 +844,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        update(true);
+                            update(true);
                     }
                 });
             }

@@ -18,11 +18,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Geo;
+import com.topface.topface.ui.analytics.TrackedMapActivity;
 import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.OsmManager;
@@ -40,7 +40,7 @@ import java.util.List;
  * @author kirussell
  */
 @SuppressWarnings("deprecation")
-public class GeoMapActivity extends MapActivity implements LocationListener, OnItemClickListener, OnClickListener {
+public class GeoMapActivity extends TrackedMapActivity implements LocationListener, OnItemClickListener, OnClickListener {
 
     //Constants
     public static final int INTENT_REQUEST_GEO = 112;
@@ -241,7 +241,7 @@ public class GeoMapActivity extends MapActivity implements LocationListener, OnI
         @Override
         protected FilterResults performFiltering(final CharSequence constraint) {
             ArrayList<Address> addressList = null;
-            //noinspection PointlessBooleanExpression
+            //noinspection PointlessBooleanExpression,ConstantConditions
             if (!OsmManager.OSMSearchEnabled) {
                 if (constraint != null) {
                     addressList = mGeoLocationManager.getSuggestionAddresses((String) constraint, 5);
