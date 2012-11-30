@@ -76,6 +76,8 @@ public class UserProfileActivity extends BaseFragmentActivity {
     //    public static final int F_ACTIONS = 3;
     public static final int F_COUNT = F_GIFTS + 1;
 
+    RetryView retryBtn;
+
     public static final int GIFTS_LOAD_COUNT = 30;
 
     private RelativeLayout lockScreen;
