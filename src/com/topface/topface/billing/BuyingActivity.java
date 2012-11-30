@@ -84,7 +84,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         mResourcesMoney.setText(getString(R.string.buying_you_have) + " " + CacheProfile.money);
 
         Matrix matrix = new Matrix();
-        matrix.postScale(0.9f, 0.9f);
+        matrix.postScale(0.7f, 0.7f);
 
         // Drawable battery =
         // getResources().getDrawable(Utils.getBatteryResource(CacheProfile.power));
