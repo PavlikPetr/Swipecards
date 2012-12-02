@@ -104,6 +104,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         // Buy Button
         mBuyButton = (Button) view.findViewById(R.id.btnBuy);
         mBuyButton.setOnClickListener(mBuyClickListener);
+        view.findViewById(R.id.loUserRates).setOnClickListener(mBuyClickListener);
 
         // Indicator
         mIndicatorView = (IndicatorView) view.findViewById(R.id.viewUserIndicator);
