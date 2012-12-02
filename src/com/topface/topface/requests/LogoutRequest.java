@@ -19,7 +19,7 @@ public class LogoutRequest extends AbstractApiRequest {
 
     @Override
     public String getServiceName() {
-        return service;  //To change body of implemented methods use File | Settings | File Templates.
+        return service;
     }
 
     @Override

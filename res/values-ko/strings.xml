@@ -33,8 +33,8 @@
     <string name="general_girls">여성</string>
     <string name="general_city">도시</string>
     <string name="general_dating">만남</string>
-    <string name="general_likes">что-то, кто-то 를 좋아합니다.</string>
-    <string name="general_likes_me">что-то, кто-то 가 당신을 좋아합니다.</string>
+    <string name="general_likes">를 좋아합니다.</string>
+    <string name="general_likes_me">가 당신을 좋아합니다.</string>
     <string name="general_sympathy">호감</string>
     <string name="general_delight">감탄</string>
     <string name="general_mutual">서로간의</string>
