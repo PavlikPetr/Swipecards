@@ -219,4 +219,7 @@
     <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
     <string name="dashbrd_popup_rate">Yes, I would rate</string>
     <string name="dashbrd_popup_later">Ask later</string>
+    <string name="settings_melody">Notification ringtone</string>
+    <string name="edit_refresh_status">Update status</string>
+    <string name="ban_title">Congratulations! You are banned</string>
 </resources>

@@ -176,6 +176,7 @@
     <string name="settings_about">Despre programa</string>
     <string name="settings_version">Versiunea</string>
     <string name="settings_copyright">Drepturi de autor 201-</string>
+    <string name="settings_rights_reserved">Topface \nиToate drepturile sunt rezervate</string>
     <string name="settings_extra">Informatia detailata se poate gasi pe</string>
     <string name="settings_logout">Iesi din acaunt</string>
     <string name="settings_logout_msg">Sunteti siguri ca doriti sa iesiti?</string>
@@ -186,9 +187,8 @@
     <string name="settings_feedback_success_msg">Mersi, mesajul a fost trimis cu succes</string>
     <string name="settings_switch_on">con.</string>
     <string name="settings_switch_off">decon.</string>
-    <string name="settings_help_url">http://topface.com</string>
-    <string name="settings_topface_url">http://topface.com</string>
     <string name="leaders_go_date">Doresc aici</string>
+    <string name="leaders_leader_now">Acum pe Dmv va vor vedea toata lumea!</string>
     <string name="leaders_need_photo">Mai intai alege poza!</string>
     <string name="leaders_select_photo">Alege cea mai tare poza:</string>
     <plurals name="leaders_price">
@@ -205,8 +205,26 @@
         <item quantity="one">%d poza</item>
     </plurals>
     <string name="novice_sympathy">Trimiteti simpatii la cei \n care va sunt dragi cu adevarat, \n pentru a incepe o cunostinta placuta</string>
+    <string name="novice_energy">Cu cat mare mare e incarcatura la baterie,\nи cu atat mai des sunte-ti aratat. \nиNu uitati sa incarcati\nиbateria, cumparand energie.</string>
+    <string name="novice_battery_bonus">Energie va da popularitate\nи noi simpatii. Dmv puteti\nи sa incarcati bateria, cumparand\nи 100% energie. Prima incarcare\nи gratis!</string>
     <string name="novice_fill_profile">Adauga pozele tale cele mai tari, \n pentru a primi mai multe simpatii.</string>
+    <string name="general_edit_profile_message">Fiti amabili, sa indepliniti campurile necesare a chestionarului</string>
+    <string name="general_premium_access_error">Pentru aceasta functie aveti nevoie de Premium</string>
+    <string name="general_search_null_response_error">Cautare esuata. Incercati sa faceti schimbari in filtru</string>
+    <string name="change_filters">Schimba filtru</string>
+    <string name="general_sex">Genul</string>
+    <string name="general_girl">Femeesc</string>
+    <string name="general_boy">Barbatesc</string>
+    <string name="filter_city_fail">Nu a fost gasit nici unorasi care sa se inceapa cu «%s»</string>
     <string name="age_filter_man">Dmv va sunt interesati baietii</string>
     <string name="age_filter_girl">Dmv va sunt interesante fetele</string>
+    <string name="dashbrd_popup_rating">Va placut aplicatia noastra? Marestene ratingul! Cat mai mare e ratingul, cu atat mai multi oameni interesanti vei intalni in Topface</string>
+    <string name="dashbrd_popup_title">Rating</string>
+    <string name="dashbrd_popup_cancel">Nu intreba mai mult</string>
+    <string name="dashbrd_popup_rate">Instaleaza ratingul</string>
+    <string name="dashbrd_popup_later">Intreaba mai tarziu</string>
     <string name="buying_store_connect">Solicit Tunes Store</string>
+    <string name="buying_store_purchase">Fac cumparaturi in iTunes Store</string>
+    <string name="buying_tf_ack_sending">Trimit informatia despre cumparatura in Topface</string>
+    <string name="settings_melody">Melodia de instiintare</string>
 </resources>

@@ -185,8 +185,6 @@
     <string name="settings_feedback_success_msg">Obrigado, a mensagem foi enviada com sucesso</string>
     <string name="settings_switch_on">incluir</string>
     <string name="settings_switch_off">cortar</string>
-    <string name="settings_help_url">http://topface.com</string>
-    <string name="settings_topface_url">http://topface.com</string>
     <string name="leaders_go_date">Eu quero ficar aqui!</string>
     <string name="leaders_leader_now">Agora todos lhe vêm!</string>
     <string name="leaders_need_photo">Primeiramente, é necessário escolher uma fotografia!</string>
@@ -222,4 +220,8 @@
     <string name="dashbrd_popup_cancel">Não perguntar mais</string>
     <string name="dashbrd_popup_rate">Definir o ranting</string>
     <string name="dashbrd_popup_later">Perguntar mais tarde</string>
+    <string name="buying_store_connect">Solicito iTunes Store</string>
+    <string name="buying_store_purchase">Faço compra em iTunes Store</string>
+    <string name="buying_tf_ack_sending">Envio informação sobre compra para Topface</string>
+    <string name="settings_melody">Melodia de notificação</string>
 </resources>

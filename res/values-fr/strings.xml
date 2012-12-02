@@ -185,8 +185,6 @@
     <string name="settings_feedback_success_msg">Merci, le message a bien été envoyé</string>
     <string name="settings_switch_on">act.</string>
     <string name="settings_switch_off">désact.</string>
-    <string name="settings_help_url">http://topface.com</string>
-    <string name="settings_topface_url">http://topface.com</string>
     <string name="leaders_go_date">Je veux être là</string>
     <string name="leaders_leader_now">Maintenant tout le monde vous verra!</string>
     <string name="leaders_need_photo">Il faut d\'abord choisir une photo!</string>

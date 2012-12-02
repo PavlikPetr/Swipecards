@@ -174,6 +174,7 @@
     <string name="settings_about">Om programmet</string>
     <string name="settings_version">Version</string>
     <string name="settings_copyright">Copyright 2010-</string>
+    <string name="settings_rights_reserved">Topface \nKopiering förbjudet</string>
     <string name="settings_extra">Läs mer här</string>
     <string name="settings_logout">Logga ut</string>
     <string name="settings_logout_msg">Är du säker att du vill logga ut?</string>
@@ -184,8 +185,6 @@
     <string name="settings_feedback_success_msg">Tack, ditt meddelande är avsänt</string>
     <string name="settings_switch_on">på</string>
     <string name="settings_switch_off">av</string>
-    <string name="settings_help_url">http://topface.com</string>
-    <string name="settings_topface_url">http://topface.com</string>
     <string name="leaders_go_date">Vill hit</string>
     <string name="leaders_leader_now">Nu kommer alla att se dig!</string>
     <string name="leaders_need_photo">Först bör man välja foto!</string>
@@ -202,9 +201,12 @@
         <item quantity="one">%d foto</item>
     </plurals>
     <string name="novice_sympathy">Skicka sympatier till dem\ndu verkligen gillar,\nför att inleda ett trevligt förhållande</string>
+    <string name="novice_energy">Ju mer energi du har,\ndesto oftare blir du rankad.\nGlöm inte ladda\nbatteriet, köp energi.</string>
+    <string name="novice_battery_bonus">Energi gör dig populär\noch ger nya sympatier. Du kan\nladda bateriet, genom att köpa\n 100% energi. Första laddningen\nfår du av oss gratis!</string>
     <string name="novice_fill_profile">Lägg till dina bästa foton,\för att få fler sympatier.</string>
     <string name="general_edit_profile_message">Vänligen fyll i nödvändiga fälten i profilen</string>
     <string name="general_premium_access_error">För denna funktion behövs Premium</string>
+    <string name="general_search_null_response_error">Inget hittats. Försök att ändra sökkriterier</string>
     <string name="change_filters">Ändra filtrar</string>
     <string name="general_sex">Kön</string>
     <string name="general_girl">Kvinna</string>
@@ -212,4 +214,13 @@
     <string name="filter_city_fail">Det har inte hittats någon stad som börjar på «%s»</string>
     <string name="age_filter_man">Du är intresserad av killar</string>
     <string name="age_filter_girl">Du är intresserad av tjejer</string>
+    <string name="dashbrd_popup_rating">Gillar du vår applikation! Höj vår rating! Ju högre rating vi har, desto fler intressanta människor kan du möta på Topface</string>
+    <string name="dashbrd_popup_title">Rating</string>
+    <string name="dashbrd_popup_cancel">Fråga inte mer</string>
+    <string name="dashbrd_popup_rate">Visa rating</string>
+    <string name="dashbrd_popup_later">Fråga senare</string>
+    <string name="buying_store_connect">Söker kontakt med iTunes Store</string>
+    <string name="buying_store_purchase">Gör ett köp i iTunes Store</string>
+    <string name="buying_tf_ack_sending">Skickar information om köpet på Topface</string>
+    <string name="settings_melody">Notifikationsmelodi</string>
 </resources>

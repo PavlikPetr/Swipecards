@@ -185,8 +185,6 @@
     <string name="settings_feedback_success_msg">Teşekkürler, mesaj başarılıyla gönderilmiştir</string>
     <string name="settings_switch_on">aç</string>
     <string name="settings_switch_off">kapat</string>
-    <string name="settings_help_url">http://topface.com</string>
-    <string name="settings_topface_url">http://topface.com</string>
     <string name="leaders_go_date">Buraya istiyorum</string>
     <string name="leaders_leader_now">Artık sizi herkes görecek!</string>
     <string name="leaders_need_photo">Önce fotoğraf seçin!</string>
@@ -221,4 +219,8 @@
     <string name="dashbrd_popup_cancel">Bir daha sorma</string>
     <string name="dashbrd_popup_rate">Reyting göstermek</string>
     <string name="dashbrd_popup_later">Daha sonra sormak</string>
+    <string name="buying_store_connect">iTunes Store istiyorum</string>
+    <string name="buying_store_purchase">iTunes Store’de alış veriş yapıyorum</string>
+    <string name="buying_tf_ack_sending">Topface’ye alış veriş hakkında bilgi gönderiyorum</string>
+    <string name="settings_melody">Bildirim sesi</string>
 </resources>

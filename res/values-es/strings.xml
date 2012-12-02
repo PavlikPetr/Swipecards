@@ -185,8 +185,6 @@
     <string name="settings_feedback_success_msg">Gracias, mensaje esta enviado con éxito</string>
     <string name="settings_switch_on">On</string>
     <string name="settings_switch_off">Off</string>
-    <string name="settings_help_url">http://topface.com</string>
-    <string name="settings_topface_url">http://topface.com</string>
     <string name="leaders_go_date">Ponme aquí</string>
     <string name="leaders_leader_now">¡Ahora te verán todo!</string>
     <string name="leaders_need_photo">¡Primero hay que elegir la foto!</string>

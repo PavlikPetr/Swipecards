@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="time_now">Právě teď</string>
+    <plurals name="time_hour">
+        <item quantity="few">před %d hodinami</item>
+        <item quantity="other">před %d hodinami</item>
+        <item quantity="one">před %d hodinou</item>
+    </plurals>
+    <plurals name="time_minute">
+        <item quantity="zero">před %d minutou</item>
+        <item quantity="other">před %d minutami</item>
+        <item quantity="one">před %d minutami</item>
+    </plurals>
+    <string name="time_yesterday">Včera</string>
+    <string name="time_today">Dnes</string>
+    <string name="time_monday">Pondělí</string>
+    <string name="time_tuesday">Úterý</string>
+    <string name="time_wednesday">Středa</string>
+    <string name="time_thursday">Čtvrtek</string>
+    <string name="time_friday">Pó</string>
+    <string name="time_saturday">Sobota</string>
+    <string name="time_sunday">Neděle</string>
+    <string name="time_january">Leden</string>
+    <string name="time_february">Únor</string>
+    <string name="time_march">Březen</string>
+    <string name="time_april">Duben</string>
+    <string name="time_may">Květen</string>
+    <string name="time_june">Červen</string>
+    <string name="time_july">Červenec</string>
+    <string name="time_august">Srpen</string>
+    <string name="time_september">Září</string>
+    <string name="time_october">Říjen</string>
+    <string name="time_november">Listopad</string>
+    <string name="time_december">Prosinec</string>
+</resources>

@@ -185,8 +185,6 @@
     <string name="settings_feedback_success_msg">Σας ευχαριστούμε, το μήνυμα εστάλη επιτυχώς</string>
     <string name="settings_switch_on">Συμπ.</string>
     <string name="settings_switch_off">εκτός.</string>
-    <string name="settings_help_url">http://topface.com</string>
-    <string name="settings_topface_url">http://topface.com</string>
     <string name="leaders_go_date">Θέλω εδώ</string>
     <string name="leaders_leader_now">Τώρα σας μπορούν να δουν όλα!</string>
     <string name="leaders_need_photo">Πρώτα θα πρέπει να επιλέξετε μια φωτογραφία!</string>
@@ -221,4 +219,8 @@
     <string name="dashbrd_popup_cancel">Μην ρωτήσετε</string>
     <string name="dashbrd_popup_rate">Ρυθμίστε το βαθμολογίας</string>
     <string name="dashbrd_popup_later">Ρωτήστε αργότερα</string>
+    <string name="buying_store_connect">Ζήτώ από το iTunes Store</string>
+    <string name="buying_store_purchase">Κάνω καταχώρηση αγοράς από το iTunes Store</string>
+    <string name="buying_tf_ack_sending">Στέλνω πληροφορίες σχετικά με την αγορά στην Topface</string>
+    <string name="settings_melody">Κοινοποίηση τον ήχο κλήσης</string>
 </resources>

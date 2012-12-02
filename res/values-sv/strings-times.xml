@@ -2,8 +2,8 @@
 <resources>
     <string name="time_now">Strax</string>
     <plurals name="time_hour">
-        <item quantity="other">%d timmar före</item>
-        <item quantity="one">%d timme före</item>
+        <item quantity="other">för %d timmar sedan</item>
+        <item quantity="one">för %d timmar sedan</item>
     </plurals>
     <plurals name="time_minute">
         <item quantity="zero">%d minut före</item>

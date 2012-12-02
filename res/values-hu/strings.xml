@@ -185,8 +185,6 @@
     <string name="settings_feedback_success_msg">Köszönjük, üzenetét sikeresen elküldte</string>
     <string name="settings_switch_on">bekapcsol</string>
     <string name="settings_switch_off">kikapcsol</string>
-    <string name="settings_help_url">http://topface.com</string>
-    <string name="settings_topface_url">http://topface.com</string>
     <string name="leaders_go_date">Itt akarok lenni</string>
     <string name="leaders_leader_now">Mindenki látni fog most már!</string>
     <string name="leaders_need_photo">Először ki kell választanod egy fotót!</string>
@@ -221,4 +219,8 @@
     <string name="dashbrd_popup_cancel">Ne kérdezd</string>
     <string name="dashbrd_popup_rate">Értékelés beállítása</string>
     <string name="dashbrd_popup_later">Kérdezd meg később</string>
+    <string name="buying_store_connect">iTunes Store kérése</string>
+    <string name="buying_store_purchase">Vásárolok az iTunes Store-ban</string>
+    <string name="buying_tf_ack_sending">Információt küldök vásárlásról a Topface-n</string>
+    <string name="settings_melody">Értesítés csengőhangja</string>
 </resources>

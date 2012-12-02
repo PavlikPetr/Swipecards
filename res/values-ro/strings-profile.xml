@@ -3,10 +3,12 @@
     <string name="profile_form_status_male_0">Dragoste si relatii serioase</string>
     <string name="profile_form_status_male_1">Relatii fara obligatiuni</string>
     <string name="profile_form_status_male_2">Prietenie si socializare</string>
+    <string name="profile_form_status_male_3">Doresc multe simpatii</string>
     <string name="profile_form_status_male_4">Doresc sa stau la taifas</string>
     <string name="profile_form_status_female_0">Dragoste si relatii serioase</string>
     <string name="profile_form_status_female_1">Relatii fara obligatiuni</string>
     <string name="profile_form_status_female_2">Prietenie si socializare</string>
+    <string name="profile_form_status_female_3">Doresc multe simpatii</string>
     <string name="profile_form_status_female_4">Vreau sa stau la taifas</string>
     <string name="profile_form_education_male_0">Mediu</string>
     <string name="profile_form_education_male_1">Inca imi fac studiile</string>

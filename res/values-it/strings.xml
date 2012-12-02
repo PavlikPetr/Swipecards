@@ -185,8 +185,6 @@
     <string name="settings_feedback_success_msg">Grazie, il messaggio è stato inviato con successo</string>
     <string name="settings_switch_on">on</string>
     <string name="settings_switch_off">off</string>
-    <string name="settings_help_url">http://topface.com</string>
-    <string name="settings_topface_url">http://topface.com</string>
     <string name="leaders_go_date">Voglio stare qui</string>
     <string name="leaders_leader_now">Ora tutti ti vedranno!</string>
     <string name="leaders_need_photo">Prima devi scegliere la foto!</string>
@@ -216,4 +214,13 @@
     <string name="filter_city_fail">Non è stata trovata alcuna città che s’inizia per «%s»</string>
     <string name="age_filter_man">Ti interessano i ragazzi</string>
     <string name="age_filter_girl">Ti interessano le ragazze</string>
+    <string name="dashbrd_popup_rating">Ti piace la nostra applicazione? Dacci il tuo voto! Più saliamo noi, più persone interessanti incontrerai su Topface</string>
+    <string name="dashbrd_popup_title">Valutazione</string>
+    <string name="dashbrd_popup_cancel">Non chiedermelo più</string>
+    <string name="dashbrd_popup_rate">Voglio votarvi</string>
+    <string name="dashbrd_popup_later">Chiedimelo più tardi</string>
+    <string name="buying_store_connect">Connessione al iTunes Store</string>
+    <string name="buying_store_purchase">Acquisto nell’iTunes Store</string>
+    <string name="buying_tf_ack_sending">Invio info sull’acquisto in Topface</string>
+    <string name="settings_melody">Suoneria di avviso</string>
 </resources>
