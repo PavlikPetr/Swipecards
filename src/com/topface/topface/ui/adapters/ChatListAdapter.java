@@ -440,7 +440,7 @@ public class ChatListAdapter extends BaseAdapter {
 
         int prev_target = -1;
         long prev_date = 0;
-        if(!doNeedClear) {
+        if(!doNeedClear && mDataList.size() != 0) {
             if(mDataList.getLast() != null) {
                 prev_date = mDataList.getLast().created;
                 if(prev_date >Data.midnight) {

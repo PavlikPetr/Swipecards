@@ -160,8 +160,10 @@ public class Profile extends AbstractDataWithPhotos {
 
                 // personal status
                 String status = profile.status;
-                if (mIsUserProfile && status.trim().isEmpty()) {
-                    status = null;
+                if(status != null) {
+                    if (mIsUserProfile && status.trim().length() == 0) {
+                        status = null;
+                    }
                 }
                 formItem = new FormItem(R.array.form_main_personal_status, status,
                         mIsUserProfile ? FormItem.DATA : FormItem.STATUS, headerItem);

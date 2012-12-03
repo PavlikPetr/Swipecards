@@ -40,7 +40,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void updateUI(Runnable action) {
-        getActivity().runOnUiThread(action);
+        if(isAdded()) {
+            getActivity().runOnUiThread(action);
+        }
     }
 
     @Override
@@ -94,11 +96,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                     }
                 }
             };
-            LocalBroadcastManager.getInstance(getActivity())
-                    .registerReceiver(
-                            updateCountersReceiver,
-                            new IntentFilter(CountersManager.UPDATE_COUNTERS)
-                    );
+            if(isAdded()) {
+                LocalBroadcastManager.getInstance(getActivity())
+                        .registerReceiver(
+                                updateCountersReceiver,
+                                new IntentFilter(CountersManager.UPDATE_COUNTERS)
+                        );
+            }
         }
     }
 }

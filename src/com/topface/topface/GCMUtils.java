@@ -51,6 +51,11 @@ public class GCMUtils {
 
     public static int lastUserId = -1;
 
+    private static boolean showMessage = true;
+    private static boolean showLikes = true;
+    private static boolean showSympathy = true;
+    private static boolean showVisitors = true;
+
     public static void init(Context context) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             try {
@@ -114,7 +119,14 @@ public class GCMUtils {
             }
 
             Options options = CacheProfile.getOptions();
-
+            if(options.notifications != null) {
+                if(!options.notifications.isEmpty()) {
+                    showMessage = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns;
+                    showLikes =  options.notifications.get(Options.NOTIFICATIONS_LIKES).apns;
+                    showSympathy = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns;
+                    showVisitors = options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns;
+                }
+            }
             String countersString = extra.getStringExtra("counters");
             if (countersString != null)
                 setCounters(countersString, context);
@@ -123,7 +135,7 @@ public class GCMUtils {
 
             switch (type) {
                 case GCM_TYPE_MESSAGE:
-                    if (options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns) {
+                    if (showMessage) {
                         if (user.id != 0) {
                             lastNotificationType = GCM_TYPE_MESSAGE;
                             i = new Intent(context, ChatActivity.class);
@@ -141,7 +153,7 @@ public class GCMUtils {
 
 
                 case GCM_TYPE_SYMPATHY:
-                    if (options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns) {
+                    if (showSympathy) {
                         lastNotificationType = GCM_TYPE_SYMPATHY;
                         i = new Intent(context, NavigationActivity.class);
                         i.putExtra(NEXT_INTENT, BaseFragment.F_MUTUAL);
@@ -149,7 +161,7 @@ public class GCMUtils {
                     break;
 
                 case GCM_TYPE_LIKE:
-                    if (options.notifications.get(Options.NOTIFICATIONS_LIKES).apns) {
+                    if (showLikes) {
                         lastNotificationType = GCM_TYPE_LIKE;
                         i = new Intent(context, NavigationActivity.class);
                         i.putExtra(NEXT_INTENT, BaseFragment.F_LIKES);
@@ -157,7 +169,7 @@ public class GCMUtils {
                     break;
 
                 case GCM_TYPE_GUESTS:
-                    if (options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns) {
+                    if (showVisitors) {
                         lastNotificationType = GCM_TYPE_GUESTS;
                         i = new Intent(context, NavigationActivity.class);
                         i.putExtra(NEXT_INTENT, BaseFragment.F_VISITORS);
