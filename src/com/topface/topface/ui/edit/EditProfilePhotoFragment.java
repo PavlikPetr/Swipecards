@@ -146,7 +146,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             if (mSelectedAsMainId != mLastSelectedAsMainId) {
                 MainRequest setAsMainRequest = new MainRequest(getActivity());
                 registerRequest(setAsMainRequest);
-                setAsMainRequest.photoid = mSelectedAsMainId;
+                setAsMainRequest.photoid = mLastSelectedAsMainId;
                 setAsMainRequest.callback(new ApiHandler() {
 
                     @Override

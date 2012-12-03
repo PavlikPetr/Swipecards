@@ -1,6 +1,7 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.*;
@@ -45,6 +46,7 @@ import com.topface.topface.utils.OsmManager;
 import com.topface.topface.utils.http.Http;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -89,6 +91,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private  int itemId;
     private Timer mTimer;
 
+    private Button btnBack;
+
     // Managers
     private GeoLocationManager mGeoManager = null;
     private RelativeLayout lockScreen;
@@ -125,10 +129,12 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         headerSubtitle.setText(getIntent().getStringExtra(INTENT_USER_CITY));
 
         findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        Button btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
+        btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
         btnBack.setVisibility(View.VISIBLE);
-        if (getIntent().hasExtra(INTENT_PREV_ENTITY)) {
-            btnBack.setOnClickListener(new OnClickListener() {
+
+
+        if (getIntent().hasExtra(INTENT_PREV_ENTITY) && isThereNavigationActivity()) {
+             btnBack.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();
@@ -461,6 +467,19 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         GCMUtils.lastUserId = mUserId; //Не показываем нотификации в чате с пользователем,
                                        //чтобы, в случае задержки нотификации, не делать лишних
                                        //оповещений
+        if(!isThereNavigationActivity() && btnBack != null) {
+            btnBack.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ChatActivity.this,NavigationActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_DIALOGS);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            btnBack.setText(R.string.general_dialogs);
+        }
     }
 
     @Override
@@ -864,5 +883,18 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             stopTimer();
             startTimer();
         }
+    }
+
+    private boolean isThereNavigationActivity() {
+        ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+        if(taskList != null) {
+            if(taskList.size() > 1) {
+                if(taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName()) || taskList.get(0).numActivities > 1)  {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
