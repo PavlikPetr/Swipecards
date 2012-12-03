@@ -148,7 +148,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
             case T_STATUS:
                 holder.mTitle.setText(item.title.toUpperCase());
                 holder.mState.setImageResource(R.drawable.user_cell);
-                if (!item.value.trim().isEmpty()) {
+                if (item.value.trim().length() != 0) {
                     holder.mValue.setText(item.value);
                     holder.mValue.setVisibility(View.VISIBLE);
                 } else {

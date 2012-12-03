@@ -307,7 +307,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         registerRequest(historyRequest);
         historyRequest.userid = mUserId;
         historyRequest.limit = LIMIT;
-        if(pullToRefresh) {
+        if(pullToRefresh && mAdapter != null) {
             LinkedList<History> data = mAdapter.getDataCopy();
             if(!data.isEmpty()) {
                 if(data.getFirst() != null) {
@@ -844,7 +844,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if(mAdapter != null) {
                             update(true);
+                        }
                     }
                 });
             }
