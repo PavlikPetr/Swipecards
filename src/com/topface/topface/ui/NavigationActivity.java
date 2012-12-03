@@ -93,9 +93,6 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT,-1);
         if(id != -1) {
             mFragmentSwitcher.showFragmentWithAnimation(id);
-        } else {
-            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
-            mFragmentMenu.selectDefaultMenu();
         }
     }
 
