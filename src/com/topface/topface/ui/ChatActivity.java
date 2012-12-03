@@ -860,7 +860,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void restartTimer () {
-        stopTimer();
-        startTimer();
+        if(mTimer != null) {
+            stopTimer();
+            startTimer();
+        }
     }
 }
