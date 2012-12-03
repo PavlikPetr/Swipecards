@@ -220,4 +220,6 @@
     <string name="dashbrd_popup_rate">Rating ausstellen</string>
     <string name="dashbrd_popup_later">Später fragen</string>
     <string name="settings_melody">Sound-Benachrichtigungen</string>
+    <string name="edit_refresh_status">Den Status aktualisieren</string>
+    <string name="ban_title">Gratulation! Sie sind gebannt</string>
 </resources>

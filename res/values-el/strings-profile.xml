@@ -229,4 +229,9 @@
     <string name="form_detail_archievements_1">Τα καλύτερα επιτεύγματά στη ζωή</string>
     <string name="form_detail_archievements_2">Καλύτερα επιτεύγματά στη ζωή σας</string>
     <string name="form_detail_archievements_3">Καλύτερα επιτεύγματά στη ζωή σας</string>
+    <string name="form_main_personal_status_0">Κατάσταση</string>
+    <string name="form_main_about_status_0">Γι \'αυτόν</string>
+    <string name="form_main_about_status_1">Γι \'αυτήν</string>
+    <string name="form_main_about_status_2">Σχετικά με εμένα</string>
+    <string name="form_main_about_status_3">Σχετικά με εμένα</string>
 </resources>

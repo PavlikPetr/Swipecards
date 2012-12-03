@@ -223,4 +223,6 @@
     <string name="buying_store_purchase">Κάνω καταχώρηση αγοράς από το iTunes Store</string>
     <string name="buying_tf_ack_sending">Στέλνω πληροφορίες σχετικά με την αγορά στην Topface</string>
     <string name="settings_melody">Κοινοποίηση τον ήχο κλήσης</string>
+    <string name="edit_refresh_status">Να κάνετε ενημέρωση της κατάστασης</string>
+    <string name="ban_title">Συγχαρητήρια! Είστε αποκλεισμένος</string>
 </resources>
