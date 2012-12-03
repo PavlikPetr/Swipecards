@@ -78,10 +78,6 @@ public class AuthToken {
 
 
     public boolean isEmpty() {
-        if (mSnType.equals(Static.EMPTY)) {
-            return true;
-        } else {
-            return false;
-        }
+        return mSnType.equals(Static.EMPTY);
     }
 }

@@ -10,6 +10,7 @@ import com.topface.topface.R;
 import com.topface.topface.RetryDialog;
 import com.topface.topface.Static;
 import com.topface.topface.ui.AuthActivity;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.http.RequestConnection;
@@ -61,7 +62,10 @@ public abstract class ApiRequest {
 
             retryDialog.show();
         } else if((!Data.isSSID() || (new AuthToken(context)).isEmpty()) && doNeedAuthorize) {
-            context.startActivity(new Intent(context, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            if (!AuthActivity.isStarted()) {
+                Debug.log("SSID and Token is empty, need authorize");
+                context.startActivity(new Intent(context, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            }
         } else {
             connection = ConnectionManager.getInstance().sendRequest(this);
         }

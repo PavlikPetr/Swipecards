@@ -40,6 +40,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     private RetryView mRetryView;
     private ProgressBar mProgressBar;
     private AuthorizationManager mAuthorizationManager;
+    private static boolean mIsAuthStart = false;
 
     private boolean mFromAuthorizationReceiver;
     private boolean mIsAuthorized = false;
@@ -138,14 +139,20 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     protected void onPause() {
         super.onPause();
         mThis = null;
+        mIsAuthStart = false;
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mIsAuthStart = true;
         checkIntentForReauth();
         mThis = this;
+    }
+
+    public static boolean isStarted() {
+        return mIsAuthStart;
     }
 
 
@@ -153,9 +160,12 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_CANCELED)
+
+        if (resultCode != RESULT_CANCELED) {
             hideButtons();
-        else showButtons();
+        } else {
+            showButtons();
+        }
     }
 
     @Override
