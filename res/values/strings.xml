@@ -78,7 +78,7 @@
     <string name="filter_only_online">Online only</string>
     <string name="filter_only_beautiful">Beautiful only</string>
     <string name="filter_extra_parameters">Advanced search</string>
-    <string name="filter_age">Age</string>
+    <string name="filter_age">Select age</string>
     <string name="filter_online">Online</string>
     <string name="filter_all">All</string>
     <string name="filter_cities_all">All cities</string>

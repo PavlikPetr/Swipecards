@@ -224,4 +224,6 @@
     <string name="buying_store_purchase">Faço compra em iTunes Store</string>
     <string name="buying_tf_ack_sending">Envio informação sobre compra para Topface</string>
     <string name="settings_melody">Melodia de notificação</string>
+    <string name="edit_refresh_status">Renovar status</string>
+    <string name="ban_title">Parabenizamos! Você está banido</string>
 </resources>

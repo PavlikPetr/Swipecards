@@ -223,4 +223,6 @@
     <string name="buying_store_purchase">iTunes Store’de alış veriş yapıyorum</string>
     <string name="buying_tf_ack_sending">Topface’ye alış veriş hakkında bilgi gönderiyorum</string>
     <string name="settings_melody">Bildirim sesi</string>
+    <string name="edit_refresh_status">Durumu yenilemek</string>
+    <string name="ban_title">Tebrikler! Siz ban edildiniz</string>
 </resources>
