@@ -81,6 +81,15 @@
               android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <activity android:name="com.adfonic.android.AdfonicActivity" />
         <activity android:name="ru.wapstart.plus1.sdk.MraidBrowser" />
+        <activity android:name=".ui.profile.BlackListActivity"/>
+        <!--TODO: Дебаг, убрать это после отладки-->
+        <!--<activity android:name=".ui.profile.BlackListActivity">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
 
         <!-- services -->
         <service android:name=".services.NotificationService"/>
