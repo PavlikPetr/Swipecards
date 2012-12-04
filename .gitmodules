@@ -19,3 +19,6 @@
 [submodule "libs/ActionBarSherlock"]
 	path = libs/ActionBarSherlock
 	url = git@github.com:Topface/ActionBarSherlock.git
+[submodule "libs/ViewPagerIndicator"]
+	path = libs/ViewPagerIndicator
+	url = git@github.com:Topface/Android-ViewPagerIndicator.git
