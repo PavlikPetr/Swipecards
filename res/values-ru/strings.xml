@@ -99,7 +99,7 @@
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_only_beautiful">Только красивые</string>
     <string name="filter_extra_parameters">Дополнительные параметры</string>
-    <string name="filter_age">Возраст</string>
+    <string name="filter_age">Выбор возраста</string>
     <string name="filter_online">Онлайн</string>
     <string name="filter_all">Все</string>
     <string name="filter_cities_all">По всем городам</string>
@@ -300,4 +300,5 @@
     <string name="edit_refresh_status">Обновить статус</string>
 
     <string name="ban_title">Поздравляем! Вы забанены</string>
+
 </resources>
