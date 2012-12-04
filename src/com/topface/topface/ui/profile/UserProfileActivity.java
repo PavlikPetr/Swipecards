@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiHandler;
@@ -90,6 +91,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EasyTracker.getInstance().setContext(this);
         Debug.log(this, "+onCreate");
         try {
         	setContentView(R.layout.ac_user_profile);
@@ -98,7 +100,9 @@ public class UserProfileActivity extends BaseFragmentActivity {
         	finish();
         }
 
-        mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1); // свой - чужой профиль
+        if(getIntent() != null) {
+            mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
+        }
 
         // Navigation bar
         String userName = getIntent().getStringExtra(INTENT_USER_NAME); // name

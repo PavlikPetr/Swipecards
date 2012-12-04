@@ -33,7 +33,6 @@ public class ConnectionManager {
     private static ConnectionManager mInstanse;
     private ExecutorService mWorker;
     private LinkedList<Thread> mDelayedRequestsThreads;
-    private boolean doNeedResend = true;
     // Constants
     public static final String TAG = "CM";
     public static final int WAITING_TIME = 2000;
@@ -100,17 +99,16 @@ public class ConnectionManager {
                             apiRequest.context.startActivity(intent);
                             apiRequest.handler.fail(apiResponse.code, apiResponse);
                         } else if (apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE) {
-                            if (doNeedResend) {
+                            if (apiRequest.isNeedResend()) {
                                 apiRequest.handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         sendRequest(apiRequest);
                                     }
                                 }, WAITING_TIME);
-                                doNeedResend = false;
+                                apiRequest.setNeedResend(false);
                             } else {
                                 apiRequest.handler.response(apiResponse);
-                                doNeedResend = true;
                             }
                         } else {
                             apiRequest.handler.response(apiResponse);

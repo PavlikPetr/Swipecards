@@ -53,6 +53,8 @@ import java.util.TimerTask;
 @SuppressWarnings("deprecation")
 public class ChatActivity extends BaseFragmentActivity implements View.OnClickListener,
         LocationListener {
+    public static final String ADAPTER_DATA = "adapter";
+    public static final String WAS_FAILED = "was_failed";
     // Data
     private int mUserId;
     private boolean mProfileInvoke;
@@ -92,6 +94,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private Timer mTimer;
 
     private Button btnBack;
+
+    private boolean wasFailed = false;
 
     // Managers
     private GeoLocationManager mGeoManager = null;
@@ -137,6 +141,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
              btnBack.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     finish();
                 }
             });
@@ -157,18 +162,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 btnBack.setText(R.string.general_profile);
             }
 
-        } else {
-            btnBack.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ChatActivity.this,NavigationActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_DIALOGS);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-            btnBack.setText(R.string.general_dialogs);
         }
 
         final ImageButton btnProfile = (ImageButton) findViewById(R.id.btnNavigationProfileBar);
@@ -262,8 +255,22 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         Object data = getLastCustomNonConfigurationInstance();
         if (data != null) {
             // noinspection unchecked
-            mAdapter.setDataList((LinkedList<History>) data);
-            mLoadingLocker.setVisibility(View.GONE);
+            try{
+                Bundle params = (Bundle)data;
+                LinkedList<History> history = (LinkedList<History>) params.getSerializable(ADAPTER_DATA);
+                if(history != null) {
+                    mAdapter.setDataList(history);
+                }
+                wasFailed =  params.getBoolean(WAS_FAILED,false);
+                if(wasFailed) {
+                    lockScreen.setVisibility(View.VISIBLE);
+                } else {
+                    lockScreen.setVisibility(View.GONE);
+                }
+                mLoadingLocker.setVisibility(View.GONE);
+            } catch (Exception e) {
+                Debug.error(e);
+            }
         } else {
             // Если это не получилось, грузим с сервера
             update(false);
@@ -331,6 +338,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 if(pullToRefresh || mTimer == null) {
                     restartTimer();
                 }
+                wasFailed = false;
                 final FeedListData<History> dataList = new FeedListData<History>(response.jsonResult, History.class);
                 post(new Runnable() {
                     @Override
@@ -364,6 +372,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                         mLoadingLocker.setVisibility(View.GONE);
                         lockScreen.setVisibility(View.VISIBLE);
                         stopTimer();
+                        wasFailed = true;
                     }
                 });
             }
@@ -479,6 +488,16 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 }
             });
             btnBack.setText(R.string.general_dialogs);
+        } else {
+            if(btnBack != null) {
+                btnBack.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+            }
+
         }
     }
 
@@ -828,14 +847,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        if(lockScreen != null) {
-            if(lockScreen.getVisibility() == View.VISIBLE) {
-                return null;
-            }
-        } else if(!Http.isOnline(this)) {
-            return null;
-        }
-        return mAdapter.getDataCopy();
+        Bundle configurations = new Bundle();
+        configurations.putBoolean(WAS_FAILED,wasFailed);
+        configurations.putSerializable(ADAPTER_DATA, mAdapter.getDataCopy());
+        return configurations;
     }
 
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -856,20 +871,22 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     private void startTimer () {
         int period = Integer.parseInt(getString(R.string.default_chat_update_period));
-        mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(mAdapter != null) {
-                            update(true);
+        if(wasFailed) {
+            mTimer = new Timer();
+            mTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(mAdapter != null && Http.isOnline(ChatActivity.this)) {
+                                update(true);
+                            }
                         }
-                    }
-                });
-            }
-        },period,period);
+                    });
+                }
+            },period,period);
+        }
     }
 
     private void stopTimer () {
@@ -890,7 +907,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
         if(taskList != null) {
             if(taskList.size() > 1) {
-                if(taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName()) || taskList.get(0).numActivities > 1)  {
+                if(taskList.get(0).baseActivity.getClassName().equals(NavigationActivity.class.getName()) || taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName()))  {
                     return true;
                 }
             }
