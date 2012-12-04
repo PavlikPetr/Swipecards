@@ -33,16 +33,18 @@ public class RetryDialog extends AlertDialog {
         mReciever = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,0) != ConnectionChangeReceiver.CONNECTION_OFFLINE)
+                if(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,0) != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
+
                     RetryDialog.this.getButton(Dialog.BUTTON_POSITIVE).performClick();
+                }
             }
         };
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mReciever, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mReciever);
     }
 }

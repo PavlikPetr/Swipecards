@@ -27,6 +27,7 @@ public abstract class ApiRequest {
     private RequestConnection connection;
     private boolean doNeedAlert;
     private boolean doNeedAuthorize;
+    private boolean doNeedResend = true;
 
     public ApiRequest(Context context) {
         //Нельзя передавать Application Context!!!! Только контекст Activity
@@ -56,10 +57,10 @@ public abstract class ApiRequest {
             retryDialog.setButton(Dialog.BUTTON_NEGATIVE, context.getString(R.string.general_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (handler != null) handler.fail(0, new ApiResponse(""));
+//                    if (handler != null) handler.fail(0, new ApiResponse(""));
                 }
             });
-
+            handler.fail(0, new ApiResponse(""));
             retryDialog.show();
         } else if((!Data.isSSID() || (new AuthToken(context)).isEmpty()) && doNeedAuthorize) {
             if (!AuthActivity.isStarted()) {
@@ -89,7 +90,17 @@ public abstract class ApiRequest {
 
     private void setStopTime() {
         SharedPreferences mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        long stopTime = Calendar.getInstance().getTimeInMillis();
-        mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
+        if(mPreferences != null) {
+            long stopTime = Calendar.getInstance().getTimeInMillis();
+            mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
+        }
+    }
+
+    public boolean isNeedResend() {
+        return doNeedResend;
+    }
+
+    public void setNeedResend(boolean value) {
+        doNeedResend = value;
     }
 }
