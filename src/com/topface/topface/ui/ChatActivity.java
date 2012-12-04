@@ -43,7 +43,6 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.OsmManager;
-import com.topface.topface.utils.http.Http;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -871,22 +870,23 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     private void startTimer () {
         int period = Integer.parseInt(getString(R.string.default_chat_update_period));
-        if(wasFailed) {
-            mTimer = new Timer();
-            mTimer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(mAdapter != null && Http.isOnline(ChatActivity.this)) {
-                                update(true);
-                            }
-                        }
-                    });
-                }
-            },period,period);
+        if (mTimer != null) {
+            mTimer.cancel();
         }
+        mTimer = new Timer();
+        mTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(mAdapter != null) {
+                            update(true);
+                        }
+                    }
+                });
+            }
+        }, period, period);
     }
 
     private void stopTimer () {

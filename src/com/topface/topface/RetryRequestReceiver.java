@@ -5,13 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import com.topface.topface.ui.NavigationActivity;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Ilya Vorobiev
- * Date: 18.10.12
- * Time: 17:45
- * To change this template use File | Settings | File Templates.
- */
 public class RetryRequestReceiver extends BroadcastReceiver {
     public static final String RETRY_INTENT = "com.topface.topface.action.RETRY";
     public static final String RETRY_REQUEST_FROM_RECEIVER = "RetryRequestFromReciever";

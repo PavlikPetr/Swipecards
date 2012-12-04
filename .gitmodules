@@ -13,9 +13,9 @@
 [submodule "plus1-android-sdk"]
 	path = plus1-android-sdk
 	url = git@github.com:Topface/plus1-android-sdk.git
-[submodule ".\\libs\\WapStart"]
-	path = .\\libs\\WapStart
-	url = git@github.com:Topface/plus1-android-sdk.git
 [submodule "libs/acra"]
 	path = libs/acra
 	url = git@github.com:Topface/acra.git
+[submodule "libs/ActionBarSherlock"]
+	path = libs/ActionBarSherlock
+	url = git@github.com:Topface/ActionBarSherlock.git
