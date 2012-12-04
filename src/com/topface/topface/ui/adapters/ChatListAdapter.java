@@ -88,7 +88,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mDataList.size();
+        return mDataList != null ? mDataList.size() : 0;
     }
 
     @Override
