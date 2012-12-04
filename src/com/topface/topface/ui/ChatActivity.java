@@ -856,6 +856,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     private void startTimer () {
         int period = Integer.parseInt(getString(R.string.default_chat_update_period));
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
         mTimer = new Timer();
         mTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -869,7 +872,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     }
                 });
             }
-        },period,period);
+        }, period, period);
     }
 
     private void stopTimer () {

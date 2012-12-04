@@ -3,7 +3,6 @@ package com.topface.topface;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Handler;
@@ -61,14 +60,21 @@ public class GCMUtils {
             try {
                 GCMRegistrar.checkDevice(context);
                 GCMRegistrar.checkManifest(context);
-                final String regId = GCMRegistrar.getRegistrationId(context);
-                if (regId.equals("")) {
+
+                if (GCMRegistrar.isRegistered(context)) {
+                    final String regId = GCMRegistrar.getRegistrationId(context);
+                    Debug.log("Already registered, regID is " + regId);
+
+                    //Если на сервере не зарегистрированы, отправляем запрос
+                    if (!GCMRegistrar.isRegisteredOnServer(context)) {
+                        sendRegId(context, regId);
+                    }
+
+                } else {
                     GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
                     Debug.log("Registered: " + GCMRegistrar.getRegistrationId(context));
-                } else {
-                    sendRegId(context, regId);
-                    Debug.log("Already registered, regID is " + regId);
                 }
+
             } catch (Exception ex) {
                 Debug.error(ex);
             }    
@@ -94,13 +100,6 @@ public class GCMUtils {
             e.printStackTrace();
         }
         showNotification(intent, context);
-    }
-
-    public static void setRegisteredFlag(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(GCM_REGISTERED, true);
-        editor.commit();
     }
 
     public static void showNotification(final Intent extra, Context context) {
@@ -236,19 +235,20 @@ public class GCMUtils {
             public void run() {
                 Looper.prepare();
 
-                Debug.log("GCM onRegistered", registrationId);
+                Debug.log("Try send GCM regId to server: ", registrationId);
 
                 RegistrationTokenRequest registrationRequest = new RegistrationTokenRequest(context);
                 registrationRequest.token = registrationId;
                 registrationRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        GCMUtils.setRegisteredFlag(context);
+                        GCMRegistrar.setRegisteredOnServer(context, true);
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
                         Debug.error(String.format("RegistrationRequest fail: #%d %s", codeError, response));
+                        GCMRegistrar.setRegisteredOnServer(context, false);
                     }
                 }).exec();
                 Looper.loop();
