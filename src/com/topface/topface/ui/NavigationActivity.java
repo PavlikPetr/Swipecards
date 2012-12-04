@@ -46,7 +46,9 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
-    
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
