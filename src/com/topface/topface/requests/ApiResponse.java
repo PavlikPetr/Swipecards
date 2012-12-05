@@ -10,6 +10,7 @@ public class ApiResponse {
     public JSONObject jsonResult;
     public JSONObject counters;
     public String method;
+    private boolean mIsErrorResponse;
     // Constants
     public static final int ERRORS_PROCCESED = -2;
     public static final int RESULT_OK = -1;
@@ -71,6 +72,7 @@ public class ApiResponse {
             jsonResult = response;
             if (!jsonResult.isNull("error")) {
                 jsonResult = jsonResult.getJSONObject("error");
+                mIsErrorResponse = true;
                 code = jsonResult.getInt("code");
             } else if (!jsonResult.isNull("result")) {
                 if(!jsonResult.isNull("counters"))  {
@@ -96,6 +98,10 @@ public class ApiResponse {
             return jsonResult.toString();
         else
             return "response is null";
+    }
+
+    public boolean isError() {
+        return mIsErrorResponse;
     }
 
 

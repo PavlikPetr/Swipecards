@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+@SuppressWarnings({"PointlessBooleanExpression", "ConstantConditions"})
 public class Debug {
 
     public static final int MAX_LOG_MESSAGE_LENGTH = 3500;
@@ -67,7 +68,7 @@ public class Debug {
         }
     }
 
-    public static void error(String msg, Exception e) {
+    public static void error(String msg, Throwable e) {
         if (App.DEBUG) {
             StringBuilder stack = new StringBuilder("\n");
             for (StackTraceElement st : e.getStackTrace()) {
@@ -75,7 +76,8 @@ public class Debug {
             }
             msg = msg != null && !msg.equals("") ? msg + " : " : "";
             String errorText = e.getMessage() == null ? "" : " :: " + e.getMessage();
-            showChunkedLogError(App.TAG, msg + errorText + stack.toString());
+            String cause = e.getCause() == null ? "" : "\n" + e.getCause() + "\n";
+            showChunkedLogError(App.TAG, msg + errorText + cause + stack.toString());
         }
     }
 
@@ -85,7 +87,7 @@ public class Debug {
         }
     }
 
-    public static void error(Exception e) {
+    public static void error(Throwable e) {
         error(null, e);
     }
 

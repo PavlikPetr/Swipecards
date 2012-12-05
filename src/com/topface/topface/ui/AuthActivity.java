@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Data;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -238,8 +239,10 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
     private void auth(AuthToken token) {
         AuthRequest authRequest = new AuthRequest(getApplicationContext());
+        String socialNet = token.getSocialNet();
+        EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + socialNet, 1L);
         registerRequest(authRequest);
-        authRequest.platform = token.getSocialNet();
+        authRequest.platform = socialNet;
         authRequest.sid = token.getUserId();
         authRequest.token = token.getTokenKey();
         authRequest.callback(new ApiHandler() {
