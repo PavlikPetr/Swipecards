@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">ru_RU</string>
+    <string name="app_locale">ko_KR</string>
     <string name="general_error">에러</string>
     <string name="general_warning">경고</string>
     <string name="general_ok">ok</string>
@@ -219,4 +219,6 @@
     <string name="buying_store_purchase">iTunes Store에서 구입을 완료하기</string>
     <string name="buying_tf_ack_sending">구입 정보를 Topface에 전송하기.</string>
     <string name="settings_melody">멜로디 설정</string>
+    <string name="edit_refresh_status">상태 업로드하기</string>
+    <string name="ban_title">축하합니다! 당신은 이용 정지 당하셨습니다.</string>
 </resources>

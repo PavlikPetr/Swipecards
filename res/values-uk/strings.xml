@@ -227,4 +227,6 @@
     <string name="buying_store_purchase">Здійснюю покупку у iTunes Store</string>
     <string name="buying_tf_ack_sending">Відправляю інформацію про купівлю в Topfacе</string>
     <string name="settings_melody">Мелодія повідомлення</string>
+    <string name="edit_refresh_status">Відновити статус</string>
+    <string name="ban_title">Вітаємо! Ви забанені</string>
 </resources>

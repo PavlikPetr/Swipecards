@@ -223,4 +223,6 @@
     <string name="buying_store_purchase">Gör ett köp i iTunes Store</string>
     <string name="buying_tf_ack_sending">Skickar information om köpet på Topface</string>
     <string name="settings_melody">Notifikationsmelodi</string>
+    <string name="edit_refresh_status">Förnya status</string>
+    <string name="ban_title">Grattis! Du har bannlysts!</string>
 </resources>

@@ -41,7 +41,7 @@ public class EditAgeFragment extends AbstractEditFragment {
             baseSexString = getString(R.string.age_filter_man);
         }
 
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_age);
+        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.filter_age);
 
         getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);

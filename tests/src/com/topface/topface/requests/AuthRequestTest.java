@@ -1,5 +1,6 @@
 package com.topface.topface.requests;
 
+import android.content.Context;
 import android.test.InstrumentationTestCase;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
@@ -22,13 +23,13 @@ public class AuthRequestTest extends InstrumentationTestCase {
         runTestOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Context context = getInstrumentation().getContext();
                 AuthToken token = new AuthToken(getInstrumentation().getContext());
                 Debug.log(token.toString());
                 AuthRequest authRequest = new AuthRequest(getInstrumentation().getContext());
                 authRequest.platform = token.getSocialNet();
                 authRequest.sid = token.getUserId();
                 authRequest.token = token.getTokenKey();
-                authRequest.locale = "en_US";
                 authRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) throws NullPointerException {

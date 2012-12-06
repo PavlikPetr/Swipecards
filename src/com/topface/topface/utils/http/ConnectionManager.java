@@ -119,9 +119,10 @@ public class ConnectionManager {
                     Debug.error(TAG + "::REQUEST::ERROR ===\n", e);
                     if (httpPost != null && !httpPost.isAborted())
                         httpPost.abort();
-                }
-                if (httpClient != null) {
-                    httpClient.close();
+                } finally {
+                    if (httpClient != null) {
+                        httpClient.close();
+                    }
                 }
             }
         });
