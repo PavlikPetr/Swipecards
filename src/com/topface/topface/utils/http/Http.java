@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import com.topface.topface.Static;
+import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.Debug;
 
 import java.io.*;
@@ -248,7 +249,8 @@ public class Http {
                 dos.writeBytes(lineEnd);
                 dos.writeBytes("Content-Type: image/jpeg");
                 dos.writeBytes(lineEnd + lineEnd);
-                dos.writeBytes(data);
+//                dos.writeBytes(data);
+                Base64.encodeFromFileToOutputStream(data, dos);
 
                 dos.writeBytes(lineEnd);
                 dos.writeBytes(twoHH + boundary + twoHH);
@@ -276,6 +278,8 @@ public class Http {
             Debug.log(TAG, "exit");
         } catch (Exception e) {
             Debug.log(TAG, "http exception:" + e);
+        } catch (OutOfMemoryError e) {
+            Debug.error("HTTP:: " + e.toString());
         } finally {
             try {
                 Debug.log(TAG, "disconnect");

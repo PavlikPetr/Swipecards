@@ -81,6 +81,19 @@ public class Debug {
         }
     }
 
+    public static void error(String msg, OutOfMemoryError e) {
+        if (App.DEBUG) {
+            StringBuilder stack = new StringBuilder("\n");
+            for (StackTraceElement st : e.getStackTrace()) {
+                stack.append(st.toString()).append("\n");
+            }
+            msg = msg != null && !msg.equals("") ? msg + " : " : "";
+            String errorText = e.getMessage() == null ? "" : " :: " + e.getMessage();
+            String cause = e.getCause() == null ? "" : "\n" + e.getCause() + "\n";
+            showChunkedLogError(App.TAG, msg + errorText + cause + stack.toString());
+        }
+    }
+
     public static void error(String msg) {
         if (App.DEBUG) {
             showChunkedLogError(App.TAG, msg);

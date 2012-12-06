@@ -22,7 +22,6 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.Http;
@@ -216,7 +215,8 @@ public class AddPhotoHelper {
             } catch (Exception e) {
                 Debug.error("Photo not uploaded", e);
             } catch (OutOfMemoryError e) {
-                Debug.error("Photo upload OOM: " + e.toString());
+                Debug.error("Photo upload OOM: ", e);
+
             }
 
 
@@ -258,17 +258,20 @@ public class AddPhotoHelper {
         final String file = cursor.getString(0);
         cursor.close();
 
-        String data = Base64.encodeFromFile(file);
+//        String data = Base64.encodeFromFile(file);
+//        new Base64.OutputStream()
 
-        return Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), data);
+        return Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), file);
     }
 
     private String getRawResponse(File file) throws IOException {
         PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
         add.ssid = Data.SSID;
-        String data = Base64.encodeFromFile(file.getAbsolutePath());
 
-        return Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), data);
+
+//        String data = Base64.encodeFromFile(file.getAbsolutePath());
+
+        return Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), file.getAbsolutePath());
     }
 
 }

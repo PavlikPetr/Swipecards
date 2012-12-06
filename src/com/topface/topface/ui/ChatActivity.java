@@ -505,13 +505,12 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     @Override
     protected void onPause() {
         super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
-        if (mReceiverRegistered) {
+        if (mReceiverRegistered && mNewMessageReceiver != null) {
             unregisterReceiver(mNewMessageReceiver);
             mReceiverRegistered = false;
         }
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
-        Debug.log("ChatActivity::onPause");
     }
 
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
