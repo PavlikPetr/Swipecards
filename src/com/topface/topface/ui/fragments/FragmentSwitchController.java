@@ -27,6 +27,7 @@ public class FragmentSwitchController extends ViewGroup {
     private FragmentSwitchListener mFragmentSwitchListener;
     private boolean mAutoScrolling = false;
     private static final int EXPANDING_PERCENT = 30;
+    private BaseFragment mCurrentFragment;
 
     public static final int EXPAND = 1;
     public static final int EXPAND_FULL = 2;
@@ -93,6 +94,11 @@ public class FragmentSwitchController extends ViewGroup {
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
+        mCurrentFragment = fragment;
+    }
+
+    public BaseFragment getmCurrentFragment () {
+        return mCurrentFragment;
     }
 
     private BaseFragment getFragmentById(int id) {

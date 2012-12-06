@@ -43,7 +43,8 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     public static NavigationActivity mThis = null;
 
     private SharedPreferences mPreferences;
-
+    public static final String PREFIX = "PHOTO :: ";
+    private static final String TAG = "NA :: ";
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
 
@@ -53,7 +54,7 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        Debug.log(PREFIX + TAG + "onCreate");
         setContentView(R.layout.ac_navigation);
         Debug.log(this, "onCreate");
 
@@ -101,6 +102,7 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     @Override
     protected void onResume() {
         super.onResume();
+        Debug.log(PREFIX + TAG + "onResume");
         mThis = this;
         long startTime = Calendar.getInstance().getTimeInMillis();
         long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME,-1);
@@ -121,6 +123,7 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     @Override
     protected void onPause() {
         super.onPause();
+        Debug.log(PREFIX + TAG + "onPause");
         mThis = null;
         setStopTime();
     }
@@ -296,6 +299,29 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     private void setStopTime() {
         long stopTime = Calendar.getInstance().getTimeInMillis();
         mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Debug.log(PREFIX + TAG + "onDestroy");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+//        Debug.log(PREFIX + TAG + "onCreate");
+//        if(requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA || requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
+//            mFragmentSwitcher.showFragment(BaseFragment.F_PROFILE);
+////            ProfilePhotoFragment fragment = (ProfilePhotoFragment)((ProfileFragment) mFragmentSwitcher.getmCurrentFragment()).getCurrentViewPagerItem();
+////            fragment.checkActivityResult(requestCode,resultCode,data);
+//        }
     }
 
     @Override

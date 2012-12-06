@@ -22,6 +22,7 @@ import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.ArrayList;
@@ -40,6 +41,13 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     private AddPhotoHelper mAddPhotoHelper;
 
     private ViewFlipper mViewFlipper;
+    private LockerView mLockerView;
+
+
+    public EditProfilePhotoFragment(LockerView lockerView) {
+        super();
+        mLockerView = lockerView;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +63,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         mPhotoGridAdapter = new EditProfileGrigAdapter(
                 getActivity().getApplicationContext(), mPhotoLinks);
 
-        mAddPhotoHelper = new AddPhotoHelper(this);
+        mAddPhotoHelper = new AddPhotoHelper(this, mLockerView);
         mAddPhotoHelper.setOnResultHandler(mHandler);
     }
 

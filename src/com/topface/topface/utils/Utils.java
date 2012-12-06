@@ -1,6 +1,9 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
@@ -14,6 +17,7 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class Utils {
 	public static final long WEEK = 604800L;
@@ -464,4 +468,14 @@ public class Utils {
 		}
 		return size;
     }
+
+    public static boolean isIntentAvailable(Context context, String action) {
+        final PackageManager packageManager = context.getPackageManager();
+        final Intent intent = new Intent(action);
+        List<ResolveInfo> list =
+                packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+
+
 }
