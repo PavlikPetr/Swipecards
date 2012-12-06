@@ -106,7 +106,9 @@ public class UserProfileActivity extends BaseFragmentActivity {
 
         // Navigation bar
         String userName = getIntent().getStringExtra(INTENT_USER_NAME); // name
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(userName);
+        if(userName != null) {
+            ((TextView) findViewById(R.id.tvNavigationTitle)).setText(userName);
+        }
 
         findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
         if (getIntent().hasExtra(INTENT_PREV_ENTITY)) {

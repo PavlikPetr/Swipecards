@@ -1,5 +1,7 @@
 package com.topface.topface.utils;
 
+import java.io.DataOutputStream;
+
 public class Base64 {
 
 /* ********  P U B L I C   F I E L D S  ******** */
@@ -1454,6 +1456,48 @@ public class Base64 {
 
         return encodedData;
     }   // end encodeFromFile
+
+
+    public static String encodeFromFileToOutputStream(String filename, DataOutputStream output)
+            throws java.io.IOException {
+
+        String encodedData = null;
+        Base64.InputStream bis = null;
+        try {
+            // Set up some useful variables
+            java.io.File file = new java.io.File(filename);
+            byte[] buffer = new byte[4096]; // Need max() for math on small files (v2.2.1); Need +1 for a few corner cases (v2.3.5)
+            int length = 0;
+            int numBytes = 0;
+
+            // Open a stream
+            bis = new Base64.InputStream(
+                    new java.io.BufferedInputStream(
+                            new java.io.FileInputStream(file)), Base64.ENCODE);
+
+            // Read until done
+            while ((bis.read(buffer)) >= 0) {
+                output.write(buffer);
+
+            }   // end while
+
+            // Save in a variable to return
+        }   // end try
+        catch (java.io.IOException e) {
+            throw e; // Catch and release to execute finally{}
+        }   // end catch: java.io.IOException
+        finally {
+            try {
+                if (bis != null) {
+                    bis.close();
+                }
+            } catch (Exception e) {
+                Debug.error(e);
+            }
+        }   // end finally
+
+        return encodedData;
+    }
 
     /**
      * Reads <tt>infile</tt> and encodes it to <tt>outfile</tt>.

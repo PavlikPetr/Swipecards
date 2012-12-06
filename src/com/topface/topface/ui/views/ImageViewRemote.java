@@ -18,6 +18,7 @@ import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.imageloader.MaskClipPostProcessor;
 import com.topface.topface.imageloader.RoundCornersPostProcessor;
 import com.topface.topface.imageloader.RoundPostProcessor;
+import com.topface.topface.utils.Debug;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -207,26 +208,30 @@ public class ImageViewRemote extends ImageView {
         @Override
         public void onLoadingFailed(FailReason failReason) {
             if (FailReason.OUT_OF_MEMORY != failReason) {
-                if (mRepeatCounter >= MAX_REPEAT_COUNT) {
-                    mRepeatCounter = 0;
-                    if (mHandler != null) {
-                        mHandler.sendEmptyMessage(LOADING_ERROR);
-                    }
-                    setImageResource(R.drawable.im_photo_error);
-                } else {
-                    mRepeatCounter++;
-                    mRepeatTimer = new Timer();
-                    mRepeatTimer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            ImageViewRemote.this.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    setRemoteSrc(mRemoteSrc, mHandler, true);
-                                }
-                            });
+                try {
+                    if (mRepeatCounter >= MAX_REPEAT_COUNT) {
+                        mRepeatCounter = 0;
+                        if (mHandler != null) {
+                            mHandler.sendEmptyMessage(LOADING_ERROR);
                         }
-                    }, REPEAT_SCHEDULE);
+                        setImageResource(R.drawable.im_photo_error);
+                    } else {
+                        mRepeatCounter++;
+                        mRepeatTimer = new Timer();
+                        mRepeatTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                ImageViewRemote.this.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        setRemoteSrc(mRemoteSrc, mHandler, true);
+                                    }
+                                });
+                            }
+                        }, REPEAT_SCHEDULE);
+                    }
+                } catch (OutOfMemoryError e) {
+                    Debug.error("ImageViewRemote:: OnLoadingFailed " + e.toString());
                 }
             }
         }

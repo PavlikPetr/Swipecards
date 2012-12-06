@@ -93,7 +93,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     @Override
     public History getItem(int position) {
-        return mDataList.get(position);
+        return mDataList.hasItem(position)? mDataList.get(position) : null;
     }
 
     @Override

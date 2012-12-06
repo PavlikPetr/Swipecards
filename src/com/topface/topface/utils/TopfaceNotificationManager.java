@@ -51,7 +51,9 @@ public class TopfaceNotificationManager {
 
         mNotificationBuilder.setContentTitle(title);
         mNotificationBuilder.setContentText(message);
-        mNotificationBuilder.setLargeIcon(scaledIcon);
+        if (scaledIcon != null) {
+            mNotificationBuilder.setLargeIcon(scaledIcon);
+        }
         if (unread > 0)
             mNotificationBuilder.setNumber(unread);
         mNotificationBuilder.setAutoCancel(true);
