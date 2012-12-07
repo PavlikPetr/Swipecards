@@ -52,7 +52,6 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        GCMUtils.generateFakeNotification(this);
         setContentView(R.layout.ac_navigation);
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
