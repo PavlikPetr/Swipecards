@@ -175,8 +175,12 @@ public class GCMUtils {
                         break;
 
                     case GCM_TYPE_GUESTS:
-                        if (showVisitors)
-                            break;
+                        if (showVisitors) {
+                            lastNotificationType = GCM_TYPE_GUESTS;
+                            i = new Intent(context, NavigationActivity.class);
+                            i.putExtra(NEXT_INTENT, BaseFragment.F_VISITORS);
+                        }
+                        break;
                     case GCM_TYPE_UPDATE:
                         i = new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.default_market_link)));
                         break;
