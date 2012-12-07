@@ -14,12 +14,10 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
 public class ProfilePhotoFragment extends BaseFragment {
@@ -43,7 +41,6 @@ public class ProfilePhotoFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Debug.log(NavigationActivity.PREFIX + TAG + "onCreate");
         initPhotoLinks();
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks);
         mAddPhotoHelper = new AddPhotoHelper(this,lockerView);
@@ -62,7 +59,6 @@ public class ProfilePhotoFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
-        Debug.log(NavigationActivity.PREFIX + TAG + "onCreateView");
 
         //Navigation bar
         if (getActivity() instanceof EditContainerActivity) {
@@ -113,7 +109,6 @@ public class ProfilePhotoFragment extends BaseFragment {
 
     @Override
     public void onResume() {
-        Debug.log(NavigationActivity.PREFIX + TAG + "onResume");
         initPhotoLinks();
         mProfilePhotoGridAdapter.notifyDataSetChanged();
         super.onResume();

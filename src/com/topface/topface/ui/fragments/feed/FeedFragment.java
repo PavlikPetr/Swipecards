@@ -364,7 +364,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         if (isHistoryLoad) {
                             mListAdapter.showRetryItem();
                         }
-                        if(codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
+                        if (codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
                             updateErrorMessage.showOnlyMessage(true);
                             updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
                         } else {
