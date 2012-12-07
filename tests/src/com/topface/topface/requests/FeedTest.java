@@ -1,26 +1,15 @@
 package com.topface.topface.requests;
 
-import android.test.InstrumentationTestCase;
+import android.content.Context;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 
-import java.util.concurrent.CountDownLatch;
-
-public abstract class FeedTest<T extends FeedItem> extends InstrumentationTestCase {
+public abstract class FeedTest<T extends FeedItem> extends AbstractThreadTest {
     private static final int LIMIT = 10;
-    private CountDownLatch mSignal;
     public Exception mAssertError;
 
-    protected void runAsyncTest(Runnable test) throws Throwable {
-        mSignal = new CountDownLatch(1);
 
-        //Запускаем в UI потоке, для чистоты теста, т.к. мы выполняем запросы
-        runTestOnUiThread(test);
-
-        mSignal.await();
-    }
-
-    private void sendFeedRequest() {
+    private void sendFeedRequest(final String testName) {
         FeedRequest request = new FeedRequest(getFeedType(), getInstrumentation().getContext());
         request.limit = LIMIT;
         request.unread = false;
@@ -40,13 +29,13 @@ public abstract class FeedTest<T extends FeedItem> extends InstrumentationTestCa
                     //assertTrue("Feed item id created date is wrong", item.created > 0);
                     runAdditionalItemAsserts(item);
                 }
-                onTestFinish();
+                stopTest(testName);
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) throws NullPointerException {
                 assertTrue("Request exec fail: " + codeError, false);
-                onTestFinish();
+                stopTest(testName);
             }
         }).exec();
     }
@@ -55,22 +44,22 @@ public abstract class FeedTest<T extends FeedItem> extends InstrumentationTestCa
 
     protected abstract FeedListData<T> getFeedList(ApiResponse response);
 
-    protected void onTestFinish() {
-        mSignal.countDown();
-    }
-
     abstract protected FeedRequest.FeedService getFeedType();
 
-    protected void runFeedTest() {
+    protected void runFeedTest(final String testName) {
         try {
             runAsyncTest(new Runnable() {
                 @Override
                 public void run() {
-                    sendFeedRequest();
+                    sendFeedRequest(testName);
                 }
-            });
+            }, testName);
         } catch (Throwable throwable) {
             assertTrue("FeedTest fail", false);
         }
+    }
+
+    protected Context getContext() {
+        return getInstrumentation().getContext();
     }
 }

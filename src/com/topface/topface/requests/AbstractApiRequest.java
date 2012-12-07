@@ -50,4 +50,11 @@ public abstract class AbstractApiRequest extends ApiRequest {
     private String getRequestId() {
         return UUID.randomUUID().toString();
     }
+
+    protected void handleFail(int errorCode, String errorMessage) {
+        handler.fail(
+                errorCode,
+                new ApiResponse(errorCode, errorMessage)
+        );
+    }
 }

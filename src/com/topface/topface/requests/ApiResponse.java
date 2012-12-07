@@ -41,6 +41,24 @@ public class ApiResponse {
     public static final int NULL_RESPONSE = 100;
     public static final int WRONG_RESPONSE = 101;
 
+    public ApiResponse(int errorCode, String errorMessage) {
+        this(constructApiError(errorCode, errorMessage));
+    }
+
+    private static JSONObject constructApiError(int errorCode, String errorMessage) {
+        try {
+            return new JSONObject()
+                    .put("error",
+                            new JSONObject()
+                                    .put("code", errorCode)
+                                    .put("message", errorMessage)
+                    );
+        } catch (JSONException e) {
+            Debug.error(e);
+           return null;
+        }
+    }
+
 
     public ApiResponse(String response) {
         JSONObject json = null;
@@ -94,10 +112,11 @@ public class ApiResponse {
 
     @Override
     public String toString() {
-        if (jsonResult != null)
+        if (jsonResult != null) {
             return jsonResult.toString();
-        else
+        } else {
             return "response is null";
+        }
     }
 
     public boolean isError() {

@@ -38,12 +38,13 @@ public class AuthRequest extends AbstractApiRequest {
     private String getClientLocale(Context context) {
         String locale;
         //На всякий случай проверяем возможность получить локаль
-        if (context.getResources().getIdentifier("app_locale", "string", null) > 0) {
+        try {
             locale = context.getResources().getString(R.string.app_locale);
         }
-        else {
+        catch (Exception e) {
             locale = FALLBACK_LOCALE;
         }
+
         return locale;
     }
 

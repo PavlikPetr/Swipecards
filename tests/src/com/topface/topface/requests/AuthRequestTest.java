@@ -1,16 +1,13 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import android.test.InstrumentationTestCase;
 import com.topface.topface.Data;
 import com.topface.topface.Static;
 import com.topface.topface.data.Auth;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
-import java.util.concurrent.CountDownLatch;
-
-public class AuthRequestTest extends InstrumentationTestCase {
+public class AuthRequestTest extends AbstractThreadTest {
 
     /**
      * Тестируем только API v1
@@ -18,9 +15,7 @@ public class AuthRequestTest extends InstrumentationTestCase {
     private static final int API_VERSION = 2;
 
     public void testAuthRequest() throws Throwable {
-        final CountDownLatch signal = new CountDownLatch(1);
-
-        runTestOnUiThread(new Runnable() {
+        runAsyncTest(new Runnable() {
             @Override
             public void run() {
                 Context context = getInstrumentation().getContext();
@@ -37,18 +32,16 @@ public class AuthRequestTest extends InstrumentationTestCase {
                         assertNotNull("SSID is null", auth.ssid);
                         assertEquals("Wrong API version", API_VERSION, Static.API_VERSION);
                         Data.SSID = auth.ssid;
-                        signal.countDown();
+                        stopTest("testAuthRequest");
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) throws NullPointerException {
                         assertTrue("Auth error: " + codeError, false);
-                        signal.countDown();
+                        stopTest("testAuthRequest");
                     }
                 }).exec();
             }
-        });
-
-        signal.await();
+        }, "testAuthRequest");
     }
 }
