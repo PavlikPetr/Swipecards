@@ -30,6 +30,10 @@ public class EditFormItemsFragment extends AbstractEditFragment {
     private ListView mListView;
     private FormCheckingDataAdapter mAdapter;
 
+    public EditFormItemsFragment() {
+        super();
+    }
+
     public EditFormItemsFragment(int titleId, int dataId, String data) {
         mTitleId = titleId;
         mDataId = dataId;
