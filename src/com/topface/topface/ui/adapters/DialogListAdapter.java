@@ -15,6 +15,10 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
 	public static final int NEW_ITEM_LAYOUT = R.layout.item_new_feed_dialog;
     public static final int ITEM_LAYOUT = R.layout.item_feed_dialog;
+    public static final int NEW_VIP_ITEM_LAYOUT = R.layout.item_new_feed_vip_dialog;
+    public static final int VIP_ITEM_LAYOUT = R.layout.item_feed_vip_dialog;
+
+//    public static final int
 
     public static final String MESSAGE_OF_UNKNOWN_TYPE = "";
 
@@ -164,5 +168,15 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 	protected int getNewItemLayout() {
 		return NEW_ITEM_LAYOUT;
 	}
+
+    @Override
+    protected int getVipItemLayout() {
+        return VIP_ITEM_LAYOUT;
+    }
+
+    @Override
+    protected int getNewVipItemLayout() {
+        return NEW_VIP_ITEM_LAYOUT;
+    }
 
 }
