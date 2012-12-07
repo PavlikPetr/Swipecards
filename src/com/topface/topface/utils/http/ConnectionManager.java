@@ -92,8 +92,8 @@ public class ConnectionManager {
                             addDelayedRequest(apiRequest);
                             apiResponse.code = ApiResponse.ERRORS_PROCCESED;
                         }
-                        if(apiResponse.code == ApiResponse.BAN) {
-                            Intent intent = new Intent(apiRequest.context,BanActivity.class);
+                        if (apiResponse.code == ApiResponse.BAN) {
+                            Intent intent = new Intent(apiRequest.context, BanActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra(BanActivity.BANNING_INTENT, apiResponse.jsonResult.get("message").toString());
                             apiRequest.context.startActivity(intent);
@@ -153,7 +153,7 @@ public class ConnectionManager {
         } catch (Exception e) {
             Debug.error("cm exception:", e);
             for (StackTraceElement st : e.getStackTrace())
-                Debug.log("cm trace: ",  st.toString());
+                Debug.log("cm trace: ", st.toString());
             if (httpPost != null && !httpPost.isAborted())
                 httpPost.abort();
         } catch (OutOfMemoryError e) {

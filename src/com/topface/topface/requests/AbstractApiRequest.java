@@ -52,9 +52,6 @@ public abstract class AbstractApiRequest extends ApiRequest {
     }
 
     protected void handleFail(int errorCode, String errorMessage) {
-        handler.fail(
-                errorCode,
-                new ApiResponse(errorCode, errorMessage)
-        );
+        handler.response(new ApiResponse(errorCode, errorMessage));
     }
 }

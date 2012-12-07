@@ -41,6 +41,12 @@ public class ApiResponse {
     public static final int NULL_RESPONSE = 100;
     public static final int WRONG_RESPONSE = 101;
 
+    /**
+     * Конструиерует объект ответа от сервера с указаной ошибкой
+     *
+     * @param errorCode    код ошибки
+     * @param errorMessage сообщение об ошибке
+     */
     public ApiResponse(int errorCode, String errorMessage) {
         this(constructApiError(errorCode, errorMessage));
     }
@@ -55,7 +61,7 @@ public class ApiResponse {
                     );
         } catch (JSONException e) {
             Debug.error(e);
-           return null;
+            return null;
         }
     }
 
@@ -93,15 +99,14 @@ public class ApiResponse {
                 mIsErrorResponse = true;
                 code = jsonResult.getInt("code");
             } else if (!jsonResult.isNull("result")) {
-                if(!jsonResult.isNull("counters"))  {
+                if (!jsonResult.isNull("counters")) {
                     counters = jsonResult.getJSONObject("counters");
                 }
-                if(!jsonResult.isNull("method")) {
+                if (!jsonResult.isNull("method")) {
                     method = jsonResult.optString("method");
                 }
                 jsonResult = jsonResult.getJSONObject("result");
-            }
-            else
+            } else
                 code = WRONG_RESPONSE;
         } catch (Exception e) {
             code = WRONG_RESPONSE;
