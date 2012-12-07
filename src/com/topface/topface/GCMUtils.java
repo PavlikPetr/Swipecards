@@ -137,7 +137,7 @@ public class GCMUtils {
                 setCounters(countersString, context);
 
             final TopfaceNotificationManager mNotificationManager = TopfaceNotificationManager.getInstance(context);
-
+            lastNotificationType = type;
             switch (type) {
                 case GCM_TYPE_MESSAGE:
                     if (showMessage) {
@@ -174,7 +174,11 @@ public class GCMUtils {
                     break;
 
                 case GCM_TYPE_GUESTS:
-                    if (showVisitors)
+                    if (showVisitors) {
+                        lastNotificationType = GCM_TYPE_GUESTS;
+                        i = new Intent(context, NavigationActivity.class);
+                        i.putExtra(NEXT_INTENT, BaseFragment.F_VISITORS);
+                    }
                     break;
                 case GCM_TYPE_UPDATE:
                     i = new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.default_market_link)));
