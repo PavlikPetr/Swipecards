@@ -237,4 +237,5 @@
     <string name="dating_skip_button_ext">Наступний</string>
     <string name="dating_search_empty_title">На жаль, нічого не знайдено</string>
     <string name="dating_search_empty_text">Ви можете спробувати повторити пошук, або змінити налаштування фільтра.</string>
+    <string name="general_close">Закрити</string>
 </resources>

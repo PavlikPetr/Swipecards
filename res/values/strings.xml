@@ -219,7 +219,18 @@
     <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
     <string name="dashbrd_popup_rate">Yes, I would rate</string>
     <string name="dashbrd_popup_later">Ask later</string>
+    <string name="buying_store_connect">Connecting to the iTunes Store</string>
+    <string name="buying_store_purchase">Processing the purchase</string>
+    <string name="buying_tf_ack_sending">Sending purchase info to the Topface</string>
     <string name="settings_melody">Notification ringtone</string>
     <string name="edit_refresh_status">Update status</string>
     <string name="ban_title">Congratulations! You are banned</string>
+    <string name="general_ready">Done</string>
+    <string name="profile_deleted_user">User is deleted</string>
+    <string name="buying_store_ok">Purchase successfully completed</string>
+    <string name="dating_prev_button_ext">Previous</string>
+    <string name="dating_skip_button_ext">Next</string>
+    <string name="dating_search_empty_title">Unfortunately, nothing found</string>
+    <string name="dating_search_empty_text">You can try to run the search again or change the filter settings.</string>
+    <string name="general_close">Close</string>
 </resources>
