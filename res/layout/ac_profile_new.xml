@@ -21,29 +21,25 @@
             android:orientation="vertical">
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                      android:id="@+id/loProfileHeader"
-                      android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_weight="1"
-                      android:orientation="vertical"
-                      android:gravity="center"
-                      android:paddingTop="10dp"
-                      android:paddingBottom="10dp">
+                        android:id="@+id/loProfileHeader"
+                        android:layout_width="fill_parent"
+                        android:layout_height="140dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
 
             <android.support.v4.view.ViewPager
                     android:id="@+id/vpHeaderFragments"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fadingEdge="none"
-                    android:paddingBottom="10dp"/>
+                    android:layout_height="fill_parent"
+                    android:fadingEdge="none"/>
 
             <com.viewpagerindicator.CirclePageIndicator
                     android:id="@+id/cpiHeaderTabs"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_alignBottom="@id/vpHeaderFragments"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"
                     />
         </RelativeLayout>
 
