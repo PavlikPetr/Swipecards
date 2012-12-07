@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,6 +42,10 @@ public class GCMUtils {
     public static final int GCM_TYPE_LIKE = 2;
     public static final int GCM_TYPE_GUESTS = 3;
     public static final int GCM_TYPE_DIALOGS = 4;
+
+    public static final int GCM_TYPE_UPDATE = 5;
+    public static final int GCM_TYPE_NOTIFICATION = 6;
+    public static final int GCM_TYPE_INTENT = 7;
 
     public static final String NEXT_INTENT = "next";
 
@@ -111,7 +116,10 @@ public class GCMUtils {
             int type = typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
 
             final User user = new User();
-            user.json2User(extra.getStringExtra("user"));
+            String userJSON = extra.getStringExtra("user");
+            if (userJSON != null) {
+                user.json2User(extra.getStringExtra("user"));
+            }
             String title = extra.getStringExtra("title");
             if (title == null || title.equals("")) {
                 title = context.getString(R.string.app_name);
@@ -168,12 +176,20 @@ public class GCMUtils {
                     break;
 
                 case GCM_TYPE_GUESTS:
-                    if (showVisitors) {
-                        lastNotificationType = GCM_TYPE_GUESTS;
-                        i = new Intent(context, NavigationActivity.class);
-                        i.putExtra(NEXT_INTENT, BaseFragment.F_VISITORS);
-                    }
+                    if (showVisitors)
                     break;
+                case GCM_TYPE_UPDATE:
+                    i = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.topface.topface"));
+                    break;
+
+                case GCM_TYPE_NOTIFICATION:
+                    i = new Intent(context, NavigationActivity.class);
+                    break;
+
+                case GCM_TYPE_INTENT:
+
+                    break;
+
                 default:
                     i = new Intent(context, AuthActivity.class);
 
@@ -283,6 +299,8 @@ public class GCMUtils {
         public String city;
 
         public User() {
+            id = 0;
+            age = 0;
         }
 
         public void json2User(String json) {
