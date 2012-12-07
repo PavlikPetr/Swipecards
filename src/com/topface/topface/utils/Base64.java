@@ -1,6 +1,6 @@
 package com.topface.topface.utils;
 
-import java.io.DataOutputStream;
+import java.io.BufferedOutputStream;
 
 public class Base64 {
 
@@ -1458,7 +1458,7 @@ public class Base64 {
     }   // end encodeFromFile
 
 
-    public static String encodeFromFileToOutputStream(String filename, DataOutputStream output)
+    public static String encodeFromFileToOutputStream(String filename, BufferedOutputStream output)
             throws java.io.IOException {
 
         String encodedData = null;
@@ -1466,7 +1466,7 @@ public class Base64 {
         try {
             // Set up some useful variables
             java.io.File file = new java.io.File(filename);
-            byte[] buffer = new byte[4096]; // Need max() for math on small files (v2.2.1); Need +1 for a few corner cases (v2.3.5)
+            byte[] buffer = new byte[8192]; // Need max() for math on small files (v2.2.1); Need +1 for a few corner cases (v2.3.5)
             int length = 0;
             int numBytes = 0;
 
@@ -1484,6 +1484,7 @@ public class Base64 {
             // Save in a variable to return
         }   // end try
         catch (java.io.IOException e) {
+            Debug.error("EncodeFromFile :: ", e);
             throw e; // Catch and release to execute finally{}
         }   // end catch: java.io.IOException
         finally {
