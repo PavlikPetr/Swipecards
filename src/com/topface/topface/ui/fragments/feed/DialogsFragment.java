@@ -1,20 +1,26 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DialogDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.DialogListAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     public DialogsFragment() {
         super();
-        setIsDeletable(false);
     }
 
     @Override
@@ -29,7 +35,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected void makeAllItemsRead() {
-    	
+
     }
 
     @Override
@@ -65,5 +71,34 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected int getTypeForCounters() {
         return CountersManager.DIALOGS;
+    }
+
+    @Override
+    protected void deleteItem(final int position) {
+        FeedDialog item = mListAdapter.getItem(position);
+        new DialogDeleteRequest(item.user.id, getActivity())
+                .callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) throws NullPointerException {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mLockView.setVisibility(View.GONE);
+                                FeedList<FeedDialog> mFeedList = mListAdapter.getData();
+                                mFeedList.remove(position);
+                                mListAdapter.setData(mFeedList);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                        Debug.log(response.toString());
+                        mLockView.setVisibility(View.GONE);
+                        if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
+                            Utils.showErrorMessage(getActivity());
+                        }
+                    }
+                }).exec();
     }
 }

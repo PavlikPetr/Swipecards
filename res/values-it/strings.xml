@@ -223,4 +223,14 @@
     <string name="buying_store_purchase">Acquisto nell’iTunes Store</string>
     <string name="buying_tf_ack_sending">Invio info sull’acquisto in Topface</string>
     <string name="settings_melody">Suoneria di avviso</string>
+    <string name="edit_refresh_status">Aggiornare lo stato</string>
+    <string name="ban_title">Congratulazioni! Hai ricevuto ban</string>
+    <string name="general_ready">Fatto</string>
+    <string name="profile_deleted_user">L’utente è stato eliminato</string>
+    <string name="filter_main_parameters">Mi interessano</string>
+    <string name="buying_store_ok">L’acquisto è stato completato con successo</string>
+    <string name="dating_prev_button_ext">Precedente</string>
+    <string name="dating_skip_button_ext">Successivo</string>
+    <string name="dating_search_empty_title">Purtroppo non abbiamo trovato nessuno</string>
+    <string name="dating_search_empty_text">Puoi riprovare a fare la ricerca o cambia le impostazioni.</string>
 </resources>

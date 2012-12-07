@@ -36,6 +36,7 @@ import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
+import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -48,7 +49,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected boolean mIsUpdating;
     private RetryView updateErrorMessage;
     private RelativeLayout mContainer;
-    private LockerView lockView;
+    protected LockerView mLockView;
 
     private BroadcastReceiver readItemReceiver;
 
@@ -73,8 +74,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getTitle());
 
-        lockView = (LockerView)view.findViewById(R.id.llvFeedLoading);
-        lockView.setVisibility(View.GONE);
+        mLockView = (LockerView) view.findViewById(R.id.llvFeedLoading);
+        mLockView.setVisibility(View.GONE);
 
         init();
 
@@ -90,12 +91,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                int itemId = intent.getIntExtra(ChatActivity.INTENT_ITEM_ID,-1);
-                if(itemId != -1){
+                int itemId = intent.getIntExtra(ChatActivity.INTENT_ITEM_ID, -1);
+                if (itemId != -1) {
                     makeItemReadWithId(itemId);
                 } else {
                     String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
-                    if(lastMethod != null) {
+                    if (lastMethod != null) {
                         updateDataAfterReceivingCounters(lastMethod);
                     }
                 }
@@ -104,7 +105,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         IntentFilter filter = new IntentFilter(ChatActivity.MAKE_ITEM_READ);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver,filter);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
 
         mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
         createUpdateErrorMessage();
@@ -116,14 +117,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     @Override
     public void onResume() {
-    	super.onResume();
-    	mFloatBlock.onResume();
+        super.onResume();
+        mFloatBlock.onResume();
     }
-    
+
     @Override
     public void onPause() {
-    	super.onPause();
-    	mFloatBlock.onPause();
+        super.onPause();
+        mFloatBlock.onPause();
     }
 
     @Override
@@ -152,7 +153,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected abstract Drawable getBackIcon();
 
     abstract protected int getTitle();
+
     abstract protected int getTypeForGCM();
+
     abstract protected int getTypeForCounters(); //TODO: Надо сделать что-то единообразное для того и того. Возможно стоит вынести типы фидов в константы
 
     protected int getLayout() {
@@ -172,17 +175,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         mListAdapter = getAdapter();
         mListAdapter.setOnAvatarClickListener(this);
-        mListView.setOnScrollListener(mListAdapter);        
-        
+        mListView.setOnScrollListener(mListAdapter);
+
         ImageView iv = new ImageView(getActivity().getApplicationContext());
         iv.setBackgroundResource(R.drawable.im_header_item_list_bg);
         iv.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mListView.getRefreshableView().addHeaderView(iv);
-        
-        mListView.getRefreshableView().setAdapter(mListAdapter);        
+
+        mListView.getRefreshableView().setAdapter(mListAdapter);
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
         mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
-        //mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
+        mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
 
         mListView.scrollBy(0, 2);
     }
@@ -227,16 +230,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id) {
-                if(isDeletable){
+                if (isDeletable) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(R.string.general_spinner_title).setItems(editButtonsNames,new DialogInterface.OnClickListener() {
+                    builder.setTitle(R.string.general_spinner_title).setItems(editButtonsNames, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            switch (which){
+                            switch (which) {
                                 case DELETE_BUTTON:
-                                   lockView.setVisibility(View.VISIBLE);
-                                   deleteItem((int)id);
-                                   break;
+                                    mLockView.setVisibility(View.VISIBLE);
+                                    deleteItem((int) id);
+                                    break;
                             }
                         }
                     });
@@ -248,7 +251,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         };
     }
 
-    private void deleteItem(final int position) {
+    protected void deleteItem(final int position) {
         DeleteRequest dr = new DeleteRequest(getActivity());
         dr.id = mListAdapter.getItem(position).id;
         registerRequest(dr);
@@ -258,7 +261,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        lockView.setVisibility(View.GONE);
+                        mLockView.setVisibility(View.GONE);
                         FeedList<T> mFeedList = mListAdapter.getData();
                         mFeedList.remove(position);
                         mListAdapter.setData(mFeedList);
@@ -269,7 +272,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void fail(int codeError, ApiResponse response) throws NullPointerException {
                 Debug.log(response.toString());
-                lockView.setVisibility(View.GONE);
+                if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
+                    Utils.showErrorMessage(getActivity());
+                }
+                mLockView.setVisibility(View.GONE);
             }
         }).exec();
 
@@ -299,7 +305,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     public void onAvatarClick(T item, View view) {
         // Open profile activity
-        if(item.unread) {
+        if (item.unread) {
             item.unread = false;
             decrementCounters();
             mListAdapter.notifyDataSetChanged();
@@ -338,12 +344,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     public void run() {
                         if (isHistoryLoad) {
                             mListAdapter.addData(dialogList);
-                        } else if(isPushUpdating){
-                            if(makeItemsRead) {
+                        } else if (isPushUpdating) {
+                            if (makeItemsRead) {
                                 makeAllItemsRead();
                             }
                             mListAdapter.addDataFirst(dialogList);
-                        } else{
+                        } else {
                             mListAdapter.setData(dialogList);
                         }
                         onUpdateSuccess(isPushUpdating || isHistoryLoad);
@@ -358,7 +364,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void fail(final int codeError, ApiResponse response) {
 
-               updateUI(new Runnable() {
+                updateUI(new Runnable() {
                     @Override
                     public void run() {
                         if (isHistoryLoad) {
@@ -401,7 +407,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void updateData(boolean isPushUpdating, boolean makeItemsRead) {
         updateData(isPushUpdating, false, makeItemsRead);
     }
-    
+
     protected void initFilter(View view) {
         new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.btnNavigationSettingsBar, R.id.loToolsBar);
         initDoubleButton(view);
@@ -431,7 +437,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onUpdateSuccess(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
-            
+
             if (mListAdapter.isEmpty()) {
                 mBackgroundText.setText(getEmptyFeedText());
             } else {
@@ -451,9 +457,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     abstract protected int getEmptyFeedText();
-    
+
     protected void makeAllItemsRead() {
-    	for(FeedItem item : mListAdapter.getData()) {
+        for (FeedItem item : mListAdapter.getData()) {
             item.unread = false;
         }
     }
@@ -524,19 +530,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void makeItemReadWithId(int id) {
-        for(FeedItem item : mListAdapter.getData()) {
-            if(item.id == id && item.unread) {
-               item.unread = false;
-               mListAdapter.notifyDataSetChanged();
-               decrementCounters();
+        for (FeedItem item : mListAdapter.getData()) {
+            if (item.id == id && item.unread) {
+                item.unread = false;
+                mListAdapter.notifyDataSetChanged();
+                decrementCounters();
             }
         }
     }
 
     private void updateDataAfterReceivingCounters(String lastMethod) {
-        if(!lastMethod.equals(CountersManager.NULL_METHOD) && !lastMethod.equals(getRequest().getServiceName())) {
-            if(CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters()) > 0) {
-                updateData(true,false);
+        if (!lastMethod.equals(CountersManager.NULL_METHOD) && !lastMethod.equals(getRequest().getServiceName())) {
+            if (CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters()) > 0) {
+                updateData(true, false);
             }
         }
     }
@@ -547,7 +553,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
         return mLoader0;
     }
-
 
 
     private AnimationDrawable getLoader() {

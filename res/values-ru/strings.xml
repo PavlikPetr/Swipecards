@@ -308,4 +308,5 @@
     <string name="dating_skip_button_ext">Следующий</string>
     <string name="dating_search_empty_title">К сожалению, ничего не найдено</string>
     <string name="dating_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра.</string>
+    <string name="general_close">Закрыть</string>
 </resources>
