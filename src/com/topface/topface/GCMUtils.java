@@ -33,7 +33,6 @@ import java.util.TimerTask;
 
 
 public class GCMUtils {
-    public static final String GCM_REGISTERED = "gcmRegistered";
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
 
     public static final int GCM_TYPE_UNKNOWN = -1;
@@ -45,7 +44,6 @@ public class GCMUtils {
 
     public static final int GCM_TYPE_UPDATE = 5;
     public static final int GCM_TYPE_NOTIFICATION = 6;
-    public static final int GCM_TYPE_INTENT = 7;
 
     public static final String NEXT_INTENT = "next";
 
@@ -95,15 +93,15 @@ public class GCMUtils {
         Intent intent = new Intent();
         intent.putExtra("text", "asd");
         intent.putExtra("title", "da");
-        intent.putExtra("type", "0");
+        intent.putExtra("type", "5");
         intent.putExtra("unread", "1");
         intent.putExtra("counters", "788");
-        try {
-            intent.putExtra("user", new JSONObject().put("id", "43945394").put("photo", new JSONObject().put("c128x128", "http://imgs.topface.com/u43945394/c128x128/nnf6g6.jpg")).put("name", "Ilya").put("age", "21").toString());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {                  topface://chat?id=13123
+//            intent.putExtra("user", new JSONObject().put("id", "43945394").put("photo", new JSONObject().put("c128x128", "http://imgs.topface.com/u43945394/c128x128/nnf6g6.jpg")).put("name", "Ilya").put("age", "21").toString());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         showNotification(intent, context);
     }
 
@@ -179,15 +177,15 @@ public class GCMUtils {
                     if (showVisitors)
                     break;
                 case GCM_TYPE_UPDATE:
-                    i = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.topface.topface"));
+                    i = new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.default_market_link)));
                     break;
 
                 case GCM_TYPE_NOTIFICATION:
+//                    if (extra.getStringExtra("url") == null) {
                     i = new Intent(context, NavigationActivity.class);
-                    break;
-
-                case GCM_TYPE_INTENT:
-
+//                    } else {
+//                        i = new Intent(Intent.ACTION_VIEW,Uri.parse(extra.getStringExtra("url")));
+//                    }
                     break;
 
                 default:
@@ -202,15 +200,19 @@ public class GCMUtils {
                 final Intent newI = i;
 //                newI.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 final String finalTitle = title;
-                fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
-                    @Override
-                    public void handleMessage(Message msg) {
-                        super.handleMessage(msg);
-                        if(user.id != lastUserId) {
-                            mNotificationManager.showNotification(user.id, finalTitle, data, fakeImageView.getImageBitmap(), Integer.parseInt(extra.getStringExtra("unread")), newI);
+                if(user.photoUrl != null) {
+                    fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
+                        @Override
+                        public void handleMessage(Message msg) {
+                            super.handleMessage(msg);
+                            if(user.id != lastUserId) {
+                                mNotificationManager.showNotification(user.id, finalTitle, data, fakeImageView.getImageBitmap(), Integer.parseInt(extra.getStringExtra("unread")), newI);
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    mNotificationManager.showNotification(user.id, finalTitle, data, null, Integer.parseInt(extra.getStringExtra("unread")), newI);
+                }
             }
         }
     }
