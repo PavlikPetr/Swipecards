@@ -25,7 +25,6 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.IndicatorView;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -50,7 +49,6 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
 
 
 //    private HashMap<Integer,Fragment> mFragmentsHash;
-    private static final String TAG = "PF :: ";
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
     public static final int F_GIFTS = 2;
@@ -60,7 +58,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.ac_profile, null);
-        Debug.log(NavigationActivity.PREFIX + TAG + "onCreateView");
+
 //		mFragmentsHash = new HashMap<Integer, Fragment>();
         // Navigation bar
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
@@ -142,7 +140,6 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        Debug.log(NavigationActivity.PREFIX + TAG + "onResume");
         mUserProfileHeader.setBackgroundResource(
                 ProfileBackgrounds.getBackgroundResource(
                         getActivity().getApplicationContext(),
@@ -151,10 +148,6 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         );
 
         mUserAvatar.setPhoto(CacheProfile.photo);
-    }
-
-    public Fragment getCurrentViewPagerItem() {
-        return ((FragmentStatePagerAdapter)mViewPager.getAdapter()).getItem(mViewPager.getCurrentItem());
     }
 
     private void layoutBuyButton() {
@@ -187,7 +180,6 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Debug.log(NavigationActivity.PREFIX + TAG + "onDestroy");
     }
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
