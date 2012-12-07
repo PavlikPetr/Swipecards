@@ -13,6 +13,7 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.Debug;
 
 public class FragmentSwitchController extends ViewGroup {
@@ -485,8 +486,10 @@ public class FragmentSwitchController extends ViewGroup {
 
         boolean result;
 
+        //Данная проверка нужна, т.к. метод доступен в API >= 14, в ImageSwitcher мы его эмулируем
         if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
-            result = v.canScrollHorizontally(-dx);
+            //noinspection RedundantCast
+            result = ((ImageSwitcher) v).canScrollHorizontally(-dx);
         } else {
             result = ViewCompat.canScrollHorizontally(v, -dx);
         }
