@@ -225,4 +225,12 @@
     <string name="settings_melody">Κοινοποίηση τον ήχο κλήσης</string>
     <string name="edit_refresh_status">Να κάνετε ενημέρωση της κατάστασης</string>
     <string name="ban_title">Συγχαρητήρια! Είστε αποκλεισμένος</string>
+    <string name="general_ready">Έγινε</string>
+    <string name="profile_deleted_user">Ο χρήστης έχει διαγραφεί</string>
+    <string name="filter_main_parameters">Έχω ένα ενδιαφέρον</string>
+    <string name="buying_store_ok">Αγορά ολοκληρώθηκε με επιτυχία</string>
+    <string name="dating_prev_button_ext">Προηγούμενος</string>
+    <string name="dating_skip_button_ext">Επόμενος</string>
+    <string name="dating_search_empty_title">Δυστυχώς, τίποτα δεν βρέθηκε</string>
+    <string name="dating_search_empty_text">Μπορείτε να δοκιμάσετε την αναζήτηση ξανά, ή να αλλάξετε τις ρυθμίσεις του φίλτρου.</string>
 </resources>

@@ -14,6 +14,7 @@ import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
@@ -94,6 +95,9 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                     public void fail(int codeError, ApiResponse response) throws NullPointerException {
                         Debug.log(response.toString());
                         mLockView.setVisibility(View.GONE);
+                        if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
+                            Utils.showErrorMessage(getActivity());
+                        }
                     }
                 }).exec();
     }

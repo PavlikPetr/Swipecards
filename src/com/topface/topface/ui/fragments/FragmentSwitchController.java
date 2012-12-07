@@ -76,8 +76,12 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     public void showFragmentWithAnimation(int fragmentId) {
-        mCurrentFragmentId = fragmentId;
-        snapToScreen(EXPAND_FULL);
+        if (fragmentId != mCurrentFragmentId) {
+            mCurrentFragmentId = fragmentId;
+            snapToScreen(EXPAND_FULL);
+        } else {
+            closeMenu();
+        }
     }
 
     public void showFragment(int fragmentId) {
@@ -482,7 +486,7 @@ public class FragmentSwitchController extends ViewGroup {
         boolean result;
 
         if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
-            result = ((com.topface.topface.ui.views.ImageSwitcher) v).canScrollHorizontally(-dx);
+            result = v.canScrollHorizontally(-dx);
         } else {
             result = ViewCompat.canScrollHorizontally(v, -dx);
         }

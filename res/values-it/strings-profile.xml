@@ -229,4 +229,9 @@
     <string name="form_detail_archievements_1">I successi più significativi nella vita</string>
     <string name="form_detail_archievements_2">I tuoi successi più significativi nella vita</string>
     <string name="form_detail_archievements_3">I tuoi successi più significativi nella vita</string>
+    <string name="form_main_personal_status_0">Stato</string>
+    <string name="form_main_about_status_0">Di lui</string>
+    <string name="form_main_about_status_1">Di lei</string>
+    <string name="form_main_about_status_2">Di me</string>
+    <string name="form_main_about_status_3">Di me</string>
 </resources>

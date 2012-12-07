@@ -36,6 +36,7 @@ import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
+import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -271,6 +272,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void fail(int codeError, ApiResponse response) throws NullPointerException {
                 Debug.log(response.toString());
+                if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
+                    Utils.showErrorMessage(getActivity());
+                }
                 mLockView.setVisibility(View.GONE);
             }
         }).exec();
