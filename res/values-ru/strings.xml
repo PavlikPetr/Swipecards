@@ -301,4 +301,7 @@
 
     <string name="ban_title">Поздравляем! Вы забанены</string>
 
+    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_services">Услуги</string>
+
 </resources>

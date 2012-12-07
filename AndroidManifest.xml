@@ -50,7 +50,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.NavigationActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme = "@style/Theme.TopfaceIndicators"/>
         <activity
             android:name=".ui.CitySearchActivity"
             android:screenOrientation="portrait" />

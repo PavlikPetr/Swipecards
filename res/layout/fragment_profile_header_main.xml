@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <ImageView
+            android:src="@drawable/profile_background_1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+
+    <com.topface.topface.ui.views.ImageViewRemote
+            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+            ivr:postProcessor="rounded"
+            android:id="@+id/ivUserAvatar"
+            style="@style/ProfileAvatar"/>
+
+    <TextView
+            android:id="@+id/tvName"
+            android:layout_below="@id/ivUserAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="name"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
+
+    <TextView
+            android:id="@+id/tvCity"
+            android:layout_below="@id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="city"
+            android:drawableLeft="@drawable/profile_ico_city"
+            android:drawablePadding="5dp"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"/>
+
+</RelativeLayout>

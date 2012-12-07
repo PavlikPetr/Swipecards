@@ -243,4 +243,13 @@ public class CacheProfile {
         editor.putString(OPTIONS_CACHE_KEY, response.toString());
         editor.commit();
     }
+
+    public static String getUserNameAgeString() {
+        return CacheProfile.first_name +
+                (CacheProfile.isAgeOk(CacheProfile.age) ? ", " + CacheProfile.age : "");
+    }
+
+    private static  boolean isAgeOk(int age) {
+        return age > 0;
+    }
 }

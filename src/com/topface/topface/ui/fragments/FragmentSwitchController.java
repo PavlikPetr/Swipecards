@@ -99,7 +99,7 @@ public class FragmentSwitchController extends ViewGroup {
         BaseFragment fragment;
         switch (id) {
             case BaseFragment.F_PROFILE:
-                fragment = new ProfileFragment();
+                fragment = new ProfileNewFragment();
                 break;
             case BaseFragment.F_DATING:
                 fragment = new DatingFragment();
@@ -123,7 +123,7 @@ public class FragmentSwitchController extends ViewGroup {
                 fragment = new SettingsFragment();
                 break;
             default:
-                fragment = new ProfileFragment();
+                fragment = new ProfileNewFragment();
                 break;
         }
         return fragment;

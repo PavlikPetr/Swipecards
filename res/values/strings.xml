@@ -222,4 +222,7 @@
     <string name="settings_melody">Notification ringtone</string>
     <string name="edit_refresh_status">Update status</string>
     <string name="ban_title">Congratulations! You are banned</string>
+
+    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_services"></string>
 </resources>

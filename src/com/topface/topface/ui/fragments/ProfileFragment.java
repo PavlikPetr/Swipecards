@@ -60,6 +60,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
 //		mFragmentsHash = new HashMap<Integer, Fragment>();
         // Navigation bar
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
+
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.profile_header_title);
 
