@@ -28,6 +28,20 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        removeAllRequests();
+    }
+
+    private void removeAllRequests() {
+        if (mRequests != null && mRequests.size() > 0) {
+            for (ApiRequest request : mRequests) {
+                removeRequest(request);
+            }
+        }
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         EasyTracker.getInstance().activityStop(this);
@@ -42,16 +56,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     @Override
     public void removeRequest(ApiRequest request) {
+        request.cancel();
         mRequests.remove(request);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        for (ApiRequest request : mRequests) {
-            request.cancel();
-        }
-        mRequests.clear();
     }
 
     @Override
