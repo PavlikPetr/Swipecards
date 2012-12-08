@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
@@ -20,6 +21,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
+import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -39,8 +41,6 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
 
     ArrayList<String> HEADER_PAGES_CLASS_NAMES = new ArrayList<String>();
 
-    private ViewGroup mProfileHeader;
-
     protected NavigationBarController mNavBarController;
     private ImageViewRemote mUserAvatar;
 
@@ -58,15 +58,6 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         editButton.setVisibility(View.VISIBLE);
         editButton.setText(getResources().getString(R.string.general_edit_button));
         editButton.setOnClickListener(this);
-
-        //Header layout
-        mProfileHeader = (ViewGroup)root.findViewById(R.id.loProfileHeader);
-//        mProfileHeader.setBackgroundResource(
-//                ProfileBackgrounds.getBackgroundResource(
-//                        getActivity().getApplicationContext(),
-//                        CacheProfile.background_id
-//                )
-//        );
 
         //Header pages
         initHeaderPages();
@@ -117,12 +108,6 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
-//        mProfileHeader.setBackgroundResource(
-//                ProfileBackgrounds.getBackgroundResource(
-//                        getActivity().getApplicationContext(),
-//                        CacheProfile.background_id
-//                )
-//        );
     }
 
     @Override
@@ -181,6 +166,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         private ImageViewRemote mAvatar;
         private TextView mName;
         private TextView mCity;
+        private ImageView mBackground;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -192,6 +178,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             mName.setText(CacheProfile.getUserNameAgeString());
             mCity = (TextView)root.findViewById(R.id.tvCity);
             mCity.setText(CacheProfile.city_name);
+            mBackground = (ImageView) root.findViewById(R.id.ivProfileBackground);
             return root;
         }
 
@@ -201,6 +188,12 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             mAvatar.setPhoto(CacheProfile.photo);
             mName.setText(CacheProfile.getUserNameAgeString());
             mCity.setText(CacheProfile.city_name);
+            mBackground.setBackgroundResource(
+                ProfileBackgrounds.getBackgroundResource(
+                        getActivity().getApplicationContext(),
+                        CacheProfile.background_id
+                )
+        );
         }
     }
 
