@@ -43,7 +43,6 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     public static NavigationActivity mThis = null;
 
     private SharedPreferences mPreferences;
-
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
 
@@ -53,12 +52,8 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.ac_navigation);
         Debug.log(this, "onCreate");
-
-
-
         mFragmentManager = getSupportFragmentManager();
 
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
@@ -266,7 +261,7 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         ratingPopup.findViewById(R.id.btnRatingPopupRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.topface.topface")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.default_market_link))));
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putLong(RATING_POPUP, 0);
                 editor.commit();
@@ -297,6 +292,18 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         long stopTime = Calendar.getInstance().getTimeInMillis();
         mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
     }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
 
     @Override
     public boolean isTrackable() {

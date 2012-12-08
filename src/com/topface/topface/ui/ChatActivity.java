@@ -89,6 +89,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
     private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
     private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
+    private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
     private  int itemId;
     private Timer mTimer;
 
@@ -201,7 +202,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         retryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
             @Override
             public void onClick(View v) {
-                update(false);
+                update(false, "retry");
                 lockScreen.setVisibility(View.GONE);
             }
         });
@@ -221,7 +222,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                update(true);
+                update(true,"pull to refresh");
             }
         });
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
@@ -272,7 +273,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             }
         } else {
             // Если это не получилось, грузим с сервера
-            update(false);
+            update(false,"initial");
         }
         GCMUtils.cancelNotification(this,GCMUtils.GCM_TYPE_MESSAGE);
     }
@@ -311,13 +312,14 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         super.onDestroy();
     }
 
-    private void update(final boolean pullToRefresh) {
+    private void update(final boolean pullToRefresh, String type) {
         if (!pullToRefresh) {
             mLoadingLocker.setVisibility(View.VISIBLE);
         }
         HistoryRequest historyRequest = new HistoryRequest(this);
         registerRequest(historyRequest);
         historyRequest.userid = mUserId;
+        historyRequest.debug = type;
         historyRequest.limit = LIMIT;
         if(pullToRefresh && mAdapter != null) {
             LinkedList<History> data = mAdapter.getDataCopy();
@@ -503,13 +505,12 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     @Override
     protected void onPause() {
         super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
-        if (mReceiverRegistered) {
+        if (mReceiverRegistered && mNewMessageReceiver != null) {
             unregisterReceiver(mNewMessageReceiver);
             mReceiverRegistered = false;
         }
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
-        Debug.log("ChatActivity::onPause");
     }
 
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
@@ -857,7 +858,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         public void onReceive(Context context, Intent intent) {
             String id = intent.getStringExtra("id");
             if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
-                update(true);
+                update(true,"update counters");
                 restartTimer();
                 GCMUtils.cancelNotification(ChatActivity.this,GCMUtils.GCM_TYPE_MESSAGE);
             }
@@ -869,7 +870,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void startTimer () {
-        int period = Integer.parseInt(getString(R.string.default_chat_update_period));
+//        int period = Integer.parseInt(getString(R.string.default_chat_update_period));
         if (mTimer != null) {
             mTimer.cancel();
         }
@@ -881,12 +882,12 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     @Override
                     public void run() {
                         if(mAdapter != null) {
-                            update(true);
+                            update(true,"timer");
                         }
                     }
                 });
             }
-        }, period, period);
+        }, DEFAULT_CHAT_UPDATE_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD);
     }
 
     private void stopTimer () {

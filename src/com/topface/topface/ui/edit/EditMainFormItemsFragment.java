@@ -28,6 +28,7 @@ import java.util.HashMap;
 public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener {
 
     public enum EditType {NAME, AGE, STATUS}
+
     public static final int MAX_STATUS_LENGTH = 200;
 
     private EditType[] mTypes;
@@ -43,6 +44,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     private ImageView mCheckGirl;
     private ImageView mCheckBoy;
+
+    public EditMainFormItemsFragment() {
+        super();
+    }
 
     public EditMainFormItemsFragment(EditType[] type) {
         mTypes = type;
@@ -289,7 +294,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 break;
             case STATUS:
                 CacheProfile.status = data;
-                for(FormItem item : CacheProfile.forms) {
+                for (FormItem item : CacheProfile.forms) {
                     if (item.type == FormItem.STATUS) {
                         item.value = CacheProfile.status;
                         break;

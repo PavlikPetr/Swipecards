@@ -13,6 +13,10 @@ public abstract class AbstractEditFragment extends BaseFragment {
     protected ProgressBar mRightPrsBar;
     protected Handler mFinishHandler;
 
+    public AbstractEditFragment() {
+        super();
+    }
+
     protected void prepareRequestSend() {
         getActivity().runOnUiThread(new Runnable() {
 

@@ -38,6 +38,10 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     private EditText mEditText;
 
+    public EditFormItemInputFragment() {
+        super();
+    }
+
     public EditFormItemInputFragment(int titleId, String data) {
         mTitleId = titleId;
         mData = data == null ? Static.EMPTY : data;

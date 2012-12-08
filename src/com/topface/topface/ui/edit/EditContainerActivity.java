@@ -9,6 +9,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.edit.EditMainFormItemsFragment.EditType;
+import com.topface.topface.ui.views.LockerView;
 
 public class EditContainerActivity extends BaseFragmentActivity {
 
@@ -41,6 +42,8 @@ public class EditContainerActivity extends BaseFragmentActivity {
 
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
+        LockerView lv = (LockerView) findViewById(R.id.loProfileLoading);
+
         int titleId;
         int dataId;
         String data;
@@ -67,7 +70,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 mFragment = new EditFormItemInputFragment(titleId, data);
                 break;
             case INTENT_EDIT_ALBUM:
-                mFragment = new EditProfilePhotoFragment();
+                mFragment = new EditProfilePhotoFragment(lv);
                 break;
             case INTENT_EDIT_FILTER:
                 mFragment = new FilterFragment();
@@ -79,7 +82,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 mFragment = new FilterChooseFormItemFragment(titleId, dataId, data, FilterFragment.mTargetUser);
                 break;
             case INTENT_EDIT_PROFILE_PHOTO:
-                mFragment = new EditProfilePhotoFragment();
+                mFragment = new EditProfilePhotoFragment(lv);
                 break;
             case INTENT_EDIT_AGE:
                 int age_start = intent.getIntExtra(INTENT_AGE_START, 16);

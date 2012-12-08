@@ -9,12 +9,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -23,15 +25,25 @@ public class ProfilePhotoFragment extends BaseFragment {
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
     private Photos mPhotoLinks;
     private AddPhotoHelper mAddPhotoHelper;
-
+    private static final String TAG = "PPF :: ";
     private ViewFlipper mViewFlipper;
+    private LockerView lockerView;
+
+    public ProfilePhotoFragment() {
+        super();
+    }
+
+    public ProfilePhotoFragment(LockerView lockerView) {
+        super();
+        this.lockerView = lockerView;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initPhotoLinks();
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks);
-        mAddPhotoHelper = new AddPhotoHelper(this);
+        mAddPhotoHelper = new AddPhotoHelper(this,lockerView);
         mAddPhotoHelper.setOnResultHandler(mHandler);
     }
 
@@ -105,6 +117,7 @@ public class ProfilePhotoFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
     }
 
@@ -136,9 +149,9 @@ public class ProfilePhotoFragment extends BaseFragment {
                 mPhotoLinks.add(1, photo);
 
                 mProfilePhotoGridAdapter.notifyDataSetChanged();
-                Toast.makeText(getActivity(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-                Toast.makeText(getActivity(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
         }
     };

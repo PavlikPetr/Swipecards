@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import com.topface.topface.Static;
+import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.Debug;
 
 import java.io.*;
@@ -232,7 +233,8 @@ public class Http {
                 String twoHH = "--";
                 String boundary = "FAfsadkfn23412034aHJSAdnk";
                 httpConnection.setRequestProperty("Content-Type", "multipart/mixed; boundary=" + boundary);
-                DataOutputStream dos = new DataOutputStream(out = httpConnection.getOutputStream());
+                BufferedOutputStream bos = new BufferedOutputStream(httpConnection.getOutputStream());
+                DataOutputStream dos =  new DataOutputStream(bos);
                 dos.writeBytes(lineEnd);
                 dos.writeBytes(twoHH + boundary);
                 dos.writeBytes(lineEnd);
@@ -248,14 +250,15 @@ public class Http {
                 dos.writeBytes(lineEnd);
                 dos.writeBytes("Content-Type: image/jpeg");
                 dos.writeBytes(lineEnd + lineEnd);
-                dos.writeBytes(data);
+//                dos.writeBytes(data);
+                Base64.encodeFromFileToOutputStream(data, bos);
 
                 dos.writeBytes(lineEnd);
                 dos.writeBytes(twoHH + boundary + twoHH);
                 dos.writeBytes(lineEnd);
                 dos.flush();
                 dos.close();
-                out.close();
+//                out.close();
             }
 
             in = httpConnection.getInputStream();
@@ -275,7 +278,9 @@ public class Http {
             Debug.log(TAG, "resp:" + response);   // RESPONSE
             Debug.log(TAG, "exit");
         } catch (Exception e) {
-            Debug.log(TAG, "http exception:" + e);
+            Debug.error("HTTP::http exception", e);
+        } catch (OutOfMemoryError e) {
+            Debug.error("HTTP::OOM ", e);
         } finally {
             try {
                 Debug.log(TAG, "disconnect");

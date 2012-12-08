@@ -20,7 +20,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     protected void onMessage(final Context context, final Intent intent) {
         Debug.log("onMessage");
-        if(intent != null && intent.getStringExtra("user") != null){
+        if (intent != null){
             if (Settings.getInstance().isNotificationEnabled()) {
                 new Thread(new Runnable() {
                     @Override
@@ -35,9 +35,10 @@ public class GCMIntentService extends GCMBaseIntentService {
             //Сообщаем о том что есть новое уведомление и нужно обновить список
             Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);
             String user = intent.getStringExtra("user");
-            Debug.logJson("GCM", "User", user);
-            broadcastReceiver.putExtra("id", getUserId(user));
-            context.sendBroadcast(broadcastReceiver);
+            if(user != null) {
+                broadcastReceiver.putExtra("id", getUserId(user));
+                context.sendBroadcast(broadcastReceiver);
+            }
         }
     }
 

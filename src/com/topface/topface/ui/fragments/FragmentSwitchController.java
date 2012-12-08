@@ -13,6 +13,7 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.Debug;
 
 public class FragmentSwitchController extends ViewGroup {
@@ -27,6 +28,7 @@ public class FragmentSwitchController extends ViewGroup {
     private FragmentSwitchListener mFragmentSwitchListener;
     private boolean mAutoScrolling = false;
     private static final int EXPANDING_PERCENT = 30;
+    private BaseFragment mCurrentFragment;
 
     public static final int EXPAND = 1;
     public static final int EXPAND_FULL = 2;
@@ -75,8 +77,12 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     public void showFragmentWithAnimation(int fragmentId) {
-        mCurrentFragmentId = fragmentId;
-        snapToScreen(EXPAND_FULL);
+        if (fragmentId != mCurrentFragmentId) {
+            mCurrentFragmentId = fragmentId;
+            snapToScreen(EXPAND_FULL);
+        } else {
+            closeMenu();
+        }
     }
 
     public void showFragment(int fragmentId) {
@@ -93,6 +99,11 @@ public class FragmentSwitchController extends ViewGroup {
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
+        mCurrentFragment = fragment;
+    }
+
+    public BaseFragment getmCurrentFragment () {
+        return mCurrentFragment;
     }
 
     private BaseFragment getFragmentById(int id) {
@@ -475,8 +486,10 @@ public class FragmentSwitchController extends ViewGroup {
 
         boolean result;
 
+        //Данная проверка нужна, т.к. метод доступен в API >= 14, в ImageSwitcher мы его эмулируем
         if (v instanceof com.topface.topface.ui.views.ImageSwitcher) {
-            result = ((com.topface.topface.ui.views.ImageSwitcher) v).canScrollHorizontally(-dx);
+            //noinspection RedundantCast
+            result = ((ImageSwitcher) v).canScrollHorizontally(-dx);
         } else {
             result = ViewCompat.canScrollHorizontally(v, -dx);
         }

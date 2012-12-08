@@ -11,8 +11,6 @@ import com.topface.topface.R;
 
 public class TopfaceNotificationManager {
     private static TopfaceNotificationManager mInstance;
-    private NotificationCompat.Builder mNotificationBuilder;
-    private NotificationManager mNotificationManager;
     public static final int id = 1312; //Completely random number
     private float width = 64;
     private float height = 64;
@@ -33,32 +31,36 @@ public class TopfaceNotificationManager {
         ctx = context;
     }
 
-    public void showNotification(int userId, String title, String message, Bitmap icon, int unread, Intent intent) {
+    public void showNotification(String title, String message, Bitmap icon, int unread, Intent intent) {
 
-        Bitmap scaledIcon = Utils.clipAndScaleBitmap(icon, (int) width, (int) height);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(ctx);
+        notificationBuilder.setSmallIcon(R.drawable.ic_notification);
 
-        mNotificationBuilder = new NotificationCompat.Builder(ctx);
+        if (icon != null) {
+            Bitmap scaledIcon = Utils.clipAndScaleBitmap(icon, (int) width, (int) height);
+            if (scaledIcon != null) {
+                notificationBuilder.setLargeIcon(scaledIcon);
+            }
+        }
 
-        mNotificationBuilder.setSmallIcon(R.drawable.ic_notification);
+        if (Settings.getInstance().isVibrationEnabled()) {
+            notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+        }
 
-        mNotificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationBuilder.setSound(Settings.getInstance().getRingtone());
+        notificationBuilder.setContentTitle(title);
+        notificationBuilder.setContentText(message);
+        notificationBuilder.setAutoCancel(true);
 
-        if (Settings.getInstance().isVibrationEnabled())
-            mNotificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
-
-
-        mNotificationBuilder.setSound(Settings.getInstance().getRingtone());
-
-        mNotificationBuilder.setContentTitle(title);
-        mNotificationBuilder.setContentText(message);
-        mNotificationBuilder.setLargeIcon(scaledIcon);
-        if (unread > 0)
-            mNotificationBuilder.setNumber(unread);
-        mNotificationBuilder.setAutoCancel(true);
+        if (unread > 0) {
+            notificationBuilder.setNumber(unread);
+        }
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mNotificationBuilder.setContentIntent(resultPendingIntent);
+        notificationBuilder.setContentIntent(resultPendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
         //noinspection deprecation
-        mNotificationManager.notify(id, mNotificationBuilder.getNotification());
+        notificationManager.notify(id, notificationBuilder.getNotification());
     }
 }
