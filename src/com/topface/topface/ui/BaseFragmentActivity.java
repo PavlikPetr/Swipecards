@@ -36,8 +36,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     private void removeAllRequests() {
         if (mRequests != null && mRequests.size() > 0) {
             for (ApiRequest request : mRequests) {
-                removeRequest(request);
+                cancelRequest(request);
             }
+            mRequests.clear();
         }
     }
 
@@ -55,9 +56,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     @Override
-    public void removeRequest(ApiRequest request) {
+    public void cancelRequest(ApiRequest request) {
         request.cancel();
-        mRequests.remove(request);
     }
 
     @Override
