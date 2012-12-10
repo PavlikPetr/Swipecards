@@ -45,9 +45,17 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         public void onFinish() {
             Activity activity = getActivity();
             if (activity != null) {
-                SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(CacheProfile.getOptions(), activity.getApplicationContext());
+                SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(activity.getApplicationContext());
                 if (request != null) {
-                    request.exec();
+                    request.callback(new ApiHandler() {
+                        @Override
+                        public void success(ApiResponse response) throws NullPointerException {
+                        }
+
+                        @Override
+                        public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                        }
+                    }).exec();
                 }
             }
         }
@@ -84,25 +92,25 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loLikes);
         setBackground(R.drawable.edit_big_btn_top, frame);
         setText(R.string.settings_likes, frame);
-        initEditNotificationFrame(Options.NOTIFICATIONS_LIKES, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_LIKES).mail, options.notifications.get(Options.NOTIFICATIONS_LIKES).apns);
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES, frame, options.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns);
 
         // Mutual
         frame = (ViewGroup) root.findViewById(R.id.loMutual);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_mutual, frame);
-        initEditNotificationFrame(Options.NOTIFICATIONS_SYMPATHY, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).mail, options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns);
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY, frame, options.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns);
 
         // Chat
         frame = (ViewGroup) root.findViewById(R.id.loChat);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_messages, frame);
-        initEditNotificationFrame(Options.NOTIFICATIONS_MESSAGE, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_MESSAGE).mail, options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns);
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE, frame, options.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns);
 
         // Guests
         frame = (ViewGroup) root.findViewById(R.id.loGuests);
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
-        initEditNotificationFrame(Options.NOTIFICATIONS_VISITOR, frame, options.hasMail, options.notifications.get(Options.NOTIFICATIONS_VISITOR).mail, options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns);
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR, frame, options.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns);
 
         // Vibration
         frame = (ViewGroup) root.findViewById(R.id.loVibration);
@@ -280,7 +288,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                                 prs.setVisibility(View.GONE);
                             }
                         });
-                        CacheProfile.getOptions().notifications.get(type).mail = isChecked;
+                        CacheProfile.notifications.get(type).mail = isChecked;
                     }
 
                     @Override
@@ -295,12 +303,12 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                             }
                         });
                         buttonView.setChecked(!isChecked);
-                        CacheProfile.getOptions().notifications.get(type).mail = !isChecked;
+                        CacheProfile.notifications.get(type).mail = !isChecked;
                     }
                 }).exec();
             }
         } else {
-            CacheProfile.getOptions().notifications.get(type).apns = isChecked;
+            CacheProfile.notifications.get(type).apns = isChecked;
             mSendTimer.cancel();
             mSendTimer.start();
         }

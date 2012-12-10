@@ -309,4 +309,14 @@
     <string name="dating_search_empty_title">К сожалению, ничего не найдено</string>
     <string name="dating_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра.</string>
     <string name="general_close">Закрыть</string>
+    <string name="vip_not_activated">Ваш VIP-статус не активирован</string>
+    <string name="vip_one_day_title">1-3 дня</string>
+    <string name="vip_one_day_value">бесплатно</string>
+    <string name="vip_seven_days_title">7 дней</string>
+    <string name="vip_seven_days_value">5 USD</string>
+    <string name="vip_30_days_title">30 дней</string>
+    <string name="vip_30_days_value">10 USD</string>
+    <string name="vip_privileges">VIP-привелегии</string>
+    <string name="vip_text_visitors">Узнаете, кто вами интересовался - смотрите своих гостей!</string>
+    <string name="vip_text_adm_unlock">Отправляйте восхищения бесплатно - выражайте свои чувства по-максимуму</string>
 </resources>

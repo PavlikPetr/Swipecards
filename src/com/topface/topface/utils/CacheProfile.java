@@ -8,6 +8,7 @@ import com.topface.topface.requests.ApiResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /* Cache Profile */
@@ -38,6 +39,14 @@ public class CacheProfile {
     public static String dating_city_name; // наименование пользователя в русской локали
     public static String dating_city_full; // полное наименование города
 
+    //Notifications constants
+    public final static int NOTIFICATIONS_UNKNOWN = -1;
+    public final static int NOTIFICATIONS_MESSAGE = 0;
+    public final static int NOTIFICATIONS_SYMPATHY = 1;
+    public final static int NOTIFICATIONS_LIKES = 2;
+    public final static int NOTIFICATIONS_RATE = 3;
+    public final static int NOTIFICATIONS_VISITOR = 4;
+
     public static LinkedList<FormItem> forms;
     public static String status; // статус пользователя    
     public static int background_id;
@@ -47,6 +56,7 @@ public class CacheProfile {
     public static final String OPTIONS_CACHE_KEY = "options_cache";
 
     public static LinkedList<Gift> gifts = new LinkedList<Gift>();
+    public static HashMap<Integer, Profile.TopfaceNotifications> notifications;
 
     public static void setData(Profile profile) {
         updateCity(profile);
@@ -144,6 +154,8 @@ public class CacheProfile {
         city_id = profile.city_id;
         city_name = profile.city_name;
         city_full = profile.city_full;
+
+        notifications = profile.notifications;
 
         dating_sex = profile.dating_sex;
         dating_age_start = profile.dating_age_start;
@@ -243,4 +255,6 @@ public class CacheProfile {
         editor.putString(OPTIONS_CACHE_KEY, response.toString());
         editor.commit();
     }
+
+
 }

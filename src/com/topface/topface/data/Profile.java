@@ -12,6 +12,7 @@ import com.topface.topface.utils.http.ProfileBackgrounds;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /* Класс профиля владельца устройства */
@@ -58,6 +59,8 @@ public class Profile extends AbstractDataWithPhotos {
 	private static boolean mIsUserProfile;
 
 	public LinkedList<Gift> gifts = new LinkedList<Gift>();
+    public HashMap<Integer, TopfaceNotifications> notifications = new HashMap<Integer, TopfaceNotifications>();
+
 	public int background;
 
 	// private static final String profileFileName = "profile.out";
@@ -118,6 +121,19 @@ public class Profile extends AbstractDataWithPhotos {
 				gift.feedId = itemGift.optInt("id");
 				profile.gifts.add(gift);
 			}
+
+            if(!resp.isNull("notifications")) {
+                JSONArray jsonNotifications = resp.optJSONArray("notifications");
+                for(int i=0; i < jsonNotifications.length(); i++) {
+                    JSONObject notification = jsonNotifications.getJSONObject(i);
+
+                    boolean mail = notification.optBoolean("mail");
+                    boolean apns = notification.optBoolean("apns");
+                    int type = notification.optInt("type");
+
+                    profile.notifications.put(type,new TopfaceNotifications(apns,mail,type));
+                }
+            }
 
 			profile.background = resp
 					.optInt("background", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
@@ -525,7 +541,17 @@ public class Profile extends AbstractDataWithPhotos {
 			}
 		}
 	}
+    public static class TopfaceNotifications {
+        public boolean apns;
+        public boolean mail;
+        public int type;
 
+        public TopfaceNotifications(boolean apns, boolean  mail, int type) {
+            this.apns = apns;
+            this.mail = mail;
+            this.type = type;
+        }
+    }
 	// public static Profile load() {
 	// Profile profile = null;
 	// ObjectInputStream oin = null;

@@ -27,12 +27,7 @@ public class Options extends AbstractData {
 	public final static String PAGE_VISITORS = "VISITORS";
 	public final static String PAGE_DIALOGS = "DIALOGS";
 
-    public final static int NOTIFICATIONS_UNKNOWN = -1;
-    public final static int NOTIFICATIONS_MESSAGE = 0;
-    public final static int NOTIFICATIONS_SYMPATHY = 1;
-    public final static int NOTIFICATIONS_LIKES = 2;
-    public final static int NOTIFICATIONS_RATE = 3;
-    public final static int NOTIFICATIONS_VISITOR = 4;
+
 
     public final static String GENERAL_MAIL_CONST = "true";
     public final static String GENERAL_APNS_CONST = "false";
@@ -57,7 +52,6 @@ public class Options extends AbstractData {
 	 * Настройки для каждого типа страниц
 	 */
 	public HashMap<String, Options.Page> pages = new HashMap<String, Options.Page>();
-    public HashMap<Integer, TopfaceNotifications> notifications = new HashMap<Integer, TopfaceNotifications>();
 
 	/**
 	 * Стоимость отправки "Восхищения"
@@ -83,7 +77,6 @@ public class Options extends AbstractData {
 			options.hasMail = response.jsonResult.optBoolean("has_email");			
 			// Pages initialization
 			JSONArray pages = response.jsonResult.optJSONArray("pages");
-            JSONArray notifications = response.jsonResult.optJSONArray("notifications");
 			for (int i = 0; i < pages.length(); i++) {
 				JSONObject page = pages.getJSONObject(i);
 
@@ -93,15 +86,7 @@ public class Options extends AbstractData {
 
 				options.pages.put(pageName, new Page(pageName, floatType, bannerType));
 			}
-            for(int i=0; i < notifications.length(); i++) {
-                JSONObject notification = notifications.getJSONObject(i);
 
-                boolean mail = notification.optBoolean("mail");
-                boolean apns = notification.optBoolean("apns");
-                int type = notification.optInt("type");
-
-                options.notifications.put(type,new TopfaceNotifications(apns,mail,type));
-            }
 		} catch (Exception e) {
 			Debug.log("Message.class", "Wrong response parsing: " + e);
 		}
@@ -126,15 +111,4 @@ public class Options extends AbstractData {
 		}
 	}
 
-	public static class TopfaceNotifications {
-        public boolean apns;
-        public boolean mail;
-        public int type;
-
-		public TopfaceNotifications(boolean apns, boolean  mail, int type) {
-            this.apns = apns;
-            this.mail = mail;
-            this.type = type;
-		}
-	}
 }
