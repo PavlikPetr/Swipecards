@@ -94,6 +94,9 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                     case AuthorizationManager.TOKEN_RECEIVED:
                         auth((AuthToken) msg.obj);
                         break;
+                    case AuthorizationManager.AUTHORIZATION_CANCELLED:
+                        showButtons();
+                        break;
                     default:
                         super.handleMessage(msg);
                 }
