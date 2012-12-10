@@ -7,10 +7,7 @@ import android.app.ProgressDialog;
 import android.content.*;
 import android.location.Location;
 import android.location.LocationListener;
-import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
+import android.os.*;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -152,7 +149,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 btnBack.setText(R.string.general_dating);
             } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_dialogs);
-            } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
+             } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_likes);
             } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_mutual);
@@ -336,9 +333,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     LocalBroadcastManager.getInstance(ChatActivity.this).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID,itemId));
                     itemId = -1;
                 }
-                if(wasFailed) {
-                    startTimer();
-                }
+
                 wasFailed = false;
                 final FeedListData<History> dataList = new FeedListData<History>(response.jsonResult, History.class);
                 post(new Runnable() {
@@ -372,7 +367,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                 Toast.LENGTH_SHORT).show();
                         mLoadingLocker.setVisibility(View.GONE);
                         lockScreen.setVisibility(View.VISIBLE);
-                        stopTimer();
                         wasFailed = true;
                     }
                 });
@@ -511,7 +505,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             mReceiverRegistered = false;
         }
         stopTimer();
-        mUpdater = null;
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
     }
 
@@ -873,9 +866,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void startTimer () {
-        if (mUpdater != null) {
-            mUpdater.removeCallbacks(mUpdaterTask);
+        if(mUpdater != null) {
 
+            mUpdater.removeCallbacks(mUpdaterTask);
             mUpdater.postDelayed(mUpdaterTask, DEFAULT_CHAT_UPDATE_PERIOD);
         }
     }
@@ -883,6 +876,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private void stopTimer () {
         if(mUpdater != null) {
             mUpdater.removeCallbacks(mUpdaterTask);
+            mUpdater = null;
         }
     }
 
@@ -905,9 +899,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(mUpdater != null) {
-                        update(true,"timer");
+                    if(mUpdater != null && !wasFailed) {
+                        update(true, "timer");
                         mUpdater.postDelayed(this, DEFAULT_CHAT_UPDATE_PERIOD);
+
                     }
                 }
             });
