@@ -46,12 +46,13 @@ import com.topface.topface.utils.OsmManager;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Timer;
 import java.util.TimerTask;
 
 @SuppressWarnings("deprecation")
 public class ChatActivity extends BaseFragmentActivity implements View.OnClickListener,
         LocationListener {
+
+    private Handler mUpdater;
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
     // Data
@@ -91,7 +92,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
     private  int itemId;
-    private Timer mTimer;
 
     private Button btnBack;
 
@@ -336,8 +336,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     LocalBroadcastManager.getInstance(ChatActivity.this).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID,itemId));
                     itemId = -1;
                 }
-                if(pullToRefresh || mTimer == null) {
-                    restartTimer();
+                if(wasFailed) {
+                    startTimer();
                 }
                 wasFailed = false;
                 final FeedListData<History> dataList = new FeedListData<History>(response.jsonResult, History.class);
@@ -473,6 +473,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
             mReceiverRegistered = true;
         }
+        mUpdater = new Handler();
         startTimer();
         GCMUtils.lastUserId = mUserId; //Не показываем нотификации в чате с пользователем,
                                        //чтобы, в случае задержки нотификации, не делать лишних
@@ -510,6 +511,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             mReceiverRegistered = false;
         }
         stopTimer();
+        mUpdater = null;
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
     }
 
@@ -860,7 +862,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             String id = intent.getStringExtra("id");
             if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
                 update(true,"update counters");
-                restartTimer();
+                startTimer();
                 GCMUtils.cancelNotification(ChatActivity.this,GCMUtils.GCM_TYPE_MESSAGE);
             }
         }
@@ -871,36 +873,16 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void startTimer () {
-//        int period = Integer.parseInt(getString(R.string.default_chat_update_period));
-        if (mTimer != null) {
-            mTimer.cancel();
+        if (mUpdater != null) {
+            mUpdater.removeCallbacks(mUpdaterTask);
+
+            mUpdater.postDelayed(mUpdaterTask, DEFAULT_CHAT_UPDATE_PERIOD);
         }
-        mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(mAdapter != null) {
-                            update(true,"timer");
-                        }
-                    }
-                });
-            }
-        }, DEFAULT_CHAT_UPDATE_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD);
     }
 
     private void stopTimer () {
-        if(mTimer != null) {
-            mTimer.cancel();
-        }
-    }
-
-    private void restartTimer () {
-        if(mTimer != null) {
-            stopTimer();
-            startTimer();
+        if(mUpdater != null) {
+            mUpdater.removeCallbacks(mUpdaterTask);
         }
     }
 
@@ -916,4 +898,19 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         }
         return false;
     }
+
+    TimerTask mUpdaterTask = new TimerTask() {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(mUpdater != null) {
+                        update(true,"timer");
+                        mUpdater.postDelayed(this, DEFAULT_CHAT_UPDATE_PERIOD);
+                    }
+                }
+            });
+        }
+    };
 }
