@@ -141,7 +141,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
              btnBack.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     finish();
                 }
             });
@@ -217,7 +216,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mListView = (PullToRefreshListView) findViewById(R.id.lvChatList);
 
         // Adapter
-        mAdapter = new ChatListAdapter(getApplicationContext(), mHistoryList);
+        mAdapter = new ChatListAdapter(this, mHistoryList);
         mAdapter.setOnAvatarListener(this);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
@@ -225,6 +224,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 update(true,"pull to refresh");
             }
         });
+        mListView.setClickable(true);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
 
             @Override
@@ -383,8 +383,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private void release() {
         mEditBox = null;
         mListView = null;
-        if (mAdapter != null)
+        if (mAdapter != null) {
             mAdapter.release();
+        }
         mAdapter = null;
         mHistoryList = null;
     }

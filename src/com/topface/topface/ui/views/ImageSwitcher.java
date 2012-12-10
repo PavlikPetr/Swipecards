@@ -73,14 +73,37 @@ public class ImageSwitcher extends ViewPager {
     public void setOnPageChangeListener(OnPageChangeListener listener) {
         final OnPageChangeListener finalListener = listener;
         super.setOnPageChangeListener(new OnPageChangeListener() {
+            public int mCurrentSelected;
+            public int mNext;
+            public int mPrev;
+
             @Override
             public void onPageScrolled(int i, float v, int i1) {
+                //Если показано больше 10% следующей фотографии, то начинаем ее грузить
+                if (v > 0.1) {
+                    if (mCurrentSelected == i) {
+                        int next;
+                        next = i + 1;
+                        //Проверяем, начали ли мы грузить следующую фотографию
+                        if (mNext != next) {
+                            mNext = next;
+                            setPhoto(next);
+                        }
+                    } else {
+                        //Проверяем, не начали ли мы грузить предыдущую фотографию
+                        if (mPrev != i) {
+                            mPrev = i;
+                            setPhoto(i);
+                        }
+                    }
+                }
                 finalListener.onPageScrolled(i,v,i1);
             }
 
             @Override
             public void onPageSelected(int i) {
-                setPhoto(i);
+                //setPhoto(i);
+                mCurrentSelected = i;
                 finalListener.onPageSelected(i);
             }
 
@@ -141,8 +164,9 @@ public class ImageSwitcher extends ViewPager {
             if(!isFirstInstantiate) {
                 View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG+Integer.toString(position));
                 ImageViewRemote imageView = (ImageViewRemote)baseLayout.findViewById(R.id.ivPreView);
-                if(imageView.getBackground()==null)
+                if(imageView.getBackground() == null) {
                     imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler);
+                }
                 imageView.setDrawingCacheEnabled(true);
                 imageView.buildDrawingCache();
 //                TopfaceNotificationManager.getInstance(ImageSwitcher.this.getContext()).showNotification("test","test", NavigationActivity.mThis,imageView.getDrawingCache());

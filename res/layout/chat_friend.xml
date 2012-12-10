@@ -22,10 +22,7 @@
         <!-- message -->
         <TextView
                 android:id="@+id/chat_message"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="#4c4c4c"/>
+                style="@style/chat_message.friend"/>
 
         <!-- date -->
         <TextView

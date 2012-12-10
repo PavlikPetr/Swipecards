@@ -13,6 +13,7 @@ import com.topface.topface.data.Leader;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeadersRequest;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.LeadersActivity;
 import com.topface.topface.ui.adapters.LeadersAdapter;
 import com.topface.topface.ui.profile.UserProfileActivity;
@@ -39,7 +40,11 @@ public class LeadersBlock {
 
     public void loadLeaders() {
         EasyTracker.getTracker().trackEvent("Leaders", "Load", "", 1L);
-        new LeadersRequest(mActivity.getApplicationContext()).callback(new ApiHandler() {
+        LeadersRequest request = new LeadersRequest(mActivity.getApplicationContext());
+        if (mActivity instanceof BaseFragmentActivity) {
+            ((BaseFragmentActivity) mActivity).registerRequest(request);
+        }
+        request.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) throws NullPointerException {
                 mActivity.runOnUiThread(new Runnable() {
