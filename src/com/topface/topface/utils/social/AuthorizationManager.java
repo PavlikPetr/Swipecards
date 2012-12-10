@@ -42,6 +42,7 @@ public class AuthorizationManager {
     public final static int AUTHORIZATION_FAILED = 0;
     public final static int TOKEN_RECEIVED = 1;
     public final static int DIALOG_COMPLETED = 2;
+    public final static int AUTHORIZATION_CANCELLED = 3;
 
     // Constants
     private String[] FB_PERMISSIONS = {"user_photos", "publish_stream", "email", "publish_actions", "offline_access"};
@@ -153,7 +154,7 @@ public class AuthorizationManager {
         public void onCancel() {
             Debug.log("FB", "mDialogListener::onCancel");
             if (mHandler != null) {
-                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+                mHandler.sendEmptyMessage(AUTHORIZATION_CANCELLED);
             }
         }
     };

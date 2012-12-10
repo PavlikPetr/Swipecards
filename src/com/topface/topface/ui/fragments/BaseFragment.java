@@ -55,16 +55,16 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onPause() {
         super.onPause();
-//        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateCountersReceiver);
+        removeAllRequests();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        for (ApiRequest request : mRequests) {
-            request.cancel();
+    private void removeAllRequests() {
+        if (mRequests != null && mRequests.size() > 0) {
+            for (ApiRequest request : mRequests) {
+                cancelRequest(request);
+            }
+            mRequests.clear();
         }
-        mRequests.clear();
     }
 
     @Override
@@ -75,8 +75,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     @Override
-    public void removeRequest(ApiRequest request) {
-        mRequests.remove(request);
+    public void cancelRequest(ApiRequest request) {
+        request.cancel();
     }
 
     @Override

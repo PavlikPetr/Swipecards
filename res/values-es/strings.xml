@@ -85,7 +85,7 @@
     <string name="filter_select_city">Seleccionar la ciudad</string>
     <string name="buying_header_title">Compras</string>
     <string name="buying_you_have">Tienes</string>
-    <string name="buying_you_have_no_coins_for_gift">No basta %d {{coins}} para comprar un regalo</string>
+    <string name="buying_you_have_no_coins_for_gift">No tienes %d {{coins}} suficientes para comprar regalo</string>
     <string name="buying_default_message">Puedes enviar regalos y admiraciones para monedas</string>
     <string name="buying_money">Comprar monedas</string>
     <string name="buying_power">Comprar energía</string>
@@ -214,4 +214,24 @@
     <string name="filter_city_fail">No podemos encontrar ciudades que comienzan con «%s»</string>
     <string name="age_filter_man">Te interesan los chicos</string>
     <string name="age_filter_girl">Te interesan las chicas</string>
+    <string name="dashbrd_popup_rating">¿Te ha gustado nuestra aplicación? ¡Aumenta nuestra puntuación! Más alto que sea nuestra puntuación, más gente interesante encontraras en Topface</string>
+    <string name="dashbrd_popup_title">Puntuación</string>
+    <string name="dashbrd_popup_cancel">No preguntar más</string>
+    <string name="dashbrd_popup_rate">Puntuar</string>
+    <string name="dashbrd_popup_later">Preguntar más tarde</string>
+    <string name="buying_store_connect">Conectando a iTunes Store</string>
+    <string name="buying_store_purchase">Haciendo la compra en iTunes Store</string>
+    <string name="buying_tf_ack_sending">Enviando la información sobre la compra a Topface</string>
+    <string name="settings_melody">Melodía de notificación</string>
+    <string name="edit_refresh_status">Renovar estado</string>
+    <string name="ban_title">¡Felicidades! Estas baneado/a</string>
+    <string name="general_ready">Listo</string>
+    <string name="profile_deleted_user">Usuario eliminado</string>
+    <string name="filter_main_parameters">Me interesa</string>
+    <string name="buying_store_ok">Compra efectuada con éxito</string>
+    <string name="dating_prev_button_ext">Anterior</string>
+    <string name="dating_skip_button_ext">Siguiente</string>
+    <string name="dating_search_empty_title">Lamentablemente no se ha encontrado nada</string>
+    <string name="dating_search_empty_text">Puede intentar repetir la busqueda o cambiar opciones de filtración</string>
+    <string name="general_close">Cerrar</string>
 </resources>

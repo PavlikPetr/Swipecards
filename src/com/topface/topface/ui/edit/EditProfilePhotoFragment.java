@@ -43,6 +43,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     private ViewFlipper mViewFlipper;
     private LockerView mLockerView;
 
+    public EditProfilePhotoFragment() {
+        super();
+    }
 
     public EditProfilePhotoFragment(LockerView lockerView) {
         super();
@@ -317,6 +320,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         @Override
         public void handleMessage(Message msg) {
             mViewFlipper.setDisplayedChild(0);
+            Activity activity = getActivity();
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
                 Photo photo = (Photo) msg.obj;
 
@@ -324,9 +328,12 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 mPhotoLinks.add(1, photo);
 
                 mPhotoGridAdapter.notifyDataSetChanged();
-                Toast.makeText(getActivity(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
-            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-                Toast.makeText(getActivity(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+
+                if (activity != null) {
+                    Toast.makeText(activity, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+                }
+            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR && activity != null) {
+                Toast.makeText(activity, R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
         }
     };
