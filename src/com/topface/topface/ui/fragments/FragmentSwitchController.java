@@ -14,6 +14,7 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
 public class FragmentSwitchController extends ViewGroup {
@@ -110,7 +111,13 @@ public class FragmentSwitchController extends ViewGroup {
         BaseFragment fragment;
         switch (id) {
             case BaseFragment.F_PROFILE:
-                fragment = new ProfileNewFragment();
+                fragment = ProfileNewFragment.newInstance(
+                        ProfileNewFragment.TYPE_MY_PROFILE,
+                        CacheProfile.photo,
+                        CacheProfile.getUserNameAgeString(),
+                        CacheProfile.city_name,
+                        CacheProfile.background_id,
+                        CacheProfile.status);
                 break;
             case BaseFragment.F_DATING:
                 fragment = new DatingFragment();
