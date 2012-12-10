@@ -118,7 +118,9 @@ public class ProfileFormListAdapter extends BaseAdapter {
                     convertView.setBackgroundResource(R.drawable.bg_user_list);
                     break;
             }
-            convertView.setTag(holder);
+            if (convertView != null) {
+                convertView.setTag(holder);
+            }
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -161,7 +163,9 @@ public class ProfileFormListAdapter extends BaseAdapter {
                 holder.mFill.setTag(item);
                 break;
         }
-        convertView.requestLayout();
+        if (convertView != null) {
+            convertView.requestLayout();
+        }
         return convertView;
     }
 

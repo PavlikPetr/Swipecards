@@ -539,18 +539,19 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (confirm.completed) {
-                            History history = new History(response);
-//							history.target = FeedDialog.USER_MESSAGE;
-                            mAdapter.addSentMessage(history);
-                            mAdapter.notifyDataSetChanged();
-                            mEditBox.getText().clear();
-                            mLoadingLocker.setVisibility(View.GONE);
+                        if (mAdapter != null) {
+                            if (confirm.completed) {
+                                History history = new History(response);
+                                mAdapter.addSentMessage(history);
+                                mAdapter.notifyDataSetChanged();
+                                mEditBox.getText().clear();
+                                mLoadingLocker.setVisibility(View.GONE);
 
-                        } else {
-                            Toast.makeText(ChatActivity.this,
-                                    getString(R.string.general_server_error),
-                                    Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ChatActivity.this,
+                                        getString(R.string.general_server_error),
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });

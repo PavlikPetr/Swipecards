@@ -25,6 +25,10 @@ public class EditAgeFragment extends AbstractEditFragment {
 
     private RangeSeekBar<Integer> rsb;
 
+    public EditAgeFragment() {
+        super();
+    }
+
     public EditAgeFragment(int age_start, int age_end, int sex) {
         this.age_end = age_end;
         this.age_start = age_start;
@@ -91,7 +95,7 @@ public class EditAgeFragment extends AbstractEditFragment {
     }
 
     private String makeString(int age_start, int age_end) {
-        String plus = age_end == absoluteMax?"+":"";
+        String plus = age_end == absoluteMax ? "+" : "";
         return baseSexString + " " + Integer.toString(age_start) + " - " + Integer.toString(age_end) + plus;
     }
 

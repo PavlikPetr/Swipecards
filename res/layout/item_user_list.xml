@@ -10,7 +10,6 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:layout_alignParentBottom="true"
             android:src="@drawable/user_cell"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
@@ -39,6 +38,10 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:textColor="#212121"
+                android:shadowColor="#999999"
+                android:shadowRadius="1"
+                android:shadowDx="0"
+                android:shadowDy="1"
                 android:textSize="10sp"
                 />
 
@@ -47,31 +50,35 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-        <!-- Value -->
-        <TextView
-                android:id="@+id/tvValue"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:paddingRight="8dp"
-                android:layout_marginTop="-4dp"
-                android:layout_marginBottom="5dp"
-                />
+            <!-- Value -->
+            <TextView
+                    android:id="@+id/tvValue"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:shadowColor="#888888"
+                    android:shadowRadius="1"
+                    android:shadowDx="0"
+                    android:shadowDy="-1"
+                    android:paddingRight="8dp"
+                    android:layout_marginTop="-4dp"
+                    android:layout_marginBottom="5dp"
+                    />
 
-        <Button
-                android:id="@+id/btnFill"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/profile_fill_selector"
-                android:text="@string/general_fill_button"
-                android:textSize="13sp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:visibility="gone"/>
+            <Button
+                    android:id="@+id/btnFill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/profile_fill_selector"
+                    android:text="@string/general_fill_button"
+                    android:textSize="13sp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:visibility="gone"/>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

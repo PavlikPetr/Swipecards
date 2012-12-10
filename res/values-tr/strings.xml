@@ -233,4 +233,5 @@
     <string name="dating_skip_button_ext">Sonraki</string>
     <string name="dating_search_empty_title">Maalesef, hiçbir şey bulunamamış</string>
     <string name="dating_search_empty_text">Aramayı tekrar deneyebilirsiniz veya filrtenin ayarlarını değiştirebilirsiniz.</string>
+    <string name="general_close">Kapatmak</string>
 </resources>

@@ -83,8 +83,9 @@ public abstract class ApiRequest {
 
     public void cancel() {
         handler = null;
-        if (connection != null)
+        if (connection != null) {
             connection.abort();
+        }
         canceled = true;
     }
 
