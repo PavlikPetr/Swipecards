@@ -7,7 +7,10 @@ import android.app.ProgressDialog;
 import android.content.*;
 import android.location.Location;
 import android.location.LocationListener;
-import android.os.*;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -218,7 +221,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                update(true,"pull to refresh");
+                update(true, "pull to refresh");
             }
         });
         mListView.setClickable(true);

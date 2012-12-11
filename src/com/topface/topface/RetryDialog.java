@@ -11,11 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Ilya Vorobiev
- * Date: 19.10.12
- * Time: 9:43
- * To change this template use File | Settings | File Templates.
+ * Диалог, показываемый при ошибке отправки запроса и предлагающий его повторить
  */
 public class RetryDialog extends AlertDialog {
     private BroadcastReceiver mReciever;

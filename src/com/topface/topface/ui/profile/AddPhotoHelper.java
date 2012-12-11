@@ -139,7 +139,7 @@ public class AddPhotoHelper {
                     intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE)));
                     intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
 
-                    if(Utils.isIntentAvailable(mContext, intent.getAction().toString())) {
+                    if(Utils.isIntentAvailable(mContext, intent.getAction())) {
                         if (mFragment != null) {
                             mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
 //                            mFragment.getActivity().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);

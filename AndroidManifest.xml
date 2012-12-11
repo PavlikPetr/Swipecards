@@ -93,7 +93,7 @@
         <!--<category android:name="android.intent.category.LAUNCHER" />-->
         <!--</intent-filter>-->
         <!--</activity>-->
-        
+
         <!-- services -->
         <service android:name=".services.NotificationService"/>
         <service android:name=".billing.BillingService"/>
