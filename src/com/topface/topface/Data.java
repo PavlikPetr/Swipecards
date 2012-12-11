@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import com.facebook.android.Facebook;
+import com.facebook.topface.Facebook;
 import com.topface.topface.data.*;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;

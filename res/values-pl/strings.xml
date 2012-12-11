@@ -3,6 +3,7 @@
     <string name="app_name">Topface</string>
     <string name="app_locale">pl_PL</string>
     <string name="general_error">BŁĄD</string>
+    <string name="general_warning">UPRZEDZENIE</string>
     <string name="general_ok">OK</string>
     <string name="general_yes">Tak</string>
     <string name="general_no">Nie</string>
@@ -161,6 +162,8 @@
     <string name="settings_notifications_summary">Powiadomienia o nowych wiadomości i sympatiach</string>
     <string name="settings_select_ringtone">Wybierz ringtone</string>
     <string name="settings_vibration">Sygnał wibracją</string>
+    <string name="settings_photo_preloading">Wstępne załadowanie</string>
+    <string name="settings_photo_preloading_summary">Wstępne załadowanie następnego zdjęcia w albumie</string>
     <string name="settings_notifications_header">Zawiadomienia</string>
     <string name="settings_other_header">Inne</string>
     <string name="settings_likes">Sympatie</string>
@@ -215,4 +218,14 @@
     <string name="filter_city_fail">Nie znaleziono żadnego miasta, nazwa którego zaczyna się na «%s»</string>
     <string name="age_filter_man">Interesują Cię mężczyźni</string>
     <string name="age_filter_girl">Interesują Cię kobiety</string>
+    <string name="dashbrd_popup_rating">Lubisz naszą aplikację? Podwyższ nam ranking! Im wyżej ranking, tym więcej interesujących ludzi spotkasz w Topface</string>
+    <string name="dashbrd_popup_title">Ranking</string>
+    <string name="dashbrd_popup_cancel">Nie pytać więcej</string>
+    <string name="dashbrd_popup_rate">Wystawić ranking</string>
+    <string name="dashbrd_popup_later">Zapytać później</string>
+    <string name="buying_store_purchase">Kupuję w iTunes Store</string>
+    <string name="buying_tf_ack_sending">Wysyłam informację o zakupie w Topface</string>
+    <string name="settings_melody">Melodia powiadomienia</string>
+    <string name="edit_refresh_status">Odnów status</string>
+    <string name="ban_title">Gratulacje! Zostałeś/-aś zablokowany/-a</string>
 </resources>

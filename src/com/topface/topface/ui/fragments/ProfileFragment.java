@@ -23,6 +23,7 @@ import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.IndicatorView;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.Utils;
@@ -44,9 +45,10 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
     private Button mBuyButton;
     private View mUserPowerBkgd;
 
+    private LockerView mLoadingLocker;
+
 
 //    private HashMap<Integer,Fragment> mFragmentsHash;
-
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
     public static final int F_GIFTS = 2;
@@ -62,6 +64,8 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.profile_header_title);
+
+        mLoadingLocker = (LockerView)view.findViewById(R.id.llvProfileLoading);
 
         Button editButton = (Button) view.findViewById(R.id.btnNavigationRightWithText);
         editButton.setVisibility(View.VISIBLE);
@@ -263,7 +267,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
             Fragment fragment = null;
             switch (position) {
                 case F_PHOTO:
-                    fragment = new ProfilePhotoFragment();
+                    fragment = new ProfilePhotoFragment(mLoadingLocker);
                     break;
                 case F_FORM:
                     fragment = new ProfileFormFragment();

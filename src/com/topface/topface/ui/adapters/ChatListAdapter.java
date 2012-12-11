@@ -2,7 +2,10 @@ package com.topface.topface.ui.adapters;
 
 import android.content.Context;
 import android.text.ClipboardManager;
+import android.text.Html;
 import android.text.format.DateFormat;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +96,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     @Override
     public History getItem(int position) {
-        return mDataList.get(position);
+        return mDataList.hasItem(position)? mDataList.get(position) : null;
     }
 
     @Override
@@ -250,10 +253,13 @@ public class ChatListAdapter extends BaseAdapter {
             return convertView;
         }
 
+        //Это нужно, что бы обработать сперва html, а потом autoLink, иначе html не получитя распарсить
+        holder.message.setAutoLinkMask(0);
+
         // setting textual information
         switch (history.type) {
             case FeedDialog.DEFAULT:
-                holder.message.setText(history.text);
+                holder.message.setText(Html.fromHtml(history.text));
                 break;
             case FeedDialog.PHOTO:
 //			if (history.code > 100500) {
@@ -272,7 +278,7 @@ public class ChatListAdapter extends BaseAdapter {
 //			}
                 break;
             case FeedDialog.MESSAGE:
-                holder.message.setText(history.text);
+                holder.message.setText(Html.fromHtml(history.text));
                 break;
             case FeedDialog.MESSAGE_WISH:
                 switch (history.target) {
@@ -336,12 +342,15 @@ public class ChatListAdapter extends BaseAdapter {
 //			}
                 break;
             case FeedDialog.PROMOTION:
-                holder.message.setText(history.text);
+                holder.message.setText(Html.fromHtml(history.text));
                 break;
             default:
                 holder.message.setText("");
                 break;
         }
+
+        holder.message.setMovementMethod(LinkMovementMethod.getInstance());
+        holder.message.setAutoLinkMask(Linkify.ALL);
 
         holder.date.setText(dateFormat.format(history.created));
         // Utils.formatTime(holder.date, msg.created);
@@ -368,7 +377,7 @@ public class ChatListAdapter extends BaseAdapter {
         int position = mDataList.size() - 1;
         History prevHistory = null;
         if (position >= 0) {
-            prevHistory = mDataList.getLast(); //get(mDataList.size() - 1);
+            prevHistory = getLastRealMessage(); //get(mDataList.size() - 1);
         }
 
         if (msg.type == FeedDialog.MESSAGE) {
@@ -412,6 +421,19 @@ public class ChatListAdapter extends BaseAdapter {
         }
 
         mDataList.add(msg);
+    }
+
+    /**
+     * @return последнее "реальное" сообщение в чате, т.е. такое у которого есть id
+     */
+    private History getLastRealMessage() {
+        for (int i = mDataList.size() - 1; i >= 0; i--) {
+            History lastItem = mDataList.get(i);
+            if (lastItem.id > 0) {
+                return lastItem;
+            }
+        }
+        return null;
     }
 
     public void setDataList(LinkedList<History> dataList) {
@@ -617,10 +639,12 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     public void release() {
-        if (mDataList != null)
+        if (mDataList != null) {
             mDataList.clear();
-        if (mItemLayoutList != null)
+        }
+        if (mItemLayoutList != null) {
             mItemLayoutList.clear();
+        }
         mDataList = null;
         mInflater = null;
         mItemLayoutList = null;

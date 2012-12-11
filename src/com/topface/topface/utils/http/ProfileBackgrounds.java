@@ -31,9 +31,9 @@ public class ProfileBackgrounds {
     public static int getBackgroundResource(Context context, int id) {
         BackgroundPair[] backgroundPairs = getPairs(context);
 
-        for (int i = 0; i < backgroundPairs.length; i++) {
-            if (backgroundPairs[i].id == id) {
-                return backgroundPairs[i].resId;
+        for (BackgroundPair backgroundPair : backgroundPairs) {
+            if (backgroundPair.id == id) {
+                return backgroundPair.resId;
             }
         }
 
@@ -96,7 +96,7 @@ public class ProfileBackgrounds {
 
         public BackgroundItem setSelected(boolean selected) {
             this.selected = selected;
-            return (BackgroundItem) this;
+            return this;
         }
 
         public int getId() {

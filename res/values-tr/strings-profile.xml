@@ -229,4 +229,9 @@
     <string name="form_detail_archievements_1">Hayatta en iyi başarılar</string>
     <string name="form_detail_archievements_2">Hayatınızda en iyi başarılarınız</string>
     <string name="form_detail_archievements_3">Hayatınızda en iyi başarılarınız</string>
+    <string name="form_main_personal_status_0">Durum</string>
+    <string name="form_main_about_status_0">Onun hakkında</string>
+    <string name="form_main_about_status_1">Onun hakkında</string>
+    <string name="form_main_about_status_2">Kendi hakkında</string>
+    <string name="form_main_about_status_3">Kendi hakkında</string>
 </resources>

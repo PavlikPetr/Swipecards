@@ -223,4 +223,15 @@
     <string name="buying_store_purchase">iTunes Store’de alış veriş yapıyorum</string>
     <string name="buying_tf_ack_sending">Topface’ye alış veriş hakkında bilgi gönderiyorum</string>
     <string name="settings_melody">Bildirim sesi</string>
+    <string name="edit_refresh_status">Durumu yenilemek</string>
+    <string name="ban_title">Tebrikler! Siz ban edildiniz</string>
+    <string name="general_ready">Hazır</string>
+    <string name="profile_deleted_user">Kullanıcı silinmiştir</string>
+    <string name="filter_main_parameters">%s ile İlgileniyorum</string>
+    <string name="buying_store_ok">Alış başarılıyla tamamlanmıştır</string>
+    <string name="dating_prev_button_ext">Önceki</string>
+    <string name="dating_skip_button_ext">Sonraki</string>
+    <string name="dating_search_empty_title">Maalesef, hiçbir şey bulunamamış</string>
+    <string name="dating_search_empty_text">Aramayı tekrar deneyebilirsiniz veya filrtenin ayarlarını değiştirebilirsiniz.</string>
+    <string name="general_close">Kapatmak</string>
 </resources>

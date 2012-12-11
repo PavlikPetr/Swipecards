@@ -3,6 +3,7 @@ package com.topface.topface.imageloader;
 import android.content.Context;
 import android.widget.ImageView;
 import android.widget.ListView;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -18,7 +19,7 @@ public class DefaultImageLoader {
     private static ImageLoader mImageLoader;
     private static DefaultImageLoader mInstance;
     public static final int DISC_CACHE_SIZE = 10 * 1024 * 1024;
-    public static final int MEMORY_CACHE_SIZE = 3 * 1024 * 1024;
+    public static final int MEMORY_CACHE_SIZE = 2 * 1024 * 1024;
     private final Context mContext;
 
     public DefaultImageLoader(Context context) {
@@ -33,6 +34,7 @@ public class DefaultImageLoader {
             builder.enableLogging();
         }
         builder.discCacheSize(DISC_CACHE_SIZE);
+        builder.memoryCache(new WeakMemoryCache());
         builder.memoryCacheSize(MEMORY_CACHE_SIZE);
         builder.threadPriority(Thread.NORM_PRIORITY - 1);
         builder.defaultDisplayImageOptions(getDisplayImageConfig().build());

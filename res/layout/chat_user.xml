@@ -17,10 +17,7 @@
         <!-- message -->
         <TextView
                 android:id="@+id/chat_message"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="#527b94"/>
+                style="@style/chat_message"/>
 
         <!-- date -->
         <TextView

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">ru_RU</string>
+    <string name="app_locale">cs_CZ</string>
     <string name="general_error">CHYBA</string>
     <string name="general_warning">UPOZORNĚNÍ</string>
     <string name="general_ok">OK</string>
@@ -229,4 +229,12 @@
     <string name="settings_melody">Tón oznámení</string>
     <string name="edit_refresh_status">Obnovit status</string>
     <string name="ban_title">Gratulujeme! Jste zabanování</string>
+    <string name="general_ready">Hotovo</string>
+    <string name="profile_deleted_user">Uživatel byl odstraněn</string>
+    <string name="filter_main_parameters">Zajímají mě</string>
+    <string name="buying_store_ok">Nákup úspěšně dokončen</string>
+    <string name="dating_prev_button_ext">Předchozí</string>
+    <string name="dating_skip_button_ext">Další</string>
+    <string name="dating_search_empty_title">Bohužel, nic nebylo nalezeno</string>
+    <string name="dating_search_empty_text">Můžete zadat nové vyhledávání nebo změnit nastavení filtru.</string>
 </resources>

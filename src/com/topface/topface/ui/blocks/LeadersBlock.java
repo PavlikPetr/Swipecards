@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedUserListData;
 import com.topface.topface.data.Leader;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeadersRequest;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.LeadersActivity;
 import com.topface.topface.ui.adapters.LeadersAdapter;
 import com.topface.topface.ui.profile.UserProfileActivity;
@@ -37,7 +39,12 @@ public class LeadersBlock {
     }
 
     public void loadLeaders() {
-        new LeadersRequest(mActivity.getApplicationContext()).callback(new ApiHandler() {
+        EasyTracker.getTracker().trackEvent("Leaders", "Load", "", 1L);
+        LeadersRequest request = new LeadersRequest(mActivity.getApplicationContext());
+        if (mActivity instanceof BaseFragmentActivity) {
+            ((BaseFragmentActivity) mActivity).registerRequest(request);
+        }
+        request.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) throws NullPointerException {
                 mActivity.runOnUiThread(new Runnable() {

@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.imageloader.MaskClipPostProcessor;
 import com.topface.topface.imageloader.RoundCornersPostProcessor;
 import com.topface.topface.imageloader.RoundPostProcessor;
+import com.topface.topface.utils.Debug;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,6 +52,10 @@ public class ImageViewRemote extends ImageView {
      * Объект таймера с задержкой запроса но
      */
     private Timer mRepeatTimer;
+    /**
+     * View, которое используется в качестве индикатора загрузки
+     */
+    private View mLoader;
 
 
     public ImageViewRemote(Context context) {
@@ -151,8 +157,11 @@ public class ImageViewRemote extends ImageView {
     @Override
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
+        if (bm != null && mLoader != null) {
+            mLoader.setVisibility(View.GONE);
+        }
         //Показываем анимацию только в том случае, если ImageView видно пользователю
-        if (mIsAnimationEnabled && isShown()) {
+        if (bm != null && mIsAnimationEnabled && isShown()) {
             startAnimation(mAnimation);
         }
 
@@ -179,7 +188,12 @@ public class ImageViewRemote extends ImageView {
     }
 
     public boolean setPhoto(Photo photo, Handler handler) {
+        return setPhoto(photo, handler, null);
+    }
+
+    public boolean setPhoto(Photo photo, Handler handler, View loader) {
         boolean result;
+        mLoader = loader;
         if (photo != null) {
             int size = Math.max(getLayoutParams().height, getLayoutParams().width);
             if (size > 0) {
@@ -207,26 +221,30 @@ public class ImageViewRemote extends ImageView {
         @Override
         public void onLoadingFailed(FailReason failReason) {
             if (FailReason.OUT_OF_MEMORY != failReason) {
-                if (mRepeatCounter >= MAX_REPEAT_COUNT) {
-                    mRepeatCounter = 0;
-                    if (mHandler != null) {
-                        mHandler.sendEmptyMessage(LOADING_ERROR);
-                    }
-                    setImageResource(R.drawable.im_photo_error);
-                } else {
-                    mRepeatCounter++;
-                    mRepeatTimer = new Timer();
-                    mRepeatTimer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            ImageViewRemote.this.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    setRemoteSrc(mRemoteSrc, mHandler, true);
-                                }
-                            });
+                try {
+                    if (mRepeatCounter >= MAX_REPEAT_COUNT) {
+                        mRepeatCounter = 0;
+                        if (mHandler != null) {
+                            mHandler.sendEmptyMessage(LOADING_ERROR);
                         }
-                    }, REPEAT_SCHEDULE);
+                        setImageResource(R.drawable.im_photo_error);
+                    } else {
+                        mRepeatCounter++;
+                        mRepeatTimer = new Timer();
+                        mRepeatTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                ImageViewRemote.this.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        setRemoteSrc(mRemoteSrc, mHandler, true);
+                                    }
+                                });
+                            }
+                        }, REPEAT_SCHEDULE);
+                    }
+                } catch (OutOfMemoryError e) {
+                    Debug.error("ImageViewRemote:: OnLoadingFailed " + e.toString());
                 }
             }
         }

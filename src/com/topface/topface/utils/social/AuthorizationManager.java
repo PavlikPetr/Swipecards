@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import com.facebook.android.AsyncFacebookRunner;
-import com.facebook.android.AsyncFacebookRunner.RequestListener;
-import com.facebook.android.DialogError;
-import com.facebook.android.Facebook.DialogListener;
-import com.facebook.android.FacebookError;
+import com.facebook.topface.AsyncFacebookRunner;
+import com.facebook.topface.AsyncFacebookRunner.RequestListener;
+import com.facebook.topface.DialogError;
+import com.facebook.topface.Facebook.DialogListener;
+import com.facebook.topface.FacebookError;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.utils.Debug;
@@ -42,6 +42,7 @@ public class AuthorizationManager {
     public final static int AUTHORIZATION_FAILED = 0;
     public final static int TOKEN_RECEIVED = 1;
     public final static int DIALOG_COMPLETED = 2;
+    public final static int AUTHORIZATION_CANCELLED = 3;
 
     // Constants
     private String[] FB_PERMISSIONS = {"user_photos", "publish_stream", "email", "publish_actions", "offline_access"};
@@ -153,7 +154,7 @@ public class AuthorizationManager {
         public void onCancel() {
             Debug.log("FB", "mDialogListener::onCancel");
             if (mHandler != null) {
-                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+                mHandler.sendEmptyMessage(AUTHORIZATION_CANCELLED);
             }
         }
     };

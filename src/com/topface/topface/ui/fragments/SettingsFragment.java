@@ -25,7 +25,6 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
@@ -37,25 +36,19 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     private Settings mSettings;
     private EditSwitcher mSwitchVibration;
     private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<String, ProgressBar>();
-    private CountDownTimer mSendTimer = new CountDownTimer(3000,3000) {
+    private CountDownTimer mSendTimer = new CountDownTimer(3000, 3000) {
         @Override
-        public void onTick(long l) { }
+        public void onTick(long l) {
+        }
 
         @Override
         public void onFinish() {
-            SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(CacheProfile.getOptions(), getActivity().getApplicationContext());
-            if (request != null) {
-                request.callback(new ApiHandler() {
-
-                    @Override
-                    public void success(ApiResponse response) throws NullPointerException {
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
-                        Debug.log("failed to send notifications options");
-                    }
-                }).exec();
+            Activity activity = getActivity();
+            if (activity != null) {
+                SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(CacheProfile.getOptions(), activity.getApplicationContext());
+                if (request != null) {
+                    request.exec();
+                }
             }
         }
     };

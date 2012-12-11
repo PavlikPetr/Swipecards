@@ -7,9 +7,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.*;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,13 +21,14 @@ import com.topface.topface.data.Confirmation;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
-import com.topface.topface.ui.fragments.ProgressDialogFragment;
-import com.topface.topface.utils.Base64;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.Http;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -40,18 +42,25 @@ import java.io.IOException;
  */
 public class AddPhotoHelper {
 
+    public static final String PATH_TO_FILE = Environment.getExternalStorageDirectory().getAbsolutePath()+"/tmp.jpg";
     private Context mContext;
     private AlertDialog mAddPhotoDialog;
     private Activity mActivity;
     private Fragment mFragment;
     private Handler mHandler;
+    private LockerView mLockerView;
+
     public static final int ADD_PHOTO_RESULT_OK = 0;
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
-    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 101;
+    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 100;
 
-    public AddPhotoHelper(Fragment fragment) {
+
+
+    public AddPhotoHelper(Fragment fragment, LockerView mLockerView) {
         this(fragment.getActivity());
         mFragment = fragment;
+        this.mLockerView = mLockerView;
     }
 
     public AddPhotoHelper(Activity activity) {
@@ -60,29 +69,36 @@ public class AddPhotoHelper {
     }
 
     public void showProgressDialog() {
-        FragmentManager fm = ((FragmentActivity) mActivity).getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-
-        Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-        if (prev != null) {
-            ft.remove(prev);
+        if(mLockerView != null) {
+            mLockerView.setVisibility(View.VISIBLE);
         }
-        ft.addToBackStack(null);
-
-        DialogFragment newFragment = ProgressDialogFragment.newInstance();
-        ft.add(newFragment, ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-        ft.commitAllowingStateLoss();
+//        if(lock)
+//        FragmentManager fm = ((FragmentActivity) mActivity).getSupportFragmentManager();
+//        FragmentTransaction ft = fm.beginTransaction();
+//
+//        Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
+//        if (prev != null) {
+//            ft.remove(prev);
+//        }
+//        ft.addToBackStack(null);
+//
+//        DialogFragment newFragment = ProgressDialogFragment.newInstance();
+//        ft.add(newFragment, ProgressDialogFragment.PROGRESS_DIALOG_TAG);
+//        ft.commitAllowingStateLoss();
     }
 
     public void hideProgressDialog() {
-        FragmentManager fm = ((FragmentActivity) mActivity).getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-
-        Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-        if (prev != null) {
-            ft.remove(prev);
+        if(mLockerView != null) {
+            mLockerView.setVisibility(View.GONE);
         }
-        ft.commitAllowingStateLoss();
+//        FragmentManager fm = ((FragmentActivity) mActivity).getSupportFragmentManager();
+//        FragmentTransaction ft = fm.beginTransaction();
+//
+//        Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
+//        if (prev != null) {
+//            ft.remove(prev);
+//        }
+//        ft.commitAllowingStateLoss();
     }
 
     /**
@@ -111,19 +127,25 @@ public class AddPhotoHelper {
                     Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
                     if (mFragment != null) {
-                        mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+                        mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+//                        mFragment.getActivity().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
                     } else {
-                        mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+                        mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
                     }
                 }
                 break;
                 case R.id.btnAddPhotoCamera: {
                     Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE)));
                     intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
-                    if (mFragment != null) {
-                        mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
-                    } else {
-                        mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE);
+
+                    if(Utils.isIntentAvailable(mContext, intent.getAction().toString())) {
+                        if (mFragment != null) {
+                            mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+//                            mFragment.getActivity().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                        } else {
+                            mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                        }
                     }
                 }
                 break;
@@ -145,8 +167,24 @@ public class AddPhotoHelper {
     }
 
     public boolean checkActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (data != null) {
+        if(mFragment != null) {
+            if(mFragment.getActivity() != null && !mFragment.isAdded()) {
+                Debug.log("APH::detached");
+            }
+        }
+        if(resultCode == Activity.RESULT_OK) {
+            if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
+                if(data == null) {
+                    data = new Intent();
+                }
+                data.putExtra("isCamera",true);
+                new AsyncTaskUploader().execute(data);
+                return true;
+            }  else if(requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
+                if(data == null) {
+                    data = new Intent();
+                }
+                data.putExtra("isCamera",false);
                 new AsyncTaskUploader().execute(data);
                 return true;
             }
@@ -164,37 +202,23 @@ public class AddPhotoHelper {
         @Override
         protected String doInBackground(Intent... intentList) {
             String rawResponse = null;
-
-            PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
-            add.ssid = Data.SSID;
-
             Intent intent = intentList[0];
-            if (intent == null)
-                return rawResponse;
-
-            Uri imageUri = intent.getData();
-
             try {
 
-                // Android 4
-                //Bundle extras = intent.getExtras();
-                //Bitmap thePic = extras.getParcelable("data");
-                //User had pick an image.
-                Cursor cursor = mActivity.getContentResolver().query(imageUri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
-                cursor.moveToFirst();
+                if(intent.getBooleanExtra("isCamera",false)){
+                    File receivedImage = new File(PATH_TO_FILE);
+                    rawResponse = getRawResponse(receivedImage);
+                } else {
+                    rawResponse = getRawResponse(intent.getData());
+                }
 
-                //Link to the image
-                final String file = cursor.getString(0);
-                cursor.close();
+            } catch (Exception e) {
+                Debug.error("Photo not uploaded", e);
+            } catch (OutOfMemoryError e) {
+                Debug.error("Photo upload OOM: ", e);
 
-                //is = App.getContext().getContentResolver().openInputStream(uri[0]);
-//                String file = FileSystem.getFilePathFromURI(AddPhotoHelper.this.mActivity, imageUri);
-                String data = Base64.encodeFromFile(file);
-                //String data2 = Base64.encodeBytes(thePic.getNinePatchChunk());
-                rawResponse = Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), data);
-            } catch (IOException e) {
-                Debug.log("Photo not uploaded");
             }
+
 
             return rawResponse;
         }
@@ -222,5 +246,33 @@ public class AddPhotoHelper {
             hideProgressDialog();
         }
     }
+
+    private String getRawResponse(Uri imageUri) throws IOException {
+        PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
+        add.ssid = Data.SSID;
+
+        Cursor cursor = mActivity.getContentResolver().query(imageUri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
+        cursor.moveToFirst();
+
+        //Link to the image
+        final String file = cursor.getString(0);
+        cursor.close();
+
+//        String data = Base64.encodeFromFile(file);
+//        new Base64.OutputStream()
+
+        return Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), file);
+    }
+
+    private String getRawResponse(File file) throws IOException {
+        PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
+        add.ssid = Data.SSID;
+
+
+//        String data = Base64.encodeFromFile(file.getAbsolutePath());
+
+        return Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), file.getAbsolutePath());
+    }
+
 }
 

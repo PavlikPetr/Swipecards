@@ -1,32 +1,24 @@
 package com.topface.topface.requests;
 
-import android.test.InstrumentationTestCase;
 import com.topface.topface.data.FeedUserListData;
 import com.topface.topface.data.Leader;
 import com.topface.topface.data.Photo;
 
-import java.util.concurrent.CountDownLatch;
-
 /**
  * Тест
  */
-public class LeadersRequestTest extends InstrumentationTestCase {
+public class LeadersRequestTest extends AbstractThreadTest {
 
     public void testLeadersRequestExec() throws Throwable {
-        final CountDownLatch signal = new CountDownLatch(1);
-
-        //Запускаем в UI потоке, для чистоты теста, т.к. мы выполняем запросы
-        runTestOnUiThread(new Runnable() {
+        runAsyncTest(new Runnable() {
             @Override
             public void run() {
-                sendLeadersRequest(signal);
+                sendLeadersRequest();
             }
-        });
-
-        signal.await();
+        }, "testLeadersRequestExec");
     }
 
-    private void sendLeadersRequest(final CountDownLatch signal) {
+    private void sendLeadersRequest() {
         new LeadersRequest(getInstrumentation().getContext())
                 .callback(new ApiHandler() {
                     @Override
@@ -43,13 +35,13 @@ public class LeadersRequestTest extends InstrumentationTestCase {
                             assertTrue("Leader has't original photo", item.photo.getSuitableLink(Photo.SIZE_ORIGINAL) != null);
                             assertTrue("Leader getSuitableLink error", item.photo.getSuitableLink(Photo.SIZE_128) != null);
                         }
-                        signal.countDown();
+                        stopTest("testLeadersRequestExec");
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) throws NullPointerException {
                         assertTrue("Request exec fail: " + codeError, false);
-                        signal.countDown();
+                        stopTest("testLeadersRequestExec");
                     }
                 })
                 .exec();

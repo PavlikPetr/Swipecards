@@ -20,5 +20,5 @@
     <string name="default_resource_value">0</string>
 
     <string name="default_chat_update_period">30000</string>
-
+    <string name="default_market_link">market://details?id=com.topface.topface</string>
 </resources>

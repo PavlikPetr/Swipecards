@@ -33,7 +33,6 @@ public class ConnectionManager {
     private static ConnectionManager mInstanse;
     private ExecutorService mWorker;
     private LinkedList<Thread> mDelayedRequestsThreads;
-    private boolean doNeedResend = true;
     // Constants
     public static final String TAG = "CM";
     public static final int WAITING_TIME = 2000;
@@ -93,24 +92,23 @@ public class ConnectionManager {
                             addDelayedRequest(apiRequest);
                             apiResponse.code = ApiResponse.ERRORS_PROCCESED;
                         }
-                        if(apiResponse.code == ApiResponse.BAN) {
-                            Intent intent = new Intent(apiRequest.context,BanActivity.class);
+                        if (apiResponse.code == ApiResponse.BAN) {
+                            Intent intent = new Intent(apiRequest.context, BanActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra(BanActivity.BANNING_INTENT, apiResponse.jsonResult.get("message").toString());
                             apiRequest.context.startActivity(intent);
                             apiRequest.handler.fail(apiResponse.code, apiResponse);
                         } else if (apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE) {
-                            if (doNeedResend) {
+                            if (apiRequest.isNeedResend()) {
                                 apiRequest.handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         sendRequest(apiRequest);
                                     }
                                 }, WAITING_TIME);
-                                doNeedResend = false;
+                                apiRequest.setNeedResend(false);
                             } else {
                                 apiRequest.handler.response(apiResponse);
-                                doNeedResend = true;
                             }
                         } else {
                             apiRequest.handler.response(apiResponse);
@@ -119,11 +117,13 @@ public class ConnectionManager {
 
                 } catch (Exception e) {
                     Debug.error(TAG + "::REQUEST::ERROR ===\n", e);
-                    if (httpPost != null && !httpPost.isAborted())
+                } finally {
+                    if (httpPost != null && !httpPost.isAborted()) {
                         httpPost.abort();
-                }
-                if (httpClient != null) {
-                    httpClient.close();
+                    }
+                    if (httpClient != null) {
+                        httpClient.close();
+                    }
                 }
             }
         });
@@ -152,11 +152,13 @@ public class ConnectionManager {
                 r.close();
             }
         } catch (Exception e) {
-            Debug.log(TAG, "cm exception:" + e.getMessage());
-            for (StackTraceElement st : e.getStackTrace())
-                Debug.log(TAG, "cm trace: " + st.toString());
-            if (httpPost != null && !httpPost.isAborted())
+            Debug.error("ConnectionManager::Exception", e);
+        } catch (OutOfMemoryError e) {
+            Debug.error("ConnectionManager::OutOfMemory", e);
+        } finally {
+            if (httpPost != null && !httpPost.isAborted()) {
                 httpPost.abort();
+            }
         }
 
         return rawResponse;

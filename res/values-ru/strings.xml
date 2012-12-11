@@ -99,7 +99,7 @@
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_only_beautiful">Только красивые</string>
     <string name="filter_extra_parameters">Дополнительные параметры</string>
-    <string name="filter_age">Возраст</string>
+    <string name="filter_age">Выбор возраста</string>
     <string name="filter_online">Онлайн</string>
     <string name="filter_all">Все</string>
     <string name="filter_cities_all">По всем городам</string>
@@ -300,4 +300,13 @@
     <string name="edit_refresh_status">Обновить статус</string>
 
     <string name="ban_title">Поздравляем! Вы забанены</string>
+    <string name="general_ready">Готово</string>
+    <string name="profile_deleted_user">Пользователь удален</string>
+    <string name="filter_main_parameters">Мне интересны</string>
+    <string name="buying_store_ok">Покупка успешно завершена</string>
+    <string name="dating_prev_button_ext">Предыдущий</string>
+    <string name="dating_skip_button_ext">Следующий</string>
+    <string name="dating_search_empty_title">К сожалению, ничего не найдено</string>
+    <string name="dating_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра.</string>
+    <string name="general_close">Закрыть</string>
 </resources>

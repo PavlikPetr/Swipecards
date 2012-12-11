@@ -1,6 +1,9 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
@@ -14,6 +17,7 @@ import com.topface.topface.Data;
 import com.topface.topface.R;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class Utils {
 	public static final long WEEK = 604800L;
@@ -48,39 +52,42 @@ public class Utils {
     public static Bitmap clipAndScaleBitmap(Bitmap rawBitmap, int dstWidth, int dstHeight) {
         if (rawBitmap == null || rawBitmap.getWidth() <= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
             return null;
+        Bitmap clippedBitmap = null;
+        try{
+            // Исходный размер загруженного изображения
+            int srcWidth = rawBitmap.getWidth();
+            int srcHeight = rawBitmap.getHeight();
 
-        // Исходный размер загруженного изображения
-        int srcWidth = rawBitmap.getWidth();
-        int srcHeight = rawBitmap.getHeight();
+            // буль, длинная фото или высокая
+            boolean LAND = false;
+            if (srcWidth >= srcHeight)
+                LAND = true;
 
-        // буль, длинная фото или высокая
-        boolean LAND = false;
-        if (srcWidth >= srcHeight)
-            LAND = true;
+            // коффициент сжатия фотографии
+            float ratio = Math.max(((float) dstWidth) / srcWidth, ((float) dstHeight) / srcHeight);
 
-        // коффициент сжатия фотографии
-        float ratio = Math.max(((float) dstWidth) / srcWidth, ((float) dstHeight) / srcHeight);
+            // на получение оригинального размера по ширине или высоте
+            if (ratio <= 0) ratio = 1;
 
-        // на получение оригинального размера по ширине или высоте
-        if (ratio <= 0) ratio = 1;
+            // матрица сжатия
+            Matrix matrix = new Matrix();
+            matrix.postScale(ratio, ratio);
 
-        // матрица сжатия
-        Matrix matrix = new Matrix();
-        matrix.postScale(ratio, ratio);
+            // сжатие изображения
+            Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
 
-        // сжатие изображения
-        Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
+            // вырезаем необходимый размер
 
-        // вырезаем необходимый размер
-        Bitmap clippedBitmap;
-        if (LAND) {
-            // у горизонтальной, вырезаем по центру
-            int offset_x = (scaledBitmap.getWidth() - dstWidth) / 2;
-            clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, dstWidth, dstHeight, null, false);
-        } else
-            // у вертикальной режим с верху
-            clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
-
+            if (LAND) {
+                // у горизонтальной, вырезаем по центру
+                int offset_x = (scaledBitmap.getWidth() - dstWidth) / 2;
+                clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, dstWidth, dstHeight, null, false);
+            } else
+                // у вертикальной режим с верху
+                clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
+        } catch (OutOfMemoryError e) {
+            Debug.error("ClipANdScaleImage:: " + e.toString());
+        }
 
         return clippedBitmap;
     }
@@ -464,4 +471,14 @@ public class Utils {
 		}
 		return size;
     }
+
+    public static boolean isIntentAvailable(Context context, String action) {
+        final PackageManager packageManager = context.getPackageManager();
+        final Intent intent = new Intent(action);
+        List<ResolveInfo> list =
+                packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+
+
 }

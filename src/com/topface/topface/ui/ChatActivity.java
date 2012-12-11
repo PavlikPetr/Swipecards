@@ -7,10 +7,7 @@ import android.app.ProgressDialog;
 import android.content.*;
 import android.location.Location;
 import android.location.LocationListener;
-import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
+import android.os.*;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -43,16 +40,18 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.OsmManager;
-import com.topface.topface.utils.http.Http;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Timer;
 import java.util.TimerTask;
 
 @SuppressWarnings("deprecation")
 public class ChatActivity extends BaseFragmentActivity implements View.OnClickListener,
         LocationListener {
+
+    private Handler mUpdater;
+    public static final String ADAPTER_DATA = "adapter";
+    public static final String WAS_FAILED = "was_failed";
     // Data
     private int mUserId;
     private boolean mProfileInvoke;
@@ -88,10 +87,12 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
     private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
     private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
+    private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
     private  int itemId;
-    private Timer mTimer;
 
     private Button btnBack;
+
+    private boolean wasFailed = false;
 
     // Managers
     private GeoLocationManager mGeoManager = null;
@@ -147,7 +148,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 btnBack.setText(R.string.general_dating);
             } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_dialogs);
-            } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
+             } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_likes);
             } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_mutual);
@@ -157,18 +158,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 btnBack.setText(R.string.general_profile);
             }
 
-        } else {
-            btnBack.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ChatActivity.this,NavigationActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_DIALOGS);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-            btnBack.setText(R.string.general_dialogs);
         }
 
         final ImageButton btnProfile = (ImageButton) findViewById(R.id.btnNavigationProfileBar);
@@ -209,7 +198,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         retryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
             @Override
             public void onClick(View v) {
-                update(false);
+                update(false, "retry");
                 lockScreen.setVisibility(View.GONE);
             }
         });
@@ -224,14 +213,15 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mListView = (PullToRefreshListView) findViewById(R.id.lvChatList);
 
         // Adapter
-        mAdapter = new ChatListAdapter(getApplicationContext(), mHistoryList);
+        mAdapter = new ChatListAdapter(this, mHistoryList);
         mAdapter.setOnAvatarListener(this);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                update(true);
+                update(true,"pull to refresh");
             }
         });
+        mListView.setClickable(true);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
 
             @Override
@@ -262,11 +252,25 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         Object data = getLastCustomNonConfigurationInstance();
         if (data != null) {
             // noinspection unchecked
-            mAdapter.setDataList((LinkedList<History>) data);
-            mLoadingLocker.setVisibility(View.GONE);
+            try{
+                Bundle params = (Bundle)data;
+                LinkedList<History> history = (LinkedList<History>) params.getSerializable(ADAPTER_DATA);
+                if(history != null) {
+                    mAdapter.setDataList(history);
+                }
+                wasFailed =  params.getBoolean(WAS_FAILED,false);
+                if(wasFailed) {
+                    lockScreen.setVisibility(View.VISIBLE);
+                } else {
+                    lockScreen.setVisibility(View.GONE);
+                }
+                mLoadingLocker.setVisibility(View.GONE);
+            } catch (Exception e) {
+                Debug.error(e);
+            }
         } else {
             // Если это не получилось, грузим с сервера
-            update(false);
+            update(false,"initial");
         }
         GCMUtils.cancelNotification(this,GCMUtils.GCM_TYPE_MESSAGE);
     }
@@ -305,13 +309,14 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         super.onDestroy();
     }
 
-    private void update(final boolean pullToRefresh) {
+    private void update(final boolean pullToRefresh, String type) {
         if (!pullToRefresh) {
             mLoadingLocker.setVisibility(View.VISIBLE);
         }
         HistoryRequest historyRequest = new HistoryRequest(this);
         registerRequest(historyRequest);
         historyRequest.userid = mUserId;
+        historyRequest.debug = type;
         historyRequest.limit = LIMIT;
         if(pullToRefresh && mAdapter != null) {
             LinkedList<History> data = mAdapter.getDataCopy();
@@ -328,9 +333,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     LocalBroadcastManager.getInstance(ChatActivity.this).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID,itemId));
                     itemId = -1;
                 }
-                if(pullToRefresh || mTimer == null) {
-                    restartTimer();
-                }
+
+                wasFailed = false;
                 final FeedListData<History> dataList = new FeedListData<History>(response.jsonResult, History.class);
                 post(new Runnable() {
                     @Override
@@ -363,7 +367,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                                 Toast.LENGTH_SHORT).show();
                         mLoadingLocker.setVisibility(View.GONE);
                         lockScreen.setVisibility(View.VISIBLE);
-                        stopTimer();
+                        wasFailed = true;
                     }
                 });
             }
@@ -373,8 +377,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private void release() {
         mEditBox = null;
         mListView = null;
-        if (mAdapter != null)
+        if (mAdapter != null) {
             mAdapter.release();
+        }
         mAdapter = null;
         mHistoryList = null;
     }
@@ -463,6 +468,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
             mReceiverRegistered = true;
         }
+        mUpdater = new Handler();
         startTimer();
         GCMUtils.lastUserId = mUserId; //Не показываем нотификации в чате с пользователем,
                                        //чтобы, в случае задержки нотификации, не делать лишних
@@ -479,19 +485,28 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 }
             });
             btnBack.setText(R.string.general_dialogs);
+        } else {
+            if(btnBack != null) {
+                btnBack.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+            }
+
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
-        if (mReceiverRegistered) {
+        if (mReceiverRegistered && mNewMessageReceiver != null) {
             unregisterReceiver(mNewMessageReceiver);
             mReceiverRegistered = false;
         }
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
-        Debug.log("ChatActivity::onPause");
     }
 
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
@@ -520,18 +535,19 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (confirm.completed) {
-                            History history = new History(response);
-//							history.target = FeedDialog.USER_MESSAGE;
-                            mAdapter.addSentMessage(history);
-                            mAdapter.notifyDataSetChanged();
-                            mEditBox.getText().clear();
-                            mLoadingLocker.setVisibility(View.GONE);
+                        if (mAdapter != null) {
+                            if (confirm.completed) {
+                                History history = new History(response);
+                                mAdapter.addSentMessage(history);
+                                mAdapter.notifyDataSetChanged();
+                                mEditBox.getText().clear();
+                                mLoadingLocker.setVisibility(View.GONE);
 
-                        } else {
-                            Toast.makeText(ChatActivity.this,
-                                    getString(R.string.general_server_error),
-                                    Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ChatActivity.this,
+                                        getString(R.string.general_server_error),
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
@@ -828,14 +844,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        if(lockScreen != null) {
-            if(lockScreen.getVisibility() == View.VISIBLE) {
-                return null;
-            }
-        } else if(!Http.isOnline(this)) {
-            return null;
-        }
-        return mAdapter.getDataCopy();
+        Bundle configurations = new Bundle();
+        configurations.putBoolean(WAS_FAILED,wasFailed);
+        configurations.putSerializable(ADAPTER_DATA, mAdapter.getDataCopy());
+        return configurations;
     }
 
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -843,8 +855,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         public void onReceive(Context context, Intent intent) {
             String id = intent.getStringExtra("id");
             if (id != null && !id.equals("") && Integer.parseInt(id) == mUserId) {
-                update(true);
-                restartTimer();
+                update(true,"update counters");
+                startTimer();
                 GCMUtils.cancelNotification(ChatActivity.this,GCMUtils.GCM_TYPE_MESSAGE);
             }
         }
@@ -855,36 +867,17 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void startTimer () {
-        int period = Integer.parseInt(getString(R.string.default_chat_update_period));
-        if (mTimer != null) {
-            mTimer.cancel();
+        if(mUpdater != null) {
+
+            mUpdater.removeCallbacks(mUpdaterTask);
+            mUpdater.postDelayed(mUpdaterTask, DEFAULT_CHAT_UPDATE_PERIOD);
         }
-        mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(mAdapter != null) {
-                            update(true);
-                        }
-                    }
-                });
-            }
-        }, period, period);
     }
 
     private void stopTimer () {
-        if(mTimer != null) {
-            mTimer.cancel();
-        }
-    }
-
-    private void restartTimer () {
-        if(mTimer != null) {
-            stopTimer();
-            startTimer();
+        if(mUpdater != null) {
+            mUpdater.removeCallbacks(mUpdaterTask);
+            mUpdater = null;
         }
     }
 
@@ -893,11 +886,27 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
         if(taskList != null) {
             if(taskList.size() > 1) {
-                if(taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName()) || taskList.get(0).numActivities > 1)  {
+                if(taskList.get(0).baseActivity.getClassName().equals(NavigationActivity.class.getName()) || taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName()))  {
                     return true;
                 }
             }
         }
         return false;
     }
+
+    TimerTask mUpdaterTask = new TimerTask() {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(mUpdater != null && !wasFailed) {
+                        update(true, "timer");
+                        mUpdater.postDelayed(this, DEFAULT_CHAT_UPDATE_PERIOD);
+
+                    }
+                }
+            });
+        }
+    };
 }

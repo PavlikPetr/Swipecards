@@ -227,4 +227,15 @@
     <string name="buying_store_purchase">Здійснюю покупку у iTunes Store</string>
     <string name="buying_tf_ack_sending">Відправляю інформацію про купівлю в Topfacе</string>
     <string name="settings_melody">Мелодія повідомлення</string>
+    <string name="edit_refresh_status">Відновити статус</string>
+    <string name="ban_title">Вітаємо! Ви забанені</string>
+    <string name="general_ready">Готово</string>
+    <string name="profile_deleted_user">Користувач знищен</string>
+    <string name="filter_main_parameters">Мені цікаві</string>
+    <string name="buying_store_ok">Купівля успішно завершена</string>
+    <string name="dating_prev_button_ext">Попередній</string>
+    <string name="dating_skip_button_ext">Наступний</string>
+    <string name="dating_search_empty_title">На жаль, нічого не знайдено</string>
+    <string name="dating_search_empty_text">Ви можете спробувати повторити пошук, або змінити налаштування фільтра.</string>
+    <string name="general_close">Закрити</string>
 </resources>

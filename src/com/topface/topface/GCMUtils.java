@@ -4,10 +4,12 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.widget.ListView;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.data.Options;
@@ -32,7 +34,6 @@ import java.util.TimerTask;
 
 
 public class GCMUtils {
-    public static final String GCM_REGISTERED = "gcmRegistered";
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
 
     public static final int GCM_TYPE_UNKNOWN = -1;
@@ -42,11 +43,14 @@ public class GCMUtils {
     public static final int GCM_TYPE_GUESTS = 3;
     public static final int GCM_TYPE_DIALOGS = 4;
 
+    public static final int GCM_TYPE_UPDATE = 5;
+    public static final int GCM_TYPE_NOTIFICATION = 6;
+
     public static final String NEXT_INTENT = "next";
 
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
 
-    public static int  lastNotificationType = GCM_TYPE_DIALOGS;
+    public static int lastNotificationType = GCM_TYPE_DIALOGS;
 
     public static int lastUserId = -1;
 
@@ -56,7 +60,7 @@ public class GCMUtils {
     private static boolean showVisitors = true;
 
     public static void init(Context context) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             try {
                 GCMRegistrar.checkDevice(context);
                 GCMRegistrar.checkManifest(context);
@@ -77,7 +81,7 @@ public class GCMUtils {
 
             } catch (Exception ex) {
                 Debug.error(ex);
-            }    
+            }
         }
     }
 
@@ -90,113 +94,187 @@ public class GCMUtils {
         Intent intent = new Intent();
         intent.putExtra("text", "asd");
         intent.putExtra("title", "da");
-        intent.putExtra("type", "0");
+        intent.putExtra("type", "5");
         intent.putExtra("unread", "1");
         intent.putExtra("counters", "788");
-        try {
-            intent.putExtra("user", new JSONObject().put("id", "43945394").put("photo", new JSONObject().put("c128x128", "http://imgs.topface.com/u43945394/c128x128/nnf6g6.jpg")).put("name", "Ilya").put("age", "21").toString());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {                  topface://chat?id=13123
+//            intent.putExtra("user", new JSONObject().put("id", "43945394").put("photo", new JSONObject().put("c128x128", "http://imgs.topface.com/u43945394/c128x128/nnf6g6.jpg")).put("name", "Ilya").put("age", "21").toString());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         showNotification(intent, context);
     }
 
     public static void showNotification(final Intent extra, Context context) {
-        final String data = extra.getStringExtra("text");
-        if (data != null) {
-            Intent i = null;
+        try {
+            final String data = extra.getStringExtra("text");
+            if (data != null) {
+                loadNotificationSettings();
+                setCounters(extra, context);
 
-            String typeString = extra.getStringExtra("type");
-            int type = typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
+                int type = getType(extra);
+                final User user = getUser(extra);
+                String title = getTitle(context, extra.getStringExtra("title"));
+                Intent intent = getIntentByType(context, type, user);
 
-            final User user = new User();
-            user.json2User(extra.getStringExtra("user"));
-            String title = extra.getStringExtra("title");
-            if (title == null || title.equals("")) {
-                title = context.getString(R.string.app_name);
-            }
 
-            Options options = CacheProfile.getOptions();
-            if(options.notifications != null) {
-                if(!options.notifications.isEmpty()) {
-                    showMessage = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns;
-                    showLikes =  options.notifications.get(Options.NOTIFICATIONS_LIKES).apns;
-                    showSympathy = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns;
-                    showVisitors = options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns;
+                if (intent != null) {
+                    intent.putExtra("C2DM", true);
+                    final TopfaceNotificationManager notificationManager = TopfaceNotificationManager.getInstance(context);
+                    if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
+                        showNotificationWithIcon(
+                                getUnread(extra),
+                                data,
+                                user,
+                                notificationManager,
+                                getTempImageViewRemote(context),
+                                intent,
+                                title
+                        );
+                    } else {
+                        notificationManager.showNotification(
+                                title,
+                                data,
+                                null,
+                                getUnread(extra),
+                                intent
+                        );
+                    }
                 }
             }
-            String countersString = extra.getStringExtra("counters");
-            if (countersString != null)
-                setCounters(countersString, context);
+        } catch (Exception e) {
+            Debug.error("Notifcation from GCM error", e);
+        }
+    }
 
-            final TopfaceNotificationManager mNotificationManager = TopfaceNotificationManager.getInstance(context);
+    private static TempImageViewRemote getTempImageViewRemote(Context context) {
+        final TempImageViewRemote fakeImageView = new TempImageViewRemote(context);
 
-            switch (type) {
-                case GCM_TYPE_MESSAGE:
-                    if (showMessage) {
-                        if (user.id != 0) {
-                            lastNotificationType = GCM_TYPE_MESSAGE;
-                            i = new Intent(context, ChatActivity.class);
+        fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
+        return fakeImageView;
+    }
 
-                            i.putExtra(ChatActivity.INTENT_USER_ID, user.id);
-                            i.putExtra(ChatActivity.INTENT_USER_NAME, user.name);
-                            i.putExtra(ChatActivity.INTENT_USER_AVATAR, user.photoUrl);
-                            i.putExtra(ChatActivity.INTENT_USER_AGE, user.age);
-                            i.putExtra(ChatActivity.INTENT_USER_CITY, user.city);
-                        } else {
-                            i = new Intent(context, NavigationActivity.class);
-                        }
-                    }
-                    break;
+    private static int getType(Intent extra) {
+        String typeString = extra.getStringExtra("type");
+        return typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
+    }
 
+    private static void setCounters(Intent extra, Context context) {
+        String countersString = extra.getStringExtra("counters");
+        if (countersString != null) {
+            setCounters(countersString, context);
+        }
+    }
 
-                case GCM_TYPE_SYMPATHY:
-                    if (showSympathy) {
-                        lastNotificationType = GCM_TYPE_SYMPATHY;
-                        i = new Intent(context, NavigationActivity.class);
-                        i.putExtra(NEXT_INTENT, BaseFragment.F_MUTUAL);
-                    }
-                    break;
+    private static User getUser(Intent extra) {
+        final User user = new User();
+        String userJson = extra.getStringExtra("user");
+        if (userJson != null) {
+            user.json2User(userJson);
+        }
+        return user;
+    }
 
-                case GCM_TYPE_LIKE:
-                    if (showLikes) {
-                        lastNotificationType = GCM_TYPE_LIKE;
-                        i = new Intent(context, NavigationActivity.class);
-                        i.putExtra(NEXT_INTENT, BaseFragment.F_LIKES);
-                    }
-                    break;
-
-                case GCM_TYPE_GUESTS:
-                    if (showVisitors) {
-                        lastNotificationType = GCM_TYPE_GUESTS;
-                        i = new Intent(context, NavigationActivity.class);
-                        i.putExtra(NEXT_INTENT, BaseFragment.F_VISITORS);
-                    }
-                    break;
-                default:
-                    i = new Intent(context, AuthActivity.class);
-
-            }
-
-            if (i != null) {
-                i.putExtra("C2DM", true);
-                final TempImageViewRemote fakeImageView = new TempImageViewRemote(context);
-                fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
-                final Intent newI = i;
-                newI.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                final String finalTitle = title;
-                fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
-                    @Override
-                    public void handleMessage(Message msg) {
-                        super.handleMessage(msg);
-                        if(user.id != lastUserId) {
-                            mNotificationManager.showNotification(user.id, finalTitle, data, fakeImageView.getImageBitmap(), Integer.parseInt(extra.getStringExtra("unread")), newI);
-                        }
-                    }
-                });
+    private static void loadNotificationSettings() {
+        Options options = CacheProfile.getOptions();
+        if (options.notifications != null) {
+            if (!options.notifications.isEmpty()) {
+                showMessage = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns;
+                showLikes = options.notifications.get(Options.NOTIFICATIONS_LIKES).apns;
+                showSympathy = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns;
+                showVisitors = options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns;
             }
         }
+    }
+
+    private static String getTitle(Context context, String title) {
+        if (title == null || title.equals("")) {
+            title = context.getString(R.string.app_name);
+        }
+        return title;
+    }
+
+    private static void showNotificationWithIcon(final int unread, final String data, final User user, final TopfaceNotificationManager notificationManager, final TempImageViewRemote fakeImageView, final Intent newI, final String finalTitle) {
+        fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (user.id != lastUserId) {
+                    notificationManager.showNotification(finalTitle, data, fakeImageView.getImageBitmap(), unread, newI);
+                }
+            }
+        });
+    }
+
+    private static int getUnread(Intent extra) {
+        String unreadExtra = extra.getStringExtra("unread");
+        int unread = 0;
+        try {
+            unread = unreadExtra != null ? Integer.parseInt(unreadExtra) : 0;
+        } catch (NumberFormatException e) {
+            Debug.error("Wrong unread format: " + unreadExtra, e);
+        }
+        return unread;
+    }
+
+    private static Intent getIntentByType(Context context, int type, User user) {
+        Intent i = null;
+        switch (type) {
+            case GCM_TYPE_MESSAGE:
+                if (showMessage) {
+                    if (user.id != 0) {
+                        lastNotificationType = GCM_TYPE_MESSAGE;
+                        i = new Intent(context, ChatActivity.class);
+
+                        i.putExtra(ChatActivity.INTENT_USER_ID, user.id);
+                        i.putExtra(ChatActivity.INTENT_USER_NAME, user.name);
+                        i.putExtra(ChatActivity.INTENT_USER_AVATAR, user.photoUrl);
+                        i.putExtra(ChatActivity.INTENT_USER_AGE, user.age);
+                        i.putExtra(ChatActivity.INTENT_USER_CITY, user.city);
+                    } else {
+                        i = new Intent(context, NavigationActivity.class);
+                    }
+                }
+                break;
+
+
+            case GCM_TYPE_SYMPATHY:
+                if (showSympathy) {
+                    lastNotificationType = GCM_TYPE_SYMPATHY;
+                    i = new Intent(context, NavigationActivity.class);
+                    i.putExtra(NEXT_INTENT, BaseFragment.F_MUTUAL);
+                }
+                break;
+
+            case GCM_TYPE_LIKE:
+                if (showLikes) {
+                    lastNotificationType = GCM_TYPE_LIKE;
+                    i = new Intent(context, NavigationActivity.class);
+                    i.putExtra(NEXT_INTENT, BaseFragment.F_LIKES);
+                }
+                break;
+
+            case GCM_TYPE_GUESTS:
+                if (showVisitors) {
+                    lastNotificationType = GCM_TYPE_GUESTS;
+                    i = new Intent(context, NavigationActivity.class);
+                    i.putExtra(NEXT_INTENT, BaseFragment.F_VISITORS);
+                }
+                break;
+            case GCM_TYPE_UPDATE:
+                i = new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.default_market_link)));
+                break;
+
+            case GCM_TYPE_NOTIFICATION:
+                i = new Intent(context, NavigationActivity.class);
+                break;
+
+            default:
+                i = new Intent(context, AuthActivity.class);
+
+        }
+        return i;
     }
 
     private static void setCounters(String counters, Context context) {
@@ -219,7 +297,7 @@ public class GCMUtils {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                if(type == lastNotificationType) {
+                if (type == lastNotificationType) {
                     NotificationManager notificationManager =
                             (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.cancel(TopfaceNotificationManager.id);
@@ -283,6 +361,8 @@ public class GCMUtils {
         public String city;
 
         public User() {
+            id = 0;
+            age = 0;
         }
 
         public void json2User(String json) {
