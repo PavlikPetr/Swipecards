@@ -37,15 +37,15 @@ public class FormInfo {
             switch (formItem.type) {
                 case FormItem.DATA:
                     title = getFormTitle(formItem);
-                    if(formItem.dataId != FormItem.NO_RESOURCE_ID) {
-                    	data = getEntryById(getEntriesByTitleId(formItem.titleId), getIdsByTitleId(formItem.titleId), formItem.dataId);
+                    if (formItem.dataId != FormItem.NO_RESOURCE_ID) {
+                        data = getEntryById(getEntriesByTitleId(formItem.titleId), getIdsByTitleId(formItem.titleId), formItem.dataId);
                     }
                     break;
                 case FormItem.HEADER:
                     title = getFormTitle(formItem);
                 case FormItem.STATUS:
                     title = getFormTitle(formItem);
-                    if(formItem.dataId != FormItem.NO_RESOURCE_ID) {
+                    if (formItem.dataId != FormItem.NO_RESOURCE_ID) {
                         data = getEntryById(getEntriesByTitleId(formItem.titleId), getIdsByTitleId(formItem.titleId), formItem.dataId);
                     }
                     break;

@@ -221,11 +221,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         });
         emptySearchDialog.setVisibility(View.GONE);
         ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(emptySearchDialog);
-         mReceiver = new BroadcastReceiver(){
+        mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(mPreloadManager != null) {
-                    mPreloadManager.checkConnectionType(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,0));
+                if (mPreloadManager != null) {
+                    mPreloadManager.checkConnectionType(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0));
                 }
             }
         };
@@ -686,9 +686,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setHeader(View view) {
-        String plus = CacheProfile.dating_age_end == FilterFragment.webAbsoluteMaxAge?"+":"";
-        int age = CacheProfile.dating_age_end == FilterFragment.webAbsoluteMaxAge?EditAgeFragment.absoluteMax:CacheProfile.dating_age_end;
-                ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(App.getContext().getString(
+        String plus = CacheProfile.dating_age_end == FilterFragment.webAbsoluteMaxAge ? "+" : "";
+        int age = CacheProfile.dating_age_end == FilterFragment.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating_age_end;
+        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(App.getContext().getString(
                 CacheProfile.dating_sex == Static.BOY ? R.string.dating_header_guys
                         : R.string.dating_header_girls, CacheProfile.dating_age_start,
                 age) + plus);

@@ -32,7 +32,7 @@ public class Gift extends AbstractDataWithPhotos {
             JSONArray array = response.jsonResult.getJSONArray("gifts");
             for (int i = 0; i < array.length(); i++) {
                 JSONObject item = array.getJSONObject(i);
-                Gift gift = new Gift();                
+                Gift gift = new Gift();
                 gift.id = item.optInt("id");
                 gift.type = item.optInt("type");
                 gift.link = item.optString("link");

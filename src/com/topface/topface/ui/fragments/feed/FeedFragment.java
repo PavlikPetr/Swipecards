@@ -527,13 +527,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void showUpdateErrorMessage() {
-        if(updateErrorMessage != null) {
+        if (updateErrorMessage != null) {
             updateErrorMessage.setVisibility(View.VISIBLE);
         }
     }
 
     private void retryButtonClick() {
-        if(updateErrorMessage != null) {
+        if (updateErrorMessage != null) {
             updateErrorMessage.setVisibility(View.GONE);
             updateData(false, true);
         }

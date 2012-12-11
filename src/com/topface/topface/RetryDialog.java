@@ -29,7 +29,7 @@ public class RetryDialog extends AlertDialog {
         mReciever = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,0) != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
+                if (intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0) != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
 
                     RetryDialog.this.getButton(Dialog.BUTTON_POSITIVE).performClick();
                 }

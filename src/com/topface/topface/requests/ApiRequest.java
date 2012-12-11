@@ -62,7 +62,7 @@ public abstract class ApiRequest {
             });
             handler.fail(0, new ApiResponse(""));
             retryDialog.show();
-        } else if((!Data.isSSID() || (new AuthToken(context)).isEmpty()) && doNeedAuthorize) {
+        } else if ((!Data.isSSID() || (new AuthToken(context)).isEmpty()) && doNeedAuthorize) {
             if (!AuthActivity.isStarted()) {
                 Debug.log("SSID and Token is empty, need authorize");
                 context.startActivity(new Intent(context, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
@@ -91,7 +91,7 @@ public abstract class ApiRequest {
 
     private void setStopTime() {
         SharedPreferences mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        if(mPreferences != null) {
+        if (mPreferences != null) {
             long stopTime = Calendar.getInstance().getTimeInMillis();
             mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
         }

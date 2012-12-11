@@ -238,11 +238,11 @@ public class AuthorizationManager {
                     JSONObject response = new JSONObject(responseRaw);
                     JSONArray responseArr = response.optJSONArray("response");
                     if (responseArr != null) {
-	                    if (responseArr.length() > 0) {
-	                        JSONObject profile = responseArr.getJSONObject(0);
-	                        result = profile.optString("first_name") + " " + profile.optString("last_name");
-	                    }
-	                    handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, result));
+                        if (responseArr.length() > 0) {
+                            JSONObject profile = responseArr.getJSONObject(0);
+                            result = profile.optString("first_name") + " " + profile.optString("last_name");
+                        }
+                        handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, result));
                     } else {
                         handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
                     }

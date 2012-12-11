@@ -20,9 +20,9 @@ import java.util.Calendar;
 import java.util.List;
 
 public class Utils {
-	public static final long WEEK = 604800L;
-	public static final long DAY = 86400L;
-	
+    public static final long WEEK = 604800L;
+    public static final long DAY = 86400L;
+
     private static PluralResources mPluralResources;
 
     public static int unixtime() {
@@ -55,7 +55,7 @@ public class Utils {
         if (rawBitmap == null || rawBitmap.getWidth() <= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
             return null;
         Bitmap clippedBitmap = null;
-        try{
+        try {
             // Исходный размер загруженного изображения
             int srcWidth = rawBitmap.getWidth();
             int srcHeight = rawBitmap.getHeight();
@@ -138,8 +138,7 @@ public class Utils {
         Bitmap clippedBitmap;
         if (width == dstWidth && height == dstHeight) {
             clippedBitmap = clippingBitmap(bitmap);
-        }
-        else {
+        } else {
             //noinspection SuspiciousNameCombination
             clippedBitmap = clipAndScaleBitmap(bitmap, dstWidth, dstWidth);
         }
@@ -233,7 +232,7 @@ public class Utils {
         cal.setTimeInMillis(time);
         Calendar cal2 = Calendar.getInstance();
         int currentYear = cal2.get(Calendar.YEAR);
-        cal2.set(currentYear,Calendar.JANUARY,1);
+        cal2.set(currentYear, Calendar.JANUARY, 1);
 
         if (time > Data.midnight)
             text = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
@@ -467,19 +466,19 @@ public class Utils {
                 Toast.LENGTH_SHORT
         ).show();
     }
-    
+
     @SuppressWarnings("deprecation")
-	public static Point getSrceenSize(Context context) {
-    	Point size;
-    	WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-		Display display = wm.getDefaultDisplay();
-		if (Build.VERSION.SDK_INT < 13) {
-			size = new Point(display.getWidth(),display.getHeight());
-		} else {
-			size = new Point();
-			display.getSize(size);
-		}
-		return size;
+    public static Point getSrceenSize(Context context) {
+        Point size;
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        if (Build.VERSION.SDK_INT < 13) {
+            size = new Point(display.getWidth(), display.getHeight());
+        } else {
+            size = new Point();
+            display.getSize(size);
+        }
+        return size;
     }
 
     public static boolean isIntentAvailable(Context context, String action) {

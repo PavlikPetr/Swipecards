@@ -44,7 +44,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void updateUI(Runnable action) {
-        if(isAdded()) {
+        if (isAdded()) {
             getActivity().runOnUiThread(action);
         }
     }
@@ -90,7 +90,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     private void setUpdateCountersReceiver() {
-        if(updateCountersReceiver == null){
+        if (updateCountersReceiver == null) {
             updateCountersReceiver = new BroadcastReceiver() {
 
                 @Override
@@ -100,7 +100,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                     }
                 }
             };
-            if(isAdded()) {
+            if (isAdded()) {
                 LocalBroadcastManager.getInstance(getActivity())
                         .registerReceiver(
                                 updateCountersReceiver,
@@ -113,7 +113,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onDestroy() {
         super.onDestroy();
-        View rootView  = getView();
+        View rootView = getView();
         if (rootView != null) {
             unbindDrawables(getView());
             System.gc();
@@ -129,7 +129,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                 unbindDrawables(((ViewGroup) view).getChildAt(i));
             }
             ((ViewGroup) view).removeAllViews();
-        } else if (view instanceof  AdapterView) {
+        } else if (view instanceof AdapterView) {
             try {
                 //noinspection unchecked
                 ((AdapterView) view).setAdapter(null);

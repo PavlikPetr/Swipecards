@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
@@ -42,17 +41,17 @@ public class RateController {
         mCommentDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-            	if(context instanceof NavigationActivity) {
-            		((NavigationActivity)context).onDialogCancel();
-            	}
-            	mContext.runOnUiThread(new Runnable() {
+                if (context instanceof NavigationActivity) {
+                    ((NavigationActivity) context).onDialogCancel();
+                }
+                mContext.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    	if (mOnRateControllerListener != null)
-                    		mOnRateControllerListener.failRate();
+                        if (mOnRateControllerListener != null)
+                            mOnRateControllerListener.failRate();
                     }
                 });
-            	
+
             }
         });
         mCommentText = (EditText) mCommentDialog.findViewById(R.id.etPopupComment);
@@ -68,7 +67,7 @@ public class RateController {
             mContext.startActivity(new Intent(mContext, BuyingActivity.class));
             return;
         }
-        ((Button) mCommentDialog.findViewById(R.id.btnPopupCommentSend)).setOnClickListener(new OnClickListener() {
+        mCommentDialog.findViewById(R.id.btnPopupCommentSend).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 String comment = mCommentText.getText().toString();
@@ -151,7 +150,7 @@ public class RateController {
             mContext.startActivity(new Intent(mContext, BuyingActivity.class));
             return;
         }
-        ((Button) mCommentDialog.findViewById(R.id.btnPopupCommentSend)).setOnClickListener(new OnClickListener() {
+        mCommentDialog.findViewById(R.id.btnPopupCommentSend).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 String comment = mCommentText.getText().toString();

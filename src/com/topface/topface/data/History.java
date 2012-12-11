@@ -1,8 +1,7 @@
 package com.topface.topface.data;
 
-import org.json.JSONObject;
-
 import com.topface.topface.requests.ApiResponse;
+import org.json.JSONObject;
 
 
 public class History extends FeedDialog {
@@ -14,7 +13,7 @@ public class History extends FeedDialog {
     public History(ApiResponse response) {
         super(response.jsonResult.optJSONObject("item"));
     }
-    
+
     public History() {
         super(null);
     }

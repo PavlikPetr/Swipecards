@@ -28,10 +28,10 @@ public class SendMailNotificationsRequest extends AbstractApiRequest {
         if (mailmutual != null) result.put("mailmutual", mailmutual);
         if (mailchat != null) result.put("mailmessage", mailchat);
         if (mailguests != null) result.put("mailvisitor", mailguests);
-        if(apnssympathy != null) result.put("apnssympathy", apnssympathy);
-        if(apnsmutual != null) result.put("apnsmutual", apnsmutual);
-        if(apnschat != null) result.put("apnsmessage", apnschat);
-        if(apnsguests != null) result.put("apnsvisitor", apnsguests);
+        if (apnssympathy != null) result.put("apnssympathy", apnssympathy);
+        if (apnsmutual != null) result.put("apnsmutual", apnsmutual);
+        if (apnschat != null) result.put("apnsmessage", apnschat);
+        if (apnsguests != null) result.put("apnsvisitor", apnsguests);
         return result;
     }
 

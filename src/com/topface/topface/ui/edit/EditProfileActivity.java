@@ -60,7 +60,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         btnBackToProfile.setVisibility(View.VISIBLE);
         btnBackToProfile.setOnClickListener(this);
 
-        hasStartedFromAuthActivity = getIntent().getBooleanExtra(FROM_AUTH_ACTIVITY,false);
+        hasStartedFromAuthActivity = getIntent().getBooleanExtra(FROM_AUTH_ACTIVITY, false);
 
         // ListView
         mEditItems = new LinkedList<EditProfileItem>();
@@ -73,17 +73,17 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_header, mEditsListView, false);
 
         ViewGroup profileNameLayout = (ViewGroup) header.findViewById(R.id.loProfileName);
-        ((ImageView)profileNameLayout.findViewById(R.id.ivNameEditBackground)).setOnClickListener(this);
-        mEditName = (TextView)profileNameLayout.findViewById(R.id.tvName);
+        profileNameLayout.findViewById(R.id.ivNameEditBackground).setOnClickListener(this);
+        mEditName = (TextView) profileNameLayout.findViewById(R.id.tvName);
         mEditName.setText(CacheProfile.first_name + ", ");
-        mEditAge = (TextView)profileNameLayout.findViewById(R.id.tvAge);
+        mEditAge = (TextView) profileNameLayout.findViewById(R.id.tvAge);
         mEditAge.setText(Integer.toString(CacheProfile.age));
-        mEditSex = (ImageView)profileNameLayout.findViewById(R.id.ivSexIcon);
-        mEditSex.setImageResource(CacheProfile.sex == Static.BOY ? 
-        		R.drawable.ico_boy : 
-        		R.drawable.ico_girl);
-        
-        
+        mEditSex = (ImageView) profileNameLayout.findViewById(R.id.ivSexIcon);
+        mEditSex.setImageResource(CacheProfile.sex == Static.BOY ?
+                R.drawable.ico_boy :
+                R.drawable.ico_girl);
+
+
         mEditCity = (Button) header.findViewById(R.id.btnEditCity);
         mEditCity.setText(CacheProfile.city_name);
         mEditCity.setOnClickListener(this);
@@ -95,7 +95,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         mProfilePhoto = (ImageViewRemote) header.findViewById(R.id.ivProfilePhoto);
         mProfilePhoto.setOnClickListener(this);
         mProfilePhoto.setPhoto(CacheProfile.photo);
-        if(hasStartedFromAuthActivity) {
+        if (hasStartedFromAuthActivity) {
             editProfileMsg = (TextView) findViewById(R.id.EditProfileMessage);
             editProfileMsg.setVisibility(View.VISIBLE);
         }
@@ -124,20 +124,23 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             }
 
             // set position type info
-            if (prevFormItem != null && prevFormItem.type == FormItem.HEADER) {
-                item.setType(Type.TOP);
-            } else if (i + 1 < CacheProfile.forms.size()) {
-                int type = CacheProfile.forms.get(i + 1).type;
-                if (type == FormItem.HEADER || type == FormItem.DIVIDER) {
+            if (item != null) {
+                if (prevFormItem != null && prevFormItem.type == FormItem.HEADER) {
+                    item.setType(Type.TOP);
+                } else if (i + 1 < CacheProfile.forms.size()) {
+                    int type = CacheProfile.forms.get(i + 1).type;
+                    if (type == FormItem.HEADER || type == FormItem.DIVIDER) {
+                        item.setType(Type.BOTTOM);
+                    }
+                } else if (i == CacheProfile.forms.size() - 1) {
                     item.setType(Type.BOTTOM);
+                } else {
+                    item.setType(Type.MIDDLE);
                 }
-            } else if (i == CacheProfile.forms.size() - 1) {
-                item.setType(Type.BOTTOM);
-            } else {
-                item.setType(Type.MIDDLE);
             }
 
             mEditItems.add(item);
+
             prevFormItem = formItem;
         }
     }
@@ -154,7 +157,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                         CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
                 break;
             case R.id.btnNavigationBackWithText:
-                if(hasStartedFromAuthActivity){
+                if (hasStartedFromAuthActivity) {
                     Intent intent = new Intent(this, NavigationActivity.class);
                     intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE);
                     startActivity(intent);
@@ -175,9 +178,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 case EditContainerActivity.INTENT_EDIT_NAME_AGE:
                     mEditName.setText(CacheProfile.first_name + ", ");
                     mEditAge.setText(Integer.toString(CacheProfile.age));
-                    mEditSex.setImageResource(CacheProfile.sex == Static.BOY ? 
-                    		R.drawable.ico_boy : 
-                    		R.drawable.ico_girl);
+                    mEditSex.setImageResource(CacheProfile.sex == Static.BOY ?
+                            R.drawable.ico_boy :
+                            R.drawable.ico_girl);
                     break;
                 case EditContainerActivity.INTENT_EDIT_STATUS:
                     mAdapter.notifyDataSetChanged();

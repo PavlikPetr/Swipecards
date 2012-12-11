@@ -176,7 +176,7 @@ public class BannerBlock {
     private boolean isCorrectResolution() {
         int screenSize = (mActivity.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK);
-        return  screenSize != Configuration.SCREENLAYOUT_SIZE_SMALL;
+        return screenSize != Configuration.SCREENLAYOUT_SIZE_SMALL;
     }
 
     private void sendStat(String action, String label) {

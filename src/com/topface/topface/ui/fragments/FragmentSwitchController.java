@@ -44,7 +44,7 @@ public class FragmentSwitchController extends ViewGroup {
         public void afterClosing();
 
         public void beforeExpanding();
-        
+
         public void afterOpening();
     }
 
@@ -109,7 +109,7 @@ public class FragmentSwitchController extends ViewGroup {
         mCurrentFragment = fragment;
     }
 
-    public BaseFragment getmCurrentFragment () {
+    public BaseFragment getmCurrentFragment() {
         return mCurrentFragment;
     }
 
@@ -217,11 +217,11 @@ public class FragmentSwitchController extends ViewGroup {
             if (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL) {
                 mFragmentSwitchListener.afterClosing();
             }
-            
+
             if (mAnimation == EXPAND || mAnimation == EXPAND_FULL) {
                 mFragmentSwitchListener.afterOpening();
             }
-            
+
             if (mAnimation == EXPAND_FULL) {
                 fullExpanding();
             }

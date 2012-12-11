@@ -19,9 +19,9 @@ import java.util.Collections;
  */
 public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter implements AbsListView.OnScrollListener {
 
-	protected static final int T_NEW = 3;
-	protected static final int T_COUNT = 1;
-	
+    protected static final int T_NEW = 3;
+    protected static final int T_COUNT = 1;
+
     private Context mContext;
     private FeedList<T> mData;
     private LayoutInflater mInflater;
@@ -86,24 +86,24 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     @Override
-    public int getViewTypeCount() {    	
-    	return super.getViewTypeCount()+T_COUNT;
+    public int getViewTypeCount() {
+        return super.getViewTypeCount() + T_COUNT;
     }
-    
+
     @Override
-    public int getItemViewType(int position) {    	
-    	int superType = super.getItemViewType(position);
-    	if (superType == T_OTHER) {
-    		if (getItem(position).unread) {
-    			return T_NEW;
-    		} else {
-    			return T_OTHER;
-    		}
-    	} else {
-    		return superType;
-    	}
+    public int getItemViewType(int position) {
+        int superType = super.getItemViewType(position);
+        if (superType == T_OTHER) {
+            if (getItem(position).unread) {
+                return T_NEW;
+            } else {
+                return T_OTHER;
+            }
+        } else {
+            return superType;
+        }
     }
-    
+
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
 
@@ -148,7 +148,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
         //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
         if (holder == null) {
-            convertView = getInflater().inflate(type==T_NEW ? getNewItemLayout() : getItemLayout(), null, false);
+            convertView = getInflater().inflate(type == T_NEW ? getNewItemLayout() : getItemLayout(), null, false);
             holder = getEmptyHolder(convertView, item);
         }
 
@@ -247,10 +247,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void addDataFirst(FeedListData<T> data) {
         removeLoaderItem();
-        if(data != null) {
+        if (data != null) {
             Collections.reverse(data.items);
-            if(!data.items.isEmpty()) {
-                for(T item : data.items) {
+            if (!data.items.isEmpty()) {
+                for (T item : data.items) {
                     getData().addFirst(item);
                 }
             }
@@ -308,7 +308,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public T getFirstItem() {
         T item = null;
-        if(!isEmpty()) {
+        if (!isEmpty()) {
             FeedList<T> data = getData();
             item = data.getFirst();
         }
@@ -329,18 +329,19 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     @SuppressWarnings("unchecked")
-	protected T getRetryItem() {
+    protected T getRetryItem() {
         //noinspection unchecked
         return (T) new FeedLoader(IListLoader.ItemType.RETRY);
     }
 
     @SuppressWarnings("unchecked")
-	protected T getLoaderItem() {
+    protected T getLoaderItem() {
         //noinspection unchecked
         return (T) new FeedLoader(IListLoader.ItemType.LOADER);
     }
 
     abstract protected int getItemLayout();
+
     abstract protected int getNewItemLayout();
 
     public boolean isNeedUpdate() {

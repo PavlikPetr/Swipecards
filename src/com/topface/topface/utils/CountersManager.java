@@ -30,7 +30,7 @@ public class CountersManager {
     private static CountersManager mInstance;
 
     public static CountersManager getInstance(Context context) {
-        if(mInstance == null) {
+        if (mInstance == null) {
             mInstance = new CountersManager(context);
         }
         return mInstance;
@@ -66,23 +66,23 @@ public class CountersManager {
     public void decrementCounter(int type) {
         switch (type) {
             case LIKES:
-                if(likesCounter > 0) {
-                    likesCounter --;
+                if (likesCounter > 0) {
+                    likesCounter--;
                 }
                 break;
             case SYMPATHY:
-                if(sympathyCounter > 0) {
-                    sympathyCounter --;
+                if (sympathyCounter > 0) {
+                    sympathyCounter--;
                 }
                 break;
             case VISITORS:
-                if(visitorsCounter > 0) {
-                    visitorsCounter --;
+                if (visitorsCounter > 0) {
+                    visitorsCounter--;
                 }
                 break;
             case DIALOGS:
-                if(dialogsCounter > 0) {
-                    dialogsCounter --;
+                if (dialogsCounter > 0) {
+                    dialogsCounter--;
                 }
                 break;
         }
@@ -145,14 +145,14 @@ public class CountersManager {
         CacheProfile.unread_visitors = visitorsCounter;
 
         updateUICounters(); //кидаем broadcast о том, что счетчики обновились и причину их обновления
-                            //название метода, если это запрос, или константу, если это GCM
+        //название метода, если это запрос, или константу, если это GCM
     }
 
     private void updateUICounters() {
-        String method = lastRequestMethod == null? NULL_METHOD: lastRequestMethod;
-        if(!method.equals(DeniedMethod)) {
+        String method = lastRequestMethod == null ? NULL_METHOD : lastRequestMethod;
+        if (!method.equals(DeniedMethod)) {
             Intent intent = new Intent(UPDATE_COUNTERS);
-            intent.putExtra(METHOD_INTENT_STRING,method);
+            intent.putExtra(METHOD_INTENT_STRING, method);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
         setMethod(null);

@@ -118,7 +118,7 @@ public class Settings {
      * Нужно ли в данный момент запускать предзагрузку фотографии следующего пользователя
      *
      * @return начинать ли предзагрузку
-     */    
+     */
     public boolean isPreloadUser() {
         return isPreloadingEnabled(mContext.getString(R.string.settings_preloading_type_user));
     }
@@ -146,26 +146,26 @@ public class Settings {
     public void resetSettings() {
         setSocialAccountName(Static.EMPTY);
     }
-        
+
     public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
         Options options = CacheProfile.getOptions();
-        SendMailNotificationsRequest request = getMailNotificationRequest(options,context);
+        SendMailNotificationsRequest request = getMailNotificationRequest(options, context);
 
         switch (key) {
             case Options.NOTIFICATIONS_LIKES:
-                if(isMail) request.mailsympathy = value;
+                if (isMail) request.mailsympathy = value;
                 else request.apnssympathy = value;
                 break;
             case Options.NOTIFICATIONS_MESSAGE:
-                if(isMail) request.mailchat = value;
+                if (isMail) request.mailchat = value;
                 else request.apnschat = value;
                 break;
             case Options.NOTIFICATIONS_SYMPATHY:
-                if(isMail) request.mailmutual = value;
+                if (isMail) request.mailmutual = value;
                 else request.apnsmutual = value;
                 break;
             case Options.NOTIFICATIONS_VISITOR:
-                if(isMail) request.mailguests = value;
+                if (isMail) request.mailguests = value;
                 else request.apnsguests = value;
                 break;
             default:

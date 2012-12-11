@@ -60,7 +60,7 @@ public class Http {
     public static String httpPostDataRequest(String request, String postParams, byte[] dataParams) {
         return httpRequest(HTTP_POST_REQUEST, request, postParams, dataParams, null);
     }
-    
+
     public static String httpPostDataRequest(String request, String postParams, InputStream is) {
         return httpRequest(HTTP_POST_REQUEST, request, postParams, null, is);
     }
@@ -234,7 +234,7 @@ public class Http {
                 String boundary = "FAfsadkfn23412034aHJSAdnk";
                 httpConnection.setRequestProperty("Content-Type", "multipart/mixed; boundary=" + boundary);
                 BufferedOutputStream bos = new BufferedOutputStream(httpConnection.getOutputStream());
-                DataOutputStream dos =  new DataOutputStream(bos);
+                DataOutputStream dos = new DataOutputStream(bos);
                 dos.writeBytes(lineEnd);
                 dos.writeBytes(twoHH + boundary);
                 dos.writeBytes(lineEnd);

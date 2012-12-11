@@ -65,8 +65,8 @@ public class UserProfileActivity extends BaseFragmentActivity {
 
     public User mUser;
 
-    private boolean mFromChat = false; 
-    
+    private boolean mFromChat = false;
+
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_CHAT_INVOKE = "chat_invoke";
@@ -94,19 +94,19 @@ public class UserProfileActivity extends BaseFragmentActivity {
         EasyTracker.getInstance().setContext(this);
         Debug.log(this, "+onCreate");
         try {
-        	setContentView(R.layout.ac_user_profile);
+            setContentView(R.layout.ac_user_profile);
         } catch (Exception ex) {
-        	Debug.error(ex);
-        	finish();
+            Debug.error(ex);
+            finish();
         }
 
-        if(getIntent() != null) {
+        if (getIntent() != null) {
             mUserId = getIntent().getIntExtra(INTENT_USER_ID, -1);
         }
 
         // Navigation bar
         String userName = getIntent().getStringExtra(INTENT_USER_NAME); // name
-        if(userName != null) {
+        if (userName != null) {
             ((TextView) findViewById(R.id.tvNavigationTitle)).setText(userName);
         }
 
@@ -184,7 +184,7 @@ public class UserProfileActivity extends BaseFragmentActivity {
         ViewTreeObserver vto = mIndicatorView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
             @SuppressWarnings("deprecation")
-			@Override
+            @Override
             public void onGlobalLayout() {
                 ViewTreeObserver obs = mIndicatorView.getViewTreeObserver();
                 //noinspection deprecation
@@ -281,19 +281,19 @@ public class UserProfileActivity extends BaseFragmentActivity {
                     mUserMutual.setEnabled(false);
                     break;
                 case R.id.btnUserChat:
-                	if (mFromChat) {
-                		finish();
-                	} else {
-	                    Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
-	                    intent.putExtra(ChatActivity.INTENT_USER_ID, mUser.uid);
-	                    intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);
-	                    intent.putExtra(ChatActivity.INTENT_USER_SEX, mUser.sex);
-	                    intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
-	                    intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
-	                    intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
-	                    intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, UserProfileActivity.this.getClass().getSimpleName());
-	                    startActivity(intent);
-                	}
+                    if (mFromChat) {
+                        finish();
+                    } else {
+                        Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
+                        intent.putExtra(ChatActivity.INTENT_USER_ID, mUser.uid);
+                        intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);
+                        intent.putExtra(ChatActivity.INTENT_USER_SEX, mUser.sex);
+                        intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
+                        intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
+                        intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
+                        intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, UserProfileActivity.this.getClass().getSimpleName());
+                        startActivity(intent);
+                    }
                     break;
                 default:
                     break;

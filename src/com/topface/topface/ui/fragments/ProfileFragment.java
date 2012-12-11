@@ -48,7 +48,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
     private LockerView mLoadingLocker;
 
 
-//    private HashMap<Integer,Fragment> mFragmentsHash;
+    //    private HashMap<Integer,Fragment> mFragmentsHash;
     public static final int F_PHOTO = 0;
     public static final int F_FORM = 1;
     public static final int F_GIFTS = 2;
@@ -65,7 +65,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.profile_header_title);
 
-        mLoadingLocker = (LockerView)view.findViewById(R.id.llvProfileLoading);
+        mLoadingLocker = (LockerView) view.findViewById(R.id.llvProfileLoading);
 
         Button editButton = (Button) view.findViewById(R.id.btnNavigationRightWithText);
         editButton.setVisibility(View.VISIBLE);
@@ -116,7 +116,7 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         ViewTreeObserver vto = mIndicatorView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
             @SuppressWarnings("deprecation")
-			@Override
+            @Override
             public void onGlobalLayout() {
                 mIndicatorView.setButtonMeasure(R.id.btnUserPhoto, mUserPhoto.getMeasuredWidth());
                 mIndicatorView.setButtonMeasure(R.id.btnUserQuestionnaire, mUserForm.getMeasuredWidth());
