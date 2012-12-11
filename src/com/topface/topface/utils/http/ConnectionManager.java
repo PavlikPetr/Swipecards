@@ -117,9 +117,10 @@ public class ConnectionManager {
 
                 } catch (Exception e) {
                     Debug.error(TAG + "::REQUEST::ERROR ===\n", e);
-                    if (httpPost != null && !httpPost.isAborted())
-                        httpPost.abort();
                 } finally {
+                    if (httpPost != null && !httpPost.isAborted()) {
+                        httpPost.abort();
+                    }
                     if (httpClient != null) {
                         httpClient.close();
                     }
@@ -151,13 +152,13 @@ public class ConnectionManager {
                 r.close();
             }
         } catch (Exception e) {
-            Debug.error("cm exception:", e);
-            for (StackTraceElement st : e.getStackTrace())
-                Debug.log("cm trace: ", st.toString());
-            if (httpPost != null && !httpPost.isAborted())
-                httpPost.abort();
+            Debug.error("ConnectionManager::Exception", e);
         } catch (OutOfMemoryError e) {
-            Debug.error("ConnectionManager:: " + e.toString());
+            Debug.error("ConnectionManager::OutOfMemory", e);
+        } finally {
+            if (httpPost != null && !httpPost.isAborted()) {
+                httpPost.abort();
+            }
         }
 
         return rawResponse;
