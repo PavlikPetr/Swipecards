@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
@@ -33,6 +34,7 @@ public class FragmentSwitchController extends ViewGroup {
     public static final int EXPAND_FULL = 2;
     public static final int COLLAPSE = 3;
     public static final int COLLAPSE_FULL = 4;
+    private int mOldFragment;
 
     /*
     *   interface FragmentSwitchListener
@@ -94,10 +96,15 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     private void switchFragment() {
+
         BaseFragment fragment = getFragmentById(mCurrentFragmentId);
 //        BaseFragment fragment = VipBuyFragment.newInstance();
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        Fragment oldFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
         transaction.replace(R.id.fragment_container, fragment);
+        if (oldFragment != null) {
+            transaction.remove(oldFragment);
+        }
         transaction.commit();
     }
 
