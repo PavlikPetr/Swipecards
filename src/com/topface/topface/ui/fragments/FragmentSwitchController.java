@@ -34,7 +34,6 @@ public class FragmentSwitchController extends ViewGroup {
     public static final int EXPAND_FULL = 2;
     public static final int COLLAPSE = 3;
     public static final int COLLAPSE_FULL = 4;
-    private int mOldFragment;
 
     /*
     *   interface FragmentSwitchListener
@@ -43,7 +42,7 @@ public class FragmentSwitchController extends ViewGroup {
         public void afterClosing();
 
         public void beforeExpanding();
-        
+
         public void afterOpening();
     }
 
@@ -98,7 +97,7 @@ public class FragmentSwitchController extends ViewGroup {
     private void switchFragment() {
 
         BaseFragment fragment = getFragmentById(mCurrentFragmentId);
-//        BaseFragment fragment = VipBuyFragment.newInstance();
+//        BaseFragment fragment = VipBuyFragment.newInstance();  Строчка для проверки фрагмента покупки
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         Fragment oldFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
         transaction.replace(R.id.fragment_container, fragment);
@@ -212,11 +211,11 @@ public class FragmentSwitchController extends ViewGroup {
             if (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL) {
                 mFragmentSwitchListener.afterClosing();
             }
-            
+
             if (mAnimation == EXPAND || mAnimation == EXPAND_FULL) {
                 mFragmentSwitchListener.afterOpening();
             }
-            
+
             if (mAnimation == EXPAND_FULL) {
                 fullExpanding();
             }

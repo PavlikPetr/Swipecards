@@ -82,8 +82,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     private void initViews(View root) {
         ViewGroup frame;
 
-        Options options = CacheProfile.getOptions();
-
         // Notifications header
         frame = (ViewGroup) root.findViewById(R.id.loNotificationsHeader);
         setText(R.string.settings_notifications_header, frame);
@@ -92,25 +90,25 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loLikes);
         setBackground(R.drawable.edit_big_btn_top, frame);
         setText(R.string.settings_likes, frame);
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES, frame, options.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns);
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES, frame, CacheProfile.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns);
 
         // Mutual
         frame = (ViewGroup) root.findViewById(R.id.loMutual);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_mutual, frame);
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY, frame, options.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns);
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY, frame, CacheProfile.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns);
 
         // Chat
         frame = (ViewGroup) root.findViewById(R.id.loChat);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_messages, frame);
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE, frame, options.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns);
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE, frame, CacheProfile.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns);
 
         // Guests
         frame = (ViewGroup) root.findViewById(R.id.loGuests);
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR, frame, options.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns);
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR, frame, CacheProfile.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns);
 
         // Vibration
         frame = (ViewGroup) root.findViewById(R.id.loVibration);

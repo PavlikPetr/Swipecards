@@ -32,16 +32,26 @@ public class EditSwitcher {
 
     public void setEnabled(boolean enabled) {
         mRoot.setEnabled(enabled);
-    	mCheckbox.setEnabled(enabled);
-    	mTextOn.setEnabled(enabled);
-    	mTextOff.setEnabled(enabled);
+        mCheckbox.setEnabled(enabled);
+        mTextOn.setEnabled(enabled);
+        mTextOff.setEnabled(enabled);
     }
-    
+
     public void doSwitch() {
         setChecked(!mCheckbox.isChecked());
     }
 
     public boolean isChecked() {
         return mCheckbox.isChecked();
+    }
+
+    public void setVisibility(int visibility) {
+        mCheckbox.setVisibility(visibility);
+        if (visibility == View.GONE) {
+            mTextOff.setVisibility(visibility);
+            mTextOn.setVisibility(visibility);
+        } else {
+            setChecked(isChecked());
+        }
     }
 }

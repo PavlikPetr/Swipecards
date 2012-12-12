@@ -1,9 +1,7 @@
 package com.topface.topface.requests;
 
 import android.os.Handler;
-import android.widget.Toast;
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import org.json.JSONObject;
@@ -16,7 +14,7 @@ abstract public class ApiHandler extends Handler {
                 fail(ApiResponse.ERRORS_PROCCESED, new ApiResponse(ApiResponse.ERRORS_PROCCESED, "Client exception"));
             } else if (response.code == ApiResponse.PREMIUM_ACCESS_ONLY) {
                 //Сообщение о необходимости Премиум-статуса
-                Toast.makeText(App.getContext(), R.string.general_premium_access_error, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(App.getContext(), R.string.general_premium_access_error, Toast.LENGTH_SHORT).show();
                 fail(response.code, response);
             } else if (response.code != ApiResponse.RESULT_OK) {
                 fail(response.code, response);
