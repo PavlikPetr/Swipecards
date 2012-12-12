@@ -21,6 +21,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
     private BroadcastReceiver updateCountersReceiver;
+    public static final int F_UNKNOWN = -1;
     public static final int F_PROFILE = 1001;
     public static final int F_DATING = 1002;
     public static final int F_LIKES = 1003;
@@ -105,4 +106,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             }
         }
     }
+
+    public void clearContent(){ }
 }

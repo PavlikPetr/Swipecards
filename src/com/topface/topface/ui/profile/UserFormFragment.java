@@ -16,10 +16,11 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 
-public class UserFormFragment extends Fragment implements OnClickListener{
+public class UserFormFragment extends BaseFragment implements OnClickListener{
     private User mUser;
     private UserFormListAdapter mUserFormListAdapter;
     private View mTitleLayout;

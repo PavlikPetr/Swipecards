@@ -120,6 +120,8 @@
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:background">#55000000</item>
         <item name="android:drawableLeft">@drawable/loader</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
     </style>
 
     <style name="SavingLocker" parent="LoadingLocker">

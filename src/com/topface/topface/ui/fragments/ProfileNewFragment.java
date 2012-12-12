@@ -11,120 +11,220 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
+import com.topface.topface.data.User;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.UserRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
+import com.topface.topface.ui.profile.UserFormFragment;
+import com.topface.topface.ui.profile.UserPhotoFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
+import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-/**
- * Created with IntelliJ IDEA.
- * User: User
- * Date: 05.12.12
- * Time: 11:39
- * To change this template use File | Settings | File Templates.
- */
 public class ProfileNewFragment extends BaseFragment implements View.OnClickListener {
     public final static int TYPE_MY_PROFILE = 1;
     public final static int TYPE_USER_PROFILE = 2;
-
     private static final String ARG_TAG_PROFILE_TYPE = "profile_type";
-    private static final String ARG_TAG_AVATAR = "avatar";
-    private static final String ARG_TAG_NAME = "name";
-    private static final String ARG_TAG_CITY = "city";
-    private static final String ARG_TAG_BACKGROUND = "background";
-    private static final String ARG_TAG_STATUS = "status";
+    private static final String ARG_TAG_PROFILE_ID = "profile_id";
 
     ArrayList<String> BODY_PAGES_TITLES = new ArrayList<String>();
     ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
-
     ArrayList<String> HEADER_PAGES_CLASS_NAMES = new ArrayList<String>();
 
-    protected NavigationBarController mNavBarController;
+    private HeaderMainFragment mHeaderMainFragment;
+    private HeaderStatusFragment mHeaderStatusFragment;
+    private UserPhotoFragment mUserPhotoFragment;
+    private UserFormFragment mUserFormFragment;
 
+    private Profile mUserProfile = null;
     private int mProfileType;
-    private Photo mAvatar;
-    private String mName;
-    private String mCity;
-    private int mBackground;
-    private String mStatus;
+    private int mProfileId;
+
+    private ImageView mOnline;
+    private TextView mTitle;
+    private View mLoaderView;
+    private RateController mRateController;
+    protected NavigationBarController mNavBarController;
+    private RelativeLayout mLockScreen;
+    private RetryView mRetryBtn;
+    private ViewPager mBodyPager;
+    private ViewPager mHeaderPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        //init args
-        mProfileType = getArguments().getInt(ARG_TAG_PROFILE_TYPE);
-        mAvatar = getArguments().getParcelable(ARG_TAG_AVATAR);
-        mName = getArguments().getString(ARG_TAG_NAME);
-        mCity = getArguments().getString(ARG_TAG_CITY);
-        mBackground = getArguments().getInt(ARG_TAG_BACKGROUND);
-        mStatus = getArguments().getString(ARG_TAG_STATUS);
-
         //init views
         View root = inflater.inflate(R.layout.ac_profile_new, null);
 
-        //Navigation bar
+        mLoaderView = root.findViewById(R.id.llvProfileLoading);
+        mRateController = new RateController(getActivity());
+
+        restoreState();
+
         mNavBarController = new NavigationBarController((ViewGroup) root.findViewById(R.id.loNavigationBar));
         root.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
+        mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
+
+        initHeaderPages(root);
+
+        initBodyPages(root);
+
+        mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
+        mRetryBtn = new RetryView(getActivity().getApplicationContext());
+        mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
+        mRetryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getUserProfile();
+                mLockScreen.setVisibility(View.GONE);
+            }
+        });
+        mLockScreen.addView(mRetryBtn);
 
         if (mProfileType == TYPE_MY_PROFILE) {
-            ((TextView) root.findViewById(R.id.tvNavigationTitle)).setText(R.string.profile_header_title);
-
+            mTitle.setText(R.string.profile_header_title);
             Button editButton = (Button) root.findViewById(R.id.btnNavigationRightWithText);
             editButton.setVisibility(View.VISIBLE);
             editButton.setText(getResources().getString(R.string.general_edit_button));
             editButton.setOnClickListener(this);
+            mUserProfile = CacheProfile.getProfile();
         } else  if (mProfileType == TYPE_USER_PROFILE){
-            ((TextView) root.findViewById(R.id.tvNavigationTitle)).setText(mName);
+            mOnline = (ImageView)root.findViewById(R.id.ivOnline);
+            getUserProfile();
         }
-
-        //Header pages
-        initHeaderPages();
-        ViewPager headerPager = (ViewPager)root.findViewById(R.id.vpHeaderFragments);
-        headerPager.setAdapter(new ProfilePageAdapter(getActivity().getSupportFragmentManager(),
-                HEADER_PAGES_CLASS_NAMES));
-
-        //Body pages
-        initBodyPages();
-        ViewPager bodyPager = (ViewPager)root.findViewById(R.id.vpFragments);
-        bodyPager.setAdapter(new ProfilePageAdapter(getActivity().getSupportFragmentManager(),BODY_PAGES_CLASS_NAMES,
-                BODY_PAGES_TITLES));
-
-        //Tabs for header
-        CirclePageIndicator cirleIndicator = (CirclePageIndicator) root.findViewById(R.id.cpiHeaderTabs);
-        cirleIndicator.setViewPager(headerPager);
-        cirleIndicator.setSnap(true);
-
-        //Tabs for Body
-        TabPageIndicator tabIndicator = (TabPageIndicator)root.findViewById(R.id.tpiTabs);
-        tabIndicator.setViewPager(bodyPager);
 
         return root;
     }
 
-    private void initHeaderPages() {
-        addHeaderPage(HeaderMainFragment.class.getName());
-        addHeaderPage(HeaderStatusFragment.class.getName());
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mProfileType == TYPE_MY_PROFILE)
+            mUserProfile = CacheProfile.getProfile();
+        setProfile(mUserProfile);
     }
 
-    private void initBodyPages() {
-        addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
-        addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
-        addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_vip_status));
+    private void setProfile(Profile profile) {
+        if (mHeaderMainFragment != null) mHeaderMainFragment.setProfile(profile);
+        if (mHeaderStatusFragment != null) mHeaderStatusFragment.setProfile(profile);
+        if (mUserPhotoFragment != null && profile instanceof User) mUserPhotoFragment.setUserData((User)profile);
+        if (mUserFormFragment != null && profile instanceof User) mUserFormFragment.setUserData((User)profile);
+    }
+
+    private void getUserProfile() {
+        mLoaderView.setVisibility(View.VISIBLE);
+        if (mProfileId < 1) {
+            mLoaderView.setVisibility(View.INVISIBLE);
+            mRetryBtn.showOnlyMessage(true);
+            mLockScreen.setVisibility(View.VISIBLE);
+            return;
+        }
+        UserRequest userRequest = new UserRequest(mProfileId, getActivity().getApplicationContext());
+        userRequest.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                try {
+                    Object test = response.jsonResult.get("profiles");
+                    if (test.equals(new JSONArray("[]"))) mLockScreen.setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                    Debug.error(e);
+                }
+                final User user = User.parse(mProfileId, response);
+                mUserProfile = user;
+                mRateController.setOnRateControllerListener(mRateControllerListener);
+                updateUI(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (user.mutual) {
+                            //TODO: manipulations with like & admiration buttons
+                        }
+                        //set info into views for user
+                        mTitle.setText(user.getNameAndAge());
+                        mOnline.setVisibility(user.online ? View.VISIBLE : View.INVISIBLE);
+                        if (mUserPhotoFragment != null) {
+                            mUserPhotoFragment.setUserData((User)mUserProfile);
+                        }
+                        if (mUserFormFragment != null) {
+                            mUserFormFragment.setUserData((User)mUserProfile);
+                        }
+                        setProfile(user);
+                        mLoaderView.setVisibility(View.INVISIBLE);
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                updateUI(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLoaderView.setVisibility(View.GONE);
+                        mLockScreen.setVisibility(View.VISIBLE);
+                        mRetryBtn.showOnlyMessage(false);
+                    }
+                });
+            }
+        }).exec();
+    }
+
+    private void restoreState() {
+        mProfileId = getArguments().getInt(ARG_TAG_PROFILE_ID);
+        mProfileType = getArguments().getInt(ARG_TAG_PROFILE_TYPE);
+    }
+
+    private void initHeaderPages(View root) {
+        addHeaderPage(HeaderMainFragment.class.getName());
+        addHeaderPage(HeaderStatusFragment.class.getName());
+
+        ViewPager headerPager = (ViewPager)root.findViewById(R.id.vpHeaderFragments);
+        headerPager.setAdapter(new ProfilePageAdapter(getActivity().getSupportFragmentManager(),
+                HEADER_PAGES_CLASS_NAMES));
+        //Tabs for header
+        CirclePageIndicator circleIndicator = (CirclePageIndicator) root.findViewById(R.id.cpiHeaderTabs);
+        circleIndicator.setViewPager(headerPager);
+        circleIndicator.setSnap(true);
+
+        mHeaderPager = headerPager;
+    }
+
+    private void initBodyPages(View root) {
+        addBodyPage((mProfileType == TYPE_MY_PROFILE) ?
+                ProfilePhotoFragment.class.getName() : UserPhotoFragment.class.getName(),
+                getResources().getString(R.string.profile_photo));
+        addBodyPage((mProfileType == TYPE_MY_PROFILE) ?
+                ProfileFormFragment.class.getName() : UserFormFragment.class.getName(),
+                getResources().getString(R.string.profile_form));
         addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
-        addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_services));
+
+        ViewPager bodyPager = (ViewPager)root.findViewById(R.id.vpFragments);
+        bodyPager.setAdapter(new ProfilePageAdapter(getActivity().getSupportFragmentManager(),BODY_PAGES_CLASS_NAMES,
+                BODY_PAGES_TITLES));
+        //Tabs for Body
+        TabPageIndicator tabIndicator = (TabPageIndicator)root.findViewById(R.id.tpiTabs);
+        tabIndicator.setViewPager(bodyPager);
+
+        mBodyPager = bodyPager;
     }
 
     private void addHeaderPage(String className) {
@@ -137,29 +237,22 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnNavigationRightWithText:
                 startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
                 break;
+            default:
+                break;
         }
     }
 
-    public static ProfileNewFragment newInstance(int type, Photo avatar, String nameAgeStr, String cityName, int backgroundId,String status){
+    public static ProfileNewFragment newInstance(int id, int type){
         ProfileNewFragment  fragment = new ProfileNewFragment();
 
         Bundle args = new Bundle();
+        args.putInt(ARG_TAG_PROFILE_ID, id);
         args.putInt(ARG_TAG_PROFILE_TYPE, type);
-        args.putParcelable(ARG_TAG_AVATAR, avatar);
-        args.putString(ARG_TAG_NAME, nameAgeStr);
-        args.putString(ARG_TAG_CITY, cityName);
-        args.putInt(ARG_TAG_BACKGROUND, backgroundId);
-        args.putString(ARG_TAG_STATUS, status);
         fragment.setArguments(args);
 
         return fragment;
@@ -169,6 +262,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
 
         private ArrayList<String> mFragmentsClasses = new ArrayList<String>();
         private ArrayList<String> mFragmentsTitles = new ArrayList<String>();
+        private HashMap<Integer,Fragment> mFragmentCache = new HashMap<Integer, Fragment>();
 
         public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses) {
             super(fm);
@@ -186,6 +280,13 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             return mFragmentsClasses.size();
         }
 
+//        @Override
+//        public long getItemId(int position) {
+//            StringBuilder strBuilder = new StringBuilder();
+//            strBuilder.append(position).append(mProfileId);
+//            return Long.parseLong(strBuilder.toString());
+//        }
+
         @Override
         public CharSequence getPageTitle(int position) {
             if (!mFragmentsTitles.isEmpty())
@@ -197,26 +298,57 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         @Override
         public Fragment getItem(int position) {
             Fragment fragment = null;
+            if(mFragmentCache.containsKey(position)) {
+               return  mFragmentCache.get(position);
+            }
             try {
-                if(mFragmentsClasses.get(position).equals(HeaderMainFragment.class.getName())) {
-                    fragment = HeaderMainFragment.newInstace(mAvatar,mName,mCity,
-                        ProfileBackgrounds.getBackgroundResource(getActivity().getApplicationContext(),mBackground));
-                } else if(mFragmentsClasses.get(position).equals(HeaderStatusFragment.class.getName())) {
-                    fragment = HeaderStatusFragment.newInstace(mStatus);
+                String fragmentClassName = mFragmentsClasses.get(position);
+
+                //create fragments
+                if(fragmentClassName.equals(HeaderMainFragment.class.getName())) {
+                    fragment = HeaderMainFragment.newInstance(mUserProfile);
+                } else if(fragmentClassName.equals(HeaderStatusFragment.class.getName())) {
+                    fragment = HeaderStatusFragment.newInstance(mUserProfile);
                 } else {
-                    Class fragmentClass = Class.forName(mFragmentsClasses.get(position));
+                    Class fragmentClass = Class.forName(fragmentClassName);
                     fragment = (Fragment) fragmentClass.newInstance();
                 }
 
-
+                //save variables for setting user data
+                if (fragment instanceof HeaderMainFragment) {
+                    mHeaderMainFragment = (HeaderMainFragment) fragment;
+                } else if (fragment instanceof HeaderStatusFragment){
+                    mHeaderStatusFragment = (HeaderStatusFragment) fragment;
+                } else if (fragment instanceof UserPhotoFragment) {
+                    mUserPhotoFragment = (UserPhotoFragment)fragment;
+                } else if (fragment instanceof UserFormFragment) {
+                    mUserFormFragment = (UserFormFragment)fragment;
+                }
             } catch (Exception ex) {
                 Debug.error(ex);
             }
+            mFragmentCache.put(position,fragment);
             return fragment;
         }
     }
 
+    @Override
+    public void clearContent() {
+        mBodyPager.setCurrentItem(0);
+        mHeaderPager.setCurrentItem(0);
+        mTitle.setText(Static.EMPTY);
+        if (mHeaderMainFragment != null) mHeaderMainFragment.clearContent();
+        if (mHeaderStatusFragment != null) mHeaderStatusFragment.clearContent();
+        if (mUserPhotoFragment != null) mUserPhotoFragment.clearContent();
+        if (mUserFormFragment != null) mUserFormFragment.clearContent();
+    }
+
     public static class HeaderMainFragment extends BaseFragment {
+        private static final String ARG_TAG_AVATAR = "avatar";
+        private static final String ARG_TAG_NAME = "name";
+        private static final String ARG_TAG_CITY = "city";
+        private static final String ARG_TAG_BACKGROUND = "background";
+
         private ImageViewRemote mAvatarView;
         private Photo mAvatarVal;
         private TextView mNameView;
@@ -230,80 +362,175 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             super.onCreateView(inflater, container, savedInstanceState);
 
-            //init arguments
-            mAvatarVal = getArguments().getParcelable(ARG_TAG_AVATAR);
-            mNameVal = getArguments().getString(ARG_TAG_NAME);
-            mCityVal = getArguments().getString(ARG_TAG_CITY);
-            mBackgroundVal = getArguments().getInt(ARG_TAG_BACKGROUND);
+            restoreState();
 
-            //init views
             View root = inflater.inflate(R.layout.fragment_profile_header_main, null);
             mAvatarView = (ImageViewRemote)root.findViewById(R.id.ivUserAvatar);
             mNameView = (TextView)root.findViewById(R.id.tvName);
             mCityView = (TextView)root.findViewById(R.id.tvCity);
             mBackgroundView = (ImageView) root.findViewById(R.id.ivProfileBackground);
 
-            mAvatarView.setPhoto(mAvatarVal);
-            mNameView.setText(mNameVal);
-            mCityView.setText(mCityVal);
-            mBackgroundView.setBackgroundResource(mBackgroundVal);
             return root;
         }
 
         @Override
         public void onResume() {
             super.onResume();
-            mAvatarView.setPhoto(CacheProfile.photo);
-            mNameView.setText(CacheProfile.getUserNameAgeString());
-            mCityView.setText(CacheProfile.city_name);
-            mBackgroundView.setBackgroundResource(mBackgroundVal);
+            refreshViews();
         }
 
-        public static Fragment newInstace(Photo avatar, String nameAgeStr, String cityName, int backgroundRes) {
+        public void setProfile(Profile profile) {
+            if (profile != null) {
+                initState(profile);
+                saveState(this,profile);
+            }
+            refreshViews();
+        }
+
+        private void refreshViews() {
+            updateUI(new Runnable() {
+                @Override
+                public void run() {
+                    mAvatarView.setPhoto(mAvatarVal);
+                    mNameView.setText(mNameVal);
+                    mCityView.setText(mCityVal);
+                    mBackgroundView.setImageResource(ProfileBackgrounds.getBackgroundResource(getActivity().getApplicationContext(),mBackgroundVal));
+                }
+            });
+        }
+
+        private void restoreState() {
+            if (getArguments() != null) {
+                mAvatarVal = getArguments().getParcelable(ARG_TAG_AVATAR);
+                mNameVal = getArguments().getString(ARG_TAG_NAME);
+                mCityVal = getArguments().getString(ARG_TAG_CITY);
+                mBackgroundVal = getArguments().getInt(ARG_TAG_BACKGROUND);
+            }
+        }
+
+        private void initState(Profile profile) {
+            mAvatarVal = profile.photo;
+            mNameVal = profile.getNameAndAge();
+            mCityVal = profile.city_name;
+            mBackgroundVal = profile.background;
+        }
+
+        private static void saveState(Fragment fragment, Profile profile) {
+            if (!fragment.isVisible()) {
+                if (fragment.getArguments() == null) {
+                    Bundle args = new Bundle();
+                    fragment.setArguments(args);
+                }
+                fragment.getArguments().putParcelable(ARG_TAG_AVATAR, profile.photo);
+                fragment.getArguments().putString(ARG_TAG_NAME, profile.getNameAndAge());
+                fragment.getArguments().putString(ARG_TAG_CITY, profile.city_name);
+                fragment.getArguments().putInt(ARG_TAG_BACKGROUND, profile.background);
+            }
+        }
+
+        public static Fragment newInstance(Profile profile) {
             HeaderMainFragment  fragment = new HeaderMainFragment();
-
-            Bundle args = new Bundle();
-            args.putParcelable(ARG_TAG_AVATAR, avatar);
-            args.putString(ARG_TAG_NAME, nameAgeStr);
-            args.putString(ARG_TAG_CITY, cityName);
-            args.putInt(ARG_TAG_BACKGROUND, backgroundRes);
-            fragment.setArguments(args);
-
+            if (profile == null) return fragment;
+            saveState(fragment,profile);
             return fragment;
+        }
+
+        @Override
+        public void clearContent() {
+            mAvatarView.setPhoto(null);
+            mNameView.setText(Static.EMPTY);
+            mCityView.setText(Static.EMPTY);
         }
     }
 
     public static class HeaderStatusFragment extends BaseFragment {
+        private static final String ARG_TAG_STATUS = "status";
+
         private TextView mStatusView;
         private String mStatusVal;
 
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             super.onCreateView(inflater, container, savedInstanceState);
 
-            //init args
-            mStatusVal = getArguments().getString(ARG_TAG_STATUS);
+            restoreState();
 
             //init views
             View root = inflater.inflate(R.layout.fragment_profile_header_status, null);
             mStatusView = (TextView)root.findViewById(R.id.tvStatus);
-            mStatusView.setText(mStatusVal);
             return root;
         }
 
         @Override
         public void onResume() {
             super.onResume();
-            mStatusView.setText(CacheProfile.status);
+            refreshViews();
         }
 
-        public static Fragment newInstace(String status) {
+        public void setProfile(Profile profile) {
+            if (profile != null) {
+                initState(profile);
+                saveState(this,profile);
+            }
+            refreshViews();
+        }
+
+        private void refreshViews() {
+            updateUI(new Runnable() {
+                @Override
+                public void run() {
+                    mStatusView.setText(mStatusVal);
+                }
+            });
+        }
+
+        private void restoreState() {
+            if(getArguments() != null) {
+                mStatusVal = getArguments().getString(ARG_TAG_STATUS);
+            }
+        }
+
+        private void initState(Profile profile) {
+            mStatusVal = profile.status;
+        }
+
+        private static void saveState(Fragment fragment, Profile profile) {
+            if (!fragment.isVisible()) {
+                Bundle args = new Bundle();
+                if (fragment.getArguments() == null) {
+                    fragment.setArguments(args);
+                }
+                fragment.getArguments().putString(ARG_TAG_STATUS, profile.status);
+            }
+        }
+
+        public static Fragment newInstance(Profile profile) {
             HeaderStatusFragment  fragment = new HeaderStatusFragment();
-
-            Bundle args = new Bundle();
-            args.putString(ARG_TAG_STATUS, status);
-            fragment.setArguments(args);
-
+            if (profile == null) return fragment;
+            saveState(fragment,profile);
             return fragment;
         }
+
+        @Override
+        public void clearContent() {
+            mStatusView.setText(Static.EMPTY);
+        }
     }
+
+    RateController.OnRateControllerListener mRateControllerListener = new RateController.OnRateControllerListener() {
+        @Override
+        public void successRate() {
+            //TODO:
+//            mUserProfile.rated = true;
+//            mUserDelight.setEnabled(!mUser.rated);
+//            mUserMutual.setEnabled(!mUser.rated);
+        }
+
+        @Override
+        public void failRate() {
+        //TODO:
+//            mUserUser.rated = false;
+//            mUserDelight.setEnabled(!mUser.rated);
+//            mUserMutual.setEnabled(!mUser.rated);
+        }
+    };
 }

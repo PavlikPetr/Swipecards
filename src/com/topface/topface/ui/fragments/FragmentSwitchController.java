@@ -1,12 +1,14 @@
 package com.topface.topface.ui.fragments;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.*;
 import android.view.animation.Interpolator;
+import android.widget.FrameLayout;
 import android.widget.Scroller;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
@@ -36,6 +38,9 @@ public class FragmentSwitchController extends ViewGroup {
     public static final int COLLAPSE = 3;
     public static final int COLLAPSE_FULL = 4;
 
+    private FrameLayout mExtraFrame;
+    private Fragment mCurrentExtraFragment;
+
     /*
     *   interface FragmentSwitchListener
     */
@@ -45,6 +50,8 @@ public class FragmentSwitchController extends ViewGroup {
         public void beforeExpanding();
         
         public void afterOpening();
+
+        public void onExtraFrameOpen();
     }
 
     public FragmentSwitchController(Context context, AttributeSet attrs) {
@@ -101,6 +108,34 @@ public class FragmentSwitchController extends ViewGroup {
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
         mCurrentFragment = fragment;
+        closeExtraFragment();
+    }
+
+    public void switchExtraFragment(Fragment fragment) {
+        if (mExtraFrame != null) mExtraFrame.setVisibility(View.VISIBLE);
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.remove(fragment);
+
+        mCurrentExtraFragment = fragment;
+        transaction.replace(R.id.fragment_extra_container, mCurrentExtraFragment);
+        transaction.commit();
+
+        mFragmentSwitchListener.onExtraFrameOpen();
+        mCurrentFragmentId = BaseFragment.F_UNKNOWN;
+    }
+
+    public void closeExtraFragment() {
+        if (mExtraFrame != null) mExtraFrame.setVisibility(View.GONE);
+        if (mCurrentExtraFragment != null) {
+            if (mCurrentExtraFragment instanceof BaseFragment) {
+                ((BaseFragment)mCurrentExtraFragment).clearContent();
+            }
+            mCurrentExtraFragment = null;
+        }
+    }
+
+    public boolean isExtraFrameShown() {
+        return (mExtraFrame.getVisibility() == View.VISIBLE);
     }
 
     public BaseFragment getmCurrentFragment () {
@@ -111,13 +146,7 @@ public class FragmentSwitchController extends ViewGroup {
         BaseFragment fragment;
         switch (id) {
             case BaseFragment.F_PROFILE:
-                fragment = ProfileNewFragment.newInstance(
-                        ProfileNewFragment.TYPE_MY_PROFILE,
-                        CacheProfile.photo,
-                        CacheProfile.getUserNameAgeString(),
-                        CacheProfile.city_name,
-                        CacheProfile.background_id,
-                        CacheProfile.status);
+                fragment = ProfileNewFragment.newInstance(CacheProfile.uid,ProfileNewFragment.TYPE_MY_PROFILE);
                 break;
             case BaseFragment.F_DATING:
                 fragment = new DatingFragment();
@@ -141,7 +170,7 @@ public class FragmentSwitchController extends ViewGroup {
                 fragment = new SettingsFragment();
                 break;
             default:
-                fragment = new ProfileNewFragment();
+                fragment = ProfileNewFragment.newInstance(CacheProfile.uid,ProfileNewFragment.TYPE_MY_PROFILE);
                 break;
         }
         return fragment;
@@ -166,6 +195,8 @@ public class FragmentSwitchController extends ViewGroup {
         int mClosedDX = mWidth / 100 * EXPANDING_PERCENT;
         mOpenDX = mWidth - mClosedDX;
         mFullOpenDX = mWidth - mOpenDX;
+
+        mExtraFrame = (FrameLayout)this.findViewById(R.id.fragment_extra_container);
     }
 
     private void snapToScreen(int typeAnimation) {

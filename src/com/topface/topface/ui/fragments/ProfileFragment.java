@@ -258,12 +258,6 @@ public class ProfileFragment extends BaseFragment implements OnClickListener {
         }
 
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-
-            return super.instantiateItem(container, position);
-        }
-
-        @Override
         public Fragment getItem(int position) {
             Fragment fragment = null;
             switch (position) {

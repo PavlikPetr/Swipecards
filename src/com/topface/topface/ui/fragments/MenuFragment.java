@@ -94,13 +94,17 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        for (Button btn : mButtons)
-            btn.setSelected(false);
+        unselectAllButtons();
 
         view.setSelected(true);
 
         if (mFragmentMenuListener != null)
             mFragmentMenuListener.onMenuClick(view.getId());
+    }
+
+    public void unselectAllButtons() {
+        for (Button btn : mButtons)
+            btn.setSelected(false);
     }
 
     public void setOnMenuListener(FragmentMenuListener onFragmentMenuListener) {

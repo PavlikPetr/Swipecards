@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
@@ -139,8 +140,12 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
             super.onBackPressed();
         } else {
-            mFragmentMenu.refreshNotifications();
-            mFragmentSwitcher.openMenu();
+            if(mFragmentSwitcher.isExtraFrameShown()) {
+                mFragmentSwitcher.closeExtraFragment();
+            } else {
+                mFragmentMenu.refreshNotifications();
+                mFragmentSwitcher.openMenu();
+            }
         }
     }
 
@@ -223,6 +228,11 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 				mNovice.completeShowFillProfile();
 			}
 		}
+
+        @Override
+        public void onExtraFrameOpen() {
+            mFragmentMenu.unselectAllButtons();
+        }
     };
 
 
@@ -308,5 +318,9 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    public void onExtraFragment(Fragment fragment) {
+        mFragmentSwitcher.switchExtraFragment(fragment);
     }
 }

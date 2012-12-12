@@ -526,6 +526,16 @@ public class Profile extends AbstractDataWithPhotos {
 		}
 	}
 
+    public String getNameAndAge() {
+        String result;
+        if (first_name != null && first_name.length() > 0 && age > 0) {
+            result = String.format("%s, %d", first_name, age);
+        } else {
+            result = first_name;
+        }
+        return result;
+    }
+
 	// public static Profile load() {
 	// Profile profile = null;
 	// ObjectInputStream oin = null;
