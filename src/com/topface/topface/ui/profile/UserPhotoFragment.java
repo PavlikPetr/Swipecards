@@ -39,13 +39,11 @@ public class UserPhotoFragment extends BaseFragment {
         mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
 
         if (mPhotoLinks != null) {
-            mTitle.setText(Utils.formatPhotoQuantity(mPhotoLinks.size()));
+            setPhotos(mPhotoLinks);
         } else {
             mTitle.setText(Utils.formatPhotoQuantity(0));
         }
         mTitle.setVisibility(View.VISIBLE);
-
-        setPhotos(mPhotoLinks);
         return root;
     }
 

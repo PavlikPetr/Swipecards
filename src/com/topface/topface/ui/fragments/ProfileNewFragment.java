@@ -337,6 +337,8 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         mBodyPager.setCurrentItem(0);
         mHeaderPager.setCurrentItem(0);
         mTitle.setText(Static.EMPTY);
+        mOnline.setVisibility(View.INVISIBLE);
+        mLoaderView.setVisibility(View.VISIBLE);
         if (mHeaderMainFragment != null) mHeaderMainFragment.clearContent();
         if (mHeaderStatusFragment != null) mHeaderStatusFragment.clearContent();
         if (mUserPhotoFragment != null) mUserPhotoFragment.clearContent();

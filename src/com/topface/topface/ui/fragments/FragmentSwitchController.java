@@ -113,10 +113,9 @@ public class FragmentSwitchController extends ViewGroup {
 
     public void switchExtraFragment(Fragment fragment) {
         if (mExtraFrame != null) mExtraFrame.setVisibility(View.VISIBLE);
-        FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.remove(fragment);
-
         mCurrentExtraFragment = fragment;
+
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_extra_container, mCurrentExtraFragment);
         transaction.commit();
 
