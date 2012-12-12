@@ -319,4 +319,9 @@
     <string name="vip_privileges">VIP-привелегии</string>
     <string name="vip_text_visitors">Узнаете, кто вами интересовался - смотрите своих гостей!</string>
     <string name="vip_text_adm_unlock">Отправляйте восхищения бесплатно - выражайте свои чувства по-максимуму</string>
+    <string name="vip_rest">У вас еще %1$d %2$s VIP</string>
+    <string name="vip_invis">Режим невидимки</string>
+    <string name="vip_messages_bg">Фон сообщений</string>
+    <string name="vip_black_list">Черный список</string>
+    <string name="vip_profile_bg">Фоновая фотография</string>
 </resources>

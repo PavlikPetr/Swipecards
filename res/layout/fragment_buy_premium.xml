@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:background="@drawable/bg_main"
+        >
+<LinearLayout
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
@@ -11,6 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/vip_not_activated"
+        style="@style/TitleWhiteText"
+        android:layout_margin="5dp"
         />
     <RelativeLayout
             android:id="@+id/fbpBuying1"
@@ -23,14 +29,18 @@
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:paddingLeft="5dp"
             android:text="@string/vip_one_day_title"
+            style="@style/ButtonGrayText"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             />
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:paddingRight="5dp"
             android:text="@string/vip_one_day_value"
+            style="@style/ButtonGrayText"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             />
@@ -46,13 +56,17 @@
         <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:paddingLeft="5dp"
                 android:text="@string/vip_seven_days_title"
+                style="@style/ButtonGrayText"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 />
         <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:paddingRight="5dp"
+                style="@style/ButtonGrayText"
                 android:text="@string/vip_seven_days_value"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -70,13 +84,17 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="@string/vip_30_days_title"
+                android:paddingLeft="5dp"
+                style="@style/ButtonGrayText"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 />
         <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:paddingRight="5dp"
                 android:text="@string/vip_30_days_value"
+                style="@style/ButtonGrayText"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 />
@@ -86,7 +104,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/vip_privileges"
-        android:layout_margin="5dp"
+        style="@style/TitleWhiteText"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
     />
 
     <ImageView
@@ -99,7 +120,7 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_vip_invisible"
         android:text="@string/vip_text_visitors"
-        android:layout_margin="5dp"
+        style="@style/VipItemTitleWhiteText"
         />
     <ImageView
             android:layout_width="fill_parent"
@@ -111,6 +132,31 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_vip_unlock"
             android:text="@string/vip_text_adm_unlock"
-            android:layout_margin="5dp"
+            style="@style/VipItemTitleWhiteText"
             />
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/vip_separator"
+            />
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_vip_blacklist"
+            android:text="@string/vip_text_adm_unlock"
+            style="@style/VipItemTitleWhiteText"
+            />
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/vip_separator"
+            />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_vip_dialog"
+        android:text="@string/vip_text_adm_unlock"
+        style="@style/VipItemTitleWhiteText"
+        />
 </LinearLayout>
+</ScrollView>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/bg_main"
+            >
+    <LinearLayout
+                  android:orientation="vertical"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            >
+            <TextView
+                android:id="@+id/fepVipRest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TitleWhiteText"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+            />
+            <Button
+                android:id="@+id/fepVipEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_vip_edit"
+                android:layout_alignParentRight="true"
+                />
+        </RelativeLayout>
+
+        <include
+                android:id="@+id/fepInvis"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+
+                layout="@layout/vip_item_edit_form_switch"/>
+        <include
+                android:id="@+id/fepMsgsBG"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                layout="@layout/vip_item_edit_form_switch"/>
+
+        <include
+                android:id="@+id/fepBlackList"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/vip_item_edit_form_select"/>
+        <include
+                android:id="@+id/fepProfileBG"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/vip_item_edit_form_select"/>
+
+
+
+    </LinearLayout>
+</ScrollView>

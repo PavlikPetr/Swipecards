@@ -55,6 +55,7 @@
                 android:id="@+id/loExtraHeader"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+
                 layout="@layout/item_edit_profile_form_header"/>
 
         <include
