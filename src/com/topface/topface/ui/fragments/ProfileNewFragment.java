@@ -215,6 +215,10 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         addBodyPage((mProfileType == TYPE_MY_PROFILE) ?
                 ProfileFormFragment.class.getName() : UserFormFragment.class.getName(),
                 getResources().getString(R.string.profile_form));
+        if (mProfileType == TYPE_MY_PROFILE) {
+            addBodyPage(VipBuyFragment.class.getName(),
+                getResources().getString(R.string.profile_vip_status));
+        }
         addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
 
         ViewPager bodyPager = (ViewPager)root.findViewById(R.id.vpFragments);
@@ -334,7 +338,6 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
 
     @Override
     public void clearContent() {
-        mBodyPager.setCurrentItem(0);
         mHeaderPager.setCurrentItem(0);
         mTitle.setText(Static.EMPTY);
         mOnline.setVisibility(View.INVISIBLE);

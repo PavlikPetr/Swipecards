@@ -42,10 +42,10 @@ public class UserFormFragment extends BaseFragment implements OnClickListener{
         listQuestionnaire.setAdapter(mUserFormListAdapter);
 
         mEmptyFormLayout = (ViewGroup) root.findViewById(R.id.loEmptyForm);
-            
+
         mAskToFillForm =(Button) mEmptyFormLayout.findViewById(R.id.btnEmptyForm);
         mAskToFillForm.setOnClickListener(this);
-        
+
         mTitleLayout = root.findViewById(R.id.fragmentTitle);
         mTitle = (TextView) root.findViewById(R.id.tvTitle);
         mState = (ImageView) root.findViewById(R.id.ivState);
