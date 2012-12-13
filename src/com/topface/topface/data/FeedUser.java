@@ -32,6 +32,8 @@ public class FeedUser extends AbstractData {
      */
     public Photo photo;    
 
+    public boolean premium;
+
     public FeedUser(JSONObject user) {
         super(user);
     }
@@ -44,6 +46,7 @@ public class FeedUser extends AbstractData {
         this.city = new City(user.optJSONObject("city"));
         this.photo = new Photo(user.optJSONObject("photo"));        
         this.sex = user.optInt("sex");
+        this.premium = user.optBoolean("premium");
     }
 
     public String getNameAndAge() {

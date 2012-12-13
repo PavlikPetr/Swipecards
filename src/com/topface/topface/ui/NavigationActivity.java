@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
@@ -312,6 +313,20 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unbindDrawables(findViewById(R.id.NavigationLayout));
+        System.gc();
+    }
+
+    private void unbindDrawables(View view) {
+        if (view.getBackground() != null) {
+            view.getBackground().setCallback(null);
+        }
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+            ((ViewGroup) view).removeAllViews();
+        }
     }
 
 

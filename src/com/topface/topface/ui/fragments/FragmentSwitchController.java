@@ -48,7 +48,7 @@ public class FragmentSwitchController extends ViewGroup {
         public void afterClosing();
 
         public void beforeExpanding();
-        
+
         public void afterOpening();
 
         public void onExtraFrameOpen();
@@ -105,8 +105,12 @@ public class FragmentSwitchController extends ViewGroup {
     private void switchFragment() {
         BaseFragment fragment = getFragmentById(mCurrentFragmentId);
         if (mCurrentFragment != fragment) {
+            Fragment oldFragment = mFragmentManager.findFragmentById(R.id.fragment_container);                        
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
             transaction.replace(R.id.fragment_container, fragment);
+            if (oldFragment != null) {
+                transaction.remove(oldFragment);
+            }
             transaction.commit();
             mCurrentFragment = fragment;
         }
@@ -249,11 +253,11 @@ public class FragmentSwitchController extends ViewGroup {
             if (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL) {
                 mFragmentSwitchListener.afterClosing();
             }
-            
+
             if (mAnimation == EXPAND || mAnimation == EXPAND_FULL) {
                 mFragmentSwitchListener.afterOpening();
             }
-            
+
             if (mAnimation == EXPAND_FULL) {
                 fullExpanding();
             }

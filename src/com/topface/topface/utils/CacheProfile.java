@@ -8,6 +8,7 @@ import com.topface.topface.requests.ApiResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /* Cache Profile */
@@ -38,6 +39,18 @@ public class CacheProfile {
     public static String dating_city_name; // наименование пользователя в русской локали
     public static String dating_city_full; // полное наименование города
 
+    //Premium
+    public static boolean premium;
+    public static boolean invisible;
+
+    //Notifications constants
+    public final static int NOTIFICATIONS_UNKNOWN = -1;
+    public final static int NOTIFICATIONS_MESSAGE = 0;
+    public final static int NOTIFICATIONS_SYMPATHY = 1;
+    public final static int NOTIFICATIONS_LIKES = 2;
+    public final static int NOTIFICATIONS_RATE = 3;
+    public final static int NOTIFICATIONS_VISITOR = 4;
+
     public static LinkedList<FormItem> forms;
     public static String status; // статус пользователя    
     public static int background_id;
@@ -47,6 +60,8 @@ public class CacheProfile {
     public static final String OPTIONS_CACHE_KEY = "options_cache";
 
     public static LinkedList<Gift> gifts = new LinkedList<Gift>();
+    public static HashMap<Integer, Profile.TopfaceNotifications> notifications;
+    public static boolean hasMail;
 
     public static void setData(Profile profile) {
         updateCity(profile);
@@ -106,6 +121,12 @@ public class CacheProfile {
         profile.unread_visitors = unread_visitors;
         profile.average_rate = average_rate;
 
+        profile.notifications = notifications;
+        profile.hasMail = hasMail;
+
+        profile.premium = premium;
+        profile.invisible = invisible;
+
         profile.city_id = city_id;
         profile.city_name = city_name;
         profile.city_full = city_full;
@@ -144,6 +165,12 @@ public class CacheProfile {
         city_id = profile.city_id;
         city_name = profile.city_name;
         city_full = profile.city_full;
+
+        notifications = profile.notifications;
+        hasMail = profile.hasMail;
+
+        premium = profile.premium;
+        invisible = profile.invisible;
 
         dating_sex = profile.dating_sex;
         dating_age_start = profile.dating_age_start;

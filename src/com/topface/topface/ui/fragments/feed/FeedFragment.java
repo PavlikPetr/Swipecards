@@ -378,12 +378,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                             if (isHistoryLoad) {
                                 mListAdapter.showRetryItem();
                             }
-                            if (codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
-                                updateErrorMessage.showOnlyMessage(true);
-                                updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
-                            } else {
-                                updateErrorMessage.showOnlyMessage(false);
-                                updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
+                            if (updateErrorMessage != null) {
+                                if (codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
+                                    updateErrorMessage.showOnlyMessage(true);
+                                    updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
+                                } else {
+                                    updateErrorMessage.showOnlyMessage(false);
+                                    updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
+                                }
                             }
                             Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                             onUpdateFail(isPushUpdating || isHistoryLoad);
@@ -530,12 +532,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void showUpdateErrorMessage() {
-        updateErrorMessage.setVisibility(View.VISIBLE);
+        if(updateErrorMessage != null) {
+            updateErrorMessage.setVisibility(View.VISIBLE);
+        }
     }
 
     private void retryButtonClick() {
-        updateErrorMessage.setVisibility(View.GONE);
-        updateData(false, true);
+        if(updateErrorMessage != null) {
+            updateErrorMessage.setVisibility(View.GONE);
+            updateData(false, true);
+        }
     }
 
     private void makeItemReadWithId(int id) {

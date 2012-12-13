@@ -82,7 +82,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
         hide();
 
-         mBroadcastReceiver = new BroadcastReceiver() {
+        mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 refreshNotifications();

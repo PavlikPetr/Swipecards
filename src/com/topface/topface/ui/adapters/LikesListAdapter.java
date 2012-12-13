@@ -8,13 +8,15 @@ import android.widget.ImageView;
 import android.widget.ViewFlipper;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
+import com.topface.topface.utils.Debug;
 
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
     private int mSelectedForMutual = -1;
     private int mPrevSelectedForMutual = -1;
 
-    private int T_SELETED_FOR_MUTUAL = 3;
-    private int T_COUNT = 1;
+    public static final int T_SELECTED_FOR_MUTUAL = 6;
+    public static final int T_SELECTED_FOR_MUTUAL_VIP = 7;
+    private int T_COUNT = 2;
 
     private OnMutualListener mMutualListener;
 
@@ -29,13 +31,16 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     @Override
     public int getItemViewType(int position) {
         if (mSelectedForMutual == position && !getItem(position).mutualed) {
-            return T_SELETED_FOR_MUTUAL;
+            if (super.getItemViewType(position) == FeedAdapter.T_VIP || super.getItemViewType(position) == FeedAdapter.T_NEW_VIP) {
+                return T_SELECTED_FOR_MUTUAL_VIP;
+            }
+            return T_SELECTED_FOR_MUTUAL;
         } else return super.getItemViewType(position);
     }
 
     @Override
     public int getViewTypeCount() {
-
+        Debug.log(Integer.toString(super.getViewTypeCount() + T_COUNT));
         return (super.getViewTypeCount() + T_COUNT);
     }
 
@@ -64,8 +69,13 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
             vf.setDisplayedChild(1);
             if (android.os.Build.VERSION.SDK_INT > 11) {
                 convertView.setActivated(true);
+
             } else {
-                convertView.setBackgroundResource(R.drawable.im_item_list_bg_activated);
+                if (super.getItemViewType(position) == T_VIP || super.getItemViewType(position) == T_NEW_VIP) {
+                    convertView.setBackgroundResource(R.drawable.im_item_list_vip_bg);
+                } else {
+                    convertView.setBackgroundResource(R.drawable.im_item_list_bg_activated);
+                }
             }
             holder.flippedBtn.setOnClickListener(new OnClickListener() {
 
@@ -87,7 +97,11 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
                 if (android.os.Build.VERSION.SDK_INT > 11) {
                     convertView.setActivated(false);
                 } else {
-                    convertView.setBackgroundResource(R.drawable.item_list_selector);
+                    if (super.getItemViewType(position) == T_VIP || super.getItemViewType(position) == T_NEW_VIP) {
+                        convertView.setBackgroundResource(R.drawable.item_list_vip_selector);
+                    } else {
+                        convertView.setBackgroundResource(R.drawable.item_list_selector);
+                    }
                 }
                 mPrevSelectedForMutual = -1;
             }
@@ -129,7 +143,17 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 	protected int getNewItemLayout() {		
 		return R.layout.item_new_feed_like;
 	}
-    
+
+    @Override
+    protected int getVipItemLayout() {
+        return R.layout.item_feed_vip_like;
+    }
+
+    @Override
+    protected int getNewVipItemLayout() {
+        return  R.layout.item_new_vip_feed_like;
+    }
+
     public void setOnMutualListener(OnMutualListener listener) {
         mMutualListener = listener;
     }	
