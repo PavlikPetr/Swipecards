@@ -104,10 +104,12 @@ public class FragmentSwitchController extends ViewGroup {
 
     private void switchFragment() {
         BaseFragment fragment = getFragmentById(mCurrentFragmentId);
-        FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
-        mCurrentFragment = fragment;
+        if (mCurrentFragment != fragment) {
+            FragmentTransaction transaction = mFragmentManager.beginTransaction();
+            transaction.replace(R.id.fragment_container, fragment);
+            transaction.commit();
+            mCurrentFragment = fragment;
+        }
         closeExtraFragment();
     }
 
