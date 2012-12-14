@@ -1,16 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="wrap_content">
 
-    <ImageButton
-            android:id="@+id/ibAction"
+    <ImageView
+            android:id="@+id/ivShadow"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_shadow_actions"
+            android:layout_alignParentBottom="true"/>
+
+    <CheckBox
+            android:id="@+id/cbOpenActions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_superskills_selector"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@android:color/transparent"
+            android:layout_alignParentRight="true"
+            android:button="@android:color/transparent"
+            android:background="@drawable/btn_action_face_selector"
             />
+
+    <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/cbOpenActions"
+            android:layout_alignBottom="@id/cbOpenActions"
+            >
+        <LinearLayout
+                android:id="@+id/loActionButtons"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:paddingBottom="12dp"
+                >
+            <ImageButton
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/btn_action_delight"
+                    android:background="@android:color/transparent"
+                    />
+            <ImageButton
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/btn_action_sympathy"
+                    android:background="@android:color/transparent"
+                    />
+            <ImageButton
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/btn_action_chat"
+                    android:background="@android:color/transparent"
+                    />
+            <ImageButton
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/btn_action_gift"
+                    android:background="@android:color/transparent"
+                    />
+
+        </LinearLayout>
+
+    </ScrollView>
 </RelativeLayout>

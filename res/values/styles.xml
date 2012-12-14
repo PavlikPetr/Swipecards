@@ -360,7 +360,10 @@
     <style name="ProfileAvatar">
         <item name="android:layout_width">93dp</item>
         <item name="android:layout_height">93dp</item>
-        <item name="android:padding">2dp</item>
+        <item name="android:paddingTop">0.5dp</item>
+        <item name="android:paddingLeft">0.5dp</item>
+        <item name="android:paddingRight">0.5dp</item>
+        <item name="android:paddingBottom">2dp</item>
         <item name="android:background">@drawable/avatar_frame_center</item>
     </style>
 

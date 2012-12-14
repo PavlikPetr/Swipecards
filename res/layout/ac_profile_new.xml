@@ -84,4 +84,10 @@
             style="@style/LoadingLocker"
             android:visibility="gone"/>
 
+    <com.topface.topface.ui.views.ProfileActionsControl
+            android:id="@+id/profileActionsControl"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+
 </RelativeLayout>

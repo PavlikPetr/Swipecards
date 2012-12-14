@@ -28,6 +28,7 @@ import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.profile.UserFormFragment;
 import com.topface.topface.ui.profile.UserPhotoFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.ProfileActionsControl;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -69,6 +70,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
     private RetryView mRetryBtn;
     private ViewPager mBodyPager;
     private ViewPager mHeaderPager;
+    private ProfileActionsControl mActionsControl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         View root = inflater.inflate(R.layout.ac_profile_new, null);
 
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
+        mActionsControl = (ProfileActionsControl) root.findViewById(R.id.profileActionsControl);
         mRateController = new RateController(getActivity());
 
         restoreState();
@@ -101,6 +104,9 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             }
         });
         mLockScreen.addView(mRetryBtn);
+
+        mActionsControl.setType(mProfileType);
+        //TODO actions' listeners
 
         if (mProfileType == TYPE_MY_PROFILE) {
             mTitle.setText(R.string.profile_header_title);
