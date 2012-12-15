@@ -10,21 +10,10 @@
             android:background="@drawable/bg_shadow_actions"
             android:layout_alignParentBottom="true"/>
 
-    <CheckBox
-            android:id="@+id/cbOpenActions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:button="@android:color/transparent"
-            android:background="@drawable/btn_action_face_selector"
-            />
-
     <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/cbOpenActions"
-            android:layout_alignBottom="@id/cbOpenActions"
+            android:layout_alignParentBottom="true"
             >
         <LinearLayout
                 android:id="@+id/loActionButtons"
@@ -61,9 +50,19 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/btn_action_chat"
                     android:background="@android:color/transparent"
+                    android:layout_marginRight="75dp"
                     />
-
         </LinearLayout>
 
     </ScrollView>
+
+    <CheckBox
+            android:id="@+id/cbOpenActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:button="@android:color/transparent"
+            android:background="@drawable/btn_action_face_selector"
+            />
 </RelativeLayout>
