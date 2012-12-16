@@ -24,6 +24,7 @@
                 android:paddingBottom="12dp"
                 >
             <ImageButton
+                    android:id="@+id/actionDelight"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -31,6 +32,7 @@
                     android:background="@android:color/transparent"
                     />
             <ImageButton
+                    android:id="@+id/actionSympathy"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -38,6 +40,7 @@
                     android:background="@android:color/transparent"
                     />
             <ImageButton
+                    android:id="@+id/actionGift"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -45,6 +48,7 @@
                     android:background="@android:color/transparent"
                     />
             <ImageButton
+                    android:id="@+id/actionChat"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

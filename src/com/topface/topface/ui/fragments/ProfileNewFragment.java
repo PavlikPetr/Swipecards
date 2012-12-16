@@ -9,10 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
@@ -20,7 +17,10 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.UserRequest;
+import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.ProfileFormFragment;
@@ -42,7 +42,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ProfileNewFragment extends BaseFragment implements View.OnClickListener {
+public class ProfileNewFragment extends BaseFragment implements View.OnClickListener,CompoundButton.OnCheckedChangeListener {
     public final static int TYPE_MY_PROFILE = 1;
     public final static int TYPE_USER_PROFILE = 2;
     private static final String ARG_TAG_PROFILE_TYPE = "profile_type";
@@ -69,8 +69,10 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
     private RelativeLayout mLockScreen;
     private RetryView mRetryBtn;
     private ViewPager mBodyPager;
+    private ProfilePageAdapter mBodyPagerAdapter;
     private ViewPager mHeaderPager;
     private ProfileActionsControl mActionsControl;
+    private GiftsFragment mGiftFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,9 +108,10 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         mLockScreen.addView(mRetryBtn);
 
         mActionsControl.setType(mProfileType);
-        //TODO actions' listeners
+        mActionsControl.setOnClickListener(this);
 
         if (mProfileType == TYPE_MY_PROFILE) {
+            mActionsControl.setOnCheckChangedListener(this);
             mTitle.setText(R.string.profile_header_title);
             Button editButton = (Button) root.findViewById(R.id.btnNavigationRightWithText);
             editButton.setVisibility(View.VISIBLE);
@@ -134,6 +137,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
     private void setProfile(Profile profile) {
         if (mHeaderMainFragment != null) mHeaderMainFragment.setProfile(profile);
         if (mHeaderStatusFragment != null) mHeaderStatusFragment.setProfile(profile);
+        if (mGiftFragment != null) mGiftFragment.setProfile(profile);
         if (mUserPhotoFragment != null && profile instanceof User) mUserPhotoFragment.setUserData((User)profile);
         if (mUserFormFragment != null && profile instanceof User) mUserFormFragment.setUserData((User)profile);
     }
@@ -168,12 +172,6 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
                         //set info into views for user
                         mTitle.setText(user.getNameAndAge());
                         mOnline.setVisibility(user.online ? View.VISIBLE : View.INVISIBLE);
-                        if (mUserPhotoFragment != null) {
-                            mUserPhotoFragment.setUserData((User)mUserProfile);
-                        }
-                        if (mUserFormFragment != null) {
-                            mUserFormFragment.setUserData((User)mUserProfile);
-                        }
                         setProfile(user);
                         mLoaderView.setVisibility(View.INVISIBLE);
                     }
@@ -228,8 +226,9 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
 
         ViewPager bodyPager = (ViewPager)root.findViewById(R.id.vpFragments);
-        bodyPager.setAdapter(new ProfilePageAdapter(getActivity().getSupportFragmentManager(),BODY_PAGES_CLASS_NAMES,
-                BODY_PAGES_TITLES));
+        mBodyPagerAdapter =  new ProfilePageAdapter(getActivity().getSupportFragmentManager(),BODY_PAGES_CLASS_NAMES,
+                BODY_PAGES_TITLES);
+        bodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
         TabPageIndicator tabIndicator = (TabPageIndicator)root.findViewById(R.id.tpiTabs);
         tabIndicator.setViewPager(bodyPager);
@@ -252,6 +251,32 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             case R.id.btnNavigationRightWithText:
                 startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
                 break;
+
+            case R.id.actionDelight:
+                mRateController.onRate(mUserProfile.uid, 10, ((User)mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                break;
+            case R.id.actionSympathy:
+                mRateController.onRate(mUserProfile.uid, 9, ((User)mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                break;
+            case R.id.actionGift:
+                if (mGiftFragment != null) mGiftFragment.sendGift();
+                else {
+                    Intent intent = new Intent(getActivity().getApplicationContext(),
+                            GiftsActivity.class);
+                    startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+                }
+                break;
+            case R.id.actionChat:
+                Intent intent = new Intent(getActivity(),ChatActivity.class);
+                intent.putExtra(ChatActivity.INTENT_USER_ID, mUserProfile.uid);
+                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserProfile.first_name);
+                intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserProfile.sex);
+                intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserProfile.age);
+                intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserProfile.city_name);
+                intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
+                intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, ProfileNewFragment.this.getClass().getSimpleName());
+                startActivity(intent);
+                break;
             default:
                 break;
         }
@@ -266,6 +291,15 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            mBodyPager.setCurrentItem(2);
+            buttonView.setChecked(false);
+        }
+
     }
 
     public class ProfilePageAdapter extends FragmentStatePagerAdapter {
@@ -289,13 +323,6 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         public int getCount() {
             return mFragmentsClasses.size();
         }
-
-//        @Override
-//        public long getItemId(int position) {
-//            StringBuilder strBuilder = new StringBuilder();
-//            strBuilder.append(position).append(mProfileId);
-//            return Long.parseLong(strBuilder.toString());
-//        }
 
         @Override
         public CharSequence getPageTitle(int position) {
@@ -333,7 +360,10 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
                     mUserPhotoFragment = (UserPhotoFragment)fragment;
                 } else if (fragment instanceof UserFormFragment) {
                     mUserFormFragment = (UserFormFragment)fragment;
+                } else if (fragment instanceof GiftsFragment) {
+                    mGiftFragment = (GiftsFragment)fragment;
                 }
+                setProfile(mUserProfile);
             } catch (Exception ex) {
                 Debug.error(ex);
             }

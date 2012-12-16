@@ -71,7 +71,6 @@ public class GiftsActivity extends BaseFragmentActivity {
                     public void run() {
                         mGiftsCollection.setCurrentType(Gift.ROMANTIC);
                         mGiftFragment.setGifts(mGiftsCollection.getGifts());
-                        mGiftFragment.update();
                     }
                 });
             }
@@ -85,7 +84,6 @@ public class GiftsActivity extends BaseFragmentActivity {
                     public void run() {
                         mGiftsCollection.setCurrentType(Gift.FRIENDS);
                         mGiftFragment.setGifts(mGiftsCollection.getGifts());
-                        mGiftFragment.update();
                     }
                 });
 
@@ -101,7 +99,6 @@ public class GiftsActivity extends BaseFragmentActivity {
                     public void run() {
                         mGiftsCollection.setCurrentType(Gift.PRESENT);
                         mGiftFragment.setGifts(mGiftsCollection.getGifts());
-                        mGiftFragment.update();
                     }
                 });
             }

@@ -312,7 +312,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             decrementCounters();
             mListAdapter.notifyDataSetChanged();
         }
-        //TODO: switch to user fragment
         ((NavigationActivity)getActivity()).onExtraFragment(
                 ProfileNewFragment.newInstance(item.user.id,ProfileNewFragment.TYPE_USER_PROFILE));
 

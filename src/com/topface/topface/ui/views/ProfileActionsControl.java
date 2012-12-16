@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class ProfileActionsControl extends RelativeLayout {
 
+    private int mType;
     private CheckBox mOpenActionButton;
     private ViewGroup mActionButtonsLayout;
     private ArrayList<ImageButton> mActionButtons = new ArrayList<ImageButton>();
@@ -41,6 +42,7 @@ public class ProfileActionsControl extends RelativeLayout {
     }
 
     public void setType(int type) {
+        mType = type;
         switch (type) {
             case ProfileNewFragment.TYPE_MY_PROFILE:
                 initMyProfileMode();
@@ -54,9 +56,15 @@ public class ProfileActionsControl extends RelativeLayout {
         }
     }
 
-    public void setActionListener(int actionButtonIndex, OnClickListener listener) {
-        if (actionButtonIndex < mActionButtons.size()) {
-            mActionButtons.get(actionButtonIndex).setOnClickListener(listener);
+    public void setOnClickListener(OnClickListener listener) {
+        for (ImageButton btn : mActionButtons) {
+            btn.setOnClickListener(listener);
+        }
+    }
+
+    public void setOnCheckChangedListener(CompoundButton.OnCheckedChangeListener listener) {
+        if (mType == ProfileNewFragment.TYPE_MY_PROFILE) {
+            mOpenActionButton.setOnCheckedChangeListener(listener);
         }
     }
 

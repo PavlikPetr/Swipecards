@@ -199,8 +199,11 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     };
 
     public void onDialogCancel() {
-        DatingFragment datingFragment = (DatingFragment) mFragmentManager.findFragmentById(R.id.fragment_container);
-        datingFragment.onDialogCancel();
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        if (fragment instanceof DatingFragment) {
+            DatingFragment datingFragment = (DatingFragment) fragment;
+            datingFragment.onDialogCancel();
+        }
     }
 
     private FragmentSwitchListener mFragmentSwitchListener = new FragmentSwitchListener() {
