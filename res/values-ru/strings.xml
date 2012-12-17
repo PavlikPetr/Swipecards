@@ -327,6 +327,9 @@
 
     <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services">Услуги</string>
+    <string name="default_balance_constant">На вашем счете</string>
+    <string name="default_energy_balance_constant">Запас энергии</string>
+    <string name="default_energy_coins_buy_btn_text">Купить монет, пополнить запас энергии</string>
 
     <string name="black_list_title">Черный список</string>
     <string name="black_list_empty">Ваш черный список пуст</string>
