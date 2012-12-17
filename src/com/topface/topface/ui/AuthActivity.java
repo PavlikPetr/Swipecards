@@ -58,7 +58,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
         mRetryView = new RetryView(getApplicationContext());
         mRetryView.setErrorMsg(getString(R.string.general_data_error));
-        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry),new View.OnClickListener() {
+        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 auth(new AuthToken(getApplicationContext()));
@@ -289,34 +289,34 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             @Override
             public void success(final ApiResponse response) {
                 CacheProfile.setProfile(Profile.parse(response), response);
-                
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    	OptionsRequest request = new OptionsRequest(getApplicationContext());                        
+                        OptionsRequest request = new OptionsRequest(getApplicationContext());
                         ApiHandler handler = new ApiHandler() {
-                			
-                			@Override
-                			public void success(ApiResponse response) throws NullPointerException {
-                				Options.parse(response);
-                				runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void success(ApiResponse response) {
+                                Options.parse(response);
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         if (!isProfileNormal() && isFirstTime) {
-                                            Intent intent = new Intent(AuthActivity.this,EditProfileActivity.class);
-                                            intent.putExtra(EditProfileActivity.FROM_AUTH_ACTIVITY,true);
+                                            Intent intent = new Intent(AuthActivity.this, EditProfileActivity.class);
+                                            intent.putExtra(EditProfileActivity.FROM_AUTH_ACTIVITY, true);
                                             openActivity(intent);
                                         } else {
-                                            Intent intent = new Intent(AuthActivity.this,NavigationActivity.class);
-                                    	    openActivity(intent);
+                                            Intent intent = new Intent(AuthActivity.this, NavigationActivity.class);
+                                            openActivity(intent);
                                         }
                                     }
                                 });
-                			}
-                			
-                			@Override
-                			public void fail(int codeError, ApiResponse response) throws NullPointerException {
-                				final ApiResponse finalResponse = response;
+                            }
+
+                            @Override
+                            public void fail(int codeError, ApiResponse response) {
+                                final ApiResponse finalResponse = response;
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -329,12 +329,12 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                                         }
                                     }
                                 });
-                			}
-                		};
-                        request.callback(handler);  
+                            }
+                        };
+                        request.callback(handler);
                         request.exec();
                     }
-				});
+                });
             }
 
             @Override

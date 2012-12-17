@@ -89,7 +89,7 @@ public class Profile extends AbstractDataWithPhotos {
             // if(power > 10000) power = 10000;
             profile.power = (int) (power * 0.01);
 
-            profile.uid = resp.optInt("uid");
+            profile.uid = resp.optInt("id");
             profile.age = resp.optInt("age");
             profile.sex = resp.optInt("sex");
             profile.status = resp.optString("status");

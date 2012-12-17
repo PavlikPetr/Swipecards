@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,13 +13,9 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Photo;
-import com.topface.topface.data.Profile;
-import com.topface.topface.data.User;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.RateRequest;
-import com.topface.topface.requests.UserRequest;
+import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.data.*;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -252,7 +249,6 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             case R.id.btnNavigationRightWithText:
                 startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
                 break;
-
             case R.id.actionDelight:
                 mRateController.onRate(mUserProfile.uid, 10, ((User)mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                 break;
@@ -260,8 +256,9 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
                 mRateController.onRate(mUserProfile.uid, 9, ((User)mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                 break;
             case R.id.actionGift:
-                if (mGiftFragment != null) mGiftFragment.sendGift();
-                else {
+                if (mGiftFragment != null && mGiftFragment.getActivity() != null) {
+                    mGiftFragment.sendGift();
+                } else {
                     Intent intent = new Intent(getActivity().getApplicationContext(),
                             GiftsActivity.class);
                     startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
@@ -383,6 +380,58 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         if (mHeaderStatusFragment != null) mHeaderStatusFragment.clearContent();
         if (mUserPhotoFragment != null) mUserPhotoFragment.clearContent();
         if (mUserFormFragment != null) mUserFormFragment.clearContent();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+                Bundle extras = data.getExtras();
+                final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+                final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+                final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+
+                if (mUserProfile != null) {
+                    final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
+                    registerRequest(sendGift);
+                    sendGift.giftId = id;
+                    sendGift.userId = mUserProfile.uid;
+                    final FeedGift sendedGift = new FeedGift();
+                    sendedGift.gift = new Gift();
+                    sendedGift.gift.id = sendGift.giftId;
+                    sendedGift.gift.link = url;
+                    sendedGift.gift.type = Gift.PROFILE_NEW;
+                    sendGift.callback(new ApiHandler() {
+                        @Override
+                        public void success(ApiResponse response) throws NullPointerException {
+                            SendGiftAnswer answer = SendGiftAnswer.parse(response);
+                            CacheProfile.power = answer.power;
+                            CacheProfile.money = answer.money;
+                            mUserProfile.gifts.addFirst(sendedGift.gift);
+                        }
+
+                        @Override
+                        public void fail(int codeError, final ApiResponse response)
+                                throws NullPointerException {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (response.code == ApiResponse.PAYMENT) {
+                                        Intent intent = new Intent(getActivity()
+                                                .getApplicationContext(), BuyingActivity.class);
+                                        intent.putExtra(BuyingActivity.INTENT_USER_COINS, price
+                                                - CacheProfile.money);
+                                        startActivity(intent);
+                                    }
+                                }
+                            });
+                        }
+                    }).exec();
+                }
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public static class HeaderMainFragment extends BaseFragment {

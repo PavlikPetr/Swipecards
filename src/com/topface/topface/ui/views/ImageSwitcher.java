@@ -96,7 +96,7 @@ public class ImageSwitcher extends ViewPager {
                         }
                     }
                 }
-                finalListener.onPageScrolled(i,v,i1);
+                finalListener.onPageScrolled(i, v, i1);
             }
 
             @Override
@@ -111,7 +111,6 @@ public class ImageSwitcher extends ViewPager {
         });
 
     }
-
 
 
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
@@ -138,7 +137,7 @@ public class ImageSwitcher extends ViewPager {
         public Object instantiateItem(ViewGroup pager, int position) {
             LayoutInflater inflater = (LayoutInflater) pager.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_album_gallery, null);
-            view.setTag(VIEW_TAG+Integer.toString(position));
+            view.setTag(VIEW_TAG + Integer.toString(position));
             ImageViewRemote imageView = (ImageViewRemote) view.findViewById(R.id.ivPreView);
             //Первую фотографию грузим сразу, или если фотографию уже загружена, то сразу показываем ее
             if (isFirstInstantiate || mLoadedPhotos.get(position, false)) {
@@ -160,10 +159,10 @@ public class ImageSwitcher extends ViewPager {
         }
 
         public void setPhotoToPosition(int position) {
-            if(!isFirstInstantiate) {
-                View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG+Integer.toString(position));
-                ImageViewRemote imageView = (ImageViewRemote)baseLayout.findViewById(R.id.ivPreView);
-                if(imageView.getBackground() == null) {
+            if (!isFirstInstantiate) {
+                View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(position));
+                ImageViewRemote imageView = (ImageViewRemote) baseLayout.findViewById(R.id.ivPreView);
+                if (imageView.getBackground() == null) {
                     setPhotoToView(position, baseLayout, imageView);
                 }
                 imageView.setDrawingCacheEnabled(true);

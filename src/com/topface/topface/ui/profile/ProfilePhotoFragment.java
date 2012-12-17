@@ -43,7 +43,7 @@ public class ProfilePhotoFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         initPhotoLinks();
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks);
-        mAddPhotoHelper = new AddPhotoHelper(this,lockerView);
+        mAddPhotoHelper = new AddPhotoHelper(this, lockerView);
         mAddPhotoHelper.setOnResultHandler(mHandler);
     }
 

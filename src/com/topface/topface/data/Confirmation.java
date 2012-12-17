@@ -19,7 +19,7 @@ public class Confirmation extends AbstractData {
         try {
             confirm.completed = response.jsonResult.optBoolean("completed");
         } catch (Exception e) {
-            Debug.log("Completed.class", "Wrong response parsing: " + e);
+            Debug.error("Completed.class: Wrong response parsing", e);
         }
 
         return confirm;

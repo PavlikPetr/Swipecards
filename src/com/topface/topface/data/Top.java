@@ -10,11 +10,11 @@ import java.util.LinkedList;
 /**
  * Класс профиля окна топов
  */
-public class Top extends AbstractDataWithPhotos{
+public class Top extends AbstractDataWithPhotos {
     /**
      * идентификатор красивого пользователя
      */
-    public int uid;    
+    public int uid;
     /**
      * процент абсолютного значения красоты
      */
@@ -42,17 +42,17 @@ public class Top extends AbstractDataWithPhotos{
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject item = arr.getJSONObject(i);
                     Top topUser = new Top();
-                    topUser.liked = item.optInt("liked");                    
+                    topUser.liked = item.optInt("liked");
                     topUser.uid = item.optInt("id");
                     topUser.name = item.optString("first_name");
                     topUser.age = item.optInt("age");
                     topUser.online = item.optBoolean("online");
-                    initPhotos(item,topUser);
+                    initPhotos(item, topUser);
 
                     userList.add(topUser);
                 }
         } catch (Exception e) {
-            Debug.log("TopUser.class", "Wrong response parsing: " + e);
+            Debug.error("TopUser.class: Wrong response parsing", e);
         }
 
         return userList;

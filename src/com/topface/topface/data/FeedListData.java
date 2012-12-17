@@ -12,7 +12,7 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
     private static final int NO_TYPE = -1;
     public boolean more;
     public FeedList<T> items;
-    public HashMap<String,Integer> counters;
+    public HashMap<String, Integer> counters;
     private final Class<T> mClass;
 
     public FeedListData(JSONObject data, Class<T> itemClass) {
@@ -29,8 +29,7 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
         items = getList(data.optJSONArray("items"));
     }
 
-    @SuppressWarnings({ "hiding", "unchecked" })
-	private <T extends FeedItem> FeedList<T> getList(JSONArray list) {
+    private <T extends FeedItem> FeedList<T> getList(JSONArray list) {
         FeedList<T> result = new FeedList<T>();
         if (list != null) {
             for (int i = 0; i < list.length(); i++) {

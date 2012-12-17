@@ -50,12 +50,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         ImageViewRemote menuAvatar = (ImageViewRemote) mRootLayout.findViewById(R.id.ivMenuAvatar);
         menuAvatar.setPhoto(CacheProfile.photo);
         menuAvatar.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
+
+            @Override
+            public void onClick(View v) {
                 btnProfile.performClick();
-			}
-		});
+            }
+        });
 
         mDefaultMenuItem = (Button) mRootLayout.findViewById(R.id.btnFragmentDating);
 
@@ -88,7 +88,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 refreshNotifications();
             }
         };
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(mBroadcastReceiver,new IntentFilter(CountersManager.UPDATE_COUNTERS));
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(mBroadcastReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
         return mRootLayout;
     }
 
@@ -138,12 +138,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         } else {
             mTvNotifyDialogs.setVisibility(View.INVISIBLE);
         }
-        
-        if (CacheProfile.unread_visitors > 0){
-        	mTvNotifyVisitors.setText(" " + CacheProfile.unread_visitors + " ");
-        	mTvNotifyVisitors.setVisibility(View.VISIBLE);
+
+        if (CacheProfile.unread_visitors > 0) {
+            mTvNotifyVisitors.setText(" " + CacheProfile.unread_visitors + " ");
+            mTvNotifyVisitors.setVisibility(View.VISIBLE);
         } else {
-        	mTvNotifyVisitors.setVisibility(View.INVISIBLE);
+            mTvNotifyVisitors.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -166,14 +166,14 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
     public OnClickListener getProfileButtonOnClickListener() {
-    	final Button btnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
-    	return new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				btnProfile.performClick();
-			}
-		};
+        final Button btnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
+        return new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                btnProfile.performClick();
+            }
+        };
     }
 }
 

@@ -15,7 +15,7 @@ public class NovicePower extends AbstractData {
             //if(power > 10000) power = 10000;
             novice.power = (int) (power * 0.01);
         } catch (Exception e) {
-            Debug.log("NovicePower.class", "Wrong response parsing: " + e);
+            Debug.error("NovicePower.class: Wrong response parsing", e);
         }
 
         return novice;

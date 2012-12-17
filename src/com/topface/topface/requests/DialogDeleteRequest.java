@@ -27,8 +27,7 @@ public class DialogDeleteRequest extends AbstractApiRequest {
     public void exec() {
         if (mUserId > 0) {
             super.exec();
-        }
-        else {
+        } else {
             handleFail(ApiResponse.MISSING_REQUIRE_PARAMETER, "Wrong userid value. userid must be more than 0");
         }
     }

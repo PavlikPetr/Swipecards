@@ -26,16 +26,14 @@ public class Device {
 
     public static boolean init(Context context) {
         try {
-        	Point sizes = Utils.getSrceenSize(context);
-            if (getOrientation(context) == LANDSCAPE)
-                width = sizes.y;
-            else
-                width = sizes.x;
+            Point sizes = Utils.getSrceenSize(context);
+            width = getOrientation(context) == LANDSCAPE ? sizes.y : sizes.x;
 
             if (width == 0) {
                 Debug.log("Device", "init error");
                 return false;
             }
+
         } catch (Exception e) {
             Debug.log("Device", "init exception:" + e);
             return false;
@@ -73,9 +71,9 @@ public class Device {
      * @return размер дисплея по максимальной стороне
      */
     public static int getMaxDisplaySize(Context context) {
-    	Point sizes = Utils.getSrceenSize(context);
+        Point sizes = Utils.getSrceenSize(context);
         return getOrientation(context) == LANDSCAPE ?
-        		sizes.x : sizes.y;
+                sizes.x : sizes.y;
     }
 
     public static int getMaxDisplaySize() {

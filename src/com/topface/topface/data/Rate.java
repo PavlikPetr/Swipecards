@@ -20,7 +20,7 @@ public class Rate extends AbstractData {
             doRate.money = response.jsonResult.optInt("money");
             doRate.average = response.jsonResult.optInt("average");
         } catch (Exception e) {
-            Debug.log("DoRate.class", "Wrong response parsing: " + e);
+            Debug.error("DoRate.class: Wrong response parsing", e);
         }
 
         return doRate;

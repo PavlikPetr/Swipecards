@@ -15,15 +15,15 @@ public class MaskClipPostProcessor extends ImagePostProcessor {
     private String mCacheKey;
     private static final String CACHE_KEY = "maskclip";
     private final Bitmap mMask;
-    private static HashMap<Integer,Bitmap> cachedMaskBitmaps = new HashMap<Integer, Bitmap>();
+    private static HashMap<Integer, Bitmap> cachedMaskBitmaps = new HashMap<Integer, Bitmap>();
 
     public MaskClipPostProcessor(int mask) {
         mCacheKey = CACHE_KEY;
-        if(cachedMaskBitmaps.containsKey(mask)) {
+        if (cachedMaskBitmaps.containsKey(mask)) {
             mMask = cachedMaskBitmaps.get(mask);
         } else {
             mMask = BitmapFactory.decodeResource(App.getContext().getResources(), mask);
-            cachedMaskBitmaps.put(mask,mMask);
+            cachedMaskBitmaps.put(mask, mMask);
         }
     }
 

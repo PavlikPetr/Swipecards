@@ -32,7 +32,7 @@ public class Gift extends AbstractDataWithPhotos {
             JSONArray array = response.jsonResult.getJSONArray("gifts");
             for (int i = 0; i < array.length(); i++) {
                 JSONObject item = array.getJSONObject(i);
-                Gift gift = new Gift();                
+                Gift gift = new Gift();
                 gift.id = item.optInt("id");
                 gift.type = item.optInt("type");
                 gift.link = item.optString("link");
@@ -41,7 +41,7 @@ public class Gift extends AbstractDataWithPhotos {
                 gifts.add(gift);
             }
         } catch (JSONException e) {
-            Debug.log("Gift.class", "Wrong response parsing: " + e);
+            Debug.error("Gift.class: Wrong response parsing", e);
         }
 
         return gifts;

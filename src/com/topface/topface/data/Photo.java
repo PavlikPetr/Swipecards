@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * Фотографии пользователей из нашего стораджа фотографий (не напрямую из социальной сети)
  */
-public class Photo extends AbstractData implements Parcelable{
+public class Photo extends AbstractData implements Parcelable {
 
     public static final String SIZE_ORIGINAL = "original";
     public static final String SIZE_64 = "c64x64";
@@ -77,6 +77,7 @@ public class Photo extends AbstractData implements Parcelable{
             return getMaxSide().equals(WIDTH) ? width : height;
         }
     }
+
     /**
      * идентификатор фотографии пользователя
      */
@@ -101,7 +102,7 @@ public class Photo extends AbstractData implements Parcelable{
             JSONObject linksJson = photoItem.optJSONObject("links");
             if (linksJson != null) {
                 @SuppressWarnings("rawtypes")
-				Iterator photoKeys = linksJson.keys();
+                Iterator photoKeys = linksJson.keys();
                 links = new HashMap<String, String>();
 
                 while (photoKeys.hasNext()) {
@@ -127,8 +128,6 @@ public class Photo extends AbstractData implements Parcelable{
     /**
      * Возвращает наиболее подходящий размер фотографии из уже существующих
      *
-     *
-     *
      * @param sizeString
      */
     public String getSuitableLink(String sizeString) {
@@ -137,7 +136,7 @@ public class Photo extends AbstractData implements Parcelable{
             url = links.get(sizeString);
         } else {
             Size size = getSizeFromKey(sizeString);
-            getSuitableLink(size.width,size.height);
+            getSuitableLink(size.width, size.height);
         }
 
         if (url == null && links.containsKey(SIZE_ORIGINAL)) {
@@ -149,10 +148,10 @@ public class Photo extends AbstractData implements Parcelable{
 
     public String getSuitableLink(int width, int height) {
         String url = null;
-        Size windowSize = new Size(width,height);
+        Size windowSize = new Size(width, height);
         if (links != null) {
             url = getSuitableLinkForSameImageForm(windowSize);
-            if(url == null) {
+            if (url == null) {
                 url = getSuitableLinkForAnotherForm(windowSize);
             }
         }
@@ -179,12 +178,11 @@ public class Photo extends AbstractData implements Parcelable{
                         minDifference = difference;
                         url = entry.getValue();
                     }
-                }
-                else {
-                    if(entrySize.isSquare() == windowSquare && !isSmallPhoto(entrySize)) {
+                } else {
+                    if (entrySize.isSquare() == windowSquare && !isSmallPhoto(entrySize)) {
                         difference = windowSize.getDifference(entrySize);
                         int entryMaxSize = entrySize.getMaxSideSize();
-                        if (difference < minDifference &&  difference < entryMaxSize * MAX_DIFFERENCE) {
+                        if (difference < minDifference && difference < entryMaxSize * MAX_DIFFERENCE) {
                             minDifference = difference;
                             url = entry.getValue();
                         }
@@ -206,14 +204,14 @@ public class Photo extends AbstractData implements Parcelable{
         int difference;
         int minDifference = Integer.MAX_VALUE;
 
-        for(HashMap.Entry<String,String> entry : links.entrySet()) {
+        for (HashMap.Entry<String, String> entry : links.entrySet()) {
             String entryKey = entry.getKey();
             //Не используем редкие размеры фотографий
             if (!isSizeDeprecated(entryKey)) {
                 Size entrySize = getSizeFromKey(entryKey);
-                if(entrySize.isSquare() != windowSize.isSquare()) {
+                if (entrySize.isSquare() != windowSize.isSquare()) {
                     difference = windowSize.getDifference(entrySize);
-                    if (difference < minDifference &&  difference < entrySize.getMaxSideSize() * MAX_DIFFERENCE) {
+                    if (difference < minDifference && difference < entrySize.getMaxSideSize() * MAX_DIFFERENCE) {
                         minDifference = difference;
                         url = entry.getValue();
                     }
@@ -221,7 +219,7 @@ public class Photo extends AbstractData implements Parcelable{
 
             }
         }
-        if(url == null) {
+        if (url == null) {
             url = getAnySuitableLink(windowSize);
         }
         return url;
@@ -232,7 +230,7 @@ public class Photo extends AbstractData implements Parcelable{
         int difference;
         int minDifference = Integer.MAX_VALUE;
         Debug.log("LINK::ANY");
-        for(HashMap.Entry<String,String> entry : links.entrySet()) {
+        for (HashMap.Entry<String, String> entry : links.entrySet()) {
             String entryKey = entry.getKey();
             //Не используем редкие размеры фотографий
             if (!isSizeDeprecated(entryKey)) {
@@ -257,19 +255,18 @@ public class Photo extends AbstractData implements Parcelable{
         if (Photo.SIZE_ORIGINAL.equals(key)) {
             size.width = Integer.MAX_VALUE;
             size.height = Integer.MAX_VALUE;
-        }
-        else {
+        } else {
             if (mPattern == null) {
                 mPattern = Pattern.compile(PHOTO_KEY_SIZE_PATTERN);
             }
 
             Matcher matcher = mPattern.matcher(key);
             if (matcher.find()) {
-                if(matcher.group(1).equals("-")) {
+                if (matcher.group(1).equals("-")) {
                     size.width = 0;
                 } else
                     size.width = Integer.parseInt(matcher.group(1));
-                if(matcher.group(2).equals("-")) {
+                if (matcher.group(2).equals("-")) {
                     size.height = 0;
                 } else
                     size.height = Integer.parseInt(matcher.group(2));
@@ -292,39 +289,39 @@ public class Photo extends AbstractData implements Parcelable{
         return mId;
     }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(mId);
-		dest.writeInt(links.size());
-		for (String key : links.keySet()) {
-			dest.writeString(key);
-			dest.writeString(links.get(key));
-		}
-		
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public static final Parcelable.Creator CREATOR =
-	    	new Parcelable.Creator() {
-	            public Photo createFromParcel(Parcel in) {
-	            	int id = in.readInt();
-	            	int hashSize = in.readInt();
-	            	HashMap<String, String> links = new HashMap<String, String>();
-	            	
-	            	for (int i = 0; i < hashSize; i++) {
-						links.put(in.readString(),in.readString());
-					}
-	            	
-	                return new Photo(id,links);
-	            }
-	 
-	            public Photo[] newArray(int size) {
-	                return new Photo[size];
-	            }
-	        };
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeInt(links.size());
+        for (String key : links.keySet()) {
+            dest.writeString(key);
+            dest.writeString(links.get(key));
+        }
+
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static final Parcelable.Creator CREATOR =
+            new Parcelable.Creator() {
+                public Photo createFromParcel(Parcel in) {
+                    int id = in.readInt();
+                    int hashSize = in.readInt();
+                    HashMap<String, String> links = new HashMap<String, String>();
+
+                    for (int i = 0; i < hashSize; i++) {
+                        links.put(in.readString(), in.readString());
+                    }
+
+                    return new Photo(id, links);
+                }
+
+                public Photo[] newArray(int size) {
+                    return new Photo[size];
+                }
+            };
 }

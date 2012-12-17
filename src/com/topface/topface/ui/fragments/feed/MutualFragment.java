@@ -22,7 +22,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    protected MutualListAdapter getAdapter() {
+    protected MutualListAdapter getNewAdapter() {
         return new MutualListAdapter(getActivity(), getUpdaterCallback());
     }
 

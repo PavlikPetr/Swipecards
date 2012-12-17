@@ -8,8 +8,8 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 
 public class City extends AbstractData {
-	public final static int ALL_CITIES = 0;
-	
+    public final static int ALL_CITIES = 0;
+
     /**
      * уникальных код города
      */
@@ -26,11 +26,11 @@ public class City extends AbstractData {
     public City(JSONObject city) {
         super(city);
     }
-    
-    private City(int id,String name,String full) {
-    	this.id = id;
-    	this.name = name;
-    	this.full = full;
+
+    private City(int id, String name, String full) {
+        this.id = id;
+        this.name = name;
+        this.full = full;
     }
 
     protected void fillData(JSONObject city) {
@@ -49,14 +49,14 @@ public class City extends AbstractData {
                     cities.add(new City(arr.getJSONObject(i)));
                 }
         } catch (Exception e) {
-            Debug.log("City.class", "Wrong response parsing: " + e);
+            Debug.error("City.class: Wrong response parsing", e);
         }
 
         return cities;
     }
-    
-    public static City createCity(int id,String name, String full) {    	
-    	return new City(id,name,full);
+
+    public static City createCity(int id, String name, String full) {
+        return new City(id, name, full);
     }
-    		
+
 }

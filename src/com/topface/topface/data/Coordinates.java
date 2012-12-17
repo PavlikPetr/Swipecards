@@ -53,15 +53,15 @@ public class Coordinates extends AbstractData implements Parcelable {
     }
 
     @SuppressWarnings("serial")
-	public class WrongCoordinatesException extends Exception {
+    public class WrongCoordinatesException extends Exception {
         @Override
         public String getMessage() {
             return "Longitude value must be => -180 and <= 180, Latitude value must be => -90 and <= 90";
         }
     }
-    
+
     @SuppressWarnings("rawtypes")
-	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public Coordinates createFromParcel(Parcel in) {
             try {
                 return new Coordinates(in.readDouble(), in.readDouble());

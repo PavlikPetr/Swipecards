@@ -18,8 +18,8 @@ public class LeadersPhotoAdapter extends BaseAdapter {
 
     protected static final int T_ADD_BTN = 0;
     protected static final int T_PHOTO = 1;
-    protected static final int T_COUNT = T_PHOTO + 1;    
-    
+    protected static final int T_COUNT = T_PHOTO + 1;
+
     static class ViewHolder {
         ImageViewRemote imageView;
         ImageView addPhoto;
@@ -52,7 +52,7 @@ public class LeadersPhotoAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-    
+
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {
@@ -83,12 +83,12 @@ public class LeadersPhotoAdapter extends BaseAdapter {
         }
 
         if (getItemViewType(position) == T_ADD_BTN) {
-        	holder.imageView.setVisibility(View.GONE);        	
+            holder.imageView.setVisibility(View.GONE);
             holder.checkbox.setVisibility(View.GONE);
             holder.addPhoto.setVisibility(View.VISIBLE);
         } else {
-        	holder.imageView.setVisibility(View.VISIBLE);
-        	holder.addPhoto.setVisibility(View.GONE);        	
+            holder.imageView.setVisibility(View.VISIBLE);
+            holder.addPhoto.setVisibility(View.GONE);
             holder.checkbox.setVisibility(
                     mPhotoSelector.getItemId() == position ?
                             View.VISIBLE :
