@@ -27,7 +27,6 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 import com.android.vending.billing.IMarketBillingService;
-import com.topface.topface.billing.Consts.PurchaseState;
 import com.topface.topface.billing.Consts.ResponseCode;
 import com.topface.topface.billing.Security.VerifiedPurchase;
 
@@ -234,7 +233,7 @@ public class BillingService extends Service implements ServiceConnection {
     /**
      * Wrapper class that requests a purchase.
      */
-    class RequestPurchase extends BillingRequest {
+    public class RequestPurchase extends BillingRequest {
         public final String mProductId;
         public final String mDeveloperPayload;
         public final String mProductType;
@@ -364,7 +363,7 @@ public class BillingService extends Service implements ServiceConnection {
     /**
      * Wrapper class that sends a RESTORE_TRANSACTIONS message to the server.
      */
-    class RestoreTransactions extends BillingRequest {
+    public class RestoreTransactions extends BillingRequest {
         long mNonce;
 
         public RestoreTransactions() {
@@ -481,18 +480,8 @@ public class BillingService extends Service implements ServiceConnection {
     }
 
     /**
-     * Checks if in-app billing is supported. Assumes this is a one-time purchase.
-     *
-     * @return true if supported; false otherwise
-     */
-    @Deprecated
-    public boolean checkBillingSupported() {
-        return new CheckBillingSupported().runRequest();
-    }
-
-    /**
      * Checks if in-app billing is supported.
-     * @pram itemType Either Consts.ITEM_TYPE_INAPP or Consts.ITEM_TYPE_SUBSCRIPTION, indicating the
+     * @param itemType Either Consts.ITEM_TYPE_INAPP or Consts.ITEM_TYPE_SUBSCRIPTION, indicating the
      *                type of item support is being checked for.
      * @return true if supported; false otherwise
      */
@@ -559,8 +548,7 @@ public class BillingService extends Service implements ServiceConnection {
     }
 
     /**
-     * Verifies that the data was signed with the given signature, and calls
-     * {@link ResponseHandler#purchaseResponse(android.content.Context, PurchaseState, String, String, long)}
+     * Verifies that the data was signed with the given signature, and calls purchaseResponse
      * for each verified purchase.
      * @param startId an identifier for the invocation instance of this service
      * @param signedData the signed JSON string (signed, not encrypted)

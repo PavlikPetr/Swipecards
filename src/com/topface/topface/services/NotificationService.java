@@ -75,6 +75,7 @@ public class NotificationService extends Service {
                 Verify verify = Verify.parse(response);
                 CacheProfile.power = verify.power;
                 CacheProfile.money = verify.money;
+                CacheProfile.premium = verify.premium;
                 // затереть ордер
                 post(new Runnable() {
                     @Override

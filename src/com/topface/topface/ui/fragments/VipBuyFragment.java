@@ -1,37 +1,95 @@
 package com.topface.topface.ui.fragments;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.billing.BillingService;
+import com.topface.topface.billing.Consts;
+import com.topface.topface.billing.PurchaseObserver;
+import com.topface.topface.billing.ResponseHandler;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.profile.BlackListActivity;
 import com.topface.topface.utils.CacheProfile;
 
-public class VipBuyFragment extends BaseFragment {
+import static android.view.View.OnClickListener;
+
+public class VipBuyFragment extends BaseFragment implements OnClickListener {
 
     EditSwitcher mInvisSwitcher;
     EditSwitcher mBgSwitcher;
 
     ProgressBar mInvisLoadBar;
+    private BillingService mBillingService;
+
+    public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
+
+    /*
+      * class NotificationReceiver
+      */
+    public BroadcastReceiver mPurchaseReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BROADCAST_PURCHASE_ACTION) && CacheProfile.premium) {
+                Intent i = new Intent(getActivity(), NavigationActivity.class);
+                i.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE);
+                getActivity().startActivity(i);
+            }
+        }
+    };
 
     // В этот метод потом можно будет передать аргументы,
     // чтобы потом установить их с помощью setArguments();
     public static VipBuyFragment newInstance() {
         return new VipBuyFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ResponseHandler.register(new VipPurchaseObserver(new Handler()));
+
+        mBillingService = new BillingService();
+        mBillingService.setContext(getActivity());
+
+        if (!mBillingService.checkBillingSupported(Consts.ITEM_TYPE_INAPP)) {
+            Toast.makeText(getActivity(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().registerReceiver(mPurchaseReceiver, new IntentFilter(BROADCAST_PURCHASE_ACTION));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().unregisterReceiver(mPurchaseReceiver);
+    }
+
+    @Override
+    public void onDestroy() {
+        mBillingService.unbind();
+        super.onDestroy();
     }
 
     @Override
@@ -48,26 +106,15 @@ public class VipBuyFragment extends BaseFragment {
     }
 
     private void initBuyVipViews(View root) {
-        RelativeLayout btnBuyMonth = (RelativeLayout) root.findViewById(R.id.fbpBuyingMonth);
-        btnBuyMonth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buyPremium();
-            }
-        });
-
-        RelativeLayout btnBuyYear = (RelativeLayout) root.findViewById(R.id.fbpBuyingYear);
-        btnBuyYear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buyPremium();
-            }
-        });
+        root.findViewById(R.id.fbpBuyingMonth)
+                .setOnClickListener(this);
+        root.findViewById(R.id.fbpBuyingYear)
+                .setOnClickListener(this);
     }
 
     private void initEditVipViews(View root) {
         Button editVip = (Button) root.findViewById(R.id.fepVipEdit);
-        editVip.setOnClickListener(new View.OnClickListener() {
+        editVip.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 editPremium();
@@ -80,7 +127,7 @@ public class VipBuyFragment extends BaseFragment {
                         R.drawable.edit_big_btn_top_selector,
                         R.drawable.ic_vip_invisible_min,
                         getString(R.string.vip_invis),
-                        new View.OnClickListener() {
+                        new OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 setVisibility();
@@ -115,7 +162,7 @@ public class VipBuyFragment extends BaseFragment {
                 R.drawable.edit_big_btn_top_selector,
                 R.drawable.ic_vip_blacklist_min,
                 getString(R.string.vip_black_list),
-                new View.OnClickListener() {
+                new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         goToBlackList();
@@ -127,7 +174,7 @@ public class VipBuyFragment extends BaseFragment {
                 R.drawable.edit_big_btn_bottom_selector,
                 R.drawable.ic_vip_profile_bg,
                 getString(R.string.vip_profile_bg),
-                new View.OnClickListener() {
+                new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         goToBgPick();
@@ -135,7 +182,7 @@ public class VipBuyFragment extends BaseFragment {
                 });
     }
 
-    private RelativeLayout initEditItem(View root, int ID, int bgId, int bgLeftId, String text, View.OnClickListener listener) {
+    private RelativeLayout initEditItem(View root, int ID, int bgId, int bgLeftId, String text, OnClickListener listener) {
         RelativeLayout layout = initLayouts(root, ID, bgId, bgLeftId, text);
         layout.setOnClickListener(listener);
         return layout;
@@ -149,9 +196,6 @@ public class VipBuyFragment extends BaseFragment {
         layout.setBackgroundResource(bgId);
         layoutText.setCompoundDrawablesWithIntrinsicBounds(bgLeftId, 0, 0, 0);
         return layout;
-    }
-
-    private void buyPremium() {
     }
 
     private void editPremium() {
@@ -212,5 +256,41 @@ public class VipBuyFragment extends BaseFragment {
         Intent intent = new Intent(getActivity(), EditContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, EditContainerActivity.INTENT_EDIT_BACKGROUND);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        //Подписки на премиумы
+        switch (v.getId()) {
+            case R.id.fbpBuyingMonth:
+                mBillingService.requestPurchase("topface.premium.month.1", Consts.ITEM_TYPE_SUBSCRIPTION, null);
+                break;
+
+            case R.id.fbpBuyingYear:
+                mBillingService.requestPurchase("topface.premium.year.1", Consts.ITEM_TYPE_SUBSCRIPTION, null);
+//              mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_SUBSCRIPTION, null); //topface.premium.month.test
+                break;
+
+        }
+    }
+
+    private class VipPurchaseObserver extends PurchaseObserver {
+        public VipPurchaseObserver(Handler handler) {
+            super(getActivity(), handler);
+        }
+
+        @Override
+        public void onBillingSupported(boolean supported, String type) {
+
+        }
+
+        @Override
+        public void onPurchaseStateChange(Consts.PurchaseState purchaseState, String itemId, int quantity, long purchaseTime, String developerPayload, String signedData, String signature) {}
+
+        @Override
+        public void onRequestPurchaseResponse(BillingService.RequestPurchase request, Consts.ResponseCode responseCode) {}
+
+        @Override
+        public void onRestoreTransactionsResponse(BillingService.RestoreTransactions request, Consts.ResponseCode responseCode) {}
     }
 }

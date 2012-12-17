@@ -120,6 +120,8 @@
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">Пакет из 100 монет</string>
     <string name="buying_100coins">10 USD</string>
+    <string name="buying_pack_300coins">Пакет из 300 монет</string>
+    <string name="buying_300coins">25 USD</string>
 
     <!-- Profile  -->
     <string name="profile_header_title">Мой профиль</string>
@@ -300,8 +302,6 @@
     <string name="edit_refresh_status">Обновить статус</string>
 
     <string name="ban_title">Поздравляем! Вы забанены</string>
-    <string name="buy_play_market_not_available">Play Market not available</string>
-    <string name="buy_subscription_not_available">Subscription not available</string>
     <string name="general_ready">Готово</string>
     <string name="profile_deleted_user">Пользователь удален</string>
     <string name="filter_main_parameters">Мне интересны</string>
@@ -355,4 +355,8 @@
     <string name="black_list_retrieve">Восстановить</string>
     <string name="buying_vip_status">Купить VIP статус</string>
     <string name="buying_vip_info">Для доступа к гостям необходимо иметь VIP статус</string>
+
+    <string name="buy_play_market_not_available">Play Market не доступен</string>
+    <string name="buy_subscription_not_available">Подписки не доступны</string>
+
 </resources>

@@ -32,7 +32,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
     private ViewGroup mMoney6;
     private ViewGroup mMoney40;
     private ViewGroup mMoney100;
-    private ViewGroup mPremium;
+    private ViewGroup mMoney300;
     private ViewGroup mPower;
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
@@ -113,9 +113,6 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         mPower = (ViewGroup) findViewById(R.id.btnBuyingPower);
         mPower.setOnClickListener(this);
 
-        mPremium = (ViewGroup) findViewById(R.id.btnPremium);
-        mPremium.setOnClickListener(this);
-
         mMoney6 = (ViewGroup) findViewById(R.id.btnBuyingMoney6);
         mMoney6.setOnClickListener(this);
 
@@ -124,6 +121,9 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
 
         mMoney100 = (ViewGroup) findViewById(R.id.btnBuyingMoney100);
         mMoney100.setOnClickListener(this);
+
+        mMoney300 = (ViewGroup) findViewById(R.id.btnBuyingMoney300);
+        mMoney300.setOnClickListener(this);
 
         mBillingService = new BillingService();
         mBillingService.setContext(this);
@@ -157,10 +157,6 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btnPremium:
-                mBillingService.requestPurchase("topface.premium.month.test3", Consts.ITEM_TYPE_SUBSCRIPTION, null); //topface.premium.month.test
-//                mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_SUBSCRIPTION, null); //topface.premium.month.test
-                break;
             case R.id.btnBuyingMoney6:
                 mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_INAPP, null); // topface.coins.6
                 // //
@@ -173,6 +169,10 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btnBuyingMoney100:
                 mBillingService.requestPurchase("topface.coins.100", Consts.ITEM_TYPE_INAPP, null); // topface.coins.100
+                // //android.test.refunded
+                break;
+            case R.id.btnBuyingMoney300:
+                mBillingService.requestPurchase("topface.coins.300", Consts.ITEM_TYPE_INAPP, null); // topface.coins.300
                 // //android.test.refunded
                 break;
             case R.id.btnBuyingPower:
@@ -196,19 +196,16 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
                     mMoney6.setEnabled(true);
                     mMoney40.setEnabled(true);
                     mMoney100.setEnabled(true);
+                    mMoney300.setEnabled(true);
                     mPower.setEnabled(true);
                 } else {
                     mMoney6.setEnabled(false);
                     mMoney40.setEnabled(false);
                     mMoney100.setEnabled(false);
+                    mMoney300.setEnabled(false);
                     mPower.setEnabled(false);
                     Toast.makeText(getApplicationContext(), getString(R.string.buy_play_market_not_available), Toast.LENGTH_SHORT).show();
                 }
-            } else if (type.equals(Consts.ITEM_TYPE_SUBSCRIPTION)) {
-                mPremium.setEnabled(true);
-            } else {
-                mPremium.setEnabled(false);
-                Toast.makeText(getApplicationContext(), getString(R.string.buy_subscription_not_available), Toast.LENGTH_SHORT).show();
             }
         }
 

@@ -4,7 +4,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Novice;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -66,7 +65,7 @@ public class Options extends AbstractData {
         Options options = new Options();
 
         try {
-            Novice.giveNovicePower = response.jsonResult.optBoolean("novice_power",true);
+            Novice.giveNovicePower = response.jsonResult.optBoolean("novice_power", true);
             options.price_highrate = response.jsonResult.optInt("price_highrate");
             options.price_leader = response.jsonResult.optInt("price_leader");
             // Pages initialization
