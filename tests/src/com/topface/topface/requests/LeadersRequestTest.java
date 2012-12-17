@@ -22,7 +22,7 @@ public class LeadersRequestTest extends AbstractThreadTest {
         new LeadersRequest(getInstrumentation().getContext())
                 .callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) throws NullPointerException {
+                    public void success(ApiResponse response) {
                         FeedUserListData<Leader> leaders = new FeedUserListData<Leader>(response.jsonResult, Leader.class);
                         assertNotNull("Leaders result is null", leaders);
                         assertTrue("Leaders result is empty", leaders.size() > 0);
@@ -39,7 +39,7 @@ public class LeadersRequestTest extends AbstractThreadTest {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    public void fail(int codeError, ApiResponse response) {
                         assertTrue("Request exec fail: " + codeError, false);
                         stopTest("testLeadersRequestExec");
                     }

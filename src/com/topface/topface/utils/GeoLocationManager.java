@@ -9,13 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.google.android.maps.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Confirmation;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,7 +60,7 @@ public class GeoLocationManager {
      */
     public LocationProviderType availableLocationProvider() {
         boolean gpsEnabled = false;
-        boolean networkEnabled = false;
+        boolean networkEnabled;
 
         //GPS
         try {
@@ -92,7 +88,7 @@ public class GeoLocationManager {
     }
 
     public boolean availableLocationProvider(LocationProviderType type) {
-        String provider = null;
+        String provider;
 
         switch (type) {
             case GPS:
@@ -122,10 +118,8 @@ public class GeoLocationManager {
                 break;
         }
 
-        if (mLocationManager.isProviderEnabled(internalType))
-            return true;
+        return mLocationManager.isProviderEnabled(internalType);
 
-        return false;
     }
 
     /**
@@ -369,27 +363,4 @@ public class GeoLocationManager {
         }
     }
 
-    public static class SendCoordinatesHandler extends ApiHandler {
-
-        private Context mContext;
-
-        public SendCoordinatesHandler(Context context) {
-            mContext = context;
-        }
-
-        @Override
-        public void success(ApiResponse response) throws NullPointerException {
-            final Confirmation confirm = Confirmation.parse(response);
-            if (!confirm.completed) {
-                Toast.makeText(mContext, R.string.general_server_error, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void fail(int codeError, ApiResponse response)
-                throws NullPointerException {
-            Toast.makeText(mContext, R.string.general_server_error, Toast.LENGTH_SHORT).show();
-        }
-
-    }
 }

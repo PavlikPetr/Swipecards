@@ -17,8 +17,8 @@ public class FeedGiftsRequest extends AbstractApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-    	JSONObject result = new JSONObject().put("limit", limit).put("userid", uid);
-    	if (from != -1) result.put("from", from);    	
+        JSONObject result = new JSONObject().put("limit", limit).put("userid", uid);
+        if (from != -1) result.put("from", from);
         return result;
     }
 

@@ -57,18 +57,19 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         }
         sendBroadCastToActiveActivity(ctx);
     }
+
     //TODO: Следующие два метода наверно можно объединить в один
     private void reAuthIfNeed() {
         Intent intent = new Intent();
         intent.setAction(REAUTH);
-        intent.putExtra(CONNECTION_TYPE,mConnectionType);
+        intent.putExtra(CONNECTION_TYPE, mConnectionType);
         LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
     }
 
     private void sendToNavigation() {
         Intent intent = new Intent();
         intent.setAction(RetryRequestReceiver.RETRY_INTENT);
-        intent.putExtra(CONNECTION_TYPE,mConnectionType);
+        intent.putExtra(CONNECTION_TYPE, mConnectionType);
         LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
     }
 

@@ -39,11 +39,14 @@ public abstract class ApiRequest {
 
     public ApiRequest callback(ApiHandler handler) {
         this.handler = handler;
+        this.handler.setContext(context);
         return this;
     }
 
     public void exec() {
         setStopTime();
+        setHandler();
+
         if (!Http.isOnline(context) && doNeedAlert) {
             RetryDialog retryDialog = new RetryDialog(context);
             retryDialog.setMessage(context.getString(R.string.general_internet_off));
@@ -62,7 +65,7 @@ public abstract class ApiRequest {
             });
             handler.fail(0, new ApiResponse(""));
             retryDialog.show();
-        } else if((!Data.isSSID() || (new AuthToken(context)).isEmpty()) && doNeedAuthorize) {
+        } else if ((!Data.isSSID() || (new AuthToken(context)).isEmpty()) && doNeedAuthorize) {
             if (!AuthActivity.isStarted()) {
                 Debug.log("SSID and Token is empty, need authorize");
                 context.startActivity(new Intent(context, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
@@ -71,6 +74,19 @@ public abstract class ApiRequest {
             connection = ConnectionManager.getInstance().sendRequest(this);
         }
 
+    }
+
+    private void setHandler() {
+        if (handler == null) {
+            handler = new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) {}
+
+                @Override
+                public void fail(int codeError, ApiResponse response) {}
+            };
+            handler.setContext(context);
+        }
     }
 
     protected void doNeedAlert(boolean value) {
@@ -86,12 +102,13 @@ public abstract class ApiRequest {
         if (connection != null) {
             connection.abort();
         }
+        connection = null;
         canceled = true;
     }
 
     private void setStopTime() {
         SharedPreferences mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        if(mPreferences != null) {
+        if (mPreferences != null) {
             long stopTime = Calendar.getInstance().getTimeInMillis();
             mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
         }
@@ -104,4 +121,9 @@ public abstract class ApiRequest {
     public void setNeedResend(boolean value) {
         doNeedResend = value;
     }
+
+    public boolean isCanceled() {
+        return canceled;
+    }
+
 }

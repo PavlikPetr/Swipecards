@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                style="@style/HeaderBar">
+
+    <ImageButton
+            android:id="@+id/btnNavigationBack"
+            style="@style/BackButton"/>
+
+    <TextView
+            android:id="@+id/tvHeaderTitle"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
+    <Button
+            android:id="@+id/btnEditList"
+            style="@style/ButtonsText"
+            android:text="@string/general_edit_button"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/navigation_edit_selector"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:maxWidth="50dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:scrollHorizontally="true"
+            android:layout_centerVertical="true"
+            android:singleLine="true"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginRight="5dp"
+            android:visibility="gone"/>
+
+</RelativeLayout>

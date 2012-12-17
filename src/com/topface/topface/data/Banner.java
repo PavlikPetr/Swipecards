@@ -25,7 +25,7 @@ public class Banner extends AbstractData {
             banner.action = item.optString("action");
             banner.parameter = item.optString("parameter");
         } catch (Exception e) {
-            Debug.log("Banner.class", "Wrong response parsing: " + e);
+            Debug.error("Banner.class: Wrong response parsing", e);
         }
 
         return banner;

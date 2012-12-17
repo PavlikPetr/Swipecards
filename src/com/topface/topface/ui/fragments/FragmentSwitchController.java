@@ -143,7 +143,7 @@ public class FragmentSwitchController extends ViewGroup {
         return (mExtraFrame.getVisibility() == View.VISIBLE);
     }
 
-    public BaseFragment getmCurrentFragment () {
+    public BaseFragment getmCurrentFragment() {
         return mCurrentFragment;
     }
 

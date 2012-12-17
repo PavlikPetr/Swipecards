@@ -23,7 +23,7 @@ public class Verify extends Confirmation {
             verify.power = (int) (power * 0.01);
             verify.order = response.jsonResult.optString("order");
         } catch (Exception e) {
-            Debug.log("Verify.class", "Wrong response parsing: " + e);
+            Debug.error("Verify.class: Wrong response parsing", e);
         }
 
         return verify;

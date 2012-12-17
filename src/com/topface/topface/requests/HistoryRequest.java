@@ -27,8 +27,8 @@ public class HistoryRequest extends AbstractApiRequest {
         if (from > 0) {
             data.put("from", from);
         }
-        if(debug != null) {
-            data.put("debug",debug);
+        if (debug != null) {
+            data.put("debug", debug);
         }
         return data;
     }

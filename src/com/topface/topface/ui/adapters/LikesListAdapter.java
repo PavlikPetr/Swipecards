@@ -112,13 +112,14 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
     public void setSelectedForMutual(int position) {
         if (position != -1) {
-        	if (getItem(position) instanceof FeedLike) {
-	            if (!getItem(position).mutualed) {
-	                mPrevSelectedForMutual = mSelectedForMutual;
-	                mSelectedForMutual = position;
-	                notifyDataSetChanged();
-	            }
-        	}
+            //noinspection ConstantConditions
+            if (getItem(position) instanceof FeedLike) {
+                if (!getItem(position).mutualed) {
+                    mPrevSelectedForMutual = mSelectedForMutual;
+                    mSelectedForMutual = position;
+                    notifyDataSetChanged();
+                }
+            }
         } else {
             mPrevSelectedForMutual = mSelectedForMutual;
             mSelectedForMutual = position;
@@ -156,6 +157,6 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
     public void setOnMutualListener(OnMutualListener listener) {
         mMutualListener = listener;
-    }	
+    }
 
 }

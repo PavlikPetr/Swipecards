@@ -13,7 +13,7 @@ public class FeedGift extends FeedItem {
     public FeedGift(JSONObject data) {
         super(data);
     }
-    
+
     public FeedGift() {
         super((JSONObject) null);
     }

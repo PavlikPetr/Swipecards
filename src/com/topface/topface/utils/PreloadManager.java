@@ -24,21 +24,21 @@ public class PreloadManager {
     }
 
     public PreloadManager(Context mContext) {
-        this(0,0,mContext);
+        this(0, 0, mContext);
     }
 
-    public void preloadPhoto (LinkedList<SearchUser> userList, int position) {
-        if(position < userList.size()) {
+    public void preloadPhoto(LinkedList<SearchUser> userList, int position) {
+        if (position < userList.size()) {
             preloadNextPhoto(userList.get(position).photos.getFirst());
         }
     }
 
-    public void preloadPhoto (SearchUser currentUser,int position) {
+    public void preloadPhoto(SearchUser currentUser, int position) {
         preloadNextPhoto(currentUser.photos.get(position));
     }
 
-    public void preloadPhoto (Photos photos,int position) {
-        if(position<photos.size()) {
+    public void preloadPhoto(Photos photos, int position) {
+        if (position < photos.size()) {
             preloadNextPhoto(photos.get(position));
         }
     }
@@ -63,7 +63,7 @@ public class PreloadManager {
     }
 
     public void checkConnectionType(int type) {
-        switch(type) {
+        switch (type) {
             case ConnectionChangeReceiver.CONNECTION_WIFI:
                 canLoad = true;
                 break;

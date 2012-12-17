@@ -277,7 +277,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 request.callback(new ApiHandler() {
 
                     @Override
-                    public void success(ApiResponse response) throws NullPointerException {
+                    public void success(ApiResponse response) {
                         buttonView.post(new Runnable() {
 
                             @Override
@@ -290,7 +290,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    public void fail(int codeError, ApiResponse response) {
                         //TODO: Здесь нужно что-то делать, чтобы пользователь понял, что у него не получилось отменить нотификации.
                         buttonView.post(new Runnable() {
 

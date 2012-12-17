@@ -326,4 +326,28 @@
     <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services">Услуги</string>
 
+    <string name="black_list_title">Черный список</string>
+    <string name="black_list_empty">Ваш черный список пуст</string>
+    <string name="black_list_add">Добавить в черный список</string>
+    <string name="black_list_delete">Удалить из черного списка</string>
+
+    <string name="vip_invisible_mode">Режим невидимки</string>
+    <string name="buying_profile_coins">На вашем счете</string>
+    <string name="buying_profile_energy">Запас энергии</string>
+    <string name="buying_buy_resources">Купить монет, пополнить запас энергии</string>
+    <string name="profile_services">Услуги</string>
+
+    <string name="black_list_title">Черный список</string>
+    <string name="black_list_empty">Ваш черный список пуст</string>
+
+    <string name="vip_buy_vip">Покупка VIP</string>
+    <string name="vip_state_off">Ваш VIP-статус не активирован</string>
+    <string name="vip_info_delight">Отправляйте восхищения бесплатно - вражайте свои чувства по максимуму!</string>
+    <string name="vip_info_guest">Узнайте, кто вами интересовался - смотрите своих гостей!</string>
+    <string name="vip_info_invisible">Оставайтесь незамеченными, посещая чужие страницы, благодаря режиму \"невидимка\"</string>
+    <string name="vip_info_message">Получите преимущество - ваши сообщения будут выделяться на общем фоне!</string>
+    <string name="vip_info_gift">Выбирайте эксклюзивные VIP-подарки, и вас обязательно запомнят!</string>
+    <string name="vip_info_blackList">Избавляйтесь от надоевших персон с помощью \"черного списка\"</string>
+    <string name="vip_info_vip">Выделяйтесь с помощью своего VIP-статуса в поиске и своем профиле!</string>
+    <string name="vip_info_title">VIP-привилегии</string>
 </resources>

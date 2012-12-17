@@ -92,7 +92,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
             request.callback(new ApiHandler() {
 
                 @Override
-                public void success(ApiResponse response) throws NullPointerException {
+                public void success(ApiResponse response) {
                     CacheProfile.background_id = mSelectedId;
                     getActivity().setResult(Activity.RESULT_OK);
                     finishRequestSend();
@@ -100,7 +100,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                public void fail(int codeError, ApiResponse response) {
                     finishRequestSend();
                 }
             }).exec();

@@ -36,7 +36,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected LikesListAdapter getAdapter() {
+    protected LikesListAdapter getNewAdapter() {
         LikesListAdapter adapter = new LikesListAdapter(getActivity(), getUpdaterCallback());
         adapter.setOnMutualListener(new OnMutualListener() {
 
@@ -83,20 +83,20 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                             public void onTap(int position) {
                                 FeedItem item = (FeedItem) mListView.getRefreshableView().getItemAtPosition(position);
                                 if (item != null) {
-	                                if (!mIsUpdating && item.isLoaderRetry()) {
-	                                    updateUI(new Runnable() {
-	                                        public void run() {
-	                                            mListAdapter.showLoaderItem();
-	                                        }
-	                                    });
-	                                    updateData(false, true);
-	                                } else {
-	                                    try {
-	                                        onFeedItemClick(item);
-	                                    } catch (Exception e) {
-	                                        Debug.error("FeedItem click error:", e);
-	                                    }
-	                                }
+                                    if (!mIsUpdating && item.isLoaderRetry()) {
+                                        updateUI(new Runnable() {
+                                            public void run() {
+                                                mListAdapter.showLoaderItem();
+                                            }
+                                        });
+                                        updateData(false, true);
+                                    } else {
+                                        try {
+                                            onFeedItemClick(item);
+                                        } catch (Exception e) {
+                                            Debug.error("FeedItem click error:", e);
+                                        }
+                                    }
                                 }
                             }
                         })

@@ -69,6 +69,7 @@ import java.util.zip.GZIPOutputStream;
  * context.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
  * </pre>
  */
+@SuppressWarnings("ALL")
 public final class AndroidHttpClient implements HttpClient {
 
     // Gzip of data shorter than this probably won't be worthwhile
@@ -433,7 +434,7 @@ public final class AndroidHttpClient implements HttpClient {
 
     private static boolean isBinaryContent(HttpUriRequest request) {
         Header[] headers;
-        headers = request.getHeaders(Headers.CONTENT_ENCODING);
+        headers = request.getHeaders("content-encoding");
         if (headers != null) {
             for (Header header : headers) {
                 if ("gzip".equalsIgnoreCase(header.getValue())) {
@@ -442,7 +443,7 @@ public final class AndroidHttpClient implements HttpClient {
             }
         }
 
-        headers = request.getHeaders(Headers.CONTENT_TYPE);
+        headers = request.getHeaders("content-type");
         if (headers != null) {
             for (Header header : headers) {
                 for (String contentType : textContentTypes) {

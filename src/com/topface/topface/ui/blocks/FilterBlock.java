@@ -19,7 +19,9 @@ public class FilterBlock {
         mControlGroup = rootView.findViewById(controlGroupId);
         mShowToolsBarButton = rootView.findViewById(showToolsBarButton);
         mToolsBar = rootView.findViewById(toolsBar);
-        initFilter();
+        if (mControlGroup != null && mShowToolsBarButton != null && mToolsBar != null) {
+            initFilter();
+        }
     }
 
     protected void initFilter() {

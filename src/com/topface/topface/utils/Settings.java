@@ -118,7 +118,7 @@ public class Settings {
      * Нужно ли в данный момент запускать предзагрузку фотографии следующего пользователя
      *
      * @return начинать ли предзагрузку
-     */    
+     */
     public boolean isPreloadUser() {
         return isPreloadingEnabled(mContext.getString(R.string.settings_preloading_type_user));
     }
@@ -146,7 +146,7 @@ public class Settings {
     public void resetSettings() {
         setSocialAccountName(Static.EMPTY);
     }
-        
+
     public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
         Options options = CacheProfile.getOptions();
         SendMailNotificationsRequest request = getMailNotificationRequest(context);

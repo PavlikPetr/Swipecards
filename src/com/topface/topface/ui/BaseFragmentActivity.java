@@ -12,8 +12,8 @@ import java.util.LinkedList;
 
 public class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
-	public static final String INTENT_PREV_ENTITY = "prev_entity";
-	
+    public static final String INTENT_PREV_ENTITY = "prev_entity";
+
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
     @Override

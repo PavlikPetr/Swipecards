@@ -22,7 +22,7 @@ public class SkipRate extends Confirmation {
             skip.power = (int) (skip.power * 0.01);
             skip.completed = response.jsonResult.optBoolean("completed");
         } catch (Exception e) {
-            Debug.log("SkipRate.class", "Wrong response parsing: " + e);
+            Debug.error("SkipRate.class: Wrong response parsing", e);
         }
 
         return skip;

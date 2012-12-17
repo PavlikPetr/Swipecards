@@ -30,7 +30,7 @@ public class FeedUser extends AbstractData {
     /**
      * Объект основного фото пользователя
      */
-    public Photo photo;    
+    public Photo photo;
 
     public boolean premium;
 
@@ -44,7 +44,7 @@ public class FeedUser extends AbstractData {
         this.age = user.optInt("age");
         this.online = user.optBoolean("online");
         this.city = new City(user.optJSONObject("city"));
-        this.photo = new Photo(user.optJSONObject("photo"));        
+        this.photo = new Photo(user.optJSONObject("photo"));
         this.sex = user.optInt("sex");
         this.premium = user.optBoolean("premium");
     }

@@ -66,9 +66,7 @@ public class ChatListAdapter extends BaseAdapter {
     private static final int T_COUNT = 13;
 
 
-
     ChatActivity.OnListViewItemLongClickListener mLongClickListener;
-
 
 
     public ChatListAdapter(Context context, LinkedList<History> dataList) {
@@ -81,7 +79,7 @@ public class ChatListAdapter extends BaseAdapter {
         prepare(dataList, true);
     }
 
-    public void setOnItemLongClickListener (ChatActivity.OnListViewItemLongClickListener l) {
+    public void setOnItemLongClickListener(ChatActivity.OnListViewItemLongClickListener l) {
         mLongClickListener = l;
     }
 
@@ -96,7 +94,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     @Override
     public History getItem(int position) {
-        return mDataList.hasItem(position)? mDataList.get(position) : null;
+        return mDataList.hasItem(position) ? mDataList.get(position) : null;
     }
 
     @Override
@@ -354,7 +352,7 @@ public class ChatListAdapter extends BaseAdapter {
 
         holder.date.setText(dateFormat.format(history.created));
         // Utils.formatTime(holder.date, msg.created);
-        if (holder.message != null && convertView!=null) {
+        if (holder.message != null && convertView != null) {
             convertView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -449,25 +447,25 @@ public class ChatListAdapter extends BaseAdapter {
         long day = 1000 * 60 * 60 * 24;
         long numb = Data.midnight - day * 5;
 
-        if (mDataList != null ) {
-            if(doNeedClear) {
-        	    mDataList.clear();
+        if (mDataList != null) {
+            if (doNeedClear) {
+                mDataList.clear();
             }
         } else {
-        	mDataList = new FeedList<History>();
+            mDataList = new FeedList<History>();
         }
-        if(doNeedClear) {
+        if (doNeedClear) {
             mItemLayoutList.clear();
         }
 
         int prev_target = -1;
         long prev_date = 0;
-        if(!doNeedClear && mDataList.size() != 0) {
-            if(mDataList.getLast() != null) {
+        if (!doNeedClear && mDataList.size() != 0) {
+            if (mDataList.getLast() != null) {
                 prev_date = mDataList.getLast().created;
-                if(prev_date >Data.midnight) {
+                if (prev_date > Data.midnight) {
                     prev_date = Data.midnight;
-                } else if(prev_date > Data.midnight - day) {
+                } else if (prev_date > Data.midnight - day) {
                     prev_date = Data.midnight - day;
                 } else if (prev_date > Data.midnight - day * 2) {
                     prev_date = Data.midnight - day * 2;
@@ -661,26 +659,26 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     private void removeAtPosition(int position) {
-        for(int i=position;i<mDataList.size()-1;i++) {
-            mDataList.set(i,mDataList.get(i+1));
+        for (int i = position; i < mDataList.size() - 1; i++) {
+            mDataList.set(i, mDataList.get(i + 1));
         }
-        mDataList.remove(mDataList.size()-1);
-        for(int i=position;i<mItemLayoutList.size()-1;i++) {
-            mItemLayoutList.set(i,mItemLayoutList.get(i+1));
+        mDataList.remove(mDataList.size() - 1);
+        for (int i = position; i < mItemLayoutList.size() - 1; i++) {
+            mItemLayoutList.set(i, mItemLayoutList.get(i + 1));
         }
-        mItemLayoutList.remove(mItemLayoutList.size()-1);
+        mItemLayoutList.remove(mItemLayoutList.size() - 1);
     }
 
     @SuppressWarnings("unchecked")
-	public LinkedList<History> getDataCopy() {
+    public LinkedList<History> getDataCopy() {
         //noinspection unchecked
-    	LinkedList<History> dataClone = (LinkedList<History>) mDataList.clone(); 
-    	Collections.reverse(dataClone);
+        LinkedList<History> dataClone = (LinkedList<History>) mDataList.clone();
+        Collections.reverse(dataClone);
         return dataClone;
 
     }
 
     public void addAll(LinkedList<History> dataList) {
-        prepare(dataList,false);
+        prepare(dataList, false);
     }
 }
