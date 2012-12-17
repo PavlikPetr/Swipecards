@@ -350,4 +350,7 @@
     <string name="vip_info_blackList">Избавляйтесь от надоевших персон с помощью \"черного списка\"</string>
     <string name="vip_info_vip">Выделяйтесь с помощью своего VIP-статуса в поиске и своем профиле!</string>
     <string name="vip_info_title">VIP-привилегии</string>
+    <string name="black_list_retrieve">Восстановить</string>
+    <string name="buying_vip_status">Купить VIP статус</string>
+    <string name="buying_vip_info">Для доступа к гостям необходимо иметь VIP статус</string>
 </resources>
