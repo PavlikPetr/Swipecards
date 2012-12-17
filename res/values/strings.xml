@@ -219,6 +219,8 @@
     <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
     <string name="dashbrd_popup_rate">Yes, I would rate</string>
     <string name="dashbrd_popup_later">Ask later</string>
+    <string name="buy_play_market_not_available">Play Market not available</string>
+    <string name="buy_subscription_not_available">Subscription not available</string>
     <string name="buying_store_connect">Connecting to the iTunes Store</string>
     <string name="buying_store_purchase">Processing the purchase</string>
     <string name="buying_tf_ack_sending">Sending purchase info to the Topface</string>

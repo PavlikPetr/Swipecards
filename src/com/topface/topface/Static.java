@@ -26,7 +26,6 @@ public class Static {
     public static final String AUTH_VK_ID = "2664589";
     public static final String INTENT_REQUEST_KEY = "requestCode";
     public static final String AUTH_FACEBOOK_ID = "161347997227885";
-    public static final String EXTERANAL_CACHE_DIR = "Android/data/com.topface.topface/cache/";
     // Preferences
     public static final String PREFERENCES_SSID = "ssid";
     public static final String PREFERENCES_TAG_SHARED = "preferences_general";

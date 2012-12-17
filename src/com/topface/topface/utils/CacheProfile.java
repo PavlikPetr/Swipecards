@@ -60,6 +60,7 @@ public class CacheProfile {
     public static final String OPTIONS_CACHE_KEY = "options_cache";
 
     public static LinkedList<Gift> gifts = new LinkedList<Gift>();
+    public static boolean premium;
     public static HashMap<Integer, Profile.TopfaceNotifications> notifications;
     public static boolean hasMail;
 
