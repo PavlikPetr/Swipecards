@@ -222,6 +222,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         if (mProfileType == TYPE_MY_PROFILE) {
             addBodyPage(VipBuyFragment.class.getName(),
                 getResources().getString(R.string.profile_vip_status));
+            addBodyPage(ServicesFragment.class.getName(),getResources().getString(R.string.profile_services));
         }
         addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
 
@@ -350,7 +351,6 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
                     Class fragmentClass = Class.forName(fragmentClassName);
                     fragment = (Fragment) fragmentClass.newInstance();
                 }
-
                 //save variables for setting user data
                 if (fragment instanceof HeaderMainFragment) {
                     mHeaderMainFragment = (HeaderMainFragment) fragment;

@@ -1,0 +1,168 @@
+package com.topface.topface.ui.views;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.*;
+import android.util.AttributeSet;
+import android.view.View;
+import android.widget.TextView;
+import com.topface.topface.R;
+import com.topface.topface.utils.Debug;
+
+public class ServicesTextView extends View {
+
+    private int mMaxChars;
+    private int mCharPadding;
+    private String text;
+    private int textSize;
+    private String textWithoutBackround;
+    private int imageId;
+
+    private String color = "#B8B8B8"; //TODO: сделать это как параметр view
+
+    private Bitmap mBackgroundFree;
+    private Bitmap mBackgroundFull;
+    private Bitmap mImageBitmap;
+
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    public ServicesTextView(Context context) {
+        super(context);
+        mMaxChars = 1;
+        mCharPadding = 0;
+        initBitmaps();
+    }
+
+    public ServicesTextView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        TypedArray allAttrs = context.getTheme().obtainStyledAttributes(attrs,
+                R.styleable.ServicesTextView,
+                0,0);
+
+        try {
+            mMaxChars = allAttrs.getInteger(R.styleable.ServicesTextView_maxChars,0);
+            mCharPadding = allAttrs.getInteger(R.styleable.ServicesTextView_charPadding,5);
+            setText(allAttrs.getString(R.styleable.ServicesTextView_text));
+            setTextSize(allAttrs.getInteger(R.styleable.ServicesTextView_fontSize,12));
+            textWithoutBackround = allAttrs.getString(R.styleable.ServicesTextView_textWithoutBackground);
+            imageId = allAttrs.getResourceId(R.styleable.ServicesTextView_image,0);
+            initBitmaps();
+        } finally {
+            allAttrs.recycle();
+        }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int additionalChars = 0;
+        int addWidth = 0;
+        int height = mBackgroundFree.getHeight();
+        if(textWithoutBackround != null) {
+            additionalChars ++;
+        }
+        if(mImageBitmap != null) {
+            addWidth = mImageBitmap.getWidth();
+            if(mImageBitmap.getHeight() > height) {
+                height = mImageBitmap.getHeight();
+            }
+        }
+
+
+        setMeasuredDimension(mBackgroundFree.getWidth() * (mMaxChars + additionalChars) + addWidth + mCharPadding, height);
+    }
+
+    private void initBitmaps() {
+        int textHeight = getTextHeight();
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeResource(getResources(), R.drawable.ic_cell_counter_free, options);
+
+        options.inSampleSize = (int)(options.outHeight/textHeight);
+        options.inJustDecodeBounds = false;
+
+        int outWidth = options.outWidth;
+        int outHeight = options.outHeight;
+
+        mBackgroundFree = BitmapFactory.decodeResource(getResources(),R.drawable.ic_cell_counter_free,options);
+        mBackgroundFull = BitmapFactory.decodeResource(getResources(),R.drawable.ic_cell_counter_full,options);
+
+        mBackgroundFree = Bitmap.createScaledBitmap(mBackgroundFree, outWidth/options.inSampleSize, outHeight/options.inSampleSize, false);
+        mBackgroundFull = Bitmap.createScaledBitmap(mBackgroundFull, outWidth/options.inSampleSize, outHeight/options.inSampleSize, false);
+
+        if(imageId != 0) {
+            mImageBitmap = BitmapFactory.decodeResource(getResources(), imageId);
+            mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, mImageBitmap.getWidth()/options.inSampleSize, mImageBitmap.getHeight()/options.inSampleSize, false);
+        }
+
+    }
+
+    private int getTextHeight() {
+        paint.setAntiAlias(true);
+        paint.setColor(Color.parseColor(color));
+        paint.setTextSize(textSize);
+        paint.setFakeBoldText(true);
+        paint.setStyle(Paint.Style.FILL);
+        Rect bounds = new Rect();
+        paint.getTextBounds("A",0,1,bounds);
+        return bounds.height() + 2 * mCharPadding;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        int currentSymbol = 0;
+        for (int i = 0; i < mMaxChars; i++) {
+            int padding = 0;//(i==0)? 0 : mCharPadding;
+            if(i < mMaxChars - text.length()) {
+                canvas.drawBitmap(mBackgroundFree, i*mBackgroundFree.getWidth() + padding, 0, paint);
+            } else {
+                canvas.drawBitmap(mBackgroundFull, i*mBackgroundFull.getWidth() + padding, 0, paint);
+                paint.setAntiAlias(true);
+                paint.setColor(Color.parseColor(color));
+                paint.setTextSize(textSize);
+                paint.setStyle(Paint.Style.FILL);
+                canvas.drawText(String.valueOf(text.charAt(currentSymbol)), i * mBackgroundFull.getWidth() + mCharPadding, textSize, paint);
+                currentSymbol++;
+            }
+
+
+        }
+        if(textWithoutBackround != null) {
+            paint.setAntiAlias(true);
+            paint.setColor(Color.parseColor(color));
+            paint.setTextSize(textSize);
+            paint.setFakeBoldText(true);
+            paint.setStyle(Paint.Style.FILL);
+            canvas.drawText(textWithoutBackround, mMaxChars * mBackgroundFull.getWidth() + mCharPadding, textSize, paint);
+        }
+
+        if(imageId != 0) {
+            int left = textWithoutBackround == null? mMaxChars * mBackgroundFull.getWidth() + mCharPadding :(mMaxChars + 1) * mBackgroundFull.getWidth() +mCharPadding;
+            int top = mBackgroundFull.getHeight()/2 - mImageBitmap.getHeight()/2;
+            canvas.drawBitmap(mImageBitmap, left, top, paint);
+        }
+    }
+
+    public void setText(String text) {
+        if(text == null) {
+            this.text = "0";
+        } else if(text.length() <= mMaxChars) {
+            this.text = text;
+        } else {
+            this.text = "";
+            for(int i=0; i < mMaxChars; i++) {
+                this.text += "9";
+            }
+            if(textWithoutBackround == null) {
+                textWithoutBackround = "+";
+            }
+        }
+    }
+
+    public void setTextSize(int textSize) {
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        this.textSize = (int)(textSize * scale);
+    }
+}

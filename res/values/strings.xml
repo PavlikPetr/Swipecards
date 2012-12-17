@@ -249,4 +249,7 @@
 
     <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services"></string>
+    <string name="default_balance_constant">На вашем счете</string>
+    <string name="default_energy_balance_constant">Запас энергии</string>
+    <string name="default_energy_coins_buy_btn_text">Купить монет, пополнить запас энергии</string>
 </resources>
