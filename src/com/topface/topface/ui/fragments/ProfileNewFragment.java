@@ -44,6 +44,8 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
     public final static int TYPE_USER_PROFILE = 2;
     private static final String ARG_TAG_PROFILE_TYPE = "profile_type";
     private static final String ARG_TAG_PROFILE_ID = "profile_id";
+    private static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
+    private static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
 
     ArrayList<String> BODY_PAGES_TITLES = new ArrayList<String>();
     ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
@@ -68,8 +70,14 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
     private ViewPager mBodyPager;
     private ProfilePageAdapter mBodyPagerAdapter;
     private ViewPager mHeaderPager;
+    private ProfilePageAdapter mHeaderPagerAdapter;
     private ProfileActionsControl mActionsControl;
     private GiftsFragment mGiftFragment;
+
+    private String mBodyStartPageClassName;
+    private String mHeaderStartPageClassName;
+    private int mStartBodyPage = 0;
+    private int mStartHeaderPage = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,6 +126,18 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             mOnline = (ImageView)root.findViewById(R.id.ivOnline);
         }
 
+        // start pages initialization
+        int startBodyPage = mBodyPagerAdapter.getFragmentIndexByClassName(mBodyStartPageClassName);
+        if (startBodyPage != -1) {
+           mStartBodyPage = startBodyPage;
+        }
+        int startHeaderPage = mHeaderPagerAdapter.getFragmentIndexByClassName(mHeaderStartPageClassName);
+        if (startHeaderPage != -1) {
+            mStartHeaderPage = startHeaderPage;
+        }
+
+        mHeaderPager.setCurrentItem(mStartHeaderPage);
+        mBodyPager.setCurrentItem(mStartBodyPage);
         return root;
     }
 
@@ -193,6 +213,8 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
     private void restoreState() {
         mProfileId = getArguments().getInt(ARG_TAG_PROFILE_ID);
         mProfileType = getArguments().getInt(ARG_TAG_PROFILE_TYPE);
+        mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
+        mHeaderStartPageClassName = getArguments().getString(ARG_TAG_INIT_HEADER_PAGE);
     }
 
     private void initHeaderPages(View root) {
@@ -200,8 +222,8 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         addHeaderPage(HeaderStatusFragment.class.getName());
 
         ViewPager headerPager = (ViewPager)root.findViewById(R.id.vpHeaderFragments);
-        headerPager.setAdapter(new ProfilePageAdapter(getActivity().getSupportFragmentManager(),
-                HEADER_PAGES_CLASS_NAMES));
+        mHeaderPagerAdapter =  new ProfilePageAdapter(getActivity().getSupportFragmentManager(),HEADER_PAGES_CLASS_NAMES);
+        headerPager.setAdapter(mHeaderPagerAdapter);
         //Tabs for header
         CirclePageIndicator circleIndicator = (CirclePageIndicator) root.findViewById(R.id.cpiHeaderTabs);
         circleIndicator.setViewPager(headerPager);
@@ -211,18 +233,17 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
     }
 
     private void initBodyPages(View root) {
-        addBodyPage((mProfileType == TYPE_MY_PROFILE) ?
-                ProfilePhotoFragment.class.getName() : UserPhotoFragment.class.getName(),
-                getResources().getString(R.string.profile_photo));
-        addBodyPage((mProfileType == TYPE_MY_PROFILE) ?
-                ProfileFormFragment.class.getName() : UserFormFragment.class.getName(),
-                getResources().getString(R.string.profile_form));
         if (mProfileType == TYPE_MY_PROFILE) {
-            addBodyPage(VipBuyFragment.class.getName(),
-                getResources().getString(R.string.profile_vip_status));
+            addBodyPage(ProfilePhotoFragment.class.getName(),getResources().getString(R.string.profile_photo));
+            addBodyPage(ProfileFormFragment.class.getName(),getResources().getString(R.string.profile_form));
+            addBodyPage(VipBuyFragment.class.getName(),getResources().getString(R.string.profile_vip_status));
             addBodyPage(ServicesFragment.class.getName(),getResources().getString(R.string.profile_services));
+            addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
+        } else {
+            addBodyPage(UserPhotoFragment.class.getName(),getResources().getString(R.string.profile_photo));
+            addBodyPage(UserFormFragment.class.getName(),getResources().getString(R.string.profile_form));
+            addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
         }
-        addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
 
         ViewPager bodyPager = (ViewPager)root.findViewById(R.id.vpFragments);
         mBodyPagerAdapter =  new ProfilePageAdapter(getActivity().getSupportFragmentManager(),BODY_PAGES_CLASS_NAMES,
@@ -296,10 +317,36 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         return fragment;
     }
 
+    public static ProfileNewFragment newInstance(int id, int type, String startBodyPageClassName){
+        ProfileNewFragment  fragment = new ProfileNewFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_PROFILE_ID, id);
+        args.putInt(ARG_TAG_PROFILE_TYPE, type);
+        args.putString(ARG_TAG_INIT_BODY_PAGE, startBodyPageClassName);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public static ProfileNewFragment newInstance(int id,int type,String initBodyClassName,String initHeaderClassName) {
+        ProfileNewFragment  fragment = new ProfileNewFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_PROFILE_ID, id);
+        args.putInt(ARG_TAG_PROFILE_TYPE, type);
+        args.putString(ARG_TAG_INIT_BODY_PAGE, initBodyClassName);
+        args.putString(ARG_TAG_INIT_HEADER_PAGE, initHeaderClassName);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-            mBodyPager.setCurrentItem(2);
+            int index = mBodyPagerAdapter.getFragmentIndexByClassName(VipBuyFragment.class.getName());
+            mBodyPager.setCurrentItem(index);
             buttonView.setChecked(false);
         }
 
@@ -320,6 +367,15 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             super(fm);
             mFragmentsClasses = fragmentsClasses;
             mFragmentsTitles = fragmentTitles;
+        }
+
+        public int getFragmentIndexByClassName(String className) {
+            for (int i=0; i < mFragmentsClasses.size(); i++) {
+                if (mFragmentsClasses.get(i).equals(className)) {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         @Override

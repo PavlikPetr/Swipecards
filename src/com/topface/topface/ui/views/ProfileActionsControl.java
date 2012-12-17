@@ -9,6 +9,7 @@ import android.view.animation.*;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.ProfileNewFragment;
+import com.topface.topface.utils.CacheProfile;
 
 import java.util.ArrayList;
 
@@ -69,7 +70,7 @@ public class ProfileActionsControl extends RelativeLayout {
     }
 
     private void initMyProfileMode() {
-        mOpenActionButton.setBackgroundResource(R.drawable.btn_action_rocket_selector);
+        mOpenActionButton.setBackgroundResource(CacheProfile.premium ? R.drawable.btn_rocket_active : R.drawable.btn_rocket_normal);
         mOpenActionButton.setOnCheckedChangeListener(null);
         mActionButtonsLayout.setVisibility(View.GONE);
         mBackShadow.setVisibility(View.GONE);
