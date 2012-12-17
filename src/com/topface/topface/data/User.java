@@ -46,15 +46,4 @@ public class User extends Profile {
 
         return profile;
     }
-
-    public String getNameAndAge() {
-        String result;
-        if (first_name != null && first_name.length() > 0 && age > 0) {
-            result = String.format("%s, %d", first_name, age);
-        } else {
-            result = first_name;
-        }
-        return result;
-    }
-
 }

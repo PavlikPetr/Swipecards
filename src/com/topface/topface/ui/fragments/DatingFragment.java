@@ -360,14 +360,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             break;
             case R.id.btnDatingProfile: {
-                Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-                intent.putExtra(UserProfileActivity.INTENT_USER_ID,
-                        mUserSearchList.get(Data.searchPosition).id);
-                intent.putExtra(UserProfileActivity.INTENT_USER_NAME,
-                        mUserSearchList.get(Data.searchPosition).first_name);
-                intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass()
-                        .getSimpleName());
-                startActivity(intent);
+                ((NavigationActivity)getActivity()).onExtraFragment(
+                        ProfileNewFragment.newInstance(mUserSearchList.get(Data.searchPosition).id,ProfileNewFragment.TYPE_USER_PROFILE));
+//                Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+//                intent.putExtra(UserProfileActivity.INTENT_USER_ID,
+//                        mUserSearchList.get(Data.searchPosition).id);
+//                intent.putExtra(UserProfileActivity.INTENT_USER_NAME,
+//                        mUserSearchList.get(Data.searchPosition).first_name);
+//                intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass()
+//                        .getSimpleName());
+//                startActivity(intent);
                 EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
             }
             break;

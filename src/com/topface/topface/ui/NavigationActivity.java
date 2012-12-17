@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
@@ -141,8 +142,12 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
             super.onBackPressed();
         } else {
-            mFragmentMenu.refreshNotifications();
-            mFragmentSwitcher.openMenu();
+            if(mFragmentSwitcher.isExtraFrameShown()) {
+                mFragmentSwitcher.closeExtraFragment();
+            } else {
+                mFragmentMenu.refreshNotifications();
+                mFragmentSwitcher.openMenu();
+            }
         }
     }
 
@@ -195,8 +200,11 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     };
 
     public void onDialogCancel() {
-        DatingFragment datingFragment = (DatingFragment) mFragmentManager.findFragmentById(R.id.fragment_container);
-        datingFragment.onDialogCancel();
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        if (fragment instanceof DatingFragment) {
+            DatingFragment datingFragment = (DatingFragment) fragment;
+            datingFragment.onDialogCancel();
+        }
     }
 
     private FragmentSwitchListener mFragmentSwitchListener = new FragmentSwitchListener() {
@@ -213,17 +221,22 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
             mFragmentMenu.hide();
         }
 
-        @Override
-        public void afterOpening() {
-            if (mNovice.isMenuCompleted()) return;
+		@Override
+		public void afterOpening() {
+			if (mNovice.isMenuCompleted()) return;
+			
+			if (mNovice.showFillProfile) {
+				mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
+		        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+		        alphaAnimation.setDuration(400L);		        
+		        mNoviceLayout.startAnimation(alphaAnimation);				
+				mNovice.completeShowFillProfile();
+			}
+		}
 
-            if (mNovice.showFillProfile) {
-                mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-                alphaAnimation.setDuration(400L);
-                mNoviceLayout.startAnimation(alphaAnimation);
-                mNovice.completeShowFillProfile();
-            }
+        @Override
+        public void onExtraFrameOpen() {
+            mFragmentMenu.unselectAllButtons();
         }
     };
 
@@ -323,5 +336,9 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    public void onExtraFragment(Fragment fragment) {
+        mFragmentSwitcher.switchExtraFragment(fragment);
     }
 }

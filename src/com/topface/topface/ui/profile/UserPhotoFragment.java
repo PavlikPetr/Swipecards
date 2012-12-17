@@ -13,9 +13,10 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.analytics.TrackedFragment;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Utils;
 
-public class UserPhotoFragment extends TrackedFragment {
+public class UserPhotoFragment extends BaseFragment {
     private User mUser;
     private UserPhotoGridAdapter mUserPhotoGridAdapter;
     private TextView mTitle;
@@ -38,12 +39,11 @@ public class UserPhotoFragment extends TrackedFragment {
         mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
 
         if (mPhotoLinks != null) {
-            mTitle.setText(Utils.formatPhotoQuantity(mPhotoLinks.size()));
+            setPhotos(mPhotoLinks);
         } else {
             mTitle.setText(Utils.formatPhotoQuantity(0));
         }
         mTitle.setVisibility(View.VISIBLE);
-
         return root;
     }
 
@@ -72,14 +72,24 @@ public class UserPhotoFragment extends TrackedFragment {
     public void setUserData(User user) {
         mUser = user;
         mPhotoLinks = user.photos;
+        setPhotos(mPhotoLinks);
+    }
 
-        if (mPhotoLinks != null) {
-            mTitle.setText(Utils.formatPhotoQuantity(mPhotoLinks.size()));
+    private void setPhotos(Photos photos) {
+        if (photos != null) {
+            mTitle.setText(Utils.formatPhotoQuantity(photos.size()));
         }
 
         if (mUserPhotoGridAdapter != null) {
-            mUserPhotoGridAdapter.setUserData(user.photos);
+            mUserPhotoGridAdapter.setUserData(photos);
         }
+    }
+
+    @Override
+    public void clearContent() {
+        if (mPhotoLinks != null) mPhotoLinks.clear();
+        mTitle.setText(Utils.formatPhotoQuantity(0));
+        mUserPhotoGridAdapter.notifyDataSetChanged();
     }
 }
  

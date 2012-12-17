@@ -48,13 +48,19 @@ public class ProfileRequest extends AbstractApiRequest {
                 fields = getInfo();
                 break;
             case P_ALL:
+                fields = null;
+                break;
             default:
                 fields = new JSONArray();
                 break;
         }
-
+        if(fields != null) {
+            return new JSONObject()
+                    .put("fields", fields)
+                            //При запросе профиля считаем текущего пользователя "гостем"
+                    .put("visitor", true);
+        }
         return new JSONObject()
-                .put("fields", fields)
                         //При запросе профиля считаем текущего пользователя "гостем"
                 .put("visitor", true);
     }

@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import com.topface.topface.utils.CacheProfile;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +19,7 @@ public class SettingsRequest extends AbstractApiRequest {
     public int cityid = -1; // идентификатор города пользователя
     public String status; // статус
     public int background = -1;
+    public boolean invisible;
 
     public SettingsRequest(Context context) {
         super(context);
@@ -26,15 +28,29 @@ public class SettingsRequest extends AbstractApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = new JSONObject();
-        if (name != null) data.put("name", name);
-        if (status != null) data.put("status", status);
-        if (age != -1) data.put("age", age);
-        if (sex != -1) data.put("sex", sex);
+        if (name != null) {
+            data.put("name", name);
+        }
+        if (status != null) {
+            data.put("status", status);
+        }
+        if (age != -1) {
+            data.put("age", age);
+        }
+        if (sex != -1) {
+            data.put("sex", sex);
+        }
         //if (lat != -1) data.put("lat", lat);
         //if (lng != -1) data.put("lng", lng);
-        if (cityid != -1) data.put("cityid", cityid);
-        if (background != -1) data.put("background", background);
-
+        if (cityid != -1) {
+            data.put("cityid", cityid);
+        }
+        if (background != -1) {
+            data.put("background", background);
+        }
+        if (invisible != CacheProfile.invisible) {
+            data.put("invisible", invisible);
+        }
         return data;
     }
 

@@ -217,7 +217,9 @@ public class UserProfileActivity extends BaseFragmentActivity {
             public void success(final ApiResponse response) {
                 try {
                     Object test = response.jsonResult.get("profiles");
-                    if (test.equals(new JSONArray("[]"))) lockScreen.setVisibility(View.VISIBLE);
+                    if (test.equals(new JSONArray("[]"))) {
+                        lockScreen.setVisibility(View.VISIBLE);
+                    }
                 } catch (Exception e) {
                     Debug.error(e);
                 }

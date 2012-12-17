@@ -14,18 +14,16 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 
-import java.util.LinkedList;
-
-public class UserFormFragment extends Fragment implements OnClickListener {
+public class UserFormFragment extends BaseFragment implements OnClickListener {
     private User mUser;
     private UserFormListAdapter mUserFormListAdapter;
     private View mTitleLayout;
     private TextView mTitle;
     private ImageView mState;
-    private Button mAskToFillForm;
     private ViewGroup mEmptyFormLayout;
 
     @Override
@@ -42,8 +40,11 @@ public class UserFormFragment extends Fragment implements OnClickListener {
 
         mEmptyFormLayout = (ViewGroup) root.findViewById(R.id.loEmptyForm);
 
-        mAskToFillForm = (Button) mEmptyFormLayout.findViewById(R.id.btnEmptyForm);
-        mAskToFillForm.setOnClickListener(this);
+        Button askToFillForm = (Button) mEmptyFormLayout.findViewById(R.id.btnEmptyForm);
+
+        mAskToFillForm =(Button) mEmptyFormLayout.findViewById(R.id.btnEmptyForm);
+        askToFillForm.setOnClickListener(this);
+
 
         mTitleLayout = root.findViewById(R.id.fragmentTitle);
         mTitle = (TextView) root.findViewById(R.id.tvTitle);

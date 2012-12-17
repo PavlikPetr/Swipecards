@@ -12,37 +12,38 @@
             android:scaleType="fitXY"
             />
 
+    <com.topface.topface.ui.views.ImageViewRemote
+            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+            ivr:postProcessor="rounded"
+            android:id="@+id/ivUserAvatar"
+            style="@style/ProfileAvatar"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"/>
+
     <LinearLayout
+            android:layout_toRightOf="@id/ivUserAvatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_marginLeft="26dp"
+            android:layout_centerVertical="true"
             android:orientation="vertical"
-            android:gravity="center">
-        <com.topface.topface.ui.views.ImageViewRemote
-                xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
-                ivr:postProcessor="rounded"
-                android:id="@+id/ivUserAvatar"
-                style="@style/ProfileAvatar"/>
+            android:gravity="left">
 
         <TextView
                 android:id="@+id/tvName"
-                android:layout_below="@id/ivUserAvatar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="name"
                 android:textColor="#FFFFFF"
-                android:textSize="14sp"/>
+                android:textSize="18sp"/>
 
         <TextView
                 android:id="@+id/tvCity"
-                android:layout_below="@id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="city"
                 android:drawableLeft="@drawable/profile_ico_city"
                 android:drawablePadding="5dp"
                 android:textColor="#FFFFFF"
-                android:textSize="12sp"/>
+                android:textSize="14sp"/>
     </LinearLayout>
 
 </RelativeLayout>

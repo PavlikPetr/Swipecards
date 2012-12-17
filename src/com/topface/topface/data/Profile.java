@@ -12,6 +12,7 @@ import com.topface.topface.utils.http.ProfileBackgrounds;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /* Класс профиля владельца устройства */
@@ -51,6 +52,10 @@ public class Profile extends AbstractDataWithPhotos {
     // локали
     public String dating_city_full; // полное наименование города
 
+    // Premium
+    public boolean premium;
+    public boolean invisible;
+
     public String status; // статус пользователя
 
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();
@@ -58,6 +63,9 @@ public class Profile extends AbstractDataWithPhotos {
     private static boolean mIsUserProfile;
 
     public LinkedList<Gift> gifts = new LinkedList<Gift>();
+    public HashMap<Integer, TopfaceNotifications> notifications = new HashMap<Integer, TopfaceNotifications>();
+    public boolean hasMail;
+
     public int background;
 
     // private static final String profileFileName = "profile.out";
@@ -117,6 +125,32 @@ public class Profile extends AbstractDataWithPhotos {
                 gift.type = Gift.PROFILE;
                 gift.feedId = itemGift.optInt("id");
                 profile.gifts.add(gift);
+            }
+
+            if (!resp.isNull("notifications")) {
+                JSONArray jsonNotifications = resp.optJSONArray("notifications");
+
+                for (int i = 0; i < jsonNotifications.length(); i++) {
+                    JSONObject notification = jsonNotifications.getJSONObject(i);
+
+                    boolean mail = notification.optBoolean("mail");
+                    boolean apns = notification.optBoolean("apns");
+                    int type = notification.optInt("type");
+
+                    profile.notifications.put(type, new TopfaceNotifications(apns, mail, type));
+                }
+            }
+
+            if (!resp.isNull("email")) {
+                profile.hasMail = resp.optBoolean("email");
+            }
+
+            if (!resp.isNull("premium")) {
+                profile.premium = resp.optBoolean("premium", false);
+            }
+
+            if (!resp.isNull("invisible")) {
+                profile.invisible = resp.optBoolean("invisible", false);
             }
 
             profile.background = resp
@@ -500,7 +534,7 @@ public class Profile extends AbstractDataWithPhotos {
             // }
             // }
         } catch (Exception e) {
-            Debug.error("Profile.class: Wrong response parsing", e);
+            Debug.log("Profile.class", "Wrong response parsing: " + e);
         }
 
         return profile;
@@ -525,7 +559,27 @@ public class Profile extends AbstractDataWithPhotos {
             }
         }
     }
+    public String getNameAndAge() {
+        String result;
+        if (first_name != null && first_name.length() > 0 && age > 0) {
+            result = String.format("%s, %d", first_name, age);
+        } else {
+            result = first_name;
+        }
+        return result;
+    }
 
+    public static class TopfaceNotifications {
+        public boolean apns;
+        public boolean mail;
+        public int type;
+
+        public TopfaceNotifications(boolean apns, boolean mail, int type) {
+            this.apns = apns;
+            this.mail = mail;
+            this.type = type;
+        }
+    }
     // public static Profile load() {
     // Profile profile = null;
     // ObjectInputStream oin = null;

@@ -9,11 +9,6 @@
             layout="@layout/bar_navigation_header"
             android:id="@+id/loNavigationBar"/>
 
-    <!-- com.topface.topface.ui.views.ScrollViewForViewPager
-            android:layout_below="@id/loNavigationBar"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:fillViewport="true"-->
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -35,11 +30,12 @@
 
             <com.viewpagerindicator.CirclePageIndicator
                     android:id="@+id/cpiHeaderTabs"
-                    android:layout_width="fill_parent"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="15dp"
                     />
         </RelativeLayout>
 
@@ -61,7 +57,6 @@
                     android:layout_height="wrap_content"/>
         </LinearLayout>
 
-        <!--/com.topface.topface.ui.views.ScrollViewForViewPager-->
     </LinearLayout>
 
     <ImageView
@@ -72,9 +67,27 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/loNavigationBar"
             android:layout_marginRight="8dp"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
+    <com.topface.topface.ui.views.ProfileActionsControl
+            android:id="@+id/profileActionsControl"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+
     <ImageView style="@style/HeaderShadow"/>
+
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/chat_add_panel_bg"
+            android:visibility="gone"
+            android:id="@+id/lockScreen"/>
+
+    <com.topface.topface.ui.views.LockerView
+            android:id="@+id/llvProfileLoading"
+            style="@style/LoadingLocker"
+            android:visibility="gone"/>
 
 </RelativeLayout>

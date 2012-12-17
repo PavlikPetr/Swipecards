@@ -39,7 +39,17 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     }
 
     @Override
-    protected int getNewItemLayout() {
-        return R.layout.item_new_feed_like;
+	protected int getNewItemLayout() {		
+		return R.layout.item_new_feed_like;
+	}
+
+    @Override
+    protected int getVipItemLayout() {
+        return R.layout.item_feed_vip_like;
+    }
+
+    @Override
+    protected int getNewVipItemLayout() {
+        return R.layout.item_new_vip_feed_like;
     }
 }

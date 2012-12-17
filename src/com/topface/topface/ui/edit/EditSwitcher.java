@@ -44,4 +44,14 @@ public class EditSwitcher {
     public boolean isChecked() {
         return mCheckbox.isChecked();
     }
+
+    public void setVisibility(int visibility) {
+        mCheckbox.setVisibility(visibility);
+        if (visibility == View.GONE) {
+            mTextOff.setVisibility(visibility);
+            mTextOn.setVisibility(visibility);
+        } else {
+            setChecked(isChecked());
+        }
+    }
 }

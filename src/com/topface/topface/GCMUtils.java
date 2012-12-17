@@ -12,7 +12,6 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.widget.ListView;
 import com.google.android.gcm.GCMRegistrar;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -177,13 +176,12 @@ public class GCMUtils {
     }
 
     private static void loadNotificationSettings() {
-        Options options = CacheProfile.getOptions();
-        if (options.notifications != null) {
-            if (!options.notifications.isEmpty()) {
-                showMessage = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns;
-                showLikes = options.notifications.get(Options.NOTIFICATIONS_LIKES).apns;
-                showSympathy = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns;
-                showVisitors = options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns;
+        if (CacheProfile.notifications != null) {
+            if (!CacheProfile.notifications.isEmpty()) {
+                showMessage = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+                showLikes = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+                showSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+                showVisitors = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
             }
         }
     }

@@ -149,23 +149,23 @@ public class Settings {
 
     public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
         Options options = CacheProfile.getOptions();
-        SendMailNotificationsRequest request = getMailNotificationRequest(options, context);
+        SendMailNotificationsRequest request = getMailNotificationRequest(context);
 
         switch (key) {
-            case Options.NOTIFICATIONS_LIKES:
-                if (isMail) request.mailsympathy = value;
+            case CacheProfile.NOTIFICATIONS_LIKES:
+                if(isMail) request.mailsympathy = value;
                 else request.apnssympathy = value;
                 break;
-            case Options.NOTIFICATIONS_MESSAGE:
-                if (isMail) request.mailchat = value;
+            case CacheProfile.NOTIFICATIONS_MESSAGE:
+                if(isMail) request.mailchat = value;
                 else request.apnschat = value;
                 break;
-            case Options.NOTIFICATIONS_SYMPATHY:
-                if (isMail) request.mailmutual = value;
+            case CacheProfile.NOTIFICATIONS_SYMPATHY:
+                if(isMail) request.mailmutual = value;
                 else request.apnsmutual = value;
                 break;
-            case Options.NOTIFICATIONS_VISITOR:
-                if (isMail) request.mailguests = value;
+            case CacheProfile.NOTIFICATIONS_VISITOR:
+                if(isMail) request.mailguests = value;
                 else request.apnsguests = value;
                 break;
             default:
@@ -175,18 +175,18 @@ public class Settings {
         return request;
     }
 
-    public SendMailNotificationsRequest getMailNotificationRequest(Options options, Context context) {
+    public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
         SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
 
-        request.mailsympathy = options.notifications.get(Options.NOTIFICATIONS_LIKES).mail;
-        request.mailmutual = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).mail;
-        request.mailchat = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).mail;
-        request.mailguests = options.notifications.get(Options.NOTIFICATIONS_VISITOR).mail;
+        request.mailsympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
+        request.mailmutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
+        request.mailchat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
+        request.mailguests = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
 
-        request.apnssympathy = options.notifications.get(Options.NOTIFICATIONS_LIKES).apns;
-        request.apnsmutual = options.notifications.get(Options.NOTIFICATIONS_SYMPATHY).apns;
-        request.apnschat = options.notifications.get(Options.NOTIFICATIONS_MESSAGE).apns;
-        request.apnsguests = options.notifications.get(Options.NOTIFICATIONS_VISITOR).apns;
+        request.apnssympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+        request.apnsmutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+        request.apnschat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+        request.apnsguests = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
 
         return request;
     }

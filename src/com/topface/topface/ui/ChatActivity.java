@@ -29,6 +29,7 @@ import com.topface.topface.requests.*;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
+import com.topface.topface.ui.fragments.ProfileNewFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
@@ -153,6 +154,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_dating);
             } else if (prevEntity.equals(UserProfileActivity.class.getSimpleName())) {
+                btnBack.setText(R.string.general_profile);
+            } else if (prevEntity.equals(ProfileNewFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_profile);
             }
 

@@ -233,6 +233,19 @@
     <string name="dating_search_empty_title">Unfortunately, nothing found</string>
     <string name="dating_search_empty_text">You can try to run the search again or change the filter settings.</string>
     <string name="general_close">Close</string>
+    <string name="vip_not_activated">Your VIP-status is not activated</string>
+    <string name="vip_one_month_title">1 month</string>
+    <string name="vip_one_month_value">10 USD</string>
+    <string name="vip_one_year_title">1 year</string>
+    <string name="vip_one_year_value">100 USD</string>
+    <string name="vip_privileges">VIP-privileges</string>
+    <string name="vip_text_visitors">Узнаете, кто вами интересовался - смотрите своих гостей!</string>
+    <string name="vip_text_adm_unlock">Отправляйте восхищения бесплатно - выражайте свои чувства по-максимуму</string>
+    <string name="vip_rest">Вы подписаны на VIP</string>
+    <string name="vip_invis">Режим невидимки</string>
+    <string name="vip_messages_bg">Фон сообщений</string>
+    <string name="vip_black_list">Черный список</string>
+    <string name="vip_profile_bg">Фоновая фотография</string>
 
     <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services"></string>
