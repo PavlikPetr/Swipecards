@@ -60,10 +60,10 @@ public class ConnectionManager {
                 AndroidHttpClient httpClient = null;
                 HttpPost httpPost = null;
 
-                if (apiRequest.canceled)
+                if (apiRequest.canceled) {
+                    //Проверяем, что запрос не отменен
                     return;
-                if (apiRequest.handler == null)
-                    return;
+                }
 
                 connection.setHttpClient(httpClient);
                 connection.setHttpPost(httpPost);
@@ -83,46 +83,63 @@ public class ConnectionManager {
                     rawResponse = request(httpClient, httpPost);
                     Debug.logJson(TAG, "RESPONSE <<<", rawResponse);
 
-                    if (apiRequest.handler != null) {
-                        ApiResponse apiResponse = new ApiResponse(rawResponse);
-                        if (apiResponse.code == ApiResponse.SESSION_NOT_FOUND)
-                            apiResponse = reAuth(apiRequest.context, httpClient, httpPost, apiRequest);
-                        if (apiResponse.code == ApiResponse.INVERIFIED_TOKEN) {
-                            sendBroadcastReauth(apiRequest.context);
-                            addDelayedRequest(apiRequest);
-                            apiResponse.code = ApiResponse.ERRORS_PROCCESED;
-                        }
-                        if (apiResponse.code == ApiResponse.BAN) {
-                            Intent intent = new Intent(apiRequest.context, BanActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra(BanActivity.BANNING_INTENT, apiResponse.jsonResult.get("message").toString());
-                            apiRequest.context.startActivity(intent);
-                            apiRequest.handler.fail(apiResponse.code, apiResponse);
-                        } else if (apiResponse.code == ApiResponse.NULL_RESPONSE || apiResponse.code == ApiResponse.WRONG_RESPONSE) {
-                            if (apiRequest.isNeedResend()) {
-                                apiRequest.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        sendRequest(apiRequest);
-                                    }
-                                }, WAITING_TIME);
-                                apiRequest.setNeedResend(false);
-                            } else {
-                                apiRequest.handler.response(apiResponse);
-                            }
-                        } else {
+                    ApiResponse apiResponse = new ApiResponse(rawResponse);
+                    //Если сессия кончилась, то переотправляем запрос авторизации, после этого обрабатываем обычным способом
+                    if (apiResponse.code == ApiResponse.SESSION_NOT_FOUND) {
+                        apiResponse = reAuth(apiRequest.context, httpClient, httpPost, apiRequest);
+                    }
+                    //Если даже после переавторизации токен не верный,
+                    //то отмечаем запрос как ошибку и ждем переавторизации пользователя
+                    if (apiResponse.code == ApiResponse.INVERIFIED_TOKEN) {
+                        sendBroadcastReauth(apiRequest.context);
+                        addDelayedRequest(apiRequest);
+                        apiResponse.code = ApiResponse.ERRORS_PROCCESED;
+                    }
+                    //Если в результате получили ответ, что забанен, прекращаем обработку, сообщаем об этом
+                    if (apiResponse.code == ApiResponse.BAN) {
+                        Intent intent = new Intent(apiRequest.context, BanActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(BanActivity.BANNING_INTENT, apiResponse.jsonResult.get("message").toString());
+                        apiRequest.context.startActivity(intent);
+                        //В запрос отправлять ничего не будем, в finally его просто отменем
+
+                    } else if (apiResponse.code == ApiResponse.NULL_RESPONSE
+                            || apiResponse.code == ApiResponse.WRONG_RESPONSE
+                            //Если после переавторизации у нас все же не верный ssid, то пробуем все повторить
+                            || apiResponse.code == ApiResponse.SESSION_NOT_FOUND) {
+                        //Если пришел пустой ответ или пришел какой то мусор, то пробуем переотправить запрос
+                        if (apiRequest.isNeedResend()) {
+                            Debug.error("Response error. Try resend");
+                            apiRequest.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    sendRequest(apiRequest);
+                                }
+                            }, WAITING_TIME);
+                            apiRequest.setNeedResend(false);
+
+                        //Предварительно проверяем, что есть handler и запрос не отменен
+                        // (если отменен, может возникнуть ситуация, когда handler уже не сможет
+                        // обработать ответ из-за убитого контекста)
+                        } else if (!apiRequest.isCanceled()) {
                             apiRequest.handler.response(apiResponse);
                         }
+                    } else if (!apiRequest.isCanceled()) {
+                        apiRequest.handler.response(apiResponse);
                     }
 
                 } catch (Exception e) {
+                    //Мы отлавливаем все ошибки, возникшие при запросе, не хотим что бы приложение падало из-за них
                     Debug.error(TAG + "::REQUEST::ERROR ===\n", e);
-                    if (httpPost != null && !httpPost.isAborted())
+                    if (httpPost != null && !httpPost.isAborted()) {
                         httpPost.abort();
+                    }
                 } finally {
                     if (httpClient != null) {
                         httpClient.close();
                     }
+                    //Отмечаем запрос отмененным, что бы почистить
+                    apiRequest.cancel();
                 }
             }
         });
@@ -147,15 +164,13 @@ public class ConnectionManager {
                     sb.append(line);
                 rawResponse = sb.toString();
                 is.close();
-                //httpEntity.consumeContent();
                 r.close();
             }
         } catch (Exception e) {
-            Debug.error("cm exception:", e);
-            for (StackTraceElement st : e.getStackTrace())
-                Debug.log("cm trace: ", st.toString());
-            if (httpPost != null && !httpPost.isAborted())
+            Debug.error("ConnectionManager::Exception", e);
+            if (httpPost != null && !httpPost.isAborted()) {
                 httpPost.abort();
+            }
         } catch (OutOfMemoryError e) {
             Debug.error("ConnectionManager:: " + e.toString());
         }
@@ -167,15 +182,10 @@ public class ConnectionManager {
     private ApiResponse reAuth(Context context, AndroidHttpClient httpClient, HttpPost httpPost, ApiRequest request) {
         Debug.log(this, "reAuth");
 
-        AuthToken token = new AuthToken(context);
-        AuthRequest authRequest = new AuthRequest(context);
-        authRequest.platform = token.getSocialNet();
-        authRequest.sid = token.getUserId();
-        authRequest.token = token.getTokenKey();
-
         String rawResponse;
         ApiResponse response = null;
         HttpPost localHttpPost;
+        AuthRequest authRequest = getAuthRequest(context);
 
         try {
             localHttpPost = new HttpPost(Static.API_URL);
@@ -184,9 +194,9 @@ public class ConnectionManager {
             setRevisionHeader(localHttpPost);
             localHttpPost.setEntity(new ByteArrayEntity(authRequest.toString().getBytes("UTF8")));
 
-            Debug.log(TAG, "cm_reauth:req0:" + authRequest.toString());
+            Debug.logJson(TAG, "REAUTH REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(), authRequest.toString());
             rawResponse = request(httpClient, localHttpPost); // REQUEST
-            Debug.log(TAG, "cm_reauth:resp0:" + rawResponse);
+            Debug.logJson(TAG, "REAUTH RESPONSE <<<", rawResponse);
 
             response = new ApiResponse(rawResponse);
             if (response.code == ApiResponse.RESULT_OK) {
@@ -199,13 +209,23 @@ public class ConnectionManager {
                 Debug.logJson(TAG, "REAUTH RESPONSE <<<", rawResponse);
                 response = new ApiResponse(rawResponse);
             } else {
+                //Если не удалос залогиниться, сбрасываем ssid целиком и в следующий раз будем авторизовываться
                 Data.removeSSID(context);
             }
         } catch (Exception e) {
-            Debug.log(TAG, "cm_reauth exception:" + e.toString());
+            Debug.log(TAG, "С exception:" + e.toString());
         }
 
         return response;
+    }
+
+    private AuthRequest getAuthRequest(Context context) {
+        AuthToken token = new AuthToken(context);
+        AuthRequest authRequest = new AuthRequest(context);
+        authRequest.platform = token.getSocialNet();
+        authRequest.sid = token.getUserId();
+        authRequest.token = token.getTokenKey();
+        return authRequest;
     }
 
     private String getRevNum() {

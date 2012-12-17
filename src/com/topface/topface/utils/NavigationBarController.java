@@ -1,41 +1,40 @@
 package com.topface.topface.utils;
 
-import com.topface.topface.R;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.topface.topface.R;
 
 public class NavigationBarController {
-	
-	private ViewGroup mNavigationHeader;
-	private TextView mDialogsNotificator;
-	private TextView mLikesNotificator;
-	private TextView mMutualNotificator;
-	
-	public NavigationBarController(ViewGroup navigationHeader) {
-		mNavigationHeader = navigationHeader;
-		initElements();
-	}
-	
-	private void initElements() {
-		mDialogsNotificator = (TextView)mNavigationHeader.findViewById(R.id.tvNotificationDialogs);
-		mMutualNotificator = (TextView)mNavigationHeader.findViewById(R.id.tvNotificationMutual);
-		mLikesNotificator = (TextView)mNavigationHeader.findViewById(R.id.tvNotificationLikes);
-	}
-	
-	public void refreshNotificators() {
-		if(CacheProfile.unread_messages > 0) {
-			mDialogsNotificator.setText(Integer.toString(CacheProfile.unread_messages));
-			mDialogsNotificator.setVisibility(View.VISIBLE);	
-			mMutualNotificator.setVisibility(View.INVISIBLE);			
-			mLikesNotificator.setVisibility(View.INVISIBLE);
-		} else if(CacheProfile.unread_mutual > 0) {
-			mMutualNotificator.setText(Integer.toString(CacheProfile.unread_mutual));
-			mMutualNotificator.setVisibility(View.VISIBLE);
-			mLikesNotificator.setVisibility(View.INVISIBLE);
-			mDialogsNotificator.setVisibility(View.INVISIBLE);							
-		} else {
+
+    private ViewGroup mNavigationHeader;
+    private TextView mDialogsNotificator;
+    private TextView mLikesNotificator;
+    private TextView mMutualNotificator;
+
+    public NavigationBarController(ViewGroup navigationHeader) {
+        mNavigationHeader = navigationHeader;
+        initElements();
+    }
+
+    private void initElements() {
+        mDialogsNotificator = (TextView) mNavigationHeader.findViewById(R.id.tvNotificationDialogs);
+        mMutualNotificator = (TextView) mNavigationHeader.findViewById(R.id.tvNotificationMutual);
+        mLikesNotificator = (TextView) mNavigationHeader.findViewById(R.id.tvNotificationLikes);
+    }
+
+    public void refreshNotificators() {
+        if (CacheProfile.unread_messages > 0) {
+            mDialogsNotificator.setText(Integer.toString(CacheProfile.unread_messages));
+            mDialogsNotificator.setVisibility(View.VISIBLE);
+            mMutualNotificator.setVisibility(View.INVISIBLE);
+            mLikesNotificator.setVisibility(View.INVISIBLE);
+        } else if (CacheProfile.unread_mutual > 0) {
+            mMutualNotificator.setText(Integer.toString(CacheProfile.unread_mutual));
+            mMutualNotificator.setVisibility(View.VISIBLE);
+            mLikesNotificator.setVisibility(View.INVISIBLE);
+            mDialogsNotificator.setVisibility(View.INVISIBLE);
+        } else {
             mDialogsNotificator.setVisibility(View.INVISIBLE);
             mMutualNotificator.setVisibility(View.INVISIBLE);
             mLikesNotificator.setVisibility(View.INVISIBLE);
@@ -46,7 +45,7 @@ public class NavigationBarController {
 //			mDialogsNotificator.setVisibility(View.INVISIBLE);	
 //			mMutualNotificator.setVisibility(View.INVISIBLE);			
 //		}				
-	}
-	
-	
+    }
+
+
 }

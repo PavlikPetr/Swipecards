@@ -24,7 +24,7 @@ public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
     }
 
     @Override
-    protected FeedAdapter<Visitor> getAdapter() {
+    protected FeedAdapter<Visitor> getNewAdapter() {
         return new VisitorsListAdapter(getActivity(), getUpdaterCallback());
     }
 

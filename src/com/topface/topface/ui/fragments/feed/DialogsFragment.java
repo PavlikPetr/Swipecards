@@ -49,7 +49,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected DialogListAdapter getAdapter() {
+    protected DialogListAdapter getNewAdapter() {
         return new DialogListAdapter(getActivity().getApplicationContext(), getUpdaterCallback());
     }
 
@@ -74,12 +74,12 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected void deleteItem(final int position) {
+    protected void onDeleteItem(final int position) {
         FeedDialog item = mListAdapter.getItem(position);
         new DialogDeleteRequest(item.user.id, getActivity())
                 .callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) throws NullPointerException {
+                    public void success(ApiResponse response) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -92,7 +92,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    public void fail(int codeError, ApiResponse response) {
                         Debug.log(response.toString());
                         mLockView.setVisibility(View.GONE);
                         if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {

@@ -24,6 +24,7 @@ import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.BaseApiHandler;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.fragments.TopsFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
@@ -95,6 +96,11 @@ public class BannerBlock {
     private void loadBanner() {
         BannerRequest bannerRequest = new BannerRequest(mActivity.getApplicationContext());
         bannerRequest.place = mBannersMap.get(mFragment.getClass().toString());
+
+        if (mActivity instanceof BaseFragmentActivity) {
+            ((BaseFragmentActivity) mActivity).registerRequest(bannerRequest);
+        }
+
         bannerRequest.callback(new BaseApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -170,7 +176,7 @@ public class BannerBlock {
     private boolean isCorrectResolution() {
         int screenSize = (mActivity.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK);
-        return  screenSize != Configuration.SCREENLAYOUT_SIZE_SMALL;
+        return screenSize != Configuration.SCREENLAYOUT_SIZE_SMALL;
     }
 
     private void sendStat(String action, String label) {

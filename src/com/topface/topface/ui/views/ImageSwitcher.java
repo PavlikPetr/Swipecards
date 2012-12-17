@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.*;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
@@ -13,7 +14,6 @@ public class ImageSwitcher extends ViewPager {
 
     private GestureDetector mGestureDetector;
     private ImageSwitcherAdapter mImageSwitcherAdapter;
-    private Photos mPhotoLinks;
     private OnClickListener mOnClickListener;
     private Handler mUpdatedHandler;
     private static final String VIEW_TAG = "view_container";
@@ -32,7 +32,7 @@ public class ImageSwitcher extends ViewPager {
     }
 
     public void setData(Photos photoLinks) {
-        mPhotoLinks = photoLinks;
+        mImageSwitcherAdapter.setData(photoLinks);
         mImageSwitcherAdapter.setIsFirstInstantiate(true);
         this.setAdapter(mImageSwitcherAdapter);
     }
@@ -73,14 +73,34 @@ public class ImageSwitcher extends ViewPager {
     public void setOnPageChangeListener(OnPageChangeListener listener) {
         final OnPageChangeListener finalListener = listener;
         super.setOnPageChangeListener(new OnPageChangeListener() {
+            private int mNext;
+            private int mPrev;
+
             @Override
             public void onPageScrolled(int i, float v, int i1) {
-                finalListener.onPageScrolled(i,v,i1);
+                //Если показано больше 10% следующей фотографии, то начинаем ее грузить
+                if (v > 0.1) {
+                    if (getCurrentItem() == i) {
+                        int next;
+                        next = i + 1;
+                        //Проверяем, начали ли мы грузить следующую фотографию
+                        if (mNext != next) {
+                            mNext = next;
+                            setPhoto(next);
+                        }
+                    } else {
+                        //Проверяем, не начали ли мы грузить предыдущую фотографию
+                        if (mPrev != i) {
+                            mPrev = i;
+                            setPhoto(i);
+                        }
+                    }
+                }
+                finalListener.onPageScrolled(i, v, i1);
             }
 
             @Override
             public void onPageSelected(int i) {
-                setPhoto(i);
                 finalListener.onPageSelected(i);
             }
 
@@ -91,7 +111,6 @@ public class ImageSwitcher extends ViewPager {
         });
 
     }
-
 
 
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
@@ -107,6 +126,8 @@ public class ImageSwitcher extends ViewPager {
     */
     class ImageSwitcherAdapter extends PagerAdapter {
         private boolean isFirstInstantiate = true;
+        private Photos mPhotoLinks;
+        private SparseArray<Boolean> mLoadedPhotos;
 
         @Override
         public int getCount() {
@@ -116,13 +137,13 @@ public class ImageSwitcher extends ViewPager {
         public Object instantiateItem(ViewGroup pager, int position) {
             LayoutInflater inflater = (LayoutInflater) pager.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_album_gallery, null);
-            view.setTag(VIEW_TAG+Integer.toString(position));
+            view.setTag(VIEW_TAG + Integer.toString(position));
             ImageViewRemote imageView = (ImageViewRemote) view.findViewById(R.id.ivPreView);
-            if(isFirstInstantiate) {
-                imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler);
+            //Первую фотографию грузим сразу, или если фотографию уже загружена, то сразу показываем ее
+            if (isFirstInstantiate || mLoadedPhotos.get(position, false)) {
+                setPhotoToView(position, view, imageView);
                 isFirstInstantiate = false;
-            } //else
-//                mPreloadManager.preloadImage(mPhotoLinks.get(position).getSuitableLink(Photo.SIZE_960));
+            }
             pager.addView(view);
             return view;
         }
@@ -138,15 +159,28 @@ public class ImageSwitcher extends ViewPager {
         }
 
         public void setPhotoToPosition(int position) {
-            if(!isFirstInstantiate) {
-                View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG+Integer.toString(position));
-                ImageViewRemote imageView = (ImageViewRemote)baseLayout.findViewById(R.id.ivPreView);
-                if(imageView.getBackground()==null)
-                    imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler);
+            if (!isFirstInstantiate) {
+                View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(position));
+                ImageViewRemote imageView = (ImageViewRemote) baseLayout.findViewById(R.id.ivPreView);
+                if (imageView.getBackground() == null) {
+                    setPhotoToView(position, baseLayout, imageView);
+                }
                 imageView.setDrawingCacheEnabled(true);
                 imageView.buildDrawingCache();
-//                TopfaceNotificationManager.getInstance(ImageSwitcher.this.getContext()).showNotification("test","test", NavigationActivity.mThis,imageView.getDrawingCache());
             }
+        }
+
+        private void setPhotoToView(int position, View baseLayout, ImageViewRemote imageView) {
+            View progressBar = baseLayout.findViewById(R.id.pgrsAlbum);
+            progressBar.setVisibility(View.VISIBLE);
+            imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler, progressBar);
+            mLoadedPhotos.put(position, true);
+        }
+
+        public void setData(Photos photos) {
+            mPhotoLinks = photos;
+            mLoadedPhotos = new SparseArray<Boolean>();
+            notifyDataSetChanged();
         }
 
         public void setIsFirstInstantiate(boolean value) {

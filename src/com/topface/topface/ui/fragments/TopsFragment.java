@@ -171,7 +171,7 @@ public class TopsFragment extends BaseFragment {
                         Data.topsList.clear();
                         Data.topsList.addAll(Top.parse(response));
                         onUpdateSuccess(false);
-                        if(mGridAdapter != null) {
+                        if (mGridAdapter != null) {
                             mGridAdapter.notifyDataSetChanged();
                             mGallery.setVisibility(View.VISIBLE);
                         }

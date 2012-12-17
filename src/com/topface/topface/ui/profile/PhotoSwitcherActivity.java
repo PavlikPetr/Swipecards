@@ -1,7 +1,5 @@
 package com.topface.topface.ui.profile;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +14,8 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
+
+import java.util.ArrayList;
 
 public class PhotoSwitcherActivity extends Activity {
 
@@ -35,9 +35,9 @@ public class PhotoSwitcherActivity extends Activity {
         setContentView(R.layout.ac_photos);
         mPreloadManager = new PreloadManager(getApplicationContext());
         // Extras
-        Intent intent = getIntent();        
+        Intent intent = getIntent();
         int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
-        int uid = intent.getIntExtra(INTENT_USER_ID, -1);        
+        int uid = intent.getIntExtra(INTENT_USER_ID, -1);
         ArrayList<Photo> arrList = intent.getExtras().getParcelableArrayList(INTENT_PHOTOS);
         mPhotoLinks = new Photos();
         mPhotoLinks.addAll(arrList);

@@ -1,5 +1,7 @@
 package com.topface.topface.utils;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,14 +17,15 @@ import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.ui.NavigationActivity;
 
 import java.util.Calendar;
 import java.util.List;
 
 public class Utils {
-	public static final long WEEK = 604800L;
-	public static final long DAY = 86400L;
-	
+    public static final long WEEK = 604800L;
+    public static final long DAY = 86400L;
+
     private static PluralResources mPluralResources;
 
     public static int unixtime() {
@@ -38,11 +41,13 @@ public class Utils {
         int height = bitmap.getHeight();
 
         // длинная фото или высокая
-        Bitmap clippedBitmap = null;
+        Bitmap clippedBitmap;
         if (width >= height) {  // горизонтальная, вырезаем по центру
             int offset_x = (width - height) / 2;
+            //noinspection SuspiciousNameCombination
             clippedBitmap = Bitmap.createBitmap(bitmap, offset_x, 0, height, height, null, false);
         } else {                // вертикальная, вырезаем сверху
+            //noinspection SuspiciousNameCombination
             clippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, width, null, false);
         }
 
@@ -53,7 +58,7 @@ public class Utils {
         if (rawBitmap == null || rawBitmap.getWidth() <= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
             return null;
         Bitmap clippedBitmap = null;
-        try{
+        try {
             // Исходный размер загруженного изображения
             int srcWidth = rawBitmap.getWidth();
             int srcHeight = rawBitmap.getHeight();
@@ -125,22 +130,27 @@ public class Utils {
         int height = bitmap.getHeight();
 
         if (dstWidth < dstHeight)
+            //noinspection SuspiciousNameCombination
             dstHeight = dstWidth;
         else
+            //noinspection SuspiciousNameCombination
             dstWidth = dstHeight;
 
         Bitmap output = Bitmap.createBitmap(dstWidth, dstHeight, Config.ARGB_8888);
 
-        Bitmap clippedBitmap = null;
-        if (width == dstWidth && height == dstHeight)
+        Bitmap clippedBitmap;
+        if (width == dstWidth && height == dstHeight) {
             clippedBitmap = clippingBitmap(bitmap);
-        else
+        } else {
+            //noinspection SuspiciousNameCombination
             clippedBitmap = clipAndScaleBitmap(bitmap, dstWidth, dstWidth);
-
+        }
 
         Canvas canvas = new Canvas(output);
 
+        @SuppressWarnings("SuspiciousNameCombination")
         Rect rect = new Rect(0, 0, dstWidth, dstWidth);
+
         Paint paint = new Paint();
 
 
@@ -153,6 +163,7 @@ public class Utils {
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
 
+        //noinspection UnusedAssignment
         bitmap = null;
 
         return output;
@@ -173,13 +184,14 @@ public class Utils {
         final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
 
-        int multWidth = 0;
+        int multWidth;
         if (type == RADIUS_OUT)
             multWidth = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
         else
             multWidth = (int) (((bitmapWidth < bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
 
 
+        @SuppressWarnings("SuspiciousNameCombination")
         Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Config.ARGB_8888);
 
         Canvas canvas = new Canvas(output);
@@ -201,15 +213,15 @@ public class Utils {
         canvasPaint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(bitmap, src, dst, canvasPaint);
 
-        Bitmap scaledBitmap = null;
+        Bitmap scaledBitmap;
 
         if (multWidth != width)
             scaledBitmap = Bitmap.createScaledBitmap(output, width, height, true);
         else
             scaledBitmap = output;
 
-        bitmap = null;
-        output = null;
+        //noinspection UnusedAssignment
+        output = bitmap = null;
 
         return scaledBitmap;
     }
@@ -223,7 +235,7 @@ public class Utils {
         cal.setTimeInMillis(time);
         Calendar cal2 = Calendar.getInstance();
         int currentYear = cal2.get(Calendar.YEAR);
-        cal2.set(currentYear,Calendar.JANUARY,1);
+        cal2.set(currentYear, Calendar.JANUARY, 1);
 
         if (time > Data.midnight)
             text = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
@@ -324,11 +336,11 @@ public class Utils {
     }
 
     public static String formatPhotoQuantity(int quantity) {
-        return Utils.getQuantityString(R.plurals.photo, (int) quantity, (int) quantity);
+        return Utils.getQuantityString(R.plurals.photo, quantity, (int) quantity);
     }
 
     public static String formatFormMatchesQuantity(int quantity) {
-        return Utils.getQuantityString(R.plurals.form_matches, (int) quantity, (int) quantity);
+        return Utils.getQuantityString(R.plurals.form_matches, quantity, (int) quantity);
     }
 
     public static int getBatteryResource(int power) {
@@ -457,19 +469,19 @@ public class Utils {
                 Toast.LENGTH_SHORT
         ).show();
     }
-    
+
     @SuppressWarnings("deprecation")
-	public static Point getSrceenSize(Context context) {
-    	Point size = null;
-    	WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-		Display display = wm.getDefaultDisplay();
-		if (Build.VERSION.SDK_INT < 13) {
-			size = new Point(display.getWidth(),display.getHeight());
-		} else {
-			size = new Point();
-			display.getSize(size);
-		}
-		return size;
+    public static Point getSrceenSize(Context context) {
+        Point size;
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        if (Build.VERSION.SDK_INT < 13) {
+            size = new Point(display.getWidth(), display.getHeight());
+        } else {
+            size = new Point();
+            display.getSize(size);
+        }
+        return size;
     }
 
     public static boolean isIntentAvailable(Context context, String action) {
@@ -480,5 +492,20 @@ public class Utils {
         return list.size() > 0;
     }
 
+    public static boolean isThereNavigationActivity(Activity activity) {
+        ActivityManager mngr = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+        if (taskList != null) {
+            if (taskList.size() > 1) {
+                if (
+                        taskList.get(0).baseActivity.getClassName().equals(NavigationActivity.class.getName())
+                        || taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName())
+                        ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

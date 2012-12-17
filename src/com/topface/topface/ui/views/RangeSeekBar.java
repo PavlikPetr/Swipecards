@@ -424,7 +424,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     }
 
     private void drawBackground(Canvas canvas) {
-        if(bgBitmap == null) {
+        if (bgBitmap == null) {
             bgBitmap = Bitmap.createScaledBitmap(bg, getWidth(), bg.getHeight(), false);
         }
         canvas.drawBitmap(bgBitmap, 0, 0, paint);

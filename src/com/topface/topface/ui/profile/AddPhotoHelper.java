@@ -42,7 +42,7 @@ import java.io.IOException;
  */
 public class AddPhotoHelper {
 
-    public static final String PATH_TO_FILE = Environment.getExternalStorageDirectory().getAbsolutePath()+"/tmp.jpg";
+    public static final String PATH_TO_FILE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp.jpg";
     private Context mContext;
     private AlertDialog mAddPhotoDialog;
     private Activity mActivity;
@@ -54,7 +54,6 @@ public class AddPhotoHelper {
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 101;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 100;
-
 
 
     public AddPhotoHelper(Fragment fragment, LockerView mLockerView) {
@@ -69,7 +68,7 @@ public class AddPhotoHelper {
     }
 
     public void showProgressDialog() {
-        if(mLockerView != null) {
+        if (mLockerView != null) {
             mLockerView.setVisibility(View.VISIBLE);
         }
 //        if(lock)
@@ -88,7 +87,7 @@ public class AddPhotoHelper {
     }
 
     public void hideProgressDialog() {
-        if(mLockerView != null) {
+        if (mLockerView != null) {
             mLockerView.setVisibility(View.GONE);
         }
 //        FragmentManager fm = ((FragmentActivity) mActivity).getSupportFragmentManager();
@@ -139,7 +138,7 @@ public class AddPhotoHelper {
                     intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE)));
                     intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
 
-                    if(Utils.isIntentAvailable(mContext, intent.getAction().toString())) {
+                    if (Utils.isIntentAvailable(mContext, intent.getAction())) {
                         if (mFragment != null) {
                             mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
 //                            mFragment.getActivity().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
@@ -167,24 +166,24 @@ public class AddPhotoHelper {
     }
 
     public boolean checkActivityResult(int requestCode, int resultCode, Intent data) {
-        if(mFragment != null) {
-            if(mFragment.getActivity() != null && !mFragment.isAdded()) {
+        if (mFragment != null) {
+            if (mFragment.getActivity() != null && !mFragment.isAdded()) {
                 Debug.log("APH::detached");
             }
         }
-        if(resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
-                if(data == null) {
+                if (data == null) {
                     data = new Intent();
                 }
-                data.putExtra("isCamera",true);
+                data.putExtra("isCamera", true);
                 new AsyncTaskUploader().execute(data);
                 return true;
-            }  else if(requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
-                if(data == null) {
+            } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
+                if (data == null) {
                     data = new Intent();
                 }
-                data.putExtra("isCamera",false);
+                data.putExtra("isCamera", false);
                 new AsyncTaskUploader().execute(data);
                 return true;
             }
@@ -205,7 +204,7 @@ public class AddPhotoHelper {
             Intent intent = intentList[0];
             try {
 
-                if(intent.getBooleanExtra("isCamera",false)){
+                if (intent.getBooleanExtra("isCamera", false)) {
                     File receivedImage = new File(PATH_TO_FILE);
                     rawResponse = getRawResponse(receivedImage);
                 } else {

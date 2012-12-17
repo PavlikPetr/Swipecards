@@ -236,4 +236,8 @@
 
     <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services"></string>
+
+
+    <string name="black_list_title">Черный список</string>
+    <string name="black_list_empty">Ваш черный список пуст</string>
 </resources>

@@ -10,10 +10,10 @@ import android.widget.ListView;
 public class SwipeGestureListener extends SimpleOnGestureListener {
     private int REL_SWIPE_MIN_DISTANCE = 80;
     private int REL_SWIPE_MAX_OFF_PATH = 200;
-    private int REL_SWIPE_THRESHOLD_VELOCITY = 150;    
-    
+    private int REL_SWIPE_THRESHOLD_VELOCITY = 150;
+
     private SwipeListener mSwipeListener;
-    private ListView mListView;    
+    private ListView mListView;
 
     public interface SwipeListener {
         void onSwipeR2L(int position);
@@ -30,23 +30,23 @@ public class SwipeGestureListener extends SimpleOnGestureListener {
         REL_SWIPE_THRESHOLD_VELOCITY = (int) (200.0f * dm.densityDpi / 160.0f + 0.5);
         mSwipeListener = listener;
         mListView = listView;
-    }    
-   
+    }
+
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
-    	int position = mListView.pointToPosition((int) e.getX(), (int) e.getY());
-	    mSwipeListener.onTap(position);
+        int position = mListView.pointToPosition((int) e.getX(), (int) e.getY());
+        mSwipeListener.onTap(position);
         return false;
     }
-    
+
     @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {    	
-        if (e1 != null && e2 != null) {    	
-            if (Math.abs(e1.getY() - e2.getY()) > 2*REL_SWIPE_MAX_OFF_PATH) {            	
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        if (e1 != null && e2 != null) {
+            if (Math.abs(e1.getY() - e2.getY()) > 2 * REL_SWIPE_MAX_OFF_PATH) {
                 return false;
-            }                        
+            }
             if (e1.getX() - e2.getX() > REL_SWIPE_MIN_DISTANCE &&
-                    Math.abs(velocityX) > REL_SWIPE_THRESHOLD_VELOCITY) {            	
+                    Math.abs(velocityX) > REL_SWIPE_THRESHOLD_VELOCITY) {
                 if (mSwipeListener != null) {
                     int position = mListView.pointToPosition((int) e1.getX(), (int) e1.getY());
                     if (position > 0) {
@@ -54,7 +54,7 @@ public class SwipeGestureListener extends SimpleOnGestureListener {
                     }
                 }
             } else if (e2.getX() - e1.getX() > REL_SWIPE_MIN_DISTANCE &&
-                    Math.abs(velocityX) > REL_SWIPE_THRESHOLD_VELOCITY) {            	
+                    Math.abs(velocityX) > REL_SWIPE_THRESHOLD_VELOCITY) {
                 if (mSwipeListener != null) {
                     int position = mListView.pointToPosition((int) e1.getX(), (int) e1.getY());
                     if (position > 0) {
@@ -64,5 +64,5 @@ public class SwipeGestureListener extends SimpleOnGestureListener {
             }
         }
         return false;
-    }    
+    }
 }

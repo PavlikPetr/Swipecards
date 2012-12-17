@@ -2,7 +2,10 @@ package com.topface.topface.ui.adapters;
 
 import android.content.Context;
 import android.text.ClipboardManager;
+import android.text.Html;
 import android.text.format.DateFormat;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,9 +66,7 @@ public class ChatListAdapter extends BaseAdapter {
     private static final int T_COUNT = 13;
 
 
-
     ChatActivity.OnListViewItemLongClickListener mLongClickListener;
-
 
 
     public ChatListAdapter(Context context, LinkedList<History> dataList) {
@@ -78,7 +79,7 @@ public class ChatListAdapter extends BaseAdapter {
         prepare(dataList, true);
     }
 
-    public void setOnItemLongClickListener (ChatActivity.OnListViewItemLongClickListener l) {
+    public void setOnItemLongClickListener(ChatActivity.OnListViewItemLongClickListener l) {
         mLongClickListener = l;
     }
 
@@ -93,7 +94,7 @@ public class ChatListAdapter extends BaseAdapter {
 
     @Override
     public History getItem(int position) {
-        return mDataList.hasItem(position)? mDataList.get(position) : null;
+        return mDataList.hasItem(position) ? mDataList.get(position) : null;
     }
 
     @Override
@@ -250,10 +251,13 @@ public class ChatListAdapter extends BaseAdapter {
             return convertView;
         }
 
+        //Это нужно, что бы обработать сперва html, а потом autoLink, иначе html не получитя распарсить
+        holder.message.setAutoLinkMask(0);
+
         // setting textual information
         switch (history.type) {
             case FeedDialog.DEFAULT:
-                holder.message.setText(history.text);
+                holder.message.setText(Html.fromHtml(history.text));
                 break;
             case FeedDialog.PHOTO:
 //			if (history.code > 100500) {
@@ -272,7 +276,7 @@ public class ChatListAdapter extends BaseAdapter {
 //			}
                 break;
             case FeedDialog.MESSAGE:
-                holder.message.setText(history.text);
+                holder.message.setText(Html.fromHtml(history.text));
                 break;
             case FeedDialog.MESSAGE_WISH:
                 switch (history.target) {
@@ -336,16 +340,19 @@ public class ChatListAdapter extends BaseAdapter {
 //			}
                 break;
             case FeedDialog.PROMOTION:
-                holder.message.setText(history.text);
+                holder.message.setText(Html.fromHtml(history.text));
                 break;
             default:
                 holder.message.setText("");
                 break;
         }
 
+        holder.message.setMovementMethod(LinkMovementMethod.getInstance());
+        holder.message.setAutoLinkMask(Linkify.ALL);
+
         holder.date.setText(dateFormat.format(history.created));
         // Utils.formatTime(holder.date, msg.created);
-        if (holder.message != null && convertView!=null) {
+        if (holder.message != null && convertView != null) {
             convertView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -368,7 +375,7 @@ public class ChatListAdapter extends BaseAdapter {
         int position = mDataList.size() - 1;
         History prevHistory = null;
         if (position >= 0) {
-            prevHistory = mDataList.getLast(); //get(mDataList.size() - 1);
+            prevHistory = getLastRealMessage(); //get(mDataList.size() - 1);
         }
 
         if (msg.type == FeedDialog.MESSAGE) {
@@ -414,6 +421,19 @@ public class ChatListAdapter extends BaseAdapter {
         mDataList.add(msg);
     }
 
+    /**
+     * @return последнее "реальное" сообщение в чате, т.е. такое у которого есть id
+     */
+    private History getLastRealMessage() {
+        for (int i = mDataList.size() - 1; i >= 0; i--) {
+            History lastItem = mDataList.get(i);
+            if (lastItem.id > 0) {
+                return lastItem;
+            }
+        }
+        return null;
+    }
+
     public void setDataList(LinkedList<History> dataList) {
         prepare(dataList, true);
     }
@@ -427,25 +447,25 @@ public class ChatListAdapter extends BaseAdapter {
         long day = 1000 * 60 * 60 * 24;
         long numb = Data.midnight - day * 5;
 
-        if (mDataList != null ) {
-            if(doNeedClear) {
-        	    mDataList.clear();
+        if (mDataList != null) {
+            if (doNeedClear) {
+                mDataList.clear();
             }
         } else {
-        	mDataList = new FeedList<History>();
+            mDataList = new FeedList<History>();
         }
-        if(doNeedClear) {
+        if (doNeedClear) {
             mItemLayoutList.clear();
         }
 
         int prev_target = -1;
         long prev_date = 0;
-        if(!doNeedClear && mDataList.size() != 0) {
-            if(mDataList.getLast() != null) {
+        if (!doNeedClear && mDataList.size() != 0) {
+            if (mDataList.getLast() != null) {
                 prev_date = mDataList.getLast().created;
-                if(prev_date >Data.midnight) {
+                if (prev_date > Data.midnight) {
                     prev_date = Data.midnight;
-                } else if(prev_date > Data.midnight - day) {
+                } else if (prev_date > Data.midnight - day) {
                     prev_date = Data.midnight - day;
                 } else if (prev_date > Data.midnight - day * 2) {
                     prev_date = Data.midnight - day * 2;
@@ -617,10 +637,12 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     public void release() {
-        if (mDataList != null)
+        if (mDataList != null) {
             mDataList.clear();
-        if (mItemLayoutList != null)
+        }
+        if (mItemLayoutList != null) {
             mItemLayoutList.clear();
+        }
         mDataList = null;
         mInflater = null;
         mItemLayoutList = null;
@@ -637,26 +659,26 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     private void removeAtPosition(int position) {
-        for(int i=position;i<mDataList.size()-1;i++) {
-            mDataList.set(i,mDataList.get(i+1));
+        for (int i = position; i < mDataList.size() - 1; i++) {
+            mDataList.set(i, mDataList.get(i + 1));
         }
-        mDataList.remove(mDataList.size()-1);
-        for(int i=position;i<mItemLayoutList.size()-1;i++) {
-            mItemLayoutList.set(i,mItemLayoutList.get(i+1));
+        mDataList.remove(mDataList.size() - 1);
+        for (int i = position; i < mItemLayoutList.size() - 1; i++) {
+            mItemLayoutList.set(i, mItemLayoutList.get(i + 1));
         }
-        mItemLayoutList.remove(mItemLayoutList.size()-1);
+        mItemLayoutList.remove(mItemLayoutList.size() - 1);
     }
 
     @SuppressWarnings("unchecked")
-	public LinkedList<History> getDataCopy() {
+    public LinkedList<History> getDataCopy() {
         //noinspection unchecked
-    	LinkedList<History> dataClone = (LinkedList<History>) mDataList.clone(); 
-    	Collections.reverse(dataClone);
+        LinkedList<History> dataClone = (LinkedList<History>) mDataList.clone();
+        Collections.reverse(dataClone);
         return dataClone;
 
     }
 
     public void addAll(LinkedList<History> dataList) {
-        prepare(dataList,false);
+        prepare(dataList, false);
     }
 }

@@ -17,7 +17,7 @@ public class RoundCornersPostProcessor extends ImagePostProcessor {
         mCacheKey = CACHE_KEY + radius;
         mRadius = radius;
     }
-    
+
     public RoundCornersPostProcessor() {
         this(DEFAULT_RADIUS);
     }

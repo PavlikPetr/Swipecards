@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -51,6 +52,10 @@ public class ImageViewRemote extends ImageView {
      * Объект таймера с задержкой запроса но
      */
     private Timer mRepeatTimer;
+    /**
+     * View, которое используется в качестве индикатора загрузки
+     */
+    private View mLoader;
 
 
     public ImageViewRemote(Context context) {
@@ -152,8 +157,11 @@ public class ImageViewRemote extends ImageView {
     @Override
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
+        if (bm != null && mLoader != null) {
+            mLoader.setVisibility(View.GONE);
+        }
         //Показываем анимацию только в том случае, если ImageView видно пользователю
-        if (mIsAnimationEnabled && isShown()) {
+        if (bm != null && mIsAnimationEnabled && isShown()) {
             startAnimation(mAnimation);
         }
 
@@ -180,7 +188,12 @@ public class ImageViewRemote extends ImageView {
     }
 
     public boolean setPhoto(Photo photo, Handler handler) {
+        return setPhoto(photo, handler, null);
+    }
+
+    public boolean setPhoto(Photo photo, Handler handler, View loader) {
         boolean result;
+        mLoader = loader;
         if (photo != null) {
             int size = Math.max(getLayoutParams().height, getLayoutParams().width);
             if (size > 0) {

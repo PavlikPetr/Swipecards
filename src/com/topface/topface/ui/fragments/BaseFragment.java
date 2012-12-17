@@ -5,10 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.http.IRequestClient;
 
@@ -40,7 +44,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void updateUI(Runnable action) {
-        if(isAdded()) {
+        if (isAdded()) {
             getActivity().runOnUiThread(action);
         }
     }
@@ -55,16 +59,16 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onPause() {
         super.onPause();
-//        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateCountersReceiver);
+        removeAllRequests();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        for (ApiRequest request : mRequests) {
-            request.cancel();
+    private void removeAllRequests() {
+        if (mRequests != null && mRequests.size() > 0) {
+            for (ApiRequest request : mRequests) {
+                cancelRequest(request);
+            }
+            mRequests.clear();
         }
-        mRequests.clear();
     }
 
     @Override
@@ -75,8 +79,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     @Override
-    public void removeRequest(ApiRequest request) {
-        mRequests.remove(request);
+    public void cancelRequest(ApiRequest request) {
+        request.cancel();
     }
 
     @Override
@@ -86,7 +90,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     private void setUpdateCountersReceiver() {
-        if(updateCountersReceiver == null){
+        if (updateCountersReceiver == null) {
             updateCountersReceiver = new BroadcastReceiver() {
 
                 @Override
@@ -96,12 +100,41 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                     }
                 }
             };
-            if(isAdded()) {
+            if (isAdded()) {
                 LocalBroadcastManager.getInstance(getActivity())
                         .registerReceiver(
                                 updateCountersReceiver,
                                 new IntentFilter(CountersManager.UPDATE_COUNTERS)
                         );
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        View rootView = getView();
+        if (rootView != null) {
+            unbindDrawables(getView());
+            System.gc();
+        }
+    }
+
+    private void unbindDrawables(View view) {
+        if (view.getBackground() != null) {
+            view.getBackground().setCallback(null);
+        }
+        if (view instanceof ViewGroup && !(view instanceof AdapterView)) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+            ((ViewGroup) view).removeAllViews();
+        } else if (view instanceof AdapterView) {
+            try {
+                //noinspection unchecked
+                ((AdapterView) view).setAdapter(null);
+            } catch (Exception e) {
+                Debug.error(e);
             }
         }
     }

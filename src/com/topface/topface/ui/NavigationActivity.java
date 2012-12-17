@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
@@ -47,7 +48,6 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     private Novice mNovice;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -65,8 +65,8 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         mFragmentSwitcher.setFragmentManager(mFragmentManager);
 
         Intent intent = getIntent();
-        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT,-1);
-        if(id != -1) {
+        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
+        if (id != -1) {
             mFragmentSwitcher.showFragmentWithAnimation(id);
         } else {
             mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
@@ -87,8 +87,8 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT,-1);
-        if(id != -1) {
+        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
+        if (id != -1) {
             mFragmentSwitcher.showFragmentWithAnimation(id);
         }
     }
@@ -98,16 +98,18 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         super.onResume();
         mThis = this;
         long startTime = Calendar.getInstance().getTimeInMillis();
-        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME,-1);
-        if(stopTime != -1) {
-            if(startTime - stopTime > UPDATE_INTERVAL) {
+        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
+        if (stopTime != -1) {
+            if (startTime - stopTime > UPDATE_INTERVAL) {
                 ProfileRequest pr = new ProfileRequest(this);
                 pr.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) throws NullPointerException {}
+                    public void success(ApiResponse response) {
+                    }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {}
+                    public void fail(int codeError, ApiResponse response) {
+                    }
                 }).exec();
             }
         }
@@ -211,18 +213,18 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
             mFragmentMenu.hide();
         }
 
-		@Override
-		public void afterOpening() {
-			if (mNovice.isMenuCompleted()) return;
-			
-			if (mNovice.showFillProfile) {
-				mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
-		        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-		        alphaAnimation.setDuration(400L);		        
-		        mNoviceLayout.startAnimation(alphaAnimation);				
-				mNovice.completeShowFillProfile();
-			}
-		}
+        @Override
+        public void afterOpening() {
+            if (mNovice.isMenuCompleted()) return;
+
+            if (mNovice.showFillProfile) {
+                mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+                alphaAnimation.setDuration(400L);
+                mNoviceLayout.startAnimation(alphaAnimation);
+                mNovice.completeShowFillProfile();
+            }
+        }
     };
 
 
@@ -237,8 +239,7 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
         if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT)) {
             return;
-        }
-        else if (date_start == 1) {
+        } else if (date_start == 1) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putLong("RATING_POPUP", new java.util.Date().getTime());
             editor.commit();
@@ -302,6 +303,20 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unbindDrawables(findViewById(R.id.NavigationLayout));
+        System.gc();
+    }
+
+    private void unbindDrawables(View view) {
+        if (view.getBackground() != null) {
+            view.getBackground().setCallback(null);
+        }
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+            ((ViewGroup) view).removeAllViews();
+        }
     }
 
 

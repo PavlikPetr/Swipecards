@@ -12,8 +12,8 @@ import java.util.LinkedList;
 
 public class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
-	public static final String INTENT_PREV_ENTITY = "prev_entity";
-	
+    public static final String INTENT_PREV_ENTITY = "prev_entity";
+
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
     @Override
@@ -25,6 +25,21 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public void onStart() {
         super.onStart();
         EasyTracker.getInstance().activityStart(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        removeAllRequests();
+    }
+
+    private void removeAllRequests() {
+        if (mRequests != null && mRequests.size() > 0) {
+            for (ApiRequest request : mRequests) {
+                cancelRequest(request);
+            }
+            mRequests.clear();
+        }
     }
 
     @Override
@@ -41,17 +56,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     @Override
-    public void removeRequest(ApiRequest request) {
-        mRequests.remove(request);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        for (ApiRequest request : mRequests) {
-            request.cancel();
-        }
-        mRequests.clear();
+    public void cancelRequest(ApiRequest request) {
+        request.cancel();
     }
 
     @Override
