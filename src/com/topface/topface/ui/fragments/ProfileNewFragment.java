@@ -351,6 +351,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
                     Class fragmentClass = Class.forName(fragmentClassName);
                     fragment = (Fragment) fragmentClass.newInstance();
                 }
+
                 //save variables for setting user data
                 if (fragment instanceof HeaderMainFragment) {
                     mHeaderMainFragment = (HeaderMainFragment) fragment;
