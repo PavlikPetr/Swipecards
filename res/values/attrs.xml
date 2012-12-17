@@ -42,4 +42,13 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="ServicesTextView">
+            <attr name="maxChars" format="integer" />
+            <attr name="charPadding" format="integer"/>
+            <attr name="text" format="string"/>
+            <attr name="image" format="reference"/>
+            <attr name="fontSize" format="integer"/>
+            <attr name="textWithoutBackground" format="string"/>
+    </declare-styleable>
+
 </resources>

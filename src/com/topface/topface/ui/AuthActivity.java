@@ -114,19 +114,18 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         // Progress
         mProgressBar = (ProgressBar) findViewById(R.id.prsAuthLoading);
 
-        if (!Http.isOnline(this))
+        checkOnline();
+
+    }
+
+    private void checkOnline() {
+        if (!Http.isOnline(this)) {
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
                     .show();
 
-        if (Data.isSSID()) {
-            mIsAuthorized = true;
-            hideButtons();
-            getProfile(false);
-        } else if (!(new AuthToken(getApplicationContext())).isEmpty()) {
-            hideButtons();
-            mAuthorizationManager.reAuthorize();
         }
     }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -153,6 +152,15 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mIsAuthStart = true;
         checkIntentForReauth();
         mThis = this;
+
+        if (Data.isSSID()) {
+            mIsAuthorized = true;
+            hideButtons();
+            getProfile(false);
+        } else if (!(new AuthToken(getApplicationContext())).isEmpty()) {
+            hideButtons();
+            mAuthorizationManager.reAuthorize();
+        }
     }
 
     public static boolean isStarted() {

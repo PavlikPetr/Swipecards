@@ -4,7 +4,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Novice;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 

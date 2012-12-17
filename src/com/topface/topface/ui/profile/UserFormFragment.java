@@ -2,7 +2,6 @@ package com.topface.topface.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,10 +43,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
         mEmptyFormLayout = (ViewGroup) root.findViewById(R.id.loEmptyForm);
 
         Button askToFillForm = (Button) mEmptyFormLayout.findViewById(R.id.btnEmptyForm);
-
-        mAskToFillForm =(Button) mEmptyFormLayout.findViewById(R.id.btnEmptyForm);
         askToFillForm.setOnClickListener(this);
-
 
         mTitleLayout = root.findViewById(R.id.fragmentTitle);
         mTitle = (TextView) root.findViewById(R.id.tvTitle);
