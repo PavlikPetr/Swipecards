@@ -18,6 +18,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.profile.BlackListActivity;
 import com.topface.topface.utils.CacheProfile;
 
 public class VipBuyFragment extends BaseFragment {
@@ -120,6 +121,7 @@ public class VipBuyFragment extends BaseFragment {
                         goToBlackList();
                     }
                 });
+
         initEditItem(root,
                 R.id.fepProfileBG,
                 R.drawable.edit_big_btn_bottom_selector,
@@ -202,6 +204,8 @@ public class VipBuyFragment extends BaseFragment {
     }
 
     private void goToBlackList() {
+        Intent intent = new Intent(getActivity(), BlackListActivity.class);
+        startActivity(intent);
     }
 
     private void goToBgPick() {

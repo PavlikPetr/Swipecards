@@ -39,12 +39,12 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
 
     @Override
     protected int getVipItemLayout() {
-        return getItemLayout();
+        return ITEM_LAYOUT;
     }
 
     @Override
     protected int getNewVipItemLayout() {
-        return getNewItemLayout();
+        return ITEM_LAYOUT;
     }
 
     public void toggleEditMode() {
