@@ -134,7 +134,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
         btnBack.setVisibility(View.VISIBLE);
 
-
         if (getIntent().hasExtra(INTENT_PREV_ENTITY) && isThereNavigationActivity()) {
              btnBack.setOnClickListener(new OnClickListener() {
                 @Override

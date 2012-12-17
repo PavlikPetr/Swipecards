@@ -31,10 +31,12 @@ import java.util.LinkedList;
 
 public class GiftsFragment extends BaseFragment {
     // Data
-    private String mTag;
+    private String mTag = GIFTS_ALL_TAG;
 
     public static final String GIFTS_ALL_TAG = "giftsGridAll";
     public static final String GIFTS_USER_PROFILE_TAG = "giftsGridProfile";
+
+    private TextView mTitle;
 
     private GiftsAdapter mGridAdapter;
     private GiftGalleryManager<FeedGift> mGalleryManager;
@@ -63,84 +65,84 @@ public class GiftsFragment extends BaseFragment {
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnScrollListener(mGalleryManager);
 
-        if(mProfile != null) {
+        mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
+
+        if (mProfile != null) {
             setProfile(mProfile);
-            initViews(root);
         }
+        initViews();
 
         return root;
     }
 
-    private void initViews(final View root) {
-        if (root != null) {
-            root.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mTag.equals(GIFTS_ALL_TAG)) {
-                        root.findViewById(R.id.fragmentTitle).setVisibility(View.GONE);
-                        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                FeedGift item = (FeedGift) parent.getItemAtPosition(position);
-                                Intent intent = getActivity().getIntent();
-                                if (view.getTag() instanceof ViewHolder) {
-                                    if (item.gift.type != Gift.PROFILE && item.gift.type != Gift.SEND_BTN) {
-                                        intent.putExtra(GiftsActivity.INTENT_GIFT_ID, item.gift.id);
-                                        intent.putExtra(GiftsActivity.INTENT_GIFT_URL, item.gift.link);
-                                        intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, item.gift.price);
+    private void initViews() {
+        updateUI(new Runnable() {
+            @Override
+            public void run() {
+                if (mTag.equals(GIFTS_ALL_TAG)) {
+                    mTitle.setVisibility(View.GONE);
+                    mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            FeedGift item = (FeedGift) parent.getItemAtPosition(position);
+                            Intent intent = getActivity().getIntent();
+                            if (view.getTag() instanceof ViewHolder) {
+                                if (item.gift.type != Gift.PROFILE && item.gift.type != Gift.SEND_BTN) {
+                                    intent.putExtra(GiftsActivity.INTENT_GIFT_ID, item.gift.id);
+                                    intent.putExtra(GiftsActivity.INTENT_GIFT_URL, item.gift.link);
+                                    intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, item.gift.price);
 
-                                        getActivity().setResult(Activity.RESULT_OK, intent);
-                                        getActivity().finish();
-                                    }
+                                    getActivity().setResult(Activity.RESULT_OK, intent);
+                                    getActivity().finish();
                                 }
-                            }
-                        });
-                        if (mProfile != null) {
-                            ((TextView) getView().findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
-                            root.findViewById(R.id.fragmentTitle).setVisibility(View.VISIBLE);
-                            if (mGifts.size() == 0) {
-                                onNewFeeds();
                             }
                         }
-                    } else if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
-                        ((TextView) getView().findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
-                        root.findViewById(R.id.fragmentTitle).setVisibility(View.VISIBLE);
-                        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                if (view.getTag() instanceof ViewHolder) {
-                                    FeedGift item = (FeedGift) parent.getItemAtPosition(position);
-                                    if (item.gift != null) {
-                                        if (item.gift.type == Gift.SEND_BTN) {
-                                            Intent intent = new Intent(getActivity().getApplicationContext(),
-                                                    GiftsActivity.class);
-                                            startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
-                                        }
+                    });
+                    if (mProfile != null) {
+                        mTitle.setText(R.string.gifts);
+                        mTitle.setVisibility(View.VISIBLE);
+                        if (mGifts.size() == 0) {
+                            onNewFeeds();
+                        }
+                    }
+                } else if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
+                    mTitle.setText(R.string.gifts);
+                    mTitle.setVisibility(View.VISIBLE);
+                    mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            if (view.getTag() instanceof ViewHolder) {
+                                FeedGift item = (FeedGift) parent.getItemAtPosition(position);
+                                if (item.gift != null) {
+                                    if (item.gift.type == Gift.SEND_BTN) {
+                                        Intent intent = new Intent(getActivity().getApplicationContext(),
+                                                GiftsActivity.class);
+                                        startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
                                     }
                                 }
-
-                                if (mGifts.get(position).isLoaderRetry()) {
-                                    updateUI(new Runnable() {
-                                        public void run() {
-                                            updateUI(new Runnable() {
-
-                                                @Override
-                                                public void run() {
-                                                    removeLoaderItem();
-                                                    mGifts.add(new FeedGift(ItemType.LOADER));
-                                                    mGridAdapter.notifyDataSetChanged();
-                                                }
-                                            });
-                                            onNewFeeds();
-                                        }
-                                    });
-                                }
                             }
-                        });
-                    }
+
+                            if (mGifts.get(position).isLoaderRetry()) {
+                                updateUI(new Runnable() {
+                                    public void run() {
+                                        updateUI(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+                                                removeLoaderItem();
+                                                mGifts.add(new FeedGift(ItemType.LOADER));
+                                                mGridAdapter.notifyDataSetChanged();
+                                            }
+                                        });
+                                        onNewFeeds();
+                                    }
+                                });
+                            }
+                        }
+                    });
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override
@@ -295,7 +297,7 @@ public class GiftsFragment extends BaseFragment {
             });
         }
 
-        initViews(getView());
+        initViews();
     }
 
     public void setProfile(Profile profile) {
