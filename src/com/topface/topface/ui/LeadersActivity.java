@@ -78,7 +78,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                     new LeaderRequest(mSelectedPhoto.getPhotoId(), LeadersActivity.this)
                             .callback(new ApiHandler() {
                                 @Override
-                                public void success(ApiResponse response) throws NullPointerException {
+                                public void success(ApiResponse response) {
                                     post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -89,7 +89,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                                 }
 
                                 @Override
-                                public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                                public void fail(int codeError, ApiResponse response) {
                                     post(new Runnable() {
                                         @Override
                                         public void run() {

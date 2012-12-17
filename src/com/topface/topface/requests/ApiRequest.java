@@ -39,11 +39,14 @@ public abstract class ApiRequest {
 
     public ApiRequest callback(ApiHandler handler) {
         this.handler = handler;
+        this.handler.setContext(context);
         return this;
     }
 
     public void exec() {
         setStopTime();
+        setHandler();
+
         if (!Http.isOnline(context) && doNeedAlert) {
             RetryDialog retryDialog = new RetryDialog(context);
             retryDialog.setMessage(context.getString(R.string.general_internet_off));
@@ -73,6 +76,19 @@ public abstract class ApiRequest {
 
     }
 
+    private void setHandler() {
+        if (handler == null) {
+            handler = new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) {}
+
+                @Override
+                public void fail(int codeError, ApiResponse response) {}
+            };
+            handler.setContext(context);
+        }
+    }
+
     protected void doNeedAlert(boolean value) {
         doNeedAlert = value;
     }
@@ -86,6 +102,7 @@ public abstract class ApiRequest {
         if (connection != null) {
             connection.abort();
         }
+        connection = null;
         canceled = true;
     }
 
@@ -104,4 +121,9 @@ public abstract class ApiRequest {
     public void setNeedResend(boolean value) {
         doNeedResend = value;
     }
+
+    public boolean isCanceled() {
+        return canceled;
+    }
+
 }

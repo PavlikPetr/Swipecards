@@ -102,7 +102,7 @@ public class Options extends AbstractData {
                 options.notifications.put(type, new TopfaceNotifications(apns, mail, type));
             }
         } catch (Exception e) {
-            Debug.log("Message.class", "Wrong response parsing: " + e);
+            Debug.error("Message.class: Wrong response parsing", e);
         }
 
         CacheProfile.setOptions(options, response.jsonResult);

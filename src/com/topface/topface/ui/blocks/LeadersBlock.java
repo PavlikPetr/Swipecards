@@ -46,7 +46,7 @@ public class LeadersBlock {
         }
         request.callback(new ApiHandler() {
             @Override
-            public void success(final ApiResponse response) throws NullPointerException {
+            public void success(final ApiResponse response) {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -56,7 +56,7 @@ public class LeadersBlock {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+            public void fail(int codeError, ApiResponse response) {
                 Debug.error("Leaders loading error: " + codeError + "-" + response.toString());
             }
         }).exec();

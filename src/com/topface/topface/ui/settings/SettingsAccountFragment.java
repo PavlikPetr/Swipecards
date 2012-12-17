@@ -69,7 +69,7 @@ public class SettingsAccountFragment extends TrackedFragment {
                 lockerView.setVisibility(View.VISIBLE);
                 logoutRequest.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) throws NullPointerException {
+                    public void success(ApiResponse response) {
                         GCMRegistrar.unregister(getActivity().getApplicationContext());
                         Data.removeSSID(getActivity().getApplicationContext());
                         token.removeToken();
@@ -87,7 +87,7 @@ public class SettingsAccountFragment extends TrackedFragment {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    public void fail(int codeError, ApiResponse response) {
                         lockerView.setVisibility(View.GONE);
                     }
                 }).exec();

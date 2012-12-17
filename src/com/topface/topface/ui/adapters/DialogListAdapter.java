@@ -33,7 +33,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
         if (getItemViewType(position) == T_NEW) {
             int unreadCounter = getUnreadCounter(dialog);
-            if (unreadCounter > 0) {
+            if (unreadCounter > 1) {
                 holder.unreadCounter.setVisibility(View.VISIBLE);
                 holder.unreadCounter.setText(Integer.toString(unreadCounter));
             } else {

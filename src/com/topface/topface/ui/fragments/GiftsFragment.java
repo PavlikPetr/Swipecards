@@ -186,7 +186,7 @@ public class GiftsFragment extends BaseFragment {
                     sendedGift.gift.type = Gift.PROFILE_NEW;
                     sendGift.callback(new ApiHandler() {
                         @Override
-                        public void success(ApiResponse response) throws NullPointerException {
+                        public void success(ApiResponse response) {
                             SendGiftAnswer answer = SendGiftAnswer.parse(response);
                             CacheProfile.power = answer.power;
                             CacheProfile.money = answer.money;
@@ -204,8 +204,7 @@ public class GiftsFragment extends BaseFragment {
                         }
 
                         @Override
-                        public void fail(int codeError, final ApiResponse response)
-                                throws NullPointerException {
+                        public void fail(int codeError, final ApiResponse response) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -255,7 +254,7 @@ public class GiftsFragment extends BaseFragment {
         request.callback(new ApiHandler() {
 
             @Override
-            public void success(ApiResponse response) throws NullPointerException {
+            public void success(ApiResponse response) {
                 final FeedListData<FeedGift> feedGifts = new FeedListData<FeedGift>(response.jsonResult, FeedGift.class);
 
                 updateUI(new Runnable() {
@@ -275,7 +274,7 @@ public class GiftsFragment extends BaseFragment {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+            public void fail(int codeError, ApiResponse response) {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {

@@ -1,7 +1,15 @@
 package com.topface.topface.data;
 
+import org.json.JSONObject;
+
 public class BlackListItem extends FeedItem {
-    public BlackListItem(ItemType type) {
-        super(type);
+    public BlackListItem(JSONObject data) {
+        super(data);
+    }
+
+    public void fillData(JSONObject item) {
+        //В черном списке нас интересует только юзер, все остальные поля не нужны
+        this.user = new FeedUser(item);
+        this.id = this.user.id;
     }
 }

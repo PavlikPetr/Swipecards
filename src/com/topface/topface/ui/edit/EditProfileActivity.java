@@ -214,7 +214,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     request.callback(new ApiHandler() {
 
                         @Override
-                        public void success(ApiResponse response) throws NullPointerException {
+                        public void success(ApiResponse response) {
                             CacheProfile.city_id = city_id;
                             CacheProfile.city_name = city_name;
                             CacheProfile.city_full = city_full;
@@ -229,7 +229,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                        public void fail(int codeError, ApiResponse response) {
                             Toast.makeText(EditProfileActivity.this, getString(R.string.general_data_error),
                                     Toast.LENGTH_SHORT).show();
                         }

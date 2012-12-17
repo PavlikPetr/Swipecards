@@ -1,7 +1,6 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.*;
@@ -38,14 +37,10 @@ import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.GeoLocationManager;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
-import com.topface.topface.utils.OsmManager;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.TimerTask;
 
 @SuppressWarnings("deprecation")
@@ -137,7 +132,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         btnBack.setVisibility(View.VISIBLE);
 
 
-        if (getIntent().hasExtra(INTENT_PREV_ENTITY) && isThereNavigationActivity()) {
+        if (getIntent().hasExtra(INTENT_PREV_ENTITY) && Utils.isThereNavigationActivity(this)) {
             btnBack.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -287,7 +282,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         registerRequest(dr);
         dr.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) throws NullPointerException {
+            public void success(ApiResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -297,7 +292,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+            public void fail(int codeError, ApiResponse response) {
                 Debug.log(response.toString());
             }
         }).exec();
@@ -476,7 +471,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         GCMUtils.lastUserId = mUserId; //Не показываем нотификации в чате с пользователем,
         //чтобы, в случае задержки нотификации, не делать лишних
         //оповещений
-        if (!isThereNavigationActivity() && btnBack != null) {
+        if (!Utils.isThereNavigationActivity(this) && btnBack != null) {
             btnBack.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -592,7 +587,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 mIsAddPanelOpened = false;
                 sendGift.callback(new ApiHandler() {
                     @Override
-                    public void success(final ApiResponse response) throws NullPointerException {
+                    public void success(final ApiResponse response) {
                         SendGiftAnswer answer = SendGiftAnswer.parse(response);
                         CacheProfile.power = answer.power;
                         CacheProfile.money = answer.money;
@@ -611,8 +606,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     }
 
                     @Override
-                    public void fail(int codeError, final ApiResponse response)
-                            throws NullPointerException {
+                    public void fail(int codeError, final ApiResponse response) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -646,7 +640,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 coordRequest.callback(new ApiHandler() {
 
                     @Override
-                    public void success(final ApiResponse response) throws NullPointerException {
+                    public void success(final ApiResponse response) {
                         final Confirmation confirm = Confirmation.parse(response);
                         runOnUiThread(new Runnable() {
                             @Override
@@ -667,8 +661,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response)
-                            throws NullPointerException {
+                    public void fail(int codeError, ApiResponse response) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -747,7 +740,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 coordRequest.callback(new ApiHandler() {
 
                     @Override
-                    public void success(final ApiResponse response) throws NullPointerException {
+                    public void success(final ApiResponse response) {
                         final Confirmation confirm = Confirmation.parse(response);
                         // final String address =
                         // mGeoManager.getLocationAddress(latitude, longitude);
@@ -775,8 +768,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response)
-                            throws NullPointerException {
+                    public void fail(int codeError, ApiResponse response) {
                         runOnUiThread(new Runnable() {
 
                             @Override
@@ -882,19 +874,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             mUpdater.removeCallbacks(mUpdaterTask);
             mUpdater = null;
         }
-    }
-
-    private boolean isThereNavigationActivity() {
-        ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
-        if (taskList != null) {
-            if (taskList.size() > 1) {
-                if (taskList.get(0).baseActivity.getClassName().equals(NavigationActivity.class.getName()) || taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     TimerTask mUpdaterTask = new TimerTask() {

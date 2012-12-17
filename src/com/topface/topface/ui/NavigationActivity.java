@@ -104,11 +104,11 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
                 ProfileRequest pr = new ProfileRequest(this);
                 pr.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) throws NullPointerException {
+                    public void success(ApiResponse response) {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    public void fail(int codeError, ApiResponse response) {
                     }
                 }).exec();
             }

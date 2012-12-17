@@ -500,7 +500,7 @@ public class Profile extends AbstractDataWithPhotos {
             // }
             // }
         } catch (Exception e) {
-            Debug.log("Profile.class", "Wrong response parsing: " + e);
+            Debug.error("Profile.class: Wrong response parsing", e);
         }
 
         return profile;

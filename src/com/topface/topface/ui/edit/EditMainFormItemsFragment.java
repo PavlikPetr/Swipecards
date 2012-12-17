@@ -247,7 +247,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             request.callback(new ApiHandler() {
 
                 @Override
-                public void success(ApiResponse response) throws NullPointerException {
+                public void success(ApiResponse response) {
                     for (EditType type : hashChangedData.keySet()) {
                         setDataByEditType(type, hashChangedData.get(type));
                     }
@@ -259,8 +259,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response)
-                        throws NullPointerException {
+                public void fail(int codeError, ApiResponse response) {
                     getActivity().setResult(Activity.RESULT_CANCELED);
                     finishRequestSend();
                     if (handler != null) handler.sendEmptyMessage(0);

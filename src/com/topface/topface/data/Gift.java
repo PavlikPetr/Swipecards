@@ -41,7 +41,7 @@ public class Gift extends AbstractDataWithPhotos {
                 gifts.add(gift);
             }
         } catch (JSONException e) {
-            Debug.log("Gift.class", "Wrong response parsing: " + e);
+            Debug.error("Gift.class: Wrong response parsing", e);
         }
 
         return gifts;

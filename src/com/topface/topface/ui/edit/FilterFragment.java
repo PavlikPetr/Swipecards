@@ -411,7 +411,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         filterRequest.callback(new ApiHandler() {
 
             @Override
-            public void success(ApiResponse response) throws NullPointerException {
+            public void success(ApiResponse response) {
                 saveFilter();
                 refreshSaveState();
                 getActivity().setResult(Activity.RESULT_OK);
@@ -420,7 +420,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+            public void fail(int codeError, ApiResponse response) {
                 getActivity().setResult(Activity.RESULT_CANCELED);
                 refreshSaveState();
                 finishRequestSend();

@@ -52,6 +52,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public ImageView heart;
         public ViewFlipper flipper;
         public Button flippedBtn;
+        public View dataLayout;
+        public ImageView deleteIndicator;
     }
 
     public FeedAdapter(Context context, Updater updateCallback) {
@@ -157,7 +159,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             setListenerOnAvatar(holder.avatar, item);
 
             holder.name.setText(item.user.getNameAndAge());
-            holder.city.setText(item.user.city.name);
+            if (item.user.city != null) {
+                holder.city.setText(item.user.city.name);
+            }
             holder.online.setVisibility(item.user.online ? View.VISIBLE : View.INVISIBLE);
         }
 
@@ -287,6 +291,17 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                 data.removeLast();
             }
         }
+    }
+
+    public boolean removeItem(int id) {
+        boolean result = false;
+        FeedList<T> data = getData();
+        if (data.hasItem(id)) {
+            result = true;
+            getData().remove(id);
+            notifyDataSetChanged();
+        }
+        return result;
     }
 
     public T getLastFeedItem() {

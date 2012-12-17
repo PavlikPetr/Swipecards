@@ -89,7 +89,7 @@ public class Debug {
             }
             msg = msg != null && !msg.equals("") ? msg + " : " : "";
             String errorText = e.getMessage() == null ? "" : " :: " + e.getMessage();
-            String cause = e.getCause() == null ? "" : "\n" + e.getCause() + "\n";
+            String cause = e.getLocalizedMessage() == null ? "" : "\n" + e.getLocalizedMessage() + "\n";
             showChunkedLogError(App.TAG, msg + errorText + cause + stack.toString());
         }
     }

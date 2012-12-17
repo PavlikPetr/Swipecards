@@ -49,7 +49,7 @@ public class City extends AbstractData {
                     cities.add(new City(arr.getJSONObject(i)));
                 }
         } catch (Exception e) {
-            Debug.log("City.class", "Wrong response parsing: " + e);
+            Debug.error("City.class: Wrong response parsing", e);
         }
 
         return cities;

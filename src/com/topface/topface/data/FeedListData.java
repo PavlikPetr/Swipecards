@@ -29,7 +29,6 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
         items = getList(data.optJSONArray("items"));
     }
 
-    @SuppressWarnings({"hiding", "unchecked"})
     private <T extends FeedItem> FeedList<T> getList(JSONArray list) {
         FeedList<T> result = new FeedList<T>();
         if (list != null) {

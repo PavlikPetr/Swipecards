@@ -128,5 +128,22 @@ public class ApiResponse {
         return mIsErrorResponse;
     }
 
+    /**
+     * Если ответ содержит поле comleted, то вернет ее значение. Нужно для парсинга простых ответов
+     * @return флаг выполенения запроса
+     */
+    public boolean isCompleted() {
+        boolean completed = false;
+        try {
+            if (jsonResult != null && jsonResult.has("completed")) {
+                completed = jsonResult.optBoolean("completed", false);
+            }
+        } catch (Exception e) {
+            Debug.error(e);
+        }
+
+        return completed;
+    }
+
 
 }

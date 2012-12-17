@@ -297,7 +297,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                         ApiHandler handler = new ApiHandler() {
 
                             @Override
-                            public void success(ApiResponse response) throws NullPointerException {
+                            public void success(ApiResponse response) {
                                 Options.parse(response);
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -315,7 +315,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                             }
 
                             @Override
-                            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                            public void fail(int codeError, ApiResponse response) {
                                 final ApiResponse finalResponse = response;
                                 runOnUiThread(new Runnable() {
                                     @Override

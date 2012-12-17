@@ -52,7 +52,7 @@ public class Top extends AbstractDataWithPhotos {
                     userList.add(topUser);
                 }
         } catch (Exception e) {
-            Debug.log("TopUser.class", "Wrong response parsing: " + e);
+            Debug.error("TopUser.class: Wrong response parsing", e);
         }
 
         return userList;

@@ -155,7 +155,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         feedbackRequest.callback(new ApiHandler() {
 
             @Override
-            public void success(ApiResponse response) throws NullPointerException {
+            public void success(ApiResponse response) {
                 mReport.body = Static.EMPTY;
                 finishRequestSend();
                 updateUI(new Runnable() {
@@ -173,7 +173,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+            public void fail(int codeError, ApiResponse response) {
                 finishRequestSend();
                 updateUI(new Runnable() {
 

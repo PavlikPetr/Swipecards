@@ -1,5 +1,7 @@
 package com.topface.topface.utils;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +17,7 @@ import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.ui.NavigationActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -489,5 +492,20 @@ public class Utils {
         return list.size() > 0;
     }
 
+    public static boolean isThereNavigationActivity(Activity activity) {
+        ActivityManager mngr = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+        if (taskList != null) {
+            if (taskList.size() > 1) {
+                if (
+                        taskList.get(0).baseActivity.getClassName().equals(NavigationActivity.class.getName())
+                        || taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName())
+                        ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

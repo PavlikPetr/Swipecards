@@ -141,14 +141,14 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 deleteRequest.callback(new ApiHandler() {
 
                     @Override
-                    public void success(ApiResponse response) throws NullPointerException {
+                    public void success(ApiResponse response) {
                         CacheProfile.photos.removeAll(mDeleted);
                         mDeleted.clear();
                         finishOperations(handler);
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    public void fail(int codeError, ApiResponse response) {
                         finishOperations(handler);
                     }
                 }).exec();
@@ -161,7 +161,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 setAsMainRequest.callback(new ApiHandler() {
 
                     @Override
-                    public void success(ApiResponse response) throws NullPointerException {
+                    public void success(ApiResponse response) {
                         CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
                         getActivity().setResult(Activity.RESULT_OK);
                         mSelectedAsMainId = mLastSelectedAsMainId;
@@ -169,7 +169,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    public void fail(int codeError, ApiResponse response) {
                         getActivity().setResult(Activity.RESULT_CANCELED);
                         finishOperations(handler);
 
