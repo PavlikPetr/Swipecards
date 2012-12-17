@@ -114,10 +114,8 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             editButton.setVisibility(View.VISIBLE);
             editButton.setText(getResources().getString(R.string.general_edit_button));
             editButton.setOnClickListener(this);
-            mUserProfile = CacheProfile.getProfile();
         } else  if (mProfileType == TYPE_USER_PROFILE){
             mOnline = (ImageView)root.findViewById(R.id.ivOnline);
-            getUserProfile();
         }
 
         return root;
@@ -128,6 +126,9 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         super.onResume();
         if (mProfileType == TYPE_MY_PROFILE)
             mUserProfile = CacheProfile.getProfile();
+        else {
+            getUserProfile();
+        }
         setProfile(mUserProfile);
     }
 
@@ -264,19 +265,23 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
                 }
                 break;
             case R.id.actionChat:
-                Intent intent = new Intent(getActivity(),ChatActivity.class);
-                intent.putExtra(ChatActivity.INTENT_USER_ID, mUserProfile.uid);
-                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserProfile.first_name);
-                intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserProfile.sex);
-                intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserProfile.age);
-                intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserProfile.city_name);
-                intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
-                intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, ProfileNewFragment.this.getClass().getSimpleName());
-                startActivity(intent);
+                openChat();
                 break;
             default:
                 break;
         }
+    }
+
+    public void openChat() {
+        Intent intent = new Intent(getActivity(),ChatActivity.class);
+        intent.putExtra(ChatActivity.INTENT_USER_ID, mUserProfile.uid);
+        intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserProfile.first_name);
+        intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserProfile.sex);
+        intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserProfile.age);
+        intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserProfile.city_name);
+        intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
+        intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, ProfileNewFragment.this.getClass().getSimpleName());
+        getActivity().startActivityForResult(intent,ChatActivity.INTENT_CHAT_REQUEST);
     }
 
     public static ProfileNewFragment newInstance(int id, int type){

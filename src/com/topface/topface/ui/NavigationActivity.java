@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,11 +21,8 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
-import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.DatingFragment;
-import com.topface.topface.ui.fragments.FragmentSwitchController;
+import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.Debug;
@@ -114,6 +112,14 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
                 }).exec();
             }
         }
+
+        //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+        if (mDelayedFragment != null) {
+            onExtraFragment(mDelayedFragment);
+            mDelayedFragment = null;
+            mChatInvoke = true;
+        }
+
     }
 
     @Override
@@ -142,8 +148,18 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
             super.onBackPressed();
         } else {
-            if(mFragmentSwitcher.isExtraFrameShown()) {
-                mFragmentSwitcher.closeExtraFragment();
+            if (mFragmentSwitcher.isExtraFrameShown()) {
+                //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+                //начало костыля--------------
+                if (mChatInvoke) {
+                    if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileNewFragment) {
+                        ((ProfileNewFragment) mFragmentSwitcher.getCurrentExtraFragment()).openChat();
+                        mChatInvoke = false;
+                    }
+                    //конец костыля--------------
+                } else {
+                    mFragmentSwitcher.closeExtraFragment();
+                }
             } else {
                 mFragmentMenu.refreshNotifications();
                 mFragmentSwitcher.openMenu();
@@ -221,18 +237,18 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
             mFragmentMenu.hide();
         }
 
-		@Override
-		public void afterOpening() {
-			if (mNovice.isMenuCompleted()) return;
-			
-			if (mNovice.showFillProfile) {
-				mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
-		        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-		        alphaAnimation.setDuration(400L);		        
-		        mNoviceLayout.startAnimation(alphaAnimation);				
-				mNovice.completeShowFillProfile();
-			}
-		}
+        @Override
+        public void afterOpening() {
+            if (mNovice.isMenuCompleted()) return;
+
+            if (mNovice.showFillProfile) {
+                mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+                alphaAnimation.setDuration(400L);
+                mNoviceLayout.startAnimation(alphaAnimation);
+                mNovice.completeShowFillProfile();
+            }
+        }
 
         @Override
         public void onExtraFrameOpen() {
@@ -338,7 +354,22 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         return false;
     }
 
-    public void onExtraFragment(Fragment fragment) {
+    public void onExtraFragment(final Fragment fragment) {
         mFragmentSwitcher.switchExtraFragment(fragment);
+    }
+
+    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+    private Fragment mDelayedFragment;
+    private boolean mChatInvoke = false;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK && requestCode == ChatActivity.INTENT_CHAT_REQUEST) {
+            if (data != null) {
+                int user_id = data.getExtras().getInt(ChatActivity.INTENT_USER_ID);
+                mDelayedFragment = ProfileNewFragment.newInstance(user_id, ProfileNewFragment.TYPE_USER_PROFILE);
+                return;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

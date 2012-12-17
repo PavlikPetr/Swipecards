@@ -8,6 +8,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -84,6 +85,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.unread_visitors = resp.optInt("unread_visitors");
             profile.average_rate = resp.optInt("average_rate");
             profile.money = resp.optInt("money");
+            Novice.giveNovicePower = !resp.optBoolean("novice_power",true);
 
             int power = resp.optInt("power");
             // if(power > 10000) power = 10000;
