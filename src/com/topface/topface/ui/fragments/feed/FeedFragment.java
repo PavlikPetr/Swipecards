@@ -26,7 +26,6 @@ import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ProfileNewFragment;
-import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
@@ -292,7 +291,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void onAddToBlackList(int position) {
-        new BlackLIstAddRequest(getItem(position).user.id, getActivity()).exec();
+        new BlackListAddRequest(getItem(position).user.id, getActivity()).exec();
     }
 
     protected void onDeleteItem(final int position) {

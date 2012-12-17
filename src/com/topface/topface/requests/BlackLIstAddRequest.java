@@ -7,7 +7,7 @@ import org.json.JSONObject;
 /**
  * Запрос добавляющий пользователя в черный список
  */
-public class BlackLIstAddRequest extends AbstractApiRequest {
+public class BlackListAddRequest extends AbstractApiRequest {
     public static final String SERVICE_NAME = "blacklistAdd";
     /**
      * id пользователя, котогорого нужно добавить в черный список
@@ -18,7 +18,7 @@ public class BlackLIstAddRequest extends AbstractApiRequest {
      *
      * @param userId пользователя, которого нужно добавить в черный список
      */
-    public BlackLIstAddRequest(int userId, Context context) {
+    public BlackListAddRequest(int userId, Context context) {
         super(context);
         mUserId = userId;
     }

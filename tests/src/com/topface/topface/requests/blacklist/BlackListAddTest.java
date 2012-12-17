@@ -5,7 +5,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.AbstractThreadTest;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackLIstAddRequest;
+import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.utils.Debug;
 
 /**
@@ -19,7 +19,7 @@ public class BlackListAddTest extends AbstractThreadTest {
         runAsyncTest(new Runnable() {
             @Override
             public void run() {
-                new BlackLIstAddRequest(TEST_USER_ID, getInstrumentation().getContext())
+                new BlackListAddRequest(TEST_USER_ID, getInstrumentation().getContext())
                         .callback(new ApiHandler() {
                             @Override
                             public void success(ApiResponse response) {
