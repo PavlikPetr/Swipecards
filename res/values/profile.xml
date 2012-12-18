@@ -22,4 +22,20 @@
         <item>2</item>
         <item>3</item>
     </integer-array>
+
+    <string-array name="profile_vip_background_images">
+        <item>@drawable/profile_vip_background_1</item>
+        <item>@drawable/profile_vip_background_2</item>
+        <item>@drawable/profile_vip_background_3</item>
+        <item>@drawable/profile_vip_background_4</item>
+        <item>@drawable/profile_vip_background_5</item>
+    </string-array>
+
+    <integer-array name="profile_vip_background_images_ids">
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </integer-array>
 </resources>
