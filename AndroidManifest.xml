@@ -32,7 +32,7 @@
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.NoTitleBar" >
+        android:theme = "@style/Theme.TopfaceIndicators">
         <uses-library android:name="com.google.android.maps" />
 
         <!-- main Activity -->
@@ -50,8 +50,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.NavigationActivity"
-            android:screenOrientation="portrait"
-            android:theme = "@style/Theme.TopfaceIndicators"/>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.CitySearchActivity"
             android:screenOrientation="portrait" />

@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.TopsAdapter;
 import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
-import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
@@ -121,9 +119,8 @@ public class TopsFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-                    intent.putExtra(UserProfileActivity.INTENT_USER_ID, Data.topsList.get(position).uid);
-                    startActivityForResult(intent, 0);
+                    ((NavigationActivity)getActivity()).onExtraFragment(
+                            ProfileNewFragment.newInstance(Data.topsList.get(position).uid, ProfileNewFragment.TYPE_USER_PROFILE));
                 } catch (Exception e) {
                     Debug.log(TopsFragment.this, "start UserProfileActivity exception:" + e.toString());
                 }

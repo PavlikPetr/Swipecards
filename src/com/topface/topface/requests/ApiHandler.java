@@ -46,10 +46,16 @@ abstract public class ApiHandler extends Handler {
         if (mContext != null && mContext instanceof Activity) {
             try {
                 //показываем уведомление
-                ((Activity) mContext).runOnUiThread(new Runnable() {
+                final Activity activity = ((Activity) mContext);
+                activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(App.getContext(), stringId, Toast.LENGTH_SHORT).show();
+//                        if (stringId == R.string.general_premium_access_error) {
+//                            Intent intent = new Intent(activity.getApplicationContext(), ContainerActivity.class);
+//                            activity.startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+//                        } else {
+                            Toast.makeText(App.getContext(), stringId, Toast.LENGTH_SHORT).show();
+//                        }
                     }
                 });
             } catch (Exception e) {

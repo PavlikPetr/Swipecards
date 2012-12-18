@@ -121,6 +121,7 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/navigation_menu_item_selector</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="LoadingLocker">
@@ -368,10 +369,13 @@
     </style>
 
     <!-- Page indicators -->
-    <style name="Theme.TopfaceIndicators" parent="android:Theme.Light.NoTitleBar">
+    <style name="Theme.TopfaceIndicators" parent="android:Theme.NoTitleBar">
         <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
         <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>
+        <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
+        <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
+        <item name="android:textAppearanceSmall">@style/TopfaceTextAppearance.Small</item>
     </style>
 
     <style name="TopfaceCirclePageIndicator">
@@ -420,6 +424,22 @@
         <item name="android:layout_height">46dp</item>
         <item name="android:baselineAligned">false</item>
         <item name="android:background">@drawable/im_bar_header</item>
+    </style>
+
+    <style name="TopfaceTextAppearance">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="TopfaceTextAppearance.Large" parent="TopfaceTextAppearance">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TopfaceTextAppearance.Medium" parent="TopfaceTextAppearance">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TopfaceTextAppearance.Small" parent="TopfaceTextAppearance">
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

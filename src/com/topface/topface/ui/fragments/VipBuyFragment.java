@@ -113,7 +113,7 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
     }
 
     private void initEditVipViews(View root) {
-        Button editVip = (Button) root.findViewById(R.id.fepVipEdit);
+        ImageButton editVip = (ImageButton) root.findViewById(R.id.fepVipEdit);
         editVip.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
