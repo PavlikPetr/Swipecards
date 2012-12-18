@@ -34,6 +34,8 @@ import java.util.LinkedList;
 
 public class TopsFragment extends BaseFragment {
 
+    // Data cache
+    private LinkedList<Top> mTopsList = new LinkedList<Top>();
     private GridView mGallery;
     private TopsAdapter mGridAdapter;
     private Button mCityButton;
@@ -66,7 +68,7 @@ public class TopsFragment extends BaseFragment {
         new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.btnNavigationSettingsBar, R.id.toolsBar);
 
         // Data
-        Data.topsList = new LinkedList<Top>();
+        mTopsList = new LinkedList<Top>();
 
         // Progress
         mLoadingLocker = (LockerView) view.findViewById(R.id.llvTopsLoading);
@@ -122,7 +124,7 @@ public class TopsFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-                    intent.putExtra(UserProfileActivity.INTENT_USER_ID, Data.topsList.get(position).uid);
+                    intent.putExtra(UserProfileActivity.INTENT_USER_ID, mTopsList.get(position).uid);
                     startActivityForResult(intent, 0);
                 } catch (Exception e) {
                     Debug.log(TopsFragment.this, "start UserProfileActivity exception:" + e.toString());
@@ -131,15 +133,14 @@ public class TopsFragment extends BaseFragment {
         });
 
         // Control creating
-        mGridAdapter = new TopsAdapter(getActivity(), Data.topsList);
+        mGridAdapter = new TopsAdapter(getActivity(), mTopsList);
         mGallery.setAdapter(mGridAdapter);
-
-        updateData();
 
         mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
 
         return view;
     }
+
 
     @Override
     public void onDestroyView() {
@@ -168,8 +169,8 @@ public class TopsFragment extends BaseFragment {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
-                        Data.topsList.clear();
-                        Data.topsList.addAll(Top.parse(response));
+                        mTopsList.clear();
+                        mTopsList.addAll(Top.parse(response));
                         onUpdateSuccess(false);
                         if (mGridAdapter != null) {
                             mGridAdapter.notifyDataSetChanged();
@@ -263,6 +264,9 @@ public class TopsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (mTopsList.isEmpty()) {
+            updateData();
+        }
         mFloatBlock.onResume();
     }
 

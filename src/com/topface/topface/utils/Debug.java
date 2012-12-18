@@ -30,6 +30,17 @@ public class Debug {
         }
     }
 
+    public static void debug(Object obj, String msg) {
+        if (App.DEBUG) {
+            if (obj == null)
+                showChunkedLogDebug(App.TAG, "::" + msg);
+            else if (obj instanceof String)
+                showChunkedLogDebug(App.TAG, obj + "::" + msg);
+            else
+                showChunkedLogDebug(App.TAG, obj.getClass().getSimpleName() + "::" + msg);
+        }
+    }
+
     public static void showChunkedLogInfo(String tag, String msg) {
         if (CHUNK_LONG_LOGS && msg.length() > MAX_LOG_MESSAGE_LENGTH) {
             int chunkCount = (int) Math.ceil(msg.length() / MAX_LOG_MESSAGE_LENGTH) + 1;
@@ -43,6 +54,22 @@ public class Debug {
             }
         } else {
             Log.i(tag, msg);
+        }
+    }
+
+    public static void showChunkedLogDebug(String tag, String msg) {
+        if (CHUNK_LONG_LOGS && msg.length() > MAX_LOG_MESSAGE_LENGTH) {
+            int chunkCount = (int) Math.ceil(msg.length() / MAX_LOG_MESSAGE_LENGTH) + 1;
+            for (int i = 0; i < chunkCount; i++) {
+                int max = MAX_LOG_MESSAGE_LENGTH * (i + 1);
+                if (max >= msg.length()) {
+                    Log.d(tag, msg.substring(MAX_LOG_MESSAGE_LENGTH * i));
+                } else {
+                    Log.d(tag, msg.substring(MAX_LOG_MESSAGE_LENGTH * i, max));
+                }
+            }
+        } else {
+            Log.d(tag, msg);
         }
     }
 
@@ -112,9 +139,9 @@ public class Debug {
                 try {
                     finalResult = new JSONObject(tokener);
                     if (FORMAT_JSON) {
-                        Debug.log(tag, title + "\n" + finalResult.toString(4));
+                        Debug.debug(tag, title + "\n" + finalResult.toString(4));
                     } else {
-                        Debug.log(tag, title + "\n" + finalResult.toString());
+                        Debug.debug(tag, title + "\n" + finalResult.toString());
                     }
                 } catch (JSONException ignored) {
                 }

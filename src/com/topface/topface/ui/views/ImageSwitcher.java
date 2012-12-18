@@ -162,11 +162,7 @@ public class ImageSwitcher extends ViewPager {
             if (!isFirstInstantiate) {
                 View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(position));
                 ImageViewRemote imageView = (ImageViewRemote) baseLayout.findViewById(R.id.ivPreView);
-                if (imageView.getBackground() == null) {
-                    setPhotoToView(position, baseLayout, imageView);
-                }
-                imageView.setDrawingCacheEnabled(true);
-                imageView.buildDrawingCache();
+                setPhotoToView(position, baseLayout, imageView);
             }
         }
 

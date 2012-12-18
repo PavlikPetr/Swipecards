@@ -29,7 +29,6 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
@@ -41,6 +40,7 @@ import java.util.LinkedList;
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
+    public static final int SEARCH_LIMIT = 30;
     private int mCurrentPhotoPrevPos;
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
@@ -245,7 +245,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         SearchRequest searchRequest = new SearchRequest(getActivity());
         registerRequest(searchRequest);
-        searchRequest.limit = 20;
+        searchRequest.limit = SEARCH_LIMIT;
         searchRequest.geo = preferences.getBoolean(App.getContext().getString(R.string.cache_profile_filter_geo),
                 false);
         searchRequest.online = preferences.getBoolean(
@@ -360,8 +360,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             break;
             case R.id.btnDatingProfile: {
-                ((NavigationActivity)getActivity()).onExtraFragment(
-                        ProfileNewFragment.newInstance(mUserSearchList.get(Data.searchPosition).id,ProfileNewFragment.TYPE_USER_PROFILE));
+                ((NavigationActivity) getActivity()).onExtraFragment(
+                        ProfileNewFragment.newInstance(mUserSearchList.get(Data.searchPosition).id, ProfileNewFragment.TYPE_USER_PROFILE));
 //                Intent intent = new Intent(getActivity(), UserProfileActivity.class);
 //                intent.putExtra(UserProfileActivity.INTENT_USER_ID,
 //                        mUserSearchList.get(Data.searchPosition).id);
@@ -450,7 +450,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 mUserInfoCity.setText(currUser.city.name);
             }
             mUserInfoStatus.setText(currUser.status);
-            mUserInfoName.setText(currUser.first_name + ", " + currUser.age);
+            mUserInfoName.setText(currUser.getNameAndAge());
 
             Resources res = App.getContext().getResources();
 
@@ -559,7 +559,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mCounter.setVisibility(View.VISIBLE);
         } else {
             mCounter.setText("-/-");
-            mCounter.setVisibility(View.INVISIBLE);
+            mCounter.setVisibility(View.GONE);
         }
     }
 
@@ -575,9 +575,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void lockControls() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mUserInfoName.setVisibility(View.INVISIBLE);
-        mUserInfoCity.setVisibility(View.INVISIBLE);
-        mUserInfoStatus.setVisibility(View.INVISIBLE);
+        mUserInfoName.setVisibility(View.GONE);
+        mUserInfoCity.setVisibility(View.GONE);
+        mUserInfoStatus.setVisibility(View.GONE);
         mMutualBtn.setEnabled(false);
         mDelightBtn.setEnabled(false);
         mSkipBtn.setEnabled(false);
@@ -594,8 +594,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         SearchUser currentUser = getCurrentUser();
 
         mProgressBar.setVisibility(View.GONE);
-        mUserInfoName.setVisibility(currentUser != null ? View.VISIBLE : View.INVISIBLE);
-        mUserInfoCity.setVisibility(currentUser != null ? View.VISIBLE : View.INVISIBLE);
+        mUserInfoName.setVisibility(currentUser != null ? View.VISIBLE : View.GONE);
+        mUserInfoCity.setVisibility(currentUser != null ? View.VISIBLE : View.GONE);
         mUserInfoStatus.setVisibility(View.VISIBLE);
 
         boolean enabled = false;
@@ -629,9 +629,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void hideControls() {
-        mDatingGroup.setVisibility(View.INVISIBLE);
-        mNavigationHeader.setVisibility(View.INVISIBLE);
-        mNavigationHeaderShadow.setVisibility(View.INVISIBLE);
+        mDatingGroup.setVisibility(View.GONE);
+        mNavigationHeader.setVisibility(View.GONE);
+        mNavigationHeaderShadow.setVisibility(View.GONE);
         mIsHide = true;
     }
 

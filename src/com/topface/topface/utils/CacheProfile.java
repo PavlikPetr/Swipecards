@@ -8,6 +8,7 @@ import com.topface.topface.requests.ApiResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -59,7 +60,7 @@ public class CacheProfile {
     public static final String PROFILE_CACHE_KEY = "profile_cache";
     public static final String OPTIONS_CACHE_KEY = "options_cache";
 
-    public static LinkedList<Gift> gifts = new LinkedList<Gift>();
+    public static ArrayList<Gift> gifts = new ArrayList<Gift>();
     public static HashMap<Integer, Profile.TopfaceNotifications> notifications;
     public static boolean hasMail;
 
@@ -276,7 +277,7 @@ public class CacheProfile {
                 (CacheProfile.isAgeOk(CacheProfile.age) ? ", " + CacheProfile.age : "");
     }
 
-    private static  boolean isAgeOk(int age) {
+    private static boolean isAgeOk(int age) {
         return age > 0;
     }
 }

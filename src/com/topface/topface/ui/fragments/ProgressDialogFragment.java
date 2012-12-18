@@ -26,4 +26,9 @@ public class ProgressDialogFragment extends TrackedDialogFragment {
         dialog.setCanceledOnTouchOutside(false);
         return dialog;
     }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
 }

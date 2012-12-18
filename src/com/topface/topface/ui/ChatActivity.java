@@ -269,10 +269,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             } catch (Exception e) {
                 Debug.error(e);
             }
-        } else {
-            // Если это не получилось, грузим с сервера
-            update(false, "initial");
         }
+
         GCMUtils.cancelNotification(this, GCMUtils.GCM_TYPE_MESSAGE);
     }
 
@@ -463,6 +461,12 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Если адаптер пустой, грузим с сервера
+        if (mAdapter == null || mAdapter.getCount() == 0) {
+            update(false, "initial");
+        }
+
         if (!mReceiverRegistered) {
             IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
             registerReceiver(mNewMessageReceiver, filter);
@@ -792,7 +796,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     @Override
-    public void onProviderDisabled(String provider) {
+    public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
     @Override
@@ -800,7 +804,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    public void onProviderDisabled(String provider) {
     }
 
     @Override
