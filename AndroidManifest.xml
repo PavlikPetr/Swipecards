@@ -83,6 +83,7 @@
         <activity android:name="com.adfonic.android.AdfonicActivity" />
         <activity android:name="ru.wapstart.plus1.sdk.MraidBrowser" />
         <activity android:name=".ui.profile.BlackListActivity"/>
+        <activity android:name=".ui.ContainerActivity"/>
         
         <!-- services -->
         <service android:name=".services.NotificationService"/>

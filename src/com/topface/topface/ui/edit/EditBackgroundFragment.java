@@ -2,6 +2,7 @@ package com.topface.topface.ui.edit;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.topface.topface.R;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.http.ProfileBackgrounds.BackgroundItem;
@@ -63,15 +65,8 @@ public class EditBackgroundFragment extends AbstractEditFragment {
     }
 
     private LinkedList<BackgroundItem> getBackgroundImagesList() {
-        LinkedList<BackgroundItem> result = new LinkedList<BackgroundItem>();
-        int[] backgroundsIds = ProfileBackgrounds.getAllBackgroundIds(getActivity().getApplicationContext());
-
-        for (int backgroundsId : backgroundsIds) {
-            boolean selected = CacheProfile.background_id == backgroundsId;
-            result.add(ProfileBackgrounds.getResourceBackgroundItem(getActivity().getApplicationContext(), backgroundsId).setSelected(selected));
-        }
-
-        return result;
+        return ProfileBackgrounds.getBackgroundItems(getActivity().getApplicationContext(),
+                CacheProfile.background_id);
     }
 
     private void setSelectedBackground(BackgroundItem item) {
@@ -175,10 +170,22 @@ public class EditBackgroundFragment extends AbstractEditFragment {
 
                     @Override
                     public void onClick(View v) {
-                        mData.get(mSelectedIndex).setSelected(false);
-                        item.setSelected(true);
-                        setSelectedBackground(item);
-                        notifyDataSetChanged();
+                        if (item.isForVip()) {
+                            if(CacheProfile.premium) {
+                                mData.get(mSelectedIndex).setSelected(false);
+                                item.setSelected(true);
+                                setSelectedBackground(item);
+                                notifyDataSetChanged();
+                            } else {
+                                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                            }
+                        } else {
+                            mData.get(mSelectedIndex).setSelected(false);
+                            item.setSelected(true);
+                            setSelectedBackground(item);
+                            notifyDataSetChanged();
+                        }
                     }
                 });
             }
