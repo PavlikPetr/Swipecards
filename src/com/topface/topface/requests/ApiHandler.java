@@ -72,6 +72,11 @@ abstract public class ApiHandler extends Handler {
         //Можно переопределить, если вам нужен коллбэк, который выполняется всегда, вне зависимости от результата
     }
 
+    public void cancel() {
+        always(new ApiResponse());
+        //Можно переопределить, если вам нужен коллбэк отмены запроса
+    }
+
     private void setCounters(ApiResponse response) {
         try {
             JSONObject counters = response.counters;

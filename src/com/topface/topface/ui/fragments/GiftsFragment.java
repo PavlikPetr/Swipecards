@@ -27,7 +27,7 @@ import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GiftGalleryManager;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class GiftsFragment extends BaseFragment {
     // Data
@@ -39,7 +39,6 @@ public class GiftsFragment extends BaseFragment {
     private TextView mTitle;
 
     private GiftsAdapter mGridAdapter;
-    private GiftGalleryManager<FeedGift> mGalleryManager;
     private GridView mGridView;
 
     private Profile mProfile;
@@ -53,7 +52,7 @@ public class GiftsFragment extends BaseFragment {
         mGridView = (GridView) root.findViewById(R.id.fragmentGrid);
         mGridView.setAnimationCacheEnabled(false);
         mGridView.setScrollingCacheEnabled(true);
-        mGalleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
+        GiftGalleryManager<FeedGift> galleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 if (!mTag.equals(GIFTS_ALL_TAG) && !mIsUpdating && mGifts.getLast().isLoader()) {
@@ -61,9 +60,9 @@ public class GiftsFragment extends BaseFragment {
                 }
             }
         });
-        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), mGalleryManager);
+        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), galleryManager);
         mGridView.setAdapter(mGridAdapter);
-        mGridView.setOnScrollListener(mGalleryManager);
+        mGridView.setOnScrollListener(galleryManager);
 
         mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
 
@@ -165,10 +164,12 @@ public class GiftsFragment extends BaseFragment {
                     sendGift.giftId = id;
                     sendGift.userId = mProfile.uid;
                     final FeedGift sendedGift = new FeedGift();
-                    sendedGift.gift = new Gift();
-                    sendedGift.gift.id = sendGift.giftId;
-                    sendedGift.gift.link = url;
-                    sendedGift.gift.type = Gift.PROFILE_NEW;
+                    sendedGift.gift = new Gift(
+                            sendGift.giftId,
+                            Gift.PROFILE_NEW,
+                            url,
+                            0
+                    );
                     sendGift.callback(new ApiHandler() {
                         @Override
                         public void success(ApiResponse response) {
@@ -273,7 +274,7 @@ public class GiftsFragment extends BaseFragment {
         }).exec();
     }
 
-    public void setGifts(LinkedList<Gift> gifts) {
+    public void setGifts(ArrayList<Gift> gifts) {
         if (mProfile == null) mTag = GIFTS_ALL_TAG;
         mGifts.clear();
         for (Gift gift : gifts) {
@@ -302,8 +303,9 @@ public class GiftsFragment extends BaseFragment {
     public void setProfile(Profile profile) {
         if (profile == null) mTag = GIFTS_ALL_TAG;
         else {
-            if (profile instanceof User) mTag = GIFTS_USER_PROFILE_TAG;
-            else mTag = GIFTS_ALL_TAG;
+            if (profile instanceof User) {
+                mTag = GIFTS_USER_PROFILE_TAG;
+            } else mTag = GIFTS_ALL_TAG;
             mProfile = profile;
             setGifts(profile.gifts);
         }

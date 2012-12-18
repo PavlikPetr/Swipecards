@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import com.facebook.topface.Facebook;
-import com.topface.topface.data.*;
+import com.topface.topface.data.City;
+import com.topface.topface.data.Photos;
+import com.topface.topface.data.SearchUser;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
 
@@ -18,12 +20,9 @@ public class Data {
     public static Bitmap friendAvatar;
     public static Facebook facebook;
     public static LinkedList<City> cityList;
-    public static LinkedList<Gift> giftsList;
     public static Photos photos;
     public static int screen_width;
     public static long midnight;
-    // Data cache
-    public static LinkedList<Top> topsList;
     public static LinkedList<SearchUser> searchList;
     public static int searchPosition = 0;
 
@@ -33,13 +32,6 @@ public class Data {
 
         // Facebook Connection
         facebook = new Facebook(Static.AUTH_FACEBOOK_ID);
-
-        // Data Cache
-        if (topsList == null)
-            topsList = new LinkedList<Top>();
-
-        if (giftsList == null)
-            giftsList = new LinkedList<Gift>();
 
         //noinspection deprecation
         Point screenSize = Utils.getSrceenSize(context);
@@ -54,11 +46,6 @@ public class Data {
 
         //LocalBroadcastManager.getInstance(context).registerReceiver(new ReAuthReceiver(), new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
 
-    }
-
-    public static void release() {
-        if (topsList != null)
-            topsList.clear();
     }
 
     public static boolean isSSID() {

@@ -13,6 +13,7 @@ import com.topface.topface.utils.http.ProfileBackgrounds;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -61,9 +62,7 @@ public class Profile extends AbstractDataWithPhotos {
 
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();
 
-    private static boolean mIsUserProfile;
-
-    public LinkedList<Gift> gifts = new LinkedList<Gift>();
+    public ArrayList<Gift> gifts = new ArrayList<Gift>();
     public HashMap<Integer, TopfaceNotifications> notifications = new HashMap<Integer, TopfaceNotifications>();
     public boolean hasMail;
 
@@ -121,11 +120,12 @@ public class Profile extends AbstractDataWithPhotos {
             JSONArray arrGifts = resp.optJSONArray("gifts");
             for (int i = 0; i < arrGifts.length(); i++) {
                 JSONObject itemGift = arrGifts.getJSONObject(i);
-                Gift gift = new Gift();
-                gift.id = itemGift.optInt("gift");
-                gift.link = itemGift.optString("link");
-                gift.type = Gift.PROFILE;
-                gift.feedId = itemGift.optInt("id");
+                Gift gift = new Gift(
+                        itemGift.optInt("gift"),
+                        itemGift.optInt("id"),
+                        Gift.PROFILE,
+                        itemGift.optString("link")
+                );
                 profile.gifts.add(gift);
             }
 
@@ -169,9 +169,9 @@ public class Profile extends AbstractDataWithPhotos {
                 FormItem headerItem;
                 FormItem formItem;
 
-                mIsUserProfile = false;
+                boolean isUserProfile = false;
                 if (profile instanceof User) {
-                    mIsUserProfile = true;
+                    isUserProfile = true;
                     // ((User) profile).formMatches = form.optInt("goodness");
                     ((User) profile).formMatches = 0;
                 }
@@ -197,14 +197,14 @@ public class Profile extends AbstractDataWithPhotos {
                 // personal status
                 String status = profile.status;
                 if (status != null) {
-                    if (mIsUserProfile && status.trim().length() == 0) {
+                    if (isUserProfile && status.trim().length() == 0) {
                         status = null;
                     }
                 }
                 formItem = new FormItem(R.array.form_main_personal_status, status,
-                        mIsUserProfile ? FormItem.DATA : FormItem.STATUS, headerItem);
+                        isUserProfile ? FormItem.DATA : FormItem.STATUS, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     if (status != null)
                         profile.forms.add(formItem);
                 } else {
@@ -217,7 +217,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     if (aboutStatus != null)
                         profile.forms.add(formItem);
                 } else {
@@ -228,7 +228,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_main_character, form.optInt("character_id"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("character_goodness", false));
@@ -240,7 +240,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_main_communication,
                         form.optInt("communication_id"), FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("communication_goodness", false));
@@ -260,7 +260,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitness_id"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("fitness_goodness", false));
@@ -273,7 +273,7 @@ public class Profile extends AbstractDataWithPhotos {
                 String height = (h == 0) ? null : Integer.toString(form.optInt("height"));
                 formItem = new FormItem(R.array.form_main_height, height, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("height_goodness", false));
@@ -286,7 +286,7 @@ public class Profile extends AbstractDataWithPhotos {
                 String weight = w == 0 ? null : Integer.toString(form.optInt("weight"));
                 formItem = new FormItem(R.array.form_main_weight, weight, FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("weight_goodness", false));
@@ -298,7 +298,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_physique_hairs, form.optInt("hair_id"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("hair_goodness", false));
@@ -310,7 +310,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_physique_eyes, form.optInt("eye_id"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("eye_goodness", false));
@@ -330,7 +330,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_social_marriage, form.optInt("marriage_id"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("marriage_goodness", false));
@@ -342,7 +342,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_social_education, form.optInt("education_id"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("education_goodness", false));
@@ -354,7 +354,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_social_finances, form.optInt("finances_id"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("finances_goodness", false));
@@ -366,7 +366,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_social_residence, form.optInt("residence_id"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("residence_goodness", false));
@@ -378,7 +378,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_social_car, form.optInt("car_id"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("car_goodness", false));
@@ -398,7 +398,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_habits_smoking, form.optInt("smoking_id"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("smoking_goodness", false));
@@ -410,7 +410,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_habits_alcohol, form.optInt("alcohol_id"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     position++;
                     compareFormItemData(formItem, position, profile,
                             form.optBoolean("alcohol_goodness", false));
@@ -424,7 +424,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA,
                         headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     if (restraunts != null)
                         profile.forms.add(formItem);
                 } else {
@@ -445,7 +445,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_detail_about_dating, datingDetails,
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     if (datingDetails != null)
                         profile.forms.add(formItem);
                 } else {
@@ -458,7 +458,7 @@ public class Profile extends AbstractDataWithPhotos {
                 formItem = new FormItem(R.array.form_detail_archievements, achievments,
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
-                if (mIsUserProfile) {
+                if (isUserProfile) {
                     if (achievments != null)
                         profile.forms.add(formItem);
                 } else {
@@ -561,6 +561,7 @@ public class Profile extends AbstractDataWithPhotos {
             }
         }
     }
+
     public String getNameAndAge() {
         String result;
         if (first_name != null && first_name.length() > 0 && age > 0) {
