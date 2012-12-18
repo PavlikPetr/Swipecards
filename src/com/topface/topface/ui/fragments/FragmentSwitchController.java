@@ -32,14 +32,13 @@ public class FragmentSwitchController extends ViewGroup {
     private boolean mAutoScrolling = false;
     private static final int EXPANDING_PERCENT = 30;
     private BaseFragment mCurrentFragment;
+    private FrameLayout mExtraFrame;
+    private Fragment mCurrentExtraFragment;
 
     public static final int EXPAND = 1;
     public static final int EXPAND_FULL = 2;
     public static final int COLLAPSE = 3;
     public static final int COLLAPSE_FULL = 4;
-
-    private FrameLayout mExtraFrame;
-    private Fragment mCurrentExtraFragment;
 
     /*
     *   interface FragmentSwitchListener
@@ -104,8 +103,12 @@ public class FragmentSwitchController extends ViewGroup {
 
     private void switchFragment() {
         BaseFragment fragment = getFragmentById(mCurrentFragmentId);
+        switchFragment(fragment);
+    }
+
+    public void switchFragment(BaseFragment fragment) {
         if (mCurrentFragment != fragment) {
-            Fragment oldFragment = mFragmentManager.findFragmentById(R.id.fragment_container);                        
+            Fragment oldFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
             transaction.replace(R.id.fragment_container, fragment);
             if (oldFragment != null) {
@@ -143,8 +146,12 @@ public class FragmentSwitchController extends ViewGroup {
         return (mExtraFrame.getVisibility() == View.VISIBLE);
     }
 
-    public BaseFragment getmCurrentFragment() {
+    public BaseFragment getCurrentFragment() {
         return mCurrentFragment;
+    }
+
+    public Fragment getCurrentExtraFragment() {
+        return mCurrentExtraFragment;
     }
 
     private BaseFragment getFragmentById(int id) {

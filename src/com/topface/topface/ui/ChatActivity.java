@@ -87,6 +87,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
     private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
+
+    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+    public static final int INTENT_CHAT_REQUEST = 371;
+
     private int itemId;
 
     private Button btnBack;
@@ -132,12 +136,12 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         btnBack = (Button) findViewById(R.id.btnNavigationBackWithText);
         btnBack.setVisibility(View.VISIBLE);
 
-
         if (getIntent().hasExtra(INTENT_PREV_ENTITY) && Utils.isThereNavigationActivity(this)) {
             btnBack.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();
+                    setResult(Activity.RESULT_CANCELED);
                 }
             });
             String prevEntity = getIntent().getStringExtra(INTENT_PREV_ENTITY);
@@ -435,6 +439,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             break;
             case R.id.btnNavigationBackWithText: {
                 finish();
+                setResult(Activity.RESULT_CANCELED);
             }
             break;
             case R.id.chat_message: {
@@ -442,17 +447,15 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             }
             break;
             default: {
+                //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
                 if (mProfileInvoke) {
-                    finish();
-                    return;
+                    setResult(Activity.RESULT_CANCELED);
+                } else {
+                    Intent intent = getIntent();
+                    intent.putExtra(ChatActivity.INTENT_USER_ID,mUserId);
+                    setResult(Activity.RESULT_OK,intent);
                 }
-                Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
-                intent.putExtra(UserProfileActivity.INTENT_USER_ID, mUserId);
-                intent.putExtra(UserProfileActivity.INTENT_CHAT_INVOKE, true);
-                intent.putExtra(UserProfileActivity.INTENT_USER_NAME, mHeaderTitle.getText());
-                intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, ChatActivity.this.getClass()
-                        .getSimpleName());
-                startActivity(intent);
+                finish();
             }
             break;
         }
@@ -496,6 +499,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     @Override
                     public void onClick(View v) {
                         finish();
+                        setResult(Activity.RESULT_CANCELED);
                     }
                 });
             }

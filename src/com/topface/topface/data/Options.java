@@ -65,7 +65,6 @@ public class Options extends AbstractData {
         Options options = new Options();
 
         try {
-            Novice.giveNovicePower = response.jsonResult.optBoolean("novice_power", true);
             options.price_highrate = response.jsonResult.optInt("price_highrate");
             options.price_leader = response.jsonResult.optInt("price_leader");
             // Pages initialization

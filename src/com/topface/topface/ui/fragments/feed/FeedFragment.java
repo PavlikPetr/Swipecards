@@ -343,7 +343,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         intent.putExtra(ChatActivity.INTENT_USER_CITY, item.user.city.name);
         intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
         intent.putExtra(ChatActivity.INTENT_ITEM_ID, item.id);
-        startActivity(intent);
+        getActivity().startActivityForResult(intent,ChatActivity.INTENT_CHAT_REQUEST);
     }
 
     public void onAvatarClick(T item, View view) {

@@ -387,7 +387,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mUserSearchList.get(Data.searchPosition).city.name);
                 intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass()
                         .getSimpleName());
-                startActivity(intent);
+                getActivity().startActivityForResult(intent,ChatActivity.INTENT_CHAT_REQUEST);
 
                 EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
             }
