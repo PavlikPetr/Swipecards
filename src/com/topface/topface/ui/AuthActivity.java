@@ -49,6 +49,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     private BroadcastReceiver mReceiver;
 
     public static AuthActivity mThis;
+    private ProfileRequest mProfileRequest;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,6 +117,14 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
         checkOnline();
 
+        if (Data.isSSID()) {
+            mIsAuthorized = true;
+            hideButtons();
+            getProfile(false);
+        } else if (!(new AuthToken(getApplicationContext())).isEmpty()) {
+            hideButtons();
+            mAuthorizationManager.reAuthorize();
+        }
     }
 
     private void checkOnline() {
@@ -152,15 +161,11 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mIsAuthStart = true;
         checkIntentForReauth();
         mThis = this;
-
-        if (Data.isSSID()) {
-            mIsAuthorized = true;
-            hideButtons();
-            getProfile(false);
-        } else if (!(new AuthToken(getApplicationContext())).isEmpty()) {
+        if (mProfileRequest != null && mProfileRequest.canceled && !Data.isSSID() && !(new AuthToken(getApplicationContext())).isEmpty()) {
             hideButtons();
             mAuthorizationManager.reAuthorize();
         }
+
     }
 
     public static boolean isStarted() {
@@ -290,10 +295,10 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
     private void getProfile(final boolean isFirstTime) {
         Debug.log("geting profile");
-        ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
-        registerRequest(profileRequest);
-        profileRequest.part = ProfileRequest.P_ALL;
-        profileRequest.callback(new ApiHandler() {
+        mProfileRequest = new ProfileRequest(getApplicationContext());
+        registerRequest(mProfileRequest);
+        mProfileRequest.part = ProfileRequest.P_ALL;
+        mProfileRequest.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
                 CacheProfile.setProfile(Profile.parse(response), response);

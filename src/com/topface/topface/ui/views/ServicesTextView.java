@@ -41,7 +41,7 @@ public class ServicesTextView extends View {
 
         try {
             mMaxChars = allAttrs.getInteger(R.styleable.ServicesTextView_maxChars,0);
-            mCharPadding = allAttrs.getInteger(R.styleable.ServicesTextView_charPadding,5);
+            setCharPadding(allAttrs.getInteger(R.styleable.ServicesTextView_charPadding,5));
             setText(allAttrs.getString(R.styleable.ServicesTextView_text));
             setTextSize(allAttrs.getInteger(R.styleable.ServicesTextView_fontSize,12));
             textWithoutBackround = allAttrs.getString(R.styleable.ServicesTextView_textWithoutBackground);
@@ -80,6 +80,7 @@ public class ServicesTextView extends View {
         BitmapFactory.decodeResource(getResources(), R.drawable.ic_cell_counter_free, options);
 
         options.inSampleSize = (int)(options.outHeight/textHeight);
+        double realScaleCoeff =  (double)options.outHeight/(double)textHeight;
         options.inJustDecodeBounds = false;
 
         int outWidth = options.outWidth;
@@ -88,12 +89,13 @@ public class ServicesTextView extends View {
         mBackgroundFree = BitmapFactory.decodeResource(getResources(),R.drawable.ic_cell_counter_free,options);
         mBackgroundFull = BitmapFactory.decodeResource(getResources(),R.drawable.ic_cell_counter_full,options);
 
-        mBackgroundFree = Bitmap.createScaledBitmap(mBackgroundFree, outWidth/options.inSampleSize, outHeight/options.inSampleSize, false);
-        mBackgroundFull = Bitmap.createScaledBitmap(mBackgroundFull, outWidth/options.inSampleSize, outHeight/options.inSampleSize, false);
+
+        mBackgroundFree = Bitmap.createScaledBitmap(mBackgroundFree, (int)(outWidth/realScaleCoeff), (int)(outHeight/realScaleCoeff), false);
+        mBackgroundFull = Bitmap.createScaledBitmap(mBackgroundFull, (int)(outWidth/realScaleCoeff), (int)(outHeight/realScaleCoeff), false);
 
         if(imageId != 0) {
             mImageBitmap = BitmapFactory.decodeResource(getResources(), imageId);
-            mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, mImageBitmap.getWidth()/options.inSampleSize, mImageBitmap.getHeight()/options.inSampleSize, false);
+            mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, (int)(mImageBitmap.getWidth()/realScaleCoeff), (int)(mImageBitmap.getHeight()/realScaleCoeff), false);
         }
 
     }
@@ -113,6 +115,7 @@ public class ServicesTextView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int currentSymbol = 0;
+        int textTop = mBackgroundFull.getHeight()/2 + (getTextHeight() - 2*mCharPadding)/2;
         for (int i = 0; i < mMaxChars; i++) {
             int padding = 0;//(i==0)? 0 : mCharPadding;
             if(i < mMaxChars - text.length()) {
@@ -123,7 +126,8 @@ public class ServicesTextView extends View {
                 paint.setColor(Color.parseColor(color));
                 paint.setTextSize(textSize);
                 paint.setStyle(Paint.Style.FILL);
-                canvas.drawText(String.valueOf(text.charAt(currentSymbol)), i * mBackgroundFull.getWidth() + mCharPadding, textSize, paint);
+                paint.setTextAlign(Paint.Align.CENTER);
+                canvas.drawText(String.valueOf(text.charAt(currentSymbol)), i * mBackgroundFull.getWidth() + mBackgroundFull.getWidth()/2, textTop, paint);
                 currentSymbol++;
             }
 
@@ -135,7 +139,7 @@ public class ServicesTextView extends View {
             paint.setTextSize(textSize);
             paint.setFakeBoldText(true);
             paint.setStyle(Paint.Style.FILL);
-            canvas.drawText(textWithoutBackround, mMaxChars * mBackgroundFull.getWidth() + mCharPadding, textSize, paint);
+            canvas.drawText(textWithoutBackround, mMaxChars * mBackgroundFull.getWidth() + mBackgroundFull.getWidth()/2, textTop, paint);
         }
 
         if(imageId != 0) {
@@ -164,5 +168,10 @@ public class ServicesTextView extends View {
     public void setTextSize(int textSize) {
         final float scale = getContext().getResources().getDisplayMetrics().density;
         this.textSize = (int)(textSize * scale);
+    }
+
+    public void setCharPadding(int charPadding) {
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        mCharPadding = (int)(charPadding * scale);
     }
 }
