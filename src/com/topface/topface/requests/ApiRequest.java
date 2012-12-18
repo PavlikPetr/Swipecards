@@ -100,8 +100,10 @@ public abstract class ApiRequest {
     }
 
     public void cancel() {
-        handler.cancel();
-        handler = null;
+        if (handler != null) {
+            handler.cancel();
+            handler = null;
+        }
         if (connection != null) {
             connection.abort();
         }
