@@ -19,8 +19,7 @@
     <string name="general_server_error">Klaida. Bandykite vėliau</string>
     <string name="general_data_error">Klaida. Bandykite dar kartą</string>
     <string name="general_internet_off">Negalima prisijungti prie interneto</string>
-    <string name="general_purchasing_error">Prašome, parašyti pranešimą apie pirkimo klaidą adresu support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Prašome, parašyti pranešimą apie pirkimo klaidą adresu support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Tekstas nukopijuotas</string>
     <string name="general_spinner_title">Pasirinkite veiksmą</string>
@@ -207,17 +206,10 @@
         <item quantity="other">%d fotografijų</item>
         <item quantity="one">%d fotografija</item>
     </plurals>
-    <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad pradėtumėte malonią
-        pažintį
-    </string>
-    <string name="novice_energy">Kuo didesnis baterijos krūvis\ntuo dažniau jus rodo.\nNeužmirškite įkrauti\nbateriją,
-        nusipirkę energijos.
-    </string>
-    <string name="novice_battery_bonus">Energija duoda jums populiarumą\nir naujas simpatijas. Jūs galite\nįkrauti
-        bateriją, nusipirkę\n100% energijos. Pirmą įkrovimą\nmes jums dovanojame nemokamai!
-    </string>
-    <string name="novice_fill_profile">Pridėkite savo geriausias fotografijas,\nkad gautumėte daugiau simpatijų.
-    </string>
+    <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad pradėtumėte malonią pažintį</string>
+    <string name="novice_energy">Kuo didesnis baterijos krūvis\ntuo dažniau jus rodo.\nNeužmirškite įkrauti\nbateriją, nusipirkę energijos.</string>
+    <string name="novice_battery_bonus">Energija duoda jums populiarumą\nir naujas simpatijas. Jūs galite\nįkrauti bateriją, nusipirkę\n100% energijos. Pirmą įkrovimą\nmes jums dovanojame nemokamai!</string>
+    <string name="novice_fill_profile">Pridėkite savo geriausias fotografijas,\nkad gautumėte daugiau simpatijų.</string>
     <string name="general_edit_profile_message">Prašome užpildyti visus būtinus anketos laukelius</string>
     <string name="general_premium_access_error">Šiai funkcijai būtina turėti Premium</string>
     <string name="general_search_null_response_error">Nieko nerasta. Pabandykite pakeisti filtrus</string>
@@ -228,9 +220,7 @@
     <string name="filter_city_fail">Nerastas nei vienas miestas prasidedantis "%s"</string>
     <string name="age_filter_man">Jus domina vaikinai</string>
     <string name="age_filter_girl">Jus domina merginos</string>
-    <string name="dashbrd_popup_rating">Patiko mūsų priedas? Pakelk mūsų reitingą! Kuo aukštesnis reitingas, tuo daugiau
-        įdomių žmonių tu sutiksi Topface
-    </string>
+    <string name="dashbrd_popup_rating">Patiko mūsų priedas? Pakelk mūsų reitingą! Kuo aukštesnis reitingas, tuo daugiau įdomių žmonių tu sutiksi Topface</string>
     <string name="dashbrd_popup_title">Reitingas</string>
     <string name="dashbrd_popup_cancel">Daugiau neklausti</string>
     <string name="dashbrd_popup_rate">Duoti reitingą</string>
@@ -248,8 +238,7 @@
     <string name="dating_prev_button_ext">Ankstesnis</string>
     <string name="dating_skip_button_ext">Sekantis</string>
     <string name="dating_search_empty_title">Gaila, bet nieko nerasta</string>
-    <string name="dating_search_empty_text">Jūs galite bandyti pakartoti paiešką arba pakeisti filtro nustatymus.
-    </string>
+    <string name="dating_search_empty_text">Jūs galite bandyti pakartoti paiešką arba pakeisti filtro nustatymus.</string>
     <string name="general_close">Uždaryti</string>
     <string name="vip_not_activated">Jūsų VIP-statusas neaktyvuotas</string>
     <string name="vip_one_month_title">1 mėnuo</string>
@@ -278,8 +267,7 @@
     <string name="vip_state_off">Jūsų VIP-statusas neaktyvuotas</string>
     <string name="vip_info_delight">Siųskite susižavėjimus nemokamai - maksimaliai išreikškite savo jausmus!</string>
     <string name="vip_info_guest">Sužinokite, kas jumis domėjosi - peržiūrėkite savo svečius!</string>
-    <string name="vip_info_invisible">Likite nepastebėti, kai lankotės svetimuose puslapiuose \"nematomo\" režimo dėka
-    </string>
+    <string name="vip_info_invisible">Likite nepastebėti, kai lankotės svetimuose puslapiuose \"nematomo\" režimo dėka</string>
     <string name="vip_info_message">Įgykite pranašumą - jūsų pranešimai bus išskirti iš bendro fono!</string>
     <string name="vip_info_gift">Išrinkite išskirtines VIP-dovanas ir jus būtinai atsimins!</string>
     <string name="vip_info_blackList">Atsikratykite nusibodusių asmenų \"juodojo sąrašo\" pagalba</string>

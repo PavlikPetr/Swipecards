@@ -19,9 +19,7 @@
     <string name="general_server_error">Помилка. Спробуйте пізніше</string>
     <string name="general_data_error">Помилка. Спробуйте ще раз</string>
     <string name="general_internet_off">Немає підключення до інтернету</string>
-    <string name="general_purchasing_error">Будь ласка, напишіть повідомлення про помилку покупки на
-        support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Будь ласка, напишіть повідомлення про помилку покупки на support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопійований</string>
     <string name="general_spinner_title">Вибрати дію</string>
@@ -208,15 +206,9 @@
         <item quantity="other">%d фотографій</item>
         <item quantity="one">%d фотографія</item>
     </plurals>
-    <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб почати приємне
-        знайомство
-    </string>
-    <string name="novice_energy">Чим вище заряд батарейки, тим частіше вас оцінюють. Не забувайте зарядити\nбатарею,
-        купивши енергію.
-    </string>
-    <string name="novice_battery_bonus">Енергія дає вам популярність\nта нові симпатії. Ви можете\nзарядити батарею,
-        купивши\n100% енергії. Перший заряд\nми даруємо вам безкоштовно!
-    </string>
+    <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб почати приємне знайомство</string>
+    <string name="novice_energy">Чим вище заряд батарейки, тим частіше вас оцінюють. Не забувайте зарядити\nбатарею, купивши енергію.</string>
+    <string name="novice_battery_bonus">Енергія дає вам популярність\nта нові симпатії. Ви можете\nзарядити батарею, купивши\n100% енергії. Перший заряд\nми даруємо вам безкоштовно!</string>
     <string name="novice_fill_profile">Додайте свої кращі фотографії,\n щоб отримувати більше симпатій.</string>
     <string name="general_edit_profile_message">Будь ласка, заповніть необхідні поля анкети</string>
     <string name="general_premium_access_error">Для даної функції потрібен Преміум</string>
@@ -228,9 +220,7 @@
     <string name="filter_city_fail">Не знайдено жодного міста що починається з «%s»</string>
     <string name="age_filter_man">Вам цікаві хлопці</string>
     <string name="age_filter_girl">Вам цікаві дівчата</string>
-    <string name="dashbrd_popup_rating">Сподобався наш додаток? Підніми нам рейтинг! Чим вищий рейтинг, тим більше
-        цікавих людей ти зустрінеш у Topface
-    </string>
+    <string name="dashbrd_popup_rating">Сподобався наш додаток? Підніми нам рейтинг! Чим вищий рейтинг, тим більше цікавих людей ти зустрінеш у Topface</string>
     <string name="dashbrd_popup_title">Рейтинг</string>
     <string name="dashbrd_popup_cancel">Більше не питати</string>
     <string name="dashbrd_popup_rate">Виставити рейтинг</string>
@@ -248,8 +238,7 @@
     <string name="dating_prev_button_ext">Попередній</string>
     <string name="dating_skip_button_ext">Наступний</string>
     <string name="dating_search_empty_title">На жаль, нічого не знайдено</string>
-    <string name="dating_search_empty_text">Ви можете спробувати повторити пошук, або змінити налаштування фільтра.
-    </string>
+    <string name="dating_search_empty_text">Ви можете спробувати повторити пошук, або змінити налаштування фільтра.</string>
     <string name="general_close">Закрити</string>
     <string name="vip_not_activated">Ваш VIP-статус не активований</string>
     <string name="vip_one_month_title">1 місяць</string>
@@ -281,10 +270,8 @@
     <string name="vip_state_off">Ваш VIP-статус не активований</string>
     <string name="vip_info_delight">Відправляйте захоплення безкоштовно - вражайте свої почуття по максимуму!</string>
     <string name="vip_info_guest">Дізнайтеся, хто вами цікавився - дивіться своїх гостей!</string>
-    <string name="vip_info_invisible">Залишайтеся непоміченими, відвідуючи чужі сторінки, завдяки режиму \"невидимка\"
-    </string>
-    <string name="vip_info_message">Отримайте перевага - ваші повідомлення будуть виділятися на загальному фоні!
-    </string>
+    <string name="vip_info_invisible">Залишайтеся непоміченими, відвідуючи чужі сторінки, завдяки режиму \"невидимка\"</string>
+    <string name="vip_info_message">Отримайте перевага - ваші повідомлення будуть виділятися на загальному фоні!</string>
     <string name="vip_info_gift">Вибирайте ексклюзивні VIP-подарунки, і вас обов\'язково запам\'ятають!</string>
     <string name="vip_info_blackList">Позбавляйтеся від обридлих персон за допомогою \"чорного списку\"</string>
     <string name="vip_info_vip">Виділяйтеся за допомогою свого VIP-статусу в пошуку та своєму профілі!</string>

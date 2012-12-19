@@ -202,15 +202,9 @@
         <item quantity="other">%d foton</item>
         <item quantity="one">%d foto</item>
     </plurals>
-    <string name="novice_sympathy">Skicka sympatier till dem\ndu verkligen gillar,\nför att inleda ett trevligt
-        förhållande
-    </string>
-    <string name="novice_energy">Ju mer energi du har,\ndesto oftare blir du rankad.\nGlöm inte ladda\nbatteriet, köp
-        energi.
-    </string>
-    <string name="novice_battery_bonus">Energi gör dig populär\noch ger nya sympatier. Du kan\nladda bateriet, genom att
-        köpa\n 100% energi. Första laddningen\nfår du av oss gratis!
-    </string>
+    <string name="novice_sympathy">Skicka sympatier till dem\ndu verkligen gillar,\nför att inleda ett trevligt förhållande</string>
+    <string name="novice_energy">Ju mer energi du har,\ndesto oftare blir du rankad.\nGlöm inte ladda\nbatteriet, köp energi.</string>
+    <string name="novice_battery_bonus">Energi gör dig populär\noch ger nya sympatier. Du kan\nladda bateriet, genom att köpa\n 100% energi. Första laddningen\nfår du av oss gratis!</string>
     <string name="novice_fill_profile">Lägg till dina bästa foton,\för att få fler sympatier.</string>
     <string name="general_edit_profile_message">Vänligen fyll i nödvändiga fälten i profilen</string>
     <string name="general_premium_access_error">För denna funktion behövs Premium</string>
@@ -222,9 +216,7 @@
     <string name="filter_city_fail">Det har inte hittats någon stad som börjar på «%s»</string>
     <string name="age_filter_man">Du är intresserad av killar</string>
     <string name="age_filter_girl">Du är intresserad av tjejer</string>
-    <string name="dashbrd_popup_rating">Gillar du vår applikation! Höj vår rating! Ju högre rating vi har, desto fler
-        intressanta människor kan du möta på Topface
-    </string>
+    <string name="dashbrd_popup_rating">Gillar du vår applikation! Höj vår rating! Ju högre rating vi har, desto fler intressanta människor kan du möta på Topface</string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Fråga inte mer</string>
     <string name="dashbrd_popup_rate">Visa rating</string>
@@ -277,7 +269,7 @@
     <string name="vip_info_invisible">Besök andra profiler osynligt genom att aktivera "Osynlig" funktionen</string>
     <string name="vip_info_message">Ha en fördel - dina meddelanden kommer att särskilt synas bland de andra!</string>
     <string name="vip_info_gift">Välj exklusiva VIP-gåvor för att säkert bli uppmärksammad!</string>
-    <string name="vip_info_blackList">Bli av med irriterande personer med hjälp av \"svartlista\"</string>
+    <string name="vip_info_blackList">Bli av med irriterande personer med hjälp av  \"svartlista\"</string>
     <string name="vip_info_vip">VIP-status hjälper dig att ha synligare profil och dyka oftare upp i sökning</string>
     <string name="vip_info_title">VIP-förmåner</string>
     <string name="black_list_retrieve">Återställ</string>

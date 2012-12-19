@@ -202,15 +202,9 @@
         <item quantity="other">%d Fotos</item>
         <item quantity="one">%d Foto</item>
     </plurals>
-    <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich gefallen,\num eine angenehme
-        Bekanntschaft anzufangen
-    </string>
-    <string name="novice_energy">Je höher die Ladung der Batterie, \ndesto öfter schätzt man Sie ein. \nVergessen Sie
-        nicht die Batterie\nzu laden, kaufend die Kraft.
-    </string>
-    <string name="novice_battery_bonus">Die Kraft gibt Ihnen die Popularität\nund neue Sympathien. Kaufen Sie\n100% der
-        Kraft und\nladen Sie Ihre Batterie.
-    </string>
+    <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich gefallen,\num eine angenehme Bekanntschaft anzufangen</string>
+    <string name="novice_energy">Je höher die Ladung der Batterie, \ndesto öfter schätzt man Sie ein. \nVergessen Sie nicht die Batterie\nzu laden, kaufend die Kraft.</string>
+    <string name="novice_battery_bonus">Die Kraft gibt Ihnen die Popularität\nund neue Sympathien. Kaufen Sie\n100% der Kraft und\nladen Sie Ihre Batterie.</string>
     <string name="novice_fill_profile">Fügen Sie Ihre besten Fotos hinzu, \num mehr Sympathien zu erhalten.</string>
     <string name="general_edit_profile_message">Bitte, füllen Sie notwendige Felder des Fragebogens</string>
     <string name="general_premium_access_error">Für diese Funktion braucht man Premium</string>
@@ -222,9 +216,7 @@
     <string name="filter_city_fail">Keine Stadt gefunden, der mit «%s» beginnt</string>
     <string name="age_filter_man">Sie interessieren sich für Männer</string>
     <string name="age_filter_girl">Sie interessieren sich für Mädchen</string>
-    <string name="dashbrd_popup_rating">Gefällt unsere Anwendung? Erhöhen Sie unser Rating! Je höher das Rating ist,
-        desto mehr interessante Leute treffen Sie in Topface
-    </string>
+    <string name="dashbrd_popup_rating">Gefällt unsere Anwendung? Erhöhen Sie unser Rating! Je höher das Rating ist, desto mehr interessante Leute treffen Sie in Topface</string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Nicht fragen mehr</string>
     <string name="dashbrd_popup_rate">Rating ausstellen</string>
@@ -242,8 +234,7 @@
     <string name="dating_prev_button_ext">Vorige</string>
     <string name="dating_skip_button_ext">Nächste</string>
     <string name="dating_search_empty_title">Leider, nichts gefunden</string>
-    <string name="dating_search_empty_text">Sie können Ihre Suche wiederholen, oder die Filter Einstellungen ändern
-    </string>
+    <string name="dating_search_empty_text">Sie können Ihre Suche wiederholen, oder die Filter Einstellungen ändern</string>
     <string name="general_close">Schließen</string>
     <string name="vip_not_activated">Ihr VIP-Status ist nicht aktiviert</string>
     <string name="vip_one_month_title">1 Monat</string>

@@ -206,29 +206,21 @@
         <item quantity="other">%d fotek</item>
         <item quantity="one">%d fotka</item>
     </plurals>
-    <string name="novice_sympathy">Posílejte sympatie pouze lidem, které se Vám\nopravdu líbí\ - a můžete začít
-        příjemnou známost
-    </string>
-    <string name="novice_energy">Čím vyšší nabití baterky,\ntím tím víc je Vás vidět.\nNezapomeňte nabit \nbaterku a
-        kupte energii.
-    </string>
-    <string name="novice_battery_bonus">Energie Vám poskytuje popularitu\na nové sympatie. Můžete \nnabit baterku –
-        kupte \n 100% energii. První nabití \nmáte od nás jako dárek!
-    </string>
+    <string name="novice_sympathy">Posílejte sympatie pouze lidem, které se Vám\nopravdu líbí\ - a můžete začít příjemnou známost</string>
+    <string name="novice_energy">Čím vyšší nabití baterky,\ntím tím víc je Vás vidět.\nNezapomeňte nabit \nbaterku a kupte energii.</string>
+    <string name="novice_battery_bonus">Energie Vám poskytuje popularitu\na nové sympatie. Můžete \nnabit baterku – kupte \n 100% energii. První nabití \nmáte od nás  jako dárek!</string>
     <string name="novice_fill_profile">Přidejte své nejlepší fotky,\nabyste získal(a) co nejvíce sympatií.</string>
     <string name="general_edit_profile_message">Prosím vyplňte všechna povinná pole dotazníku</string>
     <string name="general_premium_access_error">Pro tuto funkci je zapotřebí Premium</string>
-    <string name="general_search_null_response_error">Nic nenalezeno. Zkuste změnit nastavení filtrů.</string>
+    <string name="general_search_null_response_error">Nic nenalezeno. Zkuste  změnit nastavení filtrů.</string>
     <string name="change_filters">Změnit filtry</string>
     <string name="general_sex">Pohlaví</string>
     <string name="general_girl">Ženské</string>
     <string name="general_boy">Mužské</string>
-    <string name="filter_city_fail">Nenalezeno žádné město, které by začínalo na „%s“</string>
+    <string name="filter_city_fail">Nenalezeno žádné město, které by začínalo  na „%s“</string>
     <string name="age_filter_man">Máte zájem o muži</string>
     <string name="age_filter_girl">Máte zájem o ženy</string>
-    <string name="dashbrd_popup_rating">Líbí se naše aplikace? Pomozte zvednout náš raiting! Čím vyšší je rating, tím
-        více zajímavých lidí potkáte v Topface
-    </string>
+    <string name="dashbrd_popup_rating">Líbí se naše aplikace? Pomozte zvednout náš raiting! Čím vyšší je rating, tím více zajímavých lidí potkáte v Topface</string>
     <string name="dashbrd_popup_title">Raiting</string>
     <string name="dashbrd_popup_cancel">Příště se neptat</string>
     <string name="dashbrd_popup_rate">Vystavit raiting</string>
@@ -278,8 +270,7 @@
     <string name="vip_state_off">Váš VIP-status neni aktivovan</string>
     <string name="vip_info_delight">Posílejte obdivy zdarma - vyjadřujte maximálně své pocity!</string>
     <string name="vip_info_guest">Zjistěte, kdo se o Vás zajímá - prohlédnete své návštěvníky!</string>
-    <string name="vip_info_invisible">Zůstaňte neodhalené při návštěvě cizích stránek díky režimu \"neviditelný\"
-    </string>
+    <string name="vip_info_invisible">Zůstaňte neodhalené při návštěvě cizích stránek díky režimu \"neviditelný\"</string>
     <string name="vip_info_message">Získejte výhodu - Vaše zprávy budou vyčnívat z davu!</string>
     <string name="vip_info_gift">Zvolte exkluzivní VIP-dárky a Vás si určitě zapamatují!</string>
     <string name="vip_info_blackList">Zbavte se otravných osob pomocí \"černé listiny\"</string>

@@ -19,8 +19,7 @@
     <string name="general_server_error">Hiba. Próbálja meg újra</string>
     <string name="general_data_error">Hiba. Próbálja meg újra</string>
     <string name="general_internet_off">Nincs internet kapcsolat</string>
-    <string name="general_purchasing_error">Kérjük, írjon üzenetet a vásárlási hibáról support@topface.ru email-re
-    </string>
+    <string name="general_purchasing_error">Kérjük, írjon üzenetet a vásárlási hibáról support@topface.ru email-re</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">A szöveg másolva</string>
     <string name="general_spinner_title">Válaszon egy műveletet</string>
@@ -203,15 +202,9 @@
         <item quantity="other">%d fénykép</item>
         <item quantity="one">%d fénykép</item>
     </plurals>
-    <string name="novice_sympathy">Küldj szimpátiát azoknak, akik \ntényleg tetszenek,\nígy el tudsz kezdeni egy
-        élvezetes ismerkedést.
-    </string>
-    <string name="novice_energy">Minél több töltésed van,\nannál többen fognak látni.\nNe felejtsd el feltölteni
-        az\nelemet energia vásárlással.
-    </string>
-    <string name="novice_battery_bonus">Energia népszerűséget ad neked\nés új szimpátiákat. Fel tudod\ntölteni az
-        elemet. 100% energia vásárlásával\n. Az első\nfeltöltését ingyen adjuk neked
-    </string>
+    <string name="novice_sympathy">Küldj szimpátiát azoknak, akik \ntényleg tetszenek,\nígy el tudsz kezdeni egy élvezetes ismerkedést.</string>
+    <string name="novice_energy">Minél több töltésed van,\nannál többen fognak látni.\nNe felejtsd el feltölteni az\nelemet energia vásárlással.</string>
+    <string name="novice_battery_bonus">Energia népszerűséget ad neked\nés új szimpátiákat. Fel tudod\ntölteni az elemet. 100% energia vásárlásával\n. Az első\nfeltöltését ingyen adjuk neked</string>
     <string name="novice_fill_profile">Töltsd fel a legjobb fotóidat,\nhogy több szimpátiát kapj.</string>
     <string name="general_edit_profile_message">Kérjük, töltse ki a profil szükséges mezőit</string>
     <string name="general_premium_access_error">Prémiumnak kell lennie ennek a funkciónak a használatához</string>
@@ -223,9 +216,7 @@
     <string name="filter_city_fail">Nincs találat a "%s" kezdőbetűjű városokra.</string>
     <string name="age_filter_man">Srácok érdekelnek</string>
     <string name="age_filter_girl">Lányok érdekelnek</string>
-    <string name="dashbrd_popup_rating">Tetszett az alkalmazásunk? Növeld a népszerűségünket! Minél magasabb a
-        népszerűségünk, annál több érdekes emberrel találkozhatsz a Topface-n
-    </string>
+    <string name="dashbrd_popup_rating">Tetszett az alkalmazásunk? Növeld a népszerűségünket! Minél magasabb a népszerűségünk, annál több érdekes emberrel találkozhatsz a Topface-n</string>
     <string name="dashbrd_popup_title">Értékelés</string>
     <string name="dashbrd_popup_cancel">Ne kérdezd</string>
     <string name="dashbrd_popup_rate">Értékelés beállítása</string>

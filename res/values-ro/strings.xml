@@ -19,9 +19,7 @@
     <string name="general_server_error">Eroare. Incercati mai tarziu</string>
     <string name="general_data_error">Eroare. Mai incearca o data</string>
     <string name="general_internet_off">Conectare la Internet inaccesibila</string>
-    <string name="general_purchasing_error">Va rugam, sa trimiti mesaj despre eroarea cumparaturii la
-        support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Va rugam, sa trimiti mesaj despre eroarea cumparaturii la support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Textul a fost copiat</string>
     <string name="general_spinner_title">Alegeti actiunea</string>
@@ -51,7 +49,7 @@
     <string name="auth_retry">Mai incercati o data</string>
     <string name="auth_vk_name">VKontacte</string>
     <string name="dating_header_girls">Fete de la %1$d pana la %2$d</string>
-    <string name="dating_header_guys">Baieti de la %1$d pana la %2$d</string>
+    <string name="dating_header_guys">Baieti de la  %1$d pana la %2$d</string>
     <string name="dating_switch_button">Inca…</string>
     <string name="dating_skip_button">Urmatoarea</string>
     <string name="dating_prev_button">Precedent</string>
@@ -206,18 +204,11 @@
         <item quantity="other">%d poze</item>
         <item quantity="one">%d poza</item>
     </plurals>
-    <string name="novice_sympathy">Trimiteti simpatii la cei \n care va sunt dragi cu adevarat, \n pentru a incepe o
-        cunostinta placuta
-    </string>
-    <string name="novice_energy">Cu cat mare mare e incarcatura la baterie,\nи cu atat mai des sunte-ti aratat. \nиNu
-        uitati sa incarcati\nиbateria, cumparand energie.
-    </string>
-    <string name="novice_battery_bonus">Energie va da popularitate\nи noi simpatii. Dmv puteti\nи sa incarcati bateria,
-        cumparand\nи 100% energie. Prima incarcare\nи gratis!
-    </string>
+    <string name="novice_sympathy">Trimiteti simpatii la cei \n care va sunt dragi cu adevarat, \n pentru a incepe o cunostinta placuta</string>
+    <string name="novice_energy">Cu cat mare mare e incarcatura la baterie,\nи cu atat mai des sunte-ti aratat. \nиNu uitati sa incarcati\nиbateria, cumparand energie.</string>
+    <string name="novice_battery_bonus">Energie va da popularitate\nи noi simpatii. Dmv puteti\nи sa incarcati bateria, cumparand\nи 100% energie. Prima incarcare\nи gratis!</string>
     <string name="novice_fill_profile">Adauga pozele tale cele mai tari, \n pentru a primi mai multe simpatii.</string>
-    <string name="general_edit_profile_message">Fiti amabili, sa indepliniti campurile necesare a chestionarului
-    </string>
+    <string name="general_edit_profile_message">Fiti amabili, sa indepliniti campurile necesare a chestionarului</string>
     <string name="general_premium_access_error">Pentru aceasta functie aveti nevoie de Premium</string>
     <string name="general_search_null_response_error">Cautare esuata. Incercati sa faceti schimbari in filtru</string>
     <string name="change_filters">Schimba filtru</string>
@@ -227,9 +218,7 @@
     <string name="filter_city_fail">Nu a fost gasit nici unorasi care sa se inceapa cu «%s»</string>
     <string name="age_filter_man">Dmv va sunt interesati baietii</string>
     <string name="age_filter_girl">Dmv va sunt interesante fetele</string>
-    <string name="dashbrd_popup_rating">Va placut aplicatia noastra? Marestene ratingul! Cat mai mare e ratingul, cu
-        atat mai multi oameni interesanti vei intalni in Topface
-    </string>
+    <string name="dashbrd_popup_rating">Va placut aplicatia noastra? Marestene ratingul! Cat mai mare e ratingul, cu atat mai multi oameni interesanti vei intalni in Topface</string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Nu intreba mai mult</string>
     <string name="dashbrd_popup_rate">Instaleaza ratingul</string>
@@ -247,7 +236,6 @@
     <string name="dating_prev_button_ext">Anterior</string>
     <string name="dating_skip_button_ext">Urmatorul</string>
     <string name="dating_search_empty_title">Cu parere de rau cautare fara rezultat</string>
-    <string name="dating_search_empty_text">Puteti incerca cautarea inca odata, sau sa schimbati setarile filtrului.
-    </string>
+    <string name="dating_search_empty_text">Puteti incerca cautarea inca odata, sau sa schimbati setarile filtrului.</string>
     <string name="general_close">Inchide</string>
 </resources>

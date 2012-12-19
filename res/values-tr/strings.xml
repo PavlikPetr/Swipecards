@@ -19,8 +19,7 @@
     <string name="general_server_error">Hata. Daha sonra yeniden deneyin</string>
     <string name="general_data_error">Hata. Bir daha deneyin</string>
     <string name="general_internet_off">İnternete bağlı değil</string>
-    <string name="general_purchasing_error">Lütfen, alış veriş hatası hakkında support@topface.ru adresine yazın
-    </string>
+    <string name="general_purchasing_error">Lütfen, alış veriş hatası hakkında support@topface.ru adresine yazın</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Metin kopyalandı</string>
     <string name="general_spinner_title">Adımınızı seçin</string>
@@ -152,11 +151,8 @@
     <string name="invite_completed">Davetiye gönderildi</string>
     <plurals name="invite_bonus_text">
         <item quantity="zero">Arkadaşlarını davet et ve kişi başı 20şer .. kazan.</item>
-        <item quantity="other">Siz, %2$d arkadaşlarınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d
-            kazanırsınız
-        </item>
-        <item quantity="one">Siz, %2$d arkadaşınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız
-        </item>
+        <item quantity="other">Siz, %2$d arkadaşlarınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
+        <item quantity="one">Siz, %2$d arkadaşınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
     </plurals>
     <string name="settings_header_title">Ayarlar</string>
     <string name="settings_wifi">Sadece Wi-Fi ile</string>
@@ -206,14 +202,9 @@
         <item quantity="other">%d fotoğraf</item>
         <item quantity="one">%d fotoğraf</item>
     </plurals>
-    <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin
-    </string>
-    <string name="novice_energy">Bataryanın şarjı ne kadar yuksek \no kadar sık siz gösteriliyorsunuz. \nBataryayı
-        doldurmayı \n unutmayın.
-    </string>
-    <string name="novice_battery_bonus">Enerji size popülerlik \nve yeni sempati veriyor. %100 enerji \nalıp \nbataryayı
-        \nşarj edebilirsiniz. İlk şarjı size bedava hediye ediyoruz!
-    </string>
+    <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin</string>
+    <string name="novice_energy">Bataryanın şarjı ne kadar yuksek \no kadar sık siz gösteriliyorsunuz. \nBataryayı doldurmayı \n unutmayın.</string>
+    <string name="novice_battery_bonus">Enerji size popülerlik \nve yeni sempati veriyor. %100 enerji \nalıp \nbataryayı \nşarj edebilirsiniz. İlk şarjı size bedava hediye ediyoruz!</string>
     <string name="novice_fill_profile">Daha fazla sempati almak \n için en iyi fotoğrafınızı yükleyin.</string>
     <string name="general_edit_profile_message">Lütfen, anketin gerekli boşlukları doldurun</string>
     <string name="general_premium_access_error">Bu fonksiyon için Premium gerek</string>
@@ -225,9 +216,7 @@
     <string name="filter_city_fail">‘%s’ başlayan hiçbir şehir bulunamadı</string>
     <string name="age_filter_man">Siz erkeklere not veriyorsunuz</string>
     <string name="age_filter_girl">Siz kızlara not veriyorsunuz</string>
-    <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar yüksekse o kadar çok
-        ilginç insanlarla Topface’de karşılaşırsın
-    </string>
+    <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar yüksekse o kadar çok ilginç insanlarla Topface’de karşılaşırsın</string>
     <string name="dashbrd_popup_title">Reyting</string>
     <string name="dashbrd_popup_cancel">Bir daha sorma</string>
     <string name="dashbrd_popup_rate">Reyting göstermek</string>
@@ -245,9 +234,7 @@
     <string name="dating_prev_button_ext">Önceki</string>
     <string name="dating_skip_button_ext">Sonraki</string>
     <string name="dating_search_empty_title">Maalesef, hiçbir şey bulunamamış</string>
-    <string name="dating_search_empty_text">Aramayı tekrar deneyebilirsiniz veya filrtenin ayarlarını
-        değiştirebilirsiniz.
-    </string>
+    <string name="dating_search_empty_text">Aramayı tekrar deneyebilirsiniz veya filrtenin ayarlarını değiştirebilirsiniz.</string>
     <string name="general_close">Kapatmak</string>
     <string name="vip_not_activated">VIP-durumunuz güncellenmedi</string>
     <string name="vip_one_month_title">1 ay</string>
@@ -279,8 +266,7 @@
     <string name="vip_state_off">VIP-durumunuz güncellenmedi</string>
     <string name="vip_info_delight">Hayranlığınızı bedava gönderin, duygularınızı maksimum ifade edin!</string>
     <string name="vip_info_guest">Sizi merak edenleri öğrenin misafirlerinize göz atın!</string>
-    <string name="vip_info_invisible">\"Görünmez\" durumu sayesinde diğer sayfaları ziyaret ederken gizli kalın.
-    </string>
+    <string name="vip_info_invisible">\"Görünmez\" durumu sayesinde diğer sayfaları ziyaret ederken gizli kalın.</string>
     <string name="vip_info_message">Avantaj kazanın – mesajlarınız arka plandan öne çıkarılır.</string>
     <string name="vip_info_gift">Özel VIP-hediyelerinizi seçin ve siz muhakkak unutulmazsınız!</string>
     <string name="vip_info_blackList">Bıktığınız kişilerden \"kara liste\" yardımıyla kurtulun</string>

@@ -19,8 +19,7 @@
     <string name="general_server_error">Error. Intente más tarde</string>
     <string name="general_data_error">Error. Intenta una vez más</string>
     <string name="general_internet_off">No hay conexión a Internet</string>
-    <string name="general_purchasing_error">Por favor, envía el mensaje de error de la compra a support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Por favor, envía el mensaje de error de la compra a support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Mensaje copiado</string>
     <string name="general_spinner_title">Elige la acción</string>
@@ -204,12 +203,8 @@
         <item quantity="one">%d foto</item>
     </plurals>
     <string name="novice_sympathy">Envía simpatías a los\nquienes te gustan para\nhacer conocimiento</string>
-    <string name="novice_energy">Más la carga de la pila,\nmás a menudo te muestran.\nNo olvide comprar la energía\npara
-        cargar la pila.
-    </string>
-    <string name="novice_battery_bonus">La energía te da popularidad\ny nuevas simpatías. Para cargar\nla pila compra
-        100%\nde la energía. ¡Te regalamos\nla primera carga gratis!
-    </string>
+    <string name="novice_energy">Más la carga de la pila,\nmás a menudo te muestran.\nNo olvide comprar la energía\npara cargar la pila.</string>
+    <string name="novice_battery_bonus">La energía te da popularidad\ny nuevas simpatías. Para cargar\nla pila compra 100%\nde la energía. ¡Te regalamos\nla primera carga gratis!</string>
     <string name="novice_fill_profile">¡Elige tus mejores fotos para recibir más simpatías!</string>
     <string name="general_edit_profile_message">Por favor, rellena los campos necesarios de tu perfil</string>
     <string name="general_premium_access_error">Para esta función es necesario estar Premium</string>
@@ -221,9 +216,7 @@
     <string name="filter_city_fail">No podemos encontrar ciudades que comienzan con «%s»</string>
     <string name="age_filter_man">Te interesan los chicos</string>
     <string name="age_filter_girl">Te interesan las chicas</string>
-    <string name="dashbrd_popup_rating">¿Te ha gustado nuestra aplicación? ¡Aumenta nuestra puntuación! Más alto que sea
-        nuestra puntuación, más gente interesante encontraras en Topface
-    </string>
+    <string name="dashbrd_popup_rating">¿Te ha gustado nuestra aplicación? ¡Aumenta nuestra puntuación! Más alto que sea nuestra puntuación, más gente interesante encontraras en Topface</string>
     <string name="dashbrd_popup_title">Puntuación</string>
     <string name="dashbrd_popup_cancel">No preguntar más</string>
     <string name="dashbrd_popup_rate">Puntuar</string>
@@ -273,9 +266,7 @@
     <string name="vip_state_off">Tu estado VIP no está activado</string>
     <string name="vip_info_delight">Envía admiraciones gratis - ¡expresa tus sentimientos a máximo!</string>
     <string name="vip_info_guest">Descubra quién se interesó por ti - ¡vea tus visitantes!</string>
-    <string name="vip_info_invisible">Pasa sin dejar rastro visitando las páginas de otros, gracias al modo
-        \"invisible\"
-    </string>
+    <string name="vip_info_invisible">Pasa sin dejar rastro visitando las páginas de otros, gracias al modo \"invisible\"</string>
     <string name="vip_info_message">Obtenga ventaja - ¡tus mensajes serán destacados entre los demás!</string>
     <string name="vip_info_gift">Elige regalos-VIP exclusivos, ¡y te recordarán seguro!</string>
     <string name="vip_info_blackList">Evita las personas molestas con ayuda de \"lista negra\"</string>
