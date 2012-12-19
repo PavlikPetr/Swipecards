@@ -19,7 +19,8 @@
     <string name="general_server_error">Hiba. Próbálja meg újra</string>
     <string name="general_data_error">Hiba. Próbálja meg újra</string>
     <string name="general_internet_off">Nincs internet kapcsolat</string>
-    <string name="general_purchasing_error">Kérjük, írjon üzenetet a vásárlási hibáról support@topface.ru email-re</string>
+    <string name="general_purchasing_error">Kérjük, írjon üzenetet a vásárlási hibáról support@topface.ru email-re
+    </string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">A szöveg másolva</string>
     <string name="general_spinner_title">Válaszon egy műveletet</string>
@@ -86,17 +87,19 @@
     <string name="buying_header_title">Vásárlás</string>
     <string name="buying_you_have">Ön</string>
     <string name="buying_you_have_no_coins_for_gift">Szüksége van %d {{coins}} érmére ajándék vásárláshoz</string>
-    <string name="buying_default_message">Küldhet ajándékokat és csodálatot érmékért</string>
+    <string name="buying_default_message">Küldhetsz ajándékokat és csodálatot érmékért</string>
     <string name="buying_money">Érme vásárlás</string>
     <string name="buying_power">Energia vásárlás</string>
     <string name="buying_recharge">Feltöltés 100%-ra</string>
     <string name="buying_energy">3 USD</string>
-    <string name="buying_pack_6coins">6 érmés csomaf</string>
+    <string name="buying_pack_6coins">6 érmés csomag</string>
     <string name="buying_6coins">1 USD</string>
-    <string name="buying_pack_40coins">40 érmés csomaf</string>
+    <string name="buying_pack_40coins">40 érmés csomag</string>
     <string name="buying_40coins">5 USD</string>
-    <string name="buying_pack_100coins">100 érmés csomaf</string>
+    <string name="buying_pack_100coins">100 érmés csomag</string>
     <string name="buying_100coins">10 USD</string>
+    <string name="buying_pack_300coins">300 érmés csomag</string>
+    <string name="buying_300coins">25 USD</string>
     <string name="profile_header_title">Saját profil</string>
     <string name="profile_btn_chat">Csevegés</string>
     <string name="profile_add_title">Fotó hozzáadása</string>
@@ -200,9 +203,15 @@
         <item quantity="other">%d fénykép</item>
         <item quantity="one">%d fénykép</item>
     </plurals>
-    <string name="novice_sympathy">Küldj szimpátiát azoknak, akik \ntényleg tetszenek,\nígy el tudsz kezdeni egy élvezetes ismerkedést.</string>
-    <string name="novice_energy">Minél több töltésed van,\nannál többen fognak látni.\nNe felejtsd el feltölteni az\nelemet energia vásárlással.</string>
-    <string name="novice_battery_bonus">Energia népszerűséget ad neked\nés új szimpátiákat. Fel tudod\ntölteni az elemet. 100% energia vásárlásával\n. Az első\nfeltöltését ingyen adjuk neked</string>
+    <string name="novice_sympathy">Küldj szimpátiát azoknak, akik \ntényleg tetszenek,\nígy el tudsz kezdeni egy
+        élvezetes ismerkedést.
+    </string>
+    <string name="novice_energy">Minél több töltésed van,\nannál többen fognak látni.\nNe felejtsd el feltölteni
+        az\nelemet energia vásárlással.
+    </string>
+    <string name="novice_battery_bonus">Energia népszerűséget ad neked\nés új szimpátiákat. Fel tudod\ntölteni az
+        elemet. 100% energia vásárlásával\n. Az első\nfeltöltését ingyen adjuk neked
+    </string>
     <string name="novice_fill_profile">Töltsd fel a legjobb fotóidat,\nhogy több szimpátiát kapj.</string>
     <string name="general_edit_profile_message">Kérjük, töltse ki a profil szükséges mezőit</string>
     <string name="general_premium_access_error">Prémiumnak kell lennie ennek a funkciónak a használatához</string>
@@ -214,7 +223,9 @@
     <string name="filter_city_fail">Nincs találat a "%s" kezdőbetűjű városokra.</string>
     <string name="age_filter_man">Srácok érdekelnek</string>
     <string name="age_filter_girl">Lányok érdekelnek</string>
-    <string name="dashbrd_popup_rating">Tetszett az alkalmazásunk? Növeld a népszerűségünket! Minél magasabb a népszerűségünk, annál több érdekes emberrel találkozhatsz a Topface-n</string>
+    <string name="dashbrd_popup_rating">Tetszett az alkalmazásunk? Növeld a népszerűségünket! Minél magasabb a
+        népszerűségünk, annál több érdekes emberrel találkozhatsz a Topface-n
+    </string>
     <string name="dashbrd_popup_title">Értékelés</string>
     <string name="dashbrd_popup_cancel">Ne kérdezd</string>
     <string name="dashbrd_popup_rate">Értékelés beállítása</string>
@@ -223,4 +234,40 @@
     <string name="buying_store_purchase">Vásárolok az iTunes Store-ban</string>
     <string name="buying_tf_ack_sending">Információt küldök vásárlásról a Topface-n</string>
     <string name="settings_melody">Értesítés csengőhangja</string>
+    <string name="edit_refresh_status">Állapot frissítése</string>
+    <string name="ban_title">Gratulálunk! Letiltottak</string>
+    <string name="general_ready">Kész</string>
+    <string name="profile_deleted_user">Törölt felhasználó</string>
+    <string name="filter_main_parameters">Érdekel</string>
+    <string name="buying_store_ok">Vásárlás sikeresen befejeződött</string>
+    <string name="dating_prev_button_ext">Előző</string>
+    <string name="dating_skip_button_ext">Következő</string>
+    <string name="dating_search_empty_title">Sajnos, nincs találat</string>
+    <string name="dating_search_empty_text">Próbáld újra a keresést, vagy módosítsd a szűrő beállításait.</string>
+    <string name="general_close">Bezárás</string>
+    <string name="vip_one_month_title">1 hónap</string>
+    <string name="vip_one_month_value">10 USD</string>
+    <string name="vip_one_year_title">1 év</string>
+    <string name="vip_one_year_value">100 USD</string>
+    <string name="vip_privileges">VIP-privilégiumok</string>
+    <string name="vip_black_list">Fektelista</string>
+    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_services">Szolgáltatások</string>
+    <string name="default_balance_constant">A számládon</string>
+    <string name="default_energy_balance_constant">Energiacsomag</string>
+    <string name="default_energy_coins_buy_btn_text">Érme vásárlás, energiacsomag feltöltés</string>
+    <string name="black_list_title">Fektelista</string>
+    <string name="black_list_empty">A feketelistád megtelt</string>
+    <string name="black_list_add">Hozzáadás feketelistához</string>
+    <string name="black_list_delete">Törlés a feketelistáról</string>
+    <string name="buying_profile_coins">A számládon</string>
+    <string name="buying_profile_energy">Energiacsomag</string>
+    <string name="buying_buy_resources">Érme vásárlás, energiacsomag feltöltés</string>
+    <string name="vip_buy_vip">VIP vásárlás</string>
+    <string name="vip_info_title">VIP-privilégiumok</string>
+    <string name="black_list_retrieve">Helyreállítás</string>
+    <string name="buying_vip_status">VIP státusz vásárlás</string>
+    <string name="buying_vip_info">Vendégek megtekintéséhez VIP státuszra van szükséged</string>
+    <string name="buy_play_market_not_available">Play Market nem elérhető</string>
+    <string name="buy_subscription_not_available">Előfizetés nem elérhető</string>
 </resources>

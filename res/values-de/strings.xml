@@ -97,6 +97,8 @@
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">Paket mit 100 Coins</string>
     <string name="buying_100coins">10 USD</string>
+    <string name="buying_pack_300coins">Paket mit 300 Coins</string>
+    <string name="buying_300coins">25 USD</string>
     <string name="profile_header_title">Mein Profil</string>
     <string name="profile_btn_chat">Plaudern</string>
     <string name="profile_add_title">Foto hinzufügen</string>
@@ -200,9 +202,15 @@
         <item quantity="other">%d Fotos</item>
         <item quantity="one">%d Foto</item>
     </plurals>
-    <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich gefallen,\num eine angenehme Bekanntschaft anzufangen</string>
-    <string name="novice_energy">Je höher die Ladung der Batterie, \ndesto öfter schätzt man Sie ein. \nVergessen Sie nicht die Batterie\nzu laden, kaufend die Kraft.</string>
-    <string name="novice_battery_bonus">Die Kraft gibt Ihnen die Popularität\nund neue Sympathien. Kaufen Sie\n100% der Kraft und\nladen Sie Ihre Batterie.</string>
+    <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich gefallen,\num eine angenehme
+        Bekanntschaft anzufangen
+    </string>
+    <string name="novice_energy">Je höher die Ladung der Batterie, \ndesto öfter schätzt man Sie ein. \nVergessen Sie
+        nicht die Batterie\nzu laden, kaufend die Kraft.
+    </string>
+    <string name="novice_battery_bonus">Die Kraft gibt Ihnen die Popularität\nund neue Sympathien. Kaufen Sie\n100% der
+        Kraft und\nladen Sie Ihre Batterie.
+    </string>
     <string name="novice_fill_profile">Fügen Sie Ihre besten Fotos hinzu, \num mehr Sympathien zu erhalten.</string>
     <string name="general_edit_profile_message">Bitte, füllen Sie notwendige Felder des Fragebogens</string>
     <string name="general_premium_access_error">Für diese Funktion braucht man Premium</string>
@@ -214,12 +222,55 @@
     <string name="filter_city_fail">Keine Stadt gefunden, der mit «%s» beginnt</string>
     <string name="age_filter_man">Sie interessieren sich für Männer</string>
     <string name="age_filter_girl">Sie interessieren sich für Mädchen</string>
-    <string name="dashbrd_popup_rating">Gefällt unsere Anwendung? Erhöhen Sie unser Rating! Je höher das Rating ist, desto mehr interessante Leute treffen Sie in Topface</string>
+    <string name="dashbrd_popup_rating">Gefällt unsere Anwendung? Erhöhen Sie unser Rating! Je höher das Rating ist,
+        desto mehr interessante Leute treffen Sie in Topface
+    </string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Nicht fragen mehr</string>
     <string name="dashbrd_popup_rate">Rating ausstellen</string>
     <string name="dashbrd_popup_later">Später fragen</string>
+    <string name="buying_store_connect">Verbindung mit iTunes Store</string>
+    <string name="buying_store_purchase">Verarbeitung der Kauf in iTunes Store</string>
+    <string name="buying_tf_ack_sending">Sende die Informationen über den Kauf dem Topface</string>
     <string name="settings_melody">Sound-Benachrichtigungen</string>
     <string name="edit_refresh_status">Den Status aktualisieren</string>
     <string name="ban_title">Gratulation! Sie sind gebannt</string>
+    <string name="general_ready">Fertig</string>
+    <string name="profile_deleted_user">Nutzer ist gelöscht</string>
+    <string name="filter_main_parameters">Ich interessiere mich für</string>
+    <string name="buying_store_ok">Kauf ist erfolgreich beendet</string>
+    <string name="dating_prev_button_ext">Vorige</string>
+    <string name="dating_skip_button_ext">Nächste</string>
+    <string name="dating_search_empty_title">Leider, nichts gefunden</string>
+    <string name="dating_search_empty_text">Sie können Ihre Suche wiederholen, oder die Filter Einstellungen ändern
+    </string>
+    <string name="general_close">Schließen</string>
+    <string name="vip_not_activated">Ihr VIP-Status ist nicht aktiviert</string>
+    <string name="vip_one_month_title">1 Monat</string>
+    <string name="vip_one_month_value">10 USD</string>
+    <string name="vip_one_year_title">1 Jahr</string>
+    <string name="vip_one_year_value">100 USD</string>
+    <string name="vip_privileges">VIP-Privilegien</string>
+    <string name="vip_text_visitors">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
+    <string name="vip_invis">Unsichtbares Regime</string>
+    <string name="vip_black_list">Schwarze Liste</string>
+    <string name="profile_services">Services</string>
+    <string name="default_balance_constant">Auf Ihrem Konto</string>
+    <string name="default_energy_balance_constant">Kraft</string>
+    <string name="default_energy_coins_buy_btn_text">Coins kaufen, Kraft ergänzen</string>
+    <string name="black_list_title">Schwarze Liste</string>
+    <string name="black_list_empty">Ihre schwarze Liste ist leer</string>
+    <string name="black_list_add">In die schwarze Liste</string>
+    <string name="black_list_delete">Von der schwarzen Liste entfernen</string>
+    <string name="vip_invisible_mode">Unsichtbares Regime</string>
+    <string name="buying_profile_coins">Auf Ihrem Konto</string>
+    <string name="buying_profile_energy">Kraft</string>
+    <string name="buying_buy_resources">Coins kaufen, Kraft ergänzen</string>
+    <string name="vip_buy_vip">VIP kaufen</string>
+    <string name="vip_info_guest">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
+    <string name="vip_info_title">VIP-Privilegien</string>
+    <string name="black_list_retrieve">Wiederherstellen</string>
+    <string name="buying_vip_status">VIP Status kaufen</string>
+    <string name="buy_play_market_not_available">Play Market ist nicht erreichbar</string>
+    <string name="buy_subscription_not_available">Abonnements sind nicht erreichbar</string>
 </resources>

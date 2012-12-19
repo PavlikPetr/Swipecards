@@ -19,7 +19,8 @@
     <string name="general_server_error">Hata. Daha sonra yeniden deneyin</string>
     <string name="general_data_error">Hata. Bir daha deneyin</string>
     <string name="general_internet_off">İnternete bağlı değil</string>
-    <string name="general_purchasing_error">Lütfen, alış veriş hatası hakkında support@topface.ru adresine yazın</string>
+    <string name="general_purchasing_error">Lütfen, alış veriş hatası hakkında support@topface.ru adresine yazın
+    </string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Metin kopyalandı</string>
     <string name="general_spinner_title">Adımınızı seçin</string>
@@ -97,6 +98,8 @@
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">100 para paketi</string>
     <string name="buying_100coins">10 USD</string>
+    <string name="buying_pack_300coins">300 para paketi</string>
+    <string name="buying_300coins">25 USD</string>
     <string name="profile_header_title">Profilim</string>
     <string name="profile_btn_chat">Sohbet etmek</string>
     <string name="profile_add_title">Fotoğraf eklemek</string>
@@ -149,8 +152,11 @@
     <string name="invite_completed">Davetiye gönderildi</string>
     <plurals name="invite_bonus_text">
         <item quantity="zero">Arkadaşlarını davet et ve kişi başı 20şer .. kazan.</item>
-        <item quantity="other">Siz, %2$d arkadaşlarınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
-        <item quantity="one">Siz, %2$d arkadaşınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
+        <item quantity="other">Siz, %2$d arkadaşlarınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d
+            kazanırsınız
+        </item>
+        <item quantity="one">Siz, %2$d arkadaşınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız
+        </item>
     </plurals>
     <string name="settings_header_title">Ayarlar</string>
     <string name="settings_wifi">Sadece Wi-Fi ile</string>
@@ -200,9 +206,14 @@
         <item quantity="other">%d fotoğraf</item>
         <item quantity="one">%d fotoğraf</item>
     </plurals>
-    <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin</string>
-    <string name="novice_energy">Bataryanın şarjı ne kadar yuksek \no kadar sık siz gösteriliyorsunuz. \nBataryayı doldurmayı \n unutmayın.</string>
-    <string name="novice_battery_bonus">Enerji size popülerlik \nve yeni sempati veriyor. %100 enerji \nalıp \nbataryayı \nşarj edebilirsiniz. İlk şarjı size bedava hediye ediyoruz!</string>
+    <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin
+    </string>
+    <string name="novice_energy">Bataryanın şarjı ne kadar yuksek \no kadar sık siz gösteriliyorsunuz. \nBataryayı
+        doldurmayı \n unutmayın.
+    </string>
+    <string name="novice_battery_bonus">Enerji size popülerlik \nve yeni sempati veriyor. %100 enerji \nalıp \nbataryayı
+        \nşarj edebilirsiniz. İlk şarjı size bedava hediye ediyoruz!
+    </string>
     <string name="novice_fill_profile">Daha fazla sempati almak \n için en iyi fotoğrafınızı yükleyin.</string>
     <string name="general_edit_profile_message">Lütfen, anketin gerekli boşlukları doldurun</string>
     <string name="general_premium_access_error">Bu fonksiyon için Premium gerek</string>
@@ -214,7 +225,9 @@
     <string name="filter_city_fail">‘%s’ başlayan hiçbir şehir bulunamadı</string>
     <string name="age_filter_man">Siz erkeklere not veriyorsunuz</string>
     <string name="age_filter_girl">Siz kızlara not veriyorsunuz</string>
-    <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar yüksekse o kadar çok ilginç insanlarla Topface’de karşılaşırsın</string>
+    <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar yüksekse o kadar çok
+        ilginç insanlarla Topface’de karşılaşırsın
+    </string>
     <string name="dashbrd_popup_title">Reyting</string>
     <string name="dashbrd_popup_cancel">Bir daha sorma</string>
     <string name="dashbrd_popup_rate">Reyting göstermek</string>
@@ -232,6 +245,50 @@
     <string name="dating_prev_button_ext">Önceki</string>
     <string name="dating_skip_button_ext">Sonraki</string>
     <string name="dating_search_empty_title">Maalesef, hiçbir şey bulunamamış</string>
-    <string name="dating_search_empty_text">Aramayı tekrar deneyebilirsiniz veya filrtenin ayarlarını değiştirebilirsiniz.</string>
+    <string name="dating_search_empty_text">Aramayı tekrar deneyebilirsiniz veya filrtenin ayarlarını
+        değiştirebilirsiniz.
+    </string>
     <string name="general_close">Kapatmak</string>
+    <string name="vip_not_activated">VIP-durumunuz güncellenmedi</string>
+    <string name="vip_one_month_title">1 ay</string>
+    <string name="vip_one_month_value">10 USD</string>
+    <string name="vip_one_year_title">1 yıl</string>
+    <string name="vip_one_year_value">100 USD</string>
+    <string name="vip_privileges">VIP-ayrıcalık</string>
+    <string name="vip_text_visitors">Sizi merak edenleri öğrenin misafirlerinize göz atın!</string>
+    <string name="vip_text_adm_unlock">Hayranlığınızı bedava gönderin, duygularınızı maksimum ifade edin!</string>
+    <string name="vip_rest">VIP’e abone oldunuz</string>
+    <string name="vip_invis">Görünmez durumu</string>
+    <string name="vip_messages_bg">Mesajların arka planı</string>
+    <string name="vip_black_list">Kara liste</string>
+    <string name="vip_profile_bg">Arka plan fotoğrafı</string>
+    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_services">Hizmetler</string>
+    <string name="default_balance_constant">Hesabınızda</string>
+    <string name="default_energy_balance_constant">Enerji deposu</string>
+    <string name="default_energy_coins_buy_btn_text">Para satın almak, enerji deposu doldurmak</string>
+    <string name="black_list_title">Kara liste</string>
+    <string name="black_list_empty">Kara listeniz boş</string>
+    <string name="black_list_add">Kara listeye eklemek</string>
+    <string name="black_list_delete">Kara listeden kaldırmak</string>
+    <string name="vip_invisible_mode">Görünmez durumu</string>
+    <string name="buying_profile_coins">Hesabınızda</string>
+    <string name="buying_profile_energy">Enerji deposu</string>
+    <string name="buying_buy_resources">Para satın almak, enerji deposu doldurmak</string>
+    <string name="vip_buy_vip">VIP alışı</string>
+    <string name="vip_state_off">VIP-durumunuz güncellenmedi</string>
+    <string name="vip_info_delight">Hayranlığınızı bedava gönderin, duygularınızı maksimum ifade edin!</string>
+    <string name="vip_info_guest">Sizi merak edenleri öğrenin misafirlerinize göz atın!</string>
+    <string name="vip_info_invisible">\"Görünmez\" durumu sayesinde diğer sayfaları ziyaret ederken gizli kalın.
+    </string>
+    <string name="vip_info_message">Avantaj kazanın – mesajlarınız arka plandan öne çıkarılır.</string>
+    <string name="vip_info_gift">Özel VIP-hediyelerinizi seçin ve siz muhakkak unutulmazsınız!</string>
+    <string name="vip_info_blackList">Bıktığınız kişilerden \"kara liste\" yardımıyla kurtulun</string>
+    <string name="vip_info_vip">Arama motorunda ve profilinizde VIP-durumunuzla dikkat çekin!</string>
+    <string name="vip_info_title">VIP-ayrıcalık</string>
+    <string name="black_list_retrieve">Kurtarmak</string>
+    <string name="buying_vip_status">VIP durumu satın almak</string>
+    <string name="buying_vip_info">Misafirlere erişmek için VIP durumuna sahip olmak gerek</string>
+    <string name="buy_play_market_not_available">Play Market kullanılmamaktadır</string>
+    <string name="buy_subscription_not_available">Abonelikler kullanılmamaktadır</string>
 </resources>

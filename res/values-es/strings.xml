@@ -19,7 +19,8 @@
     <string name="general_server_error">Error. Intente más tarde</string>
     <string name="general_data_error">Error. Intenta una vez más</string>
     <string name="general_internet_off">No hay conexión a Internet</string>
-    <string name="general_purchasing_error">Por favor, envía el mensaje de error de la compra a support@topface.ru</string>
+    <string name="general_purchasing_error">Por favor, envía el mensaje de error de la compra a support@topface.ru
+    </string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Mensaje copiado</string>
     <string name="general_spinner_title">Elige la acción</string>
@@ -97,6 +98,8 @@
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">Paquete de 100 monedas</string>
     <string name="buying_100coins">10 USD</string>
+    <string name="buying_pack_300coins">Paquete de 300 monedas</string>
+    <string name="buying_300coins">25 USD</string>
     <string name="profile_header_title">Mi perfil</string>
     <string name="profile_btn_chat">Charlar</string>
     <string name="profile_add_title">Cargar foto</string>
@@ -201,8 +204,12 @@
         <item quantity="one">%d foto</item>
     </plurals>
     <string name="novice_sympathy">Envía simpatías a los\nquienes te gustan para\nhacer conocimiento</string>
-    <string name="novice_energy">Más la carga de la pila,\nmás a menudo te muestran.\nNo olvide comprar la energía\npara cargar la pila.</string>
-    <string name="novice_battery_bonus">La energía te da popularidad\ny nuevas simpatías. Para cargar\nla pila compra 100%\nde la energía. ¡Te regalamos\nla primera carga gratis!</string>
+    <string name="novice_energy">Más la carga de la pila,\nmás a menudo te muestran.\nNo olvide comprar la energía\npara
+        cargar la pila.
+    </string>
+    <string name="novice_battery_bonus">La energía te da popularidad\ny nuevas simpatías. Para cargar\nla pila compra
+        100%\nde la energía. ¡Te regalamos\nla primera carga gratis!
+    </string>
     <string name="novice_fill_profile">¡Elige tus mejores fotos para recibir más simpatías!</string>
     <string name="general_edit_profile_message">Por favor, rellena los campos necesarios de tu perfil</string>
     <string name="general_premium_access_error">Para esta función es necesario estar Premium</string>
@@ -214,7 +221,9 @@
     <string name="filter_city_fail">No podemos encontrar ciudades que comienzan con «%s»</string>
     <string name="age_filter_man">Te interesan los chicos</string>
     <string name="age_filter_girl">Te interesan las chicas</string>
-    <string name="dashbrd_popup_rating">¿Te ha gustado nuestra aplicación? ¡Aumenta nuestra puntuación! Más alto que sea nuestra puntuación, más gente interesante encontraras en Topface</string>
+    <string name="dashbrd_popup_rating">¿Te ha gustado nuestra aplicación? ¡Aumenta nuestra puntuación! Más alto que sea
+        nuestra puntuación, más gente interesante encontraras en Topface
+    </string>
     <string name="dashbrd_popup_title">Puntuación</string>
     <string name="dashbrd_popup_cancel">No preguntar más</string>
     <string name="dashbrd_popup_rate">Puntuar</string>
@@ -234,4 +243,47 @@
     <string name="dating_search_empty_title">Lamentablemente no se ha encontrado nada</string>
     <string name="dating_search_empty_text">Puede intentar repetir la busqueda o cambiar opciones de filtración</string>
     <string name="general_close">Cerrar</string>
+    <string name="vip_not_activated">Tu estado VIP no está activado</string>
+    <string name="vip_one_month_title">1 mes</string>
+    <string name="vip_one_month_value">10 USD</string>
+    <string name="vip_one_year_title">1 año</string>
+    <string name="vip_one_year_value">100 USD</string>
+    <string name="vip_privileges">VIP-ventajas</string>
+    <string name="vip_text_visitors">Descubra quién se interesó por ti - ¡vea tus visitantes!</string>
+    <string name="vip_text_adm_unlock">Envía admiraciones gratis - ¡expresa tus sentimientos a máximo!</string>
+    <string name="vip_rest">Estás suscrito al VIP</string>
+    <string name="vip_invis">Modo invisible</string>
+    <string name="vip_messages_bg">Fondo de mensajes</string>
+    <string name="vip_black_list">Lista negra</string>
+    <string name="vip_profile_bg">Fotografía de fondo</string>
+    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_services">Servicios</string>
+    <string name="default_balance_constant">En su cuenta</string>
+    <string name="default_energy_balance_constant">Energía</string>
+    <string name="default_energy_coins_buy_btn_text">Comprar monedas, rellenar la energía</string>
+    <string name="black_list_title">Lista negra</string>
+    <string name="black_list_empty">Tu lista negra está vacía</string>
+    <string name="black_list_add">Añadir a la lista negra</string>
+    <string name="black_list_delete">Eliminar de la lista negra</string>
+    <string name="vip_invisible_mode">Modo invisible</string>
+    <string name="buying_profile_coins">En su cuenta</string>
+    <string name="buying_profile_energy">Energía</string>
+    <string name="buying_buy_resources">f</string>
+    <string name="vip_buy_vip">Comprar VIP</string>
+    <string name="vip_state_off">Tu estado VIP no está activado</string>
+    <string name="vip_info_delight">Envía admiraciones gratis - ¡expresa tus sentimientos a máximo!</string>
+    <string name="vip_info_guest">Descubra quién se interesó por ti - ¡vea tus visitantes!</string>
+    <string name="vip_info_invisible">Pasa sin dejar rastro visitando las páginas de otros, gracias al modo
+        \"invisible\"
+    </string>
+    <string name="vip_info_message">Obtenga ventaja - ¡tus mensajes serán destacados entre los demás!</string>
+    <string name="vip_info_gift">Elige regalos-VIP exclusivos, ¡y te recordarán seguro!</string>
+    <string name="vip_info_blackList">Evita las personas molestas con ayuda de \"lista negra\"</string>
+    <string name="vip_info_vip">¡Destaca con ayuda de tu estado VIP en la busqueda y en tu perfil!</string>
+    <string name="vip_info_title">VIP-ventajas</string>
+    <string name="black_list_retrieve">Recuperar</string>
+    <string name="buying_vip_status">Comprar estado VIP</string>
+    <string name="buying_vip_info">Para acceder a la información de visitantes hay que tener estado VIP</string>
+    <string name="buy_play_market_not_available">Play Market sin acceso</string>
+    <string name="buy_subscription_not_available">Suscripciones sin acceso</string>
 </resources>

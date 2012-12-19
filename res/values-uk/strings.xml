@@ -19,7 +19,9 @@
     <string name="general_server_error">Помилка. Спробуйте пізніше</string>
     <string name="general_data_error">Помилка. Спробуйте ще раз</string>
     <string name="general_internet_off">Немає підключення до інтернету</string>
-    <string name="general_purchasing_error">Будь ласка, напишіть повідомлення про помилку покупки на support@topface.ru</string>
+    <string name="general_purchasing_error">Будь ласка, напишіть повідомлення про помилку покупки на
+        support@topface.ru
+    </string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопійований</string>
     <string name="general_spinner_title">Вибрати дію</string>
@@ -97,6 +99,8 @@
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">Пакет з 100 монет</string>
     <string name="buying_100coins">10 USD</string>
+    <string name="buying_pack_300coins">Пакет з 300 монет</string>
+    <string name="buying_300coins">25 USD</string>
     <string name="profile_header_title">Мій профіль</string>
     <string name="profile_btn_chat">Побалакати</string>
     <string name="profile_add_title">Додати фотографію</string>
@@ -204,9 +208,15 @@
         <item quantity="other">%d фотографій</item>
         <item quantity="one">%d фотографія</item>
     </plurals>
-    <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб почати приємне знайомство</string>
-    <string name="novice_energy">Чим вище заряд батарейки, тим частіше вас оцінюють. Не забувайте зарядити\nбатарею, купивши енергію.</string>
-    <string name="novice_battery_bonus">Енергія дає вам популярність\nта нові симпатії. Ви можете\nзарядити батарею, купивши\n100% енергії. Перший заряд\nми даруємо вам безкоштовно!</string>
+    <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб почати приємне
+        знайомство
+    </string>
+    <string name="novice_energy">Чим вище заряд батарейки, тим частіше вас оцінюють. Не забувайте зарядити\nбатарею,
+        купивши енергію.
+    </string>
+    <string name="novice_battery_bonus">Енергія дає вам популярність\nта нові симпатії. Ви можете\nзарядити батарею,
+        купивши\n100% енергії. Перший заряд\nми даруємо вам безкоштовно!
+    </string>
     <string name="novice_fill_profile">Додайте свої кращі фотографії,\n щоб отримувати більше симпатій.</string>
     <string name="general_edit_profile_message">Будь ласка, заповніть необхідні поля анкети</string>
     <string name="general_premium_access_error">Для даної функції потрібен Преміум</string>
@@ -218,7 +228,9 @@
     <string name="filter_city_fail">Не знайдено жодного міста що починається з «%s»</string>
     <string name="age_filter_man">Вам цікаві хлопці</string>
     <string name="age_filter_girl">Вам цікаві дівчата</string>
-    <string name="dashbrd_popup_rating">Сподобався наш додаток? Підніми нам рейтинг! Чим вищий рейтинг, тим більше цікавих людей ти зустрінеш у Topface</string>
+    <string name="dashbrd_popup_rating">Сподобався наш додаток? Підніми нам рейтинг! Чим вищий рейтинг, тим більше
+        цікавих людей ти зустрінеш у Topface
+    </string>
     <string name="dashbrd_popup_title">Рейтинг</string>
     <string name="dashbrd_popup_cancel">Більше не питати</string>
     <string name="dashbrd_popup_rate">Виставити рейтинг</string>
@@ -236,6 +248,50 @@
     <string name="dating_prev_button_ext">Попередній</string>
     <string name="dating_skip_button_ext">Наступний</string>
     <string name="dating_search_empty_title">На жаль, нічого не знайдено</string>
-    <string name="dating_search_empty_text">Ви можете спробувати повторити пошук, або змінити налаштування фільтра.</string>
+    <string name="dating_search_empty_text">Ви можете спробувати повторити пошук, або змінити налаштування фільтра.
+    </string>
     <string name="general_close">Закрити</string>
+    <string name="vip_not_activated">Ваш VIP-статус не активований</string>
+    <string name="vip_one_month_title">1 місяць</string>
+    <string name="vip_one_month_value">10 USD</string>
+    <string name="vip_one_year_title">1 рік</string>
+    <string name="vip_one_year_value">100 USD</string>
+    <string name="vip_privileges">VIP-привілеї</string>
+    <string name="vip_text_visitors">Дізнайтеся, хто вами цікавився - дивіться своїх гостей!</string>
+    <string name="vip_text_adm_unlock">Відправляйте захоплення безкоштовно - вражайте свої почуття по максимуму</string>
+    <string name="vip_rest">Ви підписані на VIP</string>
+    <string name="vip_invis">Режим невидимки</string>
+    <string name="vip_messages_bg">Фон повідомлень</string>
+    <string name="vip_black_list">Чорний список</string>
+    <string name="vip_profile_bg">Фонова фотографія</string>
+    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_services">Послуги</string>
+    <string name="default_balance_constant">На вашому рахунку</string>
+    <string name="default_energy_balance_constant">Запас енергії</string>
+    <string name="default_energy_coins_buy_btn_text">Купити монет, поповнити запас енергії</string>
+    <string name="black_list_title">Чорний список</string>
+    <string name="black_list_empty">Ваш чорний список порожній</string>
+    <string name="black_list_add">Додати до чорного списку</string>
+    <string name="black_list_delete">Видалити з чорного списку</string>
+    <string name="vip_invisible_mode">Режим невидимки</string>
+    <string name="buying_profile_coins">На вашому рахунку</string>
+    <string name="buying_profile_energy">Запас енергії</string>
+    <string name="buying_buy_resources">Купити монет, поповнити запас енергії</string>
+    <string name="vip_buy_vip">Купівля VIP</string>
+    <string name="vip_state_off">Ваш VIP-статус не активований</string>
+    <string name="vip_info_delight">Відправляйте захоплення безкоштовно - вражайте свої почуття по максимуму!</string>
+    <string name="vip_info_guest">Дізнайтеся, хто вами цікавився - дивіться своїх гостей!</string>
+    <string name="vip_info_invisible">Залишайтеся непоміченими, відвідуючи чужі сторінки, завдяки режиму \"невидимка\"
+    </string>
+    <string name="vip_info_message">Отримайте перевага - ваші повідомлення будуть виділятися на загальному фоні!
+    </string>
+    <string name="vip_info_gift">Вибирайте ексклюзивні VIP-подарунки, і вас обов\'язково запам\'ятають!</string>
+    <string name="vip_info_blackList">Позбавляйтеся від обридлих персон за допомогою \"чорного списку\"</string>
+    <string name="vip_info_vip">Виділяйтеся за допомогою свого VIP-статусу в пошуку та своєму профілі!</string>
+    <string name="vip_info_title">VIP-привілеї</string>
+    <string name="black_list_retrieve">Відновити</string>
+    <string name="buying_vip_status">Купити VIP статус</string>
+    <string name="buying_vip_info">Для доступу до гостей необхідно мати VIP статус</string>
+    <string name="buy_play_market_not_available">Play Market не доступний</string>
+    <string name="buy_subscription_not_available">Підписки не доступні</string>
 </resources>

@@ -19,7 +19,8 @@
     <string name="general_server_error">Λάθος. Προσπαθήστε αργότερα</string>
     <string name="general_data_error">Σφάλμα. Προσπαθήστε ξανά</string>
     <string name="general_internet_off">Δεν υπάρχει σύνδεση με το Διαδίκτυο</string>
-    <string name="general_purchasing_error">Παρακαλώ, γράψετε ένα μήνυμα σφάλματος για την αγορά support@topface.ru</string>
+    <string name="general_purchasing_error">Παρακαλώ, γράψετε ένα μήνυμα σφάλματος για την αγορά support@topface.ru
+    </string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">αντιγραφεί</string>
     <string name="general_spinner_title">Επιλέξτε μια δράση</string>
@@ -97,12 +98,14 @@
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">Ένα πακέτο με 100 κέρματα</string>
     <string name="buying_100coins">10 USD</string>
+    <string name="buying_pack_300coins">Ένα πακέτο των 300 κέρματα</string>
+    <string name="buying_300coins">25 USD</string>
     <string name="profile_header_title">Το προφίλ μου</string>
     <string name="profile_btn_chat">Να κάνουμε ένα κουβέντα</string>
     <string name="profile_add_title">Προσθέστε μια φωτογραφία</string>
     <string name="profile_add_album">Επιλέξτε από τις διαθέσιμες</string>
     <string name="profile_add_camera">Κάντε μια εικόνα</string>
-    <string name="profile_photo">φωτογραφία</string>
+    <string name="profile_photo">Φωτογραφία</string>
     <string name="profile_form">Το ερωτηματολόγιο</string>
     <string name="profile_gifts">Δώρα</string>
     <string name="profile_actions">Δράσης</string>
@@ -150,7 +153,8 @@
     <plurals name="invite_bonus_text">
         <item quantity="zero">Προσκαλέστε τους φίλους σας και να παρέτε για καθεμία από τις 20</item>
         <item quantity="other">Θα πάμε για να στείλετε προσκλήσεις %2$d στους φίλους και να παρέτε γι \'αυτό %1$d</item>
-        <item quantity="one">Θα πάμε για να στείλετε μια πρόσκληση για %2$d στους φίλους και να παρέτε γι \'αυτό %1$d</item>
+        <item quantity="one">Θα πάμε για να στείλετε μια πρόσκληση για %2$d στους φίλους και να παρέτε γι \'αυτό %1$d
+        </item>
     </plurals>
     <string name="settings_header_title">Ρυθμίσεις</string>
     <string name="settings_wifi">Μόνο σε Wi-Fi</string>
@@ -200,10 +204,18 @@
         <item quantity="other">%d φωτογραφίες</item>
         <item quantity="one">%d φωτογραφία</item>
     </plurals>
-    <string name="novice_sympathy">Στείλτε συμπάθεια για εκείνους που \nσας αρέσει πραγματικά\ nγια να ξεκινήσετε μια ευχάριστη γνωριμία</string>
-    <string name="novice_energy">Όσο υψηλότερη είναι η φόρτιση της μπαταρίας, \nτόσο περισσότερο σας να εκτιμήσουν. \nΜην ξεχάσετε να φορτίσετε \nμπαταρία, με την αγορά της ενέργειας.</string>
-    <string name="novice_battery_bonus">Ενέργεια σας δίνει τις δημοφιλείς \nκαι νέα συμπάθειας. Μπορείτε να \n φορτίσετε την μπαταρία, αν έχετε αγοράσει \n100% της ενέργειας. Η πρώτη φόρτιση \n να σας δίνουμε δωρεάν!</string>
-    <string name="novice_fill_profile">Προσθέστε τις καλύτερες φωτογραφίες σας \nγια να πάρετε περισσότερες συμπάθειας.</string>
+    <string name="novice_sympathy">Στείλτε συμπάθεια για εκείνους που \nσας αρέσει πραγματικά\ nγια να ξεκινήσετε μια
+        ευχάριστη γνωριμία
+    </string>
+    <string name="novice_energy">Όσο υψηλότερη είναι η φόρτιση της μπαταρίας, \nτόσο περισσότερο σας να εκτιμήσουν.
+        \nΜην ξεχάσετε να φορτίσετε \nμπαταρία, με την αγορά της ενέργειας.
+    </string>
+    <string name="novice_battery_bonus">Ενέργεια σας δίνει τις δημοφιλείς \nκαι νέα συμπάθειας. Μπορείτε να \n φορτίσετε
+        την μπαταρία, αν έχετε αγοράσει \n100% της ενέργειας. Η πρώτη φόρτιση \n να σας δίνουμε δωρεάν!
+    </string>
+    <string name="novice_fill_profile">Προσθέστε τις καλύτερες φωτογραφίες σας \nγια να πάρετε περισσότερες
+        συμπάθειας.
+    </string>
     <string name="general_edit_profile_message">Παρακαλούμε συμπληρώστε τα απαιτούμενα πεδία του ερωτηματολόγιο</string>
     <string name="general_premium_access_error">Για αυτή η λειτουργία χρειάζεται Premium</string>
     <string name="general_search_null_response_error">Τίποτα δεν βρέθηκε. Προσπαθήστε να αλλάξετε τα φίλτρα</string>
@@ -214,7 +226,9 @@
     <string name="filter_city_fail">Βρέθηκε καμία πόλη που αρχίζει με «%s»</string>
     <string name="age_filter_man">‘Εχετε ενδιαφέρον για άντρες</string>
     <string name="age_filter_girl">‘Εχετε ενδιαφέρον για κοπέλες</string>
-    <string name="dashbrd_popup_rating">Άρεσε εφαρμογή μας? Ανασηκώστε το βαθμολογίας μας!  Όσο υψηλότερη είναι η βαθμολογίας, τόσο πιο πολλοί ενδιαφέροντες ανθρώπους μπορείς να συναντήσεις στη Topface</string>
+    <string name="dashbrd_popup_rating">Άρεσε εφαρμογή μας? Ανασηκώστε το βαθμολογίας μας! Όσο υψηλότερη είναι η
+        βαθμολογίας, τόσο πιο πολλοί ενδιαφέροντες ανθρώπους μπορείς να συναντήσεις στη Topface
+    </string>
     <string name="dashbrd_popup_title">Βαθμολογίας</string>
     <string name="dashbrd_popup_cancel">Μην ρωτήσετε</string>
     <string name="dashbrd_popup_rate">Ρυθμίστε το βαθμολογίας</string>
@@ -232,5 +246,51 @@
     <string name="dating_prev_button_ext">Προηγούμενος</string>
     <string name="dating_skip_button_ext">Επόμενος</string>
     <string name="dating_search_empty_title">Δυστυχώς, τίποτα δεν βρέθηκε</string>
-    <string name="dating_search_empty_text">Μπορείτε να δοκιμάσετε την αναζήτηση ξανά, ή να αλλάξετε τις ρυθμίσεις του φίλτρου.</string>
+    <string name="dating_search_empty_text">Μπορείτε να δοκιμάσετε την αναζήτηση ξανά, ή να αλλάξετε τις ρυθμίσεις του
+        φίλτρου.
+    </string>
+    <string name="general_close">Κλείστε</string>
+    <string name="vip_not_activated">Η κατάστασή σας-VIP δεν είναι ενεργοποιημένη</string>
+    <string name="vip_one_month_title">1 μήνας</string>
+    <string name="vip_one_month_value">10 USD</string>
+    <string name="vip_one_year_title">1 χρόνος</string>
+    <string name="vip_one_year_value">100 USD</string>
+    <string name="vip_privileges">VIP τα προνόμια</string>
+    <string name="vip_text_visitors">Μάθετε ποιος είναι ενδιαφέρεται για σας - δείτε τους καλεσμένους σας!</string>
+    <string name="vip_text_adm_unlock">Αποστολή θαυμασμό για δωρεάν - εκφράστε τα συναισθήματά σας στο μέγιστο!</string>
+    <string name="vip_rest">Έχετε εγγραφεί στη VIP</string>
+    <string name="vip_invis">Αόρατη Λειτουργία</string>
+    <string name="vip_messages_bg">Το φόντο μηνυμάτων</string>
+    <string name="vip_black_list">Η μαύρη λίστα</string>
+    <string name="vip_profile_bg">Ιστορικό φωτογραφία</string>
+    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_services">Τα υπηρεσίες</string>
+    <string name="default_balance_constant">Στο λογαριασμό σας</string>
+    <string name="default_energy_balance_constant">Ενεργειακό περιεχόμενο</string>
+    <string name="default_energy_coins_buy_btn_text">Να αγοράσετε τα κέρματα, να ξαναγεμίσετε της ενέργειας</string>
+    <string name="black_list_title">Η μαύρη λίστα</string>
+    <string name="black_list_empty">Η μαύρη λίστα σας είναι άδειο</string>
+    <string name="black_list_add">Να προσθέσετε στη μαύρη λίστα</string>
+    <string name="black_list_delete">Αφαιρέστε από τη μαύρη λίστα</string>
+    <string name="vip_invisible_mode">Αόρατη Λειτουργία</string>
+    <string name="buying_profile_coins">Στο λογαριασμό σας</string>
+    <string name="buying_profile_energy">Το ενεργειακό περιεχόμενο</string>
+    <string name="buying_buy_resources">Να αγοράσετε τα κέρματα, να ξαναγεμίσετε της ενέργειας</string>
+    <string name="vip_buy_vip">Αγορά της VIP</string>
+    <string name="vip_state_off">Η κατάστασή σας-VIP δεν είναι ενεργοποιημένη</string>
+    <string name="vip_info_delight">Στείλτε θαυμασμό για δωρεάν - εκφράστε τα συναισθήματά σας στο μέγιστο!</string>
+    <string name="vip_info_guest">Μάθετε ποιος είναι ενδιαφέρεται για σας - δείτε τους καλεσμένους σας!</string>
+    <string name="vip_info_invisible">Μείνετε απαρατήρητα, όταν επισκέπτεστε τις σελίδες κάποιου άλλου, χάρη στην \
+        "αόρατος \"
+    </string>
+    <string name="vip_info_message">Αποκτήστε το πλεονέκτημα - τα μηνύματα σας θα ξεχωρίσουν από το πλήθος!</string>
+    <string name="vip_info_gift">Επιλέξτε αποκλειστικά VIP-δώρα, και θα σας μείνει αξέχαστο!</string>
+    <string name="vip_info_blackList">Απαλλαγείτε από τα ενοχλητικά άτομα με \ "μαύρη λίστα \"</string>
+    <string name="vip_info_vip">Ξεχωρίστε με VIP-κατάστασή σας στην αναζήτηση και με το προφίλ σας!</string>
+    <string name="vip_info_title">VIP τα προνόμια</string>
+    <string name="black_list_retrieve">Αποκαταστήστε</string>
+    <string name="buying_vip_status">Να αγοράσετε VIP κατάσταση</string>
+    <string name="buying_vip_info">Για να αποκτήσετε πρόσβαση τους επισκέπτες πρέπει να έχετε τη κατάσταση VIP</string>
+    <string name="buy_play_market_not_available">Play Market δεν είναι διαθέσιμη</string>
+    <string name="buy_subscription_not_available">Τα συνδρομές δεν είναι διαθέσιμες</string>
 </resources>
