@@ -156,28 +156,52 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        requestPurchase(view);
+        //requestTestPurchase(view);
+    }
+
+    private void requestPurchase(View view) {
         switch (view.getId()) {
             case R.id.btnBuyingMoney6:
-                mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_INAPP, null); // topface.coins.6
-                // //
-                // android.test.purchased
+                mBillingService.requestPurchase("topface.coins.6", Consts.ITEM_TYPE_INAPP, null);
                 break;
             case R.id.btnBuyingMoney40:
-                mBillingService.requestPurchase("topface.coins.40", Consts.ITEM_TYPE_INAPP, null); // topface.coins.40
-                // //
-                // android.test.canceled
+                mBillingService.requestPurchase("topface.coins.40", Consts.ITEM_TYPE_INAPP, null);
                 break;
             case R.id.btnBuyingMoney100:
-                mBillingService.requestPurchase("topface.coins.100", Consts.ITEM_TYPE_INAPP, null); // topface.coins.100
-                // //android.test.refunded
+                mBillingService.requestPurchase("topface.coins.100", Consts.ITEM_TYPE_INAPP, null);
                 break;
             case R.id.btnBuyingMoney300:
-                mBillingService.requestPurchase("topface.coins.300", Consts.ITEM_TYPE_INAPP, null); // topface.coins.300
-                // //android.test.refunded
+                mBillingService.requestPurchase("topface.coins.300", Consts.ITEM_TYPE_INAPP, null);
                 break;
             case R.id.btnBuyingPower:
-                mBillingService.requestPurchase("topface.energy.10000", Consts.ITEM_TYPE_INAPP, null); // topface.energy.10000
-                // //android.test.item_unavailable
+                mBillingService.requestPurchase("topface.energy.10000", Consts.ITEM_TYPE_INAPP, null);
+                break;
+        }
+    }
+
+    /**
+     * Тестовые товары для отладки покупок
+     * NOTE: Применяется только для тестирования!
+     *
+     * @param view кнопка покупки
+     */
+    private void requestTestPurchase(View view) {
+        switch (view.getId()) {
+            case R.id.btnBuyingMoney6:
+                mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_INAPP, null);
+                break;
+            case R.id.btnBuyingMoney40:
+                mBillingService.requestPurchase("android.test.canceled", Consts.ITEM_TYPE_INAPP, null);
+                break;
+            case R.id.btnBuyingMoney100:
+                mBillingService.requestPurchase("android.test.refunded", Consts.ITEM_TYPE_INAPP, null);
+                break;
+            case R.id.btnBuyingMoney300:
+                mBillingService.requestPurchase("android.test.item_unavailable", Consts.ITEM_TYPE_INAPP, null);
+                break;
+            case R.id.btnBuyingPower:
+                mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_INAPP, null);
                 break;
         }
     }
