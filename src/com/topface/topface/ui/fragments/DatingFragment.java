@@ -18,7 +18,10 @@ import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.*;
 import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.*;
+import com.topface.topface.data.NovicePower;
+import com.topface.topface.data.Search;
+import com.topface.topface.data.SearchUser;
+import com.topface.topface.data.SkipRate;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.ChatActivity;
@@ -272,6 +275,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             } else {
                                 mUserSearchList.clear();
                                 mUserSearchList.addAll(userList);
+                                Data.searchPosition = 0;
                                 onUpdateSuccess(isAddition);
                                 showNextUser();
                                 unlockControls();
@@ -395,7 +399,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mUserSearchList.get(Data.searchPosition).city.name);
                 intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass()
                         .getSimpleName());
-                getActivity().startActivityForResult(intent,ChatActivity.INTENT_CHAT_REQUEST);
+                getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT_REQUEST);
 
                 EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
             }
