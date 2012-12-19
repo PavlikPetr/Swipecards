@@ -80,10 +80,12 @@ public abstract class ApiRequest {
         if (handler == null) {
             handler = new ApiHandler() {
                 @Override
-                public void success(ApiResponse response) {}
+                public void success(ApiResponse response) {
+                }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {}
+                public void fail(int codeError, ApiResponse response) {
+                }
             };
             handler.setContext(context);
         }
@@ -98,7 +100,10 @@ public abstract class ApiRequest {
     }
 
     public void cancel() {
-        handler = null;
+        if (handler != null) {
+            handler.cancel();
+            handler = null;
+        }
         if (connection != null) {
             connection.abort();
         }

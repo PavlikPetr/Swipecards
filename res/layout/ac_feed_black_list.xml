@@ -54,7 +54,8 @@
     </RelativeLayout>
 
 
-    <ImageView style="@style/HeaderShadow"/>
+    <ImageView style="@style/HeaderShadow"
+            android:layout_below="@id/blackListBar"/>
 
 
 </RelativeLayout>

@@ -59,6 +59,8 @@ public class ConnectionManager {
                 String rawResponse;
                 AndroidHttpClient httpClient = null;
                 HttpPost httpPost = null;
+                boolean needResend = false;
+
 
                 if (apiRequest.canceled) {
                     //Проверяем, что запрос не отменен
@@ -109,6 +111,7 @@ public class ConnectionManager {
                             || apiResponse.code == ApiResponse.SESSION_NOT_FOUND) {
                         //Если пришел пустой ответ или пришел какой то мусор, то пробуем переотправить запрос
                         if (apiRequest.isNeedResend()) {
+                            needResend = true;
                             Debug.error("Response error. Try resend");
                             apiRequest.handler.postDelayed(new Runnable() {
                                 @Override
@@ -118,9 +121,9 @@ public class ConnectionManager {
                             }, WAITING_TIME);
                             apiRequest.setNeedResend(false);
 
-                        //Предварительно проверяем, что есть handler и запрос не отменен
-                        // (если отменен, может возникнуть ситуация, когда handler уже не сможет
-                        // обработать ответ из-за убитого контекста)
+                            //Предварительно проверяем, что есть handler и запрос не отменен
+                            // (если отменен, может возникнуть ситуация, когда handler уже не сможет
+                            // обработать ответ из-за убитого контекста)
                         } else if (!apiRequest.isCanceled()) {
                             apiRequest.handler.response(apiResponse);
                         }
@@ -138,8 +141,10 @@ public class ConnectionManager {
                     if (httpClient != null) {
                         httpClient.close();
                     }
-                    //Отмечаем запрос отмененным, что бы почистить
-                    apiRequest.cancel();
+                    if (!needResend) {
+                        //Отмечаем запрос отмененным, что бы почистить
+                        apiRequest.cancel();
+                    }
                 }
             }
         });

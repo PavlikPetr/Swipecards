@@ -39,7 +39,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ProfileNewFragment extends BaseFragment implements View.OnClickListener,CompoundButton.OnCheckedChangeListener {
+public class ProfileNewFragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     public final static int TYPE_MY_PROFILE = 1;
     public final static int TYPE_USER_PROFILE = 2;
     private static final String ARG_TAG_PROFILE_TYPE = "profile_type";
@@ -156,8 +156,8 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         if (mHeaderMainFragment != null) mHeaderMainFragment.setProfile(profile);
         if (mHeaderStatusFragment != null) mHeaderStatusFragment.setProfile(profile);
         if (mGiftFragment != null) mGiftFragment.setProfile(profile);
-        if (mUserPhotoFragment != null && profile instanceof User) mUserPhotoFragment.setUserData((User)profile);
-        if (mUserFormFragment != null && profile instanceof User) mUserFormFragment.setUserData((User)profile);
+        if (mUserPhotoFragment != null && profile instanceof User) mUserPhotoFragment.setUserData((User) profile);
+        if (mUserFormFragment != null && profile instanceof User) mUserFormFragment.setUserData((User) profile);
     }
 
     private void getUserProfile() {
@@ -245,12 +245,12 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
         }
 
-        ViewPager bodyPager = (ViewPager)root.findViewById(R.id.vpFragments);
-        mBodyPagerAdapter =  new ProfilePageAdapter(getActivity().getSupportFragmentManager(),BODY_PAGES_CLASS_NAMES,
+        ViewPager bodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
+        mBodyPagerAdapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), BODY_PAGES_CLASS_NAMES,
                 BODY_PAGES_TITLES);
         bodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
-        TabPageIndicator tabIndicator = (TabPageIndicator)root.findViewById(R.id.tpiTabs);
+        TabPageIndicator tabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
         tabIndicator.setViewPager(bodyPager);
 
         mBodyPager = bodyPager;
@@ -272,10 +272,10 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
                 startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
                 break;
             case R.id.actionDelight:
-                mRateController.onRate(mUserProfile.uid, 10, ((User)mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                 break;
             case R.id.actionSympathy:
-                mRateController.onRate(mUserProfile.uid, 9, ((User)mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                 break;
             case R.id.actionGift:
                 if (mGiftFragment != null && mGiftFragment.getActivity() != null) {
@@ -356,7 +356,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
 
         private ArrayList<String> mFragmentsClasses = new ArrayList<String>();
         private ArrayList<String> mFragmentsTitles = new ArrayList<String>();
-        private HashMap<Integer,Fragment> mFragmentCache = new HashMap<Integer, Fragment>();
+        private HashMap<Integer, Fragment> mFragmentCache = new HashMap<Integer, Fragment>();
 
         public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses) {
             super(fm);
@@ -394,16 +394,16 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         @Override
         public Fragment getItem(int position) {
             Fragment fragment = null;
-            if(mFragmentCache.containsKey(position)) {
-               return  mFragmentCache.get(position);
+            if (mFragmentCache.containsKey(position)) {
+                return mFragmentCache.get(position);
             }
             try {
                 String fragmentClassName = mFragmentsClasses.get(position);
 
                 //create fragments
-                if(fragmentClassName.equals(HeaderMainFragment.class.getName())) {
+                if (fragmentClassName.equals(HeaderMainFragment.class.getName())) {
                     fragment = HeaderMainFragment.newInstance(mUserProfile);
-                } else if(fragmentClassName.equals(HeaderStatusFragment.class.getName())) {
+                } else if (fragmentClassName.equals(HeaderStatusFragment.class.getName())) {
                     fragment = HeaderStatusFragment.newInstance(mUserProfile);
                 } else {
                     Class fragmentClass = Class.forName(fragmentClassName);
@@ -413,20 +413,20 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
                 //save variables for setting user data
                 if (fragment instanceof HeaderMainFragment) {
                     mHeaderMainFragment = (HeaderMainFragment) fragment;
-                } else if (fragment instanceof HeaderStatusFragment){
+                } else if (fragment instanceof HeaderStatusFragment) {
                     mHeaderStatusFragment = (HeaderStatusFragment) fragment;
                 } else if (fragment instanceof UserPhotoFragment) {
-                    mUserPhotoFragment = (UserPhotoFragment)fragment;
+                    mUserPhotoFragment = (UserPhotoFragment) fragment;
                 } else if (fragment instanceof UserFormFragment) {
-                    mUserFormFragment = (UserFormFragment)fragment;
+                    mUserFormFragment = (UserFormFragment) fragment;
                 } else if (fragment instanceof GiftsFragment) {
-                    mGiftFragment = (GiftsFragment)fragment;
+                    mGiftFragment = (GiftsFragment) fragment;
                 }
                 setProfile(mUserProfile);
             } catch (Exception ex) {
                 Debug.error(ex);
             }
-            mFragmentCache.put(position,fragment);
+            mFragmentCache.put(position, fragment);
             return fragment;
         }
     }
@@ -458,17 +458,19 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
                     sendGift.giftId = id;
                     sendGift.userId = mUserProfile.uid;
                     final FeedGift sendedGift = new FeedGift();
-                    sendedGift.gift = new Gift();
-                    sendedGift.gift.id = sendGift.giftId;
-                    sendedGift.gift.link = url;
-                    sendedGift.gift.type = Gift.PROFILE_NEW;
+                    sendedGift.gift = new Gift(sendGift.giftId, Gift.PROFILE_NEW, url, 0);
                     sendGift.callback(new ApiHandler() {
                         @Override
                         public void success(ApiResponse response) throws NullPointerException {
                             SendGiftAnswer answer = SendGiftAnswer.parse(response);
                             CacheProfile.power = answer.power;
                             CacheProfile.money = answer.money;
-                            mUserProfile.gifts.addFirst(sendedGift.gift);
+
+                            ArrayList<Gift> gifts = new ArrayList<Gift>();
+                            gifts.add(sendedGift.gift);
+                            gifts.addAll(mUserProfile.gifts);
+
+                            mUserProfile.gifts = gifts;
                         }
 
                         @Override
@@ -517,9 +519,9 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             restoreState();
 
             View root = inflater.inflate(R.layout.fragment_profile_header_main, null);
-            mAvatarView = (ImageViewRemote)root.findViewById(R.id.ivUserAvatar);
-            mNameView = (TextView)root.findViewById(R.id.tvName);
-            mCityView = (TextView)root.findViewById(R.id.tvCity);
+            mAvatarView = (ImageViewRemote) root.findViewById(R.id.ivUserAvatar);
+            mNameView = (TextView) root.findViewById(R.id.tvName);
+            mCityView = (TextView) root.findViewById(R.id.tvCity);
             mBackgroundView = (ImageView) root.findViewById(R.id.ivProfileBackground);
 
             return root;
@@ -534,7 +536,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         public void setProfile(Profile profile) {
             if (profile != null) {
                 initState(profile);
-                saveState(this,profile);
+                saveState(this, profile);
             }
             refreshViews();
         }
@@ -546,7 +548,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
                     mAvatarView.setPhoto(mAvatarVal);
                     mNameView.setText(mNameVal);
                     mCityView.setText(mCityVal);
-                    mBackgroundView.setImageResource(ProfileBackgrounds.getBackgroundResource(getActivity().getApplicationContext(),mBackgroundVal));
+                    mBackgroundView.setImageResource(ProfileBackgrounds.getBackgroundResource(getActivity().getApplicationContext(), mBackgroundVal));
                 }
             });
         }
@@ -581,9 +583,9 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         }
 
         public static Fragment newInstance(Profile profile) {
-            HeaderMainFragment  fragment = new HeaderMainFragment();
+            HeaderMainFragment fragment = new HeaderMainFragment();
             if (profile == null) return fragment;
-            saveState(fragment,profile);
+            saveState(fragment, profile);
             return fragment;
         }
 
@@ -592,6 +594,11 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             mAvatarView.setPhoto(null);
             mNameView.setText(Static.EMPTY);
             mCityView.setText(Static.EMPTY);
+        }
+
+        @Override
+        public boolean isTrackable() {
+            return false;
         }
     }
 
@@ -608,7 +615,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
 
             //init views
             View root = inflater.inflate(R.layout.fragment_profile_header_status, null);
-            mStatusView = (TextView)root.findViewById(R.id.tvStatus);
+            mStatusView = (TextView) root.findViewById(R.id.tvStatus);
             return root;
         }
 
@@ -621,7 +628,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         public void setProfile(Profile profile) {
             if (profile != null) {
                 initState(profile);
-                saveState(this,profile);
+                saveState(this, profile);
             }
             refreshViews();
         }
@@ -636,7 +643,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         }
 
         private void restoreState() {
-            if(getArguments() != null) {
+            if (getArguments() != null) {
                 mStatusVal = getArguments().getString(ARG_TAG_STATUS);
             }
         }
@@ -656,9 +663,9 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         }
 
         public static Fragment newInstance(Profile profile) {
-            HeaderStatusFragment  fragment = new HeaderStatusFragment();
+            HeaderStatusFragment fragment = new HeaderStatusFragment();
             if (profile == null) return fragment;
-            saveState(fragment,profile);
+            saveState(fragment, profile);
             return fragment;
         }
 
@@ -679,7 +686,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
 
         @Override
         public void failRate() {
-        //TODO:
+            //TODO:
 //            mUserUser.rated = false;
 //            mUserDelight.setEnabled(!mUser.rated);
 //            mUserMutual.setEnabled(!mUser.rated);

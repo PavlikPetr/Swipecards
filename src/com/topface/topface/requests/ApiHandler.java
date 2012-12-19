@@ -46,10 +46,16 @@ abstract public class ApiHandler extends Handler {
         if (mContext != null && mContext instanceof Activity) {
             try {
                 //показываем уведомление
-                ((Activity) mContext).runOnUiThread(new Runnable() {
+                final Activity activity = ((Activity) mContext);
+                activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(App.getContext(), stringId, Toast.LENGTH_SHORT).show();
+//                        if (stringId == R.string.general_premium_access_error) {
+//                            Intent intent = new Intent(activity.getApplicationContext(), ContainerActivity.class);
+//                            activity.startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+//                        } else {
+                            Toast.makeText(App.getContext(), stringId, Toast.LENGTH_SHORT).show();
+//                        }
                     }
                 });
             } catch (Exception e) {
@@ -64,6 +70,11 @@ abstract public class ApiHandler extends Handler {
 
     public void always(ApiResponse response) {
         //Можно переопределить, если вам нужен коллбэк, который выполняется всегда, вне зависимости от результата
+    }
+
+    public void cancel() {
+        always(new ApiResponse());
+        //Можно переопределить, если вам нужен коллбэк отмены запроса
     }
 
     private void setCounters(ApiResponse response) {

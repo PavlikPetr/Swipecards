@@ -85,6 +85,9 @@ public class ApiResponse {
         parseJson(response);
     }
 
+    public ApiResponse() {
+    }
+
     public void parseJson(JSONObject response) {
         try {
             if (response == null) {
@@ -130,6 +133,7 @@ public class ApiResponse {
 
     /**
      * Если ответ содержит поле comleted, то вернет ее значение. Нужно для парсинга простых ответов
+     *
      * @return флаг выполенения запроса
      */
     public boolean isCompleted() {
