@@ -9,6 +9,7 @@ import android.util.SparseArray;
 import android.view.*;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
+import com.topface.topface.utils.PreloadManager;
 
 public class ImageSwitcher extends ViewPager {
 
@@ -17,6 +18,7 @@ public class ImageSwitcher extends ViewPager {
     private OnClickListener mOnClickListener;
     private Handler mUpdatedHandler;
     private static final String VIEW_TAG = "view_container";
+    private PreloadManager mPreloadManager;
 
     public ImageSwitcher(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -29,6 +31,7 @@ public class ImageSwitcher extends ViewPager {
         setAdapter(mImageSwitcherAdapter);
         setOnTouchListener(mOnTouchListener);
         setPageMargin(40);
+        mPreloadManager = new PreloadManager(getWidth(), getHeight(), getContext());
     }
 
     public void setData(Photos photoLinks) {
@@ -142,6 +145,7 @@ public class ImageSwitcher extends ViewPager {
             //Первую фотографию грузим сразу, или если фотографию уже загружена, то сразу показываем ее
             if (isFirstInstantiate || mLoadedPhotos.get(position, false)) {
                 setPhotoToView(position, view, imageView);
+                mPreloadManager.preloadPhoto(mPhotoLinks, position + 1);
                 isFirstInstantiate = false;
             }
             pager.addView(view);
