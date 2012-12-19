@@ -122,7 +122,7 @@ public class TopsFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     ((NavigationActivity)getActivity()).onExtraFragment(
-                            ProfileNewFragment.newInstance(mTopsList.get(position).uid, ProfileNewFragment.TYPE_USER_PROFILE));
+                            ProfileFragment.newInstance(mTopsList.get(position).uid, ProfileFragment.TYPE_USER_PROFILE));
                 } catch (Exception e) {
                     Debug.log(TopsFragment.this, "start UserProfileActivity exception:" + e.toString());
                 }

@@ -361,7 +361,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 ((NavigationActivity) getActivity()).onExtraFragment(
-                        ProfileNewFragment.newInstance(mUserSearchList.get(Data.searchPosition).id, ProfileNewFragment.TYPE_USER_PROFILE));
+                        ProfileFragment.newInstance(mUserSearchList.get(Data.searchPosition).id, ProfileFragment.TYPE_USER_PROFILE));
 //                Intent intent = new Intent(getActivity(), UserProfileActivity.class);
 //                intent.putExtra(UserProfileActivity.INTENT_USER_ID,
 //                        mUserSearchList.get(Data.searchPosition).id);
