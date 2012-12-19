@@ -10,6 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -136,6 +138,7 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             mStartHeaderPage = startHeaderPage;
         }
 
+
         mHeaderPager.setCurrentItem(mStartHeaderPage);
         mBodyPager.setCurrentItem(mStartBodyPage);
         return root;
@@ -251,8 +254,35 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
         bodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
         TabPageIndicator tabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
-        tabIndicator.setViewPager(bodyPager);
+        final Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
+        final Animation fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
 
+        fadeInAnimation.setAnimationListener(new FadeAnimationListener(false));
+        fadeOutAnimation.setAnimationListener(new FadeAnimationListener(true));
+
+        tabIndicator.setViewPager(bodyPager);
+        tabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            private boolean shouldAnimate;
+
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {}
+
+            @Override
+            public void onPageSelected(int i) {
+                if (((ProfilePageAdapter)mBodyPager.getAdapter()).getClassNameByFragmentIndex(i).equals(VipBuyFragment.class.getName())) {
+                    shouldAnimate = true;
+                    mActionsControl.startAnimation(fadeOutAnimation);
+                } else {
+                    if(shouldAnimate) {
+                        mActionsControl.startAnimation(fadeInAnimation);
+                        shouldAnimate = false;
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {}
+        });
         mBodyPager = bodyPager;
     }
 
@@ -378,6 +408,13 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
             return -1;
         }
 
+        public String getClassNameByFragmentIndex(int i) {
+            if(mFragmentsClasses.isEmpty()) {
+                return "";
+            }
+            return mFragmentsClasses.get(i);
+        }
+
         @Override
         public int getCount() {
             return mFragmentsClasses.size();
@@ -409,7 +446,6 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
                     Class fragmentClass = Class.forName(fragmentClassName);
                     fragment = (Fragment) fragmentClass.newInstance();
                 }
-
                 //save variables for setting user data
                 if (fragment instanceof HeaderMainFragment) {
                     mHeaderMainFragment = (HeaderMainFragment) fragment;
@@ -692,4 +728,27 @@ public class ProfileNewFragment extends BaseFragment implements View.OnClickList
 //            mUserMutual.setEnabled(!mUser.rated);
         }
     };
+
+    private class FadeAnimationListener implements Animation.AnimationListener {
+        private boolean mShouldHide;
+
+        public FadeAnimationListener(boolean  shouldHide) {
+            mShouldHide = shouldHide;
+        }
+
+        @Override
+        public void onAnimationStart(Animation animation) {}
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            if(mShouldHide) {
+                mActionsControl.setVisibility(View.GONE);
+            } else {
+                mActionsControl.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {}
+    }
 }
