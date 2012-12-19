@@ -405,11 +405,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-//            int index = mBodyPagerAdapter.getFragmentIndexByClassName(VipBuyFragment.class.getName());
-//            mBodyPager.setCurrentItem(index);
-//            buttonView.setChecked(false);
-            Intent asd = new Intent("com.topface.topface.PURCHASE_NOTIFICATION");
-            getActivity().sendBroadcast(asd);
+            int index = mBodyPagerAdapter.getFragmentIndexByClassName(VipBuyFragment.class.getName());
+            mBodyPager.setCurrentItem(index);
+            buttonView.setChecked(false);
         }
     }
 
