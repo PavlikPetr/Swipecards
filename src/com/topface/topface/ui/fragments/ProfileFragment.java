@@ -20,10 +20,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
-import com.topface.topface.ui.profile.ProfileFormFragment;
-import com.topface.topface.ui.profile.ProfilePhotoFragment;
-import com.topface.topface.ui.profile.UserFormFragment;
-import com.topface.topface.ui.profile.UserPhotoFragment;
+import com.topface.topface.ui.profile.*;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.ProfileActionsControl;
 import com.topface.topface.ui.views.RetryView;
@@ -245,6 +242,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             addBodyPage(UserPhotoFragment.class.getName(),getResources().getString(R.string.profile_photo));
             addBodyPage(UserFormFragment.class.getName(),getResources().getString(R.string.profile_form));
             addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
+            addBodyPage(UserServicesFragment.class.getName(),getResources().getString(R.string.profile_services));
         }
 
         ViewPager bodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
