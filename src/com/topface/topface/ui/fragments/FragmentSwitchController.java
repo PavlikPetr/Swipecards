@@ -158,7 +158,7 @@ public class FragmentSwitchController extends ViewGroup {
         BaseFragment fragment;
         switch (id) {
             case BaseFragment.F_PROFILE:
-                fragment = ProfileNewFragment.newInstance(CacheProfile.uid,ProfileNewFragment.TYPE_MY_PROFILE);
+                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
                 break;
             case BaseFragment.F_DATING:
                 fragment = new DatingFragment();
@@ -182,7 +182,7 @@ public class FragmentSwitchController extends ViewGroup {
                 fragment = new SettingsFragment();
                 break;
             default:
-                fragment = ProfileNewFragment.newInstance(CacheProfile.uid,ProfileNewFragment.TYPE_MY_PROFILE);
+                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
                 break;
         }
         return fragment;

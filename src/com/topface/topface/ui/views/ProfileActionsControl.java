@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.view.animation.*;
 import android.widget.*;
 import com.topface.topface.R;
-import com.topface.topface.ui.fragments.ProfileNewFragment;
+import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.ArrayList;
@@ -45,10 +45,10 @@ public class ProfileActionsControl extends RelativeLayout {
     public void setType(int type) {
         mType = type;
         switch (type) {
-            case ProfileNewFragment.TYPE_MY_PROFILE:
+            case ProfileFragment.TYPE_MY_PROFILE:
                 initMyProfileMode();
                 break;
-            case ProfileNewFragment.TYPE_USER_PROFILE:
+            case ProfileFragment.TYPE_USER_PROFILE:
                 initUserProfileMode();
                 break;
             default:
@@ -64,7 +64,7 @@ public class ProfileActionsControl extends RelativeLayout {
     }
 
     public void setOnCheckChangedListener(CompoundButton.OnCheckedChangeListener listener) {
-        if (mType == ProfileNewFragment.TYPE_MY_PROFILE) {
+        if (mType == ProfileFragment.TYPE_MY_PROFILE) {
             mOpenActionButton.setOnCheckedChangeListener(listener);
         }
     }

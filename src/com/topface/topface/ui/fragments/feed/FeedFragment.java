@@ -26,7 +26,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.ProfileNewFragment;
+import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
@@ -354,7 +354,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             getListAdapter().notifyDataSetChanged();
         }
         ((NavigationActivity)getActivity()).onExtraFragment(
-                ProfileNewFragment.newInstance(item.user.id, ProfileNewFragment.TYPE_USER_PROFILE));
+                ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE));
 
 //        Intent intent = new Intent(getActivity(), UserProfileActivity.class);
 //        intent.putExtra(UserProfileActivity.INTENT_USER_ID, item.user.id);

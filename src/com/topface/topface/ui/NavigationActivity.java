@@ -152,8 +152,8 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
                 //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
                 //начало костыля--------------
                 if (mChatInvoke) {
-                    if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileNewFragment) {
-                        ((ProfileNewFragment) mFragmentSwitcher.getCurrentExtraFragment()).openChat();
+                    if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileFragment) {
+                        ((ProfileFragment) mFragmentSwitcher.getCurrentExtraFragment()).openChat();
                         mChatInvoke = false;
                     }
                     //конец костыля--------------
@@ -366,7 +366,7 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         if (resultCode == Activity.RESULT_OK && requestCode == ChatActivity.INTENT_CHAT_REQUEST) {
             if (data != null) {
                 int user_id = data.getExtras().getInt(ChatActivity.INTENT_USER_ID);
-                mDelayedFragment = ProfileNewFragment.newInstance(user_id, ProfileNewFragment.TYPE_USER_PROFILE);
+                mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
                 return;
             }
         }

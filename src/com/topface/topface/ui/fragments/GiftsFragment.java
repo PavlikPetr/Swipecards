@@ -23,13 +23,13 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
-import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GiftGalleryManager;
 
 import java.util.ArrayList;
 
 public class GiftsFragment extends BaseFragment {
+    private static final int GIFTS_LOAD_COUNT = 30;
     // Data
     private String mTag = GIFTS_ALL_TAG;
 
@@ -227,7 +227,7 @@ public class GiftsFragment extends BaseFragment {
     private void onNewFeeds(int userId) {
         mIsUpdating = true;
         FeedGiftsRequest request = new FeedGiftsRequest(getActivity());
-        request.limit = UserProfileActivity.GIFTS_LOAD_COUNT;
+        request.limit = GIFTS_LOAD_COUNT;
         request.uid = userId;
         if (!mGifts.isEmpty()) {
             if (mGifts.getLast().isLoader() || mGifts.getLast().isLoaderRetry()) {
@@ -250,7 +250,7 @@ public class GiftsFragment extends BaseFragment {
                         removeLoaderItem();
                         mGifts.addAll(feedGifts.items);
 
-                        if (FeedGift.more) {
+                        if (feedGifts.more) {
                             mGifts.add(new FeedGift(ItemType.LOADER));
                         }
                         mGridAdapter.notifyDataSetChanged();
@@ -284,7 +284,7 @@ public class GiftsFragment extends BaseFragment {
         }
         if (mTag != null && mTag.equals(GIFTS_USER_PROFILE_TAG)) {
             mGifts.add(0, FeedGift.getSendedGiftItem());
-            if (mGifts.size() >= UserProfileActivity.GIFTS_LOAD_COUNT)
+            if (mGifts.size() >= GIFTS_LOAD_COUNT)
                 mGifts.add(new FeedGift(ItemType.LOADER));
         }
 
