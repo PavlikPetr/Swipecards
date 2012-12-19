@@ -57,6 +57,7 @@ public class Profile extends AbstractDataWithPhotos {
     // Premium
     public boolean premium;
     public boolean invisible;
+    public boolean inBlackList;
 
     public String status; // статус пользователя
 
@@ -95,6 +96,10 @@ public class Profile extends AbstractDataWithPhotos {
             profile.sex = resp.optInt("sex");
             profile.status = resp.optString("status");
             profile.first_name = resp.optString("first_name");
+
+            if(!resp.isNull("in_blacklist")) {
+                profile.inBlackList = resp.getBoolean("in_blacklist");
+            }
 
             // city
             if (!resp.isNull("city")) {

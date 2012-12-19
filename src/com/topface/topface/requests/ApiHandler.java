@@ -22,7 +22,7 @@ abstract public class ApiHandler extends Handler {
                 Debug.error(App.getContext().getString(R.string.general_premium_access_error));
 
                 //Сообщение о необходимости Премиум-статуса
-                showToast(R.string.general_premium_access_error);
+                showToast(response.code, R.string.general_premium_access_error);
 
                 fail(response.code, response);
             } else if (response.code != ApiResponse.RESULT_OK) {
@@ -42,7 +42,7 @@ abstract public class ApiHandler extends Handler {
         }
     }
 
-    private void showToast(final int stringId) {
+    private void showToast(int code, final int stringId) {
         if (mContext != null && mContext instanceof Activity) {
             try {
                 //показываем уведомление
@@ -50,11 +50,11 @@ abstract public class ApiHandler extends Handler {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        if (stringId == R.string.general_premium_access_error) {
+//                        if (code == ApiResponse.PREMIUM_ACCESS_ONLY) {
 //                            Intent intent = new Intent(activity.getApplicationContext(), ContainerActivity.class);
 //                            activity.startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
 //                        } else {
-                            Toast.makeText(App.getContext(), stringId, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getContext(), stringId, Toast.LENGTH_SHORT).show();
 //                        }
                     }
                 });

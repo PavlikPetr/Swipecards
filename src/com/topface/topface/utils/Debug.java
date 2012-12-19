@@ -102,9 +102,9 @@ public class Debug {
                 stack.append(st.toString()).append("\n");
             }
             msg = msg != null && !msg.equals("") ? msg + " : " : "";
-            String errorText = e.getMessage() == null ? "" : " :: " + e.getMessage();
-            String cause = e.getCause() == null ? "" : "\n" + e.getCause() + "\n";
-            showChunkedLogError(App.TAG, msg + errorText + cause + stack.toString());
+            String errorText = e.getMessage() == null ? e.toString() : " :: " + e.getMessage();
+            errorText = "\n" + errorText + "\n";
+            showChunkedLogError(App.TAG, msg + errorText + stack.toString());
         }
     }
 
@@ -115,9 +115,9 @@ public class Debug {
                 stack.append(st.toString()).append("\n");
             }
             msg = msg != null && !msg.equals("") ? msg + " : " : "";
-            String errorText = e.getMessage() == null ? "" : " :: " + e.getMessage();
-            String cause = e.getLocalizedMessage() == null ? "" : "\n" + e.getLocalizedMessage() + "\n";
-            showChunkedLogError(App.TAG, msg + errorText + cause + stack.toString());
+            String errorText = e.getMessage() == null ? e.toString() : " :: " + e.getMessage();
+            errorText = "\n" + errorText + "\n";
+            showChunkedLogError(App.TAG, msg + errorText + stack.toString());
         }
     }
 

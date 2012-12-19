@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -27,6 +28,7 @@ import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.profile.BlackListActivity;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 
 import static android.view.View.OnClickListener;
 
@@ -95,10 +97,8 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
     }
 
     private void initBuyVipViews(View root) {
-        root.findViewById(R.id.fbpBuyingMonth)
-                .setOnClickListener(this);
-        root.findViewById(R.id.fbpBuyingYear)
-                .setOnClickListener(this);
+        root.findViewById(R.id.fbpBuyingMonth).setOnClickListener(this);
+        root.findViewById(R.id.fbpBuyingYear).setOnClickListener(this);
     }
 
     private void initEditVipViews(View root) {
@@ -253,11 +253,12 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
         switch (v.getId()) {
             case R.id.fbpBuyingMonth:
                 mBillingService.requestPurchase("topface.premium.month.1", Consts.ITEM_TYPE_SUBSCRIPTION, null);
+                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Month", 0L);
                 break;
 
             case R.id.fbpBuyingYear:
                 mBillingService.requestPurchase("topface.premium.year.1", Consts.ITEM_TYPE_SUBSCRIPTION, null);
-//              mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_SUBSCRIPTION, null); //topface.premium.month.test
+                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Year", 0L);
                 break;
 
         }
@@ -274,12 +275,22 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
         }
 
         @Override
-        public void onPurchaseStateChange(Consts.PurchaseState purchaseState, String itemId, int quantity, long purchaseTime, String developerPayload, String signedData, String signature) {}
+        public void onPurchaseStateChange(Consts.PurchaseState purchaseState, String itemId, int quantity, long purchaseTime, String developerPayload, String signedData, String signature) {
+            if (purchaseState == Consts.PurchaseState.PURCHASED) {
+                try {
+                    EasyTracker.getTracker().trackEvent("Subscription", "Complete", itemId, 0L);
+                } catch (Exception e) {
+                    Debug.error(e);
+                }
+            }
+        }
 
         @Override
-        public void onRequestPurchaseResponse(BillingService.RequestPurchase request, Consts.ResponseCode responseCode) {}
+        public void onRequestPurchaseResponse(BillingService.RequestPurchase request, Consts.ResponseCode responseCode) {
+        }
 
         @Override
-        public void onRestoreTransactionsResponse(BillingService.RestoreTransactions request, Consts.ResponseCode responseCode) {}
+        public void onRestoreTransactionsResponse(BillingService.RestoreTransactions request, Consts.ResponseCode responseCode) {
+        }
     }
 }

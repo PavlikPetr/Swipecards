@@ -19,11 +19,11 @@ import java.util.Collections;
  */
 public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter implements AbsListView.OnScrollListener {
 
-	protected static final int T_NEW_VIP = 3;
+    protected static final int T_NEW_VIP = 3;
     protected static final int T_VIP = 4;
     protected static final int T_NEW = 5;
-	protected static final int T_COUNT = 3;
-	
+    protected static final int T_COUNT = 3;
+
     private Context mContext;
     private FeedList<T> mData;
     private LayoutInflater mInflater;
@@ -95,21 +95,21 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     @Override
-    public int getItemViewType(int position) {    	
-    	int superType = super.getItemViewType(position);
-    	if (superType == T_OTHER) {
-    		if (getItem(position).unread && getItem(position).user.premium) {
-    			return T_NEW_VIP;
-    		} else if (getItem(position).unread && !getItem(position).user.premium){
+    public int getItemViewType(int position) {
+        int superType = super.getItemViewType(position);
+        if (superType == T_OTHER) {
+            if (getItem(position).unread && getItem(position).user.premium) {
+                return T_NEW_VIP;
+            } else if (getItem(position).unread && !getItem(position).user.premium) {
                 return T_NEW;
             } else if (!getItem(position).unread && getItem(position).user.premium) {
                 return T_VIP;
             } else {
-    			return T_OTHER;
-    		}
-    	} else {
-    		return superType;
-    	}
+                return T_OTHER;
+            }
+        } else {
+            return superType;
+        }
     }
 
     @Override
@@ -158,7 +158,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (holder == null) {
             int layoutId;
             if (type == T_NEW) {
-                 layoutId = getNewItemLayout();
+                layoutId = getNewItemLayout();
             } else if (type == T_NEW_VIP) {
                 layoutId = getNewVipItemLayout();
             } else if (type == T_VIP || type == LikesListAdapter.T_SELECTED_FOR_MUTUAL_VIP) {
@@ -314,7 +314,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         FeedList<T> data = getData();
         if (data.hasItem(id)) {
             result = true;
-            getData().remove(id);
+            data.remove(id);
             notifyDataSetChanged();
         }
         return result;
@@ -374,7 +374,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     abstract protected int getItemLayout();
 
     abstract protected int getNewItemLayout();
+
     abstract protected int getVipItemLayout();
+
     abstract protected int getNewVipItemLayout();
 
     public boolean isNeedUpdate() {

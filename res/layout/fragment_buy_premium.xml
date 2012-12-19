@@ -21,7 +21,7 @@
         <RelativeLayout
                 android:id="@+id/fbpBuyingMonth"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:background="@drawable/btn_vip_sale_selector"
                 android:padding="5dp"
                 android:layout_margin="5dp"
@@ -55,7 +55,7 @@
         <RelativeLayout
                 android:id="@+id/fbpBuyingYear"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:background="@drawable/btn_vip_super_sale_selector"
                 android:padding="5dp"
                 android:layout_margin="5dp"
@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:text="@string/vip_one_year_title"
                     android:paddingLeft="5dp"
-                    style="@style/ButtonGrayText"
+                    style="@style/ButtonWhiteText"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     />
@@ -81,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:paddingRight="5dp"
                     android:text="@string/vip_one_year_value"
-                    style="@style/ButtonGrayText"
+                    style="@style/ButtonWhiteText"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     />
@@ -106,7 +106,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_vip_invisible"
-                android:text="@string/vip_text_visitors"
+                android:text="@string/vip_info_guest"
                 style="@style/VipItemTitleWhiteText"
                 />
         <ImageView
@@ -118,7 +118,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_vip_unlock"
-                android:text="@string/vip_text_adm_unlock"
+                android:text="@string/vip_info_delight"
                 style="@style/VipItemTitleWhiteText"
                 />
         <ImageView
@@ -130,7 +130,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_vip_blacklist"
-                android:text="@string/vip_text_adm_unlock"
+                android:text="@string/vip_info_blackList"
                 style="@style/VipItemTitleWhiteText"
                 />
         <ImageView
@@ -142,7 +142,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_vip_dialog"
-                android:text="@string/vip_text_adm_unlock"
+                android:text="@string/vip_info_message"
                 style="@style/VipItemTitleWhiteText"
                 />
     </LinearLayout>
