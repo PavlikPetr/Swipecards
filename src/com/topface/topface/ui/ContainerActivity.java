@@ -53,4 +53,9 @@ public class ContainerActivity extends BaseFragmentActivity {
                     .replace(R.id.loFrame, fragment).commit();
         }
     }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
 }

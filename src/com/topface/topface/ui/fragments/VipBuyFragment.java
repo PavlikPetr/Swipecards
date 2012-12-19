@@ -268,7 +268,6 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
 
             case R.id.fbpBuyingYear:
                 mBillingService.requestPurchase("topface.premium.year.1", Consts.ITEM_TYPE_SUBSCRIPTION, null);
-//              mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_SUBSCRIPTION, null); //topface.premium.month.test
                 break;
 
         }
@@ -285,12 +284,15 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
         }
 
         @Override
-        public void onPurchaseStateChange(Consts.PurchaseState purchaseState, String itemId, int quantity, long purchaseTime, String developerPayload, String signedData, String signature) {}
+        public void onPurchaseStateChange(Consts.PurchaseState purchaseState, String itemId, int quantity, long purchaseTime, String developerPayload, String signedData, String signature) {
+        }
 
         @Override
-        public void onRequestPurchaseResponse(BillingService.RequestPurchase request, Consts.ResponseCode responseCode) {}
+        public void onRequestPurchaseResponse(BillingService.RequestPurchase request, Consts.ResponseCode responseCode) {
+        }
 
         @Override
-        public void onRestoreTransactionsResponse(BillingService.RestoreTransactions request, Consts.ResponseCode responseCode) {}
+        public void onRestoreTransactionsResponse(BillingService.RestoreTransactions request, Consts.ResponseCode responseCode) {
+        }
     }
 }

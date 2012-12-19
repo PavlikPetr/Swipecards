@@ -6,6 +6,7 @@ import android.content.*;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -211,10 +212,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
      */
     abstract protected FeedAdapter<T> getNewAdapter();
 
-    public FeedAdapter<T> getAdapter() {
-        return mListAdapter;
-    }
-
     protected FeedAdapter.Updater getUpdaterCallback() {
         return new FeedAdapter.Updater() {
             @Override
@@ -291,8 +288,21 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return editButtonsNames;
     }
 
-    private void onAddToBlackList(int position) {
-        new BlackListAddRequest(getItem(position).user.id, getActivity()).exec();
+    private void onAddToBlackList(final int position) {
+        new BlackListAddRequest(getItem(position).user.id, getActivity())
+                .callback(new VipApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (getListAdapter() != null) {
+                                    getListAdapter().removeItem(position);
+                                }
+                            }
+                        });
+                    }
+                }).exec();
     }
 
     protected void onDeleteItem(final int position) {
@@ -343,7 +353,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         intent.putExtra(ChatActivity.INTENT_USER_CITY, item.user.city.name);
         intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
         intent.putExtra(ChatActivity.INTENT_ITEM_ID, item.id);
-        getActivity().startActivityForResult(intent,ChatActivity.INTENT_CHAT_REQUEST);
+        getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT_REQUEST);
     }
 
     public void onAvatarClick(T item, View view) {
@@ -353,14 +363,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             decrementCounters();
             getListAdapter().notifyDataSetChanged();
         }
-        ((NavigationActivity)getActivity()).onExtraFragment(
-                ProfileNewFragment.newInstance(item.user.id, ProfileNewFragment.TYPE_USER_PROFILE));
+        FragmentActivity activity = getActivity();
+        if (activity instanceof NavigationActivity) {
+            ((NavigationActivity) activity).onExtraFragment(
+                    ProfileNewFragment.newInstance(item.user.id, ProfileNewFragment.TYPE_USER_PROFILE));
+        }
 
-//        Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-//        intent.putExtra(UserProfileActivity.INTENT_USER_ID, item.user.id);
-//        intent.putExtra(UserProfileActivity.INTENT_USER_NAME, item.user.first_name);
-//        intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
-//        startActivity(intent);
     }
 
     protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {

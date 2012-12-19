@@ -143,7 +143,7 @@ public class ConnectionManager {
                     }
                     if (!needResend) {
                         //Отмечаем запрос отмененным, что бы почистить
-                        apiRequest.cancel();
+                        apiRequest.setFinished();
                     }
                 }
             }

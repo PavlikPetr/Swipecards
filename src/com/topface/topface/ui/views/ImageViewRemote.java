@@ -228,6 +228,9 @@ public class ImageViewRemote extends ImageView {
                         if (mHandler != null) {
                             mHandler.sendEmptyMessage(LOADING_ERROR);
                         }
+                        if (mLoader != null) {
+                            mLoader.setVisibility(View.GONE);
+                        }
                         setImageResource(R.drawable.im_photo_error);
                     } else {
                         mRepeatCounter++;

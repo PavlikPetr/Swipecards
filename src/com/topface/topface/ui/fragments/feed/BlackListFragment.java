@@ -14,7 +14,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.SimpleApiHandler;
+import com.topface.topface.requests.VipApiHandler;
 import com.topface.topface.ui.adapters.BlackListAdapter;
 import org.json.JSONObject;
 
@@ -24,7 +24,7 @@ import java.util.LinkedList;
 /**
  * Черный список. Сюда попадают заблокированые пользователи, отныне от них не приходит никакая активность
  */
-public class BlackListFragment extends FeedFragment<BlackListItem> implements View.OnClickListener{
+public class BlackListFragment extends FeedFragment<BlackListItem> implements View.OnClickListener {
 
     private static final int BLACK_LIST_DELETE_BUTTON = 0;
 
@@ -87,7 +87,7 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               getActivity().finish();
+                getActivity().finish();
             }
         });
 
@@ -102,9 +102,9 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     }
 
     private void toggleEditList(Button editButton) {
-        editButton.setText(((BlackListAdapter) getAdapter()).isEditMode() ?
-            R.string.general_edit_button :
-            R.string.general_save_button
+        editButton.setText(((BlackListAdapter) getListAdapter()).isEditMode() ?
+                R.string.general_edit_button :
+                R.string.general_save_button
         );
         final BlackListAdapter adapter = ((BlackListAdapter) mListAdapter);
         //Удаляем отмеченные элементы, отправляя запрос на сервер
@@ -118,21 +118,32 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
         if (adapter.isEditMode() && markedForDelete.size() > 0) {
             mLockView.setVisibility(View.VISIBLE);
             new BlackListDeleteRequest(markedForDelete, getActivity())
-                    .callback(new SimpleApiHandler() {
+                    .callback(new VipApiHandler() {
                         @Override
                         public void success(ApiResponse response) {
-                            adapter.removeDeleted();
+                            if (isAdded()) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.removeDeleted();
+                                    }
+                                });
+                            }
                         }
 
                         @Override
                         public void always(ApiResponse response) {
                             super.always(response);
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mLockView.setVisibility(View.GONE);
-                                }
-                            });
+                            if (isAdded()) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (mLockView != null) {
+                                            mLockView.setVisibility(View.GONE);
+                                        }
+                                    }
+                                });
+                            }
                         }
                     })
                     .exec();
@@ -157,20 +168,31 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     private void onRemoveFromBlackList(final int position) {
         mLockView.setVisibility(View.VISIBLE);
         new BlackListDeleteRequest(getItem(position).user.id, getActivity())
-                .callback(new SimpleApiHandler() {
+                .callback(new VipApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                getListAdapter().removeItem(position);
-                            }
-                        });
+                        if (isAdded()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getListAdapter().removeItem(position);
+                                }
+                            });
+                        }
                     }
 
                     @Override
                     public void always(ApiResponse response) {
-                        mLockView.setVisibility(View.GONE);
+                        if (isAdded()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (mLockView != null) {
+                                        mLockView.setVisibility(View.GONE);
+                                    }
+                                }
+                            });
+                        }
                     }
 
                 }).exec();
@@ -179,13 +201,14 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     @Override
     protected String[] getLongTapActions() {
         if (editButtonsNames == null) {
-            editButtonsNames = new String[]{ getString(R.string.black_list_delete) };
+            editButtonsNames = new String[]{getString(R.string.black_list_delete)};
         }
         return editButtonsNames;
     }
 
     @Override
-    protected void initDoubleButton(View view) {}
+    protected void initDoubleButton(View view) {
+    }
 
     @Override
     protected AdapterView.OnItemClickListener getOnItemClickListener() {
@@ -193,7 +216,7 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BlackListAdapter adapter = (BlackListAdapter) getAdapter();
+                BlackListAdapter adapter = (BlackListAdapter) getListAdapter();
                 if (adapter.isEditMode()) {
                     //Добавляем в список пользователей для удаления
                     FeedItem item = (FeedItem) parent.getItemAtPosition(position);
@@ -206,5 +229,6 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     }
 
     @Override
-    protected void initFloatBlock(ViewGroup view) {}
+    protected void initFloatBlock(ViewGroup view) {
+    }
 }

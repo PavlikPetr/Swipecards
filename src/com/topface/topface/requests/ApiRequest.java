@@ -102,13 +102,8 @@ public abstract class ApiRequest {
     public void cancel() {
         if (handler != null) {
             handler.cancel();
-            handler = null;
         }
-        if (connection != null) {
-            connection.abort();
-        }
-        connection = null;
-        canceled = true;
+        setFinished();
     }
 
     private void setStopTime() {
@@ -131,4 +126,12 @@ public abstract class ApiRequest {
         return canceled;
     }
 
+    public void setFinished() {
+        if (connection != null) {
+            connection.abort();
+        }
+        handler = null;
+        connection = null;
+        canceled = true;
+    }
 }
