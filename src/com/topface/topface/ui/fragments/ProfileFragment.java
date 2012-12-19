@@ -1,11 +1,15 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,6 +81,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private String mHeaderStartPageClassName;
     private int mStartBodyPage = 0;
     private int mStartHeaderPage = 0;
+    private BroadcastReceiver mMUpdateBlackListState;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -145,13 +150,28 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     public void onResume() {
         super.onResume();
         if (mUserProfile == null) {
-        if (mProfileType == TYPE_MY_PROFILE)
-            mUserProfile = CacheProfile.getProfile();
-        else {
-            getUserProfile();
+            if (mProfileType == TYPE_MY_PROFILE)
+                mUserProfile = CacheProfile.getProfile();
+            else {
+                getUserProfile();
+            }
         }
-        }
+        mMUpdateBlackListState = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(mUserProfile != null) {
+                    mUserProfile.inBlackList = intent.getBooleanExtra(ProfileBlackListControlFragment.BLACK_LIST_STATUS,false);
+                }
+            }
+        };
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
         setProfile(mUserProfile);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMUpdateBlackListState);
     }
 
     private void setProfile(Profile profile) {
@@ -447,7 +467,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 } else {
                     Class fragmentClass = Class.forName(fragmentClassName);
                     if(fragmentClassName.equals(ProfileBlackListControlFragment.class.getName())) {
-                        fragment = ProfileBlackListControlFragment.newInstance(mUserProfile.uid);
+                        fragment = ProfileBlackListControlFragment.newInstance(mUserProfile.uid, mUserProfile.inBlackList);
                     } else {
                         fragment = (Fragment) fragmentClass.newInstance();
                     }

@@ -41,7 +41,7 @@ public class ContainerActivity extends BaseFragmentActivity {
         switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0)) {
             case INTENT_BUY_VIP_FRAGMENT:
                 ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.profile_vip_status));
-                fragment = new VipBuyFragment();
+                fragment = VipBuyFragment.newInstance();
                 Toast.makeText(App.getContext(), R.string.general_premium_access_error, Toast.LENGTH_SHORT).show();
                 break;
             default:
