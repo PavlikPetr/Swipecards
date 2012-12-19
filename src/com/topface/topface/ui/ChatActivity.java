@@ -58,7 +58,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private ChatListAdapter mAdapter;
     private LinkedList<History> mHistoryList;
     private EditText mEditBox;
-    private TextView mHeaderTitle;
     private LockerView mLoadingLocker;
 
     private SwapControl mSwapControl;
@@ -124,8 +123,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         int userSex = getIntent().getIntExtra(INTENT_USER_SEX, Static.BOY);
 
         // Navigation bar
-        mHeaderTitle = ((TextView) findViewById(R.id.tvNavigationTitle));
-        mHeaderTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME) + ", "
+        TextView headerTitle = ((TextView) findViewById(R.id.tvNavigationTitle));
+        headerTitle.setText(getIntent().getStringExtra(INTENT_USER_NAME) + ", "
                 + getIntent().getIntExtra(INTENT_USER_AGE, 0));
         TextView headerSubtitle = ((TextView) findViewById(R.id.tvNavigationSubtitle));
         headerSubtitle.setVisibility(View.VISIBLE);
@@ -449,8 +448,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     setResult(Activity.RESULT_CANCELED);
                 } else {
                     Intent intent = getIntent();
-                    intent.putExtra(ChatActivity.INTENT_USER_ID,mUserId);
-                    setResult(Activity.RESULT_OK,intent);
+                    intent.putExtra(ChatActivity.INTENT_USER_ID, mUserId);
+                    setResult(Activity.RESULT_OK, intent);
                 }
                 finish();
             }

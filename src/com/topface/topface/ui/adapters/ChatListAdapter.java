@@ -378,16 +378,7 @@ public class ChatListAdapter extends BaseAdapter {
             prevHistory = getLastRealMessage(); //get(mDataList.size() - 1);
         }
 
-        if (msg.type == FeedDialog.MESSAGE) {
-            if (prevHistory == null) {
-                mItemLayoutList.add(T_USER_PHOTO);
-            } else {
-                if (prevHistory.target == FeedDialog.USER_MESSAGE)
-                    mItemLayoutList.add(T_USER_EXT);
-                else
-                    mItemLayoutList.add(T_USER_PHOTO);
-            }
-        } else if (msg.type == FeedDialog.GIFT) {
+        if (msg.type == FeedDialog.GIFT) {
             if (prevHistory == null)
                 mItemLayoutList.add(T_USER_GIFT_PHOTO);
             else {
@@ -416,7 +407,17 @@ public class ChatListAdapter extends BaseAdapter {
                 else
                     mItemLayoutList.add(T_USER_MAP_PHOTO);
             }
+        } else {
+            if (prevHistory == null) {
+                mItemLayoutList.add(T_USER_PHOTO);
+            } else {
+                if (prevHistory.target == FeedDialog.USER_MESSAGE)
+                    mItemLayoutList.add(T_USER_EXT);
+                else
+                    mItemLayoutList.add(T_USER_PHOTO);
+            }
         }
+
 
         mDataList.add(msg);
     }

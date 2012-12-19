@@ -117,14 +117,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
         checkOnline();
 
-        if (Data.isSSID()) {
-            mIsAuthorized = true;
-            hideButtons();
-            getProfile(false);
-        } else if (!(new AuthToken(getApplicationContext())).isEmpty()) {
-            hideButtons();
-            mAuthorizationManager.reAuthorize();
-        }
     }
 
     private void checkOnline() {
@@ -161,9 +153,11 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mIsAuthStart = true;
         checkIntentForReauth();
         mThis = this;
-        if (mProfileRequest != null && mProfileRequest.canceled && !Data.isSSID() && !(new AuthToken(getApplicationContext())).isEmpty()) {
+
+        if (Data.isSSID() || (mProfileRequest != null && mProfileRequest.canceled)) {
+            mIsAuthorized = true;
             hideButtons();
-            mAuthorizationManager.reAuthorize();
+            getProfile(false);
         }
 
     }
@@ -222,9 +216,12 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mFBButton.setVisibility(View.VISIBLE);
-                mVKButton.setVisibility(View.VISIBLE);
-                mProgressBar.setVisibility(View.GONE);
+                //Эта проверка нужна, для безопасной работы в потоке
+                if (mFBButton != null && mVKButton != null && mProgressBar != null) {
+                    mFBButton.setVisibility(View.VISIBLE);
+                    mVKButton.setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -283,12 +280,15 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        showButtons();
-//                        Log.d("Topface","fail");
                         authorizationFailed();
                         mIsAuthorized = false;
                     }
                 });
+            }
+
+            @Override
+            public void cancel() {
+                showButtons();
             }
         }).exec();
     }
@@ -302,7 +302,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             @Override
             public void success(final ApiResponse response) {
                 CacheProfile.setProfile(Profile.parse(response), response);
-
+                mProfileRequest = null;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -353,6 +353,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             @Override
             public void fail(int codeError, ApiResponse response) {
                 final ApiResponse finalResponse = response;
+                mProfileRequest = null;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
