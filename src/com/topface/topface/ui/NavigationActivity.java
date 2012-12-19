@@ -2,9 +2,7 @@ package com.topface.topface.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,6 +23,7 @@ import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.ui.views.NoviceLayout;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -371,5 +370,31 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void onVipRecieved() {
+        mFragmentSwitcher.showFragment(BaseFragment.F_VIP_PROFILE);
+    }
+
+    public BroadcastReceiver mPurchaseReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            CacheProfile.premium = true;
+            if (intent.getAction().equals(VipBuyFragment.BROADCAST_PURCHASE_ACTION) && CacheProfile.premium) {
+                onVipRecieved();
+            }
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        registerReceiver(mPurchaseReceiver, new IntentFilter(VipBuyFragment.BROADCAST_PURCHASE_ACTION));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver(mPurchaseReceiver);
     }
 }

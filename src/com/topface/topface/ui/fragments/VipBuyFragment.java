@@ -42,20 +42,6 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
 
     public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
 
-    /*
-      * class NotificationReceiver
-      */
-    public BroadcastReceiver mPurchaseReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(BROADCAST_PURCHASE_ACTION) && CacheProfile.premium) {
-                Intent i = new Intent(getActivity(), NavigationActivity.class);
-                i.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE);
-                getActivity().startActivity(i);
-            }
-        }
-    };
-
     // В этот метод потом можно будет передать аргументы,
     // чтобы потом установить их с помощью setArguments();
     public static VipBuyFragment newInstance() {
@@ -77,15 +63,18 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        getActivity().registerReceiver(mPurchaseReceiver, new IntentFilter(BROADCAST_PURCHASE_ACTION));
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().unregisterReceiver(mPurchaseReceiver);
     }
 
     @Override

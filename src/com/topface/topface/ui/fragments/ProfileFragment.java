@@ -322,10 +322,18 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
                 break;
             case R.id.actionDelight:
-                mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                if (v.isEnabled()) {
+                    mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                    v.setEnabled(false);
+                    v.setAlpha(0.75f);
+                }
                 break;
             case R.id.actionSympathy:
-                mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                if (v.isEnabled()) {
+                    mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                    v.setEnabled(false);
+                    v.setAlpha(0.75f);
+                }
                 break;
             case R.id.actionGift:
                 if (mGiftFragment != null && mGiftFragment.getActivity() != null) {
@@ -401,7 +409,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mBodyPager.setCurrentItem(index);
             buttonView.setChecked(false);
         }
-
     }
 
     public class ProfilePageAdapter extends FragmentStatePagerAdapter {

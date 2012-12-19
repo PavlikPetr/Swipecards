@@ -417,7 +417,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                     refreshSaveState();
                     getActivity().setResult(Activity.RESULT_OK);
                     finishRequestSend();
-                    handler.sendEmptyMessage(0);
+                    if (handler != null) {
+                        handler.sendEmptyMessage(0);
+                    }
                 }
 
                 @Override
@@ -425,7 +427,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                     getActivity().setResult(Activity.RESULT_CANCELED);
                     refreshSaveState();
                     finishRequestSend();
-                    handler.sendEmptyMessage(0);
+                    if (handler != null) {
+                        handler.sendEmptyMessage(0);
+                    }
                 }
             }).exec();
         } else {
@@ -435,7 +439,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 getActivity().setResult(Activity.RESULT_CANCELED);
             }
 
-            handler.sendEmptyMessage(0);
+            if (handler != null) {
+                handler.sendEmptyMessage(0);
+            }
         }
     }
 
