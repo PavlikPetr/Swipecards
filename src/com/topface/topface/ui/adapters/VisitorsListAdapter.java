@@ -10,6 +10,8 @@ import com.topface.topface.utils.Utils;
 
 public class VisitorsListAdapter extends FeedAdapter<Visitor> {
 
+    private boolean allowUpdating = false;
+
     public VisitorsListAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
     }
@@ -51,5 +53,14 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     @Override
     protected int getNewVipItemLayout() {
         return R.layout.item_new_vip_feed_like;
+    }
+
+    @Override
+    public boolean isNeedUpdate() {
+        return super.isNeedUpdate() && !allowUpdating;
+    }
+
+    public void allowUpdating(boolean allow) {
+        allowUpdating = allow;
     }
 }

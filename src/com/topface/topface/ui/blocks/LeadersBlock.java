@@ -17,7 +17,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.LeadersActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeadersAdapter;
-import com.topface.topface.ui.fragments.ProfileNewFragment;
+import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.Debug;
 
 /**
@@ -92,7 +92,7 @@ public class LeadersBlock {
             //При клике на лидера, открываем его профиль
             Leader leader = (Leader) adapterView.getItemAtPosition(i);
             ((NavigationActivity)mActivity).onExtraFragment(
-                    ProfileNewFragment.newInstance(leader.id, ProfileNewFragment.TYPE_USER_PROFILE));
+                    ProfileFragment.newInstance(leader.id, ProfileFragment.TYPE_USER_PROFILE));
 
         }
     };

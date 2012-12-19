@@ -58,6 +58,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mLoSwitchBeautifull;
 
     private Button mExtraSaveButton;
+    private boolean mExtraSavingPerformed = false;
 
     public static final int webAbsoluteMaxAge = 99;
 
@@ -154,6 +155,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             @Override
             public void onClick(View v) {
                 saveChanges(null);
+                mExtraSavingPerformed = true;
             }
         });
 
@@ -393,40 +395,48 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     @Override
     protected void saveChanges(final Handler handler) {
-        prepareRequestSend();
+        if (hasChanges()) {
+            FilterRequest filterRequest = new FilterRequest(getActivity());
+            registerRequest(filterRequest);
+            filterRequest.beautiful = mFilter.beautiful;
+            filterRequest.city = mFilter.city_id;
+            filterRequest.sex = mFilter.sex;
+            filterRequest.agebegin = mFilter.age_start;
+            filterRequest.ageend = mFilter.age_end;
+            filterRequest.xstatus = mFilter.xstatus_id;
+            filterRequest.character = mFilter.character_id;
+            filterRequest.marriage = mFilter.marriage_id;
+            //Финансовое положение и бюст - по сути одно поле, отправляем их оба, что бы не париться с опрееделением пола
+            filterRequest.finances = filterRequest.breast = mFilter.showoff_id;
+            prepareRequestSend();
+            filterRequest.callback(new ApiHandler() {
 
-        FilterRequest filterRequest = new FilterRequest(getActivity());
-        registerRequest(filterRequest);
-        filterRequest.beautiful = mFilter.beautiful;
-        filterRequest.city = mFilter.city_id;
-        filterRequest.sex = mFilter.sex;
-        filterRequest.agebegin = mFilter.age_start;
-        filterRequest.ageend = mFilter.age_end;
-        filterRequest.xstatus = mFilter.xstatus_id;
-        filterRequest.character = mFilter.character_id;
-        filterRequest.marriage = mFilter.marriage_id;
-        //Финансовое положение и бюст - по сути одно поле, отправляем их оба, что бы не париться с опрееделением пола
-        filterRequest.finances = filterRequest.breast = mFilter.showoff_id;
-        prepareRequestSend();
-        filterRequest.callback(new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    saveFilter();
+                    refreshSaveState();
+                    getActivity().setResult(Activity.RESULT_OK);
+                    finishRequestSend();
+                    handler.sendEmptyMessage(0);
+                }
 
-            @Override
-            public void success(ApiResponse response) {
-                saveFilter();
-                refreshSaveState();
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+                    getActivity().setResult(Activity.RESULT_CANCELED);
+                    refreshSaveState();
+                    finishRequestSend();
+                    handler.sendEmptyMessage(0);
+                }
+            }).exec();
+        } else {
+            if (mExtraSavingPerformed) {
                 getActivity().setResult(Activity.RESULT_OK);
-                finishRequestSend();
-                handler.sendEmptyMessage(0);
+            } else {
+                getActivity().setResult(Activity.RESULT_CANCELED);
             }
 
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-                getActivity().setResult(Activity.RESULT_CANCELED);
-                refreshSaveState();
-                finishRequestSend();
-                handler.sendEmptyMessage(0);
-            }
-        }).exec();
+            handler.sendEmptyMessage(0);
+        }
     }
 
     @Override

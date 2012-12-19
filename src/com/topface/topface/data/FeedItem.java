@@ -32,10 +32,6 @@ abstract public class FeedItem extends AbstractLoaderData {
      */
     public int unreadCounter;
     /**
-     * имеются ли в ленте ещё элементы для пользователя
-     */
-    public static boolean more;
-    /**
      * Пользователь (автор) элемента списка
      */
     public FeedUser user;

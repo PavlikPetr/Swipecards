@@ -14,6 +14,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 
@@ -109,7 +110,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
                 intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
                 intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
                 intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
-                intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, UserProfileActivity.class.getSimpleName());
+                intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, ProfileFragment.class.getSimpleName());
                 startActivity(intent);
                 break;
         }

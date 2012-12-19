@@ -29,12 +29,11 @@ import com.topface.topface.requests.*;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
-import com.topface.topface.ui.fragments.ProfileNewFragment;
+import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
-import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
@@ -157,9 +156,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 btnBack.setText(R.string.general_mutual);
             } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_dating);
-            } else if (prevEntity.equals(UserProfileActivity.class.getSimpleName())) {
-                btnBack.setText(R.string.general_profile);
-            } else if (prevEntity.equals(ProfileNewFragment.class.getSimpleName())) {
+            } else if (prevEntity.equals(ProfileFragment.class.getSimpleName())) {
                 btnBack.setText(R.string.general_profile);
             }
 
