@@ -272,10 +272,18 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
                 break;
             case R.id.actionDelight:
-                mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                if (v.isEnabled()) {
+                    mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                    v.setEnabled(false);
+                    v.setAlpha(0.75f);
+                }
                 break;
             case R.id.actionSympathy:
-                mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                if (v.isEnabled()) {
+                    mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
+                    v.setEnabled(false);
+                    v.setAlpha(0.75f);
+                }
                 break;
             case R.id.actionGift:
                 if (mGiftFragment != null && mGiftFragment.getActivity() != null) {
@@ -347,11 +355,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-            int index = mBodyPagerAdapter.getFragmentIndexByClassName(VipBuyFragment.class.getName());
-            mBodyPager.setCurrentItem(index);
-            buttonView.setChecked(false);
+//            int index = mBodyPagerAdapter.getFragmentIndexByClassName(VipBuyFragment.class.getName());
+//            mBodyPager.setCurrentItem(index);
+//            buttonView.setChecked(false);
+            Intent asd = new Intent("com.topface.topface.PURCHASE_NOTIFICATION");
+            getActivity().sendBroadcast(asd);
         }
-
     }
 
     public class ProfilePageAdapter extends FragmentStatePagerAdapter {

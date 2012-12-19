@@ -18,10 +18,7 @@ import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.*;
 import com.topface.topface.billing.BuyingActivity;
-import com.topface.topface.data.NovicePower;
-import com.topface.topface.data.Search;
-import com.topface.topface.data.SearchUser;
-import com.topface.topface.data.SkipRate;
+import com.topface.topface.data.*;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.ChatActivity;
@@ -44,6 +41,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private int mCurrentPhotoPrevPos;
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
+    private TextView mDatingLovePrice;
     private Button mDelightBtn;
     private Button mMutualBtn;
     private Button mSkipBtn;
@@ -180,7 +178,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSwitchNextBtn.setOnClickListener(this);
         mSwitchPrevBtn = (Button) view.findViewById(R.id.btnDatingSwitchPrev);
         mSwitchPrevBtn.setOnClickListener(this);
+
         // Dating Love Price
+        int delightPrice = CacheProfile.getOptions().price_highrate;
+        mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);
+        if (delightPrice > 0) {
+            mDatingLovePrice.setText(Integer.toString(CacheProfile.getOptions().price_highrate));
+        } else {
+            mDatingLovePrice.setVisibility(View.GONE);
+        }
+
         mDatingLoveBtnLayout = (RelativeLayout) view.findViewById(R.id.loDatingLove);
 
         // User Info
@@ -311,6 +318,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         return;
                     } else {
                         lockControls();
+                        CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().price_highrate;
                         mRateController.onRate(currentSearch.id, 10,
                                 currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL
                                         : RateRequest.DEFAULT_NO_MUTUAL);

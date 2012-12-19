@@ -157,6 +157,10 @@ public class FragmentSwitchController extends ViewGroup {
     private BaseFragment getFragmentById(int id) {
         BaseFragment fragment;
         switch (id) {
+            case BaseFragment.F_VIP_PROFILE:
+                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE,
+                        VipBuyFragment.class.getName());
+                break;
             case BaseFragment.F_PROFILE:
                 fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
                 break;

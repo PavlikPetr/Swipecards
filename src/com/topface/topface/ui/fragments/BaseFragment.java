@@ -26,6 +26,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private BroadcastReceiver updateCountersReceiver;
     public static final int F_UNKNOWN = -1;
+    public static final int F_VIP_PROFILE = 1000;
     public static final int F_PROFILE = 1001;
     public static final int F_DATING = 1002;
     public static final int F_LIKES = 1003;
