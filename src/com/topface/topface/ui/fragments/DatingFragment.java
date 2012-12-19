@@ -275,7 +275,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             } else {
                                 mUserSearchList.clear();
                                 mUserSearchList.addAll(userList);
-                                Data.searchPosition = 0;
+                                Data.searchPosition = -1;
                                 onUpdateSuccess(isAddition);
                                 showNextUser();
                                 unlockControls();
