@@ -22,10 +22,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
-import com.topface.topface.ui.profile.ProfileFormFragment;
-import com.topface.topface.ui.profile.ProfilePhotoFragment;
-import com.topface.topface.ui.profile.UserFormFragment;
-import com.topface.topface.ui.profile.UserPhotoFragment;
+import com.topface.topface.ui.profile.*;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.ProfileActionsControl;
 import com.topface.topface.ui.views.RetryView;
@@ -147,10 +144,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
+        if (mUserProfile == null) {
         if (mProfileType == TYPE_MY_PROFILE)
             mUserProfile = CacheProfile.getProfile();
         else {
             getUserProfile();
+        }
         }
         setProfile(mUserProfile);
     }
@@ -246,6 +245,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             addBodyPage(UserPhotoFragment.class.getName(),getResources().getString(R.string.profile_photo));
             addBodyPage(UserFormFragment.class.getName(),getResources().getString(R.string.profile_form));
             addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
+            addBodyPage(ProfileBlackListControlFragment.class.getName(), getResources().getString(R.string.profile_services));
         }
 
         ViewPager bodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
@@ -325,6 +325,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     public void openChat() {
+        if (mUserProfile != null) {
         Intent intent = new Intent(getActivity(),ChatActivity.class);
         intent.putExtra(ChatActivity.INTENT_USER_ID, mUserProfile.uid);
         intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserProfile.first_name);
@@ -334,6 +335,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
         intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, ProfileFragment.this.getClass().getSimpleName());
         getActivity().startActivityForResult(intent,ChatActivity.INTENT_CHAT_REQUEST);
+    }
     }
 
     public static ProfileFragment newInstance(int id, int type){
@@ -444,7 +446,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     fragment = HeaderStatusFragment.newInstance(mUserProfile);
                 } else {
                     Class fragmentClass = Class.forName(fragmentClassName);
-                    fragment = (Fragment) fragmentClass.newInstance();
+                    if(fragmentClassName.equals(ProfileBlackListControlFragment.class.getName())) {
+                        fragment = ProfileBlackListControlFragment.newInstance(mUserProfile.uid);
+                    } else {
+                        fragment = (Fragment) fragmentClass.newInstance();
+                    }
                 }
                 //save variables for setting user data
                 if (fragment instanceof HeaderMainFragment) {
