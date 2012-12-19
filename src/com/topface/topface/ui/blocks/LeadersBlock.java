@@ -80,9 +80,11 @@ public class LeadersBlock {
 
     private void setAdapter(FeedUserListData<Leader> leaders) {
         HorizontalListView list = (HorizontalListView) mLayout.findViewById(R.id.leadersList);
-        list.setAdapter(new LeadersAdapter(mContext, leaders));
-        //Обработчик нажатия на лидера
-        list.setOnItemClickListener(mItemClickListener);
+        if (list != null) {
+            list.setAdapter(new LeadersAdapter(mContext, leaders));
+            //Обработчик нажатия на лидера
+            list.setOnItemClickListener(mItemClickListener);
+        }
     }
 
     //Листенер нажатия на лидера
@@ -91,7 +93,7 @@ public class LeadersBlock {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             //При клике на лидера, открываем его профиль
             Leader leader = (Leader) adapterView.getItemAtPosition(i);
-            ((NavigationActivity)mActivity).onExtraFragment(
+            ((NavigationActivity) mActivity).onExtraFragment(
                     ProfileFragment.newInstance(leader.id, ProfileFragment.TYPE_USER_PROFILE));
 
         }

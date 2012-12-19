@@ -126,8 +126,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             editButton.setVisibility(View.VISIBLE);
             editButton.setText(getResources().getString(R.string.general_edit_button));
             editButton.setOnClickListener(this);
-        } else  if (mProfileType == TYPE_USER_PROFILE){
-            mOnline = (ImageView)root.findViewById(R.id.ivOnline);
+        } else if (mProfileType == TYPE_USER_PROFILE) {
+            mOnline = (ImageView) root.findViewById(R.id.ivOnline);
         }
 
         // start pages initialization
@@ -159,8 +159,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mMUpdateBlackListState = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(mUserProfile != null) {
-                    mUserProfile.inBlackList = intent.getBooleanExtra(ProfileBlackListControlFragment.BLACK_LIST_STATUS,false);
+                if (mUserProfile != null) {
+                    mUserProfile.inBlackList = intent.getBooleanExtra(ProfileBlackListControlFragment.BLACK_LIST_STATUS, false);
                 }
             }
         };
@@ -243,8 +243,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         addHeaderPage(HeaderMainFragment.class.getName());
         addHeaderPage(HeaderStatusFragment.class.getName());
 
-        ViewPager headerPager = (ViewPager)root.findViewById(R.id.vpHeaderFragments);
-        mHeaderPagerAdapter =  new ProfilePageAdapter(getActivity().getSupportFragmentManager(),HEADER_PAGES_CLASS_NAMES);
+        ViewPager headerPager = (ViewPager) root.findViewById(R.id.vpHeaderFragments);
+        mHeaderPagerAdapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), HEADER_PAGES_CLASS_NAMES);
         headerPager.setAdapter(mHeaderPagerAdapter);
         //Tabs for header
         CirclePageIndicator circleIndicator = (CirclePageIndicator) root.findViewById(R.id.cpiHeaderTabs);
@@ -256,14 +256,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     private void initBodyPages(View root) {
         if (mProfileType == TYPE_MY_PROFILE) {
-            addBodyPage(ProfilePhotoFragment.class.getName(),getResources().getString(R.string.profile_photo));
-            addBodyPage(ProfileFormFragment.class.getName(),getResources().getString(R.string.profile_form));
-            addBodyPage(VipBuyFragment.class.getName(),getResources().getString(R.string.profile_vip_status));
-            addBodyPage(ServicesFragment.class.getName(),getResources().getString(R.string.profile_services));
+            addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
+            addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
+            addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.profile_vip_status));
+            addBodyPage(ServicesFragment.class.getName(), getResources().getString(R.string.profile_services));
             addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
         } else {
-            addBodyPage(UserPhotoFragment.class.getName(),getResources().getString(R.string.profile_photo));
-            addBodyPage(UserFormFragment.class.getName(),getResources().getString(R.string.profile_form));
+            addBodyPage(UserPhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
+            addBodyPage(UserFormFragment.class.getName(), getResources().getString(R.string.profile_form));
             addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
             addBodyPage(ProfileBlackListControlFragment.class.getName(), getResources().getString(R.string.profile_services));
         }
@@ -285,15 +285,16 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             private boolean shouldAnimate;
 
             @Override
-            public void onPageScrolled(int i, float v, int i2) {}
+            public void onPageScrolled(int i, float v, int i2) {
+            }
 
             @Override
             public void onPageSelected(int i) {
-                if (((ProfilePageAdapter)mBodyPager.getAdapter()).getClassNameByFragmentIndex(i).equals(VipBuyFragment.class.getName())) {
+                if (((ProfilePageAdapter) mBodyPager.getAdapter()).getClassNameByFragmentIndex(i).equals(VipBuyFragment.class.getName())) {
                     shouldAnimate = true;
                     mActionsControl.startAnimation(fadeOutAnimation);
                 } else {
-                    if(shouldAnimate) {
+                    if (shouldAnimate) {
                         mActionsControl.startAnimation(fadeInAnimation);
                         shouldAnimate = false;
                     }
@@ -301,7 +302,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
 
             @Override
-            public void onPageScrollStateChanged(int i) {}
+            public void onPageScrollStateChanged(int i) {
+            }
         });
         mBodyPager = bodyPager;
     }
@@ -325,14 +327,16 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 if (v.isEnabled()) {
                     mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     v.setEnabled(false);
-                    v.setAlpha(0.75f);
+                    //noinspection deprecation
+                    ((ImageButton) v).setAlpha(80);
                 }
                 break;
             case R.id.actionSympathy:
                 if (v.isEnabled()) {
                     mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     v.setEnabled(false);
-                    v.setAlpha(0.75f);
+                    //noinspection deprecation
+                    ((ImageButton) v).setAlpha(80);
                 }
                 break;
             case R.id.actionGift:
@@ -354,19 +358,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     public void openChat() {
         if (mUserProfile != null) {
-        Intent intent = new Intent(getActivity(),ChatActivity.class);
-        intent.putExtra(ChatActivity.INTENT_USER_ID, mUserProfile.uid);
-        intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserProfile.first_name);
-        intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserProfile.sex);
-        intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserProfile.age);
-        intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserProfile.city_name);
-        intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
-        intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, ProfileFragment.this.getClass().getSimpleName());
-        getActivity().startActivityForResult(intent,ChatActivity.INTENT_CHAT_REQUEST);
-    }
+            Intent intent = new Intent(getActivity(), ChatActivity.class);
+            intent.putExtra(ChatActivity.INTENT_USER_ID, mUserProfile.uid);
+            intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserProfile.first_name);
+            intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserProfile.sex);
+            intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserProfile.age);
+            intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserProfile.city_name);
+            intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
+            intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, ProfileFragment.this.getClass().getSimpleName());
+            getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT_REQUEST);
+        }
     }
 
-    public static ProfileFragment newInstance(int id, int type){
+    public static ProfileFragment newInstance(int id, int type) {
         ProfileFragment fragment = new ProfileFragment();
 
         Bundle args = new Bundle();
@@ -377,7 +381,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         return fragment;
     }
 
-    public static ProfileFragment newInstance(int id, int type, String startBodyPageClassName){
+    public static ProfileFragment newInstance(int id, int type, String startBodyPageClassName) {
         ProfileFragment fragment = new ProfileFragment();
 
         Bundle args = new Bundle();
@@ -389,7 +393,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         return fragment;
     }
 
-    public static ProfileFragment newInstance(int id,int type,String initBodyClassName,String initHeaderClassName) {
+    public static ProfileFragment newInstance(int id, int type, String initBodyClassName, String initHeaderClassName) {
         ProfileFragment fragment = new ProfileFragment();
 
         Bundle args = new Bundle();
@@ -429,7 +433,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         public int getFragmentIndexByClassName(String className) {
-            for (int i=0; i < mFragmentsClasses.size(); i++) {
+            for (int i = 0; i < mFragmentsClasses.size(); i++) {
                 if (mFragmentsClasses.get(i).equals(className)) {
                     return i;
                 }
@@ -438,7 +442,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         public String getClassNameByFragmentIndex(int i) {
-            if(mFragmentsClasses.isEmpty()) {
+            if (mFragmentsClasses.isEmpty()) {
                 return "";
             }
             return mFragmentsClasses.get(i);
@@ -473,7 +477,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     fragment = HeaderStatusFragment.newInstance(mUserProfile);
                 } else {
                     Class fragmentClass = Class.forName(fragmentClassName);
-                    if(fragmentClassName.equals(ProfileBlackListControlFragment.class.getName())) {
+                    if (fragmentClassName.equals(ProfileBlackListControlFragment.class.getName())) {
                         fragment = ProfileBlackListControlFragment.newInstance(mUserProfile.uid, mUserProfile.inBlackList);
                     } else {
                         fragment = (Fragment) fragmentClass.newInstance();
@@ -765,16 +769,17 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private class FadeAnimationListener implements Animation.AnimationListener {
         private boolean mShouldHide;
 
-        public FadeAnimationListener(boolean  shouldHide) {
+        public FadeAnimationListener(boolean shouldHide) {
             mShouldHide = shouldHide;
         }
 
         @Override
-        public void onAnimationStart(Animation animation) {}
+        public void onAnimationStart(Animation animation) {
+        }
 
         @Override
         public void onAnimationEnd(Animation animation) {
-            if(mShouldHide) {
+            if (mShouldHide) {
                 mActionsControl.setVisibility(View.GONE);
             } else {
                 mActionsControl.setVisibility(View.VISIBLE);
@@ -782,6 +787,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         @Override
-        public void onAnimationRepeat(Animation animation) {}
+        public void onAnimationRepeat(Animation animation) {
+        }
     }
 }

@@ -23,6 +23,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Geo;
 import com.topface.topface.ui.analytics.TrackedMapActivity;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoLocationManager;
 import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.OsmManager;
@@ -66,7 +67,14 @@ public class GeoMapActivity extends TrackedMapActivity implements LocationListen
 
     @Override
     protected void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
+        //При каких то проблемах с картой на устройстве не удается найти класс
+        try {
+            super.onCreate(icicle);
+        } catch (NoClassDefFoundError e) {
+            Debug.error("MapActivity error!", e);
+            finish();
+        }
+
         setContentView(R.layout.ac_map);
 
         mGeoLocationManager = new GeoLocationManager(getApplicationContext());

@@ -42,12 +42,12 @@ public class UserFormListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mUserForms.size();
+        return mUserForms != null ? mUserForms.size() : 0;
     }
 
     @Override
     public FormItem getItem(int position) {
-        return mUserForms.get(position);
+        return mUserForms != null ? mUserForms.get(position) : null;
     }
 
     @Override

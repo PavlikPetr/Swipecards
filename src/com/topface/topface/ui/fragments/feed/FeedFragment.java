@@ -365,7 +365,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
-            ((NavigationActivity)activity).onExtraFragment(
+            ((NavigationActivity) activity).onExtraFragment(
                     ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE));
         }
 
@@ -511,7 +511,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
 
             if (mBackgroundText.getCompoundDrawables()[0] != null) {
-                ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).stop();
+                Drawable drawable = mBackgroundText.getCompoundDrawables()[0];
+                if (drawable instanceof AnimationDrawable) {
+                    ((AnimationDrawable) drawable).stop();
+                }
             }
 
             mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
@@ -536,8 +539,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mListView.setVisibility(View.VISIBLE);
             mBackgroundText.setText("");
             showUpdateErrorMessage();
-            if (mBackgroundText.getCompoundDrawables()[0] != null) {
-                ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).stop();
+            Drawable drawable = mBackgroundText.getCompoundDrawables()[0];
+            if (drawable != null && drawable instanceof AnimationDrawable) {
+                ((AnimationDrawable) drawable).stop();
             }
 
             mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
@@ -558,7 +562,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     mBackgroundText.getCompoundDrawables()[1],
                     mBackgroundText.getCompoundDrawables()[2],
                     mBackgroundText.getCompoundDrawables()[3]);
-            ((AnimationDrawable) mBackgroundText.getCompoundDrawables()[0]).start();
+            Drawable drawable = mBackgroundText.getCompoundDrawables()[0];
+            if (drawable instanceof AnimationDrawable) {
+                ((AnimationDrawable) drawable).start();
+            }
             setFilterSwitcherState(false);
         }
     }
@@ -629,7 +636,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private AnimationDrawable getLoader() {
         if (mLoader == null && isAdded()) {
-            mLoader = (AnimationDrawable) getResources().getDrawable(R.drawable.loader);
+            Drawable drawable = getResources().getDrawable(R.drawable.loader);
+            if (drawable instanceof AnimationDrawable) {
+                mLoader = (AnimationDrawable) drawable;
+            }
         }
         return mLoader;
     }
