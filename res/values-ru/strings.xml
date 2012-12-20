@@ -362,4 +362,11 @@
     <string name="buy_play_market_not_available">Play Market не доступен</string>
     <string name="buy_subscription_not_available">Подписки не доступны</string>
 
+    <string name="profile_gifts_empty">Этому пользователю еще никто не дарил подарков</string>
+    <string name="profile_mygifts_empty">Вам еще никто не дарил подарков</string>
+    <string name="profile_mood">Опишите Ваше настроение</string>
+    <string name="general_reconnect">Пытаемся восстаносить соединение с Интернет.\nПожалуйста подождите.</string>
+    <string name="dating_people_unnoticed">Десять человек остались без вашего внимания!</string>
+    <string name="dating_continue">Продолжить оценивать</string>
+    <string name="dating_better_look">Присмотритесь!\nВозможно вы упускаете свою судьбу!</string>
 </resources>
