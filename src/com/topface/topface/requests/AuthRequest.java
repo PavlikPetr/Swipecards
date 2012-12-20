@@ -40,8 +40,7 @@ public class AuthRequest extends AbstractApiRequest {
         //На всякий случай проверяем возможность получить локаль
         try {
             locale = context.getResources().getString(R.string.app_locale);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             locale = FALLBACK_LOCALE;
         }
 

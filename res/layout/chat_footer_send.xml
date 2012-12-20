@@ -7,12 +7,13 @@
               android:orientation="horizontal"
               android:background="@drawable/chat_footer_send">
 
-    <Button
+    <ImageButton
             android:id="@+id/btnChatAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/chat_add_selector"/>
+            android:src="@drawable/chat_add_selector"
+            android:background="@android:color/transparent"/>
 
     <EditText
             android:id="@+id/edChatBox"
@@ -35,7 +36,7 @@
     <Button
             android:id="@+id/btnSend"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="33.5dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="6dp"
             android:text="@string/general_send_button"

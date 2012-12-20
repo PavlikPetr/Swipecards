@@ -10,6 +10,8 @@ import com.topface.topface.utils.Utils;
 
 public class VisitorsListAdapter extends FeedAdapter<Visitor> {
 
+    private boolean allowUpdating = false;
+
     public VisitorsListAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
     }
@@ -37,9 +39,28 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     protected int getItemLayout() {
         return R.layout.item_feed_like;
     }
-    
+
     @Override
 	protected int getNewItemLayout() {		
 		return R.layout.item_new_feed_like;
 	}
+
+    @Override
+    protected int getVipItemLayout() {
+        return R.layout.item_feed_vip_like;
+    }
+
+    @Override
+    protected int getNewVipItemLayout() {
+        return R.layout.item_new_vip_feed_like;
+    }
+
+    @Override
+    public boolean isNeedUpdate() {
+        return super.isNeedUpdate() && !allowUpdating;
+    }
+
+    public void allowUpdating(boolean allow) {
+        allowUpdating = allow;
+    }
 }

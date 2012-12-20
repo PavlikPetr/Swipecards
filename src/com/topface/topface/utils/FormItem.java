@@ -32,7 +32,7 @@ public class FormItem {
         this.value = Static.EMPTY;
         this.dataId = NO_RESOURCE_ID;
         this.equal = false;
-    }    
+    }
 
     public FormItem(int titleId, int dataId, int type) {
         this.titleId = titleId;
@@ -40,7 +40,7 @@ public class FormItem {
         this.type = type;
         this.equal = false;
     }
-    
+
     public FormItem(int titleId, int dataId, int type, FormItem header) {
         this.titleId = titleId;
         this.dataId = dataId;
@@ -56,7 +56,7 @@ public class FormItem {
         this.type = type;
         this.equal = false;
     }
-    
+
     public FormItem(int titleId, String data, int type, FormItem header) {
         this.titleId = titleId;
         this.value = data;

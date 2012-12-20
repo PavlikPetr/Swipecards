@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="44"
-          android:versionName="2.0.5">
+          android:versionCode="46"
+          android:versionName="2.1.1">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -32,7 +32,7 @@
             android:hardwareAccelerated="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@style/Theme.TopfaceIndicators">
         <uses-library android:name="com.google.android.maps"/>
 
         <!-- main Activity -->
@@ -58,9 +58,6 @@
                 android:name=".ui.GeoMapActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize"/>
-        <activity
-                android:name=".ui.profile.UserProfileActivity"
-                android:screenOrientation="portrait"/>
         <activity android:name=".ui.profile.PhotoSwitcherActivity"/>
         <activity
                 android:name=".ui.edit.EditProfileActivity"
@@ -84,6 +81,8 @@
                 android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
         <activity android:name="com.adfonic.android.AdfonicActivity"/>
         <activity android:name="ru.wapstart.plus1.sdk.MraidBrowser"/>
+        <activity android:name=".ui.profile.BlackListActivity"/>
+        <activity android:name=".ui.ContainerActivity"/>
 
         <!-- services -->
         <service android:name=".services.NotificationService"/>

@@ -7,12 +7,12 @@ import com.topface.topface.utils.Debug;
  */
 public class BaseApiHandler extends ApiHandler {
     @Override
-    public void success(ApiResponse response) throws NullPointerException {
+    public void success(ApiResponse response) {
         //Implement me
     }
 
     @Override
-    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+    public void fail(int codeError, ApiResponse response) {
         Debug.error("ApiResponse error #" + codeError + "\n" + response.toString());
     }
 }

@@ -227,4 +227,15 @@
     <string name="buying_store_purchase">Fac cumparaturi in iTunes Store</string>
     <string name="buying_tf_ack_sending">Trimit informatia despre cumparatura in Topface</string>
     <string name="settings_melody">Melodia de instiintare</string>
+    <string name="edit_refresh_status">Actualizeaza statutul</string>
+    <string name="ban_title">Va felicitam! Dmv sunteti blochati</string>
+    <string name="general_ready">Gata</string>
+    <string name="profile_deleted_user">Utilizatorul a fost sters</string>
+    <string name="filter_main_parameters">Imi sun interesante</string>
+    <string name="buying_store_ok">Cumpararea a fost efectuata cu succes</string>
+    <string name="dating_prev_button_ext">Anterior</string>
+    <string name="dating_skip_button_ext">Urmatorul</string>
+    <string name="dating_search_empty_title">Cu parere de rau cautare fara rezultat</string>
+    <string name="dating_search_empty_text">Puteti incerca cautarea inca odata, sau sa schimbati setarile filtrului.</string>
+    <string name="general_close">Inchide</string>
 </resources>

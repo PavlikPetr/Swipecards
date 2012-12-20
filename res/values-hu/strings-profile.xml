@@ -229,4 +229,9 @@
     <string name="form_detail_archievements_1">A legjobb eredmények az életben</string>
     <string name="form_detail_archievements_2">A legjobb eredmények az életedben</string>
     <string name="form_detail_archievements_3">A legjobb eredmények az életedben</string>
+    <string name="form_main_personal_status_0">Állapot</string>
+    <string name="form_main_about_status_0">Róla</string>
+    <string name="form_main_about_status_1">Róla</string>
+    <string name="form_main_about_status_2">Rólam</string>
+    <string name="form_main_about_status_3">Rólam</string>
 </resources>

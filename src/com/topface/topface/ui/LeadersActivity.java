@@ -5,10 +5,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.*;
-
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Photo;
@@ -35,17 +34,17 @@ public class LeadersActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_leaders);
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.leaders_go_date);        
+        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.leaders_go_date);
         findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
         View backButton = findViewById(R.id.btnNavigationBack);
         backButton.setVisibility(View.VISIBLE);
         backButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {                
+            public void onClick(View v) {
                 finish();
             }
         });
-        
+
         mProgressBar = (ProgressBar) findViewById(R.id.loader);
         mLeadersContent = (ViewGroup) findViewById(R.id.leadersContent);
         mListView = (HorizontalListView) findViewById(R.id.photoAlbum);
@@ -79,7 +78,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                     new LeaderRequest(mSelectedPhoto.getPhotoId(), LeadersActivity.this)
                             .callback(new ApiHandler() {
                                 @Override
-                                public void success(ApiResponse response) throws NullPointerException {
+                                public void success(ApiResponse response) {
                                     post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -90,7 +89,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                                 }
 
                                 @Override
-                                public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                                public void fail(int codeError, ApiResponse response) {
                                     post(new Runnable() {
                                         @Override
                                         public void run() {

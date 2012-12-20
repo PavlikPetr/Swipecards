@@ -229,4 +229,9 @@
     <string name="form_detail_archievements_1">Geriausi pasiekimai gyvenime</string>
     <string name="form_detail_archievements_2">Jūsų geriausi gyvenimo pasiekimai</string>
     <string name="form_detail_archievements_3">Jūsų geriausi gyvenimo pasiekimai</string>
+    <string name="form_main_personal_status_0">Statusas</string>
+    <string name="form_main_about_status_0">Apie jį</string>
+    <string name="form_main_about_status_1">Apie ją</string>
+    <string name="form_main_about_status_2">Apie save</string>
+    <string name="form_main_about_status_3">Apie save</string>
 </resources>

@@ -14,7 +14,7 @@ public class FeedRequest extends AbstractApiRequest {
     //private boolean leave; //Оставить сообщения не прочитанными
 
     public static enum FeedService {
-        DIALOGS, LIKES, MUTUAL, VISITORS
+        DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST
     }
 
     public FeedRequest(FeedService service, Context context) {
@@ -54,6 +54,9 @@ public class FeedRequest extends AbstractApiRequest {
                 break;
             case VISITORS:
                 service = "visitors";
+                break;
+            case BLACK_LIST:
+                service = "blacklistGet";
         }
         return service;
     }

@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.requests.ApiHandler;
@@ -16,6 +15,7 @@ import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.TripleButton;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class GiftsActivity extends BaseFragmentActivity {
@@ -24,6 +24,8 @@ public class GiftsActivity extends BaseFragmentActivity {
     public static final String INTENT_GIFT_ID = "gift_id";
     public static final String INTENT_GIFT_URL = "gift_url";
     public static final String INTENT_GIFT_PRICE = "gift_price";
+    public static final String GIFTS_LIST = "gifts_list";
+    public static ArrayList<Gift> mGiftsList = new ArrayList<Gift>();
 
     public GiftsCollection mGiftsCollection;
 
@@ -71,7 +73,6 @@ public class GiftsActivity extends BaseFragmentActivity {
                     public void run() {
                         mGiftsCollection.setCurrentType(Gift.ROMANTIC);
                         mGiftFragment.setGifts(mGiftsCollection.getGifts());
-                        mGiftFragment.update();
                     }
                 });
             }
@@ -85,7 +86,6 @@ public class GiftsActivity extends BaseFragmentActivity {
                     public void run() {
                         mGiftsCollection.setCurrentType(Gift.FRIENDS);
                         mGiftFragment.setGifts(mGiftsCollection.getGifts());
-                        mGiftFragment.update();
                     }
                 });
 
@@ -101,20 +101,18 @@ public class GiftsActivity extends BaseFragmentActivity {
                     public void run() {
                         mGiftsCollection.setCurrentType(Gift.PRESENT);
                         mGiftFragment.setGifts(mGiftsCollection.getGifts());
-                        mGiftFragment.update();
                     }
                 });
             }
         });
 
-        update();
     }
 
     /**
      * Loading array of gifts from server
      */
     private void update() {
-        if (Data.giftsList.isEmpty()) {
+        if (mGiftsList.isEmpty()) {
             mTripleButton.setChecked(TripleButton.LEFT_BUTTON);
             mLoadingLocker.setVisibility(View.VISIBLE);
             GiftsRequest giftRequest = new GiftsRequest(this);
@@ -122,8 +120,8 @@ public class GiftsActivity extends BaseFragmentActivity {
             giftRequest.callback(new ApiHandler() {
                 @Override
                 public void success(final ApiResponse response) {
-                    Data.giftsList.addAll(Gift.parse(response));
-                    mGiftsCollection.add(Data.giftsList);
+                    mGiftsList.addAll(Gift.parse(response));
+                    mGiftsCollection.add(mGiftsList);
                     mGiftFragment.setGifts(mGiftsCollection.getGifts());
 
                     runOnUiThread(new Runnable() {
@@ -148,7 +146,7 @@ public class GiftsActivity extends BaseFragmentActivity {
                 }
             }).exec();
         } else {
-            mGiftsCollection.add(Data.giftsList);
+            mGiftsCollection.add(mGiftsList);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -161,6 +159,13 @@ public class GiftsActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (mGiftsList.isEmpty()) {
+            update();
+        } else {
+            mGiftsCollection.add(mGiftsList);
+            mGiftFragment.setGifts(mGiftsCollection.getGifts());
+        }
 
         switch (GiftsCollection.currentType) {
             case Gift.ROMANTIC:
@@ -184,12 +189,12 @@ public class GiftsActivity extends BaseFragmentActivity {
         public static int currentType = Gift.ROMANTIC;
         private LinkedList<Gift> mAllGifts = new LinkedList<Gift>();
 
-        public void add(LinkedList<Gift> gifts) {
+        public void add(ArrayList<Gift> gifts) {
             mAllGifts.addAll(gifts);
         }
 
-        public LinkedList<Gift> getGifts(int type) {
-            LinkedList<Gift> result = new LinkedList<Gift>();
+        public ArrayList<Gift> getGifts(int type) {
+            ArrayList<Gift> result = new ArrayList<Gift>();
             for (Gift gift : mAllGifts) {
                 if (gift.type == type) {
                     result.add(gift);
@@ -199,7 +204,7 @@ public class GiftsActivity extends BaseFragmentActivity {
             return result;
         }
 
-        public LinkedList<Gift> getGifts() {
+        public ArrayList<Gift> getGifts() {
             return getGifts(GiftsCollection.currentType);
         }
 
@@ -207,4 +212,22 @@ public class GiftsActivity extends BaseFragmentActivity {
             GiftsCollection.currentType = type;
         }
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(GIFTS_LIST, mGiftsList);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mGiftsList = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
+    }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
 }

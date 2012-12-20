@@ -65,6 +65,22 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="ButtonWhiteText" parent="ItemTitleText">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TitleWhiteText" parent="ItemTitleText">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="VipItemTitleWhiteText">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+
     <style name="ButtonBlueText" parent="ButtonGrayText">
         <item name="android:textColor">#9FCCF3</item>
     </style>
@@ -111,6 +127,7 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/navigation_menu_item_selector</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="LoadingLocker">
@@ -120,6 +137,8 @@
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:background">#55000000</item>
         <item name="android:drawableLeft">@drawable/loader</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
     </style>
 
     <style name="SavingLocker" parent="LoadingLocker">
@@ -343,6 +362,90 @@
 
     <style name="chat_message.friend">
         <item name="android:textColor">#4c4c4c</item>
+    </style>
+
+    <style name="ProfileAvatar">
+        <item name="android:layout_width">93dp</item>
+        <item name="android:layout_height">93dp</item>
+        <item name="android:paddingTop">0.5dp</item>
+        <item name="android:paddingLeft">0.5dp</item>
+        <item name="android:paddingRight">0.5dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:background">@drawable/avatar_frame_center</item>
+    </style>
+
+    <!-- Page indicators -->
+    <style name="Theme.TopfaceIndicators" parent="android:Theme.NoTitleBar">
+        <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
+        <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
+        <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>
+        <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
+        <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
+        <item name="android:textAppearanceSmall">@style/TopfaceTextAppearance.Small</item>
+    </style>
+
+    <style name="TopfaceCirclePageIndicator">
+
+        <item name="pageColor">#99FFFFFF</item>
+        <item name="fillColor">#FFFFFFFF</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="radius">3dp</item>
+        <item name="android:padding">0dp</item>
+    </style>
+
+    <style name="Widget.TopfaceTabPageIndicator" parent="Widget">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/topface_tab_indicator</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.TopfaceTabPageIndicator</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="TextAppearance.TopfaceTabPageIndicator" parent="Widget">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/vpi__dark_theme</item>
+    </style>
+
+    <style name="Widget.TopfaceIconPageIndicator" parent="Widget">
+        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:layout_marginRight">6dp</item>
+    </style>
+
+    <style name="chat_message">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#527b94</item>
+    </style>
+
+    <style name="chat_message.friend">
+        <item name="android:textColor">#4c4c4c</item>
+    </style>
+
+    <style name="HeaderBar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">46dp</item>
+        <item name="android:baselineAligned">false</item>
+        <item name="android:background">@drawable/im_bar_header</item>
+    </style>
+
+    <style name="TopfaceTextAppearance">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="TopfaceTextAppearance.Large" parent="TopfaceTextAppearance">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TopfaceTextAppearance.Medium" parent="TopfaceTextAppearance">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TopfaceTextAppearance.Small" parent="TopfaceTextAppearance">
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

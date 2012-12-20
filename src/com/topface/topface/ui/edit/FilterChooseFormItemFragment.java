@@ -208,4 +208,9 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
     protected void unlockUi() {
         mListView.setEnabled(true);
     }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
 }

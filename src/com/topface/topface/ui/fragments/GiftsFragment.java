@@ -19,145 +19,129 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.ui.GiftsActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
-import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GiftGalleryManager;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class GiftsFragment extends BaseFragment {
+    private static final int GIFTS_LOAD_COUNT = 30;
     // Data
-    private String mTag;
+    private String mTag = GIFTS_ALL_TAG;
 
     public static final String GIFTS_ALL_TAG = "giftsGridAll";
     public static final String GIFTS_USER_PROFILE_TAG = "giftsGridProfile";
-    public static final int GIFTS_COLUMN_PORTRAIT = 3;
-    public static final int GIFTS_COLUMN_LANDSCAPE = 5;
+
+    private TextView mTitle;
 
     private GiftsAdapter mGridAdapter;
-    private GiftGalleryManager<FeedGift> mGalleryManager;
+    private GridView mGridView;
 
     private Profile mProfile;
     private FeedList<FeedGift> mGifts = new FeedList<FeedGift>();
     private boolean mIsUpdating = false;
 
     @Override
-    public void onAttach(Activity activity) {
-        if (activity instanceof UserProfileActivity) {
-            mProfile = ((UserProfileActivity) activity).mUser;
-            mTag = GIFTS_USER_PROFILE_TAG;
-            if (mProfile != null) {
-                setGifts(mProfile.gifts);
-            }
-            mGalleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    if (!mIsUpdating && mGifts.getLast().isLoader()) {
-                        onNewFeeds();
-                    }
-                }
-            });
-        } else if (activity instanceof NavigationActivity) {
-            mProfile = CacheProfile.getProfile();
-            mTag = GIFTS_ALL_TAG;
-            setGifts(mProfile.gifts);
-            mGalleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    if (!mIsUpdating && mGifts.getLast().isLoader()) {
-                        onNewFeeds();
-                    }
-                }
-            });
-        } else {
-            mTag = GIFTS_ALL_TAG;
-            mGalleryManager = new GiftGalleryManager<FeedGift>(mGifts, null);
-        }
-
-        mGridAdapter = new GiftsAdapter(activity.getApplicationContext(), mGalleryManager);
-        super.onAttach(activity);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_grid, null);
+        View root = inflater.inflate(R.layout.fragment_grid, null);
 
-        GridView gridView = (GridView) view.findViewById(R.id.fragmentGrid);
-        gridView.setAnimationCacheEnabled(false);
-        gridView.setScrollingCacheEnabled(true);
-
-        if (mTag.equals(GIFTS_ALL_TAG)) {
-            view.findViewById(R.id.fragmentTitle).setVisibility(View.GONE);
-            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    FeedGift item = (FeedGift) parent.getItemAtPosition(position);
-                    Intent intent = getActivity().getIntent();
-                    if (view.getTag() instanceof ViewHolder) {
-                        if (item.gift.type != Gift.PROFILE && item.gift.type != Gift.SEND_BTN) {
-                            intent.putExtra(GiftsActivity.INTENT_GIFT_ID, item.gift.id);
-                            intent.putExtra(GiftsActivity.INTENT_GIFT_URL, item.gift.link);
-                            intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, item.gift.price);
-
-                            getActivity().setResult(Activity.RESULT_OK, intent);
-                            getActivity().finish();
-                        }
-                    }
-                }
-            });
-            if (mProfile != null) {
-                ((TextView) view.findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
-                view.findViewById(R.id.fragmentTitle).setVisibility(View.VISIBLE);
-                if (mGifts.size() == 0) {
+        mGridView = (GridView) root.findViewById(R.id.fragmentGrid);
+        mGridView.setAnimationCacheEnabled(false);
+        mGridView.setScrollingCacheEnabled(true);
+        GiftGalleryManager<FeedGift> galleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if (!mTag.equals(GIFTS_ALL_TAG) && !mIsUpdating && mGifts.getLast().isLoader()) {
                     onNewFeeds();
                 }
             }
-        } else if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
-            ((TextView) view.findViewById(R.id.fragmentTitle)).setText(R.string.gifts);
-            view.findViewById(R.id.fragmentTitle).setVisibility(View.VISIBLE);
-            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (view.getTag() instanceof ViewHolder) {
-                        FeedGift item = (FeedGift) parent.getItemAtPosition(position);
-                        if (item.gift != null) {
-                            if (item.gift.type == Gift.SEND_BTN) {
-                                Intent intent = new Intent(getActivity().getApplicationContext(),
-                                        GiftsActivity.class);
-                                startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+        });
+        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), galleryManager);
+        mGridView.setAdapter(mGridAdapter);
+        mGridView.setOnScrollListener(galleryManager);
+
+        mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
+
+        if (mProfile != null) {
+            setProfile(mProfile);
+        }
+        initViews();
+
+        return root;
+    }
+
+    private void initViews() {
+        updateUI(new Runnable() {
+            @Override
+            public void run() {
+                if (mTag.equals(GIFTS_ALL_TAG)) {
+                    mTitle.setVisibility(View.GONE);
+                    mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            FeedGift item = (FeedGift) parent.getItemAtPosition(position);
+                            Intent intent = getActivity().getIntent();
+                            if (view.getTag() instanceof ViewHolder) {
+                                if (item.gift.type != Gift.PROFILE && item.gift.type != Gift.SEND_BTN) {
+                                    intent.putExtra(GiftsActivity.INTENT_GIFT_ID, item.gift.id);
+                                    intent.putExtra(GiftsActivity.INTENT_GIFT_URL, item.gift.link);
+                                    intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, item.gift.price);
+
+                                    getActivity().setResult(Activity.RESULT_OK, intent);
+                                    getActivity().finish();
+                                }
                             }
                         }
+                    });
+                    if (mProfile != null) {
+                        mTitle.setText(R.string.gifts);
+                        mTitle.setVisibility(View.VISIBLE);
+                        if (mGifts.size() == 0) {
+                            onNewFeeds();
+                        }
                     }
+                } else if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
+                    mTitle.setText(R.string.gifts);
+                    mTitle.setVisibility(View.VISIBLE);
+                    mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            if (view.getTag() instanceof ViewHolder) {
+                                FeedGift item = (FeedGift) parent.getItemAtPosition(position);
+                                if (item.gift != null) {
+                                    if (item.gift.type == Gift.SEND_BTN) {
+                                        Intent intent = new Intent(getActivity().getApplicationContext(),
+                                                GiftsActivity.class);
+                                        startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+                                    }
+                                }
+                            }
 
-                    if (mGifts.get(position).isLoaderRetry()) {
-                        updateUI(new Runnable() {
-                            public void run() {
+                            if (mGifts.get(position).isLoaderRetry()) {
                                 updateUI(new Runnable() {
-
-                                    @Override
                                     public void run() {
-                                        removeLoaderItem();
-                                        mGifts.add(new FeedGift(ItemType.LOADER));
-                                        update();
+                                        updateUI(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+                                                removeLoaderItem();
+                                                mGifts.add(new FeedGift(ItemType.LOADER));
+                                                mGridAdapter.notifyDataSetChanged();
+                                            }
+                                        });
+                                        onNewFeeds();
                                     }
                                 });
-                                onNewFeeds();
                             }
-                        });
-                    }
+                        }
+                    });
                 }
-            });
-        }
-
-        gridView.setAdapter(mGridAdapter);
-        gridView.setOnScrollListener(mGalleryManager);
-
-        return view;
+            }
+        });
     }
 
     @Override
@@ -180,13 +164,15 @@ public class GiftsFragment extends BaseFragment {
                     sendGift.giftId = id;
                     sendGift.userId = mProfile.uid;
                     final FeedGift sendedGift = new FeedGift();
-                    sendedGift.gift = new Gift();
-                    sendedGift.gift.id = sendGift.giftId;
-                    sendedGift.gift.link = url;
-                    sendedGift.gift.type = Gift.PROFILE_NEW;
+                    sendedGift.gift = new Gift(
+                            sendGift.giftId,
+                            Gift.PROFILE_NEW,
+                            url,
+                            0
+                    );
                     sendGift.callback(new ApiHandler() {
                         @Override
-                        public void success(ApiResponse response) throws NullPointerException {
+                        public void success(ApiResponse response) {
                             SendGiftAnswer answer = SendGiftAnswer.parse(response);
                             CacheProfile.power = answer.power;
                             CacheProfile.money = answer.money;
@@ -198,14 +184,13 @@ public class GiftsFragment extends BaseFragment {
                                     } else {
                                         mGifts.addLast(sendedGift);
                                     }
-                                    update();
+                                    mGridAdapter.notifyDataSetChanged();
                                 }
                             });
                         }
 
                         @Override
-                        public void fail(int codeError, final ApiResponse response)
-                                throws NullPointerException {
+                        public void fail(int codeError, final ApiResponse response) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -242,7 +227,7 @@ public class GiftsFragment extends BaseFragment {
     private void onNewFeeds(int userId) {
         mIsUpdating = true;
         FeedGiftsRequest request = new FeedGiftsRequest(getActivity());
-        request.limit = UserProfileActivity.GIFTS_LOAD_COUNT;
+        request.limit = GIFTS_LOAD_COUNT;
         request.uid = userId;
         if (!mGifts.isEmpty()) {
             if (mGifts.getLast().isLoader() || mGifts.getLast().isLoaderRetry()) {
@@ -255,7 +240,7 @@ public class GiftsFragment extends BaseFragment {
         request.callback(new ApiHandler() {
 
             @Override
-            public void success(ApiResponse response) throws NullPointerException {
+            public void success(ApiResponse response) {
                 final FeedListData<FeedGift> feedGifts = new FeedListData<FeedGift>(response.jsonResult, FeedGift.class);
 
                 updateUI(new Runnable() {
@@ -265,23 +250,23 @@ public class GiftsFragment extends BaseFragment {
                         removeLoaderItem();
                         mGifts.addAll(feedGifts.items);
 
-                        if (FeedGift.more) {
+                        if (feedGifts.more) {
                             mGifts.add(new FeedGift(ItemType.LOADER));
                         }
-                        update();
+                        mGridAdapter.notifyDataSetChanged();
                     }
                 });
                 mIsUpdating = false;
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+            public void fail(int codeError, ApiResponse response) {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
                         removeLoaderItem();
                         mGifts.add(new FeedGift(ItemType.RETRY));
-                        update();
+                        mGridAdapter.notifyDataSetChanged();
                     }
                 });
                 mIsUpdating = false;
@@ -289,14 +274,8 @@ public class GiftsFragment extends BaseFragment {
         }).exec();
     }
 
-    /**
-     * Call if Data.giftList changed
-     */
-    public void update() {
-        mGridAdapter.notifyDataSetChanged();
-    }
-
-    public void setGifts(LinkedList<Gift> gifts) {
+    public void setGifts(ArrayList<Gift> gifts) {
+        if (mProfile == null) mTag = GIFTS_ALL_TAG;
         mGifts.clear();
         for (Gift gift : gifts) {
             FeedGift item = new FeedGift();
@@ -305,13 +284,41 @@ public class GiftsFragment extends BaseFragment {
         }
         if (mTag != null && mTag.equals(GIFTS_USER_PROFILE_TAG)) {
             mGifts.add(0, FeedGift.getSendedGiftItem());
-            if (mGifts.size() >= UserProfileActivity.GIFTS_LOAD_COUNT)
+            if (mGifts.size() >= GIFTS_LOAD_COUNT)
                 mGifts.add(new FeedGift(ItemType.LOADER));
+        }
+
+        if (mGridView != null) {
+            mGridView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mGridAdapter.notifyDataSetChanged();
+                }
+            });
+        }
+
+        initViews();
+    }
+
+    public void setProfile(Profile profile) {
+        if (profile == null) mTag = GIFTS_ALL_TAG;
+        else {
+            if (profile instanceof User) {
+                mTag = GIFTS_USER_PROFILE_TAG;
+            } else mTag = GIFTS_ALL_TAG;
+            mProfile = profile;
+            setGifts(profile.gifts);
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    public void sendGift() {
+        Intent intent = new Intent(getActivity().getApplicationContext(),
+                GiftsActivity.class);
+        startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
     }
 }

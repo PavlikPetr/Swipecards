@@ -13,6 +13,9 @@ import org.json.JSONObject;
 
 
 public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
+
+    private VisitorsListAdapter mListAdapter;
+
     @Override
     protected Drawable getBackIcon() {
         return getResources().getDrawable(R.drawable.visitors_back_icon);
@@ -24,8 +27,9 @@ public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
     }
 
     @Override
-    protected FeedAdapter<Visitor> getAdapter() {
-        return new VisitorsListAdapter(getActivity(), getUpdaterCallback());
+    protected FeedAdapter<Visitor> getNewAdapter() {
+        mListAdapter = new VisitorsListAdapter(getActivity(), getUpdaterCallback());
+        return mListAdapter;
     }
 
     @Override

@@ -13,8 +13,12 @@ import java.util.Collections;
 
 public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
-	public static final int NEW_ITEM_LAYOUT = R.layout.item_new_feed_dialog;
+    public static final int NEW_ITEM_LAYOUT = R.layout.item_new_feed_dialog;
     public static final int ITEM_LAYOUT = R.layout.item_feed_dialog;
+    public static final int NEW_VIP_ITEM_LAYOUT = R.layout.item_new_feed_vip_dialog;
+    public static final int VIP_ITEM_LAYOUT = R.layout.item_feed_vip_dialog;
+
+//    public static final int
 
     public static final String MESSAGE_OF_UNKNOWN_TYPE = "";
 
@@ -29,18 +33,18 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
         FeedDialog dialog = getItem(position);
         holder.text.setText(getDialogText(dialog));
-        holder.time.setText(Utils.formatTime(getContext(), dialog.created));        
+        holder.time.setText(Utils.formatTime(getContext(), dialog.created));
 
         if (getItemViewType(position) == T_NEW) {
-        	int unreadCounter = getUnreadCounter(dialog);
-            if (unreadCounter > 0) {
-            	holder.unreadCounter.setVisibility(View.VISIBLE);
-            	holder.unreadCounter.setText(Integer.toString(unreadCounter));
+            int unreadCounter = getUnreadCounter(dialog);
+            if (unreadCounter > 1) {
+                holder.unreadCounter.setVisibility(View.VISIBLE);
+                holder.unreadCounter.setText(Integer.toString(unreadCounter));
             } else {
-            	holder.unreadCounter.setVisibility(View.GONE);
+                holder.unreadCounter.setVisibility(View.GONE);
             }
         }
-        
+
         return convertView;
     }
 
@@ -50,32 +54,32 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
             case FeedDialog.DEFAULT:
             case FeedDialog.MESSAGE:
             case FeedDialog.MESSAGE_WISH:
-            case FeedDialog.MESSAGE_SEXUALITY:            
+            case FeedDialog.MESSAGE_SEXUALITY:
             case FeedDialog.MESSAGE_WINK:
             case FeedDialog.RATE:
             case FeedDialog.PROMOTION:
             case FeedDialog.PHOTO:
-            	text = (dialog.target == FeedDialog.USER_MESSAGE) ? "{{outbox}} " + dialog.text : dialog.text;
-            	break;
+                text = (dialog.target == FeedDialog.USER_MESSAGE) ? "{{outbox}} " + dialog.text : dialog.text;
+                break;
             case FeedDialog.LIKE:
-            	text = (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
+                text = (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
                         getContext().getString(R.string.chat_like_in) :
                         "{{outbox}} " + getContext().getString(R.string.chat_like_out);
                 break;
             case FeedDialog.SYMPHATHY:
-            	text = (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
+                text = (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
                         getContext().getString(R.string.chat_mutual_in) :
                         "{{outbox}} " + getContext().getString(R.string.chat_mutual_out);
-                        
-            	break;
+
+                break;
             case FeedDialog.ADDRESS:
-            	text = "{{map}} "+dialog.text;
+                text = "{{map}} " + dialog.text;
                 break;
             case FeedDialog.MAP:
-                text = "{{my_map}} "+dialog.text;
+                text = "{{my_map}} " + dialog.text;
                 break;
             case FeedDialog.GIFT:
-            	text = "{{gift}} ";
+                text = "{{gift}} ";
                 text += (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
                         getContext().getString(R.string.chat_gift_in) :
                         getContext().getString(R.string.chat_gift_out);
@@ -85,9 +89,9 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         }
         return text;
     }
-    
+
     private int getUnreadCounter(FeedDialog dialog) {
-        int counter = 0;
+        int counter;
         switch (dialog.type) {
             case FeedDialog.DEFAULT:
             case FeedDialog.MESSAGE:
@@ -99,10 +103,10 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
             case FeedDialog.RATE:
             case FeedDialog.PROMOTION:
             case FeedDialog.PHOTO:
-            	counter = dialog.unreadCounter;
-            	break;
+                counter = dialog.unreadCounter;
+                break;
             case FeedDialog.ADDRESS:
-            case FeedDialog.MAP:                
+            case FeedDialog.MAP:
             case FeedDialog.GIFT:
             default:
                 counter = 0;
@@ -116,7 +120,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         FeedViewHolder holder = super.getEmptyHolder(convertView, item);
         holder.text = (TextView) convertView.findViewById(R.id.tvText);
         if (item.unread) {
-        	holder.unreadCounter = (TextView) convertView.findViewById(R.id.tvUnreadCounter);
+            holder.unreadCounter = (TextView) convertView.findViewById(R.id.tvUnreadCounter);
         }
         holder.time = (TextView) convertView.findViewById(R.id.tvTime);
         return holder;
@@ -125,11 +129,11 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     @Override
     public void addDataFirst(FeedListData<FeedDialog> data) {
         removeLoaderItem();
-        Collections.reverse(data.items);
-        if(data!=null) {
-            if(!data.items.isEmpty()) {
-                for(FeedDialog item : data.items) {
-                    if(!addItemToStartOfFeed(item)) {
+        if (data != null) {
+            Collections.reverse(data.items);
+            if (!data.items.isEmpty()) {
+                for (FeedDialog item : data.items) {
+                    if (!addItemToStartOfFeed(item)) {
                         getData().addFirst(item);
                     }
                 }
@@ -141,9 +145,9 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     }
 
     private boolean addItemToStartOfFeed(FeedDialog item) {
-        for(FeedDialog dialog : getData()) {
-            if(item.user.id == dialog.user.id) {
-                setItemToStartOfFeed(dialog,item);
+        for (FeedDialog dialog : getData()) {
+            if (item.user.id == dialog.user.id) {
+                setItemToStartOfFeed(dialog, item);
                 return true;
             }
         }
@@ -160,9 +164,19 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         return ITEM_LAYOUT;
     }
 
-	@Override
-	protected int getNewItemLayout() {
-		return NEW_ITEM_LAYOUT;
-	}
+    @Override
+    protected int getNewItemLayout() {
+        return NEW_ITEM_LAYOUT;
+    }
+
+    @Override
+    protected int getVipItemLayout() {
+        return VIP_ITEM_LAYOUT;
+    }
+
+    @Override
+    protected int getNewVipItemLayout() {
+        return NEW_VIP_ITEM_LAYOUT;
+    }
 
 }

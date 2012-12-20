@@ -13,7 +13,7 @@ public class FeedGift extends FeedItem {
     public FeedGift(JSONObject data) {
         super(data);
     }
-    
+
     public FeedGift() {
         super((JSONObject) null);
     }
@@ -21,17 +21,17 @@ public class FeedGift extends FeedItem {
     @Override
     public void fillData(JSONObject item) {
         super.fillData(item);
-        gift = new Gift();
-        gift.id = item.optInt("gift");
-        gift.link = item.optString("link");
-        gift.type = Gift.PROFILE;
-        gift.feedId = item.optInt("id");
+        gift = new Gift(
+                item.optInt("gift"),
+                item.optInt("id"),
+                Gift.PROFILE,
+                item.optString("link")
+        );
     }
 
     public static FeedGift getSendedGiftItem() {
         FeedGift result = new FeedGift();
-        result.gift = new Gift();
-        result.gift.type = Gift.SEND_BTN;
+        result.gift = new Gift(0, Gift.SEND_BTN, null, 0);
         return result;
     }
 

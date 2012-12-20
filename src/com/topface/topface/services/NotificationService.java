@@ -75,6 +75,7 @@ public class NotificationService extends Service {
                 Verify verify = Verify.parse(response);
                 CacheProfile.power = verify.power;
                 CacheProfile.money = verify.money;
+                CacheProfile.premium = verify.premium;
                 // затереть ордер
                 post(new Runnable() {
                     @Override
@@ -92,7 +93,6 @@ public class NotificationService extends Service {
                         Toast.makeText(getApplicationContext(), getString(R.string.general_purchasing_error), Toast.LENGTH_LONG).show();
                     }
                 });
-                // обратитесь в суппорт, ваш ордер
             }
         }).exec();
     }

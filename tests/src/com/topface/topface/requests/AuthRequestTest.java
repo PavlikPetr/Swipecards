@@ -12,7 +12,7 @@ public class AuthRequestTest extends AbstractThreadTest {
     /**
      * Тестируем только API v1
      */
-    private static final int API_VERSION = 2;
+    private static final int API_VERSION = 3;
 
     public void testAuthRequest() throws Throwable {
         runAsyncTest(new Runnable() {
@@ -27,7 +27,7 @@ public class AuthRequestTest extends AbstractThreadTest {
                 authRequest.token = token.getTokenKey();
                 authRequest.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) throws NullPointerException {
+                    public void success(ApiResponse response) {
                         Auth auth = Auth.parse(response);
                         assertNotNull("SSID is null", auth.ssid);
                         assertEquals("Wrong API version", API_VERSION, Static.API_VERSION);
@@ -36,7 +36,7 @@ public class AuthRequestTest extends AbstractThreadTest {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    public void fail(int codeError, ApiResponse response) {
                         assertTrue("Auth error: " + codeError, false);
                         stopTest("testAuthRequest");
                     }

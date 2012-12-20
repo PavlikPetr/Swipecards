@@ -29,7 +29,6 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.profile.UserProfileActivity;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
@@ -41,9 +40,11 @@ import java.util.LinkedList;
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
+    public static final int SEARCH_LIMIT = 30;
     private int mCurrentPhotoPrevPos;
     private TextView mResourcesPower;
     private TextView mResourcesMoney;
+    private TextView mDatingLovePrice;
     private Button mDelightBtn;
     private Button mMutualBtn;
     private Button mSkipBtn;
@@ -180,7 +181,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSwitchNextBtn.setOnClickListener(this);
         mSwitchPrevBtn = (Button) view.findViewById(R.id.btnDatingSwitchPrev);
         mSwitchPrevBtn.setOnClickListener(this);
+
         // Dating Love Price
+        int delightPrice = CacheProfile.getOptions().price_highrate;
+        mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);
+        if (delightPrice > 0) {
+            mDatingLovePrice.setText(Integer.toString(CacheProfile.getOptions().price_highrate));
+        } else {
+            mDatingLovePrice.setVisibility(View.GONE);
+        }
+
         mDatingLoveBtnLayout = (RelativeLayout) view.findViewById(R.id.loDatingLove);
 
         // User Info
@@ -221,11 +231,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         });
         emptySearchDialog.setVisibility(View.GONE);
         ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(emptySearchDialog);
-         mReceiver = new BroadcastReceiver(){
+        mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(mPreloadManager != null) {
-                    mPreloadManager.checkConnectionType(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,0));
+                if (mPreloadManager != null) {
+                    mPreloadManager.checkConnectionType(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0));
                 }
             }
         };
@@ -245,7 +255,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         SearchRequest searchRequest = new SearchRequest(getActivity());
         registerRequest(searchRequest);
-        searchRequest.limit = 20;
+        searchRequest.limit = SEARCH_LIMIT;
         searchRequest.geo = preferences.getBoolean(App.getContext().getString(R.string.cache_profile_filter_geo),
                 false);
         searchRequest.online = preferences.getBoolean(
@@ -265,6 +275,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             } else {
                                 mUserSearchList.clear();
                                 mUserSearchList.addAll(userList);
+                                Data.searchPosition = -1;
                                 onUpdateSuccess(isAddition);
                                 showNextUser();
                                 unlockControls();
@@ -311,6 +322,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         return;
                     } else {
                         lockControls();
+                        CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().price_highrate;
                         mRateController.onRate(currentSearch.id, 10,
                                 currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL
                                         : RateRequest.DEFAULT_NO_MUTUAL);
@@ -360,14 +372,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             break;
             case R.id.btnDatingProfile: {
-                Intent intent = new Intent(getActivity(), UserProfileActivity.class);
-                intent.putExtra(UserProfileActivity.INTENT_USER_ID,
-                        mUserSearchList.get(Data.searchPosition).id);
-                intent.putExtra(UserProfileActivity.INTENT_USER_NAME,
-                        mUserSearchList.get(Data.searchPosition).first_name);
-                intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass()
-                        .getSimpleName());
-                startActivity(intent);
+                ((NavigationActivity) getActivity()).onExtraFragment(
+                        ProfileFragment.newInstance(mUserSearchList.get(Data.searchPosition).id, ProfileFragment.TYPE_USER_PROFILE));
+//                Intent intent = new Intent(getActivity(), UserProfileActivity.class);
+//                intent.putExtra(UserProfileActivity.INTENT_USER_ID,
+//                        mUserSearchList.get(Data.searchPosition).id);
+//                intent.putExtra(UserProfileActivity.INTENT_USER_NAME,
+//                        mUserSearchList.get(Data.searchPosition).first_name);
+//                intent.putExtra(UserProfileActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass()
+//                        .getSimpleName());
+//                startActivity(intent);
                 EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
             }
             break;
@@ -385,7 +399,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mUserSearchList.get(Data.searchPosition).city.name);
                 intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass()
                         .getSimpleName());
-                startActivity(intent);
+                getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT_REQUEST);
 
                 EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
             }
@@ -448,7 +462,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 mUserInfoCity.setText(currUser.city.name);
             }
             mUserInfoStatus.setText(currUser.status);
-            mUserInfoName.setText(currUser.first_name + ", " + currUser.age);
+            mUserInfoName.setText(currUser.getNameAndAge());
 
             Resources res = App.getContext().getResources();
 
@@ -557,7 +571,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mCounter.setVisibility(View.VISIBLE);
         } else {
             mCounter.setText("-/-");
-            mCounter.setVisibility(View.INVISIBLE);
+            mCounter.setVisibility(View.GONE);
         }
     }
 
@@ -573,9 +587,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void lockControls() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mUserInfoName.setVisibility(View.INVISIBLE);
-        mUserInfoCity.setVisibility(View.INVISIBLE);
-        mUserInfoStatus.setVisibility(View.INVISIBLE);
+        mUserInfoName.setVisibility(View.GONE);
+        mUserInfoCity.setVisibility(View.GONE);
+        mUserInfoStatus.setVisibility(View.GONE);
         mMutualBtn.setEnabled(false);
         mDelightBtn.setEnabled(false);
         mSkipBtn.setEnabled(false);
@@ -592,8 +606,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         SearchUser currentUser = getCurrentUser();
 
         mProgressBar.setVisibility(View.GONE);
-        mUserInfoName.setVisibility(currentUser != null ? View.VISIBLE : View.INVISIBLE);
-        mUserInfoCity.setVisibility(currentUser != null ? View.VISIBLE : View.INVISIBLE);
+        mUserInfoName.setVisibility(currentUser != null ? View.VISIBLE : View.GONE);
+        mUserInfoCity.setVisibility(currentUser != null ? View.VISIBLE : View.GONE);
         mUserInfoStatus.setVisibility(View.VISIBLE);
 
         boolean enabled = false;
@@ -627,9 +641,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void hideControls() {
-        mDatingGroup.setVisibility(View.INVISIBLE);
-        mNavigationHeader.setVisibility(View.INVISIBLE);
-        mNavigationHeaderShadow.setVisibility(View.INVISIBLE);
+        mDatingGroup.setVisibility(View.GONE);
+        mNavigationHeader.setVisibility(View.GONE);
+        mNavigationHeaderShadow.setVisibility(View.GONE);
         mIsHide = true;
     }
 
@@ -686,9 +700,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setHeader(View view) {
-        String plus = CacheProfile.dating_age_end == FilterFragment.webAbsoluteMaxAge?"+":"";
-        int age = CacheProfile.dating_age_end == FilterFragment.webAbsoluteMaxAge?EditAgeFragment.absoluteMax:CacheProfile.dating_age_end;
-                ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(App.getContext().getString(
+        String plus = CacheProfile.dating_age_end == FilterFragment.webAbsoluteMaxAge ? "+" : "";
+        int age = CacheProfile.dating_age_end == FilterFragment.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating_age_end;
+        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(App.getContext().getString(
                 CacheProfile.dating_sex == Static.BOY ? R.string.dating_header_guys
                         : R.string.dating_header_girls, CacheProfile.dating_age_start,
                 age) + plus);

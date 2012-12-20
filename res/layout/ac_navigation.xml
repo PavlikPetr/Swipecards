@@ -24,19 +24,31 @@
                 android:layout_alignParentRight="true"
                 android:src="@drawable/topface_shadow"/>
 
-        <!-- 1 fragment -->
-        <FrameLayout
-                android:id="@+id/fragment_container"
+        <RelativeLayout
+                android:id="@+id/loFrameContainer"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"/>
+                android:layout_height="fill_parent">
+            <!-- 1 fragment -->
+            <FrameLayout
+                    android:id="@+id/fragment_container"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"/>
+
+            <!-- 2 fragment -->
+            <FrameLayout
+                    android:id="@+id/fragment_extra_container"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:visibility="gone"/>
+        </RelativeLayout>
 
     </com.topface.topface.ui.fragments.FragmentSwitchController>
 
-	<com.topface.topface.ui.views.NoviceLayout
-        android:id="@+id/loNovice"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone"/>
+    <com.topface.topface.ui.views.NoviceLayout
+            android:id="@+id/loNovice"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="gone"/>
 
 </RelativeLayout>
 

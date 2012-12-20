@@ -15,8 +15,9 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeadersRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.LeadersActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeadersAdapter;
-import com.topface.topface.ui.profile.UserProfileActivity;
+import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.Debug;
 
 /**
@@ -46,7 +47,7 @@ public class LeadersBlock {
         }
         request.callback(new ApiHandler() {
             @Override
-            public void success(final ApiResponse response) throws NullPointerException {
+            public void success(final ApiResponse response) {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -56,7 +57,7 @@ public class LeadersBlock {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+            public void fail(int codeError, ApiResponse response) {
                 Debug.error("Leaders loading error: " + codeError + "-" + response.toString());
             }
         }).exec();
@@ -79,9 +80,11 @@ public class LeadersBlock {
 
     private void setAdapter(FeedUserListData<Leader> leaders) {
         HorizontalListView list = (HorizontalListView) mLayout.findViewById(R.id.leadersList);
-        list.setAdapter(new LeadersAdapter(mContext, leaders));
-        //Обработчик нажатия на лидера
-        list.setOnItemClickListener(mItemClickListener);
+        if (list != null) {
+            list.setAdapter(new LeadersAdapter(mContext, leaders));
+            //Обработчик нажатия на лидера
+            list.setOnItemClickListener(mItemClickListener);
+        }
     }
 
     //Листенер нажатия на лидера
@@ -90,10 +93,9 @@ public class LeadersBlock {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             //При клике на лидера, открываем его профиль
             Leader leader = (Leader) adapterView.getItemAtPosition(i);
-            Intent intent = new Intent(mActivity, UserProfileActivity.class);
-            intent.putExtra(UserProfileActivity.INTENT_USER_ID, leader.id);
-            intent.putExtra(UserProfileActivity.INTENT_USER_NAME, leader.first_name);
-            mActivity.startActivity(intent);
+            ((NavigationActivity) mActivity).onExtraFragment(
+                    ProfileFragment.newInstance(leader.id, ProfileFragment.TYPE_USER_PROFILE));
+
         }
     };
 

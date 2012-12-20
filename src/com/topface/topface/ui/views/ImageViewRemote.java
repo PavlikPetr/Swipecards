@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -41,7 +40,6 @@ public class ImageViewRemote extends ImageView {
      */
     private static final long REPEAT_SCHEDULE = 2000;
     private ImagePostProcessor mPostProcessor;
-    Animation mAnimation = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
     private String mCurrentSrc;
     private boolean mIsAnimationEnabled;
     /**
@@ -133,6 +131,7 @@ public class ImageViewRemote extends ImageView {
             mRepeatTimer = null;
         }
 
+
         if (remoteSrc != null && remoteSrc.trim().length() > 0) {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
@@ -141,12 +140,14 @@ public class ImageViewRemote extends ImageView {
                 mIsAnimationEnabled = false;
             }
 
-            setImageBitmap(null);
+            if (getDrawable() != null) {
+                super.setImageBitmap(null);
+            }
             getImageLoader().displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
 
         } else {
             isCorrectSrc = false;
-            setImageBitmap(null);
+            super.setImageBitmap(null);
             mCurrentSrc = null;
             mIsAnimationEnabled = true;
         }
@@ -161,8 +162,8 @@ public class ImageViewRemote extends ImageView {
             mLoader.setVisibility(View.GONE);
         }
         //Показываем анимацию только в том случае, если ImageView видно пользователю
-        if (bm != null && mIsAnimationEnabled && isShown()) {
-            startAnimation(mAnimation);
+        if (bm != null && mIsAnimationEnabled) {
+            startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in));
         }
 
     }
@@ -226,6 +227,9 @@ public class ImageViewRemote extends ImageView {
                         mRepeatCounter = 0;
                         if (mHandler != null) {
                             mHandler.sendEmptyMessage(LOADING_ERROR);
+                        }
+                        if (mLoader != null) {
+                            mLoader.setVisibility(View.GONE);
                         }
                         setImageResource(R.drawable.im_photo_error);
                     } else {

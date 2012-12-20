@@ -120,4 +120,9 @@ public class EditContainerActivity extends BaseFragmentActivity {
             EditContainerActivity.super.finish();
         }
     };
+
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
 }

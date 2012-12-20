@@ -11,11 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Ilya Vorobiev
- * Date: 19.10.12
- * Time: 9:43
- * To change this template use File | Settings | File Templates.
+ * Диалог, показываемый при ошибке отправки запроса и предлагающий его повторить
  */
 public class RetryDialog extends AlertDialog {
     private BroadcastReceiver mReciever;
@@ -33,7 +29,7 @@ public class RetryDialog extends AlertDialog {
         mReciever = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE,0) != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
+                if (intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0) != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
 
                     RetryDialog.this.getButton(Dialog.BUTTON_POSITIVE).performClick();
                 }

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_list_vip_selector">
+
+    <!-- аватар -->
+
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ivAvatar"
+            style="@style/FeedAvatar"/>
+
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@id/ivAvatar">
+
+        <!-- имя -->
+
+        <TextView
+                android:id="@+id/tvName"
+                style="@style/ListName"/>
+
+        <!-- возраст, город -->
+
+        <TextView
+                android:id="@+id/tvCity"
+                style="@style/ListAgeAndCity"
+                android:layout_below="@id/tvName"/>
+
+        <!-- время -->
+
+        <TextView
+                android:id="@+id/tvTime"
+                style="@style/ListTime"
+                android:layout_alignBaseline="@id/tvCity"
+                android:visibility="gone"/>
+    </RelativeLayout>
+
+    <ViewFlipper
+            android:id="@+id/vfFlipper"
+            android:layout_width="100dp"
+            android:layout_height="82dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:inAnimation="@anim/slide_in_from_right"
+            android:outAnimation="@anim/slide_out_right">
+
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+            <!-- сердце -->
+
+            <ImageView
+                    android:id="@+id/ivHeart"
+                    android:visibility="gone"
+                    style="@style/FeedHeart"/>
+
+            <!-- стрелка -->
+
+            <ImageView
+                    android:id="@id/ivArrow"
+                    style="@style/ListArrow"/>
+
+            <!-- online -->
+
+            <ImageView
+                    android:id="@+id/ivOnline"
+                    style="@style/OnlineIndicator"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+            <Button
+                    android:id="@+id/btnMutual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="6dp"
+                    style="@style/ItemtText"
+                    android:text="@string/general_mutual"
+                    android:background="@drawable/likes_btn_mutual_selector"/>
+        </RelativeLayout>
+    </ViewFlipper>
+
+</RelativeLayout>

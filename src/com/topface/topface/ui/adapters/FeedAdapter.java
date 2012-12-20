@@ -19,9 +19,11 @@ import java.util.Collections;
  */
 public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter implements AbsListView.OnScrollListener {
 
-	protected static final int T_NEW = 3;
-	protected static final int T_COUNT = 1;
-	
+    protected static final int T_NEW_VIP = 3;
+    protected static final int T_VIP = 4;
+    protected static final int T_NEW = 5;
+    protected static final int T_COUNT = 3;
+
     private Context mContext;
     private FeedList<T> mData;
     private LayoutInflater mInflater;
@@ -52,6 +54,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public ImageView heart;
         public ViewFlipper flipper;
         public Button flippedBtn;
+        public View dataLayout;
+        public ImageView deleteIndicator;
     }
 
     public FeedAdapter(Context context, Updater updateCallback) {
@@ -86,24 +90,28 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     @Override
-    public int getViewTypeCount() {    	
-    	return super.getViewTypeCount()+T_COUNT;
+    public int getViewTypeCount() {
+        return super.getViewTypeCount() + T_COUNT;
     }
-    
+
     @Override
-    public int getItemViewType(int position) {    	
-    	int superType = super.getItemViewType(position);
-    	if (superType == T_OTHER) {
-    		if (getItem(position).unread) {
-    			return T_NEW;
-    		} else {
-    			return T_OTHER;
-    		}
-    	} else {
-    		return superType;
-    	}
+    public int getItemViewType(int position) {
+        int superType = super.getItemViewType(position);
+        if (superType == T_OTHER) {
+            if (getItem(position).unread && getItem(position).user.premium) {
+                return T_NEW_VIP;
+            } else if (getItem(position).unread && !getItem(position).user.premium) {
+                return T_NEW;
+            } else if (!getItem(position).unread && getItem(position).user.premium) {
+                return T_VIP;
+            } else {
+                return T_OTHER;
+            }
+        } else {
+            return superType;
+        }
     }
-    
+
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
 
@@ -148,7 +156,17 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
         //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
         if (holder == null) {
-            convertView = getInflater().inflate(type==T_NEW ? getNewItemLayout() : getItemLayout(), null, false);
+            int layoutId;
+            if (type == T_NEW) {
+                layoutId = getNewItemLayout();
+            } else if (type == T_NEW_VIP) {
+                layoutId = getNewVipItemLayout();
+            } else if (type == T_VIP || type == LikesListAdapter.T_SELECTED_FOR_MUTUAL_VIP) {
+                layoutId = getVipItemLayout();
+            } else {
+                layoutId = getItemLayout();
+            }
+            convertView = getInflater().inflate(layoutId, null, false);
             holder = getEmptyHolder(convertView, item);
         }
 
@@ -157,7 +175,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             setListenerOnAvatar(holder.avatar, item);
 
             holder.name.setText(item.user.getNameAndAge());
-            holder.city.setText(item.user.city.name);
+            if (item.user.city != null) {
+                holder.city.setText(item.user.city.name);
+            }
             holder.online.setVisibility(item.user.online ? View.VISIBLE : View.INVISIBLE);
         }
 
@@ -247,10 +267,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void addDataFirst(FeedListData<T> data) {
         removeLoaderItem();
-        if(data != null) {
+        if (data != null) {
             Collections.reverse(data.items);
-            if(!data.items.isEmpty()) {
-                for(T item : data.items) {
+            if (!data.items.isEmpty()) {
+                for (T item : data.items) {
                     getData().addFirst(item);
                 }
             }
@@ -289,6 +309,17 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
     }
 
+    public boolean removeItem(int id) {
+        boolean result = false;
+        FeedList<T> data = getData();
+        if (data.hasItem(id)) {
+            result = true;
+            data.remove(id);
+            notifyDataSetChanged();
+        }
+        return result;
+    }
+
     public T getLastFeedItem() {
         T item = null;
         if (!isEmpty()) {
@@ -308,7 +339,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public T getFirstItem() {
         T item = null;
-        if(!isEmpty()) {
+        if (!isEmpty()) {
             FeedList<T> data = getData();
             item = data.getFirst();
         }
@@ -329,19 +360,24 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     @SuppressWarnings("unchecked")
-	protected T getRetryItem() {
+    protected T getRetryItem() {
         //noinspection unchecked
         return (T) new FeedLoader(IListLoader.ItemType.RETRY);
     }
 
     @SuppressWarnings("unchecked")
-	protected T getLoaderItem() {
+    protected T getLoaderItem() {
         //noinspection unchecked
         return (T) new FeedLoader(IListLoader.ItemType.LOADER);
     }
 
     abstract protected int getItemLayout();
+
     abstract protected int getNewItemLayout();
+
+    abstract protected int getVipItemLayout();
+
+    abstract protected int getNewVipItemLayout();
 
     public boolean isNeedUpdate() {
         return isEmpty() || (System.currentTimeMillis() > mLastUpdate + CACHE_TIMEOUT);

@@ -233,4 +233,5 @@
     <string name="dating_skip_button_ext">Successivo</string>
     <string name="dating_search_empty_title">Purtroppo non abbiamo trovato nessuno</string>
     <string name="dating_search_empty_text">Puoi riprovare a fare la ricerca o cambia le impostazioni.</string>
+    <string name="general_close">Chiudi</string>
 </resources>

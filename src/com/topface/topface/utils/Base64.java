@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import java.io.BufferedOutputStream;
 
+@SuppressWarnings("ALL")
 public class Base64 {
 
 /* ********  P U B L I C   F I E L D S  ******** */

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+        >
+
+    <!-- Page indicators -->
+    <style name="Theme.TopfaceIndicators" parent="android:Theme.Holo.NoActionBar">
+        <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
+        <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
+        <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>
+        <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
+        <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
+        <item name="android:textAppearanceSmall">@style/TopfaceTextAppearance.Small</item>
+    </style>
+
+</resources>

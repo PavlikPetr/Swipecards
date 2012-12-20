@@ -120,6 +120,8 @@
     <string name="buying_40coins">5 USD</string>
     <string name="buying_pack_100coins">Пакет из 100 монет</string>
     <string name="buying_100coins">10 USD</string>
+    <string name="buying_pack_300coins">Пакет из 300 монет</string>
+    <string name="buying_300coins">25 USD</string>
 
     <!-- Profile  -->
     <string name="profile_header_title">Мой профиль</string>
@@ -309,4 +311,55 @@
     <string name="dating_search_empty_title">К сожалению, ничего не найдено</string>
     <string name="dating_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра.</string>
     <string name="general_close">Закрыть</string>
+    <string name="vip_not_activated">Ваш VIP-статус не активирован</string>
+    <string name="vip_one_month_title">1 месяц</string>
+    <string name="vip_one_month_value">10 USD</string>
+    <string name="vip_one_year_title">1 год</string>
+    <string name="vip_one_year_value">100 USD</string>
+    <string name="vip_privileges">VIP-привелегии</string>
+    <string name="vip_text_visitors">Узнаете, кто вами интересовался - смотрите своих гостей!</string>
+    <string name="vip_text_adm_unlock">Отправляйте восхищения бесплатно - выражайте свои чувства по-максимуму</string>
+    <string name="vip_rest">Вы подписаны на VIP</string>
+    <string name="vip_invis">Режим невидимки</string>
+    <string name="vip_messages_bg">Фон сообщений</string>
+    <string name="vip_black_list">Черный список</string>
+    <string name="vip_profile_bg">Фоновая фотография</string>
+
+    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_services">Услуги</string>
+    <string name="default_balance_constant">На вашем счете</string>
+    <string name="default_energy_balance_constant">Запас энергии</string>
+    <string name="default_energy_coins_buy_btn_text">Купить монет, пополнить запас энергии</string>
+
+    <string name="black_list_title">Черный список</string>
+    <string name="black_list_empty">Ваш черный список пуст</string>
+    <string name="black_list_add">Добавить в черный список</string>
+    <string name="black_list_delete">Удалить из черного списка</string>
+
+    <string name="vip_invisible_mode">Режим невидимки</string>
+    <string name="buying_profile_coins">На вашем счете</string>
+    <string name="buying_profile_energy">Запас энергии</string>
+    <string name="buying_buy_resources">Купить монет, пополнить запас энергии</string>
+    <string name="profile_services">Услуги</string>
+
+    <string name="black_list_title">Черный список</string>
+    <string name="black_list_empty">Ваш черный список пуст</string>
+
+    <string name="vip_buy_vip">Покупка VIP</string>
+    <string name="vip_state_off">Ваш VIP-статус не активирован</string>
+    <string name="vip_info_delight">Отправляйте восхищения бесплатно - вражайте свои чувства по максимуму!</string>
+    <string name="vip_info_guest">Узнайте, кто вами интересовался - смотрите своих гостей!</string>
+    <string name="vip_info_invisible">Оставайтесь незамеченными, посещая чужие страницы, благодаря режиму \"невидимка\"</string>
+    <string name="vip_info_message">Получите преимущество - ваши сообщения будут выделяться на общем фоне!</string>
+    <string name="vip_info_gift">Выбирайте эксклюзивные VIP-подарки, и вас обязательно запомнят!</string>
+    <string name="vip_info_blackList">Избавляйтесь от надоевших персон с помощью \"черного списка\"</string>
+    <string name="vip_info_vip">Выделяйтесь с помощью своего VIP-статуса в поиске и своем профиле!</string>
+    <string name="vip_info_title">VIP-привилегии</string>
+    <string name="black_list_retrieve">Восстановить</string>
+    <string name="buying_vip_status">Купить VIP статус</string>
+    <string name="buying_vip_info">Для доступа к гостям необходимо иметь VIP статус</string>
+
+    <string name="buy_play_market_not_available">Play Market не доступен</string>
+    <string name="buy_subscription_not_available">Подписки не доступны</string>
+
 </resources>

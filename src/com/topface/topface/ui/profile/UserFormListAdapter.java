@@ -19,7 +19,7 @@ public class UserFormListAdapter extends BaseAdapter {
     private LinkedList<FormItem> mUserForms;
     private LinkedList<FormItem> mInitialUserForms;
     private LinkedList<FormItem> mMatchedUserForms;
-    
+
     private boolean isMatchedDataOnly = false;
 
     private static final int T_HEADER = 0;
@@ -42,12 +42,12 @@ public class UserFormListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mUserForms.size();
+        return mUserForms != null ? mUserForms.size() : 0;
     }
 
     @Override
     public FormItem getItem(int position) {
-        return mUserForms.get(position);
+        return mUserForms != null ? mUserForms.get(position) : null;
     }
 
     @Override
@@ -103,7 +103,9 @@ public class UserFormListAdapter extends BaseAdapter {
                     convertView.setBackgroundResource(R.drawable.user_list_cell_bg);
                     break;
             }
-            convertView.setTag(holder);
+            if (convertView != null) {
+                convertView.setTag(holder);
+            }
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -123,83 +125,83 @@ public class UserFormListAdapter extends BaseAdapter {
                 else
                     holder.mState.setImageResource(R.drawable.user_cell);
                 break;
-        }        
-        
+        }
+
         return convertView;
     }
 
     @SuppressWarnings("unchecked")
-	public void setUserData(User user) {        
-        mInitialUserForms = removeEmptyHeaders((LinkedList<FormItem>)user.forms.clone());        
-        mMatchedUserForms = removeEmptyHeaders(removeNotMatchedItems((LinkedList<FormItem>) mInitialUserForms.clone())); 
+    public void setUserData(User user) {
+        mInitialUserForms = removeEmptyHeaders((LinkedList<FormItem>) user.forms.clone());
+        mMatchedUserForms = removeEmptyHeaders(removeNotMatchedItems((LinkedList<FormItem>) mInitialUserForms.clone()));
         setAllData();
     }
-    
+
     public void setMatchedDataOnly() {
-    	mUserForms = mMatchedUserForms;
-    	isMatchedDataOnly = true;
+        mUserForms = mMatchedUserForms;
+        isMatchedDataOnly = true;
     }
-    
+
     public void setAllData() {
-    	mUserForms = mInitialUserForms;
-    	isMatchedDataOnly = false;
+        mUserForms = mInitialUserForms;
+        isMatchedDataOnly = false;
     }
-    
+
     public boolean isMatchedDataOnly() {
-    	return isMatchedDataOnly;
+        return isMatchedDataOnly;
     }
-    
+
     private LinkedList<FormItem> removeNotMatchedItems(LinkedList<FormItem> userForms) {
-    	int i = 0;
-    	while (i<userForms.size()) {
-    		if (userForms.get(i).type == FormItem.DATA) {
-    			if (!userForms.get(i).equal) {
-    				userForms.remove(i);
-    			} else {
-    				i++;
-    			}
-    		} else {
-    			i++;
-    		}
-    	}
-    	
-    	return userForms;
+        int i = 0;
+        while (i < userForms.size()) {
+            if (userForms.get(i).type == FormItem.DATA) {
+                if (!userForms.get(i).equal) {
+                    userForms.remove(i);
+                } else {
+                    i++;
+                }
+            } else {
+                i++;
+            }
+        }
+
+        return userForms;
     }
-    
+
     private LinkedList<FormItem> removeEmptyHeaders(LinkedList<FormItem> userForms) {
-    	int i = 0;
-    	while (i<userForms.size()) {    		
-			if(userForms.get(i).type == FormItem.HEADER) {
-				FormItem headerItem = userForms.get(i);
-				if(!hasRelatedFormItem(headerItem,userForms,i)) {
-					userForms.remove(i);
-					if(i-1 >= 0) {
-						if(userForms.get(i-1).type == FormItem.DIVIDER) {
-							userForms.remove(i-1);
-						}
-						i--;
-					}
-				} else {
-					i++;
-				}
-				
-			} else {
-				i++;
-			}
-		}
-    	
-    	if(!userForms.isEmpty() && (userForms.get(0).type == FormItem.DIVIDER)) {
-    		userForms.remove(0);
-    	}
-    	
-    	return userForms;
+        int i = 0;
+        while (i < userForms.size()) {
+            if (userForms.get(i).type == FormItem.HEADER) {
+                FormItem headerItem = userForms.get(i);
+                if (!hasRelatedFormItem(headerItem, userForms, i)) {
+                    userForms.remove(i);
+                    if (i - 1 >= 0) {
+                        if (userForms.get(i - 1).type == FormItem.DIVIDER) {
+                            userForms.remove(i - 1);
+                        }
+                        i--;
+                    }
+                } else {
+                    i++;
+                }
+
+            } else {
+                i++;
+            }
+        }
+
+        if (!userForms.isEmpty() && (userForms.get(0).type == FormItem.DIVIDER)) {
+            userForms.remove(0);
+        }
+
+        return userForms;
     }
-    
+
     private boolean hasRelatedFormItem(FormItem header, LinkedList<FormItem> userForms, int startPos) {
-    	for (int i = startPos; i < userForms.size(); i++) {
-			if (userForms.get(i).header == header) return true; 
-		}
-    	return false;
+        for (int i = startPos; i < userForms.size(); i++) {
+            if (userForms.get(i).header == header) return true;
+        }
+        return false;
     }
 
 }

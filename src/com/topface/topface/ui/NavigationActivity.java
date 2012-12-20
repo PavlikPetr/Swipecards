@@ -1,11 +1,11 @@
 package com.topface.topface.ui;
 
+import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
@@ -19,13 +19,11 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
-import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.DatingFragment;
-import com.topface.topface.ui.fragments.FragmentSwitchController;
+import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.ui.views.NoviceLayout;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -48,7 +46,6 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     private Novice mNovice;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -66,8 +63,8 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         mFragmentSwitcher.setFragmentManager(mFragmentManager);
 
         Intent intent = getIntent();
-        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT,-1);
-        if(id != -1) {
+        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
+        if (id != -1) {
             mFragmentSwitcher.showFragmentWithAnimation(id);
         } else {
             mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
@@ -88,8 +85,8 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT,-1);
-        if(id != -1) {
+        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
+        if (id != -1) {
             mFragmentSwitcher.showFragmentWithAnimation(id);
         }
     }
@@ -99,19 +96,29 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         super.onResume();
         mThis = this;
         long startTime = Calendar.getInstance().getTimeInMillis();
-        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME,-1);
-        if(stopTime != -1) {
-            if(startTime - stopTime > UPDATE_INTERVAL) {
+        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
+        if (stopTime != -1) {
+            if (startTime - stopTime > UPDATE_INTERVAL) {
                 ProfileRequest pr = new ProfileRequest(this);
                 pr.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) throws NullPointerException {}
+                    public void success(ApiResponse response) {
+                    }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {}
+                    public void fail(int codeError, ApiResponse response) {
+                    }
                 }).exec();
             }
         }
+
+        //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+        if (mDelayedFragment != null) {
+            onExtraFragment(mDelayedFragment);
+            mDelayedFragment = null;
+            mChatInvoke = true;
+        }
+
     }
 
     @Override
@@ -140,8 +147,22 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
             super.onBackPressed();
         } else {
-            mFragmentMenu.refreshNotifications();
-            mFragmentSwitcher.openMenu();
+            if (mFragmentSwitcher.isExtraFrameShown()) {
+                //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+                //начало костыля--------------
+                if (mChatInvoke) {
+                    if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileFragment) {
+                        ((ProfileFragment) mFragmentSwitcher.getCurrentExtraFragment()).openChat();
+                        mChatInvoke = false;
+                    }
+                    //конец костыля--------------
+                } else {
+                    mFragmentSwitcher.closeExtraFragment();
+                }
+            } else {
+                mFragmentMenu.refreshNotifications();
+                mFragmentSwitcher.openMenu();
+            }
         }
     }
 
@@ -194,8 +215,11 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     };
 
     public void onDialogCancel() {
-        DatingFragment datingFragment = (DatingFragment) mFragmentManager.findFragmentById(R.id.fragment_container);
-        datingFragment.onDialogCancel();
+        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        if (fragment instanceof DatingFragment) {
+            DatingFragment datingFragment = (DatingFragment) fragment;
+            datingFragment.onDialogCancel();
+        }
     }
 
     private FragmentSwitchListener mFragmentSwitchListener = new FragmentSwitchListener() {
@@ -212,18 +236,23 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
             mFragmentMenu.hide();
         }
 
-		@Override
-		public void afterOpening() {
-			if (mNovice.isMenuCompleted()) return;
-			
-			if (mNovice.showFillProfile) {
-				mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
-		        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-		        alphaAnimation.setDuration(400L);		        
-		        mNoviceLayout.startAnimation(alphaAnimation);				
-				mNovice.completeShowFillProfile();
-			}
-		}
+        @Override
+        public void afterOpening() {
+            if (mNovice.isMenuCompleted()) return;
+
+            if (mNovice.showFillProfile) {
+                mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+                alphaAnimation.setDuration(400L);
+                mNoviceLayout.startAnimation(alphaAnimation);
+                mNovice.completeShowFillProfile();
+            }
+        }
+
+        @Override
+        public void onExtraFrameOpen() {
+            mFragmentMenu.unselectAllButtons();
+        }
     };
 
 
@@ -238,8 +267,7 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
         if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT)) {
             return;
-        }
-        else if (date_start == 1) {
+        } else if (date_start == 1) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putLong("RATING_POPUP", new java.util.Date().getTime());
             editor.commit();
@@ -323,5 +351,50 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    public void onExtraFragment(final Fragment fragment) {
+        mFragmentSwitcher.switchExtraFragment(fragment);
+    }
+
+    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+    private Fragment mDelayedFragment;
+    private boolean mChatInvoke = false;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK && requestCode == ChatActivity.INTENT_CHAT_REQUEST) {
+            if (data != null) {
+                int user_id = data.getExtras().getInt(ChatActivity.INTENT_USER_ID);
+                mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
+                return;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void onVipRecieved() {
+        mFragmentSwitcher.showFragment(BaseFragment.F_VIP_PROFILE);
+    }
+
+    public BroadcastReceiver mPurchaseReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            CacheProfile.premium = true;
+            if (intent.getAction().equals(VipBuyFragment.BROADCAST_PURCHASE_ACTION) && CacheProfile.premium) {
+                onVipRecieved();
+            }
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        registerReceiver(mPurchaseReceiver, new IntentFilter(VipBuyFragment.BROADCAST_PURCHASE_ACTION));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver(mPurchaseReceiver);
     }
 }

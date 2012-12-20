@@ -229,4 +229,9 @@
     <string name="form_detail_archievements_1">Cele mai mari realizari in viata</string>
     <string name="form_detail_archievements_2">Realizarile Dmv cele mai bune, in viata</string>
     <string name="form_detail_archievements_3">Realizarile Dmv cele mai bune, in viata</string>
+    <string name="form_main_personal_status_0">Statut</string>
+    <string name="form_main_about_status_0">Despre el</string>
+    <string name="form_main_about_status_1">Despre ea</string>
+    <string name="form_main_about_status_2">Despre mine</string>
+    <string name="form_main_about_status_3">Despre mine</string>
 </resources>

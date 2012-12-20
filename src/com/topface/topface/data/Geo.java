@@ -61,9 +61,9 @@ public class Geo extends AbstractData implements Parcelable {
         dest.writeString(getAddress());
         dest.writeParcelable(getCoordinates(), flags);
     }
-    
+
     @SuppressWarnings("rawtypes")
-	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public Geo createFromParcel(Parcel in) {
             return new Geo(in.readString(), (Coordinates) in.readParcelable(Coordinates.class.getClassLoader()));
         }

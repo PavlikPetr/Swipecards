@@ -143,7 +143,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                     request.callback(new ApiHandler() {
 
                         @Override
-                        public void success(ApiResponse response) throws NullPointerException {
+                        public void success(ApiResponse response) {
                             item.value = TextUtils.isEmpty(mInputData) ? null : mInputData;
                             mFormInfo.fillFormItem(item);
                             getActivity().setResult(Activity.RESULT_OK);
@@ -154,8 +154,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response)
-                                throws NullPointerException {
+                        public void fail(int codeError, ApiResponse response) {
                             getActivity().setResult(Activity.RESULT_CANCELED);
                             finishRequestSend();
                             if (handler != null) handler.sendEmptyMessage(0);

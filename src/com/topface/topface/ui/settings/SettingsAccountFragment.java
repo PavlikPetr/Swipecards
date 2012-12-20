@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.data.SearchUser;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
@@ -22,6 +25,8 @@ import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
+
+import java.util.LinkedList;
 
 public class SettingsAccountFragment extends TrackedFragment {
 
@@ -69,7 +74,7 @@ public class SettingsAccountFragment extends TrackedFragment {
                 lockerView.setVisibility(View.VISIBLE);
                 logoutRequest.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) throws NullPointerException {
+                    public void success(ApiResponse response) {
                         GCMRegistrar.unregister(getActivity().getApplicationContext());
                         Data.removeSSID(getActivity().getApplicationContext());
                         token.removeToken();
@@ -84,10 +89,14 @@ public class SettingsAccountFragment extends TrackedFragment {
                         startActivity(new Intent(getActivity().getApplicationContext(), AuthActivity.class));
                         getActivity().setResult(RESULT_LOGOUT);
                         getActivity().finish();
+                        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
+                        //Чистим список тех, кого нужно оценить
+                        Data.searchList = new LinkedList<SearchUser>();
+
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) throws NullPointerException {
+                    public void fail(int codeError, ApiResponse response) {
                         lockerView.setVisibility(View.GONE);
                     }
                 }).exec();

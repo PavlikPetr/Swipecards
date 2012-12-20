@@ -49,6 +49,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     private BroadcastReceiver mReceiver;
 
     public static AuthActivity mThis;
+    private ProfileRequest mProfileRequest;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
         mRetryView = new RetryView(getApplicationContext());
         mRetryView.setErrorMsg(getString(R.string.general_data_error));
-        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry),new View.OnClickListener() {
+        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 auth(new AuthToken(getApplicationContext()));
@@ -114,19 +115,18 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         // Progress
         mProgressBar = (ProgressBar) findViewById(R.id.prsAuthLoading);
 
-        if (!Http.isOnline(this))
+        checkOnline();
+
+    }
+
+    private void checkOnline() {
+        if (!Http.isOnline(this)) {
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
                     .show();
 
-        if (Data.isSSID()) {
-            mIsAuthorized = true;
-            hideButtons();
-            getProfile(false);
-        } else if (!(new AuthToken(getApplicationContext())).isEmpty()) {
-            hideButtons();
-            mAuthorizationManager.reAuthorize();
         }
     }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -153,6 +153,13 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mIsAuthStart = true;
         checkIntentForReauth();
         mThis = this;
+
+        if (Data.isSSID() || (mProfileRequest != null && mProfileRequest.canceled)) {
+            mIsAuthorized = true;
+            hideButtons();
+            getProfile(false);
+        }
+
     }
 
     public static boolean isStarted() {
@@ -209,9 +216,12 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mFBButton.setVisibility(View.VISIBLE);
-                mVKButton.setVisibility(View.VISIBLE);
-                mProgressBar.setVisibility(View.GONE);
+                //Эта проверка нужна, для безопасной работы в потоке
+                if (mFBButton != null && mVKButton != null && mProgressBar != null) {
+                    mFBButton.setVisibility(View.VISIBLE);
+                    mVKButton.setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -270,53 +280,56 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        showButtons();
-//                        Log.d("Topface","fail");
                         authorizationFailed();
                         mIsAuthorized = false;
                     }
                 });
+            }
+
+            @Override
+            public void cancel() {
+                showButtons();
             }
         }).exec();
     }
 
     private void getProfile(final boolean isFirstTime) {
         Debug.log("geting profile");
-        ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
-        registerRequest(profileRequest);
-        profileRequest.part = ProfileRequest.P_ALL;
-        profileRequest.callback(new ApiHandler() {
+        mProfileRequest = new ProfileRequest(getApplicationContext());
+        registerRequest(mProfileRequest);
+        mProfileRequest.part = ProfileRequest.P_ALL;
+        mProfileRequest.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
                 CacheProfile.setProfile(Profile.parse(response), response);
-                
+                mProfileRequest = null;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    	OptionsRequest request = new OptionsRequest(getApplicationContext());                        
+                        OptionsRequest request = new OptionsRequest(getApplicationContext());
                         ApiHandler handler = new ApiHandler() {
-                			
-                			@Override
-                			public void success(ApiResponse response) throws NullPointerException {
-                				Options.parse(response);
-                				runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void success(ApiResponse response) {
+                                Options.parse(response);
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         if (!isProfileNormal() && isFirstTime) {
-                                            Intent intent = new Intent(AuthActivity.this,EditProfileActivity.class);
-                                            intent.putExtra(EditProfileActivity.FROM_AUTH_ACTIVITY,true);
+                                            Intent intent = new Intent(AuthActivity.this, EditProfileActivity.class);
+                                            intent.putExtra(EditProfileActivity.FROM_AUTH_ACTIVITY, true);
                                             openActivity(intent);
                                         } else {
-                                            Intent intent = new Intent(AuthActivity.this,NavigationActivity.class);
-                                    	    openActivity(intent);
+                                            Intent intent = new Intent(AuthActivity.this, NavigationActivity.class);
+                                            openActivity(intent);
                                         }
                                     }
                                 });
-                			}
-                			
-                			@Override
-                			public void fail(int codeError, ApiResponse response) throws NullPointerException {
-                				final ApiResponse finalResponse = response;
+                            }
+
+                            @Override
+                            public void fail(int codeError, ApiResponse response) {
+                                final ApiResponse finalResponse = response;
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -329,17 +342,18 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                                         }
                                     }
                                 });
-                			}
-                		};
-                        request.callback(handler);  
+                            }
+                        };
+                        request.callback(handler);
                         request.exec();
                     }
-				});
+                });
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
                 final ApiResponse finalResponse = response;
+                mProfileRequest = null;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

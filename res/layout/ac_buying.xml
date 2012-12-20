@@ -110,7 +110,6 @@
                         android:orientation="horizontal">
 
                     <TextView
-                            android:id="@+id/tvBuyingTitlePower"
                             style="@style/ButtonGrayText"
                             android:layout_width="wrap_content"
                             android:layout_height="fill_parent"
@@ -147,8 +146,8 @@
                         android:text="@string/buying_money"
                         android:textStyle="bold"/>
 
-                <!-- 6 money btn -->
 
+                <!-- 6 money btn -->
                 <LinearLayout
                         android:id="@+id/btnBuyingMoney6"
                         android:layout_width="fill_parent"
@@ -159,7 +158,6 @@
                         android:orientation="horizontal">
 
                     <TextView
-                            android:id="@+id/tvBuyingTitle6"
                             style="@style/ButtonGrayText"
                             android:layout_width="wrap_content"
                             android:layout_height="fill_parent"
@@ -226,7 +224,6 @@
                     android:orientation="horizontal">
 
                 <TextView
-                        android:id="@+id/tvBuyingTitle100"
                         style="@style/ButtonGrayText"
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
@@ -245,6 +242,40 @@
                         android:layout_weight="0.5"
                         android:gravity="right|center_vertical"
                         android:text="@string/buying_100coins"/>
+            </LinearLayout>
+
+            <!-- 300 money btn -->
+
+            <LinearLayout
+                    android:id="@+id/btnBuyingMoney300"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/buying_purchase_selector"
+                    android:orientation="horizontal">
+
+                <TextView
+                        style="@style/ButtonGrayText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="12dp"
+                        android:layout_weight="0.5"
+                        android:gravity="left|center_vertical"
+                        android:text="@string/buying_pack_300coins"
+                        android:textColor="#9FCCF3"
+                        android:textStyle="bold"/>
+
+                <TextView
+                        style="@style/ButtonBlueText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_marginRight="12dp"
+                        android:layout_weight="0.5"
+                        android:gravity="right|center_vertical"
+                        android:text="@string/buying_300coins"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

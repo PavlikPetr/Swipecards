@@ -16,7 +16,7 @@ public abstract class FeedTest<T extends FeedItem> extends AbstractThreadTest {
         request.callback(new ApiHandler() {
 
             @Override
-            public void success(ApiResponse response) throws NullPointerException {
+            public void success(ApiResponse response) {
                 final FeedListData<T> feedList = getFeedList(response);
                 assertNotNull("Feed list is null", feedList);
                 assertNotNull("Feed list items is null", feedList.items);
@@ -33,7 +33,7 @@ public abstract class FeedTest<T extends FeedItem> extends AbstractThreadTest {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+            public void fail(int codeError, ApiResponse response) {
                 assertTrue("Request exec fail: " + codeError, false);
                 stopTest(testName);
             }

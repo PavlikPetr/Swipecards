@@ -9,6 +9,7 @@ import android.util.SparseArray;
 import android.view.*;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
+import com.topface.topface.utils.PreloadManager;
 
 public class ImageSwitcher extends ViewPager {
 
@@ -17,6 +18,7 @@ public class ImageSwitcher extends ViewPager {
     private OnClickListener mOnClickListener;
     private Handler mUpdatedHandler;
     private static final String VIEW_TAG = "view_container";
+    private PreloadManager mPreloadManager;
 
     public ImageSwitcher(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -29,6 +31,7 @@ public class ImageSwitcher extends ViewPager {
         setAdapter(mImageSwitcherAdapter);
         setOnTouchListener(mOnTouchListener);
         setPageMargin(40);
+        mPreloadManager = new PreloadManager(getWidth(), getHeight(), getContext());
     }
 
     public void setData(Photos photoLinks) {
@@ -96,7 +99,7 @@ public class ImageSwitcher extends ViewPager {
                         }
                     }
                 }
-                finalListener.onPageScrolled(i,v,i1);
+                finalListener.onPageScrolled(i, v, i1);
             }
 
             @Override
@@ -111,7 +114,6 @@ public class ImageSwitcher extends ViewPager {
         });
 
     }
-
 
 
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
@@ -138,11 +140,12 @@ public class ImageSwitcher extends ViewPager {
         public Object instantiateItem(ViewGroup pager, int position) {
             LayoutInflater inflater = (LayoutInflater) pager.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_album_gallery, null);
-            view.setTag(VIEW_TAG+Integer.toString(position));
+            view.setTag(VIEW_TAG + Integer.toString(position));
             ImageViewRemote imageView = (ImageViewRemote) view.findViewById(R.id.ivPreView);
             //Первую фотографию грузим сразу, или если фотографию уже загружена, то сразу показываем ее
             if (isFirstInstantiate || mLoadedPhotos.get(position, false)) {
                 setPhotoToView(position, view, imageView);
+                mPreloadManager.preloadPhoto(mPhotoLinks, position + 1);
                 isFirstInstantiate = false;
             }
             pager.addView(view);
@@ -160,14 +163,10 @@ public class ImageSwitcher extends ViewPager {
         }
 
         public void setPhotoToPosition(int position) {
-            if(!isFirstInstantiate) {
-                View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG+Integer.toString(position));
-                ImageViewRemote imageView = (ImageViewRemote)baseLayout.findViewById(R.id.ivPreView);
-                if(imageView.getBackground() == null) {
-                    setPhotoToView(position, baseLayout, imageView);
-                }
-                imageView.setDrawingCacheEnabled(true);
-                imageView.buildDrawingCache();
+            if (!isFirstInstantiate) {
+                View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(position));
+                ImageViewRemote imageView = (ImageViewRemote) baseLayout.findViewById(R.id.ivPreView);
+                setPhotoToView(position, baseLayout, imageView);
             }
         }
 

@@ -1,5 +1,7 @@
 package com.topface.topface.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
@@ -9,7 +11,7 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class Gift extends AbstractDataWithPhotos {
+public class Gift extends AbstractDataWithPhotos implements Parcelable {
 
     public static final int ROMANTIC = 0;
     public static final int FRIENDS = 2;
@@ -25,6 +27,22 @@ public class Gift extends AbstractDataWithPhotos {
     public int price;
     public int feedId;
 
+    public Gift(int id, int type, String link, int price) {
+        super();
+        this.id = id;
+        this.type = type;
+        this.link = link;
+        this.price = price;
+    }
+
+    public Gift(int id, int feedId, int type, String link) {
+        super();
+        this.id = id;
+        this.type = type;
+        this.link = link;
+        this.feedId = feedId;
+    }
+
     public static LinkedList<Gift> parse(ApiResponse response) {
         LinkedList<Gift> gifts = new LinkedList<Gift>();
 
@@ -32,16 +50,18 @@ public class Gift extends AbstractDataWithPhotos {
             JSONArray array = response.jsonResult.getJSONArray("gifts");
             for (int i = 0; i < array.length(); i++) {
                 JSONObject item = array.getJSONObject(i);
-                Gift gift = new Gift();                
-                gift.id = item.optInt("id");
-                gift.type = item.optInt("type");
-                gift.link = item.optString("link");
-                gift.price = item.optInt("price");
+
+                Gift gift = new Gift(
+                        item.optInt("id"),
+                        item.optInt("type"),
+                        item.optString("link"),
+                        item.optInt("price")
+                );
 
                 gifts.add(gift);
             }
         } catch (JSONException e) {
-            Debug.log("Gift.class", "Wrong response parsing: " + e);
+            Debug.error("Gift.class: Wrong response parsing", e);
         }
 
         return gifts;
@@ -50,7 +70,9 @@ public class Gift extends AbstractDataWithPhotos {
     // Gets User gifts
     public static LinkedList<Gift> parse(LinkedList<Gift> giftsList) {
         LinkedList<Gift> gifts = new LinkedList<Gift>();
-        gifts.add(Gift.getSendedGiftItem());
+        gifts.add(
+                new Gift(0, Gift.SEND_BTN, null, 0)
+        );
         gifts.addAll(giftsList);
         return gifts;
     }
@@ -68,10 +90,33 @@ public class Gift extends AbstractDataWithPhotos {
         }
     }
 
-    public static Gift getSendedGiftItem() {
-        Gift result = new Gift();
-        result.type = Gift.SEND_BTN;
-        return result;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(type);
+        dest.writeString(link);
+        dest.writeInt(price);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Gift createFromParcel(Parcel in) {
+            return new Gift(
+                    in.readInt(),
+                    in.readInt(),
+                    in.readString(),
+                    in.readInt()
+            );
+        }
+
+        @Override
+        public Gift[] newArray(int size) {
+            return new Gift[size];
+        }
+    };
 }

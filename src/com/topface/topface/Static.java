@@ -2,8 +2,8 @@ package com.topface.topface;
 
 public class Static {
     // Constants
-	
-    public static final int API_VERSION = 2;
+
+    public static final int API_VERSION = 3;
     public static final int GIRL = 0;
     public static final int BOY = 1;
     public static final int PHOTO_WIDTH = 640;
@@ -26,7 +26,6 @@ public class Static {
     public static final String AUTH_VK_ID = "2664589";
     public static final String INTENT_REQUEST_KEY = "requestCode";
     public static final String AUTH_FACEBOOK_ID = "161347997227885";
-    public static final String EXTERANAL_CACHE_DIR = "Android/data/com.topface.topface/cache/";
     // Preferences
     public static final String PREFERENCES_SSID = "ssid";
     public static final String PREFERENCES_TAG_SHARED = "preferences_general";
@@ -37,13 +36,14 @@ public class Static {
     public static final String PREFERENCES_TOPS_CITY_POS = "tops_city_pos";
     public static final String PREFERENCES_PROFILE_BACKGROUND_ID = "profile_background_id";
     public static final String PREFERENCES_NAVIGATION_LAST_FRAGMENT = "navigation_last_fragment";
-    
+
     public static final String PREFERENCES_NOVICE_DATING_ENERGY = "novice_dating_energy";
     public static final String PREFERENCES_NOVICE_DATING_ENERGY_DATE = "novice_dating_energy_date_tag";
     public static final String PREFERENCES_NOVICE_DATING_SYMPATHY = "novice_dating_sympathy";
     public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE = "novice_menu_fill_profile";
     public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE = "novice_menu_fill_profile_date_tag";
     public static final String PREFERENCES_STOP_TIME = "preferences_stop_time";
+    public static final String LOGOUT_INTENT = "com.topface.topface.intent.LOGOUT";
 
     // Profile
     //public static final String PREFERENCES_PROFILE_FILTER_GEO = "cache_profile_filter_geo";

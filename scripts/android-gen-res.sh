@@ -21,17 +21,17 @@ USAGE_DOC
 
 if [ ! $1 ]
 then
-	echo "$USAGE";
+	echo ${USAGE};
 	exit 1;
 fi
 
-if [ -z "$SOURCE"  ]
+if [ -z ${SOURCE}  ]
 then
 	#Если не указана директория, будет использована текущий путь
 	SOURCE="."
 fi
 
-if [ ! -d "$SOURCE" ]
+if [ ! -d ${SOURCE} ]
 then
 	#Если директория не существует, то ошибка
 	echo "Ошибка! $SOURCE не существует или не является директорией"
@@ -44,19 +44,20 @@ then
 	exit 1;
 fi
 
-case "$DPI" in
+case "${DPI}" in
 
 	"hdpi" | "HDPI" )
 	mkdir res
-	mkdir res/drawable-xhdpi
+	#Не пытаемся увеличить размер, это только увеличивает потребление памяти
+	#mkdir res/drawable-xhdpi
 	mkdir res/drawable-hdpi
 	mkdir res/drawable-mdpi
 	mkdir res/drawable-ldpi
-	cp "$SOURCE"/*png res/drawable-xhdpi
-	cp "$SOURCE"/*png res/drawable-hdpi
-	cp "$SOURCE"/*png res/drawable-mdpi
-	cp "$SOURCE"/*png res/drawable-ldpi
-	mogrify -resize 133.333% -format png res/drawable-xhdpi/*
+	#cp ${SOURCE}/*png res/drawable-xhdpi
+	cp ${SOURCE}/*png res/drawable-hdpi
+	cp ${SOURCE}/*png res/drawable-mdpi
+	cp ${SOURCE}/*png res/drawable-ldpi
+	#mogrify -resize 133.333% -format png res/drawable-xhdpi/*
 	mogrify -resize 66.666% -format png res/drawable-mdpi/*
 	mogrify -resize 50% -format png res/drawable-ldpi/*
 	;;
@@ -67,17 +68,17 @@ case "$DPI" in
 	mkdir res/drawable-hdpi
 	mkdir res/drawable-mdpi
 	mkdir res/drawable-ldpi
-	cp "$SOURCE"/*png res/drawable-xhdpi
-	cp "$SOURCE"/*png res/drawable-hdpi
-	cp "$SOURCE"/*png res/drawable-mdpi
-	cp "$SOURCE"/*png res/drawable-ldpi
+	cp ${SOURCE}/*png res/drawable-xhdpi
+	cp ${SOURCE}/*png res/drawable-hdpi
+	cp ${SOURCE}/*png res/drawable-mdpi
+	cp ${SOURCE}/*png res/drawable-ldpi
 	mogrify -resize 75% -format png res/drawable-hdpi/*
 	mogrify -resize 50% -format png res/drawable-mdpi/*
 	mogrify -resize 37.5% -format png res/drawable-ldpi/*
 	;;
 
 	* )
-	echo "$USAGE"
+	echo ${USAGE}
 	exit 1
 	;;
 esac
