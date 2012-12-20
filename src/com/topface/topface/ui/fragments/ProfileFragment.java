@@ -149,13 +149,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        if (mUserProfile == null) {
-            if (mProfileType == TYPE_MY_PROFILE)
-                mUserProfile = CacheProfile.getProfile();
-            else {
-                getUserProfile();
-            }
+        if (mProfileType == TYPE_MY_PROFILE) {
+            mUserProfile = CacheProfile.getProfile();
+        } else {
+            if (mUserProfile == null) getUserProfile();
         }
+
         mMUpdateBlackListState = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
