@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.*;
@@ -83,16 +85,20 @@ public class GiftsFragment extends BaseFragment {
                     mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            FeedGift item = (FeedGift) parent.getItemAtPosition(position);
-                            Intent intent = getActivity().getIntent();
-                            if (view.getTag() instanceof ViewHolder) {
-                                if (item.gift.type != Gift.PROFILE && item.gift.type != Gift.SEND_BTN) {
-                                    intent.putExtra(GiftsActivity.INTENT_GIFT_ID, item.gift.id);
-                                    intent.putExtra(GiftsActivity.INTENT_GIFT_URL, item.gift.link);
-                                    intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, item.gift.price);
+                            FragmentActivity activity = getActivity();
+                            if (activity != null) {
+                                FeedGift item = (FeedGift) parent.getItemAtPosition(position);
+                                Intent intent = activity.getIntent();
+                                if (view.getTag() instanceof ViewHolder) {
+                                    if (item.gift.type != Gift.PROFILE && item.gift.type != Gift.SEND_BTN) {
+                                        intent.putExtra(GiftsActivity.INTENT_GIFT_ID, item.gift.id);
+                                        intent.putExtra(GiftsActivity.INTENT_GIFT_URL, item.gift.link);
+                                        intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, item.gift.price);
 
-                                    getActivity().setResult(Activity.RESULT_OK, intent);
-                                    getActivity().finish();
+                                        EasyTracker.getTracker().trackEvent("Gifts", "Send", "GiftId="+item.gift.id, (long)item.gift.price);
+                                        activity.setResult(Activity.RESULT_OK, intent);
+                                        activity.finish();
+                                    }
                                 }
                             }
                         }
