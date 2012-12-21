@@ -15,11 +15,14 @@ import java.util.ArrayList;
 
 public class ProfileActionsControl extends RelativeLayout {
 
+    private boolean mIsHidden;
+
     private int mType;
     private CheckBox mOpenActionButton;
     private ViewGroup mActionButtonsLayout;
     private ArrayList<ImageButton> mActionButtons = new ArrayList<ImageButton>();
     private ImageView mBackShadow;
+    private CompoundButton.OnCheckedChangeListener mExtraOnCheckedListener;
 
     public ProfileActionsControl(Context context) {
         super(context,null);
@@ -63,9 +66,59 @@ public class ProfileActionsControl extends RelativeLayout {
         }
     }
 
+
     public void setOnCheckChangedListener(CompoundButton.OnCheckedChangeListener listener) {
         if (mType == ProfileFragment.TYPE_MY_PROFILE) {
             mOpenActionButton.setOnCheckedChangeListener(listener);
+        } else if(mType == ProfileFragment.TYPE_USER_PROFILE) {
+            mExtraOnCheckedListener = listener;
+        }
+    }
+
+    Animation slideToBottom;
+    public void hide() {
+        if (!mIsHidden) {
+            if (slideToBottom == null) {
+                slideToBottom = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_to_bottom);
+                slideToBottom.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) { }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) { }
+                });
+            }
+
+            mIsHidden = true;
+            this.startAnimation(slideToBottom);
+        }
+    }
+
+    Animation slideFromBottom;
+    public void show() {
+        if (mIsHidden) {
+            if (slideFromBottom == null) {
+                slideFromBottom = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_bottom);
+                slideFromBottom.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) { }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) { }
+                });
+            }
+            mIsHidden = false;
+            this.startAnimation(slideFromBottom);
         }
     }
 
@@ -86,6 +139,7 @@ public class ProfileActionsControl extends RelativeLayout {
         mOpenActionButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mExtraOnCheckedListener.onCheckedChanged(buttonView,isChecked);
                 if (isChecked) {
                     mActionButtonsLayout.setVisibility(View.VISIBLE);
                     for (int i = 0; i < mActionButtons.size(); i++) {

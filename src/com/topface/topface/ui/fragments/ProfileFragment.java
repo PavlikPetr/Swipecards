@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -41,6 +42,7 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TimerTask;
 
 public class ProfileFragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     public final static int TYPE_MY_PROFILE = 1;
@@ -53,6 +55,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     ArrayList<String> BODY_PAGES_TITLES = new ArrayList<String>();
     ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
     ArrayList<String> HEADER_PAGES_CLASS_NAMES = new ArrayList<String>();
+
+    private final static long HIDE_ACTION_CONTROL_TIME = 3000;
 
     private HeaderMainFragment mHeaderMainFragment;
     private HeaderStatusFragment mHeaderStatusFragment;
@@ -82,6 +86,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private int mStartBodyPage = 0;
     private int mStartHeaderPage = 0;
     private BroadcastReceiver mMUpdateBlackListState;
+
+    private Handler mHideActionControlsUpdater;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -127,6 +133,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             editButton.setText(getResources().getString(R.string.general_edit_button));
             editButton.setOnClickListener(this);
         } else if (mProfileType == TYPE_USER_PROFILE) {
+            mActionsControl.setOnCheckChangedListener(this);
             mOnline = (ImageView) root.findViewById(R.id.ivOnline);
         }
 
@@ -139,7 +146,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (startHeaderPage != -1) {
             mStartHeaderPage = startHeaderPage;
         }
-
 
         mHeaderPager.setCurrentItem(mStartHeaderPage);
         mBodyPager.setCurrentItem(mStartBodyPage);
@@ -165,12 +171,16 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
         setProfile(mUserProfile);
+
+        startWaitingActionControlsHide();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMUpdateBlackListState);
+
+        stopWaitingActionControlHiding();
     }
 
     private void setProfile(Profile profile) {
@@ -280,6 +290,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         fadeOutAnimation.setAnimationListener(new FadeAnimationListener(true));
 
         tabIndicator.setViewPager(bodyPager);
+
         tabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private boolean shouldAnimate;
 
@@ -290,13 +301,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onPageSelected(int i) {
                 if (((ProfilePageAdapter) mBodyPager.getAdapter()).getClassNameByFragmentIndex(i).equals(VipBuyFragment.class.getName())) {
-                    shouldAnimate = true;
-                    mActionsControl.startAnimation(fadeOutAnimation);
-                } else {
-                    if (shouldAnimate) {
-                        mActionsControl.startAnimation(fadeInAnimation);
-                        shouldAnimate = false;
+                    if (mActionsControl.getVisibility() == View.VISIBLE) {
+                        mActionsControl.hide();
                     }
+                } else {
+                    mActionsControl.show();
+                    startWaitingActionControlsHide();
                 }
             }
 
@@ -407,10 +417,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-            int index = mBodyPagerAdapter.getFragmentIndexByClassName(VipBuyFragment.class.getName());
-            mBodyPager.setCurrentItem(index);
-            buttonView.setChecked(false);
+        if (mProfileType == TYPE_MY_PROFILE) {
+            if (isChecked) {
+                int index = mBodyPagerAdapter.getFragmentIndexByClassName(VipBuyFragment.class.getName());
+                mBodyPager.setCurrentItem(index);
+                buttonView.setChecked(false);
+            }
+        } else if (mProfileType == TYPE_USER_PROFILE) {
+            if (isChecked) {
+                stopWaitingActionControlHiding();
+                mActionsControl.show();
+            } else {
+                startWaitingActionControlsHide();
+            }
         }
     }
 
@@ -789,4 +808,30 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void onAnimationRepeat(Animation animation) {
         }
     }
+
+    private void startWaitingActionControlsHide() {
+        if (mHideActionControlsUpdater != null) {
+            mHideActionControlsUpdater.removeCallbacks(mHideActionControlsTask);
+            mHideActionControlsUpdater.postDelayed(mHideActionControlsTask,HIDE_ACTION_CONTROL_TIME);
+        } else {
+            mHideActionControlsUpdater = new Handler();
+            mHideActionControlsUpdater.postDelayed(mHideActionControlsTask,HIDE_ACTION_CONTROL_TIME);
+        }
+    }
+
+    private void stopWaitingActionControlHiding() {
+        if (mHideActionControlsUpdater != null) {
+            mHideActionControlsUpdater.removeCallbacks(mHideActionControlsTask);
+            mHideActionControlsUpdater = null;
+        }
+    }
+
+    TimerTask mHideActionControlsTask = new TimerTask() {
+        @Override
+        public void run() {
+            if(mActionsControl != null) {
+                mActionsControl.hide();
+            }
+        }
+    };
 }
