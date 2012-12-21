@@ -59,8 +59,8 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_buying);
-        Debug.log(this, "+onCreate");
+        setContentView(R.layout.fragment_buy);
+     /*   Debug.log(this, "+onCreate");
 
         // Title Header
         ((TextView) findViewById(R.id.tvNavigationTitle))
@@ -133,7 +133,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener {
         if (!mBillingService.checkBillingSupported(Consts.ITEM_TYPE_INAPP)) {
             Toast.makeText(getApplicationContext(), "Play Market not available", Toast.LENGTH_SHORT)
                     .show();
-        }
+        }      */
     }
 
     @Override

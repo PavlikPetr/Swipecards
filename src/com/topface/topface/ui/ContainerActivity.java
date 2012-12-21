@@ -11,11 +11,13 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.ui.fragments.BuyingFragment;
 import com.topface.topface.ui.fragments.VipBuyFragment;
 
 public class ContainerActivity extends BaseFragmentActivity {
 
     public static final int INTENT_BUY_VIP_FRAGMENT = 1;
+    public static final int INTENT_BUYING_FRAGMENT = 2;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -36,18 +38,25 @@ public class ContainerActivity extends BaseFragmentActivity {
             }
         });
 
-        Fragment fragment = null;
         Intent intent = getIntent();
-        switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0)) {
+        startFragment(intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0));
+
+    }
+
+    public void startFragment(int id) {
+        Fragment fragment = null;
+        switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
                 ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.profile_vip_status));
                 fragment = VipBuyFragment.newInstance();
-                Toast.makeText(App.getContext(), R.string.general_premium_access_error, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(App.getContext(), R.string.general_premium_access_error, Toast.LENGTH_SHORT).show();
                 break;
+            case INTENT_BUYING_FRAGMENT:
+                ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.buying_header_title));
+                fragment = BuyingFragment.newInstance();
             default:
                 break;
         }
-
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.loFrame, fragment).commit();

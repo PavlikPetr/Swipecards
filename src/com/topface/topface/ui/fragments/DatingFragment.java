@@ -25,6 +25,7 @@ import com.topface.topface.data.SkipRate;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
@@ -311,7 +312,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().trackEvent("Dating", "BuyClick", "", 1L);
-                startActivity(new Intent(getActivity(), BuyingActivity.class));
+                Intent intent = new Intent(getActivity(), ContainerActivity.class);
+                intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                startActivity(intent);
             }
             break;
             case R.id.btnDatingLove: {

@@ -428,8 +428,10 @@ public class ChatListAdapter extends BaseAdapter {
     private History getLastRealMessage() {
         for (int i = mDataList.size() - 1; i >= 0; i--) {
             History lastItem = mDataList.get(i);
-            if (lastItem.id > 0) {
-                return lastItem;
+            if(lastItem != null) {
+                if (lastItem.id > 0) {
+                    return lastItem;
+                }
             }
         }
         return null;

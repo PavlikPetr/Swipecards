@@ -112,7 +112,7 @@
     <string name="buying_default_message">Вы можете отправлять подарки и восхищения за монеты</string>
     <string name="buying_money">Покупка монет</string>
     <string name="buying_power">Покупка энергии</string>
-    <string name="buying_recharge">Зарядить на 100%</string>
+    <string name="buying_recharge">Зарядиться на 100%</string>
     <string name="buying_energy">3 USD</string>
     <string name="buying_pack_6coins">Пакет из 6 монет</string>
     <string name="buying_6coins">1 USD</string>
@@ -347,6 +347,9 @@
 
     <string name="vip_buy_vip">Покупка VIP</string>
     <string name="vip_state_off">Ваш VIP-статус не активирован</string>
+    <string name="vip_state_on">Ваш VIP-статус активирован</string>
+    <string name="vip_abilities">Ваши VIP возможности</string>
+    <string name="vip_why">Почему вам так важно быть VIP</string>
     <string name="vip_info_delight">Отправляйте восхищения бесплатно - вражайте свои чувства по максимуму!</string>
     <string name="vip_info_guest">Узнайте, кто вами интересовался - смотрите своих гостей!</string>
     <string name="vip_info_invisible">Оставайтесь незамеченными, посещая чужие страницы, благодаря режиму \"невидимка\"</string>
@@ -361,5 +364,16 @@
 
     <string name="buy_play_market_not_available">Play Market не доступен</string>
     <string name="buy_subscription_not_available">Подписки не доступны</string>
+    <string name="default_six_coins">6 монет по 0.16$ за монету</string>
+    <string name="default_six_coins_price">1 USD</string>
+    <string name="default_coins_40">40 монет по 0.12$ за монету</string>
+    <string name="default_coins_40_price">5 USD</string>
+    <string name="default_economy_25">Экономия 25%</string>
+    <string name="default_coins_100">100 монет по 0.1$ за монету</string>
+    <string name="default_economy_vip">Vip от 10 USD в месяц</string>
+
+    <string name="default_economy_38">Экономия 38%</string>
+    <string name="default_coins_300">300 монет по 0.08$ за монету</string>
+    <string name="default_economy_50">Экономия 50%</string>
 
 </resources>

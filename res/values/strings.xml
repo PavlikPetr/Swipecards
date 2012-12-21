@@ -90,7 +90,7 @@
     <string name="buying_money">Purchase coins</string>
     <string name="buying_power">Buy energy</string>
     <string name="buying_recharge">Get 100% charge</string>
-    <string name="buying_energy">3 USD</string>
+    <string name="buying_energy">2.99 USD</string>
     <string name="buying_pack_6coins">6 coins package</string>
     <string name="buying_6coins">1 USD</string>
     <string name="buying_pack_40coins">40 coins package</string>
@@ -277,4 +277,5 @@
     <string name="buying_vip_info">To get access to guests VIP status is necessary</string>
     <string name="buy_play_market_not_available">Play Market not available</string>
     <string name="buy_subscription_not_available">Subscriptions are not available</string>
+    <string name="default_coins_100_price">10 USD</string>
 </resources>
