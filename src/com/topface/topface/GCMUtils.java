@@ -121,7 +121,17 @@ public class GCMUtils {
                 if (intent != null) {
                     intent.putExtra("C2DM", true);
                     final TopfaceNotificationManager notificationManager = TopfaceNotificationManager.getInstance(context);
-                    if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
+                    if(!Data.isSSID()) {
+                        if(type == GCM_TYPE_UPDATE || type == GCM_TYPE_NOTIFICATION) {
+                            notificationManager.showNotification(
+                                    title,
+                                    data,
+                                    null,
+                                    getUnread(extra),
+                                    intent
+                            );
+                        }
+                    } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
                         showNotificationWithIcon(
                                 getUnread(extra),
                                 data,

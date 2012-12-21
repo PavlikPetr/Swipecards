@@ -53,12 +53,7 @@ abstract public class ApiHandler extends Handler {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        if (code == ApiResponse.PREMIUM_ACCESS_ONLY) {
-//                            Intent intent = new Intent(activity.getApplicationContext(), ContainerActivity.class);
-//                            activity.startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-//                        } else {
                         Toast.makeText(App.getContext(), stringId, Toast.LENGTH_SHORT).show();
-//                        }
                     }
                 });
             } catch (Exception e) {

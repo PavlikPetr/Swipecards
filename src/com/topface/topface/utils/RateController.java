@@ -47,6 +47,7 @@ public class RateController {
     public void onRate(final int userId, final int rate) {
         if (rate == 10 && CacheProfile.money <= 0) {
             mContext.startActivity(new Intent(mContext, BuyingActivity.class));
+            mOnRateControllerListener.failRate();
             return;
         }
 
@@ -100,6 +101,7 @@ public class RateController {
     public void onRate(final int userId, final int rate, final int mutualId) {
         if (rate == 10 && CacheProfile.money <= 0) {
             mContext.startActivity(new Intent(mContext, BuyingActivity.class));
+            mOnRateControllerListener.failRate();
             return;
         }
 

@@ -43,6 +43,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
+        <activity-alias android:name=".ui.MainActivity" android:targetActivity=".ui.AuthActivity"/>
 
         <!-- activity -->
         <activity

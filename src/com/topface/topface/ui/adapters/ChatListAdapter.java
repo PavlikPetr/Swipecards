@@ -343,7 +343,7 @@ public class ChatListAdapter extends BaseAdapter {
                 holder.message.setText(Html.fromHtml(history.text));
                 break;
             default:
-                holder.message.setText("");
+                holder.message.setText(Html.fromHtml(history.text));
                 break;
         }
 

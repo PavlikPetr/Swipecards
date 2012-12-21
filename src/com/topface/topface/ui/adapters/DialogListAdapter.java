@@ -85,7 +85,8 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                         getContext().getString(R.string.chat_gift_out);
                 break;
             default:
-                text = MESSAGE_OF_UNKNOWN_TYPE;
+                //По умолчанию все равно показываем текст
+                text = (dialog.target == FeedDialog.USER_MESSAGE) ? "{{outbox}} " + dialog.text : dialog.text;
         }
         return text;
     }

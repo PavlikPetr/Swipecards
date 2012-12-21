@@ -2,6 +2,7 @@ package com.topface.topface.ui.views;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ public class RetryView extends LinearLayout {
     public static final String REFRESH_TEMPLATE = "{{refresh}} ";
     private IllustratedTextView mBtn1;
     private IllustratedTextView mBtn2;
+    private IllustratedTextView mBtnBlue;
     private int textColor = Color.parseColor("#B8B8B8");
     private TextView mErrorMsg;
     private LinearLayout mButtonContainer;
@@ -51,6 +53,15 @@ public class RetryView extends LinearLayout {
         }
     }
 
+    public void addBlueButton(String title, OnClickListener listener) {
+        if (mBtnBlue == null) {
+            mBtnBlue = generateBlueButton();
+            mBtnBlue.setText(title);
+            mBtnBlue.setOnClickListener(listener);
+            mButtonContainer.addView(mBtnBlue);
+        }
+    }
+
     private IllustratedTextView generateButton() {
         IllustratedTextView btn = new IllustratedTextView(getContext(), null);
         btn.setBackgroundResource(R.drawable.btn_retry_selector);
@@ -60,6 +71,20 @@ public class RetryView extends LinearLayout {
         btn.setPadding(15, 0, 15, 0);
         btn.setTextColor(textColor);
         btn.setGravity(Gravity.CENTER);
+        return btn;
+    }
+
+    private IllustratedTextView generateBlueButton() {
+        IllustratedTextView btn = new IllustratedTextView(getContext(), null);
+        btn.setBackgroundResource(R.drawable.btn_vip_super_sale_selector);
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.setMargins(10, 5, 10, 5);
+        btn.setLayoutParams(lp);
+        btn.setPadding(15, 0, 15, 0);
+        btn.setTextAppearance(getContext(), R.style.VipItemTitleWhiteText);
+        btn.setTypeface(Typeface.DEFAULT_BOLD);
+        btn.setGravity(Gravity.CENTER);
+
         return btn;
     }
 

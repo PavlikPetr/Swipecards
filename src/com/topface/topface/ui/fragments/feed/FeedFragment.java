@@ -22,6 +22,7 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.blocks.FilterBlock;
@@ -428,7 +429,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                             }
                             if (updateErrorMessage != null) {
                                 if (codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
-                                    updateErrorMessage.showOnlyMessage(true);
+                                    updateErrorMessage.showOnlyMessage(false);
+                                    updateErrorMessage.addBlueButton(getString(R.string.buying_vip_status),new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                                            startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                                        }
+                                    });
                                     updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
                                 } else {
                                     updateErrorMessage.showOnlyMessage(false);
