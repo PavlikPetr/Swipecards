@@ -137,7 +137,9 @@ public class CountersManager {
     }
 
     public void setMethod(String method) {
-        if(!method.equals(LeadersRequest.SERVICE_NAME)) {
+        if(method == null) {
+            lastRequestMethod = method;
+        } if(!method.equals(LeadersRequest.SERVICE_NAME)) {
             lastRequestMethod = method;
         } else {
             lastRequestMethod = DeniedMethod;
@@ -161,6 +163,6 @@ public class CountersManager {
             intent.putExtra(METHOD_INTENT_STRING, method);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
-        setMethod(null);
+        setMethod(NULL_METHOD);
     }
 }
