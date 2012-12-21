@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.topface.topface.billing.PurchaseObserver;
 import com.topface.topface.billing.ResponseHandler;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
@@ -37,10 +39,14 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
     EditSwitcher mInvisSwitcher;
     EditSwitcher mBgSwitcher;
 
+    BroadcastReceiver mBroadcastReceiver;
+
     ProgressBar mInvisLoadBar;
     private BillingService mBillingService;
 
     public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
+    private View mRoot;
+    private LayoutInflater mInflater;
 
     // В этот метод потом можно будет передать аргументы,
     // чтобы потом установить их с помощью setArguments();
@@ -65,6 +71,19 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switchLayouts();
+            }
+        };
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -85,15 +104,19 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root;
+        mInflater = inflater;
+        switchLayouts();
+        return mRoot;
+    }
+
+    private void switchLayouts() {
         if (CacheProfile.premium) {
-            root = inflater.inflate(R.layout.fragment_edit_premium, null);
-            initEditVipViews(root);
+            mRoot = getActivity().getLayoutInflater().inflate(R.layout.fragment_edit_premium, null);
+            initEditVipViews(mRoot);
         } else {
-            root = inflater.inflate(R.layout.fragment_buy_premium, null);
-            initBuyVipViews(root);
+            mRoot = mInflater.inflate(R.layout.fragment_buy_premium, null);
+            initBuyVipViews(mRoot);
         }
-        return root;
     }
 
     private void initBuyVipViews(View root) {
@@ -252,8 +275,10 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
         //Подписки на премиумы
         switch (v.getId()) {
             case R.id.fbpBuyingMonth:
-                mBillingService.requestPurchase("topface.premium.month.1", Consts.ITEM_TYPE_SUBSCRIPTION, null);
-                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Month", 0L);
+//                mBillingService.requestPurchase("topface.premium.month.1", Consts.ITEM_TYPE_SUBSCRIPTION, null);
+//                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Month", 0L);
+                CacheProfile.premium = true;
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                 break;
 
             case R.id.fbpBuyingYear:
