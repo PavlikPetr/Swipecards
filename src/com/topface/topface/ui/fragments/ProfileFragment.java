@@ -290,6 +290,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         fadeOutAnimation.setAnimationListener(new FadeAnimationListener(true));
 
         tabIndicator.setViewPager(bodyPager);
+
         tabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private boolean shouldAnimate;
 
@@ -300,13 +301,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onPageSelected(int i) {
                 if (((ProfilePageAdapter) mBodyPager.getAdapter()).getClassNameByFragmentIndex(i).equals(VipBuyFragment.class.getName())) {
-                    shouldAnimate = true;
-                    mActionsControl.startAnimation(fadeOutAnimation);
-                } else {
-                    if (shouldAnimate) {
-                        mActionsControl.startAnimation(fadeInAnimation);
-                        shouldAnimate = false;
+                    if (mActionsControl.getVisibility() == View.VISIBLE) {
+                        mActionsControl.hide();
                     }
+                } else {
+                    mActionsControl.show();
+                    startWaitingActionControlsHide();
                 }
             }
 
@@ -315,19 +315,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
         });
         mBodyPager = bodyPager;
-        mBodyPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i2) {
-                mActionsControl.show();
-                startWaitingActionControlsHide();
-            }
-
-            @Override
-            public void onPageSelected(int i) { }
-
-            @Override
-            public void onPageScrollStateChanged(int i) { }
-        });
     }
 
     private void addHeaderPage(String className) {
