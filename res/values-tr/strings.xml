@@ -277,4 +277,11 @@
     <string name="buying_vip_info">Misafirlere erişmek için VIP durumuna sahip olmak gerek</string>
     <string name="buy_play_market_not_available">Play Market kullanılmamaktadır</string>
     <string name="buy_subscription_not_available">Abonelikler kullanılmamaktadır</string>
+    <string name="profile_gifts_empty">Bu kullanıcıya henüz kimse hediye etmedi</string>
+    <string name="profile_mygifts_empty">Size henüz kimse hediye etmedi</string>
+    <string name="profile_mood">Moralinizi anlatın</string>
+    <string name="general_reconnect">İnternetle bağlantıyı sağlamayı çalışıyoruz.\nLütfen bekleyin.</string>
+    <string name="dating_people_unnoticed">On kişi dikkatinizden kaçırdınız!</string>
+    <string name="dating_continue">Not vermeye devam etmek</string>
+    <string name="dating_better_look">Dikkatle bakın!\n Belki kaderinizi kaçırıyorsunuz!</string>
 </resources>

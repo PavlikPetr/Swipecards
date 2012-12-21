@@ -281,4 +281,11 @@
     <string name="buying_vip_info">Для доступу до гостей необхідно мати VIP статус</string>
     <string name="buy_play_market_not_available">Play Market не доступний</string>
     <string name="buy_subscription_not_available">Підписки не доступні</string>
+    <string name="profile_gifts_empty">Цьому користувачу ще ніхто не дарував подарунків</string>
+    <string name="profile_mygifts_empty">Вам ще ніхто не дарував подарунків</string>
+    <string name="profile_mood">Опишіть Ваш настрій</string>
+    <string name="general_reconnect">Намагаємося восстаносіть з\'єднання з Інтернет. Будь ласка почекайте.</string>
+    <string name="dating_people_unnoticed">Десять людей залишилися без вашої уваги!</string>
+    <string name="dating_continue">Продовжити оцінювати</string>
+    <string name="dating_better_look">Придивіться!\nМожливо ви втрачаєте свою долю!</string>
 </resources>
