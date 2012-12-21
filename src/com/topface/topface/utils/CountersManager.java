@@ -3,6 +3,8 @@ package com.topface.topface.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import com.topface.topface.requests.LeaderRequest;
+import com.topface.topface.requests.LeadersRequest;
 
 public class CountersManager {
     private static int likesCounter;
@@ -135,7 +137,13 @@ public class CountersManager {
     }
 
     public void setMethod(String method) {
-        lastRequestMethod = method;
+        if(method == null) {
+            lastRequestMethod = method;
+        } if(!method.equals(LeadersRequest.SERVICE_NAME)) {
+            lastRequestMethod = method;
+        } else {
+            lastRequestMethod = DeniedMethod;
+        }
     }
 
     private void commitCounters() {
@@ -155,6 +163,6 @@ public class CountersManager {
             intent.putExtra(METHOD_INTENT_STRING, method);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
-        setMethod(null);
+        setMethod(NULL_METHOD);
     }
 }
