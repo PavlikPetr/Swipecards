@@ -322,7 +322,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         return;
                     } else {
                         lockControls();
-                        CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().price_highrate;
+                        if (CacheProfile.money > 0) {
+                            CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().price_highrate;
+                        }
                         mRateController.onRate(currentSearch.id, 10,
                                 currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL
                                         : RateRequest.DEFAULT_NO_MUTUAL);
