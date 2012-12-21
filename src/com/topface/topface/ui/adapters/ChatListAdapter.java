@@ -360,6 +360,13 @@ public class ChatListAdapter extends BaseAdapter {
                     return false;
                 }
             });
+            holder.message.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    mLongClickListener.onLongClick(position, holder.message);
+                    return false;
+                }
+            });
         }
         return convertView;
     }
