@@ -45,8 +45,9 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
     private BillingService mBillingService;
 
     public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
-    private View mRoot;
     private LayoutInflater mInflater;
+    private View mRoot;
+    private ViewGroup mContainer;
 
     // В этот метод потом можно будет передать аргументы,
     // чтобы потом установить их с помощью setArguments();
@@ -104,18 +105,30 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mInflater = inflater;
-        switchLayouts();
+        mContainer = container;
+        if (CacheProfile.premium) {
+            mRoot = inflater.inflate(R.layout.fragment_edit_premium, null);
+            initEditVipViews(mRoot);
+        } else {
+            mRoot = inflater.inflate(R.layout.fragment_buy_premium, null);
+            initBuyVipViews(mRoot);
+        }
         return mRoot;
     }
 
     private void switchLayouts() {
-        if (CacheProfile.premium) {
-            mRoot = getActivity().getLayoutInflater().inflate(R.layout.fragment_edit_premium, null);
-            initEditVipViews(mRoot);
-        } else {
-            mRoot = mInflater.inflate(R.layout.fragment_buy_premium, null);
-            initBuyVipViews(mRoot);
+        if (mRoot != null && mContainer != null) {
+            if (CacheProfile.premium) {
+                mRoot = getActivity().getLayoutInflater().inflate(R.layout.fragment_edit_premium, null);
+                initEditVipViews(mRoot);
+                mContainer.removeAllViews();
+                mContainer.addView(mRoot);
+            } else {
+                mRoot = getActivity().getLayoutInflater().inflate(R.layout.fragment_buy_premium, null);
+                initBuyVipViews(mRoot);
+                mContainer.removeAllViews();
+                mContainer.addView(mRoot);
+            }
         }
     }
 
@@ -275,10 +288,8 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
         //Подписки на премиумы
         switch (v.getId()) {
             case R.id.fbpBuyingMonth:
-//                mBillingService.requestPurchase("topface.premium.month.1", Consts.ITEM_TYPE_SUBSCRIPTION, null);
-//                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Month", 0L);
-                CacheProfile.premium = true;
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                mBillingService.requestPurchase("topface.premium.month.1", Consts.ITEM_TYPE_SUBSCRIPTION, null);
+                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Month", 0L);
                 break;
 
             case R.id.fbpBuyingYear:
