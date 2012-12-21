@@ -50,7 +50,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
         mTitle = (TextView) root.findViewById(R.id.tvTitle);
         mState = (ImageView) root.findViewById(R.id.ivState);
         if (mUser != null) {
-            initFormHeader();
+            setUserData(mUser);
         } else {
             mTitle.setText(Utils.formatFormMatchesQuantity(0));
             mState.setImageResource(R.drawable.user_cell_center);
@@ -61,7 +61,8 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
     }
 
     public void setUserData(User user) {
-        mUser = user;
+        if (mUser != user)
+            mUser = user;
         mUserFormListAdapter.setUserData(mUser);
         mUserFormListAdapter.notifyDataSetChanged();
 
