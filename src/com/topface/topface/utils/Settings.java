@@ -26,6 +26,7 @@ public class Settings {
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
 
     public static final String SETTINGS_SOCIAL_ACCOUNT_NAME = "social_account_name";
+    public static final String SETTINGS_SOCIAL_ACCOUNT_EMAIL = "social_account_email";
 
     public static final int REQUEST_CODE_RINGTONE = 333;
 
@@ -62,12 +63,21 @@ public class Settings {
         mEditor.commit();
     }
 
+    public void setSocialAccountEmail(String email) {
+        mEditor.putString(SETTINGS_SOCIAL_ACCOUNT_EMAIL, email);
+        mEditor.commit();
+    }
+
     public boolean getSetting(String key) {
         return mSettings.getBoolean(key, true);
     }
 
     public String getSocialAccountName() {
         return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
+    }
+
+    public String getSocialAccountEmail() {
+        return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_EMAIL, Static.EMPTY);
     }
 
     public void getSocialAccountNameAsync(final Handler handler) {
@@ -145,6 +155,7 @@ public class Settings {
 
     public void resetSettings() {
         setSocialAccountName(Static.EMPTY);
+        setSocialAccountEmail(Static.EMPTY);
     }
 
     public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {

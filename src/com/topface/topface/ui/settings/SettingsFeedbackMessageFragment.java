@@ -23,7 +23,10 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.ui.edit.AbstractEditFragment;
+import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Settings;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Locale;
@@ -39,6 +42,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     public static final int COOPERATION_MESSAGE = 4;
 
     private EditText mEditText;
+    private EditText mEditEmail;
 
     private Report mReport = new Report();
 
@@ -121,6 +125,32 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             }
         });
 
+        final TextView emailTitle = (TextView) root.findViewById(R.id.tvEmailTitle);
+        mEditEmail = (EditText) root.findViewById(R.id.edEmail);
+        mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
+        mEditEmail.setText(Settings.getInstance().getSocialAccountEmail());
+
+        ViewGroup emailSwitchLayout = (ViewGroup) root.findViewById(R.id.loEmailSwitcher);
+        setBackground(R.drawable.edit_big_btn_selector, emailSwitchLayout);
+        setText(R.string.settings_want_answer, emailSwitchLayout);
+        final EditSwitcher switchBeautifull = new EditSwitcher(emailSwitchLayout);
+        switchBeautifull.setChecked(false);
+        emailSwitchLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchBeautifull.doSwitch();
+                if (switchBeautifull.isChecked()) {
+                    mReport.emailWanted = true;
+                    mEditEmail.setVisibility(View.VISIBLE);
+                    emailTitle.setVisibility(View.VISIBLE);
+                } else {
+                    mReport.emailWanted = false;
+                    mEditEmail.setVisibility(View.GONE);
+                    emailTitle.setVisibility(View.GONE);
+                }
+            }
+        });
+
         try {
             PackageInfo pInfo;
             pInfo = getActivity().getPackageManager().getPackageInfo(
@@ -146,48 +176,84 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         InputMethodManager imm = (InputMethodManager) getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
 
-        mReport.body = mEditText.getText().toString();
-        prepareRequestSend();
-        FeedbackReport feedbackRequest = new FeedbackReport(getActivity().getApplicationContext());
-        feedbackRequest.subject = mReport.getSubject();
-        feedbackRequest.text = mReport.getBody();
-        feedbackRequest.extra = mReport.getExtra();
-        feedbackRequest.callback(new ApiHandler() {
+        if (emailConfirmed()) {
+            mReport.body = mEditText.getText().toString();
+            prepareRequestSend();
+            FeedbackReport feedbackRequest = new FeedbackReport(getActivity().getApplicationContext());
+            feedbackRequest.subject = mReport.getSubject();
+            feedbackRequest.text = mReport.getBody();
+            feedbackRequest.extra = mReport.getExtra();
+            feedbackRequest.callback(new ApiHandler() {
 
-            @Override
-            public void success(ApiResponse response) {
-                mReport.body = Static.EMPTY;
-                finishRequestSend();
-                updateUI(new Runnable() {
+                @Override
+                public void success(ApiResponse response) {
+                    mReport.body = Static.EMPTY;
+                    finishRequestSend();
+                    updateUI(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        mEditText.setText(Static.EMPTY);
-                        Toast.makeText(getActivity(),
-                                getString(R.string.settings_feedback_success_msg),
-                                Toast.LENGTH_SHORT).show();
-                        getActivity().finish();
-                    }
-                });
+                        @Override
+                        public void run() {
+                            mEditText.setText(Static.EMPTY);
+                            Toast.makeText(getActivity(),
+                                    getString(R.string.settings_feedback_success_msg),
+                                    Toast.LENGTH_SHORT).show();
+                            getActivity().finish();
+                        }
+                    });
+                }
 
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+                    finishRequestSend();
+                    updateUI(new Runnable() {
+
+                        @Override
+                        public void run() {
+                        Toast.makeText(getActivity(), getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }).exec();
+        } else {
+            updateUI(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity().getApplicationContext(),R.string.settings_invalid_email,Toast.LENGTH_LONG).show();
+                    mEditEmail.requestFocus();
+                }
+            });
+
+        }
+    }
+
+    private boolean emailConfirmed() {
+        if (mReport.emailWanted) {
+            String email = mEditEmail.getText().toString();
+            if (Utils.isValidEmail(email)) {
+                mReport.email = email;
+                Settings.getInstance().setSocialAccountEmail(mReport.email);
+                return true;
             }
-
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-                finishRequestSend();
-                updateUI(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), getString(R.string.general_data_error),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+            else {
+                return false;
             }
-        }).exec();
+        } else {
+            return true;
+        }
+    }
+
+    private void setBackground(int resId, ViewGroup frame) {
+        ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
+        background.setImageResource(resId);
+    }
+
+    private void setText(int titleResId, ViewGroup frame) {
+        ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleResId);
     }
 
     class Report {
+        boolean emailWanted = false;
+        String email;
         String subject;
         String body = Static.EMPTY;
         String topface_version = "unknown";
@@ -210,17 +276,20 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         public String getExtra() {
             StringBuilder strBuilder = new StringBuilder();
 
-            strBuilder.append("<p>Topface version:").append(topface_version).append("/").append(topface_versionCode).append("</p>");
-            strBuilder.append("<p>Device:").append(device).append("/").append(model).append("</p>");
-            strBuilder.append("<p>Device language:").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
+            if(emailWanted && email != null) {
+                strBuilder.append("<p>Email for answer: ").append(email).append("</p>");
+            }
+            strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode).append("</p>");
+            strBuilder.append("<p>Device: ").append(device).append("/").append(model).append("</p>");
+            strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
 
-            strBuilder.append("<p>Topface SSID:").append(Data.SSID).append("</p>");
+            strBuilder.append("<p>Topface SSID: ").append(Data.SSID).append("</p>");
             AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
-            strBuilder.append("<p>Social net:").append(authToken.getSocialNet()).append("</p>");
-            strBuilder.append("<p>Social token:").append(authToken.getTokenKey()).append("</p>");
-            strBuilder.append("<p>Social id:").append(authToken.getUserId()).append("</p>");
+            strBuilder.append("<p>Social net: ").append(authToken.getSocialNet()).append("</p>");
+            strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append("</p>");
+            strBuilder.append("<p>Social id: ").append(authToken.getUserId()).append("</p>");
 
-            strBuilder.append("<p>Android version:").append(android_CODENAME).append("/");
+            strBuilder.append("<p>Android version: ").append(android_CODENAME).append("/");
             strBuilder.append(android_RELEASE).append("/").append(android_SDK).append("</p>");
 
             return strBuilder.toString();
