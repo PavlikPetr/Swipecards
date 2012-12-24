@@ -90,7 +90,7 @@
     <string name="buying_money">Purchase coins</string>
     <string name="buying_power">Buy energy</string>
     <string name="buying_recharge">Get 100% charge</string>
-    <string name="buying_energy">3 USD</string>
+    <string name="buying_energy">2.99 USD</string>
     <string name="buying_pack_6coins">6 coins package</string>
     <string name="buying_6coins">1 USD</string>
     <string name="buying_pack_40coins">40 coins package</string>
@@ -284,4 +284,5 @@
     <string name="dating_people_unnoticed">You left 10 people unnoticed!</string>
     <string name="dating_continue">Continue rating</string>
     <string name="dating_better_look">Get a better look!\nYou might be missing your fate!</string>
+    <string name="default_coins_100_price">10 USD</string>
 </resources>
