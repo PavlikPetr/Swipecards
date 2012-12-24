@@ -107,7 +107,7 @@ public abstract class ApiRequest {
     }
 
     private void setStopTime() {
-        if(context != null) {
+        if (context != null) {
             SharedPreferences mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             if (mPreferences != null) {
                 long stopTime = Calendar.getInstance().getTimeInMillis();

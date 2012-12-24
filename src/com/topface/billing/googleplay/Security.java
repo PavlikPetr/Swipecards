@@ -1,10 +1,10 @@
 // Copyright 2010 Google Inc. All Rights Reserved.
 
-package com.topface.topface.billing;
+package com.topface.billing.googleplay;
 
 import android.text.TextUtils;
 import android.util.Log;
-import com.topface.topface.billing.Consts.PurchaseState;
+import com.topface.billing.googleplay.Consts.PurchaseState;
 import com.topface.topface.utils.Base64;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,7 +66,9 @@ public class Security {
         }
     }
 
-    /** Generates a nonce (a random number used once). */
+    /**
+     * Generates a nonce (a random number used once).
+     */
     public static long generateNonce() {
         long nonce = RANDOM.nextLong();
         sKnownNonces.add(nonce);
@@ -90,8 +92,9 @@ public class Security {
      * In the general case, there can be an array of purchase transactions
      * because there may be delays in processing the purchase on the backend
      * and then several purchases can be batched together.
+     *
      * @param signedData the signed JSON string (signed, not encrypted)
-     * @param signature the signature for the data, signed with the private key
+     * @param signature  the signature for the data, signed with the private key
      */
     public static ArrayList<VerifiedPurchase> verifyPurchase(String signedData, String signature) {
         if (signedData == null) {
@@ -206,9 +209,9 @@ public class Security {
      * Verifies that the signature from the server matches the computed
      * signature on the data.  Returns true if the data is correctly signed.
      *
-     * @param publicKey public key associated with the developer account
+     * @param publicKey  public key associated with the developer account
      * @param signedData signed data from server
-     * @param signature server signature
+     * @param signature  server signature
      * @return true if the data and signature match
      */
     public static boolean verify(PublicKey publicKey, String signedData, String signature) {

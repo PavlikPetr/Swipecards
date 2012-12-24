@@ -164,19 +164,19 @@ public class Settings {
 
         switch (key) {
             case CacheProfile.NOTIFICATIONS_LIKES:
-                if(isMail) request.mailsympathy = value;
+                if (isMail) request.mailsympathy = value;
                 else request.apnssympathy = value;
                 break;
             case CacheProfile.NOTIFICATIONS_MESSAGE:
-                if(isMail) request.mailchat = value;
+                if (isMail) request.mailchat = value;
                 else request.apnschat = value;
                 break;
             case CacheProfile.NOTIFICATIONS_SYMPATHY:
-                if(isMail) request.mailmutual = value;
+                if (isMail) request.mailmutual = value;
                 else request.apnsmutual = value;
                 break;
             case CacheProfile.NOTIFICATIONS_VISITOR:
-                if(isMail) request.mailguests = value;
+                if (isMail) request.mailguests = value;
                 else request.apnsguests = value;
                 break;
             default:

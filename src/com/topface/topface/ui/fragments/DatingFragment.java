@@ -17,7 +17,6 @@ import android.view.animation.AlphaAnimation;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.*;
-import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.NovicePower;
 import com.topface.topface.data.Search;
 import com.topface.topface.data.SearchUser;

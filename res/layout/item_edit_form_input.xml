@@ -21,7 +21,7 @@
             android:padding="10dp"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:minLines="1"            
+            android:minLines="1"
             android:singleLine="false"
             android:textSize="14sp"
             android:focusable="true"
