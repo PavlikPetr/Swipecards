@@ -1,12 +1,10 @@
 package com.topface.topface.ui.fragments;
 
 
-import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +18,11 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.profile.BlackListActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 
 import static android.view.View.OnClickListener;
 
@@ -60,33 +55,18 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
         mBillindDriver = BillingTypeManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
             @Override
             public void onPurchased() {
-                Activity activity = getActivity();
-                if (activity instanceof NavigationActivity && CacheProfile.premium) {
-                    ((NavigationActivity) getActivity()).onVipRecieved();
-                }
-            }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
                 switchLayouts();
             }
-        };
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
-    }
+            @Override
+            public void onError() {
+                //TODO: сделать обработку ошибок
+            }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+            @Override
+            public void onCancel() {
+            }
+        }, this);
     }
 
     @Override

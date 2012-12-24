@@ -523,8 +523,8 @@ public class Utils {
     }
 
     private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
-            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-                    "\\@" +
+            "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@" +
+                    "" +
                     "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
                     "(" +
                     "\\." +
@@ -533,13 +533,8 @@ public class Utils {
     );
 
     public static boolean isValidEmail(CharSequence email) {
-        if (email == null) {
-            return false;
-        } else {
-            return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
-        }
+        return email != null && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
-
 
 
 }

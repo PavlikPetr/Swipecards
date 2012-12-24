@@ -812,10 +812,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private void startWaitingActionControlsHide() {
         if (mHideActionControlsUpdater != null) {
             mHideActionControlsUpdater.removeCallbacks(mHideActionControlsTask);
-            mHideActionControlsUpdater.postDelayed(mHideActionControlsTask,HIDE_ACTION_CONTROL_TIME);
+            mHideActionControlsUpdater.postDelayed(mHideActionControlsTask, HIDE_ACTION_CONTROL_TIME);
         } else {
             mHideActionControlsUpdater = new Handler();
-            mHideActionControlsUpdater.postDelayed(mHideActionControlsTask,HIDE_ACTION_CONTROL_TIME);
+            mHideActionControlsUpdater.postDelayed(mHideActionControlsTask, HIDE_ACTION_CONTROL_TIME);
         }
     }
 
@@ -829,7 +829,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     TimerTask mHideActionControlsTask = new TimerTask() {
         @Override
         public void run() {
-            if(mActionsControl != null) {
+            if (mActionsControl != null) {
                 mActionsControl.hide();
             }
         }

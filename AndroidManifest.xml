@@ -83,9 +83,6 @@
                 android:name=".ui.LeadersActivity"
                 android:screenOrientation="portrait"/>
         <activity android:name=".ui.settings.SettingsContainerActivity"/>
-        <activity
-                android:name=".billing.BuyingActivity"
-                android:screenOrientation="portrait"/>
         <activity android:name=".ui.BanActivity"/>
         <activity
                 android:name="com.google.ads.AdActivity"

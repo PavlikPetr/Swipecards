@@ -5,7 +5,6 @@ package com.topface.billing.googleplay;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import com.topface.billing.GooglePlayV2Queue;
 import com.topface.billing.googleplay.BillingService.RequestPurchase;
@@ -15,9 +14,7 @@ import com.topface.billing.googleplay.Consts.ResponseCode;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.VerifyRequest;
-import com.topface.topface.ui.fragments.BuyingFragment;
 import com.topface.topface.utils.CacheProfile;
 
 /**
