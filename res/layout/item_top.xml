@@ -55,7 +55,6 @@
             android:text=""
             />
 
-
     <ImageView
             android:id="@+id/ivOnline"
             android:layout_alignRight="@id/ivTG"

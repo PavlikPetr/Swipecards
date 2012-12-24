@@ -6,34 +6,30 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeaderRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.adapters.LeadersPhotoAdapter;
-import com.topface.topface.ui.blocks.HorizontalListView;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 public class LeadersActivity extends BaseFragmentActivity {
-    private HorizontalListView mListView;
-    private ProgressBar mProgressBar;
-    private ViewGroup mLeadersContent;
+    private GridView mGridView;
+//    private ProgressBar mProgressBar;
     private PhotoSelector mSelectedPhoto = new PhotoSelector();
     private Button mBuyButton;
-    private AddPhotoHelper mAddPhotoHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_leaders);
+        setContentView(R.layout.ac_leaders_new);
         ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.leaders_go_date);
         findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
         View backButton = findViewById(R.id.btnNavigationBack);
@@ -45,12 +41,9 @@ public class LeadersActivity extends BaseFragmentActivity {
             }
         });
 
-        mProgressBar = (ProgressBar) findViewById(R.id.loader);
-        mLeadersContent = (ViewGroup) findViewById(R.id.leadersContent);
-        mListView = (HorizontalListView) findViewById(R.id.photoAlbum);
+//        mProgressBar = (ProgressBar) findViewById(R.id.loader);
+        mGridView = (GridView) findViewById(R.id.fragmentGrid);
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
-        mAddPhotoHelper = new AddPhotoHelper(this);
-        mAddPhotoHelper.setOnResultHandler(mHandler);
 
         setListeners();
         getProfile();
@@ -105,56 +98,53 @@ public class LeadersActivity extends BaseFragmentActivity {
             }
         });
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    mAddPhotoHelper.addPhoto();
-                } else {
-                    mSelectedPhoto.select(i, adapterView);
-                }
+                mSelectedPhoto.select(i, adapterView);
             }
         });
     }
 
     private void updateProfileInfo(Profile profile) {
         LeadersPhotoAdapter leadersAdapter = new LeadersPhotoAdapter(getApplicationContext(), profile.photos, mSelectedPhoto);
-        mListView.setAdapter(leadersAdapter);
+        mGridView.setAdapter(leadersAdapter);
+        mSelectedPhoto.selectInitPhoto(profile.photo,profile.photos);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
     }
 
     private void getProfile() {
-        ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
-        profileRequest.part = ProfileRequest.P_ALL;
-        profileRequest.callback(new ApiHandler() {
-            @Override
-            public void success(final ApiResponse response) {
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateProfileInfo(Profile.parse(response));
-                        mProgressBar.setVisibility(View.GONE);
-                        mLeadersContent.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
+        updateProfileInfo(CacheProfile.getProfile());
 
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Utils.showErrorMessage(LeadersActivity.this);
-                        mProgressBar.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }).exec();
+//        ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
+//        profileRequest.part = ProfileRequest.P_ALL;
+//        profileRequest.callback(new ApiHandler() {
+//            @Override
+//            public void success(final ApiResponse response) {
+//                post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        updateProfileInfo(Profile.parse(response));
+////                        mProgressBar.setVisibility(View.GONE);
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void fail(int codeError, ApiResponse response) {
+//                post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Utils.showErrorMessage(LeadersActivity.this);
+////                        mProgressBar.setVisibility(View.GONE);
+//                    }
+//                });
+//            }
+//        }).exec();
     }
 
     public static class PhotoSelector {
@@ -162,11 +152,11 @@ public class LeadersActivity extends BaseFragmentActivity {
         private int mPhotoId;
 
         public void select(int item, AdapterView<?> adapterView) {
-            if (item > 0) {
+            if (item >= 0) {
                 //При повторном клике на выбранный элемент, отключаем
                 if (item == mItem) {
-                    mItem = 0;
-                    mPhotoId = 0;
+                    mItem = -1;
+                    mPhotoId = -1;
                 } else {
                     Photo photo = (Photo) adapterView.getItemAtPosition(item);
                     mItem = item;
@@ -174,6 +164,16 @@ public class LeadersActivity extends BaseFragmentActivity {
                 }
                 ((LeadersPhotoAdapter) adapterView.getAdapter()).notifyDataSetChanged();
             }
+        }
+
+        public void selectInitPhoto(Photo avatar, Photos photos) {
+            for (int i=0; i < photos.size(); i++) {
+                if (avatar.getId() == photos.get(i).getId()) {
+                    mItem = i;
+                    break;
+                }
+            }
+            mPhotoId = avatar.getId();
         }
 
         public boolean isSelected() {
