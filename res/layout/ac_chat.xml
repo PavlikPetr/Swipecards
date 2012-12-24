@@ -48,19 +48,19 @@
                     android:divider="@android:color/transparent"
                     android:dividerHeight="0dp"
                     android:fadeScrollbars="true"
-                    android:fadingEdge="none"    
-                    android:stackFromBottom="true"                
+                    android:fadingEdge="none"
+                    android:stackFromBottom="true"
                     android:listSelector="@android:color/transparent"
                     android:transcriptMode="alwaysScroll"/>
 
-                <FrameLayout
-                        android:id="@+id/loChatFooterSend"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        >
+            <FrameLayout
+                    android:id="@+id/loChatFooterSend"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    >
 
-                    <include layout="@layout/chat_footer_send"/>
-                </FrameLayout>
+                <include layout="@layout/chat_footer_send"/>
+            </FrameLayout>
 
 
         </LinearLayout>
@@ -94,6 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
+                    android:visibility="gone"
                     android:background="@drawable/chat_map_selector"/>
         </LinearLayout>
     </com.topface.topface.ui.views.SwapControl>

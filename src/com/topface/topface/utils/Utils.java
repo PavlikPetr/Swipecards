@@ -499,13 +499,26 @@ public class Utils {
             if (taskList.size() > 1) {
                 if (
                         taskList.get(0).baseActivity.getClassName().equals(NavigationActivity.class.getName())
-                        || taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName())
+                                || taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName())
                         ) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    /**
+     * @return флаг наличия API Google карт
+     */
+    public static boolean isGoogleMapsAvailable() {
+        Class mapClass;
+        try {
+            mapClass = Class.forName("com.google.android.maps.MapActivity");
+        } catch (ClassNotFoundException e) {
+            mapClass = null;
+        }
+        return mapClass != null;
     }
 
 }

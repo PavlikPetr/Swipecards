@@ -1,6 +1,6 @@
 // Copyright 2010 Google Inc. All Rights Reserved.
 
-package com.topface.topface.billing;
+package com.topface.billing.googleplay;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -9,10 +9,11 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Handler;
 import android.util.Log;
-import com.topface.topface.billing.BillingService.RequestPurchase;
-import com.topface.topface.billing.BillingService.RestoreTransactions;
-import com.topface.topface.billing.Consts.PurchaseState;
-import com.topface.topface.billing.Consts.ResponseCode;
+import com.topface.billing.googleplay.BillingService.RequestPurchase;
+import com.topface.billing.googleplay.BillingService.RestoreTransactions;
+import com.topface.billing.googleplay.Consts.PurchaseState;
+import com.topface.billing.googleplay.Consts.ResponseCode;
+import com.topface.topface.requests.ApiResponse;
 
 import java.lang.reflect.Method;
 
@@ -30,8 +31,8 @@ public abstract class PurchaseObserver {
     private final Handler mHandler;
     private Method mStartIntentSender;
     private Object[] mStartIntentSenderArgs = new Object[5];
-    private static final Class[] START_INTENT_SENDER_SIG = new Class[] {
-        IntentSender.class, Intent.class, int.class, int.class, int.class
+    private static final Class[] START_INTENT_SENDER_SIG = new Class[]{
+            IntentSender.class, Intent.class, int.class, int.class, int.class
     };
 
     public PurchaseObserver(Activity activity, Handler handler) {
@@ -43,6 +44,7 @@ public abstract class PurchaseObserver {
     /**
      * This is the callback that is invoked when Android Market responds to the
      * {@link BillingService#checkBillingSupported()} request.
+     *
      * @param supported true if in-app billing is supported.
      */
     public abstract void onBillingSupported(boolean supported, String type);
@@ -57,10 +59,11 @@ public abstract class PurchaseObserver {
      * update.  The database update is handled in
      * {@link ResponseHandler#purchaseResponse(android.content.Context, PurchaseState,
      * String, String, long)}.
+     *
      * @param purchaseState the purchase state of the item
-     * @param itemId a string identifying the item (the "SKU")
-     * @param quantity the current quantity of this item after the purchase
-     * @param purchaseTime the time the product was purchased, in
+     * @param itemId        a string identifying the item (the "SKU")
+     * @param quantity      the current quantity of this item after the purchase
+     * @param purchaseTime  the time the product was purchased, in
      * @param signedData
      * @param signature
      */
@@ -74,23 +77,23 @@ public abstract class PurchaseObserver {
      * {@link #onPurchaseStateChange(PurchaseState, String, int, long)}.
      * This is used for reporting various errors, or if the user backed out
      * and didn't purchase the item.  The possible response codes are:
-     *   RESULT_OK means that the order was sent successfully to the server.
-     *       The onPurchaseStateChange() will be invoked later (with a
-     *       purchase state of PURCHASED or CANCELED) when the order is
-     *       charged or canceled.  This response code can also happen if an
-     *       order for a Market-managed item was already sent to the server.
-     *   RESULT_USER_CANCELED means that the user didn't buy the item.
-     *   RESULT_SERVICE_UNAVAILABLE means that we couldn't connect to the
-     *       Android Market server (for example if the data connection is down).
-     *   RESULT_BILLING_UNAVAILABLE means that in-app billing is not
-     *       supported yet.
-     *   RESULT_ITEM_UNAVAILABLE means that the item this app offered for
-     *       sale does not exist (or is not published) in the server-side
-     *       catalog.
-     *   RESULT_ERROR is used for any other errors (such as a server error).
+     * RESULT_OK means that the order was sent successfully to the server.
+     * The onPurchaseStateChange() will be invoked later (with a
+     * purchase state of PURCHASED or CANCELED) when the order is
+     * charged or canceled.  This response code can also happen if an
+     * order for a Market-managed item was already sent to the server.
+     * RESULT_USER_CANCELED means that the user didn't buy the item.
+     * RESULT_SERVICE_UNAVAILABLE means that we couldn't connect to the
+     * Android Market server (for example if the data connection is down).
+     * RESULT_BILLING_UNAVAILABLE means that in-app billing is not
+     * supported yet.
+     * RESULT_ITEM_UNAVAILABLE means that the item this app offered for
+     * sale does not exist (or is not published) in the server-side
+     * catalog.
+     * RESULT_ERROR is used for any other errors (such as a server error).
      */
     public abstract void onRequestPurchaseResponse(RequestPurchase request,
-            ResponseCode responseCode);
+                                                   ResponseCode responseCode);
 
     /**
      * This is called when we receive a response code from Android Market for a
@@ -98,7 +101,7 @@ public abstract class PurchaseObserver {
      * RESULT_OK means that the request was successfully sent to the server.
      */
     public abstract void onRestoreTransactionsResponse(RestoreTransactions request,
-            ResponseCode responseCode);
+                                                       ResponseCode responseCode);
 
     private void initCompatibilityLayer() {
         try {
@@ -144,9 +147,10 @@ public abstract class PurchaseObserver {
      * Updates the UI after the database has been updated.  This method runs
      * in a background thread so it has to post a Runnable to run on the UI
      * thread.
+     *
      * @param purchaseState the purchase state of the item
-     * @param itemId a string identifying the item
-     * @param quantity the quantity of items in this purchase
+     * @param itemId        a string identifying the item
+     * @param quantity      the quantity of items in this purchase
      * @param signedData
      * @param signature
      */
@@ -160,4 +164,25 @@ public abstract class PurchaseObserver {
             }
         });
     }
+
+    /**
+     * Вызывает коллбэк
+     *
+     * @param response ответ от сервера
+     */
+    void postVerify(final ApiResponse response) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                onVerifyResponse(response);
+            }
+        });
+    }
+
+    /**
+     * Коллбэк вызывается после получения ответа от API
+     *
+     * @param response объект ответа от сервера
+     */
+    abstract public void onVerifyResponse(ApiResponse response);
 }

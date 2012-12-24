@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.topface.topface.billing;
+package com.topface.billing.googleplay;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import com.topface.topface.billing.Consts.ResponseCode;
 
 /**
  * This class implements the broadcast receiver for in-app billing. All asynchronous messages from
@@ -30,7 +29,7 @@ import com.topface.topface.billing.Consts.ResponseCode;
  * network I/O, database updates, or any tasks that might take a long time to complete.
  * It also must not start a background thread because that may be killed as soon as
  * {@link #onReceive(android.content.Context, android.content.Intent)} returns.
- *
+ * <p/>
  * You should modify and obfuscate this code before using it.
  */
 public class BillingReceiver extends BroadcastReceiver {
@@ -59,7 +58,7 @@ public class BillingReceiver extends BroadcastReceiver {
         } else if (Consts.ACTION_RESPONSE_CODE.equals(action)) {
             long requestId = intent.getLongExtra(Consts.INAPP_REQUEST_ID, -1);
             int responseCodeIndex = intent.getIntExtra(Consts.INAPP_RESPONSE_CODE,
-                    ResponseCode.RESULT_ERROR.ordinal());
+                    Consts.ResponseCode.RESULT_ERROR.ordinal());
             checkResponseCode(context, requestId, responseCodeIndex);
         } else {
             Log.w(TAG, "unexpected action: " + action);
@@ -71,9 +70,10 @@ public class BillingReceiver extends BroadcastReceiver {
      * change. The signedData parameter is a plaintext JSON string that is
      * signed by the server with the developer's private key. The signature
      * for the signed data is passed in the signature parameter.
-     * @param context the context
+     *
+     * @param context    the context
      * @param signedData the (unencrypted) JSON string
-     * @param signature the signature for the signedData
+     * @param signature  the signature for the signedData
      */
     private void purchaseStateChanged(Context context, String signedData, String signature) {
         Intent intent = new Intent(Consts.ACTION_PURCHASE_STATE_CHANGED);
@@ -91,7 +91,7 @@ public class BillingReceiver extends BroadcastReceiver {
      * MarketBillingService directly so it starts the {@link BillingService}, which does the
      * actual work of sending the message.
      *
-     * @param context the context
+     * @param context  the context
      * @param notifyId the notification ID
      */
     private void notify(Context context, String notifyId) {
@@ -105,8 +105,8 @@ public class BillingReceiver extends BroadcastReceiver {
      * This is called when Android Market sends a server response code. The BillingService can
      * then report the status of the response if desired.
      *
-     * @param context the context
-     * @param requestId the request ID that corresponds to a previous request
+     * @param context           the context
+     * @param requestId         the request ID that corresponds to a previous request
      * @param responseCodeIndex the ResponseCode ordinal value for the request
      */
     private void checkResponseCode(Context context, long requestId, int responseCodeIndex) {
