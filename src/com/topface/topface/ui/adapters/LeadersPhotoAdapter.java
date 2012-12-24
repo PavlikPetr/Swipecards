@@ -65,7 +65,6 @@ public class LeadersPhotoAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.imageView.setVisibility(View.VISIBLE);
         holder.checkbox.setVisibility(
                 mPhotoSelector.getItemId() == position ?
                         View.VISIBLE :

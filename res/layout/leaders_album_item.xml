@@ -45,10 +45,12 @@
             android:background="@drawable/leaders_selected_photo_bg"
             android:drawableLeft="@drawable/edit_form_select_check"
             android:visibility="gone"
-            android:clickable="false"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_alignBottom="@id/leaderAlbumPhoto"
             android:layout_marginBottom="4dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             />
 </RelativeLayout>

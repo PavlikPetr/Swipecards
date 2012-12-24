@@ -10,6 +10,7 @@ import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -108,6 +109,7 @@ public class LeadersActivity extends BaseFragmentActivity {
     private void updateProfileInfo(Profile profile) {
         LeadersPhotoAdapter leadersAdapter = new LeadersPhotoAdapter(getApplicationContext(), profile.photos, mSelectedPhoto);
         mGridView.setAdapter(leadersAdapter);
+        mSelectedPhoto.selectInitPhoto(profile.photo,profile.photos);
     }
 
     @Override
@@ -150,11 +152,11 @@ public class LeadersActivity extends BaseFragmentActivity {
         private int mPhotoId;
 
         public void select(int item, AdapterView<?> adapterView) {
-            if (item > 0) {
+            if (item >= 0) {
                 //При повторном клике на выбранный элемент, отключаем
                 if (item == mItem) {
-                    mItem = 0;
-                    mPhotoId = 0;
+                    mItem = -1;
+                    mPhotoId = -1;
                 } else {
                     Photo photo = (Photo) adapterView.getItemAtPosition(item);
                     mItem = item;
@@ -162,6 +164,16 @@ public class LeadersActivity extends BaseFragmentActivity {
                 }
                 ((LeadersPhotoAdapter) adapterView.getAdapter()).notifyDataSetChanged();
             }
+        }
+
+        public void selectInitPhoto(Photo avatar, Photos photos) {
+            for (int i=0; i < photos.size(); i++) {
+                if (avatar.getId() == photos.get(i).getId()) {
+                    mItem = i;
+                    break;
+                }
+            }
+            mPhotoId = avatar.getId();
         }
 
         public boolean isSelected() {
