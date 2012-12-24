@@ -186,8 +186,15 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         // Place Button
         findViewById(R.id.btnChatPlace).setOnClickListener(this);
 
-        // Map Button
-        findViewById(R.id.btnChatMap).setOnClickListener(this);
+        /**
+         * Показываем кнопки отправки произвольного местоположения когда карты доступны
+         */
+        if (Utils.isGoogleMapsAvailable()) {
+            // Map Button
+            View chatMap = findViewById(R.id.btnChatMap);
+            chatMap.setOnClickListener(this);
+            chatMap.setVisibility(View.VISIBLE);
+        }
 
         // Edit Box
         mEditBox = (EditText) findViewById(R.id.edChatBox);
@@ -388,7 +395,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         if (v instanceof ImageView) {
             if (v.getTag() instanceof History) {
                 History history = (History) v.getTag();
-                if (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS) {
+                if (Utils.isGoogleMapsAvailable() && (history.type == FeedDialog.MAP || history.type == FeedDialog.ADDRESS)) {
                     Intent intent = new Intent(this, GeoMapActivity.class);
                     intent.putExtra(GeoMapActivity.INTENT_GEO, history.geo);
                     startActivity(intent);
@@ -426,11 +433,13 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             }
             break;
             case R.id.btnChatMap: {
-                startActivityForResult(new Intent(this, GeoMapActivity.class),
-                        GeoMapActivity.INTENT_REQUEST_GEO);
-                // Toast.makeText(ChatActivity.this, "Map",
-                // Toast.LENGTH_SHORT).show();
-                EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
+                if (Utils.isGoogleMapsAvailable()) {
+                    startActivityForResult(new Intent(this, GeoMapActivity.class),
+                            GeoMapActivity.INTENT_REQUEST_GEO);
+                    // Toast.makeText(ChatActivity.this, "Map",
+                    // Toast.LENGTH_SHORT).show();
+                    EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
+                }
             }
             break;
             case R.id.btnNavigationBackWithText: {
@@ -898,4 +907,5 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             });
         }
     };
+
 }

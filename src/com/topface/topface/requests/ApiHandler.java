@@ -95,7 +95,7 @@ abstract public class ApiHandler extends Handler {
     }
 
     private void sendProfileUpdateIntent(ApiResponse response) {
-        if(response.method.equals(ProfileRequest.SERVICE_NAME)) {
+        if (response.method.equals(ProfileRequest.SERVICE_NAME)) {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
     }

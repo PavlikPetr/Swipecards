@@ -8,16 +8,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 
-public class ServicesFragment extends BaseFragment{
+public class ServicesFragment extends BaseFragment {
 
     public static ServicesFragment newInstance() {
-        ServicesFragment mInstance = new ServicesFragment();
-        return mInstance;
+        return new ServicesFragment();
     }
 
     @Override
@@ -28,13 +26,13 @@ public class ServicesFragment extends BaseFragment{
     }
 
     private void initViews(View root) {
-        ServicesTextView mCurCoins = (ServicesTextView)root.findViewById(R.id.fpsCurCoins);
+        ServicesTextView mCurCoins = (ServicesTextView) root.findViewById(R.id.fpsCurCoins);
         mCurCoins.setText(Integer.toString(CacheProfile.money));
 
-        ServicesTextView mCurPower = (ServicesTextView)root.findViewById(R.id.fpsCurPower);
+        ServicesTextView mCurPower = (ServicesTextView) root.findViewById(R.id.fpsCurPower);
         mCurPower.setText(Integer.toString(CacheProfile.power));
 
-        Button mBuyBtn = (Button)root.findViewById(R.id.fpsBuyBtn);
+        Button mBuyBtn = (Button) root.findViewById(R.id.fpsBuyBtn);
         mBuyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,7 +43,7 @@ public class ServicesFragment extends BaseFragment{
 
     private void buyAction() {
         Intent intent = new Intent(getActivity(), ContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY,ContainerActivity.INTENT_BUYING_FRAGMENT);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
         startActivity(intent);
     }
 }

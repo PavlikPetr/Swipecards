@@ -33,7 +33,14 @@
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
             android:theme="@style/Theme.TopfaceIndicators">
-        <uses-library android:name="com.google.android.maps"/>
+
+        <meta-data
+                android:name="@string/build_type_key"
+                android:value="google-play"/>
+
+        <uses-library
+                android:required="false"
+                android:name="com.google.android.maps"/>
 
         <!-- main Activity -->
         <activity android:name=".ui.AuthActivity">
@@ -44,7 +51,9 @@
             </intent-filter>
         </activity>
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
-        <activity-alias android:name=".ui.MainActivity" android:targetActivity=".ui.AuthActivity"/>
+        <activity-alias
+                android:name=".ui.MainActivity"
+                android:targetActivity=".ui.AuthActivity"/>
 
         <!-- activity -->
         <activity
@@ -74,9 +83,6 @@
                 android:name=".ui.LeadersActivity"
                 android:screenOrientation="portrait"/>
         <activity android:name=".ui.settings.SettingsContainerActivity"/>
-        <activity
-                android:name=".billing.BuyingActivity"
-                android:screenOrientation="portrait"/>
         <activity android:name=".ui.BanActivity"/>
         <activity
                 android:name="com.google.ads.AdActivity"
@@ -87,11 +93,10 @@
         <activity android:name=".ui.ContainerActivity"/>
 
         <!-- services -->
-        <service android:name=".services.NotificationService"/>
-        <service android:name=".billing.BillingService"/>
+        <service android:name="com.topface.billing.googleplay.BillingService"/>
 
         <!-- receivers -->
-        <receiver android:name=".billing.BillingReceiver">
+        <receiver android:name="com.topface.billing.googleplay.BillingReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.billing.IN_APP_NOTIFY"/>
                 <action android:name="com.android.vending.billing.RESPONSE_CODE"/>
