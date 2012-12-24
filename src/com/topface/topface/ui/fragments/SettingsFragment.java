@@ -90,25 +90,53 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loLikes);
         setBackground(R.drawable.edit_big_btn_top, frame);
         setText(R.string.settings_likes, frame);
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES, frame, CacheProfile.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns);
+
+        boolean mail = false;
+        boolean apns = false;
+        if(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES) != null) {
+            mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
+            apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+        }
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES, frame, CacheProfile.hasMail, mail, apns);
 
         // Mutual
         frame = (ViewGroup) root.findViewById(R.id.loMutual);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_mutual, frame);
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY, frame, CacheProfile.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns);
+        if(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY) != null) {
+            mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
+            apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+        } else {
+            mail = false;
+            apns = false;
+        }
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_SYMPATHY, frame, CacheProfile.hasMail, mail, apns);
 
         // Chat
         frame = (ViewGroup) root.findViewById(R.id.loChat);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_messages, frame);
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE, frame, CacheProfile.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns);
+        if(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE) != null) {
+            mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
+            apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+        } else {
+            mail = false;
+            apns = false;
+        }
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_MESSAGE, frame, CacheProfile.hasMail, mail, apns);
 
         // Guests
         frame = (ViewGroup) root.findViewById(R.id.loGuests);
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
-        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR, frame, CacheProfile.hasMail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail, CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns);
+        if(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR) != null) {
+            mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
+            apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
+        } else {
+            mail = false;
+            apns = false;
+        }
+        initEditNotificationFrame(CacheProfile.NOTIFICATIONS_VISITOR, frame, CacheProfile.hasMail, mail, apns);
 
         // Vibration
         frame = (ViewGroup) root.findViewById(R.id.loVibration);

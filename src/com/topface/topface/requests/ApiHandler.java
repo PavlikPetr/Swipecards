@@ -2,7 +2,9 @@ package com.topface.topface.requests;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -28,6 +30,7 @@ abstract public class ApiHandler extends Handler {
             } else if (response.code != ApiResponse.RESULT_OK) {
                 fail(response.code, response);
             } else {
+                sendProfileUpdateIntent(response);
                 setCounters(response);
                 success(response);
             }
@@ -88,6 +91,12 @@ abstract public class ApiHandler extends Handler {
             }
         } catch (Exception e) {
             Debug.error("api handler exception", e);
+        }
+    }
+
+    private void sendProfileUpdateIntent(ApiResponse response) {
+        if(response.method.equals(ProfileRequest.SERVICE_NAME)) {
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
     }
 

@@ -5,6 +5,7 @@ package com.topface.topface.billing;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 import com.topface.topface.R;
@@ -15,7 +16,9 @@ import com.topface.topface.billing.Consts.ResponseCode;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.VerifyRequest;
+import com.topface.topface.ui.fragments.BuyingFragment;
 import com.topface.topface.utils.CacheProfile;
 
 /**
@@ -175,7 +178,8 @@ public class ResponseHandler {
                 CacheProfile.money = verify.money;
                 CacheProfile.premium = verify.premium;
                 //Оповещаем интерфейс о том, что элемент удачно куплен
-                context.sendBroadcast(new Intent(BuyingActivity.BROADCAST_PURCHASE_ACTION));
+                context.sendBroadcast(new Intent(BuyingFragment.BROADCAST_PURCHASE_ACTION));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
             }
 
             @Override

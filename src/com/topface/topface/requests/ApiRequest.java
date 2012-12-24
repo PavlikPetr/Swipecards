@@ -107,10 +107,12 @@ public abstract class ApiRequest {
     }
 
     private void setStopTime() {
-        SharedPreferences mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        if (mPreferences != null) {
-            long stopTime = Calendar.getInstance().getTimeInMillis();
-            mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
+        if(context != null) {
+            SharedPreferences mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            if (mPreferences != null) {
+                long stopTime = Calendar.getInstance().getTimeInMillis();
+                mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
+            }
         }
     }
 
